@@ -2,6 +2,17 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 1.2.0 — 2026-08-18
+
+### ✨ Added
+
+- **Named the two existing mechanisms and added a third.** Shape was already called "the shape engine" in passing; formalised that, and named the theme/accent/rainbow mechanism **the colour engine** (one mechanism, three inputs, all resolving to the same handful of tokens). Added **the motion engine** as its own section — it existed as CSS (four keyframes, a `prefers-reduced-motion` block, rule 10) but was never documented as a system with its own timing rationale.
+- A short "engines we don't have" note explaining why browser-engine differences (Chromium/Gecko/WebKit) stay out of scope: everything GlimStone does runs through standard CSS media queries and custom properties, which behave identically across engines — engine-specific branching is an application concern, not a design-language one.
+
+### 🐛 Fixed
+
+- `.glim-live`'s pulse had no `prefers-reduced-motion` fallback at all — an infinite 2s animation is exactly the category that preference exists for, unlike the one-shot entrances that already degraded correctly. It now renders as a static, fully-opaque dot under reduced motion instead of continuing to pulse.
+
 ## 1.1.0 — 2026-08-17
 
 ### ✨ Added

@@ -103,10 +103,14 @@ A plugin page inherits the host's global form and button CSS. Two things that ha
 
 Theme, shape, accent and language are all settings, and every one of them is **applied once at the app root** — never by the page that edits it. A settings page reads the current value and writes the new one; it never carries the styling logic itself, or two pages would be free to disagree about how "square" looks.
 
+Two of these axes hand off to a named **engine** — a single mechanism that turns one input (or, for colour, three) into every token a component reads, so nothing downstream has to know which setting produced the value it got. Shape has one: the **shape engine**, below. Theme, accent and rainbow share one: the **colour engine**, below that. Language doesn't — it changes structure (`lang`, `dir`, which glyphs get requested) rather than resolving to a token set, so it stays "an axis" and not "an engine."
+
 - **Theme** sets `data-theme` on `<html>`: `light` · `dark` · unset, which follows the OS via `prefers-color-scheme`. **Default is system**, not a hard-coded light or dark — an app that opens dark on a light-mode OS made a choice nobody asked it to make. A user who picks light or dark explicitly overrides the OS until they clear it.
-- **Shape** sets `data-shape` on `<html>`: `round` (16/10px) · `soft` (8/5px) · `square` (0). **One** token drives every radius, no exception list.
+- **Shape** sets `data-shape` on `<html>`: `round` (16/10px) · `soft` (8/5px) · `square` (0). **One** token drives every radius, no exception list — this is the whole shape engine; there is no further mechanism beyond the three token sets in `reference/tokens.css`.
 - **Accent** overrides `--accent`; `--accent-contrast` is **computed** from sRGB luminance, never asked for as a second setting — asking for a second colour just to make the first one legible is a trap, not a preference. **The default, before anyone has touched the setting, is Sunflower gold `#FCC419`** (`DEFAULT_ACCENT` in `reference/appearance.ts`) — a fresh install of any app that shares this language opens in the same colour, so the family reads as one product from the very first screen, not just after someone finds the picker.
 - **Language** sets `lang` (and `dir`, see below) on `<html>`. Default is the browser's own locale (`navigator.language`) if it's supported, English otherwise — never a hard-coded language shown to everyone regardless of their system. The picker itself is a plain `<select>` (rule 14), not the horizontal selector above: a language list runs to dozens of entries, and a control built for "everything visible at once" stops working once it has to wrap or scroll.
+
+**On engines we don't have.** Chromium, Gecko and WebKit differences (clipboard permissions, native widget chrome, form-control quirks) are real, but they live in *application* code, not here — every axis above resolves through standard CSS custom properties and media queries (`prefers-color-scheme`, `prefers-reduced-motion`, logical properties), which behave identically across engines. A "browser engine" would only earn a place here if GlimStone itself ever needed to branch its own *visual* rules by engine; nothing in this document currently does.
 
 ## Right-to-left languages
 
@@ -124,7 +128,13 @@ The font stack ends in `system-ui, sans-serif`, not a fixed list of named fonts,
 - **Letter-spacing is a Latin assumption.** The base `-0.008em` tightening reads as normal kerning on Latin letterforms and as crowding on CJK, which is set in full-width square cells that don't kern the same way. Scope it out for CJK content: `:lang(ja), :lang(zh), :lang(ko) { letter-spacing: normal; }`.
 - **`.glim-num`'s tabular figures are a Latin-digit feature.** `font-variant-numeric: tabular-nums` only affects the Western Arabic numerals (0–9) most fonts ship as monospaced-width by convention; it has no defined effect on native digit systems (Eastern Arabic-Indic, Devanagari) some locales display instead. Where a locale's own digits are shown, column alignment has to come from a fixed-width container instead of the numeral feature.
 
-## Rainbow — the accent, plural
+## The colour engine
+
+Theme, accent and rainbow are three inputs into one mechanism, not three separate systems: **theme** picks which half of the palette (`:root` vs `[data-theme="light"]`) is active, **accent** overrides the activity hue on top of it, **rainbow** multiplies that hue by list position. All three ultimately resolve to the same handful of tokens — `--accent`, `--accent-contrast`, `--accent-soft`, and whichever `--carbon-*` step theme selected — so a component reading `var(--accent)` never needs to know which of the three produced the value.
+
+The four state hues (rule 4) are the one thing that never runs through this engine: settled/fault/warning/neutral are fixed per theme, not user-editable, and never rainbowed — green has to mean "finished" everywhere, unconditionally.
+
+### Rainbow — the accent, plural
 
 Eight colours handed out by **position** instead of one colour everywhere. Three sub-switches:
 
@@ -144,6 +154,15 @@ Eight colours handed out by **position** instead of one colour everywhere. Three
 - **Tailwind's `@theme` resolves once, at `:root`.** `--color-accent: var(--accent)` inside `@theme` gets evaluated at `:root` and frozen there — every utility generated from it (`bg-accent`, `text-accent`) points at the global accent forever, and a `.glim-hue` subtree that redefines `--accent` never reaches it. Rainbow coloured everything that read `var(--accent)` directly and nothing that went through a utility class. The hue rules have to set `--color-accent`, `--color-accentContrast` and `--color-accentSoft` **themselves**.
 
 **Security:** every palette colour lands in a CSS custom property. Validate server-side with `^#[0-9a-fA-F]{6}$`, and take it **all-or-nothing** — seven good colours plus one injected value isn't an 87%-safe palette, it's an invisible line.
+
+## The motion engine
+
+Four keyframes cover everything that moves: `glim-page-in` (a page or section settling in, 280ms), `glim-toast-in` (a notification sliding in, 220ms), `glim-fade-in` (the info bubble and other transient UI, 110ms), `glim-pulse` (the `.glim-live` dot, 2s, infinite). All four exist to answer one question — is this new, arriving, or ongoing — and nothing else in the system animates: a settled page doesn't idle-animate, a card doesn't breathe, hover states change instantly.
+
+- **Fast by default, and faster the closer it is to input.** Entrances that follow user intent (opening a page) get the full 280ms with an ease-out curve; something the pointer is already waiting on (the info bubble) gets 110ms flat — a bubble that fades in slowly reads as *lag*, not as *polish*, because the cursor got there first.
+- **`prefers-reduced-motion: reduce` swaps entrances for a plain fade, never nothing.** `glim-page-in`/`glim-toast-in` drop their translate and shrink to a 160–180ms opacity-only fade under the media query — an element still needs to *arrive* legibly, just without the motion component. This is the accessibility signal, not a GlimStone setting (see "the axes we don't have" above): no in-app toggle duplicates it today.
+- **An infinite animation gets a true stop under reduced motion, not a slower version.** `.glim-live`'s pulse communicates "this is happening now" — under `prefers-reduced-motion` it renders as a static, fully-opaque dot instead: `.glim-live { animation: none; opacity: 1; }`. A continuous animation is exactly the category `prefers-reduced-motion` exists for (unlike a one-shot 110–280ms entrance), and "this item is live" still has to read from its colour and position alone once the pulse is gone.
+- **This is independent of the colour engine's reactive mode.** Rule 10 exists because of a real regression: reactive rainbow (colour rests neutral, appears on hover) was once implemented by also suppressing nearby animation, which silently turned `.glim-live` off for anyone running reactive. Colour mode and motion are two different engines reading two different signals (a setting vs. an OS preference); neither one gets to reach into the other.
 
 ## Tokens (the contract)
 

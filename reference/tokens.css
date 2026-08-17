@@ -337,4 +337,10 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .glim-page-enter { animation: glim-fade-in 180ms ease both; }
   .glim-toast { animation: glim-fade-in 160ms ease both; }
+  /* An infinite animation gets a true stop here, not a slower version: a
+     one-shot 110-280ms entrance is a poor match for what reduced-motion
+     exists to prevent, but a 2s-forever pulse is exactly it. Still fully
+     opaque, not hidden -- "this is live" has to keep reading from colour and
+     position alone once the motion is gone. */
+  .glim-live { animation: none; opacity: 1; }
 }
