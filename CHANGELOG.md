@@ -2,6 +2,17 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 1.3.0 — 2026-08-18
+
+### ✨ Added
+
+- **Repository made public**, with the license and funding files that implies: AGPL-3.0 (name and branding reserved, matching every other own-named product repo), `FUNDING.yml`, a License badge, and the Buy Me a Coffee button top and bottom.
+- **Chosen mark: one lit block in a 3x3 grid of stone blocks** — literal to this document's own opening line. Replaces the faceted-gem concept from 1.1.0/1.2.0's banner, after drafting it alongside two other concepts (a seal with a sunburst was the other finalist) for comparison.
+
+### 🎨 Design
+
+- Dropped the "private, internal" framing from the README; GlimStone is now published for reference and transparency, though still not positioned as a general-purpose design system seeking outside adopters.
+
 ## 1.2.0 — 2026-08-18
 
 ### ✨ Added

@@ -5,16 +5,21 @@
  * logo masters (not just the banner) — everything downstream is procedural
  * geometry, computed here, never hand-authored path data:
  *
- *   glimstone-dunkel.svg   dark rock, gold gem   (reads on a LIGHT background)
- *   glimstone-hell.svg     pale rock, gold gem   (reads on a DARK background)
+ *   glimstone-dunkel.svg   dark stones, gold lit block   (reads on a LIGHT background)
+ *   glimstone-hell.svg     pale stones, gold lit block   (reads on a DARK background)
  *   glimstone-banner.svg/.png       light banner: logo + "GlimStone" + claim
  *   glimstone-banner-dark.svg/.png  dark banner:  logo + "GlimStone" + claim
  *
- * The mark: a faceted gem (the "glimme" — shining brightness) set into a
- * fractured rock silhouette (the "stone") — the name's own etymology, drawn
- * literally. The gold gem is the constant core in both theme variants, same
- * as every other logo pair in this house style; only the rock's tone swaps
- * so it keeps reading against its background.
+ * The mark: a 3x3 grid of stone blocks with one block lit gold — the doc's
+ * own opening line, "a small light in dark masonry," drawn literally. The
+ * gold block (plus its glow) is the constant core in both theme variants,
+ * same as every other logo pair in this house style; only the stone tone
+ * swaps so it keeps reading against its background.
+ *
+ * Two other concepts (a faceted gem in fractured rock; a notched seal with a
+ * sunburst) were drafted and rendered for comparison, then dropped once this
+ * one was picked — see git history (.github/assets/gen-logo-alts.mjs) if
+ * either is ever worth revisiting.
  *
  * Text is converted to SVG paths (opentype.js) so the SVG needs no font and
  * renders identically anywhere. Bree Serif (name) + Lato (claim) — the same
@@ -41,72 +46,44 @@ const __dir = dirname(fileURLToPath(import.meta.url));
 // The mark — computed geometry, no hand-authored path data.
 // ============================================================================
 
-const CX = 500, CY = 520; // slight optical drop: the gem should look "set into" the rock, not floating above centre
-
-/** Point on a circle of radius r around (CX,CY), angle in degrees, 0 = due right, clockwise. */
-function pt(angleDeg, r) {
-  const a = (angleDeg * Math.PI) / 180;
-  return [CX + r * Math.cos(a), CY + r * Math.sin(a)];
-}
-function poly(points) {
-  return points.map((p) => p.join(",")).join(" ");
-}
-
-// Rock silhouette: an irregular, angular ring of points — a fixed jitter
-// pattern (not Math.random(), so re-running this script is reproducible).
-// Radius alternates in a fixed sequence to read as fractured, not a smooth
-// blob or a regular polygon.
-const ROCK_ANGLES = [ -100, -55, -18, 22, 60, 100, 140, 180, 220, 262 ];
-const ROCK_RADII =  [  330,  380, 300, 400,  320, 370, 300, 390, 310, 360 ];
-const rockOuter = ROCK_ANGLES.map((a, i) => pt(a, ROCK_RADII[i]));
-
-// Three crack facets across the rock: thin polygons from a shared inner
-// point out to two rock-outline vertices, picked non-adjacently so the
-// cracks read as crossing the stone rather than outlining one corner of it.
-const crackPairs = [
-  [0, 4], [2, 7], [5, 9],
-];
-function crackPath(iA, iB, widthPx) {
-  const a = rockOuter[iA], b = rockOuter[iB];
-  const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2;
-  const dx = b[0] - a[0], dy = b[1] - a[1];
-  const len = Math.hypot(dx, dy);
-  const nx = (-dy / len) * widthPx, ny = (dx / len) * widthPx;
-  return `M ${a[0]},${a[1]} L ${mx + nx},${my + ny} L ${b[0]},${b[1]} L ${mx - nx},${my - ny} Z`;
-}
-
-// The gem: an eight-point faceted jewel, slightly taller than wide (a cut
-// stone, not a regular octagon), with three internal facet lines meeting at
-// an off-centre highlight point for a dimensional, cut-glass read.
-const GEM_R = 175;
-const gemAngles = [ -90, -45, 0, 45, 100, 135, 180, 225 ];
-const gemRadii =  [ 170, 165, 175, 160, 180, 160, 175, 165 ];
-const gemOuter = gemAngles.map((a, i) => pt(a, gemRadii[i] * (GEM_R / 170)));
-const highlight = pt(-70, 40); // off-centre, toward the "light" corner
-
-function gemFacetPath(i, j) {
-  return `M ${highlight[0]},${highlight[1]} L ${gemOuter[i][0]},${gemOuter[i][1]} L ${gemOuter[j][0]},${gemOuter[j][1]} Z`;
-}
-
 const GOLD = "#FCC419", GOLD_MID = "#d4af37", GOLD_DEEP = "#a97c0a";
 
-function buildMark(rockFill, rockShade) {
-  const facets = [];
-  for (let i = 0; i < gemOuter.length; i++) {
-    const j = (i + 1) % gemOuter.length;
-    const tone = i % 3 === 0 ? GOLD : i % 3 === 1 ? GOLD_MID : GOLD_DEEP;
-    facets.push(`<path d="${gemFacetPath(i, j)}" fill="${tone}" opacity="0.92"/>`);
+// A 3x3 grid of stone blocks, one lit. Grid is centred in the 1000x1000
+// viewBox; cell size and gap are fixed so re-running this script reproduces
+// the same layout exactly.
+function buildMark(stoneFill) {
+  const cell = 260, gapPx = 20, rx = 24;
+  const gridW = cell * 3 + gapPx * 2;
+  const start = (1000 - gridW) / 2; // 90
+  const cells = [];
+  for (let r = 0; r < 3; r++) {
+    for (let c = 0; c < 3; c++) {
+      cells.push({ x: start + c * (cell + gapPx), y: start + r * (cell + gapPx), lit: r === 1 && c === 1 });
+    }
   }
+  const litCell = cells.find((k) => k.lit);
+  const glowCx = litCell.x + cell / 2, glowCy = litCell.y + cell / 2;
+
+  const stones = cells
+    .filter((k) => !k.lit)
+    .map((k) => `<rect x="${k.x}" y="${k.y}" width="${cell}" height="${cell}" rx="${rx}" fill="${stoneFill}"/>`)
+    .join("\n  ");
+
   return `
-  <polygon points="${poly(rockOuter)}" fill="${rockFill}"/>
-  ${crackPairs.map(([a, b]) => `<path d="${crackPath(a, b, 5)}" fill="${rockShade}" opacity="0.5"/>`).join("\n  ")}
-  <polygon points="${poly(gemOuter)}" fill="${GOLD}"/>
-  ${facets.join("\n  ")}
-  <polygon points="${poly(gemOuter)}" fill="none" stroke="${GOLD_DEEP}" stroke-width="3" stroke-opacity="0.35"/>`;
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="${GOLD}" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="${GOLD}" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="${glowCx}" cy="${glowCy}" r="330" fill="url(#glow)"/>
+  ${stones}
+  <rect x="${litCell.x}" y="${litCell.y}" width="${cell}" height="${cell}" rx="${rx}" fill="${GOLD}"/>
+  <rect x="${litCell.x + 40}" y="${litCell.y + 40}" width="${cell - 80}" height="${cell - 80}" rx="${rx - 12}" fill="${GOLD_MID}" opacity="0.55"/>`;
 }
 
-function writeMark(file, rockFill, rockShade) {
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">${buildMark(rockFill, rockShade)}
+function writeMark(file, stoneFill) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">${buildMark(stoneFill)}
 </svg>
 `;
   writeFileSync(join(__dir, file), svg);
@@ -114,10 +91,10 @@ function writeMark(file, rockFill, rockShade) {
 }
 
 // Dark stone (Carbon's own darkest surface step) — reads on a light banner.
-writeMark("glimstone-dunkel.svg", "#262626", "#161616");
+writeMark("glimstone-dunkel.svg", "#262626");
 // Pale stone — reads on a dark banner. Kept a genuine light grey, not white,
 // so it still reads as stone rather than paper.
-writeMark("glimstone-hell.svg", "#d1d1d1", "#8d8d8d");
+writeMark("glimstone-hell.svg", "#d1d1d1");
 
 // ============================================================================
 // The banner — same harness as every other repo's gen-banner.mjs.

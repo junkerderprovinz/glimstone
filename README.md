@@ -5,11 +5,21 @@
   </picture>
 </p>
 
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-AGPL--3.0-blue?style=for-the-badge&logo=gnu&logoColor=white" alt="License: AGPL-3.0" height="36"></a>
+</p>
+
 <p align="center">The shared design language behind a family of apps by the same author: a layered, low-noise interface system built on IBM Carbon's neutral palette, with one shared accent, one shared shape engine, and a house style for componentry (cards, tabs, switches, the info bubble, the reveal eye).</p>
+
+<p align="center">
+  <a href="https://buymeacoffee.com/junkerderprovinz">
+    <img src=".github/assets/button-buy-me-a-coffee.svg" alt="Buy me a coffee" width="220">
+  </a>
+</p>
 
 This repository is the canonical source — the written spec, and the reference token files an adopting app copies from. It has no build step and ships no package; adoption is copy-and-paste by design, so a plain-CSS Unraid plugin and a React/Tailwind app can both read the same design language without sharing a runtime.
 
-**Status: private, internal.** GlimStone documents a house style shared across the author's own apps — it is not (yet) meant for outside adoption. See [`docs/design-language.md`](docs/design-language.md) for the full reasoning behind that, and everything else.
+GlimStone documents a house style shared across the author's own apps. It's published for reference and transparency rather than as a general-purpose design system for outside adoption — see [`docs/design-language.md`](docs/design-language.md) for the full reasoning and everything else.
 
 ## Contents
 
@@ -18,6 +28,8 @@ This repository is the canonical source — the written spec, and the reference 
 3. [Adopting GlimStone in an app](#3-adopting-glimstone-in-an-app)
 4. [Where per-app detail lives](#4-where-per-app-detail-lives)
 5. [Versioning](#5-versioning)
+6. [License](#6-license)
+7. [Support this project](#7-support-this-project)
 
 ## 1. What's in this repo
 
@@ -48,3 +60,23 @@ This repository is deliberately app-agnostic. Anything true for only one app —
 ## 5. Versioning
 
 GlimStone the language is versioned independently of any app that adopts it — a rule added here doesn't imply every adopting app has picked it up yet. See [`CHANGELOG.md`](CHANGELOG.md) for what changed and when.
+
+## 6. License
+
+**Copyright (C) 2026 Junker der Provinz.**
+
+GlimStone is free software under the **GNU Affero General Public License v3.0** (AGPL-3.0); see [LICENSE](LICENSE). You may run, study, share and modify it. If you distribute it, or run a modified version as a network service, you must release your source under the same AGPL-3.0 terms and keep the existing copyright and attribution notices intact.
+
+**Name and branding are not licensed.** The AGPL covers the source and documentation only. "GlimStone", its logo and its branding remain reserved: a fork or derivative must use its own distinct name and branding, and may not present itself as GlimStone. This keeps it unambiguous which project is the original.
+
+## 7. Support this project
+
+Bugs, ideas or questions? Please [open a GitHub issue](https://github.com/junkerderprovinz/glimstone/issues).
+
+This is a one-person project, maintained in whatever free time is available. If it's been useful as a reference, you're welcome to buy me a coffee.
+
+<p align="center">
+  <a href="https://buymeacoffee.com/junkerderprovinz">
+    <img src=".github/assets/button-buy-me-a-coffee.svg" alt="Buy me a coffee" width="220">
+  </a>
+</p>
