@@ -2,7 +2,7 @@
 
 A layered, low-noise interface system: a small light in dark masonry.
 
-**The palette is not ours to invent.** The ground, the surfaces, the text ramp and the state hues are IBM Carbon's neutral greys and support tones — the same values BombVault, Krusader and the JDownloader themes already use. GlimStone briefly had a warm near-black of its own, and it read as brown beside every sibling. A design language shared across apps has to share its ground first; what GlimStone contributes is the *system* — the rules below, the shape engine, the rainbow, the info bubble — not a second set of greys.
+**The palette is not ours to invent.** The ground, the surfaces, the text ramp and the state hues are IBM Carbon's neutral greys and support tones — the same values already used consistently across every app that shares this language. GlimStone briefly had a warm near-black of its own, and it read as brown beside everything else. A design language shared across apps has to share its ground first; what GlimStone contributes is the *system* — the rules below, the shape engine, the rainbow, the info bubble — not a second set of greys.
 
 ## The palette
 
@@ -64,11 +64,11 @@ The CSS prefix is `glim-`.
 - **Rendered into `<body>`, positioned from the icon.** Anchored locally, it's at the mercy of every card, table and scroll container above it — one `overflow: hidden` and the explanation is a sliver. Closes on scroll instead of drifting away from what it explains.
 - **Hover *and* focus, Escape closes**, text as `aria-label`, bubble is `pointer-events: none` (never swallows a click).
 
-Why bother at all: grey prose under every control gets read once and then costs vertical space forever. The reference implementation is CC's `cc-info`.
+Why bother at all: grey prose under every control gets read once and then costs vertical space forever.
 
 ## The one horizontal selector
 
-Tabs, filter bars, segmented controls and the corner-style picker are **the same thing**: a row from which one (or several) item is chosen. One component covers all of it — `components/Tabs.tsx`, `select="one" | "many"`, built from `segBase`/`segOn`/`segOff`. Building a bespoke set of buttons for one specific picker just builds a second selector, and the two drift apart from there — it has already happened once.
+Tabs, filter bars, segmented controls and the corner-style picker are **the same thing**: a row from which one (or several) item is chosen. Build it as **one** component (`select="one" | "many"`, built from a filled/unfilled segment style), not a bespoke set of buttons per picker — a second, hand-rolled selector drifts from the first one the moment either changes. This is for **small, fixed** sets that all fit on screen at once — a list with dozens of entries (see the language picker below) is a different component, not a wrapping tab strip.
 
 - **No wrapping bar.** The filled tab already says which one is selected; a box around the row says nothing and is one elevation too many (rule 1). The container is gone entirely; the gap alone carries the separation. Measured: a bare strip, no background, no padding — the tabs sit on the page as badges.
 - **Top, with an icon.** Settings pages line their tabs up **horizontally at the top**, each with a glyph. A tab with no label is a gap; a tab with the wrong glyph is a lie — no icon beats the wrong one.
@@ -99,12 +99,30 @@ A plugin page inherits the host's global form and button CSS. Two things that ha
 - **Specificity beats a single class.** Unraid's `button[type=button]:where(…)` (0,1,1) beats `.my-btn` (0,1,0) — the button gets the host's ghost styling (transparent, accent text, gradient border). Component rules should therefore be **prefixed with the app's root class** (`.app-cfg .app-btn` = 0,2,0), the same way input rules already have to be. Icons (the eye, the `(i)`) stay `<span>`, never `<button>`, so no button chrome applies; a hidden toggle checkbox needs `position: absolute !important` hard-pulled out of flow, or a host reset shoves it back and the pill drifts.
 - **Native by default, GlimStone only with the companion app installed** (one markup base, two looks). Without that companion, the page should look **fully native to the host** — style layout only, lean on the host's own form CSS (underlined inputs, native checkbox toggles, the host's own type). The GlimStone look (cards, wells, eyebrows, pill tabs/toggles, filled chips) lives in a **second layer**, gated behind a class the companion app stamps onto `<html>` when it's present, with higher specificity, reading the shared tokens only then. GlimStone is **progressive enhancement, not the default.** The anti-pattern seen in the wild: GlimStone applied unconditionally with token fallbacks baked in — the page then stands there as "GlimStone in the host's own orange" when the companion app isn't installed, and doesn't read as native to anyone.
 
-## The two user-owned axes
+## The user-owned axes
 
-Shape and accent are settings, **both applied once at the app root**, never by the page that edits them.
+Theme, shape, accent and language are all settings, and every one of them is **applied once at the app root** — never by the page that edits it. A settings page reads the current value and writes the new one; it never carries the styling logic itself, or two pages would be free to disagree about how "square" looks.
 
+- **Theme** sets `data-theme` on `<html>`: `light` · `dark` · unset, which follows the OS via `prefers-color-scheme`. **Default is system**, not a hard-coded light or dark — an app that opens dark on a light-mode OS made a choice nobody asked it to make. A user who picks light or dark explicitly overrides the OS until they clear it.
 - **Shape** sets `data-shape` on `<html>`: `round` (16/10px) · `soft` (8/5px) · `square` (0). **One** token drives every radius, no exception list.
-- **Accent** overrides `--accent`; `--accent-contrast` is **computed** from sRGB luminance, never asked for as a second setting — asking for a second colour just to make the first one legible is a trap, not a preference.
+- **Accent** overrides `--accent`; `--accent-contrast` is **computed** from sRGB luminance, never asked for as a second setting — asking for a second colour just to make the first one legible is a trap, not a preference. **The default, before anyone has touched the setting, is Sunflower gold `#FCC419`** (`DEFAULT_ACCENT` in `reference/appearance.ts`) — a fresh install of any app that shares this language opens in the same colour, so the family reads as one product from the very first screen, not just after someone finds the picker.
+- **Language** sets `lang` (and `dir`, see below) on `<html>`. Default is the browser's own locale (`navigator.language`) if it's supported, English otherwise — never a hard-coded language shown to everyone regardless of their system. The picker itself is a plain `<select>` (rule 14), not the horizontal selector above: a language list runs to dozens of entries, and a control built for "everything visible at once" stops working once it has to wrap or scroll.
+
+## Right-to-left languages
+
+Setting `dir="rtl"` on `<html>` (Arabic, Hebrew) mirrors layout through the Bidi algorithm, and most of the system holds up under it for free — the token-driven spacing and alignment already use logical properties (`margin-inline-start`, not `margin-left`), so a card, a form field or a section badge just flips. Two things don't get to flip automatically:
+
+- **Technical content stays pinned left-to-right.** A path, URL, filename, API key or log line is not language — it's data, and the Bidi algorithm reorders neutral characters (`/`, `.`, `-`) inside it as if it were prose. `/data/downloads` under `dir="rtl"` renders as `data/downloads/`: still the same string, but visually a different path, and a user reading it will believe their files live somewhere else. Any field or display showing technical content gets `dir="ltr"` **and** `text-align: start` (so its *position* still follows the surrounding RTL layout — only the text *inside* it stays LTR).
+- **Directional icons mirror, symmetric ones don't.** An arrow, a chevron, a "forward" glyph that implies a reading direction gets mirrored under `dir="rtl"` (`transform: scaleX(-1)`, or a dedicated RTL glyph if mirroring distorts it). An icon with no inherent direction — a gear, a trash can, the reveal eye — never does; mirroring it just makes it look subtly wrong for no reason anyone can name.
+
+Verify RTL on the rendered page, not by reading the CSS: a logical property used correctly and one used incorrectly look identical in the source and only differ once the browser actually flips the layout.
+
+## Non-Latin scripts
+
+The font stack ends in `system-ui, sans-serif`, not a fixed list of named fonts, and that's deliberate: a browser missing a glyph in the first-choice font (Segoe UI's CJK coverage is thin) falls back **per character** to whatever the OS already has installed for that script — it does not need every script's font to be listed by name to render correctly. Two things that font stack alone doesn't cover:
+
+- **Letter-spacing is a Latin assumption.** The base `-0.008em` tightening reads as normal kerning on Latin letterforms and as crowding on CJK, which is set in full-width square cells that don't kern the same way. Scope it out for CJK content: `:lang(ja), :lang(zh), :lang(ko) { letter-spacing: normal; }`.
+- **`.glim-num`'s tabular figures are a Latin-digit feature.** `font-variant-numeric: tabular-nums` only affects the Western Arabic numerals (0–9) most fonts ship as monospaced-width by convention; it has no defined effect on native digit systems (Eastern Arabic-Indic, Devanagari) some locales display instead. Where a locale's own digits are shown, column alignment has to come from a fixed-width container instead of the numeral feature.
 
 ## Rainbow — the accent, plural
 
@@ -155,7 +173,7 @@ Utility classes: `.glim-card` (the surface), `.glim-well` (inset grouping), `.gl
 ## Adopting GlimStone in another app
 
 1. Copy the `:root` / `[data-theme="light"]` blocks from [`reference/tokens.css`](../reference/tokens.css) into the app's stylesheet.
-2. Copy the `.glim-card` / `.glim-well` / `.glim-eyebrow` / `.glim-num` helpers, plus the scrollbar and focus rules, from the same file.
+2. Copy the `.glim-card` / `.glim-well` / `.glim-eyebrow` / `.glim-num` helpers, plus the base `body`/font rules and the scrollbar and focus rules, from the same file.
 3. Add whatever tokens the app doesn't have yet: `--accent-soft`, `--elevation`, `--hairline`, `--focus-ring`, `--radius-card`, `--radius-control`, `--radius-pill`.
 4. Replace hard-coded `rounded-lg` / `shadow-*` on panels with `.glim-card`; fill the selected nav item, tab or segment with the accent (`segBase`/`segOn`/`segOff`, see the componentry note in each app's own style guide).
 5. For rainbow, copy [`reference/appearance.ts`](../reference/appearance.ts) — it's dependency-free and talks only to `document.documentElement` and its own settings object.

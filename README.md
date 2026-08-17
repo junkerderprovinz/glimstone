@@ -1,6 +1,11 @@
-# GlimStone
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/assets/glimstone-banner-dark.png">
+    <img src=".github/assets/glimstone-banner.png" alt="GlimStone" width="100%">
+  </picture>
+</p>
 
-The shared design language behind [KnightLoader](https://github.com/junkerderprovinz/knightloader), [BombVault](https://github.com/junkerderprovinz/bombvault) and [CannonadeCommand](https://github.com/junkerderprovinz/cannonadecommand): a layered, low-noise interface system built on IBM Carbon's neutral palette, with one shared accent, one shared shape engine, and a house style for componentry (cards, tabs, switches, the info bubble, the reveal eye).
+<p align="center">The shared design language behind a family of apps by the same author: a layered, low-noise interface system built on IBM Carbon's neutral palette, with one shared accent, one shared shape engine, and a house style for componentry (cards, tabs, switches, the info bubble, the reveal eye).</p>
 
 This repository is the canonical source — the written spec, and the reference token files an adopting app copies from. It has no build step and ships no package; adoption is copy-and-paste by design, so a plain-CSS Unraid plugin and a React/Tailwind app can both read the same design language without sharing a runtime.
 
@@ -29,7 +34,7 @@ IBM Carbon's neutral greys for the ground and surfaces, one accent that means "t
 ## 3. Adopting GlimStone in an app
 
 1. Copy the `:root` / `[data-theme="light"]` blocks from [`reference/tokens.css`](reference/tokens.css) into the app's stylesheet.
-2. Copy `.glim-card` / `.glim-well` / `.glim-eyebrow` / `.glim-num`, plus the scrollbar and focus rules, from the same file.
+2. Copy `.glim-card` / `.glim-well` / `.glim-eyebrow` / `.glim-num`, plus the base `body`/font rules and the scrollbar and focus rules, from the same file.
 3. Add whatever tokens the app doesn't have yet — the full list is in the file's own comments and in the design-language doc's token table.
 4. Replace hard-coded `rounded-lg` / `shadow-*` with `.glim-card`; fill the selected nav item, tab or segment with the accent.
 5. For rainbow, copy [`reference/appearance.ts`](reference/appearance.ts) as-is.

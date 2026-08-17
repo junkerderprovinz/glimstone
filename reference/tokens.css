@@ -143,6 +143,30 @@
   --focus-ring: rgba(142, 106, 0, .5);
 }
 
+/* Base document styling. The font stack ends in system-ui/sans-serif rather
+   than a fixed list of named fonts on purpose: a browser missing a glyph in
+   the first-choice font falls back per character to whatever the OS already
+   has installed for that script, so this list does not need every script's
+   font named to render correctly (see docs/design-language.md, "Non-Latin
+   scripts"). The base letter-spacing is a Latin-kerning assumption and reads
+   as crowding on CJK, which is set in full-width cells that don't kern the
+   same way — scoped back to normal for it below. */
+body {
+  margin: 0;
+  background-color: var(--carbon-bg);
+  color: var(--carbon-text);
+  font-family: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.008em;
+}
+:lang(ja), :lang(zh), :lang(ko) {
+  letter-spacing: normal;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 /* The one raised surface. Never nest it (rule 1). */
 .glim-card {
   background-color: var(--carbon-surface);
