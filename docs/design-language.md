@@ -92,6 +92,45 @@ A field holding a secret carries its show/hide control **inside the field** at t
 - **Neutral, never the accent.** Like the `(i)`, it means "look", not "activity".
 - **It doesn't change the field's width.** The wrapper that positions the eye fills the column exactly like a plain field; a shrink-to-content wrapper makes secret fields read as narrower than every other field — the one thing the eye should *not* draw attention to. A verify/check action goes on its own line **below**, not beside it.
 
+## Badges
+
+Rules 11 and 13 already say a lot is a badge — every heading, everything clickable. What a badge actually *is* has four shape registers and a sizing discipline of its own.
+
+- **Four shapes, not the shape engine's three.** Pill (`--radius-pill`, fully round) for standalone chips and count/data badges; rounded (a small fixed radius, matching `--radius-control`) for compact inline badges; square (0) mirrors the shape engine's square setting; circle (`--radius-pill` again, but width locked to height) for icon-only or single-glyph badges — same radius value as pill, but a distinct semantic use: a pill implies text content, a circle implies "just a glyph."
+- **Cap the pill radius to the badge's own height.** A blind `border-radius: var(--radius-pill)` on a very compact badge over-rounds once the radius exceeds half the badge's height, and it stops reading as a pill and starts reading as a pointed lozenge. Use `border-radius: min(var(--radius-pill), 50%)` rather than the raw token value on anything short enough for this to matter.
+- **Sizes are named stages with one canonical source, not per-instance values.** A handful of named stages (however many an app genuinely needs — small/medium/large is usually enough) each fix a font-size, padding and height together; every badge instance reads its stage's tokens rather than repeating literals. This isn't a nice-to-have: a real regression shrunk one row's badge height in a single stylesheet while five other stylesheets styling the same row still referenced the old literal value — a 30px badge can never share a line with a 26px button next to it, no matter what alignment logic runs afterward.
+- **Same stage means pixel-identical, regardless of the underlying element.** A `<button>` and a `<span>` styled to the same badge stage must resolve to the exact same rendered height — claim the full box model (`box-sizing`, an explicit `height`, `min-height: 0`, `appearance: none` on native elements) and read padding/font-size from the stage's own tokens, never from whatever that element type defaults to. Two badges built from the "same" helper function still rendered visibly different heights until this was enforced explicitly.
+- **The `font-size: 0` + `vertical-align: middle` trap.** A wrapper set to `font-size: 0` (the usual fix for whitespace-node gaps between inline children) combined with `vertical-align: middle` moves the line box's strut baseline to `line-height / 2` with zero x-height, so content centers on that baseline instead of the wrapper's true middle — landing a few pixels off from a same-height sibling that still has a real font-size. Removing the `font-size: 0` while `vertical-align: middle` stays in place pushes the content back up unexpectedly in the other direction. Fix the two together, never just one.
+
+## Toasts
+
+`.glim-toast`/`glim-toast-in` (in `reference/tokens.css`) is the CSS half; the other half is behavioral and framework-specific, so it's spec here rather than a copyable file.
+
+- **A fixed duration, not "until dismissed."** 4 seconds is long enough to read, short enough not to pile up — a toast is a notice, not a to-do list.
+- **Stacked, not replaced.** Multiple toasts queue in a fixed corner rather than one overwriting the next; each is independently dismissible.
+- **Hover or focus pauses the countdown — and preserves the remaining time**, rather than restarting it. Resetting to the full duration on every hover means a toast under a wandering cursor never actually expires.
+- **A "quiet" mode filters by severity, not by muting everything.** Failures and anything that blocks progress (a captcha waiting for input, an account that just got benched) always surface; routine completions can be suppressed for someone who's turned the volume down. The two categories that already have a dedicated, persistent surface elsewhere (a captcha panel, an account-health strip) skip the toast entirely rather than duplicating the notice in two places at once — a toast is for something that has no other place to live.
+
+## Empty states
+
+A list, table or panel with nothing in it gets a **deliberate empty state**, not blank space: a `.glim-card`, a muted icon at reduced opacity, a muted title, an optional one-line hint, an optional action button (e.g. "Add one"). The same shape serves two related but distinct situations — genuinely nothing exists yet, versus a filter/search matched nothing — with different copy for each; conflating them ("No results" when the real answer is "you haven't added anything yet") sends the user looking for a filter to clear that was never set. A spot where the shared empty-state shape genuinely doesn't fit is fine as a one-off exception — document *why* inline where it happens, so it reads as a deliberate call and not an overlooked gap.
+
+## Destructive and confirmable actions
+
+Not every removal deserves the same friction, and treating them identically is itself the bug.
+
+- **Reversible actions don't ask.** Dropping a row from a working list (re-addable in one step) fires immediately — a confirmation dialog in front of an undoable action just teaches people to click through confirmations without reading them.
+- **Irreversible actions get a real confirmation that states the stakes**, not a generic "Are you sure?" — the exact count and, where it applies, the size of what's about to be gone. It's the standard `.glim-card` window (rule 15), not a native browser dialog: a native `confirm()` can't be styled, can't be localized consistently with the rest of the UI, and blocks the entire tab while it's open.
+- **The destructive control is always the fault colour.** Not the accent, never a neutral grey "Delete" sitting next to neutral "Cancel" — the one control on the screen that ends something permanently is the one place status-red belongs on a button.
+
+## Charts (provisional — extracted from a single example, revisit once a second chart exists)
+
+- **Hand-drawn SVG, not a charting library.** A smoothed line path, filled underneath with an accent-colour gradient fading to transparent, stroked in the accent at a hairline weight.
+- **One colour source: the accent, never rainbow or status hues.** A chart shows a quantity over time, not a set of distinct identities — the plural colour modes exist for the latter.
+- **No axes, no gridlines, no tick labels.** A single eyebrow-style caption states the current or peak value in words; the shape of the line is the point, not a coordinate system to read precisely.
+- **The live edge pulses** (`.glim-live`), same treatment as any other "this is happening now" indicator elsewhere in the system — a chart isn't a special case, it's rule 4's accent-means-running applied to a curve instead of a badge.
+- **Idle degrades to a flat, muted hairline — not a gold line sitting at zero.** The accent means activity; a coloured line with nothing happening behind it is the same mistake rule 3 already rules out elsewhere, just easier to miss on a chart.
+
 ## Inside a foreign host UI (Unraid plugins)
 
 A plugin page inherits the host's global form and button CSS. Two things that have cost real time:

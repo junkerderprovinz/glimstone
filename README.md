@@ -33,7 +33,7 @@ GlimStone documents a house style shared across the author's own apps. It's publ
 
 ## 1. What's in this repo
 
-- [`docs/design-language.md`](docs/design-language.md) — the full spec: the palette, the name and its etymology, all nineteen rules, the componentry vocabulary (info bubble, horizontal selector, switches, the reveal eye), the rainbow colour-mode system, the token contract, and the adoption steps. This is the document to read start to finish; everything below just points back into it.
+- [`docs/design-language.md`](docs/design-language.md) — the full spec: the palette, the name and its etymology, all nineteen rules, the componentry vocabulary (info bubble, horizontal selector, switches, the reveal eye, badges, toasts, empty states, destructive actions, charts), the colour and motion engines, the token contract, and the adoption steps. This is the document to read start to finish; everything below just points back into it.
 - [`reference/tokens.css`](reference/tokens.css) — the palette and component classes as plain CSS custom properties. No build step, no framework. Copy the parts an app needs.
 - [`reference/tailwind-theme.css`](reference/tailwind-theme.css) — the optional Tailwind v4 `@theme` layer that maps the tokens onto utility classes. Skip it entirely on a non-Tailwind app.
 - [`reference/appearance.ts`](reference/appearance.ts) — the shape/accent/rainbow logic. Framework-free (talks only to `document.documentElement` and `localStorage`), so it drops into any app unchanged.

@@ -17,7 +17,12 @@
 /* Shape is one knob for the whole app. Every rounded corner reads one of
    these three tokens and nothing hard-codes a radius, so switching the shape
    changes cards, buttons, tabs, inputs, pills, badges and toggles together.
-   A single exception is the thing that ends up looking broken. */
+   A single exception is the thing that ends up looking broken.
+
+   On a very short element (a compact badge), border-radius: var(--radius-pill)
+   applied literally over-rounds past half the element's own height and reads
+   as a pointed lozenge instead of a pill. Cap it against the element instead
+   of using the raw token: border-radius: min(var(--radius-pill), 50%). */
 :root {
   --radius-card: 1rem;
   --radius-control: 0.625rem;

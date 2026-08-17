@@ -2,6 +2,13 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 1.4.0 — 2026-08-18
+
+### ✨ Added
+
+- **Five new sections extracted from real, working code rather than invented:** Badges (four shape registers, named size stages with one canonical source, the pixel-parity-across-element-types discipline, the `font-size: 0` + `vertical-align: middle` trap — generalised from CannonadeCommand's production badge system, previously only in its app-specific subnote), Toasts (duration, stacking, hover-pauses-and-preserves-remaining-time, severity-filtered quiet mode, toast-vs-dedicated-surface judgement — from KnightLoader's `lib/toast.tsx`), Empty states (the shared `EmptyState` shape, and the zero-items-vs-zero-matches copy distinction), Destructive and confirmable actions (reversible fires immediately, irreversible gets a real modal stating exact stakes, the control is always the fault colour), and Charts, marked provisional since only one example (a speed graph) currently exists.
+- A short technique note in `reference/tokens.css`: cap a pill radius against the element's own height (`min(var(--radius-pill), 50%)`) rather than applying the raw token, so a compact badge doesn't over-round into a lozenge.
+
 ## 1.3.0 — 2026-08-18
 
 ### ✨ Added
