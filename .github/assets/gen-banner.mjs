@@ -141,14 +141,32 @@ const blockH = nameAsc + nameDesc + lineGap + claimAsc;
 const nameBaseline = H / 2 - blockH / 2 + nameAsc;
 const claimBaseline = nameBaseline + nameDesc + lineGap + claimAsc;
 
-// Generated at LOCAL origin (0,0) and positioned via <g transform>, not baked
-// into getPath's own x/y: opentype.js's toPathData() silently corrupts long
-// multi-glyph paths once the baked-in offset gets large enough (confirmed by
-// bisection — reproduces with either operand large, fix confirmed by moving
-// the offset to an SVG transform instead). Keep coordinates small at the
-// source; let the SVG do the positioning.
-const namePath = font.getPath(NAME, 0, 0, nameSize).toPathData(2);
-const claimPath = claimFont.getPath(CLAIM, 0, 0, claimSize).toPathData(2);
+// Render text as ONE <g> PER GLYPH, each glyph's own path always computed at
+// x=0 and positioned only via its group's transform. A single getPath(text,
+// x, y, size) call over the whole string is NOT reliable: opentype.js's
+// hinting goes numerically unstable (silently emits NaN mid-glyph, for
+// specific glyphs) once the x it's fed grows past a few hundred units.
+// Root-caused later (see the bootstrapping repo's gen-banner.mjs for the
+// full bisection): an earlier "local origin for the whole string" version of
+// this fix only delayed the problem to longer strings — it happened to work
+// for the exact NAME/CLAIM text at the time, not because the bug was fixed.
+// Requesting every glyph at x=0 sidesteps the instability regardless of
+// string length or content.
+function textGroups(fnt, text, fontSize, x0, y0) {
+  const scale = fontSize / fnt.unitsPerEm;
+  let cx = x0;
+  const parts = [];
+  for (let i = 0; i < text.length; i++) {
+    const glyph = fnt.charToGlyph(text[i]);
+    const d = glyph.getPath(0, 0, fontSize).toPathData(2);
+    parts.push(`<g transform="translate(${cx.toFixed(2)},${y0.toFixed(2)})"><path d="${d}"/></g>`);
+    cx += glyph.advanceWidth * scale;
+    if (i < text.length - 1) {
+      cx += fnt.getKerningValue(glyph, fnt.charToGlyph(text[i + 1])) * scale;
+    }
+  }
+  return parts.join("");
+}
 
 function embedLogo(logoFile, x, y, w, h) {
   const raw = readFileSync(join(__dir, logoFile), "utf8").replace(/<\?xml[^>]*\?>\s*/, "");
@@ -167,11 +185,13 @@ function emit(name, svg, bg) {
 }
 
 for (const t of THEMES) {
+  const nameGlyphs = textGroups(font, NAME, nameSize, textX, nameBaseline);
+  const claimGlyphs = textGroups(claimFont, CLAIM, claimSize, textX, claimBaseline);
   const full = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
   <rect width="${W}" height="${H}" fill="${t.bg}"/>
   ${embedLogo(t.logo, LX, LY, LW, LH)}
-  <g transform="translate(${textX},${nameBaseline})"><path d="${namePath}" fill="${t.name}"/></g>
-  <g transform="translate(${textX},${claimBaseline})"><path d="${claimPath}" fill="${t.claim}"/></g>
+  <g fill="${t.name}">${nameGlyphs}</g>
+  <g fill="${t.claim}">${claimGlyphs}</g>
 </svg>
 `;
   emit(`glimstone-banner${t.suffix}`, full, t.bg);
