@@ -26,6 +26,21 @@ Accent presets in the picker are the same five across every app: Sunflower `#FCC
 
 The light accent is **the same hue, darkened** (`#8E6A00`), not a different colour: gold on white is unreadable at 11px, and Carbon's own answer to that is to darken the hue rather than switch it.
 
+## The type scale
+
+Not an engine, on purpose: an engine resolves a *variable* input (a setting, an OS signal) into tokens. Nobody sets their own type scale — this is a fixed reference table, the same category as the palette above, not a mechanism.
+
+| Size | Role |
+|---|---|
+| 20px | Heading — a section or page title. |
+| 14px | Body — the default for everything that isn't one of the other rows. |
+| 12px | Dense — list rows, table cells, anywhere many instances stack and body size would crowd. |
+| 11px | Caption — three treatments of the *same size*, not three sizes: a plain muted caption, `.glim-eyebrow`'s uppercase+letter-spaced label, and the info bubble's popover text. The treatment carries the distinction, not the size. |
+
+**Two sizes exist and are deliberately *not* part of this scale**, so nobody extends them into steps that don't exist: a page's one hero figure (rule 2) is sized on its own merits case by case, not from a repeated "display" step — forcing every hero into one fixed size would fight the same rule that says there's exactly one hero and everything else is quiet. A wordmark or brand-name instance is typography for a specific, singular piece of chrome, not a heading size available for reuse elsewhere. Treat any large one-off number the same way: it's not a gap in the scale, it's a case the scale was never meant to cover.
+
+**How this table got here:** three near-identical caption sizes (10px, 11px, 11.5px) drifted apart across an app's history before being consolidated to the single 11px row above — the same failure mode rule about badge sizing warns against, just for text instead of boxes. If a future audit finds a fourth size claiming to be a caption, that's the bug to fix, not a fourth row to add.
+
 ## The name
 
 Middle English *glimme*, "shining brightness; radiance", attested around 1400 in *Pearl* — MS Cotton Nero A.x, the same manuscript that carries *Sir Gawain and the Green Knight*. The Gawain-poet himself alliterates the two halves together in line 172: *"euer glemered & glent al of grene stones."* The later thieves'-cant sense ("douse the glim", 1700) is a narrowing of a word that had already been English for three centuries. The German ear hears the same root in *glimmen* and *Glimmer* — the gold that sits in dark rock.
@@ -223,6 +238,7 @@ Defined under `:root` / `[data-theme="light"]`.
 | `--elevation`, `--hairline` | the one shadow + its top light |
 | `--focus-ring` | focus outline colour |
 | `--radius-card`, `--radius-control`, `--radius-pill` | the shape engine |
+| `--text-heading`, `--text-body`, `--text-dense`, `--text-caption` | the type scale |
 
 Utility classes: `.glim-card` (the surface), `.glim-well` (inset grouping), `.glim-eyebrow` (small uppercase label), `.glim-num` (tabular digits), `.glim-bubble` (the info bubble), `.glim-hue` (owns a rainbow position), `.glim-hue-icon`, `.glim-tint`, `.glim-page-enter`, `.glim-toast`, `.glim-fade`, `.glim-live` (pulsing dot).
 
