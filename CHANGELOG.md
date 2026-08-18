@@ -2,6 +2,12 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 1.0.1 — 2026-08-18
+
+### 🐛 Fixed
+
+- [`reference/appearance.ts`](reference/appearance.ts) failed to typecheck under a consumer's stricter TypeScript settings (`noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`) — found while adopting GlimStone into a new strict-mode project. `rainbowAt()` now throws a descriptive error on the (practically unreachable, since `usablePalette()` never lets the palette go empty) case its indexed lookup can't statically prove is defined; `cacheAppearance()` now builds its cached payload with a conditional spread so an absent `rainbow` argument omits the key entirely instead of setting it to `undefined`. Both fixes preserve the exact same runtime behaviour — this is a type-only correctness fix for adopting apps that run with these stricter flags, not a behaviour change.
+
 ## 1.0.0 — 2026-08-18
 
 ### ✨ Added
