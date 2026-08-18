@@ -2,6 +2,12 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 1.0.2 — 2026-08-19
+
+### 🐛 Fixed
+
+- [`reference/tokens.css`](reference/tokens.css) never actually implemented the documented "theme defaults to system" behaviour — `docs/design-language.md` states that an unset `data-theme` "follows the OS via `prefers-color-scheme`", but the stylesheet had no `@media (prefers-color-scheme: light)` block at all: the bare `:root` unconditionally applied the dark palette, so any adopting app that never explicitly sets `data-theme` opened dark regardless of the OS's light preference — the exact "opened dark on a light-mode OS nobody asked for" mistake the design language itself warns against. Added the missing media-query tier (`:root:not([data-theme="dark"])` under `@media (prefers-color-scheme: light)`, mirroring the same token values as `[data-theme="light"]`), so an unset theme now genuinely follows the OS in both directions, and an explicit `data-theme="light"`/`"dark"` override still wins regardless of OS preference. Found while wiring a full appearance-settings panel (shape/accent/theme pickers) into a new adopting app.
+
 ## 1.0.1 — 2026-08-18
 
 ### 🐛 Fixed
