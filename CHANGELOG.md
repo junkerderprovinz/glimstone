@@ -2,6 +2,12 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 1.1.0 — 2026-08-19
+
+### ✨ Added
+
+- Rule 14 gains a scroll-to-cycle behaviour for `<select>` elements: a new [`reference/selectScroll.ts`](reference/selectScroll.ts) (`enableSelectScroll()` / `enableSelectScrollForAll()`) lets a closed dropdown answer the mouse wheel directly, stepping `selectedIndex` and firing a real `change` event without ever opening the native dropdown. The platform default only wires the wheel up once a `<select>` is already open; this closes that gap for values people reach for constantly (a font, a preset, a language) so they don't cost a click first. Framework-free, idempotent, dependency-free like `appearance.ts`. Requested while building a character-set/font-heavy settings surface in an adopting app, where scrolling through options one at a time is the natural gesture.
+
 ## 1.0.2 — 2026-08-19
 
 ### 🐛 Fixed
