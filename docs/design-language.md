@@ -92,6 +92,18 @@ Tabs, filter bars, segmented controls and the corner-style picker are **the same
 
 **The trap:** `Field` is a `<label>`. A label wrapped around *three* tabs hands its click to the first one — clicking the "Corners" caption reset the app to "round", and the first tab announced the caption as its own name to a screen reader. So: `Field` for **one** control, **`FieldGroup`** for a set.
 
+## The sidebar
+
+A persistent left rail is how a multi-destination app is navigated: the brand mark at the top, a vertical icon+label list filling the middle, and Settings pinned at the bottom below a spacer — no separate top app-bar at all, the brand lives inside the rail. This is a **different component** from the horizontal selector above, not a vertical variant of it: a sidebar destination is real navigation (which whole content area is showing), not "which of a small fixed set is chosen" — it uses `aria-current="page"` semantics, not the ARIA tabs pattern, and in an app without a URL router it's the same idea an SPA reaches for when it swaps a content area without touching the address bar.
+
+- **Own surface token.** The rail reads `--carbon-sidebar`, not `--carbon-surface` — same value today, but a distinct token, because the rail is chrome that spans full height flush against the window edge, not a card floating on the ground colour. No elevation, no border: the page's own background colour change *is* the separation.
+- **Filled when active**, same idea as the horizontal selector: the accent fills the active item (`background: var(--accent)`, `color: var(--accent-contrast)`), nothing else marks selection — no rail-beside-the-rail, no left border (rule 5 already forbids vertical marks generally, and a sidebar is exactly where the temptation to add one is strongest).
+- **A quiet hover moves, it doesn't just recolour.** A 2px horizontal nudge on hover (motion-safe-gated) reads as "this is reachable" more than a colour change alone does on a rail this visually quiet.
+- **Two groups, one state.** The main destinations fill the available height (`flex: 1` on the list); Settings sits in its own group below, separated only by the space the flex spacer creates — never a rule line between them (rule 5 again). Both groups share one "which destination is active" state; only one content area is ever showing.
+- **Version numbers live in Settings, never in a persistent footer.** A version string sitting in permanent page chrome is read once and then costs a line forever (the same objection rule 8 makes about explanatory prose) — put it where someone actually goes looking for it.
+
+**A lightweight alternative for a genuinely simple app.** Not every adopter has enough real destinations to justify a full rail — a single-workspace tool with only "the work" and "Settings" can skip the sidebar entirely and put a small square badge (`--radius-control`, not the pill) carrying a gear glyph in the page's own top-right corner instead, opening Settings as its own full-page view (still no preview, no working cards behind it — see rule 15, a window is a window). This is a real, sanctioned pattern, not a workaround: state which one an app uses and why in that app's own style-guide subnote, since a future pass shouldn't "fix" a deliberately simple app back toward the rail.
+
 ## Switches
 
 - **Flush, no indent.** Sub-switches don't get indented — they're already dimmed when the parent switch is off, and that says the relationship better than indentation does. Indenting only left the switch tracks starting at two different x-positions.
