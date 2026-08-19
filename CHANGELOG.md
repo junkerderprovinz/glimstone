@@ -2,6 +2,16 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 1.3.0 — 2026-08-20
+
+### ✨ Added
+
+- The Language axis (under "The user-owned axes") now documents flag-emoji-prefixed options for the language `<select>` - a new [`reference/flagEmoji.ts`](reference/flagEmoji.ts) (`flagEmoji(isoCode)`) converts an ISO 3166-1 alpha-2 code to its regional-indicator flag emoji by string concatenation alone, so a native `<option>` (which can only ever hold plain text, never an image or CSS background) can still show a flag next to each language name without forcing a custom-built dropdown just to render one. Notes that a component-framework app that already isn't using a native select for other reasons may reasonably build a custom dropdown with a real flag-icon sprite library instead - this is the plain-`<select>`-compatible default, not a mandate to avoid a fancier approach elsewhere.
+
+### ⚡ Improved
+
+- The sidebar's version-numbers rule (1.2.0) is more specific: version numbers live at the very bottom of the Settings destination itself, outside every card - not inside whichever card happens to be last. Tucking it into one particular card made it read as that card's own property instead of the whole app's, and tied its position to wherever that card happens to land if Settings ever gains or reorders cards.
+
 ## 1.2.0 — 2026-08-20
 
 ### ✨ Added
