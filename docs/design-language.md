@@ -94,6 +94,7 @@ Tabs, filter bars, segmented controls and the corner-style picker are **the same
 - **Top, with an icon.** Settings pages line their tabs up **horizontally at the top**, each with a glyph. A tab with no label is a gap; a tab with the wrong glyph is a lie — no icon beats the wrong one.
 - **It wraps, it never scrolls.** A horizontally scrolling tab strip hides pages behind a gesture nobody makes on desktop.
 - **Roving tabindex**, arrow keys/Home/End, direction-aware (RTL).
+- **Under rainbow, only the SELECTED segment owns a position** — see "Rainbow — the accent, plural" below. The fill already carries the selection state; colouring every segment (including the ones not picked) is noise the control doesn't need, unlike a list row (which needs a wash at rest or an all-idle list shows no colour at all).
 
 **The trap:** `Field` is a `<label>`. A label wrapped around *three* tabs hands its click to the first one — clicking the "Corners" caption reset the app to "round", and the first tab announced the caption as its own name to a screen reader. So: `Field` for **one** control, **`FieldGroup`** for a set.
 
@@ -224,6 +225,8 @@ Eight colours handed out by **position** instead of one colour everywhere. Three
 | `rainbowPalette` | all eight editable; taken **only as a complete set** |
 
 **Mechanism:** an element that owns a position sets `--item-hue` (`hueVars`) and carries `.glim-hue`; the stylesheet redefines `--accent` **for that subtree**. Every component that already paints activity picks the colour up automatically — none of them has to know the mode exists. `.glim-hue-icon` additionally colours the glyph, `.glim-tint` washes the whole row at 16% (as an inset shadow, so the row's own hover tint still shows through). The set's active/selected member additionally carries **`.glim-active`** (the shared marker class, not just whatever app-specific "this one is selected" class already exists alongside it) — `.glim-tint.glim-active` reads the stronger 22% soft tint instead of the plain wash, so the selected row still reads as distinct from its neighbours instead of collapsing into the same flat colour as everything else in the list.
+
+**An icon-only badge that owns a position carries THREE classes, not one.** `.glim-hue` (redefines `--accent`, unconditionally — not just while active/checked, since `.glim-hue-icon`'s own rule only ever recolours a glyph once something has already redefined `--accent` for it to read), `.glim-hue-icon` (the glyph), and `.glim-tint` (the badge's own background wash) — an icon-only badge with only the glyph recoloured and a flat neutral background behind it reads as half-applied (jdp: "bei den ganzen Icons soll der Badge eingefärbt sein, wie das Icon"). Contrast this with a **horizontal selector's own segments**, below: there the inactive members get NEITHER `.glim-hue` nor `.glim-tint` at all — a selector's fill already says which one is picked, and washing the rest too is noise the selection state doesn't need, unlike a list where every row needs the wash or an all-idle list shows nothing (the trap above).
 
 **Five traps, all hit in production:**
 
