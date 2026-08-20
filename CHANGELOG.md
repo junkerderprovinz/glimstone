@@ -6,11 +6,11 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ### ✨ Added
 
-- New [`reference/colorPicker.ts`](reference/colorPicker.ts) is a permanently embedded saturation/value square + hue bar - real DOM the app owns, extracted from CannonadeCommand's own `inlinePicker()`. `.glim-picker`/`.glim-picker-sv`/`.glim-picker-hue` in `reference/tokens.css` give it the shared look.
+- New [`reference/colorPicker.ts`](reference/colorPicker.ts) is a saturation/value square + hue bar - real DOM the app owns, extracted from CannonadeCommand's own `inlinePicker()`. `.glim-picker`/`.glim-picker-sv`/`.glim-picker-hue` in `reference/tokens.css` give it the shared look. `openColorPickerPopover(trigger, hex, onChange)` wraps it in a floating `.glim-picker-popover` anchored to a trigger element (closes on outside click, Escape, scroll or resize) - the recommended default for a compact settings card, where embedding the picker permanently grows the card every time one is added. The bare `colorPicker()` (no popover) is still there for a page with genuinely dedicated, permanent space for exactly one control.
 
 ### 🐛 Fixed
 
-- The 1.4.0 accent-row rule mandated a native `<input type="color">` sized like the preset swatches. That hands control to a browser/OS surface entirely outside the page - a genuinely separate top-level window on some setups, not an inline popover - directly contradicting a standing preference from CannonadeCommand's own build ("ich will das Farbwählfeld fest integriert") and unverifiable in automated testing besides. The picker section now documents two layouts instead: always-visible for a single custom colour (re-synced whenever a preset is clicked), revealed-on-click and shared across positions for a multi-value palette - matching how CC itself handles the accent vs. the rainbow palette respectively.
+- The 1.4.0 accent-row rule mandated a native `<input type="color">` sized like the preset swatches. That hands control to a browser/OS surface entirely outside the page - a genuinely separate top-level window on some setups, not an inline popover - directly contradicting a standing preference from CannonadeCommand's own build ("ich will das Farbwählfeld fest integriert") and unverifiable in automated testing besides. The picker section now documents ONE layout: every custom colour value (a single accent, or one of a palette's several positions) gets the same trigger - a flat swatch, same size as the presets beside it - that opens the shared popover pre-synced to its value.
 
 ## 1.5.0 — 2026-08-20
 
