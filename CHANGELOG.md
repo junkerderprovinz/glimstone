@@ -2,6 +2,17 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 1.5.0 — 2026-08-20
+
+### ✨ Added
+
+- A new [`reference/tooltip.ts`](reference/tooltip.ts) is the shared tooltip and info-bubble engine - one floating bubble, positioned from the trigger's own bounding box, shared by every hover tooltip AND every "(i)" info icon in the app. Extracted from CannonadeCommand's own production mechanism (the reference to match pixel-for-pixel, not approximate): viewport-clamped, flips above the trigger when opening below would clip the bottom edge, a 6px arrow that tracks the trigger even when the bubble itself has been clamped off-centre, no transition. A stray native `title=` anywhere in the app is auto-upgraded to `data-tip` on its first hover, so adopting the engine is one `wireTooltips()` call at boot.
+- New rule: a tooltip only exists when it adds information the trigger doesn't already show. An icon-only button needs one unconditionally; a control that already shows its own full label as visible text does not get a tooltip repeating that same text, except when the label is genuinely truncated.
+
+### 🐛 Fixed
+
+- `.glim-bubble` previously had its own bespoke, JS-free styling (no arrow, no viewport clamping, no flip) - visibly inconsistent against a sibling app's own tooltip system built on the real thing. It now IS the real thing: same engine, same look, matching CannonadeCommand's reference exactly.
+
 ## 1.4.0 — 2026-08-20
 
 ### 🐛 Fixed

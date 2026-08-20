@@ -71,13 +71,18 @@ The CSS prefix is `glim-`.
 18. **A native control gets replaced, not persuaded.** Where the host UI renders a widget whose insides CSS can't reach (an open native `<select>`), there is exactly one right answer: swap in the app's own replacement, which it already has anyway. "Closed, it looks on-brand" is not an adoption, it's a half-finished rebuild, and it reads as one.
 19. **Controls that belong together share one box.** Same height, same radius, same font, one row. Elements that live in different parents can never share a row — move the element itself, don't nudge the spacing to fake it.
 
-## The info bubble
+## The tooltip and info bubble
 
-`<InfoBubble tip="…" />`; a `Field` given a `hint` gets it automatically — no call site had to change.
+Two triggers, **one shared engine** — [`reference/tooltip.ts`](../reference/tooltip.ts)'s `wireTooltips()` + `infoIcon()`. A plain icon-only button's hover tooltip and a control's "(i)" explanatory bubble are the same mechanism wearing two different trigger elements, not two separate implementations that happen to look similar. An app that built its own bespoke bubble (its own positioning, its own CSS, no arrow, no flip) alongside a *different* implementation for tooltips is the exact inconsistency this section exists to rule out — found in production: one adopting app's info bubble and its toolbar tooltips visibly disagreed on background colour, corner radius and shadow depth because they were two unrelated pieces of code.
 
-- **Neutral, never the accent.** The icon is furniture; the accent means activity.
-- **Rendered into `<body>`, positioned from the icon.** Anchored locally, it's at the mercy of every card, table and scroll container above it — one `overflow: hidden` and the explanation is a sliver. Closes on scroll instead of drifting away from what it explains.
-- **Hover *and* focus, Escape closes**, text as `aria-label`, bubble is `pointer-events: none` (never swallows a click).
+- **One floating bubble, `#glim-bubble`, a single `<body>` child** — not a per-trigger popup. `wireTooltips()` positions and fills the same element for whichever trigger is currently hovered or focused, `reference/tokens.css`'s `.glim-bubble` styles it. Rendered into `<body>` (position measured from the trigger's own `getBoundingClientRect()` in JS) so no scroll container, card or table can clip it — an anchored-locally popup is at the mercy of every `overflow: hidden` above it, and one card's own clipping shouldn't be able to turn an explanation into a sliver.
+- **`data-tip` is the one attribute that drives it**, on either kind of trigger — a plain icon-only button (`<button data-tip="Undo">`) or the "(i)" glyph (`infoIcon()` sets it internally). **A stray native `title=` anywhere in the app is auto-upgraded to `data-tip` on its first hover** (`wireTooltips()`'s delegated listener does this, then removes the `title` so the OS's own balloon never also fires) — adopting the engine is one `wireTooltips()` call at boot, not a rewrite of every existing tooltip call site.
+- **Viewport-clamped, flips above the trigger, has an arrow.** Opens below the trigger by default, centred on it; clamps horizontally into the viewport with an 8px margin so a trigger near either edge doesn't push the bubble half off-screen; flips to open **above** when opening below would clip the viewport's bottom edge (and only then, and only if there's room up there). A 6px CSS-triangle arrow points from the bubble back to the trigger, tracking the trigger's real position (`--glim-tip-ax`) even when the bubble itself has been clamped off-centre.
+- **No transition — an instant `display` toggle.** A tooltip that fades in, however briefly, reads as *lag* on something this small and this frequently triggered; the pointer is already there waiting for it.
+- **Hover *and* focus** open it (`mouseover`/`focusin`, delegated on `document`, not per-element listeners); a `pointerdown` anywhere or any scroll hides it immediately — a press means the person is acting, not reading, and a scroll de-anchors the fixed-position bubble from whatever it was pointing at.
+- **`pointer-events: none` on the bubble itself** — it never swallows a click meant for whatever's underneath it once it's already open.
+- **The info icon (`infoIcon()`) is a bare stroke-only SVG glyph, never a filled badge.** Neutral colour, `opacity: .8` at rest → `1` on hover/focus — the icon is furniture; a background fill on it would read as a control it isn't (rule 3: the accent, and by extension any fill, means activity).
+- **A tooltip only exists when it adds information the trigger doesn't already show.** An icon-only button (no visible text at all) needs one unconditionally — there's no other way to know what it does. A control that already shows its own full label as visible text does NOT get a tooltip repeating that same text verbatim; the one case where a *labelled* control still earns one is when its own label is actually truncated (an ellipsis-cut string in a fixed-width segmented option, say) and the tooltip is the only place the full text still exists. Found in production: a Rotate control's own segmented buttons (already showing "0°"/"90°"/"180°"/"270°" as visible text, never truncated) carried a tooltip repeating the exact same four characters back — pure noise, while a sibling Flip control's icon-only buttons had no tooltip at all and genuinely needed one.
 
 Why bother at all: grey prose under every control gets read once and then costs vertical space forever.
 
@@ -258,7 +263,7 @@ Defined under `:root` / `[data-theme="light"]`.
 | `--radius-card`, `--radius-control`, `--radius-pill` | the shape engine |
 | `--text-heading`, `--text-body`, `--text-dense`, `--text-caption` | the type scale |
 
-Utility classes: `.glim-card` (the surface), `.glim-well` (inset grouping), `.glim-eyebrow` (small uppercase label), `.glim-num` (tabular digits), `.glim-bubble` (the info bubble), `.glim-hue` (owns a rainbow position), `.glim-hue-icon`, `.glim-tint`, `.glim-page-enter`, `.glim-toast`, `.glim-fade`, `.glim-live` (pulsing dot).
+Utility classes: `.glim-card` (the surface), `.glim-well` (inset grouping), `.glim-eyebrow` (small uppercase label), `.glim-num` (tabular digits), `.glim-bubble` (the shared tooltip/info bubble, `--above` when flipped), `.glim-info-icon` (the "(i)" trigger), `.glim-hue` (owns a rainbow position), `.glim-hue-icon`, `.glim-tint`, `.glim-page-enter`, `.glim-toast`, `.glim-fade`, `.glim-live` (pulsing dot).
 
 **The token names are the contract, the values are the look.** A sibling app adopts GlimStone by pointing its own components at these same names — nothing about a component's markup has to change, because every colour already flows through a token.
 
@@ -271,6 +276,7 @@ Utility classes: `.glim-card` (the surface), `.glim-well` (inset grouping), `.gl
 5. For rainbow, copy [`reference/appearance.ts`](../reference/appearance.ts) — it's dependency-free and talks only to `document.documentElement` and its own settings object.
 6. For the scroll-to-cycle `<select>` behaviour (rule 14), copy [`reference/selectScroll.ts`](../reference/selectScroll.ts) and call `enableSelectScroll()` on every `<select>` the app mounts.
 7. For flag-emoji-prefixed language options (the user-owned axes, Language), copy [`reference/flagEmoji.ts`](../reference/flagEmoji.ts) and prefix each `<option>`'s text with `flagEmoji(locale.flag) + ' ' + locale.label`.
+8. For the shared tooltip/info-bubble engine, copy [`reference/tooltip.ts`](../reference/tooltip.ts) and call `wireTooltips()` once at boot; use its `infoIcon(text)` for every "(i)" explanatory trigger, and set `data-tip` (or a plain native `title`, auto-upgraded on first hover) on any icon-only control that needs a hover name.
 
 Nothing else is required: component markup stays exactly as it is, because every colour already flows through the tokens.
 
