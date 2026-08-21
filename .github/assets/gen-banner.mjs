@@ -4,12 +4,13 @@
  * The mark's geometry (glimstone-mark-source.svg) is the user's own real
  * design — a running-bond brick wall, drawn in Illustrator — taken 1:1,
  * byte-for-byte, never hand-rebuilt (house rule: never-hand-rebuild-svg).
- * This script only recolours it: every brick gets the stone tone, except
- * the one whose own centre sits closest to the viewBox's centre, which gets
- * the lit-gold treatment plus a soft radial glow behind it — the doc's own
- * opening line, "a small light in dark masonry," drawn literally. Finding
- * "the centre brick" geometrically (not a hardcoded index) means a future
- * redraw with a different brick count/layout still lands on the right one.
+ * This script only recolours it: every brick gets its own stone shade,
+ * except the one whose own centre sits closest to the viewBox's centre,
+ * which gets a flat lit-gold fill instead — no glow (dropped per feedback:
+ * "der gelbe Stein soll nicht leuchten"), the colour alone reads as "lit."
+ * Finding "the centre brick" geometrically (not a hardcoded index) means a
+ * future redraw with a different brick count/layout still lands on the
+ * right one.
  *
  * An earlier placeholder version of this script (before a real logo
  * existed) synthesised its own 3x3 grid of stone blocks procedurally — see
@@ -21,9 +22,9 @@
  *   glimstone-banner.svg/.png       light banner: logo + "GlimStone" + claim
  *   glimstone-banner-dark.svg/.png  dark banner:  logo + "GlimStone" + claim
  *
- * The gold brick (plus its glow) is the constant core in both theme
- * variants, same as every other logo pair in this house style; only the
- * stone tone swaps so it keeps reading against its background.
+ * The gold brick is the constant core in both theme variants, same as every
+ * other logo pair in this house style; only the stone tone swaps so it
+ * keeps reading against its background.
  *
  * Text is converted to SVG paths (opentype.js) so the SVG needs no font and
  * renders identically anywhere. Bree Serif (name) + Lato (claim) — the same
@@ -105,9 +106,6 @@ function buildMark(stonePalette) {
       lit = r;
     }
   }
-  const glowCx = lit.x + lit.width / 2, glowCy = lit.y + lit.height / 2;
-  const glowR = Math.max(w, h) * 0.33;
-
   // Each brick a slightly different stone shade (jdp: "die ziegel in
   // unterschiedlichen grautönen einfärben") — real masonry never reads as
   // one flat colour. Deterministic (position-driven, not Math.random()) so
@@ -126,14 +124,9 @@ function buildMark(stonePalette) {
     })
     .join("\n  ");
 
+  // No glow (jdp: "der gelbe Stein soll nicht leuchten") - the lit brick
+  // reads as "lit" from its colour alone now, no halo behind it.
   const body = `
-  <defs>
-    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="${GOLD}" stop-opacity="0.55"/>
-      <stop offset="100%" stop-color="${GOLD}" stop-opacity="0"/>
-    </radialGradient>
-  </defs>
-  <circle cx="${glowCx}" cy="${glowCy}" r="${glowR}" fill="url(#glow)"/>
   ${bricks}
   <rect x="${lit.x}" y="${lit.y}" width="${lit.width}" height="${lit.height}" rx="${lit.rx}" ry="${lit.ry}" fill="${GOLD}"/>`;
 
@@ -165,7 +158,7 @@ console.log("wrote logo.svg");
 // ============================================================================
 
 const NAME = "GlimStone";
-const CLAIM = "A small light in dark masonry.";
+const CLAIM = "Consistency you can Ctrl+C.";
 const W = 1600, H = 500;
 const LH = 450, LW = 450; // jdp: "die brickwall etwas größer machen" (was 400)
 const nameSize = 132, claimSize = 44, gap = 70, lineGap = 8;
@@ -201,7 +194,15 @@ const sc = (s) => s / font.unitsPerEm;
 const nameAsc = font.ascender * sc(nameSize);
 const nameDesc = -font.descender * sc(nameSize);
 const claimAsc = claimFont.ascender * (claimSize / claimFont.unitsPerEm);
-const blockH = nameAsc + nameDesc + lineGap + claimAsc;
+// The claim's own descender has to count toward the block's height too, or
+// the centring below treats the claim's BASELINE as the block's bottom edge
+// instead of its real ink - any claim with a true descender (the two y's in
+// "Consistency you...", or g/j/p/q generally) then renders visibly lower
+// than the logo's own vertical centre, which is exactly centred on H/2
+// (jdp: "Name und Claim sind als Gruppe nicht vertikal mit dem Logo
+// zentriert" — this was the actual root cause, not a layout-constant tweak).
+const claimDesc = -claimFont.descender * (claimSize / claimFont.unitsPerEm);
+const blockH = nameAsc + nameDesc + lineGap + claimAsc + claimDesc;
 const nameBaseline = H / 2 - blockH / 2 + nameAsc;
 const claimBaseline = nameBaseline + nameDesc + lineGap + claimAsc;
 
