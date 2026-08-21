@@ -112,10 +112,16 @@ function buildMark(stonePalette) {
   // unterschiedlichen grautönen einfärben") — real masonry never reads as
   // one flat colour. Deterministic (position-driven, not Math.random()) so
   // re-running this script reproduces byte-identical output every time.
-  const others = rects.filter((r) => r !== lit);
+  // Reading order (top-to-bottom, left-to-right) + a step coprime with the
+  // palette length walks every shade before repeating any — plain "index +
+  // position" collapsed almost the whole wall onto one shade last time,
+  // since this source's coordinates increase in near-lockstep with the
+  // iteration index.
+  const others = rects.filter((r) => r !== lit).sort((a, b) => a.y - b.y || a.x - b.x);
+  const step = stonePalette.length % 2 === 0 ? 1 : 2; // stays coprime with the length
   const bricks = others
     .map((r, i) => {
-      const shade = stonePalette[(i + Math.round(r.x + r.y)) % stonePalette.length];
+      const shade = stonePalette[(i * step) % stonePalette.length];
       return `<rect x="${r.x}" y="${r.y}" width="${r.width}" height="${r.height}" rx="${r.rx}" ry="${r.ry}" fill="${shade}"/>`;
     })
     .join("\n  ");
@@ -144,11 +150,12 @@ function writeMark(file, stonePalette) {
 }
 
 // Dark stone (Carbon's own darkest surface step), ± a few nearby shades —
-// reads on a light banner.
-writeMark("glimstone-dunkel.svg", ["#222222", "#262626", "#2c2c2c", "#302f2d", "#242424"]);
+// reads on a light banner. Wider spread than the first pass (jdp: "die
+// Schattierungen dürfen leicht kräftiger sein").
+writeMark("glimstone-dunkel.svg", ["#1a1a1a", "#242424", "#2f2e2b", "#3a3a3a", "#252220"]);
 // Pale stone, ± a few nearby shades — reads on a dark banner. Kept genuine
 // light greys, not white, so it still reads as stone rather than paper.
-writeMark("glimstone-hell.svg", ["#c7c7c7", "#d1d1d1", "#dcdcdc", "#cfcac2", "#d6d6d6"]);
+writeMark("glimstone-hell.svg", ["#b8b8b8", "#c9c9c9", "#dadada", "#e6e2da", "#cfc9c0"]);
 // Mirrors every other repo's convention (dunkel = the general-purpose icon).
 writeFileSync(join(__dir, "logo.svg"), readFileSync(join(__dir, "glimstone-dunkel.svg")));
 console.log("wrote logo.svg");

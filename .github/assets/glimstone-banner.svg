@@ -8,22 +8,22 @@
     </radialGradient>
   </defs>
   <circle cx="159.8" cy="160.2" r="105.435" fill="url(#glow)"/>
-  <rect x="78.7" y="177.3" width="80.4" height="30.4" rx="4" ry="4" fill="#262626"/>
-  <rect x="201.6" y="145" width="80.4" height="30.4" rx="4" ry="4" fill="#302f2d"/>
-  <rect x="37.5" y="145" width="80.4" height="30.4" rx="4" ry="4" fill="#222222"/>
-  <rect x="160.4" y="177.3" width="80.4" height="30.4" rx="4" ry="4" fill="#262626"/>
-  <rect x="37.5" y="209.8" width="80.4" height="30.4" rx="4" ry="4" fill="#262626"/>
-  <rect x="119.6" y="209.8" width="80.4" height="30.4" rx="4" ry="4" fill="#242424"/>
-  <rect x="201.6" y="209.8" width="80.4" height="30.4" rx="4" ry="4" fill="#2c2c2c"/>
-  <rect x="37.5" y="177.3" width="39.2" height="30.4" rx="4" ry="4" fill="#2c2c2c"/>
-  <rect x="242.8" y="177.3" width="39.2" height="30.4" rx="4" ry="4" fill="#302f2d"/>
-  <rect x="78.7" y="111.9" width="80.4" height="30.4" rx="4" ry="4" fill="#222222"/>
-  <rect x="160.4" y="111.9" width="80.4" height="30.4" rx="4" ry="4" fill="#2c2c2c"/>
-  <rect x="37.5" y="79.3" width="80.4" height="30.4" rx="4" ry="4" fill="#302f2d"/>
-  <rect x="201.6" y="79.3" width="80.4" height="30.4" rx="4" ry="4" fill="#302f2d"/>
-  <rect x="119.6" y="79.3" width="80.4" height="30.4" rx="4" ry="4" fill="#2c2c2c"/>
-  <rect x="37.5" y="111.9" width="39.2" height="30.4" rx="4" ry="4" fill="#302f2d"/>
-  <rect x="242.8" y="111.9" width="39.2" height="30.4" rx="4" ry="4" fill="#222222"/>
+  <rect x="35.5" y="73.3" width="80.4" height="30.4" rx="4" ry="4" fill="#1a1a1a"/>
+  <rect x="119.6" y="73.3" width="80.4" height="30.4" rx="4" ry="4" fill="#2f2e2b"/>
+  <rect x="203.6" y="73.3" width="80.4" height="30.4" rx="4" ry="4" fill="#252220"/>
+  <rect x="35.5" y="108.9" width="39.2" height="30.4" rx="4" ry="4" fill="#242424"/>
+  <rect x="77.7" y="108.9" width="80.4" height="30.4" rx="4" ry="4" fill="#3a3a3a"/>
+  <rect x="161.4" y="108.9" width="80.4" height="30.4" rx="4" ry="4" fill="#1a1a1a"/>
+  <rect x="244.8" y="108.9" width="39.2" height="30.4" rx="4" ry="4" fill="#2f2e2b"/>
+  <rect x="35.5" y="145" width="80.4" height="30.4" rx="4" ry="4" fill="#252220"/>
+  <rect x="203.6" y="145" width="80.4" height="30.4" rx="4" ry="4" fill="#242424"/>
+  <rect x="35.5" y="180.3" width="39.2" height="30.4" rx="4" ry="4" fill="#3a3a3a"/>
+  <rect x="77.7" y="180.3" width="80.4" height="30.4" rx="4" ry="4" fill="#1a1a1a"/>
+  <rect x="161.4" y="180.3" width="80.4" height="30.4" rx="4" ry="4" fill="#2f2e2b"/>
+  <rect x="244.8" y="180.3" width="39.2" height="30.4" rx="4" ry="4" fill="#252220"/>
+  <rect x="35.5" y="215.8" width="80.4" height="30.4" rx="4" ry="4" fill="#242424"/>
+  <rect x="119.6" y="215.8" width="80.4" height="30.4" rx="4" ry="4" fill="#3a3a3a"/>
+  <rect x="203.6" y="215.8" width="80.4" height="30.4" rx="4" ry="4" fill="#1a1a1a"/>
   <rect x="119.6" y="145" width="80.4" height="30.4" rx="4" ry="4" fill="#FFD53D"/>
 </svg>
 
