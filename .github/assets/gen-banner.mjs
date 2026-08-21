@@ -1,25 +1,29 @@
 /**
  * Generates the GlimStone mark and banners.
  *
- * GlimStone has no pre-existing logo, so this script also derives the two
- * logo masters (not just the banner) — everything downstream is procedural
- * geometry, computed here, never hand-authored path data:
+ * The mark's geometry (glimstone-mark-source.svg) is the user's own real
+ * design — a running-bond brick wall, drawn in Illustrator — taken 1:1,
+ * byte-for-byte, never hand-rebuilt (house rule: never-hand-rebuild-svg).
+ * This script only recolours it: every brick gets the stone tone, except
+ * the one whose own centre sits closest to the viewBox's centre, which gets
+ * the lit-gold treatment plus a soft radial glow behind it — the doc's own
+ * opening line, "a small light in dark masonry," drawn literally. Finding
+ * "the centre brick" geometrically (not a hardcoded index) means a future
+ * redraw with a different brick count/layout still lands on the right one.
  *
- *   glimstone-dunkel.svg   dark stones, gold lit block   (reads on a LIGHT background)
- *   glimstone-hell.svg     pale stones, gold lit block   (reads on a DARK background)
+ * An earlier placeholder version of this script (before a real logo
+ * existed) synthesised its own 3x3 grid of stone blocks procedurally — see
+ * git history if that's ever worth comparing against.
+ *
+ *   glimstone-mark-source.svg   the user's own master, untouched
+ *   glimstone-dunkel.svg        dark stones, gold lit brick   (reads on a LIGHT background)
+ *   glimstone-hell.svg          pale stones, gold lit brick   (reads on a DARK background)
  *   glimstone-banner.svg/.png       light banner: logo + "GlimStone" + claim
  *   glimstone-banner-dark.svg/.png  dark banner:  logo + "GlimStone" + claim
  *
- * The mark: a 3x3 grid of stone blocks with one block lit gold — the doc's
- * own opening line, "a small light in dark masonry," drawn literally. The
- * gold block (plus its glow) is the constant core in both theme variants,
- * same as every other logo pair in this house style; only the stone tone
- * swaps so it keeps reading against its background.
- *
- * Two other concepts (a faceted gem in fractured rock; a notched seal with a
- * sunburst) were drafted and rendered for comparison, then dropped once this
- * one was picked — see git history (.github/assets/gen-logo-alts.mjs) if
- * either is ever worth revisiting.
+ * The gold brick (plus its glow) is the constant core in both theme
+ * variants, same as every other logo pair in this house style; only the
+ * stone tone swaps so it keeps reading against its background.
  *
  * Text is converted to SVG paths (opentype.js) so the SVG needs no font and
  * renders identically anywhere. Bree Serif (name) + Lato (claim) — the same
@@ -43,47 +47,89 @@ const { Resvg } = require(`${groot}/@resvg/resvg-js`);
 const __dir = dirname(fileURLToPath(import.meta.url));
 
 // ============================================================================
-// The mark — computed geometry, no hand-authored path data.
+// The mark — real user geometry (glimstone-mark-source.svg), recoloured only.
 // ============================================================================
 
-const GOLD = "#FCC419", GOLD_MID = "#d4af37", GOLD_DEEP = "#a97c0a";
+const GOLD = "#FCC419", GOLD_LIGHT = "#ffe27a", GOLD_DEEP = "#a97c0a";
 
-// A 3x3 grid of stone blocks, one lit. Grid is centred in the 1000x1000
-// viewBox; cell size and gap are fixed so re-running this script reproduces
-// the same layout exactly.
+function parseViewBox(svg) {
+  const [, vb] = svg.match(/viewBox="([^"]+)"/);
+  const [minX, minY, w, h] = vb.split(/\s+/).map(Number);
+  return { minX, minY, w, h };
+}
+
+// The source has no id/class scheme worth relying on (some rects carry
+// class="st0", the corner half-bricks carry none at all and fall back to
+// SVG's default black fill) — every rect's geometry is read generically off
+// its own attributes instead, so this survives a future re-export cleanly.
+function parseRects(svg) {
+  const rects = [];
+  const re = /<rect\b([^>]*)\/>/g;
+  let m;
+  while ((m = re.exec(svg))) {
+    const attrs = {};
+    const attrRe = /([\w-]+)="([^"]*)"/g;
+    let am;
+    while ((am = attrRe.exec(m[1]))) attrs[am[1]] = am[2];
+    rects.push({
+      x: Number(attrs.x),
+      y: Number(attrs.y),
+      width: Number(attrs.width),
+      height: Number(attrs.height),
+      rx: attrs.rx ?? "0",
+      ry: attrs.ry ?? attrs.rx ?? "0",
+    });
+  }
+  return rects;
+}
+
 function buildMark(stoneFill) {
-  const cell = 260, gapPx = 20, rx = 24;
-  const gridW = cell * 3 + gapPx * 2;
-  const start = (1000 - gridW) / 2; // 90
-  const cells = [];
-  for (let r = 0; r < 3; r++) {
-    for (let c = 0; c < 3; c++) {
-      cells.push({ x: start + c * (cell + gapPx), y: start + r * (cell + gapPx), lit: r === 1 && c === 1 });
+  const source = readFileSync(join(__dir, "glimstone-mark-source.svg"), "utf8");
+  const { minX, minY, w, h } = parseViewBox(source);
+  const rects = parseRects(source);
+  const boxCx = minX + w / 2, boxCy = minY + h / 2;
+
+  // "The lit brick" is whichever one's own centre sits closest to the
+  // viewBox's centre — computed, not assumed, so it's correct for this wall
+  // (the middle brick of the middle row) without hand-picking an index.
+  let lit = rects[0], bestDist = Infinity;
+  for (const r of rects) {
+    const rcx = r.x + r.width / 2, rcy = r.y + r.height / 2;
+    const d = (rcx - boxCx) ** 2 + (rcy - boxCy) ** 2;
+    if (d < bestDist) {
+      bestDist = d;
+      lit = r;
     }
   }
-  const litCell = cells.find((k) => k.lit);
-  const glowCx = litCell.x + cell / 2, glowCy = litCell.y + cell / 2;
+  const glowCx = lit.x + lit.width / 2, glowCy = lit.y + lit.height / 2;
+  const glowR = Math.max(w, h) * 0.33;
 
-  const stones = cells
-    .filter((k) => !k.lit)
-    .map((k) => `<rect x="${k.x}" y="${k.y}" width="${cell}" height="${cell}" rx="${rx}" fill="${stoneFill}"/>`)
+  const bricks = rects
+    .filter((r) => r !== lit)
+    .map((r) => `<rect x="${r.x}" y="${r.y}" width="${r.width}" height="${r.height}" rx="${r.rx}" ry="${r.ry}" fill="${stoneFill}"/>`)
     .join("\n  ");
 
-  return `
+  const body = `
   <defs>
     <radialGradient id="glow" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="${GOLD}" stop-opacity="0.55"/>
       <stop offset="100%" stop-color="${GOLD}" stop-opacity="0"/>
     </radialGradient>
+    <linearGradient id="litBrick" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="${GOLD_LIGHT}"/>
+      <stop offset="100%" stop-color="${GOLD_DEEP}"/>
+    </linearGradient>
   </defs>
-  <circle cx="${glowCx}" cy="${glowCy}" r="330" fill="url(#glow)"/>
-  ${stones}
-  <rect x="${litCell.x}" y="${litCell.y}" width="${cell}" height="${cell}" rx="${rx}" fill="${GOLD}"/>
-  <rect x="${litCell.x + 40}" y="${litCell.y + 40}" width="${cell - 80}" height="${cell - 80}" rx="${rx - 12}" fill="${GOLD_MID}" opacity="0.55"/>`;
+  <circle cx="${glowCx}" cy="${glowCy}" r="${glowR}" fill="url(#glow)"/>
+  ${bricks}
+  <rect x="${lit.x}" y="${lit.y}" width="${lit.width}" height="${lit.height}" rx="${lit.rx}" ry="${lit.ry}" fill="url(#litBrick)"/>`;
+
+  return { viewBox: `${minX} ${minY} ${w} ${h}`, body };
 }
 
 function writeMark(file, stoneFill) {
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">${buildMark(stoneFill)}
+  const { viewBox, body } = buildMark(stoneFill);
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}">${body}
 </svg>
 `;
   writeFileSync(join(__dir, file), svg);
@@ -95,6 +141,9 @@ writeMark("glimstone-dunkel.svg", "#262626");
 // Pale stone — reads on a dark banner. Kept a genuine light grey, not white,
 // so it still reads as stone rather than paper.
 writeMark("glimstone-hell.svg", "#d1d1d1");
+// Mirrors every other repo's convention (dunkel = the general-purpose icon).
+writeFileSync(join(__dir, "logo.svg"), readFileSync(join(__dir, "glimstone-dunkel.svg")));
+console.log("wrote logo.svg");
 
 // ============================================================================
 // The banner — same harness as every other repo's gen-banner.mjs.

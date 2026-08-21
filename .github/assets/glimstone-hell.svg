@@ -1,19 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 319.5 319.5">
   <defs>
     <radialGradient id="glow" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="#FCC419" stop-opacity="0.55"/>
       <stop offset="100%" stop-color="#FCC419" stop-opacity="0"/>
     </radialGradient>
+    <linearGradient id="litBrick" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffe27a"/>
+      <stop offset="100%" stop-color="#a97c0a"/>
+    </linearGradient>
   </defs>
-  <circle cx="500" cy="500" r="330" fill="url(#glow)"/>
-  <rect x="90" y="90" width="260" height="260" rx="24" fill="#d1d1d1"/>
-  <rect x="370" y="90" width="260" height="260" rx="24" fill="#d1d1d1"/>
-  <rect x="650" y="90" width="260" height="260" rx="24" fill="#d1d1d1"/>
-  <rect x="90" y="370" width="260" height="260" rx="24" fill="#d1d1d1"/>
-  <rect x="650" y="370" width="260" height="260" rx="24" fill="#d1d1d1"/>
-  <rect x="90" y="650" width="260" height="260" rx="24" fill="#d1d1d1"/>
-  <rect x="370" y="650" width="260" height="260" rx="24" fill="#d1d1d1"/>
-  <rect x="650" y="650" width="260" height="260" rx="24" fill="#d1d1d1"/>
-  <rect x="370" y="370" width="260" height="260" rx="24" fill="#FCC419"/>
-  <rect x="410" y="410" width="180" height="180" rx="12" fill="#d4af37" opacity="0.55"/>
+  <circle cx="159.8" cy="160.2" r="105.435" fill="url(#glow)"/>
+  <rect x="78.7" y="177.3" width="80.4" height="30.4" rx="4" ry="4" fill="#d1d1d1"/>
+  <rect x="201.6" y="145" width="80.4" height="30.4" rx="4" ry="4" fill="#d1d1d1"/>
+  <rect x="37.5" y="145" width="80.4" height="30.4" rx="4" ry="4" fill="#d1d1d1"/>
+  <rect x="160.4" y="177.3" width="80.4" height="30.4" rx="4" ry="4" fill="#d1d1d1"/>
+  <rect x="37.5" y="209.8" width="80.4" height="30.4" rx="4" ry="4" fill="#d1d1d1"/>
+  <rect x="119.6" y="209.8" width="80.4" height="30.4" rx="4" ry="4" fill="#d1d1d1"/>
+  <rect x="201.6" y="209.8" width="80.4" height="30.4" rx="4" ry="4" fill="#d1d1d1"/>
+  <rect x="37.5" y="177.3" width="39.2" height="30.4" rx="4" ry="4" fill="#d1d1d1"/>
+  <rect x="242.8" y="177.3" width="39.2" height="30.4" rx="4" ry="4" fill="#d1d1d1"/>
+  <rect x="78.7" y="111.9" width="80.4" height="30.4" rx="4" ry="4" fill="#d1d1d1"/>
+  <rect x="160.4" y="111.9" width="80.4" height="30.4" rx="4" ry="4" fill="#d1d1d1"/>
+  <rect x="37.5" y="79.3" width="80.4" height="30.4" rx="4" ry="4" fill="#d1d1d1"/>
+  <rect x="201.6" y="79.3" width="80.4" height="30.4" rx="4" ry="4" fill="#d1d1d1"/>
+  <rect x="119.6" y="79.3" width="80.4" height="30.4" rx="4" ry="4" fill="#d1d1d1"/>
+  <rect x="37.5" y="111.9" width="39.2" height="30.4" rx="4" ry="4" fill="#d1d1d1"/>
+  <rect x="242.8" y="111.9" width="39.2" height="30.4" rx="4" ry="4" fill="#d1d1d1"/>
+  <rect x="119.6" y="145" width="80.4" height="30.4" rx="4" ry="4" fill="url(#litBrick)"/>
 </svg>
