@@ -2,6 +2,12 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 1.7.0 — 2026-08-21
+
+### ✨ Added
+
+- The Language axis's custom-listbox escape hatch (design-language.md, "The user-owned axes" > Language) now documents a follow-up fix for the Windows flag-rendering gap it already accepted as expected: an app that upgraded to a custom listbox (real page DOM, not a native `<select>`) can layer in [`noto-color-emoji-flags`](https://www.npmjs.com/package/noto-color-emoji-flags) (OFL-1.1, a ~800KB COLR-vector subset of Noto Color Emoji containing only flag glyphs) scoped to just the flag span, so Windows shows real pictorial flags too instead of the two-letter fallback tag. Deliberately not Twemoji's own country-flags subset - Twemoji is CC-BY 4.0, which fails the OFL-only asset rule. `reference/flagEmoji.ts`'s own comment updated to point here; the function's output itself (plain regional-indicator codepoints) is unchanged - this is a presentation-layer fix, not a behavioural one. First adopted in TrickWork.
+
 ## 1.6.0 — 2026-08-20
 
 ### ✨ Added
