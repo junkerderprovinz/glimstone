@@ -50,7 +50,11 @@ const __dir = dirname(fileURLToPath(import.meta.url));
 // The mark — real user geometry (glimstone-mark-source.svg), recoloured only.
 // ============================================================================
 
-const GOLD = "#FCC419", GOLD_LIGHT = "#ffe27a", GOLD_DEEP = "#a97c0a";
+// Flat, no gradient (jdp: "der goldene soll keinen Verlauf haben und etwas
+// gelblicher sein") — a punchier, more yellow-leaning gold than the Carbon
+// accent gold used elsewhere, so the lit brick reads as distinctly "lit"
+// rather than merely "differently coloured."
+const GOLD = "#FFD53D";
 
 function parseViewBox(svg) {
   const [, vb] = svg.match(/viewBox="([^"]+)"/);
@@ -83,7 +87,7 @@ function parseRects(svg) {
   return rects;
 }
 
-function buildMark(stoneFill) {
+function buildMark(stonePalette) {
   const source = readFileSync(join(__dir, "glimstone-mark-source.svg"), "utf8");
   const { minX, minY, w, h } = parseViewBox(source);
   const rects = parseRects(source);
@@ -104,9 +108,16 @@ function buildMark(stoneFill) {
   const glowCx = lit.x + lit.width / 2, glowCy = lit.y + lit.height / 2;
   const glowR = Math.max(w, h) * 0.33;
 
-  const bricks = rects
-    .filter((r) => r !== lit)
-    .map((r) => `<rect x="${r.x}" y="${r.y}" width="${r.width}" height="${r.height}" rx="${r.rx}" ry="${r.ry}" fill="${stoneFill}"/>`)
+  // Each brick a slightly different stone shade (jdp: "die ziegel in
+  // unterschiedlichen grautönen einfärben") — real masonry never reads as
+  // one flat colour. Deterministic (position-driven, not Math.random()) so
+  // re-running this script reproduces byte-identical output every time.
+  const others = rects.filter((r) => r !== lit);
+  const bricks = others
+    .map((r, i) => {
+      const shade = stonePalette[(i + Math.round(r.x + r.y)) % stonePalette.length];
+      return `<rect x="${r.x}" y="${r.y}" width="${r.width}" height="${r.height}" rx="${r.rx}" ry="${r.ry}" fill="${shade}"/>`;
+    })
     .join("\n  ");
 
   const body = `
@@ -115,20 +126,16 @@ function buildMark(stoneFill) {
       <stop offset="0%" stop-color="${GOLD}" stop-opacity="0.55"/>
       <stop offset="100%" stop-color="${GOLD}" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="litBrick" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="${GOLD_LIGHT}"/>
-      <stop offset="100%" stop-color="${GOLD_DEEP}"/>
-    </linearGradient>
   </defs>
   <circle cx="${glowCx}" cy="${glowCy}" r="${glowR}" fill="url(#glow)"/>
   ${bricks}
-  <rect x="${lit.x}" y="${lit.y}" width="${lit.width}" height="${lit.height}" rx="${lit.rx}" ry="${lit.ry}" fill="url(#litBrick)"/>`;
+  <rect x="${lit.x}" y="${lit.y}" width="${lit.width}" height="${lit.height}" rx="${lit.rx}" ry="${lit.ry}" fill="${GOLD}"/>`;
 
   return { viewBox: `${minX} ${minY} ${w} ${h}`, body };
 }
 
-function writeMark(file, stoneFill) {
-  const { viewBox, body } = buildMark(stoneFill);
+function writeMark(file, stonePalette) {
+  const { viewBox, body } = buildMark(stonePalette);
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}">${body}
 </svg>
 `;
@@ -136,11 +143,12 @@ function writeMark(file, stoneFill) {
   console.log(`wrote ${file}`);
 }
 
-// Dark stone (Carbon's own darkest surface step) — reads on a light banner.
-writeMark("glimstone-dunkel.svg", "#262626");
-// Pale stone — reads on a dark banner. Kept a genuine light grey, not white,
-// so it still reads as stone rather than paper.
-writeMark("glimstone-hell.svg", "#d1d1d1");
+// Dark stone (Carbon's own darkest surface step), ± a few nearby shades —
+// reads on a light banner.
+writeMark("glimstone-dunkel.svg", ["#222222", "#262626", "#2c2c2c", "#302f2d", "#242424"]);
+// Pale stone, ± a few nearby shades — reads on a dark banner. Kept genuine
+// light greys, not white, so it still reads as stone rather than paper.
+writeMark("glimstone-hell.svg", ["#c7c7c7", "#d1d1d1", "#dcdcdc", "#cfcac2", "#d6d6d6"]);
 // Mirrors every other repo's convention (dunkel = the general-purpose icon).
 writeFileSync(join(__dir, "logo.svg"), readFileSync(join(__dir, "glimstone-dunkel.svg")));
 console.log("wrote logo.svg");
@@ -152,7 +160,7 @@ console.log("wrote logo.svg");
 const NAME = "GlimStone";
 const CLAIM = "A small light in dark masonry.";
 const W = 1600, H = 500;
-const LH = 400, LW = 400;
+const LH = 450, LW = 450; // jdp: "die brickwall etwas größer machen" (was 400)
 const nameSize = 132, claimSize = 44, gap = 70, lineGap = 8;
 
 const THEMES = [
