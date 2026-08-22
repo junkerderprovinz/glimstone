@@ -2,6 +2,12 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+### 🐛 Fixed
+
+- **The tooltip and info bubble** now states explicitly that a bubble must never be partially clipped by the viewport — not implied by the clamp/flip mechanism already documented, but a stated requirement. Found live: BombVault's own `InfoBubble`/`SelectorTab` — the exact component v1.1.0's own "Cross-app info-bubble standardisation" entries below call the anointed reference implementation — had in fact never implemented the clamp or the flip at all. Both positioned the bubble by centring it on the trigger and always opening downward, with zero viewport awareness; the gap had simply never been exercised by a trigger near enough to an edge until the "Wiederherstellungskit" (Recovery kit) info bubble in Settings overflowed the browser window and part of its text couldn't be read. Fixed by porting `reference/tooltip.ts`'s own `show()` math into a shared, pure, unit-tested function both call sites now invoke from a `useLayoutEffect`, measuring the bubble's real rendered size before it paints. Also found and fixed in the same pass: `.glim-bubble`'s documented `width: max-content` was missing from BombVault's own shipped CSS despite this file's prior "verbatim" claim — without it, a `position: fixed` box with only `left` set sizes itself via CSS shrink-to-fit (available width = containing-block width minus `left`), so computing a clamped `left` from a measured size and then applying it could change the box's own width and, via rewrapping, height — invalidating the very measurement the position was based on. Confirmed live at a narrow viewport: a bubble shrank from 280px to ~155px wide and grew from ~126px to ~253px tall after being positioned, fitting only by chance in that case. See "The tooltip and info bubble" for the corrected rule text.
+
 ## 1.1.0 — 2026-08-22
 
 ### ✨ Added
