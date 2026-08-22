@@ -700,6 +700,24 @@ body {
   0%, 100% { opacity: 1; }
   50%      { opacity: .45; }
 }
+/* A control refusing an action - optimistically shown, then reverted because
+   a real backend precondition failed (no SSH configured for a feature that
+   needs it, say). Decaying so the eye reads it as "pushed back", not a glitch.
+   Apply the .glim-shake class to the control itself at the moment it reverts;
+   see the reduced-motion fallback below for what replaces it there. */
+@keyframes glim-shake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-4px); }
+  40%      { transform: translateX(4px); }
+  60%      { transform: translateX(-2px); }
+  80%      { transform: translateX(2px); }
+}
+/* A brief opacity pulse - the same "still arrives legibly, minus the motion
+   component" substitution every other entrance gets under reduced motion. */
+@keyframes glim-shake-reduced {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: .5; }
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .glim-page-enter { animation: glim-page-in 280ms cubic-bezier(.2, .6, .2, 1) both; }
@@ -708,6 +726,7 @@ body {
   /* Short on purpose: a bubble that fades in slowly reads as lag, because the
      pointer is already there waiting for it. */
   .glim-fade { animation: glim-fade-in 110ms ease both; }
+  .glim-shake { animation: glim-shake 360ms ease-in-out; }
 }
 @media (prefers-reduced-motion: reduce) {
   .glim-page-enter { animation: glim-fade-in 180ms ease both; }
@@ -718,4 +737,11 @@ body {
      opaque, not hidden -- "this is live" has to keep reading from colour and
      position alone once the motion is gone. */
   .glim-live { animation: none; opacity: 1; }
+  .glim-shake { animation: glim-shake-reduced 300ms ease-in-out; }
 }
+/* Replay on a repeated identical failure needs a fresh DOM node, not a
+   re-toggled class - an animation already at rest doesn't restart just
+   because .glim-shake briefly leaves and returns within the same frame. Key
+   the shaking element (or its animated child) on an incrementing
+   per-instance failure counter, the same way lib/toast.tsx's push() mints a
+   fresh id per call so an identical repeated message still gets a fresh node. */

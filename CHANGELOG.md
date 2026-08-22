@@ -2,6 +2,12 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+### ✨ Added
+
+- A fifth motion-engine keyframe, `glim-shake` (`docs/design-language.md`, "The motion engine"; `reference/tokens.css`): a control refusing an action shakes instead of just silently reverting. A toggle switched on then rejected by a real backend precondition (no SSH configured for a feature that needs it, say) needs to visibly say "that didn't work," not just quietly snap back while the real explanation sits in a toast the eye may not be on yet. 360ms `ease-in-out` one-shot `translateX` oscillation, decaying `±4px → ±4px → ±2px → ±2px` through the middle four keyframes back to 0; under `prefers-reduced-motion: reduce` it swaps for a brief opacity pulse instead of nothing, matching every other entrance's reduced-motion substitution. Documented the one real implementation gotcha up front rather than letting it get rediscovered per adopting app: replaying the shake on a repeated identical failure needs a fresh DOM node (key the shaking element on an incrementing per-instance failure counter), not a re-toggled class — an animation already at rest doesn't restart just because its class briefly leaves and returns within the same frame. Named for the gesture, not the first control it shipped on — reach for it anywhere an optimistic UI update has to be undone (a rejected toggle, a form field failing server-side validation after looking locally valid, a drag snapping back because the drop target refused it), not just toggles. First implemented in BombVault.
+
 ## 1.0.0 — 2026-08-21
 
 The first public release of the design language: the full rule set, the reference tokens, and the componentry it took to keep BombVault, KnightLoader, TrickWork and every app since consistent with each other.
