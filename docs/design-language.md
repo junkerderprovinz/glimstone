@@ -151,6 +151,10 @@ Rules 11 and 13 already say a lot is a badge — every heading, everything click
 
 A list, table or panel with nothing in it gets a **deliberate empty state**, not blank space: a `.glim-card`, a muted icon at reduced opacity, a muted title, an optional one-line hint, an optional action button (e.g. "Add one"). The same shape serves two related but distinct situations — genuinely nothing exists yet, versus a filter/search matched nothing — with different copy for each; conflating them ("No results" when the real answer is "you haven't added anything yet") sends the user looking for a filter to clear that was never set. A spot where the shared empty-state shape genuinely doesn't fit is fine as a one-off exception — document *why* inline where it happens, so it reads as a deliberate call and not an overlooked gap.
 
+## The version footer
+
+An app's build version (and the GlimStone version it's built against) belongs in Settings, not under the logo in the nav rail — the rail is for orientation, not diagnostics, and a version string competing with the app's own name for that one line of space loses the name its own weight. It lives instead as a single quiet line, **fixed to the corner of the actual browser window** (not the settings content's own scroll container), so it reads on every settings tab without being implemented per tab and without competing with anything else pinned to the bottom of that scroll area (an unsaved-changes bar, say) for the same sticky slot — the two are positionally independent by construction. `pointer-events-none` and a low-opacity muted tone (`text-carbon-textMuted/50` at `10px`, tabular numerals) keep it a background fact rather than a control: legible on demand, invisible the rest of the time. First built for KnightLoader (`web/src/pages/Settings.tsx`'s `VersionFooter`), after the same information had first been tried as a single card on one settings tab and found to only ever be seen by someone who happened to open that specific tab.
+
 ## Destructive and confirmable actions
 
 Not every removal deserves the same friction, and treating them identically is itself the bug.

@@ -2,7 +2,7 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 1.1.0 — 2026-08-22
 
 ### ✨ Added
 
@@ -10,6 +10,7 @@ All notable changes to the GlimStone design language are documented here. Versio
 - **The switch knob follows the shape engine too** ("Switches"): round → circle, soft → lightly-rounded square, square → sharp corners, reading the same `--radius-pill` token the track already does instead of a hardcoded `rounded-full`. Lives in the one shared switch component, so every switch in an adopting app picks it up automatically. First implemented in BombVault, found missing after the track itself had already been shape-correct for a while — a knob this small is exactly the kind of element that's easy to leave circular "because it always has been."
 - **A second horizontal-selector styling: the well** ("The one horizontal selector"). The existing default (no wrapping bar, bare badges on the page) is right for a strip of independent, equally-weighted destinations; a small, genuinely exclusive set (three shape options, an on/off/reactive triple) can instead sit inside one shared padded track (`--carbon-surface2` background, `0.2rem` padding/gap, `--radius-control` on the track, flush segments), with the active segment filled and a plain colour crossfade on change — no sliding pill. Documented as an opt-in `variant` on the same component, not a second implementation: same keyboard/RTL/disabled behaviour either way, only the paint differs. First built for BombVault's shape picker, adapted from a shared "segmented row" widget already used the same way in TrickWork.
 - **New standing principle: a component is wired into both engines AS it's built, not audited in afterward** ("The user-owned axes"). Adopting the shape/colour tokens isn't automatic just because they exist in the reference file — and the gap is easy to miss because a hardcoded value and a token-correct one render identically at the DEFAULT setting, only diverging once someone actually switches shape or accent. Every real instance of this found in BombVault was a small, low-visibility control (a dismiss "×", a quick-fill button, an ad-hoc status chip) styled in isolation instead of matching its nearest sibling — not a whole new component copied from an old pre-GlimStone one. The rule that actually catches it: before hand-writing a radius or colour value, grep for how the same KIND of control is already styled elsewhere and copy the token; verify by actually toggling the setting, not by reading the class list.
+- **The version footer** ("The version footer"): an app's build version + the GlimStone version it targets belongs as one quiet line fixed to the settings window's own corner, visible on every settings tab without per-tab wiring, rather than a card on a single tab or a line competing with the app name in the nav rail. First built for KnightLoader, after the single-tab-card version was found to only ever be seen by someone who happened to open that one tab.
 
 ## 1.0.0 — 2026-08-21
 
