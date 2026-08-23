@@ -70,6 +70,7 @@ The CSS prefix is `glim-`.
 17. **Never override a foreign container with `display: … !important`.** The host shows and hides it on its own; forcing `display` leaves it stuck visible.
 18. **A native control gets replaced, not persuaded.** Where the host UI renders a widget whose insides CSS can't reach (an open native `<select>`), there is exactly one right answer: swap in the app's own replacement, which it already has anyway. "Closed, it looks on-brand" is not an adoption, it's a half-finished rebuild, and it reads as one.
 19. **Controls that belong together share one box.** Same height, same radius, same font, one row. Elements that live in different parents can never share a row — move the element itself, don't nudge the spacing to fake it.
+20. **Stacked cards keep one shared vertical rhythm: `gap-10` (40px), including the gap below the tab strip.** A smaller gap (`gap-6`/24px) reads as cramped once every card carries its own notch title badge overlapping its top edge — badges that close together lose the "separate section" read the spacing exists to give. The gap between the tab strip and the first card uses the SAME value, not a bigger one invented just for that seam — one number, reused, beats two numbers that happen to look similar. First measured live in BombVault's own Settings page (bumped from `gap-6`, once the largest gap value anywhere in that app, to `gap-10` for both the card-to-card wrapper and the tab-strip-to-first-card wrapper in the same round).
 
 ## The tooltip and info bubble
 
