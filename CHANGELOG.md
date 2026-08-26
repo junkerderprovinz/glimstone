@@ -4,6 +4,8 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
+## 1.3.0 — 2026-08-26
+
 ### ✨ Added
 
 - **"The one horizontal selector" now documents the well at a SECOND, compact scale — one variant with a sizing option, never a second variant.** A page-level picker that appears once (theme, shape, motion) and a picker that repeats a dozen times down the same page (every schedule card's mode picker, a notification-trigger row, a weekday strip) are the same control at two scales. The small one is the same well with the equal-width pinning switched off: segments hug their own content instead of pinning to a shared minimum width, height comes from padding plus line-height, the strip wraps, and the track is `width: fit-content` so it hugs its own segments rather than stretching to a block parent (which also retires the hand-rolled `inline-flex`/`align-self` wrappers the three big call sites carried). Same groove token, radius, idle/active fill, crossfade and keyboard/RTL/disabled behaviour either way.
