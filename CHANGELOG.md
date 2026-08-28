@@ -4,6 +4,11 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
+### ✨ Added
+
+- **"The tooltip and info bubble" now says EVERY explanatory text is a bubble — not "usually", not "when it's long".** A short grey sentence under a field is the same debt as a long one and easier to talk yourself into: read once, by one person, on the day it was written, then costing that vertical space forever. If a control needs explaining, the explanation hangs off its "(i)"; if it doesn't, the sentence goes. Reported live and without qualification after an adopting app's browser-extension options page shipped four separate grey sub-captions, each individually defensible and collectively a wall of prose above the controls anyone came for. Names the excuse explicitly: **a surface with no component framework is not an exemption** — that page was hand-written HTML with a stylesheet, which is precisely the reasoning that produced the sub-captions.
+- **"Switches" now rules out the native checkbox outright.** `<input type="checkbox">` renders the operating system's box, which follows none of the engines — shape, colour, motion — and sits in a GlimStone surface looking pasted in from another program. Same origin, same page, same flat report. Records the excuse that produces it ("this page has no component framework") and why it does not hold: the switch is markup plus CSS and belongs in that surface's own stylesheet. Also names `accent-color` as a non-fix, since it recolours one part of a control whose geometry, knob and transition still ignore everything else here.
+
 ## 1.3.0 — 2026-08-26
 
 ### ✨ Added
