@@ -212,6 +212,7 @@ export function openColorPickerPopover(
   trigger: HTMLElement,
   initialHex: string,
   onChange: (hex: string) => void,
+  onClose?: () => void,
 ): ColorPickerPopoverHandle {
   openPopover?.close();
 
@@ -261,13 +262,26 @@ export function openColorPickerPopover(
   }
   position();
 
+  let closed = false;
   function close(): void {
+    if (closed) return;
+    closed = true;
     panel.remove();
     document.removeEventListener('pointerdown', onPointerDown, true);
     document.removeEventListener('keydown', onKeyDown);
     window.removeEventListener('scroll', close, true);
     window.removeEventListener('resize', close);
     if (openPopover?.el === panel) openPopover = null;
+    // `onClose` exists for one specific, non-obvious constraint: while the
+    // popover is open, the row that owns the trigger must NOT be re-rendered.
+    // Replacing the trigger element strands this popover's own outside-click
+    // handler on a node that is no longer in the page, so a second click on
+    // the (new) trigger neither closes nor re-opens anything. A caller that
+    // redraws its row after a colour change therefore applies the colour live
+    // in `onChange` and does the redraw here, once, when the picker is gone.
+    // Found building KnightLoader's extension options page, where the reset
+    // badge and the diagnostic report both depend on that redraw.
+    onClose?.();
   }
   // Capture phase, and excludes the trigger itself - a second click on the
   // trigger re-opens fresh (via the caller's own click handler) rather
