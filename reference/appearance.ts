@@ -85,6 +85,12 @@ export function applyShape(shape: Shape | string | undefined): void {
  * configured: a light accent with white text on it is unreadable, and asking
  * the user to pick a second colour to fix the first one is not a setting, it
  * is a trap.
+ *
+ * `--accent-ink` is deliberately NOT set here. It is declared in tokens.css
+ * as a color-mix over --accent, so it re-resolves on its own from whatever
+ * this function writes AND follows a light/dark switch that happens later.
+ * Computing it here would freeze it at the theme in force when the accent was
+ * picked, which is exactly the bug the second token exists to avoid.
  */
 export function applyAccent(hex: string | undefined): void {
   const root = document.documentElement.style;

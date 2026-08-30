@@ -17,14 +17,42 @@ A layered, low-noise interface system: a small light in dark masonry.
 | Text | `#f4f4f4` | `#161616` |
 | Text, secondary | `#c6c6c6` | `#525252` |
 | Text, muted | `#8d8d8d` | `#6f6f6f` |
-| **Accent (default)** | `#FCC419` | `#8E6A00` |
+| **Accent (default)** | `#FCC419` | `#FCC419` |
+| **Accent as ink** | `#FCC419` | `#8B6C0E` (derived) |
 | Settled | `#6fdc8c` | `#0e6027` |
 | Fault | `#ff8389` | `#da1e28` |
 | Warning | `#f1c21b` | `#8E6A00` |
 
 Accent presets in the picker are the same five across every app: Sunflower `#FCC419`, Blue `#1D99F3`, Green `#6FDC8C`, Red `#FF8389`, Purple `#BE95FF`. Someone who picks "Blue" in one app finds the same blue in the next.
 
-The light accent is **the same hue, darkened** (`#8E6A00`), not a different colour: gold on white is unreadable at 11px, and Carbon's own answer to that is to darken the hue rather than switch it.
+**The accent is two tokens, because it does two jobs.** `--accent` is the fill: a
+filled badge, a switch track, a primary button, a progress bar. The ink that goes
+on top of it is computed (`--accent-contrast`), so the fill needs no adjusting for
+the theme — Sunflower on a white page with near-black text on it is perfectly
+readable. `--accent-ink` is the other job: the accent used AS a colour that gets
+read, on the page's own ground — accent-coloured text, a link, a line-drawn glyph.
+That one does need darkening on a light ground, because gold text on white is
+unreadable at 11px whichever gold it is.
+
+For a long time this was one token, darkened for the light theme. That reads as a
+sensible compromise and is not one: it makes the fill wrong to fix the text. An
+adopting app's light theme drew every badge, switch and filled button in
+olive-brown, and the report was flat — *"Die gelbe Akzentfarbe ist im hellen Modus
+ganz dunkel."* **A token doing two jobs will be wrong for one of them.**
+
+`--accent-ink` is **derived, not a second colour anybody picks**: 55% of `--accent`
+toward black on a light ground, the accent itself on a dark one. Derived matters
+twice over — it follows a colour the user chose, which the old fixed constant never
+did (it only ever applied to the default), and it follows `--item-hue` inside a
+rainbow subtree, so accent-coloured text takes its position's colour like every
+fill around it. Measured against white, the palest ground here: Sunflower lands at
+4.95:1 and all five presets clear 4.5:1. On Sunflower it also computes to `#8B6C0E`,
+within a shade of the `#8E6A00` the single token used to be — the check that this
+generalises the old rule rather than replacing it.
+
+Deciding which one a given place wants takes no thought: if the colour is on a
+`background`, it is `--accent`; if it is on `color`, a `fill` or a `stroke` against
+the page, it is `--accent-ink`.
 
 ## The type scale
 
@@ -431,7 +459,8 @@ Defined under `:root` / `[data-theme="light"]`.
 | `--carbon-border` | hairline separators |
 | `--carbon-text` / `-sub` / `-muted` | three-step text ramp |
 | `--sidebar-text` | nav label colour |
-| `--accent` / `--accent-contrast` / `--accent-soft` | activity |
+| `--accent` / `--accent-contrast` / `--accent-soft` | activity, as a FILL and the computed ink on it |
+| `--accent-ink` | the same activity colour where it is READ — text, a stroke on the page ground. Derived from `--accent`, never set by hand |
 | `--status-{ok,fail,warn,info,neutral}-{text,bg,solid}` | states |
 | `--elevation`, `--hairline` | the one shadow + its top light |
 | `--focus-ring` | focus outline colour |

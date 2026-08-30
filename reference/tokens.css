@@ -93,6 +93,12 @@
   --accent:            #FCC419;
   --accent-contrast:   #161616;
   --accent-soft:       rgba(252, 196, 25, 0.14);
+  /* The accent used AS INK — accent-coloured text or a line-drawn glyph
+     sitting on the page's own ground, rather than a fill with computed ink on
+     top. On a dark ground the two jobs want the same colour, so this is the
+     accent itself; the light theme is where they part. Always reach for this
+     rather than --accent when the colour is the thing being read. */
+  --accent-ink:        var(--accent);
 
   /* Four state hues, Carbon's dark support tones. Paused reuses neutral
      on purpose — its label and its resume control carry the difference. */
@@ -200,12 +206,25 @@
   --carbon-text-muted: #6f6f6f;
   --sidebar-text:      #393939;
 
-  /* The dark accent is a yellow, and yellow on white is unreadable at 11px.
-     Carbon's own answer is to darken the hue rather than pick another one,
-     so the accent stays recognisably the same colour across both themes. */
-  --accent:            #8E6A00;
-  --accent-contrast:   #ffffff;
-  --accent-soft:       rgba(142, 106, 0, 0.12);
+  /* The accent is the accent in BOTH themes. It marks activity, and a filled
+     badge in Sunflower with computed ink on top reads perfectly well on a
+     white page. What does not work on white is that same yellow used as TEXT
+     at 11px — and darkening the one token to fix that painted every filled
+     thing on the page olive-brown instead (jdp, 2026-08-30: "Die gelbe
+     akzentfarbe ist im hellen modus ganz dunkel"). One token was doing two
+     jobs. The fill keeps the colour; the ink gets its own token.
+
+     Derived from --accent rather than a second fixed colour, so it follows a
+     colour somebody picked as well as the default, and follows --item-hue
+     inside a rainbow subtree. 55% toward black, measured against white — the
+     palest ground in this palette: Sunflower lands at 4.95:1 and every accent
+     preset clears 4.5:1. On Sunflower it also comes out at #8B6C0E, within a
+     shade of the #8E6A00 this token used to be, which is the check that this
+     generalises the old rule rather than replacing it. */
+  --accent:            #FCC419;
+  --accent-contrast:   #161616;
+  --accent-soft:       rgba(252, 196, 25, 0.14);
+  --accent-ink:        color-mix(in srgb, var(--accent) 55%, black);
 
   --status-info-text:    #8E6A00;
   --status-info-bg:      rgba(142, 106, 0, 0.12);
@@ -544,11 +563,33 @@ body {
   --accent: var(--item-hue);
   --accent-contrast: var(--item-hue-ink);
   --accent-soft: var(--item-hue-soft);
+  /* Redefined here as well, and not left to inherit. A custom property whose
+     value contains var() is substituted where it is DECLARED, so the
+     --accent-ink written on :root computed itself against :root's own
+     --accent and hands descendants that finished colour. Without this line a
+     hued subtree would take its position's colour on every fill and keep the
+     single accent on every piece of accent-coloured text - which is the
+     rainbow half-applied, the exact failure the position-on-the-container
+     rule was written to end. */
+  --accent-ink: var(--item-hue);
   /* The focus ring is part of the position, not the theme: drawn directly
      around the element that owns the colour. Reactive mode deliberately does
      not reset this — the ring only ever paints while the element has focus,
      and focus already brings the hue back via :focus-within below. */
   --focus-ring: var(--item-hue-ring);
+}
+
+/* The light half of --accent-ink above, in the same two tiers the theme
+   blocks themselves use: the media query for an app that never sets
+   data-theme, and the explicit attribute for one that does. data-rainbow and
+   data-theme both sit on <html>, hence the compound selector. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"])[data-rainbow] .glim-hue {
+    --accent-ink: color-mix(in srgb, var(--item-hue) 55%, black);
+  }
+}
+[data-theme="light"][data-rainbow] .glim-hue {
+  --accent-ink: color-mix(in srgb, var(--item-hue) 55%, black);
 }
 
 /* Opt-in: the element's glyph takes the hue too. A download row owns a
