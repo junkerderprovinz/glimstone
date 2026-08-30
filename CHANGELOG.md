@@ -2,6 +2,13 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 1.5.1 — 2026-08-30
+
+### ✨ Added
+
+- **Never a native number spinner, for the identical reason as the native checkbox.** `<input type="number">` is fine and keeps everything worth keeping — min/max/step, the arrow keys, a phone's numeric keypad — but the two arrows the browser paints beside it come from the OS widget set, on their own background, and the only property that reaches them is `accent-color`, which recolours one part of a control whose geometry, ground and spacing still ignore every token here. Same excuse ("it is a native input"), same answer: the widget goes. Reported live on an adopting app's options page, and the second half of that report is the part worth keeping — *"die beiden pfeiltasten … haben einen dunklen hintergrund und der text ist zu nah an diesen pfeilen"*: they do not merely look wrong, they crowd the value, so a right-aligned field has its digits pressed against a widget from another design system.
+- **The recipe names the STANDARD property, not only the WebKit one.** `appearance: textfield` plus `::-webkit-outer-spin-button`/`::-webkit-inner-spin-button { appearance: none }`. Firefox draws its spinner through a different pseudo-element, so a WebKit-only rule leaves those arrows exactly where they were — the same shape of half-fix as any other `-webkit-`-only appearance reset.
+
 ## 1.5.0 — 2026-08-30
 
 ### ✨ Added
