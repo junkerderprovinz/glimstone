@@ -41,6 +41,8 @@ GlimStone documents a house style shared across the author's own apps. It's publ
 - [`reference/tokens.css`](reference/tokens.css) — the palette and component classes as plain CSS custom properties. No build step, no framework. Copy the parts an app needs.
 - [`reference/tailwind-theme.css`](reference/tailwind-theme.css) — the optional Tailwind v4 `@theme` layer that maps the tokens onto utility classes. Skip it entirely on a non-Tailwind app.
 - [`reference/appearance.ts`](reference/appearance.ts) — the shape/accent/rainbow logic. Framework-free (talks only to `document.documentElement` and `localStorage`), so it drops into any app unchanged.
+- [`reference/controls.ts`](reference/controls.ts) — the label engine: four modes (text, text+glyph, glyph, reactive) across three independent surfaces, plus the width stages that let a mode change happen without the page reflowing. Framework-free the same way.
+- [`reference/glyphs.md`](reference/glyphs.md) — the shared glyph assortment: which icon means what, where each comes from and under which licence, and the sizing rules that make a set of icons read as one set.
 - [`CHANGELOG.md`](CHANGELOG.md) — what changed in the language itself, versioned.
 
 <br>
