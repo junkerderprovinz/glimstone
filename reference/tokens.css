@@ -95,10 +95,17 @@
   --accent-soft:       rgba(252, 196, 25, 0.14);
   /* The accent used AS INK — accent-coloured text or a line-drawn glyph
      sitting on the page's own ground, rather than a fill with computed ink on
-     top. On a dark ground the two jobs want the same colour, so this is the
-     accent itself; the light theme is where they part. Always reach for this
-     rather than --accent when the colour is the thing being read. */
-  --accent-ink:        var(--accent);
+     top. On a dark ground the two jobs want the same colour; the light theme
+     is where they part. Always reach for this rather than --accent when the
+     colour is the thing being read.
+
+     The theme sets only --ink-mix, and every --accent-ink is the same one-line
+     mix over it. That is what keeps the rainbow blocks below from each needing
+     a light-theme twin: --ink-mix is inherited from <html>, so one declaration
+     is correct in both themes. 100% of a colour mixed with black is that
+     colour exactly. */
+  --ink-mix:           100%;
+  --accent-ink:        color-mix(in srgb, var(--accent) var(--ink-mix), black);
 
   /* Four state hues, Carbon's dark support tones. Paused reuses neutral
      on purpose — its label and its resume control carry the difference. */
@@ -224,7 +231,7 @@
   --accent:            #FCC419;
   --accent-contrast:   #161616;
   --accent-soft:       rgba(252, 196, 25, 0.14);
-  --accent-ink:        color-mix(in srgb, var(--accent) 55%, black);
+  --ink-mix:           55%;
 
   --status-info-text:    #8E6A00;
   --status-info-bg:      rgba(142, 106, 0, 0.12);
@@ -570,8 +577,9 @@ body {
      hued subtree would take its position's colour on every fill and keep the
      single accent on every piece of accent-coloured text - which is the
      rainbow half-applied, the exact failure the position-on-the-container
-     rule was written to end. */
-  --accent-ink: var(--item-hue);
+     rule was written to end. One line and no light-theme twin, because
+     --ink-mix is inherited from <html> and already says which theme this is. */
+  --accent-ink: color-mix(in srgb, var(--item-hue) var(--ink-mix), black);
   /* The focus ring is part of the position, not the theme: drawn directly
      around the element that owns the colour. Reactive mode deliberately does
      not reset this — the ring only ever paints while the element has focus,
@@ -579,18 +587,6 @@ body {
   --focus-ring: var(--item-hue-ring);
 }
 
-/* The light half of --accent-ink above, in the same two tiers the theme
-   blocks themselves use: the media query for an app that never sets
-   data-theme, and the explicit attribute for one that does. data-rainbow and
-   data-theme both sit on <html>, hence the compound selector. */
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"])[data-rainbow] .glim-hue {
-    --accent-ink: color-mix(in srgb, var(--item-hue) 55%, black);
-  }
-}
-[data-theme="light"][data-rainbow] .glim-hue {
-  --accent-ink: color-mix(in srgb, var(--item-hue) 55%, black);
-}
 
 /* Opt-in: the element's glyph takes the hue too. A download row owns a
    colour but its action icons must stay quiet, hence the second class. The
@@ -692,6 +688,7 @@ body {
   --accent: var(--carbon-text-muted);
   --accent-contrast: var(--carbon-bg);
   --accent-soft: transparent;
+  --accent-ink: var(--carbon-text-muted);
 }
 [data-rainbow='reactive'] .glim-hue:hover,
 [data-rainbow='reactive'] .glim-hue:focus-within,
@@ -699,6 +696,11 @@ body {
   --accent: var(--item-hue);
   --accent-contrast: var(--item-hue-ink);
   --accent-soft: var(--item-hue-soft);
+  /* Restated, and it has to be: the resting rule above muted the ink too, and
+     it matches [data-rainbow] .glim-hue at the same specificity while coming
+     later in the file. Without this line the fill returns on hover and the
+     accent-coloured text inside it stays grey. */
+  --accent-ink: color-mix(in srgb, var(--item-hue) var(--ink-mix), black);
 }
 
 :focus-visible {

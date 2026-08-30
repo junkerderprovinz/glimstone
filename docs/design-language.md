@@ -40,8 +40,12 @@ adopting app's light theme drew every badge, switch and filled button in
 olive-brown, and the report was flat — *"Die gelbe Akzentfarbe ist im hellen Modus
 ganz dunkel."* **A token doing two jobs will be wrong for one of them.**
 
-`--accent-ink` is **derived, not a second colour anybody picks**: 55% of `--accent`
-toward black on a light ground, the accent itself on a dark one. Derived matters
+`--accent-ink` is **derived, not a second colour anybody picks**:
+`color-mix(in srgb, var(--accent) var(--ink-mix), black)`, with the theme setting
+`--ink-mix` to `100%` on a dark ground and `55%` on a light one. The factor is a
+token rather than a literal so that every `--accent-ink` in the sheet — including
+the one inside a rainbow subtree — is a single declaration correct in both themes,
+instead of a rule with a light-theme twin beside it. Derived matters
 twice over — it follows a colour the user chose, which the old fixed constant never
 did (it only ever applied to the default), and it follows `--item-hue` inside a
 rainbow subtree, so accent-coloured text takes its position's colour like every
@@ -461,6 +465,7 @@ Defined under `:root` / `[data-theme="light"]`.
 | `--sidebar-text` | nav label colour |
 | `--accent` / `--accent-contrast` / `--accent-soft` | activity, as a FILL and the computed ink on it |
 | `--accent-ink` | the same activity colour where it is READ — text, a stroke on the page ground. Derived from `--accent`, never set by hand |
+| `--ink-mix` | how far `--accent-ink` sits toward black: `100%` dark, `55%` light. The only part of the ink a theme sets |
 | `--status-{ok,fail,warn,info,neutral}-{text,bg,solid}` | states |
 | `--elevation`, `--hairline` | the one shadow + its top light |
 | `--focus-ring` | focus outline colour |
