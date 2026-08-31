@@ -2,6 +2,18 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 1.7.0 — 2026-08-31
+
+### ✨ Added
+
+- **Reordering by dragging is a rule now, not an app's private invention.** Long press to arm (never a plain touch on a touch screen: it fights the list's own scrolling, and every attempt to tell the two apart by distance or direction gets one of them wrong somewhere), everything wiggles while armed because the wiggle is a MODE indicator about the LIST rather than about the row under the finger, the dragged row lifts with both `elevation` and `z-index` set, and the others move out of the way AS IT PASSES rather than on release, so the gap is always where the row would land. Plus the four things that are only obvious after building it: a drop that lands where it started writes nothing; rows reorder only within their own BAND, or the gesture can express an order the list cannot render and the store cannot hold; the target is computed against MEASURED row boxes, because a group header is taller than a row inside it; and the order is written whole rather than as a diff, so two clients dragging the same list merge orders instead of merging opinions about what moved.
+- **When adding a gesture library would mean new NATIVE dependencies in a fragile build, the platform's own primitives are enough** — and the trade belongs in the code rather than in somebody's memory. A reorder gesture is not worth putting a build at risk for.
+
+### 🔄 Changed
+
+- **The version footer becomes an About card, and the old section is replaced rather than extended.** The footer was defensible: one quiet line, fixed to the window, on every settings tab without being implemented per tab. What it could not do only shows once you ask what somebody does NEXT with a version number — they report something, and page chrome has nowhere to put that. The card carries the versions, one sentence inviting a report, and two buttons: the repository, and a `mailto:` with the subject prefilled (no body, because a prefilled body reads as a form to fill in). **It is the one card in this language whose content is prose rather than an info bubble**, and that is a named exception rather than an oversight of rule 8: a bubble hangs an explanation off a control, and this card has no control to explain. Watch for the failure mode where both ship — the card AND the footer are each individually defensible, and together they are one number in two type sizes twelve pixels apart, which is what got reported the moment the card landed. Built across three surfaces of one product in a single round, which is also the check that it generalises.
+- **A number field keeps its steppers, drawn by the app.** 1.5.1 dropped the native spinner and was right; it also dropped the affordance and was therefore incomplete, which took exactly one release and three words to find out (*"jetzt sind keine pfeiltasten mehr da"*). Two square controls in the page's own tokens, driven by `stepUp()`/`stepDown()` so the range lives in one place, each greyed out at its own end. **The general form: a rule that removes a native widget owes the replacement in the same breath, or the next release is a bug report.**
+
 ## 1.6.0 — 2026-08-31
 
 ### ✨ Added
