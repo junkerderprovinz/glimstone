@@ -10,10 +10,16 @@ This file is the assortment itself: which glyph means what, where each one comes
 
 **[Streamline](https://streamlinehq.com) — free Core Solid, CC BY 4.0.** Specifically the 1000-icon free subset published at [`webalys-hq/streamline-vectors`](https://github.com/webalys-hq/streamline-vectors), folder `core/solid`. That subset is explicitly redistributable; the larger 5771-icon set sold on streamlinehq.com is a different product whose licence forbids redistribution, which is exactly what a public repository does. Getting this wrong is not a style question, so check which set a file came from before adding it.
 
-Two other sources appear where the free set genuinely has no answer, both attributed alongside Streamline in the generated file's header:
+Other sources appear where the free set has no answer, or where a better drawing existed. All of them are attributed alongside Streamline in the generated file's header:
 
 - **[Font Awesome Free](https://fontawesome.com)**, icons only, CC BY 4.0. Its licence splits by asset type — fonts are SIL OFL, code is MIT, and only the icons are CC BY. A single path counts as an icon, so attribution is the whole obligation.
+- **[Tabler Icons](https://tabler.io/icons)**, MIT. Use the **filled** variants — the outline set is the default on their site and would break the fill rule below.
+- **[Material Design Icons](https://pictogrammers.com/library/mdi/)**, Apache 2.0.
 - **[Simple Icons](https://simpleicons.org)**, CC0, for brand marks. A brand mark is still a trademark: use it only to refer to the thing it names (a row that navigates to Docker containers), unmodified, and never in a way that implies endorsement.
+
+**Mixing sets is fine and normalising them is not optional.** Four sets means four ideas about how much of a viewBox a drawing should occupy; the sizing rules below are what make them read as one family rather than four.
+
+**Watch for transparent padding paths.** Tabler and several Illustrator exports ship a `fill="none"` rectangle covering the whole viewBox. It paints nothing, so it is easy to keep — and it makes every ink measurement report 100%, which silently defeats the sizing rules. Drop it on import.
 
 **Attribution is required and lives in the generated file's header**, not in a licence file nobody reads next to the code that uses it.
 
@@ -33,7 +39,7 @@ Two other sources appear where the free set genuinely has no answer, both attrib
 
 ## 3. Sizing: the part that is not obvious
 
-Three rounds of live review went into these, each one starting from a report that something "looked too big" or "too small" while every box on screen was already the same size. The box is almost never the answer.
+Five rounds of live review went into these, each one starting from a report that something "looked too big" or "too small" while every box on screen was already the same size. The box is almost never the answer.
 
 **Rule 1 — what the eye compares is INK, not the box.** Two glyphs in identical 20px boxes are not the same size if one is drawn edge to edge and the other has air around it. A hand-drawn cloud covering 10.4 × 8.2 of the grid stood beside an imported drive covering 14 × 13.7: near enough double the ink, in the same box, and it read exactly that way.
 
@@ -41,9 +47,9 @@ Three rounds of live review went into these, each one starting from a report tha
 
 **Rule 3 — normalise by cropping the viewBox, not by editing paths.** A glyph whose ink fills 69% of its grid renders 69% the size of one that fills 100%. Give it a viewBox cropped to its own measured ink, squared off (side = the larger of width and height) and centred, and the default `preserveAspectRatio="xMidYMid meet"` scales it up to fill its dominant dimension with the aspect ratio untouched. No coordinate moves, so shapes that survived earlier legibility rounds survive this too.
 
-**Rule 4 — a matched pair matches on its shared dimension, and "shared" depends on the shapes.** Two wide glyphs with similar aspect ratios match on WIDTH; a near-square glyph beside a wide one matches on HEIGHT, because a row of icons is read off its height. Getting this backwards leaves one of the pair looking like the smaller symbol while both measurements say they agree.
+**Rule 4 — one mechanism, not one per pair.** An earlier version of this file matched individual pairs to each other with a `translate`/`scale` transform and a shared width constant. That works and does not scale: a transform has to know the target grid, so it only ever applies to glyphs already living on it, and every pair needs its own constant that two call sites must keep agreeing on. The cropped viewBox above replaces all of it. It works on a 24-unit Tabler icon and a 512-unit Font Awesome one without converting either first, and two glyphs end up the same size because they follow the same rule, not because somebody kept two numbers in step.
 
-**Rule 5 — matching a pair to each other is necessary and not sufficient.** A pair tuned only against itself can end up the smallest thing in a strip of other glyphs. The comparison that matters is with every glyph on screen. In practice: fill the box the way the rest of the set does, then match the pair inside that.
+**Rule 5 — matching a pair to each other is necessary and not sufficient.** A pair tuned only against itself can end up the smallest thing in a strip of other glyphs — measured once at 68% while the rail beside it sat at 98–100%. The comparison that matters is with every glyph on screen, which is exactly what a single global rule gives you and a per-pair constant does not.
 
 **Rule 6 — detail thinner than the raster disappears, and no amount of scaling fixes it.** At a 14-unit grid in a 20px box, one unit is 1.43px, so anything under roughly 1.5 units merges into its neighbour. A cloud whose humps rose 1.3 units read as a plain dome; a drive whose interior arm was under a unit read as a scribble in a box. **Build small glyphs from few, large shapes with deep valleys**, and check them at 20px magnified rather than at 88px where everything looks fine.
 
@@ -53,13 +59,12 @@ Three rounds of live review went into these, each one starting from a report tha
 
 ## 4. The assortment
 
-`Icon<Name>` is the component name; the path is the file inside `core/solid`. Meanings are the contract — an app that needs "delete" uses `IconTrash`, it does not pick a different bin.
+`Icon<Name>` is the component name; the path is the file inside Streamline's `core/solid`. Glyphs from the other sets are in the table below this one. Meanings are the contract — an app that needs "delete" uses `IconTrash`, it does not pick a different bin.
 
 ### Actions — the verbs a button wears
 
 | Name | Source | Means |
 | --- | --- | --- |
-| `IconSave` | `computer-devices/floppy-disk.svg` | Save |
 | `IconRefresh` | `interface-essential/arrow-reload-horizontal-1.svg` | Refresh or reload |
 | `IconUpload` | `interface-essential/upload-box-1.svg` | Upload, send, import |
 | `IconDownload` | `interface-essential/download-box-1.svg` | Download, export |
@@ -79,9 +84,7 @@ Three rounds of live review went into these, each one starting from a report tha
 | `IconEye` | `interface-essential/glasses.svg` | Show, reveal, preview |
 | `IconInfo` | `interface-essential/information-circle.svg` | Information, details |
 | `IconPencil` | `interface-essential/pencil.svg` | Edit |
-| `IconCopy` | `interface-essential/copy-paste.svg` | Copy |
 | `IconGear` | `interface-essential/cog.svg` | Settings |
-| `IconCheckCircle` | `interface-essential/shield-check.svg` | Verified, test connection |
 | `IconSync` | `interface-essential/arrow-reload-vertical-2.svg` | Replicate, synchronise |
 | `IconRestore` | `interface-essential/arrow-reload-vertical-1.svg` | Restore |
 | `IconRecovery` | `interface-essential/arrow-reload-horizontal-2.svg` | Recovery, rebuild |
@@ -110,15 +113,20 @@ Three rounds of live review went into these, each one starting from a report tha
 
 ### Hand-drawn — where no free set had an answer
 
-| Name | Means | Why drawn |
+| Name | Means | Source, and why |
 | --- | --- | --- |
-| `IconCloud` | Off-site, remote | Font Awesome's `cloud`. Fitted to the pair's width and centre, so it stands beside `IconLocal` as a matched pair. |
-| `IconLocal` | Local storage | Two rounded bars, nothing else. Every imported drive glyph carried interior detail finer than 20px can hold (rule 6). |
-| `IconAdd` | Add | A plus with 10 units of arm and 2.8 of bar — shorter and thicker than the imported one (rule 7). |
+| `IconCloud` | Off-site, remote | Font Awesome's `cloud`. One closed path with valleys deep enough to survive 20px (rule 6). |
+| `IconLocal` | Local storage | Font Awesome's `server`. Reads as storage without borrowing the folder, which a Browse button already owns. |
+| `IconSave` | Save | Font Awesome. |
+| `IconTabStorage` | Paths and storage | Font Awesome's `database`. |
+| `IconCopy` | Copy | Tabler, filled variant. Ships with a transparent padding path — drop it. |
+| `IconCheckCircle` | Verify, check, test | Ships with a transparent padding path — drop it. |
+| `IconTabIntegrity` | Integrity | Material's `shield-check`. |
+| `IconAdd` | Add | Hand-drawn: a plus with 10 units of arm and 2.8 of bar, shorter and thicker than any imported one (rule 7). |
 | `IconClose` | Close, dismiss, cancel | The same plus, rotated 45°. |
 | `IconContainers` | Docker containers | Simple Icons' whale. A trademark used descriptively, unmodified. |
 
-**`IconLocal` and `IconCloud` are a pair.** Local storage against off-site storage is the one place in these apps where two glyphs must read as two halves of one choice: same width, same centre, and neither of them a folder.
+**`IconLocal` and `IconCloud` are a pair.** Local storage against off-site storage is the one place in these apps where two glyphs must read as two halves of one choice. They need no special handling to do it: both go through the same crop as everything else, and that is the point of having one rule.
 
 <br>
 
@@ -139,7 +147,8 @@ BombVault's `scripts/gen_glyphs.py` is the working reference implementation of a
 ## 6. Adding a glyph
 
 - **Check the assortment first.** A new name for an existing meaning is how two apps end up with two bins.
-- **Prefer the free Streamline set**, and check which set the file came from.
+- **Prefer the free Streamline set**, and check which set the file came from. Any of the sets in section 1 is fine; a new one needs its licence checked and its attribution added in the same commit.
+- **Drop any transparent padding path** before measuring, or the measurement is meaningless.
 - **Measure the ink** and compare it against the glyphs it will stand next to, not against the box.
 - **Look at it at 20px, magnified** — not at 88px, where every glyph looks fine.
 - **Add it here in the same commit.** An assortment that documents four apps out of five is a list of what somebody remembered.
