@@ -9,7 +9,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-AGPL--3.0-blue?style=for-the-badge&logo=gnu&logoColor=white" alt="License: AGPL-3.0" height="36"></a>
 </p>
 
-<p align="center">The shared design language behind a family of apps by the same author: a layered, low-noise interface system built on IBM Carbon's neutral palette, with one shared accent, one shared shape engine, and a house style for componentry (cards, tabs, switches, the info bubble, the reveal eye).</p>
+<p align="center">The shared design language behind a family of apps by the same author: a layered, low-noise interface system built on IBM Carbon's neutral palette, four engines a user drives from the app root (shape, colour, motion, labels), one shared glyph assortment, and a house style for componentry (cards, tabs, switches, the info bubble, the reveal eye).</p>
 
 <p align="center">
   <a href="https://buymeacoffee.com/junkerderprovinz">
@@ -37,7 +37,7 @@ GlimStone documents a house style shared across the author's own apps. It's publ
 
 ## 1. What's in this repo
 
-- [`docs/design-language.md`](docs/design-language.md) — the full spec: the palette, the name and its etymology, all nineteen rules, the componentry vocabulary (info bubble, horizontal selector, switches, the reveal eye, badges, toasts, empty states, destructive actions, charts), the colour and motion engines, the token contract, and the adoption steps. This is the document to read start to finish; everything below just points back into it.
+- [`docs/design-language.md`](docs/design-language.md) — the full spec: the palette, the name and its etymology, all nineteen rules, the componentry vocabulary (info bubble, horizontal selector, switches, the reveal eye, badges, toasts, empty states, destructive actions, charts), the colour, motion and label engines, the token contract, and the adoption steps. This is the document to read start to finish; everything below just points back into it.
 - [`reference/tokens.css`](reference/tokens.css) — the palette and component classes as plain CSS custom properties. No build step, no framework. Copy the parts an app needs.
 - [`reference/tailwind-theme.css`](reference/tailwind-theme.css) — the optional Tailwind v4 `@theme` layer that maps the tokens onto utility classes. Skip it entirely on a non-Tailwind app.
 - [`reference/appearance.ts`](reference/appearance.ts) — the shape/accent/rainbow logic. Framework-free (talks only to `document.documentElement` and `localStorage`), so it drops into any app unchanged.
@@ -49,7 +49,11 @@ GlimStone documents a house style shared across the author's own apps. It's publ
 
 ## 2. The short version
 
-IBM Carbon's neutral greys for the ground and surfaces, one accent that means "this is happening" and nothing else, four state hues total, hierarchy from type and colour rather than borders, and every heading rendered as a filled section badge rather than bare text. The two settings a user actually owns — corner shape and accent colour — are applied once at the app root and never touched by the page underneath them. See [`docs/design-language.md`](docs/design-language.md) for the palette table and all nineteen rules with their reasoning.
+IBM Carbon's neutral greys for the ground and surfaces, one accent that means "this is happening" and nothing else, four state hues total, hierarchy from type and colour rather than borders, and every heading rendered as a filled section badge rather than bare text.
+
+**Six axes belong to the user** — theme, corner shape, accent colour, rainbow, motion intensity and label mode — and every one of them is applied once at the app root, never by the page that edits it. Four resolve through a named engine, so nothing downstream has to know which setting produced the value it got: the **shape engine** (one radius token, no exception list), the **colour engine** (theme, accent and rainbow together), the **motion engine** (one set of duration and distance tokens feeding the same keyframes at every intensity) and the **label engine** (text, glyph or both, across three independent surfaces). Icons come from one shared assortment so a folder is the same folder in every app.
+
+See [`docs/design-language.md`](docs/design-language.md) for the palette table and all nineteen rules with their reasoning.
 
 <br>
 
@@ -60,6 +64,8 @@ IBM Carbon's neutral greys for the ground and surfaces, one accent that means "t
 3. Add whatever tokens the app doesn't have yet — the full list is in the file's own comments and in the design-language doc's token table.
 4. Replace hard-coded `rounded-lg` / `shadow-*` with `.glim-card`; fill the selected nav item, tab or segment with the accent.
 5. For rainbow, copy [`reference/appearance.ts`](reference/appearance.ts) as-is.
+6. For the label engine, copy [`reference/controls.ts`](reference/controls.ts) as-is, and call `applyStoredLabelModes()` at the app root before first render — not from the settings page that edits it, or the app opens in the default mode and snaps over on load.
+7. For icons, generate from [`reference/glyphs.md`](reference/glyphs.md) rather than copying SVGs, and take its sizing rules with them: artwork from different sets fills its own viewBox by wildly different amounts, so a set assembled without normalising arrives on screen at several sizes.
 
 Nothing else is required — component markup stays as it is, because every colour already flows through a token. Full detail (including the three traps that have bitten every adopter so far) is in [`docs/design-language.md`](docs/design-language.md#adopting-glimstone-in-another-app).
 
