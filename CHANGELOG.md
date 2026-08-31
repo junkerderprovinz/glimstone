@@ -2,6 +2,16 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 1.6.0 — 2026-08-31
+
+### ✨ Added
+
+- **Every version number on screen links to that version's own release page.** A version string answers "which build is this"; the question straight after it is always "and what changed", and a number nobody can follow makes somebody search a repository for a tag they then retype by hand. Holds for the design-language version beside the app's own, too — GlimStone is a repository with tagged releases like any other. Built from the version rather than written out per release, so a hand-maintained list cannot go stale, and opened in a new tab, because leaving Settings to read a changelog is not what anybody meant by clicking a number.
+
+### 🐞 Fixed
+
+- **The number-field stepper rule was wrong in the other direction, and is rewritten rather than extended.** The stepper rule as shipped in 1.5.0 said "two square controls flanking the field", in the page's own surface token. That turns one control into three objects standing in a row, and — worse — it re-imports the exact property that made the native spinner wrong: the complaint was never "there are arrows", it was that they arrive *on their own dark background*, crowding the value. Copying that ground onto our own arrows copies the defect in our tokens instead of the OS's. **A stepper is part of the field, not a control next to it**: inside the field's own box, `background: none`, only the ink changing on hover, with the field carrying enough inline padding that the digits never run underneath. The general form is now explicit: a replacement for a removed native widget must not re-import the property that made the original wrong.
+
 ## 1.5.0 — 2026-08-31
 
 ### ✨ Added
