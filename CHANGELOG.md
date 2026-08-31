@@ -2,6 +2,17 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 1.7.1 — 2026-08-31
+
+*(Landed as 1.6.1 for a few minutes. A parallel session cut 1.7.0 while this was being written, so the number pointed backwards at the moment it was pushed — renumbered rather than left as a version that sorts below the release it follows.)*
+
+### 🔧 Changed
+
+- **One sizing mechanism instead of two.** The assortment described matching individual pairs with a `translate`/`scale` transform and a shared width constant, alongside the cropped viewBox. The transform is gone. It only ever worked for glyphs already living on the target grid, and every pair needed its own constant that two call sites had to keep in step — a cropped viewBox needs neither, works on a 24-unit icon and a 512-unit one without converting either first, and makes two glyphs agree because they follow the same rule rather than because somebody maintained two numbers. Rule 4 now says so instead of describing the thing it replaced.
+- **The assortment carries four sources, not two.** Tabler Icons (MIT, filled variants only — the outline set is their site's default and would break the fill rule) and Material Design Icons (Apache 2.0) join Font Awesome and Simple Icons beside Streamline. **Mixing sets is fine; normalising them is not optional** — four sets means four ideas about how much of a viewBox a drawing should occupy, which is exactly what the sizing rules exist to flatten.
+- **New standing warning: transparent padding paths.** Tabler and several Illustrator exports ship a `fill="none"` rectangle covering the whole viewBox. It paints nothing, so it survives an import unnoticed, and it makes every ink measurement report 100% — silently defeating the rule that everything else depends on. Drop it before measuring.
+- **The README described two engines and four axes ago.** Its subtitle still said „one shared accent, one shared shape engine“ and the short version still said „the two settings a user actually owns“. Motion gained an engine in 1.5.0 and labels in 1.6.0, which makes four, and the axes are six. A design language's front page understating its own scope is worse than a stale changelog entry: it is the file somebody reads to decide whether this covers what they need. The adoption steps gain the two files that had none, including `controls.ts`'s boot call — easy to leave out, and it only shows as a flash on reload.
+
 ## 1.7.0 — 2026-08-31
 
 ### ✨ Added
@@ -14,13 +25,6 @@ All notable changes to the GlimStone design language are documented here. Versio
 - **The version footer becomes an About card, and the old section is replaced rather than extended.** The footer was defensible: one quiet line, fixed to the window, on every settings tab without being implemented per tab. What it could not do only shows once you ask what somebody does NEXT with a version number — they report something, and page chrome has nowhere to put that. The card carries the versions, one sentence inviting a report, and two buttons: the repository, and a `mailto:` with the subject prefilled (no body, because a prefilled body reads as a form to fill in). **It is the one card in this language whose content is prose rather than an info bubble**, and that is a named exception rather than an oversight of rule 8: a bubble hangs an explanation off a control, and this card has no control to explain. Watch for the failure mode where both ship — the card AND the footer are each individually defensible, and together they are one number in two type sizes twelve pixels apart, which is what got reported the moment the card landed. Built across three surfaces of one product in a single round, which is also the check that it generalises.
 - **A number field keeps its steppers, drawn by the app.** 1.5.1 dropped the native spinner and was right; it also dropped the affordance and was therefore incomplete, which took exactly one release and three words to find out (*"jetzt sind keine pfeiltasten mehr da"*). Two square controls in the page's own tokens, driven by `stepUp()`/`stepDown()` so the range lives in one place, each greyed out at its own end. **The general form: a rule that removes a native widget owes the replacement in the same breath, or the next release is a bug report.**
 
-## 1.6.1 — 2026-08-31
-
-### 🔧 Changed
-
-- **One sizing mechanism instead of two.** The assortment described matching individual pairs with a `translate`/`scale` transform and a shared width constant, alongside the cropped viewBox. The transform is gone. It only ever worked for glyphs already living on the target grid, and every pair needed its own constant that two call sites had to keep in step — a cropped viewBox needs neither, works on a 24-unit icon and a 512-unit one without converting either first, and makes two glyphs agree because they follow the same rule rather than because somebody maintained two numbers. Rule 4 now says so instead of describing the thing it replaced.
-- **The assortment carries four sources, not two.** Tabler Icons (MIT, filled variants only — the outline set is their site's default and would break the fill rule) and Material Design Icons (Apache 2.0) join Font Awesome and Simple Icons beside Streamline. **Mixing sets is fine; normalising them is not optional** — four sets means four ideas about how much of a viewBox a drawing should occupy, which is exactly what the sizing rules exist to flatten.
-- **New standing warning: transparent padding paths.** Tabler and several Illustrator exports ship a `fill="none"` rectangle covering the whole viewBox. It paints nothing, so it survives an import unnoticed, and it makes every ink measurement report 100% — silently defeating the rule that everything else depends on. Drop it before measuring.
 
 ## 1.6.0 — 2026-08-31
 
