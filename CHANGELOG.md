@@ -2,6 +2,12 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 1.7.1 — 2026-09-01
+
+### 🐞 Fixed
+
+- **The number field's steppers are solid triangles, not outlined chevrons.** Shipped in 1.7.0 as two-stroke chevrons, which is the one outlined mark in an icon set made entirely of filled shapes — so it reads as borrowed from another design system, at exactly the size where that is hardest to miss. Reported by the first app to adopt it, in one line: *"die pfeile sollen solide dreiecke sein, damit es zum style passt"*. Worth recording because it is the SAME objection that removed the OS spinner in the first place, applied one level down to its replacement: **a control does not get to come from somewhere else just because it is small.** A replacement inherits the standard it was built to satisfy.
+
 ## 1.7.0 — 2026-09-01
 
 ### ✨ Added

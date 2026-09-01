@@ -116,10 +116,20 @@ export function attachNumberSteppers(
     return b;
   };
 
-  // Chevrons, drawn rather than typed: an arrow CHARACTER inherits the font and
-  // the OS glyph, which is the same mistake as the native widget one size down.
-  const up = make(1, '<svg viewBox="0 0 10 6" width="10" height="6" aria-hidden="true"><path d="M1 5 L5 1 L9 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>');
-  const down = make(-1, '<svg viewBox="0 0 10 6" width="10" height="6" aria-hidden="true"><path d="M1 1 L5 5 L9 1" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+  // SOLID triangles, drawn rather than typed.
+  //
+  // Drawn, because an arrow CHARACTER inherits the font and the OS glyph, which
+  // is the same mistake as the native widget one size down.
+  //
+  // Solid, because an icon set is filled shapes and a two-stroke chevron is an
+  // outline: put one inside a field surrounded by filled glyphs and it reads as
+  // borrowed from another design system, at exactly the size where that shows
+  // most. Reported on the first app to adopt this ("die pfeile sollen solide
+  // dreiecke sein, damit es zum style passt"), which is the same objection that
+  // removed the OS spinner in the first place — a control does not get to come
+  // from somewhere else just because it is small.
+  const up = make(1, '<svg viewBox="0 0 10 6" width="10" height="6" aria-hidden="true"><path d="M5 0.9 L9.4 5.3 L0.6 5.3 Z" fill="currentColor"/></svg>');
+  const down = make(-1, '<svg viewBox="0 0 10 6" width="10" height="6" aria-hidden="true"><path d="M5 5.3 L0.6 0.9 L9.4 0.9 Z" fill="currentColor"/></svg>');
 
   stack.append(up, down);
   wrap.appendChild(stack);
