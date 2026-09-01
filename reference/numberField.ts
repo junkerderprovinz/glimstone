@@ -116,7 +116,7 @@ export function attachNumberSteppers(
     return b;
   };
 
-  // SOLID triangles, drawn rather than typed.
+  // Solid triangles with ROUNDED corners, drawn rather than typed.
   //
   // Drawn, because an arrow CHARACTER inherits the font and the OS glyph, which
   // is the same mistake as the native widget one size down.
@@ -128,8 +128,22 @@ export function attachNumberSteppers(
   // dreiecke sein, damit es zum style passt"), which is the same objection that
   // removed the OS spinner in the first place — a control does not get to come
   // from somewhere else just because it is small.
-  const up = make(1, '<svg viewBox="0 0 10 6" width="10" height="6" aria-hidden="true"><path d="M5 0.9 L9.4 5.3 L0.6 5.3 Z" fill="currentColor"/></svg>');
-  const down = make(-1, '<svg viewBox="0 0 10 6" width="10" height="6" aria-hidden="true"><path d="M5 5.3 L0.6 0.9 L9.4 0.9 Z" fill="currentColor"/></svg>');
+  //
+  // Rounded, and that correction is the one worth carrying: the browser's own
+  // spinner was already the right MARK. The complaint about it was the ground
+  // under it and the space it stole, never the shape. Reading "remove the
+  // widget" as "design a replacement" cost two rounds here — chevrons, then
+  // sharp triangles — before the answer turned out to be the original drawing
+  // minus its background. **When somebody asks for one property of a thing to
+  // change, the rest of the thing is the specification.**
+  //
+  // Done with a matched stroke and stroke-linejoin instead of arcs in the path:
+  // three corners, three radii, and the shape stays one triangle anybody can
+  // read. The base path is inset by the stroke's half-width, so the painted
+  // result lands where the sharp version did rather than growing.
+  const ARROW = 'fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"';
+  const up = make(1, `<svg viewBox="0 0 10 6" width="10" height="6" aria-hidden="true"><path d="M5 1.7 L8.6 4.6 L1.4 4.6 Z" ${ARROW}/></svg>`);
+  const down = make(-1, `<svg viewBox="0 0 10 6" width="10" height="6" aria-hidden="true"><path d="M5 4.3 L1.4 1.4 L8.6 1.4 Z" ${ARROW}/></svg>`);
 
   stack.append(up, down);
   wrap.appendChild(stack);

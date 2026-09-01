@@ -2,6 +2,12 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 1.7.2 — 2026-09-01
+
+### 🐞 Fixed
+
+- **The steppers get rounded corners, and the round trip that produced them is the entry.** 1.7.0 shipped chevrons, 1.7.1 made them solid triangles, and only then did the actual ask surface: *"eigentlich wollte ich einfach nur die ursprünglichen dreicke wie sie waren, nur ohne den dunklen hintergrund"*. The browser's own spinner was already the right MARK. Every complaint about it — the dark ground of its own, the digits crowded against it — was about everything EXCEPT the shape, and reading "remove the widget" as "design a replacement" cost two rounds redrawing something that had been correct. **When somebody asks for one property of a thing to change, the rest of the thing is the specification.** Rounded with a matched stroke and `stroke-linejoin: round` rather than arcs in the path (three corners, three radii, and the shape stays one triangle anybody can read), with the base path inset by the stroke's half-width so the painted result lands where the sharp version did instead of growing.
+
 ## 1.7.1 — 2026-09-01
 
 ### 🐞 Fixed
