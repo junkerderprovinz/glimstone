@@ -2,6 +2,14 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 1.7.0 — 2026-09-01
+
+### ✨ Added
+
+- **The number field arrives with working code, not only a rule.** 1.6.0 rewrote the stepper bullet after the first replacement got it wrong; the bullet was right and still shipped nothing an adopting app could copy, which is how a rule described twice in prose got built wrong twice. `reference/numberField.ts` attaches a pair of in-field steppers to a plain `<input type="number">` and returns a teardown, framework-free like the rest of `reference/`; `reference/tokens.css` carries the ground rules beside it. Both halves of the original complaint are in the CSS rather than in a paragraph: the arrows have `background: none` and change only their ink, and `padding-inline-end` keeps the digits from running underneath them. The buttons drive the input's own `stepUp()`/`stepDown()`, so min/max/step live in the markup and nowhere else, and each greys out at its own end. They dispatch `input` and `change` by hand, because `stepUp()` fires neither — a field that saves on change would otherwise save everything except the arrows.
+
+- **A row of colour swatches needs neither a caption nor a ninth swatch to open the picker.** An adopting app's accent row carried a standalone custom-colour trigger, then the word "Voreinstellungen:", then the eight presets. Every one of those eight already opens the same picker, so the ninth swatch offered nothing the row did not already offer while looking like a colour you could select — two controls doing one job, one of them lying about what it is. The caption went for the ordinary reason: a row of coloured discs in a card titled *Accent colour* does not need a word telling you it is a row of colours. jdp, live: *"das Farbpickerfeld und der text Voreinstellungen soll weg"*. **The general form: a label that names what the control obviously is survives because nobody re-reads it, not because anybody needed it.**
+
 ## 1.6.0 — 2026-08-31
 
 ### ✨ Added

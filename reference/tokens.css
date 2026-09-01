@@ -788,3 +788,88 @@ body {
    the shaking element (or its animated child) on an incrementing
    per-instance failure counter, the same way lib/toast.tsx's push() mints a
    fresh id per call so an identical repeated message still gets a fresh node. */
+
+
+/* ===========================================================================
+   The number field — no native spinner, our own arrows inside the box.
+   ---------------------------------------------------------------------------
+   Pairs with reference/numberField.ts. The rule is in docs/design-language.md
+   ("Never a native number spinner either", and the bullet after it); this is
+   the ground it stands on.
+
+   Two halves, and the second one is the half people forget. The original
+   complaint was not "there are arrows" — it was that they "haben einen dunklen
+   hintergrund und der text ist zu nah an diesen pfeilen". Removing the widget
+   answers the first clause. The inline padding below answers the second, and a
+   replacement that skips it reproduces the defect in the app's own colours.
+   =========================================================================== */
+
+/* BOTH properties, not just the -webkit- one. Chrome hides its spinner through
+   the pseudo-elements; Firefox draws its own through a different mechanism and
+   ignores them entirely, so a WebKit-only rule leaves those arrows exactly
+   where they were. */
+.glim-num-input {
+  appearance: textfield;
+  -moz-appearance: textfield;
+  /* Room for the arrows, so the digits never run underneath them. 1.75rem
+     clears the 14px stack plus its inset at every field height in the set. */
+  padding-inline-end: 1.75rem;
+}
+.glim-num-input::-webkit-outer-spin-button,
+.glim-num-input::-webkit-inner-spin-button {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.glim-num-wrap {
+  position: relative;
+  display: block;
+}
+
+/* Inside the field's box, vertically centred, and out of the way of a click
+   meant for the input itself — the buttons take pointer events back. */
+.glim-num-steppers {
+  position: absolute;
+  inset-block: 1px;
+  inset-inline-end: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1px;
+  pointer-events: none;
+}
+
+/* NO ground of its own. This is the whole point: the arrows belong to the
+   field, so only their INK moves on hover. Give them a surface and they become
+   a third object standing beside a control, which is what went wrong the first
+   time this was replaced. */
+.glim-num-step {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 11px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--carbon-text-muted, #a8a8a8);
+  cursor: pointer;
+  transition: color 120ms ease;
+}
+.glim-num-step:hover:not(:disabled) { color: var(--carbon-text, #f4f4f4); }
+.glim-num-step:disabled {
+  /* Says so rather than lying: at a boundary the native widget greyed out too,
+     and a control that looks pressable and does nothing is worse. */
+  opacity: .35;
+  cursor: default;
+}
+/* The field owns the focus ring; the arrows inside it must not draw a second
+   one. They are tabIndex=-1 and aria-hidden, so this removes an outline nobody
+   can reach by keyboard anyway. */
+.glim-num-step:focus { outline: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .glim-num-step { transition: none; }
+}
