@@ -2,6 +2,19 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 1.7.1 — 2026-09-07
+
+### 🐛 Fixed
+
+- **The components shipped without the CSS they stand on.** 1.7.0's `reference/react/` read thirteen classes and seven tokens defined nowhere in this repository - the button box and its four width stages, the chip and glyph forms, the reactive label, the modal entrance, and the `--btn-h` / `--btn-pad-x` / `--btn-gap` / `--btn-w-*` tokens underneath them. They had been living in one adopting app's own stylesheet all along, so a button copied out of the folder arrived with no height, no padding and no radius. Every file typechecked; the defect was only ever visible on screen. The rules now live in `reference/tokens.css`, under the language's own `glim-` prefix rather than one app's three letters.
+- **Two utilities were missing from the theme layer.** `bg-statusWarnBgStrong` had no token at all (an opaque warn wash, for a chip on a row that already carries a fill; the translucent one takes that fill's colour through it) and is now defined in all three colour modes. `text-accentText` was `--accent-ink` under an older name.
+- **A toast entered from the wrong edge in right-to-left languages**, because its slide distance was a literal inside the keyframes and a keyframe cannot be mirrored by a class sweep. Now a token, mirrored under `[dir="rtl"]`.
+- **The card-wide hue reveal in reactive rainbow mode was missing**, so a heading notch would have lit up only while the pointer rested on its own glyph.
+
+### ✨ Added
+
+- **`reference/react/check.sh`**, which asks what TypeScript cannot: does every class, themed utility and custom property the components touch actually exist here? It found everything above. Then it was broken on purpose to prove it fails - the first version passed while a class was deleted, because a plain substring match let `.glim-btn-chip` answer for a missing `.glim-btn`.
+
 ## 1.7.0 — 2026-09-07
 
 ### ✨ Added

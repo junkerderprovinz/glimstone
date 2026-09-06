@@ -58,6 +58,23 @@ a different one.
    without Tailwind maps those few names itself; the tokens underneath are the
    same either way.
 
+## Checking that the folder is complete
+
+`bash reference/react/check.sh` from the repository root asks the one question
+TypeScript cannot: does every class, themed utility and custom property these
+components touch actually exist in `../tokens.css` and `../tailwind-theme.css`?
+
+It exists because the first cut of this folder shipped components reading
+thirteen classes and seven tokens that were defined nowhere here - they had been
+living in one app's own stylesheet the whole time, so a button copied out of
+here arrived with no height, no padding and no radius. Every file typechecked
+perfectly. The defect was only visible on screen, in the app that adopted it.
+
+One name is skipped deliberately: `glim-convention-exception` is not a class but
+a marker written inside a comment, tagging a departure from a rule that was
+reviewed and kept on purpose, so a later reader knows it is a decision rather
+than an oversight.
+
 A component copied from here and then edited in the app is a fork, and the next
 release of this folder will not reach it. Where an app genuinely needs different
 behaviour, add a prop here and copy the file again, so every sibling gets the
