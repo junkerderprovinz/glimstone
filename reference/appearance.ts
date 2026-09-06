@@ -23,10 +23,17 @@ export const SHAPES: Shape[] = ['round', 'soft', 'square'];
 export const DEFAULT_ACCENT = '#FCC419';
 
 /**
- * ACCENTS are the presets offered in the picker — the same five across every
+ * ACCENTS are the presets offered in the picker — the same EIGHT across every
  * adopting app, in the same order, so someone who set "Blue" in one app finds
- * the same blue in the next. A free colour field sits beside them, so this
- * list is a shortcut, not a restriction.
+ * the same blue in the next. Every one of them opens the picker, so the list is
+ * a shortcut rather than a restriction.
+ *
+ * It was five here for as long as one adopting app had been shipping eight,
+ * which is the drift a shared list exists to prevent: two accent rows sat at
+ * visibly different lengths, and three colours somebody could pick in one app
+ * were simply absent in the next. The last three are taken from the rainbow
+ * palette by position, so the accent row and the palette row draw on one family
+ * rather than two.
  */
 export const ACCENTS: { name: string; hex: string }[] = [
   { name: 'Sunflower', hex: '#FCC419' },
@@ -34,6 +41,9 @@ export const ACCENTS: { name: string; hex: string }[] = [
   { name: 'Green', hex: '#6FDC8C' },
   { name: 'Red', hex: '#FF8389' },
   { name: 'Purple', hex: '#BE95FF' },
+  { name: 'Orange', hex: '#FF832B' },
+  { name: 'Teal', hex: '#3DDBD9' },
+  { name: 'Magenta', hex: '#FF7EB6' },
 ];
 
 /**

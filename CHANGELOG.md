@@ -2,6 +2,12 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 1.7.2 — 2026-09-07
+
+### 🎨 Design
+
+- **Eight accent presets, not five.** The list here had said five for as long as an adopting app had been shipping eight, which is precisely the drift a shared list exists to prevent: two accent rows sat at visibly different lengths, and three colours somebody could pick in one app were simply absent in the next. Orange `#FF832B`, Teal `#3DDBD9` and Magenta `#FF7EB6` join them, taken from the rainbow palette by position so the accent row and the palette row below it draw on one family rather than two. The contrast claim beside the list was re-measured rather than re-worded: as `--accent-ink` on white, the worst of the eight is Sunflower at 4.94:1 and every one clears 4.5:1.
+
 ## 1.7.1 — 2026-09-07
 
 ### 🐛 Fixed

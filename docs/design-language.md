@@ -23,7 +23,7 @@ A layered, low-noise interface system: a small light in dark masonry.
 | Fault | `#ff8389` | `#da1e28` |
 | Warning | `#f1c21b` | `#8E6A00` |
 
-Accent presets in the picker are the same five across every app: Sunflower `#FCC419`, Blue `#1D99F3`, Green `#6FDC8C`, Red `#FF8389`, Purple `#BE95FF`. Someone who picks "Blue" in one app finds the same blue in the next.
+Accent presets in the picker are the same eight across every app: Sunflower `#FCC419`, Blue `#1D99F3`, Green `#6FDC8C`, Red `#FF8389`, Purple `#BE95FF`, Orange `#FF832B`, Teal `#3DDBD9`, Magenta `#FF7EB6`. Someone who picks "Blue" in one app finds the same blue in the next, and the last three are the rainbow palette's own positions, so the accent row and the palette row below it draw on one family rather than two.
 
 **The accent is two tokens, because it does two jobs.** `--accent` is the fill: a
 filled badge, a switch track, a primary button, a progress bar. The ink that goes
@@ -50,7 +50,7 @@ twice over — it follows a colour the user chose, which the old fixed constant 
 did (it only ever applied to the default), and it follows `--item-hue` inside a
 rainbow subtree, so accent-coloured text takes its position's colour like every
 fill around it. Measured against white, the palest ground here: Sunflower lands at
-4.95:1 and all five presets clear 4.5:1. On Sunflower it also computes to `#8B6C0E`,
+4.95:1 and all eight presets clear 4.5:1. On Sunflower it also computes to `#8B6C0E`,
 within a shade of the `#8E6A00` the single token used to be — the check that this
 generalises the old rule rather than replacing it.
 
