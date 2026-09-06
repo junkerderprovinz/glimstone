@@ -2,7 +2,7 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 1.7.0 — 2026-09-07
 
 ### ✨ Added
 
