@@ -49,6 +49,7 @@ GlimStone documents a house style shared across the author's own apps. It's publ
 - [`reference/selectScroll.ts`](reference/selectScroll.ts) — keeps a long option list scrollable without the list deciding the page's height.
 - [`reference/flagEmoji.ts`](reference/flagEmoji.ts) — turns an ISO 3166-1 alpha-2 code into its regional-indicator emoji, for language options a native `<option>` can actually hold.
 - [`reference/glyphs.md`](reference/glyphs.md) — the shared glyph assortment: which icon means what, where each comes from and under which licence, and the sizing rules that make a set of icons read as one set.
+- [`reference/react/`](reference/react/) — the components themselves, as React source: `Button`, `Toggle`, `Card`, `Badge`, `DropdownListbox`, `ConfirmDialog`, `Toast`, `InfoBubble`, `AboutCard`, plus the small hooks they need. The files above say what a control must look like; these say what it **is**. Two apps built from the prose alone produced the same language under different names — one `Toggle` and one `Switch`, one `ConfirmDialog` and one `Confirm` — and a third would have invented a third set. Every string is a prop and no component fetches anything, so the same file serves an app in any language.
 - [`CHANGELOG.md`](CHANGELOG.md) — what changed in the language itself, versioned.
 
 <br>
@@ -93,6 +94,7 @@ A new control has to point its own CSS at these tokens as it is built. Adopting 
 5. For rainbow, copy [`reference/appearance.ts`](reference/appearance.ts) as-is.
 6. For the label engine, copy [`reference/controls.ts`](reference/controls.ts) as-is, and call `applyStoredLabelModes()` at the app root before first render — not from the settings page that edits it, or the app opens in the default mode and snaps over on load.
 7. For icons, generate from [`reference/glyphs.md`](reference/glyphs.md) rather than copying SVGs, and take its sizing rules with them: artwork from different sets fills its own viewBox by wildly different amounts, so a set assembled without normalising arrives on screen at several sizes.
+8. For the controls themselves, copy [`reference/react/`](reference/react/) as a folder and register the app's own icons through its `setGlyphResolver`. This is the step that decides whether two apps end up the same: rebuilt from the prose, the same switch becomes `Toggle` in one app and `Switch` inside a shared `Field.tsx` in the next, and every rule in this repo then has to be applied by hand in both.
 
 Nothing else is required — component markup stays as it is, because every colour already flows through a token. Full detail (including the three traps that have bitten every adopter so far) is in [`docs/design-language.md`](docs/design-language.md#adopting-glimstone-in-another-app).
 
