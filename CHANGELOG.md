@@ -2,6 +2,18 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+### 🎨 Design
+
+- **The About card gets its order fixed, and the order is the standard.** It had a content list and no arrangement, which is why three adopting apps built three different cards from one section: one led with the sentence, one led with the versions, one put them in a two-column list of labelled fields. The order now: **what this is, then the money with its own button, then the report with its own buttons, then the versions as a footer.** The reason it matters is the pairing — **each sentence sits directly above the thing it asks for**. Three sentences stacked over one row of buttons reads as a form to work through; a sentence with its own button under it reads as one offer, and the card carries two. Asked for as a family rule (*"kannst du in BV die Übercard so machen wie in KL? Die soll standard werden für alle meine Apps"*), so the ORDER and the CONTENT are what standardise, not the markup: a button here is whatever that app's own control system calls a button.
+
+- **One extra step of space above the report sentence, and only above that one.** At even spacing the coffee button sits as close to the sentence below it as to the one it belongs to, and the eye pairs it with the wrong text. A blank line is what separates two paragraphs everywhere else, and that is all this is.
+
+- **A card never names a route no control on it can reach.** The sentence and the buttons under it are one promise. An app with no address of its own says "open an issue" and stops there, rather than inviting a mail that lands in another product's inbox: a contact route that reaches the wrong place is worse than no contact route, because somebody writes and then waits. Learned the other way round first, when a card offered a mail button pointing at a different product's address.
+
+- **In the version footer, only the number is a link.** The word in front of it is not a destination, and underlining it as part of the link makes "Version" read as somewhere to go.
+
 ## 1.6.0 — 2026-09-01
 
 ### ✨ Added
