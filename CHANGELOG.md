@@ -2,6 +2,12 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 1.7.5 — 2026-09-07
+
+### 🎨 Design
+
+- **Whichever colour row is not in force is dimmed and inert.** With the rainbow off the accent row decides everything and the palette row decides nothing; with it on, exactly the reverse. A control that stays bright and clickable while nothing reads it appears to do something and does not, and people find that out by using it and seeing no change, which teaches them the setting is broken rather than inactive. Dimming alone is not enough: a click still lands and a picker still opens on a value nothing will read, so the pointer events go too. Reported as one half of this, and the rule states BOTH halves on purpose, because the complaint only ever arrives about the direction somebody happened to try and the other one then gets found again in a year as a new bug. Shipped in an adopting app before the language knew about it, which is the third time that has happened and the reason it is written down here rather than only there.
+
 ## 1.7.4 — 2026-09-07
 
 ### ✨ Added
