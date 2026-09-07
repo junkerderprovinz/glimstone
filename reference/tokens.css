@@ -1078,6 +1078,26 @@ body {
 .glim-btn-md { min-width: var(--btn-w-md); }
 .glim-btn-lg { min-width: var(--btn-w-lg); }
 
+/* The row action: square at the ordinary button height, glyph in every mode.
+   ---------------------------------------------------------------------------
+   It takes no width stage, for the same reason a chip does not: it is sized by
+   its glyph rather than by a label it never prints. It DOES take the button
+   height and the tone table, because unlike a chip it stands on the page rather
+   than inside a pill. See `ButtonVariant` in reference/react/Button.tsx for why
+   a control like this is inside the label engine rather than exempt from it. */
+.glim-btn-icon {
+  width: var(--btn-h);
+  min-width: 0;
+  padding-inline: 0;
+}
+
+/* A row action promoted to a key control stays square, at the other height.
+   Written as its own rule rather than as `width: inherit` guesswork: the two
+   numbers are the two named heights, and a square control has to name both. */
+.glim-btn-icon.glim-btn-key {
+  width: var(--btn-h-key);
+}
+
 /* The dismiss control inside a chip takes none of the width stages and none of
    the button height: it has to fit INSIDE its chip, which is a 0.75rem-text
    pill. It inherits the pill's ink rather than painting a surface of its own,

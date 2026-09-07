@@ -2,6 +2,12 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 1.7.6 — 2026-09-07
+
+### ✨ Added
+
+- **`variant="icon"` on the button: the small row action, inside the label engine rather than beside it.** Rule 13 has always said that a copy, reset or delete control standing in a row of its siblings carries an icon and never a text label, and adopting apps built those as badges, which put them outside the one setting that governs what a button shows. Reported as exactly that, about a card whose five row actions ignored the label mode while every other control on the page answered it. Making them ordinary buttons is the obvious fix and the wrong one: the default mode then prints five verbs where a tidy strip used to be, which is a change nobody asked for made to satisfy a setting. So the variant resolves the way `chip` already does, glyph in every mode, square at the button height, name in the accessible tree and in the bubble. What it gains over a badge is everything else the button component owns: the colour engine, the tone table, the busy spinner, one tooltip mechanism, and the wrapper that keeps a disabled control's explanation reachable.
+
 ## 1.7.5 — 2026-09-07
 
 ### ✨ Added
