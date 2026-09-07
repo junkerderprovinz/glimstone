@@ -2,6 +2,22 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 1.7.3 — 2026-09-07
+
+### 🐛 Fixed
+
+- **The motion engine could not reach a single one of its own animations.** The document describes duration tokens redefined per `[data-motion]`; `tokens.css` had none, and wrote every duration into the rule itself. So the three-way switch changed nothing except whatever an adopting app had wired up on its own, and an app that wired up nothing had a setting with three states and no effect. Found by measuring rather than reading: in an adopting app the page entrance ran at 280ms on full, on subtle and on off alike. There are five tokens now, one per animation, redefined at each intensity and consumed by the same keyframes at all three, so the difference between full and subtle is a smaller number and never a different animation. The pulse is the one that does not take a zero: an infinite animation at zero duration is a still element, which is right, but `.glim-live` means "this is happening now" and that has to survive the motion going away, so it stops outright and stays fully opaque, exactly as the reduced-motion block already did. The control-transition token and its `[data-motion]` rules move in from the adopting app that had been carrying them, for the same reason: one setting should reach every transition rather than a list each app keeps in step by hand.
+
+### 🎨 Design
+
+- **The confirmation dialog's two divider lines are gone.** A rule above the buttons and another under the title is hierarchy drawn with borders, which is the thing most of this document exists to avoid, and it had survived in the language's own window. Reported on an adopting app ("die linien weg") and correct there as a rule, not a preference.
+- **The header close button is optional.** Pass `closeLabel` and the corner X is drawn as before; leave it out and it is not. Two controls that do the same thing, one of them where a window's close button lives, read as a choice between two answers rather than as one answer offered twice ("der obere stehen lassen button weg"). Nothing changes for an app that keeps passing it.
+
+### ✨ Added
+
+- **`confirmGlyph` on the confirmation dialog.** The confirm button's meaning changes with the action it confirms, so no fixed key can name its glyph, and without one it was words alone beside a cancel button that had a glyph. Reported as "löschen hat kein Glyph".
+- **`extra` on the confirmation dialog:** a slot under the message for a control the confirming action needs an answer to. It exists because the alternatives are worse: an app that has to ask "and shall I also remove X?" either builds a second dialog of its own, which is how a house ends up with two confirmation windows that look almost alike, or asks afterwards, which is a second question about an action already taken. Keep it to a switch or two; a dialog with a form in it is a page.
+
 ## 1.7.2 — 2026-09-07
 
 ### 🎨 Design
