@@ -2,6 +2,12 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 1.7.4 — 2026-09-07
+
+### ✨ Added
+
+- The number field answers the mouse wheel while it has focus. Once the browser's own arrows are gone, a number has three ways in: typing, the arrow keys and the two steppers. The wheel is the fourth, and it is the one people reach for on a value they are dialling in rather than typing. The focus condition is the design rather than a caution: a field that answers the wheel on hover alone changes values somebody was only scrolling past, which is exactly why browsers removed that behaviour from the native widget. Non-passive listener and `preventDefault`, so the page does not scroll the field out from under the pointer mid-adjustment. In `reference/numberField.ts`, so an adopting app gets it by attaching the same helper it already attaches, and written down as a rule beside the one that removed the native spinner.
+
 ## 1.7.3 — 2026-09-07
 
 ### 🐛 Fixed
