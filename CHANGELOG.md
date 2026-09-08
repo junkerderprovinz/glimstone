@@ -2,6 +2,17 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 1.7.7 — 2026-09-08
+
+### 🐛 Fixed
+
+- **The row action was exempt from the label engine, and an exemption looks exactly like a control that ignores the setting.** `variant="icon"` shipped in 1.7.6 resolving to glyph in every mode, on the reasoning that such a control's identity IS its symbol. It was rejected in the same words as the defect it was meant to fix, by the same person, about the same card: five controls in one row printed no word while three beside them did, with the app-wide setting on text-plus-glyph. The variant now decides the SHAPE only. In a mode that paints words it is an ordinary button with its label and its width stage; in one that hides them it is the square at `--btn-h` a plain button cannot be, because a plain button hugs its glyph inside its own horizontal padding and a row of those reads as lozenges rather than tiles. Reactive stays out of the square deliberately: it grows on hover, and a fixed width is the one thing that cannot do. The lesson is worth more than the change: the first fix rewrote the component and altered nothing anybody could see, so the report came back word for word.
+- **A glyph alone in a square was sized as though it had words beside it.** 20px is the right answer next to 14px text, where a mark and its label have to read as one control. In a square glyph-only button there is no text to match, so the only proportion available is how much of the frame the ink fills, and 20px in a 32px box is 62% of it: reported as chunky. It is half the box now, at both named heights, which is not a number picked to look right but the proportion the house already had and had never written down - an icon tile in the sibling app is a 32px square carrying a 16px drawing, and those have never drawn a complaint.
+
+### ✨ Added
+
+- **The mouse wheel follows the picker, not the element the platform draws.** Rule 14 has answered the wheel on a closed `<select>` since 1.5.0, and rule 18 says a native control gets replaced rather than persuaded - so an app that has finished following rule 18 has no `<select>` left for the helper to attach to, and the behaviour quietly disappears with the last one. `enableWheelStep` puts it back on a custom listbox's trigger, clamped at both ends rather than wrapping, because one notch too many should not land a value from the other end of the list. It is a real listener attached with `{ passive: false }` and that detail is load-bearing: React registers `onWheel` as passive, so `preventDefault` inside such a handler does nothing but log a warning, and the page scrolls away under the pointer while the value changes.
+
 ## 1.7.6 — 2026-09-07
 
 ### ✨ Added
