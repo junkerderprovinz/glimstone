@@ -14,6 +14,8 @@ A brand mark can now reach the About card's repository button, and the language 
 
 ## 🎨 Design
 
+- **The rail is a card, not a wall.** Same radius and same ground margin as every other card, background showing around it on all four sides. Reported live on an app whose rail was welded to the window edge while everything else on the page floated, which made the one element that was neither read as window chrome rather than as part of the app. Its surface stays one step apart from the card surface, because it is still navigation; what changes is the shape. No shadow, in a house whose cards have none.
+
 - **A brand mark is passed explicitly and is never reachable by pattern.** Written down because it was asked for and was not there: every other glyph in this language is resolved from a translation key BY MEANING, which is what makes one shape mean one thing in forty-two languages, and a brand is the exception in both directions. Not by pattern, because a rule keyed on "repo" would put GitHub's logo on repository settings that have nothing to do with GitHub, and would follow a project to a different forge and be wrong there. Not omitted either, because a button that opens GitHub wearing a chain link says less than it could, and a familiar mark is found faster than a word is read. The same reasoning already governed the platform marks on a download button and now has one place to be read.
 
 ## 1.7.7 — 2026-09-08
