@@ -2,6 +2,18 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 1.7.8 — 2026-09-09
+
+A brand mark can now reach the About card's repository button, and the language says when a mark may be passed at all.
+
+## ✨ Added
+
+- **`AboutCard` takes `repoGlyph`.** The repository button resolved its mark from the label key like every other button, which meant it could only ever wear the generic link glyph. An app whose repository lives on a forge with a recognisable mark can now hand that mark over, and one whose does not passes nothing and keeps what it had.
+
+## 🎨 Design
+
+- **A brand mark is passed explicitly and is never reachable by pattern.** Written down because it was asked for and was not there: every other glyph in this language is resolved from a translation key BY MEANING, which is what makes one shape mean one thing in forty-two languages, and a brand is the exception in both directions. Not by pattern, because a rule keyed on "repo" would put GitHub's logo on repository settings that have nothing to do with GitHub, and would follow a project to a different forge and be wrong there. Not omitted either, because a button that opens GitHub wearing a chain link says less than it could, and a familiar mark is found faster than a word is read. The same reasoning already governed the platform marks on a download button and now has one place to be read.
+
 ## 1.7.7 — 2026-09-08
 
 ### 🐛 Fixed
