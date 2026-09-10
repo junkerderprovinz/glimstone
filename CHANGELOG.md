@@ -2,6 +2,14 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 1.8.1 — 2026-09-10
+
+The rail's glyph size was never written down, so two apps shipped it at two sizes.
+
+## ✨ Added
+
+- **`.glim-nav-row > svg` carries the rail's glyph size: 20px.** A step up from the 16px a glyph takes beside body text, because a rail row is a bigger target with more room around it, and in glyph-only mode the symbol IS the row. One app had the rule in its own stylesheet and the other had none, so its rail showed whatever its icon generator emitted - 14px, a third smaller, on the same screen as its sibling. Reported the way every unwritten rule is, by somebody putting the two side by side. A horizontal selector's tab glyphs take the same 20px, so a settings tab and a nav row never show one symbol at two sizes.
+
 ## 1.8.0 — 2026-09-10
 
 The reference components arrive with the CSS they stand on, the label engine reaches the controls that were standing beside it, and hover finally knows which ground it is on.
