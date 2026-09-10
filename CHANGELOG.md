@@ -2,6 +2,18 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 1.7.10 — 2026-09-10
+
+The ramp used to stop at surface3, so the controls sitting on it had nowhere to hover to.
+
+## ✨ Added
+
+- **`--carbon-hover-raised`.** Rule 21 said what an unfilled element and a surface2-filled element hover to, and the neutral button is filled with `--carbon-surface3`, one step past both. With nothing above it in the ramp, every such control reached back DOWN to `--carbon-hover` - a 29-unit drop on the dark ramp, which is the same defect rule 21 was written for and seven times larger. Found on the About card's own repository button, in the release that added the rule. `brightness()` is not the substitute: one step further from the surface means lighter on dark and darker on light, and a single brightness value can only be one of those.
+
+## 🎨 Design
+
+- **Rule 21 covers all three tiers.** No fill takes `--carbon-hover`, surface2 takes `--carbon-surface3`, surface3 takes `--carbon-hover-raised`. The table entries say what happens when they are swapped.
+
 ## 1.7.9 — 2026-09-09
 
 Which hover token an element takes depends on what it is already sitting on, and the language now says so as a rule rather than as a line in a table.
