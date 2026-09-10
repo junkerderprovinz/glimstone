@@ -2,7 +2,7 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## 1.8.1 — 2026-09-10
+## Unreleased
 
 The rail's glyph size was never written down, so two apps shipped it at two sizes.
 
