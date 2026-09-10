@@ -40,6 +40,18 @@
   --radius-control: 0.625rem;
   --radius-pill: 9999px;
 
+  /* The page gutter: the distance between the window edge and everything on
+     it, and between the rail and the content. ONE number, set on the frame
+     that holds both, never on the rail and never on the content (see "The
+     rail is a CARD, not a wall" in docs/design-language.md).
+
+     It is a token because "one number" alone was not enough to keep two
+     adopting apps on the same one: one took 1rem, the other 1.5rem, and the
+     rail in the second sat further from the edge and, half a rem shorter at
+     the top and the bottom each, read as a smaller rail entirely. The
+     content's own padding is a SEPARATE distance and is not this token. */
+  --page-gutter: 1rem;
+
   /* The type scale: a fixed reference table, not an engine — nobody sets
      their own type scale. --text-caption covers three treatments of the
      same size (plain caption, .glim-eyebrow's uppercase label, the info
