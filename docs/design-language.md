@@ -380,6 +380,8 @@ The failure this prevents is the reason it gets a rule of its own rather than a 
 
 The window is a normal house window otherwise (rule 15): a title badge over the top edge, a footer button that closes it, Escape and a backdrop click doing the same. The rows are a `listbox` rather than a dropdown, because five chains is a list somebody reads, and a closed picker would hide the very choice the window exists to put in front of them.
 
+**The button that opens it wears a WALLET**, never a coin and never a currency's own mark. It needs a symbol of its own because it stands next to the coffee button under one sentence, and two offers wearing one mark is the glyph collision every icon table exists to prevent. It must not be a brand: the window behind it offers several chains, so a Bitcoin symbol would name one of them and mislead about the rest. An app whose label engine has a guard over unreachable keys will say so on its own — that is how this rule was found, by a test going red on `about.crypto` the minute the button appeared.
+
 `reference/react/CryptoDonateDialog.tsx` is the component. It takes the chains, the picked one, the strings and a `renderQr` function — the language draws no QR code itself and has no dependencies, so the app hands in the encoder it already owns (an authenticator secret needs the same square). An app without one passes nothing and the window falls back to address-and-copy, which is still a complete way to give.
 
 ## Reordering by dragging
