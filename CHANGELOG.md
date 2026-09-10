@@ -2,6 +2,24 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 1.8.3 — 2026-09-10
+
+The crypto window asks for a coin first, the code comes before the picker, and the button that opens it wears a brand after all.
+
+## ✨ Added
+
+- **`renderMark` on `CryptoDonateDialog`.** The coins are TILES now, each with its own logo, because a coin is recognised by its mark faster than its name is read and a grid of marks says at a glance what is on offer. The mark is a prop for the same reason the QR encoder is: this folder has no dependencies and no right to hand out somebody else's logo, so the app passes in the marks it is entitled to use.
+
+## 🎨 Design
+
+- **Coin first, chain second, and both are real choices.** A donor thinks "I have USDT", not "I have Ethereum", so the first question is the one they can actually answer; the second is the dangerous one and gets a row of its own rather than a subtitle nobody reads. The safety rule is unchanged in force and sharper in form: **every network a donor can pick carries its OWN address**, so a chain the recipient cannot receive on is unofferable rather than merely discouraged. The chain is switched directly under the address it changes, because a picker one box away from its own effect makes somebody look twice to see whether the address moved. The row is shown even for a coin that has only one, because it is also the line saying which network the address belongs to, and that may not appear and disappear depending on which tile is lit.
+
+- **The answer comes before the question.** The code sits at the top of the window and the picker underneath it. A dialog usually asks before it answers; this one is the other way round, because the code is what the window was opened for, and the picker changes it in place so it never moves off the top.
+
+- **The button that opens the window wears Bitcoin's mark, reversing 1.8.2.** That release argued for a neutral wallet drawing, since a currency's symbol names one chain out of eight and misleads about the rest. The argument is sound and the conclusion was wrong: ₿ is the one symbol that reads as "crypto" to somebody who has never held any, the way a floppy disk still reads as "save", and the neutral drawing was correct while saying nothing. What keeps it honest is the window itself, which opens on a grid of every coin on offer. The general rule survives: a brand is passed explicitly at the one call site that means it and is never reachable by pattern.
+
+- **Check the shape of an address list against a table written out by hand**, one that says which wallet each chain must resolve to. Derived from the list it guards, such a check would agree with any mistake in it. Written separately, a chain pointed at the wrong wallet fails immediately, a failure that is otherwise invisible in review because both strings look like addresses.
+
 ## 1.8.2 — 2026-09-10
 
 A second way to give, and one rule about lists of addresses that is worth more than the window it lives in.
