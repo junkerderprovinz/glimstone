@@ -4,7 +4,13 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
-The rail's glyph size was never written down, so two apps shipped it at two sizes.
+The rail's glyph size was never written down, so two apps shipped it at two sizes, and the button's own tone table broke the hover rule that shipped beside it.
+
+## 🐛 Fixed
+
+- **The neutral and subtle buttons hovered DOWN the surface ramp, against rule 21, which arrived in the same release.** `--carbon-hover-raised` was added in 1.8.0, the rule was written around it and the token table listed it - and `Button.tsx` still sent a surface3 fill and a surface2 fill both to `--carbon-hover`. On the dark ramp that value is `#353535`, **below** surface2's `#393939`, so a filled control hovered with it goes four units darker at the one moment somebody is looking straight at it. The neutral tone now takes `--carbon-hover-raised` and the subtle tone takes `--carbon-surface3`, which is what the rule says.
+
+    An adopting app already had the fix and the language did not, which is the wrong direction for a correction to travel, and nothing here could notice. So `check.sh` gained a fifth check: any class list that FILLS with surface2 or surface3 and hovers to `--carbon-hover` is a failure. It is deliberately narrow, because a bare control on a card - the toast's close button - has no fill of its own and that token is exactly right for it; a blanket ban would flag the one correct use. And the name has to END there, or `hover:bg-carbon-hoverRaised` contains `hover:bg-carbon-hover` and every correct control reports as the mistake. Broken on purpose to prove it fails.
 
 ## ✨ Added
 

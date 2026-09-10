@@ -44,6 +44,39 @@ done
 # 4. Nothing may point at a file that only exists inside an adopting app.
 grep -n "index\.css" reference/react/*.tsx && note "a comment names an app's own stylesheet"
 
+# 5. Hover moves UP the surface ramp (rule 21), and these components must obey
+#    the rule they document.
+#
+#    This exists because they did not. `--carbon-hover-raised` was added in
+#    1.8.0, rule 21 was written around it, the token table listed it - and the
+#    button's own tone table still hovered a surface3 fill and a surface2 fill
+#    both to `--carbon-hover`. On the dark ramp that value is #353535, BELOW
+#    surface2's #393939, so a filled control hovered with it goes darker at the
+#    moment somebody is looking straight at it. An adopting app had the fix and
+#    the language did not, which is the wrong direction for a correction to
+#    travel, and nothing here could notice.
+#
+#    The check is deliberately narrow: only a class list that FILLS with
+#    surface2 or surface3 is examined. A bare control on a card - the toast's
+#    close button - has no fill of its own and `--carbon-hover` is exactly right
+#    for it, so a blanket ban on the token would flag the one correct use.
+#
+#    The name must END there, or `hover:bg-carbon-hoverRaised` contains
+#    `hover:bg-carbon-hover` and every correct control reports as the mistake.
+#    That is not hypothetical either: the first version of this guard, in an
+#    adopting app, did exactly that.
+while IFS= read -r line; do
+  case "$line" in
+    *bg-carbon-surface2*|*bg-carbon-surface3*)
+      case "$line" in
+        *"hover:bg-carbon-hoverRaised"*) continue ;;
+      esac
+      printf '%s\n' "$line" | grep -qE "hover:bg-carbon-hover([^A-Za-z-]|$)" \
+        && note "a surface-filled control hovers DOWN the ramp (rule 21): ${line%%:*}"
+      ;;
+  esac
+done < <(grep -nE '"[^"]*bg-carbon-surface[23][^"]*"' reference/react/*.tsx)
+
 if [ "$fail" -eq 0 ]; then
   echo "OK  every class, utility and property the components use is defined here"
 fi
