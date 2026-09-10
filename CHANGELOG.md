@@ -2,6 +2,18 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 1.8.2 — 2026-09-10
+
+A second way to give, and one rule about lists of addresses that is worth more than the window it lives in.
+
+## ✨ Added
+
+- **`reference/react/CryptoDonateDialog.tsx`, the crypto window.** The coffee button takes a card; this takes what somebody already holds in a wallet. It is a house window rather than a link to somebody else's page: pick a chain, get the address as text and as a QR code, copy it. Nothing leaves the machine, no account is needed and no name is shown at either end, which is why it belongs beside the coffee button and not instead of it. Pure and hookless like `ConfirmDialog`, so the app keeps the state, the portal, Escape and the toast. `renderQr` is a prop because this folder has no dependencies and is not going to grow one: the app hands in the encoder it already owns, and an app with none falls back to address-and-copy, which is still a complete way to give.
+
+- **`AboutCard` takes `onCrypto` and a second give label.** Both give buttons stay in the row under the one sentence that asks for money. A second row further down is the failure to avoid: it reads as a second, unrelated offer, and the card's own rule is that a sentence sits directly above the thing it asks for.
+
+- **The rule the window exists for: a list of addresses is grouped BY CHAIN, never by coin.** One row per address, with the coins it can receive as its subtitle. Written the other way round it produced a "Tether" row offering *BNB, Tron, Solana, Ethereum* above a single `0x…` address, which lives on EVM chains only - so a donor picking Tron would have sent the money into nothing. A coin whose chain there is no address for is simply absent, however popular it is. This gets a rule of its own rather than a note because the failure is silent, total and unreportable: the person it happens to is not a user, they are a stranger who tried to give something away and never writes. The same section makes the address checks a TEST rather than a review step, for the same reason - a typo in a donation address survives every review and no test failure, because nothing in the app ever reads it back.
+
 ## 1.8.1 — 2026-09-10
 
 The rail's glyph size was never written down, so two apps shipped it at two sizes, and the button's own tone table broke the hover rule that shipped beside it.
