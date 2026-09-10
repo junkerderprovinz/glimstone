@@ -40,6 +40,10 @@ export function AboutCard({
   repoGlyph,
   glimstoneRepoUrl,
   coffeeUrl,
+  coffeeGlyph,
+  cryptoGlyph,
+  paypalGlyph,
+  paypalUrl,
   onCrypto,
   mailAddress,
   hueIndex,
@@ -54,6 +58,8 @@ export function AboutCard({
     coffeeButton: string;
     /** The second give button. Only drawn together with `onCrypto`. */
     cryptoButton?: string;
+    /** The third. Only drawn together with `paypalUrl`. */
+    paypalButton?: string;
     report: string;
     repoButton: string;
     mailButton: string;
@@ -85,6 +91,27 @@ export function AboutCard({
   repoGlyph?: ReactNode;
   glimstoneRepoUrl: string;
   coffeeUrl: string;
+  /**
+   * The mark on the give buttons, where the route belongs to a named company.
+   *
+   * Passed rather than resolved, for the same reason as `repoGlyph`: a brand
+   * must never be reachable BY PATTERN. A glyph rule keyed on "coffee" would
+   * put one company's cup on anything that mentions coffee, and one keyed on
+   * "crypto" would put a currency's symbol on settings that have nothing to do
+   * with it. An app that passes nothing keeps whatever its own table resolves.
+   */
+  coffeeGlyph?: ReactNode;
+  cryptoGlyph?: ReactNode;
+  paypalGlyph?: ReactNode;
+  /**
+   * A hosted payment page (PayPal.Me and the like). Omitted where none exists.
+   *
+   * The card's own rule applied to a route rather than to a sentence: never
+   * offer a control that reaches nowhere. Such a link is usually created once
+   * and cannot be renamed afterwards, so an app hands one over only when it
+   * really has it.
+   */
+  paypalUrl?: string;
   /**
    * Open the crypto window (CryptoDonateDialog). Omit it and the card offers
    * the coffee alone.
@@ -130,6 +157,7 @@ export function AboutCard({
         <Button
           label={text.coffeeButton}
           labelKey="about.coffeeButton"
+          glyph={coffeeGlyph}
           tone="neutral"
           onClick={() => open(coffeeUrl)}
         />
@@ -137,8 +165,18 @@ export function AboutCard({
           <Button
             label={text.cryptoButton}
             labelKey="about.crypto"
+            glyph={cryptoGlyph}
             tone="neutral"
             onClick={onCrypto}
+          />
+        )}
+        {paypalUrl && text.paypalButton && (
+          <Button
+            label={text.paypalButton}
+            labelKey="about.paypal"
+            glyph={paypalGlyph}
+            tone="neutral"
+            onClick={() => open(paypalUrl)}
           />
         )}
       </div>
