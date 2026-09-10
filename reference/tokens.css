@@ -52,6 +52,14 @@
      content's own padding is a SEPARATE distance and is not this token. */
   --page-gutter: 1rem;
 
+  /* The navigation rail's width in glyph mode, where it shows no words. A
+     NUMBER, not a per-app calculation: deriving it from each app's own brand
+     mark and row padding gave 96px in one and 64px in another, and two rails of
+     different widths doing the same job is what a shared language exists to
+     prevent. The mark fits the rail, not the other way round. The wide rail
+     stays 14rem and needs no token, because it is on Tailwind's own scale. */
+  --rail-narrow: 85px;
+
   /* The type scale: a fixed reference table, not an engine — nobody sets
      their own type scale. --text-caption covers three treatments of the
      same size (plain caption, .glim-eyebrow's uppercase label, the info
