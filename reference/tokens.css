@@ -842,9 +842,6 @@ body {
    this one is easy to miss. */
 :root { --glim-toast-slide: 12px; }
 [dir="rtl"] { --glim-toast-slide: -12px; }
-/* The toast travels further at the top intensity, mirrored the same way. */
-:root[data-motion='subtle'] { --glim-toast-slide: 12px; }
-:root[data-motion='subtle'][dir="rtl"] { --glim-toast-slide: -12px; }
 
 @keyframes glim-toast-in {
   from { opacity: 0; transform: translateX(var(--glim-toast-slide, 12px)); }
@@ -913,7 +910,15 @@ body {
        what makes it spring rather than ease - the same shape React Native's
        spring gives the phone, so the two surfaces move alike. */
     --motion-curve: cubic-bezier(.34, 1.56, .64, 1);
+    /* The toast travels with everything else. It had been left behind at one
+       distance for all three intensities, under a comment claiming it moved
+       further at the top one - a rule with nothing behind it, which is the
+       exact failure this release is otherwise about. The mirrored pair is the
+       reason it is easy to miss: a keyframe cannot be flipped by a class
+       sweep, so every value here needs its RTL twin written out. */
+    --glim-toast-slide: 24px;
   }
+  :root[dir="rtl"] { --glim-toast-slide: -24px; }
   :root[data-motion='subtle'] {
     --motion-page-dur: 140ms;
     --motion-toast-dur: 120ms;
@@ -925,7 +930,9 @@ body {
     --motion-page-travel: 6px;
     --motion-page-scale: 1;
     --motion-curve: cubic-bezier(.2, .6, .2, 1);
+    --glim-toast-slide: 12px;
   }
+  :root[data-motion='subtle'][dir="rtl"] { --glim-toast-slide: -12px; }
   :root[data-motion='off'] {
     --motion-page-dur: 0s;
     --motion-toast-dur: 0s;
@@ -934,6 +941,7 @@ body {
     --motion-page-travel: 0px;
     --motion-page-scale: 1;
     --motion-curve: linear;
+    --glim-toast-slide: 0px;
     /* The pulse is the one that does not get a zero. An infinite animation at
        zero duration is a still element, which is correct, but `.glim-live`
        carries a meaning ("this is happening now") that has to survive the

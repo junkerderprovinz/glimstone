@@ -42,6 +42,8 @@ One save mark for every app, the paperwork that comes with a fifth source, the A
 
 ## 🐛 Fixed
 
+- **The toast's travel was the one distance left behind, under a comment claiming it moved.** Every intensity read the same 12px while the note above it said the toast went further at the top one - a rule with nothing behind it, which is the failure the rest of this release is about, and invisible because the animation still ran. It joins the other per-intensity numbers: 24px at the top, 12 in the middle, zero when motion is off. Each value needs its RTL twin written out, because a keyframe cannot be mirrored by a class sweep; zero is the exception, being its own negative.
+
 - **`flagEmoji` returned three glyphs for a subdivision code.** It mapped EVERY character it was handed to a regional-indicator symbol, which is right for the two-letter code it documents and wrong for anything else: `es-ct` became five codepoints, so "ES" rendered as Spain's flag, the hyphen rendered as itself, and "CT" formed a SECOND pair. Reported on an adopting app as *"bei manchen sind zwei flaggen"*. It takes the first two letters now, so a subdivision shows its country's flag - the honest answer rather than a compromise, since Unicode has tag sequences for exactly three subdivisions (England, Scotland, Wales) and nothing for Catalonia, Galicia or the Basque Country. The NAME identifies the language anyway: it is written in itself, which is why somebody scanning a list finds "Català" before they look at any flag.
 
 ## 1.9.0 — 2026-09-11
