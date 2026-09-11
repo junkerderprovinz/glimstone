@@ -15,6 +15,14 @@ One save mark for every app, and the paperwork that comes with a fifth source.
 
 - **`measure_ink.py`: the reference's measuring step, without a browser.** Rule 2 has always said to measure ink with `getBBox()` and write the number down, which quietly requires a running page. This flattens every curve in the path data and takes the extremes, so a generator can be handed the number instead of a person being asked for it. It raises on a path command it does not implement rather than skipping one, because a skipped command is a corner missing from the measurement and a crop straight through the drawing's own ink.
 
+## 🎨 Design
+
+- **A sub-switch is ABSENT while its parent is off, never dimmed.** This reverses what the Switches section said, and the reversal is the point: *"dieser abgeschaltet toggle soll weg, das hab ich schon oft angesprochen."* A dimmed sub-switch is something somebody can see, read and reach for that answers nothing, and the reason it is dead sits one row up, where nobody looks once they have decided this row is the interesting one. Whatever else hangs off the mode goes with it - a palette editor under a rainbow that is not running is eight swatches nobody can open beside a reset nobody can press.
+
+- **"Switched off, not hidden" now says which switch it means.** It is about the MODE's own switch, which stays visible when the mode is off because that is the control somebody is looking for. It was being read as cover for leaving dependent controls on screen unusable, and the two are easy to conflate: both end up sounding like "keep it visible".
+
+- **One exception, and it has a test.** A control greyed because it is REPORTING - a reset badge with nothing to reset - is answering its own question and stays. A control greyed because something else is off is not. The question is whether the disabled state says something about the thing the control acts on, or only about a decision made elsewhere on the page.
+
 - **The save mark is the case rule 3 was written for.** Its ink is a 368.7 square inside a declared `0 0 492 492`: three quarters of the box. Carried through unchanged it renders three quarters the size of every glyph beside it, in an identical box, which is the exact complaint that produced the sizing rules in the first place.
 
 ## 1.9.0 — 2026-09-11
