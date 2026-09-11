@@ -1,11 +1,13 @@
 # Changelog
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
-## 1.10.0 — 2026-09-11
+## 1.10.0 — 2026-09-12
 
-One save mark for every app, the paperwork that comes with a fifth source, and the About card's brand colours turned from a paragraph into tokens.
+One save mark for every app, the paperwork that comes with a fifth source, the About card's brand colours turned from a paragraph into tokens, and a top motion intensity that finally moves like its name.
 
 ## ✨ Added
+
+- **`--motion-page-travel`, `--motion-page-scale` and `--motion-curve` join the durations as per-intensity tokens.** Every duration was a token and every travel was a literal, so the top two intensities ran the same six-pixel slide at two speeds - a difference somebody has to be TOLD about rather than one they can see. The top one now travels three times as far, scales in, and rides a curve that overshoots and settles; the middle one keeps a plain ease, because somebody who asked for less movement asked for less movement and not for a faster bounce; off is zero and linear. **The language's existing rule survives intact, and that is the part worth checking:** the same keyframes at all three intensities, never a forked animation. What changes is the number the keyframe reads and the curve it reads it through. A phone reaches the same shape with a spring at `springDamping: 0.68`, so the two surfaces move alike rather than merely both moving.
 
 - **The About card's brand values and classes ship with the language.** `--brand-coffee`, `--brand-bitcoin`, `--brand-paypal` and `--brand-github` in all three theme blocks, plus `.glim-brand-btn` and one `.glim-brand-<name>` block each, spending the three values the rule has always described: the adjusted colour at rest, the true colour as the hover fill, and that colour's measured ink on top. `AboutCard` applies them itself. The rule was here in prose for a release and the numbers were nowhere, so one adopting app built its own set of four tokens and the next read the same paragraph and shipped every mark in the button's ink - which is the failure the rule exists to prevent. A rule with no values behind it is a rule each app re-derives.
 
@@ -22,6 +24,10 @@ One save mark for every app, the paperwork that comes with a fifth source, and t
 
 ## 🎨 Design
 
+- **The top intensity is called "wild" now, not "full".** A name about the setting's ENERGY rather than its completeness, which is what somebody is actually choosing between. It arrived as a naming question (*jdp, 11.09.2026: "sollen wir die bewegungsmodi nicht aus, sanft und wild nennen?"*) and the first answer was to pick a quieter word, because the level did not deliver a bounce. jdp turned that round - *"auf wilder stufe möchte ich auch wilde animationen"* - and he is right: the fix for a label promising more than it delivers is either a quieter label or a livelier animation, and only one of the two makes the product better. So the animation changed first and the name followed it.
+
+- **A sentence that FOLLOWS controls gets an extra step of space above it, anywhere in the language.** This was written as a note about the About card, and it is not about that card: wherever one runs *sentence, controls, sentence, controls*, even spacing makes the first row of controls sit as close to the NEXT sentence as to the one it belongs to, so the eye pairs it with the wrong text (*jdp, 11.09.2026: "bitte eine leerzeile vor dem text einfügen... damit nicht alles so nah aneinander klebt"*). The step goes above the SENTENCE and never below the controls: a card whose last row is a control would otherwise end in a gap, which reads as a missing row rather than as a separation. The first sentence in a card takes none, having nothing above it to be separated from.
+
 - **The give buttons run hosted-page first, wallet last.** Coffee, then PayPal, then the crypto window (*jdp, 11.09.2026*). It reads as a ramp rather than an alphabet: the routes most people already hold an account for, then the one that needs no account and shows no name at either end. Fixed in the component rather than left to each app, because three apps picking three orders is what a shared card exists to prevent.
 
 - **A mark that brings its own GROUND takes no brand class, and the card says so where somebody would add one.** A coin disc is a filled circle in the brand's colour with a white symbol on it, so what decides whether it can be read sits inside the mark and is identical on either theme. Flattening it to one ink would be redrawing the logo. That is why the crypto button carries none while the four flat marks do.
@@ -33,6 +39,10 @@ One save mark for every app, the paperwork that comes with a fifth source, and t
 - **One exception, and it has a test.** A control greyed because it is REPORTING - a reset badge with nothing to reset - is answering its own question and stays. A control greyed because something else is off is not. The question is whether the disabled state says something about the thing the control acts on, or only about a decision made elsewhere on the page.
 
 - **The save mark is the case rule 3 was written for.** Its ink is a 368.7 square inside a declared `0 0 492 492`: three quarters of the box. Carried through unchanged it renders three quarters the size of every glyph beside it, in an identical box, which is the exact complaint that produced the sizing rules in the first place.
+
+## 🐛 Fixed
+
+- **`flagEmoji` returned three glyphs for a subdivision code.** It mapped EVERY character it was handed to a regional-indicator symbol, which is right for the two-letter code it documents and wrong for anything else: `es-ct` became five codepoints, so "ES" rendered as Spain's flag, the hyphen rendered as itself, and "CT" formed a SECOND pair. Reported on an adopting app as *"bei manchen sind zwei flaggen"*. It takes the first two letters now, so a subdivision shows its country's flag - the honest answer rather than a compromise, since Unicode has tag sequences for exactly three subdivisions (England, Scotland, Wales) and nothing for Catalonia, Galicia or the Basque Country. The NAME identifies the language anyway: it is written in itself, which is why somebody scanning a list finds "Català" before they look at any flag.
 
 ## 1.9.0 — 2026-09-11
 
