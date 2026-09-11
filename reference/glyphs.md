@@ -16,6 +16,7 @@ Other sources appear where the free set has no answer, or where a better drawing
 - **[Tabler Icons](https://tabler.io/icons)**, MIT. Use the **filled** variants — the outline set is the default on their site and would break the fill rule below.
 - **[Material Design Icons](https://pictogrammers.com/library/mdi/)**, Apache 2.0.
 - **[Simple Icons](https://simpleicons.org)**, CC0, for brand marks. A brand mark is still a trademark: use it only to refer to the thing it names (a row that navigates to Docker containers), unmodified, and never in a way that implies endorsement.
+- **[Vecteezy](https://www.vecteezy.com)**, Free License, for `IconSave` and nothing else so far. Its terms are not a public-licence family and the obligation is specific: *"remember to always attribute the author which can be done by adding Vecteezy.com to your design and linking to vecteezy.com where possible."* So the generated file's header carries **`IconSave from Vecteezy - https://www.vecteezy.com`**, a real link rather than a bare word, and it is not optional. Assume the Free License unless a Pro receipt says otherwise: attributing under Pro costs nothing, and not attributing under Free is a breach. Reach for this source only where a licence like this one is worth the paperwork, which for a single glyph adopted everywhere it was.
 
 **Mixing sets is fine and normalising them is not optional.** Four sets means four ideas about how much of a viewBox a drawing should occupy; the sizing rules below are what make them read as one family rather than four.
 
@@ -117,7 +118,7 @@ Five rounds of live review went into these, each one starting from a report that
 | --- | --- | --- |
 | `IconCloud` | Off-site, remote | Font Awesome's `cloud`. One closed path with valleys deep enough to survive 20px (rule 6). |
 | `IconLocal` | Local storage | Font Awesome's `server`. Reads as storage without borrowing the folder, which a Browse button already owns. |
-| `IconSave` | Save | Font Awesome. |
+| `IconSave` | Save | **Vecteezy, and it is the same drawing in every app** - jdp picked it and asked for it across all of them, so a repo that keeps its old floppy is the odd one out rather than the one with a preference. Attribution is required, see above. Its ink is a 368.7 square inside a declared `0 0 492 492`, so it needs the crop below: carried through unmodified it renders at three quarters the size of every glyph beside it. |
 | `IconTabStorage` | Paths and storage | Font Awesome's `database`. |
 | `IconCopy` | Copy | Tabler, filled variant. Ships with a transparent padding path — drop it. |
 | `IconCheckCircle` | Verify, check, test | Ships with a transparent padding path — drop it. |
@@ -141,6 +142,8 @@ Adoption is a script, not a package. The shape that works:
 5. Pin the arithmetic with a test that RECOMPUTES the transform from the measured boxes rather than snapshotting what the generator emitted. A transform that merely exists proves nothing; a wrong scale renders perfectly well.
 
 BombVault's `scripts/gen_glyphs.py` is the working reference implementation of all five.
+
+**Keep a glyph from a second source in its own table.** ArrowLoop's generator carries a `LICENSED` list beside the Streamline one: name, meaning, source-and-licence line, the measured crop, and the paths verbatim. It earns the separation twice over - the doc comment it emits names the real source rather than claiming the drawing was made here, and the box sitting next to the paths is the only place the measurement can be read back from later. `scripts/measure_ink.py` in the same repo produces that box without a browser, by flattening every curve and taking the extremes; the reference's own measuring step, in a form a generator can be handed.
 
 <br>
 

@@ -1,6 +1,22 @@
 # Changelog
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
+## 1.10.0 — 2026-09-11
+
+One save mark for every app, and the paperwork that comes with a fifth source.
+
+## ✨ Added
+
+- **`IconSave` is Vecteezy's drawing now, in every app that speaks this language.** jdp picked it and asked for it everywhere, which is what makes it a language change rather than one repo's preference: an assortment exists so that a save button is the same save button in all of them, and a repo keeping its old floppy would be the odd one out. The old entry read "Font Awesome" and nothing else, which is exactly as much as a table row can say before somebody has to go and look.
+
+- **Vecteezy as a fifth source, with its obligation written down rather than assumed.** Its licence is not one of the public-licence families the other four belong to, and the Free License asks for something specific: attribute the author by adding Vecteezy.com to the design and linking to vecteezy.com where possible. So the generated file's header carries a real link, not a bare word. The rule that comes with it is to assume the Free License unless a receipt says otherwise, because attributing under Pro costs nothing and the other way round is a breach.
+
+- **A glyph from a second source keeps its own table in the generator.** Name, meaning, the source-and-licence line, the measured crop, and the paths. It earns the separation twice: the doc comment it emits names the real source instead of implying the drawing was made in-house, and the measured box sits where the next person can read it back. ArrowLoop's `LICENSED` list is the working example.
+
+- **`measure_ink.py`: the reference's measuring step, without a browser.** Rule 2 has always said to measure ink with `getBBox()` and write the number down, which quietly requires a running page. This flattens every curve in the path data and takes the extremes, so a generator can be handed the number instead of a person being asked for it. It raises on a path command it does not implement rather than skipping one, because a skipped command is a corner missing from the measurement and a crop straight through the drawing's own ink.
+
+- **The save mark is the case rule 3 was written for.** Its ink is a 368.7 square inside a declared `0 0 492 492`: three quarters of the box. Carried through unchanged it renders three quarters the size of every glyph beside it, in an identical box, which is the exact complaint that produced the sizing rules in the first place.
+
 ## 1.9.0 — 2026-09-11
 
 A second way to give, in a window of its own, and the About card written out whole.
