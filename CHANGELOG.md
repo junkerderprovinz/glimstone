@@ -3,9 +3,14 @@
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 ## 1.10.0 — 2026-09-11
 
-One save mark for every app, and the paperwork that comes with a fifth source.
+One save mark for every app, the paperwork that comes with a fifth source, and the About card's brand colours turned from a paragraph into tokens.
 
 ## ✨ Added
+
+- **The About card's brand values and classes ship with the language.** `--brand-coffee`, `--brand-bitcoin`, `--brand-paypal` and `--brand-github` in all three theme blocks, plus `.glim-brand-btn` and one `.glim-brand-<name>` block each, spending the three values the rule has always described: the adjusted colour at rest, the true colour as the hover fill, and that colour's measured ink on top. `AboutCard` applies them itself. The rule was here in prose for a release and the numbers were nowhere, so one adopting app built its own set of four tokens and the next read the same paragraph and shipped every mark in the button's ink - which is the failure the rule exists to prevent. A rule with no values behind it is a rule each app re-derives.
+
+- **`.glim-brand-house`, so the mail button's exception is enforceable rather than described.** The one button on that card reaching an app's own AUTHORS reads the accent tokens, and therefore follows the user's accent and rainbow - which a vendor's mark may never do. It was a sentence anybody could forget to act on; it is a class now.
+
 
 - **`IconSave` is Vecteezy's drawing now, in every app that speaks this language.** jdp picked it and asked for it everywhere, which is what makes it a language change rather than one repo's preference: an assortment exists so that a save button is the same save button in all of them, and a repo keeping its old floppy would be the odd one out. The old entry read "Font Awesome" and nothing else, which is exactly as much as a table row can say before somebody has to go and look.
 
@@ -16,6 +21,10 @@ One save mark for every app, and the paperwork that comes with a fifth source.
 - **`measure_ink.py`: the reference's measuring step, without a browser.** Rule 2 has always said to measure ink with `getBBox()` and write the number down, which quietly requires a running page. This flattens every curve in the path data and takes the extremes, so a generator can be handed the number instead of a person being asked for it. It raises on a path command it does not implement rather than skipping one, because a skipped command is a corner missing from the measurement and a crop straight through the drawing's own ink.
 
 ## 🎨 Design
+
+- **The give buttons run hosted-page first, wallet last.** Coffee, then PayPal, then the crypto window (*jdp, 11.09.2026*). It reads as a ramp rather than an alphabet: the routes most people already hold an account for, then the one that needs no account and shows no name at either end. Fixed in the component rather than left to each app, because three apps picking three orders is what a shared card exists to prevent.
+
+- **A mark that brings its own GROUND takes no brand class, and the card says so where somebody would add one.** A coin disc is a filled circle in the brand's colour with a white symbol on it, so what decides whether it can be read sits inside the mark and is identical on either theme. Flattening it to one ink would be redrawing the logo. That is why the crypto button carries none while the four flat marks do.
 
 - **A sub-switch is ABSENT while its parent is off, never dimmed.** This reverses what the Switches section said, and the reversal is the point: *"dieser abgeschaltet toggle soll weg, das hab ich schon oft angesprochen."* A dimmed sub-switch is something somebody can see, read and reach for that answers nothing, and the reason it is dead sits one row up, where nobody looks once they have decided this row is the interesting one. Whatever else hangs off the mode goes with it - a palette editor under a rainbow that is not running is eight swatches nobody can open beside a reset nobody can press.
 
