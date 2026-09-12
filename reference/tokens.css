@@ -185,6 +185,9 @@
   /* One elevation, one hairline. Neutral black, not a warm one: a brown
      shadow under a grey card is visible and reads as a colour cast. */
   --elevation: 0 1px 2px rgba(0, 0, 0, .40), 0 18px 40px -24px rgba(0, 0, 0, .85);
+  /* The ground behind a floating window. ONE value, so making it darker is
+     one edit rather than a hunt through every component that floats one. */
+  --glim-scrim: rgba(0, 0, 0, .65);
   --hairline: inset 0 1px 0 rgba(255, 255, 255, .045);
   --focus-ring: rgba(252, 196, 25, .55);
 }
@@ -248,6 +251,7 @@
     --status-neutral-solid: #8d8d8d;
 
     --elevation: 0 1px 2px rgba(0, 0, 0, .06), 0 16px 36px -26px rgba(0, 0, 0, .35);
+    --glim-scrim: rgba(0, 0, 0, .55);
     --hairline: inset 0 0 0 1px rgba(0, 0, 0, .05);
     --focus-ring: rgba(142, 106, 0, .5);
   }
@@ -326,6 +330,7 @@
   --status-neutral-solid: #8d8d8d;
 
   --elevation: 0 1px 2px rgba(0, 0, 0, .06), 0 16px 36px -26px rgba(0, 0, 0, .35);
+  --glim-scrim: rgba(0, 0, 0, .55);
   --hairline: inset 0 0 0 1px rgba(0, 0, 0, .05);
   --focus-ring: rgba(142, 106, 0, .5);
 }
@@ -1480,6 +1485,19 @@ body {
   from { opacity: 0; transform: translateY(10px) scale(.98); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
+
+/* THE SCRIM IS A TOKEN, and it is one because it was a literal.
+   `bg-black/60` was written into each component that floats a window, and into
+   each adopting app's own copies of them, which is the same shape the brand
+   colours were in before this language grew tokens for those: a value the rule
+   describes and nothing holds. Asked to make it darker, somebody has to find
+   every place it was typed.
+
+   .65 rather than .60 (jdp, 12.09.2026: "ich würde die abdunkelung hinter
+   einem schwebefenster nochmal 5 Prozent dunkler machen"). At .60 the card
+   above it and the page behind it sit close enough in value that the eye keeps
+   reading the page; the point of a scrim is to stop that. */
+.glim-modal-backdrop { background: var(--glim-scrim); }
 
 @media (prefers-reduced-motion: no-preference) {
   :root[data-motion="full"] .glim-modal-backdrop { animation: glim-fade-in 200ms ease both; }
