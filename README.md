@@ -9,7 +9,26 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-AGPL--3.0-blue?style=for-the-badge&logo=gnu&logoColor=white" alt="License: AGPL-3.0" height="36"></a>
 </p>
 
-<p align="center">The shared design language behind a family of apps by the same author: a layered, low-noise interface system built on IBM Carbon's neutral palette, four engines a user drives from the app root (shape, colour, motion, labels), one shared glyph assortment, and a house style for componentry (cards, tabs, switches, the info bubble, the reveal eye).</p>
+<p align="center">
+The shared design language behind a family of apps by the same author: one low-noise palette,<br>
+four engines a user drives from the app root, and a house style for the componentry.<br>
+<br>
+No build step and no package. Adoption is copy-and-paste by design, so a plain-CSS Unraid plugin<br>
+and a React app can speak the same language without sharing a runtime. Published for reference<br>
+rather than for outside adoption; <a href="docs/design-language.md">docs/design-language.md</a> carries the reasoning and everything else.
+</p>
+
+<br>
+
+<p align="center">
+One knight's job: I build it, keep it running, work through the issues and add what people ask for, until nothing is missing. No accounts, no telemetry, no ads. No trial, no tier, no asterisk. Nothing readable ever leaves your own walls.
+</p>
+
+<p align="center">
+If it has earned a place on your computer or server, a donation covers what it costs: the domain, the server, and the evenings that go into it. It also makes this knight's heart beat a little faster. Three ways below, whichever suits you.
+</p>
+
+<br>
 
 <p align="center">
   <a href="https://buymeacoffee.com/junkerderprovinz"><img src="https://raw.githubusercontent.com/junkerderprovinz/junkerderprovinz/main/donate/buttons/button-buy-me-a-coffee-live.svg" alt="Buy me a coffee" width="160"></a>
@@ -18,10 +37,6 @@
   &nbsp;
   <a href="https://junkerderprovinz.github.io/junkerderprovinz/"><img src="https://raw.githubusercontent.com/junkerderprovinz/junkerderprovinz/main/donate/buttons/button-crypto-live.svg" alt="Donate with crypto" width="160"></a>
 </p>
-
-This repository is the canonical source — the written spec, and the reference token files an adopting app copies from. It has no build step and ships no package; adoption is copy-and-paste by design, so a plain-CSS Unraid plugin and a React/Tailwind app can both read the same design language without sharing a runtime.
-
-GlimStone documents a house style shared across the author's own apps. It's published for reference and transparency rather than as a general-purpose design system for outside adoption — see [`docs/design-language.md`](docs/design-language.md) for the full reasoning and everything else.
 
 <br>
 
