@@ -1,6 +1,16 @@
 # Changelog
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
+## 1.12.0 - 2026-09-13
+
+Nothing that deletes is painted red any more, the confirmation window included.
+
+## 🎨 Design
+
+- **A destructive button takes the same colour its siblings take.** The language kept status-red for exactly one control: the commit button inside a confirmation window. That carve-out is gone. What warns is the QUESTION - an irreversible action opens a window that states the stakes in words and counts, and somebody who has read it and reached for the button has already been told. A colour cannot say more than the sentence above it, and spending red on every delete in an app teaches people to read past it by the third time. Cancel and commit now look alike on purpose: neither is recommended, the sentence decides.
+- **The delete-badge rule and the destructive-control rule finally agree.** They used to be two halves of one answer, split at the line between the trigger that OPENS a confirmation and the control that ENDS something. Trigger and commit are now the same answer, so there is no line to get wrong.
+- **The old rule is kept as the record, not deleted.** Its argument is genuinely persuasive read on its own, which is how it survived this long, so it stands in the document marked SUPERSEDED with the reason it lost - the same habit this language already uses for the numbered-heading reversal.
+
 ## 1.11.0 — 2026-09-12
 
 The scrim behind a floating window becomes a token, and a darker one.

@@ -197,7 +197,12 @@ export function ConfirmDialog({
             // gave none is the deliberate 'no key' answer, not an oversight.
             labelKey={confirmLabelKey ?? null}
             glyph={confirmGlyph}
-            tone={tone === "fail" ? "danger" : "warn"}
+            // NOT red, since 1.12.0. See "Destructive and confirmable
+            // actions": the window's own sentence is the warning, and a colour
+            // repeating it louder on every delete stops being read. Cancel and
+            // commit look alike on purpose - neither is recommended, the
+            // sentence decides which one somebody wants.
+            tone="neutral"
             onClick={onConfirm}
           />
         </div>
