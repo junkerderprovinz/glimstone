@@ -39,7 +39,6 @@ import { Badge } from "./Badge";
 import { Button } from "./Button";
 import { IconCancel, IconClose } from "./glyphs";
 
-export type ConfirmTone = "fail" | "warn";
 
 export interface ConfirmDialogProps {
   /** Generic, reusable dialog title (e.g. t("confirmDialog.title") = "Confirm")
@@ -82,12 +81,6 @@ export interface ConfirmDialogProps {
    *  "der obere stehen lassen button weg". An app that wants the corner X
    *  keeps passing this and nothing changes for it. */
   closeLabel?: string;
-  /** Fault-red for a genuinely irreversible action (the default — every
-   *  migrated call site but one is exactly this), warn-amber for
-   *  RestoreCancelButton's "light" (non-destructive, restore-to-folder)
-   *  branch. Design-language rule: "the destructive control is always the
-   *  fault colour." */
-  tone?: ConfirmTone;
   onConfirm: () => void;
   onCancel: () => void;
   /** The dialog card's root DOM node, for useConfirm.tsx's focus trap. */
@@ -102,7 +95,6 @@ export function ConfirmDialog({
   extra,
   cancelLabel,
   closeLabel,
-  tone = "fail",
   onConfirm,
   onCancel,
   ref,
@@ -177,18 +169,12 @@ export function ConfirmDialog({
             autoFocus
             onClick={onCancel}
           />
-          {/* glim-convention-exception: no-status-color-on-control -- this is THE
-              destructive-confirmation control, and the design language states
-              the rule it is the exception to: "the destructive control is
-              always the fault colour" (see the `tone` prop's own doc above).
-              The guard exists to stop bespoke red turning up on arbitrary
-              controls; the answer to that is ONE sanctioned place where the
-              status colour is the meaning, and this is it — every destructive
-              confirmation in the app routes through this dialog. `tone` is a
-              closed two-value union, not a free colour, so nothing here can
-              drift into a third shade. Invisible to the guard until it learned
-              to follow a class list behind an identifier (CONFIRM_BUTTON_TONE),
-              which is why the marker is only being written now. */}
+          {/* No convention exception here any more. Until 1.12.0 this was THE
+              sanctioned place for a status colour on a control, marked
+              `glim-convention-exception: no-status-color-on-control`, because
+              the language kept fault-red for the button that ends something.
+              It does not any more, so the exception is not relocated - it is
+              gone, and the guard now covers this file like any other. */}
           <Button
             label={confirmLabel}
             // The confirm button's meaning changes with the action it confirms

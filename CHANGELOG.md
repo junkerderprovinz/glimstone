@@ -1,6 +1,15 @@
 # Changelog
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
+## 1.13.0 - 2026-09-13
+
+The `tone` prop leaves ConfirmDialog, and a sanctioned exception stops existing.
+
+## ⚡ Improved
+
+- **`ConfirmDialog` no longer takes a `tone`.** It had exactly one job, picking fault-red or warn-amber for the commit button, and 1.12.0 gave that button its siblings' colour. A prop that decides nothing is worse than no prop: it reads like a lever. No adopter passed it.
+- **The `no-status-color-on-control` exception is gone, not moved.** This dialog carried the one marker in the whole language sanctioning a status colour on a control, with a paragraph explaining why the carve-out was safe. There is no carve-out left to explain, so the guard now covers this file like every other one. That is the tidiest thing a rule change can do: remove the exception rather than relocate it.
+
 ## 1.12.0 - 2026-09-13
 
 Nothing that deletes is painted red any more, the confirmation window included.
