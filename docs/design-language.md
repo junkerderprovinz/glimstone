@@ -427,6 +427,17 @@ A list whose order MEANS something (a download queue, a playlist, a set of rules
 
 Where a gesture library is available, use it — the animation runs off the main thread and the result is smoother. Where adding one means new NATIVE dependencies in an app whose build is already fragile, the platform's own pan and animation primitives are enough for a reorder, and the trade is worth naming in the code rather than discovering later: a reorder gesture is not worth putting a build at risk for.
 
+## Button order in a pair
+
+**The control that GOES AHEAD sits on the right; the one that steps back sits on the left.** Save right, Cancel left. Run right, Pause left. Confirm right, Cancel left.
+
+This is a rule about ROLE, not about vocabulary, and the second example is what makes that clear: a job card's pair is Run and Pause, neither of which is a save or a cancel, and the rule still decides it. Ask which control moves the thing forward and which one holds or undoes it.
+
+- **Right is where the hand already is.** On a phone the right edge is under the thumb, and on a desktop it is where the eye finishes a row it has just read. The action somebody came for should not be the one they reach past.
+- **It is a position, not a colour.** The accent already says which control is primary; the position says it again in a way that survives glyph-only mode, a colour-blind reader, and the palette being switched. Two signals agreeing is the point, and the position is the one that still works when the other is off.
+- **Consistency beats local reasoning here.** "On this card the destructive one is more common, so it should be handier" is exactly the argument that produces a row where the same gesture does opposite things two screens apart. A pair whose order changes by screen is worse than either order applied everywhere.
+- **Under RTL the pair mirrors with the page**, like every other row: `flex-direction` and logical properties do this for free. Right means *end*, not literally the right of the glass.
+
 ## Destructive and confirmable actions
 
 Not every removal deserves the same friction, and treating them identically is itself the bug.

@@ -1,6 +1,15 @@
 # Changelog
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
+## 1.14.0 - 2026-09-13
+
+The control that goes ahead sits on the right.
+
+## 🎨 Design
+
+- **Button order in a pair is now a rule, not a habit.** Save right and Cancel left, Run right and Pause left, Confirm right and Cancel left. It is stated in terms of ROLE rather than vocabulary, because the pair that prompted it was Run and Pause: neither is a save or a cancel, and the rule still has to decide it. Ask which control moves the thing forward and which holds or undoes it.
+- **Position is a second signal that survives what colour does not.** The accent already says which control is primary; the position says it again in glyph-only mode, to a colour-blind reader, and after the palette is switched. Under RTL the pair mirrors with the page, so "right" means end rather than the right of the glass.
+
 ## 1.13.0 - 2026-09-13
 
 The `tone` prop leaves ConfirmDialog, and a sanctioned exception stops existing.
