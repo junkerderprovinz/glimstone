@@ -1,6 +1,16 @@
 # Changelog
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
+## 1.16.0 - 2026-09-13
+
+Two rules that had been contradicting each other for six releases.
+
+## 🎨 Design
+
+- **A control whose value still ACTS while something else is in charge stays, dimmed.** The document said two things about the same row and neither knew about the other: the sub-switch rule says a control hanging off another mode should be ABSENT, and the conditional-bubble rule says of an adopting app's accent picker that *"the dimmed controls stay the signal that something changed"*. Both current, both right, and a review round moved that row in one direction while the next moved it back - which is exactly what happened, and is the cost of a document that contradicts itself two sections apart.
+- **The test is whether the control still does anything.** No state behind it, remove it; state that still shows somewhere, dim it and say who is in charge. A sub-switch under an off parent does nothing at all, so leaving it offers a decision nobody can make. The accent picker is not in that position: the rainbow only overrides the accent on elements that opt into a hue, so a handful of controls still paint the picked value. Removing it would hide a setting that is still in effect, which is worse than dimming one that is partly overridden. The consequence is stated too: if the override is ever made total, the picker's value stops acting and the first rule takes over. The answer follows the behaviour rather than the other way round.
+- **Both passages now point at each other**, rather than one of them being quietly rewritten. The pair is genuinely hard to get right from either end alone, and a reader arriving at either one needs to know the other exists.
+
 ## 1.15.0 - 2026-09-13
 
 A login gains a way in, never a way instead.
