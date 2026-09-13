@@ -176,6 +176,14 @@
      the colour underneath it, which is right on a card and wrong on a row that
      already carries a hover fill. */
   --status-warn-bg-strong: #3a2f1c;
+  /* And a quieter one, for a paragraph that explains rather than warns: the
+     refusal box under "The second way in" is a whole sentence of body text,
+     and --status-warn-bg at full strength reads as an alert behind prose.
+     It exists because an adopting app asked for a soft warn wash that was
+     never defined - the family had a base and a strong step, and only the
+     FAILURE family had a soft one - so the box rendered with no fill at all
+     and nothing could see it. */
+  --status-warn-bg-soft: rgba(241, 194, 27, 0.06);
   --status-warn-solid:   #f1c21b;
 
   --status-neutral-text: #a8a8a8;
@@ -244,6 +252,7 @@
     --status-warn-text:    #8E6A00;
     --status-warn-bg:      rgba(142, 106, 0, 0.10);
     --status-warn-bg-strong: #fcf4d6;
+    --status-warn-bg-soft: rgba(142, 106, 0, 0.05);
     --status-warn-solid:   #b28600;
 
     --status-neutral-text: #6f6f6f;
@@ -323,6 +332,7 @@
   --status-warn-text:    #8E6A00;
   --status-warn-bg:      rgba(142, 106, 0, 0.10);
   --status-warn-bg-strong: #fcf4d6;
+  --status-warn-bg-soft: rgba(142, 106, 0, 0.05);
   --status-warn-solid:   #b28600;
 
   --status-neutral-text: #6f6f6f;

@@ -1,6 +1,26 @@
 # Changelog
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
+## 1.15.0 - 2026-09-13
+
+A login gains a way in, never a way instead.
+
+## ✨ Added
+
+- **`## The second way in (second factor and passkey)`.** Two cards that a login with a password can grow, written down as language rather than as one app's feature. The maxim the section hangs on is in its first lines: a login gains a way IN, never a way INSTEAD. What both cards actually have to carry is not the button, which is three lines, but the explanation around it - the failure here is somebody locking themselves out of the tool that recovers everything else.
+- **A capability the environment forbids is refused with the reason, not offered as a button that fails.** WebAuthn binds a credential to a domain name, so a browser refuses the exchange on a bare IP address and again on an untrusted certificate - which is the DEFAULT state of a self-hosted app opened over its LAN address. The answer is no control at all plus the paragraph saying what is wrong. **This is a third case beside the two "Switches" already names**, and the section says so explicitly, because without the boundary the document contradicts itself: a sub-switch is absent, a reporting control may be dimmed, and an environment refusal is absent AND owes prose. The test question that decides all three is written into the rule.
+- **`--status-warn-bg-soft`, and its `bg-statusWarnBgSoft` utility.** The quiet end of the warn family, for a paragraph that explains rather than warns. It exists because an adopting app reached for exactly this name before it existed anywhere: the family had a base tone and a strong tone, only the FAILURE family had a soft step, so that app's refusal box shipped with a radius, a border and no fill, and nothing in its build could notice. That is the zero-delta-enclosure trap one stage earlier - there the value equalled its parent, here the value did not exist at all.
+- **`reference/react/UnavailableNotice.tsx`.** The shape above as a component: a title, a reason, an optional action the caller builds. It does not translate, does not know what a passkey is, and deliberately does not accept the server's own sentence - a server's verdict travels as a boolean and the copy is written in the front end. The one piece of this surface where two apps were guaranteed to drift is the fill, which is exactly what drifted.
+
+## 🎨 Design
+
+- **The reason is UI copy, translated, never the server's own sentence.** This is the mirror image of the fallback rule under "Failure feedback": there the app's own copy gets forgotten, here a diagnostic gets wrongly promoted to be the paragraph that explains a feature, in front of somebody whose interface runs in their language. The test that pins it is named in the rule: feed the server field an obviously non-human string, assert positively on the translated text and negatively on that string.
+- **An entry that cannot answer here is marked, not hidden**, and that is for DATA rather than controls - the whole distinction against the sub-switch rule. A credential registered through a proxy cannot answer over the IP; hiding it would make a key somebody deliberately created look lost, which is the most alarming thing this surface can imply.
+- **Two independent facts under one entry are separated in the MARKUP, never inside the sentences.** Whether the second fact appears is decided outside the app, so neither sentence can own the punctuation: a full stop on the first dangles on every row where the second never comes. The separator is the middle dot the About card already puts between two version numbers, so this is a cross-reference rather than a second convention. The consequence lands in the translation table and is stated there: a key that can appear non-final ends without a full stop.
+- **Separate cards for separate decisions, and the test is whether there are two decisions, not whether the topic is the same.** The counter-precedent sits in the same bullet so it cannot be read as "always split": the accent picker and rainbow mode were merged into one card on report, because they are one decision. The question is "can somebody want this and not that".
+- **What an enrolment owes**, as four rules with four failures that each look like success: the status line reads the authority rather than the local step; a secret shown once says so beforehand and is acknowledged rather than dismissed; turning a protection OFF costs the same proof as using it, which is stricter than the confirmation rule and for a different reason (not regret, but a session somebody walked away from); and an enrolment renders the step it is on rather than every control at once with most disabled.
+- **A dialog that takes away one of several ways names the one that remains.** Generalised out of a passkey removal saying "the password still works" - a confirmation that states only what it destroys makes somebody stop and work out whether anything is left.
+
 ## 1.14.0 - 2026-09-13
 
 The control that goes ahead sits on the right.

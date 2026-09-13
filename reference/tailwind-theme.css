@@ -52,6 +52,11 @@
      which already carries a fill of its own. The translucent one above would
      take that fill's colour through it. */
   --color-statusWarnBgStrong: var(--status-warn-bg-strong);
+  /* bg-statusWarnBgSoft: the quiet end of the same family, for a paragraph
+     that explains rather than warns. See "The second way in" - an adopting
+     app reached for this name before it existed anywhere, so its refusal box
+     rendered with no fill at all and nothing in the build could notice. */
+  --color-statusWarnBgSoft: var(--status-warn-bg-soft);
   --color-statusWarnSolid: var(--status-warn-solid);
 
   --color-statusInfo: var(--status-info-text);
