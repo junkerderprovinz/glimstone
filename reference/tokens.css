@@ -948,6 +948,36 @@ body {
     --glim-toast-slide: 12px;
   }
   :root[data-motion='subtle'][dir="rtl"] { --glim-toast-slide: -12px; }
+  /* THE HIDDEN FOURTH, and it is a real level rather than a joke.
+
+     Same keyframes, same elements, same tokens: a spring that swings further
+     and takes longer to come to rest. The language's own rule about intensities
+     - a level is a different number, never a different animation - is what
+     makes a fourth one cost nothing but this block.
+
+     It is not in the picker. See "A hidden fourth level" in the design
+     language for the gesture that reveals it and, more importantly, for the
+     rule it establishes: an easter egg that changes BEHAVIOUR has to be one
+     somebody can switch back off, and must not quietly become a permanent
+     entry in a settings list.
+
+     The phone reaches the same shape with `springDamping: 0.34` against wild's
+     0.68, so the two surfaces overshoot alike rather than merely both
+     overshooting. */
+  :root[data-motion='storm'] {
+    --motion-page-dur: 760ms;
+    --motion-toast-dur: 420ms;
+    --motion-pulse-dur: 1.4s;
+    --motion-fade-dur: 200ms;
+    --motion-shake-dur: 520ms;
+    --motion-page-travel: 34px;
+    --motion-page-scale: .9;
+    /* Further past 1 than wild's curve, and slower to settle: the overshoot is
+       the whole point of the level. */
+    --motion-curve: cubic-bezier(.22, 1.94, .45, 1);
+    --glim-toast-slide: 44px;
+  }
+  :root[data-motion='storm'][dir="rtl"] { --glim-toast-slide: -44px; }
   :root[data-motion='off'] {
     --motion-page-dur: 0s;
     --motion-toast-dur: 0s;

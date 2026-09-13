@@ -89,6 +89,92 @@ export function applyShape(shape: Shape | string | undefined): void {
   document.documentElement.setAttribute('data-shape', s);
 }
 
+// ---------------------------------------------------------------------------
+// Motion
+//
+// How much the interface moves. The tokens live in tokens.css, keyed off
+// `data-motion` on the root, and this is the piece that writes the attribute
+// plus the one gesture that reveals the level the picker does not list.
+// ---------------------------------------------------------------------------
+
+/**
+ * The levels, quietest first.
+ *
+ * `storm` is deliberately LAST and deliberately not in `MOTION_LEVELS` below.
+ * It is a real level with real numbers - see the `data-motion='storm'` block in
+ * tokens.css - and it is not something a picker offers.
+ */
+export type Motion = 'off' | 'subtle' | 'wild' | 'storm';
+
+/** What a picker shows. The storm is not in here; see stormTap below. */
+export const MOTION_LEVELS: Motion[] = ['off', 'subtle', 'wild'];
+
+/**
+ * The default is the top VISIBLE level, not the quietest.
+ *
+ * This axis is additive polish a user dials DOWN, not a compatibility fallback
+ * they have to opt INTO - and the accessibility signal that genuinely needs a
+ * default is `prefers-reduced-motion`, which the tokens already read
+ * unconditionally and which wins over every value here.
+ */
+export const DEFAULT_MOTION: Motion = 'wild';
+
+/** applyMotion sets the attribute the motion tokens key off. */
+export function applyMotion(motion: Motion | string | undefined): void {
+  // `storm` is accepted here even though no picker offers it: somebody who
+  // found it and then reloaded the page must get it back, or the gesture would
+  // have produced a setting that silently forgets itself.
+  const m: Motion =
+    motion === 'storm' || MOTION_LEVELS.includes(motion as Motion) ? (motion as Motion) : DEFAULT_MOTION;
+  document.documentElement.setAttribute('data-motion', m);
+}
+
+/** How many taps on the level already chosen open the one below the floor. */
+export const STORM_TAPS = 5;
+
+/**
+ * The gesture that reveals the storm, and the rule it carries.
+ *
+ * SET THE MOTION TO THE TOP LEVEL, THEN TAP THAT SAME OPTION FIVE MORE TIMES.
+ * It is the gesture of somebody pressing a button that is already pressed
+ * because they wanted more of it, which is exactly who this level is for. It
+ * cannot be reached from any other level on purpose: tapping "off" five times
+ * means somebody is annoyed, not curious.
+ *
+ * THE RULE, and it is the part worth copying rather than the numbers: AN
+ * EASTER EGG THAT CHANGES BEHAVIOUR MUST BE SWITCHABLE BACK OFF, AND MUST NOT
+ * QUIETLY BECOME A PERMANENT ENTRY IN A SETTINGS LIST. The first build of this
+ * stored a "found it" flag, so a single gesture put a fourth option in the
+ * picker for ever - which turns a secret into a setting somebody has to explain
+ * to themselves months later, with no memory of how it got there. Reported as
+ * exactly that (jdp, 13.09.2026: "sturm soll wieder verschwinden wenn man zb
+ * sanft einstellt und die einstellungen verlässt").
+ *
+ * So what keeps it visible is the plain truth about the current state:
+ *
+ *   - It is offered while it is CHOSEN, because a picker that hid the value it
+ *     is currently showing would be lying about the interface.
+ *   - Otherwise it is offered only for as long as the screen stays open.
+ *     Choose something else and leave, and it is gone until the gesture is made
+ *     again.
+ *
+ * The caller owns the screen and therefore owns how long "open" means: keep
+ * `found` in the settings screen's own state, never in storage.
+ *
+ * Returns the level to switch to, or undefined when the tap was not the fifth.
+ * Counting lives in the caller for the same reason `found` does.
+ */
+export function stormTap(state: { taps: number }, tapped: string, current: string): Motion | undefined {
+  if (tapped !== 'wild' || current !== 'wild') {
+    state.taps = 0;
+    return undefined;
+  }
+  state.taps += 1;
+  if (state.taps < STORM_TAPS) return undefined;
+  state.taps = 0;
+  return 'storm';
+}
+
 /**
  * applyAccent overrides the accent tokens, or clears the override so the
  * theme's own gold comes back. The contrast colour is computed rather than
