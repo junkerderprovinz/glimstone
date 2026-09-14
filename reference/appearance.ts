@@ -100,6 +100,15 @@ export function applyShape(shape: Shape | string | undefined): void {
 /**
  * The levels, quietest first.
  *
+ * THESE FOUR STRINGS ARE FIXED. They are a wire format, not wording: they go
+ * into the `data-motion` attribute, stylesheet selectors match on them, and
+ * storage holds them. An app that renames one has not made a local choice - the
+ * tokens keyed to the old spelling stop matching, and a value already saved
+ * under the old name fails validation and falls back to DEFAULT_MOTION, which
+ * from the outside looks like the setting resetting itself. What somebody READS
+ * is a separate question and lives in the translation table (German: Aus,
+ * Dezent, Wild, Sturm).
+ *
  * `storm` is deliberately LAST and deliberately not in `MOTION_LEVELS` below.
  * It is a real level with real numbers - see the `data-motion='storm'` block in
  * tokens.css - and it is not something a picker offers.
@@ -108,6 +117,15 @@ export type Motion = 'off' | 'subtle' | 'wild' | 'storm';
 
 /** What a picker shows. The storm is not in here; see stormTap below. */
 export const MOTION_LEVELS: Motion[] = ['off', 'subtle', 'wild'];
+
+/**
+ * What a STORED value may legally be, which is a different question.
+ *
+ * Validate against this and populate a picker from MOTION_LEVELS. Conflating
+ * the two is what makes a found storm forget itself on the next reload, and an
+ * axis with a hidden level is where the difference shows.
+ */
+export const MOTION_STORED: Motion[] = [...MOTION_LEVELS, 'storm'];
 
 /**
  * The default is the top VISIBLE level, not the quietest.
@@ -121,11 +139,11 @@ export const DEFAULT_MOTION: Motion = 'wild';
 
 /** applyMotion sets the attribute the motion tokens key off. */
 export function applyMotion(motion: Motion | string | undefined): void {
-  // `storm` is accepted here even though no picker offers it: somebody who
-  // found it and then reloaded the page must get it back, or the gesture would
-  // have produced a setting that silently forgets itself.
-  const m: Motion =
-    motion === 'storm' || MOTION_LEVELS.includes(motion as Motion) ? (motion as Motion) : DEFAULT_MOTION;
+  // MOTION_STORED, not MOTION_LEVELS: `storm` is accepted here even though no
+  // picker offers it, because somebody who found it and then reloaded the page
+  // must get it back, or the gesture would have produced a setting that
+  // silently forgets itself.
+  const m: Motion = MOTION_STORED.includes(motion as Motion) ? (motion as Motion) : DEFAULT_MOTION;
   document.documentElement.setAttribute('data-motion', m);
 }
 
