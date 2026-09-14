@@ -45,11 +45,12 @@ If it has earned a place on your computer or server, a donation covers what it c
 1. [What's in this repo](#1-whats-in-this-repo)
 2. [The short version](#2-the-short-version)
 3. [The engines](#3-the-engines)
-4. [Adopting GlimStone in an app](#4-adopting-glimstone-in-an-app)
-5. [Where per-app detail lives](#5-where-per-app-detail-lives)
-6. [Versioning](#6-versioning)
-7. [License](#7-license)
-8. [Support this project](#8-support-this-project)
+4. [Easter eggs](#4-easter-eggs)
+5. [Adopting GlimStone in an app](#5-adopting-glimstone-in-an-app)
+6. [Where per-app detail lives](#6-where-per-app-detail-lives)
+7. [Versioning](#7-versioning)
+8. [License](#8-license)
+9. [Support this project](#9-support-this-project)
 
 <br>
 
@@ -58,7 +59,7 @@ If it has earned a place on your computer or server, a donation covers what it c
 - [`docs/design-language.md`](docs/design-language.md) — the full spec: the palette, the name and its etymology, all twenty rules, the componentry vocabulary (info bubble, horizontal selector, switches, the reveal eye, badges, toasts, empty states, destructive actions, charts), all four engines, the token contract, and the adoption steps. This is the document to read start to finish; everything below just points back into it.
 - [`reference/tokens.css`](reference/tokens.css) — the palette and component classes as plain CSS custom properties, and where the shape, colour and motion engines resolve to actual values. No build step, no framework. Copy the parts an app needs.
 - [`reference/tailwind-theme.css`](reference/tailwind-theme.css) — the optional Tailwind v4 `@theme` layer that maps the tokens onto utility classes. Skip it entirely on a non-Tailwind app.
-- [`reference/appearance.ts`](reference/appearance.ts) — the shape/accent/rainbow logic. Framework-free (talks only to `document.documentElement` and `localStorage`), so it drops into any app unchanged.
+- [`reference/appearance.ts`](reference/appearance.ts) — the shape, accent, rainbow and motion logic, including the four fixed motion level names and `stormTap()`, the gesture behind the hidden fourth one. Framework-free (talks only to `document.documentElement` and `localStorage`), so it drops into any app unchanged.
 - [`reference/controls.ts`](reference/controls.ts) — the label engine: four modes (text, text+glyph, glyph, reactive) across three independent surfaces, plus the width stages that let a mode change happen without the page reflowing. Framework-free the same way.
 - [`reference/colorPicker.ts`](reference/colorPicker.ts) — the floating saturation/value picker, drawn in the app's own DOM. Never a native `<input type="color">`, which hands off to a surface outside the page.
 - [`reference/numberField.ts`](reference/numberField.ts) — in-field steppers for a plain `<input type="number">`, driving the input's own `stepUp()`/`stepDown()` so min/max/step stay in the markup.
@@ -66,7 +67,7 @@ If it has earned a place on your computer or server, a donation covers what it c
 - [`reference/selectScroll.ts`](reference/selectScroll.ts) — keeps a long option list scrollable without the list deciding the page's height.
 - [`reference/flagEmoji.ts`](reference/flagEmoji.ts) — turns an ISO 3166-1 alpha-2 code into its regional-indicator emoji, for language options a native `<option>` can actually hold.
 - [`reference/glyphs.md`](reference/glyphs.md) — the shared glyph assortment: which icon means what, where each comes from and under which licence, and the sizing rules that make a set of icons read as one set.
-- [`reference/react/`](reference/react/) — the components themselves, as React source: `Button`, `Toggle`, `Card`, `Badge`, `DropdownListbox`, `ConfirmDialog`, `Toast`, `InfoBubble`, `AboutCard`, `CryptoDonateDialog`, plus the small hooks they need. The files above say what a control must look like; these say what it **is**. Two apps built from the prose alone produced the same language under different names — one `Toggle` and one `Switch`, one `ConfirmDialog` and one `Confirm` — and a third would have invented a third set. Every string is a prop and no component fetches anything, so the same file serves an app in any language.
+- [`reference/react/`](reference/react/) — the components themselves, as React source: `Button`, `Toggle`, `Card`, `Badge`, `DropdownListbox`, `ConfirmDialog`, `Toast`, `InfoBubble`, `IconTipButton`, `UnavailableNotice`, `AboutCard`, `CryptoDonateDialog`, plus the small hooks they need. The files above say what a control must look like; these say what it **is**. Two apps built from the prose alone produced the same language under different names — one `Toggle` and one `Switch`, one `ConfirmDialog` and one `Confirm` — and a third would have invented a third set. Every string is a prop and no component fetches anything, so the same file serves an app in any language.
 - [`CHANGELOG.md`](CHANGELOG.md) — what changed in the language itself, versioned.
 
 <br>
@@ -102,7 +103,23 @@ A new control has to point its own CSS at these tokens as it is built. Adopting 
 
 <br>
 
-## 4. Adopting GlimStone in an app
+## 4. Easter eggs
+
+The language has one, and it exists mostly to establish the rule that comes with it.
+
+**`storm`, a fourth motion level no picker lists.** Same keyframes as the other three with bigger numbers: page entrance 760ms over 34px on `cubic-bezier(.22, 1.94, .45, 1)`, and `springDamping: 0.34` on a phone. One token block, `:root[data-motion='storm']` in [`reference/tokens.css`](reference/tokens.css), is its entire cost.
+
+**To find it: set the motion to the top level, then tap that same option five more times.** `stormTap()` in [`reference/appearance.ts`](reference/appearance.ts) is the whole mechanism. It is unreachable from any other level on purpose - tapping "off" five times means somebody is annoyed, not curious, and a secret that opens under annoyance is a bug report waiting to be filed.
+
+**The rule, which is the part worth copying rather than the numbers: an easter egg that changes BEHAVIOUR must be switchable back off, and must not quietly become a permanent entry in a settings list.** The first build stored a "found it" flag, so one gesture added a fourth picker option for ever after - a secret turned into a setting somebody has to explain to themselves months later. What keeps it visible instead is the plain truth about the current state: it is offered while it is chosen, because a picker hiding the value it is showing would be lying, and otherwise only while that settings screen stays open. So `found` lives in the screen's own state and never in storage, while the chosen value persists like any other setting.
+
+**A hidden "more animation" switch still sits inside the accessibility gate.** `storm` resolves within the same `@media (prefers-reduced-motion: no-preference)` block as the other three levels, so a machine whose owner asked the OS for less motion never evaluates a `data-motion` selector at all.
+
+An adopting app is free to have eggs of its own; they belong in that app's own notes, not here. What belongs here is the rule above, which applies to every one of them.
+
+<br>
+
+## 5. Adopting GlimStone in an app
 
 1. Copy the `:root` / `[data-theme="light"]` blocks from [`reference/tokens.css`](reference/tokens.css) into the app's stylesheet.
 2. Copy `.glim-card` / `.glim-well` / `.glim-eyebrow` / `.glim-num`, plus the base `body`/font rules and the scrollbar and focus rules, from the same file.
@@ -117,19 +134,19 @@ Nothing else is required — component markup stays as it is, because every colo
 
 <br>
 
-## 5. Where per-app detail lives
+## 6. Where per-app detail lives
 
 This repository is deliberately app-agnostic. Anything true for only one app — its exact token names if they diverge from the reference, class prefixes, measured pixel values, quirks of a specific host UI it runs inside — belongs in that app's own style guide, not here. If the same rule shows up in both places, it gets deleted from the app-specific one: universal belongs here, an exception belongs there.
 
 <br>
 
-## 6. Versioning
+## 7. Versioning
 
 GlimStone the language is versioned independently of any app that adopts it — a rule added here doesn't imply every adopting app has picked it up yet. See [`CHANGELOG.md`](CHANGELOG.md) for what changed and when.
 
 <br>
 
-## 7. License
+## 8. License
 
 **Copyright (C) 2026 Junker der Provinz.**
 
@@ -139,7 +156,7 @@ GlimStone is free software under the **GNU Affero General Public License v3.0** 
 
 <br>
 
-## 8. Support this project
+## 9. Support this project
 
 Bugs, ideas or questions? Please [open a GitHub issue](https://github.com/junkerderprovinz/glimstone/issues).
 
