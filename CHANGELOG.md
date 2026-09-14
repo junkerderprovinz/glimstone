@@ -1,18 +1,6 @@
 # Changelog
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
-## 2.1.0 - 2026-09-14
-
-Two rules from one report: a settings card had grown session buttons, and the two cards that enrol a login control were calling the same act two different things.
-
-## 🎨 Design
-
-- **A settings card CONFIGURES; the shell OPERATES.** Rule 22. A card that sets something up does not also carry the buttons that act on the live session - on a form with unsaved fields, those are the two controls that throw the form away, and one of them duplicated what the shell already offered.
-- **Removing an operation from a card must not remove the CAPABILITY.** The test before deleting such a button is "where does this live once it is gone" - another surface, or the action that implies it. Signing every other session out moved into changing the password, which is what somebody changing it out of suspicion assumed was happening.
-- **The control that starts an enrolment is named for the act, and every such control is named the same.** *Enable* on one card and *Add passkey* on the next made a reader work out whether the different wording meant a different thing. It does not.
-- **A control named that way must carry a glyph**, because the glyph is then what tells two same-worded buttons apart. It is picked from the meaning of the capability, not from the shared verb.
-- **That word is a per-language LOOKUP of what the app already says elsewhere**, never a fresh translation, or one language ends up with two words for one act.
-
 ## 2.0.0 - 2026-09-14
 
 A major release, because the motion axis renamed a value adopting apps write into the DOM.
@@ -21,58 +9,58 @@ A major release, because the motion axis renamed a value adopting apps write int
 
 ## ✨ Added
 
-- `--motion-page-travel`, `--motion-page-scale` and `--motion-curve` as per-intensity tokens, so the top level travels further and overshoots instead of only finishing sooner.
-- `storm`, a fourth motion level no picker offers. One token block: 760ms, 34px, `.9` scale, `cubic-bezier(.22, 1.94, .45, 1)`; `springDamping: 0.34` on the phone.
-- `stormTap()` in `reference/appearance.ts`: the gesture that reveals it is five more taps on the top level, and it is unreachable from any other.
-- `Motion`, `MOTION_LEVELS`, `MOTION_STORED`, `DEFAULT_MOTION` and `applyMotion()` join the reference module. `MOTION_LEVELS` fills a picker, `MOTION_STORED` validates a value and includes the storm.
-- `## The second way in (second factor and passkey)`: the two cards a password login can grow, and what their copy owes.
-- `--status-warn-bg-soft` plus `bg-statusWarnBgSoft`, the quiet end of the warn family.
-- `reference/react/UnavailableNotice.tsx`: title, reason, optional action, for a capability the environment forbids.
-- `--glim-scrim`, spent by `.glim-modal-backdrop`.
-- The About card's brand values and classes: `--brand-coffee`, `--brand-bitcoin`, `--brand-paypal`, `--brand-github`, `.glim-brand-btn` and one block each.
-- `.glim-brand-house`, so the mail button's accent exception is a class rather than a sentence.
-- `IconSave` is Vecteezy's drawing in every app that speaks this language.
-- Vecteezy as a fifth glyph source, with its attribution obligation written into the generated header.
-- `measure_ink.py`, so a glyph's ink box can be measured without a running browser.
+- **Distance and curve join duration as per-intensity motion tokens** (`--motion-page-travel`, `--motion-page-scale`, `--motion-curve`). Every level used to run the same six-pixel slide at a different speed, so the top one was just "the same thing, sooner". It now travels three times as far, scales in, and rides a curve that overshoots and settles.
+- **`storm`, a fourth motion level that no picker lists.** Same keyframes as the other three with bigger numbers: a spring that swings further and takes longer to come to rest. Page entrance 760ms over 34px on `cubic-bezier(.22, 1.94, .45, 1)`, and `springDamping: 0.34` on the phone so both surfaces overshoot alike.
+- **The gesture that reveals it: `stormTap()` in `reference/appearance.ts`.** Set the motion to the top level, then tap that same option five more times. It is unreachable from any other level on purpose - tapping "off" five times means somebody is annoyed, not curious.
+- **The motion axis ships as code now, not only as tokens and a document**: `Motion`, `MOTION_LEVELS`, `MOTION_STORED`, `DEFAULT_MOTION` and `applyMotion()`. Every adopting app had written the attribute-setting half itself. `MOTION_LEVELS` is what a picker offers and excludes the storm; `MOTION_STORED` is what a saved value may legally be and includes it.
+- **A new section, "The second way in (second factor and passkey)".** The two cards a password login can grow, written down as language rather than as one app's feature: what each must carry, and why the explanation around the button matters more than the button.
+- **`--status-warn-bg-soft`, with its `bg-statusWarnBgSoft` utility.** The quiet end of the warn family, for a paragraph that explains rather than warns. The family had a base tone and a strong tone and no soft step, so an adopting app's explanation box shipped with a border and no fill at all.
+- **`reference/react/UnavailableNotice.tsx`**, the component for a capability the environment forbids - a passkey over a bare IP address, say. A title, the reason in the app's own translated words, and an optional action, instead of a button that is guaranteed to fail.
+- **`--glim-scrim`, the darkening behind a floating window**, spent by `.glim-modal-backdrop`. It used to be `bg-black/60` typed into every component that floats a window, so changing it meant finding every place somebody had typed it.
+- **The About card's brand colours ship as tokens and classes**: `--brand-coffee`, `--brand-bitcoin`, `--brand-paypal`, `--brand-github`, plus `.glim-brand-btn` and one block per mark. The rule describing them was prose with no values behind it, so two adopting apps derived two different answers from it.
+- **`.glim-brand-house`, for the one button on that card that reaches the app's own authors.** It follows the user's accent and rainbow, which a vendor's mark may never do. That was a sentence anybody could forget to act on; it is a class now.
+- **`IconSave` is Vecteezy's drawing in every app that speaks this language.** A save button should be the same save button everywhere, which is the whole reason a shared glyph assortment exists.
+- **Vecteezy joins as a fifth glyph source, with its attribution obligation written into the generated file's header.** Its Free License asks for a named link rather than a bare credit, and the rule is to assume Free unless a receipt says otherwise.
+- **`measure_ink.py`, which measures a glyph's real ink box without a browser.** The sizing rule has always said to measure with `getBBox()` and write the number down, which quietly required a running page.
 
 ## 🎨 Design
 
-- **The four motion level names are fixed: `off`, `subtle`, `wild`, `storm`.** They are a wire format, not wording: they go into `data-motion`, selectors match on them, storage holds them. A renamed level stops matching its tokens and falls back to the default. The visible label is separate and belongs in the translation table.
-- **A selector must name the quiet levels, never the lively one.** `[data-motion="wild"] .thing` excludes `storm`. Use `:root:not([data-motion="subtle"]):not([data-motion="off"])`.
-- **An easter egg that changes behaviour must be switchable back off, and must not become a permanent entry in a settings list.** `found` lives in the screen's state, never in storage.
-- **Validating a stored value and populating a picker are two different questions.** A persisted `storm` is accepted even though nothing offers it.
-- **A hidden "more animation" level still resolves inside the reduced-motion gate**, not beside it.
-- **A card carries the established NAME of what it offers**, not a description: *Two-factor authentication*, not *Second factor*. The test is whether the title works as a noun in somebody's own sentence.
-- **That name is a per-language lookup**, not a literal translation.
-- **A control whose value still acts while something else is in charge stays, dimmed**; one that does nothing at all is removed. The two rules that had contradicted each other now point at each other.
-- **An unavailable capability's reason is translated UI copy, never the server's sentence.**
-- **A data entry that cannot answer is marked, not hidden.** Hiding it makes a credential somebody created look lost.
-- **Two independent facts under one entry are separated in the markup**, never inside the sentences.
-- **Separate cards for separate decisions** - the test is whether somebody can want one and not the other.
-- **What an enrolment owes:** status from the authority, a once-shown secret announced beforehand and acknowledged, turning a protection off costing the same proof as using it, and one step rendered at a time.
-- **A dialog that removes one of several ways names the one that remains.**
-- **Button order in a pair is a rule: the control that goes forward sits on the right**, mirrored under RTL. Position says what colour cannot in glyph-only mode or to a colour-blind reader.
-- **Nothing destructive is painted red any more, the confirmation's commit button included.** What warns is the question. The superseded rule stays on the record.
-- **The scrim is .65 on a dark ground and .55 on a light one.**
-- **A sentence that follows controls gets an extra step of space above it**, never below the controls.
-- **The give buttons run hosted-page first, wallet last.**
-- **A mark that brings its own ground takes no brand class.**
-- **A sub-switch is absent while its parent is off, never dimmed**, and whatever else hangs off that mode goes with it.
-- **"Switched off, not hidden" means the mode's own switch**, and nothing that depends on it.
-- **A control greyed because it is reporting stays**; greyed because something else is off, it goes.
-- **A glyph whose ink fills three quarters of its box needs its measured crop**, which is the case the sizing rules were written for.
+- **The four motion level names are fixed: `off`, `subtle`, `wild`, `storm`.** They are a wire format rather than wording: they go into the `data-motion` attribute, selectors match on them, and storage holds them. An app that renames one loses the tokens keyed to the old spelling, and a saved value falls back to the default, which looks like the setting resetting itself.
+- **A stylesheet rule must name the QUIET levels, never the lively one.** `[data-motion="wild"] .thing` excludes `storm`, which is more motion and wants the livelier treatment rather than none of it. Write `:root:not([data-motion="subtle"]):not([data-motion="off"])` instead, and the rule keeps covering whatever is added above it later.
+- **An easter egg that changes behaviour must be switchable back off, and must not become a permanent entry in a settings list.** The first build stored a "found it" flag, so one gesture added a fourth picker option for ever. What keeps it visible is the current state: offered while it is chosen, otherwise only while that screen stays open. So `found` lives in the screen's state, never in storage.
+- **Validating a stored value and populating a picker are two different questions.** A saved `storm` is accepted at boot even though nothing offers it, or the gesture would produce a setting that forgets itself on the next reload.
+- **A hidden "more animation" level still resolves inside the reduced-motion gate, not beside it.** `storm` sits in the same `@media (prefers-reduced-motion: no-preference)` block as the other three, so a machine whose owner asked the OS for less motion never evaluates a `data-motion` selector at all. That is the one way a secret level could do real harm.
+- **A card carries the established NAME of what it offers, not a description of it**: *Two-factor authentication*, not *Second factor*. The test is whether the title works as a noun in somebody's own sentence. A described title makes a reader translate before they can be sure they are in the right place.
+- **That name is a per-language lookup rather than a literal translation.** Several languages use the English shorthand, several say "two steps" rather than "two factors", and rendering the English word for word produces a term nobody uses.
+- **A control whose value still ACTS while something else is in charge stays, dimmed; one that does nothing at all is removed.** Two rules here had been contradicting each other on exactly that row, so one review round moved it and the next moved it back. They now point at each other.
+- **The reason an unavailable capability gives is translated UI copy, never the server's own sentence.** A diagnostic promoted to explanatory prose lands in front of somebody whose interface runs in their language.
+- **A data entry that cannot answer is marked, not hidden.** A credential registered through a proxy cannot answer over a bare IP address; hiding it would make a key somebody deliberately created look lost, which is the most alarming thing that surface can imply.
+- **Two independent facts under one entry are separated in the markup, never inside the sentences.** Whether the second fact appears is decided outside the app, so a full stop on the first one dangles on every row where the second never comes.
+- **Separate cards for separate decisions, and the test is whether there are two decisions rather than whether the topic is the same.** The accent picker and rainbow mode were merged back into one card on exactly that test.
+- **What an enrolment owes**, as four rules whose failures each look like success: the status line reads the authority rather than the local step, a secret shown once says so beforehand and is acknowledged rather than dismissed, turning a protection off costs the same proof as using it, and the screen renders one step at a time.
+- **A dialog that removes one of several ways names the one that remains.** A confirmation stating only what it destroys makes somebody stop and work out whether anything is left.
+- **Button order in a pair is a rule: the control that goes forward sits on the right**, mirrored under RTL. The accent already says which control is primary; the position says it again in glyph-only mode, to a colour-blind reader, and after the palette is switched.
+- **Nothing destructive is painted red any more, the confirmation's commit button included.** What warns is the question: an irreversible action opens a window stating the stakes, and somebody who read it has already been told. Spending red on every delete teaches people to read past it by the third time.
+- **The scrim behind a floating window is .65 on a dark ground and .55 on a light one.** At .60 the card in front and the page behind sat close enough in value that the eye kept reading the page, which is the one thing a scrim exists to stop.
+- **A sentence that FOLLOWS controls gets an extra step of space above it**, never a step below the controls. With even spacing the eye pairs a row of controls with the next sentence instead of the one it belongs to.
+- **The give buttons run hosted-page first, wallet last**: coffee, then PayPal, then the crypto window. It reads as a ramp - the routes most people already have an account for, then the one that needs no account at either end.
+- **A mark that brings its own GROUND takes no brand class.** A coin disc is a filled circle in the brand's colour with a white symbol on it, so what makes it readable sits inside the mark and is identical on either theme. Flattening it to one ink would be redrawing the logo.
+- **A sub-switch is absent while its parent is off, never dimmed**, and whatever else hangs off that mode goes with it. A dimmed sub-switch is something somebody can see, read and reach for that answers nothing, and the reason it is dead sits a row up where nobody looks.
+- **"Switched off, not hidden" means the mode's own switch**, which stays visible because it is the control somebody is looking for. It was being read as cover for leaving dependent controls on screen unusable.
+- **A control greyed because it is REPORTING stays; one greyed because something else is off goes.** A reset badge with nothing to reset is answering its own question, which is a fact about the thing it acts on rather than about a decision made elsewhere.
+- **A glyph whose ink fills three quarters of its declared box needs its measured crop.** Carried through unchanged it renders three quarters the size of every glyph beside it in an identical box, which is the complaint that produced the sizing rules.
 
 ## ⚡ Improved
 
-- `ConfirmDialog` no longer takes a `tone`: it decided one colour and that colour is gone.
-- The `no-status-color-on-control` exception is removed rather than relocated.
+- **`ConfirmDialog` no longer takes a `tone`.** Its only job was picking fault-red or warn-amber for the commit button, and that button now takes its siblings' colour. A prop that decides nothing is worse than no prop, because it reads like a lever.
+- **The `no-status-color-on-control` exception is removed rather than relocated.** That dialog carried the one marker in the whole language sanctioning a status colour on a control. There is no carve-out left to explain, so the guard covers this file like every other one.
 
 ## 🐛 Fixed
 
-- Two rules in `reference/tokens.css` matched nothing: the reactive label's overshoot and the modal's rise were keyed to `[data-motion="full"]` while `appearance.ts` writes `wild`. Both now cover wild and storm.
-- The language said `full` in six places and `wild` in two. All say `wild`.
-- The toast's travel was the one distance left at 12px for every intensity, under a comment claiming otherwise. Now 24/12/0, each with its RTL twin.
-- `flagEmoji` returned three glyphs for a subdivision code like `es-ct`. It takes the first two letters now.
+- **Two component rules in `reference/tokens.css` matched nothing on any surface.** The reactive label's overshoot and the modal's rise-and-settle were keyed to `[data-motion="full"]` while `appearance.ts` writes `wild`, so an app adopting both files got neither animation at its top level. Both now cover wild and storm.
+- **The language contradicted itself about the top level's name in eight places**, six saying `full` and two saying `wild`. All say `wild`.
+- **The toast's travel was the one distance left behind at 12px for every intensity**, under a comment claiming it moved further at the top one - invisible because the animation still ran. It is 24/12/0 now, each value with its RTL twin, because a keyframe cannot be mirrored by a class sweep.
+- **`flagEmoji` returned three glyphs for a subdivision code.** It mapped every character it was handed to a regional-indicator symbol, so `es-ct` rendered as Spain's flag, a hyphen, and a second flag. It takes the first two letters now, and a subdivision shows its country's flag.
 
 ## 1.9.0 — 2026-09-11
 
