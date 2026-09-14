@@ -1,6 +1,16 @@
 # Changelog
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
+## 1.18.0 - 2026-09-14
+
+A card is titled with the name of the thing, not with a description of it.
+
+## 🎨 Design
+
+- **A card that offers a named, established capability carries that capability's NAME.** The card is *Two-factor authentication*, not *Second factor*. Both are accurate and one of them is what the thing is called - on the phone that generates the code, in the help article somebody searched for, in the sentence a friend used when recommending it. A described title makes a reader do a translation step before they can be sure they are in the right place, and this is the surface where being unsure costs most. Reported against an adopting app that had shipped the described form; the section it belongs to had written down everything the two cards must DO and never what they are CALLED.
+- **The test is whether the title works as a noun in somebody's own sentence.** "I turned on two-factor authentication" is a sentence; "I turned on second factor" is a summary of one. This is the card-title half of the existing copy rule about naming things the way people recognise them rather than the way the system is built, and it bites hardest wherever a spec term and a common term differ. *Passkeys* needs no correction under it: that already is the name.
+- **The consequence lands in the translation table, and it is the part that gets missed.** The name travels per language and is frequently NOT a literal translation: several languages have adopted the English shorthand, several have an established phrase that says "two steps" rather than "two factors", and rendering the English word for word produces a term nobody uses. Every entry is a lookup of what that language calls the thing.
+
 ## 1.17.0 - 2026-09-13
 
 A fourth motion level nobody is offered, and the rule that makes hiding it honest.
