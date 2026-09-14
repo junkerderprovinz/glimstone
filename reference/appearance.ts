@@ -165,8 +165,7 @@ export const STORM_TAPS = 5;
  * stored a "found it" flag, so a single gesture put a fourth option in the
  * picker for ever - which turns a secret into a setting somebody has to explain
  * to themselves months later, with no memory of how it got there. Reported as
- * exactly that (jdp, 13.09.2026: "sturm soll wieder verschwinden wenn man zb
- * sanft einstellt und die einstellungen verlässt").
+ * exactly that.
  *
  * So what keeps it visible is the plain truth about the current state:
  *
@@ -323,10 +322,9 @@ export function hueVars(hex: string | undefined): Record<string, string> {
     // A compact circular badge (an icon toggle, an undo/redo/zoom action) has
     // no neighbouring row to reinforce the colour by repetition the way a
     // list does, and reads as barely-tinted grey at the wash's own 16% once
-    // shrunk to badge size (jdp, adopting app: "die ganzen icon badges sind
-    // immer noch schwach eingefärbt, die sollen normal kräftig eingefärbt
-    // sein"). This tier is deliberately separate from the wash above rather
-    // than just raising it - a list row's own 16% is calibrated for a
+    // shrunk to badge size, as reported against an adopting app. This tier is
+    // deliberately separate from the wash above rather than just raising it -
+    // a list row's own 16% is calibrated for a
     // DIFFERENT reason (rule above: dense/at-scale is exactly where subtlety
     // matters) and must stay put.
     '--item-hue-badge': `rgba(${r}, ${g}, ${b}, 0.5)`,

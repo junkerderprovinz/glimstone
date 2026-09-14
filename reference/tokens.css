@@ -31,10 +31,10 @@
    non-square it bakes in two different corner radii up front and renders as
    a visible ELLIPSE instead of a pill - this exact bug shipped in an
    adopting app's own rainbow-mode switch (a 44×24 track rendered as an oval,
-   not a pill; jdp: "der toggle... ist in der runden form einstellung
-   elliptisch"). Verified empirically (a live 220×120 test box), not just
-   reasoned about: min(9999px, 50%) renders a visible ellipse, the raw
-   9999px alone renders a correct stadium, on the exact same non-square box. */
+   not a pill, in the round shape setting). Verified empirically (a live
+   220×120 test box), not just reasoned about: min(9999px, 50%) renders a
+   visible ellipse, the raw 9999px alone renders a correct stadium, on the
+   exact same non-square box. */
 :root {
   --radius-card: 1rem;
   --radius-control: 0.625rem;
@@ -301,8 +301,8 @@
      badge in Sunflower with computed ink on top reads perfectly well on a
      white page. What does not work on white is that same yellow used as TEXT
      at 11px — and darkening the one token to fix that painted every filled
-     thing on the page olive-brown instead (jdp, 2026-08-30: "Die gelbe
-     akzentfarbe ist im hellen modus ganz dunkel"). One token was doing two
+     thing on the page olive-brown instead, reported as the yellow accent
+     reading almost black in the light theme. One token was doing two
      jobs. The fill keeps the colour; the ink gets its own token.
 
      Derived from --accent rather than a second fixed colour, so it follows a
@@ -377,9 +377,9 @@ body {
    Written down here because it was not written down anywhere, which is exactly
    how two apps in this house ended up with rail glyphs at 20px and at 14px -
    the second one had no rule to follow and used whatever its generator emitted.
-   jdp, comparing them side by side: "die icons in der seitenleiste sind kleiner
-   als in BV ... das sollte doch alles in GS standardisiert sein?" It should
-   have been, and now it is.
+   Reported after comparing the two side by side: the rail glyphs in one app
+   were smaller than in the other, and this is a thing the shared language was
+   supposed to standardise. It should have been, and now it is.
 
    `flex: none` because a rail row is a flex line and a glyph beside a long
    label is the item a flex container squeezes first. */
@@ -573,9 +573,9 @@ body {
 /* ---------------------------------------------------------------------------
    The colour picker — a PERMANENTLY EMBEDDED saturation/value square + hue
    bar, real DOM the app owns, never a native `<input type="color">` (which
-   hands off to a browser/OS surface outside the page - jdp, building CC:
-   "ich will das Farbwählfeld fest integriert"). Pair with
-   reference/colorPicker.ts for the JS side. Sized against --radius-control
+   hands off to a browser/OS surface outside the page; the picker was asked for
+   as a permanently embedded field). Pair with reference/colorPicker.ts for
+   the JS side. Sized against --radius-control
    (a real 2D control, not a badge) so it follows the shape engine like any
    other rectangular field. */
 .glim-picker {
@@ -747,9 +747,9 @@ body {
    mode above, but as a per-ELEMENT choice, independent of the user's own
    on/reactive setting - some rows (a set of equal-weight action buttons,
    not a persistent selection) read as noisy fully washed at rest even
-   under `on` (jdp: "die buttons die inaktiv sind sollen nicht eingefärbt
-   sein, beim mouseover sollen sie eingefärbt werden"), yet the app isn't
-   asking its USER to opt into reactive mode globally just for this one
+   under `on` - the idle buttons should carry no colour and take it on
+   mouseover instead - yet the app isn't asking its USER to opt into
+   reactive mode globally just for this one
    row. Use `.glim-tint` for a row where colour-at-rest is the point (a
    list, so an all-idle list doesn't read as blank); use
    `.glim-tint-hover` for a row of equal-weight actions where the colour
@@ -757,8 +757,8 @@ body {
    reads the stronger --item-hue-badge tier (50%), not the list-row
    --item-hue-wash (16%) - a hover reveal is a deliberate, momentary, one-
    at-a-time state, closer to a badge's own "clearly coloured" bar than a
-   list's "don't overwhelm a whole column of these" one (jdp: "die export
-   buttons sollen bei mouseover kräftig eingefärbt werden"). */
+   list's "don't overwhelm a whole column of these" one: the ask was for a
+   strong colour on mouseover, not a faint one. */
 [data-rainbow] .glim-tint-hover {
   box-shadow: none;
 }
@@ -913,8 +913,8 @@ body {
        a difference somebody has to be told about rather than one they can see.
        A setting whose top end is only "the same thing, slower to finish" earns
        the quiet name it had; one that actually travels further and overshoots
-       earns a livelier one (jdp: "auf wilder stufe möchte ich auch wilde
-       animationen").
+       earns a livelier one - the wild level was asked for with animations to
+       match its name.
 
        The rule the language already states survives intact: the same keyframes
        at all three intensities, never a forked animation. What changes is the
@@ -1044,10 +1044,11 @@ body {
    the ground it stands on.
 
    Two halves, and the second one is the half people forget. The original
-   complaint was not "there are arrows" — it was that they "haben einen dunklen
-   hintergrund und der text ist zu nah an diesen pfeilen". Removing the widget
-   answers the first clause. The inline padding below answers the second, and a
-   replacement that skips it reproduces the defect in the app's own colours.
+   complaint was not that there were arrows - it was that they carried a dark
+   ground of their own and that the text sat too close to them. Removing the
+   widget answers the first clause. The inline padding below answers the
+   second, and a replacement that skips it reproduces the defect in the app's
+   own colours.
    =========================================================================== */
 
 /* BOTH properties, not just the -webkit- one. Chrome hides its spinner through
@@ -1079,9 +1080,8 @@ body {
    cross axis - which in a column is the WIDTH. So a 6rem number box inside a
    full-width column produced a full-width wrapper, and the two arrows landed
    at the far right of the row with the field they belong to sitting alone on
-   the left. Reported as exactly that: "die ganzen hoch und runter pfeile um
-   ein eintrag zu erhoehen und niedriger zu machen gehoert ins feld. nicht
-   daneben."
+   the left. Reported as exactly that: the up and down arrows that raise and
+   lower a value belong in the field, not beside it.
 
    Three declarations because there are three kinds of parent and no single one
    of them covers the others: `width: fit-content` for a block parent,
@@ -1205,14 +1205,14 @@ body {
    There was exactly one button height here for a long time, and that was
    right: the number is what a text field measures, so a button standing in a
    row of fields matches instead of standing proud of it. That rule came out of
-   a report ("viel zu klobig ... so hoch wie die texteingabefelder") and it
-   still governs every ordinary button.
+   a report that the buttons were far too chunky and should stand as tall as
+   the text fields, and it still governs every ordinary button.
 
    What it could not answer is the button a page is about. Asked twice in one
-   round, about two different controls: "der Button fuer auftrag anlegen soll
-   groesser sein. haben wir nicht eine groessere standardisierte groesse?" and
-   "koennen wir den button in die naechste groesse anheben? das ist ein
-   kritischer button." The honest answer at the time was no, there was no such
+   round, about two different controls: whether the button that creates a
+   record could be bigger and whether the house already had a larger
+   standardised size, and whether a critical button could be raised to the next
+   size up. The honest answer at the time was no, there was no such
    size - and the wrong way to supply one is to raise `--btn-h`, which would
    put every button in the house out of line with every field beside it to
    solve a problem two controls have.
@@ -1337,9 +1337,9 @@ body {
    IT IS APPLIED ONLY WHILE THE MODE PAINTS NO WORDS, which is the correction
    1.7.7 makes to 1.7.6. This class used to ride on every row action in every
    mode, on the reasoning that such a control's identity IS its symbol. Reported
-   twice, the second time after the change that was meant to answer it: "alle
-   buttons sind nach wie vor nicht in der farb und beschriftungs engine." He is
-   right, and the measurement says why. In text-plus-glyph mode, five controls in
+   twice, the second time after the change that was meant to answer it: the
+   buttons still did not all follow the colour and labelling engine. The report
+   was right, and the measurement says why. In text-plus-glyph mode, five controls in
    one card row printed no word while three beside them did, so the row visibly
    disagreed with the one setting that governs it. A named exemption is still an
    exemption once you are looking at the row.
@@ -1368,8 +1368,8 @@ body {
    mark and the words next to it have to read as one control. A square glyph-only
    button asks something else, because there are no words to match - the box is
    the frame, and the only proportion available is how much of it the ink fills.
-   At 20px in a 32px box that is 62%, and it was reported in exactly those terms:
-   "die glyphen sind zu gross und wirken klobig."
+   At 20px in a 32px box that is 62%, and it was reported in exactly those
+   terms: the glyphs are too big and read as chunky.
 
    Half, because that is the proportion the house already had and nobody had
    written down: an icon badge in the sibling app is a 32px tile carrying a 16px
@@ -1541,8 +1541,7 @@ body {
    describes and nothing holds. Asked to make it darker, somebody has to find
    every place it was typed.
 
-   .65 rather than .60 (jdp, 12.09.2026: "ich würde die abdunkelung hinter
-   einem schwebefenster nochmal 5 Prozent dunkler machen"). At .60 the card
+   .65 rather than .60, five percent darker than it was. At .60 the card
    above it and the page behind it sit close enough in value that the eye keeps
    reading the page; the point of a scrim is to stop that. */
 .glim-modal-backdrop { background: var(--glim-scrim); }

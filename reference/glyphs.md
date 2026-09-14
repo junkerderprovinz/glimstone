@@ -118,7 +118,7 @@ Five rounds of live review went into these, each one starting from a report that
 | --- | --- | --- |
 | `IconCloud` | Off-site, remote | Font Awesome's `cloud`. One closed path with valleys deep enough to survive 20px (rule 6). |
 | `IconLocal` | Local storage | Font Awesome's `server`. Reads as storage without borrowing the folder, which a Browse button already owns. |
-| `IconSave` | Save | **Vecteezy, and it is the same drawing in every app** - jdp picked it and asked for it across all of them, so a repo that keeps its old floppy is the odd one out rather than the one with a preference. Attribution is required, see above. Its ink is a 368.7 square inside a declared `0 0 492 492`, so it needs the crop below: carried through unmodified it renders at three quarters the size of every glyph beside it. |
+| `IconSave` | Save | **Vecteezy, and it is the same drawing in every app** - it was chosen once and adopted everywhere, so a repo that keeps its old floppy is the odd one out rather than the one with a preference. Attribution is required, see above. Its ink is a 368.7 square inside a declared `0 0 492 492`, so it needs the crop below: carried through unmodified it renders at three quarters the size of every glyph beside it. |
 | `IconTabStorage` | Paths and storage | Font Awesome's `database`. |
 | `IconCopy` | Copy | Tabler, filled variant. Ships with a transparent padding path — drop it. |
 | `IconCheckCircle` | Verify, check, test | Ships with a transparent padding path — drop it. |

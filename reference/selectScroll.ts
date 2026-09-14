@@ -47,9 +47,9 @@ export function enableSelectScrollForAll(root: ParentNode = document): void {
  *
  * Rule 18 says a native control gets replaced rather than persuaded, and an app
  * that follows it ends up with no <select> left for the function above to reach.
- * The behaviour must not be lost on the way: jdp, about an app that had just
- * finished replacing its last one, "Dropdownlisten soll man ueberall auch per
- * scrollen umschalten koennen." So the wheel belongs to the PICKER, not to the
+ * The behaviour must not be lost on the way: raised about an app that had just
+ * finished replacing its last one, the requirement is that every dropdown list
+ * stays switchable by scrolling. So the wheel belongs to the PICKER, not to the
  * element the platform happens to draw.
  *
  * Attach it to the trigger - the button that opens the list - and return the

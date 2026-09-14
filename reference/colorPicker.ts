@@ -11,15 +11,15 @@
 //
 // Why this exists instead of `<input type="color">`: a native colour input
 // hands control to the browser/OS, which can (and on many setups does)
-// open its own top-level picker surface entirely outside the page - jdp,
-// building CC: "ich will das Farbwählfeld fest integriert" (I want the
-// colour field permanently embedded), and the same rejection recurred
-// nearly verbatim in an adopting app that tried the native-input shortcut
-// anyway ("es soll sich kein komplett neues Fenster öffnen"). A native
-// input is also functionally unverifiable in Playwright - its picker
-// surface is outside the page's own DOM, so no automated check can ever
-// prove it opens, let alone that it opens the RIGHT way. This component
-// has neither problem: it's real, styleable DOM either way.
+// open its own top-level picker surface entirely outside the page, which
+// was rejected while building CC - the colour field has to stay
+// permanently embedded, no separate window - and the same rejection
+// recurred nearly verbatim in an adopting app that tried the native-input
+// shortcut anyway. A native input is also functionally unverifiable in
+// Playwright - its picker surface is outside the page's own DOM, so no
+// automated check can ever prove it opens, let alone that it opens the
+// RIGHT way. This component has neither problem: it's real, styleable DOM
+// either way.
 //
 // Framework-free, like appearance.ts/selectScroll.ts/tooltip.ts: talks
 // only to the elements it's given and returns plain DOM nodes.
@@ -199,9 +199,7 @@ let openPopover: { el: HTMLDivElement; close: () => void } | null = null;
  * Opens the picker as a floating popover anchored below `trigger` instead
  * of embedding it permanently in the layout - the default for a compact
  * settings panel, where a permanently-embedded picker grows the
- * surrounding card every time one is added (jdp, adopting this in a
- * compact settings card: "der Farbpicker soll per schwebendem Fenster
- * erscheinen, nicht fix in der card sein"). Reserve the bare
+ * surrounding card every time one is added. Reserve the bare
  * `colorPicker()` for a page with genuinely dedicated, permanent space for
  * exactly one control (CannonadeCommand's own settings PAGE, not a card).
  * Only ONE popover is ever open at a time - opening a new one closes
@@ -219,11 +217,10 @@ export function openColorPickerPopover(
   const panel = document.createElement('div');
   panel.className = 'glim-picker-popover';
 
-  // The hex field beside the picker (jdp: "das hex feld fehlt im
-  // colorpicker") - CannonadeCommand's own `cc-set-hexin` pairs with
-  // `inlinePicker()` everywhere it appears; a picker with no way to type or
-  // read back an exact value is missing half of what "a colour field"
-  // means. Bidirectional: dragging the picker updates the hex text,
+  // The hex field beside the picker - CannonadeCommand's own `cc-set-hexin`
+  // pairs with `inlinePicker()` everywhere it appears; a picker with no way
+  // to type or read back an exact value is missing half of what "a colour
+  // field" means. Bidirectional: dragging the picker updates the hex text,
   // typing a valid 6-digit hex re-syncs the picker's own dot positions.
   const hexInput = document.createElement('input');
   hexInput.type = 'text';
