@@ -855,12 +855,19 @@ body {
    the compositor to resample anything. There is no scale token and no tilt
    token to put back here - see "An ancestor's entrance may translate, never
    scale" in docs/design-language.md. */
+/* MOVEMENT ONLY, and the fade beside it is a second animation on a curve that
+   does not spring. OPACITY NEVER RIDES A SPRING: a spring drives its value
+   through the target and back, which is the point for a distance and
+   meaningless for opacity, because it clamps at 1. The fade therefore finishes
+   early and then sits flat, so the dial set to make the entrance LONGER makes
+   the fade SHORTER. Found in an adopting app while chasing a paint defect at
+   the top level; the defect is still unexplained, this part is not.
+   The same applies to glim-toast-in below. */
 @keyframes glim-page-in {
   from {
-    opacity: 0;
     transform: translateY(var(--motion-page-travel, 6px));
   }
-  to   { opacity: 1; transform: none; }
+  to   { transform: none; }
 }
 @keyframes glim-fade-in {
   from { opacity: 0; }
@@ -875,8 +882,8 @@ body {
 [dir="rtl"] { --glim-toast-slide: -12px; }
 
 @keyframes glim-toast-in {
-  from { opacity: 0; transform: translateX(var(--glim-toast-slide, 12px)); }
-  to   { opacity: 1; transform: none; }
+  from { transform: translateX(var(--glim-toast-slide, 12px)); }
+  to   { transform: none; }
 }
 @keyframes glim-pulse {
   0%, 100% { opacity: 1; }
@@ -946,8 +953,16 @@ body {
     --motion-page-travel: 18px;
     /* A curve that overshoots and settles. The fourth control point past 1 is
        what makes it spring rather than ease - the same shape React Native's
-       spring gives the phone, so the two surfaces move alike. */
-    --motion-curve: cubic-bezier(.34, 1.56, .64, 1);
+       spring gives the phone, so the two surfaces move alike.
+       TWO CURVES, NOT ONE, and the split was earned rather than tidy. There
+       used to be a single --motion-curve driving both the page and the toast.
+       A page arriving is free to overshoot; a toast slides in from the screen
+       EDGE, and a spring there carries it back past the edge it came from,
+       which reads as a glitch rather than as energy. So the page springs at
+       this level and the toast eases. They agree again at storm, where
+       restraint is the thing being turned off. */
+    --motion-page-ease: cubic-bezier(.34, 1.56, .64, 1);
+    --motion-toast-ease: cubic-bezier(.2, .6, .2, 1);
     /* The toast travels with everything else. It had been left behind at one
        distance for all three intensities, under a comment claiming it moved
        further at the top one - a rule with nothing behind it, which is the
@@ -966,7 +981,11 @@ body {
     /* Smaller travel and a curve that only eases. Somebody who asked for less
        movement asked for less movement, not for a faster bounce. */
     --motion-page-travel: 6px;
-    --motion-curve: cubic-bezier(.2, .6, .2, 1);
+    /* No toast curve here on purpose. A quieter level asking for less movement
+       is not asking for a different easing, and this one already eases; the
+       shorter duration is what carries the change. A LIVELIER level has no
+       such excuse, which is why storm names both. */
+    --motion-page-ease: cubic-bezier(.2, .6, .2, 1);
     --glim-toast-slide: 12px;
   }
   :root[data-motion='subtle'][dir="rtl"] { --glim-toast-slide: -12px; }
@@ -999,7 +1018,11 @@ body {
        is the one level that still animates for somebody whose operating system
        asked for less motion, which makes it the last place in the language that
        should resample a whole page. */
-    --motion-curve: cubic-bezier(.22, 1.94, .45, 1);
+    --motion-page-ease: cubic-bezier(.22, 1.94, .45, 1);
+    /* The toast springs HERE and nowhere else. At wild it eases, because a
+       spring at the screen edge reads as a glitch; at the level somebody had
+       to go and find, that is the point. */
+    --motion-toast-ease: cubic-bezier(.22, 1.94, .45, 1);
     --glim-toast-slide: 44px;
   }
   :root[data-motion='storm'][dir="rtl"] { --glim-toast-slide: -44px; }
@@ -1009,7 +1032,8 @@ body {
     --motion-fade-dur: 0s;
     --motion-shake-dur: 0s;
     --motion-page-travel: 0px;
-    --motion-curve: linear;
+    --motion-page-ease: linear;
+    --motion-toast-ease: ease;
     --glim-toast-slide: 0px;
     /* The pulse is the one that does not get a zero. An infinite animation at
        zero duration is a still element, which is correct, but `.glim-live`
@@ -1018,8 +1042,27 @@ body {
        block below already does. */
   }
 
-  .glim-page-enter { animation: glim-page-in var(--motion-page-dur) var(--motion-curve) both; }
-  .glim-toast { animation: glim-toast-in var(--motion-toast-dur) var(--motion-curve) both; }
+  /* Two animations per element, one duration: the movement on the level's own
+     curve, the fade on one that cannot overshoot. See @keyframes glim-page-in
+     for why opacity never rides a spring.
+     A CAVEAT WORTH COPYING ALONG WITH THE RULE. A two-animation shorthand
+     costs real parse time, and an adopting app hit it on the one element that
+     exists in the dozens: a staggered list row. 66 of them took a jsdom test
+     from passing to 8.8s against a 5s budget. Where an element is numerous,
+     reach the same invariant the other way instead - keep the fade inside the
+     keyframe and give the whole animation a curve that does not spring. The
+     rule is about opacity and springs, never about which of the two shapes
+     you use to get there. */
+  .glim-page-enter {
+    animation:
+      glim-page-in var(--motion-page-dur) var(--motion-page-ease) both,
+      glim-fade-in var(--motion-page-dur) ease-out both;
+  }
+  .glim-toast {
+    animation:
+      glim-toast-in var(--motion-toast-dur) var(--motion-toast-ease, var(--motion-page-ease)) both,
+      glim-fade-in var(--motion-toast-dur) ease-out both;
+  }
   .glim-live { animation: glim-pulse var(--motion-pulse-dur) ease-in-out infinite; }
   /* Short on purpose: a bubble that fades in slowly reads as lag, because the
      pointer is already there waiting for it. */
@@ -1076,8 +1119,16 @@ body {
   /* And the storm, restored. Values are the (no-preference) block's own,
      token-driven, so the numbers keep coming from :root[data-motion='storm']
      rather than being repeated here. */
-  :root[data-motion='storm'] .glim-page-enter { animation: glim-page-in var(--motion-page-dur) var(--motion-curve) both; }
-  :root[data-motion='storm'] .glim-toast { animation: glim-toast-in var(--motion-toast-dur) var(--motion-curve) both; }
+  :root[data-motion='storm'] .glim-page-enter {
+    animation:
+      glim-page-in var(--motion-page-dur) var(--motion-page-ease) both,
+      glim-fade-in var(--motion-page-dur) ease-out both;
+  }
+  :root[data-motion='storm'] .glim-toast {
+    animation:
+      glim-toast-in var(--motion-toast-dur) var(--motion-toast-ease, var(--motion-page-ease)) both,
+      glim-fade-in var(--motion-toast-dur) ease-out both;
+  }
   :root[data-motion='storm'] .glim-shake { animation: glim-shake var(--motion-shake-dur) ease-in-out; }
 }
 /* Replay on a repeated identical failure needs a fresh DOM node, not a
