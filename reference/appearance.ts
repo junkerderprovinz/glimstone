@@ -128,14 +128,33 @@ export const MOTION_LEVELS: Motion[] = ['off', 'subtle', 'wild'];
 export const MOTION_STORED: Motion[] = [...MOTION_LEVELS, 'storm'];
 
 /**
- * The default is the top VISIBLE level, not the quietest.
+ * The default is the MIDDLE level, and it used to be the top visible one.
  *
- * This axis is additive polish a user dials DOWN, not a compatibility fallback
- * they have to opt INTO - and the accessibility signal that genuinely needs a
- * default is `prefers-reduced-motion`, which the tokens already read
- * unconditionally and which wins over every value here.
+ * The old reasoning: this axis is additive polish a user dials DOWN, not a
+ * compatibility fallback they have to opt INTO, so booting at the top meant
+ * nobody's interface changed merely because the setting appeared.
+ *
+ * WHAT THAT MISSED, reported against the first adopting app: once distance and
+ * curve became per-level tokens, the top level stopped being "the same
+ * animation, livelier". It tilts and scales the whole route wrapper on every
+ * page change while the cards inside stagger in on their own transforms, and
+ * nested transforms each get their own compositing layer. One reporter read
+ * the result as the page trembling before it settled, with a green flash on
+ * top - uninitialised layer memory on that engine. Nobody had asked for any of
+ * it; it was simply what shipped.
+ *
+ * So "nobody's interface changes" only holds while the top of the range is
+ * polish. Once the top is a statement, the default belongs one step down:
+ * `subtle` keeps the entrance and drops the tilt and the scale, and `wild`
+ * stays on the picker for anybody who wants it.
+ *
+ * MOVING A DEFAULT IS NOT MOVING A CHOICE. An app that had shipped the old
+ * default needs a migration for any stored value that used to mean the top
+ * level (an earlier spelling of it, say), or the change quietly rewrites what
+ * people picked on purpose. Those are two different promises and only the
+ * first one was made.
  */
-export const DEFAULT_MOTION: Motion = 'wild';
+export const DEFAULT_MOTION: Motion = 'subtle';
 
 /** applyMotion sets the attribute the motion tokens key off. */
 export function applyMotion(motion: Motion | string | undefined): void {
@@ -191,6 +210,40 @@ export function stormTap(state: { taps: number }, tapped: string, current: strin
   state.taps = 0;
   return 'storm';
 }
+
+/* ---------------------------------------------------------------------------
+ * THE STORM OUTRANKS THE OPERATING SYSTEM, and it is the only thing that does.
+ *
+ * Every offered level sits strictly inside
+ * `@media (prefers-reduced-motion: no-preference)`, which is what enforces
+ * "the OS wins": a browser reporting reduced motion never even evaluates a
+ * data-motion selector for those properties. That stays true for `off`,
+ * `subtle` and `wild`, because somebody who set reduced motion did not go
+ * looking for any of them - they got whichever one the app booted at.
+ *
+ * The storm is not like that. Five taps on an option already chosen is not a
+ * value anybody inherited, and treating a deliberate, hidden, reversible
+ * choice as if it were a default is how an accessibility rule turns into a
+ * thing that ignores what the person in front of it actually asked for.
+ *
+ * WHERE THE EXEMPTION LIVES IS THE WHOLE DESIGN. Not in the (no-preference)
+ * block - what that block holds is the press, the hover lift, the spinner, and
+ * nobody unlocks a storm for those. It goes in the (reduce) block, which does
+ * not switch motion off but swaps in gentler substitutes, and those
+ * substitutes ARE the things that make the storm a storm. See
+ * `reference/tokens.css`.
+ *
+ * TWO HALVES. Exempting the storm from a substitute without RESTORING the full
+ * animation leaves it with no animation at all, since the real rule lives in
+ * the block the media query replaced - quieter than the substitute it
+ * displaced. Where the element's resting state is invisible (`opacity: 0`, a
+ * `display: none` debris layer), the same omission removes it from the screen
+ * entirely and puts nothing in its place.
+ *
+ * AND THE LINE THE EXEMPTION STOPS AT: an infinite animation. Wanting more
+ * movement is not the same as wanting something that never stops, so
+ * `.glim-live`'s pulse keeps its true stop at every level, storm included.
+ * ------------------------------------------------------------------------- */
 
 /**
  * applyAccent overrides the accent tokens, or clears the override so the
@@ -439,4 +492,137 @@ export function applyCachedAppearance(): void {
     applyShape('round');
     applyRainbow(undefined);
   }
+}
+
+/* ===========================================================================
+   Disco - the second easter egg, and the palette walks
+   ---------------------------------------------------------------------------
+   Rainbow hands every row in a list its own colour out of the set of eight,
+   read through rainbowAt(index). Disco steps that set once a second, so every
+   hued element in the app moves to the next colour together while nothing
+   else changes.
+
+   IT ANIMATES NOTHING, and that is the design rather than a shortcut. There
+   are no keyframes here and no new classes: a seed change re-renders the
+   colour engine's readers, which is a paint, not a compositing layer. The
+   report that moved the motion default down a level was two entrance
+   animations nesting their transforms, so a second-by-second effect built out
+   of transforms was never on the table.
+   =========================================================================== */
+
+/** One colour step a second. Fast enough to read as a disco, slow enough to
+ *  stay well under the 3Hz flicker threshold photosensitivity guidance
+ *  names - which is the number that decides this value, not taste. */
+export const DISCO_TICK_MS = 1000;
+
+/** Turn-ons needed to unlock, matching STORM_TAPS. */
+export const DISCO_UNLOCK_TURN_ONS = 5;
+
+/** How long a run of turn-ons may pause before it counts as a new run.
+ *  Without it, somebody comparing rainbow on against rainbow off over a
+ *  minute unlocks a mode they never went looking for. The storm's own gesture
+ *  needs no window because tapping an option already chosen is not something
+ *  anybody does by accident. */
+export const DISCO_UNLOCK_WINDOW_MS = 3000;
+
+let discoTimer: ReturnType<typeof setInterval> | null = null;
+
+/** Stops the walk. Safe to call when nothing is running, which is what makes
+ *  applyDisco idempotent; the caller decides whether the palette the last
+ *  tick left behind stays or is handed back. */
+export function stopDisco(): void {
+  if (discoTimer !== null) {
+    clearInterval(discoTimer);
+    discoTimer = null;
+  }
+}
+
+/**
+ * Starts or stops the walk, and stamps `data-disco` so a stylesheet or a test
+ * can tell disco from plain rainbow.
+ *
+ * Call it at boot, and again whenever the switch or the rainbow state changes.
+ * Every entry stops the previous interval first: a second call would otherwise
+ * leave two intervals racing and the colours would jump two steps a second.
+ *
+ * `stored` is the rainbow state as PERSISTED, which the caller has and this
+ * module deliberately does not - see the tick below for why the two differ.
+ *
+ * THREE THINGS HERE ARE EASY TO GET WRONG AND EVERY ONE OF THEM IS QUIET:
+ *
+ *   - `rotate: true` on the tick is what makes any of this visible. The seed
+ *     is not a colour, it is an OFFSET, and rainbowAt() reads it as
+ *     `rotate ? seed : 0`. Rotation is a switch of its own that defaults to
+ *     off, so on the default setup - which is where almost everybody is - a
+ *     walking seed renders byte-identically for ever. Disco IS rotation over
+ *     time, so it rotates, and it overrides that switch for as long as it
+ *     runs while leaving the stored value alone.
+ *   - The tick applies, it never PERSISTS. Writing the seed each second would
+ *     mean a storage write and a server sync every second for as long as the
+ *     tab is open, and it would grind the user's own stored seed forward
+ *     behind their back. So the seed disco shows is live-only, and the stored
+ *     one stays whatever they actually chose - which is also why stopping
+ *     re-applies the stored state rather than leaving the palette turned by
+ *     however many steps the walk managed. Leave that out and a stopped disco
+ *     looks exactly like the rotate switch having turned itself on.
+ *   - Rainbow off means nothing hued is on screen, so the walk must not run.
+ *     The switch stays on and starts by itself when rainbow comes back.
+ *
+ * AND THE ONE THAT IS NOT IN THIS FILE AT ALL: a hue reaches an element as an
+ * inline style computed during render (hueVars() bakes the hex and its derived
+ * tints, which is why it cannot be a var() reference), so an element only
+ * changes colour when its component RENDERS again. An app whose hue consumers
+ * do not all subscribe to the colour engine will walk in the parts that do and
+ * sit still in the parts that do not, and "position three is teal" stops being
+ * true across one screen - which is the entire promise of the mode. Subscribe
+ * once ABOVE the routes. Until a per-second writer existed nobody noticed,
+ * because rainbow was only ever edited on a settings page and every other page
+ * mounted fresh afterwards.
+ */
+export function applyDisco(on: boolean, stored: RainbowState): void {
+  const wasWalking = discoTimer !== null;
+  stopDisco();
+
+  const root = document.documentElement;
+  if (on) root.setAttribute('data-disco', 'on');
+  else root.removeAttribute('data-disco');
+
+  if (!on || !rainbowState().on) {
+    if (wasWalking) applyRainbow(stored);
+    return;
+  }
+
+  const palette = rainbowState().palette.length || 1;
+  discoTimer = setInterval(() => {
+    const live = rainbowState();
+    applyRainbow({ ...live, rotate: true, seed: (live.seed + 1) % palette });
+  }, DISCO_TICK_MS);
+}
+
+/**
+ * The unlock gesture: five turn-ONS of Rainbow Mode, each within
+ * DISCO_UNLOCK_WINDOW_MS of the last. Returns true on the fifth.
+ *
+ * Counting turn-ons rather than clicks does two things at once. It halves the
+ * clicks needed - five, not five on and five off - and it makes the gesture
+ * end with rainbow ON, which is the only state where disco has colours to
+ * walk. A reward that arrives invisible is a bug report waiting to happen.
+ *
+ * The count lives in the caller, exactly like stormTap's, and for the same
+ * reason: an unlock that persisted would turn a found secret into a permanent
+ * settings row. The row is offered while the mode is on regardless, since a
+ * switch that hid the value it is showing would be lying.
+ */
+export function discoTap(
+  state: { taps: number; last: number },
+  turnedOn: boolean,
+  clock: { now: number },
+): boolean {
+  if (!turnedOn) return false;
+  const gap = clock.now - state.last;
+  state.last = clock.now;
+  state.taps = state.taps > 0 && gap <= DISCO_UNLOCK_WINDOW_MS ? state.taps + 1 : 1;
+  if (state.taps < DISCO_UNLOCK_TURN_ONS) return false;
+  state.taps = 0;
+  return true;
 }

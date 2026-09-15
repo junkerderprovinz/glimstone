@@ -1017,16 +1017,44 @@ body {
     transition-duration: var(--motion-control-dur);
   }
 }
+/* THE ONE EXEMPTION, and this block is where it belongs.
+   Every substitute below excludes `storm`, and storm gets the full animation
+   back at the end of the block. The three levels a picker OFFERS keep obeying
+   the operating system everywhere, because somebody who set reduced motion
+   did not go looking for any of them. Storm is different in kind: it is
+   reached by tapping the same option five times, so arriving there is a
+   statement of intent rather than a default somebody inherited.
+   Here and not in the (no-preference) block above, because what this block
+   holds is the gentler stand-in for exactly the things that make the storm a
+   storm. Gating them per selector reaches the whole effect and leaves the
+   accessibility rule intact everywhere it still applies.
+   TWO HALVES, and the second is the one that gets forgotten: exempting
+   without RESTORING leaves those elements with no animation at all in here,
+   since the full rules live in the block this media query replaces - quieter
+   than the substitute that was removed, which is the opposite of the point.
+   An element whose resting state is invisible (opacity: 0, display: none)
+   makes that failure worse than merely quiet: un-hiding it and animating it
+   are one change, never two. */
 @media (prefers-reduced-motion: reduce) {
-  .glim-page-enter { animation: glim-fade-in 180ms ease both; }
-  .glim-toast { animation: glim-fade-in 160ms ease both; }
+  :root:not([data-motion='storm']) .glim-page-enter { animation: glim-fade-in 180ms ease both; }
+  :root:not([data-motion='storm']) .glim-toast { animation: glim-fade-in 160ms ease both; }
   /* An infinite animation gets a true stop here, not a slower version: a
      one-shot 110-280ms entrance is a poor match for what reduced-motion
      exists to prevent, but a 2s-forever pulse is exactly it. Still fully
      opaque, not hidden -- "this is live" has to keep reading from colour and
-     position alone once the motion is gone. */
+     position alone once the motion is gone.
+     The storm is NOT exempted from this one, and that is the line the
+     exemption stops at: an intent to see more movement is not an intent to
+     sit in front of something that never stops moving. */
   .glim-live { animation: none; opacity: 1; }
-  .glim-shake { animation: glim-shake-reduced 300ms ease-in-out; }
+  :root:not([data-motion='storm']) .glim-shake { animation: glim-shake-reduced 300ms ease-in-out; }
+
+  /* And the storm, restored. Values are the (no-preference) block's own,
+     token-driven, so the numbers keep coming from :root[data-motion='storm']
+     rather than being repeated here. */
+  :root[data-motion='storm'] .glim-page-enter { animation: glim-page-in var(--motion-page-dur) var(--motion-curve) both; }
+  :root[data-motion='storm'] .glim-toast { animation: glim-toast-in var(--motion-toast-dur) var(--motion-curve) both; }
+  :root[data-motion='storm'] .glim-shake { animation: glim-shake var(--motion-shake-dur) ease-in-out; }
 }
 /* Replay on a repeated identical failure needs a fresh DOM node, not a
    re-toggled class - an animation already at rest doesn't restart just

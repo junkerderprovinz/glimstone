@@ -105,7 +105,7 @@ A new control has to point its own CSS at these tokens as it is built. Adopting 
 
 ## 4. Easter eggs
 
-The language has one, and it exists mostly to establish the rule that comes with it.
+The language has two, and they exist mostly to establish the rules that come with them.
 
 **`storm`, a fourth motion level no picker lists.** Same keyframes as the other three with bigger numbers: page entrance 760ms over 34px on `cubic-bezier(.22, 1.94, .45, 1)`, and `springDamping: 0.34` on a phone. One token block, `:root[data-motion='storm']` in [`reference/tokens.css`](reference/tokens.css), is its entire cost.
 
@@ -113,9 +113,15 @@ The language has one, and it exists mostly to establish the rule that comes with
 
 **The rule, which is the part worth copying rather than the numbers: an easter egg that changes BEHAVIOUR must be switchable back off, and must not quietly become a permanent entry in a settings list.** The first build stored a "found it" flag, so one gesture added a fourth picker option for ever after - a secret turned into a setting somebody has to explain to themselves months later. What keeps it visible instead is the plain truth about the current state: it is offered while it is chosen, because a picker hiding the value it is showing would be lying, and otherwise only while that settings screen stays open. So `found` lives in the screen's own state and never in storage, while the chosen value persists like any other setting.
 
-**A hidden "more animation" switch still sits inside the accessibility gate.** `storm` resolves within the same `@media (prefers-reduced-motion: no-preference)` block as the other three levels, so a machine whose owner asked the OS for less motion never evaluates a `data-motion` selector at all.
+**`disco`, the colour engine's own: the eight rainbow colours step one position every second**, so every hued element moves to the next colour together while nothing else changes. It animates nothing — no keyframes, no new classes, just the rotation offset rainbow already carried, stepped on a timer. **To find it: turn Rainbow Mode on five times, each within three seconds of the last.** Only turn-ons count, which halves the clicks and leaves the gesture ending with rainbow ON, the one state where a walking palette is visible at all. `applyDisco()` and `discoTap()` in [`reference/appearance.ts`](reference/appearance.ts).
 
-An adopting app is free to have eggs of its own; they belong in that app's own notes, not here. What belongs here is the rule above, which applies to every one of them.
+**A hidden switch may outrank the accessibility preference, and that reverses what this section said until 2026-09-15.** `storm` used to resolve only inside `@media (prefers-reduced-motion: no-preference)` like every other level. It no longer does: the `reduce` block exempts it from the gentler substitutes and restores the full animations for it, and disco carries no reduced-motion gate at all. The position on accessibility has not moved, the reading of the gesture has. The three levels a picker OFFERS keep obeying the OS unconditionally, because somebody who set reduced motion did not go looking for any of them — they got whichever one the app booted at. Five taps on an option already chosen, or five deliberate turn-ons of a mode, is not a value anybody inherited.
+
+**Where that exemption lives is the whole design, and it has two halves.** It belongs in the `reduce` block, which swaps in gentler substitutes rather than switching motion off — those substitutes are the things that make the storm a storm. And exempting without RESTORING leaves the element with no animation at all, since the real rule sits in the block the media query replaced: quieter than the substitute just removed. Worse where the resting state is invisible, because then nothing takes its place on screen at all.
+
+**The line both eggs stop at: anything continuous.** Wanting more movement is not wanting something that never stops, so the live-indicator pulse keeps its true stop at every level, and disco's one-second step stays well under the 3Hz flicker threshold photosensitivity guidance names.
+
+An adopting app is free to have eggs of its own; they belong in that app's own notes, not here. What belongs here are the rules above, which apply to every one of them.
 
 <br>
 
