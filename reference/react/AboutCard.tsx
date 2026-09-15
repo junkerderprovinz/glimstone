@@ -202,15 +202,20 @@ export function AboutCard({
             glyph={cryptoGlyph}
             tone="neutral"
             // A brand class like the other four, because the mark this button
-            // wears is the bare LETTERFORM, disc cut away. It used to carry
-            // none, on the argument that a coin disc brings its own ground and
-            // painting it with one ink would be redrawing the logo. That
-            // argument was sound and the conclusion was backwards: the class
-            // paints every path in the mark, so a disc handed in here did not
-            // keep its ground, it became a solid orange blob with the letter
-            // filled in too. Reported exactly as that, a blob where a symbol
-            // should be. The disc belongs on the coin tiles in the window,
-            // where nothing repaints it; this row takes flat marks only.
+            // wears is the bare LETTERFORM, disc cut away.
+            //
+            // Two separate things made the disc wrong here, and only one of
+            // them is about colour. A coin logo drawn in TWO colours, a filled
+            // circle with a white symbol on it, cannot take this class at all:
+            // the rule paints every path in the mark with one ink, so the
+            // symbol disappears into the circle. A disc drawn as ONE path with
+            // the symbol knocked out of it survives that, and still loses the
+            // argument: at 16px in a row beside a cup and a P it reads as an
+            // orange dot, because what the eye gets is the shape of the ground
+            // rather than the shape of the letter. Reported that way against an
+            // adopting app. The disc keeps its place on the coin tiles in the
+            // donation window, where the mark is large, nothing repaints it,
+            // and telling eight logos apart is the whole job.
             className="glim-brand-btn glim-brand-bitcoin"
             onClick={onCrypto}
           />

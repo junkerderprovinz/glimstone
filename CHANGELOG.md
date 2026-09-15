@@ -1,6 +1,22 @@
 # Changelog
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
+## 2.5.0 - 2026-09-16
+
+The About card's give row gets its fifth mark, its crypto button drops the coin disc, and button labels stop losing their descenders.
+
+**Adopting apps:** pass `mailGlyph` to `AboutCard`, an envelope rather than a paper plane, and hand `cryptoGlyph` a flat Bitcoin letterform instead of a coin disc. The card puts `glim-brand-bitcoin` on that button itself now, so a two-colour coin logo passed there would be flattened to one ink. Copies of `tokens.css` need the two new `line-height: 1.4` lines.
+
+## 🎨 Design
+
+- **The crypto button wears the bare letterform.** Two things ruled the coin disc out, and they are worth keeping apart. A logo drawn in two colours, a filled circle with a white symbol on it, cannot take a brand class at all, because that rule paints every path with one ink and the symbol vanishes into the circle. A disc drawn as one path with the symbol knocked out survives the class and still loses: at 16px beside a coffee cup and a PayPal P it hands the eye the shape of the ground instead of the shape of the letter. The disc keeps the coin tiles in the donation window, where the mark is large, nothing repaints it, and telling eight logos apart is the whole job.
+- **The mail button carries a mark like the four beside it.** The card takes a `mailGlyph` and passes it through. Until now that button was the one gap in the card's own rule that every control in those rows wears a mark, and a row where four buttons carry a logo and the fifth carries nothing reads as a missing image rather than as a plainer button.
+- **An envelope, not a paper plane, and the label names the thing rather than the act.** "Email" says where the button goes; "Send an email" describes what the reader is about to do, which every button on the card could claim. The plane that usually comes with that wording draws the same idea a second time.
+
+## 🐛 Fixed
+
+- **Button labels lost the bottom of every descender.** `.glim-btn` sets `line-height: 1`, which is right for a fixed-height control and wrong for a label box that hides its overflow: at 0.875rem the line box is 14px while a UI face needs about 18.6, so every p, g, y and j was cut off about 1.7px short. Both label boxes carry their own line height now. Nothing moves, because the button keeps its own height and the extra leading splits evenly above and below the words.
+
 ## 2.4.0 - 2026-09-15
 
 Opacity never rides a spring, and the single curve token splits in two because a page may overshoot where a toast may not.
