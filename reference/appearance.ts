@@ -136,17 +136,23 @@ export const MOTION_STORED: Motion[] = [...MOTION_LEVELS, 'storm'];
  *
  * WHAT THAT MISSED, reported against the first adopting app: once distance and
  * curve became per-level tokens, the top level stopped being "the same
- * animation, livelier". It tilts and scales the whole route wrapper on every
- * page change while the cards inside stagger in on their own transforms, and
- * nested transforms each get their own compositing layer. One reporter read
- * the result as the page trembling before it settled, with a green flash on
- * top - uninitialised layer memory on that engine. Nobody had asked for any of
- * it; it was simply what shipped.
+ * animation, livelier". It scaled the whole route wrapper on every page change
+ * while the cards inside staggered in on their own transforms, and a scale on
+ * an ancestor makes the engine resample every one of those through the parent's
+ * matrix. One reporter read the result as the page trembling before it settled,
+ * with a green flash on top - uninitialised layer memory on that engine. Nobody
+ * had asked for any of it; it was simply what shipped.
  *
  * So "nobody's interface changes" only holds while the top of the range is
- * polish. Once the top is a statement, the default belongs one step down:
- * `subtle` keeps the entrance and drops the tilt and the scale, and `wild`
- * stays on the picker for anybody who wants it.
+ * polish. Once the top is a statement, the default belongs one step down, and
+ * `wild` stays on the picker for anybody who wants it.
+ *
+ * AND MOVING THE DEFAULT WAS MITIGATION, NOT A FIX. A changed default never
+ * reaches a stored choice, so the reporter met the flash again after updating,
+ * and so did anybody who chose the top level on purpose. The cause is fixed in
+ * tokens.css instead: `glim-page-in` translates and nothing more, at every
+ * level. This default stays where it is on its own merit, which is that the top
+ * of the range had stopped being polish.
  *
  * MOVING A DEFAULT IS NOT MOVING A CHOICE. An app that had shipped the old
  * default needs a migration for any stored value that used to mean the top

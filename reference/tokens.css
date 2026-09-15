@@ -839,10 +839,23 @@ body {
   0%   { left: -35%; }
   100% { left: 100%; }
 }
+/* A TRANSLATION AND NOTHING ELSE, and that is the rule rather than the taste.
+   This runs on the route wrapper, and the cards and rows inside it animate
+   transforms of their own. A translation on an ancestor can be composited
+   independently of its subtree; a scale or a rotation cannot, because the
+   engine has to resample everything underneath through the parent's matrix.
+   So every animating descendant ended up with its own layer inside a parent
+   being resampled around it. Two engines, two symptoms, one cause: on one the
+   hued badges came out of uninitialised layer memory as a green flash, on the
+   other the colour was right and the page trembled before it settled.
+   The levels stay apart on distance, duration and curve, none of which asks
+   the compositor to resample anything. There is no scale token and no tilt
+   token to put back here - see "An ancestor's entrance may translate, never
+   scale" in docs/design-language.md. */
 @keyframes glim-page-in {
   from {
     opacity: 0;
-    transform: translateY(var(--motion-page-travel, 6px)) scale(var(--motion-page-scale, 1));
+    transform: translateY(var(--motion-page-travel, 6px));
   }
   to   { opacity: 1; transform: none; }
 }
@@ -916,11 +929,18 @@ body {
        earns a livelier one - the wild level was asked for with animations to
        match its name.
 
+       DISTANCE, DURATION AND CURVE ARE THE WHOLE SET, and a scale dial used to
+       sit here beside them. It is gone at every level: the page entrance runs
+       on an element with animating descendants, and a scale on such an element
+       resamples all of them through its own matrix (see the keyframe above).
+       Three numbers are enough to tell the levels apart - 18px against subtle's
+       6px, three times the duration, and a spring instead of an ease - and none
+       of the three costs the compositor anything.
+
        The rule the language already states survives intact: the same keyframes
        at all three intensities, never a forked animation. What changes is the
        number the keyframe reads and the curve it reads it through. */
     --motion-page-travel: 18px;
-    --motion-page-scale: .96;
     /* A curve that overshoots and settles. The fourth control point past 1 is
        what makes it spring rather than ease - the same shape React Native's
        spring gives the phone, so the two surfaces move alike. */
@@ -940,10 +960,9 @@ body {
     --motion-pulse-dur: 3.2s;
     --motion-fade-dur: 70ms;
     --motion-shake-dur: 220ms;
-    /* Smaller travel, no scale, and a curve that only eases. Somebody who asked
-       for less movement asked for less movement, not for a faster bounce. */
+    /* Smaller travel and a curve that only eases. Somebody who asked for less
+       movement asked for less movement, not for a faster bounce. */
     --motion-page-travel: 6px;
-    --motion-page-scale: 1;
     --motion-curve: cubic-bezier(.2, .6, .2, 1);
     --glim-toast-slide: 12px;
   }
@@ -971,9 +990,12 @@ body {
     --motion-fade-dur: 200ms;
     --motion-shake-dur: 520ms;
     --motion-page-travel: 34px;
-    --motion-page-scale: .9;
     /* Further past 1 than wild's curve, and slower to settle: the overshoot is
-       the whole point of the level. */
+       the whole point of the level. Distance and curve carry the level on their
+       own, and they have to: since the reduce block below exempts storm, this
+       is the one level that still animates for somebody whose operating system
+       asked for less motion, which makes it the last place in the language that
+       should resample a whole page. */
     --motion-curve: cubic-bezier(.22, 1.94, .45, 1);
     --glim-toast-slide: 44px;
   }
@@ -984,7 +1006,6 @@ body {
     --motion-fade-dur: 0s;
     --motion-shake-dur: 0s;
     --motion-page-travel: 0px;
-    --motion-page-scale: 1;
     --motion-curve: linear;
     --glim-toast-slide: 0px;
     /* The pulse is the one that does not get a zero. An infinite animation at

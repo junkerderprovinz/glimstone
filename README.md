@@ -90,7 +90,7 @@ An engine is a single mechanism that turns one setting into every token a compon
 |---|---|---|---|---|---|
 | **Shape** | corner shape | `data-shape` | `round` (16/10px) · `soft` (8/5px) · `square` (0) | `round` | [`tokens.css`](reference/tokens.css), [`appearance.ts`](reference/appearance.ts) |
 | **Colour** | theme, accent, rainbow | `data-theme`, `--accent` | `light` · `dark` · unset (follows the OS); any accent, eight rainbow positions | system theme, Sunflower gold `#FCC419` | [`tokens.css`](reference/tokens.css), [`appearance.ts`](reference/appearance.ts), [`colorPicker.ts`](reference/colorPicker.ts) |
-| **Motion** | motion intensity | `data-motion` | `off` · `subtle` · `wild`, plus `storm` below the picker's floor | `wild` | [`tokens.css`](reference/tokens.css), [`appearance.ts`](reference/appearance.ts) |
+| **Motion** | motion intensity | `data-motion` | `off` · `subtle` · `wild`, plus `storm` below the picker's floor | `subtle` | [`tokens.css`](reference/tokens.css), [`appearance.ts`](reference/appearance.ts) |
 | **Label** | how much of a control is shown | `data-labels-buttons`, `data-labels-sidebar`, `data-labels-tabs` | `text` · `textGlyph` · `glyph` · `reactive` | `textGlyph` | [`controls.ts`](reference/controls.ts) |
 
 Three things are worth knowing before adopting them:
