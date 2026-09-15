@@ -140,8 +140,11 @@ export const MOTION_STORED: Motion[] = [...MOTION_LEVELS, 'storm'];
  * while the cards inside staggered in on their own transforms, and a scale on
  * an ancestor makes the engine resample every one of those through the parent's
  * matrix. One reporter read the result as the page trembling before it settled,
- * with a green flash on top - uninitialised layer memory on that engine. Nobody
- * had asked for any of it; it was simply what shipped.
+ * and saw a flat green flash on another engine. The trembling follows from that
+ * nesting. THE GREEN DOES NOT, and this comment used to claim it did: the
+ * adopting app removed the scale on that theory and the reporter saw no change,
+ * so it is an observed symptom with an unconfirmed mechanism. Nobody had asked
+ * for any of it either way; it was simply what shipped.
  *
  * So "nobody's interface changes" only holds while the top of the range is
  * polish. Once the top is a statement, the default belongs one step down, and

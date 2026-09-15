@@ -845,9 +845,12 @@ body {
    independently of its subtree; a scale or a rotation cannot, because the
    engine has to resample everything underneath through the parent's matrix.
    So every animating descendant ended up with its own layer inside a parent
-   being resampled around it. Two engines, two symptoms, one cause: on one the
-   hued badges came out of uninitialised layer memory as a green flash, on the
-   other the colour was right and the page trembled before it settled.
+   being resampled around it. That is why a page nested like this TREMBLES
+   before it settles, which is the symptom this rule is founded on.
+   A second symptom was reported on another engine, a flat green badge flash,
+   and this comment used to name the same cause for it. That did not hold: the
+   adopting app removed the scale on that basis and the reporter saw no change.
+   Unconfirmed mechanism, so it is not evidence for anything here.
    The levels stay apart on distance, duration and curve, none of which asks
    the compositor to resample anything. There is no scale token and no tilt
    token to put back here - see "An ancestor's entrance may translate, never
