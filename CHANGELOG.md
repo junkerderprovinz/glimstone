@@ -9,9 +9,8 @@ Where a window's way out lives is written down, and it lives in the button row.
 
 ## 🎨 Design
 
-- **A window's way out is a button in its bottom row**, carrying its words and its glyph, and it follows the labelling engine exactly like every other button: text, text with glyph, or glyph alone, whichever the one app-wide setting says. A window whose only answer is "close" keeps that row and that button.
+- **A window's way out is a button in its bottom row**, carrying its words and its glyph, and it follows the labelling engine exactly like every other button: text, text with glyph, or glyph alone, whichever the one app-wide setting says. A window whose only answer is "close" keeps that row and that button. A window's way out is the last place that should be an exception to the one setting governing every other control, which is the same point rule 13 makes about the row action.
 - **A corner X is a second control, not the first.** It stays optional, and where a window has one it is an ordinary button with a real label that follows the same engine, never a permanent glyph-only square. A window whose footer already answers should not carry one at all, or the same answer is offered twice.
-- **The tidier-looking alternative was built, looked at and rejected**, which is why the rule is worth a release of its own. Moving the control into the corner as a square and taking the footer out reads well written down: a bar holding a single button is a row with one thing in it. What it costs is the thing this house keeps having to relearn - a control that opts out of the labelling engine is the defect, however good the exemption sounds. Rule 13 records the same lesson from the row action, in almost the same words.
 
 ## 2.5.0 - 2026-09-16
 
