@@ -1,31 +1,17 @@
 # Changelog
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
-## 2.7.0 - 2026-09-16
-
-2.6.0's corner X is taken back. A window's way out is a button in its bottom row again, with its words and its glyph, following the labelling engine like everything else.
-
-**Adopting apps:** revert to 2.5.0's `Button.tsx`, `ConfirmDialog.tsx` and `CryptoDonateDialog.tsx`, which is what these files are again. The `close` variant is gone; a call site passing `variant="close"` no longer compiles.
-
-## 🎨 Design
-
-- **The close button is back in the button row, and it obeys the labelling setting.** Text, text with glyph, or glyph alone, whichever the one app-wide setting says. That is the whole of this release and it is a reversal, not a refinement.
-- **Why the corner lost.** The case for it was that a bar holding a single button is a row with one thing in it, spending a line of the window on what a corner would say for nothing. True, and beside the point: a square that is glyph-only in every mode is a control opting out of the engine that governs every other control, and this house has now learned that twice. Rule 13 records the first time, on the row action, in almost the same words.
-- **A corner X stays available and stays optional**, the way it was before 2.6.0: a real button with a real label, following the engine, for a window that wants one. A window whose footer already answers should not have one, or the same answer is offered twice.
-
 ## 2.6.0 - 2026-09-16
 
-A window's way out is the square in its top right corner, and a window with nothing to decide loses its button row.
+Where a window's way out lives is written down, and it lives in the button row.
 
-**Adopting apps:** `Button` takes a fourth variant, `close`. Put it on the control beside a window's title badge, and delete the footer of any window whose footer held nothing but a Close button. The label is still required and still announced; it is only no longer printed.
+**Adopting apps:** nothing to copy. The component files are unchanged; this release settles a rule that had never been stated and that an app can get wrong without noticing.
 
 ## 🎨 Design
 
-- **The corner control is a square with an X, in every label mode.** That is the one thing the `icon` variant deliberately is not, and the difference is what the two controls are for. A row action stands among labelled siblings inside a card and has to agree with them, so it prints its word wherever the setting says. A window's corner control stands alone on the chrome with a title badge for a neighbour, and its position is half of what says what it does. A word printed there grows a lozenge into the badge beside it, and "Close" next to a title reads as part of the title.
-- **A window whose only answer is "close" has no button row at all.** A bar holding a single button is a row with one thing in it, and it spends a line of the window saying what the corner already says. Where the footer carries real answers it keeps them, and the corner keeps the X: one of those decides something, the other gets you out, and they are not the same offer made twice.
-- **The crypto window is the first to lose its footer**, which is what surfaced the rule. It had one line at the bottom holding one button.
-- **The confirmation window stops printing "Close" beside its heading.** It had carried a labelled corner button since its close control became an ordinary Button, on the sound principle that a clickable thing follows the labelling engine like everything else. The principle holds, the printing was the part that did not: in a mode that paints words, a window with two real answers in its footer also wore a third, wider control in the corner saying what its X already said.
-- **The square takes no width stage**, for the same reason a chip does not. A stage is derived from a label, and a control that never prints its label would be sized by how long "Close" happens to be in the current language.
+- **A window's way out is a button in its bottom row**, carrying its words and its glyph, and it follows the labelling engine exactly like every other button: text, text with glyph, or glyph alone, whichever the one app-wide setting says. A window whose only answer is "close" keeps that row and that button.
+- **A corner X is a second control, not the first.** It stays optional, and where a window has one it is an ordinary button with a real label that follows the same engine, never a permanent glyph-only square. A window whose footer already answers should not carry one at all, or the same answer is offered twice.
+- **The tidier-looking alternative was built, looked at and rejected**, which is why the rule is worth a release of its own. Moving the control into the corner as a square and taking the footer out reads well written down: a bar holding a single button is a row with one thing in it. What it costs is the thing this house keeps having to relearn - a control that opts out of the labelling engine is the defect, however good the exemption sounds. Rule 13 records the same lesson from the row action, in almost the same words.
 
 ## 2.5.0 - 2026-09-16
 
