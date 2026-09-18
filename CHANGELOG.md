@@ -1,6 +1,17 @@
 # Changelog
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
+## 2.7.1 - 2026-09-19
+
+The bottom bar's axis gets a type of its own, so 2.7.0 no longer breaks apps that keep label state per axis.
+
+**Adopting apps:** copy `reference/controls.ts` and `reference/react/useLabelMode.ts` again, and take these rather than 2.7.0's `controls.ts`.
+
+## 🐛 Fixed
+
+- **2.7.0 broke apps that keep label state per axis.** It added `bottombar` to `ControlAxis`, so a `Record<ControlAxis, LabelMode>` with three entries stopped compiling. `ControlAxis` is back to the three axes every app has. The bar's axis is `BarAxis`, and the functions that read and write a mode take `LabelAxis`, which covers both. Found while lifting ArrowLoop, before any app had taken 2.7.0.
+- **The bar's axis is applied at boot.** `applyStoredLabelModes` only walked `CONTROL_AXES`, so an app with a bar would open it in `textGlyph` and then switch. It takes extra axes now: `applyStoredLabelModes([BOTTOM_BAR_AXIS])`.
+
 ## 2.7.0 - 2026-09-19
 
 The web reference gets the bottom bar's label axis.
