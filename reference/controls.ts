@@ -49,37 +49,48 @@ export function hidesLabel(mode: LabelMode): boolean {
 }
 
 /**
- * THREE INDEPENDENT AXES, not one global switch.
+ * Independent axes, not one global switch.
  *
- * The same answer is rarely right for all three surfaces: a navigation rail
- * reduced to glyphs is a layout decision — the rail gets narrower and the page
- * gets wider — while a button reduced to glyphs is only a density preference.
+ * The same answer is rarely right for every surface: a navigation rail
+ * reduced to glyphs is a layout decision (the rail gets narrower and the page
+ * gets wider), while a button reduced to glyphs is only a density preference.
  * Tying them together forces a user who wants a compact rail to also accept
  * unlabelled buttons, which is a different question they were never asked.
  *
- * 'buttons' — action buttons throughout the app.
- * 'sidebar' — the navigation rail.
- * 'tabs'    — tab strips inside pages.
+ * 'buttons':   action buttons throughout the app.
+ * 'sidebar':   the navigation rail.
+ * 'tabs':      tab strips inside pages.
+ * 'bottombar': the bar that replaces the rail in a phone layout.
  *
- * Kept as a list rather than three copies of the same code, so a fourth
- * surface is one entry and a settings card can iterate instead of repeating
- * itself.
+ * Kept as a list rather than copies of the same code, so a new surface is one
+ * entry and a settings card can iterate instead of repeating itself.
  */
-export type ControlAxis = 'buttons' | 'sidebar' | 'tabs';
+export type ControlAxis = 'buttons' | 'sidebar' | 'tabs' | 'bottombar';
 
+/** The axes every adopting app has. */
 export const CONTROL_AXES: ControlAxis[] = ['buttons', 'sidebar', 'tabs'];
+
+/**
+ * Only an app with a phone layout has a bar, so the axis stays out of
+ * CONTROL_AXES: anywhere else its settings row would change nothing. An app
+ * with a bar appends it to its label settings, with a note that the row only
+ * affects the phone layout.
+ */
+export const BOTTOM_BAR_AXIS: ControlAxis = 'bottombar';
 
 /** Per-axis storage keys. Prefix them per app the way `bv-shape` is prefixed. */
 const STORAGE_KEY: Record<ControlAxis, string> = {
   buttons: 'glim-labels-buttons',
   sidebar: 'glim-labels-sidebar',
   tabs: 'glim-labels-tabs',
+  bottombar: 'glim-labels-bottombar',
 };
 
 const ATTRIBUTE: Record<ControlAxis, string> = {
   buttons: 'data-labels-buttons',
   sidebar: 'data-labels-sidebar',
   tabs: 'data-labels-tabs',
+  bottombar: 'data-labels-bottombar',
 };
 
 /**

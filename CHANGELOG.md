@@ -1,6 +1,20 @@
 # Changelog
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
+## 2.7.0 - 2026-09-19
+
+The web reference gets the bottom bar's label axis.
+
+**Adopting apps:** copy `reference/controls.ts` again. Nothing changes for an app without a phone bar, because `CONTROL_AXES` still lists the same three axes. An app whose web UI has a phone bar appends `BOTTOM_BAR_AXIS` to its label settings.
+
+## ✨ Added
+
+- **`bottombar` in the web reference.** `ControlAxis` gains the bar's axis, with its own storage key and a `data-labels-bottombar` attribute. The reference kept three axes because the web had no bar, and a web UI with a phone layout has one; BombVault's phone layout brought it up. The axis stays out of `CONTROL_AXES`, so an app without a bar never lists a row that changes nothing.
+
+## 🎨 Design
+
+- **The bar's settings row says it only affects the phone layout.** On a desktop viewport there is no bar, so without that note the row looks broken. "The bottom bar" and "The label engine" in design-language.md say so.
+
 ## 2.6.1 - 2026-09-18
 
 Tooltips no longer stay on the page after the control under them changes.
