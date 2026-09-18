@@ -1,52 +1,26 @@
 # Changelog
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
-## 2.7.1 - 2026-09-19
+## 2.6.0 - 2026-09-19
 
-The bottom bar's axis gets a type of its own, so 2.7.0 no longer breaks apps that keep label state per axis.
+Where a window's way out lives is written down, tooltips close when the control under them changes, and the web reference gets the phone's bottom bar axis.
 
-**Adopting apps:** copy `reference/controls.ts` and `reference/react/useLabelMode.ts` again, and take these rather than 2.7.0's `controls.ts`.
-
-## 🐛 Fixed
-
-- **2.7.0 broke apps that keep label state per axis.** It added `bottombar` to `ControlAxis`, so a `Record<ControlAxis, LabelMode>` with three entries stopped compiling. `ControlAxis` is back to the three axes every app has. The bar's axis is `BarAxis`, and the functions that read and write a mode take `LabelAxis`, which covers both. Found while lifting ArrowLoop, before any app had taken 2.7.0.
-- **The bar's axis is applied at boot.** `applyStoredLabelModes` only walked `CONTROL_AXES`, so an app with a bar would open it in `textGlyph` and then switch. It takes extra axes now: `applyStoredLabelModes([BOTTOM_BAR_AXIS])`.
-
-## 2.7.0 - 2026-09-19
-
-The web reference gets the bottom bar's label axis.
-
-**Adopting apps:** copy `reference/controls.ts` again. Nothing changes for an app without a phone bar, because `CONTROL_AXES` still lists the same three axes. An app whose web UI has a phone bar appends `BOTTOM_BAR_AXIS` to its label settings.
+**Adopting apps:** copy `reference/react/useTipBubble.tsx`, `reference/tooltip.ts`, `reference/controls.ts` and `reference/react/useLabelMode.ts` again. Nothing changes for an app without a phone bar, because `ControlAxis` and `CONTROL_AXES` still hold the same three axes. An app whose web UI has a phone bar appends `BOTTOM_BAR_AXIS` to its label settings and passes it to `applyStoredLabelModes`.
 
 ## ✨ Added
 
-- **`bottombar` in the web reference.** `ControlAxis` gains the bar's axis, with its own storage key and a `data-labels-bottombar` attribute. The reference kept three axes because the web had no bar, and a web UI with a phone layout has one; BombVault's phone layout brought it up. The axis stays out of `CONTROL_AXES`, so an app without a bar never lists a row that changes nothing.
-
-## 🎨 Design
-
-- **The bar's settings row says it only affects the phone layout.** On a desktop viewport there is no bar, so without that note the row looks broken. "The bottom bar" and "The label engine" in design-language.md say so.
-
-## 2.6.1 - 2026-09-18
-
-Tooltips no longer stay on the page after the control under them changes.
-
-**Adopting apps:** copy `reference/react/useTipBubble.tsx` and `reference/tooltip.ts` again. Nothing else changed.
-
-## 🐛 Fixed
-
-- **A bubble closes when its trigger is replaced.** `useTipBubble` wraps a disabled control in a box so its explanation stays reachable, and that mounts a new element every time `disabled` flips. The old element went away without a blur or mouseleave, so a bubble that was open at that moment stayed up. The hook now closes on every flip. BombVault [#243](https://github.com/junkerderprovinz/bombvault/issues/243) found it: each pressed Prune left one bubble behind.
-- **Focus opens a bubble only after keyboard input.** A click focuses the control it lands on, and a confirm dialog hands focus back to its opener when it closes, so pressing Cancel opened the opener's bubble where the pointer no longer was. Both engines now remember for the whole page whether a pointer or a key came last, and open on focus only after a key. "The tooltip and info bubble" in design-language.md states both rules.
-
-## 2.6.0 - 2026-09-16
-
-Where a window's way out lives is written down, and it lives in the button row.
-
-**Adopting apps:** nothing to copy. The component files are unchanged; this release settles a rule that had never been stated and that an app can get wrong without noticing.
+- **The bottom bar's axis is in the web reference.** A web UI with a phone layout has the bar too, so the reference carries its axis as `bottombar`, with its own storage key and a `data-labels-bottombar` attribute. It has a type of its own, `BarAxis`, and stays out of `CONTROL_AXES`, so an app without a bar never lists a row that changes nothing and state it keys by `ControlAxis` is unaffected. The functions that read and write a mode take `LabelAxis`, which covers both, and `applyStoredLabelModes([BOTTOM_BAR_AXIS])` applies the bar's mode at boot, so the bar does not open in `textGlyph` and then switch. BombVault's phone layout brought it up.
 
 ## 🎨 Design
 
 - **A window's way out is a button in its bottom row**, carrying its words and its glyph, and it follows the labelling engine exactly like every other button: text, text with glyph, or glyph alone, whichever the one app-wide setting says. A window whose only answer is "close" keeps that row and that button. A window's way out is the last place that should be an exception to the one setting governing every other control, which is the same point rule 13 makes about the row action.
 - **A corner X is a second control, not the first.** It stays optional, and where a window has one it is an ordinary button with a real label that follows the same engine, never a permanent glyph-only square. A window whose footer already answers should not carry one at all, or the same answer is offered twice.
+- **The bar's settings row says it only affects the phone layout.** On a desktop viewport there is no bar, so without that note the row looks broken. "The bottom bar" and "The label engine" in design-language.md say so.
+
+## 🐛 Fixed
+
+- **A bubble closes when its trigger is replaced.** `useTipBubble` wraps a disabled control in a box so its explanation stays reachable, and that mounts a new element every time `disabled` flips. The old element went away without a blur or mouseleave, so a bubble that was open at that moment stayed up. The hook now closes on every flip. BombVault [#243](https://github.com/junkerderprovinz/bombvault/issues/243) found it: each pressed Prune left one bubble behind.
+- **Focus opens a bubble only after keyboard input.** A click focuses the control it lands on, and a confirm dialog hands focus back to its opener when it closes, so pressing Cancel opened the opener's bubble where the pointer no longer was. Both engines now remember for the whole page whether a pointer or a key came last, and open on focus only after a key. "The tooltip and info bubble" in design-language.md states both rules.
 
 ## 2.5.0 - 2026-09-16
 
