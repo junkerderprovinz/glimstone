@@ -1,6 +1,12 @@
 # Changelog
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
+## Unreleased
+
+## ⚡ Improved
+
+- Tidied the code comments and log messages.
+
 ## 2.6.0 - 2026-09-19
 
 Where a window's way out lives is written down, tooltips close when the control under them changes, and the web reference gets the phone's bottom bar axis.
