@@ -1,34 +1,18 @@
 /**
  * Generates the GlimStone mark and banners.
  *
- * The mark's geometry (glimstone-mark-source.svg) is the user's own real
- * design — a running-bond brick wall, drawn in Illustrator — taken 1:1,
- * byte-for-byte, never hand-rebuilt (house rule: never-hand-rebuild-svg).
- * This script only recolours it: every brick gets its own stone shade,
- * except the one whose own centre sits closest to the viewBox's centre,
- * which gets a flat lit-gold fill instead — no glow (dropped per feedback:
- * "der gelbe Stein soll nicht leuchten"), the colour alone reads as "lit."
- * Finding "the centre brick" geometrically (not a hardcoded index) means a
- * future redraw with a different brick count/layout still lands on the
- * right one.
+ * The mark's geometry comes unchanged from glimstone-mark-source.svg, a
+ * running-bond brick wall drawn in Illustrator. This script only recolours it:
+ * each brick gets a stone shade, and the brick nearest the centre a flat gold.
  *
- * An earlier placeholder version of this script (before a real logo
- * existed) synthesised its own 3x3 grid of stone blocks procedurally — see
- * git history if that's ever worth comparing against.
+ *   glimstone-mark-source.svg       the master, untouched
+ *   glimstone-dunkel.svg            dark stones, for a light background
+ *   glimstone-hell.svg              pale stones, for a dark background
+ *   glimstone-banner.svg/.png       light banner: logo, "GlimStone" and claim
+ *   glimstone-banner-dark.svg/.png  dark banner
  *
- *   glimstone-mark-source.svg   the user's own master, untouched
- *   glimstone-dunkel.svg        dark stones, gold lit brick   (reads on a LIGHT background)
- *   glimstone-hell.svg          pale stones, gold lit brick   (reads on a DARK background)
- *   glimstone-banner.svg/.png       light banner: logo + "GlimStone" + claim
- *   glimstone-banner-dark.svg/.png  dark banner:  logo + "GlimStone" + claim
- *
- * The gold brick is the constant core in both theme variants, same as every
- * other logo pair in this house style; only the stone tone swaps so it
- * keeps reading against its background.
- *
- * Text is converted to SVG paths (opentype.js) so the SVG needs no font and
- * renders identically anywhere. Bree Serif (name) + Lato (claim) — the same
- * pairing used across this author's other Bree-Serif-branded repos.
+ * Text is converted to paths with opentype.js so the SVG needs no font: Bree
+ * Serif for the name, Lato for the claim.
  *
  * Deps (global): opentype.js, @resvg/resvg-js. Fonts are fetched to the OS
  * temp dir. Run: node .github/assets/gen-banner.mjs
@@ -47,14 +31,8 @@ const { Resvg } = require(`${groot}/@resvg/resvg-js`);
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 
-// ============================================================================
-// The mark — real user geometry (glimstone-mark-source.svg), recoloured only.
-// ============================================================================
-
-// Flat, no gradient (jdp: "der goldene soll keinen Verlauf haben und etwas
-// gelblicher sein") — a punchier, more yellow-leaning gold than the Carbon
-// accent gold used elsewhere, so the lit brick reads as distinctly "lit"
-// rather than merely "differently coloured."
+// More yellow than the accent gold, so the lit brick reads as lit rather than
+// merely differently coloured.
 const GOLD = "#FFD53D";
 
 function parseViewBox(svg) {
@@ -63,10 +41,8 @@ function parseViewBox(svg) {
   return { minX, minY, w, h };
 }
 
-// The source has no id/class scheme worth relying on (some rects carry
-// class="st0", the corner half-bricks carry none at all and fall back to
-// SVG's default black fill) — every rect's geometry is read generically off
-// its own attributes instead, so this survives a future re-export cleanly.
+// The source's classes are inconsistent (the corner half-bricks have none), so
+// each rect is read off its own attributes.
 function parseRects(svg) {
   const rects = [];
   const re = /<rect\b([^>]*)\/>/g;
@@ -94,9 +70,8 @@ function buildMark(stonePalette) {
   const rects = parseRects(source);
   const boxCx = minX + w / 2, boxCy = minY + h / 2;
 
-  // "The lit brick" is whichever one's own centre sits closest to the
-  // viewBox's centre — computed, not assumed, so it's correct for this wall
-  // (the middle brick of the middle row) without hand-picking an index.
+  // The lit brick is found geometrically, so a redraw with a different layout
+  // still lands on the centre one.
   let lit = rects[0], bestDist = Infinity;
   for (const r of rects) {
     const rcx = r.x + r.width / 2, rcy = r.y + r.height / 2;
@@ -106,15 +81,9 @@ function buildMark(stonePalette) {
       lit = r;
     }
   }
-  // Each brick a slightly different stone shade (jdp: "die ziegel in
-  // unterschiedlichen grautönen einfärben") — real masonry never reads as
-  // one flat colour. Deterministic (position-driven, not Math.random()) so
-  // re-running this script reproduces byte-identical output every time.
-  // Reading order (top-to-bottom, left-to-right) + a step coprime with the
-  // palette length walks every shade before repeating any — plain "index +
-  // position" collapsed almost the whole wall onto one shade last time,
-  // since this source's coordinates increase in near-lockstep with the
-  // iteration index.
+  // Shades are assigned in reading order with a step coprime to the palette
+  // length, so every shade is used before any repeats and the output is
+  // reproducible.
   const others = rects.filter((r) => r !== lit).sort((a, b) => a.y - b.y || a.x - b.x);
   const step = stonePalette.length % 2 === 0 ? 1 : 2; // stays coprime with the length
   const bricks = others
@@ -124,8 +93,6 @@ function buildMark(stonePalette) {
     })
     .join("\n  ");
 
-  // No glow (jdp: "der gelbe Stein soll nicht leuchten") - the lit brick
-  // reads as "lit" from its colour alone now, no halo behind it.
   const body = `
   ${bricks}
   <rect x="${lit.x}" y="${lit.y}" width="${lit.width}" height="${lit.height}" rx="${lit.rx}" ry="${lit.ry}" fill="${GOLD}"/>`;
@@ -142,25 +109,16 @@ function writeMark(file, stonePalette) {
   console.log(`wrote ${file}`);
 }
 
-// Dark stone (Carbon's own darkest surface step), ± a few nearby shades —
-// reads on a light banner. Wider spread than the first pass (jdp: "die
-// Schattierungen dürfen leicht kräftiger sein").
 writeMark("glimstone-dunkel.svg", ["#1a1a1a", "#242424", "#2f2e2b", "#3a3a3a", "#252220"]);
-// Pale stone, ± a few nearby shades — reads on a dark banner. Kept genuine
-// light greys, not white, so it still reads as stone rather than paper.
+// Light greys rather than white, so the pale mark still reads as stone.
 writeMark("glimstone-hell.svg", ["#b8b8b8", "#c9c9c9", "#dadada", "#e6e2da", "#cfc9c0"]);
-// Mirrors every other repo's convention (dunkel = the general-purpose icon).
 writeFileSync(join(__dir, "logo.svg"), readFileSync(join(__dir, "glimstone-dunkel.svg")));
 console.log("wrote logo.svg");
-
-// ============================================================================
-// The banner — same harness as every other repo's gen-banner.mjs.
-// ============================================================================
 
 const NAME = "GlimStone";
 const CLAIM = "Consistency you can Ctrl+C.";
 const W = 1600, H = 500;
-const LH = 450, LW = 450; // jdp: "die brickwall etwas größer machen" (was 400)
+const LH = 450, LW = 450;
 const nameSize = 132, claimSize = 44, gap = 70, lineGap = 8;
 
 const THEMES = [
@@ -194,29 +152,16 @@ const sc = (s) => s / font.unitsPerEm;
 const nameAsc = font.ascender * sc(nameSize);
 const nameDesc = -font.descender * sc(nameSize);
 const claimAsc = claimFont.ascender * (claimSize / claimFont.unitsPerEm);
-// The claim's own descender has to count toward the block's height too, or
-// the centring below treats the claim's BASELINE as the block's bottom edge
-// instead of its real ink - any claim with a true descender (the two y's in
-// "Consistency you...", or g/j/p/q generally) then renders visibly lower
-// than the logo's own vertical centre, which is exactly centred on H/2
-// (jdp: "Name und Claim sind als Gruppe nicht vertikal mit dem Logo
-// zentriert" — this was the actual root cause, not a layout-constant tweak).
+// The claim's descender counts toward the block height, or a claim with a y or
+// g sits lower than the logo's centre.
 const claimDesc = -claimFont.descender * (claimSize / claimFont.unitsPerEm);
 const blockH = nameAsc + nameDesc + lineGap + claimAsc + claimDesc;
 const nameBaseline = H / 2 - blockH / 2 + nameAsc;
 const claimBaseline = nameBaseline + nameDesc + lineGap + claimAsc;
 
-// Render text as ONE <g> PER GLYPH, each glyph's own path always computed at
-// x=0 and positioned only via its group's transform. A single getPath(text,
-// x, y, size) call over the whole string is NOT reliable: opentype.js's
-// hinting goes numerically unstable (silently emits NaN mid-glyph, for
-// specific glyphs) once the x it's fed grows past a few hundred units.
-// Root-caused later (see the bootstrapping repo's gen-banner.mjs for the
-// full bisection): an earlier "local origin for the whole string" version of
-// this fix only delayed the problem to longer strings — it happened to work
-// for the exact NAME/CLAIM text at the time, not because the bug was fixed.
-// Requesting every glyph at x=0 sidesteps the instability regardless of
-// string length or content.
+// One <g> per glyph, each path computed at x=0 and placed by its transform:
+// opentype.js emits NaN for some glyphs once the x it is given grows past a few
+// hundred units.
 function textGroups(fnt, text, fontSize, x0, y0) {
   const scale = fontSize / fnt.unitsPerEm;
   let cx = x0;
