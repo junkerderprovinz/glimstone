@@ -49,7 +49,7 @@ a different one.
 ## Copying them in
 
 1. Put this folder's files next to each other in the app, and keep
-   `../appearance.ts` and `../controls.ts` one level up — those two imports are
+   `../appearance.ts` and `../controls.ts` one level up; those two imports are
    the only paths that leave the folder.
 2. Call `applyStoredLabelModes()` (from `controls.ts`) at the app root before
    first render, not from the settings page that edits it, or the app opens in
