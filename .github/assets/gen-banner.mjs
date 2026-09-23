@@ -1,9 +1,10 @@
 /**
  * Generates the GlimStone mark and banners.
  *
- * The mark's geometry comes unchanged from glimstone-mark-source.svg, a
- * running-bond brick wall drawn in Illustrator. This script only recolours it:
- * each brick gets a stone shade, and the brick nearest the centre a flat gold.
+ * The mark comes unchanged from glimstone-mark-source.svg, a brick wall drawn
+ * in Illustrator in the pale stone shades with one gold brick. The pale mark is
+ * the master as drawn; the dark mark swaps each pale shade for its partner in
+ * the dark palette, so both keep the same arrangement.
  *
  *   glimstone-mark-source.svg       the master, untouched
  *   glimstone-dunkel.svg            dark stones, for a light background
@@ -41,9 +42,17 @@ function parseViewBox(svg) {
   return { minX, minY, w, h };
 }
 
-// The source's classes are inconsistent (the corner half-bricks have none), so
-// each rect is read off its own attributes.
+// Illustrator writes the fills as classes in a <style> block.
+function parseClassFills(svg) {
+  const fills = {};
+  const re = /\.([\w-]+)\s*\{\s*fill:\s*(#[0-9a-fA-F]{6})/g;
+  let m;
+  while ((m = re.exec(svg))) fills[m[1]] = m[2].toUpperCase();
+  return fills;
+}
+
 function parseRects(svg) {
+  const classFills = parseClassFills(svg);
   const rects = [];
   const re = /<rect\b([^>]*)\/>/g;
   let m;
@@ -59,66 +68,48 @@ function parseRects(svg) {
       height: Number(attrs.height),
       rx: attrs.rx ?? "0",
       ry: attrs.ry ?? attrs.rx ?? "0",
+      fill: attrs.fill ?? classFills[attrs.class],
     });
   }
   return rects;
 }
 
-function buildMark(stonePalette) {
-  const source = readFileSync(join(__dir, "glimstone-mark-source.svg"), "utf8");
-  const { minX, minY, w, h } = parseViewBox(source);
-  const rects = parseRects(source);
-  const boxCx = minX + w / 2, boxCy = minY + h / 2;
+// Light greys rather than white, so the pale mark still reads as stone.
+const PALE = ["#B8B8B8", "#C9C9C9", "#DADADA", "#E6E2DA", "#CFC9C0"];
+const DARK = ["#1A1A1A", "#242424", "#2F2E2B", "#3A3A3A", "#252220"];
 
-  // The lit brick is found geometrically, so a redraw with a different layout
-  // still lands on the centre one.
-  let lit = rects[0], bestDist = Infinity;
-  for (const r of rects) {
-    const rcx = r.x + r.width / 2, rcy = r.y + r.height / 2;
-    const d = (rcx - boxCx) ** 2 + (rcy - boxCy) ** 2;
-    if (d < bestDist) {
-      bestDist = d;
-      lit = r;
-    }
-  }
-  // Shades are assigned in reading order with a step coprime to the palette
-  // length, so every shade is used before any repeats and the output is
-  // reproducible.
-  const others = rects.filter((r) => r !== lit).sort((a, b) => a.y - b.y || a.x - b.x);
-  const step = stonePalette.length % 2 === 0 ? 1 : 2; // stays coprime with the length
-  const bricks = others
-    .map((r, i) => {
-      const shade = stonePalette[(i * step) % stonePalette.length];
-      return `<rect x="${r.x}" y="${r.y}" width="${r.width}" height="${r.height}" rx="${r.rx}" ry="${r.ry}" fill="${shade}"/>`;
+const source = readFileSync(join(__dir, "glimstone-mark-source.svg"), "utf8");
+const markBox = parseViewBox(source);
+const markRects = parseRects(source);
+
+function writeMark(file, palette) {
+  const { minX, minY, w, h } = markBox;
+  const bricks = markRects
+    .map((r) => {
+      const i = PALE.indexOf(r.fill);
+      if (r.fill !== GOLD && i < 0) throw new Error(`unexpected brick fill ${r.fill} in the master`);
+      const fill = r.fill === GOLD ? GOLD : palette[i];
+      return `<rect x="${r.x}" y="${r.y}" width="${r.width}" height="${r.height}" rx="${r.rx}" ry="${r.ry}" fill="${fill}"/>`;
     })
     .join("\n  ");
-
-  const body = `
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${minX} ${minY} ${w} ${h}">
   ${bricks}
-  <rect x="${lit.x}" y="${lit.y}" width="${lit.width}" height="${lit.height}" rx="${lit.rx}" ry="${lit.ry}" fill="${GOLD}"/>`;
-
-  return { viewBox: `${minX} ${minY} ${w} ${h}`, body };
-}
-
-function writeMark(file, stonePalette) {
-  const { viewBox, body } = buildMark(stonePalette);
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}">${body}
 </svg>
 `;
   writeFileSync(join(__dir, file), svg);
   console.log(`wrote ${file}`);
 }
 
-writeMark("glimstone-dunkel.svg", ["#1a1a1a", "#242424", "#2f2e2b", "#3a3a3a", "#252220"]);
-// Light greys rather than white, so the pale mark still reads as stone.
-writeMark("glimstone-hell.svg", ["#b8b8b8", "#c9c9c9", "#dadada", "#e6e2da", "#cfc9c0"]);
+writeMark("glimstone-dunkel.svg", DARK);
+writeMark("glimstone-hell.svg", PALE);
 writeFileSync(join(__dir, "logo.svg"), readFileSync(join(__dir, "glimstone-dunkel.svg")));
 console.log("wrote logo.svg");
 
 const NAME = "GlimStone";
-const CLAIM = "Consistency you can Ctrl+C.";
+const CLAIM = "Set in stone, lit where it counts.";
 const W = 1600, H = 500;
-const LH = 450, LW = 450;
+// The master's viewBox is tight around the bricks, so LH is the visible height.
+const LH = 240, LW = Math.round((LH * markBox.w) / markBox.h);
 const nameSize = 132, claimSize = 44, gap = 70, lineGap = 8;
 
 const THEMES = [
@@ -144,7 +135,7 @@ const claimFont = opentype.parse(readFileSync(claimFontPath));
 
 const nameW = font.getAdvanceWidth(NAME, nameSize);
 const claimW = claimFont.getAdvanceWidth(CLAIM, claimSize);
-const startX = 165;
+const startX = Math.round((W - (LW + gap + Math.max(nameW, claimW))) / 2);
 const LX = startX, LY = (H - LH) / 2;
 const textX = startX + LW + gap;
 

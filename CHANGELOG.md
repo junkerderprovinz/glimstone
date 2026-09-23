@@ -3,6 +3,11 @@
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 ## Unreleased
 
+## 🎨 Design
+
+- **A new mark.** The wall is a running bond of whole stones with stepped ends, where it used to be a square with half stones at the edges, and the one gold stone still sits at its centre. The pale and the dark mark keep the same arrangement of shades.
+- **A new claim:** "Set in stone, lit where it counts."
+
 ## ⚡ Improved
 
 - Tidied the code comments and log messages.
