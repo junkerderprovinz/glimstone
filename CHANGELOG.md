@@ -12,6 +12,10 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 - Tidied the code comments and log messages.
 
+## 🐛 Fixed
+
+- **Under reduced motion the storm now plays as its exemption intends.** Its tokens sat inside the `no-preference` block, so on a system that asked for less motion the restored animations read durations that did not exist and played nothing. The storm's token block sits outside that block now. KnightLoader's web UI turned this up while adopting 2.6.0.
+
 ## 2.6.0 - 2026-09-19
 
 Where a window's way out lives is written down, tooltips close when the control under them changes, and the web reference gets the phone's bottom bar axis.

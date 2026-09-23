@@ -664,9 +664,9 @@ body {
 @media (prefers-reduced-motion: no-preference) {
   /* The motion engine's numbers. Each intensity is a token set read by the
      same keyframes, so a level is a different number, never a different
-     animation. It lives inside no-preference, so a system that asked for less
-     motion never evaluates a data-motion selector and keeps the reduce block's
-     values. */
+     animation. The offered levels live inside no-preference, so a system that
+     asked for less motion never evaluates their selectors and keeps the reduce
+     block's values. Storm's numbers are the exception, below the gate. */
   :root {
     --motion-page-dur: 420ms;
     --motion-toast-dur: 300ms;
@@ -701,26 +701,6 @@ body {
     --glim-toast-slide: 12px;
   }
   :root[data-motion='subtle'][dir="rtl"] { --glim-toast-slide: -12px; }
-  /* Storm, the hidden fourth level: the same keyframes with a spring that
-     swings further and settles later. No picker offers it; see "A hidden
-     fourth level" in the design language. The phone matches it with
-     `springDamping: 0.34` against wild's 0.68. */
-  :root[data-motion='storm'] {
-    --motion-page-dur: 760ms;
-    --motion-toast-dur: 420ms;
-    --motion-pulse-dur: 1.4s;
-    --motion-fade-dur: 200ms;
-    --motion-shake-dur: 520ms;
-    --motion-page-travel: 34px;
-    /* Further past 1 than wild's curve and slower to settle. Storm still
-       animates under reduced motion (see the reduce block), so it carries the
-       level with distance and curve, never a scale. */
-    --motion-page-ease: cubic-bezier(.22, 1.94, .45, 1);
-    /* The only level where the toast springs past the screen edge. */
-    --motion-toast-ease: cubic-bezier(.22, 1.94, .45, 1);
-    --glim-toast-slide: 44px;
-  }
-  :root[data-motion='storm'][dir="rtl"] { --glim-toast-slide: -44px; }
   :root[data-motion='off'] {
     --motion-page-dur: 0s;
     --motion-toast-dur: 0s;
@@ -768,6 +748,30 @@ body {
     transition-duration: var(--motion-control-dur);
   }
 }
+/* Storm, the hidden fourth level: the same keyframes with a spring that swings
+   further and settles later. No picker offers it; see "A hidden fourth level"
+   in the design language. The phone matches it with `springDamping: 0.34`
+   against wild's 0.68.
+
+   Its numbers sit outside the no-preference gate. Storm is the one level that
+   still animates under reduced motion, and the reduce block below restores its
+   animations from these tokens, which it could not read inside the gate. */
+:root[data-motion='storm'] {
+  --motion-page-dur: 760ms;
+  --motion-toast-dur: 420ms;
+  --motion-pulse-dur: 1.4s;
+  --motion-fade-dur: 200ms;
+  --motion-shake-dur: 520ms;
+  --motion-page-travel: 34px;
+  /* Further past 1 than wild's curve and slower to settle. It carries the
+     level with distance and curve, never a scale. */
+  --motion-page-ease: cubic-bezier(.22, 1.94, .45, 1);
+  /* The only level where the toast springs past the screen edge. */
+  --motion-toast-ease: cubic-bezier(.22, 1.94, .45, 1);
+  --glim-toast-slide: 44px;
+}
+:root[data-motion='storm'][dir="rtl"] { --glim-toast-slide: -44px; }
+
 /* Storm is exempt from reduced motion. The offered levels obey the OS because
    somebody who set reduced motion never chose them; five taps on a chosen
    option are a deliberate request. Each substitute below excludes storm, and
