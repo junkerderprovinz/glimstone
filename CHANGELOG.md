@@ -3,6 +3,16 @@
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 ## Unreleased
 
+## 2.7.0 - 2026-09-24
+
+A dragged item floats under the pointer and lands in its gap, with the look in the reference; the mark is laid as a running bond under a new claim; and the storm plays under reduced motion as its exemption intends.
+
+**Adopting apps:** copy the drag lift block from `reference/tokens.css` (the `--drag-*` tokens and the classes `.glim-drag-lift`, `.glim-drag-shift` and `.glim-drag-settle`, right after the motion engine) and let the reorder script set each item's `translate` and switch the classes. An app that keeps storm's tokens inside its `no-preference` block moves them out of it.
+
+## ✨ Added
+
+- **A dragged item floats.** It follows the pointer, along the list or on both axes where the items wrap, while the others slide aside, and on release it slides into its gap instead of snapping. Escape slides everything back, a drag never ends in a click, and a scrolling list keeps a few pixels of room so the lift's shadow is not cut off. The look is five tokens and three classes in `reference/tokens.css`, and "Reordering by dragging" in design-language.md has the rules. KnightLoader's settings rail, whose tiles only swapped places under a still pointer, brought it up.
+
 ## 🎨 Design
 
 - **A new mark.** The wall is a running bond of whole stones with stepped ends, where it used to be a square with half stones at the edges, and the one gold stone still sits at its centre. The pale and the dark mark keep the same arrangement of shades.

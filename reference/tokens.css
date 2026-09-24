@@ -804,6 +804,57 @@ body {
    animation, so a repeated failure needs a fresh DOM node: key the element on
    a per-instance failure counter. */
 
+/* The drag lift ("Reordering by dragging" in the design language). The held
+   item floats under the pointer (.glim-drag-lift), the others slide aside while
+   it passes (.glim-drag-shift), and on release it slides into the gap they left
+   (.glim-drag-settle). A script sets only each item's `translate`; the separate
+   `translate` and `scale` properties compose with a wiggle's `transform`
+   instead of replacing it.
+
+   The lift is a state rather than motion, so the shadow and the gap stay at
+   every level. Reduced motion and "off" drop only the scale, and the slides
+   take the level's duration, none where the level has none. */
+:root {
+  --drag-lift-scale: 1.03;
+  /* The card elevation alone barely shows under something one row tall. */
+  --drag-lift-shadow: 0 10px 22px -8px rgba(0, 0, 0, .45), var(--elevation);
+  --drag-lift-z: 1;
+  --drag-settle-dur: 0ms;
+  --drag-settle-ease: var(--motion-page-ease, ease);
+}
+@media (prefers-reduced-motion: no-preference) {
+  :root { --drag-settle-dur: 220ms; }
+  :root[data-motion='subtle'] { --drag-settle-dur: 130ms; }
+  :root[data-motion='off'] { --drag-settle-dur: 0ms; --drag-lift-scale: 1; }
+}
+/* Outside the gate for the same reason as storm's other numbers. */
+:root[data-motion='storm'] { --drag-settle-dur: 400ms; }
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion='storm']) { --drag-lift-scale: 1; }
+}
+.glim-drag-lift {
+  position: relative;
+  z-index: var(--drag-lift-z);
+  scale: var(--drag-lift-scale);
+  box-shadow: var(--drag-lift-shadow);
+  cursor: grabbing;
+  /* No `translate` here, so the item keeps up with the pointer. */
+  transition:
+    scale var(--drag-settle-dur) var(--drag-settle-ease),
+    box-shadow var(--drag-settle-dur) var(--drag-settle-ease);
+}
+/* Still above its neighbours while it lands, or it slides under the next one
+   on the way. */
+.glim-drag-settle {
+  position: relative;
+  z-index: var(--drag-lift-z);
+  transition:
+    translate var(--drag-settle-dur) var(--drag-settle-ease),
+    scale var(--drag-settle-dur) var(--drag-settle-ease),
+    box-shadow var(--drag-settle-dur) var(--drag-settle-ease);
+}
+.glim-drag-shift { transition: translate var(--drag-settle-dur) var(--drag-settle-ease); }
+
 
 /* The number field (reference/numberField.ts; docs/design-language.md, "Never a
    native number spinner either"): our own arrows inside the box, with no ground
