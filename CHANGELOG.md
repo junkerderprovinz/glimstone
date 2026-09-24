@@ -3,6 +3,22 @@
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 ## Unreleased
 
+## 2.9.0 - 2026-09-25
+
+A phone app's motion is a table in the reference now, the same numbers for every app: cards fly in from both sides on every tab and every return to it, a flung page runs past its edge and springs back, and a press gives way under the finger.
+
+**Adopting apps with a phone app:** copy `reference/motionNative.ts` as it is and read the level's numbers from `NATIVE_MOTION` instead of a table of your own. Give every tab the arrival line, lists included, and follow "On a phone" under "The motion engine" for the rest: the late-mount rule for rows a list mounts while scrolling, the start for a page that mounts after its tab was focused, and the edge spring with the platform's own overscroll switched off where `edge` is not 0.
+
+## ✨ Added
+
+- **`reference/motionNative.ts`**, the phone's motion levels as numbers with no React Native import: layout and fade durations, the spring's damping, and the arrival, press and edge dials. `springOf()`, `arrivalDelay()`, `arrivalSide()` and `edgeReach()` turn them into what `Animated` takes. ArrowLoop's app is the first to run on it.
+- **The edge spring.** At `wild` a page flung against its top or bottom runs on up to 36 points past it and swings back, at `storm` up to 64, and a faster fling runs further. The lower levels keep Android's own overscroll effect.
+
+## 🎨 Design
+
+- **Every tab arrives.** A list is held to the same arrival as a page, since a level that animates some tabs and not others looks broken. Rows a list mounts while somebody scrolls appear without flying in, because the person scrolled to them.
+- **A page that mounts after its tab was focused starts its arrival at once** instead of waiting for a focus event that has already fired, which left its cards invisible.
+
 ## 2.8.0 - 2026-09-24
 
 Noto Sans becomes the house font, disco glides round the colour wheel instead of jumping, a button's glyph is the size of its words, a selector that wraps fills its box, row actions stay visible, the brand block at the top of the rail is one layout for every app, and a picker tile hovers to a grey instead of white.
