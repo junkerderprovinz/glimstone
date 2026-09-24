@@ -3,6 +3,13 @@
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 ## Unreleased
 
+**Adopting apps:** `hueVars()` takes the palette position instead of a colour, so every `hueVars(rainbowAt(i))` becomes `hueVars(i)`, and `applyRainbow` also writes `--rb-ink-N`. Disco moves out of `appearance.ts` into `reference/disco.ts` and `reference/discoLoop.ts`: copy both, and call `applyDisco(on)` with the stored switch at boot and whenever the switch or the rainbow state changes.
+
+## 🎨 Design
+
+- **Disco glides.** Every hued element moves along the palette together, round the colour wheel in OKLCH, one colour's worth every 2.4 seconds and a full turn in 19.2. It used to jump one colour a second. One animation frame loop writes the root's colours, so the glide has no jolts and no component renders while it runs. Under reduced motion, or at the `off` level, it steps one colour at a time instead.
+- **A hued element points at the root.** `hueVars(i)` sets `--item-hue` to `var(--rb-i)`, and the tints are `color-mix()` of it at the same strengths as before, so a palette edit or a rotation is one write on the root.
+
 ## 2.8.0 - 2026-09-24
 
 Noto Sans becomes the house font, row actions stay visible, the brand block at the top of the rail is one layout for every app, and a picker tile hovers to a grey instead of white.
