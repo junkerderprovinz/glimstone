@@ -3,6 +3,10 @@
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 ## Unreleased
 
+## 2.9.0 - 2026-09-24
+
+Disco glides round the colour wheel instead of jumping, a hued element takes its colour from the root, and a selector that wraps fills its box.
+
 **Adopting apps:** `hueVars()` takes the palette position instead of a colour, so every `hueVars(rainbowAt(i))` becomes `hueVars(i)`, and `applyRainbow` also writes `--rb-ink-N`. Disco moves out of `appearance.ts` into `reference/disco.ts` and `reference/discoLoop.ts`: copy both, and call `applyDisco(on)` with the stored switch at boot and whenever the switch or the rainbow state changes. For a wrapping selector, give every pinned segment the pinned width as its `min-width` and `flex: 1 0 calc((100% - perRow * gap) / perRow)` in place of `flex: none` and a fixed `width`, work out `perRow` as "The one horizontal selector" describes, and work it out again when the parent resizes. Segments that are not pinned take `flex: 1 0 auto`. The track keeps `width: fit-content; max-width: 100%`.
 
 ## 🎨 Design
