@@ -3,6 +3,18 @@
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 ## Unreleased
 
+## 2.9.0 - 2026-09-24
+
+Noto Sans becomes the house font, shipped with every app, so an interface looks the same on Windows, a Mac, Android and a Linux desktop.
+
+**Adopting apps:** install `@fontsource-variable/noto-sans`, `-noto-sans-arabic`, `-noto-sans-hebrew` and `-noto-sans-thai`, import the four at the entry point, and copy the `--font-sans` and `--font-cjk` block from `reference/tokens.css`. Remove any font list of the app's own; the body reads `var(--font-sans)`.
+
+## 🎨 Design
+
+- **Noto Sans is the house font.** It covers Latin, Cyrillic, Greek, Vietnamese and Devanagari, and Noto's own cuts cover Arabic, Hebrew and Thai, all drawn to one design. The files are split by Unicode range, so a German page loads about 200 KB and a script it does not show costs nothing.
+- **Chinese, Japanese and Korean are not shipped.** Their Noto cut is used where the system has it installed, chosen by the page's language, and the system font everywhere else. Shipping them would add several megabytes per language.
+- **The font stack is one token**, `--font-sans`, so no app keeps a list of its own that quietly wins over the language's.
+
 ## 2.8.0 - 2026-09-24
 
 Row actions stay visible, the brand block at the top of the rail is one layout for every app, and a picker tile hovers to a grey instead of white.

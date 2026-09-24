@@ -58,6 +58,15 @@ Deciding which one a given place wants takes no thought: if the colour is on a
 `background`, it is `--accent`; if it is on `color`, a `fill` or a `stroke` against
 the page, it is `--accent-ink`.
 
+## The house font
+
+**Noto Sans, shipped with the app, in every app of this house.** A system font stack draws every app differently on every machine: Segoe UI on Windows, San Francisco on a Mac, Roboto on Android, and on a Linux desktop or inside a NAS's web view whatever the distribution happens to carry, which moves every width this language sets. A shipped font draws the same everywhere. Noto is the one family that has a cut for every script the adopting apps are translated into, drawn to one design, so a Persian or Hindi interface looks like the same product as the German one rather than a patchwork.
+
+- **Shipped:** Noto Sans (Latin, Latin Extended, Vietnamese, Cyrillic, Greek, Devanagari) and Noto Sans Arabic, Hebrew and Thai, as the variable-weight files of the `@fontsource-variable` packages, imported once at the app's entry. They are split by Unicode range, so a page loads only the ranges it shows: a German page fetches Latin and Latin Extended, about 200 KB, and nothing else.
+- **Not shipped:** Chinese, Japanese and Korean. Their Noto cuts weigh several megabytes per language, more than an app that embeds its interface in its binary should carry for every user. `--font-sans` names them first (`Noto Sans CJK SC/JP/KR/TC`, chosen by the page's `lang`, since Han characters are drawn differently per language), so a machine that has them installed, which most Linux and Android systems do, uses them, and everything else falls back to the system's CJK font.
+- **The stack lives in one token**, `--font-sans` in [`reference/tokens.css`](../reference/tokens.css). An app sets `font-family: var(--font-sans)` and never writes its own list: a second list in an app's own stylesheet silently wins over the token when it loads later, and the app then runs a font the language no longer names.
+- **Monospace stays the system's** (`ui-monospace`, Cascadia Code, Menlo): paths and hashes are read for their characters, not their shape.
+
 ## The type scale
 
 Not an engine, on purpose: an engine resolves a *variable* input (a setting, an OS signal) into tokens. Nobody sets their own type scale. This is a fixed reference table, the same category as the palette above, not a mechanism.
@@ -632,7 +641,7 @@ Verify RTL on the rendered page, not by reading the CSS: a logical property used
 
 ## Non-Latin scripts
 
-The font stack ends in `system-ui, sans-serif`, not a fixed list of named fonts, and that's deliberate: a browser missing a glyph in the first-choice font (Segoe UI's CJK coverage is thin) falls back **per character** to whatever the OS already has installed for that script. It does not need every script's font to be listed by name to render correctly. Two things that font stack alone doesn't cover:
+The font stack ends in `system-ui, sans-serif`: a browser missing a glyph in every named font falls back **per character** to whatever the OS has installed for that script, so a script the house font does not ship still renders. Two things that font stack alone doesn't cover:
 
 - **Letter-spacing is a Latin assumption.** The base `-0.008em` tightening reads as normal kerning on Latin letterforms and as crowding on CJK, which is set in full-width square cells that don't kern the same way. Scope it out for CJK content: `:lang(ja), :lang(zh), :lang(ko) { letter-spacing: normal; }`.
 - **`.glim-num`'s tabular figures are a Latin-digit feature.** `font-variant-numeric: tabular-nums` only affects the Western Arabic numerals (0-9) most fonts ship as monospaced-width by convention; it has no defined effect on native digit systems (Eastern Arabic-Indic, Devanagari) some locales display instead. Where a locale's own digits are shown, column alignment has to come from a fixed-width container instead of the numeral feature.
@@ -753,6 +762,7 @@ Defined under `:root` / `[data-theme="light"]`.
 | `--carbon-surface2` | inputs, wells, quiet fills |
 | `--carbon-surface3` | tracks, and hover for anything already filled with surface2 (rule 21) |
 | `--carbon-hover` | hover for something carrying NO fill of its own. Below surface2 on the dark ramp, so it DIMS a filled element (rule 21) |
+| `--font-sans` / `--font-cjk` | the house font stack, Noto Sans first, and the CJK cut chosen by the page's `lang`. |
 | `--carbon-tile-hover` / `--carbon-tile-hover-ink` | the light hover of a picker tile that carries brand marks, and the ink on it. `#a8a8a8` with dark ink on the dark theme, surface3 on the light one. |
 | `--carbon-hover-raised` | hover for anything already filled with surface3 - the neutral button, a raised segment. One step further from the surface in each theme, which is lighter on dark and darker on light (rule 21) |
 | `--carbon-border` | hairline separators |
