@@ -3,6 +3,18 @@
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 ## Unreleased
 
+## 2.8.0 - 2026-09-24
+
+Row actions stay visible, the brand block at the top of the rail is one layout for every app, and a picker tile hovers to a grey instead of white.
+
+**Adopting apps:** copy `--carbon-tile-hover` and `--carbon-tile-hover-ink` from `reference/tokens.css` into all three theme blocks, hover every brand-mark tile to them, and switch its marks to their light-ground values while hovered. Take the hover-only reveal off row actions. Set the rail's brand block to the sizes in "The sidebar": mark above the name, 104px, name 20px bold in one colour.
+
+## 🎨 Design
+
+- **Every action on a row is visible at rest.** Edit and delete stand beside the primary action all the time instead of appearing under the pointer, which a touch screen never has. Rule 6 says so, and the label engine is what keeps a long list calm.
+- **The brand block is the same in every app.** The mark stands centred above the app's name at 104px, 44px in the narrow rail, and the name is 20px, bold and in one colour.
+- **A picker tile hovers to `#a8a8a8` on the dark theme**, with dark ink and its marks on their light-ground values. White was too loud on a dark page, one step up the ramp too quiet to notice. The light theme keeps surface3. Two new tokens carry it: `--carbon-tile-hover` and `--carbon-tile-hover-ink`.
+
 ## 2.7.0 - 2026-09-24
 
 A dragged item floats under the pointer and lands in its gap, with the look in the reference; the mark is laid as a running bond under a new claim; and the storm plays under reduced motion as its exemption intends.

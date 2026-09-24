@@ -69,6 +69,8 @@
   --carbon-surface3:   #525252;
   --carbon-hover:      #353535;
   --carbon-hover-raised: #6f6f6f;
+  --carbon-tile-hover: #a8a8a8;
+  --carbon-tile-hover-ink: #161616;
   --carbon-border:     #393939;
 
   /* The About card's brand marks at rest, adjusted from the published brand
@@ -159,6 +161,8 @@
     --carbon-surface3:   #d1d1d1;
     --carbon-hover:      #e0e0e0;
     --carbon-hover-raised: #c6c6c6;
+    --carbon-tile-hover: #d1d1d1;
+    --carbon-tile-hover-ink: #161616;
     --carbon-border:     #d1d1d1;
 
     /* Warm brands deepened, dark ones left dark (see the dark block). */
@@ -217,6 +221,8 @@
   --carbon-surface3:   #d1d1d1;
   --carbon-hover:      #e0e0e0;
   --carbon-hover-raised: #c6c6c6;
+  --carbon-tile-hover: #d1d1d1;
+  --carbon-tile-hover-ink: #161616;
   --carbon-border:     #d1d1d1;
 
   /* The same brand values as the media block, for an explicit light choice. */
