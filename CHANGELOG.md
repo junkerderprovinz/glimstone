@@ -33,6 +33,7 @@ A phone app's motion is a table in the reference now, the same numbers for every
 - **Round has true pills.** Buttons, tabs, badges, selector segments and switches read `--radius-pill`, so in round they are pills and circles. Cards go from 16 to 20px, fields and panels from 10 to 12px. Soft and square look as they did, because their pill and control radii were already the same.
 - **Soft is the default shape.** A stored choice keeps its shape and a fresh install starts on soft. The German name is Abgerundet.
 - **"The App tab"** in design-language.md: one tile shape for every way, only the forms this instance is not, only the ways that exist, a coming listing shown as coming, the APK's Download and QR code buttons with a code that fills the tile, a Docker tile that copies its command, the source archive named "Source code.zip", and the version in the phone card's corner. ArrowLoop's App tab is the first to follow it.
+- **A closed dropdown steps on the wheel only while it has focus** (rule 14), as a number field does. Hovered alone it let the page's scroll change whatever it passed, and in a list with a dropdown on every row that set values nobody chose. `enableSelectScroll()` and `enableWheelStep()` in `reference/selectScroll.ts` check focus.
 - **A desktop app's links leave through its shell.** `AppTile` takes `onLinkClick` and `AboutCard` takes `openUrl`, so a desktop build can hand every external link to the system browser. Where the shell opens no popups, the PayPal button opens the donation page there too.
 
 ## 2.8.0 - 2026-09-24
