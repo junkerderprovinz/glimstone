@@ -21,11 +21,11 @@ export function AboutCard({
   repoUrl,
   repoGlyph,
   glimstoneRepoUrl,
-  coffeeUrl,
+  onCoffee,
   coffeeGlyph,
   cryptoGlyph,
   paypalGlyph,
-  paypalUrl,
+  onPaypal,
   onCrypto,
   mailAddress,
   mailGlyph,
@@ -40,7 +40,7 @@ export function AboutCard({
     coffeeButton: string;
     /** The second give button. Only drawn together with `onCrypto`. */
     cryptoButton?: string;
-    /** The third. Only drawn together with `paypalUrl`. */
+    /** The third. Only drawn together with `onPaypal`. */
     paypalButton?: string;
     report: string;
     repoButton: string;
@@ -61,7 +61,8 @@ export function AboutCard({
    */
   repoGlyph?: ReactNode;
   glimstoneRepoUrl: string;
-  coffeeUrl: string;
+  /** Opens the coffee window (CoffeeDialog), which stays inside the app. */
+  onCoffee: () => void;
   /**
    * The marks on the give buttons, passed for the same reason as `repoGlyph`.
    * An app that passes nothing keeps whatever its own table resolves.
@@ -75,8 +76,9 @@ export function AboutCard({
    * missing image.
    */
   mailGlyph?: ReactNode;
-  /** A hosted payment page such as PayPal.Me. Omit it where none exists. */
-  paypalUrl?: string;
+  /** Opens the PayPal window (PaypalDialog). Omit it where the maker takes no
+   *  PayPal donations. */
+  onPaypal?: () => void;
   /**
    * Opens the crypto window (CryptoDonateDialog), which stays inside the app.
    * Omit it and the card offers no crypto button.
@@ -97,8 +99,8 @@ export function AboutCard({
 
       <p className="text-sm text-carbon-textSub">{text.coffee}</p>
       {/* Every way to give sits in one row under its sentence, the two hosted
-          payment pages first and the wallet, which needs no account, last. The
-          brand classes take their colours from the brand block in
+          payment routes first and the wallet, which needs no account, last. Each
+          opens its own window inside the app. The brand classes take their colours from the brand block in
           reference/tokens.css. */}
       <div className="flex flex-wrap items-center gap-2">
         <Button
@@ -107,16 +109,16 @@ export function AboutCard({
           glyph={coffeeGlyph}
           tone="neutral"
           className="glim-brand-btn glim-brand-coffee"
-          onClick={() => open(coffeeUrl)}
+          onClick={onCoffee}
         />
-        {paypalUrl && text.paypalButton && (
+        {onPaypal && text.paypalButton && (
           <Button
             label={text.paypalButton}
             labelKey="about.paypal"
             glyph={paypalGlyph}
             tone="neutral"
             className="glim-brand-btn glim-brand-paypal"
-            onClick={() => open(paypalUrl)}
+            onClick={onPaypal}
           />
         )}
         {onCrypto && text.cryptoButton && (

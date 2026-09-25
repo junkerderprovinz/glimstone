@@ -26,7 +26,9 @@ would then have to be re-applied by hand in three places.
 | `Toast.tsx` + `toastEngine.ts` | Transient feedback, including the shake a failing control does |
 | `InfoBubble.tsx`, `IconTipButton.tsx` | The "(i)" explanation and the hover name on an icon-only control |
 | `AboutCard.tsx` | The About card, in its fixed order |
-| `CryptoDonateDialog.tsx` | The second way to give: one address per chain, as text and as a code |
+| `CryptoDonateDialog.tsx` | Giving from a wallet: one address per chain, as text and as a code |
+| `CoffeeDialog.tsx` | Buy Me a Coffee's widget inside a house window |
+| `PaypalDialog.tsx` + `usePaypalButtons.ts` | How often and how much in house controls, then PayPal's wallet and card buttons |
 | `UnavailableNotice.tsx` | What stands where a control would be, when the environment forbids the thing entirely |
 | `useLabelMode.ts`, `useTipBubble.tsx`, `bubblePosition.ts`, `portalHue.ts` | The small hooks the components above need |
 | `glyphs.tsx` | The two marks the components draw themselves, plus the seam an app registers its own icon set through |
