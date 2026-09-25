@@ -5,7 +5,8 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## 🎨 Design
 
-- **The language picker stands first on the Look tab**, above the shape, and never on a General tab. Language is a user-owned axis like theme and shape, so it sits with them; where Settings has no tabs it heads the appearance card.
+- **The language picker stands first on the Look tab**, above the shape, and never on a General tab. Language is a user-owned axis like theme and shape, so it sits with them; where Settings has no tabs it heads the appearance card. Its trigger has a field's height, `--btn-h`.
+- **Every horizontal selector spans the whole width of its card**, at both scales and in both stylings, with the segments sharing the width. A strip sized to its own content left a ragged edge down a card of stacked selectors.
 
 ## 2.12.0 - 2026-09-25
 
