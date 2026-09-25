@@ -3,6 +3,10 @@
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 ## Unreleased
 
+## 🎨 Design
+
+- **The language picker stands first on the Look tab**, above the shape, and never on a General tab. Language is a user-owned axis like theme and shape, so it sits with them; where Settings has no tabs it heads the appearance card.
+
 ## 2.12.0 - 2026-09-25
 
 A tile that carries a brand's mark lights up in that brand's colour under the pointer, and its mark turns white on it, or near-black where white would not read. The one grey every tile used to hover to is gone.
