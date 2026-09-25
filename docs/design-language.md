@@ -555,7 +555,7 @@ A settings tab named App offers every way to get the product that the person is 
 - **A tile that does something on the page says so in its name.** The Docker tile copies the command that starts the container, its "(i)" shows the command, and its name reads "Copied" for a moment after the click.
 - **The source archive is named as a file**, "Source code.zip" in the reader's language, with Font Awesome's file-zipper: a name that says both what it is and what arrives. It points at the source of the running version where that version has a tag.
 - **The version stands in the phone card's corner**, linked to its release when it is a plain release number and shown as text otherwise, so the card says which app its tiles give.
-- **Marks keep their colours**, and a mark with one flat colour or one gradient takes a deeper value while its tile is lit, since the hover grey carries none of Android's green, Docker's blue or Unraid's red: the `--brand-android`, `--brand-docker` and `--brand-unraid-*` pairs in `reference/tokens.css`, applied through `.glim-android-mark`, `.glim-docker-mark` and `.glim-unraid-mark`. Apple and Linux take the tile's ink, since neither has a colour of its own.
+- **Marks keep their colours**, and a mark with one flat colour or one gradient takes a deeper value while its tile is lit, since the hover grey carries none of Android's green, Docker's or Windows' blue or Unraid's red: the `--brand-android`, `--brand-docker`, `--brand-windows` and `--brand-unraid-*` pairs in `reference/tokens.css`, applied through `.glim-android-mark`, `.glim-docker-mark`, `.glim-windows-mark` and `.glim-unraid-mark`. Apple and Linux take the tile's ink, since neither has a colour of its own.
 
 ## Reordering by dragging
 

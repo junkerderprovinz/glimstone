@@ -122,6 +122,8 @@
   --brand-unraid-to:         #ff8d30;
   --brand-unraid-from-hover: #9c1414;
   --brand-unraid-to-hover:   #a84b0c;
+  --brand-windows:           #0078d4;
+  --brand-windows-hover:     #005a9e;
   --brand-github:  #ffffff;
 
   /* Text ramp: three steps, the last still legible at 11px. */
@@ -213,6 +215,8 @@
     --brand-unraid-to:         #c85d12;
     --brand-unraid-from-hover: #c21f1f;
     --brand-unraid-to-hover:   #c85d12;
+    --brand-windows:           #0078d4;
+    --brand-windows-hover:     #0078d4;
     --brand-github:  #181717;
 
     --carbon-text:       #161616;
@@ -281,6 +285,8 @@
   --brand-unraid-to:         #c85d12;
   --brand-unraid-from-hover: #c21f1f;
   --brand-unraid-to-hover:   #c85d12;
+  --brand-windows:           #0078d4;
+  --brand-windows-hover:     #0078d4;
   --brand-github:  #181717;
 
   --carbon-text:       #161616;
@@ -1100,9 +1106,11 @@ body {
    pointer, or a tap on a touch screen would leave it on a resting tile. */
 .glim-android-mark { color: var(--brand-android); }
 .glim-docker-mark { color: var(--brand-docker); }
+.glim-windows-mark { color: var(--brand-windows); }
 @media (hover: hover) {
   .group:hover .glim-android-mark { color: var(--brand-android-hover); }
   .group:hover .glim-docker-mark { color: var(--brand-docker-hover); }
+  .group:hover .glim-windows-mark { color: var(--brand-windows-hover); }
   .group:hover .glim-unraid-mark {
     --brand-unraid-from: var(--brand-unraid-from-hover);
     --brand-unraid-to: var(--brand-unraid-to-hover);
