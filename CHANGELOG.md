@@ -3,13 +3,14 @@
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 ## Unreleased
 
+## 🎨 Design
+
+- **A third button height, for a head bar's transport row only** (rule 19). Play, pause, stop and the quick-settings square beside them are 48px squares with a 24px glyph, through `--btn-h-transport` and `.glim-btn-transport`. Every other button keeps the two heights.
+- **The reset at the end of a colour row is the size of a swatch and shows only its glyph**, in every label mode ("The user-owned axes", Accent). Found in TrickWork, where the reset under the swatches said "Reset to default" and took a line of its own.
+
 ## 🐛 Fixed
 
 - **`reference/paypal.ts` typechecks with `noUncheckedIndexedAccess`**, and a PayPal SDK that loads without setting its namespace, as behind a content blocker, rejects instead of resolving to nothing. Found while bringing TrickWork's About card over.
-
-## 🎨 Design
-
-- **The reset at the end of a colour row is the size of a swatch and shows only its glyph**, in every label mode ("The user-owned axes", Accent). Found in TrickWork, where the reset under the swatches said "Reset to default" and took a line of its own.
 
 ## 2.10.1 - 2026-09-25
 
