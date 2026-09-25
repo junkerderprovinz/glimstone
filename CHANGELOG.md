@@ -3,6 +3,16 @@
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 ## Unreleased
 
+## 2.10.1 - 2026-09-25
+
+A light desktop with the theme on System showed the old olive accent, while Light picked by hand showed Sunflower. Both show Sunflower now.
+
+**Adopting apps:** copy the accent lines of the `@media (prefers-color-scheme: light)` block in `reference/tokens.css`, or the whole file again.
+
+## 🐛 Fixed
+
+- **The light theme the system picks wears the same accent as the one chosen by hand.** The `@media (prefers-color-scheme: light)` block still set `--accent` to `#8E6A00` with white ink and no `--ink-mix`, a value from before the accent's fill and its text got separate tokens. Its comment says it matches `[data-theme="light"]`, and it did in every other line. Found while bringing TrickWork up to date, whose theme starts on System.
+
 ## 2.10.0 - 2026-09-25
 
 A selector's label wraps only when its box has run out of room. Where the pinned width would break a long option onto a second line and the options fit side by side at their own widths, the track takes the width of its box and each segment gets its own width plus an even share of the rest, so the long option is simply the widest. Every giving window opens with the same appeal, a paragraph of its own above the window's sentence about how that route pays: "Toss a coin to your knight: it covers part of the costs and keeps the project alive. Everything I build costs nothing and shows no ads."
