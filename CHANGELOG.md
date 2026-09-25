@@ -8,8 +8,13 @@ All notable changes to the GlimStone design language are documented here. Versio
 - **Every motion level declares every dial.** Storm had no `--motion-control-dur` or `--drag-lift-scale` of its own and subtle no `--drag-lift-scale`, so both quietly ran the lively number. Subtle now states `--motion-toast-ease` and off `--motion-pulse-dur` as well, so no level inherits anything.
 - **The window entrance and the reactive label are one animation at every level**, read through `--motion-modal-dur`/`--motion-modal-travel` and `--motion-label-*`, instead of fixed numbers per selector that gave storm wild's timing. The window's keyframe ends at `transform: none` and no longer scales: ending at `scale(1)` kept a transform on the card, which makes it the containing block of anything fixed inside it.
 
+## ✨ Added
+
+- **The seven round-two animations and the reorder wiggle are in `reference/tokens.css`**: `glim-confirm`, `glim-row-in` (`.glim-stagger-row`), `.glim-colour-wipe`, `glim-check-draw`, `glim-content-fade-in`, `glim-tab-slide` and `glim-wiggle` (`.glim-drag-armed`), each on dials declared at every level (`--motion-shape-*`, `-confirm-*`, `-stagger-*`, `-wipe-dur`, `-check-dur`, `-content-dur`, `-tab-*`, `-wiggle-*`). The shape morph registers the radius tokens with `@property` and transitions them on `:root.glim-shape-transitions`.
+
 ## 🎨 Design
 
+- **Fixed steps and a free value share one row** ("The one horizontal selector"): the field sits right of the steps, a valid value takes the selection away from them, a step empties the field.
 - **The language picker stands first on the Look tab**, above the shape, and never on a General tab. Language is a user-owned axis like theme and shape, so it sits with them; where Settings has no tabs it heads the appearance card. Its trigger has a field's height, `--btn-h`.
 - **Settings tabs have fixed glyphs** (glyphs.md, "Settings tabs"): General Material's tune, Look the colour palette, App the screen with a device beside it, Security the padlock, About the information circle. The cog stays Settings itself and is not reused for General. The Email button's envelope (Material's `email` and `email-open`) opens under the pointer.
 - **Every horizontal selector spans the whole width of its card**, at both scales and in both stylings, with the segments sharing the width. A strip sized to its own content left a ragged edge down a card of stacked selectors.
