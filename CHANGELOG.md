@@ -3,6 +3,17 @@
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 ## Unreleased
 
+## 2.11.0 - 2026-09-25
+
+Every giving window opens with the same appeal, a paragraph of its own above the window's sentence about how that route pays: "Toss a coin to your knight: it covers part of the costs and keeps the project alive. Everything I build costs nothing and shows no ads."
+
+**Adopting apps:** copy `reference/react/CoffeeDialog.tsx`, `reference/react/PaypalDialog.tsx` and `reference/react/CryptoDonateDialog.tsx`, and pass `text.appeal` to all three from one string per language (`about.donateAppeal`). The crypto window's intro says "Pick a currency and a network" in English; in a language whose word for coin sat there, use its word for currency.
+
+## 🎨 Design
+
+- **Every giving window opens with the appeal** ("The card's own copy"). The About card asks, and the window behind each of its buttons says what the coin keeps going, in one sentence shared by all three.
+- **The crypto window says "currency"**, so "coin" keeps one meaning on a screen that also tosses one to the knight.
+
 ## 2.10.0 - 2026-09-25
 
 A selector's label wraps only when its box has run out of room. Where the pinned width would break a long option onto a second line and the options fit side by side at their own widths, the track takes the width of its box and each segment gets its own width plus an even share of the rest, so the long option is simply the widest.

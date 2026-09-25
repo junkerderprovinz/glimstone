@@ -473,7 +473,11 @@ about.coffee: If {{APP}} has earned a place on your server or computer, toss a c
 about.report: Problems, wishes or suggestions? You're welcome to open an issue on GitHub, or send an email.
 
 about.mail:   Email
+
+about.donateAppeal: Toss a coin to your knight: it covers part of the costs and keeps the project alive. Everything I build costs nothing and shows no ads.
 ```
+
+**Every giving window opens with the appeal**, a paragraph of its own above the window's sentence about how that route pays. Somebody who opens a window has already decided to give, so the appeal says what the coin keeps going rather than asking a second time. It is one string per language, shared by all three windows. Beside it the crypto window asks for a currency rather than a coin, so the word keeps one meaning on one screen.
 
 **Three rules the copy has to keep, because each one was got wrong first.** One sentence at most lists what the app does NOT do: two such sentences in a row turn a claim into a recital. The running costs are never itemised, because a donation covers a project rather than a receipt. And the opening paragraph ends on the making of it, on evenings and weekends, so the card closes the same way the project's README does.
 
