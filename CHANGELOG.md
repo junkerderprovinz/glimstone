@@ -3,6 +3,10 @@
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 ## Unreleased
 
+## 🎨 Design
+
+- **A selector label wraps only when its box has no room left.** Where the pinned width would break a label and the options fit side by side at their own widths, the track takes its box's width and shares the rest out, so the long option is the widest. Under "The one horizontal selector".
+
 ## 2.9.0 - 2026-09-25
 
 A phone app's motion is a table in the reference now, the same numbers for every app: cards fly in from both sides on every tab and every return to it, a flung page runs past its edge and springs back, and a press gives way under the finger. The coffee and PayPal buttons on the About card open windows in which the donor pays without leaving the app, and PayPal takes monthly and yearly giving too. The App tab is one standard: every other way to get the app as a tile of one shape, only the forms this instance is not, listings that are coming marked as coming, and the APK with a Download button and a code to scan. In round everything somebody presses is a true pill, soft is the default shape, and a fourth shape hides behind square.
