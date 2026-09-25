@@ -106,25 +106,37 @@ A new control has to point its own CSS at these tokens as it is built. Adopting 
 
 ## 4. Easter eggs
 
-The language has three, and they exist mostly to establish the rules that come with them.
+Three settings have a hidden extra that no picker lists. They exist mostly for the rules that come with them, and those rules apply to any egg an adopting app adds.
 
-**`storm`, a fourth motion level no picker lists.** Same keyframes as the other three with bigger numbers: page entrance 760ms over 34px on `cubic-bezier(.22, 1.94, .45, 1)`, and `springDamping: 0.34` on a phone. One token block, `:root[data-motion='storm']` in [`reference/tokens.css`](reference/tokens.css), is its entire cost.
+| Egg | Setting | How to find it | What it does | Code |
+|---|---|---|---|---|
+| **Storm** | Motion | Set the motion to `wild`, then tap `wild` five more times. | A fourth motion level: the same animations with bigger, springier numbers. | `stormTap()`, `:root[data-motion='storm']` |
+| **Disco** | Rainbow | Turn Rainbow Mode on five times, each within three seconds of the last. | The rainbow colours step one position every second. | `discoTap()`, `applyDisco()` |
+| **Leaf** | Corners | Set the shape to `square`, then tap `square` five more times. | A fourth shape: the top-left and bottom-right corners rounded, the other two sharp. | `leafTap()`, `:root[data-shape='leaf']` |
 
-**To find it: set the motion to the top level, then tap that same option five more times.** `stormTap()` in [`reference/appearance.ts`](reference/appearance.ts) is the whole mechanism. It is unreachable from any other level on purpose: tapping "off" five times means somebody is annoyed, not curious, and a secret that opens under annoyance is a bug report waiting to be filed.
+The functions live in [`reference/appearance.ts`](reference/appearance.ts) and the token blocks in [`reference/tokens.css`](reference/tokens.css).
 
-**The rule, which is the part worth copying rather than the numbers: an easter egg that changes BEHAVIOUR must be switchable back off, and must not quietly become a permanent entry in a settings list.** The first build stored a "found it" flag, so one gesture added a fourth picker option for ever after. A secret had turned into a setting somebody has to explain to themselves months later. What keeps it visible instead is the plain truth about the current state: it is offered while it is chosen, because a picker hiding the value it is showing would be lying, and otherwise only while that settings screen stays open. So `found` lives in the screen's own state and never in storage, while the chosen value persists like any other setting.
+### The rules every egg follows
 
-**`disco`, the colour engine's own: the eight rainbow colours step one position every second**, so every hued element moves to the next colour together while nothing else changes. It animates nothing: no keyframes, no new classes, just the rotation offset rainbow already carried, stepped on a timer. **To find it: turn Rainbow Mode on five times, each within three seconds of the last.** Only turn-ons count, which halves the clicks and leaves the gesture ending with rainbow ON, the one state where a walking palette is visible at all. `applyDisco()` and `discoTap()` in [`reference/appearance.ts`](reference/appearance.ts).
+1. **It can be switched off again and never becomes a permanent setting.** A stored "found it" flag would add the hidden option to the picker for good, and a secret would turn into a setting somebody has to explain to themselves months later. So the option is offered while it is chosen, because a picker that hid the value it shows would be lying, and otherwise only while the settings screen that found it stays open. `found` lives in that screen's state and never in storage. The chosen value is saved like any other setting, so a found storm or leaf survives a reload.
+2. **Only a deliberate gesture on the setting it extends opens it.** Tapping an option that is already chosen means wanting more of it. Tapping "off" five times means somebody is annoyed, and a secret that opens under annoyance is a bug report waiting to be filed.
+3. **It may outrank reduced motion, but never for anything continuous.** The three motion levels a picker offers always obey the operating system's reduced-motion setting, because somebody who set it never went looking for them; they got whatever the app booted at. A found egg is a deliberate request, so the storm plays in full and disco has no reduced-motion gate. The live-indicator pulse still stops at every level, and disco's one-second step stays well under the 3Hz flicker threshold that photosensitivity guidance names.
 
-**`leaf`, a fourth shape: two opposite corners rounded, the other two sharp.** Found the storm's way: set the shape to square, then tap square five more times (`leafTap()`). It follows the storm's rule, offered while chosen and found again after the settings screen closes. It is plain per-corner radii, so it looks the same in every browser, desktop shell and phone app.
+### Storm
 
-**A hidden switch may outrank the accessibility preference, and that reverses what this section said until 2026-09-15.** `storm` used to resolve only inside `@media (prefers-reduced-motion: no-preference)` like every other level. It no longer does: the `reduce` block exempts it from the gentler substitutes and restores the full animations for it, and disco carries no reduced-motion gate at all. The position on accessibility has not moved, the reading of the gesture has. The three levels a picker OFFERS keep obeying the OS unconditionally, because somebody who set reduced motion did not go looking for any of them; they got whichever one the app booted at. Five taps on an option already chosen, or five deliberate turn-ons of a mode, is not a value anybody inherited.
+The same keyframes as the other levels with bigger numbers: a page entrance of 760ms over 34px on `cubic-bezier(.22, 1.94, .45, 1)`, and `springDamping: 0.34` on a phone. One token block is its whole cost.
 
-**Where that exemption lives is the whole design, and it has two halves.** It belongs in the `reduce` block, which swaps in gentler substitutes rather than switching motion off, and those substitutes are the things that make the storm a storm. And exempting without RESTORING leaves the element with no animation at all, since the real rule sits in the block the media query replaced: quieter than the substitute just removed. Worse where the resting state is invisible, because then nothing takes its place on screen at all.
+Its exemption from reduced motion has two halves. It sits in the `reduce` block, which swaps in gentler substitutes rather than switching motion off, and it restores the full animation there. An exemption without the restore would leave the storm with no animation at all, because the real rule lives in the block the media query replaced. Where the resting state is invisible, nothing would appear on screen.
 
-**The line both eggs stop at: anything continuous.** Wanting more movement is not wanting something that never stops, so the live-indicator pulse keeps its true stop at every level, and disco's one-second step stays well under the 3Hz flicker threshold photosensitivity guidance names.
+### Disco
 
-An adopting app is free to have eggs of its own; they belong in that app's own notes, not here. What belongs here are the rules above, which apply to every one of them.
+Disco animates nothing of its own. It has no keyframes and no new classes; it steps the rotation offset rainbow already carries on a timer, so every hued element moves to the next colour at the same moment. Only turn-ons count toward the gesture, which halves the clicks and leaves rainbow on, the one state in which a walking palette is visible.
+
+### Leaf
+
+The tokens stay single lengths, and one rule sets the top-right and bottom-left radius of every element and pseudo-element to 0. Every `calc()` on a token keeps working, and a phone app gets plain numbers. The corners are physical rather than logical, so the leaf leans the same way in a right-to-left language. Because it is ordinary per-corner radii, it looks the same in every browser, desktop shell and phone app.
+
+An adopting app may add eggs of its own. They belong in that app's own notes, and the rules above apply to them too.
 
 <br>
 
