@@ -3,6 +3,19 @@
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 ## Unreleased
 
+## 2.12.0 - 2026-09-25
+
+A tile that carries a brand's mark lights up in that brand's colour under the pointer, and its mark turns white on it, or near-black where white would not read. The one grey every tile used to hover to is gone.
+
+**Adopting apps:** remove `--carbon-tile-hover`, `--carbon-tile-hover-ink` and the four `--brand-*-hover` values from all three theme blocks, and replace the `.group:hover .glim-*-mark` block with the brand tile rules from `reference/tokens.css`: `.glim-brand-tile`, `.glim-mark-hover` and the `.glim-tile-<brand>` classes. Take the light blocks' new `--brand-android`, `--brand-docker` and `--brand-unraid-*` values. Copy `reference/appMarks.ts` again, give every `AppTile` its `brand`, and give each coin in the crypto window its `tile` colour and ink. A coin disc paints its disc with `var(--mark-ink, <colour>)` and its symbol with `var(--mark-cut, <colour>)`.
+
+## 🎨 Design
+
+- **Brand tiles** (new section). Under the pointer a tile fills with its brand's own colour, the same on both themes; its name and mark take white where white reaches 2:1 and `#161616` below that. A part of a mark that lies on another part (eyes, letters, the M on a disc) becomes a cut-out in the tile colour, and a mark whose layers do not survive one ink shows the brand's single-colour version while lit. Tile and mark switch without a transition.
+- **Marks keep their own colours at rest on the light theme.** Only a part that all but vanishes on the light tile, under 1.35:1, is deepened. Android, Docker and Unraid wear their brand colours on light again.
+- **Tux has a yellow beak and feet**, which stay cut-outs in the tile's yellow while it is lit.
+- **The App tab's tiles and the crypto window's coin tiles are brand tiles.** `AppTile` takes a `brand`; a coin takes a `tile` colour and ink, and the picked coin keeps the accent.
+
 ## 2.11.0 - 2026-09-25
 
 Windows stand out more: the page behind one is blurred and a little darker, so the window is the one thing left to read. An app's head bar gets a third button height for its transport controls, and a colour row's reset shrinks to a swatch.
