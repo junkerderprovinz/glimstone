@@ -541,6 +541,20 @@ The coffee and PayPal buttons open a window too, and the donor pays inside it. A
 
 `reference/react/CoffeeDialog.tsx` and `reference/react/PaypalDialog.tsx` are the windows, `reference/react/usePaypalButtons.ts` puts PayPal's buttons into the second, and `reference/paypal.ts` loads the SDK and builds the order or subscription. The PayPal window takes the app's own horizontal selector as `renderSelector`, since the language describes that control and leaves its code to each app. Three things go wrong without a readable error. An element with `id="paypal"` and a page-level `open` or `close` shadowing `window.open` each stop the SDK, and `paypal.ts` names both. A buttons box on a dark `color-scheme` makes the browser paint PayPal's cross-origin frames an opaque white, which `PaypalDialog` answers by giving that box the light scheme.
 
+## The App tab (every other way to get the app)
+
+A settings tab named App offers every way to get the product that the person is not already using, one tile per way. The tile is [`reference/react/AppTile.tsx`](../reference/react/AppTile.tsx) and its marks are [`reference/appMarks.ts`](../reference/appMarks.ts); the rules are these.
+
+- **One tile shape for every way.** A mark above a name, 112 pixels square, surface2 at rest and the picker tile's grey (`--carbon-tile-hover`) under the pointer, the same tile the provider pickers use. A store, a file, a container image and a source archive are all the same control, so nobody has to learn which one is a button.
+- **Only the forms this instance is not.** The tab knows where it runs. Opened in a container or a server binary, its second card offers the desktop app; opened in the desktop app, it offers a server instead: Unraid's Community Applications, the Docker image and the source code. The phone card stands everywhere. A card that would offer nothing new is left out, and an app with only one form has no App tab at all.
+- **Only the ways that exist.** A tile stands for a real way to get the app. There is no App Store tile for an app without an iPhone build.
+- **A listing that is coming is shown as coming.** Its tile stands quiet: muted name, faded mark, a "Soon" badge in the corner, and no link or action, so a click does nothing because nothing is offered rather than because something broke. The tile turns live the release its link is filled in.
+- **The APK tile brings its own two buttons**, Download with a heavy down arrow and QR code, stacked beside it. QR code turns the tile's face into the code on a white ground that fills the tile, because the page is usually open on a computer and the file is wanted on the phone. Pressed again, it turns back.
+- **A tile that does something on the page says so in its name.** The Docker tile copies the command that starts the container, its "(i)" shows the command, and its name reads "Copied" for a moment after the click.
+- **The source archive is named as a file**, "Source code.zip" in the reader's language, with Font Awesome's file-zipper: a name that says both what it is and what arrives. It points at the source of the running version where that version has a tag.
+- **The version stands in the phone card's corner**, linked to its release when it is a plain release number and shown as text otherwise, so the card says which app its tiles give.
+- **Marks keep their colours**, and a mark with one flat colour or one gradient takes a deeper value while its tile is lit, since the hover grey carries none of Android's green, Docker's blue or Unraid's red: the `--brand-android`, `--brand-docker` and `--brand-unraid-*` pairs in `reference/tokens.css`, applied through `.glim-android-mark`, `.glim-docker-mark` and `.glim-unraid-mark`. Apple and Linux take the tile's ink, since neither has a colour of its own.
+
 ## Reordering by dragging
 
 A list whose order MEANS something (a download queue, a playlist, a set of rules evaluated in sequence) is reordered by dragging, and the gesture is the same everywhere:

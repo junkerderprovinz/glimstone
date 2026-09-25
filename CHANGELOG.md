@@ -3,6 +3,22 @@
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 ## Unreleased
 
+## 2.10.0 - 2026-09-25
+
+The App tab is one standard: every other way to get the app as a tile of one shape, only the forms this instance is not, listings that are coming marked as coming, and the APK with a Download button and a code to scan.
+
+**Adopting apps:** copy `reference/react/AppTile.tsx` and `reference/appMarks.ts`, and the `--brand-android`, `--brand-docker` and `--brand-unraid-*` pairs from all three theme blocks of `reference/tokens.css` together with the `.glim-android-mark`, `.glim-docker-mark` and `.glim-unraid-mark` rules. Build the App tab as "The App tab" in design-language.md describes: the phone card where there is a phone app, and a second card with the desktop app in a container or a server install in the desktop app. An app with only one form gets no App tab.
+
+## ✨ Added
+
+- **`reference/react/AppTile.tsx`**, the tile for one way to get the app: a link to a file or a listing, a button that does something on the page, or a quiet tile with a "Soon" badge while its listing does not exist. `face` lets a tile show something else, such as the code to scan on the APK tile.
+- **`reference/appMarks.ts`**: Google Play, Android, Docker, Unraid, the ZIP, Windows, Apple and Linux as markup with prefixed ids.
+- **Three colour pairs for single-colour marks.** Android's green, Docker's blue and Unraid's red gradient each take a deeper value while their tile is lit, since the hover grey carries none of them, and a single deep value on the light theme.
+
+## 🎨 Design
+
+- **"The App tab"** in design-language.md: one tile shape for every way, only the forms this instance is not, only the ways that exist, a coming listing shown as coming, the APK's Download and QR code buttons with a code that fills the tile, a Docker tile that copies its command, the source archive named "Source code.zip", and the version in the phone card's corner. ArrowLoop's App tab is the first to follow it.
+
 ## 2.9.0 - 2026-09-25
 
 A phone app's motion is a table in the reference now, the same numbers for every app: cards fly in from both sides on every tab and every return to it, a flung page runs past its edge and springs back, and a press gives way under the finger. The coffee and PayPal buttons on the About card open windows in which the donor pays without leaving the app, and PayPal takes monthly and yearly giving too.
