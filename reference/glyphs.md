@@ -124,7 +124,7 @@ Every app names its Settings tabs with these, so the same tab wears the same gly
 | `IconTabApp` | `computer-devices/computer-pc-desktop.svg` | The App tab: every other way to get the app, whichever forms it offers |
 | `IconTabSecurity` | `interface-essential/padlock-square-1.svg` | Security, passwords, remote access |
 | `IconInfo` | `interface-essential/information-circle.svg` | About, where it is a tab of its own |
-| `IconMail`, `IconMailOpen` | Material Design Icons `email`, `email-open` | The About card's Email button: closed at rest, open under the pointer, in one shared box so the envelope does not jump |
+| `IconMail`, `IconMailOpen` | Material Design Icons `email`, `email-open` | The About card's Email button: closed at rest, open under the pointer, in one shared box so the envelope does not jump. Both ship as `MAIL_SVG` in `appMarks.ts` |
 
 The General glyph and the envelope come from Material, since the free Streamline set has neither a pair of sliders that reads at 20px nor an open envelope.
 

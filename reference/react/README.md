@@ -26,7 +26,7 @@ would then have to be re-applied by hand in three places.
 | `Toast.tsx` + `toastEngine.ts` | Transient feedback, including the shake a failing control does |
 | `InfoBubble.tsx`, `IconTipButton.tsx` | The "(i)" explanation and the hover name on an icon-only control |
 | `AboutCard.tsx` | The About card, in its fixed order |
-| `AppTile.tsx` | One way to get the app on the App tab, live, acting or still to come; its marks are in `../appMarks.ts` |
+| `ReadmeButton.tsx` | The button in the shape of the README's, with its segments: one way to get the app on the App tab, live, acting or still to come, and the About card's give and report buttons; the marks are in `../appMarks.ts` |
 | `CryptoDonateDialog.tsx` | Giving from a wallet: one address per chain, as text and as a code |
 | `CoffeeDialog.tsx` | Buy Me a Coffee's widget inside a house window |
 | `PaypalDialog.tsx` + `usePaypalButtons.ts` | How often and how much in house controls, then PayPal's wallet and card buttons |
