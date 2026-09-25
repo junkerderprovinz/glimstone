@@ -539,6 +539,8 @@ The coffee and PayPal buttons open a window too, and the donor pays inside it. A
 
 **The window says where the money goes.** Its one sentence names the provider the payment runs through, so nobody takes the house's frame for the house taking card numbers.
 
+**In a desktop shell, a link leaves through the shell.** A Wails v2 webview opens popups on Windows but not on macOS or Linux, where `window.open` does nothing. There the PayPal button opens PayPal's donation page in the system browser instead of the window, since the wallet login lives in a popup; the coffee and crypto windows need none and stay in the app everywhere. Every external link goes through the shell's own browser opener as well, which is what `openUrl` on `AboutCard` and `onLinkClick` on `AppTile` are for: a link that does nothing is worse than a link that leaves the app.
+
 `reference/react/CoffeeDialog.tsx` and `reference/react/PaypalDialog.tsx` are the windows, `reference/react/usePaypalButtons.ts` puts PayPal's buttons into the second, and `reference/paypal.ts` loads the SDK and builds the order or subscription. The PayPal window takes the app's own horizontal selector as `renderSelector`, since the language describes that control and leaves its code to each app. Three things go wrong without a readable error. An element with `id="paypal"` and a page-level `open` or `close` shadowing `window.open` each stop the SDK, and `paypal.ts` names both. A buttons box on a dark `color-scheme` makes the browser paint PayPal's cross-origin frames an opaque white, which `PaypalDialog` answers by giving that box the light scheme.
 
 ## The App tab (every other way to get the app)
