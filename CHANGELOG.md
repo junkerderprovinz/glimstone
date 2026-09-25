@@ -3,6 +3,11 @@
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 ## Unreleased
 
+## 🐛 Fixed
+
+- **Every motion level declares every dial.** Storm had no `--motion-control-dur` or `--drag-lift-scale` of its own and subtle no `--drag-lift-scale`, so both quietly ran the lively number. Subtle now states `--motion-toast-ease` and off `--motion-pulse-dur` as well, so no level inherits anything.
+- **The window entrance and the reactive label are one animation at every level**, read through `--motion-modal-dur`/`--motion-modal-travel` and `--motion-label-*`, instead of fixed numbers per selector that gave storm wild's timing. The window's keyframe ends at `transform: none` and no longer scales: ending at `scale(1)` kept a transform on the card, which makes it the containing block of anything fixed inside it.
+
 ## 🎨 Design
 
 - **The language picker stands first on the Look tab**, above the shape, and never on a General tab. Language is a user-owned axis like theme and shape, so it sits with them; where Settings has no tabs it heads the appearance card. Its trigger has a field's height, `--btn-h`.
