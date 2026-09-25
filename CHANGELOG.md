@@ -3,6 +3,10 @@
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 ## Unreleased
 
+## 🎨 Design
+
+- **The reset at the end of a colour row is the size of a swatch and shows only its glyph**, in every label mode ("The user-owned axes", Accent). Found in TrickWork, where the reset under the swatches said "Reset to default" and took a line of its own.
+
 ## 2.10.1 - 2026-09-25
 
 A light desktop with the theme on System showed the old olive accent, while Light picked by hand showed Sunflower. Both show Sunflower now.
