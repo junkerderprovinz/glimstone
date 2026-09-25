@@ -60,7 +60,7 @@ If it has earned a place on your server or computer, toss a coin to your knight:
 - [`docs/design-language.md`](docs/design-language.md) is the full spec: the palette, the name and its etymology, all twenty rules, the componentry vocabulary (info bubble, horizontal selector, switches, the reveal eye, badges, toasts, empty states, destructive actions, charts, the sidebar and the phone's bottom bar), all four engines, the token contract, and the adoption steps. This is the document to read start to finish; everything below just points back into it.
 - [`reference/tokens.css`](reference/tokens.css) is the palette and component classes as plain CSS custom properties, and where the shape, colour and motion engines resolve to actual values. No build step, no framework. Copy the parts an app needs.
 - [`reference/tailwind-theme.css`](reference/tailwind-theme.css) is the optional Tailwind v4 `@theme` layer that maps the tokens onto utility classes. Skip it entirely on a non-Tailwind app.
-- [`reference/appearance.ts`](reference/appearance.ts) holds the shape, accent, rainbow and motion logic, including the four fixed motion level names and `stormTap()`, the gesture behind the hidden fourth one. Framework-free (talks only to `document.documentElement` and `localStorage`), so it drops into any app unchanged.
+- [`reference/appearance.ts`](reference/appearance.ts) holds the shape, accent, rainbow and motion logic, including the four fixed motion level names and `stormTap()`, the gesture behind the hidden fourth one, and `leafTap()`, the same gesture for the hidden shape. Framework-free (talks only to `document.documentElement` and `localStorage`), so it drops into any app unchanged.
 - [`reference/controls.ts`](reference/controls.ts) is the label engine: four modes (text, text+glyph, glyph, reactive) across three independent surfaces, plus the width stages that let a mode change happen without the page reflowing. Framework-free the same way.
 - [`reference/colorPicker.ts`](reference/colorPicker.ts) is the floating saturation/value picker, drawn in the app's own DOM. Never a native `<input type="color">`, which hands off to a surface outside the page.
 - [`reference/numberField.ts`](reference/numberField.ts) adds in-field steppers for a plain `<input type="number">`, driving the input's own `stepUp()`/`stepDown()` so min/max/step stay in the markup.
@@ -89,7 +89,7 @@ An engine is a single mechanism that turns one setting into every token a compon
 
 | Engine | Drives | Set on `<html>` | Values | Default | Reference |
 |---|---|---|---|---|---|
-| **Shape** | corner shape | `data-shape` | `round` (16/10px) · `soft` (8/5px) · `square` (0) | `round` | [`tokens.css`](reference/tokens.css), [`appearance.ts`](reference/appearance.ts) |
+| **Shape** | corner shape | `data-shape` | `round` (card 20px, field 12px, pressable things pills) · `soft` (8/5px) · `square` (0), plus `leaf` below the picker's floor | `soft` | [`tokens.css`](reference/tokens.css), [`appearance.ts`](reference/appearance.ts) |
 | **Colour** | theme, accent, rainbow | `data-theme`, `--accent` | `light` · `dark` · unset (follows the OS); any accent, eight rainbow positions | system theme, Sunflower gold `#FCC419` | [`tokens.css`](reference/tokens.css), [`appearance.ts`](reference/appearance.ts), [`colorPicker.ts`](reference/colorPicker.ts) |
 | **Motion** | motion intensity | `data-motion` | `off` · `subtle` · `wild`, plus `storm` below the picker's floor | `subtle` | [`tokens.css`](reference/tokens.css), [`appearance.ts`](reference/appearance.ts) |
 | **Label** | how much of a control is shown | `data-labels-buttons`, `data-labels-sidebar`, `data-labels-tabs` | `text` · `textGlyph` · `glyph` · `reactive` | `textGlyph` | [`controls.ts`](reference/controls.ts) |
@@ -106,7 +106,7 @@ A new control has to point its own CSS at these tokens as it is built. Adopting 
 
 ## 4. Easter eggs
 
-The language has two, and they exist mostly to establish the rules that come with them.
+The language has three, and they exist mostly to establish the rules that come with them.
 
 **`storm`, a fourth motion level no picker lists.** Same keyframes as the other three with bigger numbers: page entrance 760ms over 34px on `cubic-bezier(.22, 1.94, .45, 1)`, and `springDamping: 0.34` on a phone. One token block, `:root[data-motion='storm']` in [`reference/tokens.css`](reference/tokens.css), is its entire cost.
 
@@ -115,6 +115,8 @@ The language has two, and they exist mostly to establish the rules that come wit
 **The rule, which is the part worth copying rather than the numbers: an easter egg that changes BEHAVIOUR must be switchable back off, and must not quietly become a permanent entry in a settings list.** The first build stored a "found it" flag, so one gesture added a fourth picker option for ever after. A secret had turned into a setting somebody has to explain to themselves months later. What keeps it visible instead is the plain truth about the current state: it is offered while it is chosen, because a picker hiding the value it is showing would be lying, and otherwise only while that settings screen stays open. So `found` lives in the screen's own state and never in storage, while the chosen value persists like any other setting.
 
 **`disco`, the colour engine's own: the eight rainbow colours step one position every second**, so every hued element moves to the next colour together while nothing else changes. It animates nothing: no keyframes, no new classes, just the rotation offset rainbow already carried, stepped on a timer. **To find it: turn Rainbow Mode on five times, each within three seconds of the last.** Only turn-ons count, which halves the clicks and leaves the gesture ending with rainbow ON, the one state where a walking palette is visible at all. `applyDisco()` and `discoTap()` in [`reference/appearance.ts`](reference/appearance.ts).
+
+**`leaf`, a fourth shape: two opposite corners rounded, the other two sharp.** Found the storm's way: set the shape to square, then tap square five more times (`leafTap()`). It follows the storm's rule, offered while chosen and found again after the settings screen closes. It is plain per-corner radii, so it looks the same in every browser, desktop shell and phone app.
 
 **A hidden switch may outrank the accessibility preference, and that reverses what this section said until 2026-09-15.** `storm` used to resolve only inside `@media (prefers-reduced-motion: no-preference)` like every other level. It no longer does: the `reduce` block exempts it from the gentler substitutes and restores the full animations for it, and disco carries no reduced-motion gate at all. The position on accessibility has not moved, the reading of the gesture has. The three levels a picker OFFERS keep obeying the OS unconditionally, because somebody who set reduced motion did not go looking for any of them; they got whichever one the app booted at. Five taps on an option already chosen, or five deliberate turn-ons of a mode, is not a value anybody inherited.
 
