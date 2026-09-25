@@ -112,6 +112,19 @@ Five rounds of live review went into these, each one starting from a report that
 | `IconViewSimple` | `interface-essential/layout-window-11.svg` | Simple view |
 | `IconViewAdvanced` | `interface-essential/layout-window-8.svg` | Advanced view |
 
+### Settings tabs
+
+Every app names its Settings tabs with these, so the same tab wears the same glyph in each of them. The cog is Settings itself and nothing inside it: a tab that repeated it would give one drawing two meanings.
+
+| Name | Source | Means |
+| --- | --- | --- |
+| `IconGear` | `interface-essential/cog.svg` | Settings, the destination (see above) |
+| `IconTabGeneral` | `interface-essential/vertical-slider-square.svg` | The General tab |
+| `IconTabLook` | `interface-essential/color-palette.svg` | The Look tab: language, theme, shape, motion, labels, colours |
+| `IconTabApp` | `computer-devices/computer-pc-desktop.svg` | The App tab: every other way to get the app, whichever forms it offers |
+| `IconTabSecurity` | `interface-essential/padlock-square-1.svg` | Security, passwords, remote access |
+| `IconInfo` | `interface-essential/information-circle.svg` | About, where it is a tab of its own |
+
 ### Hand-drawn, where no free set had an answer
 
 | Name | Means | Source, and why |
