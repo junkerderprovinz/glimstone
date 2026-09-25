@@ -179,8 +179,10 @@
   /* One elevation, one hairline. The shadow is neutral black, since a brown
      one under a grey card reads as a colour cast. */
   --elevation: 0 1px 2px rgba(0, 0, 0, .40), 0 18px 40px -24px rgba(0, 0, 0, .85);
-  /* The ground behind a floating window. */
-  --glim-scrim: rgba(0, 0, 0, .65);
+  /* The ground behind a floating window, and the blur that takes the page's
+     detail away beneath it. */
+  --glim-scrim: rgba(0, 0, 0, .72);
+  --glim-scrim-blur: 6px;
   --hairline: inset 0 1px 0 rgba(255, 255, 255, .045);
   --focus-ring: rgba(252, 196, 25, .55);
 }
@@ -252,7 +254,7 @@
     --status-neutral-solid: #8d8d8d;
 
     --elevation: 0 1px 2px rgba(0, 0, 0, .06), 0 16px 36px -26px rgba(0, 0, 0, .35);
-    --glim-scrim: rgba(0, 0, 0, .55);
+    --glim-scrim: rgba(0, 0, 0, .62);
     --hairline: inset 0 0 0 1px rgba(0, 0, 0, .05);
     --focus-ring: rgba(142, 106, 0, .5);
   }
@@ -329,7 +331,7 @@
   --status-neutral-solid: #8d8d8d;
 
   --elevation: 0 1px 2px rgba(0, 0, 0, .06), 0 16px 36px -26px rgba(0, 0, 0, .35);
-  --glim-scrim: rgba(0, 0, 0, .55);
+  --glim-scrim: rgba(0, 0, 0, .62);
   --hairline: inset 0 0 0 1px rgba(0, 0, 0, .05);
   --focus-ring: rgba(142, 106, 0, .5);
 }
@@ -1321,9 +1323,18 @@ body {
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* The scrim reads the --glim-scrim token, so darkening it is one edit. At .60
-   the eye keeps reading the page behind the card, hence .65. */
-.glim-modal-backdrop { background: var(--glim-scrim); }
+/* The blur takes the page's detail away and the scrim its contrast, so the
+   window is the one thing left to read. Both are tokens, so an app changes
+   every window in one place, and a system that asks for less transparency gets
+   the darkening without the blur. */
+.glim-modal-backdrop {
+  background: var(--glim-scrim);
+  -webkit-backdrop-filter: blur(var(--glim-scrim-blur));
+  backdrop-filter: blur(var(--glim-scrim-blur));
+}
+@media (prefers-reduced-transparency: reduce) {
+  :root { --glim-scrim-blur: 0px; }
+}
 
 @media (prefers-reduced-motion: no-preference) {
   /* The quiet levels are excluded rather than the lively ones named, as in the

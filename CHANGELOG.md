@@ -3,8 +3,15 @@
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 ## Unreleased
 
+## 2.11.0 - 2026-09-25
+
+Windows stand out more: the page behind one is blurred and a little darker, so the window is the one thing left to read. An app's head bar gets a third button height for its transport controls, and a colour row's reset shrinks to a swatch.
+
+**Adopting apps:** copy the `--glim-scrim` values from all three theme blocks of `reference/tokens.css`, `--glim-scrim-blur`, the `.glim-modal-backdrop` rule and the `prefers-reduced-transparency` block beside it. An app with play, pause and stop in its head bar gives those squares `glim-btn glim-btn-transport` and takes `--btn-h-transport` and the `.glim-btn-transport` rules; no other button uses them. Copy `reference/paypal.ts` again if the app has the PayPal window.
+
 ## 🎨 Design
 
+- **The page behind a window is blurred and a little darker** (rule 15): a 6px blur through `--glim-scrim-blur` on `.glim-modal-backdrop`, and `--glim-scrim` at .72 on the dark theme and .62 on the light one. A system set to reduce transparency keeps the darkening without the blur.
 - **A third button height, for a head bar's transport row only** (rule 19). Play, pause, stop and the quick-settings square beside them are 48px squares with a 24px glyph, through `--btn-h-transport` and `.glim-btn-transport`. Every other button keeps the two heights.
 - **The reset at the end of a colour row is the size of a swatch and shows only its glyph**, in every label mode ("The user-owned axes", Accent). Found in TrickWork, where the reset under the swatches said "Reset to default" and took a line of its own.
 
