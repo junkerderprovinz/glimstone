@@ -2,16 +2,20 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 2.14.0 - 2026-09-26
+
+On a phone, a control that just succeeded swells once and settles, on dials in `motionNative.ts` that carry the web's confirm numbers. Two more Settings tabs get a fixed glyph, Engine and Advanced, and a selector in a toolbar keeps its own width.
+
+**Adopting apps:** a phone app copies `reference/motionNative.ts` again and scales a control that just succeeded to `confirmPeak()` over the first 40 per cent of `confirm`, then back over the rest. An app with an Engine tab gives it `IconTabEngine` (Streamline's dashboard), one with an Advanced tab `IconTabAdvanced` (Material's hammer and wrench). A toolbar selector that was stretched across its row can hug its segments again.
 
 ## ✨ Added
 
 - **A confirm dial for phone apps**: `confirm` and `confirmScale` in `reference/motionNative.ts`, with `confirmPeak()`, carrying the web's `--motion-confirm-*` numbers at every level. A copy or a save that landed swells its control once and settles ("On a phone").
-- **`IconTabEngine`** in glyphs.md, Streamline's dashboard, for a tab about how the app's own background work runs.
+- **`IconTabEngine` and `IconTabAdvanced`** in glyphs.md. Streamline's dashboard marks a tab about how the app's own background work runs. Material's hammer and wrench marks an Advanced tab, where sliders would read as General beside it.
 
 ## 🎨 Design
 
-- **A selector in a toolbar keeps its own width** ("The one horizontal selector"). The full-width rule is for a selector that has its card to itself; in a row it shares with a search field or buttons it hugs its segments.
+- **A selector in a toolbar keeps its own width** ("The one horizontal selector"). The full-width rule is for a selector that has its card to itself; in a row it shares with a search field or buttons, it hugs its segments.
 
 ## 2.13.0 - 2026-09-26
 
