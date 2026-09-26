@@ -2,6 +2,17 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+## ✨ Added
+
+- **A confirm dial for phone apps**: `confirm` and `confirmScale` in `reference/motionNative.ts`, with `confirmPeak()`, carrying the web's `--motion-confirm-*` numbers at every level. A copy or a save that landed swells its control once and settles ("On a phone").
+- **`IconTabEngine`** in glyphs.md, Streamline's dashboard, for a tab about how the app's own background work runs.
+
+## 🎨 Design
+
+- **A selector in a toolbar keeps its own width** ("The one horizontal selector"). The full-width rule is for a selector that has its card to itself; in a row it shares with a search field or buttons it hugs its segments.
+
 ## 2.13.0 - 2026-09-26
 
 The App tab and the About card offer their links as the buttons in the family's READMEs. At rest a button is grey with the brand's mark; under the pointer it takes the brand's colour, the name moves up for a second line and a sheen crosses once. A variant hangs on its button as a segment. Every horizontal selector now spans its card, with a free value at the end of the row under its steps, and the language picker opens the Look tab. On the motion side, every level answers every dial, and the reference carries the rest of the round-two animations.

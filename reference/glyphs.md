@@ -123,6 +123,7 @@ Every app names its Settings tabs with these, so the same tab wears the same gly
 | `IconTabLook` | `interface-essential/color-palette.svg` | The Look tab: language, theme, shape, motion, labels, colours |
 | `IconTabApp` | `computer-devices/computer-pc-desktop.svg` | The App tab: every other way to get the app, whichever forms it offers |
 | `IconTabSecurity` | `interface-essential/padlock-square-1.svg` | Security, passwords, remote access |
+| `IconTabEngine` | `interface-essential/dashboard-3.svg` | An Engine tab: how the app's own background work runs (ArrowLoop's transfers) |
 | `IconInfo` | `interface-essential/information-circle.svg` | About, where it is a tab of its own |
 | `IconMail`, `IconMailOpen` | Material Design Icons `email`, `email-open` | The About card's Email button: closed at rest, open under the pointer, in one shared box so the envelope does not jump. Both ship as `MAIL_SVG` in `appMarks.ts` |
 
