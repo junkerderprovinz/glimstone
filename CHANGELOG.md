@@ -2,6 +2,12 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+## 🎨 Design
+
+- **The first row of every page stands level with the rail's top edge** ("The sidebar"). The Settings tab strip, a row of buttons or a heading starts on the rail's top line, so the content has no padding above its first row.
+
 ## 2.14.0 - 2026-09-26
 
 On a phone, a control that just succeeded swells once and settles, on dials in `motionNative.ts` that carry the web's confirm numbers. Two more Settings tabs get a fixed glyph, Engine and Advanced, and a selector in a toolbar keeps its own width.
