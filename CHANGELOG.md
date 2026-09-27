@@ -2,6 +2,16 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 3.0.2 - 2026-09-27
+
+A button that runs a test can show its verdict on itself: the button takes an `ok` tone next to `danger`.
+
+**Adopting apps:** copy `reference/react/Button.tsx` again, or add `ok: "bg-statusOkSolid text-carbon-background hover:opacity-90"` to its tone table and `"ok"` to `ButtonTone`. A Test connection button then turns `ok` or `danger` with its answer and changes its word and glyph with it, instead of a coloured word elsewhere in the form.
+
+## 🎨 Design
+
+- **A test button shows its verdict.** The button has an `ok` tone on the solid success colour, the counterpart of `danger`. A button that tests something, such as Test connection, turns green with Connected and a check when the test passes, and red with Not connected and a cross when it fails, and it shakes on a failure like any failed click. The reason for a failure stays as one line above the buttons.
+
 ## 3.0.1 - 2026-09-27
 
 The closed envelope on the About card's mail button sits in the middle of its button, and the design language says where the switch for automatic updates belongs.
