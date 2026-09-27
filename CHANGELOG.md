@@ -2,116 +2,61 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## 2.15.0 - 2026-09-27
+## 3.0.0 - 2026-09-27
 
-The first row of every page, a Settings tab strip, a row of buttons or a heading, stands level with the rail's top edge, and a page that opens with a card starts at the card's badge.
+A major release, because the App tab's tiles make way for the buttons in the family's READMEs: `AppTile` is gone, and so are `.glim-brand-btn`, `--carbon-tile-hover` and the `--brand-*-hover` values an app copied for them.
 
-**Adopting apps:** take the content's padding off above the first row and keep it at the sides and the bottom. Where a page opens with a card, give that card half the heading badge's height as a top margin, so the badge meets the line instead of being cut off.
+At rest a README button is grey with the brand's mark; under the pointer it takes the brand's colour, the name moves up for a second line and a sheen crosses once. The About card gives and reports with the same buttons, and every giving window opens with the same appeal. Every horizontal selector spans its card, and a label wraps only when its box has run out of room. The page behind a window is blurred, and the first row of every page stands level with the rail's top edge. On the motion side every level answers every dial, the reference carries seven more animations and the reorder wiggle, and a phone gets its own confirm swell.
 
-## 🎨 Design
+**Adopting apps:**
 
-- **The first row of every page stands level with the rail's top edge** ("The sidebar"). The Settings tab strip, a row of buttons or a heading starts on the rail's top line, so the content has no padding above its first row. A page that opens with a card starts at the card's badge.
-
-## 2.14.0 - 2026-09-26
-
-On a phone, a control that just succeeded swells once and settles, on dials in `motionNative.ts` that carry the web's confirm numbers. Two more Settings tabs get a fixed glyph, Engine and Advanced, and a selector in a toolbar keeps its own width.
-
-**Adopting apps:** a phone app copies `reference/motionNative.ts` again and scales a control that just succeeded to `confirmPeak()` over the first 40 per cent of `confirm`, then back over the rest. An app with an Engine tab gives it `IconTabEngine` (Streamline's dashboard), one with an Advanced tab `IconTabAdvanced` (Material's hammer and wrench). A toolbar selector that was stretched across its row can hug its segments again.
-
-## ✨ Added
-
-- **A confirm dial for phone apps**: `confirm` and `confirmScale` in `reference/motionNative.ts`, with `confirmPeak()`, carrying the web's `--motion-confirm-*` numbers at every level. A copy or a save that landed swells its control once and settles ("On a phone").
-- **`IconTabEngine` and `IconTabAdvanced`** in glyphs.md. Streamline's dashboard marks a tab about how the app's own background work runs. Material's hammer and wrench marks an Advanced tab, where sliders would read as General beside it.
-
-## 🎨 Design
-
-- **A selector in a toolbar keeps its own width** ("The one horizontal selector"). The full-width rule is for a selector that has its card to itself; in a row it shares with a search field or buttons, it hugs its segments.
-
-## 2.13.0 - 2026-09-26
-
-The App tab and the About card offer their links as the buttons in the family's READMEs. At rest a button is grey with the brand's mark; under the pointer it takes the brand's colour, the name moves up for a second line and a sheen crosses once. A variant hangs on its button as a segment. Every horizontal selector now spans its card, with a free value at the end of the row under its steps, and the language picker opens the Look tab. On the motion side, every level answers every dial, and the reference carries the rest of the round-two animations.
-
-**Adopting apps:** copy `reference/tokens.css` again. If you merge by hand, take the motion blocks, which declare every dial at every level, the round-two keyframes and classes with the `@property` registration of the radius tokens, the new `.glim-tile-*` and `.glim-*-mark` classes, the `.glim-readme-btn` block and `.glim-about-give`, and drop `.glim-brand-btn` with its `.glim-brand-<name>` blocks. Copy `reference/appMarks.ts` and the `reference/react/` folder again. `ReadmeButton` replaces `AppTile`: every way to get the app becomes a `ReadmeButton` with its brand, its parts and its mark's `markClass`, Windows on ARM and the portable build become segments of the Windows button, and an APK's QR code becomes a segment that opens the code in a small window. `AboutCard` takes `coffeeArt` (`<BrandMark svg={COFFEE_BUTTON_SVG} />`) in place of `coffeeGlyph`, and its mail button takes `MAIL_SVG`. Move the language picker to the top of the Look tab at `--btn-h`, let every horizontal selector fill its card, give the Settings tabs the glyphs from `glyphs.md`, and put a free value at the end of the row under its steps.
-
-## 🎨 Design
-
-- **The App tab offers README buttons** ("The App tab") where it had 112px tiles: 10rem by 2.9125rem, the README's 160 by 46.6. At rest a button is surface2 with its mark in its own colours and the name in the middle. Under the pointer it takes the brand's colour, the name moves up for a second line ("Windows" over "x64"), and a sheen crosses it once on `--motion-button-sheen-dur`. A variant is a segment of its button (ARM64 and Portable beside Windows, the QR code beside the APK) and lights up with it. The buttons follow the shape engine, and a long translation shrinks rather than being cut off. A listing still to come stays grey with "Soon" as its second line.
-- **The About card gives and reports with the same buttons**, one line each. Buy Me a Coffee's button wears the vendor's own cup and lettering, as on the README, and the Email button's envelope opens under the pointer. The give row stands a blank line apart from the sentences above and below it.
-- **A free value stands at the end of the row under its steps** ("The one horizontal selector"), so the steps keep the card's width. Where that row already holds controls, the field joins it at the end. A valid value takes the selection away from the steps, a step empties the field, and text that is no value shakes it. The PayPal window's free amount moves under its presets the same way.
-- **A simple app's Settings page** keeps the brand card in the top left corner and puts Back in the top right one, with the tabs General, Look and App and their cards centred between them ("The sidebar").
-- **The language picker stands first on the Look tab**, above the shape, and never on a General tab. Language is a user-owned axis like theme and shape, so it sits with them; where Settings has no tabs it heads the appearance card. Its trigger has a field's height, `--btn-h`.
-- **Settings tabs have fixed glyphs** (glyphs.md, "Settings tabs"): General Material's tune, Look the colour palette, App the screen with a device beside it, Security the padlock, About the information circle. The cog stays Settings itself and is not reused for General. The Email button's envelope is Material's `email` and `email-open`.
-- **Every horizontal selector spans the whole width of its card**, at both scales and in both stylings, with the segments sharing the width. A strip sized to its own content left a ragged edge down a card of stacked selectors.
+- **Tokens:** copy `reference/tokens.css` again. Merging by hand, remove `--carbon-tile-hover`, `--carbon-tile-hover-ink` and the four `--brand-*-hover` values from all three theme blocks, drop `.glim-brand-btn` with its `.glim-brand-<name>` blocks, and replace the `.group:hover .glim-*-mark` block with the brand tile rules (`.glim-brand-tile`, `.glim-mark-hover`, the `.glim-tile-*` and `.glim-*-mark` classes).
+- **New in the tokens:** `.glim-readme-btn` and `.glim-about-give`; motion blocks that declare every dial at every level, with the new keyframes and the `@property` registration of the radius tokens; `--glim-scrim` in all three theme blocks with `--glim-scrim-blur`, `.glim-modal-backdrop` and its `prefers-reduced-transparency` block; `--btn-h-transport` with `.glim-btn-transport`; the light blocks' `--brand-android`, `--brand-docker` and `--brand-unraid-*`; and the accent lines of the `@media (prefers-color-scheme: light)` block.
+- **Reference files:** copy `reference/appMarks.ts`, `reference/paypal.ts`, `reference/segmentLayout.ts` and the `reference/react/` folder again. A phone app copies `reference/motionNative.ts` and scales a control that just succeeded to `confirmPeak()` over the first 40 per cent of `confirm`, then back over the rest.
+- **App tab:** every way to get the app becomes a `ReadmeButton` with its brand, its parts and its mark's `markClass`. Windows on ARM and the portable build become segments of the Windows button, and an APK's QR code becomes a segment that opens the code in a small window.
+- **About card:** `AboutCard` takes `coffeeArt` (`<BrandMark svg={COFFEE_BUTTON_SVG} />`) in place of `coffeeGlyph`, and its mail button takes `MAIL_SVG`.
+- **Giving windows:** pass `text.appeal` to `CoffeeDialog`, `PaypalDialog` and `CryptoDonateDialog` from one string per language (`about.donateAppeal`). Give each coin in the crypto window its `tile` colour and ink; a coin disc paints its disc with `var(--mark-ink, <colour>)` and its symbol with `var(--mark-cut, <colour>)`. Where a language's crypto intro used its word for coin, use its word for currency.
+- **Selectors:** let every horizontal selector fill its card, except one in a toolbar, which hugs its segments. Call `segmentLayout()` with the room, the pinned width, the gap and each segment's max-content and min-content width, measured again when the box or a segment resizes. With `byContent` set, give the segments `flex: 1 0 auto` and the track `width: 100%` without wrapping; otherwise lay the pinned segments out `perRow` to a row. Put a free value at the end of the row under its steps.
+- **Settings:** move the language picker to the top of the Look tab at `--btn-h`, and give the tabs the glyphs from `glyphs.md`, `IconTabEngine` and `IconTabAdvanced` included. An app with play, pause and stop in its head bar gives those squares `glim-btn glim-btn-transport`; no other button uses it.
+- **Pages:** take the content's padding off above the first row and keep it at the sides and the bottom. Where a page opens with a card, give that card half the heading badge's height as a top margin, so the badge meets the line instead of being cut off.
 
 ## ✨ Added
 
 - **`reference/react/ReadmeButton.tsx`**, with `fitReadmeText` and `BrandMark`, and the `.glim-readme-btn` rules in `reference/tokens.css`. It replaces `AppTile.tsx`, which is gone.
 - **`COFFEE_BUTTON_SVG` and `MAIL_SVG` in `reference/appMarks.ts`**: Buy Me a Coffee's README artwork without its yellow ground, and Material's closed and open envelope in one box.
 - **Tile colours for the About card's brands**: `.glim-tile-coffee`, `.glim-tile-paypal` and `.glim-tile-bitcoin`, and `.glim-tile-house`, which takes the accent. The resting marks paint through `.glim-paypal-mark`, `.glim-bitcoin-mark`, `.glim-github-mark` and `.glim-house-mark`, which replace `.glim-brand-btn` and its `.glim-brand-<name>` blocks.
-- **The seven round-two animations and the reorder wiggle are in `reference/tokens.css`**: `glim-confirm`, `glim-row-in` (`.glim-stagger-row`), `.glim-colour-wipe`, `glim-check-draw`, `glim-content-fade-in`, `glim-tab-slide` and `glim-wiggle` (`.glim-drag-armed`), each on dials declared at every level (`--motion-shape-*`, `-confirm-*`, `-stagger-*`, `-wipe-dur`, `-check-dur`, `-content-dur`, `-tab-*`, `-wiggle-*`). The shape morph registers the radius tokens with `@property` and transitions them on `:root.glim-shape-transitions`.
-
-## 🐛 Fixed
-
-- **Every motion level declares every dial.** Storm had no `--motion-control-dur` or `--drag-lift-scale` of its own and subtle no `--drag-lift-scale`, so both quietly ran the lively number. Subtle now states `--motion-toast-ease` and off `--motion-pulse-dur` as well, so no level inherits anything.
-- **The window entrance and the reactive label are one animation at every level**, read through `--motion-modal-dur`/`--motion-modal-travel` and `--motion-label-*`, instead of fixed numbers per selector that gave storm wild's timing. The window's keyframe ends at `transform: none` and no longer scales: ending at `scale(1)` kept a transform on the card, which makes it the containing block of anything fixed inside it.
-- **`AboutCard` typechecks with `noUncheckedIndexedAccess`.**
-
-## 2.12.0 - 2026-09-25
-
-A tile that carries a brand's mark lights up in that brand's colour under the pointer, and its mark turns white on it, or near-black where white would not read. The one grey every tile used to hover to is gone.
-
-**Adopting apps:** remove `--carbon-tile-hover`, `--carbon-tile-hover-ink` and the four `--brand-*-hover` values from all three theme blocks, and replace the `.group:hover .glim-*-mark` block with the brand tile rules from `reference/tokens.css`: `.glim-brand-tile`, `.glim-mark-hover` and the `.glim-tile-<brand>` classes. Take the light blocks' new `--brand-android`, `--brand-docker` and `--brand-unraid-*` values. Copy `reference/appMarks.ts` again, give every `AppTile` its `brand`, and give each coin in the crypto window its `tile` colour and ink. A coin disc paints its disc with `var(--mark-ink, <colour>)` and its symbol with `var(--mark-cut, <colour>)`.
-
-## 🎨 Design
-
-- **Brand tiles** (new section). Under the pointer a tile fills with its brand's own colour, the same on both themes; its name and mark take white where white reaches 2:1 and `#161616` below that. A part of a mark that lies on another part (eyes, letters, the M on a disc) becomes a cut-out in the tile colour, and a mark whose layers do not survive one ink shows the brand's single-colour version while lit. Tile and mark switch without a transition.
-- **Marks keep their own colours at rest on the light theme.** Only a part that all but vanishes on the light tile, under 1.35:1, is deepened. Android, Docker and Unraid wear their brand colours on light again.
-- **Tux has a yellow beak and feet**, which stay cut-outs in the tile's yellow while it is lit.
-- **The App tab's tiles and the crypto window's coin tiles are brand tiles.** `AppTile` takes a `brand`; a coin takes a `tile` colour and ink, and the picked coin keeps the accent.
-
-## 2.11.0 - 2026-09-25
-
-Windows stand out more: the page behind one is blurred and a little darker, so the window is the one thing left to read. An app's head bar gets a third button height for its transport controls, and a colour row's reset shrinks to a swatch.
-
-**Adopting apps:** copy the `--glim-scrim` values from all three theme blocks of `reference/tokens.css`, `--glim-scrim-blur`, the `.glim-modal-backdrop` rule and the `prefers-reduced-transparency` block beside it. An app with play, pause and stop in its head bar gives those squares `glim-btn glim-btn-transport` and takes `--btn-h-transport` and the `.glim-btn-transport` rules; no other button uses them. Copy `reference/paypal.ts` again if the app has the PayPal window.
-
-## 🎨 Design
-
-- **The page behind a window is blurred and a little darker** (rule 15): a 6px blur through `--glim-scrim-blur` on `.glim-modal-backdrop`, and `--glim-scrim` at .72 on the dark theme and .62 on the light one. A system set to reduce transparency keeps the darkening without the blur.
-- **A third button height, for a head bar's transport row only** (rule 19). Play, pause, stop and the quick-settings square beside them are 48px squares with a 24px glyph, through `--btn-h-transport` and `.glim-btn-transport`. Every other button keeps the two heights.
-- **The reset at the end of a colour row is the size of a swatch and shows only its glyph**, in every label mode ("The user-owned axes", Accent). Found in TrickWork, where the reset under the swatches said "Reset to default" and took a line of its own.
-
-## 🐛 Fixed
-
-- **`reference/paypal.ts` typechecks with `noUncheckedIndexedAccess`**, and a PayPal SDK that loads without setting its namespace, as behind a content blocker, rejects instead of resolving to nothing. Found while bringing TrickWork's About card over.
-
-## 2.10.1 - 2026-09-25
-
-A light desktop with the theme on System showed the old olive accent, while Light picked by hand showed Sunflower. Both show Sunflower now.
-
-**Adopting apps:** copy the accent lines of the `@media (prefers-color-scheme: light)` block in `reference/tokens.css`, or the whole file again.
-
-## 🐛 Fixed
-
-- **The light theme the system picks wears the same accent as the one chosen by hand.** The `@media (prefers-color-scheme: light)` block still set `--accent` to `#8E6A00` with white ink and no `--ink-mix`, a value from before the accent's fill and its text got separate tokens. Its comment says it matches `[data-theme="light"]`, and it did in every other line. Found while bringing TrickWork up to date, whose theme starts on System.
-
-## 2.10.0 - 2026-09-25
-
-A selector's label wraps only when its box has run out of room. Where the pinned width would break a long option onto a second line and the options fit side by side at their own widths, the track takes the width of its box and each segment gets its own width plus an even share of the rest, so the long option is simply the widest. Every giving window opens with the same appeal, a paragraph of its own above the window's sentence about how that route pays: "Toss a coin to your knight: it covers part of the costs and keeps the project alive. Everything I build costs nothing and shows no ads."
-
-**Adopting apps with a horizontal selector:** copy `reference/segmentLayout.ts` and call `segmentLayout()` from the selector with the room, the pinned width, the gap and each segment's max-content and min-content width, measured again when the box or a segment resizes. With `byContent` set, give the segments `flex: 1 0 auto` and the track `width: 100%` without wrapping; otherwise lay the pinned segments out `perRow` to a row as before. An app whose pinned width is never narrower than its widest label already meets the rule and has nothing to change.
-
-**Adopting apps with giving windows:** copy `reference/react/CoffeeDialog.tsx`, `reference/react/PaypalDialog.tsx` and `reference/react/CryptoDonateDialog.tsx`, and pass `text.appeal` to all three from one string per language (`about.donateAppeal`). The crypto window's intro says "Pick a currency and a network" in English; in a language whose word for coin sat there, use its word for currency.
-
-## ✨ Added
-
+- **Seven more animations and the reorder wiggle in `reference/tokens.css`**: `glim-confirm`, `glim-row-in` (`.glim-stagger-row`), `.glim-colour-wipe`, `glim-check-draw`, `glim-content-fade-in`, `glim-tab-slide` and `glim-wiggle` (`.glim-drag-armed`), each on dials declared at every level. The shape morph registers the radius tokens with `@property` and transitions them on `:root.glim-shape-transitions`.
+- **A confirm dial for phone apps**: `confirm` and `confirmScale` in `reference/motionNative.ts`, with `confirmPeak()`, carrying the web's `--motion-confirm-*` numbers at every level. A copy or a save that landed swells its control once and settles ("On a phone").
 - **`reference/segmentLayout.ts`**: `segmentLayout()` decides whether a selector keeps its pinned widths, spreads its segments by content or wraps into even rows, and `perRowFor()` is the even-rows rule from "A selector that wraps fills its box". It has no imports, so a check can run it in Node.
+- **`IconTabEngine` and `IconTabAdvanced`** in glyphs.md. Streamline's dashboard marks a tab about how the app's own background work runs. Material's hammer and wrench marks an Advanced tab, where sliders would read as General beside it.
 
 ## 🎨 Design
 
-- **A selector label wraps only when its box has no room left** ("The one horizontal selector"). A single word too long for its segment cannot wrap and does not trigger this; a Japanese label can. Found in KnightLoader, where „Ein Eintrag, dass dieser Download sie geschrieben hat“ wrapped at the 22rem cap of a three-option well while the two short options sat in segments just as wide.
-- **Every giving window opens with the appeal** ("The card's own copy"). The About card asks, and the window behind each of its buttons says what the coin keeps going, in one sentence shared by all three.
+- **The App tab offers README buttons** ("The App tab"): 10rem by 2.9125rem, the README's 160 by 46.6. At rest a button is surface2 with its mark in its own colours and the name in the middle. Under the pointer it takes the brand's colour, the name moves up for a second line ("Windows" over "x64"), and a sheen crosses it once on `--motion-button-sheen-dur`. A variant is a segment of its button (ARM64 and Portable beside Windows, the QR code beside the APK) and lights up with it.
+- **The About card gives and reports with the same buttons**, one line each. Buy Me a Coffee's button wears the vendor's own cup and lettering, as on the README, and the Email button's envelope opens under the pointer. The give row stands a blank line apart from the sentences above and below it.
+- **Brand tiles** (new section). Under the pointer a tile fills with its brand's own colour, the same on both themes; its name and mark take white where white reaches 2:1 and `#161616` below that. A part of a mark that lies on another part (eyes, letters, the M on a disc) becomes a cut-out in the tile colour. The crypto window's coin tiles are brand tiles, and the picked coin keeps the accent.
+- **Marks keep their own colours at rest on the light theme.** Only a part that all but vanishes on the light tile, under 1.35:1, is deepened. Android, Docker and Unraid wear their brand colours on light again, and Tux has a yellow beak and feet.
+- **Every horizontal selector spans the whole width of its card**, at both scales and in both stylings, with the segments sharing the width. A strip sized to its own content left a ragged edge down a card of stacked selectors.
+- **A selector in a toolbar keeps its own width** ("The one horizontal selector"). In a row it shares with a search field or buttons, it hugs its segments.
+- **A selector label wraps only when its box has no room left.** Where the pinned width would break a long option onto a second line and the options fit side by side at their own widths, each segment gets its own width plus an even share of the rest. Found in KnightLoader, where a long German option wrapped at the 22rem cap of a three-option well.
+- **A free value stands at the end of the row under its steps**, so the steps keep the card's width. A valid value takes the selection away from the steps, a step empties the field, and text that is no value shakes it. The PayPal window's free amount moves under its presets the same way.
+- **The first row of every page stands level with the rail's top edge** ("The sidebar"). The Settings tab strip, a row of buttons or a heading starts on the rail's top line, and a page that opens with a card starts at the card's badge.
+- **A simple app's Settings page** keeps the brand card in the top left corner and puts Back in the top right one, with the tabs General, Look and App and their cards centred between them.
+- **The language picker stands first on the Look tab**, above the shape, and never on a General tab. Language is a user-owned axis like theme and shape, so it sits with them. Its trigger has a field's height, `--btn-h`.
+- **Settings tabs have fixed glyphs** (glyphs.md, "Settings tabs"): General Material's tune, Look the colour palette, App the screen with a device beside it, Security the padlock, About the information circle. The cog stays Settings itself and is not reused for General.
+- **The page behind a window is blurred and a little darker** (rule 15): a 6px blur through `--glim-scrim-blur` on `.glim-modal-backdrop`, and `--glim-scrim` at .72 on the dark theme and .62 on the light one. A system set to reduce transparency keeps the darkening without the blur.
+- **A third button height, for a head bar's transport row only** (rule 19). Play, pause, stop and the quick-settings square beside them are 48px squares with a 24px glyph. Every other button keeps the two heights.
+- **The reset at the end of a colour row is the size of a swatch and shows only its glyph**, in every label mode ("The user-owned axes", Accent). Found in TrickWork, where it said "Reset to default" and took a line of its own.
+- **Every giving window opens with the appeal** ("The card's own copy"): "Toss a coin to your knight: it covers part of the costs and keeps the project alive. Everything I build costs nothing and shows no ads." It stands as a paragraph of its own above the window's sentence about how that route pays.
 - **The crypto window says "currency"**, so "coin" keeps one meaning on a screen that also tosses one to the knight.
+
+## 🐛 Fixed
+
+- **Every motion level declares every dial.** Storm had no `--motion-control-dur` or `--drag-lift-scale` of its own and subtle no `--drag-lift-scale`, so both quietly ran the lively number. Subtle states `--motion-toast-ease` and off `--motion-pulse-dur` as well, so no level inherits anything.
+- **The window entrance and the reactive label are one animation at every level**, read through `--motion-modal-dur`/`--motion-modal-travel` and `--motion-label-*`, instead of fixed numbers per selector that gave storm wild's timing. The window's keyframe ends at `transform: none`, since a leftover `scale(1)` makes the card the containing block of anything fixed inside it.
+- **The light theme the system picks wears the same accent as the one chosen by hand.** The `@media (prefers-color-scheme: light)` block still set `--accent` to the old olive `#8E6A00` with white ink and no `--ink-mix`, while `[data-theme="light"]` showed Sunflower. Found while bringing TrickWork up to date, whose theme starts on System.
+- **A PayPal SDK that loads without setting its namespace**, as behind a content blocker, rejects instead of resolving to nothing.
+- **`reference/paypal.ts` and `AboutCard` typecheck with `noUncheckedIndexedAccess`.**
 
 ## 2.9.0 - 2026-09-25
 
