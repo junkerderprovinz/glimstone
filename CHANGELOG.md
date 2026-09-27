@@ -6,7 +6,7 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## 🎨 Design
 
-- **The first row of every page stands level with the rail's top edge** ("The sidebar"). The Settings tab strip, a row of buttons or a heading starts on the rail's top line, so the content has no padding above its first row.
+- **The first row of every page stands level with the rail's top edge** ("The sidebar"). The Settings tab strip, a row of buttons or a heading starts on the rail's top line, so the content has no padding above its first row. A page that opens with a card starts at the card's badge.
 
 ## 2.14.0 - 2026-09-26
 
