@@ -2,6 +2,17 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 3.0.1 - 2026-09-27
+
+The closed envelope on the About card's mail button sits in the middle of its button, and the design language says where the switch for automatic updates belongs.
+
+**Adopting apps:** copy `reference/appMarks.ts` again, or change both viewBoxes of `MAIL_SVG` to `2 2.32 20 19.36` and give its hover `<svg>` `overflow="visible"`. Move a switch for automatic updates to the General tab if it stands anywhere else.
+
+## 🎨 Design
+
+- **The closed envelope sits in the middle of the mail button.** It shared a box with the open envelope, which is taller, so it stood about a twelfth of its height too low. The box is now centred on the closed envelope; the open flap rises a little past its top under the pointer, and the envelope still does not jump.
+- **Automatic updates stand on the General tab.** The switch that lets the installed app update itself belongs with what concerns the app as a whole, not on the App tab, which offers other ways to get the product.
+
 ## 3.0.0 - 2026-09-27
 
 A major release, because the App tab's tiles make way for the buttons in the family's READMEs: `AppTile` is gone, and so are `.glim-brand-btn`, `--carbon-tile-hover` and the `--brand-*-hover` values an app copied for them.

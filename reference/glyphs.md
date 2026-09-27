@@ -126,7 +126,7 @@ Every app names its Settings tabs with these, so the same tab wears the same gly
 | `IconTabEngine` | `interface-essential/dashboard-3.svg` | An Engine tab: how the app's own background work runs (ArrowLoop's transfers) |
 | `IconTabAdvanced` | Material Design Icons `hammer-wrench` | An Advanced tab, the settings most people never need. Sliders would read as General beside it |
 | `IconInfo` | `interface-essential/information-circle.svg` | About, where it is a tab of its own |
-| `IconMail`, `IconMailOpen` | Material Design Icons `email`, `email-open` | The About card's Email button: closed at rest, open under the pointer, in one shared box so the envelope does not jump. Both ship as `MAIL_SVG` in `appMarks.ts` |
+| `IconMail`, `IconMailOpen` | Material Design Icons `email`, `email-open` | The About card's Email button: closed at rest, open under the pointer, in one shared box centred on the closed envelope so it does not jump; the open flap rises past the top of the box. Both ship as `MAIL_SVG` in `appMarks.ts` |
 
 The General and Advanced glyphs and the envelope come from Material: the free Streamline set has no sliders that read at 20px and no open envelope, and the hammer with a wrench read best beside General when eight candidates stood side by side.
 
