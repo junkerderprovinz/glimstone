@@ -2,7 +2,11 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 2.15.0 - 2026-09-27
+
+The first row of every page, a Settings tab strip, a row of buttons or a heading, stands level with the rail's top edge, and a page that opens with a card starts at the card's badge.
+
+**Adopting apps:** take the content's padding off above the first row and keep it at the sides and the bottom. Where a page opens with a card, give that card half the heading badge's height as a top margin, so the badge meets the line instead of being cut off.
 
 ## 🎨 Design
 
