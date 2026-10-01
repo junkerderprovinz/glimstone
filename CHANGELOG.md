@@ -2,6 +2,19 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 3.2.0 - 2026-10-02
+
+A phone app joins its group with the same pairing page and the same scanner in KnightLoader and BombVault, and the design language describes both, together with the QR code that stands beside the words on the web.
+
+**Adopting apps:** no reference file changes. An app that pairs a phone with a twelve-word phrase builds the page and the scanner as "Pairing a phone" describes them, and the window that shows the words on the web puts the QR code to their right.
+
+## 🎨 Design
+
+- **Pairing a phone.** The phrase page has a back badge, title and (i) on one row, a word counter that turns green at twelve, a tall filled field and twelve numbered tiles that fill as the words arrive. Paste, Pair and Scan the QR code stand stacked at full width in rainbow order, Pair shakes when the words are refused, and autocorrect is off in the field so the keyboard cannot swap a word.
+- **Looking before joining.** Pair lists the instances the relay announces under "On this relay" before anything is saved, and "Add all" takes the group over. Back closes the connection without joining.
+- **The scanner.** A window over the whole screen with the camera picture, a 240px accent frame with the card radius, the hint under it and a quiet Cancel at the end of the bottom row. It asks for the camera in one line first, opens the app's settings once Android stops asking, and reads the code without any Google service.
+- **The QR code beside the words.** The window that shows the phrase on the web puts a 128px code to the right of the three rows, which stretch to its height. Below 640px it moves under the words.
+
 ## 3.1.0 - 2026-10-01
 
 A settings area with many pages can stand its tabs in a column of tiles beside the content, and the search over all of Settings shows only when somebody scrolls up for it; both come from KnightLoader. A button that runs a test shows its verdict on itself, the closed envelope on the About card's mail button sits in the middle of its button, and the design language says where the switch for automatic updates belongs and which giving windows a phone keeps in the app.
