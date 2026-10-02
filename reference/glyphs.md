@@ -185,6 +185,7 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconTabApps` | Apps tab, the companions | Streamline `programming/module-three.svg` |
 | `IconTabSystem` | System tab | Streamline `computer-devices/computer-chip-1.svg` |
 | `IconTabStorage` | Paths and storage tab | Streamline `computer-devices/database-server-1.svg` |
+| `IconTabRetention` | Retention tab, how long backups are kept | Font Awesome Free `box-archive` (CC BY 4.0) |
 | `IconTabIntegrity` | Integrity tab | Streamline `interface-essential/shield-check.svg` |
 | `IconTabOffsite` | Off-site tab | Font Awesome Free `cloud` (CC BY 4.0) |
 | `IconSchedules` | Schedules, automation | Streamline `interface-essential/circle-clock.svg` |

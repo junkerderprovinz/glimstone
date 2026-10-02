@@ -131,6 +131,7 @@
 | Apps tab, the companions | `IconTabApps` | `IconTabApps`, standard | none |
 | System tab | `IconTabSystem` | `IconTabSystem`, standard | none |
 | Paths and storage tab | `IconTabStorage` | `IconTabStorage`, standard | none |
+| Retention tab, how long backups are kept | `IconTabRetention` | `IconTabRetention`, standard | none |
 | Integrity tab | `IconTabIntegrity` | `IconTabIntegrity`, standard | none |
 | Off-site tab | `IconTabOffsite` | `IconTabOffsite`, standard | none |
 | Schedules, automation | `IconSchedules` | `IconSchedules`, standard | `IconSchedules`, standard |
