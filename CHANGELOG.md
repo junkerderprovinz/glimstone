@@ -2,6 +2,17 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 3.1.1 - 2026-10-02
+
+The pairing page shows what the words found on a view of its own, and the glyph map records BombVault's padlock on the Security tab.
+
+**Adopting apps:** no reference file changes. An app whose pairing page lists the found instances under the words moves them to a view of their own with only Add and Cancel.
+
+## 🎨 Design
+
+- **What the words found gets a view of its own.** After Pair the page shows only the instances on the relay, "Add all n" and a quiet Cancel back to the words. With the field, Paste, Pair, Scan and the local network's Add server on the same screen, nobody could tell which button came next.
+- **BombVault's padlock in the glyph map.** The Security tab's row names the padlock BombVault draws there.
+
 ## 3.1.0 - 2026-10-01
 
 A settings area with many pages can stand its tabs in a column of tiles beside the content, and the search over all of Settings shows only when somebody scrolls up for it; both come from KnightLoader. A button that runs a test shows its verdict on itself, and the closed envelope on the About card's mail button sits in the middle of its button. KnightLoader's and BombVault's phone apps share one pairing page, one scanner and one settings page and answer every press on a touch screen, and a new file maps every glyph to the component each app renders, with KnightLoader's eye in both. The design language also says where the switch for automatic updates belongs and which giving windows a phone keeps in the app.
