@@ -2,6 +2,17 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 3.3.0 - 2026-10-02
+
+KnightLoader's and BombVault's phone apps share one settings page, and the design language describes it card by card.
+
+**Adopting apps:** no reference file changes. A phone app opens its settings from a gear beside the plus and lays them out as "A phone app's settings" describes.
+
+## 🎨 Design
+
+- **A phone app's settings.** Language, This device, Appearance, Motion, the other forms of the product, Problems?, About and the Danger zone, in that order and each in its own rainbow position. Language is a row that opens a list of every language with its flag. The device name is what the Instances page shows. Appearance follows an instance until a look is set on the phone, and the switch gives the phone's own look back when it is turned off again.
+- **Problems? and the Danger zone.** The report carries the version, platform, language and look and nothing that identifies a person or a server. The Danger zone's buttons stay quiet and let their question do the warning.
+
 ## 3.2.0 - 2026-10-02
 
 A phone app joins its group with the same pairing page and the same scanner in KnightLoader and BombVault, and the design language describes both, together with the QR code that stands beside the words on the web.

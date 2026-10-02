@@ -640,6 +640,19 @@ A phone app joins its group with the twelve words the instances share. KnightLoa
 - **Looking before joining.** Pair connects to the relay and lists every instance it announces under "On this relay", one card each with name and version. Nothing is saved at this point. "Add all n", or "Add this instance" when there is only one, takes the group over and returns to the list. Back leaves without joining and closes the connection. When nobody in the group is online, the page shows the empty-state card with its muted glyph and a line asking to check the words and to make sure an instance is running.
 - **The scanner is a window over the whole screen.** The camera picture fills it. A 240px frame in the accent colour, with the card radius, marks where the code goes, and the hint sits under it. Cancel is quiet and carries its glyph, at the end of the bottom row like every window's footer. Before the camera can be used, the window says so in one line with an "Allow access" button. Once Android stops asking, the same button opens the app's settings page. A scanned code joins right away, since it carries the same words Pair would send. The scanner reads the frames itself (ZXing in KnightLoader, jsQR in BombVault's web-built launcher) and needs no Google service, so the APK stays fit for F-Droid.
 
+## A phone app's settings
+
+KnightLoader's and BombVault's phone apps open their settings from a gear beside the plus at the top of the start page. The page has the same cards in the same order, each in its own rainbow position: Language, This device, Appearance, Motion, the forms of the product this app is not, Problems?, About, and the Danger zone.
+
+- **Language is a row, not a picker.** The row shows the flag and the name of the language in use. A tap opens a page that lists every language as a card with its flag, and a check marks the one in use. A phone has no room for a dropdown of forty languages.
+- **This device names the phone.** One field, with the phone's model as its placeholder, saved when it loses focus. The Instances page of every instance in the group shows this name, and the app announces itself again when it changes.
+- **Appearance follows an instance until it is set here.** A switch at the top says whether the app takes its look from an instance: the default one in KnightLoader, the first server in the list in BombVault. A line under the switch says which is the case. While the app follows, the options below are dimmed but still pressable, and a press makes the look the phone's own and turns the switch off. The switch shelves and restores the phone's own look as "A switch that puts something away" describes. Motion, disco and the language belong to the phone and never follow.
+- **Motion has its own card.** While the phone asks for less motion, its (i) says so.
+- **The other forms of the product** are README buttons ("The App tab"), and only the forms that exist and that this app is not.
+- **Problems? holds a report** with the app's version, the platform, the language and the look. It never contains an address, a name or a secret. Its Copy report button reads Report copied for a moment after a press.
+- **About is the About card**, titled About this app, showing the app's own version with a link to the app's privacy policy under it. PayPal opens in the browser, because its buttons need popups that a phone's web view does not open.
+- **The Danger zone comes last.** Its buttons are quiet, each with a glyph and none of them red, because the question each one asks is the warning. BombVault offers leaving the group and removing every server, KnightLoader removing every connection.
+
 ## Reordering by dragging
 
 A list whose order MEANS something (a download queue, a playlist, a set of rules evaluated in sequence) is reordered by dragging, and the gesture is the same everywhere:
