@@ -86,11 +86,11 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconCopy` | Copy | Tabler Icons, filled `copy` (MIT) |
 | `IconCheck` | Verify, confirmed | Drawn for GlimStone |
 | `IconLink` | Connect, pair | Streamline `interface-essential/link-chain.svg` |
-| `IconKey` | Credentials, key | BombVault's drawing |
+| `IconKey` | Credentials, key | Streamline `interface-essential/key.svg` |
 | `IconKeyRevoke` | Revoke a key | Streamline `key` with a bar cut through it |
-| `IconSignIn` | Sign in | BombVault's drawing |
-| `IconSignOut` | Sign out | BombVault's drawing |
-| `IconInfo` | Information | BombVault's drawing |
+| `IconSignIn` | Sign in | Streamline `interface-essential/login-1.svg` |
+| `IconSignOut` | Sign out | Streamline `interface-essential/logout-1.svg` |
+| `IconInfo` | Information | Streamline `interface-essential/information-circle.svg` |
 | `IconHelp` | Help | Streamline `interface-essential/help-question-1.svg` |
 | `IconMore` | More | Streamline `interface-essential/horizontal-menu-circle.svg` |
 | `IconMenu` | Menu | KnightLoader's drawing on a 20-unit grid |
@@ -99,7 +99,7 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconPrune` | Prune, reclaim space | Streamline `computer-devices/shredder.svg` |
 | `IconBack` | Back | KnightLoader's drawing on a 20-unit grid |
 | `IconForward` | Next, forward | KnightLoader's drawing on a 20-unit grid |
-| `IconLatest` | Jump to the newest entry, the end | BombVault's drawing |
+| `IconLatest` | Jump to the newest entry, the end | Streamline `interface-essential/arrow-down-2.svg` |
 | `IconFirst` | Jump to the start | `IconLatest` mirrored |
 | `IconMoveUp` | Move up one | Streamline `interface-essential/arrow-up-1.svg` |
 | `IconMoveDown` | Move down one | Streamline `arrow-up-1` mirrored |

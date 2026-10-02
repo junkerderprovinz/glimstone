@@ -236,7 +236,7 @@
  {
   "name": "IconKey",
   "means": "Credentials, key",
-  "source": "BombVault's drawing",
+  "source": "Streamline interface-essential/key.svg",
   "viewBox": "0 0 14 14",
   "ink": [
    0,
@@ -262,7 +262,7 @@
  {
   "name": "IconSignIn",
   "means": "Sign in",
-  "source": "BombVault's drawing",
+  "source": "Streamline interface-essential/login-1.svg",
   "viewBox": "0 0 14 14",
   "ink": [
    0,
@@ -275,7 +275,7 @@
  {
   "name": "IconSignOut",
   "means": "Sign out",
-  "source": "BombVault's drawing",
+  "source": "Streamline interface-essential/logout-1.svg",
   "viewBox": "0 0 14 14",
   "ink": [
    0,
@@ -288,7 +288,7 @@
  {
   "name": "IconInfo",
   "means": "Information",
-  "source": "BombVault's drawing",
+  "source": "Streamline interface-essential/information-circle.svg",
   "viewBox": "0 0 14 14",
   "ink": [
    0,
@@ -405,7 +405,7 @@
  {
   "name": "IconLatest",
   "means": "Jump to the newest entry, the end",
-  "source": "BombVault's drawing",
+  "source": "Streamline interface-essential/arrow-down-2.svg",
   "viewBox": "0 0 14 14",
   "ink": [
    3,
