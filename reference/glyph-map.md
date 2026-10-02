@@ -67,9 +67,10 @@
 | Script, code | `IconCode` | none | `IconCode`, standard |
 | Dark look | `IconMoon` | none | `IconMoon`, standard |
 | Light look | `IconSun` | none | `IconSun`, standard |
-| Paste | `IconPaste` | none | `IconClipboard`, switch |
-| Sort direction | `IconSort` | none | `IconMoveUp`, `IconMoveDown`, switch |
-| Up one folder | `IconFolderUp` | none | `IconMoveUp`, switch |
+| Paste | `IconPaste` | none | `IconPaste`, standard |
+| Sort direction | `IconSort` | none | `IconSort`, standard |
+| Up one folder | `IconFolderUp` | none | `IconFolderUp`, standard |
+| Write to us, under the pointer or a finger | `IconMailOpen` | `MAIL_SVG`, switch | `MAIL_SVG`, switch |
 
 <br>
 
@@ -111,9 +112,10 @@
 | ZFS datasets | `IconZFS` | `IconZFS`, standard | none |
 | Anomalies | `IconAnomalies` | `IconAnomalies`, standard | none |
 | The GitHub repository | `IconGithub` | `IconGithub`, standard | `IconGithub`, standard |
-| Health of the services | `IconHealth` | none | `IconBolt`, switch |
-| Queued | `IconQueued` | none | `IconSchedules`, switch |
-| Time left on a captcha | `IconCaptchaTimer` | none | `IconSchedules`, switch |
+| Health of the services | `IconHealth` | none | `IconHealth`, standard |
+| Queued | `IconQueued` | none | `IconQueued`, standard |
+| Time left on a captcha | `IconCaptchaTimer` | none | `IconCaptchaTimer`, standard |
+| Resolvers, download quality and format | `IconResolvers` | none | `IconSliders`, switch |
 
 <br>
 
