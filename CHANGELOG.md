@@ -2,6 +2,16 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 3.1.4 - 2026-10-02
+
+The App tab's cards follow the order of the README's download rows.
+
+**Adopting apps:** put the App tab's cards in the README's order: the server or desktop card first, then the phone card, the browser extension, and anything without a README row last. A phone app lists the server before the desktop app.
+
+## 🎨 Design
+
+- **The App tab follows the README.** Its cards stand in the order of the README's four download rows (server, desktop app, phone app, browser extension), and the buttons in a card keep the order of their row. Whatever the README has no row for, such as a bookmarklet, comes last.
+
 ## 3.1.3 - 2026-10-02
 
 Eight more meanings have a drawing of their own, the mail button's envelope opens under the pointer again, and both apps render every glyph in the list.
