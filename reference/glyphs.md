@@ -86,11 +86,11 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconCopy` | Copy | Tabler Icons, filled `copy` (MIT) |
 | `IconCheck` | Verify, confirmed | Drawn for GlimStone |
 | `IconLink` | Connect, pair | Streamline `interface-essential/link-chain.svg` |
-| `IconKey` | Credentials, key | Streamline `interface-essential/key.svg` |
+| `IconKey` | Credentials, key | BombVault's drawing |
 | `IconKeyRevoke` | Revoke a key | Streamline `key` with a bar cut through it |
-| `IconSignIn` | Sign in | Streamline `interface-essential/login-1.svg` |
-| `IconSignOut` | Sign out | Streamline `interface-essential/logout-1.svg` |
-| `IconInfo` | Information | Streamline `interface-essential/information-circle.svg` |
+| `IconSignIn` | Sign in | BombVault's drawing |
+| `IconSignOut` | Sign out | BombVault's drawing |
+| `IconInfo` | Information | BombVault's drawing |
 | `IconHelp` | Help | Streamline `interface-essential/help-question-1.svg` |
 | `IconMore` | More | Streamline `interface-essential/horizontal-menu-circle.svg` |
 | `IconMenu` | Menu | KnightLoader's drawing on a 20-unit grid |
@@ -99,7 +99,7 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconPrune` | Prune, reclaim space | Streamline `computer-devices/shredder.svg` |
 | `IconBack` | Back | KnightLoader's drawing on a 20-unit grid |
 | `IconForward` | Next, forward | KnightLoader's drawing on a 20-unit grid |
-| `IconLatest` | Jump to the newest entry, the end | Streamline `interface-essential/arrow-down-2.svg` |
+| `IconLatest` | Jump to the newest entry, the end | BombVault's drawing |
 | `IconFirst` | Jump to the start | `IconLatest` mirrored |
 | `IconMoveUp` | Move up one | Streamline `interface-essential/arrow-up-1.svg` |
 | `IconMoveDown` | Move down one | Streamline `arrow-up-1` mirrored |
@@ -125,6 +125,9 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconCode` | Script, code | Drawn for GlimStone |
 | `IconMoon` | Dark look | Streamline `interface-essential/waning-cresent-moon.svg` |
 | `IconSun` | Light look | Streamline `interface-essential/brightness-1.svg` |
+| `IconPaste` | Paste | Streamline `interface-essential/empty-clipboard.svg` |
+| `IconSort` | Sort direction | Streamline `interface-essential/ascending-number-order.svg` |
+| `IconFolderUp` | Up one folder | Material Design Icons `folder-arrow-up` (Apache 2.0) |
 
 ### Navigation and domain
 
@@ -164,6 +167,9 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconZFS` | ZFS datasets | Drawn: three separated platters |
 | `IconAnomalies` | Anomalies | Drawn: four columns, the third far above the rest |
 | `IconGithub` | The GitHub repository | Simple Icons `github` (CC0, a trademark used descriptively) |
+| `IconHealth` | Health of the services | Font Awesome Free `heart-pulse` (CC BY 4.0) |
+| `IconQueued` | Queued | Font Awesome Free `hourglass-half` (CC BY 4.0) |
+| `IconCaptchaTimer` | Time left on a captcha | Material Design Icons `clock-alert` (Apache 2.0) |
 
 ### Settings tabs
 

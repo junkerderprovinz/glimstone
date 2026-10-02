@@ -2,7 +2,7 @@
 
 [`glyphs.md`](glyphs.md) says which drawing means what. This file says where each app stands against it: one row per meaning, the GlimStone name, the component each app renders for it today, and whether that is already the standard drawing. An app that adds or swaps a glyph changes its row here in the same commit.
 
-"Standard" means the app renders the drawing from [`glyphs.json`](glyphs.json). "Switch" means it still renders its own and moves to the standard one. "None" means the app has no such meaning.
+"Standard" means the app's next release renders the drawing from [`glyphs.json`](glyphs.json). "Switch" means it still renders its own and moves to the standard one. "None" means the app has no such meaning.
 
 <br>
 
@@ -10,63 +10,66 @@
 
 | Meaning | GlimStone | BombVault | KnightLoader |
 | --- | --- | --- | --- |
-| Show, reveal | `IconEye` | `IconEye`, switch | `IconEye`, switch |
-| Hide again | `IconEyeOff` | `IconEyeOff`, switch | `IconEyeOff`, switch |
-| Refresh, retry | `IconRefresh` | `IconRefresh`, switch | `IconRetry`, switch |
-| Upload, import | `IconUpload` | `IconUpload`, switch | `IconUpload`, switch |
-| Download, export | `IconDownload` | `IconDownload`, switch | `IconDownloads`, switch |
-| Search | `IconSearch` | `IconSearch`, standard | `IconSearch`, switch |
-| Start, run now | `IconPlay` | `IconPlay`, standard | `IconPlay`, switch |
-| Pause | `IconPause` | none | `IconPause`, switch |
-| Stop, abort | `IconStop` | `IconStop`, standard | `IconStop`, `IconStopMark`, switch |
-| Power on and off | `IconPower` | `IconPower`, standard | `IconPower`, switch |
-| Delete | `IconTrash` | `IconTrash`, standard | `IconTrash`, switch |
-| Delete with its files | `IconTrashFiles` | none | `IconTrashFiles`, switch |
-| Add | `IconAdd` | `IconAdd`, switch | `IconPlus`, switch |
-| Close, cancel | `IconClose` | `IconClose`, switch | `IconClose`, switch |
-| Edit | `IconPencil` | `IconPencil`, standard | `IconEdit`, switch |
-| Copy | `IconCopy` | `IconCopy`, standard | `IconClipboard`, switch |
-| Verify, confirmed | `IconCheck` | `IconCheckCircle`, switch | `IconCheck`, `IconCheckDrawn`, switch |
-| Connect, pair | `IconLink` | `IconLink`, standard | `IconLink`, switch |
-| Credentials, key | `IconKey` | `IconKey`, standard | `IconKey`, switch |
+| Show, reveal | `IconEye` | `IconEye`, standard | `IconEye`, standard |
+| Hide again | `IconEyeOff` | `IconEyeOff`, standard | `IconEyeOff`, standard |
+| Refresh, retry | `IconRefresh` | `IconRefresh`, standard | `IconRefresh`, standard |
+| Upload, import | `IconUpload` | `IconUpload`, standard | `IconUpload`, standard |
+| Download, export | `IconDownload` | `IconDownload`, standard | `IconDownload`, standard |
+| Search | `IconSearch` | `IconSearch`, standard | `IconSearch`, standard |
+| Start, run now | `IconPlay` | `IconPlay`, standard | `IconPlay`, standard |
+| Pause | `IconPause` | none | `IconPause`, standard |
+| Stop, abort | `IconStop` | `IconStop`, standard | `IconStop`, standard |
+| Power on and off | `IconPower` | `IconPower`, standard | `IconPower`, standard |
+| Delete | `IconTrash` | `IconTrash`, standard | `IconTrash`, standard |
+| Delete with its files | `IconTrashFiles` | none | `IconTrashFiles`, standard |
+| Add | `IconAdd` | `IconAdd`, standard | `IconAdd`, standard |
+| Close, cancel | `IconClose` | `IconClose`, standard | `IconClose`, standard |
+| Edit | `IconPencil` | `IconPencil`, standard | `IconPencil`, standard |
+| Copy | `IconCopy` | `IconCopy`, standard | `IconCopy`, standard |
+| Verify, confirmed | `IconCheck` | `IconCheck`, standard | `IconCheck`, standard |
+| Connect, pair | `IconLink` | `IconLink`, standard | `IconLink`, standard |
+| Credentials, key | `IconKey` | `IconKey`, standard | `IconKey`, standard |
 | Revoke a key | `IconKeyRevoke` | `IconKeyRevoke`, standard | none |
 | Sign in | `IconSignIn` | `IconSignIn`, standard | none |
-| Sign out | `IconSignOut` | `IconSignOut`, standard | `IconSignOut`, switch |
+| Sign out | `IconSignOut` | `IconSignOut`, standard | `IconSignOut`, standard |
 | Information | `IconInfo` | `IconInfo`, standard | none |
-| Help | `IconHelp` | none | `IconHelp`, switch |
-| More | `IconMore` | `IconEllipsis`, switch | `IconMore`, switch |
+| Help | `IconHelp` | none | `IconHelp`, standard |
+| More | `IconMore` | `IconMore`, standard | `IconMore`, standard |
 | Menu | `IconMenu` | none | `IconMenu`, standard |
-| Save | `IconSave` | `IconSave`, switch | none |
-| Unlock, clear a lock | `IconUnlock` | `IconUnlock`, switch | none |
-| Prune, reclaim space | `IconPrune` | `IconPrune`, switch | none |
-| Back | `IconBack` | `IconBack`, switch | `IconChevronStart`, standard |
-| Next, forward | `IconForward` | `IconForward`, switch | `IconChevronEnd`, standard |
-| Jump to the newest entry, the end | `IconLatest` | `IconLatest`, standard | `IconBottom`, switch |
-| Jump to the start | `IconFirst` | none | `IconTop`, switch |
-| Move up one | `IconMoveUp` | none | `IconArrowUp`, switch |
-| Move down one | `IconMoveDown` | none | `IconArrowDown`, switch |
-| Expand | `IconExpand` | none | `IconChevronDown`, standard |
-| Collapse | `IconCollapse` | none | `IconChevronUp`, standard |
+| Save | `IconSave` | `IconSave`, standard | none |
+| Unlock, clear a lock | `IconUnlock` | `IconUnlock`, standard | none |
+| Prune, reclaim space | `IconPrune` | `IconPrune`, standard | none |
+| Back | `IconBack` | `IconBack`, standard | `IconBack`, standard |
+| Next, forward | `IconForward` | `IconForward`, standard | `IconForward`, standard |
+| Jump to the newest entry, the end | `IconLatest` | `IconLatest`, standard | `IconLatest`, standard |
+| Jump to the start | `IconFirst` | none | `IconFirst`, standard |
+| Move up one | `IconMoveUp` | none | `IconMoveUp`, standard |
+| Move down one | `IconMoveDown` | none | `IconMoveDown`, standard |
+| Expand | `IconExpand` | none | `IconExpand`, standard |
+| Collapse | `IconCollapse` | none | `IconCollapse`, standard |
 | Select all | `IconSelectAll` | `IconSelectAll`, standard | none |
 | Clear the selection | `IconClearSelection` | `IconClearSelection`, standard | none |
 | Compare | `IconCompare` | `IconCompare`, standard | none |
-| Filter | `IconFilter` | none | `IconFilter`, switch |
+| Filter | `IconFilter` | none | `IconFilter`, standard |
 | Pin | `IconPin` | none | `IconPin`, standard |
 | Priority | `IconPriority` | none | `IconPriority`, standard |
-| Drag to reorder | `IconGrip` | none | `IconGrip`, switch |
-| Open a service's own site | `IconExternalLink` | none | `IconExternalLink`, switch |
-| Warning | `IconWarning` | none | `IconWarning`, switch |
+| Drag to reorder | `IconGrip` | none | `IconGrip`, standard |
+| Open a service's own site | `IconExternalLink` | none | `IconExternalLink`, standard |
+| Warning | `IconWarning` | none | `IconWarning`, standard |
 | Right away | `IconBolt` | none | `IconBolt`, standard |
 | Write to us | `IconMail` | `IconMail`, standard | none |
-| Buy the author a coffee | `IconCoffee` | `IconCoffee`, switch | `IconCoffee`, switch |
-| A protection is on | `IconShieldOn` | `IconShieldOn`, switch | `IconShieldCheck`, switch |
-| A protection is off | `IconShieldOff` | `IconShieldOff`, switch | none |
+| Buy the author a coffee | `IconCoffee` | `IconCoffee`, standard | `IconCoffee`, standard |
+| A protection is on | `IconShieldOn` | `IconShieldOn`, standard | `IconShieldOn`, standard |
+| A protection is off | `IconShieldOff` | `IconShieldOff`, standard | none |
 | Store uncompressed | `IconCompressOff` | `IconCompressOff`, standard | none |
 | Let the tool choose the compression | `IconCompressAuto` | `IconCompressAuto`, standard | none |
 | Compress as far as possible | `IconCompressMax` | `IconCompressMax`, standard | none |
-| Script, code | `IconCode` | none | `IconCode`, switch |
-| Dark look | `IconMoon` | none | `IconMoon`, switch |
-| Light look | `IconSun` | none | `IconSun`, switch |
+| Script, code | `IconCode` | none | `IconCode`, standard |
+| Dark look | `IconMoon` | none | `IconMoon`, standard |
+| Light look | `IconSun` | none | `IconSun`, standard |
+| Paste | `IconPaste` | none | `IconClipboard`, switch |
+| Sort direction | `IconSort` | none | `IconMoveUp`, `IconMoveDown`, switch |
+| Up one folder | `IconFolderUp` | none | `IconMoveUp`, switch |
 
 <br>
 
@@ -74,40 +77,43 @@
 
 | Meaning | GlimStone | BombVault | KnightLoader |
 | --- | --- | --- | --- |
-| Settings | `IconGear` | `IconGear`, standard | `IconSettings`, standard |
-| Dashboard, overview | `IconDashboard` | `IconDashboard`, standard | `IconDashboard`, switch |
-| A folder | `IconFolder` | `IconFolder`, standard | `IconFolder`, switch |
-| An open folder | `IconFolderOpen` | none | `IconFolderOpen`, switch |
-| New folder | `IconFolderAdd` | none | `IconFolderPlus`, switch |
-| Archive | `IconArchive` | none | `IconArchive`, switch |
-| Instances, other boxes | `IconFleet` | `IconFleet`, standard | `IconInstances`, switch |
-| Collector, taking links in | `IconCollector` | none | `IconCollector`, switch |
+| Settings | `IconGear` | `IconGear`, standard | `IconGear`, standard |
+| Dashboard, overview | `IconDashboard` | `IconDashboard`, standard | `IconDashboard`, standard |
+| A folder | `IconFolder` | `IconFolder`, standard | `IconFolder`, standard |
+| An open folder | `IconFolderOpen` | none | `IconFolderOpen`, standard |
+| New folder | `IconFolderAdd` | none | `IconFolderAdd`, standard |
+| Archive | `IconArchive` | none | `IconArchive`, standard |
+| Instances, other boxes | `IconFleet` | `IconFleet`, standard | `IconFleet`, standard |
+| Collector, taking links in | `IconCollector` | none | `IconCollector`, standard |
 | Accounts | `IconAccounts` | none | `IconAccounts`, standard |
-| Network, connections | `IconNetwork` | none | `IconGlobe`, switch |
-| Phone | `IconPhone` | none | `IconPhone`, switch |
-| Browser | `IconBrowser` | none | `IconBrowser`, switch |
-| Open the app | `IconApp` | none | `IconApp`, switch |
-| Modules | `IconModules` | none | `IconModules`, switch |
-| Captcha | `IconCaptcha` | none | `IconCaptcha`, switch |
-| Docker containers | `IconContainers` | `IconContainers`, standard | `IconContainer`, switch |
+| Network, connections | `IconNetwork` | none | `IconNetwork`, standard |
+| Phone | `IconPhone` | none | `IconPhone`, standard |
+| Browser | `IconBrowser` | none | `IconBrowser`, standard |
+| Open the app | `IconApp` | none | `IconApp`, standard |
+| Modules | `IconModules` | none | `IconModules`, standard |
+| Captcha | `IconCaptcha` | none | `IconCaptcha`, standard |
+| Docker containers | `IconContainers` | `IconContainers`, standard | `IconContainers`, standard |
 | Virtual machines | `IconVM` | `IconVM`, standard | none |
-| Files and folder sets | `IconFiles` | `IconFiles`, switch | none |
-| Receiver, an incoming transfer | `IconReceiver` | `IconReceiver`, switch | none |
+| Files and folder sets | `IconFiles` | `IconFiles`, standard | none |
+| Receiver, an incoming transfer | `IconReceiver` | `IconReceiver`, standard | none |
 | Back up now | `IconBackupNow` | `IconBackupNow`, standard | none |
 | Restore | `IconRestore` | `IconRestore`, standard | none |
-| Replicate, synchronise | `IconSync` | `IconSync`, switch | none |
-| Recovery, rebuild from backups | `IconRecovery` | `IconRecovery`, switch | none |
+| Replicate, synchronise | `IconSync` | `IconSync`, standard | none |
+| Recovery, rebuild from backups | `IconRecovery` | `IconRecovery`, standard | none |
 | Live, running now | `IconLive` | `IconLive`, standard | none |
 | Configuration self-backup | `IconConfig` | `IconConfig`, standard | none |
 | Simple view | `IconViewSimple` | `IconViewSimple`, standard | none |
 | Advanced view | `IconViewAdvanced` | `IconViewAdvanced`, standard | none |
 | Boot flash drive | `IconFlash` | `IconFlash`, standard | none |
 | Off-site, cloud | `IconCloud` | `IconCloud`, standard | none |
-| Local storage | `IconLocal` | `IconLocal`, switch | none |
-| A database | `IconDatabase` | `IconDatabase`, switch | none |
+| Local storage | `IconLocal` | `IconLocal`, standard | none |
+| A database | `IconDatabase` | `IconDatabase`, standard | none |
 | ZFS datasets | `IconZFS` | `IconZFS`, standard | none |
 | Anomalies | `IconAnomalies` | `IconAnomalies`, standard | none |
-| The GitHub repository | `IconGithub` | `IconGithub`, standard | `IconGithub`, switch |
+| The GitHub repository | `IconGithub` | `IconGithub`, standard | `IconGithub`, standard |
+| Health of the services | `IconHealth` | none | `IconBolt`, switch |
+| Queued | `IconQueued` | none | `IconSchedules`, switch |
+| Time left on a captcha | `IconCaptchaTimer` | none | `IconSchedules`, switch |
 
 <br>
 
@@ -115,21 +121,21 @@
 
 | Meaning | GlimStone | BombVault | KnightLoader |
 | --- | --- | --- | --- |
-| General tab | `IconTabGeneral` | `IconTabGeneral`, switch | `IconTabGeneral`, switch |
-| Look tab | `IconTabLook` | `IconTabLook`, switch | `IconLook`, switch |
-| Security tab | `IconTabSecurity` | `IconTabSecurity`, switch | `IconLock`, switch |
-| Advanced tab | `IconTabAdvanced` | none | `IconTabAdvanced`, switch |
-| App tab, the other forms of the product | `IconTabApp` | none | `IconTabApp`, switch |
-| Apps tab, the companions | `IconTabApps` | `IconApps`, switch | none |
+| General tab | `IconTabGeneral` | `IconTabGeneral`, standard | `IconTabGeneral`, standard |
+| Look tab | `IconTabLook` | `IconTabLook`, standard | `IconTabLook`, standard |
+| Security tab | `IconTabSecurity` | `IconTabSecurity`, standard | `IconTabSecurity`, standard |
+| Advanced tab | `IconTabAdvanced` | none | `IconTabAdvanced`, standard |
+| App tab, the other forms of the product | `IconTabApp` | none | `IconTabApp`, standard |
+| Apps tab, the companions | `IconTabApps` | `IconTabApps`, standard | none |
 | System tab | `IconTabSystem` | `IconTabSystem`, standard | none |
-| Paths and storage tab | `IconTabStorage` | `IconTabStorage`, switch | none |
-| Integrity tab | `IconTabIntegrity` | `IconTabIntegrity`, switch | none |
+| Paths and storage tab | `IconTabStorage` | `IconTabStorage`, standard | none |
+| Integrity tab | `IconTabIntegrity` | `IconTabIntegrity`, standard | none |
 | Off-site tab | `IconTabOffsite` | `IconTabOffsite`, standard | none |
-| Schedules, automation | `IconSchedules` | `IconSchedules`, switch | `IconClock`, switch |
-| Notifications | `IconNotifications` | `IconNotifications`, switch | `IconBell`, switch |
-| Schedule sliders | `IconSliders` | none | `IconSliders`, switch |
-| Diagnostics | `IconDiagnostics` | none | `IconDiagnostics`, switch |
-| Keyboard shortcuts | `IconKeyboard` | none | `IconKeyboard`, switch |
+| Schedules, automation | `IconSchedules` | `IconSchedules`, standard | `IconSchedules`, standard |
+| Notifications | `IconNotifications` | `IconNotifications`, standard | `IconNotifications`, standard |
+| Schedule sliders | `IconSliders` | none | `IconSliders`, standard |
+| Diagnostics | `IconDiagnostics` | none | `IconDiagnostics`, standard |
+| Keyboard shortcuts | `IconKeyboard` | none | `IconKeyboard`, standard |
 
 <br>
 
