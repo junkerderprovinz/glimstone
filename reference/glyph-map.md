@@ -57,7 +57,7 @@
 | --- | --- | --- | --- | --- |
 | General | `IconTabGeneral` | `IconTabGeneral` | `IconTabGeneral` | Shared: Material's `tune`; BombVault crops to the ink |
 | Look | `IconTabLook` | `IconTabLook` | `IconLook` | Shared: Streamline's palette |
-| Security | `IconTabSecurity` | `IconShield` | `IconLock` | BombVault differs from the assortment, which gives Security the padlock |
+| Security | `IconTabSecurity` | `IconTabSecurity` | `IconLock` | Differs; Streamline's padlock wins |
 | Pairing | `IconLink` | `IconLink` | `IconLink` | See Connect, pair |
 | App, the other forms of the product | `IconTabApp` | none | `IconTabApp` | KnightLoader only |
 | Apps, the companions | none | `IconApps` | none | BombVault only, drawn in `settingsPages.tsx` |
