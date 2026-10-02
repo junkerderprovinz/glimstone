@@ -2,6 +2,19 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 3.1.3 - 2026-10-02
+
+Eight more meanings have a drawing of their own, the mail button's envelope opens under the pointer again, and both apps render every glyph in the list.
+
+**Adopting apps:** copy `reference/glyphs.json` and `MAIL_SVG` from `reference/appMarks.ts` again and regenerate. A mail button shows `IconMail` at rest and `IconMailOpen` under the pointer or a finger.
+
+## 🎨 Design
+
+- **Eight more glyphs.** Paste, sort direction, up one folder, health, queued, the time left on a captcha, Resolvers and the open envelope each have their own drawing, so no meaning borrows another's. The list holds 114.
+- **The mail pair.** `MAIL_SVG` pairs the standard envelope at rest with Material's open one under the pointer, each in the box cropped to its own ink so the two read the same size.
+- **The map is complete.** Every row in `glyph-map.md` shows BombVault and KnightLoader on the standard drawing, and it says where each app generates its glyphs.
+- **Sources.** Five glyphs BombVault took from Streamline name their file again instead of the app.
+
 ## 3.1.2 - 2026-10-02
 
 Every glyph BombVault and KnightLoader draw has one standard drawing, and `reference/glyphs.json` holds all 106 ready to generate from.
