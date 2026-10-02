@@ -2,6 +2,16 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 3.1.5 - 2026-10-03
+
+Retention has a glyph of its own.
+
+**Adopting apps:** a Retention tab or page wears `IconTabRetention`. `IconPrune` stays on the Prune action.
+
+## 🎨 Design
+
+- **An archive box for Retention.** `IconTabRetention` is Font Awesome's `box-archive`, cropped to its ink like every other glyph, and names the place where an app sets how long its backups are kept. `IconPrune`'s shredder means throwing away, so it stays with Prune. The list holds 115.
+
 ## 3.1.4 - 2026-10-02
 
 The App tab's cards follow the order of the README's download rows.
