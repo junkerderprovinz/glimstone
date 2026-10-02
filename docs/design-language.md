@@ -367,7 +367,7 @@ Found and fixed on BombVault's Integrity tab (reported live and emphatically: wh
 
 ## The reveal eye (password/token fields)
 
-A field holding a secret carries its show/hide control **inside the field** at the trailing edge: a bare eye that becomes a slashed eye once the value is visible.
+A field holding a secret carries its show/hide control **inside the field** at the trailing edge: a bare eye that becomes a slashed eye once the value is visible. The two are `IconEye` and `IconEyeOff` from the assortment, the same drawings a Show phrase button wears.
 
 - **A bare icon, never a badge or a second button.** The eye is furniture, a glyph the field's own trailing padding reserves room for, not a chrome button beside it. On a page inside a foreign host UI whose global `button` styling would paint any `<button>` as a filled badge, the eye is a `<span role="button" tabindex="0">` so nothing themes it. An app that owns its own CSS may use a real button. The look is identical either way: just the eye, nothing around it.
 - **Neutral, never the accent.** Like the `(i)`, it means "look", not "activity".
@@ -450,7 +450,7 @@ Rules 11 and 13 already say a lot is a badge: every heading, everything clickabl
 
 ## Icon glyphs
 
-**Which glyph means what is [`reference/glyphs.md`](../reference/glyphs.md), the shared assortment.** One icon set across every app that speaks this language, so a folder is the same folder in all of them and nobody learns a second vocabulary to use the second app. It carries the source of each glyph and its licence, the meanings as a contract (an app that needs "delete" uses `IconTrash`, it does not pick a different bin), and the seven sizing rules that decide whether a set of icons *looks* like one set, all of them written down after a live review reported something "too big" or "too small" while every box on screen was already identical. The rules below are about how a glyph is DRAWN; that file is about which glyphs exist and how big they read.
+**Which glyph means what is [`reference/glyphs.md`](../reference/glyphs.md), the shared assortment.** One icon set across every app that speaks this language, so a folder is the same folder in all of them and nobody learns a second vocabulary to use the second app. It carries the source of each glyph and its licence, the meanings as a contract (an app that needs "delete" uses `IconTrash`, it does not pick a different bin), and the seven sizing rules that decide whether a set of icons *looks* like one set, all of them written down after a live review reported something "too big" or "too small" while every box on screen was already identical. The rules below are about how a glyph is DRAWN; that file is about which glyphs exist and how big they read. [`reference/glyph-map.md`](../reference/glyph-map.md) lists, meaning by meaning, the component each app renders and whether the apps share its drawing.
 
 **Every icon glyph is a filled solid shape (`fill="currentColor"`), never a stroked outline (`stroke="currentColor", fill="none"`).** A line-drawn icon reads as a wireframe, sitting at a different visual weight than the filled badges, filled switches and filled active states around it (rule 3, rule 11, rule 13; this whole language is built from *filled* shapes making a statement, not from outlines). A glyph set with some icons filled and others stroked reads as two icon libraries that happen to share a colour, not one.
 

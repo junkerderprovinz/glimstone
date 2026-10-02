@@ -82,7 +82,6 @@ Five rounds of live review went into these, each one starting from a report that
 | `IconClearSelection` | `interface-essential/subtract-square.svg` | Clear the selection |
 | `IconKey` | `interface-essential/key.svg` | Credentials |
 | `IconLink` | `interface-essential/link-chain.svg` | Connect, link |
-| `IconEye` | `interface-essential/glasses.svg` | Show, reveal, preview |
 | `IconInfo` | `interface-essential/information-circle.svg` | Information, details |
 | `IconPencil` | `interface-essential/pencil.svg` | Edit |
 | `IconGear` | `interface-essential/cog.svg` | Settings |
@@ -144,6 +143,10 @@ The General and Advanced glyphs and the envelope come from Material: the free St
 | `IconAdd` | Add | Hand-drawn: a plus with 10 units of arm and 2.8 of bar, shorter and thicker than any imported one (rule 7). |
 | `IconClose` | Close, dismiss, cancel | The same plus, rotated 45°. |
 | `IconContainers` | Docker containers | Simple Icons' whale. A trademark used descriptively, unmodified. |
+| `IconEye` | Show, reveal, preview | KnightLoader's lens on a 20-unit grid, the pupil cut out with evenodd. The free Streamline set has glasses but no eye. Ink box `(2.5, 4.3, 15, 11.4)`. |
+| `IconEyeOff` | Hide what the eye revealed | The same lens at 0.55 opacity under a 1.8-unit bar turned 45° about the centre, in the same box. |
+
+**`IconEye` and `IconEyeOff` are a pair** and the only eye in an app: a Show phrase button and the reveal toggle in a password field wear the same two drawings.
 
 **`IconLocal` and `IconCloud` are a pair.** Local storage against off-site storage is the one place in these apps where two glyphs must read as two halves of one choice. They need no special handling to do it: both go through the same crop as everything else, and that is the point of having one rule.
 
@@ -172,4 +175,4 @@ BombVault's `scripts/gen_glyphs.py` is the working reference implementation of a
 - **Drop any transparent padding path** before measuring, or the measurement is meaningless.
 - **Measure the ink** and compare it against the glyphs it will stand next to, not against the box.
 - **Look at it at 20px, magnified**, not at 88px, where every glyph looks fine.
-- **Add it here in the same commit.** An assortment that documents four apps out of five is a list of what somebody remembered.
+- **Add it here in the same commit**, and its row in [`glyph-map.md`](glyph-map.md). An assortment that documents four apps out of five is a list of what somebody remembered.

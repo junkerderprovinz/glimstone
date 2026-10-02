@@ -2,6 +2,17 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 3.4.0 - 2026-10-02
+
+A new file lists, meaning by meaning, which glyph component BombVault and KnightLoader render and whether they share the drawing. Both apps use KnightLoader's eye.
+
+**Adopting apps:** no reference file changes. An app that shows or hides a secret uses `IconEye` and `IconEyeOff` as `reference/glyphs.md` draws them, and an app that adds or swaps a glyph updates its row in `reference/glyph-map.md` in the same commit.
+
+## 🎨 Design
+
+- **The glyph map.** `reference/glyph-map.md` has one row per meaning for actions, navigation and Settings tabs, with the GlimStone name, BombVault's component and KnightLoader's. Where the two apps draw one meaning differently, the row says which drawing wins once they are aligned. It also says where each app keeps its glyphs.
+- **One eye.** `IconEye` is KnightLoader's lens with the pupil cut out, in place of Streamline's glasses, and `IconEyeOff` is the same lens faded under a diagonal bar. A Show phrase button and the reveal toggle in a password field wear the same pair.
+
 ## 3.3.0 - 2026-10-02
 
 KnightLoader's and BombVault's phone apps share one settings page, and the design language describes it card by card.
