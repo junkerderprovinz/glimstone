@@ -60,95 +60,136 @@ Five rounds of live review went into these, each one starting from a report that
 
 ## 4. The assortment
 
-`Icon<Name>` is the component name; the path is the file inside Streamline's `core/solid`. Glyphs from the other sets are in the table below this one. Meanings are the contract: an app that needs "delete" uses `IconTrash`, it does not pick a different bin.
+Every glyph below is in [`glyphs.json`](glyphs.json) with its drawing, its measured ink box and the square viewBox cropped to it (rule 3), so an app generates its file from that list instead of hunting the sources down again. The drawings were picked one meaning at a time. Meanings are the contract: an app that needs "delete" uses `IconTrash`, it does not pick a different bin.
+
+Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one exception, because the Off-site tab is the off-site meaning itself.
 
 ### Actions, the verbs a button wears
 
-| Name | Source | Means |
+| Name | Means | Source |
 | --- | --- | --- |
-| `IconRefresh` | `interface-essential/arrow-reload-horizontal-1.svg` | Refresh or reload |
-| `IconUpload` | `interface-essential/upload-box-1.svg` | Upload, send, import |
-| `IconDownload` | `interface-essential/download-box-1.svg` | Download, export |
-| `IconSearch` | `interface-essential/magnifying-glass.svg` | Search, scan, discover |
-| `IconUnlock` | `interface-essential/keyhole-lock-circle.svg` | Unlock, clear a stale lock |
-| `IconPrune` | `interface-essential/recycle-bin-2.svg` | Prune, reclaim space |
-| `IconTrash` | `interface-essential/recycle-bin-2.svg` | Delete |
-| `IconPlay` | `entertainment/button-play.svg` | Start, run now |
-| `IconStop` | `entertainment/button-stop.svg` | Stop, abort |
-| `IconPower` | `entertainment/button-power-1.svg` | Power, start or stop |
-| `IconBack` | `interface-essential/move-left.svg` | Back, previous |
-| `IconForward` | `interface-essential/move-right.svg` | Next, continue, forward |
-| `IconSelectAll` | `interface-essential/check-square.svg` | Select all |
-| `IconClearSelection` | `interface-essential/subtract-square.svg` | Clear the selection |
-| `IconKey` | `interface-essential/key.svg` | Credentials |
-| `IconLink` | `interface-essential/link-chain.svg` | Connect, link |
-| `IconInfo` | `interface-essential/information-circle.svg` | Information, details |
-| `IconPencil` | `interface-essential/pencil.svg` | Edit |
-| `IconGear` | `interface-essential/cog.svg` | Settings |
-| `IconSync` | `interface-essential/arrow-reload-vertical-2.svg` | Replicate, synchronise |
-| `IconRestore` | `interface-essential/arrow-reload-vertical-1.svg` | Restore |
-| `IconRecovery` | `interface-essential/arrow-reload-horizontal-2.svg` | Recovery, rebuild |
-| `IconLive` | `interface-essential/live-video.svg` | Live, happening now |
-
-**`IconUpload` and `IconDownload` are one drawing with the arrow reversed.** Wherever an app shows an export and an import together, use this pair: same box, opposite arrow, and no mirroring transform to maintain.
-
-**`IconRefresh`, `IconSync`, `IconRestore` and `IconRecovery` are four different loops and are easy to confuse.** Horizontal reload for "refresh", vertical two-arrow for "replicate", vertical one-arrow for "restore", horizontal two-arrow ring for "recovery". If an app only needs two of them, pick the two that look least alike.
+| `IconEye` | Show, reveal | Streamline `interface-essential/visible.svg` |
+| `IconEyeOff` | Hide again | Streamline `interface-essential/invisible-1.svg` |
+| `IconRefresh` | Refresh, retry | Streamline `interface-essential/arrow-round-left.svg` |
+| `IconUpload` | Upload, import | Streamline `interface-essential/upload-circle.svg` |
+| `IconDownload` | Download, export | Streamline `interface-essential/download-circle.svg` |
+| `IconSearch` | Search | Streamline `interface-essential/magnifying-glass.svg` |
+| `IconPlay` | Start, run now | Streamline `entertainment/button-play.svg` |
+| `IconPause` | Pause | Streamline `entertainment/button-pause-2.svg` |
+| `IconStop` | Stop, abort | Streamline `entertainment/button-stop.svg` |
+| `IconPower` | Power on and off | Streamline `entertainment/button-power-1.svg` |
+| `IconTrash` | Delete | Streamline `interface-essential/recycle-bin-2.svg` |
+| `IconTrashFiles` | Delete with its files | Streamline `interface-essential/file-delete-alternate.svg` |
+| `IconAdd` | Add | Drawn for GlimStone |
+| `IconClose` | Close, cancel | Drawn for GlimStone |
+| `IconPencil` | Edit | Streamline `interface-essential/pencil.svg` |
+| `IconCopy` | Copy | Tabler Icons, filled `copy` (MIT) |
+| `IconCheck` | Verify, confirmed | Drawn for GlimStone |
+| `IconLink` | Connect, pair | Streamline `interface-essential/link-chain.svg` |
+| `IconKey` | Credentials, key | Streamline `interface-essential/key.svg` |
+| `IconKeyRevoke` | Revoke a key | Streamline `key` with a bar cut through it |
+| `IconSignIn` | Sign in | Streamline `interface-essential/login-1.svg` |
+| `IconSignOut` | Sign out | Streamline `interface-essential/logout-1.svg` |
+| `IconInfo` | Information | Streamline `interface-essential/information-circle.svg` |
+| `IconHelp` | Help | Streamline `interface-essential/help-question-1.svg` |
+| `IconMore` | More | Streamline `interface-essential/horizontal-menu-circle.svg` |
+| `IconMenu` | Menu | KnightLoader's drawing on a 20-unit grid |
+| `IconSave` | Save | Drawn for GlimStone |
+| `IconUnlock` | Unlock, clear a lock | Drawn for GlimStone |
+| `IconPrune` | Prune, reclaim space | Streamline `computer-devices/shredder.svg` |
+| `IconBack` | Back | KnightLoader's drawing on a 20-unit grid |
+| `IconForward` | Next, forward | KnightLoader's drawing on a 20-unit grid |
+| `IconLatest` | Jump to the newest entry, the end | Streamline `interface-essential/arrow-down-2.svg` |
+| `IconFirst` | Jump to the start | `IconLatest` mirrored |
+| `IconMoveUp` | Move up one | Streamline `interface-essential/arrow-up-1.svg` |
+| `IconMoveDown` | Move down one | Streamline `arrow-up-1` mirrored |
+| `IconExpand` | Expand | KnightLoader's drawing on a 20-unit grid |
+| `IconCollapse` | Collapse | KnightLoader's drawing on a 20-unit grid |
+| `IconSelectAll` | Select all | Streamline `interface-essential/check-square.svg` |
+| `IconClearSelection` | Clear the selection | Streamline `interface-essential/subtract-square.svg` |
+| `IconCompare` | Compare | Streamline `interface-essential/layers-2.svg` |
+| `IconFilter` | Filter | Streamline `interface-essential/filter-2.svg` |
+| `IconPin` | Pin | KnightLoader's drawing on a 20-unit grid |
+| `IconPriority` | Priority | KnightLoader's drawing on a 20-unit grid |
+| `IconGrip` | Drag to reorder | Streamline `interface-essential/hand-grab.svg` |
+| `IconExternalLink` | Open a service's own site | Streamline `interface-essential/expand-window-2.svg` |
+| `IconWarning` | Warning | Streamline `interface-essential/warning-triangle.svg` |
+| `IconBolt` | Right away | KnightLoader's drawing on a 20-unit grid |
+| `IconMail` | Write to us | Streamline `mail/mail-send-envelope.svg` |
+| `IconCoffee` | Buy the author a coffee | Simple Icons `buymeacoffee` (CC0, a trademark used descriptively) |
+| `IconShieldOn` | A protection is on | Drawn for GlimStone |
+| `IconShieldOff` | A protection is off | Drawn for GlimStone |
+| `IconCompressOff` | Store uncompressed | Streamline `shipping/shipping-box-1.svg` |
+| `IconCompressAuto` | Let the tool choose the compression | Streamline `interface-essential/magic-wand-2.svg` |
+| `IconCompressMax` | Compress as far as possible | Streamline `interface-essential/arrow-shrink.svg` |
+| `IconCode` | Script, code | Drawn for GlimStone |
+| `IconMoon` | Dark look | Streamline `interface-essential/waning-cresent-moon.svg` |
+| `IconSun` | Light look | Streamline `interface-essential/brightness-1.svg` |
 
 ### Navigation and domain
 
-| Name | Source | Means |
+| Name | Means | Source |
 | --- | --- | --- |
-| `IconDashboard` | `interface-essential/dashboard-3.svg` | Dashboard, overview |
-| `IconFolder` | `interface-essential/new-folder.svg` | A folder |
-| `IconFiles` | `interface-essential/new-folder.svg` | Files and folder sets |
-| `IconVM` | `computer-devices/screen-1.svg` | Virtual machines |
-| `IconFlash` | `computer-devices/usb-drive.svg` | A USB / boot flash drive |
-| `IconConfig` | `computer-devices/database-setting.svg` | Configuration, self-backup |
-| `IconBackupNow` | `computer-devices/database-check.svg` | Back up now |
-| `IconReceiver` | `interface-essential/login-1.svg` | Receiver, an incoming transfer |
-| `IconFleet` | `interface-essential/hierarchy-2.svg` | Fleet, other instances |
-| `IconTabSystem` | `computer-devices/computer-chip-1.svg` | System |
-| `IconViewSimple` | `interface-essential/layout-window-11.svg` | Simple view |
-| `IconViewAdvanced` | `interface-essential/layout-window-8.svg` | Advanced view |
+| `IconGear` | Settings | Streamline `interface-essential/cog.svg` |
+| `IconDashboard` | Dashboard, overview | Streamline `interface-essential/dashboard-3.svg` |
+| `IconFolder` | A folder | Streamline `interface-essential/new-folder.svg` |
+| `IconFolderOpen` | An open folder | Font Awesome Free folder-open (CC BY 4.0) |
+| `IconFolderAdd` | New folder | Streamline `interface-essential/folder-add.svg` |
+| `IconArchive` | Archive | Streamline `interface-essential/archive-box.svg` |
+| `IconFleet` | Instances, other boxes | Streamline `interface-essential/hierarchy-2.svg` |
+| `IconCollector` | Collector, taking links in | Streamline `mail/inbox-tray-1.svg` |
+| `IconAccounts` | Accounts | KnightLoader's drawing on a 20-unit grid |
+| `IconNetwork` | Network, connections | Streamline `computer-devices/wifi.svg` |
+| `IconPhone` | Phone | Streamline `phone/phone-mobile-phone.svg` |
+| `IconBrowser` | Browser | Streamline `programming/browser-website-1.svg` |
+| `IconApp` | Open the app | Streamline `programming/application-add.svg` |
+| `IconModules` | Modules | Streamline `programming/module-puzzle-1.svg` |
+| `IconCaptcha` | Captcha | reCAPTCHA's mark in one colour, its three arrows set apart (a trademark used descriptively) |
+| `IconContainers` | Docker containers | Simple Icons whale (CC0, a trademark used descriptively) |
+| `IconVM` | Virtual machines | Streamline `computer-devices/screen-1.svg` |
+| `IconFiles` | Files and folder sets | Streamline `interface-essential/multiple-file-2.svg` |
+| `IconReceiver` | Receiver, an incoming transfer | Streamline `interface-essential/download-computer.svg` |
+| `IconBackupNow` | Back up now | Streamline `computer-devices/database-check.svg` |
+| `IconRestore` | Restore | Streamline `interface-essential/arrow-reload-vertical-1.svg` |
+| `IconSync` | Replicate, synchronise | Streamline `interface-essential/arrow-reload-horizontal-2.svg` |
+| `IconRecovery` | Recovery, rebuild from backups | Streamline `interface-essential/arrow-reload-vertical-2.svg` |
+| `IconLive` | Live, running now | Streamline `interface-essential/live-video.svg` |
+| `IconConfig` | Configuration self-backup | Streamline `computer-devices/database-setting.svg` |
+| `IconViewSimple` | Simple view | Streamline `interface-essential/layout-window-11.svg` |
+| `IconViewAdvanced` | Advanced view | Streamline `interface-essential/layout-window-8.svg` |
+| `IconFlash` | Boot flash drive | Streamline `computer-devices/usb-drive.svg` |
+| `IconCloud` | Off-site, cloud | Font Awesome Free `cloud` (CC BY 4.0) |
+| `IconLocal` | Local storage | Streamline `computer-devices/hard-disk.svg` |
+| `IconDatabase` | A database | Streamline `computer-devices/database.svg` |
+| `IconZFS` | ZFS datasets | Drawn: three separated platters |
+| `IconAnomalies` | Anomalies | Drawn: four columns, the third far above the rest |
+| `IconGithub` | The GitHub repository | Simple Icons `github` (CC0, a trademark used descriptively) |
 
 ### Settings tabs
 
-Every app names its Settings tabs with these, so the same tab wears the same glyph in each of them. The cog is Settings itself and nothing inside it: a tab that repeated it would give one drawing two meanings.
-
-| Name | Source | Means |
+| Name | Means | Source |
 | --- | --- | --- |
-| `IconGear` | `interface-essential/cog.svg` | Settings, the destination (see above) |
-| `IconTabGeneral` | Material Design Icons `tune` | The General tab |
-| `IconTabLook` | `interface-essential/color-palette.svg` | The Look tab: language, theme, shape, motion, labels, colours |
-| `IconTabApp` | `computer-devices/computer-pc-desktop.svg` | The App tab: every other way to get the app, whichever forms it offers |
-| `IconTabSecurity` | `interface-essential/padlock-square-1.svg` | Security, passwords, remote access |
-| `IconTabEngine` | `interface-essential/dashboard-3.svg` | An Engine tab: how the app's own background work runs (ArrowLoop's transfers) |
-| `IconTabAdvanced` | Material Design Icons `hammer-wrench` | An Advanced tab, the settings most people never need. Sliders would read as General beside it |
-| `IconInfo` | `interface-essential/information-circle.svg` | About, where it is a tab of its own |
-| `IconMail`, `IconMailOpen` | Material Design Icons `email`, `email-open` | The About card's Email button: closed at rest, open under the pointer, in one shared box centred on the closed envelope so it does not jump; the open flap rises past the top of the box. Both ship as `MAIL_SVG` in `appMarks.ts` |
+| `IconTabGeneral` | General tab | Drawn for GlimStone |
+| `IconTabLook` | Look tab | Streamline `interface-essential/paint-palette.svg` |
+| `IconTabSecurity` | Security tab | Streamline `interface-essential/shield-1.svg` |
+| `IconTabAdvanced` | Advanced tab | Streamline `interface-essential/wrench.svg` |
+| `IconTabApp` | App tab, the other forms of the product | Streamline `computer-devices/computer-pc-desktop.svg` |
+| `IconTabApps` | Apps tab, the companions | Streamline `programming/module-three.svg` |
+| `IconTabSystem` | System tab | Streamline `computer-devices/computer-chip-1.svg` |
+| `IconTabStorage` | Paths and storage tab | Streamline `computer-devices/database-server-1.svg` |
+| `IconTabIntegrity` | Integrity tab | Streamline `interface-essential/shield-check.svg` |
+| `IconTabOffsite` | Off-site tab | Font Awesome Free `cloud` (CC BY 4.0) |
+| `IconSchedules` | Schedules, automation | Streamline `interface-essential/circle-clock.svg` |
+| `IconNotifications` | Notifications | Streamline `interface-essential/ringing-bell-notification.svg` |
+| `IconSliders` | Schedule sliders | Streamline `interface-essential/vertical-slider-square.svg` |
+| `IconDiagnostics` | Diagnostics | Streamline `programming/bug.svg` |
+| `IconKeyboard` | Keyboard shortcuts | Streamline `computer-devices/keyboard.svg` |
 
-The General and Advanced glyphs and the envelope come from Material: the free Streamline set has no sliders that read at 20px and no open envelope, and the hammer with a wrench read best beside General when eight candidates stood side by side.
+**Pairs share one drawing turned or mirrored.** `IconFirst` is `IconLatest` mirrored top to bottom and `IconMoveDown` is `IconMoveUp` mirrored, so the two halves of each pair cannot drift apart. `IconEye` and `IconEyeOff` are Streamline's `visible` and `invisible-1`, and a Show phrase button and the reveal toggle in a password field wear the same two.
 
-### Hand-drawn, where no free set had an answer
+**A brand mark is the brand's own and goes only where it is meant.** `IconCoffee` is Buy Me a Coffee's mark and stands only on the button that leads there, and `IconCaptcha` is reCAPTCHA's mark and stands only where a captcha is the subject. `IconContainers` and `IconGithub` follow the same rule (section 1).
 
-| Name | Means | Source, and why |
-| --- | --- | --- |
-| `IconCloud` | Off-site, remote | Font Awesome's `cloud`. One closed path with valleys deep enough to survive 20px (rule 6). |
-| `IconLocal` | Local storage | Font Awesome's `server`. Reads as storage without borrowing the folder, which a Browse button already owns. |
-| `IconSave` | Save | **Vecteezy, and it is the same drawing in every app** - it was chosen once and adopted everywhere, so a repo that keeps its old floppy is the odd one out rather than the one with a preference. Attribution is required, see above. Its ink is a 368.7 square inside a declared `0 0 492 492`, so it needs the crop below: carried through unmodified it renders at three quarters the size of every glyph beside it. |
-| `IconTabStorage` | Paths and storage | Font Awesome's `database`. |
-| `IconCopy` | Copy | Tabler, filled variant. Ships with a transparent padding path; drop it. |
-| `IconCheckCircle` | Verify, check, test | Ships with a transparent padding path; drop it. |
-| `IconTabIntegrity` | Integrity | Material's `shield-check`. |
-| `IconAdd` | Add | Hand-drawn: a plus with 10 units of arm and 2.8 of bar, shorter and thicker than any imported one (rule 7). |
-| `IconClose` | Close, dismiss, cancel | The same plus, rotated 45°. |
-| `IconContainers` | Docker containers | Simple Icons' whale. A trademark used descriptively, unmodified. |
-| `IconEye` | Show, reveal, preview | KnightLoader's lens on a 20-unit grid, the pupil cut out with evenodd. The free Streamline set has glasses but no eye. Ink box `(2.5, 4.3, 15, 11.4)`. |
-| `IconEyeOff` | Hide what the eye revealed | The same lens at 0.55 opacity under a 1.8-unit bar turned 45° about the centre, in the same box. |
-
-**`IconEye` and `IconEyeOff` are a pair** and the only eye in an app: a Show phrase button and the reveal toggle in a password field wear the same two drawings.
-
-**`IconLocal` and `IconCloud` are a pair.** Local storage against off-site storage is the one place in these apps where two glyphs must read as two halves of one choice. They need no special handling to do it: both go through the same crop as everything else, and that is the point of having one rule.
+**Drawn for GlimStone** means drawn on Streamline's 14-unit grid as filled shapes: lines as strokes buffered with round caps, cut-outs as real holes. `IconAdd` and `IconClose` are Streamline's `add-1` and `delete-1` with a 2.5-unit bar instead of 2.
 
 <br>
 
