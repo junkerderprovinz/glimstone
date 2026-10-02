@@ -651,7 +651,8 @@ KnightLoader's and BombVault's phone apps open their settings from a gear beside
 - **The other forms of the product** are README buttons ("The App tab"), and only the forms that exist and that this app is not.
 - **Problems? holds a report** with the app's version, the platform, the language and the look. It never contains an address, a name or a secret. Its Copy report button reads Report copied for a moment after a press.
 - **About is the About card**, titled About this app, showing the app's own version with a link to the app's privacy policy under it. PayPal opens in the browser, because its buttons need popups that a phone's web view does not open.
-- **The Danger zone comes last.** Its buttons are quiet, each with a glyph and none of them red, because the question each one asks is the warning. BombVault offers leaving the group and removing every server, KnightLoader removing every connection.
+- **The Danger zone comes last, with one button.** It is quiet, with a glyph and no red, because the question it asks is the warning. It removes every server in BombVault and every connection in KnightLoader; leaving a group alone is on the pairing page.
+- **A touch screen answers every press.** Nothing hovers under a finger, so a control dims while it is held, and a README button lights in its brand colour until the finger lifts. Nothing stays lit at rest. A long press on a button counts as a slow tap and opens no link menu.
 
 ## Reordering by dragging
 

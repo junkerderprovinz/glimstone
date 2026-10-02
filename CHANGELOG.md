@@ -2,46 +2,11 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## 3.4.0 - 2026-10-02
-
-A new file lists, meaning by meaning, which glyph component BombVault and KnightLoader render and whether they share the drawing. Both apps use KnightLoader's eye.
-
-**Adopting apps:** no reference file changes. An app that shows or hides a secret uses `IconEye` and `IconEyeOff` as `reference/glyphs.md` draws them, and an app that adds or swaps a glyph updates its row in `reference/glyph-map.md` in the same commit.
-
-## 🎨 Design
-
-- **The glyph map.** `reference/glyph-map.md` has one row per meaning for actions, navigation and Settings tabs, with the GlimStone name, BombVault's component and KnightLoader's. Where the two apps draw one meaning differently, the row says which drawing wins once they are aligned. It also says where each app keeps its glyphs.
-- **One eye.** `IconEye` is KnightLoader's lens with the pupil cut out, in place of Streamline's glasses, and `IconEyeOff` is the same lens faded under a diagonal bar. A Show phrase button and the reveal toggle in a password field wear the same pair.
-
-## 3.3.0 - 2026-10-02
-
-KnightLoader's and BombVault's phone apps share one settings page, and the design language describes it card by card.
-
-**Adopting apps:** no reference file changes. A phone app opens its settings from a gear beside the plus and lays them out as "A phone app's settings" describes.
-
-## 🎨 Design
-
-- **A phone app's settings.** Language, This device, Appearance, Motion, the other forms of the product, Problems?, About and the Danger zone, in that order and each in its own rainbow position. Language is a row that opens a list of every language with its flag. The device name is what the Instances page shows. Appearance follows an instance until a look is set on the phone, and the switch gives the phone's own look back when it is turned off again.
-- **Problems? and the Danger zone.** The report carries the version, platform, language and look and nothing that identifies a person or a server. The Danger zone's buttons stay quiet and let their question do the warning.
-
-## 3.2.0 - 2026-10-02
-
-A phone app joins its group with the same pairing page and the same scanner in KnightLoader and BombVault, and the design language describes both, together with the QR code that stands beside the words on the web.
-
-**Adopting apps:** no reference file changes. An app that pairs a phone with a twelve-word phrase builds the page and the scanner as "Pairing a phone" describes them, and the window that shows the words on the web puts the QR code to their right.
-
-## 🎨 Design
-
-- **Pairing a phone.** The phrase page has a back badge, title and (i) on one row, a word counter that turns green at twelve, a tall filled field and twelve numbered tiles that fill as the words arrive. Paste, Pair and Scan the QR code stand stacked at full width in rainbow order, Pair shakes when the words are refused, and autocorrect is off in the field so the keyboard cannot swap a word.
-- **Looking before joining.** Pair lists the instances the relay announces under "On this relay" before anything is saved, and "Add all" takes the group over. Back closes the connection without joining.
-- **The scanner.** A window over the whole screen with the camera picture, a 240px accent frame with the card radius, the hint under it and a quiet Cancel at the end of the bottom row. It asks for the camera in one line first, opens the app's settings once Android stops asking, and reads the code without any Google service.
-- **The QR code beside the words.** The window that shows the phrase on the web puts a 128px code to the right of the three rows, which stretch to its height. Below 640px it moves under the words.
-
 ## 3.1.0 - 2026-10-01
 
-A settings area with many pages can stand its tabs in a column of tiles beside the content, and the search over all of Settings shows only when somebody scrolls up for it; both come from KnightLoader. A button that runs a test shows its verdict on itself, the closed envelope on the About card's mail button sits in the middle of its button, and the design language says where the switch for automatic updates belongs and which giving windows a phone keeps in the app.
+A settings area with many pages can stand its tabs in a column of tiles beside the content, and the search over all of Settings shows only when somebody scrolls up for it; both come from KnightLoader. A button that runs a test shows its verdict on itself, and the closed envelope on the About card's mail button sits in the middle of its button. KnightLoader's and BombVault's phone apps share one pairing page, one scanner and one settings page and answer every press on a touch screen, and a new file maps every glyph to the component each app renders, with KnightLoader's eye in both. The design language also says where the switch for automatic updates belongs and which giving windows a phone keeps in the app.
 
-**Adopting apps:** copy `reference/react/Button.tsx` and `reference/appMarks.ts` again. Merging by hand, add `ok: "bg-statusOkSolid text-carbon-background hover:opacity-90"` to the button's tone table and `"ok"` to `ButtonTone`, change both viewBoxes of `MAIL_SVG` to `2 2.32 20 19.36` and give its hover `<svg>` `overflow="visible"`. A Test connection button then turns `ok` or `danger` with its answer and changes its word and glyph with it, instead of a coloured word elsewhere in the form. Move a switch for automatic updates to the General tab if it stands anywhere else. An app whose settings strip wraps into several rows moves its tabs into a column of tiles beside the content ("Vertical tiles"), and an app with a search box above its settings pages renders it only after an upward scroll ("The settings search").
+**Adopting apps:** copy `reference/react/Button.tsx` and `reference/appMarks.ts` again. Merging by hand, add `ok: "bg-statusOkSolid text-carbon-background hover:opacity-90"` to the button's tone table and `"ok"` to `ButtonTone`, change both viewBoxes of `MAIL_SVG` to `2 2.32 20 19.36` and give its hover `<svg>` `overflow="visible"`. A Test connection button then turns `ok` or `danger` with its answer and changes its word and glyph with it, instead of a coloured word elsewhere in the form. Move a switch for automatic updates to the General tab if it stands anywhere else. An app whose settings strip wraps into several rows moves its tabs into a column of tiles beside the content ("Vertical tiles"), and an app with a search box above its settings pages renders it only after an upward scroll ("The settings search"). An app that pairs a phone with a twelve-word phrase builds the page and the scanner as "Pairing a phone" describes them, and the window that shows the words on the web puts the QR code to their right. A phone app opens its settings from a gear beside the plus, lays them out as "A phone app's settings" describes with one button in its Danger zone, and gives every control a press state: dimmed while held, and a README button lit in its brand colour until the finger lifts. An app that shows or hides a secret uses `IconEye` and `IconEyeOff` as `reference/glyphs.md` draws them, and an app that adds or swaps a glyph updates its row in `reference/glyph-map.md` in the same commit.
 
 ## 🎨 Design
 
@@ -51,6 +16,15 @@ A settings area with many pages can stand its tabs in a column of tiles beside t
 - **The closed envelope sits in the middle of the mail button.** It shared a box with the open envelope, which is taller, so it stood about a twelfth of its height too low. The box is centred on the closed envelope; the open flap rises a little past its top under the pointer, and the envelope still does not jump.
 - **Automatic updates stand on the General tab.** The switch that lets the installed app update itself belongs with what concerns the app as a whole, not on the App tab, which offers other ways to get the product.
 - **A phone keeps the coffee and crypto windows in the app and sends PayPal to the browser.** The coffee window shows BMAC's widget page in a web view, and a phone app rebuilds the windows in its own toolkit from the same strings and constants as the web.
+- **Pairing a phone.** The phrase page has a back badge, title and (i) on one row, a word counter that turns green at twelve, a tall filled field and twelve numbered tiles that fill as the words arrive. Paste, Pair and Scan the QR code stand stacked at full width in rainbow order, Pair shakes when the words are refused, and autocorrect is off in the field so the keyboard cannot swap a word.
+- **Looking before joining.** Pair lists the instances the relay announces under "On this relay" before anything is saved, and "Add all" takes the group over. Back closes the connection without joining.
+- **The scanner.** A window over the whole screen with the camera picture, a 240px accent frame with the card radius, the hint under it and a quiet Cancel at the end of the bottom row. It asks for the camera in one line first, opens the app's settings once Android stops asking, and reads the code without any Google service.
+- **The QR code beside the words.** The window that shows the phrase on the web puts a 128px code to the right of the three rows, which stretch to its height. Below 640px it moves under the words.
+- **A phone app's settings.** Language, This device, Appearance, Motion, the other forms of the product, Problems?, About and the Danger zone, in that order and each in its own rainbow position. Language is a row that opens a list of every language with its flag. The device name is what the Instances page shows. Appearance follows an instance until a look is set on the phone, and the switch gives the phone's own look back when it is turned off again.
+- **Problems? and the Danger zone.** The report carries the version, platform, language and look and nothing that identifies a person or a server. The Danger zone has one quiet button that removes every server or connection and lets its question do the warning; leaving a group alone stays on the pairing page.
+- **A touch screen answers every press.** A control dims while it is held and a README button lights in its brand colour until the finger lifts, so nothing stays lit at rest. A long press on a button counts as a slow tap and opens no link menu.
+- **The glyph map.** `reference/glyph-map.md` has one row per meaning for actions, navigation and Settings tabs, with the GlimStone name, BombVault's component and KnightLoader's. Where the two apps draw one meaning differently, the row says which drawing wins once they are aligned. It also says where each app keeps its glyphs.
+- **One eye.** `IconEye` is KnightLoader's lens with the pupil cut out, in place of Streamline's glasses, and `IconEyeOff` is the same lens faded under a diagonal bar. A Show phrase button and the reveal toggle in a password field wear the same pair.
 
 ## 3.0.0 - 2026-09-27
 
