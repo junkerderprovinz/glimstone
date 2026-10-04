@@ -16,7 +16,6 @@ Other sources appear where the free set has no answer, or where a better drawing
 - **[Tabler Icons](https://tabler.io/icons)**, MIT. Use the **filled** variants: the outline set is the default on their site and would break the fill rule below.
 - **[Material Design Icons](https://pictogrammers.com/library/mdi/)**, Apache 2.0.
 - **[Simple Icons](https://simpleicons.org)**, CC0, for brand marks. A brand mark is still a trademark: use it only to refer to the thing it names (a row that navigates to Docker containers), unmodified, and never in a way that implies endorsement.
-- **[Vecteezy](https://www.vecteezy.com)**, Free License, for `IconSave` and nothing else so far. Its terms are not a public-licence family and the obligation is specific: *"remember to always attribute the author which can be done by adding Vecteezy.com to your design and linking to vecteezy.com where possible."* So the generated file's header carries **`IconSave from Vecteezy - https://www.vecteezy.com`**, a real link rather than a bare word, and it is not optional. Assume the Free License unless a Pro receipt says otherwise: attributing under Pro costs nothing, and not attributing under Free is a breach. Reach for this source only where a licence like this one is worth the paperwork, which for a single glyph adopted everywhere it was.
 
 **Mixing sets is fine and normalising them is not optional.** Four sets means four ideas about how much of a viewBox a drawing should occupy; the sizing rules below are what make them read as one family rather than four.
 
@@ -94,7 +93,7 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconHelp` | Help | Streamline `interface-essential/help-question-1.svg` |
 | `IconMore` | More | Streamline `interface-essential/horizontal-menu-circle.svg` |
 | `IconMenu` | Menu | KnightLoader's drawing on a 20-unit grid |
-| `IconSave` | Save | Drawn for GlimStone |
+| `IconSave` | Save | Material Design Icons `content-save` (Apache 2.0) |
 | `IconUnlock` | Unlock, clear a lock | Drawn for GlimStone |
 | `IconPrune` | Prune, reclaim space | Streamline `computer-devices/shredder.svg` |
 | `IconBack` | Back | KnightLoader's drawing on a 20-unit grid |
@@ -221,7 +220,7 @@ BombVault's `scripts/gen_glyphs.py` is the working reference implementation of a
 ## 6. Adding a glyph
 
 - **Check the assortment first.** A new name for an existing meaning is how two apps end up with two bins.
-- **Prefer the free Streamline set**, and check which set the file came from. Any of the sets in section 1 is fine; a new one needs its licence checked and its attribution added in the same commit.
+- **Prefer the free Streamline set**, and check which set the file came from. Any of the sets in section 1 is fine. A new one needs its licence checked and its attribution added in the same commit, and the licence has to be an open one such as CC BY, CC0, MIT or Apache 2.0: F-Droid marks an app as carrying non-free assets when its artwork sits under a stock site's own terms.
 - **Drop any transparent padding path** before measuring, or the measurement is meaningless.
 - **Measure the ink** and compare it against the glyphs it will stand next to, not against the box.
 - **Look at it at 20px, magnified**, not at 88px, where every glyph looks fine.

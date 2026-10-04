@@ -36,7 +36,7 @@
 | Help | `IconHelp` | none | `IconHelp`, standard |
 | More | `IconMore` | `IconMore`, standard | `IconMore`, standard |
 | Menu | `IconMenu` | none | `IconMenu`, standard |
-| Save | `IconSave` | `IconSave`, standard | none |
+| Save | `IconSave` | `IconSave`, switch | none |
 | Unlock, clear a lock | `IconUnlock` | `IconUnlock`, standard | none |
 | Prune, reclaim space | `IconPrune` | `IconPrune`, standard | none |
 | Back | `IconBack` | `IconBack`, standard | `IconBack`, standard |
