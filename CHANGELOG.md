@@ -2,6 +2,16 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 3.1.6 - 2026-10-04
+
+Save is drawn from a set under an open licence.
+
+**Adopting apps:** swap the Vecteezy floppy in `IconSave` for the new drawing and remove the Vecteezy attribution from the generated glyph file.
+
+## 🎨 Design
+
+- **Material Design's floppy for Save.** `IconSave` is `content-save` from Material Design Icons (Apache 2.0), cropped to its ink like every other glyph. Vecteezy's drawing came under the site's own Free License, which is not an open licence, and F-Droid lists an app that ships it with the NonFreeAssets anti-feature. Vecteezy is no longer a glyph source, and any new source needs an open licence.
+
 ## 3.1.5 - 2026-10-03
 
 Retention has a glyph of its own.
