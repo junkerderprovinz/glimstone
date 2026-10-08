@@ -45,12 +45,12 @@ for one of them.**
 `--accent-ink` is **derived, not a second colour anybody picks**:
 `color-mix(in srgb, var(--accent) var(--ink-mix), black)`, with the theme setting
 `--ink-mix` to `100%` on a dark ground and `55%` on a light one. The factor is a
-token rather than a literal so that every `--accent-ink` in the sheet (including
-the one inside a rainbow subtree) is a single declaration correct in both themes,
+token rather than a literal so that every ink in the sheet (including
+`--accent-glyph` inside a rainbow subtree) is a single declaration correct in both themes,
 instead of a rule with a light-theme twin beside it. Derived matters
 twice over: it follows a colour the user chose, which the old fixed constant never
-did (it only ever applied to the default), and inside a rainbow subtree it
-follows `--item-hue` for a line-drawn glyph, so the glyph takes its position's
+did (it only ever applied to the default), and its twin for line-drawn glyphs,
+`--accent-glyph`, follows `--item-hue` inside a rainbow subtree, so the glyph takes its position's
 colour like every fill around it.
 
 **Rainbow never colours text.** It colours glyphs, badges, switches, primary
@@ -1129,7 +1129,7 @@ Defined under `:root` / `[data-theme="light"]`.
 | `--btn-h`, `--btn-h-key` | the two button heights for everything (rule 19) |
 | `--btn-h-transport` | the third, for a head bar's transport squares only (rule 19) |
 | `--btn-w-xs`, `--btn-w-sm`, `--btn-w-md`, `--btn-w-lg` | the four width stages the label engine derives from a label |
-| `--text-heading`, `--text-body`, `--text-dense`, `--text-caption` | the type scale |
+| `--text-status`, `--text-title`, `--text-body`, `--text-subline`, `--text-meta` | the type scale: 22, 16, 14, 13 and 12px. `--text-heading`, `--text-dense` and `--text-caption` remain as aliases onto it |
 
 Utility classes: `.glim-card` (the surface), `.glim-well` (inset grouping), `.glim-eyebrow` (small uppercase label), `.glim-num` (tabular digits), `.glim-bubble` (the shared tooltip/info bubble, `--above` when flipped), `.glim-info-icon` (the "(i)" trigger), `.glim-picker`/`.glim-picker-sv`/`.glim-picker-hue` (the embedded colour picker), `.glim-hue` (owns a rainbow position), `.glim-hue-icon`, `.glim-tint`, `.glim-tint-badge`, `.glim-tint-hover`, `.glim-page-enter`, `.glim-toast`, `.glim-fade`, `.glim-live` (pulsing dot), `.glim-shake` (a control refusing an action), `.glim-readme-btn` and its parts (the App tab's and the About card's buttons).
 

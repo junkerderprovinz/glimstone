@@ -40,14 +40,21 @@
      Tailwind's own scale. */
   --rail-narrow: 85px;
 
-  /* The type scale, a fixed table. --text-caption serves a plain caption,
-     .glim-eyebrow's uppercase label and the info bubble; the treatment carries
-     the distinction. A page's hero figure and a brand wordmark are outside the
+  /* The type scale, a fixed table of five sizes, one per role. --text-meta
+     serves a card's notch badge, .glim-eyebrow's uppercase label, the info
+     bubble, a muted meta line and a count; the treatment carries the
+     distinction. A page's hero figure and a brand wordmark are outside the
      scale (docs/design-language.md, "The type scale"). */
-  --text-heading: 1.25rem;  /* 20px */
+  --text-status: 1.375rem;  /* 22px, the status head and a tile's one figure */
+  --text-title: 1rem;       /* 16px, an emphasised row title, a window's title */
   --text-body: 0.875rem;    /* 14px */
-  --text-dense: 0.75rem;    /* 12px */
-  --text-caption: 0.6875rem; /* 11px */
+  --text-subline: 0.8125rem; /* 13px, the text beside or under a name, a hint, a time */
+  --text-meta: 0.75rem;     /* 12px */
+
+  /* Aliases for apps that read the four-step names. */
+  --text-heading: var(--text-status);
+  --text-dense: var(--text-meta);
+  --text-caption: var(--text-meta);
 }
 
 :root[data-shape="soft"] {
@@ -119,7 +126,7 @@
   --brand-windows:           #2b88d8;
   --brand-github:  #ffffff;
 
-  /* Text ramp: three steps, the last still legible at 11px. */
+  /* Text ramp: three steps, the last still legible at 12px. */
   --carbon-text:       #f4f4f4;
   --carbon-text-sub:   #c6c6c6;
   --carbon-text-muted: #8d8d8d;
@@ -140,6 +147,9 @@
      100% of a colour mixed with black is that colour. */
   --ink-mix:           100%;
   --accent-ink:        color-mix(in srgb, var(--accent) var(--ink-mix), black);
+  /* The same ink for a line-drawn glyph. Rainbow never colours text, so a hued
+     subtree redefines this one and leaves --accent-ink on the single accent. */
+  --accent-glyph:      var(--accent-ink);
 
   /* Four state hues, Carbon's dark support tones. Paused reuses neutral; its
      label and its resume control carry the difference. */
@@ -281,7 +291,8 @@
      yellow text on white fails, so --accent-ink mixes the accent 55% toward
      black here. Measured against white, the palest ground, Sunflower lands at
      4.95:1 and every preset clears 4.5:1. Because it derives from --accent, it
-     follows a picked colour and --item-hue in a rainbow subtree. */
+     follows a picked colour, and --accent-glyph follows --item-hue in a
+     rainbow subtree. */
   --accent:            #FCC419;
   --accent-contrast:   #161616;
   --accent-soft:       rgba(252, 196, 25, 0.14);
@@ -313,6 +324,19 @@
   --glim-scrim: rgba(0, 0, 0, .62);
   --hairline: inset 0 0 0 1px rgba(0, 0, 0, .05);
   --focus-ring: rgba(142, 106, 0, .5);
+}
+
+/* The hover step of a filled tone that has no surface ramp of its own (rule
+   21): the fill mixed toward the theme's text colour, which is lighter on dark
+   and darker on light, the direction the ramp moves. 15% is about one step of
+   the dark ramp, surface3 to hover-raised. Declared wherever a theme is set,
+   so --carbon-text is the one that theme defines. */
+:root,
+[data-theme] {
+  --accent-hover:      color-mix(in srgb, var(--accent) 85%, var(--carbon-text));
+  --status-ok-hover:   color-mix(in srgb, var(--status-ok-solid) 85%, var(--carbon-text));
+  --status-fail-hover: color-mix(in srgb, var(--status-fail-solid) 85%, var(--carbon-text));
+  --status-warn-hover: color-mix(in srgb, var(--status-warn-solid) 85%, var(--carbon-text));
 }
 
 /* The house font is Noto Sans, shipped with the app for Latin, Cyrillic,
@@ -380,7 +404,7 @@ body {
 
 /* Eyebrow label: small, uppercase, quiet. It labels, it never announces. */
 .glim-eyebrow {
-  font-size: var(--text-caption);
+  font-size: var(--text-meta);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--carbon-text-muted);
@@ -412,7 +436,7 @@ body {
   border-radius: var(--radius-control);
   box-shadow: var(--elevation), var(--hairline);
   padding: 7px 10px;
-  font-size: var(--text-caption);
+  font-size: var(--text-meta);
   line-height: 1.45;
   letter-spacing: normal;
   text-transform: none;
@@ -543,7 +567,7 @@ body {
   background-color: var(--carbon-surface2);
   color: var(--carbon-text);
   font-family: ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
-  font-size: var(--text-caption);
+  font-size: var(--text-meta);
   letter-spacing: 0.02em;
   text-transform: uppercase;
 }
@@ -559,15 +583,20 @@ body {
 
    A position belongs to one member of a set of equals: a nav item, a list row,
    a tab, a filter chip, a segment. The only one of its kind on a page keeps the
-   single accent, and the four state hues are never rainbowed. */
+   single accent, and the four state hues are never rainbowed.
+
+   Rainbow never colours text. A custom property containing var() is resolved
+   where it is declared, so the --accent-ink from :root arrives here already
+   computed on the single accent, and these rules leave it alone. A line-drawn
+   glyph reads --accent-glyph instead, which they do redefine. --accent-hover
+   is restated for the same reason, so a filled button's hover steps from its
+   own hue. */
 [data-rainbow] .glim-hue {
   --accent: var(--item-hue);
   --accent-contrast: var(--item-hue-ink);
   --accent-soft: var(--item-hue-soft);
-  /* A custom property containing var() is resolved where it is declared, so
-     the --accent-ink from :root arrives already computed; without redefining
-     it, accent-coloured text would keep the single accent. */
-  --accent-ink: color-mix(in srgb, var(--item-hue) var(--ink-mix), black);
+  --accent-glyph: color-mix(in srgb, var(--item-hue) var(--ink-mix), black);
+  --accent-hover: color-mix(in srgb, var(--item-hue) 85%, var(--carbon-text));
   /* Reactive mode leaves this alone: the ring only paints on focus, which
      brings the hue back through :focus-within. */
   --focus-ring: var(--item-hue-ring);
@@ -638,7 +667,7 @@ body {
   --accent: var(--carbon-text-muted);
   --accent-contrast: var(--carbon-bg);
   --accent-soft: transparent;
-  --accent-ink: var(--carbon-text-muted);
+  --accent-glyph: var(--carbon-text-muted);
 }
 [data-rainbow='reactive'] .glim-hue:hover,
 [data-rainbow='reactive'] .glim-hue:focus-within,
@@ -646,8 +675,8 @@ body {
   --accent: var(--item-hue);
   --accent-contrast: var(--item-hue-ink);
   --accent-soft: var(--item-hue-soft);
-  /* Restated because the resting rule above muted the ink too. */
-  --accent-ink: color-mix(in srgb, var(--item-hue) var(--ink-mix), black);
+  /* Restated because the resting rule above muted the glyph too. */
+  --accent-glyph: color-mix(in srgb, var(--item-hue) var(--ink-mix), black);
 }
 
 :focus-visible {
@@ -1232,7 +1261,7 @@ body {
   height: var(--btn-h);
   padding-inline: var(--btn-pad-x);
   border-radius: var(--radius-pill);
-  font-size: 0.875rem;
+  font-size: var(--text-body);
   font-weight: 500;
   line-height: 1;
   box-sizing: border-box;
@@ -1271,15 +1300,15 @@ body {
 .glim-btn-lg { min-width: var(--btn-w-lg); }
 
 /* The single-colour marks at rest. A published brand colour fails on one of
-   the two grounds, so the About card's marks take the adjusted theme tokens,
-   and the house mark follows the accent. */
+   the two grounds, so the Info tile's marks take the adjusted theme tokens,
+   and the house mark follows the accent and, under rainbow, its position. */
 .glim-android-mark { color: var(--brand-android); }
 .glim-docker-mark { color: var(--brand-docker); }
 .glim-windows-mark { color: var(--brand-windows); }
 .glim-paypal-mark { color: var(--brand-paypal); }
 .glim-bitcoin-mark { color: var(--brand-bitcoin); }
 .glim-github-mark { color: var(--brand-github); }
-.glim-house-mark { color: var(--accent-ink); }
+.glim-house-mark { color: var(--accent-glyph); }
 
 /* A tile carrying a brand mark ("Brand tiles"): under the pointer it fills with
    the brand's own colour (--tile), the same on both themes, and its name and
@@ -1463,7 +1492,7 @@ body {
 }
 
 .glim-readme-btn-sub {
-  font-size: 0.75rem;
+  font-size: var(--text-meta);
   opacity: 0;
   translate: 0 0.25rem;
   transition:
@@ -1546,10 +1575,11 @@ body {
   }
 }
 
-/* The About card's give buttons stand a blank line of the card's text apart
-   from the sentences above and below them ("The About card"). */
+/* The About card's give buttons stand a blank line of the card's text below
+   the sentence above them ("The Info tile and the About card"). They end the
+   card, and space after the last row reads as a missing row. */
 .glim-about-give {
-  margin-block: calc(var(--text-body) * 1.5);
+  margin-block-start: calc(var(--text-body) * 1.5);
 }
 
 

@@ -23,7 +23,7 @@ for c in $(grep -ohE "\bglim-[a-z0-9-]+" reference/react/*.tsx | sort -u); do
 done
 
 # 2. Every themed Tailwind utility, against the @theme layer that maps them.
-for u in $(grep -ohE "\b(bg|text|border|ring|fill|stroke)-(carbon|accent|status)[A-Za-z0-9-]*|\brounded-(card|control|pill)\b" reference/react/*.tsx | sort -u); do
+for u in $(grep -ohE "\b(bg|text|border|ring|fill|stroke)-(carbon|accent|status)[A-Za-z0-9-]*|\brounded-(card|control|pill)\b|\btext-(title|body|subline|meta|heading|dense|caption)\b" reference/react/*.tsx | sort -u); do
   grep -q "${u#*-}" reference/tailwind-theme.css || note "utility $u (not in reference/tailwind-theme.css)"
 done
 
