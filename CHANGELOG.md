@@ -4,7 +4,7 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## 3.2.0 - 2026-10-08
 
-BombVault's redesign becomes the standard. Its rules for structure, navigation, lists, page actions, wording, narrow windows, first start and what's new move into the language. Warnings turn orange, the type scale has five sizes, Settings ends in an Info tile, and row buttons, selectors, sub-cards, the settings search and illustrations follow the redesign.
+BombVault's redesign becomes the standard. Its rules for structure, navigation, lists, page actions, wording, narrow windows, first start and what's new move into the language. Warnings turn orange, the type scale has five sizes, Settings ends in an Info tile, and row buttons, selectors, sub-cards, the settings search and illustrations follow the redesign. The glyph set holds one standard drawing per meaning, 116 of them in `reference/glyphs.json`, and the App tab follows the README's download rows.
 
 **Adopting apps:**
 
@@ -15,6 +15,9 @@ BombVault's redesign becomes the standard. Its rules for structure, navigation, 
 - **Navigation:** cut the rail to about five entries and give every module a settings tile with "Also show in the sidebar". Put Sign out above Settings in the rail and the page's main action in the bottom right corner.
 - **Settings:** set selectors in settings rows compact at the row's end, and show the settings search only on a second upward push at the top, or with / and Ctrl+K. Replace the About card with an Info tile holding About, Version and Help.
 - **Rainbow:** keep accent-coloured text on the single accent inside a hued subtree, and fill a chosen selector segment with its card's hue.
+- **Glyphs:** copy `reference/glyphs.json` and `MAIL_SVG` from `reference/appMarks.ts` and generate the app's glyph file from them at the app's own size. Each viewBox is cropped to the ink, so an app that wants air around its glyphs widens it around the centre. Rename components to the names in `reference/glyphs.md` and mark a row in `reference/glyph-map.md` as standard once the app renders its drawing. A Retention tab wears `IconTabRetention` while Prune keeps `IconPrune`, Save wears the new `IconSave` without the Vecteezy attribution, and a mail button shows `IconMail` at rest and `IconMailOpen` under the pointer or a finger.
+- **App tab:** put the cards in the README's order, the server or desktop card first, then the phone card, the browser extension, and anything without a README row last. A phone app lists the server before the desktop app.
+- **Pairing:** an app whose pairing page lists the found instances under the words moves them to a view of their own with only Add and Cancel.
 - **Reference code:** the React reference and `reference/tokens.css` still carry the old type sizes, an `opacity` hover on the accent button, text coloured under rainbow and the About card. They follow in 3.3.0.
 
 ## ✨ Added
@@ -61,6 +64,17 @@ BombVault's redesign becomes the standard. Its rules for structure, navigation, 
 
 - **A magnifier with a tick for Integrity.** `IconTabIntegrity` is the search lens with a tick inside instead of a shield, so checking reads as looking closely and never as search.
 - **A lifebuoy for Recovery.** `IconTabRecovery` is new: a lifebuoy in one ink for the Recovery tab and rail entry, two thin rings joined by four bands.
+- **One drawing per meaning.** Section 4 of `glyphs.md` lists every glyph with its meaning and source, in three groups: actions, navigation and Settings tabs. Most come from Streamline's free set, a few from Font Awesome Free, Material Design Icons, Tabler and the two apps, and any source needs an open licence.
+- **Drawn for GlimStone.** A heavier plus and cross, a check, an open padlock, a shield with a tick and a struck-through one, `</>`, three sliders for General, and mirrored arrows for Jump to the start and Move down one. All are filled shapes on Streamline's 14-unit grid.
+- **More meanings with a drawing of their own.** Paste, sort direction, up one folder, health, queued, the time left on a captcha and Resolvers no longer borrow another meaning's glyph.
+- **Save is Material Design's floppy.** `IconSave` is `content-save` from Material Design Icons (Apache 2.0). Vecteezy's drawing came under a licence that is not open, and F-Droid lists an app that ships it with the NonFreeAssets anti-feature.
+- **An archive box for Retention.** `IconTabRetention` is Font Awesome's `box-archive` and names the place where an app sets how long its backups are kept. `IconPrune`'s shredder means throwing away, so it stays with Prune.
+- **The mail pair.** `MAIL_SVG` pairs the standard envelope at rest with Material's open one under the pointer, each in the box cropped to its own ink so the two read the same size.
+- **The eye and the shield.** `IconEye` and `IconEyeOff` are Streamline's `visible` and `invisible-1`, and the Security tab wears `shield-1`.
+- **Brand marks where they belong.** Buy Me a Coffee's mark stands only on the button that leads there, reCAPTCHA's only where a captcha is the subject.
+- **The glyph map is complete.** Every row in `glyph-map.md` names the component BombVault and KnightLoader render today and whether it is the standard drawing yet, and the file says where each app generates its glyphs.
+- **The App tab follows the README.** Its cards stand in the order of the README's four download rows (server, desktop app, phone app, browser extension), and the buttons in a card keep the order of their row. Whatever the README has no row for, such as a bookmarklet, comes last.
+- **What the words found gets a view of its own.** After Pair the pairing page shows only the instances on the relay, "Add all n" and a quiet Cancel back to the words, so nobody has to guess which of the page's buttons comes next.
 - **Every button gives way on press**, scaling to `.97` on the web as it already did on a phone.
 - **Illustrations** (new part of "The motion engine"). SVG with SMIL and Web Animations, no library. An explainer scene uses the real controls and clicks before its result shows, a finished pairing gets a ring and confetti, and a check made of parts checks each in turn.
 
@@ -82,74 +96,6 @@ BombVault's redesign becomes the standard. Its rules for structure, navigation, 
 - **Illustrations may animate**, some in a loop; reduced motion and the `off` level get a still frame.
 - **The About card becomes the Info tile**, the last in Settings, with About, Version (every version as a row with its release link and "Check for updates" at the bottom) and Help (GitHub, Email and a bug report download). No licences page.
 - **Rainbow never colours text.** Glyphs, badges, switches, primary buttons and active surfaces take the hue; accent-coloured text keeps the single accent.
-
-## 3.1.6 - 2026-10-04
-
-Save is drawn from a set under an open licence.
-
-**Adopting apps:** swap the Vecteezy floppy in `IconSave` for the new drawing and remove the Vecteezy attribution from the generated glyph file.
-
-## 🎨 Design
-
-- **Material Design's floppy for Save.** `IconSave` is `content-save` from Material Design Icons (Apache 2.0), cropped to its ink like every other glyph. Vecteezy's drawing came under the site's own Free License, which is not an open licence, and F-Droid lists an app that ships it with the NonFreeAssets anti-feature. Vecteezy is no longer a glyph source, and any new source needs an open licence.
-
-## 3.1.5 - 2026-10-03
-
-Retention has a glyph of its own.
-
-**Adopting apps:** a Retention tab or page wears `IconTabRetention`. `IconPrune` stays on the Prune action.
-
-## 🎨 Design
-
-- **An archive box for Retention.** `IconTabRetention` is Font Awesome's `box-archive`, cropped to its ink like every other glyph, and names the place where an app sets how long its backups are kept. `IconPrune`'s shredder means throwing away, so it stays with Prune. The list holds 115.
-
-## 3.1.4 - 2026-10-02
-
-The App tab's cards follow the order of the README's download rows.
-
-**Adopting apps:** put the App tab's cards in the README's order: the server or desktop card first, then the phone card, the browser extension, and anything without a README row last. A phone app lists the server before the desktop app.
-
-## 🎨 Design
-
-- **The App tab follows the README.** Its cards stand in the order of the README's four download rows (server, desktop app, phone app, browser extension), and the buttons in a card keep the order of their row. Whatever the README has no row for, such as a bookmarklet, comes last.
-
-## 3.1.3 - 2026-10-02
-
-Eight more meanings have a drawing of their own, the mail button's envelope opens under the pointer again, and both apps render every glyph in the list.
-
-**Adopting apps:** copy `reference/glyphs.json` and `MAIL_SVG` from `reference/appMarks.ts` again and regenerate. A mail button shows `IconMail` at rest and `IconMailOpen` under the pointer or a finger.
-
-## 🎨 Design
-
-- **Eight more glyphs.** Paste, sort direction, up one folder, health, queued, the time left on a captcha, Resolvers and the open envelope each have their own drawing, so no meaning borrows another's. The list holds 114.
-- **The mail pair.** `MAIL_SVG` pairs the standard envelope at rest with Material's open one under the pointer, each in the box cropped to its own ink so the two read the same size.
-- **The map is complete.** Every row in `glyph-map.md` shows BombVault and KnightLoader on the standard drawing, and it says where each app generates its glyphs.
-- **Sources.** Five glyphs BombVault took from Streamline name their file again instead of the app.
-
-## 3.1.2 - 2026-10-02
-
-Every glyph BombVault and KnightLoader draw has one standard drawing, and `reference/glyphs.json` holds all 106 ready to generate from.
-
-**Adopting apps:** copy `reference/glyphs.json` and generate the app's glyph file from it at the app's own size. Each viewBox is cropped to the ink, so an app that wants air around its glyphs widens it around the centre. Rename components to the names in `reference/glyphs.md` and mark a row in `reference/glyph-map.md` as standard once the app renders its drawing.
-
-## 🎨 Design
-
-- **One drawing per meaning.** Section 4 of `glyphs.md` lists every glyph with its meaning and source, in three groups: actions, navigation and Settings tabs. Most come from Streamline's free set, a few from Font Awesome Free, Tabler and the two apps.
-- **Drawn for GlimStone.** A heavier plus and cross, a check, a floppy, an open padlock, a shield with a tick and a struck-through one, `</>`, three sliders for General, and mirrored arrows for Jump to the start and Move down one. All are filled shapes on Streamline's 14-unit grid.
-- **Brand marks where they belong.** Buy Me a Coffee's mark stands only on the button that leads there, reCAPTCHA's only where a captcha is the subject.
-- **The eye and the shield.** `IconEye` and `IconEyeOff` are Streamline's `visible` and `invisible-1`, and the Security tab wears `shield-1`.
-- **The map says who still has to switch.** Every row in `glyph-map.md` names the component each app renders today and whether it is the standard drawing yet.
-
-## 3.1.1 - 2026-10-02
-
-The pairing page shows what the words found on a view of its own, and the glyph map records BombVault's padlock on the Security tab.
-
-**Adopting apps:** no reference file changes. An app whose pairing page lists the found instances under the words moves them to a view of their own with only Add and Cancel.
-
-## 🎨 Design
-
-- **What the words found gets a view of its own.** After Pair the page shows only the instances on the relay, "Add all n" and a quiet Cancel back to the words. With the field, Paste, Pair, Scan and the local network's Add server on the same screen, nobody could tell which button came next.
-- **BombVault's padlock in the glyph map.** The Security tab's row names the padlock BombVault draws there.
 
 ## 3.1.0 - 2026-10-01
 
