@@ -119,6 +119,12 @@ The CSS prefix is `glim-`.
 
     **The half that is easy to get wrong is the removal, not the rule.** Taking an operation off a card must not take the CAPABILITY with it. *Sign out* survived the cut untouched because the shell already offered it. *Sign out everywhere* had no second home, and deleting its only button would have quietly removed the one way to revoke outstanding sessions - a security capability, lost to a tidy-up. So it moved into the action that already implies it: **changing the password ends every other session**, which is what somebody changing a password out of suspicion believed was happening anyway. The test before removing an operation from a card is therefore not "is it out of place here" but **"where does this capability live once this button is gone"** - another surface, or the action that implies it, and if the answer is "nowhere", the button stays until one of those exists.
 
+23. **An action never ends in an ellipsis.** A button, a menu item or an option says what it does and stops: *Export*, *Delete*, *Choose a media server*. The trailing "…" once promised that a window would follow. In an app where most actions open one it promises nothing, and on every row it adds three characters of noise. Text that reports work in progress keeps it (*Checking backups …*, *Loading release notes …*), and so does a search field's placeholder: there the dots say that something is still going on, or still to be typed. Found in BombVault's redesign, where fourteen labels carried one.
+
+24. **A card whose content changes with a choice keeps the height of its tallest choice.** Switching then changes the words, not the layout. A picture beside the text stays where it was instead of jumping by the difference in line count, and the card below does not move. Measure the tallest variant after each render (render every variant off-screen at the column's width and take the largest height) rather than writing a fixed height, which breaks with the first translation. The picture sits at the top of its column, not centred on the text, or it still moves. Found in BombVault's relay card, whose four choices differ by up to two settings rows.
+
+25. **An action that writes files says where before it writes.** Its window names the folder and the file names first and shows the finished path afterwards, with a copy button. A server-side export that says nothing sends people to their downloads folder, which is where a browser puts files and where these are not. Where the action offers formats, they are a selector with plain names, and the usual one is preselected rather than labelled "(default)". Found in BombVault's export, reported as "Export to where? Not clear."
+
 ## The tooltip and info bubble
 
 Two triggers, **one shared engine**: [`reference/tooltip.ts`](../reference/tooltip.ts)'s `wireTooltips()` + `infoIcon()`. A plain icon-only button's hover tooltip and a control's "(i)" explanatory bubble are the same mechanism wearing two different trigger elements, not two separate implementations that happen to look similar. An app that built its own bespoke bubble (its own positioning, its own CSS, no arrow, no flip) alongside a *different* implementation for tooltips is the exact inconsistency this section exists to rule out. Found in production: one adopting app's info bubble and its toolbar tooltips visibly disagreed on background colour, corner radius and shadow depth because they were two unrelated pieces of code.
@@ -226,6 +232,7 @@ The small scale follows the same rule with less machinery. Its segments hug thei
 - **The command palette can summon it.** A "Search all settings" entry shows the bar first and then focuses it; with the bar absent there would be nothing to focus, and the command would do nothing.
 - **It stands in the content column, not in the page header**, where it would push the column of tiles down.
 - **A result jumps, it does not filter.** Picking a page, a card or a row goes to its page and marks the card or row there. Filtering the page would give its cards other rainbow positions and leave the tiles pointing at a page that is no longer shown whole.
+- **A page that was merged or renamed stays findable under its old name.** Each former name is an extra entry that points at the page holding it now, with a line saying so (*A tab of its own in 9.9, now under Storage locations*), and it is listed first. Somebody who learned the old app looks for the old word. Matching ignores hyphens, so *offsite* finds *Off-site*. Found in BombVault's redesign, which folded the Off-site, Retention and Cloud tabs into Storage locations.
 
 KnightLoader's `web/src/pages/settings/revealOnScrollUp.ts` is the whole mechanism, a hook that takes the page as its reset key and the in-use state as its veto, and `SettingsSearch.tsx` beside it is the bar.
 
@@ -423,6 +430,16 @@ The maxim the whole section hangs on: **a login gains a way IN, never a way INST
 - **A secret is offered in every form a device can take it.** A QR code for the phone that can scan, the typeable string for the one that cannot, a copy button for both. Either alone strands somebody. This is not a new rule: "The crypto window" already states it for a wallet address, and already names an authenticator secret as the same case when it explains why the QR encoder is passed in rather than bundled. Two call sites, one rule - stated there, pointed at from here.
 
 **Provenance, and the three things that are NOT the language.** Built for an Unraid backup app, where the default install is reached over `https://[IP]:3443` with a certificate covering only localhost - so the case the first bullet describes is that app's REGULAR case, not its edge case. That frequency is local. So is the number of recovery codes. And so is deriving the relying-party identifier from the request's own host rather than from a setting - though the reason behind it does generalise, and is the one line worth carrying: **a capability tied to the ADDRESS the page is currently open on must not read its address from a setting, because the same box is usually reachable under more than one.**
+
+## Dates and times
+
+**A day with a time is spelled out wherever there is room.** *Sunday, 04:10* reads at a glance, *Sun 04:10* has to be decoded. Today and yesterday are words, and an older date keeps its digits.
+
+- German: *Sonntag, 04:10 Uhr*, *Gestern, 03:48 Uhr*, *28.09., 03:46 Uhr*, and a range as *heute, 03:46 bis 03:47 Uhr*. It is *von heute*, never *vom heute*. English: *Sunday, 04:10*, *Yesterday, 03:48*, with no word for the hour.
+- **A weekly plan is a sentence**: *Wöchentlich am Sonntag um 04:00 Uhr*, *Weekly on Sunday at 04:00*.
+- **The short form stays where space is the point**: a pill in a list row, a log whose timestamps carry seconds, a chart axis, a selector and a field.
+- **Capitals follow the sentence**: *Heute, 03:51 Uhr* at the start, *zuletzt heute, 03:51 Uhr* inside one.
+- **Do it in one place.** The app formats every text as it appears, so no template has to remember it, and a pill or a log opts out by its class. BombVault's redesign does it in the same pass that translates, which is also what keeps the English form from being built out of the German one.
 
 ## Badges
 
@@ -630,6 +647,7 @@ A settings tab named App offers every way to get the product that the person is 
 - **Marks keep their colours at rest and turn the tile's ink when lit.** Android, Docker, Windows and Unraid paint from `--brand-android`, `--brand-docker`, `--brand-windows` and `--brand-unraid-*` through `.glim-android-mark`, `.glim-docker-mark`, `.glim-windows-mark` and `.glim-unraid-mark`, set on the mark's box through `markClass`; Apple and Linux take the button's ink, since neither has a colour of its own, and Linux keeps Tux's yellow beak and feet. Each unit names its brand, which gives it the `.glim-tile-<brand>` colour and ink.
 
 The same button carries the About card's give and report routes ("The About card"), so a person meets one control for every link to somebody else's service in the app.
+- **Every card names the version it offers**, as a link to that release (see "The About card": every version number on screen is a link). A card that offers a download without a version leaves the person comparing file names.
 
 ## Pairing a phone (the phrase page and the scanner)
 
@@ -676,6 +694,17 @@ A list whose order MEANS something (a download queue, a playlist, a set of rules
 The web reference carries the look in `reference/tokens.css`: `--drag-lift-scale`, `--drag-lift-shadow`, `--drag-lift-z`, `--drag-settle-dur` and `--drag-settle-ease`, read by three classes. `.glim-drag-lift` is the carried item, `.glim-drag-shift` the ones making room, `.glim-drag-settle` the item landing. The script sets only each item's `translate` and switches the classes; the separate `translate` and `scale` properties leave a wiggle's `transform` alone. An app whose own stylesheet puts a `transition` on every element, for a shape morph say, has to outrank it on these three classes, or its transition replaces theirs.
 
 Where a gesture library is available, use it: the animation runs off the main thread and the result is smoother. Where adding one means new NATIVE dependencies in an app whose build is already fragile, the platform's own pan and animation primitives are enough for a reorder, and the trade is worth naming in the code rather than discovering later: a reorder gesture is not worth putting a build at risk for.
+
+## The overview cards
+
+An overview is a set of cards that the person arranges. In customize mode each card can be moved, hidden and resized; outside it the cards simply stand there.
+
+- **Every card is shown at first.** Hiding is the person's choice, not the app's guess about what matters. An overview that opens on three cards keeps the rest of the app's state behind a mode nobody knows about.
+- **Six columns, so a width snaps to a third, a half, two thirds or the whole row.** In customize mode a handle at the bottom right corner, a filled accent dot, drags the size. The width jumps to the nearest of the four, the height moves in 20px steps from 140px, and a double click on the handle gives the card its natural height back. A button in the card's bar steps through the widths for keyboard users.
+- **The badge is never cut.** A card with a set height scrolls below its title badge, never as a whole: the badge stands above the card's edge (rule 11), and a card that scrolls itself clips the top half of it. Lists inside the card, such as a log or a run history, take the room the card gets and drop their own maximum height, so a taller card shows more rows rather than more empty card.
+- **On a phone the sizes are ignored.** Every card takes the full width at its natural height, and the handle is hidden.
+
+Found in BombVault's redesign.
 
 ## Button order in a pair
 

@@ -2,6 +2,26 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+BombVault's redesign becomes the standard: its rules for actions, times, the overview and the Integrity glyph move into the language.
+
+**Adopting apps:** drop the trailing "…" from every button, menu item and option; spell out days with times; give cards with switchable content the height of their tallest choice; make overview cards resizable; name the folder before an export writes; show the version on every App tab card; render `IconTabIntegrity` from the new drawing.
+
+## ✨ Added
+
+- **No ellipsis on actions.** Buttons, menu items and options end without "…"; status text and search placeholders keep it.
+- **Days spelled out.** *Sonntag, 04:10 Uhr* and *Sunday, 04:10* wherever there is room; pills, logs, charts and fields keep the short form.
+- **Cards keep the height of their tallest choice**, so a picture beside switchable text stays put.
+- **Overview cards are resizable** in thirds and 20px steps, scroll below their badge and start out all shown.
+- **An export names its folder** and file names before it writes, with plain format names.
+- **Old page names stay findable** in the settings search, hyphens ignored.
+- **App tab cards show their version** as a link to the release.
+
+## 🎨 Design
+
+- **A magnifier with a tick for Integrity.** `IconTabIntegrity` is the search lens with a tick inside instead of a shield, so checking reads as looking closely and never as search.
+
 ## 3.1.6 - 2026-10-04
 
 Save is drawn from a set under an open licence.

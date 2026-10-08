@@ -185,7 +185,7 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconTabSystem` | System tab | Streamline `computer-devices/computer-chip-1.svg` |
 | `IconTabStorage` | Paths and storage tab | Streamline `computer-devices/database-server-1.svg` |
 | `IconTabRetention` | Retention tab, how long backups are kept | Font Awesome Free `box-archive` (CC BY 4.0) |
-| `IconTabIntegrity` | Integrity tab | Streamline `interface-essential/shield-check.svg` |
+| `IconTabIntegrity` | Integrity tab, checks | Streamline `interface-essential/magnifying-glass.svg` with a tick drawn on its grid |
 | `IconTabOffsite` | Off-site tab | Font Awesome Free `cloud` (CC BY 4.0) |
 | `IconSchedules` | Schedules, automation | Streamline `interface-essential/circle-clock.svg` |
 | `IconNotifications` | Notifications | Streamline `interface-essential/ringing-bell-notification.svg` |
