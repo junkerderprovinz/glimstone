@@ -25,8 +25,8 @@ would then have to be re-applied by hand in three places.
 | `ConfirmDialog.tsx` | The confirm surface for a destructive action |
 | `Toast.tsx` + `toastEngine.ts` | Transient feedback, including the shake a failing control does |
 | `InfoBubble.tsx`, `IconTipButton.tsx` | The "(i)" explanation and the hover name on an icon-only control |
-| `AboutCard.tsx` | The About card, in its fixed order |
-| `ReadmeButton.tsx` | The button in the shape of the README's, with its segments: one way to get the app on the App tab, live, acting or still to come, and the About card's give and report buttons; the marks are in `../appMarks.ts` |
+| `AboutCard.tsx` | The Info tile: `InfoTile` renders its About, Version and Help cards in their fixed order, and each is exported on its own (`InfoAboutCard`, `InfoVersionCard`, `InfoHelpCard`). `AboutCard` takes the 3.2.0 props and lays them out as the tile |
+| `ReadmeButton.tsx` | The button in the shape of the README's, with its segments: one way to get the app on the App tab, live, acting or still to come, and the Info tile's give and report buttons; the marks are in `../appMarks.ts` |
 | `CryptoDonateDialog.tsx` | Giving from a wallet: one address per chain, as text and as a code |
 | `CoffeeDialog.tsx` | Buy Me a Coffee's widget inside a house window |
 | `PaypalDialog.tsx` + `usePaypalButtons.ts` | How often and how much in house controls, then PayPal's wallet and card buttons |
@@ -45,9 +45,34 @@ skip it and buttons fall back to the glyph they are handed, then to text alone.
 **Translation.** Every string is a prop. The components carry the order and the
 behaviour, the app carries its own language.
 
-**Data.** No component here fetches anything. The About card takes its version as
-a prop rather than reading a health endpoint, so the same file serves an app with
-a different one.
+**Data.** No component here fetches anything. The Version card takes its versions
+as props and its update check as a function rather than reading a health
+endpoint, so the same file serves an app with a different one.
+
+## The Info tile
+
+`InfoTile` takes one prop object per card and a `hueIndex` for the first of
+them; the other two take the next positions. It returns the three cards without
+a wrapper, so they stack in the page's own rhythm.
+
+- **About:** the maker's sentence, then the sentence about the money with the
+  give row under it.
+- **Version:** `rows` lists the app first, then GlimStone and every component
+  the app ships, each with a `name`, an optional `sub` line, the `version` read
+  from the build and the `repoUrl` whose release page the number opens. A row
+  without `repoUrl`, or a build that is not a published release, shows the
+  number as plain text. `updateCheck.run` checks them all and resolves to how
+  many have a newer release; the button turns `ok` with `upToDate`, `warn` with
+  `updatesFound(n)`, or `danger` with `checkFailed` and a shake when it rejects.
+  The app puts the reason for a failure in its toast.
+- **Help:** the report sentence, GitHub, Email with `MAIL_SVG` when the
+  sentence names a mail route and `mailAddress` is set, and the bug report when
+  `onBugReport` and `text.bugReport` are set, with `IconDiagnostics` as
+  `bugGlyph` and "Download" as `text.bugReportSub`.
+
+The glyphs on the update check come from the app's resolver under the keys
+`about.checkUpdates`, `about.upToDate`, `about.updatesFound` and
+`about.checkFailed`.
 
 ## Copying them in
 
