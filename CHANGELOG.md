@@ -4,9 +4,17 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
-BombVault's redesign becomes the standard: its rules for actions, times, the overview and the Integrity glyph move into the language.
+BombVault's redesign becomes the standard. Its rules for structure, navigation, lists, page actions, wording, narrow windows, first start and what's new move into the language. Warnings turn orange, the type scale has five sizes, Settings ends in an Info tile, and row buttons, selectors, sub-cards, the settings search and illustrations follow the redesign.
 
-**Adopting apps:** drop the trailing "…" from every button, menu item and option; spell out days with times; give cards with switchable content the height of their tallest choice; make overview cards resizable; name the folder before an export writes; show the version on every App tab card; render `IconTabIntegrity` from the new drawing.
+**Adopting apps:**
+
+- **Tokens:** copy the `--status-warn-*` values from `reference/tokens.css` again, in all three theme blocks. Move every text to one of the five sizes 12, 13, 14, 16 and 22px.
+- **Structure:** replace every fold, accordion and Simple/Advanced switch with sub-cards, cards of their own or a sheet. Remove page headings and info strips, merge one-row cards, and keep each fact and each setting in one place.
+- **Buttons:** leave one filled accent button per view, the floating page action or a dialog's main button. Give the accent-filled button a hover step without `brightness()` or `opacity`, and every button a `.97` press.
+- **Lists:** show row buttons on hover and focus (always on touch screens), put Filter, Sort and Search in three buttons, and make the whole row the link. Pick rows with the round selection mark, never a checkbox.
+- **Navigation:** cut the rail to about five entries and give every module a settings tile with "Also show in the sidebar". Put Sign out above Settings in the rail and the page's main action in the bottom right corner.
+- **Settings:** set selectors in settings rows compact at the row's end, and show the settings search only on a second upward push at the top, or with / and Ctrl+K. Replace the About card with an Info tile holding About, Version and Help.
+- **Rainbow:** keep accent-coloured text on the single accent inside a hued subtree, and fill a chosen selector segment with its card's hue.
 
 ## ✨ Added
 
@@ -17,10 +25,62 @@ BombVault's redesign becomes the standard: its rules for actions, times, the ove
 - **An export names its folder** and file names before it writes, with plain format names.
 - **Old page names stay findable** in the settings search, hyphens ignored.
 - **App tab cards show their version** as a link to the release.
+- **Nothing expands in place** (rule 26). No accordion or "Advanced" fold; a row that used to expand opens a sheet.
+- **No Simple/Advanced switch** (rule 27). Everyday things stand on the page, details on the object's page, rare things in their own card and rare actions in the More menu.
+- **Every fact once per view, every setting in one home** (rules 28 and 29). Other places link to it; a module's on/off switch is the one exception.
+- **No page headings and no info strips** (rules 30 and 31). A page starts with its first card or selector.
+- **A card holds at least two rows** (rule 32), and its title names the group instead of repeating a row or the tab.
+- **The normal case is quiet** (rule 33): success is a small green dot, coloured pills are for deviations, and a normal state is not shown.
+- **Options of one action are asked in its window** (rule 34), not kept on a settings page.
+- **A long explanation hides behind a button** beside its control and opens a window.
+- **One topic per settings tile.** A topic with enough settings gets its own tile.
+- **Navigation and modules** (new section). The rail holds about five entries; a module's page is always a settings tile that "Also show in the sidebar" only adds to the rail; one page renders the same through both doors; a module that is off still answers with an empty state; Sign out stands above Settings in the rail.
+- **The phone bar keeps four destinations and More**, which opens the rest as a sheet.
+- **The content column** (new section). The content starts at the same x on every page, and settings form pages are capped at 880px.
+- **Lists** (new section). Category tiles select instead of hiding, a tile's action covers what it shows, and Filter, Sort and Search are three equal buttons. The whole row opens its object, a row carries only its name and badges in one style, rows share one height, a count badge leads to what it counts, and an optional column appears only while the list is sorted by it.
+- **Multi-select like a file manager**, with Ctrl+click, Shift+click and Ctrl+A, and a context menu on right-click.
+- **A flat header on an object's page**: glyph, name, one state line, status and actions in one row.
+- **Page actions** (new section). The page's main action floats at the bottom right, aligned with the content's edge, never repeated in a card, with 96px of room below the last row. On a phone it shows its glyph above the bottom bar.
+- **The More menu** holds rare and dangerous actions and says "More"; two actions are two buttons.
+- **Wording** (new section). A button never repeats its row's label; everyday words replace jargon; one word per thing in a glossary; noun titles; one status vocabulary; settings name the window, not the device; a renamed page redirects; Reset is called Reset; parallel options get parallel sentences.
+- **The settings search reaches into the bubbles** and every object and storage page, and / or Ctrl+K opens it.
+- **Defaults and exceptions** (new section). The default stands once and only the exceptions as rows; changing a default reaches everything that follows it; an inherited value is shown locked with an override and a way back; named presets with Custom replace raw fields.
+- **A stored secret is a row** with "Saved" and "Change"; the field appears only while it changes.
+- **A schedule is edited from its sentence**, a button that opens the editor in a popover.
+- **The overview opens with a status head** of fixed states, and a warning is never rounded up to "all good".
+- **A neutral button's glyph takes the button's ink.**
+- **Switching something on is one click** and opens no window.
+- **Pickers and wizards** (new section). A big picker is one window with groups and a search button at the top right; a wizard names its steps; the app offers what it found before asking to type.
+- **A destructive choice preselects the safe option, and a finding offers its fix first.**
+- **Narrow windows** (new section). Dialogs become bottom sheets, and switches and short selectors stay in their row.
+- **First start and what's new** (new section). First start is a welcome page with three steps to the first backup and no count badges in the rail. After an update glowing green dots mark what changed, listed under "New (n)", and only the latest update's dots show.
+- **Pairing is a settings tile of its own**, after Instances.
 
 ## 🎨 Design
 
 - **A magnifier with a tick for Integrity.** `IconTabIntegrity` is the search lens with a tick inside instead of a shield, so checking reads as looking closely and never as search.
+- **A lifebuoy for Recovery.** `IconTabRecovery` is new: a lifebuoy in one ink for the Recovery tab and rail entry, two thin rings joined by four bands.
+- **Every button gives way on press**, scaling to `.97` on the web as it already did on a phone.
+- **Illustrations** (new part of "The motion engine"). SVG with SMIL and Web Animations, no library. An explainer scene uses the real controls and clicks before its result shows, a finished pairing gets a ring and confetti, and a check made of parts checks each in turn.
+
+## ⚡ Improved
+
+- **One filled accent per view** (rule 3). It is the floating action or a dialog's main button, and every button inside a card is secondary.
+- **Every button answers hover** (rule 21), the accent-filled one included, through an accent step instead of `brightness()` or `opacity`.
+- **The settings search waits for a second push at the top.** The page remembers since when it has rested there, about 250ms, because Chromium scrolls before the wheel event arrives.
+
+## 🔁 Changed
+
+- **Row buttons appear on hover and focus** (rule 6). Touch screens keep them visible, and rule 16 still applies. Replaces "every action on a row is visible at rest".
+- **Five type sizes**: 12, 13, 14, 16 and 22px for notch and meta, sub-line, body, emphasised title and status line. Replaces 20, 14, 12 and 11px.
+- **Warnings are orange**, `#FF832B` dark and `#ba4e00` light, so yellow only means "act here" or "chosen".
+- **Sub-cards group content inside a card** (rule 1): a flat inset group in surface2 at the card radius with a small uppercase title. A card inside a card is still not allowed.
+- **Selectors in settings rows stay compact** at the row's end with the label at its start. A selector with the card to itself still spans the card.
+- **A chosen selector segment wears its card's hue** under rainbow; the segments own no positions of their own.
+- **List selection is the round selection mark**, filled with the accent and a tick, shown once something is selected or on hover. It replaces checkboxes in lists.
+- **Illustrations may animate**, some in a loop; reduced motion and the `off` level get a still frame.
+- **The About card becomes the Info tile**, the last in Settings, with About, Version (every version as a row with its release link and "Check for updates" at the bottom) and Help (GitHub, Email and a bug report download). No licences page.
+- **Rainbow never colours text.** Glyphs, badges, switches, primary buttons and active surfaces take the hue; accent-coloured text keeps the single accent.
 
 ## 3.1.6 - 2026-10-04
 

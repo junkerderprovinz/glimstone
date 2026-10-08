@@ -133,6 +133,7 @@
 | Paths and storage tab | `IconTabStorage` | `IconTabStorage`, standard | none |
 | Retention tab, how long backups are kept | `IconTabRetention` | `IconTabRetention`, standard | none |
 | Integrity tab, checks | `IconTabIntegrity` | `IconTabIntegrity`, standard | none |
+| Recovery tab and rail entry | `IconTabRecovery` | `IconTabRecovery`, switch | none |
 | Off-site tab | `IconTabOffsite` | `IconTabOffsite`, standard | none |
 | Schedules, automation | `IconSchedules` | `IconSchedules`, standard | `IconSchedules`, standard |
 | Notifications | `IconNotifications` | `IconNotifications`, standard | `IconNotifications`, standard |
