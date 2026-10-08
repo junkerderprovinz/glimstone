@@ -4,7 +4,7 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## 3.3.0 - 2026-10-08
 
-The reference code follows the rules 3.2.0 wrote down. Under rainbow, text keeps the single accent while glyphs take their position's hue. The tokens carry the five type sizes, filled buttons hover by a colour step instead of `opacity`, and the About card becomes the Info tile with About, Version and Help.
+The reference code follows the rules 3.2.0 wrote down. Under rainbow, text keeps the single accent while glyphs take their position's hue. The tokens carry the five type sizes, filled buttons and clickable badges hover by a colour step instead of `opacity`, and the About card becomes the Info tile with About, Version and Help.
 
 **Adopting apps:**
 
@@ -12,6 +12,7 @@ The reference code follows the rules 3.2.0 wrote down. Under rainbow, text keeps
 - **Tailwind:** copy `reference/tailwind-theme.css` again. It adds `accentGlyph`, `accentHover` and `status{Ok,Fail,Warn}Hover`, maps the type scale to `text-status`, `text-title`, `text-body`, `text-subline` and `text-meta`, and stops redefining `--color-accentInk` under `.glim-hue`.
 - **Glyphs under rainbow:** a line-drawn glyph that should take its position's hue reads `--accent-glyph` or `text-accentGlyph`. Text stays on `--accent-ink`.
 - **Buttons:** copy `reference/react/Button.tsx` again, or replace each `hover:opacity-90` in its tone table with `hover:bg-accentHover`, `hover:bg-statusOkHover`, `hover:bg-statusFailHover` or `hover:bg-statusWarnHover`.
+- **Badges:** copy `reference/react/Badge.tsx` again. Merging by hand, take its `HOVER_CLASSES` table in place of `hover:opacity-80` on badge buttons and links, and `disabled:pointer-events-none` in place of `disabled:hover:opacity-50`.
 - **Info tile:** copy `reference/react/AboutCard.tsx` and render `InfoTile` as the last settings tile, with every version in `rows`, an `updateCheck` and `onBugReport`. Register glyphs for `about.checkUpdates`, `about.upToDate`, `about.updatesFound` and `about.checkFailed`. `AboutCard` still takes its 3.2.0 props and lays them out as the three cards.
 - **Version:** copy `reference/react/version.ts` again.
 
@@ -24,6 +25,7 @@ The reference code follows the rules 3.2.0 wrote down. Under rainbow, text keeps
 ## ⚡ Improved
 
 - **Filled buttons hover by a colour step.** The accent, ok, danger and warn tones mix 15% toward the theme's text colour, lighter on dark and darker on light. Under rainbow the accent button steps from its own hue.
+- **Clickable badges hover the same way.** A badge that is a button or a link steps its own background: a wash mixes 12% of its ink into itself, a neutral badge moves up to surface3, and a heading badge or an icon-only active badge takes the accent's hover step. A muted badge has no background, so its text darkens or lightens to the full text colour.
 - **The type scale works as Tailwind utilities.** `reference/tailwind-theme.css` maps every size, and `check.sh` checks the components' size utilities against it.
 
 ## 🔁 Changed
