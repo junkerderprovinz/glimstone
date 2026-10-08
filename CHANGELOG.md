@@ -2,7 +2,7 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 3.2.0 - 2026-10-08
 
 BombVault's redesign becomes the standard. Its rules for structure, navigation, lists, page actions, wording, narrow windows, first start and what's new move into the language. Warnings turn orange, the type scale has five sizes, Settings ends in an Info tile, and row buttons, selectors, sub-cards, the settings search and illustrations follow the redesign.
 
@@ -15,6 +15,7 @@ BombVault's redesign becomes the standard. Its rules for structure, navigation, 
 - **Navigation:** cut the rail to about five entries and give every module a settings tile with "Also show in the sidebar". Put Sign out above Settings in the rail and the page's main action in the bottom right corner.
 - **Settings:** set selectors in settings rows compact at the row's end, and show the settings search only on a second upward push at the top, or with / and Ctrl+K. Replace the About card with an Info tile holding About, Version and Help.
 - **Rainbow:** keep accent-coloured text on the single accent inside a hued subtree, and fill a chosen selector segment with its card's hue.
+- **Reference code:** the React reference and `reference/tokens.css` still carry the old type sizes, an `opacity` hover on the accent button, text coloured under rainbow and the About card. They follow in 3.3.0.
 
 ## ✨ Added
 
