@@ -6,11 +6,11 @@ import { Card } from "./Card";
 import { ReadmeButton } from "./ReadmeButton";
 
 // The Info tile, the last tile in Settings ("The Info tile and the About card"
-// in design-language.md): the About card with the maker's sentence and the give
-// row, the Version card with every version the app is made of, and the Help
-// card with the ways to report something. Each sentence sits directly above the
-// buttons it asks for, and no card names a route no control on it can reach.
-// Every string is passed in.
+// in design-language.md): the Version card with every version the app is made
+// of, the Help card with the ways to report something, the app's own What's new
+// card where it has one, and the About card with the maker's sentence and the
+// give row. Each sentence sits directly above the buttons it asks for, and no
+// card names a route no control on it can reach. Every string is passed in.
 
 type OpenUrl = (url: string) => void;
 
@@ -48,7 +48,7 @@ export interface InfoAboutCardProps {
   hueIndex?: number;
 }
 
-/** The first card of the Info tile: who made the app, then the give row. */
+/** The last card of the Info tile: who made the app, then the give row. */
 export function InfoAboutCard({
   text,
   onCoffee,
@@ -140,7 +140,7 @@ export interface InfoVersionCardProps {
   hueIndex?: number;
 }
 
-/** The second card: every version as a row, and the update check under them. */
+/** The first card: every version as a row, and the update check under them. */
 export function InfoVersionCard({ text, rows, updateCheck, openUrl = openInBrowser, hueIndex }: InfoVersionCardProps) {
   return (
     <Card title={text.title} hint={text.hint} hueIndex={hueIndex}>
@@ -294,7 +294,7 @@ export interface InfoHelpCardProps {
   hueIndex?: number;
 }
 
-/** The last card: a sentence inviting a report, then GitHub, Email and the bug report. */
+/** The second card: a sentence inviting a report, then GitHub, Email and the bug report. */
 export function InfoHelpCard({
   text,
   repoUrl,
@@ -348,21 +348,25 @@ export function InfoHelpCard({
 }
 
 export interface InfoTileProps {
-  about: Omit<InfoAboutCardProps, "hueIndex">;
   version: Omit<InfoVersionCardProps, "hueIndex">;
   help: Omit<InfoHelpCardProps, "hueIndex">;
-  /** The About card's rainbow position; Version and Help take the next two. */
+  /** The app's own What's new card. It takes the rainbow position after Help's,
+   *  and About moves one further. */
+  whatsNew?: ReactNode;
+  about: Omit<InfoAboutCardProps, "hueIndex">;
+  /** The Version card's rainbow position; the cards after it take the next ones. */
   hueIndex?: number;
 }
 
-/** The Info tile's three cards in their fixed order, for the page that stacks them. */
-export function InfoTile({ about, version, help, hueIndex }: InfoTileProps) {
+/** The Info tile's cards in their fixed order, for the page that stacks them. */
+export function InfoTile({ version, help, whatsNew, about, hueIndex }: InfoTileProps) {
   const at = (offset: number) => (hueIndex === undefined ? undefined : hueIndex + offset);
   return (
     <>
-      <InfoAboutCard {...about} hueIndex={at(0)} />
-      <InfoVersionCard {...version} hueIndex={at(1)} />
-      <InfoHelpCard {...help} hueIndex={at(2)} />
+      <InfoVersionCard {...version} hueIndex={at(0)} />
+      <InfoHelpCard {...help} hueIndex={at(1)} />
+      {whatsNew}
+      <InfoAboutCard {...about} hueIndex={at(whatsNew ? 3 : 2)} />
     </>
   );
 }

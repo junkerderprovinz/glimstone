@@ -25,7 +25,7 @@ would then have to be re-applied by hand in three places.
 | `ConfirmDialog.tsx` | The confirm surface for a destructive action |
 | `Toast.tsx` + `toastEngine.ts` | Transient feedback, including the shake a failing control does |
 | `InfoBubble.tsx`, `IconTipButton.tsx` | The "(i)" explanation and the hover name on an icon-only control |
-| `AboutCard.tsx` | The Info tile: `InfoTile` renders its About, Version and Help cards in their fixed order, and each is exported on its own (`InfoAboutCard`, `InfoVersionCard`, `InfoHelpCard`). `AboutCard` takes the 3.2.0 props and lays them out as the tile |
+| `AboutCard.tsx` | The Info tile: `InfoTile` renders its Version, Help and About cards in their fixed order, with the app's own What's new card between Help and About where it has one, and each is exported on its own (`InfoVersionCard`, `InfoHelpCard`, `InfoAboutCard`). `AboutCard` takes the 3.2.0 props and lays them out as the tile |
 | `ReadmeButton.tsx` | The button in the shape of the README's, with its segments: one way to get the app on the App tab, live, acting or still to come, and the Info tile's give and report buttons; the marks are in `../appMarks.ts` |
 | `CryptoDonateDialog.tsx` | Giving from a wallet: one address per chain, as text and as a code |
 | `CoffeeDialog.tsx` | Buy Me a Coffee's widget inside a house window |
@@ -52,11 +52,9 @@ endpoint, so the same file serves an app with a different one.
 ## The Info tile
 
 `InfoTile` takes one prop object per card and a `hueIndex` for the first of
-them; the other two take the next positions. It returns the three cards without
-a wrapper, so they stack in the page's own rhythm.
+them; the others take the next positions. It returns the cards without a
+wrapper, so they stack in the page's own rhythm.
 
-- **About:** the maker's sentence, then the sentence about the money with the
-  give row under it.
 - **Version:** `rows` lists the app first, then GlimStone and every component
   the app ships, each with a `name`, an optional `sub` line, the `version` read
   from the build and the `repoUrl` whose release page the number opens. A row
@@ -69,6 +67,10 @@ a wrapper, so they stack in the page's own rhythm.
   sentence names a mail route and `mailAddress` is set, and the bug report when
   `onBugReport` and `text.bugReport` are set, with `IconDiagnostics` as
   `bugGlyph` and "Download" as `text.bugReportSub`.
+- **What's new:** the app's own card, passed as `whatsNew`, with the hue after
+  Help's. Without it About follows Help.
+- **About:** the maker's sentence, then the sentence about the money with the
+  give row under it.
 
 The glyphs on the update check come from the app's resolver under the keys
 `about.checkUpdates`, `about.upToDate`, `about.updatesFound` and
