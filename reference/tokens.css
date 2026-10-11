@@ -1413,11 +1413,12 @@ body {
 }
 
 /* The height is the README's mark, and the box is wider than tall, so a wide
-   mark such as Unraid's or Docker's is not shrunk to a sliver. */
+   mark such as Unraid's or Docker's is not shrunk to a sliver. The start is
+   where the README's own buttons put their mark, 68.5 of 841.9 units. */
 .glim-readme-btn-mark {
   position: absolute;
   top: 50%;
-  inset-inline-start: 1.5rem;
+  inset-inline-start: 0.875rem;
   width: 2rem;
   height: 1.5625rem;
   translate: 0 -50%;
@@ -1456,7 +1457,7 @@ body {
 .glim-readme-btn-text {
   position: absolute;
   inset-block: 0;
-  inset-inline: 3.9375rem 0.625rem;
+  inset-inline: 3.3125rem 0.625rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
