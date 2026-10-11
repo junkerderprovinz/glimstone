@@ -1339,6 +1339,14 @@ body {
 /* A mark whose layers do not survive one ink brings the brand's own
    single-colour version for the hover. */
 .glim-mark-hover { display: none; }
+/* The house marks open: the envelope and the manual's book show their open
+   drawing on the focus as well, and under a finger, where nothing hovers. */
+.glim-brand-tile:focus-visible .glim-house-mark .glim-mark-rest { display: none; }
+.glim-brand-tile:focus-visible .glim-house-mark .glim-mark-hover { display: block; }
+@media (hover: none) {
+  .glim-brand-tile:active .glim-house-mark .glim-mark-rest { display: none; }
+  .glim-brand-tile:active .glim-house-mark .glim-mark-hover { display: block; }
+}
 
 /* The brands' tile colours: the true colour and the ink that holds on it, white
    wherever white reaches 2:1 and near-black below that. */

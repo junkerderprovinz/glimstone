@@ -128,6 +128,8 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconSort` | Sort direction | Streamline `interface-essential/ascending-number-order.svg` |
 | `IconFolderUp` | Up one folder | Material Design Icons `folder-arrow-up` (Apache 2.0) |
 | `IconMailOpen` | Write to us, under the pointer or a finger | Material Design Icons `email-open` (Apache 2.0) |
+| `IconManual` | Manual | Drawn for BombVault's Help card |
+| `IconManualOpen` | Manual, under the pointer, a finger or the focus | Drawn for BombVault's Help card |
 
 ### Navigation and domain
 
@@ -194,7 +196,7 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconDiagnostics` | Diagnostics | Streamline `programming/bug.svg` |
 | `IconKeyboard` | Keyboard shortcuts | Streamline `computer-devices/keyboard.svg` |
 
-**Pairs share one drawing turned or mirrored.** `IconFirst` is `IconLatest` mirrored top to bottom and `IconMoveDown` is `IconMoveUp` mirrored, so the two halves of each pair cannot drift apart. `IconEye` and `IconEyeOff` are Streamline's `visible` and `invisible-1`, and a Show phrase button and the reveal toggle in a password field wear the same two. `IconMail` rests on a mail button and `IconMailOpen` takes its place under the pointer or a finger; `MAIL_SVG` in `appMarks.ts` carries the pair.
+**Pairs share one drawing turned or mirrored.** `IconFirst` is `IconLatest` mirrored top to bottom and `IconMoveDown` is `IconMoveUp` mirrored, so the two halves of each pair cannot drift apart. `IconEye` and `IconEyeOff` are Streamline's `visible` and `invisible-1`, and a Show phrase button and the reveal toggle in a password field wear the same two. `IconMail` rests on a mail button and `IconMailOpen` takes its place under the pointer or a finger; `MAIL_SVG` in `appMarks.ts` carries the pair. `IconManual`, the closed book, and `IconManualOpen` do the same on the manual button, and `MANUAL_SVG` carries them.
 
 **A brand mark is the brand's own and goes only where it is meant.** `IconCoffee` is Buy Me a Coffee's mark and stands only on the button that leads there, and `IconCaptcha` is reCAPTCHA's mark and stands only where a captcha is the subject. `IconContainers` and `IconGithub` follow the same rule (section 1).
 
