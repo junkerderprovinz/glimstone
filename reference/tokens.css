@@ -43,8 +43,9 @@
   /* The type scale, a fixed table of five sizes, one per role. --text-meta
      serves a card's notch badge, .glim-eyebrow's uppercase label, the info
      bubble, a muted meta line and a count; the treatment carries the
-     distinction. A page's hero figure and a brand wordmark are outside the
-     scale (docs/design-language.md, "The type scale"). */
+     distinction. A page's hero figure, a brand wordmark and text drawn inside
+     an illustration are outside the scale (docs/design-language.md, "The type
+     scale"). */
   --text-status: 1.375rem;  /* 22px, the status head and a tile's one figure */
   --text-title: 1rem;       /* 16px, an emphasised row title, a window's title */
   --text-body: 0.875rem;    /* 14px */
