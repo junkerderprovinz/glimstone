@@ -32,7 +32,7 @@
 | Revoke a key | `IconKeyRevoke` | `IconKeyRevoke`, standard | none |
 | Sign in | `IconSignIn` | `IconSignIn`, standard | none |
 | Sign out | `IconSignOut` | `IconSignOut`, standard | `IconSignOut`, standard |
-| Information | `IconInfo` | `IconInfo`, standard | none |
+| Information | `IconInfo` | `IconInfo`, standard | `IconInfo`, standard |
 | Help | `IconHelp` | none | `IconHelp`, standard |
 | More | `IconMore` | `IconMore`, standard | `IconMore`, standard |
 | Menu | `IconMenu` | none | `IconMenu`, standard |
@@ -47,8 +47,8 @@
 | Move down one | `IconMoveDown` | none | `IconMoveDown`, standard |
 | Expand | `IconExpand` | none | `IconExpand`, standard |
 | Collapse | `IconCollapse` | none | `IconCollapse`, standard |
-| Select all | `IconSelectAll` | `IconSelectAll`, standard | none |
-| Clear the selection | `IconClearSelection` | `IconClearSelection`, standard | none |
+| Select all | `IconSelectAll` | `IconSelectAll`, standard | `IconSelectAll`, standard |
+| Clear the selection | `IconClearSelection` | `IconClearSelection`, standard | `IconClearSelection`, standard |
 | Compare | `IconCompare` | `IconCompare`, standard | none |
 | Filter | `IconFilter` | none | `IconFilter`, standard |
 | Pin | `IconPin` | none | `IconPin`, standard |
@@ -57,8 +57,8 @@
 | Open a service's own site | `IconExternalLink` | none | `IconExternalLink`, standard |
 | Warning | `IconWarning` | none | `IconWarning`, standard |
 | Right away | `IconBolt` | none | `IconBolt`, standard |
-| Write to us | `IconMail` | `IconMail`, standard | none |
-| Buy the author a coffee | `IconCoffee` | `IconCoffee`, standard | `IconCoffee`, standard |
+| Write to us | `IconMail` | `IconMail`, standard | `IconMail`, standard |
+| Buy the author a coffee | `IconCoffee` | `IconCoffee`, standard | none |
 | A protection is on | `IconShieldOn` | `IconShieldOn`, standard | `IconShieldOn`, standard |
 | A protection is off | `IconShieldOff` | `IconShieldOff`, standard | none |
 | Store uncompressed | `IconCompressOff` | `IconCompressOff`, standard | none |
@@ -93,7 +93,7 @@
 | Open the app | `IconApp` | none | `IconApp`, standard |
 | Modules | `IconModules` | none | `IconModules`, standard |
 | Captcha | `IconCaptcha` | none | `IconCaptcha`, standard |
-| Docker containers | `IconContainers` | `IconContainers`, standard | `IconContainers`, standard |
+| Docker containers | `IconContainers` | `IconContainers`, standard | none |
 | Virtual machines | `IconVM` | `IconVM`, standard | none |
 | Files and folder sets | `IconFiles` | `IconFiles`, standard | none |
 | Receiver, an incoming transfer | `IconReceiver` | `IconReceiver`, standard | none |
@@ -146,4 +146,4 @@
 ## Where each app keeps its glyphs
 
 - **BombVault:** `scripts/gen_glyphs.py` writes `web/src/components/glyphs.tsx` and `navGlyphs.tsx` from a copy of `glyphs.json` at 16px; the phone app shows the web launcher and uses the same files. `glyphFor.tsx` maps a translation key to a glyph when a button passes none; a button that passes one wins.
-- **KnightLoader:** `web/scripts/gen-glyphs.mjs` writes `web/src/lib/glyphs.tsx` at 22px with the ink at three quarters of the box, and `mobile/scripts/gen-glyphs.mjs` writes the Android app's glyphs for react-native-svg. Every call site passes its glyph; Settings page glyphs are mapped in `pages/settings/pageIcons.tsx`. The browser extension copies the eye and a few others in `extension/src/`.
+- **KnightLoader:** `web/scripts/gen-glyphs.mjs` writes `web/src/lib/glyphs.tsx` at 22px with the ink at three quarters of the box; the Android app draws its few marks itself with react-native-svg. Every call site passes its glyph; Settings page glyphs are mapped in `pages/settings/pageIcons.tsx`. The browser extension copies the eye and a few others in `extension/src/`.
