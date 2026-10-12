@@ -63,6 +63,8 @@ Every glyph below is in [`glyphs.json`](glyphs.json) with its drawing, its measu
 
 Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one exception, because the Off-site tab is the off-site meaning itself.
 
+`IconTabEngine`, named in 3.0.0 for a tab about how the app's own background work runs, is not in the assortment: its drawing was Streamline's dashboard, which `IconDashboard` wears. ArrowLoop, which has no overview, gives that tab `IconDashboard` itself. A glyph only one app needs, such as ArrowLoop's `IconPreview`, stays in that app's generator and is listed under "Glyphs outside the assortment" in [`glyph-map.md`](glyph-map.md).
+
 ### Actions, the verbs a button wears
 
 | Name | Means | Source |
