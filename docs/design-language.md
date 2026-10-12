@@ -449,9 +449,130 @@ A field holding a secret carries its show/hide control **inside the field** at t
 - **It doesn't change the field's width.** The wrapper that positions the eye fills the column exactly like a plain field; a shrink-to-content wrapper makes secret fields read as narrower than every other field, the one thing the eye should *not* draw attention to. A verify/check action goes on its own line **below**, not beside it.
 - **A secret that is already stored is a row, not an open form.** The row shows a state word ("Saved") and a "Change" button; the field, with its eye, Cancel and Save, appears only while it is being changed. An empty password field on every visit asks somebody to type what is already there. Found in BombVault's redesign, round 8.
 
+## The first way in (password, reset and sessions)
+
+Every app with a login needs the same few things: a password that a copied database cannot open, a way back in when the password is lost, and a clear line between what the owner's browser may do and what a paired phone may do. BombVault, KnightLoader and ArrowLoop build them the same way, so somebody who has reset one of them can reset the others. BombVault is the reference implementation: its login page, its reset form and the page after it, the phone pairing card under Settings, Security, and the gate in front of its API show every rule below at work. The second factor and passkeys build on this section and have their own, ["The second way in"](#the-second-way-in-second-factor-and-passkey).
+
+The interface rules here are the design language. The server rules are what an adopting app has to meet so that the interface tells the truth. **Every rule has a test that fails without it:** take the guard out, watch the test fail, put the guard back. A test that stays green without its guard proves nothing.
+
+### Password and session
+
+- **The password is hashed with Argon2id and peppered with the app key from the environment.** A copied database is useless without that key, and the key never lives in the database.
+- **A new password has at least 12 characters; an older, shorter one keeps working until it is changed.** Raising the minimum must not lock out somebody who chose a password under the old one. The form reads the minimum from the server instead of repeating the number.
+- **Sessions are signed with an HMAC from the app key and carry an epoch.** Every password change and every reset moves the epoch on, which ends every other session at once, and the session that made the change gets a fresh cookie. Without the epoch a stolen cookie would outlive the password it was issued under.
+- **Sign-in allows five failed attempts per minute per client, and a wrong name gets the same answer as a wrong password.** The limit makes guessing slow, and the single answer keeps the form from telling a stranger which names exist.
+- **Two-factor authentication is TOTP with eight recovery codes, shown once when it is turned on.** The secret is stored sealed, and turning it off asks for a current code, because a session somebody walked away from must not be enough to remove it.
+- **A passkey is added beside the password, never in its place.** On an address without a real domain name and a trusted certificate, the card says so instead of offering a button that fails. "The second way in" has both cards.
+- **A write that rests on a session check confirms, as it saves, that the password hash and the epoch are still the ones it checked.** A password change and a reset can run at the same moment, and the later write must not quietly undo the earlier one.
+
+### Forgot password (the code in the container log)
+
+Whoever lost the password still owns the box, and the one channel that only the box's owner can read is the app's own log. A reset proves ownership through that log, and the app says plainly who else can read it.
+
+- **"Forgot password?" is a quiet button at the foot of the sign-in form**, under Sign in and under the passkey button where there is one, at full width like them. It is there whenever a password is set, since nobody plans to forget one.
+- **Pressing it writes a code to the container log, and only then does the reset form appear.** The form never asks for a code that does not exist. Asking again while a code is still valid writes no second one, so the log does not fill up and the code somebody is typing stays good.
+- **The code goes to the container log (stdout) and nowhere else.** The activity log, a diagnostics bundle, an API answer and an error message can all be read by somebody who only reaches the web interface.
+- **The log shows the code as a block of its own**, highlighted and set apart from the timestamped lines, in groups of four (`XXXX-XXXX-XXXX`), with how long it is valid and the line "If nobody here asked for a reset, ignore this. The password is unchanged." Its alphabet leaves out 0, O, 1 and I. A code printed as an ordinary line gets lost in a busy log, characters that look alike get typed wrong, and an owner who did not ask needs to know that nothing changed.
+- **A code has 12 characters (about 60 bits) and is valid for 10 minutes, and a wrong guess does not spend it.** Nobody finds 60 bits in ten minutes at any rate HTTP allows, while a code that a few wrong guesses killed would let any stranger at the login page stop the owner from ever resetting.
+- **Wrong codes have a throttle of their own per address, apart from the sign-in throttle, and the right code always gets through.** Behind a reverse proxy every visitor shares one address, so a throttle in front of the right code would let anybody keep the owner out.
+- **A wrong code and an expired code get the same answer, and the comparison takes constant time.** Neither the words nor the timing may tell a guesser anything about the live code.
+- **The reset form takes the place of the sign-in form in the same card.** The code field comes first, labelled "Code from the container log" with an (i), set in capitals with wide letter spacing, the placeholder `XXXX-XXXX-XXXX`, spellcheck off and one-time-code autofill. New password and Confirm password follow, each with its reveal eye ("The reveal eye"). Set password (accent) and Back (quiet) are stacked at full width, because the longer translations of the two labels do not fit the card side by side. The field accepts the code in either case and with or without dashes and spaces, since people copy it in every shape, and a mismatch or a short password is caught before anything is sent, so a typing mistake never costs a guess.
+- **A refused code gets one sentence: "That code is wrong or has expired. If it expired, the log now shows a new one."** The form asks for a new code as it shows the sentence, which keeps the promise true; while a code is still valid, asking writes nothing.
+- **The code's (i) says where the log is, how long the code lasts, who can reset and what the reset removes.** BombVault's reads: "BombVault has written a code to its container log. On Unraid: Docker tab, BombVault icon, Logs. A code is valid for 10 minutes. Anyone who can read this log can reset the password, including through a log viewer such as Dozzle. The reset also turns two-factor authentication off, removes every passkey, revokes every API token and MCP key, ends every other session and stops phones from pairing until you turn that back on." Name the place in the host's own words, and name a log viewer people actually run rather than "privileged users", because the reader has to recognise their own setup in the sentence.
+- **The documentation says the same thing plainly: whoever can read the container log can reset the password.** That is root on the host, a log viewer such as Dozzle, any container given the Docker socket (read-only is enough) and any log shipper that forwards container output. An owner who runs one of those has to know before trusting the password.
+- **The reset leaves whoever holds the code alone in the app.** It turns two-factor authentication off, ends every other session, removes every passkey, revokes every API token, MCP key and OAuth sign-in, and switches phone pairing off until the owner turns it back on under Settings, Security. Whoever lost the password may have lost the authenticator with it, and whoever stole it may have left a key, a token or a phone behind.
+- **Creating a token, a key, a passkey or an OAuth sign-in holds a read lock, and the reset holds the write lock.** Whatever a request adds then exists before the reset removes it, or is refused because the reset ended its session. The reset removes the keys before it stores the password, so a failure never leaves old keys beside a new password.
+- **A finished reset signs the person in and shows what it removed.** The page is titled "Your new password is set", opens with "The reset also removed every other way in:" and lists that every other session has ended, that phones are signed out and cannot pair again until this is turned back on under Settings, Security, that two-factor authentication is off (when it was on), and the counts of removed passkeys, revoked API tokens and revoked MCP keys or OAuth sign-ins, each only when it is above zero. When a key was removed, one line says where to add passkeys again and to create new tokens where they are still needed. One accent Done button goes on. Without this page the next sign-in looks for a passkey that no longer exists, and a script fails on a token nobody said was revoked.
+- **The reset writes one line to the log naming what it removed, and refused codes are counted in a line at most once a minute.** Somebody guessing shows up in the log without filling it.
+
+### Requests and origin
+
+- **A request that changes something is accepted only with `Content-Type: application/json` and not with `Sec-Fetch-Site: cross-site`; anything else gets 415.** A foreign web page can make the owner's browser send a form to an address in the LAN, but not a JSON request, so no other site can change the app's settings through that browser.
+- **The `Host` header is never taken as the app's own address when that address is handed to others.** Anybody can send any Host header, and DNS rebinding makes a browser do it, so only a request from a browser signed in with the password may teach the app where it is reached.
+- **Without a password the app is open to whoever reaches the port, but whatever hands out a secret or deletes data for good still needs a password and a real sign-in.** The refusal has a code of its own (`password-not-set` in BombVault) and a sentence of its own: "Set a login password first, under Settings, Security. Without one this server hands out no key." An open app on a trusted network is a choice the owner may make; handing its keys to the whole network is not part of that choice.
+- **The gate fails closed.** When the app cannot read whether a password is set, it answers 503 to everything except sign-in and health, so a database error never opens the API.
+
+### Device and phone sessions
+
+A phone that pairs with the group's twelve words gets a session without the password ("Pairing a phone"). Every member of the group knows those words, so that session reaches what the phone app shows and nothing that leads to a key.
+
+- **Phone pairing is a card under Settings, Security, titled with the phone app's name, with one switch: "Phones can pair with the group's twelve words".** The switch's (i) says what a paired phone may do without the password, what it cannot reach, and that a password reset turns pairing off. It saves on the flip like every switch ("Saving"). This is where the owner decides whether the words are a way in at all, and it is the switch the reset page points to.
+- **While pairing is off, a paired session gets 401, the same as no session.** Turning the switch off has to end the phones' access, not only stop new pairings.
+- **A paired session reaches only the routes on an allow list, by method and pattern.** Every other route answers 403 with a code of its own (`own-login-needed` in BombVault), and a path that matches no route stays 404. A new route stays closed to phones until somebody decides it belongs on the list.
+- **The interface answers that refusal with a window holding the reason and a "Sign in here" button.** BombVault's sentence is "This needs a sign-in at this instance's own web interface. The phone app's connection opens the pages, but no keys. Sign in here, then do it again." The button ends the phone's session and brings up the login screen on the same page, and Cancel leaves everything as it was. A toast would explain the refusal and leave nothing to press, while the window fixes it in one step. The sentence is UI copy picked by the code, never the server's text (the reason is in "The second way in").
+- **A guard test reads every registered route from the source.** Each one must be either allowed or refused by name, and neither list may name a route that no longer exists, which is what keeps a new route closed and the lists from going stale.
+- **An allowed read route gives a paired session no credentials.** Passwords in URLs (including ones with a `'`), `key=value` secrets in connection strings, hook commands and the logins of storage locations are scrubbed, and the test covers every allowed read route. Being allowed to see a list is not being allowed to see the secrets inside it.
+- **What is dangerous stays out of a phone's reach or gets its safeguard forced.** A restore in place runs only with a safety copy first, and a phone cannot switch off safety snapshots, dismiss a finding that holds something back, import anything that runs as root at boot or dismiss every error at once. The words are shared across the group, so whatever they open has to be safe in the hands of every member.
+- **The check whether a session is paired fails closed.** When the gate cannot tell which route a request is for, it refuses.
+
+### Group members
+
+- **A request from another member is never matched to that member by a sender ID the caller writes.** Every member has a key pair of its own, pinned at first contact, and every later request (a role answer, a withdrawal, a hand-over, a sign-in) is signed with it. A sender ID in the body says whatever the sender wants.
+- **Limits count per pinned key as well as globally, and the server keeps the counters.** With only a global limit, a forger can use up the real member's allowance just when that member needs a restore, and a counter the caller sends is a counter the caller sets.
+
+### Restoring the app's own settings
+
+- **An uploaded or restored database is cleaned before it goes into place: its triggers and views are dropped, and schema names are never run as SQL.** A database file can carry code that runs as soon as the app opens it.
+- **The running server keeps its own login over the one in the file, unless the file's check value matches and every sealed value in it opened.** Otherwise restoring an old or foreign file would hand the app to whoever knew that file's password.
+- **After resealing, the database file is rebuilt (VACUUM).** Old sealed values would otherwise stay readable on its free pages.
+- **An older build refuses to start on a database from a newer version.** Carrying on with wrong assumptions damages data without a sound; a refusal to start is loud and harmless.
+
+### Deleting data
+
+- **The preview and the run compute the same thing.** The confirmation sends a checksum of what the preview showed, and the run stops when anything has changed since. A person confirms what they saw, not whatever the data became after they looked.
+- **Places are compared by identity, never as text.** A local path goes through `os.SameFile` after resolving symlinks, a remote one is compared by backend, bucket and path. A place that cannot be identified does not count as "still kept somewhere else", because a wrong yes there deletes the last copy.
+
+### The lift's checklist
+
+One line per rule above, for a session that lifts an app to this version.
+
+- [ ] Every rule above has a test that fails when its guard is taken out.
+- [ ] Argon2id, peppered with the app key from the environment.
+- [ ] New passwords need 12 characters, shorter old ones still sign in, and the form reads the minimum from the server.
+- [ ] HMAC-signed sessions with an epoch that every password change and reset moves on; the changing session gets a fresh cookie.
+- [ ] Five failed sign-ins per minute per client, one answer for a wrong name and a wrong password.
+- [ ] TOTP with eight recovery codes shown once, the secret sealed, turning it off asks for a code.
+- [ ] Passkeys only beside the password, and the card explains a missing domain name or certificate.
+- [ ] A write after a session check confirms the hash and epoch at save time.
+- [ ] "Forgot password?" is a quiet full-width button at the foot of the sign-in form.
+- [ ] The reset form appears only once a code is in the log, and asking again keeps the live code.
+- [ ] The code reaches the container log and nothing else.
+- [ ] The log block is highlighted, in groups of four, without 0, O, 1 or I, with validity and the "ignore this" line.
+- [ ] 12 characters, 10 minutes, a wrong guess leaves the code alive.
+- [ ] Wrong codes have their own throttle per address; the right code always gets through.
+- [ ] Wrong and expired codes get one answer, compared in constant time.
+- [ ] The reset form: code field with (i), new password and confirm with eyes, Set password over Back, checks before sending.
+- [ ] A refused code gets the one sentence, and the form asks for a new code as it shows it.
+- [ ] The code's (i) names where the log is, the 10 minutes, a real log viewer, and what the reset removes.
+- [ ] The documentation names root, log viewers, the Docker socket and log shippers as able to reset.
+- [ ] The reset ends sessions, turns two-factor off, removes passkeys, revokes tokens, MCP keys and OAuth sign-ins, and switches pairing off.
+- [ ] Minting holds a read lock, the reset the write lock, and keys go before the password.
+- [ ] The page after the reset signs in, lists what went with counts above zero, and points to Settings, Security.
+- [ ] The reset logs what it removed, and refused codes are summed at most once a minute.
+- [ ] Changing requests need JSON and not cross-site, or get 415.
+- [ ] The Host header never becomes the address handed to others.
+- [ ] Secrets and permanent deletes need a password even on an open app, with `password-not-set` and its sentence.
+- [ ] The gate answers 503 when it cannot read the auth state.
+- [ ] The pairing card under Settings, Security with its one switch and its (i).
+- [ ] Pairing off means 401 for every paired session.
+- [ ] Paired sessions reach an allow list only; the rest is 403 `own-login-needed`, unknown paths 404.
+- [ ] The refusal opens a window with the sentence and "Sign in here".
+- [ ] The guard test covers every registered route, and the lists name no route that is gone.
+- [ ] Allowed read routes scrub every credential for a paired session, covered by a test.
+- [ ] Dangerous actions stay refused to a phone or get their safeguard forced.
+- [ ] The paired check refuses when it cannot tell the route.
+- [ ] Members are matched by a key pinned at first contact, never by a sender ID.
+- [ ] Limits count per pinned key, kept by the server.
+- [ ] A restored database loses its triggers and views, and no schema name runs as SQL.
+- [ ] The running login wins unless the check value matches and every sealed value opened.
+- [ ] VACUUM after resealing.
+- [ ] An older build refuses a newer database.
+- [ ] Preview and run share a checksum, and the run stops on a difference.
+- [ ] Places are compared by identity, and an unknown place never counts as a second copy.
+
 ## The second way in (second factor and passkey)
 
-A login that has a password can be given a second factor, a passkey, or both. They are two cards answering the same question differently, and neither is a backup product's concern: any app with a login reaches this shape eventually. What both cards actually have to carry is not the button - the button is three lines - but the explanation around it, because the failure mode here is somebody locking themselves out of the tool that recovers everything else.
+A login that has a password can be given a second factor, a passkey, or both. They are two cards answering the same question differently, and neither is a backup product's concern: any app with a login reaches this shape eventually. What both cards actually have to carry is not the button (the button is three lines) but the explanation around it, because the failure mode here is somebody locking themselves out of the tool that recovers everything else. The password both cards stand beside, and the way back in when it is lost, are in ["The first way in"](#the-first-way-in-password-reset-and-sessions).
 
 The maxim the whole section hangs on: **a login gains a way IN, never a way INSTEAD.** Everything below is that sentence applied to a specific surface.
 
