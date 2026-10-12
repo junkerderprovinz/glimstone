@@ -64,7 +64,9 @@ wrapper, so they stack in the page's own rhythm.
   `updatesFound(n)`, or `danger` with `checkFailed` and a shake when it rejects.
   The app puts the reason for a failure in its toast.
 - **Help:** the report sentence, GitHub, Email with `MAIL_SVG` when the
-  sentence names a mail route and `mailAddress` is set, and the bug report when
+  sentence names a mail route and `mailAddress` is set, the manual when
+  `manualUrl` and `text.manual` are set, with `MANUAL_SVG` as `manualGlyph`
+  and "Open" as `text.manualSub`, and the bug report when
   `onBugReport` and `text.bugReport` are set, with `IconDiagnostics` as
   `bugGlyph` and "Download" as `text.bugReportSub`.
 - **What's new:** the app's own card, passed as `whatsNew`, with the hue after
@@ -95,6 +97,10 @@ The glyphs on the update check come from the app's resolver under the keys
 `bash reference/react/check.sh` from the repository root asks the one question
 TypeScript cannot: does every class, themed utility and custom property these
 components touch actually exist in `../tokens.css` and `../tailwind-theme.css`?
+
+It also refuses Tailwind's own size names (`text-xs`, `text-sm`, `text-base`): a
+component writes the role from the type scale, `text-body` or `text-meta`, so
+it carries the scale's line height with it.
 
 It exists because the first cut of this folder shipped components reading
 thirteen classes and seven tokens that were defined nowhere here - they had been

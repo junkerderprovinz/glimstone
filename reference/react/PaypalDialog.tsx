@@ -101,8 +101,8 @@ export function PaypalDialog({
         </div>
 
         <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-5 pb-5">
-          <p className="text-sm text-carbon-text">{text.appeal}</p>
-          <p className="text-sm text-carbon-textSub">{text.intro}</p>
+          <p className="text-body text-carbon-text">{text.appeal}</p>
+          <p className="text-body text-carbon-textSub">{text.intro}</p>
 
           <div className="flex flex-col gap-1.5">
             <span id="paypal-frequency" className="glim-eyebrow text-carbon-textMuted">
@@ -140,7 +140,7 @@ export function PaypalDialog({
                 aria-label={text.otherAmount}
                 aria-invalid={typed !== "" && !typedValid}
                 onChange={(e) => onTyped(e.target.value)}
-                className={`h-9 w-36 rounded-control border bg-carbon-surface px-2.5 text-sm text-carbon-text ${
+                className={`h-9 w-36 rounded-control border bg-carbon-surface px-2.5 text-body text-carbon-text ${
                   typedValid ? "border-accent" : "border-carbon-border"
                 }`}
               />
@@ -152,11 +152,11 @@ export function PaypalDialog({
               strip, so their box declares the light scheme. The extra space
               above separates PayPal's controls from the house's. */}
           <div ref={buttonsRef} className="mt-4 min-h-28 [color-scheme:light]">
-            <p className="py-2 text-center text-xs text-carbon-textMuted">{text.loading}</p>
+            <p className="py-2 text-center text-meta text-carbon-textMuted">{text.loading}</p>
           </div>
 
-          {status === "done" && <p className="text-sm text-statusOk">{text.thanks}</p>}
-          {status === "failed" && <p className="text-sm text-statusFail">{text.failed}</p>}
+          {status === "done" && <p className="text-body text-statusOk">{text.thanks}</p>}
+          {status === "failed" && <p className="text-body text-statusFail">{text.failed}</p>}
         </div>
 
         <div className="flex justify-end gap-2 px-5 pb-5">

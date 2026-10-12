@@ -23,7 +23,7 @@ for c in $(grep -ohE "\bglim-[a-z0-9-]+" reference/react/*.tsx | sort -u); do
 done
 
 # 2. Every themed Tailwind utility, against the @theme layer that maps them.
-for u in $(grep -ohE "\b(bg|text|border|ring|fill|stroke)-(carbon|accent|status)[A-Za-z0-9-]*|\brounded-(card|control|pill)\b|\btext-(title|body|subline|meta|heading|dense|caption)\b" reference/react/*.tsx | sort -u); do
+for u in $(grep -ohE "\b(bg|text|border|ring|fill|stroke)-(carbon|accent|status)[A-Za-z0-9-]*|\brounded-(card|control|pill)\b|\btext-(status|title|body|subline|meta|heading|dense|caption)\b" reference/react/*.tsx | sort -u); do
   grep -q "${u#*-}" reference/tailwind-theme.css || note "utility $u (not in reference/tailwind-theme.css)"
 done
 
@@ -35,7 +35,12 @@ done
 # 4. Nothing may point at a file that only exists inside an adopting app.
 grep -n "index\.css" reference/react/*.tsx && note "a comment names an app's own stylesheet"
 
-# 5. Hover moves up the surface ramp (rule 21). On the dark ramp `--carbon-hover`
+# 5. Sizes are written by role, so a component reads the type scale's names
+#    and its line heights rather than Tailwind's own steps.
+grep -nE '\btext-(xs|sm|base|lg|[0-9]?xl)\b' reference/react/*.tsx \
+  && note "a component writes a Tailwind size instead of a role from the type scale"
+
+# 6. Hover moves up the surface ramp (rule 21). On the dark ramp `--carbon-hover`
 #    is #353535, below surface2's #393939, so a control filled with surface2 or
 #    surface3 that hovers to it goes darker. Only filled controls are examined: a
 #    bare control on a card, such as the toast's close button, is right to use

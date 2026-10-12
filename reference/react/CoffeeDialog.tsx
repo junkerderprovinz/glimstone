@@ -52,8 +52,8 @@ export function CoffeeDialog({ widgetUrl, text, onClose, ref }: CoffeeDialogProp
         </div>
 
         <div className="flex min-h-0 flex-1 flex-col gap-4 px-5 pb-5">
-          <p className="text-sm text-carbon-text">{text.appeal}</p>
-          <p className="text-sm text-carbon-textSub">{text.intro}</p>
+          <p className="text-body text-carbon-text">{text.appeal}</p>
+          <p className="text-body text-carbon-textSub">{text.intro}</p>
           <div className="flex min-h-0 flex-1 rounded-card bg-carbon-surface2 p-2">
             {/* White behind the frame so the first paint is not a dark hole
                 on the dark theme; BMAC's page is light either way. */}

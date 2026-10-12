@@ -118,15 +118,15 @@ export function CryptoDonateDialog({
         </div>
 
         <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-5 pb-5">
-          <p className="text-sm text-carbon-text">{text.appeal}</p>
-          <p className="text-sm text-carbon-textSub">{text.intro}</p>
+          <p className="text-body text-carbon-text">{text.appeal}</p>
+          <p className="text-body text-carbon-textSub">{text.intro}</p>
 
           <div className="flex flex-col items-center gap-3 rounded-card bg-carbon-surface2 p-4">
             {renderQr?.(network.address)}
             {/* Never shortened, since an address is checked by eye before
                 sending. `dir="ltr"` keeps it left-to-right in a right-to-left
                 interface. */}
-            <p dir="ltr" className="w-full break-all text-center font-mono text-xs text-carbon-text">
+            <p dir="ltr" className="w-full break-all text-center font-mono text-meta text-carbon-text">
               {network.address}
             </p>
             {/* The chain row sits directly under the address it changes, and
@@ -142,7 +142,7 @@ export function CryptoDonateDialog({
                   aria-selected={n.id === network.id}
                   onClick={() => onPick(coin, n)}
                   style={hueVars(i) as CSSProperties}
-                  className={`glim-hue rounded-pill px-3 py-1 text-xs font-medium transition-colors ${
+                  className={`glim-hue rounded-pill px-3 py-1 text-meta font-medium transition-colors ${
                     n.id === network.id
                       ? "glim-active bg-accent text-accentContrast"
                       : "bg-carbon-surface3 text-carbon-textSub hover:bg-carbon-hoverRaised hover:text-carbon-text"
@@ -154,7 +154,7 @@ export function CryptoDonateDialog({
             </div>
             {/* Warn-coloured so a donor looking for a memo or destination tag
                 finds it next to the address. */}
-            {network.note && <p className="text-center text-xs text-statusWarn">{network.note}</p>}
+            {network.note && <p className="text-center text-meta text-statusWarn">{network.note}</p>}
             {/* Takes the coin's rainbow position, so in rainbow mode it matches
                 the tile the address came from. */}
             <Button
@@ -200,7 +200,7 @@ export function CryptoDonateDialog({
                   }`}
                 >
                   {showMark && renderMark?.(c)}
-                  {showTicker && <span className="text-xs font-medium">{c.symbol}</span>}
+                  {showTicker && <span className="text-meta font-medium">{c.symbol}</span>}
                 </button>
               );
             })}

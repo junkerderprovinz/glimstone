@@ -28,8 +28,8 @@ export function UnavailableNotice({
 }) {
   return (
     <div className="rounded-card bg-statusWarnBgSoft px-4 py-3">
-      <p className="text-sm font-medium text-carbon-text">{title}</p>
-      <p className="mt-1 text-sm text-carbon-textSub">{reason}</p>
+      <p className="text-body font-medium text-carbon-text">{title}</p>
+      <p className="mt-1 text-body text-carbon-textSub">{reason}</p>
       {action ? <div className="mt-3">{action}</div> : null}
     </div>
   );

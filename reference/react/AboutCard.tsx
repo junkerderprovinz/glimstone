@@ -63,9 +63,9 @@ export function InfoAboutCard({
     <Card title={text.title} hueIndex={hueIndex}>
       {/* No reading-width cap: a reading width belongs to a whole page, and a
           cap on this card alone reads as hand-set line breaks. */}
-      <p className="text-sm text-carbon-textSub">{text.body}</p>
+      <p className="text-body text-carbon-textSub">{text.body}</p>
 
-      <p className="text-sm text-carbon-textSub">{text.coffee}</p>
+      <p className="text-body text-carbon-textSub">{text.coffee}</p>
       {/* The hosted payment routes first and the wallet, which needs no
           account, last. One line per button, as on the README, so nothing
           moves up under the pointer. */}
@@ -148,7 +148,7 @@ export function InfoVersionCard({ text, rows, updateCheck, openUrl = openInBrows
         {rows.map((row) => (
           <li key={row.name} className="flex items-center justify-between gap-4">
             <span className="flex min-w-0 flex-col">
-              <span className="text-sm text-carbon-text">{row.name}</span>
+              <span className="text-body text-carbon-text">{row.name}</span>
               {row.sub && <span className="text-subline text-carbon-textMuted">{row.sub}</span>}
             </span>
             <VersionNumber row={row} unreleased={text.unreleased} openUrl={openUrl} />
@@ -241,10 +241,10 @@ function VersionNumber({
   const tag = releaseTag(row.version);
   const released = /^v\d+\.\d+\.\d+$/.test(tag);
   if (!released) {
-    return <span className="glim-num shrink-0 text-sm text-carbon-textSub">{unreleased(row.version)}</span>;
+    return <span className="glim-num shrink-0 text-body text-carbon-textSub">{unreleased(row.version)}</span>;
   }
   if (!row.repoUrl) {
-    return <span className="glim-num shrink-0 text-sm text-carbon-textSub">{row.version}</span>;
+    return <span className="glim-num shrink-0 text-body text-carbon-textSub">{row.version}</span>;
   }
   const href = `${row.repoUrl}/releases/tag/${encodeURIComponent(`${row.tagPrefix ?? ""}${tag}`)}`;
   return (
@@ -256,7 +256,7 @@ function VersionNumber({
         e.preventDefault();
         openUrl(href);
       }}
-      className="glim-num shrink-0 text-sm text-carbon-textSub no-underline hover:text-carbon-text"
+      className="glim-num shrink-0 text-body text-carbon-textSub no-underline hover:text-carbon-text"
     >
       {row.version}
     </a>
@@ -272,6 +272,10 @@ export interface InfoHelpCardProps {
     repoButton: string;
     mailButton: string;
     mailSubject: string;
+    /** "Manual". Only drawn together with `manualUrl`. */
+    manual?: string;
+    /** The manual's second line, "Open". */
+    manualSub?: string;
     /** "Bug report". Only drawn together with `onBugReport`. */
     bugReport?: string;
     /** The bug report's second line, "Download". */
@@ -285,6 +289,11 @@ export interface InfoHelpCardProps {
   mailAddress?: string;
   /** The envelope, `MAIL_SVG` from appMarks.ts, which opens under the pointer. */
   mailGlyph?: ReactNode;
+  /** Where the handbook is read. Omit it where the app has none rather than
+   *  point the button at the README. */
+  manualUrl?: string;
+  /** The book, `MANUAL_SVG` from appMarks.ts, which opens under the pointer. */
+  manualGlyph?: ReactNode;
   /** Downloads the instance's logs and settings as one file, without
    *  passwords, keys or credentials. */
   onBugReport?: () => void;
@@ -294,13 +303,15 @@ export interface InfoHelpCardProps {
   hueIndex?: number;
 }
 
-/** The second card: a sentence inviting a report, then GitHub, Email and the bug report. */
+/** The second card: a sentence inviting a report, then GitHub, Email, the manual and the bug report. */
 export function InfoHelpCard({
   text,
   repoUrl,
   repoGlyph,
   mailAddress,
   mailGlyph,
+  manualUrl,
+  manualGlyph,
   onBugReport,
   bugGlyph,
   openUrl = openInBrowser,
@@ -310,7 +321,7 @@ export function InfoHelpCard({
 
   return (
     <Card title={text.title} hint={text.hint} hueIndex={hueIndex}>
-      <p className="text-sm text-carbon-textSub">{text.report}</p>
+      <p className="text-body text-carbon-textSub">{text.report}</p>
       <div className="glim-readme-btn-rows">
         <ReadmeButton
           brand="github"
@@ -331,6 +342,14 @@ export function InfoHelpCard({
               },
             ]}
             mark={mailGlyph}
+            markClass="glim-house-mark"
+          />
+        )}
+        {manualUrl && text.manual && (
+          <ReadmeButton
+            brand="house"
+            parts={[{ name: text.manual, sub: text.manualSub, onClick: () => openUrl(manualUrl) }]}
+            mark={manualGlyph}
             markClass="glim-house-mark"
           />
         )}

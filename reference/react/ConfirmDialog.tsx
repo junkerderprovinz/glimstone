@@ -88,7 +88,7 @@ export function ConfirmDialog({
         </div>
 
         <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
-          <p id="confirmdialog-message" className="text-sm leading-relaxed text-carbon-textSub wrap-break-word">
+          <p id="confirmdialog-message" className="text-body leading-relaxed text-carbon-textSub wrap-break-word">
             {message}
           </p>
           {extra !== undefined && <div className="mt-4 flex flex-col gap-3">{extra}</div>}

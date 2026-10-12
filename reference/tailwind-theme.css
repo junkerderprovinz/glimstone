@@ -68,15 +68,33 @@
   /* The type scale as text-status, text-title, text-body, text-subline and
      text-meta. Each key names its own runtime property, which works because
      @theme compiles into a cascade layer that the unlayered :root in
-     tokens.css outranks. */
+     tokens.css outranks. Each size brings its line height, or a utility sets
+     the size and leaves the line to whatever the parent had: 20px under the
+     body size is what makes a field and `--btn-h` 32px. */
   --text-status: var(--text-status);
+  --text-status--line-height: 1.75rem;
   --text-title: var(--text-title);
+  --text-title--line-height: 1.5rem;
   --text-body: var(--text-body);
+  --text-body--line-height: 1.25rem;
   --text-subline: var(--text-subline);
+  --text-subline--line-height: 1.125rem;
   --text-meta: var(--text-meta);
+  --text-meta--line-height: 1rem;
   --text-heading: var(--text-heading);
+  --text-heading--line-height: 1.75rem;
   --text-dense: var(--text-dense);
+  --text-dense--line-height: 1rem;
   --text-caption: var(--text-caption);
+  --text-caption--line-height: 1rem;
+  /* Tailwind's own xs, sm and base read the scale too, so a size copied in
+     from elsewhere follows the tokens instead of Tailwind's numbers. */
+  --text-xs: var(--text-meta);
+  --text-xs--line-height: 1rem;
+  --text-sm: var(--text-body);
+  --text-sm--line-height: 1.25rem;
+  --text-base: var(--text-title);
+  --text-base--line-height: 1.5rem;
 }
 
 /* Tailwind resolves `--color-accent: var(--accent)` once at :root, so bg-accent

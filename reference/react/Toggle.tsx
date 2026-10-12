@@ -25,7 +25,7 @@ export interface ToggleProps {
 export function Toggle({ checked, onChange, label, hideLabel = false, disabled, className }: ToggleProps) {
   return (
     <span className={`inline-flex items-center gap-2${className ? ` ${className}` : ""}`}>
-      {!hideLabel && <span className="text-sm text-carbon-text">{label}</span>}
+      {!hideLabel && <span className="text-body text-carbon-text">{label}</span>}
       <button
         type="button"
         role="switch"

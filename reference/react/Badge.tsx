@@ -11,7 +11,7 @@
 //
 // Square icon badges have one size. Sizes chosen per role end up side by side
 // in one card, where a user sees only that they differ. 32px is the height of
-// the usual text field (`text-sm px-3 py-1.5`), so a badge beside a field
+// the usual text field (`text-body px-3 py-1.5`), so a badge beside a field
 // aligns with it.
 //
 // `as="button"` and `as="a"` resolve to the same box as a span at the same

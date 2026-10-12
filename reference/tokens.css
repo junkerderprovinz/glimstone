@@ -443,7 +443,9 @@ body {
   text-transform: none;
   font-weight: 400;
   text-align: start;
-  white-space: normal;
+  /* A line break in the tip starts a new line, so a bubble can hold a short
+     list, one item per line, as the way to a change does. */
+  white-space: pre-line;
 }
 .glim-bubble::before {
   content: '';
@@ -604,11 +606,12 @@ body {
 }
 
 
-/* The element's glyph takes the hue too; a separate class because a row's
-   action icons stay quiet. The active item is filled with the hue, where an
-   icon in the same colour would vanish. */
-[data-rainbow] .glim-hue-icon:not(.glim-active) svg {
-  color: var(--accent);
+/* The element's glyph wears the accent at rest, or its position's hue under
+   rainbow; a separate class because a row's action icons stay quiet. Reactive
+   rests it through the muted --accent-glyph on .glim-hue. The active item is
+   filled with the hue, where an icon in the same colour would vanish. */
+.glim-hue-icon:not(.glim-active) svg {
+  color: var(--accent-glyph);
 }
 
 /* The row is washed with its hue rather than ruled with an edge line, since a
@@ -1045,6 +1048,86 @@ body {
 }
 .glim-drag-shift { transition: translate var(--drag-settle-dur) var(--drag-settle-ease); }
 
+/* The press: a button gives way while it is held, the web's side of the
+   phone's press. `.glim-btn` has it; anything else a person presses, such as a
+   tile, a nav row or a clickable badge, takes `.glim-press`. The separate
+   `scale` property leaves a transform the element already has alone. Storm's
+   number sits outside the gate like its other numbers. */
+:root { --motion-press-scale: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  :root { --motion-press-scale: .97; }
+  :root[data-motion='off'] { --motion-press-scale: 1; }
+}
+:root[data-motion='storm'] { --motion-press-scale: .94; }
+.glim-btn:active:not(:disabled),
+.glim-press:active:not(:disabled) {
+  scale: var(--motion-press-scale);
+}
+
+/* What an update changed ("First start and what's new"): a green dot on each
+   changed element and on every link that leads to one. The dots stand in one
+   layer in <body>, placed from where the marked elements are, so marking a
+   change costs a component no layout. The layer lies above windows and below
+   the bubbles. The green is the state colour in every colour mode, and the
+   ring in the page's ground keeps it legible on any surface. */
+.glim-new-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  pointer-events: none;
+}
+.glim-new-dot {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border-radius: 50%;
+  background-color: var(--status-ok-solid);
+  box-shadow:
+    0 0 0 2px var(--carbon-bg),
+    0 0 10px 3px color-mix(in srgb, var(--status-ok-solid) 80%, transparent);
+  pointer-events: auto;
+  cursor: pointer;
+}
+.glim-new-dot:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+/* A finger needs more than twelve pixels to hit. */
+@media (pointer: coarse) {
+  .glim-new-dot::before {
+    content: '';
+    position: absolute;
+    inset: -14px;
+  }
+}
+/* The same dot in the "New" list, where it marks a line and is nothing to
+   press. A change that was seen loses the colour. */
+.glim-new-dot-still {
+  position: static;
+  flex: none;
+  margin: 0;
+  pointer-events: none;
+}
+.glim-new-dot-seen {
+  background-color: var(--carbon-text-muted);
+  box-shadow: none;
+}
+@keyframes glim-new-glow {
+  50% {
+    box-shadow:
+      0 0 0 2px var(--carbon-bg),
+      0 0 18px 7px color-mix(in srgb, var(--status-ok-solid) 50%, transparent);
+  }
+}
+/* The glow never stops, so it stays inside the gate at every level, storm
+   included, and a dot without it still reads by its colour. */
+@media (prefers-reduced-motion: no-preference) {
+  :root:not([data-motion='off']) .glim-new-dot:not(.glim-new-dot-still) {
+    animation: glim-new-glow var(--motion-pulse-dur) ease-in-out infinite;
+  }
+}
+
 /* The round-two animations of "The motion engine". Each reads its own dials,
    declared at every level above, and plays only inside the no-preference gate.
    A class that has to play again, such as the pulse on a second success, is
@@ -1237,7 +1320,7 @@ body {
 
    The four width stages are a floor (`min-width`), so a longer translation is
    never clipped. The height is what an ordinary text field measures
-   (`px-3 py-1.5 text-sm`: a 20px line box plus 12px of padding), so a button
+   (`px-3 py-1.5 text-body`: a 20px line box plus 12px of padding), so a button
    beside a field matches it. */
 :root {
   --btn-h: 2rem;
@@ -1266,7 +1349,7 @@ body {
   font-weight: 500;
   line-height: 1;
   box-sizing: border-box;
-  transition: opacity 120ms, background-color 120ms;
+  transition: opacity 120ms, background-color 120ms, scale var(--motion-control-dur, 0s);
 }
 
 .glim-btn:disabled {

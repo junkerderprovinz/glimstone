@@ -97,7 +97,7 @@ export function ToastCard({
       className="glim-toast pointer-events-auto flex w-80 max-w-[calc(100vw-2rem)] items-start gap-2.5 rounded-card bg-carbon-surface px-3.5 py-3 text-carbon-text"
     >
       <ToastGlyph severity={severity} />
-      <p className="min-w-0 flex-1 text-sm leading-snug wrap-break-word">{message}</p>
+      <p className="min-w-0 flex-1 text-body leading-snug wrap-break-word">{message}</p>
       <button
         type="button"
         onClick={() => onDismiss(id)}
