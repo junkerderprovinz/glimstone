@@ -2,6 +2,31 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 3.4.2 - 2026-10-12
+
+The login and what keeps it safe join the language. A new section, "The first way in", gives every app the same password rules, the same reset through the container log, the same page after it, and the same line between the owner's browser and a paired phone, with a checklist to tick off when lifting. BombVault is the reference implementation.
+
+**Adopting apps:**
+
+- **Lifting:** work through the checklist at the end of "The first way in", one line per rule, and keep a test for each that fails without its guard.
+- **Login:** put a quiet "Forgot password?" button at the foot of the sign-in form. Show the reset form only once the code is in the container log, and after the reset show the page that lists what it removed.
+- **Reset tip:** the code field's (i) names where the log is, how long the code lasts, a log viewer people actually run, and what the reset removes.
+- **Phone pairing:** add the card with its one switch under Settings, Security, and answer a refused call from a paired session with the window and its "Sign in here" button.
+- **Server:** check the session epoch, the throttles, the JSON-only writes, the allow list for paired sessions, restores and deletes against the section's rules.
+- **Version:** copy `reference/react/version.ts` again.
+
+## ✨ Added
+
+- **A new section, "The first way in (password, reset and sessions)".** It sits before "The second way in", and each links to the other. Its rules are grouped by password and session, forgot password, requests and origin, device and phone sessions, group members, restoring the app's own settings, and deleting data.
+- **Forgot password, through the container log.** The code is 12 characters, valid for 10 minutes, survives wrong guesses and appears nowhere but the log. The reset ends every other session, turns two-factor authentication off, removes passkeys, revokes tokens and keys and switches phone pairing off, and the page after it says which of these happened.
+- **The wording of the reset tip.** It says plainly who can reset: anyone who can read the container log, named in terms the reader recognises.
+- **Phone sessions.** The pairing card and its switch, the allow list a paired session is held to, the scrubbed read routes, and the refusal window with "Sign in here".
+- **A checklist for the lift**, one line per rule.
+
+## ⚡ Improved
+
+- **"The second way in" points to the password and the reset** it builds on.
+
 ## 3.4.1 - 2026-10-11
 
 The findings from KnightLoader's redesign, and what BombVault already ships: the Info tile's cards in its order, the README button's mark where the README puts it, and the manual's book. Text inside a picture leaves the type scale.
