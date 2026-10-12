@@ -743,7 +743,16 @@ BombVault's redesign settled one form for every list page (backups, restore, ano
 
 ## Pickers and wizards
 
-- **A big picker is one window with groups and a search button at the top right.** No "Popular" section; the entry for typing one in by hand is the last tile; group names follow the interface language; and every picker of that kind looks the same (in BombVault, the storage providers and the MCP clients). Rounds 9, 13 and 14: *die beiden fenster sollen auch exakt gleich aussehen*.
+- **A big picker is one window with groups and a search field at the top right.** No "Popular" section; the entry for typing one in by hand is the last tile; group names follow the interface language; and every picker of that kind looks the same (in BombVault the storage providers, the container registries and the MCP clients, in ArrowLoop the storage targets, in KnightLoader the debrid services and hosters). Rounds 9, 13 and 14: *die beiden fenster sollen auch exakt gleich aussehen*.
+- **Every picker window has the same shape.** ArrowLoop's "Add storage or cloud" window is the model, with KnightLoader's search added to it:
+  - The title is the heading badge on the card's top edge, with the picker's (i) in it.
+  - The window is 48rem wide (`max-w-3xl`, 768px) and at most 85% of the screen tall. The heading, the search and the button row stay where they are, and only the tiles scroll.
+  - A group has only an eyebrow heading (`.glim-eyebrow`), without a card or a well around it. Where the app says how well a group suits the job (BombVault's "Best fit" badge) or explains the group with an (i), both sit in the eyebrow's line.
+  - The tiles are README buttons ("Brand tiles") in `.glim-provider-pick`. They stand directly on the window's surface on their own surface2 ground, with no grey well under them. Three go to a row (`minmax(13rem, 1fr)`, 0.8125rem apart), and under the pointer each fills with its brand's colour.
+  - The button row holds only the way out, "Cancel" or "Close", at the end. Once a tile is picked, Back and the forward button join it there.
+  - The window opens with `glim-modal-in` like every window, on the motion level's `--motion-modal-dur`: 150ms at Subtle, 260ms at Standard.
+  - On a phone the window is a bottom sheet ("Narrow windows"). The search spans the sheet's width above the tiles, and the tiles go two to a row (0.5rem apart), since the 13rem floor would leave a single column to scroll through.
+- **The search is an open field, not a button.** It stands at the window's top right from the moment the window opens, about 16rem wide, its placeholder names what it searches ("Search providers"), and Escape empties it before it closes the window. A list of some forty brands is searched rather than read, so the search should not hide behind a click. **While a query narrows the tiles, the window keeps the height it had without one.** A centred window that shrank with every letter would move the field away from the eye as the person types. If nothing matches, one sentence says so and names the tile that takes anything ("S3 compatible", "Other registry", "Other client"). Decided for BombVault 10.0.0, which had a search button that unfolded, four tiles to a row on a grey well and Cancel at the start: *AL-Form plus Suche*.
 - **A wizard names its steps.** Each step has a title, and a finished step shrinks to a one-line summary with "Change". Rounds 8 and 11.
 - **After a tile is picked, the same window shows the form**, with Back and Save, and the window's title carries the picker's info bubble. BombVault's container registries open the window its storage providers and MCP clients use. Round 34.
 - **A picker of brands shows their logos**, and the pick is stored with the entry, so a self-hosted registry keeps its logo whatever its address is. BombVault takes the logos from Dashboard Icons. Round 30.
@@ -761,10 +770,11 @@ The web interface at phone width, beside "The bottom bar" that replaces the rail
 
 - **First start is a welcome page with the steps to the first backup.** The logo, one sentence, what the app has found, three steps, and two buttons at the taller button height (`--btn-h-key`): "Restore from a backup" and "Start". From the redesign's first feedback and rounds 8 and 11.
 - **No count badges in the rail during first start.** Nothing can need attention yet. Round 8.
-- **What's new is marked on the page.** After an update every changed element carries a glowing green dot with a bubble saying what changed. A "New (n)" list groups the changes by page with "Go there", and a switch hides the dots. Decided for BombVault's redesign release, after a tester asked for the dots the prototype used between rounds.
+- **What's new is marked on the page.** After an update every changed element carries a glowing green dot with a bubble saying what changed. The "New" card lists the changes by page, each with "Go there" and an arrow. Decided for BombVault's redesign release, after a tester asked for the dots the prototype used between rounds.
 - **The dots show only the latest update.** The previous update's dots go by themselves when the next one arrives. Round 10.
 - **A dot also stands on every link that leads to a change.** The rail entry, the phone's bar, the settings tile, the row and the tab on the way each carry one, so a change three levels down can be found from the first page. Under the pointer such a dot says "This way to 2 changes" and lists them, and a click on it follows the link. Round 35.
-- **A click on a dot hides it.** The change counts as seen and stays hidden after a reload. A dot on the way goes by itself once everything behind it has been seen. The "New" list dims what was seen and its counter counts only what is left. Two buttons there, "Show all again" and "Mark all as seen", undo or finish the lot. The next update starts with all of its dots. Round 36.
+- **A click on a dot hides it.** The change counts as seen and stays hidden after a reload. A dot on the way goes by itself once everything behind it has been seen. The "New" list dims what was seen. The next update starts with all of its dots. Round 36.
+- **One button in the card's heading does the rest, and it counts.** It stands at the end of the "New" card's heading row. While anything is unseen it reads "Mark all as seen · 7" with a check, the number being what is left; once nothing is, it reads "Show all again · 25" with an eye, the number being every change. The card has no switch for the dots and no separate count line, because hiding the dots and marking everything as seen are the same act. A browser that never saw an older release starts with everything seen, since nothing is new to it. Decided for BombVault 10.0.0, where a switch, a "7 of 25 left" line and two buttons said the same thing three times: *ein Umschaltknopf*.
 
 ## The Info tile and the About card
 
@@ -784,7 +794,7 @@ The footer was defensible: one line, fixed to the window, legible on every setti
 - **A bug report is a download.** A third README button beside GitHub and Email, named "Bug report" with `IconDiagnostics` (the bug) and "Download" as its second line, packs the instance's logs and settings into one file without passwords, keys or credentials, ready to attach to an issue. Rounds 10 and 13: *Text soll nur Fehlerbericht heißen*.
 - **No licences page in the app.** Attributions live in the README. Round 10.
 
-**What's new** follows Help in an app that marks its changes, with the "New (n)" list and the switch for the dots. An app without it goes from Help straight to About.
+**What's new** follows Help in an app that marks its changes, with the list of changes and the one button that marks them as seen or shows them again. An app without it goes from Help straight to About.
 
 **The About card** comes last:
 
