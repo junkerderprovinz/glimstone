@@ -2,6 +2,62 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+What ArrowLoop's lift from 3.0.2 to 3.4.2 found missing or unclear. An app whose main list carries its own status may do without the overview, nothing counts as in sync that never synced, and rules the apps had read in different ways now say what two of the three already do. The press, the line heights, the what's-new dot, a list in a bubble and the Help card's Manual button move into the reference, and the glyph map gains ArrowLoop's column.
+
+**Adopting apps:**
+
+- **Tokens:** copy `reference/tokens.css` again. Merging by hand, take `--motion-press-scale` with `.glim-press` and the `scale` in `.glim-btn`'s transition, the `.glim-new-*` block, `white-space: pre-line` on `.glim-bubble`, and the `.glim-hue-icon` rule without its `[data-rainbow]`.
+- **Tailwind:** copy `reference/tailwind-theme.css` again for the line heights and the mapping of `text-xs`, `text-sm` and `text-base` onto the scale.
+- **Components:** copy `reference/react/` again. The components write `text-body` and `text-meta`, and `InfoHelpCard` takes `manualUrl`, `manualGlyph`, `text.manual` and `text.manualSub`.
+- **Status:** keep the head off its all-good state while an object that is on has never run or last failed, and give each such object a line in the card of what waits.
+- **Navigation:** at phone width, put Sign out at the foot of the More sheet. A phone app with a bottom bar puts Settings on the bar and drops the gear.
+- **Phone settings:** give each card its fixed rainbow position, the Danger zone 6.
+- **Selectors:** count a selector's colour by where it stands on its page, with no fixed start per kind.
+- **Sizes:** set rail rows and settings tile names at 14px on a 20px line.
+- **Lists:** drop Sort from a list that only runs in time order, let the page actions take the room under the last row, and float an object page's main action in the corner.
+- **Version:** never copy a folded patch number into the app's version constant.
+
+## ✨ Added
+
+- **The press as a token.** `--motion-press-scale` is `.97` at subtle and wild, `.94` at storm and 1 at off and under reduced motion. `.glim-btn` gives way by itself, and `.glim-press` gives anything else a person presses the same answer.
+- **The what's-new dot in the reference.** `.glim-new-layer` and `.glim-new-dot`, with `.glim-new-dot-still` for the "New" list and `.glim-new-dot-seen` for a change already seen. The glow breathes while motion is on.
+- **A Manual button on the Help card.** `InfoHelpCard` draws it between Email and the bug report from `manualUrl` and `text.manual`, with `MANUAL_SVG` as its mark and "Open" as its second line.
+- **A list in a bubble.** A line break in a tip starts a new line, so the bubble on a dot that leads to changes can name each change on a line of its own.
+- **ArrowLoop's column in the glyph map**, the glyphs only one app has, and where ArrowLoop keeps its glyphs.
+- **The pieces each app builds itself**, with the BombVault and ArrowLoop paths to copy from: page actions, the list bar, the selection mark, the run strip, the dots' layer, the settings search and tiles, the rail and its counts, the bottom bar and its More sheet, sheets, the sub-card, row buttons on hover and the drawn tick.
+- **More of the first way in.** A key kept in a file beside the configuration when the environment sets none, sessions kept only in memory, no "Forgot password?" while the password comes from the environment, a refusal to start on a damaged security file, 403 from Go's `http.CrossOriginProtection` for a cross-site write, a run picked from a preview that skips the rows that changed, and an after-reset page that lists only what the app has. Each has its line in the checklist.
+
+## 🎨 Design
+
+- **The main list may carry the status head.** An app whose main list is short and whose rows carry their own status may do without the overview. The list opens with the head, and the card of what needs the person stands under it only while something waits, titled so it does not repeat the head: ArrowLoop's "Needs you" over "Waiting".
+- **Nothing is in sync that never synced.** An object that is on and has never run, or whose last run failed, is a note.
+- **A trash is the Restore entry** in an app that gets things back from one, and wears `IconTabRecovery`.
+- **Fixed rainbow positions for a phone's settings cards**, so moving a card recolours no other. Past eight they count round the palette, and a colour repeats only on cards with another between them.
+- **Settings on the phone's bottom bar** where the app has one, in place of the gear beside the plus.
+- **Sign out at the foot of the More sheet** at phone width.
+- **A list with only one order has no Sort.** A history or a log keeps Filter and Search.
+- **An object's page floats its action** in the corner like every other page, and the buttons in its head stay secondary.
+
+## 🔁 Changed
+
+- **Rail rows and settings tile names are 14px**, the body size, as BombVault and KnightLoader set them, instead of 15px.
+- **The room under a page's last row is as tall as the page actions**, which stand in the flow there at the end of the page, instead of a fixed 96px.
+- **A selector's colour is counted per page.** A fixed starting colour per kind of selector goes.
+- **Two cards keep one row:** a phone's Language card and the Danger zone are named as the exceptions to rule 32.
+
+## ⚡ Improved
+
+- **Each type size brings its line height**: 28, 24, 20, 18 and 16px. Tailwind's `text-xs`, `text-sm` and `text-base` map onto the scale, the reference components write the roles, and `check.sh` refuses Tailwind's size names in them.
+- **Every button answers the pointer, unfilled ones and the brand block included**, by `--carbon-hover` and never by `opacity`.
+- **A folded patch number stays out of an app's version constant**, since its tag has no release page.
+- **`glyphs.md` says where `IconTabEngine` went** and where a glyph only one app needs is listed.
+
+## 🐛 Fixed
+
+- **An idle tab's glyph was grey with rainbow off in the reference.** `.glim-hue-icon` coloured it only under `[data-rainbow]`, while the doc and BombVault and KnightLoader colour it in every mode. It now wears `--accent-glyph` at rest.
+
 ## 3.4.2 - 2026-10-12
 
 The login and what keeps it safe join the language. A new section, "The first way in", gives every app the same password rules, the same reset through the container log, the same page after it, and the same line between the owner's browser and a paired phone, with a checklist to tick off when lifting. BombVault is the reference implementation.
