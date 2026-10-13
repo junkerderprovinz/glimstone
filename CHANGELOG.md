@@ -2,6 +2,27 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 3.5.1 - 2026-10-14
+
+The Version card keeps one button, the Look settings get glyphs, and the rules now cover a phone app's own screen header and the removal of something that keeps state.
+
+**Adopting apps:**
+
+- **Version card:** keep one button before "Check for updates". An app that marks its changes shows "New · n", which opens the window on Changes while anything is unseen and on Release notes otherwise; an app without marked changes shows "Release notes" alone. `InfoVersionCard` draws "Release notes" only when `whatsNew` is absent.
+- **Look settings:** put `IconThemeSystem` on the System segment of the Design selector, the four corner glyphs on the Corners selector and the four motion glyphs on the Motion selector. Copy them from `reference/glyphs.json`.
+- **Removal:** where removing an object would also drop the state it keeps, keep the state and offer deleting it as its own confirmed action.
+- **Version:** copy `reference/react/version.ts` again.
+
+## ✨ Added
+
+- **Nine glyphs for the Look settings.** `IconThemeSystem`, a ring with one half filled, stands for System beside the moon and the sun. Four frames show the corner shapes Round, Soft, Square and Leaf, and one line that swings further at each step shows the motion levels Off, Subtle, Wild and Storm.
+- **Removing something that keeps state keeps the state.** Taking away a sync job leaves its record of how both sides looked at the last run in place; deleting that record is a separate action with its own confirmation. Added again, the job still knows what was in sync.
+
+## 🔁 Changed
+
+- **The Version card carries one button.** "New · n" opens the window on Changes while something is unseen and on Release notes otherwise, and after an update the window still opens by itself on the notes. The separate "Release notes" button is gone where the app marks its changes.
+- **A phone app's native header may name the screen.** It shows the same name as the screen's tab in the bottom bar and does not count as a page heading. On the web, rule 30 stands as it is.
+
 ## 3.5.0 - 2026-10-13
 
 What KnightLoader's redesign settled and the login BombVault ships, written down so the next app can follow them. The Info tile takes BombVault's order, the Version card gains Release notes and a counting New button, and the Help card a Manual button in the README's yellow. Dropdowns stand beside their labels, every page gets a search button and every picker window has one shape. Pages and windows run the full width, selectors wear their own colours under rainbow, and a fill level sloshes. A new section, "The first way in", gives every app the same password rules, the same reset through the container log and the same line between the owner's browser and a paired phone. KnightLoader and BombVault are the reference implementations, and ArrowLoop's storage window is the model for pickers.
