@@ -2,7 +2,7 @@
 
 [`glyphs.md`](glyphs.md) says which drawing means what. This file says where each app stands against it: one row per meaning, the GlimStone name, the component each app renders for it today, and whether that is already the standard drawing. An app that adds or swaps a glyph changes its row here in the same commit.
 
-"Standard" means the app's next release renders the drawing from [`glyphs.json`](glyphs.json). "Switch" means it still renders its own and moves to the standard one. "None" means the app has no such meaning.
+"Standard" means the app's next release renders the drawing from [`glyphs.json`](glyphs.json). "Switch" means it still renders its own and moves to the standard one. "To follow" means the app has the setting and takes the standard drawing in a later release. "None" means the app has no such meaning.
 
 <br>
 
@@ -145,7 +145,28 @@
 
 <br>
 
+## Look settings
+
+ArrowLoop drew these glyphs for the segments of its Design, Corners and Motion selectors and is the first app to wear them, so this table gets a column for it. BombVault and KnightLoader follow.
+
+| Meaning | GlimStone | ArrowLoop | BombVault | KnightLoader |
+| --- | --- | --- | --- | --- |
+| Design selector, System | `IconThemeSystem` | `IconThemeSystem`, standard | `IconThemeSystem`, to follow | `IconThemeSystem`, to follow |
+| Design selector, Dark | `IconMoon` | `IconMoon`, standard | `IconMoon`, to follow | `IconMoon`, standard |
+| Design selector, Light | `IconSun` | `IconSun`, standard | `IconSun`, to follow | `IconSun`, standard |
+| Corners selector, Round | `IconCornerRound` | `IconCornerRound`, standard | `IconCornerRound`, to follow | `IconCornerRound`, to follow |
+| Corners selector, Soft | `IconCornerSoft` | `IconCornerSoft`, standard | `IconCornerSoft`, to follow | `IconCornerSoft`, to follow |
+| Corners selector, Square | `IconCornerSquare` | `IconCornerSquare`, standard | `IconCornerSquare`, to follow | `IconCornerSquare`, to follow |
+| Corners selector, the hidden leaf | `IconCornerLeaf` | `IconCornerLeaf`, standard | `IconCornerLeaf`, to follow | `IconCornerLeaf`, to follow |
+| Motion selector, Off | `IconMotionOff` | `IconMotionOff`, standard | `IconMotionOff`, to follow | `IconMotionOff`, to follow |
+| Motion selector, Subtle | `IconMotionSubtle` | `IconMotionSubtle`, standard | `IconMotionSubtle`, to follow | `IconMotionSubtle`, to follow |
+| Motion selector, Wild | `IconMotionWild` | `IconMotionWild`, standard | `IconMotionWild`, to follow | `IconMotionWild`, to follow |
+| Motion selector, the hidden storm | `IconMotionStorm` | `IconMotionStorm`, standard | `IconMotionStorm`, to follow | `IconMotionStorm`, to follow |
+
+<br>
+
 ## Where each app keeps its glyphs
 
+- **ArrowLoop:** `scripts/gen_glyphs.py` writes the app's glyphs, and the nine Look settings glyphs come from it.
 - **BombVault:** `scripts/gen_glyphs.py` writes `web/src/components/glyphs.tsx` and `navGlyphs.tsx` from a copy of `glyphs.json` at 16px; the phone app shows the web launcher and uses the same files. `glyphFor.tsx` maps a translation key to a glyph when a button passes none; a button that passes one wins.
 - **KnightLoader:** `web/scripts/gen-glyphs.mjs` writes `web/src/lib/glyphs.tsx` at 22px with the ink at three quarters of the box; the Android app draws its few marks itself with react-native-svg. Every call site passes its glyph; Settings page glyphs are mapped in `pages/settings/pageIcons.tsx`. The browser extension copies the eye and a few others in `extension/src/`.

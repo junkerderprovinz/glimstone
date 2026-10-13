@@ -196,6 +196,22 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconDiagnostics` | Diagnostics | Streamline `programming/bug.svg` |
 | `IconKeyboard` | Keyboard shortcuts | Streamline `computer-devices/keyboard.svg` |
 
+### Look settings, the segments of the Design, Corners and Motion selectors
+
+| Name | Means | Source |
+| --- | --- | --- |
+| `IconThemeSystem` | The look follows the device, light or dark | Drawn for ArrowLoop after BombVault's System theme mark, ArrowLoop commit `771005df` |
+| `IconCornerRound` | Round corners | Drawn for ArrowLoop, commit `771005df` |
+| `IconCornerSoft` | Softly rounded corners | Drawn for ArrowLoop, commit `771005df` |
+| `IconCornerSquare` | Square corners | Drawn for ArrowLoop, commit `771005df` |
+| `IconCornerLeaf` | The leaf: two opposite corners round, the other two square | Drawn for ArrowLoop, commit `771005df` |
+| `IconMotionOff` | No motion | Drawn for ArrowLoop, commit `771005df` |
+| `IconMotionSubtle` | Gentle motion | Drawn for ArrowLoop, commit `771005df` |
+| `IconMotionWild` | Wild motion | Drawn for ArrowLoop, commit `771005df` |
+| `IconMotionStorm` | The storm, the hidden level above wild | Drawn for ArrowLoop, commit `771005df` |
+
+The Design selector's Dark and Light segments wear `IconMoon` and `IconSun` from the actions above, and System wears `IconThemeSystem`, a ring with one half filled. Each corner glyph is a frame drawn with the corners it names, so the four read as one family whatever corners the selector around them has. The motion glyphs are one line that swings further at each level, just as a level is the same animation with bigger numbers. `IconCornerLeaf` and `IconMotionStorm` belong to the hidden shape and the hidden level and stand only where the selector offers those.
+
 **Pairs share one drawing turned or mirrored.** `IconFirst` is `IconLatest` mirrored top to bottom and `IconMoveDown` is `IconMoveUp` mirrored, so the two halves of each pair cannot drift apart. `IconEye` and `IconEyeOff` are Streamline's `visible` and `invisible-1`, and a Show phrase button and the reveal toggle in a password field wear the same two. `IconMail` rests on a mail button and `IconMailOpen` takes its place under the pointer or a finger; `MAIL_SVG` in `appMarks.ts` carries the pair. `IconManual`, the closed book, and `IconManualOpen` do the same on the manual button, and `MANUAL_SVG` carries them.
 
 **A brand mark is the brand's own and goes only where it is meant.** `IconCoffee` is Buy Me a Coffee's mark and stands only on the button that leads there, and `IconCaptcha` is reCAPTCHA's mark and stands only where a captcha is the subject. `IconContainers` and `IconGithub` follow the same rule (section 1).
