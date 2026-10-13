@@ -352,7 +352,8 @@ A persistent left rail is how a multi-destination app is navigated: the brand ma
 ## The content column
 
 - **The content starts at the same x on every page.** Cards inside Settings and outside it line up on one edge, so changing page never shifts the column sideways. Found in BombVault's redesign, round 7.
-- **A settings form page is capped at 880px; the overview and lists stay wide.** A form of label and control rows stretched across a wide window puts the control far from its label, while a list or an overview uses the width. The cap belongs to the page, as "The Info tile and the About card" says of a reading width. Found in BombVault's redesign, round 8.
+- **Every page is as wide as the window leaves it beside the rail, settings included.** No page caps its column, so the cards of a settings page, the overview and the lists all end at the same right edge, a small margin in from the window's. A row keeps its label at the start and its control at the end, and a field in such a row has a width of its own (18rem in KnightLoader's pairing cards) instead of stretching. KnightLoader's redesign is the model. Decided for BombVault 10.0.0, candidate notes round 3: *in KL sind alle einstellungen so breit wie das fenster*.
+- **SUPERSEDED, kept as the record: "A settings form page is capped at 880px; the overview and lists stay wide."** The bullet above is current. The cap was meant to keep a control near its label, which the row form does on its own. BombVault had grown a 1152px cap for every page instead, and on a wide window its settings stood in a column with a broad empty band beside it while KnightLoader's used the room.
 
 ## The tab-strip colour rule
 
@@ -723,7 +724,7 @@ BombVault's redesign settled one form for every list page (backups, restore, ano
 
 **The action a page exists for floats at the bottom right, in the same place on every page.** Adding a backup, a storage location or a server is always found in the same corner. Found in BombVault's redesign, rounds 3, 7 and 9: *damit er überall gleich ist*.
 
-- **The floating actions align with the content's right edge, not the window's.** They stand flush under the cards, only as far right as the cards go. Round 7.
+- **The floating actions stand in the window's bottom right corner.** Pages span the window ("The content column"), so the corner under the cards' right edge is the window's corner, where KnightLoader keeps its Pairing button on the Instances page. Decided for BombVault 10.0.0, candidate notes round 3: *solche buttons immer ganz rechts unten im fenster*. Until then BombVault's cap put them at the column's edge, mid-window (round 7).
 - **The floating action is the view's one filled accent** (rule 3). Other actions beside it in the corner are secondary.
 - **A floating action is not repeated inside a card.** If the corner offers "Add", no card carries a second add button. Rounds 16 and 18, where a tester looked for "add" inside the card and was pointed to the corner.
 - **Every page keeps room below its last row for them**: 96px of bottom padding, so nothing is covered. On a phone-width window they sit above the bottom bar and show their glyph only.
@@ -758,6 +759,15 @@ BombVault's redesign settled one form for every list page (backups, restore, ano
 - **A picker of brands shows their logos**, and the pick is stored with the entry, so a self-hosted registry keeps its logo whatever its address is. BombVault takes the logos from Dashboard Icons. Round 30.
 - **Discover instead of asking to type.** What the app can find (containers, virtual machines, folders) is offered as a choice; typing is the fallback. Round 11.
 
+## Windows
+
+What every window holds, whatever it is for: a question, a picker, a wizard or a list. KnightLoader's redesign is the model. Decided for BombVault 10.0.0, candidate notes round 3: *in allen fenstern in KL alles so breit wie das fenster und solche buttons immer ganz rechts unten im fenster*.
+
+- **The content is as wide as the window.** Cards, lists, sections and text run from the window's start padding to its end padding. A body wrapped in a narrower column leaves a band of empty window beside it. A field in a row keeps its own width, as it does on a settings page ("The content column"), and a picture keeps its size.
+- **The window's actions stand in its foot, at the end of the row.** Close or Cancel, Back, the forward action and anything else that answers the window go in the one row at the bottom, aligned to the end, with the forward action last ("Button order in a pair"). Nothing that answers the window stands in its title row or in the middle of its body. On a phone the row sticks to the bottom of the sheet ("Narrow windows"), and the sheet has no close X in its header, since Close is already in the row.
+- **A button that belongs to one item stays with it.** "Go there" on a line of a list, "Test" beside the one field it tests, or a retry on the one entry that failed act on that item, not on the window, and stay in its row.
+- **A link out of the window may open the foot.** A link to a page outside the app, such as the release page, stands at the start of the foot row, and the actions keep the end.
+
 ## Narrow windows
 
 The web interface at phone width, beside "The bottom bar" that replaces the rail there.
@@ -774,8 +784,9 @@ The web interface at phone width, beside "The bottom bar" that replaces the rail
 - **The dots show only the latest update.** The previous update's dots go by themselves when the next one arrives. Round 10.
 - **A dot also stands on every link that leads to a change.** The rail entry, the phone's bar, the settings tile, the row and the tab on the way each carry one, so a change three levels down can be found from the first page. Under the pointer such a dot says "This way to 2 changes" and lists them, and a click on it follows the link. Round 35.
 - **A click on a dot hides it.** The change counts as seen and stays hidden after a reload. A dot on the way goes by itself once everything behind it has been seen. The list of changes dims what was seen. The next update starts with all of its dots. Round 36.
-- **"New" is a button in the Version card, and it counts.** It stands beside "Check for updates" and reads "New · 5", the number being what is still unseen, with a green dot in front that turns grey once nothing is left, when the button reads "New" alone. It opens a window in the shared window form ("Pickers and wizards"), titled "New in 10.0.0", with the changes grouped by page. "Go there" closes the window on its way to the page. There is no card of its own for the list and no entry in the rail. Every app does it this way, so the list sits in the same place everywhere. An app that shows its release notes in the same window gives them a tab beside the list (KnightLoader); one that has them in a dialog of their own keeps them there (BombVault). Decided for BombVault 10.0.0, which had a card of its own: *in den anderen programmen ist das ein button in der versionscard. wir müssen es überall gleich machen*.
+- **"New" is a button in the Version card, and it counts.** It stands beside "Check for updates" and reads "New · 5", the number being what is still unseen, with a green dot in front that turns grey once nothing is left, when the button reads "New" alone. It opens a window in the shared window form ("Pickers and wizards"), titled "New in 10.0.0", with the changes grouped by page. "Go there" closes the window on its way to the page. There is no card of its own for the list and no entry in the rail. Every app does it this way, so the list sits in the same place everywhere. Decided for BombVault 10.0.0, which had a card of its own: *in den anderen programmen ist das ein button in der versionscard. wir müssen es überall gleich machen*.
 - **One toggle at the top of the list does the rest, and it counts.** While anything is unseen it reads "Mark all as seen · 7" with a check, the number being what is left; once nothing is, it reads "Show all again · 25" with an eye, the number being every change. The window has no switch for the dots and no separate count line, because hiding the dots and marking everything as seen are the same act. A browser that never saw an older release starts with everything seen, since nothing is new to it. Decided for BombVault 10.0.0, where a switch, a "7 of 25 left" line and two buttons said the same thing three times: *ein Umschaltknopf*.
+- **The release notes are the window's other tab.** "New in 10.0.0" has two tabs at its top, across the window's width: "Release notes" and "Changes · 5", the number being what is still unseen, and "Changes" alone once nothing is. After an update the window opens by itself on the release notes; the "New" button opens it on the changes. Either way one click switches to the other, so nobody has to find a second window for the notes. The foot holds a link to the release page at its start and Close at its end. An app whose release has no marked changes shows the notes without the tabs. The app's own release notes come from its own server, in English like the release page. KnightLoader's redesign is the model. Decided for BombVault 10.0.0, candidate notes round 3, where the notes had a dialog of their own: *hier soll man zwischen changelog und punkten hin und her switchen können, wie in KL*.
 
 ## The Info tile and the About card
 
@@ -942,6 +953,13 @@ A settings tab named App offers every way to get the product that the person is 
 
 The same button carries the give and report routes of the About and Help cards ("The Info tile and the About card"), so a person meets one control for every link to somebody else's service in the app.
 - **Every card names the version it offers**, as a link to that release (see "The About card": every version number on screen is a link). A card that offers a download without a version leaves the person comparing file names.
+
+## Pairing instances (the pairing page's cards)
+
+The pairing page of Settings, where instances join a group with twelve words. KnightLoader's redesign is the model for its cards. Decided for BombVault 10.0.0, candidate notes round 3: *die card wie im KL redesign* and *der HS wie im KL redesign*.
+
+- **The card for this instance is made of setting rows.** Each row has its name at the start, its explanation behind an (i) and its control at the end, and a hairline parts the rows. The first row is the instance's name with a text field 18rem wide. The second is "Known addresses": at the end stand first the addresses the instance found by itself, one per line in the monospace face, with the eyebrow "Found by this instance" under them, and below those the field for the address the other members are told. The column of the second row is as wide as the name field, so both rows end on one edge. In a narrow window a row's control drops under its name. A label stacked over a full-width field, as BombVault had, reads as a form rather than as settings and leaves the address far from its name.
+- **The relay is picked with one big well of four segments, each a glyph and a word**: the project's relay, an own relay, an instance of the group serving as relay, and no relay. The segments are pinned to one width and the well hugs them instead of spanning the card, at the button height (32px, 20px glyphs, 14px text), so it lines up with "What the relay sees" beside it. That button and the relay's state stand at the end of the same row. Where the four segments and the button do not fit side by side, the button and the state go under the well at the end of the row; the well itself wraps into even rows only when the card is narrower than its four segments. BombVault's well spanned a fixed share of the row at the taller page-level height, so it broke into two rows of two beside a lot of empty card.
 
 ## Pairing a phone (the phrase page and the scanner)
 
