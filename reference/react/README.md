@@ -25,7 +25,7 @@ would then have to be re-applied by hand in three places.
 | `ConfirmDialog.tsx` | The confirm surface for a destructive action |
 | `Toast.tsx` + `toastEngine.ts` | Transient feedback, including the shake a failing control does |
 | `InfoBubble.tsx`, `IconTipButton.tsx` | The "(i)" explanation and the hover name on an icon-only control |
-| `AboutCard.tsx` | The Info tile: `InfoTile` renders its Version, Help and About cards in their fixed order, with the app's own "New · n" button in the Version card where it has one, and each is exported on its own (`InfoVersionCard`, `InfoHelpCard`, `InfoAboutCard`). `AboutCard` takes the 3.2.0 props and lays them out as the tile |
+| `AboutCard.tsx` | The Info tile: `InfoTile` renders its Version, Help and About cards in their fixed order, with the app's own "New · n" button in the Version card where it has one and "Release notes" where it has not, and each is exported on its own (`InfoVersionCard`, `InfoHelpCard`, `InfoAboutCard`). `AboutCard` takes the 3.2.0 props and lays them out as the tile |
 | `ReadmeButton.tsx` | The button in the shape of the README's, with its segments: one way to get the app on the App tab, live, acting or still to come, and the Info tile's give and report buttons; the marks are in `../appMarks.ts` |
 | `CryptoDonateDialog.tsx` | Giving from a wallet: one address per chain, as text and as a code |
 | `CoffeeDialog.tsx` | Buy Me a Coffee's widget inside a house window |
@@ -62,10 +62,11 @@ wrapper, so they stack in the page's own rhythm.
   number as plain text. `updateCheck.run` checks them all and resolves to how
   many have a newer release; the button turns `ok` with `upToDate`, `warn` with
   `updatesFound(n)`, or `danger` with `checkFailed` and a shake when it rejects.
-  The app puts the reason for a failure in its toast. `onReleaseNotes` with
-  `text.releaseNotes` adds "Release notes" before the check, and `whatsNew`,
-  the app's own "New · n" button, stands between the two. Both open the app's
-  own window, on the notes of the running version or on the list of changes.
+  The app puts the reason for a failure in its toast. One button stands
+  before the check: `whatsNew`, the app's own "New · n" button, which opens its
+  window with the release notes and the changes as tabs, or, in an app that
+  marks no changes, "Release notes" from `onReleaseNotes` with
+  `text.releaseNotes`, which opens the notes alone. The card never draws both.
 - **Help:** the report sentence, GitHub, Email with `MAIL_SVG` when the
   sentence names a mail route and `mailAddress` is set, the manual when
   `manualUrl` and `text.manual` are set, with `MANUAL_SVG` as `manualGlyph` and
