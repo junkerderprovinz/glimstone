@@ -25,7 +25,7 @@ would then have to be re-applied by hand in three places.
 | `ConfirmDialog.tsx` | The confirm surface for a destructive action |
 | `Toast.tsx` + `toastEngine.ts` | Transient feedback, including the shake a failing control does |
 | `InfoBubble.tsx`, `IconTipButton.tsx` | The "(i)" explanation and the hover name on an icon-only control |
-| `AboutCard.tsx` | The Info tile: `InfoTile` renders its Version, Help and About cards in their fixed order, with the app's own What's new card between Help and About where it has one, and each is exported on its own (`InfoVersionCard`, `InfoHelpCard`, `InfoAboutCard`). `AboutCard` takes the 3.2.0 props and lays them out as the tile |
+| `AboutCard.tsx` | The Info tile: `InfoTile` renders its Version, Help and About cards in their fixed order, with the app's own "New · n" button in the Version card where it has one, and each is exported on its own (`InfoVersionCard`, `InfoHelpCard`, `InfoAboutCard`). `AboutCard` takes the 3.2.0 props and lays them out as the tile |
 | `ReadmeButton.tsx` | The button in the shape of the README's, with its segments: one way to get the app on the App tab, live, acting or still to come, and the Info tile's give and report buttons; the marks are in `../appMarks.ts` |
 | `CryptoDonateDialog.tsx` | Giving from a wallet: one address per chain, as text and as a code |
 | `CoffeeDialog.tsx` | Buy Me a Coffee's widget inside a house window |
@@ -63,16 +63,15 @@ wrapper, so they stack in the page's own rhythm.
   many have a newer release; the button turns `ok` with `upToDate`, `warn` with
   `updatesFound(n)`, or `danger` with `checkFailed` and a shake when it rejects.
   The app puts the reason for a failure in its toast. `onReleaseNotes` with
-  `text.releaseNotes` adds "Release notes" before the check; it opens the app's
-  own window with the notes of the running version.
+  `text.releaseNotes` adds "Release notes" before the check, and `whatsNew`,
+  the app's own "New · n" button, stands between the two. Both open the app's
+  own window, on the notes of the running version or on the list of changes.
 - **Help:** the report sentence, GitHub, Email with `MAIL_SVG` when the
   sentence names a mail route and `mailAddress` is set, the manual when
   `manualUrl` and `text.manual` are set, with `MANUAL_SVG` as `manualGlyph` and
   "Open" as `text.manualSub`, and the bug report when `onBugReport` and
   `text.bugReport` are set, with `IconDiagnostics` as `bugGlyph` and "Download"
   as `text.bugReportSub`.
-- **What's new:** the app's own card, passed as `whatsNew`, with the hue after
-  Help's. Without it About follows Help.
 - **About:** the maker's sentence, then the sentence about the money with the
   give row under it.
 

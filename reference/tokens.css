@@ -1858,6 +1858,34 @@ body {
   gap: 0.8125rem;
 }
 
+/* A picker's tiles ("Pickers and wizards"): the README buttons as a grid on
+   the window's own surface, three across a picker window and two on a phone.
+   A brand too numerous for a class of its own hands its colour pair down
+   from its list item as --provider-tile and --provider-ink. */
+.glim-provider-pick {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+  gap: 0.8125rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+@media (max-width: 47.99rem) {
+  .glim-provider-pick {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+}
+.glim-provider-pick .glim-readme-btn-unit {
+  display: flex;
+  --tile: var(--provider-tile, var(--accent));
+  --tile-ink: var(--provider-ink, var(--accent-contrast));
+}
+.glim-provider-pick .glim-readme-btn {
+  flex: 1;
+  width: auto;
+}
+
 .glim-readme-btn-unit {
   position: relative;
   display: inline-flex;

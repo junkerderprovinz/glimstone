@@ -7,8 +7,8 @@ import { ReadmeButton } from "./ReadmeButton";
 
 // The Info tile, the last tile in Settings ("The Info tile and the About card"
 // in design-language.md): the Version card with every version the app is made
-// of, the Help card with the ways to report something, the app's own What's new
-// card where it has one, and the About card with the maker's sentence and the
+// of and the way to its release notes and changes, the Help card with the ways
+// to report something, and the About card with the maker's sentence and the
 // give row. Each sentence sits directly above the buttons it asks for, and no
 // card names a route no control on it can reach. Every string is passed in.
 
@@ -138,19 +138,22 @@ export interface InfoVersionCardProps {
   /** "Check for updates" at the bottom of the card. Omit it and the card
    *  offers no check. */
   updateCheck?: UpdateCheck;
-  /** Opens the app's window with the running version's release notes and the
-   *  list of what the update changed. */
+  /** Opens the app's window on the running version's release notes. */
   onReleaseNotes?: () => void;
+  /** The app's own "New · n" button, which opens the same window on the list
+   *  of changes. It stands between "Release notes" and the update check. */
+  whatsNew?: ReactNode;
   openUrl?: OpenUrl;
   hueIndex?: number;
 }
 
-/** The first card: every version as a row, and the release notes and the update check under them. */
+/** The first card: every version as a row, and the release notes, the New button and the update check under them. */
 export function InfoVersionCard({
   text,
   rows,
   updateCheck,
   onReleaseNotes,
+  whatsNew,
   openUrl = openInBrowser,
   hueIndex,
 }: InfoVersionCardProps) {
@@ -168,9 +171,10 @@ export function InfoVersionCard({
           </li>
         ))}
       </ul>
-      {(notes || updateCheck) && (
-        <div className="flex flex-wrap justify-end gap-3">
+      {(notes || whatsNew || updateCheck) && (
+        <div className="flex flex-wrap items-end justify-end gap-3">
           {notes && <Button label={notes} labelKey="about.releaseNotes" onClick={onReleaseNotes} />}
+          {whatsNew}
           {updateCheck && <UpdateCheckButton {...updateCheck} />}
         </div>
       )}
@@ -384,23 +388,19 @@ export function InfoHelpCard({
 export interface InfoTileProps {
   version: Omit<InfoVersionCardProps, "hueIndex">;
   help: Omit<InfoHelpCardProps, "hueIndex">;
-  /** The app's own What's new card. It takes the rainbow position after Help's,
-   *  and About moves one further. */
-  whatsNew?: ReactNode;
   about: Omit<InfoAboutCardProps, "hueIndex">;
   /** The Version card's rainbow position; the cards after it take the next ones. */
   hueIndex?: number;
 }
 
 /** The Info tile's cards in their fixed order, for the page that stacks them. */
-export function InfoTile({ version, help, whatsNew, about, hueIndex }: InfoTileProps) {
+export function InfoTile({ version, help, about, hueIndex }: InfoTileProps) {
   const at = (offset: number) => (hueIndex === undefined ? undefined : hueIndex + offset);
   return (
     <>
       <InfoVersionCard {...version} hueIndex={at(0)} />
       <InfoHelpCard {...help} hueIndex={at(1)} />
-      {whatsNew}
-      <InfoAboutCard {...about} hueIndex={at(whatsNew ? 3 : 2)} />
+      <InfoAboutCard {...about} hueIndex={at(2)} />
     </>
   );
 }
