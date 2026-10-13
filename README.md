@@ -57,7 +57,7 @@ If it has earned a place on your server or computer, toss a coin to your knight:
 
 ## 1. What's in this repo
 
-- [`docs/design-language.md`](docs/design-language.md) is the full spec: the palette, the name and its etymology, all twenty rules, the componentry vocabulary (info bubble, horizontal selector and its vertical tiles, the settings search and the search button, switches, the reveal eye, badges, toasts, empty states, destructive actions, charts, the sidebar and the phone's bottom bar), all four engines, the token contract, and the adoption steps. This is the document to read start to finish; everything below just points back into it.
+- [`docs/design-language.md`](docs/design-language.md) is the full spec: the palette, the name and its etymology, all the rules, the componentry vocabulary (info bubble, horizontal selector and its vertical tiles, the settings search and the search button, switches, the reveal eye, badges, toasts, empty states, destructive actions, charts, the sidebar and the phone's bottom bar), all four engines, the token contract, and the adoption steps. This is the document to read start to finish; everything below just points back into it.
 - [`reference/tokens.css`](reference/tokens.css) is the palette and component classes as plain CSS custom properties, and where the shape, colour and motion engines resolve to actual values. No build step, no framework. Copy the parts an app needs.
 - [`reference/tailwind-theme.css`](reference/tailwind-theme.css) is the optional Tailwind v4 `@theme` layer that maps the tokens onto utility classes. Skip it entirely on a non-Tailwind app.
 - [`reference/appearance.ts`](reference/appearance.ts) holds the shape, accent, rainbow and motion logic, including the four fixed motion level names and `stormTap()`, the gesture behind the hidden fourth one, and `leafTap()`, the same gesture for the hidden shape. Framework-free (talks only to `document.documentElement` and `localStorage`), so it drops into any app unchanged.
@@ -80,7 +80,7 @@ IBM Carbon's neutral greys for the ground and surfaces, one accent that means "t
 
 **Six axes belong to the user**: theme, corner shape, accent colour, rainbow, motion intensity and label mode. Every one of them is applied once at the app root, never by the page that edits it. Four resolve through a named engine, so nothing downstream has to know which setting produced the value it got: the **shape engine** (one radius token, no exception list), the **colour engine** (theme, accent and rainbow together), the **motion engine** (one set of duration and distance tokens feeding the same keyframes at every intensity) and the **label engine** (text, glyph or both, across three independent surfaces). Icons come from one shared assortment so a folder is the same folder in every app.
 
-See [`docs/design-language.md`](docs/design-language.md) for the palette table and all twenty rules with their reasoning.
+See [`docs/design-language.md`](docs/design-language.md) for the palette table and all the rules with their reasoning.
 
 <br>
 
