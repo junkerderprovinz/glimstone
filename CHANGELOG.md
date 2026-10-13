@@ -2,59 +2,26 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## 3.4.3 - 2026-10-13
+## 3.5.0 - 2026-10-13
 
-What KnightLoader's redesign brought, written down so the next app can follow it: the manual button in the README's yellow, Release notes and a counting New button on the Version card, dropdowns beside their labels, a search button on every page, one shape for every picker window, pages and windows at full width, and a fill level that sloshes. KnightLoader is the reference implementation, and ArrowLoop's storage window is the model for pickers.
+What KnightLoader's redesign settled and the login BombVault ships, written down so the next app can follow them. The Info tile takes BombVault's order, the Version card gains Release notes and a counting New button, and the Help card a Manual button in the README's yellow. Dropdowns stand beside their labels, every page gets a search button and every picker window has one shape. Pages and windows run the full width, selectors wear their own colours under rainbow, and a fill level sloshes. A new section, "The first way in", gives every app the same password rules, the same reset through the container log and the same line between the owner's browser and a paired phone. KnightLoader and BombVault are the reference implementations, and ArrowLoop's storage window is the model for pickers.
 
 **Adopting apps:**
 
-- **Help card:** give the Manual button the README's book and yellow. Pass `manualUrl` to `InfoHelpCard`, or set `brand="docs"` and `markClass="glim-docs-mark"` on your own button, and copy `MANUAL_SVG` from `appMarks.ts` again. From `reference/tokens.css` take the `--brand-docs` values, `.glim-docs-mark`, `.glim-tile-docs` and the rules that open the book on focus and under a finger.
+- **Info tile:** show Version, Help, then About, and remove the What's new card.
 - **Version card:** add "Release notes" and, if the app marks its changes, a "New · n" button after it, so "Check for updates" stays last. Both open one window, "New in x.y.z", with the release notes and the changes as two tabs. `InfoVersionCard` takes `onReleaseNotes` and `whatsNew`.
-- **What's new:** remove the What's new card. `InfoTile` no longer takes `whatsNew`. In the list of changes, replace the switch for the dots, the count line and the two buttons with one toggle that reads "Mark all as seen · n" or "Show all again · n".
+- **What's new:** in the list of changes, replace the switch for the dots, the count line and the two buttons with one toggle that reads "Mark all as seen · n" or "Show all again · n".
+- **Help card:** an app with a handbook adds a "Manual" button between Email and the bug report. Pass `manualUrl` to `InfoHelpCard`, or set `brand="docs"` and `markClass="glim-docs-mark"` on your own button, with `MANUAL_SVG` from `appMarks.ts` as its mark. From `reference/tokens.css` take the `--brand-docs` values, `.glim-docs-mark`, `.glim-tile-docs` and the rules that open the book on focus and under a finger.
+- **README buttons:** copy the `.glim-readme-btn-mark` and `.glim-readme-btn-text` rules from `reference/tokens.css` again, and the house-mark rules after `.glim-mark-hover`.
+- **Selectors:** under rainbow, give each selector on a page its own colour, and offer System beside Dark and Light in the Design selector.
 - **Settings rows:** move every dropdown and one-line field beside its label. A list, a text area or a code editor keeps its label above it.
 - **Search:** turn every search on a page into a Search button that becomes the field when pressed. The settings search, the command palette and the search in a picker window stay fields.
+- **Grids:** take the card away from around a grid of cards.
 - **Picker windows:** build every picker window the same way: 48rem wide, groups under an eyebrow, three tiles to a row in `.glim-provider-pick` from `reference/tokens.css`, an open search at the top right and only the way out in the button row. Keep the window's height while a search narrows the tiles.
 - **Full width:** remove any width cap from pages and window bodies, settings included, and give a field in a row its own width instead. Put the floating actions in the window's bottom right corner and a window's actions in its foot, at the end of the row.
 - **Pairing page:** if the app pairs instances, build the card for this instance from setting rows and pick the relay from one well of four segments.
 - **Fill levels:** copy the `--motion-slosh-*` dials at all four motion levels, the `glim-slosh-*` keyframes, the resting rules and the rules inside the no-preference gate. Then put the classes on the vessel and on any bar that shows a fill level.
-- **Version:** copy `reference/react/version.ts` again.
-
-## ✨ Added
-
-- **A fill level sloshes.** The liquid in a vessel tilts from wall to wall, a crest runs up the wall it leans toward, and bubbles rise and pop. A bar that shows a fill level sloshes at its end. The motion setting sets how lively it is, and at "off" or under reduced motion the liquid rests level.
-- **A packet arriving splashes.** In a transfer flow the liquid kicks up the wall where a packet lands and settles back into its slosh.
-- **Release notes and New on the Version card.** "Release notes" opens a wide window with the notes of the running version. In an app that marks its changes, "New · 5" counts what is still unseen and opens the same window on the list of changes.
-- **Rule 35: a dropdown or a one-line field stands beside its label.** A list, a text area or a code editor keeps its label above it.
-- **A section on search, "Every other search".** A search on a page starts as a Search button, turns into the field when pressed and turns back once it is left empty. The settings search, the command palette and the search in a picker window stay fields.
-- **A section on windows.** A window's content is as wide as the window, and its actions stand in its foot, at the end of the row.
-- **A section on the pairing page's cards.** The card for this instance is made of setting rows, and the relay is picked from one well that hugs its four segments.
-
-## 🎨 Design
-
-- **The manual button looks like the README's docs button.** It wears the README's closed book and that button's yellow instead of the accent, deepened on the light theme.
-- **Every picker window has one shape.** It follows ArrowLoop's storage window, with three README tiles to a row on the window's own surface, an open search field at the top right and the way out at the end of the button row. `.glim-provider-pick` lays out the tiles.
-
-## ⚡ Improved
-
-- **The glyph map** shows KnightLoader's manual button with the README's book, and BombVault's as the next to switch.
-
-## 🔁 Changed
-
-- **Pages and windows run the full width.** Settings pages lose their 880px cap and end at the same edge as the overview and the lists. The floating actions stand in the window's bottom right corner.
-- **The What's new card is now a "New · n" button on the Version card.** The release notes are the other tab of its window.
-- **The list of changes has one toggle.** "Mark all as seen" and "Show all again" take turns on one button with a count, in place of the switch for the dots, the count line and two buttons.
-
-## 🐛 Fixed
-
-- **`InfoHelpCard` had no Manual button**, although 3.4.1 put one on the Help card. It draws one from `manualUrl` now.
-
-## 3.4.2 - 2026-10-12
-
-The login and what keeps it safe join the language. A new section, "The first way in", gives every app the same password rules, the same reset through the container log, the same page after it, and the same line between the owner's browser and a paired phone, with a checklist to tick off when lifting. BombVault is the reference implementation.
-
-**Adopting apps:**
-
-- **Lifting:** work through the checklist at the end of "The first way in", one line per rule, and keep a test for each that fails without its guard.
+- **The first way in:** work through the checklist at the end of the section, one line per rule, and keep a test for each that fails without its guard.
 - **Login:** put a quiet "Forgot password?" button at the foot of the sign-in form. Show the reset form only once the code is in the container log, and after the reset show the page that lists what it removed.
 - **Reset tip:** the code field's (i) names where the log is, how long the code lasts, a log viewer people actually run, and what the reset removes.
 - **Phone pairing:** add the card with its one switch under Settings, Security, and answer a refused call from a paired session with the window and its "Sign in here" button.
@@ -67,30 +34,17 @@ The login and what keeps it safe join the language. A new section, "The first wa
 - **Forgot password, through the container log.** The code is 12 characters, valid for 10 minutes, survives wrong guesses and appears nowhere but the log. The reset ends every other session, turns two-factor authentication off, removes passkeys, revokes tokens and keys and switches phone pairing off, and the page after it says which of these happened.
 - **The wording of the reset tip.** It says plainly who can reset: anyone who can read the container log, named in terms the reader recognises.
 - **Phone sessions.** The pairing card and its switch, the allow list a paired session is held to, the scrubbed read routes, and the refusal window with "Sign in here".
-- **A checklist for the lift**, one line per rule.
-
-## ⚡ Improved
-
-- **"The second way in" points to the password and the reset** it builds on.
-
-## 3.4.1 - 2026-10-11
-
-The findings from KnightLoader's redesign, and what BombVault already ships: the Info tile's cards in its order, the README button's mark where the README puts it, and the manual's book. Text inside a picture leaves the type scale.
-
-**Adopting apps:**
-
-- **Info tile:** show Version, Help, What's new where the app has it, then About. `InfoTile` takes the What's new card as `whatsNew`.
-- **Help card:** an app with a handbook adds a "Manual" button between Email and the bug report, with `MANUAL_SVG` as its mark.
-- **README buttons:** copy the `.glim-readme-btn-mark` and `.glim-readme-btn-text` rules from `reference/tokens.css` again, and the house-mark rules after `.glim-mark-hover`.
-- **Selectors:** under rainbow, give each selector on a page its own colour, and offer System beside Dark and Light in the Design selector.
-- **Grids:** take the card away from around a grid of cards.
-- **Version:** copy `reference/react/version.ts` again.
-
-## ✨ Added
-
-- **A manual is a button.** An app with a handbook puts a "Manual" README button between Email and the bug report, with "Open" as its second line. It opens the documentation in the browser.
-- **The manual's book.** `IconManual` and `IconManualOpen` join the glyph set as BombVault drew them, and `MANUAL_SVG` in `appMarks.ts` carries the pair. The book is closed at rest and opens under the pointer, under a finger and on focus, like the mail button's envelope.
+- **A checklist at the end of "The first way in"**, one line per rule.
+- **A manual is a button.** An app with a handbook puts a "Manual" README button between Email and the bug report, with "Open" as its second line. It opens the documentation in the browser and wears the book and the yellow of the README's docs button, deepened on the light theme. `InfoHelpCard` draws it from `manualUrl`.
+- **The manual's book.** `IconManual` and `IconManualOpen` join the glyph set as BombVault drew them. `MANUAL_SVG` in `appMarks.ts` pairs the README's closed book with `IconManualOpen`, so the book opens under the pointer, under a finger and on focus, like the mail button's envelope.
+- **Release notes and New on the Version card.** "Release notes" opens a wide window with the notes of the running version. In an app that marks its changes, "New · 5" counts what is still unseen and opens the same window on the list of changes.
+- **Rule 35: a dropdown or a one-line field stands beside its label.** A list, a text area or a code editor keeps its label above it.
+- **A section on search, "Every other search".** A search on a page starts as a Search button, turns into the field when pressed and turns back once it is left empty. The settings search, the command palette and the search in a picker window stay fields.
+- **A section on windows.** A window's content is as wide as the window, and its actions stand in its foot, at the end of the row.
+- **A section on the pairing page's cards.** The card for this instance is made of setting rows, and the relay is picked from one well that hugs its four segments.
 - **Text inside a picture is outside the type scale.** Text drawn in an illustration or a scene SVG uses the picture's own units, because it scales with the picture.
+- **A fill level sloshes.** The liquid in a vessel tilts from wall to wall, a crest runs up the wall it leans toward, and bubbles rise and pop. A bar that shows a fill level sloshes at its end. The motion setting sets how lively it is, and at "off" or under reduced motion the liquid rests level.
+- **A packet arriving splashes.** In a transfer flow the liquid kicks up the wall where a packet lands and settles back into its slosh.
 
 ## 🎨 Design
 
@@ -98,14 +52,22 @@ The findings from KnightLoader's redesign, and what BombVault already ships: the
 - **The Design selector offers System** beside Dark and Light, on the web and in a phone app. Without it a choice, once made, could not go back to following the device.
 - **A grid of cards stands on the page.** A card around the cards framed the same thing twice.
 - **The README button's mark starts 0.875rem from the edge and its text at 3.3125rem.** That is where the README's own buttons put their mark, and the text keeps the same distance from it.
+- **Every picker window has one shape.** It follows ArrowLoop's storage window, with three README tiles to a row on the window's own surface, an open search field at the top right and the way out at the end of the button row. `.glim-provider-pick` lays out the tiles.
 
 ## ⚡ Improved
 
-- **KnightLoader's column in the glyph map** shows what its redesign renders. Information, Select all, Clear the selection and Write to us are standard there, coffee and Docker containers are gone, and both apps wear the manual's book.
+- **KnightLoader's column in the glyph map** shows what its redesign renders. Information, Select all, Clear the selection and Write to us are standard there, coffee and Docker containers are gone, and its manual button wears the README's book. BombVault's is the next to switch.
+- **"The second way in" points to the password and the reset** it builds on.
+
+## 🔁 Changed
+
+- **Pages and windows run the full width.** Settings pages lose their 880px cap and end at the same edge as the overview and the lists. The floating actions stand in the window's bottom right corner.
+- **The What's new card is now a "New · n" button on the Version card.** The release notes are the other tab of its window.
+- **The list of changes has one toggle.** "Mark all as seen" and "Show all again" take turns on one button with a count, in place of the switch for the dots, the count line and two buttons.
 
 ## 🐛 Fixed
 
-- **The Info tile listed its cards in the wrong order.** The doc and `InfoTile` both put About first. They now follow BombVault: Version, Help, What's new, About.
+- **The Info tile listed its cards in the wrong order.** The doc and `InfoTile` both put About first. They now follow BombVault: Version, Help, About.
 
 ## 3.4.0 - 2026-10-10
 
