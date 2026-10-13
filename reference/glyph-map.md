@@ -147,21 +147,21 @@
 
 ## Look settings
 
-ArrowLoop drew these glyphs for the segments of its Design, Corners and Motion selectors and is the first app to wear them, so this table gets a column for it. BombVault and KnightLoader follow.
+ArrowLoop drew these glyphs for the segments of its Design, Corners and Motion selectors, so this table gets a column for it. BombVault and KnightLoader wear them too.
 
 | Meaning | GlimStone | ArrowLoop | BombVault | KnightLoader |
 | --- | --- | --- | --- | --- |
-| Design selector, System | `IconThemeSystem` | `IconThemeSystem`, standard | `IconThemeSystem`, to follow | `IconThemeSystem`, to follow |
-| Design selector, Dark | `IconMoon` | `IconMoon`, standard | `IconMoon`, to follow | `IconMoon`, standard |
-| Design selector, Light | `IconSun` | `IconSun`, standard | `IconSun`, to follow | `IconSun`, standard |
-| Corners selector, Round | `IconCornerRound` | `IconCornerRound`, standard | `IconCornerRound`, to follow | `IconCornerRound`, to follow |
-| Corners selector, Soft | `IconCornerSoft` | `IconCornerSoft`, standard | `IconCornerSoft`, to follow | `IconCornerSoft`, to follow |
-| Corners selector, Square | `IconCornerSquare` | `IconCornerSquare`, standard | `IconCornerSquare`, to follow | `IconCornerSquare`, to follow |
-| Corners selector, the hidden leaf | `IconCornerLeaf` | `IconCornerLeaf`, standard | `IconCornerLeaf`, to follow | `IconCornerLeaf`, to follow |
-| Motion selector, Off | `IconMotionOff` | `IconMotionOff`, standard | `IconMotionOff`, to follow | `IconMotionOff`, to follow |
-| Motion selector, Subtle | `IconMotionSubtle` | `IconMotionSubtle`, standard | `IconMotionSubtle`, to follow | `IconMotionSubtle`, to follow |
-| Motion selector, Wild | `IconMotionWild` | `IconMotionWild`, standard | `IconMotionWild`, to follow | `IconMotionWild`, to follow |
-| Motion selector, the hidden storm | `IconMotionStorm` | `IconMotionStorm`, standard | `IconMotionStorm`, to follow | `IconMotionStorm`, to follow |
+| Design selector, System | `IconThemeSystem` | `IconThemeSystem`, standard | `IconThemeSystem`, standard | `IconThemeSystem`, standard |
+| Design selector, Dark | `IconMoon` | `IconMoon`, standard | `IconMoon`, standard | `IconMoon`, standard |
+| Design selector, Light | `IconSun` | `IconSun`, standard | `IconSun`, standard | `IconSun`, standard |
+| Corners selector, Round | `IconCornerRound` | `IconCornerRound`, standard | `IconCornerRound`, standard | `IconCornerRound`, standard |
+| Corners selector, Soft | `IconCornerSoft` | `IconCornerSoft`, standard | `IconCornerSoft`, standard | `IconCornerSoft`, standard |
+| Corners selector, Square | `IconCornerSquare` | `IconCornerSquare`, standard | `IconCornerSquare`, standard | `IconCornerSquare`, standard |
+| Corners selector, the hidden leaf | `IconCornerLeaf` | `IconCornerLeaf`, standard | `IconCornerLeaf`, standard | `IconCornerLeaf`, standard |
+| Motion selector, Off | `IconMotionOff` | `IconMotionOff`, standard | `IconMotionOff`, standard | `IconMotionOff`, standard |
+| Motion selector, Subtle | `IconMotionSubtle` | `IconMotionSubtle`, standard | `IconMotionSubtle`, standard | `IconMotionSubtle`, standard |
+| Motion selector, Wild | `IconMotionWild` | `IconMotionWild`, standard | `IconMotionWild`, standard | `IconMotionWild`, standard |
+| Motion selector, the hidden storm | `IconMotionStorm` | `IconMotionStorm`, standard | `IconMotionStorm`, standard | `IconMotionStorm`, standard |
 
 <br>
 
@@ -169,4 +169,4 @@ ArrowLoop drew these glyphs for the segments of its Design, Corners and Motion s
 
 - **ArrowLoop:** `scripts/gen_glyphs.py` writes the app's glyphs, and the nine Look settings glyphs come from it.
 - **BombVault:** `scripts/gen_glyphs.py` writes `web/src/components/glyphs.tsx` and `navGlyphs.tsx` from a copy of `glyphs.json` at 16px; the phone app shows the web launcher and uses the same files. `glyphFor.tsx` maps a translation key to a glyph when a button passes none; a button that passes one wins.
-- **KnightLoader:** `web/scripts/gen-glyphs.mjs` writes `web/src/lib/glyphs.tsx` at 22px with the ink at three quarters of the box; the Android app draws its few marks itself with react-native-svg. Every call site passes its glyph; Settings page glyphs are mapped in `pages/settings/pageIcons.tsx`. The browser extension copies the eye and a few others in `extension/src/`.
+- **KnightLoader:** `web/scripts/gen-glyphs.mjs` writes `web/src/lib/glyphs.tsx` at 22px with the ink at three quarters of the box; the Android app has no SVG and shows tinted bitmaps rendered from the same list into `mobile/assets/`. Every call site passes its glyph; Settings page glyphs are mapped in `pages/settings/pageIcons.tsx`. The browser extension copies the eye and a few others in `extension/src/`.
