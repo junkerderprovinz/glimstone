@@ -285,7 +285,7 @@ KnightLoader's `web/src/pages/settings/revealOnScrollUp.ts` is the mechanism, a 
 - **An empty field turns back into the button** on Escape or when the focus leaves it, and after Escape the focus stays on the button. Escape closes the empty field before the window around it. A field that holds text stays a field, so a forgotten filter cannot hide behind a button.
 - **A shortcut opens it.** Ctrl+F on a list turns the button into the field and puts the caret there, so the key never lands on a button that still has to be pressed.
 - **The button follows the label engine** and is named "Search", never the field's placeholder.
-- **Three searches stay fields.** The settings search is already fetched by an upward scroll ("The settings search"), and the command palette is a search and nothing else, so it opens with the caret in its field. A picker window is the third: its search stands open at the window's top right from the start, because a window of forty brands is there to be searched ("Pickers and wizards").
+- **Three searches stay fields.** The settings search is already fetched by an upward scroll ("The settings search"), and the command palette is a search and nothing else, so it opens with the caret in its field. A picker window is the third: its search stands open at the window's top right from the start, because a window of some forty brands is there to be searched ("Pickers and wizards").
 
 KnightLoader's `web/src/components/SearchToggle.tsx` is the component, and a test there holds every other search to the button.
 
