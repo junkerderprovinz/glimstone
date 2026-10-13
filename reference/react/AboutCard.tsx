@@ -130,18 +130,31 @@ export interface InfoVersionCardProps {
     /** The card's "(i)", such as what a click on a number opens. */
     hint?: string;
     unreleased: (version: string) => string;
+    /** "Release notes". Only drawn together with `onReleaseNotes`. */
+    releaseNotes?: string;
   };
   /** The app first, then the design language, then every component it ships. */
   rows: VersionRow[];
   /** "Check for updates" at the bottom of the card. Omit it and the card
    *  offers no check. */
   updateCheck?: UpdateCheck;
+  /** Opens the app's window with the running version's release notes and the
+   *  list of what the update changed. */
+  onReleaseNotes?: () => void;
   openUrl?: OpenUrl;
   hueIndex?: number;
 }
 
-/** The first card: every version as a row, and the update check under them. */
-export function InfoVersionCard({ text, rows, updateCheck, openUrl = openInBrowser, hueIndex }: InfoVersionCardProps) {
+/** The first card: every version as a row, and the release notes and the update check under them. */
+export function InfoVersionCard({
+  text,
+  rows,
+  updateCheck,
+  onReleaseNotes,
+  openUrl = openInBrowser,
+  hueIndex,
+}: InfoVersionCardProps) {
+  const notes = onReleaseNotes && text.releaseNotes;
   return (
     <Card title={text.title} hint={text.hint} hueIndex={hueIndex}>
       <ul className="flex flex-col gap-3">
@@ -155,9 +168,10 @@ export function InfoVersionCard({ text, rows, updateCheck, openUrl = openInBrows
           </li>
         ))}
       </ul>
-      {updateCheck && (
-        <div className="flex justify-end">
-          <UpdateCheckButton {...updateCheck} />
+      {(notes || updateCheck) && (
+        <div className="flex flex-wrap justify-end gap-3">
+          {notes && <Button label={notes} labelKey="about.releaseNotes" onClick={onReleaseNotes} />}
+          {updateCheck && <UpdateCheckButton {...updateCheck} />}
         </div>
       )}
     </Card>
@@ -276,6 +290,10 @@ export interface InfoHelpCardProps {
     bugReport?: string;
     /** The bug report's second line, "Download". */
     bugReportSub?: string;
+    /** "Manual". Only drawn together with `manualUrl`. */
+    manual?: string;
+    /** The manual's second line, "Open". */
+    manualSub?: string;
   };
   repoUrl: string;
   /** The mark on the repository button, passed for the same reason as the
@@ -285,6 +303,11 @@ export interface InfoHelpCardProps {
   mailAddress?: string;
   /** The envelope, `MAIL_SVG` from appMarks.ts, which opens under the pointer. */
   mailGlyph?: ReactNode;
+  /** The app's handbook. Omit it where the app has none; the README is not a
+   *  manual. */
+  manualUrl?: string;
+  /** The book, `MANUAL_SVG` from appMarks.ts, which opens under the pointer. */
+  manualGlyph?: ReactNode;
   /** Downloads the instance's logs and settings as one file, without
    *  passwords, keys or credentials. */
   onBugReport?: () => void;
@@ -294,13 +317,15 @@ export interface InfoHelpCardProps {
   hueIndex?: number;
 }
 
-/** The second card: a sentence inviting a report, then GitHub, Email and the bug report. */
+/** The second card: a sentence inviting a report, then GitHub, Email, the manual and the bug report. */
 export function InfoHelpCard({
   text,
   repoUrl,
   repoGlyph,
   mailAddress,
   mailGlyph,
+  manualUrl,
+  manualGlyph,
   onBugReport,
   bugGlyph,
   openUrl = openInBrowser,
@@ -332,6 +357,15 @@ export function InfoHelpCard({
             ]}
             mark={mailGlyph}
             markClass="glim-house-mark"
+          />
+        )}
+        {manualUrl && text.manual && (
+          // The README's docs button, its book and its yellow.
+          <ReadmeButton
+            brand="docs"
+            parts={[{ name: text.manual, sub: text.manualSub, onClick: () => openUrl(manualUrl) }]}
+            mark={manualGlyph}
+            markClass="glim-docs-mark"
           />
         )}
         {onBugReport && text.bugReport && (

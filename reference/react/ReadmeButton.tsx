@@ -24,6 +24,7 @@ const TILES = {
   bitcoin: "glim-tile-bitcoin",
   coffee: "glim-tile-coffee",
   house: "glim-tile-house",
+  docs: "glim-tile-docs",
 } as const;
 
 export interface ReadmePart {

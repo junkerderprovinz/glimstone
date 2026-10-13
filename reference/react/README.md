@@ -62,11 +62,15 @@ wrapper, so they stack in the page's own rhythm.
   number as plain text. `updateCheck.run` checks them all and resolves to how
   many have a newer release; the button turns `ok` with `upToDate`, `warn` with
   `updatesFound(n)`, or `danger` with `checkFailed` and a shake when it rejects.
-  The app puts the reason for a failure in its toast.
+  The app puts the reason for a failure in its toast. `onReleaseNotes` with
+  `text.releaseNotes` adds "Release notes" before the check; it opens the app's
+  own window with the notes of the running version.
 - **Help:** the report sentence, GitHub, Email with `MAIL_SVG` when the
-  sentence names a mail route and `mailAddress` is set, and the bug report when
-  `onBugReport` and `text.bugReport` are set, with `IconDiagnostics` as
-  `bugGlyph` and "Download" as `text.bugReportSub`.
+  sentence names a mail route and `mailAddress` is set, the manual when
+  `manualUrl` and `text.manual` are set, with `MANUAL_SVG` as `manualGlyph` and
+  "Open" as `text.manualSub`, and the bug report when `onBugReport` and
+  `text.bugReport` are set, with `IconDiagnostics` as `bugGlyph` and "Download"
+  as `text.bugReportSub`.
 - **What's new:** the app's own card, passed as `whatsNew`, with the hue after
   Help's. Without it About follows Help.
 - **About:** the maker's sentence, then the sentence about the money with the
@@ -74,7 +78,7 @@ wrapper, so they stack in the page's own rhythm.
 
 The glyphs on the update check come from the app's resolver under the keys
 `about.checkUpdates`, `about.upToDate`, `about.updatesFound` and
-`about.checkFailed`.
+`about.checkFailed`, and the one on "Release notes" under `about.releaseNotes`.
 
 ## Copying them in
 

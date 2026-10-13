@@ -71,7 +71,7 @@
 | Sort direction | `IconSort` | none | `IconSort`, standard |
 | Up one folder | `IconFolderUp` | none | `IconFolderUp`, standard |
 | Write to us, under the pointer or a finger | `IconMailOpen` | `IconMailOpen`, standard | `IconMailOpen`, standard |
-| Open the manual | `IconManual` | `IconManual`, standard | `IconManual`, standard |
+| Open the manual | `IconManual`; on the Help card's button the README's book in `MANUAL_SVG` | `IconManual`, switch to `MANUAL_SVG` on the Help card | `MANUAL_SVG`, standard |
 | Open the manual, under the pointer, a finger or the focus | `IconManualOpen` | `IconManualOpen`, standard | `IconManualOpen`, standard |
 
 <br>
