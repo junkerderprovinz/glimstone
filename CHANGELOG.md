@@ -2,9 +2,9 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 3.6.0 - 2026-10-16
 
-GlimStone gets a site, and its components get behaviour contracts: which keys do what, where focus goes and what a screen reader hears, each row tested on every push. Select, Combobox and Slider arrive on Zag's state machines, and ConfirmDialog ships with the hook that gives it Escape and a focus trap. Two smaller rules settle a narrow web bottom bar and give a simple app's Settings an Info tab.
+GlimStone gets a site, and its components get behaviour contracts: which keys do what, where focus goes and what a screen reader hears, each row tested on every push. Select, Combobox and Slider arrive on Zag's state machines, and ConfirmDialog ships with the hook that gives it Escape and a focus trap. Smaller rules give the Version card one button and the Look settings their glyphs, and cover a phone app's own screen header, the removal of something that keeps state, a narrow web bottom bar and an Info tab in a simple app's Settings.
 
 **Adopting apps:**
 
@@ -12,8 +12,12 @@ GlimStone gets a site, and its components get behaviour contracts: which keys do
 - **Confirm:** copy `reference/react/useConfirm.tsx` and call `await confirm(question)` where the app has its own hook. BombVault's `useConfirm.tsx` and ArrowLoop's `ConfirmWindow.tsx` can then go, or keep only what goes beyond it, such as BombVault's phone sheet.
 - **Button:** copy `reference/react/Button.tsx` again.
 - **Glyphs:** copy `reference/react/glyphs.tsx` again.
+- **Version card:** keep one button before "Check for updates". An app that marks its changes shows "New · n", which opens the window on Changes while anything is unseen and on Release notes otherwise; an app without marked changes shows "Release notes" alone. `InfoVersionCard` draws "Release notes" only when `whatsNew` is absent.
+- **Look settings:** put `IconThemeSystem` on the System segment of the Design selector, the four corner glyphs on the Corners selector and the four motion glyphs on the Motion selector. Copy them from `reference/glyphs.json`.
+- **Removal:** where removing an object would also drop the state it keeps, keep the state and offer deleting it as its own confirmed action.
 - **Bottom bar:** below 45rem, show glyphs only in the web bar whatever its axis says, with the page name as `aria-label` and in the tip bubble, and the glyph at 28px.
 - **Settings of a simple app:** add an Info tab after App, holding the Version, Help and About cards; the About card leaves General.
+- **Version:** copy `reference/react/version.ts` again.
 
 ## ✨ Added
 
@@ -21,38 +25,21 @@ GlimStone gets a site, and its components get behaviour contracts: which keys do
 - **Behaviour contracts.** Every interactive component has a table of what it does for the keyboard, the focus and a screen reader, following the WAI-ARIA Authoring Practices. Each row is a Playwright test that drives the live component on every push, and the site prints the result beside the row.
 - **Select, Combobox and Slider.** Built on Zag, the state machines under Ark UI, which also run without a framework. Select picks from a short list, Combobox filters a long one as somebody types and says so when nothing matches, Slider sets a value on a range and reads it out in words.
 - **useConfirm.** The hook ConfirmDialog was always meant to have: a portal, Escape from anywhere, a Tab trap and focus back to the control that asked.
+- **Nine glyphs for the Look settings.** `IconThemeSystem`, a ring with one half filled, stands for System beside the moon and the sun. Four frames show the corner shapes Round, Soft, Square and Leaf, and one line that swings further at each step shows the motion levels Off, Subtle, Wild and Storm.
+- **Removing something that keeps state keeps the state.** Taking away a sync job leaves its record of how both sides looked at the last run in place; deleting that record is a separate action with its own confirmation. Added again, the job still knows what was in sync.
 
 ## 🔁 Changed
 
 - **DropdownListbox is deprecated.** It leaves the trigger to the caller, so it cannot keep focus there or offer typeahead. It stays until every app has moved to Select.
 - **A narrow web bar shows glyphs only.** Below 45rem a fifth of a phone holds no page name in German, Greek and many other languages, and a bar that switched by language would look different on the same phone. From 45rem on the axis decides again. Found in BombVault, where Wiederherstellung ran into its neighbour.
 - **A simple app's Settings get an Info tab.** It is the Info tile of a Settings made of tiles, so it comes last and holds Version, Help and About in that order.
+- **The Version card carries one button.** "New · n" opens the window on Changes while something is unseen and on Release notes otherwise, and after an update the window still opens by itself on the notes. The separate "Release notes" button is gone where the app marks its changes.
+- **A phone app's native header may name the screen.** It shows the same name as the screen's tab in the bottom bar and does not count as a page heading. On the web, rule 30 stands as it is.
 
 ## 🐛 Fixed
 
 - **A busy button says so.** It sets `aria-busy`, so a screen reader hears that it is working instead of only seeing a spinner.
 - **The mark's SVG files are valid again.** The master leaves out `x` and `y` where they are 0, and the generator turned the missing value into `NaN`. Renderers fell back to 0, so nothing looked wrong, but three stones in `logo.svg`, both marks and both banners carried an invalid coordinate.
-
-## 3.5.1 - 2026-10-14
-
-The Version card keeps one button, the Look settings get glyphs, and the rules now cover a phone app's own screen header and the removal of something that keeps state.
-
-**Adopting apps:**
-
-- **Version card:** keep one button before "Check for updates". An app that marks its changes shows "New · n", which opens the window on Changes while anything is unseen and on Release notes otherwise; an app without marked changes shows "Release notes" alone. `InfoVersionCard` draws "Release notes" only when `whatsNew` is absent.
-- **Look settings:** put `IconThemeSystem` on the System segment of the Design selector, the four corner glyphs on the Corners selector and the four motion glyphs on the Motion selector. Copy them from `reference/glyphs.json`.
-- **Removal:** where removing an object would also drop the state it keeps, keep the state and offer deleting it as its own confirmed action.
-- **Version:** copy `reference/react/version.ts` again.
-
-## ✨ Added
-
-- **Nine glyphs for the Look settings.** `IconThemeSystem`, a ring with one half filled, stands for System beside the moon and the sun. Four frames show the corner shapes Round, Soft, Square and Leaf, and one line that swings further at each step shows the motion levels Off, Subtle, Wild and Storm.
-- **Removing something that keeps state keeps the state.** Taking away a sync job leaves its record of how both sides looked at the last run in place; deleting that record is a separate action with its own confirmation. Added again, the job still knows what was in sync.
-
-## 🔁 Changed
-
-- **The Version card carries one button.** "New · n" opens the window on Changes while something is unseen and on Release notes otherwise, and after an update the window still opens by itself on the notes. The separate "Release notes" button is gone where the app marks its changes.
-- **A phone app's native header may name the screen.** It shows the same name as the screen's tab in the bottom bar and does not count as a page heading. On the web, rule 30 stands as it is.
 
 ## 3.5.0 - 2026-10-13
 
