@@ -147,21 +147,21 @@
 
 ## Look settings
 
-ArrowLoop drew these glyphs for the segments of its Design, Corners and Motion selectors, so this table gets a column for it. BombVault and KnightLoader wear them too.
+ArrowLoop drew these glyphs for the segments of its Design, Corners and Motion selectors, so this table gets a column for it. BombVault, KnightLoader and CannonadeCommand wear them too.
 
-| Meaning | GlimStone | ArrowLoop | BombVault | KnightLoader |
-| --- | --- | --- | --- | --- |
-| Design selector, System | `IconThemeSystem` | `IconThemeSystem`, standard | `IconThemeSystem`, standard | `IconThemeSystem`, standard |
-| Design selector, Dark | `IconMoon` | `IconMoon`, standard | `IconMoon`, standard | `IconMoon`, standard |
-| Design selector, Light | `IconSun` | `IconSun`, standard | `IconSun`, standard | `IconSun`, standard |
-| Corners selector, Round | `IconCornerRound` | `IconCornerRound`, standard | `IconCornerRound`, standard | `IconCornerRound`, standard |
-| Corners selector, Soft | `IconCornerSoft` | `IconCornerSoft`, standard | `IconCornerSoft`, standard | `IconCornerSoft`, standard |
-| Corners selector, Square | `IconCornerSquare` | `IconCornerSquare`, standard | `IconCornerSquare`, standard | `IconCornerSquare`, standard |
-| Corners selector, the hidden leaf | `IconCornerLeaf` | `IconCornerLeaf`, standard | `IconCornerLeaf`, standard | `IconCornerLeaf`, standard |
-| Motion selector, Off | `IconMotionOff` | `IconMotionOff`, standard | `IconMotionOff`, standard | `IconMotionOff`, standard |
-| Motion selector, Subtle | `IconMotionSubtle` | `IconMotionSubtle`, standard | `IconMotionSubtle`, standard | `IconMotionSubtle`, standard |
-| Motion selector, Wild | `IconMotionWild` | `IconMotionWild`, standard | `IconMotionWild`, standard | `IconMotionWild`, standard |
-| Motion selector, the hidden storm | `IconMotionStorm` | `IconMotionStorm`, standard | `IconMotionStorm`, standard | `IconMotionStorm`, standard |
+| Meaning | GlimStone | ArrowLoop | BombVault | KnightLoader | CannonadeCommand |
+| --- | --- | --- | --- | --- | --- |
+| Design selector, System | `IconThemeSystem` | `IconThemeSystem`, standard | `IconThemeSystem`, standard | `IconThemeSystem`, standard | none |
+| Design selector, Dark | `IconMoon` | `IconMoon`, standard | `IconMoon`, standard | `IconMoon`, standard | none |
+| Design selector, Light | `IconSun` | `IconSun`, standard | `IconSun`, standard | `IconSun`, standard | none |
+| Corners selector, Round | `IconCornerRound` | `IconCornerRound`, standard | `IconCornerRound`, standard | `IconCornerRound`, standard | `IconCornerRound`, standard |
+| Corners selector, Soft | `IconCornerSoft` | `IconCornerSoft`, standard | `IconCornerSoft`, standard | `IconCornerSoft`, standard | `IconCornerSoft`, standard |
+| Corners selector, Square | `IconCornerSquare` | `IconCornerSquare`, standard | `IconCornerSquare`, standard | `IconCornerSquare`, standard | `IconCornerSquare`, standard |
+| Corners selector, the hidden leaf | `IconCornerLeaf` | `IconCornerLeaf`, standard | `IconCornerLeaf`, standard | `IconCornerLeaf`, standard | none |
+| Motion selector, Off | `IconMotionOff` | `IconMotionOff`, standard | `IconMotionOff`, standard | `IconMotionOff`, standard | `IconMotionOff`, standard |
+| Motion selector, Subtle | `IconMotionSubtle` | `IconMotionSubtle`, standard | `IconMotionSubtle`, standard | `IconMotionSubtle`, standard | `IconMotionSubtle`, standard |
+| Motion selector, Wild | `IconMotionWild` | `IconMotionWild`, standard | `IconMotionWild`, standard | `IconMotionWild`, standard | `IconMotionWild`, standard |
+| Motion selector, the hidden storm | `IconMotionStorm` | `IconMotionStorm`, standard | `IconMotionStorm`, standard | `IconMotionStorm`, standard | none |
 
 <br>
 
@@ -206,5 +206,6 @@ CannonadeCommand drew these for the rest of its settings selectors, so the table
 ## Where each app keeps its glyphs
 
 - **ArrowLoop:** `scripts/gen_glyphs.py` writes the app's glyphs, and the nine Look settings glyphs come from it.
+- **CannonadeCommand:** `scripts/settings.js` carries the selector glyphs in `SEG_GLYPHS`, each as its view box and paths copied from `glyphs.json`, with the settings tab glyphs beside them in `TAB_GLYPHS`; `scripts/cc-theme.js` carries the button glyphs in `GLYPHS`.
 - **BombVault:** `scripts/gen_glyphs.py` writes `web/src/components/glyphs.tsx` and `navGlyphs.tsx` from a copy of `glyphs.json` at 16px; the phone app shows the web launcher and uses the same files. `glyphFor.tsx` maps a translation key to a glyph when a button passes none; a button that passes one wins.
 - **KnightLoader:** `web/scripts/gen-glyphs.mjs` writes `web/src/lib/glyphs.tsx` at 22px with the ink at three quarters of the box; the Android app has no SVG and shows tinted bitmaps rendered from the same list into `mobile/assets/`. Every call site passes its glyph; Settings page glyphs are mapped in `pages/settings/pageIcons.tsx`. The browser extension copies the eye and a few others in `extension/src/`.
