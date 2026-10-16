@@ -62,8 +62,8 @@ function parseRects(svg) {
     let am;
     while ((am = attrRe.exec(m[1]))) attrs[am[1]] = am[2];
     rects.push({
-      x: Number(attrs.x),
-      y: Number(attrs.y),
+      x: Number(attrs.x ?? 0),
+      y: Number(attrs.y ?? 0),
       width: Number(attrs.width),
       height: Number(attrs.height),
       rx: attrs.rx ?? "0",

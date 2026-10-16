@@ -2,6 +2,12 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+## 🐛 Fixed
+
+- **The mark's SVG files are valid again.** The master leaves out `x` and `y` where they are 0, and the generator turned the missing value into `NaN`. Renderers fell back to 0, so nothing looked wrong, but three stones in `logo.svg`, both marks and both banners carried an invalid coordinate.
+
 ## 3.5.1 - 2026-10-14
 
 The Version card keeps one button, the Look settings get glyphs, and the rules now cover a phone app's own screen header and the removal of something that keeps state.

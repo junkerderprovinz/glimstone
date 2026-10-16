@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 331.5 172.9">
-  <rect x="41.5" y="NaN" width="80.4" height="30.4" rx="4" ry="4" fill="#B8B8B8"/>
-  <rect x="125.6" y="NaN" width="80.4" height="30.4" rx="4" ry="4" fill="#DADADA"/>
+  <rect x="41.5" y="0" width="80.4" height="30.4" rx="4" ry="4" fill="#B8B8B8"/>
+  <rect x="125.6" y="0" width="80.4" height="30.4" rx="4" ry="4" fill="#DADADA"/>
   <rect x="209.6" y="0" width="80.4" height="30.4" rx="4" ry="4" fill="#CFC9C0"/>
   <rect x="251.1" y="107" width="80.4" height="30.4" rx="4" ry="4" fill="#CFC9C0"/>
   <rect x="83.7" y="35.6" width="80.4" height="30.4" rx="4" ry="4" fill="#E6E2DA"/>
-  <rect x="NaN" y="107" width="80.4" height="30.4" rx="4" ry="4" fill="#E6E2DA"/>
+  <rect x="0" y="107" width="80.4" height="30.4" rx="4" ry="4" fill="#E6E2DA"/>
   <rect x="167.4" y="35.6" width="80.4" height="30.4" rx="4" ry="4" fill="#B8B8B8"/>
   <rect x="41.5" y="71.7" width="80.4" height="30.4" rx="4" ry="4" fill="#CFC9C0"/>
   <rect x="209.6" y="71.7" width="80.4" height="30.4" rx="4" ry="4" fill="#C9C9C9"/>
