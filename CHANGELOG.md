@@ -2,6 +2,16 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 3.6.1 - 2026-10-16
+
+A patch to the design language for What's new.
+
+## 🔁 Changed
+
+- **What's new shows one card per release.** The window lists a card for every release since the one the browser saw before, newest first. Each card is a sub-card with the version as its badge, the release notes always open, and that release's changes grouped by page. The tabs and the button for the notes are gone.
+- **The dots cover every release since the last one seen.** Each change belongs to the release that brought it, so an update over several releases marks all of them.
+- **Every new feature gets a dot.** Each feature a release lists under Added has an entry, also in a patch. A change that no page shows has its dot in the window only and counts as seen once the window closes.
+
 ## 3.6.0 - 2026-10-16
 
 GlimStone gets a site, and its components get behaviour contracts: which keys do what, where focus goes and what a screen reader hears, each row tested on every push. Select, Combobox and Slider arrive on Zag's state machines, and ConfirmDialog ships with the hook that gives it Escape and a focus trap. Smaller rules give the Version card one button and the Look settings their glyphs, and cover a phone app's own screen header, the removal of something that keeps state, a narrow web bottom bar and an Info tab in a simple app's Settings.
