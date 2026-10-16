@@ -1,0 +1,116 @@
+// What each component promises to do, row by row. The site draws these as the
+// behaviour table, and tests/contracts.spec.ts checks every row by its id.
+
+export interface Row {
+  id: string;
+  keys?: string[];
+  when: string;
+  then: string;
+}
+
+export interface Contract {
+  /** The WAI-ARIA Authoring Practices pattern the rows follow. */
+  pattern?: { name: string; url: string };
+  rows: Row[];
+}
+
+const APG = "https://www.w3.org/WAI/ARIA/apg/patterns/";
+
+export const CONTRACTS: Record<string, Contract> = {
+  Button: {
+    pattern: { name: "Button", url: `${APG}button/` },
+    rows: [
+      { id: "button-keys", keys: ["Enter", "Space"], when: "The button has focus", then: "It acts, once per press." },
+      { id: "button-name", when: "The label mode hides the words", then: "The label stays the accessible name." },
+      { id: "button-width", when: "The label mode changes", then: "The button keeps its width to the pixel." },
+      { id: "button-busy", when: "busy turns on", then: "The width stays and the button announces it is busy." },
+    ],
+  },
+  Toggle: {
+    pattern: { name: "Switch", url: `${APG}switch/` },
+    rows: [
+      { id: "toggle-role", when: "Always", then: "role=\"switch\" with aria-checked matching the state." },
+      { id: "toggle-space", keys: ["Space"], when: "The switch has focus", then: "It flips." },
+      { id: "toggle-enter", keys: ["Enter"], when: "The switch has focus", then: "It flips." },
+      { id: "toggle-name", when: "Always", then: "The label is the accessible name, also with hideLabel." },
+      { id: "toggle-disabled", when: "The switch is disabled", then: "A click changes nothing." },
+    ],
+  },
+  ConfirmDialog: {
+    pattern: { name: "Dialog (modal)", url: `${APG}dialog-modal/` },
+    rows: [
+      { id: "dialog-role", when: "The window is open", then: "role=\"dialog\", aria-modal, named by its title, described by its message." },
+      { id: "dialog-focus", when: "The window opens", then: "Focus lands on Cancel." },
+      { id: "dialog-escape", keys: ["Escape"], when: "The window is open", then: "It cancels." },
+      { id: "dialog-trap", keys: ["Tab", "Shift+Tab"], when: "Focus is on the last or first control", then: "Focus wraps inside the window." },
+      { id: "dialog-return", when: "The window closes", then: "Focus goes back to the control that opened it." },
+      { id: "dialog-backdrop", when: "A click lands outside the window", then: "It cancels." },
+    ],
+  },
+  DropdownListbox: {
+    pattern: { name: "Listbox", url: `${APG}listbox/` },
+    rows: [
+      { id: "list-open-focus", when: "The list opens", then: "Focus is on the selected option." },
+      { id: "list-arrows", keys: ["ArrowDown", "ArrowUp"], when: "An option has focus", then: "Focus moves to the next or previous option." },
+      { id: "list-home-end", keys: ["Home", "End"], when: "An option has focus", then: "Focus moves to the first or last option." },
+      { id: "list-typeahead", keys: ["a-z"], when: "An option has focus", then: "Focus jumps to the next option starting with the letter." },
+      { id: "list-escape", keys: ["Escape"], when: "The list is open", then: "It closes and focus returns to the trigger." },
+      { id: "list-outside", when: "A click lands outside", then: "It closes." },
+    ],
+  },
+  Select: {
+    pattern: { name: "Select-only combobox", url: `${APG}combobox/examples/combobox-select-only/` },
+    rows: [
+      { id: "select-open-focus", keys: ["Enter", "Space", "ArrowDown"], when: "The trigger has focus", then: "The list opens on the selected option." },
+      { id: "select-arrows", keys: ["ArrowDown", "ArrowUp"], when: "The list is open", then: "The highlight moves to the next or previous option." },
+      { id: "select-home-end", keys: ["Home", "End"], when: "The list is open", then: "The highlight moves to the first or last option." },
+      { id: "select-typeahead", keys: ["a-z"], when: "The list is open or closed", then: "The highlight jumps to the next option starting with the letter." },
+      { id: "select-enter", keys: ["Enter"], when: "An option is highlighted", then: "It is chosen and the list closes." },
+      { id: "select-escape", keys: ["Escape"], when: "The list is open", then: "It closes and focus stays on the trigger." },
+      { id: "select-outside", when: "A click lands outside", then: "It closes." },
+    ],
+  },
+  Combobox: {
+    pattern: { name: "Combobox", url: `${APG}combobox/` },
+    rows: [
+      { id: "combo-filter", when: "Somebody types", then: "The list opens and shows only matching entries." },
+      { id: "combo-pick", keys: ["ArrowDown", "Enter"], when: "The list is open", then: "The highlighted entry fills the field." },
+      { id: "combo-active", when: "An entry is highlighted", then: "The field points at it with aria-activedescendant; focus stays in the field." },
+      { id: "combo-escape", keys: ["Escape"], when: "The list is open", then: "It closes." },
+      { id: "combo-empty", when: "Nothing matches", then: "The list says so instead of vanishing." },
+    ],
+  },
+  Slider: {
+    pattern: { name: "Slider", url: `${APG}slider/` },
+    rows: [
+      { id: "slider-role", when: "Always", then: "role=\"slider\" with aria-valuenow, -min, -max and a readable aria-valuetext." },
+      { id: "slider-arrows", keys: ["ArrowRight", "ArrowLeft"], when: "The thumb has focus", then: "The value moves by one step." },
+      { id: "slider-page", keys: ["PageUp", "PageDown"], when: "The thumb has focus", then: "The value moves by a large step, ten by default." },
+      { id: "slider-home-end", keys: ["Home", "End"], when: "The thumb has focus", then: "The value jumps to the minimum or maximum." },
+    ],
+  },
+  InfoBubble: {
+    pattern: { name: "Tooltip", url: `${APG}tooltip/` },
+    rows: [
+      { id: "bubble-focus", keys: ["Tab"], when: "The (i) receives keyboard focus", then: "The bubble opens." },
+      { id: "bubble-hover", when: "The pointer rests on the (i)", then: "The bubble opens." },
+      { id: "bubble-escape", keys: ["Escape"], when: "The bubble is open", then: "It closes and focus stays on the (i)." },
+      { id: "bubble-described", when: "The bubble is open", then: "role=\"tooltip\", and the (i) points at it with aria-describedby." },
+      { id: "bubble-viewport", when: "The (i) sits at the window edge", then: "The bubble stays fully inside the window." },
+    ],
+  },
+  IconTipButton: {
+    rows: [
+      { id: "icontip-name", when: "Always", then: "The tip is the accessible name." },
+      { id: "icontip-focus", keys: ["Tab"], when: "The button receives keyboard focus", then: "The tip shows in the house bubble, not the browser's." },
+    ],
+  },
+  Toast: {
+    rows: [
+      { id: "toast-roles", when: "A toast appears", then: "A failure is role=\"alert\", a success role=\"status\"." },
+      { id: "toast-expire", when: "Nobody touches it", then: "It leaves after four seconds." },
+      { id: "toast-pause", when: "The pointer rests on it", then: "It stays, and the time left is kept." },
+      { id: "toast-dismiss", when: "The dismiss button is pressed", then: "Only that toast leaves." },
+    ],
+  },
+};

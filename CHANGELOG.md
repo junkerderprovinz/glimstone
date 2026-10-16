@@ -4,7 +4,29 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
+GlimStone gets a site, and its components get behaviour contracts: which keys do what, where focus goes and what a screen reader hears, each row tested on every push. Select, Combobox and Slider arrive on Zag's state machines, and ConfirmDialog ships with the hook that gives it Escape and a focus trap.
+
+**Adopting apps:**
+
+- **Select:** replace DropdownListbox with `Select`. Install `@zag-js/react` and `@zag-js/select`, copy `reference/react/Select.tsx` and the select rules from `reference/tokens.css` (`.glim-field-label` through `.glim-select-empty`). A plugin page without React uses `reference/select.ts`.
+- **Confirm:** copy `reference/react/useConfirm.tsx` and call `await confirm(question)` where the app has its own hook. BombVault's `useConfirm.tsx` and ArrowLoop's `ConfirmWindow.tsx` can then go, or keep only what goes beyond it, such as BombVault's phone sheet.
+- **Button:** copy `reference/react/Button.tsx` again.
+- **Glyphs:** copy `reference/react/glyphs.tsx` again.
+
+## ✨ Added
+
+- **The site.** [junkerderprovinz.github.io/glimstone](https://junkerderprovinz.github.io/glimstone/) shows every component live under every look a user can pick, with its source, its props read from the code and its rules. It is built from `reference/` itself, so it cannot drift from what an app copies.
+- **Behaviour contracts.** Every interactive component has a table of what it does for the keyboard, the focus and a screen reader, following the WAI-ARIA Authoring Practices. Each row is a Playwright test that drives the live component on every push, and the site prints the result beside the row.
+- **Select, Combobox and Slider.** Built on Zag, the state machines under Ark UI, which also run without a framework. Select picks from a short list, Combobox filters a long one as somebody types and says so when nothing matches, Slider sets a value on a range and reads it out in words.
+- **useConfirm.** The hook ConfirmDialog was always meant to have: a portal, Escape from anywhere, a Tab trap and focus back to the control that asked.
+
+## 🔁 Changed
+
+- **DropdownListbox is deprecated.** It leaves the trigger to the caller, so it cannot keep focus there or offer typeahead. It stays until every app has moved to Select.
+
 ## 🐛 Fixed
+
+- **A busy button says so.** It sets `aria-busy`, so a screen reader hears that it is working instead of only seeing a spinner.
 
 - **The mark's SVG files are valid again.** The master leaves out `x` and `y` where they are 0, and the generator turned the missing value into `NaN`. Renderers fell back to 0, so nothing looked wrong, but three stones in `logo.svg`, both marks and both banners carried an invalid coordinate.
 
