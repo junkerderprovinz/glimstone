@@ -165,6 +165,44 @@ ArrowLoop drew these glyphs for the segments of its Design, Corners and Motion s
 
 <br>
 
+## Selector segments
+
+CannonadeCommand drew these for the rest of its settings selectors, so the table has a column only for it. An app that adds one of these settings takes the same drawing and a column here.
+
+| Meaning | GlimStone | CannonadeCommand |
+| --- | --- | --- |
+| Colour mode, Accent | `IconAccent` | `IconAccent`, standard |
+| Colour mode, Rainbow | `IconRainbow` | `IconRainbow`, standard |
+| Colour mode, Flag | `IconFlag` | `IconFlag`, standard |
+| Badge style, Flat | `IconBadgeFlat` | `IconBadgeFlat`, standard |
+| Badge style, Glass | `IconBadgeGlass` | `IconBadgeGlass`, standard |
+| Density, Compact | `IconDensityCompact` | `IconDensityCompact`, standard |
+| Density, Normal | `IconDensityNormal` | `IconDensityNormal`, standard |
+| Density, Airy | `IconDensityAiry` | `IconDensityAiry`, standard |
+| Tile size, Small | `IconSizeSmall` | `IconSizeSmall`, standard |
+| Tile size, Medium | `IconSizeMedium` | `IconSizeMedium`, standard |
+| Tile size, Large | `IconSizeLarge` | `IconSizeLarge`, standard |
+| Icon colouring, Automatic | `IconTintAuto` | `IconTintAuto`, standard |
+| Icon colouring, Native icon | `IconTintNative` | `IconTintNative`, standard |
+| Icon colouring, Ink flatten | `IconTintFlatten` | `IconTintFlatten`, standard |
+| Icon colouring, Luminance tint | `IconTintLuminance` | `IconTintLuminance`, standard |
+| Temperature warning, 50 °C | `IconTempLow` | `IconTempLow`, standard |
+| Temperature warning, 60 °C | `IconTempMid` | `IconTempMid`, standard |
+| Temperature warning, 70 °C | `IconTempHigh` | `IconTempHigh`, standard |
+| Temperature warning, a value of one's own | `IconCustomValue` | `IconCustomValue`, standard |
+| Font weight, Thin | `IconWeightThin` | `IconWeightThin`, standard |
+| Font weight, Normal | `IconWeightRegular` | `IconWeightRegular`, standard |
+| Font weight, Medium | `IconWeightMedium` | `IconWeightMedium`, standard |
+| Font weight, Semibold | `IconWeightSemibold` | `IconWeightSemibold`, standard |
+| Font weight, Bold | `IconWeightBold` | `IconWeightBold`, standard |
+| Italic, Normal | `IconUpright` | `IconUpright`, standard |
+| Italic, Italic | `IconItalic` | `IconItalic`, standard |
+| Docker view, List | `IconViewList` | `IconViewList`, standard |
+| Docker view, Grid | `IconViewGrid` | `IconViewGrid`, standard |
+| Docker view, Folders | `IconFolder` | `IconFolder`, standard |
+
+<br>
+
 ## Where each app keeps its glyphs
 
 - **ArrowLoop:** `scripts/gen_glyphs.py` writes the app's glyphs, and the nine Look settings glyphs come from it.

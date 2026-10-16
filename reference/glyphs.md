@@ -212,6 +212,43 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 
 The Design selector's Dark and Light segments wear `IconMoon` and `IconSun` from the actions above, and System wears `IconThemeSystem`, a ring with one half filled. Each corner glyph is a frame drawn with the corners it names, so the four read as one family whatever corners the selector around them has. The motion glyphs are one line that swings further at each level, just as a level is the same animation with bigger numbers. `IconCornerLeaf` and `IconMotionStorm` belong to the hidden shape and the hidden level and stand only where the selector offers those.
 
+### Selector segments, the other choices a settings page offers
+
+| Name | Means | Source |
+| --- | --- | --- |
+| `IconAccent` | One accent colour for everything | Drawn for CannonadeCommand: a drop |
+| `IconRainbow` | A palette, one colour after the other | Drawn for CannonadeCommand: two bands of a rainbow |
+| `IconFlag` | A country's flag, its colours as the palette | Drawn for CannonadeCommand: a pole with a swallow-tailed flag |
+| `IconBadgeFlat` | Flat badges, one solid fill | Drawn for CannonadeCommand: a pill |
+| `IconBadgeGlass` | Glass badges, a sheen on the fill | Drawn for CannonadeCommand: a pill with two slanted streaks of light cut out |
+| `IconDensityCompact` | Compact rows | Drawn for CannonadeCommand: four rows close together |
+| `IconDensityNormal` | Rows at the normal spacing | Drawn for CannonadeCommand: three rows |
+| `IconDensityAiry` | Airy rows | Drawn for CannonadeCommand: two rows far apart |
+| `IconSizeSmall` | Small tiles | Drawn for CannonadeCommand: a small tile, in the shared 14-unit box |
+| `IconSizeMedium` | Medium tiles | Drawn for CannonadeCommand: a medium tile, in the shared 14-unit box |
+| `IconSizeLarge` | Large tiles | Drawn for CannonadeCommand: a large tile, in the shared 14-unit box |
+| `IconTintAuto` | Let the app choose how each logo is coloured | Drawn for CannonadeCommand: a four-pointed spark |
+| `IconTintNative` | Keep each logo as it ships | Drawn for CannonadeCommand: a picture in its frame, a hill and a sun |
+| `IconTintFlatten` | Redraw each logo in one solid ink | Drawn for CannonadeCommand: a rubber stamp |
+| `IconTintLuminance` | Tint each logo and keep its light and dark | Drawn for CannonadeCommand: a drop, its left half filled |
+| `IconTempLow` | A low temperature threshold | Drawn for CannonadeCommand: a thermometer filled to its bulb |
+| `IconTempMid` | A middle temperature threshold | Drawn for CannonadeCommand: a thermometer filled halfway |
+| `IconTempHigh` | A high temperature threshold | Drawn for CannonadeCommand: a thermometer filled to the top |
+| `IconCustomValue` | A value of one's own, typed in a field | Drawn for CannonadeCommand: a field with a text caret |
+| `IconWeightThin` | Thin type | Drawn for CannonadeCommand: a capital A in thin strokes |
+| `IconWeightRegular` | Regular type | Drawn for CannonadeCommand: a capital A in regular strokes |
+| `IconWeightMedium` | Medium type | Drawn for CannonadeCommand: a capital A in medium strokes |
+| `IconWeightSemibold` | Semibold type | Drawn for CannonadeCommand: a capital A in semibold strokes |
+| `IconWeightBold` | Bold type | Drawn for CannonadeCommand: a capital A in bold strokes |
+| `IconUpright` | Upright type | Drawn for CannonadeCommand: a capital I with its serifs |
+| `IconItalic` | Italic type | Drawn for CannonadeCommand: the capital I leaning forward |
+| `IconViewList` | List view | Drawn for CannonadeCommand: three rows, each a dot and a line |
+| `IconViewGrid` | Grid view | Drawn for CannonadeCommand: four tiles in a square |
+
+Each set reads as one drawing that changes along the choice it stands for. Accent, Rainbow and Flag are the three colour modes, and Accent's drop comes back half filled in `IconTintLuminance`, the treatment that keeps a logo's light and dark under the colour. The density rows grow fewer as they move apart, the thermometers fill one step at a time, and the five weights are one letter drawn with thicker strokes. A folder view wears `IconFolder` from the domain glyphs, so the view selector needs only the list and the grid.
+
+**The three tile sizes keep the full 14-unit box.** Rule 3 would crop each to its own ink and draw all three the same size, when the difference in size is what they mean. Every other glyph here is cropped as usual.
+
 **Pairs share one drawing turned or mirrored.** `IconFirst` is `IconLatest` mirrored top to bottom and `IconMoveDown` is `IconMoveUp` mirrored, so the two halves of each pair cannot drift apart. `IconEye` and `IconEyeOff` are Streamline's `visible` and `invisible-1`, and a Show phrase button and the reveal toggle in a password field wear the same two. `IconMail` rests on a mail button and `IconMailOpen` takes its place under the pointer or a finger; `MAIL_SVG` in `appMarks.ts` carries the pair. `IconManual`, the closed book, and `IconManualOpen` do the same on the manual button, and `MANUAL_SVG` carries them.
 
 **A brand mark is the brand's own and goes only where it is meant.** `IconCoffee` is Buy Me a Coffee's mark and stands only on the button that leads there, and `IconCaptcha` is reCAPTCHA's mark and stands only where a captcha is the subject. `IconContainers` and `IconGithub` follow the same rule (section 1).
