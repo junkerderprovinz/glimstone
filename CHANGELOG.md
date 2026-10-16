@@ -4,7 +4,7 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
-GlimStone gets a site, and its components get behaviour contracts: which keys do what, where focus goes and what a screen reader hears, each row tested on every push. Select, Combobox and Slider arrive on Zag's state machines, and ConfirmDialog ships with the hook that gives it Escape and a focus trap.
+GlimStone gets a site, and its components get behaviour contracts: which keys do what, where focus goes and what a screen reader hears, each row tested on every push. Select, Combobox and Slider arrive on Zag's state machines, and ConfirmDialog ships with the hook that gives it Escape and a focus trap. Two smaller rules settle a narrow web bottom bar and give a simple app's Settings an Info tab.
 
 **Adopting apps:**
 
@@ -12,6 +12,8 @@ GlimStone gets a site, and its components get behaviour contracts: which keys do
 - **Confirm:** copy `reference/react/useConfirm.tsx` and call `await confirm(question)` where the app has its own hook. BombVault's `useConfirm.tsx` and ArrowLoop's `ConfirmWindow.tsx` can then go, or keep only what goes beyond it, such as BombVault's phone sheet.
 - **Button:** copy `reference/react/Button.tsx` again.
 - **Glyphs:** copy `reference/react/glyphs.tsx` again.
+- **Bottom bar:** below 45rem, show glyphs only in the web bar whatever its axis says, with the page name as `aria-label` and in the tip bubble, and the glyph at 28px.
+- **Settings of a simple app:** add an Info tab after App, holding the Version, Help and About cards; the About card leaves General.
 
 ## ✨ Added
 
@@ -23,11 +25,12 @@ GlimStone gets a site, and its components get behaviour contracts: which keys do
 ## 🔁 Changed
 
 - **DropdownListbox is deprecated.** It leaves the trigger to the caller, so it cannot keep focus there or offer typeahead. It stays until every app has moved to Select.
+- **A narrow web bar shows glyphs only.** Below 45rem a fifth of a phone holds no page name in German, Greek and many other languages, and a bar that switched by language would look different on the same phone. From 45rem on the axis decides again. Found in BombVault, where Wiederherstellung ran into its neighbour.
+- **A simple app's Settings get an Info tab.** It is the Info tile of a Settings made of tiles, so it comes last and holds Version, Help and About in that order.
 
 ## 🐛 Fixed
 
 - **A busy button says so.** It sets `aria-busy`, so a screen reader hears that it is working instead of only seeing a spinner.
-
 - **The mark's SVG files are valid again.** The master leaves out `x` and `y` where they are 0, and the generator turned the missing value into `NaN`. Renderers fell back to 0, so nothing looked wrong, but three stones in `logo.svg`, both marks and both banners carried an invalid coordinate.
 
 ## 3.5.1 - 2026-10-14
