@@ -76,6 +76,16 @@
 
 <br>
 
+## Resume
+
+CannonadeCommand drew `IconResume` for its resume buttons, so this table has a column for it. Its other action glyphs are not mapped here yet.
+
+| Meaning | GlimStone | BombVault | KnightLoader | CannonadeCommand |
+| --- | --- | --- | --- | --- |
+| Resume after a pause | `IconResume` | `IconSchedules` on a paused schedule, switch | `IconPlay` on a paused download, switch | `IconResume`, standard |
+
+<br>
+
 ## Navigation and domain
 
 | Meaning | GlimStone | BombVault | KnightLoader |

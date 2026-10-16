@@ -75,6 +75,7 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconSearch` | Search | Streamline `interface-essential/magnifying-glass.svg` |
 | `IconPlay` | Start, run now | Streamline `entertainment/button-play.svg` |
 | `IconPause` | Pause | Streamline `entertainment/button-pause-2.svg` |
+| `IconResume` | Resume after a pause | Drawn for CannonadeCommand: the play triangle with a bar before it |
 | `IconStop` | Stop, abort | Streamline `entertainment/button-stop.svg` |
 | `IconPower` | Power on and off | Streamline `entertainment/button-power-1.svg` |
 | `IconTrash` | Delete | Streamline `interface-essential/recycle-bin-2.svg` |

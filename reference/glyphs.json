@@ -104,6 +104,19 @@
   "svg": "<g>\n    <path fill=\"currentColor\" fill-rule=\"evenodd\" d=\"M0 1.5C0 0.671573 0.671573 0 1.5 0H4c0.82843 0 1.5 0.671573 1.5 1.5v11c0 0.8284 -0.67157 1.5 -1.5 1.5H1.5C0.671573 14 0 13.3284 0 12.5v-11ZM10 0c-0.82843 0 -1.5 0.671573 -1.5 1.5v11c0 0.8284 0.67157 1.5 1.5 1.5h2.5c0.8284 0 1.5 -0.6716 1.5 -1.5v-11c0 -0.828427 -0.6716 -1.5 -1.5 -1.5H10Z\" clip-rule=\"evenodd\" stroke-width=\"1\"></path>\n  </g>"
  },
  {
+  "name": "IconResume",
+  "means": "Resume after a pause",
+  "source": "Drawn for CannonadeCommand: the play triangle with a bar before it",
+  "viewBox": "0 0.333 13.335 13.335",
+  "ink": [
+   0,
+   0.625,
+   13.335,
+   12.75
+  ],
+  "svg": "<path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M0 2.25A1.625 1.625 0 0 1 3.25 2.25V11.75A1.625 1.625 0 0 1 0 11.75ZM4.75 2.35Q4.75 0.75 6.08 1.65L12.67 6.1Q14 7 12.67 7.9L6.08 12.35Q4.75 13.25 4.75 11.65Z\" />"
+ },
+ {
   "name": "IconStop",
   "means": "Stop, abort",
   "source": "Streamline entertainment/button-stop.svg",
