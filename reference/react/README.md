@@ -21,8 +21,11 @@ would then have to be re-applied by hand in three places.
 | `Toggle.tsx` | The switch. Never a checkbox |
 | `Card.tsx` | The surface, and the one place a section heading is drawn |
 | `Badge.tsx` | Status pills and the filled section heading the card draws |
-| `DropdownListbox.tsx` | The select replacement, portal-rendered so it can never be clipped |
-| `ConfirmDialog.tsx` | The confirm surface for a destructive action |
+| `Select.tsx` | Picks one value from a short list, on Zag's select machine: typeahead, focus kept on the trigger, the list in a portal |
+| `Combobox.tsx` | A field that filters a long list as somebody types, on Zag's combobox machine |
+| `Slider.tsx` | A value on a range, on Zag's slider machine, with the value in words beside the label |
+| `DropdownListbox.tsx` | Deprecated, use `Select`. The list panel of a dropdown whose trigger the caller draws |
+| `ConfirmDialog.tsx` + `useConfirm.tsx` | The confirm surface for a destructive action, and the hook that gives it a portal, Escape, the Tab trap and focus back to the control that asked |
 | `Toast.tsx` + `toastEngine.ts` | Transient feedback, including the shake a failing control does |
 | `InfoBubble.tsx`, `IconTipButton.tsx` | The "(i)" explanation and the hover name on an icon-only control |
 | `AboutCard.tsx` | The Info tile: `InfoTile` renders its Version, Help and About cards in their fixed order, with the app's own "New · n" button in the Version card where it has one and "Release notes" where it has not, and each is exported on its own (`InfoVersionCard`, `InfoHelpCard`, `InfoAboutCard`). `AboutCard` takes the 3.2.0 props and lays them out as the tile |
@@ -32,7 +35,9 @@ would then have to be re-applied by hand in three places.
 | `PaypalDialog.tsx` + `usePaypalButtons.ts` | How often and how much in house controls, then PayPal's wallet and card buttons |
 | `UnavailableNotice.tsx` | What stands where a control would be, when the environment forbids the thing entirely |
 | `useLabelMode.ts`, `useTipBubble.tsx`, `bubblePosition.ts`, `portalHue.ts` | The small hooks the components above need |
-| `glyphs.tsx` | The two marks the components draw themselves, plus the seam an app registers its own icon set through |
+| `glyphs.tsx` | The four marks the components draw themselves (close, cancel, check, expand), plus the seam an app registers its own icon set through |
+
+Select, Combobox and Slider need `@zag-js/react` and their machine package (`@zag-js/select`, `@zag-js/combobox`, `@zag-js/slider`) in the app. The interactive ones carry a behaviour contract, tested on every push; see "Behaviour contracts" in the design language and each component's page on the [site](https://junkerderprovinz.github.io/glimstone/).
 
 ## What is deliberately NOT here
 
