@@ -2,6 +2,24 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 3.6.2 - 2026-10-19
+
+A patch with one glyph and one rule. `IconStar` marks the default entry, and a card's own buttons move to its foot.
+
+**Adopting apps:**
+
+- **Glyphs:** copy `IconStar` from `reference/glyphs.json` and put it on the badge that marks the default entry and on the button that makes an entry the default.
+- **Cards:** move the buttons that act on a whole card into one row at the card's foot, aligned to the end. Buttons in a row stay where they are.
+- **Version:** copy `reference/react/version.ts` again.
+
+## ✨ Added
+
+- **`IconStar` for the default.** Tabler's filled star marks the entry that is used when nothing else is named, such as the sign-in a login uses unless another one is picked. BombVault wears it on its Default badge and its Make default button.
+
+## 🎨 Design
+
+- **A card's own buttons stand at its bottom right.** Actions for the whole card, such as "Add storage location" or "Add sign-in", go in one row at the card's foot, aligned to the end, where a window keeps its buttons too. A button that acts on one row stays in that row.
+
 ## 3.6.1 - 2026-10-16
 
 A patch to the design language for What's new.
