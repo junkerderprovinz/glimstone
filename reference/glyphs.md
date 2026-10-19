@@ -130,6 +130,7 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconMailOpen` | Write to us, under the pointer or a finger | Material Design Icons `email-open` (Apache 2.0) |
 | `IconManual` | Manual | Drawn for BombVault's Help card |
 | `IconManualOpen` | Manual, under the pointer, a finger or the focus | Drawn for BombVault's Help card |
+| `IconStar` | Default, preferred | Tabler Icons, filled `star` (MIT) |
 
 ### Navigation and domain
 
