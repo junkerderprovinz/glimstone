@@ -27,6 +27,7 @@
 | Edit | `IconPencil` | `IconPencil`, standard | `IconPencil`, standard |
 | Copy | `IconCopy` | `IconCopy`, standard | `IconCopy`, standard |
 | Verify, confirmed | `IconCheck` | `IconCheck`, standard | `IconCheck`, standard |
+| Acknowledge a note, "Got it" | `IconCheck` | `IconCheck`, standard on every "Got it" button | `IconCheck` on such a button |
 | Connect, pair | `IconLink` | `IconLink`, standard | `IconLink`, standard |
 | Credentials, key | `IconKey` | `IconKey`, standard | `IconKey`, standard |
 | Revoke a key | `IconKeyRevoke` | `IconKeyRevoke`, standard | none |
