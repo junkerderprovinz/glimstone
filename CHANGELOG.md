@@ -2,11 +2,14 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 3.6.3 - 2026-10-26
+
+A patch for one crash. A number field that a React page hides while its row stays no longer blanks the page.
 
 **Adopting apps:**
 
-- **Number fields in React:** render the input inside your own `<span class="glim-num-wrap">` and keep attaching `attachNumberSteppers` to the input. The helper then leaves the input where it is.
+- **Number fields in React:** render the input inside your own `<span class="glim-num-wrap">`, copy `reference/numberField.ts` again and keep attaching `attachNumberSteppers` to the input. The helper then leaves the input where it is.
+- **Version:** copy `reference/react/version.ts` again.
 
 ## 🐛 Fixed
 
