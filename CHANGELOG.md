@@ -2,6 +2,16 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+**Adopting apps:**
+
+- **Number fields in React:** render the input inside your own `<span class="glim-num-wrap">` and keep attaching `attachNumberSteppers` to the input. The helper then leaves the input where it is.
+
+## 🐛 Fixed
+
+- **Hiding a number field no longer blanks a React page.** The steppers moved the input into a span of their own, and React later looked for it in its old place when the field went away while its row stayed. A wrap the host draws itself is used as it is, so nothing moves; a bare input is still wrapped as before.
+
 ## 3.6.2 - 2026-10-19
 
 A patch with one glyph and one rule. `IconStar` marks the default entry, and a card's own buttons move to its foot.
