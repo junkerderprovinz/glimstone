@@ -4,7 +4,7 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## 3.7.0 - 2026-10-27
 
-Nine findings from TowerTorch, the Unraid plugin that restyles the host's own pages. Two rules keep a live page fast, the tooltip leaves structure alone, the label engine reaches buttons the app does not own, a move mode wiggles, and the glyph set grows by six and redraws its grip.
+Nine findings from TowerTorch, the Unraid plugin that restyles the host's own pages. Two rules keep a live page fast, the tooltip leaves structure alone, the label engine reaches buttons the app does not own, a move mode wiggles, and the glyph set grows by six and redraws its grip. Besides, a star marks the default entry, a card's own buttons move to its foot, What's new shows one card per release, and a number field that React hides no longer blanks the page.
 
 **Adopting apps:**
 
@@ -14,6 +14,9 @@ Nine findings from TowerTorch, the Unraid plugin that restyles the host's own pa
 - **Move mode:** copy the `--motion-row-wiggle-*` dials at every level, the keyframe `glim-row-wiggle` and the `.glim-move-mode` rules from `reference/tokens.css`, and put `.glim-move-mode` on a list while its rows can be reordered.
 - **Charts:** draw a second series as a line in the text colour without fill.
 - **Badges:** move a status that belongs to a name off the picture and into its own badge before the name.
+- **Default entry:** copy `IconStar` from `reference/glyphs.json` and put it on the badge that marks the default entry and on the button that makes an entry the default.
+- **Cards:** move the buttons that act on a whole card into one row at the card's foot, aligned to the end. Buttons in a row stay where they are.
+- **Number fields in React:** render the input inside your own `<span class="glim-num-wrap">`, copy `reference/numberField.ts` again and keep attaching `attachNumberSteppers` to the input. The helper then leaves the input where it is.
 - **Version:** copy `reference/react/version.ts` again.
 
 ## ✨ Added
@@ -23,61 +26,26 @@ Nine findings from TowerTorch, the Unraid plugin that restyles the host's own pa
 - **The label engine on markup the app does not own.** The glyph is a background layer of the host's button in the button's own ink, the input stays the real control, a renamed input is followed through its own `value` setter, and a caption the table does not know keeps its words. The section carries the table of Unraid's English and German captions.
 - **Move mode.** While a switch keeps a list sortable, its rows wiggle a fraction of a degree, out of step with their neighbours, and the row in hand holds still. Three new motion dials carry it at every level, and nothing moves at `off` or under reduced motion.
 - **A grip badge for a row that drags whole**, and a folder picture of three filled shapes that opens under the pointer.
+- **`IconStar` for the default.** Tabler's filled star marks the entry that is used when nothing else is named, such as the sign-in a login uses unless another one is picked. BombVault wears it on its Default badge and its Make default button.
 - **Six glyphs.** `IconMove` is `IconMoveUp` turned to point right, `IconCompute` is a calculator, and `IconLabelText`, `IconLabelTextGlyph`, `IconLabelGlyph` and `IconLabelReactive` are the four choices of a Labels selector.
 
 ## 🎨 Design
 
 - **A status that belongs to a name is a badge before the name.** It matches the name badge's height and shape and keeps the state's own colour in every colour mode. TowerTorch first put the shield on the corner of the folder picture and then on its front, where only its shape said anything.
 - **A chart's second series is a line in the text colour.** The first keeps the accent and its fill. A paler accent beside it could not be told apart.
+- **A card's own buttons stand at its bottom right.** Actions for the whole card, such as "Add storage location" or "Add sign-in", go in one row at the card's foot, aligned to the end, where a window keeps its buttons too. A button that acts on one row stays in that row.
 
 ## 🔁 Changed
 
 - **`IconGrip` is two columns of three dots**, the handle TowerTorch and KnightLoader both draw, in place of Streamline's `hand-grab`.
+- **What's new shows one card per release.** The window lists a card for every release since the one the browser saw before, newest first. Each card is a sub-card with the version as its badge, the release notes always open, and that release's changes grouped by page. The tabs and the button for the notes are gone.
+- **The dots cover every release since the last one seen.** Each change belongs to the release that brought it, so an update over several releases marks all of them.
+- **Every new feature gets a dot.** Each feature a release lists under Added has an entry. A change that no page shows has its dot in the window only and counts as seen once the window closes.
 
 ## 🐛 Fixed
 
 - **A title on structure is no longer turned into a bubble.** `wireTooltips()` took the `title` of anything under the pointer, and on Unraid's Dashboard that was the key each tile is saved under, so a pointer resting on a tile while the page started left the tiles empty. It now takes the `title` of controls only.
-
-## 3.6.3 - 2026-10-26
-
-A patch for one crash. A number field that a React page hides while its row stays no longer blanks the page.
-
-**Adopting apps:**
-
-- **Number fields in React:** render the input inside your own `<span class="glim-num-wrap">`, copy `reference/numberField.ts` again and keep attaching `attachNumberSteppers` to the input. The helper then leaves the input where it is.
-- **Version:** copy `reference/react/version.ts` again.
-
-## 🐛 Fixed
-
 - **Hiding a number field no longer blanks a React page.** The steppers moved the input into a span of their own, and React later looked for it in its old place when the field went away while its row stayed. A wrap the host draws itself is used as it is, so nothing moves; a bare input is still wrapped as before.
-
-## 3.6.2 - 2026-10-19
-
-A patch with one glyph and one rule. `IconStar` marks the default entry, and a card's own buttons move to its foot.
-
-**Adopting apps:**
-
-- **Glyphs:** copy `IconStar` from `reference/glyphs.json` and put it on the badge that marks the default entry and on the button that makes an entry the default.
-- **Cards:** move the buttons that act on a whole card into one row at the card's foot, aligned to the end. Buttons in a row stay where they are.
-- **Version:** copy `reference/react/version.ts` again.
-
-## ✨ Added
-
-- **`IconStar` for the default.** Tabler's filled star marks the entry that is used when nothing else is named, such as the sign-in a login uses unless another one is picked. BombVault wears it on its Default badge and its Make default button.
-
-## 🎨 Design
-
-- **A card's own buttons stand at its bottom right.** Actions for the whole card, such as "Add storage location" or "Add sign-in", go in one row at the card's foot, aligned to the end, where a window keeps its buttons too. A button that acts on one row stays in that row.
-
-## 3.6.1 - 2026-10-16
-
-A patch to the design language for What's new.
-
-## 🔁 Changed
-
-- **What's new shows one card per release.** The window lists a card for every release since the one the browser saw before, newest first. Each card is a sub-card with the version as its badge, the release notes always open, and that release's changes grouped by page. The tabs and the button for the notes are gone.
-- **The dots cover every release since the last one seen.** Each change belongs to the release that brought it, so an update over several releases marks all of them.
-- **Every new feature gets a dot.** Each feature a release lists under Added has an entry, also in a patch. A change that no page shows has its dot in the window only and counts as seen once the window closes.
 
 ## 3.6.0 - 2026-10-16
 
