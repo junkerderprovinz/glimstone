@@ -2,6 +2,41 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+Nine findings from TowerTorch, the Unraid plugin that restyles the host's own pages. Two rules keep a live page fast, the tooltip leaves structure alone, the label engine reaches buttons the app does not own, a move mode wiggles, and the glyph set grows by six and redraws its grip.
+
+**Adopting apps:**
+
+- **Stylesheets:** rewrite every `:has()` that tests `[class…]` or `[style…]` to test a class by name, and give every bar or meter that changes all the time `contain: size layout` and a real height.
+- **Tooltips:** copy `reference/tooltip.ts` again. A `title` on a table, a row group, a card or a section stays where it is.
+- **Glyphs:** copy `IconGrip` from `reference/glyphs.json` again, and take `IconMove`, `IconCompute` and the four label glyphs where the app has those meanings.
+- **Move mode:** copy the `--motion-row-wiggle-*` dials at every level, the keyframe `glim-row-wiggle` and the `.glim-move-mode` rules from `reference/tokens.css`, and put `.glim-move-mode` on a list while its rows can be reordered.
+- **Charts:** draw a second series as a line in the text colour without fill.
+- **Badges:** move a status that belongs to a name off the picture and into its own badge before the name.
+
+## ✨ Added
+
+- **Rule 36: a `:has()` never tests the `class` or `style` attribute.** Chrome then restyles the whole page whenever a class or an inline style changes anywhere. On Unraid's Dashboard, which animates its CPU bars through inline styles, rewriting those rules took the total blocking time from 8.4 s to 12 ms. `reference/react/check.sh` now fails on such a `:has()` in `reference/`.
+- **Rule 37: a bar that changes all the time is contained.** `contain: size layout` keeps a frame's change inside the bar, where Firefox would otherwise lay out every ancestor again. On the same Dashboard that took the blocked time from 140 ms in every second to 0 to 4 ms.
+- **The label engine on markup the app does not own.** The glyph is a background layer of the host's button in the button's own ink, the input stays the real control, a renamed input is followed through its own `value` setter, and a caption the table does not know keeps its words. The section carries the table of Unraid's English and German captions.
+- **Move mode.** While a switch keeps a list sortable, its rows wiggle a fraction of a degree, out of step with their neighbours, and the row in hand holds still. Three new motion dials carry it at every level, and nothing moves at `off` or under reduced motion.
+- **A grip badge for a row that drags whole**, and a folder picture of three filled shapes that opens under the pointer.
+- **Six glyphs.** `IconMove` is `IconMoveUp` turned to point right, `IconCompute` is a calculator, and `IconLabelText`, `IconLabelTextGlyph`, `IconLabelGlyph` and `IconLabelReactive` are the four choices of a Labels selector.
+
+## 🎨 Design
+
+- **A status that belongs to a name is a badge before the name.** It matches the name badge's height and shape and keeps the state's own colour in every colour mode. TowerTorch first put the shield on the corner of the folder picture and then on its front, where only its shape said anything.
+- **A chart's second series is a line in the text colour.** The first keeps the accent and its fill. A paler accent beside it could not be told apart.
+
+## 🔁 Changed
+
+- **`IconGrip` is two columns of three dots**, the handle TowerTorch and KnightLoader both draw, in place of Streamline's `hand-grab`.
+
+## 🐛 Fixed
+
+- **A title on structure is no longer turned into a bubble.** `wireTooltips()` took the `title` of anything under the pointer, and on Unraid's Dashboard that was the key each tile is saved under, so a pointer resting on a tile while the page started left the tiles empty. It now takes the `title` of controls only.
+
 ## 3.6.3 - 2026-10-26
 
 A patch for one crash. A number field that a React page hides while its row stays no longer blanks the page.
