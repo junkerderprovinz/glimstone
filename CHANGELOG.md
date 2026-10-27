@@ -2,7 +2,7 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 3.7.0 - 2026-10-27
 
 Nine findings from TowerTorch, the Unraid plugin that restyles the host's own pages. Two rules keep a live page fast, the tooltip leaves structure alone, the label engine reaches buttons the app does not own, a move mode wiggles, and the glyph set grows by six and redraws its grip.
 
@@ -14,6 +14,7 @@ Nine findings from TowerTorch, the Unraid plugin that restyles the host's own pa
 - **Move mode:** copy the `--motion-row-wiggle-*` dials at every level, the keyframe `glim-row-wiggle` and the `.glim-move-mode` rules from `reference/tokens.css`, and put `.glim-move-mode` on a list while its rows can be reordered.
 - **Charts:** draw a second series as a line in the text colour without fill.
 - **Badges:** move a status that belongs to a name off the picture and into its own badge before the name.
+- **Version:** copy `reference/react/version.ts` again.
 
 ## ✨ Added
 
