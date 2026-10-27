@@ -39,12 +39,14 @@
 | Save | `IconSave` | `IconSave`, switch | none |
 | Unlock, clear a lock | `IconUnlock` | `IconUnlock`, standard | none |
 | Prune, reclaim space | `IconPrune` | `IconPrune`, standard | none |
+| Compute, calculate | `IconCompute` | none | none |
 | Back | `IconBack` | `IconBack`, standard | `IconBack`, standard |
 | Next, forward | `IconForward` | `IconForward`, standard | `IconForward`, standard |
 | Jump to the newest entry, the end | `IconLatest` | `IconLatest`, standard | `IconLatest`, standard |
 | Jump to the start | `IconFirst` | none | `IconFirst`, standard |
 | Move up one | `IconMoveUp` | none | `IconMoveUp`, standard |
 | Move down one | `IconMoveDown` | none | `IconMoveDown`, standard |
+| Move elsewhere | `IconMove` | none | none |
 | Expand | `IconExpand` | none | `IconExpand`, standard |
 | Collapse | `IconCollapse` | none | `IconCollapse`, standard |
 | Select all | `IconSelectAll` | `IconSelectAll`, standard | `IconSelectAll`, standard |
@@ -53,7 +55,7 @@
 | Filter | `IconFilter` | none | `IconFilter`, standard |
 | Pin | `IconPin` | none | `IconPin`, standard |
 | Priority | `IconPriority` | none | `IconPriority`, standard |
-| Drag to reorder | `IconGrip` | none | `IconGrip`, standard |
+| Drag to reorder | `IconGrip` | none | `IconGrip`, switch |
 | Open a service's own site | `IconExternalLink` | none | `IconExternalLink`, standard |
 | Warning | `IconWarning` | none | `IconWarning`, standard |
 | Right away | `IconBolt` | none | `IconBolt`, standard |
@@ -166,8 +168,27 @@ ArrowLoop drew these glyphs for the segments of its Design, Corners and Motion s
 
 <br>
 
+## TowerTorch
+
+TowerTorch wears the assortment on its own controls and on the Unraid buttons it draws as badges, and it drew the glyphs below for them. Its other rows are not listed here yet.
+
+| Meaning | GlimStone | TowerTorch |
+| --- | --- | --- |
+| Drag to reorder | `IconGrip` | `Grip`, standard |
+| Move elsewhere | `IconMove` | `Move`, standard |
+| Compute, calculate | `IconCompute` | `Compute`, standard |
+| Labels selector, Text | `IconLabelText` | `IconLabelText`, standard |
+| Labels selector, Text and glyph | `IconLabelTextGlyph` | `IconLabelTextGlyph`, standard |
+| Labels selector, Glyph | `IconLabelGlyph` | `IconLabelGlyph`, standard |
+| Labels selector, Reactive | `IconLabelReactive` | `IconLabelReactive`, standard |
+
+KnightLoader still draws its own grip, three rows of two dots in an 8 by 12 box, which is why its row above says switch.
+
+<br>
+
 ## Where each app keeps its glyphs
 
 - **ArrowLoop:** `scripts/gen_glyphs.py` writes the app's glyphs, and the nine Look settings glyphs come from it.
 - **BombVault:** `scripts/gen_glyphs.py` writes `web/src/components/glyphs.tsx` and `navGlyphs.tsx` from a copy of `glyphs.json` at 16px; the phone app shows the web launcher and uses the same files. `glyphFor.tsx` maps a translation key to a glyph when a button passes none; a button that passes one wins.
 - **KnightLoader:** `web/scripts/gen-glyphs.mjs` writes `web/src/lib/glyphs.tsx` at 22px with the ink at three quarters of the box; the Android app has no SVG and shows tinted bitmaps rendered from the same list into `mobile/assets/`. Every call site passes its glyph; Settings page glyphs are mapped in `pages/settings/pageIcons.tsx`. The browser extension copies the eye and a few others in `extension/src/`.
+- **TowerTorch:** `scripts/cc-theme.js` holds a copy of every entry it draws, the square viewBox and the drawing, for its own controls and for Unraid's buttons; Unraid's own icons keep their Font Awesome. The glyphs of its settings selectors sit in `scripts/settings.js`, and `scripts/labels.js` maps Unraid's button captions to glyph names.

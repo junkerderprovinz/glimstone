@@ -96,12 +96,14 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconSave` | Save | Material Design Icons `content-save` (Apache 2.0) |
 | `IconUnlock` | Unlock, clear a lock | Drawn for GlimStone |
 | `IconPrune` | Prune, reclaim space | Streamline `computer-devices/shredder.svg` |
+| `IconCompute` | Compute, calculate | Drawn for TowerTorch, commit `a13c2ef`: a calculator |
 | `IconBack` | Back | KnightLoader's drawing on a 20-unit grid |
 | `IconForward` | Next, forward | KnightLoader's drawing on a 20-unit grid |
 | `IconLatest` | Jump to the newest entry, the end | Streamline `interface-essential/arrow-down-2.svg` |
 | `IconFirst` | Jump to the start | `IconLatest` mirrored |
 | `IconMoveUp` | Move up one | Streamline `interface-essential/arrow-up-1.svg` |
 | `IconMoveDown` | Move down one | Streamline `arrow-up-1` mirrored |
+| `IconMove` | Move elsewhere | Streamline `arrow-up-1` turned to point right |
 | `IconExpand` | Expand | KnightLoader's drawing on a 20-unit grid |
 | `IconCollapse` | Collapse | KnightLoader's drawing on a 20-unit grid |
 | `IconSelectAll` | Select all | Streamline `interface-essential/check-square.svg` |
@@ -110,7 +112,7 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconFilter` | Filter | Streamline `interface-essential/filter-2.svg` |
 | `IconPin` | Pin | KnightLoader's drawing on a 20-unit grid |
 | `IconPriority` | Priority | KnightLoader's drawing on a 20-unit grid |
-| `IconGrip` | Drag to reorder | Streamline `interface-essential/hand-grab.svg` |
+| `IconGrip` | Drag to reorder | Drawn for TowerTorch, commit `25aab69`: two columns of three dots |
 | `IconExternalLink` | Open a service's own site | Streamline `interface-essential/expand-window-2.svg` |
 | `IconWarning` | Warning | Streamline `interface-essential/warning-triangle.svg` |
 | `IconBolt` | Right away | KnightLoader's drawing on a 20-unit grid |
@@ -197,7 +199,7 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconDiagnostics` | Diagnostics | Streamline `programming/bug.svg` |
 | `IconKeyboard` | Keyboard shortcuts | Streamline `computer-devices/keyboard.svg` |
 
-### Look settings, the segments of the Design, Corners and Motion selectors
+### Look settings, the segments of the Design, Corners, Motion and Labels selectors
 
 | Name | Means | Source |
 | --- | --- | --- |
@@ -210,8 +212,14 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconMotionSubtle` | Gentle motion | Drawn for ArrowLoop, commit `771005df` |
 | `IconMotionWild` | Wild motion | Drawn for ArrowLoop, commit `771005df` |
 | `IconMotionStorm` | The storm, the hidden level above wild | Drawn for ArrowLoop, commit `771005df` |
+| `IconLabelText` | Label mode, the words alone | Drawn for TowerTorch, commit `0fbc20d` |
+| `IconLabelTextGlyph` | Label mode, glyph and words | Drawn for TowerTorch, commit `0fbc20d` |
+| `IconLabelGlyph` | Label mode, the glyph alone | Drawn for TowerTorch, commit `0fbc20d` |
+| `IconLabelReactive` | Label mode, the glyph that opens to its words | Drawn for TowerTorch, commit `0fbc20d` |
 
-The Design selector's Dark and Light segments wear `IconMoon` and `IconSun` from the actions above, and System wears `IconThemeSystem`, a ring with one half filled. Each corner glyph is a frame drawn with the corners it names, so the four read as one family whatever corners the selector around them has. The motion glyphs are one line that swings further at each level, just as a level is the same animation with bigger numbers. `IconCornerLeaf` and `IconMotionStorm` belong to the hidden shape and the hidden level and stand only where the selector offers those.
+The Design selector's Dark and Light segments wear `IconMoon` and `IconSun` from the actions above, and System wears `IconThemeSystem`, a ring with one half filled. Each corner glyph is a frame drawn with the corners it names, so the four read as one family whatever corners the selector around them has. The motion glyphs are one line that swings further at each level, just as a level is the same animation with bigger numbers. `IconCornerLeaf` and `IconMotionStorm` belong to the hidden shape and the hidden level and stand only where the selector offers those. The four label glyphs share one uncropped box like the corner and motion glyphs, so a rounded block for the glyph and bars for the words keep their sizes against each other from choice to choice: the bars alone for Text, block and bars for Text and glyph, the block alone for Glyph, and for Reactive the block with three dots that shrink away from it.
+
+**`IconGrip` is two columns of three dots**, the handle TowerTorch and KnightLoader each drew for a row that drags.
 
 **Pairs share one drawing turned or mirrored.** `IconFirst` is `IconLatest` mirrored top to bottom and `IconMoveDown` is `IconMoveUp` mirrored, so the two halves of each pair cannot drift apart. `IconEye` and `IconEyeOff` are Streamline's `visible` and `invisible-1`, and a Show phrase button and the reveal toggle in a password field wear the same two. `IconMail` rests on a mail button and `IconMailOpen` takes its place under the pointer or a finger; `MAIL_SVG` in `appMarks.ts` carries the pair. `IconManual`, the closed book, and `IconManualOpen` do the same on the manual button, and `MANUAL_SVG` carries them.
 
