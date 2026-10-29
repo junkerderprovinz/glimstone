@@ -74,3 +74,43 @@ export function IconExpand() {
     </svg>
   );
 }
+
+/** Minimise a window, `IconWindowMinimise` from the assortment: the bar the window goes down to. */
+export function IconWindowMinimise() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 14 14" fill="currentColor" className="shrink-0" aria-hidden="true">
+      <rect x="0" y="6" width="14" height="2" rx="1" />
+    </svg>
+  );
+}
+
+/** Maximise a window, `IconWindowMaximise` from the assortment: the window filling the screen. */
+export function IconWindowMaximise() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 14 14" fill="currentColor" className="shrink-0" aria-hidden="true">
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M2.5 0h9A2.5 2.5 0 0 1 14 2.5v9a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 0 11.5v-9A2.5 2.5 0 0 1 2.5 0Zm0 2a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5Z"
+      />
+    </svg>
+  );
+}
+
+/**
+ * Restore a maximised window, `IconWindowRestore` from the assortment: the
+ * window in front of the screen it filled. Not `IconRestore`, which brings a
+ * backup back.
+ */
+export function IconWindowRestore() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 14 14" fill="currentColor" className="shrink-0" aria-hidden="true">
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M2.5 3h6A2.5 2.5 0 0 1 11 5.5v6A2.5 2.5 0 0 1 8.5 14h-6A2.5 2.5 0 0 1 0 11.5v-6A2.5 2.5 0 0 1 2.5 3Zm0 2a.5.5 0 0 0-.5.5v6a.5.5 0 0 0 .5.5h6a.5.5 0 0 0 .5-.5v-6a.5.5 0 0 0-.5-.5Z"
+      />
+      <path d="M5 0h6.5A2.5 2.5 0 0 1 14 2.5V9h-2V2.5a.5.5 0 0 0-.5-.5H5Z" />
+    </svg>
+  );
+}

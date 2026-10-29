@@ -81,6 +81,9 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconTrashFiles` | Delete with its files | Streamline `interface-essential/file-delete-alternate.svg` |
 | `IconAdd` | Add | Drawn for GlimStone |
 | `IconClose` | Close, cancel | Drawn for GlimStone |
+| `IconWindowMinimise` | Minimise a window | Drawn for KnightLoader |
+| `IconWindowMaximise` | Maximise a window | Drawn for KnightLoader |
+| `IconWindowRestore` | Restore a maximised window | Drawn for KnightLoader |
 | `IconPencil` | Edit | Streamline `interface-essential/pencil.svg` |
 | `IconCopy` | Copy | Tabler Icons, filled `copy` (MIT) |
 | `IconCheck` | Verify, confirmed | Drawn for GlimStone |
@@ -224,6 +227,8 @@ The Design selector's Dark and Light segments wear `IconMoon` and `IconSun` from
 **Pairs share one drawing turned or mirrored.** `IconFirst` is `IconLatest` mirrored top to bottom and `IconMoveDown` is `IconMoveUp` mirrored, so the two halves of each pair cannot drift apart. `IconEye` and `IconEyeOff` are Streamline's `visible` and `invisible-1`, and a Show phrase button and the reveal toggle in a password field wear the same two. `IconMail` rests on a mail button and `IconMailOpen` takes its place under the pointer or a finger; `MAIL_SVG` in `appMarks.ts` carries the pair. `IconManual`, the closed book, and `IconManualOpen` do the same on the manual button, and `MANUAL_SVG` carries them.
 
 **A brand mark is the brand's own and goes only where it is meant.** `IconCoffee` is Buy Me a Coffee's mark and stands only on the button that leads there, and `IconCaptcha` is reCAPTCHA's mark and stands only where a captcha is the subject. `IconContainers` and `IconGithub` follow the same rule (section 1).
+
+**The title bar wears three glyphs of its own and `IconClose`.** `IconWindowMinimise` is a bar as wide as the grid, `IconWindowMaximise` the window as a rounded frame filling it, and `IconWindowRestore` a smaller frame in front of the corner of another, all drawn with a 2-unit line and filling the grid like the close mark beside them. A window that gets restored is not a backup that does, so the title bar never wears `IconRestore`.
 
 **Drawn for GlimStone** means drawn on Streamline's 14-unit grid as filled shapes: lines as strokes buffered with round caps, cut-outs as real holes. `IconAdd` and `IconClose` are Streamline's `add-1` and `delete-1` with a 2.5-unit bar instead of 2.
 
