@@ -2,6 +2,20 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+A desktop app draws its own title bar on Windows and Linux, in the app's look rather than the system's, and keeps the system's on macOS.
+
+**Adopting apps:**
+
+- **Desktop window frame:** make the main window frameless on Windows and Linux and render `reference/react/WindowBar.tsx` only there, with the app's own window calls. Copy the window frame rules from `reference/tokens.css`, mark the frame that holds the rail and the content with `.glim-shell`, and size a full-height shell and anything fixed to the top edge with `--window-bar`.
+- **Glyphs:** copy `reference/react/glyphs.tsx` again, and take `IconWindowMinimise`, `IconWindowMaximise` and `IconWindowRestore` from `reference/glyphs.json` where the app has a title bar.
+
+## ✨ Added
+
+- **The desktop window frame.** `WindowBar` is a strip to drag with minimise, maximise and close, and no mark or name, since the rail shows both. The page and a dialog's scrim start under the 2.5rem bar, so the window can still be moved and closed while a dialog is open. Windows 11's snap layouts do not open on the drawn maximise button.
+- **Three window glyphs.** `IconWindowMinimise`, `IconWindowMaximise` and `IconWindowRestore`, drawn on the 14-unit grid and filling it like `IconClose`.
+
 ## 3.7.0 - 2026-10-27
 
 Nine findings from TowerTorch, the Unraid plugin that restyles the host's own pages. Two rules keep a live page fast, the tooltip leaves structure alone, the label engine reaches buttons the app does not own, a move mode wiggles, and the glyph set grows by six and redraws its grip. A star marks the default entry and a card's own buttons move to its foot. What's new shows one card per release, and a number field that React hides no longer blanks the page.
