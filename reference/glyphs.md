@@ -69,25 +69,34 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | --- | --- | --- |
 | `IconEye` | Show, reveal | Streamline `interface-essential/visible.svg` |
 | `IconEyeOff` | Hide again | Streamline `interface-essential/invisible-1.svg` |
-| `IconRefresh` | Refresh, retry | Streamline `interface-essential/arrow-round-left.svg` |
-| `IconUpload` | Upload, import | Streamline `interface-essential/upload-circle.svg` |
-| `IconDownload` | Download, export | Streamline `interface-essential/download-circle.svg` |
+| `IconRefresh` | Reset to the default | Streamline `interface-essential/arrow-round-left.svg` |
+| `IconRetry` | Retry, reload, refresh | Streamline `interface-essential/arrow-reload-horizontal-1.svg` |
+| `IconUpload` | Upload | Streamline `interface-essential/upload-circle.svg` |
+| `IconImport` | Import, read in | Streamline `interface-essential/upload-file.svg` |
+| `IconDownload` | Download | Streamline `interface-essential/download-circle.svg` |
+| `IconExport` | Export | Streamline `interface-essential/download-file.svg` |
 | `IconSearch` | Search | Streamline `interface-essential/magnifying-glass.svg` |
-| `IconPlay` | Start, run now | Streamline `entertainment/button-play.svg` |
+| `IconPlay` | Start, run now, play | Streamline `entertainment/button-play.svg` |
 | `IconPause` | Pause | Streamline `entertainment/button-pause-2.svg` |
 | `IconStop` | Stop, abort | Streamline `entertainment/button-stop.svg` |
 | `IconPower` | Power on and off | Streamline `entertainment/button-power-1.svg` |
-| `IconTrash` | Delete | Streamline `interface-essential/recycle-bin-2.svg` |
+| `IconTrash` | Delete, remove | Streamline `interface-essential/recycle-bin-2.svg` |
 | `IconTrashFiles` | Delete with its files | Streamline `interface-essential/file-delete-alternate.svg` |
-| `IconAdd` | Add | Drawn for GlimStone |
-| `IconClose` | Close, cancel | Drawn for GlimStone |
-| `IconPencil` | Edit | Streamline `interface-essential/pencil.svg` |
+| `IconEmpty` | Clear, empty a list | Streamline `interface-essential/clipboard-remove.svg` |
+| `IconAdd` | Add, create | Drawn for GlimStone |
+| `IconClose` | Close, cancel, dismiss | Drawn for GlimStone |
+| `IconPencil` | Edit, rename, change | Streamline `interface-essential/pencil.svg` |
 | `IconCopy` | Copy | Tabler Icons, filled `copy` (MIT) |
-| `IconCheck` | Verify, confirmed | Drawn for GlimStone |
+| `IconCheck` | Test, verify, success | Drawn for GlimStone |
+| `IconConfirm` | Done, confirm, got it | Streamline `interface-essential/like-1.svg` |
+| `IconReject` | Refuse, decline | `IconConfirm` mirrored top to bottom |
+| `IconApply` | Apply, take over, use this one | Streamline `interface-essential/clipboard-check.svg` |
+| `IconUndo` | Undo | Streamline `computer-devices/return-2.svg` |
 | `IconLink` | Connect, pair | Streamline `interface-essential/link-chain.svg` |
-| `IconKey` | Credentials, key | Streamline `interface-essential/key.svg` |
-| `IconKeyRevoke` | Revoke a key | Streamline `key` with a bar cut through it |
-| `IconSignIn` | Sign in | Streamline `interface-essential/login-1.svg` |
+| `IconKey` | Credentials, key, set a password | Streamline `interface-essential/key.svg` |
+| `IconKeyRevoke` | Revoke a key, remove a password or passkey | Streamline `key` with a bar cut through it |
+| `IconForgotPassword` | Forgot password | Streamline `interface-essential/lock-rotation.svg` |
+| `IconSignIn` | Sign in | Streamline `interface-essential/login-1.svg` turned half a turn, so the arrow points into the door |
 | `IconSignOut` | Sign out | Streamline `interface-essential/logout-1.svg` |
 | `IconInfo` | Information | Streamline `interface-essential/information-circle.svg` |
 | `IconHelp` | Help | Streamline `interface-essential/help-question-1.svg` |
@@ -96,9 +105,10 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconSave` | Save | Material Design Icons `content-save` (Apache 2.0) |
 | `IconUnlock` | Unlock, clear a lock | Drawn for GlimStone |
 | `IconPrune` | Prune, reclaim space | Streamline `computer-devices/shredder.svg` |
+| `IconCompact` | Compact a database | Streamline `interface-essential/arrow-shrink-diagonal-1.svg` |
 | `IconCompute` | Compute, calculate | Drawn for TowerTorch, commit `a13c2ef`: a calculator |
 | `IconBack` | Back | KnightLoader's drawing on a 20-unit grid |
-| `IconForward` | Next, forward | KnightLoader's drawing on a 20-unit grid |
+| `IconForward` | Next, continue | KnightLoader's drawing on a 20-unit grid |
 | `IconLatest` | Jump to the newest entry, the end | Streamline `interface-essential/arrow-down-2.svg` |
 | `IconFirst` | Jump to the start | `IconLatest` mirrored |
 | `IconMoveUp` | Move up one | Streamline `interface-essential/arrow-up-1.svg` |
@@ -109,6 +119,10 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconSelectAll` | Select all | Streamline `interface-essential/check-square.svg` |
 | `IconClearSelection` | Clear the selection | Streamline `interface-essential/subtract-square.svg` |
 | `IconCompare` | Compare | Streamline `interface-essential/layers-2.svg` |
+| `IconKeepBoth` | Keep both versions | Streamline `interface-essential/layers-1.svg` |
+| `IconKeepLeft` | Keep the left version | Streamline `interface-essential/align-left.svg` |
+| `IconKeepRight` | Keep the right version | Streamline `interface-essential/align-right.svg` |
+| `IconMerge` | Merge | Streamline `interface-essential/pathfinder-union.svg` |
 | `IconFilter` | Filter | Streamline `interface-essential/filter-2.svg` |
 | `IconPin` | Pin | KnightLoader's drawing on a 20-unit grid |
 | `IconPriority` | Priority | KnightLoader's drawing on a 20-unit grid |
@@ -117,13 +131,14 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconWarning` | Warning | Streamline `interface-essential/warning-triangle.svg` |
 | `IconBolt` | Right away | KnightLoader's drawing on a 20-unit grid |
 | `IconMail` | Write to us | Streamline `mail/mail-send-envelope.svg` |
+| `IconSendTest` | Send a test | Streamline `mail/mail-send-email-message.svg` |
 | `IconCoffee` | Buy the author a coffee | Simple Icons `buymeacoffee` (CC0, a trademark used descriptively) |
-| `IconShieldOn` | A protection is on | Drawn for GlimStone |
-| `IconShieldOff` | A protection is off | Drawn for GlimStone |
+| `IconShieldOn` | A protection is on, turn it on | Drawn for GlimStone |
+| `IconShieldOff` | A protection is off, turn it off | Drawn for GlimStone |
 | `IconCompressOff` | Store uncompressed | Streamline `shipping/shipping-box-1.svg` |
-| `IconCompressAuto` | Let the tool choose the compression | Streamline `interface-essential/magic-wand-2.svg` |
+| `IconCompressAuto` | Automatic, the app chooses | Streamline `interface-essential/magic-wand-2.svg` |
 | `IconCompressMax` | Compress as far as possible | Streamline `interface-essential/arrow-shrink.svg` |
-| `IconCode` | Script, code | Drawn for GlimStone |
+| `IconCode` | Script, code, variables | Drawn for GlimStone |
 | `IconMoon` | Dark look | Streamline `interface-essential/waning-cresent-moon.svg` |
 | `IconSun` | Light look | Streamline `interface-essential/brightness-1.svg` |
 | `IconPaste` | Paste | Streamline `interface-essential/empty-clipboard.svg` |
@@ -133,12 +148,19 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconManual` | Manual | Drawn for BombVault's Help card |
 | `IconManualOpen` | Manual, under the pointer, a finger or the focus | Drawn for BombVault's Help card |
 | `IconStar` | Default, preferred | Tabler Icons, filled `star` (MIT) |
+| `IconStopAsking` | Stop asking | Streamline `interface-essential/block-bell-notification.svg` |
+| `IconCookies` | Store cookies | Streamline `interface-essential/paperclip-1.svg` |
+| `IconLog` | Open the log | Streamline `programming/file-code-1.svg` |
+| `IconInstall` | Install | Streamline `programming/browser-add.svg` |
+| `IconUpdate` | Fetch an update, update now | Streamline `programming/cloud-refresh.svg` |
+| `IconUpToDate` | Up to date after an update check | Streamline `programming/cloud-check.svg` |
+| `IconUpdateAvailable` | An update is available | Streamline `interface-essential/megaphone-2.svg` |
 
 ### Navigation and domain
 
 | Name | Means | Source |
 | --- | --- | --- |
-| `IconGear` | Settings | Streamline `interface-essential/cog.svg` |
+| `IconGear` | Settings, open a setting | Streamline `interface-essential/cog.svg` |
 | `IconDashboard` | Dashboard, overview | Streamline `interface-essential/dashboard-3.svg` |
 | `IconFolder` | A folder | Streamline `interface-essential/new-folder.svg` |
 | `IconFolderOpen` | An open folder | Font Awesome Free folder-open (CC BY 4.0) |
@@ -150,7 +172,7 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconNetwork` | Network, connections | Streamline `computer-devices/wifi.svg` |
 | `IconPhone` | Phone | Streamline `phone/phone-mobile-phone.svg` |
 | `IconBrowser` | Browser | Streamline `programming/browser-website-1.svg` |
-| `IconApp` | Open the app | Streamline `programming/application-add.svg` |
+| `IconApp` | Open or show the app | Streamline `programming/application-add.svg` |
 | `IconModules` | Modules | Streamline `programming/module-puzzle-1.svg` |
 | `IconCaptcha` | Captcha | reCAPTCHA's mark in one colour, its three arrows set apart (a trademark used descriptively) |
 | `IconContainers` | Docker containers | Simple Icons whale (CC0, a trademark used descriptively) |
@@ -176,6 +198,7 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconQueued` | Queued | Font Awesome Free `hourglass-half` (CC BY 4.0) |
 | `IconCaptchaTimer` | Time left on a captcha | Material Design Icons `clock-alert` (Apache 2.0) |
 | `IconResolvers` | Resolvers, download quality and format | Material Design Icons `movie-cog` (Apache 2.0) |
+| `IconWhatsNew` | What's new | Streamline `money-shopping/gift.svg`, its stroked ribbon drawn as a filled shape |
 
 ### Settings tabs
 
@@ -195,7 +218,7 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconTabOffsite` | Off-site tab | Font Awesome Free `cloud` (CC BY 4.0) |
 | `IconSchedules` | Schedules, automation | Streamline `interface-essential/circle-clock.svg` |
 | `IconNotifications` | Notifications | Streamline `interface-essential/ringing-bell-notification.svg` |
-| `IconSliders` | Schedule sliders | Streamline `interface-essential/vertical-slider-square.svg` |
+| `IconSliders` | Schedule sliders, set limits | Streamline `interface-essential/vertical-slider-square.svg` |
 | `IconDiagnostics` | Diagnostics | Streamline `programming/bug.svg` |
 | `IconKeyboard` | Keyboard shortcuts | Streamline `computer-devices/keyboard.svg` |
 
@@ -224,7 +247,9 @@ The Design selector's Dark and Light segments wear `IconMoon` and `IconSun` from
 
 **`IconGrip` is two columns of three dots**, the handle TowerTorch and KnightLoader each drew for a row that drags.
 
-**Pairs share one drawing turned or mirrored.** `IconFirst` is `IconLatest` mirrored top to bottom and `IconMoveDown` is `IconMoveUp` mirrored, so the two halves of each pair cannot drift apart. `IconEye` and `IconEyeOff` are Streamline's `visible` and `invisible-1`, and a Show phrase button and the reveal toggle in a password field wear the same two. `IconMail` rests on a mail button and `IconMailOpen` takes its place under the pointer or a finger; `MAIL_SVG` in `appMarks.ts` carries the pair. `IconManual`, the closed book, and `IconManualOpen` do the same on the manual button, and `MANUAL_SVG` carries them.
+**Pairs share one drawing turned or mirrored.** `IconFirst` is `IconLatest` mirrored top to bottom, `IconMoveDown` is `IconMoveUp` mirrored and `IconReject`, the thumb down, is `IconConfirm` mirrored, so the two halves of each pair cannot drift apart. `IconEye` and `IconEyeOff` are Streamline's `visible` and `invisible-1`, and a Show phrase button and the reveal toggle in a password field wear the same two. `IconMail` rests on a mail button and `IconMailOpen` takes its place under the pointer or a finger; `MAIL_SVG` in `appMarks.ts` carries the pair. `IconManual`, the closed book, and `IconManualOpen` do the same on the manual button, and `MANUAL_SVG` carries them.
+
+**Close meanings wear different drawings.** `IconRetry` tries again, reloads or refreshes, and `IconRefresh` goes back to the default whatever its name says. `IconUpload` and `IconDownload` move a file to or from somewhere else, while `IconImport` and `IconExport` read a list or settings in and write them out. `IconCheck` marks a test and the success it reports, and `IconConfirm` is a person agreeing: Done, Confirm, Got it. `IconApply` takes something over in place of what was there, which is not saving. `IconCompressAuto` marks anything the app chooses by itself, the compression as well as the order of the providers, and keeps its name for the apps that generate from this list. `IconUpdate` fetches an update and `IconUpToDate` reports that there was none to fetch: the same cloud, with a tick in place of the arrows.
 
 **A brand mark is the brand's own and goes only where it is meant.** `IconCoffee` is Buy Me a Coffee's mark and stands only on the button that leads there, and `IconCaptcha` is reCAPTCHA's mark and stands only where a captcha is the subject. `IconContainers` and `IconGithub` follow the same rule (section 1).
 

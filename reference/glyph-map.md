@@ -12,36 +12,46 @@
 | --- | --- | --- | --- |
 | Show, reveal | `IconEye` | `IconEye`, standard | `IconEye`, standard |
 | Hide again | `IconEyeOff` | `IconEyeOff`, standard | `IconEyeOff`, standard |
-| Refresh, retry | `IconRefresh` | `IconRefresh`, standard | `IconRefresh`, standard |
-| Upload, import | `IconUpload` | `IconUpload`, standard | `IconUpload`, standard |
-| Download, export | `IconDownload` | `IconDownload`, standard | `IconDownload`, standard |
+| Reset to the default | `IconRefresh` | `IconClearSelection`, switch | to follow |
+| Retry, reload, refresh | `IconRetry` | `IconRefresh`, switch | `IconRefresh`, switch |
+| Upload | `IconUpload` | `IconUpload`, standard | `IconUpload`, standard |
+| Import, read in | `IconImport` | to follow | `IconUpload`, switch |
+| Download | `IconDownload` | `IconDownload`, standard | `IconDownload`, standard |
+| Export | `IconExport` | `IconDownload`, switch | `IconDownload`, switch |
 | Search | `IconSearch` | `IconSearch`, standard | `IconSearch`, standard |
-| Start, run now | `IconPlay` | `IconPlay`, standard | `IconPlay`, standard |
+| Start, run now, play | `IconPlay` | `IconPlay`, standard | `IconPlay`, standard |
 | Pause | `IconPause` | none | `IconPause`, standard |
 | Stop, abort | `IconStop` | `IconStop`, standard | `IconStop`, standard |
 | Power on and off | `IconPower` | `IconPower`, standard | `IconPower`, standard |
-| Delete | `IconTrash` | `IconTrash`, standard | `IconTrash`, standard |
+| Delete, remove | `IconTrash` | `IconTrash`, standard | `IconTrash`, standard |
 | Delete with its files | `IconTrashFiles` | none | `IconTrashFiles`, standard |
-| Add | `IconAdd` | `IconAdd`, standard | `IconAdd`, standard |
-| Close, cancel | `IconClose` | `IconClose`, standard | `IconClose`, standard |
-| Edit | `IconPencil` | `IconPencil`, standard | `IconPencil`, standard |
+| Clear, empty a list | `IconEmpty` | none | to follow |
+| Add, create | `IconAdd` | `IconAdd`, standard | `IconAdd`, standard |
+| Close, cancel, dismiss | `IconClose` | `IconClose`, standard | `IconClose`, standard |
+| Edit, rename, change | `IconPencil` | `IconPencil`, standard | `IconPencil`, standard |
 | Copy | `IconCopy` | `IconCopy`, standard | `IconCopy`, standard |
-| Verify, confirmed | `IconCheck` | `IconCheck`, standard | `IconCheck`, standard |
+| Test, verify, success | `IconCheck` | `IconCheck`, standard | `IconCheck`, standard |
+| Done, confirm, got it | `IconConfirm` | `IconCheck`, switch | to follow |
+| Refuse, decline | `IconReject` | `IconClose`, switch | to follow |
+| Apply, take over, use this one | `IconApply` | `IconSave`, switch | to follow |
+| Undo | `IconUndo` | `IconRestore`, switch | to follow |
 | Connect, pair | `IconLink` | `IconLink`, standard | `IconLink`, standard |
-| Credentials, key | `IconKey` | `IconKey`, standard | `IconKey`, standard |
-| Revoke a key | `IconKeyRevoke` | `IconKeyRevoke`, standard | none |
-| Sign in | `IconSignIn` | `IconSignIn`, standard | none |
+| Credentials, key, set a password | `IconKey` | `IconKey`, standard | `IconKey`, standard |
+| Revoke a key, remove a password or passkey | `IconKeyRevoke` | `IconKeyRevoke`, standard | to follow |
+| Forgot password | `IconForgotPassword` | `IconKey`, switch | to follow |
+| Sign in | `IconSignIn` | `IconSignIn`, switch | to follow |
 | Sign out | `IconSignOut` | `IconSignOut`, standard | `IconSignOut`, standard |
 | Information | `IconInfo` | `IconInfo`, standard | `IconInfo`, standard |
 | Help | `IconHelp` | none | `IconHelp`, standard |
 | More | `IconMore` | `IconMore`, standard | `IconMore`, standard |
 | Menu | `IconMenu` | none | `IconMenu`, standard |
-| Save | `IconSave` | `IconSave`, switch | none |
+| Save | `IconSave` | `IconSave`, switch | to follow |
 | Unlock, clear a lock | `IconUnlock` | `IconUnlock`, standard | none |
 | Prune, reclaim space | `IconPrune` | `IconPrune`, standard | none |
+| Compact a database | `IconCompact` | none | to follow |
 | Compute, calculate | `IconCompute` | none | none |
 | Back | `IconBack` | `IconBack`, standard | `IconBack`, standard |
-| Next, forward | `IconForward` | `IconForward`, standard | `IconForward`, standard |
+| Next, continue | `IconForward` | `IconForward`, standard | `IconForward`, standard |
 | Jump to the newest entry, the end | `IconLatest` | `IconLatest`, standard | `IconLatest`, standard |
 | Jump to the start | `IconFirst` | none | `IconFirst`, standard |
 | Move up one | `IconMoveUp` | none | `IconMoveUp`, standard |
@@ -52,6 +62,10 @@
 | Select all | `IconSelectAll` | `IconSelectAll`, standard | `IconSelectAll`, standard |
 | Clear the selection | `IconClearSelection` | `IconClearSelection`, standard | `IconClearSelection`, standard |
 | Compare | `IconCompare` | `IconCompare`, standard | none |
+| Keep both versions | `IconKeepBoth` | none | to follow |
+| Keep the left version | `IconKeepLeft` | none | none |
+| Keep the right version | `IconKeepRight` | none | none |
+| Merge | `IconMerge` | none | to follow |
 | Filter | `IconFilter` | none | `IconFilter`, standard |
 | Pin | `IconPin` | none | `IconPin`, standard |
 | Priority | `IconPriority` | none | `IconPriority`, standard |
@@ -60,13 +74,14 @@
 | Warning | `IconWarning` | none | `IconWarning`, standard |
 | Right away | `IconBolt` | none | `IconBolt`, standard |
 | Write to us | `IconMail` | `IconMail`, standard | `IconMail`, standard |
+| Send a test | `IconSendTest` | `IconCheck`, switch | to follow |
 | Buy the author a coffee | `IconCoffee` | `IconCoffee`, standard | none |
-| A protection is on | `IconShieldOn` | `IconShieldOn`, standard | `IconShieldOn`, standard |
-| A protection is off | `IconShieldOff` | `IconShieldOff`, standard | none |
+| A protection is on, turn it on | `IconShieldOn` | `IconShieldOn`, standard | `IconShieldOn`, standard |
+| A protection is off, turn it off | `IconShieldOff` | `IconShieldOff`, standard | to follow |
 | Store uncompressed | `IconCompressOff` | `IconCompressOff`, standard | none |
-| Let the tool choose the compression | `IconCompressAuto` | `IconCompressAuto`, standard | none |
+| Automatic, the app chooses | `IconCompressAuto` | `IconCompressAuto`, standard | to follow |
 | Compress as far as possible | `IconCompressMax` | `IconCompressMax`, standard | none |
-| Script, code | `IconCode` | none | `IconCode`, standard |
+| Script, code, variables | `IconCode` | none | `IconCode`, standard |
 | Dark look | `IconMoon` | none | `IconMoon`, standard |
 | Light look | `IconSun` | none | `IconSun`, standard |
 | Paste | `IconPaste` | none | `IconPaste`, standard |
@@ -76,6 +91,13 @@
 | Open the manual | `IconManual`; on the Help card's button the README's book in `MANUAL_SVG` | `IconManual`, switch to `MANUAL_SVG` on the Help card | `MANUAL_SVG`, standard |
 | Open the manual, under the pointer, a finger or the focus | `IconManualOpen` | `IconManualOpen`, standard | `IconManualOpen`, standard |
 | Default, preferred | `IconStar` | `IconStar`, standard on the Default badge and the Make default button | none |
+| Stop asking | `IconStopAsking` | none | to follow |
+| Store cookies | `IconCookies` | none | to follow |
+| Open the log | `IconLog` | none | to follow |
+| Install | `IconInstall` | to follow | to follow |
+| Fetch an update, update now | `IconUpdate` | none | to follow |
+| Up to date after an update check | `IconUpToDate` | `IconCheck`, switch | none |
+| An update is available | `IconUpdateAvailable` | `IconSearch`, switch | none |
 
 <br>
 
@@ -83,7 +105,7 @@
 
 | Meaning | GlimStone | BombVault | KnightLoader |
 | --- | --- | --- | --- |
-| Settings | `IconGear` | `IconGear`, standard | `IconGear`, standard |
+| Settings, open a setting | `IconGear` | `IconGear`, standard | `IconGear`, standard |
 | Dashboard, overview | `IconDashboard` | `IconDashboard`, standard | `IconDashboard`, standard |
 | A folder | `IconFolder` | `IconFolder`, standard | `IconFolder`, standard |
 | An open folder | `IconFolderOpen` | none | `IconFolderOpen`, standard |
@@ -95,7 +117,7 @@
 | Network, connections | `IconNetwork` | none | `IconNetwork`, standard |
 | Phone | `IconPhone` | none | `IconPhone`, standard |
 | Browser | `IconBrowser` | none | `IconBrowser`, standard |
-| Open the app | `IconApp` | none | `IconApp`, standard |
+| Open or show the app | `IconApp` | none | `IconApp`, standard |
 | Modules | `IconModules` | none | `IconModules`, standard |
 | Captcha | `IconCaptcha` | none | `IconCaptcha`, standard |
 | Docker containers | `IconContainers` | `IconContainers`, standard | none |
@@ -103,7 +125,7 @@
 | Files and folder sets | `IconFiles` | `IconFiles`, standard | none |
 | Receiver, an incoming transfer | `IconReceiver` | `IconReceiver`, standard | none |
 | Back up now | `IconBackupNow` | `IconBackupNow`, standard | none |
-| Restore | `IconRestore` | `IconRestore`, standard | none |
+| Restore | `IconRestore` | `IconRestore`, standard | to follow |
 | Replicate, synchronise | `IconSync` | `IconSync`, standard | none |
 | Recovery, rebuild from backups | `IconRecovery` | `IconRecovery`, standard | none |
 | Live, running now | `IconLive` | `IconLive`, standard | none |
@@ -121,6 +143,7 @@
 | Queued | `IconQueued` | none | `IconQueued`, standard |
 | Time left on a captcha | `IconCaptchaTimer` | none | `IconCaptchaTimer`, standard |
 | Resolvers, download quality and format | `IconResolvers` | none | `IconResolvers`, standard |
+| What's new | `IconWhatsNew` | none | to follow |
 
 <br>
 
@@ -142,7 +165,7 @@
 | Off-site tab | `IconTabOffsite` | `IconTabOffsite`, standard | none |
 | Schedules, automation | `IconSchedules` | `IconSchedules`, standard | `IconSchedules`, standard |
 | Notifications | `IconNotifications` | `IconNotifications`, standard | `IconNotifications`, standard |
-| Schedule sliders | `IconSliders` | none | `IconSliders`, standard |
+| Schedule sliders, set limits | `IconSliders` | none | `IconSliders`, standard |
 | Diagnostics | `IconDiagnostics` | none | `IconDiagnostics`, standard |
 | Keyboard shortcuts | `IconKeyboard` | none | `IconKeyboard`, standard |
 
@@ -196,9 +219,33 @@ KnightLoader still draws its own grip, three rows of two dots in an 8 by 12 box,
 
 <br>
 
+## ArrowLoop
+
+ArrowLoop picks a button's glyph from its translation key. The rows below are the button meanings where it has a button; its other rows are not listed here yet.
+
+| Meaning | GlimStone | ArrowLoop |
+| --- | --- | --- |
+| Reset to the default | `IconRefresh` | `IconRefresh`, standard |
+| Import, read in | `IconImport` | `IconUpload`, switch |
+| Export | `IconExport` | `IconDownload`, switch |
+| Done, confirm, got it | `IconConfirm` | `IconSave`, switch |
+| Apply, take over, use this one | `IconApply` | `IconSave`, switch |
+| Send a test | `IconSendTest` | `IconCheck`, switch |
+| Keep both versions | `IconKeepBoth` | to follow |
+| Keep the left version | `IconKeepLeft` | to follow |
+| Keep the right version | `IconKeepRight` | to follow |
+| Sign in | `IconSignIn` | `IconSave`, switch |
+| Forgot password | `IconForgotPassword` | `IconRefresh`, switch |
+| Up to date after an update check | `IconUpToDate` | to follow |
+| An update is available | `IconUpdateAvailable` | to follow |
+| What's new | `IconWhatsNew` | to follow, beside the dot its button wears |
+| Open or show the app | `IconApp` | `IconTabApp` on the tray's Open, switch |
+
+<br>
+
 ## Where each app keeps its glyphs
 
-- **ArrowLoop:** `scripts/gen_glyphs.py` writes the app's glyphs, and the Look settings glyphs come from it, for the web and, through `scripts/gen_glyph_data.py`, for the phone.
+- **ArrowLoop:** `scripts/gen_glyphs.py` writes the app's glyphs, and the Look settings glyphs come from it, for the web and, through `scripts/gen_glyph_data.py`, for the phone. `web/src/lib/glyphName.ts` maps a translation key to a glyph name, and a key it does not know keeps its text.
 - **BombVault:** `scripts/gen_glyphs.py` writes `web/src/components/glyphs.tsx` and `navGlyphs.tsx` from a copy of `glyphs.json` at 16px; the phone app shows the web launcher and uses the same files. `glyphFor.tsx` maps a translation key to a glyph when a button passes none; a button that passes one wins.
 - **KnightLoader:** `web/scripts/gen-glyphs.mjs` writes `web/src/lib/glyphs.tsx` at 22px with the ink at three quarters of the box; the Android app has no SVG and shows tinted bitmaps rendered from the same list into `mobile/assets/`. Every call site passes its glyph; Settings page glyphs are mapped in `pages/settings/pageIcons.tsx`. The browser extension copies the eye and a few others in `extension/src/`.
 - **TowerTorch:** `scripts/cc-theme.js` holds a copy of every entry it draws, the square viewBox and the drawing, for its own controls and for Unraid's buttons; Unraid's own icons keep their Font Awesome. The glyphs of its settings selectors sit in `scripts/settings.js`, and `scripts/labels.js` maps Unraid's button captions to glyph names.

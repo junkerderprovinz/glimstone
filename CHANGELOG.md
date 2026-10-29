@@ -4,19 +4,30 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
-The Labels selector gets new glyphs, and a Row height selector gets three of its own.
+Every button and every Look selector in the family can now wear a glyph. The Labels selector gets new glyphs and a Row height selector three of its own; buttons that only had words in BombVault, KnightLoader and ArrowLoop get theirs, so the Glyph choice of the label setting reaches them too. Twenty-three glyphs join the assortment, four meanings move off the glyphs they shared, and `IconSignIn` is turned so its arrow points into the door.
 
 **Adopting apps:**
 
-- **Glyphs:** copy `IconLabelText`, `IconLabelTextGlyph`, `IconLabelGlyph` and `IconLabelReactive` from `reference/glyphs.json` again and put them on the Labels selector's segments. An app with a Row height selector takes `IconRowCompact`, `IconRowMedium` and `IconRowComfortable` for it.
+- **Look glyphs:** copy `IconLabelText`, `IconLabelTextGlyph`, `IconLabelGlyph` and `IconLabelReactive` from `reference/glyphs.json` again and put them on the Labels selector's segments. An app with a Row height selector takes `IconRowCompact`, `IconRowMedium` and `IconRowComfortable` for it.
+- **Button glyphs:** copy `IconSignIn` from `reference/glyphs.json` again, and take the new glyphs where the app has those buttons. `reference/glyph-map.md` says which button moves where in BombVault, KnightLoader and ArrowLoop.
+- **Label keys:** point retry, reload and refresh at `IconRetry` and a reset at `IconRefresh`, import and export at `IconImport` and `IconExport`, Done, Confirm and Got it at `IconConfirm`, decline at `IconReject`, apply at `IconApply` and undo at `IconUndo`.
 
 ## ✨ Added
 
 - **Three glyphs for a Row height selector.** `IconRowCompact`, `IconRowMedium` and `IconRowComfortable` are bars across the width, four close together, three, and two far apart.
+- **Twenty-three glyphs for buttons that had none**, all from Streamline's free set: `IconRetry`, `IconImport`, `IconExport`, `IconConfirm`, `IconReject`, `IconApply`, `IconUndo`, `IconEmpty`, `IconForgotPassword`, `IconCompact`, `IconKeepBoth`, `IconKeepLeft`, `IconKeepRight`, `IconMerge`, `IconSendTest`, `IconStopAsking`, `IconCookies`, `IconLog`, `IconInstall`, `IconUpdate`, `IconUpToDate`, `IconUpdateAvailable` and `IconWhatsNew`. `IconUpToDate` is the cloud of `IconUpdate` with a tick, for the update check that found nothing new. `IconReject` is the thumb of `IconConfirm` mirrored to point down, and the gift of `IconWhatsNew` has its ribbon drawn as a filled shape instead of a line.
+- **An ArrowLoop table in `glyph-map.md`** with the button meanings it has.
 
 ## 🎨 Design
 
 - **The label glyphs are redrawn with a disc for the glyph.** Three bars stand for Text, a small disc before two bars for Text and glyph, a large disc for Glyph, and a disc with a pointer arrow for Reactive. `IconLabelGlyph` and `IconLabelReactive` take a viewBox cropped to their ink.
+
+## 🔁 Changed
+
+- **`IconSignIn` is turned half a turn**, so its arrow points into the door while `IconSignOut`'s leaves it. The turn is part of the path, so the ink box and the view box stay as they were.
+- **Four meanings get a glyph of their own.** `IconRefresh` marks a reset to the default, and trying again, reloading and refreshing wear `IconRetry`. `IconUpload` and `IconDownload` move files, while `IconImport` and `IconExport` read in and write out. `IconCheck` keeps a test and its success, and `IconConfirm` takes Done, Confirm and Got it.
+- **`IconCompressAuto` means Automatic, the app chooses.** The magic wand covers the compression the tool picks and the order KnightLoader picks for its providers. The name stays, so apps that generate from the list keep working.
+- **Existing glyphs name their new buttons.** The meanings of `IconAdd`, `IconClose`, `IconPencil`, `IconTrash`, `IconPlay`, `IconForward`, `IconKey`, `IconKeyRevoke`, `IconGear`, `IconSliders`, `IconCode`, `IconApp`, `IconShieldOn` and `IconShieldOff` now cover buttons such as Create, Dismiss, Rename, Set password and Variables.
 
 ## 3.7.0 - 2026-10-27
 
