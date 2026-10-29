@@ -2,6 +2,16 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+**Adopting apps:**
+
+- **Glyphs:** copy `IconSignIn` from `reference/glyphs.json` again.
+
+## 🔁 Changed
+
+- **`IconSignIn` is turned half a turn**, so its arrow points into the door while `IconSignOut`'s leaves it. The turn is part of the path, so the ink box and the view box stay as they were.
+
 ## 3.7.0 - 2026-10-27
 
 Nine findings from TowerTorch, the Unraid plugin that restyles the host's own pages. Two rules keep a live page fast, the tooltip leaves structure alone, the label engine reaches buttons the app does not own, a move mode wiggles, and the glyph set grows by six and redraws its grip. A star marks the default entry and a card's own buttons move to its foot. What's new shows one card per release, and a number field that React hides no longer blanks the page.

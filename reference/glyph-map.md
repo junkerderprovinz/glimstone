@@ -30,7 +30,7 @@
 | Connect, pair | `IconLink` | `IconLink`, standard | `IconLink`, standard |
 | Credentials, key | `IconKey` | `IconKey`, standard | `IconKey`, standard |
 | Revoke a key | `IconKeyRevoke` | `IconKeyRevoke`, standard | none |
-| Sign in | `IconSignIn` | `IconSignIn`, standard | none |
+| Sign in | `IconSignIn` | `IconSignIn`, switch | to follow |
 | Sign out | `IconSignOut` | `IconSignOut`, standard | `IconSignOut`, standard |
 | Information | `IconInfo` | `IconInfo`, standard | `IconInfo`, standard |
 | Help | `IconHelp` | none | `IconHelp`, standard |

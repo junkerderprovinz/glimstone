@@ -87,7 +87,7 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconLink` | Connect, pair | Streamline `interface-essential/link-chain.svg` |
 | `IconKey` | Credentials, key | Streamline `interface-essential/key.svg` |
 | `IconKeyRevoke` | Revoke a key | Streamline `key` with a bar cut through it |
-| `IconSignIn` | Sign in | Streamline `interface-essential/login-1.svg` |
+| `IconSignIn` | Sign in | Streamline `interface-essential/login-1.svg` turned half a turn, so the arrow points into the door |
 | `IconSignOut` | Sign out | Streamline `interface-essential/logout-1.svg` |
 | `IconInfo` | Information | Streamline `interface-essential/information-circle.svg` |
 | `IconHelp` | Help | Streamline `interface-essential/help-question-1.svg` |
