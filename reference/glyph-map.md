@@ -165,13 +165,13 @@ ArrowLoop drew the glyphs for the segments of its Design, Corners and Motion sel
 | Motion selector, Subtle | `IconMotionSubtle` | `IconMotionSubtle`, standard | `IconMotionSubtle`, standard | `IconMotionSubtle`, standard |
 | Motion selector, Wild | `IconMotionWild` | `IconMotionWild`, standard | `IconMotionWild`, standard | `IconMotionWild`, standard |
 | Motion selector, the hidden storm | `IconMotionStorm` | `IconMotionStorm`, standard | `IconMotionStorm`, standard | `IconMotionStorm`, standard |
-| Labels selector, Text | `IconLabelText` | `IconLabelText`, to follow | `IconLabelText`, to follow | `IconLabelText`, to follow |
-| Labels selector, Text and glyph | `IconLabelTextGlyph` | `IconLabelTextGlyph`, to follow | `IconLabelTextGlyph`, to follow | `IconLabelTextGlyph`, to follow |
-| Labels selector, Glyph | `IconLabelGlyph` | `IconLabelGlyph`, to follow | `IconLabelGlyph`, to follow | `IconLabelGlyph`, to follow |
-| Labels selector, Reactive | `IconLabelReactive` | `IconLabelReactive`, to follow | `IconLabelReactive`, to follow | `IconLabelReactive`, to follow |
-| Row height selector, Compact | `IconRowCompact` | none | none | `IconRowCompact`, to follow |
-| Row height selector, Medium | `IconRowMedium` | none | none | `IconRowMedium`, to follow |
-| Row height selector, Comfortable | `IconRowComfortable` | none | none | `IconRowComfortable`, to follow |
+| Labels selector, Text | `IconLabelText` | `IconLabelText`, standard | `IconLabelText`, standard | `IconLabelText`, standard |
+| Labels selector, Text and glyph | `IconLabelTextGlyph` | `IconLabelTextGlyph`, standard | `IconLabelTextGlyph`, standard | `IconLabelTextGlyph`, standard |
+| Labels selector, Glyph | `IconLabelGlyph` | `IconLabelGlyph`, standard | `IconLabelGlyph`, standard | `IconLabelGlyph`, standard |
+| Labels selector, Reactive | `IconLabelReactive` | `IconLabelReactive`, standard | `IconLabelReactive`, standard | `IconLabelReactive`, standard |
+| Row height selector, Compact | `IconRowCompact` | none | none | `IconRowCompact`, standard |
+| Row height selector, Medium | `IconRowMedium` | none | none | `IconRowMedium`, standard |
+| Row height selector, Comfortable | `IconRowComfortable` | none | none | `IconRowComfortable`, standard |
 
 <br>
 
@@ -195,7 +195,7 @@ KnightLoader still draws its own grip, three rows of two dots in an 8 by 12 box,
 
 ## Where each app keeps its glyphs
 
-- **ArrowLoop:** `scripts/gen_glyphs.py` writes the app's glyphs, and the nine Look settings glyphs come from it.
+- **ArrowLoop:** `scripts/gen_glyphs.py` writes the app's glyphs, and the Look settings glyphs come from it, for the web and, through `scripts/gen_glyph_data.py`, for the phone.
 - **BombVault:** `scripts/gen_glyphs.py` writes `web/src/components/glyphs.tsx` and `navGlyphs.tsx` from a copy of `glyphs.json` at 16px; the phone app shows the web launcher and uses the same files. `glyphFor.tsx` maps a translation key to a glyph when a button passes none; a button that passes one wins.
 - **KnightLoader:** `web/scripts/gen-glyphs.mjs` writes `web/src/lib/glyphs.tsx` at 22px with the ink at three quarters of the box; the Android app has no SVG and shows tinted bitmaps rendered from the same list into `mobile/assets/`. Every call site passes its glyph; Settings page glyphs are mapped in `pages/settings/pageIcons.tsx`. The browser extension copies the eye and a few others in `extension/src/`.
 - **TowerTorch:** `scripts/cc-theme.js` holds a copy of every entry it draws, the square viewBox and the drawing, for its own controls and for Unraid's buttons; Unraid's own icons keep their Font Awesome. The glyphs of its settings selectors sit in `scripts/settings.js`, and `scripts/labels.js` maps Unraid's button captions to glyph names.
