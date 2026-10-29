@@ -184,12 +184,15 @@ TowerTorch wears the assortment on its own controls and on the Unraid buttons it
 | Drag to reorder | `IconGrip` | `Grip`, standard |
 | Move elsewhere | `IconMove` | `Move`, standard |
 | Compute, calculate | `IconCompute` | `Compute`, standard |
-| Labels selector, Text | `IconLabelText` | `IconLabelText`, switch |
-| Labels selector, Text and glyph | `IconLabelTextGlyph` | `IconLabelTextGlyph`, switch |
-| Labels selector, Glyph | `IconLabelGlyph` | `IconLabelGlyph`, switch |
-| Labels selector, Reactive | `IconLabelReactive` | `IconLabelReactive`, switch |
+| Labels selector, Text | `IconLabelText` | `IconLabelText`, standard |
+| Labels selector, Text and glyph | `IconLabelTextGlyph` | `IconLabelTextGlyph`, standard |
+| Labels selector, Glyph | `IconLabelGlyph` | `IconLabelGlyph`, standard |
+| Labels selector, Reactive | `IconLabelReactive` | `IconLabelReactive`, standard |
+| Row height selector, Compact | `IconRowCompact` | `IconRowCompact`, standard |
+| Row height selector, Medium | `IconRowMedium` | `IconRowMedium`, standard |
+| Row height selector, Comfortable | `IconRowComfortable` | `IconRowComfortable`, standard |
 
-KnightLoader still draws its own grip, three rows of two dots in an 8 by 12 box, which is why its row above says switch. TowerTorch still wears the four label glyphs it drew, a rounded block beside bars, and moves to the assortment's discs.
+KnightLoader still draws its own grip, three rows of two dots in an 8 by 12 box, which is why its row above says switch.
 
 <br>
 
