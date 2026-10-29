@@ -28,7 +28,7 @@ export default function ToastDemo() {
 
   return (
     <>
-      <Button label="Success" labelKey="confirm" tone="ok" onClick={() => show("success")} />
+      <Button label="Success" labelKey="success" tone="ok" onClick={() => show("success")} />
       <Button label="Warning" labelKey="warning" tone="warn" onClick={() => show("warn")} />
       <Button label="Failure" labelKey="close" tone="danger" onClick={() => show("fail")} />
       <ToastViewport
