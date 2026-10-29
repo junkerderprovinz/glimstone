@@ -4,13 +4,23 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
+Buttons that only had words in BombVault, KnightLoader and ArrowLoop get glyphs, so the Glyph choice of the label setting reaches them too. Twenty-two glyphs join the assortment, four meanings move off the glyphs they shared, and `IconSignIn` is turned so its arrow points into the door.
+
 **Adopting apps:**
 
-- **Glyphs:** copy `IconSignIn` from `reference/glyphs.json` again.
+- **Glyphs:** copy `IconSignIn` from `reference/glyphs.json` again, and take the new glyphs where the app has those buttons. `reference/glyph-map.md` says which button moves where in BombVault, KnightLoader and ArrowLoop.
+- **Label keys:** point retry, reload and refresh at `IconRetry` and a reset at `IconRefresh`, import and export at `IconImport` and `IconExport`, Done, Confirm and Got it at `IconConfirm`, decline at `IconReject`, apply at `IconApply` and undo at `IconUndo`.
+
+## ✨ Added
+
+- **Twenty-two glyphs for buttons that had none**, all from Streamline's free set: `IconRetry`, `IconImport`, `IconExport`, `IconConfirm`, `IconReject`, `IconApply`, `IconUndo`, `IconEmpty`, `IconForgotPassword`, `IconCompact`, `IconKeepBoth`, `IconKeepLeft`, `IconKeepRight`, `IconMerge`, `IconSendTest`, `IconStopAsking`, `IconCookies`, `IconLog`, `IconInstall`, `IconUpdate`, `IconUpdateAvailable` and `IconWhatsNew`. `IconReject` is the thumb of `IconConfirm` mirrored to point down, and the gift of `IconWhatsNew` has its ribbon drawn as a filled shape instead of a line.
+- **An ArrowLoop table in `glyph-map.md`** with the button meanings it has.
 
 ## 🔁 Changed
 
 - **`IconSignIn` is turned half a turn**, so its arrow points into the door while `IconSignOut`'s leaves it. The turn is part of the path, so the ink box and the view box stay as they were.
+- **Four meanings get a glyph of their own.** `IconRefresh` marks a reset to the default, and trying again, reloading and refreshing wear `IconRetry`. `IconUpload` and `IconDownload` move files, while `IconImport` and `IconExport` read in and write out. `IconCheck` keeps a test and its success, and `IconConfirm` takes Done, Confirm and Got it.
+- **Existing glyphs name their new buttons.** The meanings of `IconAdd`, `IconClose`, `IconPencil`, `IconTrash`, `IconPlay`, `IconForward`, `IconKey`, `IconKeyRevoke`, `IconGear`, `IconSliders`, `IconCode`, `IconApp`, `IconShieldOn` and `IconShieldOff` now cover buttons such as Create, Dismiss, Rename, Set password and Variables.
 
 ## 3.7.0 - 2026-10-27
 
