@@ -199,7 +199,7 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconDiagnostics` | Diagnostics | Streamline `programming/bug.svg` |
 | `IconKeyboard` | Keyboard shortcuts | Streamline `computer-devices/keyboard.svg` |
 
-### Look settings, the segments of the Design, Corners, Motion and Labels selectors
+### Look settings, the segments of the Design, Corners, Motion, Labels and Row height selectors
 
 | Name | Means | Source |
 | --- | --- | --- |
@@ -212,12 +212,15 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconMotionSubtle` | Gentle motion | Drawn for ArrowLoop, commit `771005df` |
 | `IconMotionWild` | Wild motion | Drawn for ArrowLoop, commit `771005df` |
 | `IconMotionStorm` | The storm, the hidden level above wild | Drawn for ArrowLoop, commit `771005df` |
-| `IconLabelText` | Label mode, the words alone | Drawn for TowerTorch, commit `0fbc20d` |
-| `IconLabelTextGlyph` | Label mode, glyph and words | Drawn for TowerTorch, commit `0fbc20d` |
-| `IconLabelGlyph` | Label mode, the glyph alone | Drawn for TowerTorch, commit `0fbc20d` |
-| `IconLabelReactive` | Label mode, the glyph that opens to its words | Drawn for TowerTorch, commit `0fbc20d` |
+| `IconLabelText` | Label mode, the words alone | Drawn for GlimStone |
+| `IconLabelTextGlyph` | Label mode, glyph and words | Drawn for GlimStone |
+| `IconLabelGlyph` | Label mode, the glyph alone | Drawn for GlimStone |
+| `IconLabelReactive` | Label mode, the glyph that opens to its words | Drawn for GlimStone |
+| `IconRowCompact` | Compact rows | Drawn for GlimStone |
+| `IconRowMedium` | Medium rows | Drawn for GlimStone |
+| `IconRowComfortable` | Comfortable rows | Drawn for GlimStone |
 
-The Design selector's Dark and Light segments wear `IconMoon` and `IconSun` from the actions above, and System wears `IconThemeSystem`, a ring with one half filled. Each corner glyph is a frame drawn with the corners it names, so the four read as one family whatever corners the selector around them has. The motion glyphs are one line that swings further at each level, just as a level is the same animation with bigger numbers. `IconCornerLeaf` and `IconMotionStorm` belong to the hidden shape and the hidden level and stand only where the selector offers those. The four label glyphs share one uncropped box like the corner and motion glyphs, so a rounded block for the glyph and bars for the words keep their sizes against each other from choice to choice: the bars alone for Text, block and bars for Text and glyph, the block alone for Glyph, and for Reactive the block with three dots that shrink away from it.
+The Design selector's Dark and Light segments wear `IconMoon` and `IconSun` from the actions above, and System wears `IconThemeSystem`, a ring with one half filled. Each corner glyph is a frame drawn with the corners it names, so the four read as one family whatever corners the selector around them has. The motion glyphs are one line that swings further at each level, just as a level is the same animation with bigger numbers. `IconCornerLeaf` and `IconMotionStorm` belong to the hidden shape and the hidden level and stand only where the selector offers those. The four label glyphs draw a choice with a disc for the glyph and bars for the words: three bars for Text, a small disc before two bars for Text and glyph, a large disc alone for Glyph, and for Reactive a disc with a pointer arrow at its corner, since that mode opens the words under the pointer. The row glyphs are bars across the full width at three spacings, four close ones for Compact, three for Medium and two far apart for Comfortable. Only the gap between the bars sets the three apart.
 
 **`IconGrip` is two columns of three dots**, the handle TowerTorch and KnightLoader each drew for a row that drags.
 

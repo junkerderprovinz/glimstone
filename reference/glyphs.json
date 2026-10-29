@@ -886,54 +886,93 @@
  {
   "name": "IconLabelText",
   "means": "Label mode, the words alone",
-  "source": "Drawn for TowerTorch, commit 0fbc20d",
+  "source": "Drawn for GlimStone",
   "viewBox": "0 0 14 14",
   "ink": [
-   1,
-   4.6,
-   12,
-   4.8
+   0,
+   2.5,
+   14,
+   9
   ],
-  "svg": "<path d=\"M1.9 4.6H12.1A0.9 0.9 0 0 1 12.1 6.4H1.9A0.9 0.9 0 0 1 1.9 4.6ZM1.9 7.6H8.1A0.9 0.9 0 0 1 8.1 9.4H1.9A0.9 0.9 0 0 1 1.9 7.6Z\" />"
+  "svg": "<path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M0 3.5A1 1 0 0 1 1 2.5H13A1 1 0 0 1 13 4.5H1A1 1 0 0 1 0 3.5ZM0 7A1 1 0 0 1 1 6H13A1 1 0 0 1 13 8H1A1 1 0 0 1 0 7ZM0 10.5A1 1 0 0 1 1 9.5H8A1 1 0 0 1 8 11.5H1A1 1 0 0 1 0 10.5Z\" />"
  },
  {
   "name": "IconLabelTextGlyph",
   "means": "Label mode, glyph and words",
-  "source": "Drawn for TowerTorch, commit 0fbc20d",
+  "source": "Drawn for GlimStone",
   "viewBox": "0 0 14 14",
   "ink": [
-   0.5,
-   4.5,
-   13,
-   5
+   0,
+   4,
+   14,
+   6
   ],
-  "svg": "<path d=\"M1.7 4.5H4.3A1.2 1.2 0 0 1 5.5 5.7V8.3A1.2 1.2 0 0 1 4.3 9.5H1.7A1.2 1.2 0 0 1 0.5 8.3V5.7A1.2 1.2 0 0 1 1.7 4.5ZM7.9 4.6H12.6A0.9 0.9 0 0 1 12.6 6.4H7.9A0.9 0.9 0 0 1 7.9 4.6ZM7.9 7.6H10.6A0.9 0.9 0 0 1 10.6 9.4H7.9A0.9 0.9 0 0 1 7.9 7.6Z\" />"
+  "svg": "<path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M3 4A3 3 0 1 1 3 10 3 3 0 1 1 3 4ZM7 5A1 1 0 0 1 8 4H13A1 1 0 0 1 13 6H8A1 1 0 0 1 7 5ZM7 9A1 1 0 0 1 8 8H11A1 1 0 0 1 11 10H8A1 1 0 0 1 7 9Z\" />"
  },
  {
   "name": "IconLabelGlyph",
   "means": "Label mode, the glyph alone",
-  "source": "Drawn for TowerTorch, commit 0fbc20d",
-  "viewBox": "0 0 14 14",
+  "source": "Drawn for GlimStone",
+  "viewBox": "1.5 1.5 11 11",
   "ink": [
-   3.5,
-   3.5,
-   7,
-   7
+   1.5,
+   1.5,
+   11,
+   11
   ],
-  "svg": "<path d=\"M5.1 3.5H8.9A1.6 1.6 0 0 1 10.5 5.1V8.9A1.6 1.6 0 0 1 8.9 10.5H5.1A1.6 1.6 0 0 1 3.5 8.9V5.1A1.6 1.6 0 0 1 5.1 3.5Z\" />"
+  "svg": "<path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M7 1.5A5.5 5.5 0 1 1 7 12.5 5.5 5.5 0 1 1 7 1.5Z\" />"
  },
  {
   "name": "IconLabelReactive",
   "means": "Label mode, the glyph that opens to its words",
-  "source": "Drawn for TowerTorch, commit 0fbc20d",
-  "viewBox": "0 0 14 14",
+  "source": "Drawn for GlimStone",
+  "viewBox": "0.25 0.5 14 14",
   "ink": [
    0.5,
-   4.5,
-   13,
-   5
+   0.5,
+   13.5,
+   14
   ],
-  "svg": "<path d=\"M1.7 4.5H4.3A1.2 1.2 0 0 1 5.5 5.7V8.3A1.2 1.2 0 0 1 4.3 9.5H1.7A1.2 1.2 0 0 1 0.5 8.3V5.7A1.2 1.2 0 0 1 1.7 4.5ZM8 6.1A0.9 0.9 0 1 1 8 7.9A0.9 0.9 0 1 1 8 6.1ZM10.8 6.2A0.8 0.8 0 1 1 10.8 7.8A0.8 0.8 0 1 1 10.8 6.2ZM12.95 6.45A0.55 0.55 0 1 1 12.95 7.55A0.55 0.55 0 1 1 12.95 6.45Z\" />"
+  "svg": "<path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M4.5 0.5A4 4 0 1 1 4.5 8.5 4 4 0 1 1 4.5 0.5ZM8.8 8.8 14 11 11.7 11.7 13.2 13.9 12.2 14.5 10.8 12.3 9.2 13.9Z\" />"
+ },
+ {
+  "name": "IconRowCompact",
+  "means": "Compact rows",
+  "source": "Drawn for GlimStone",
+  "viewBox": "0 0 14 14",
+  "ink": [
+   0,
+   0.5,
+   14,
+   13
+  ],
+  "svg": "<path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M0 1.4A.9.9 0 0 1 .9.5H13.1A.9.9 0 0 1 13.1 2.3H.9A.9.9 0 0 1 0 1.4ZM0 5.13A.9.9 0 0 1 .9 4.23H13.1A.9.9 0 0 1 13.1 6.03H.9A.9.9 0 0 1 0 5.13ZM0 8.87A.9.9 0 0 1 .9 7.97H13.1A.9.9 0 0 1 13.1 9.77H.9A.9.9 0 0 1 0 8.87ZM0 12.6A.9.9 0 0 1 .9 11.7H13.1A.9.9 0 0 1 13.1 13.5H.9A.9.9 0 0 1 0 12.6Z\" />"
+ },
+ {
+  "name": "IconRowMedium",
+  "means": "Medium rows",
+  "source": "Drawn for GlimStone",
+  "viewBox": "0 0 14 14",
+  "ink": [
+   0,
+   1,
+   14,
+   12
+  ],
+  "svg": "<path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M0 2A1 1 0 0 1 1 1H13A1 1 0 0 1 13 3H1A1 1 0 0 1 0 2ZM0 7A1 1 0 0 1 1 6H13A1 1 0 0 1 13 8H1A1 1 0 0 1 0 7ZM0 12A1 1 0 0 1 1 11H13A1 1 0 0 1 13 13H1A1 1 0 0 1 0 12Z\" />"
+ },
+ {
+  "name": "IconRowComfortable",
+  "means": "Comfortable rows",
+  "source": "Drawn for GlimStone",
+  "viewBox": "0 0 14 14",
+  "ink": [
+   0,
+   1.8,
+   14,
+   10.4
+  ],
+  "svg": "<path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M0 3A1.2 1.2 0 0 1 1.2 1.8H12.8A1.2 1.2 0 0 1 12.8 4.2H1.2A1.2 1.2 0 0 1 0 3ZM0 11A1.2 1.2 0 0 1 1.2 9.8H12.8A1.2 1.2 0 0 1 12.8 12.2H1.2A1.2 1.2 0 0 1 0 11Z\" />"
  },
  {
   "name": "IconGear",

@@ -150,7 +150,7 @@
 
 ## Look settings
 
-ArrowLoop drew these glyphs for the segments of its Design, Corners and Motion selectors, so this table gets a column for it. BombVault and KnightLoader wear them too.
+ArrowLoop drew the glyphs for the segments of its Design, Corners and Motion selectors, so this table gets a column for it. BombVault and KnightLoader wear them too. The Labels and Row height glyphs were drawn for GlimStone; only KnightLoader has a Row height selector.
 
 | Meaning | GlimStone | ArrowLoop | BombVault | KnightLoader |
 | --- | --- | --- | --- | --- |
@@ -165,6 +165,13 @@ ArrowLoop drew these glyphs for the segments of its Design, Corners and Motion s
 | Motion selector, Subtle | `IconMotionSubtle` | `IconMotionSubtle`, standard | `IconMotionSubtle`, standard | `IconMotionSubtle`, standard |
 | Motion selector, Wild | `IconMotionWild` | `IconMotionWild`, standard | `IconMotionWild`, standard | `IconMotionWild`, standard |
 | Motion selector, the hidden storm | `IconMotionStorm` | `IconMotionStorm`, standard | `IconMotionStorm`, standard | `IconMotionStorm`, standard |
+| Labels selector, Text | `IconLabelText` | `IconLabelText`, to follow | `IconLabelText`, to follow | `IconLabelText`, to follow |
+| Labels selector, Text and glyph | `IconLabelTextGlyph` | `IconLabelTextGlyph`, to follow | `IconLabelTextGlyph`, to follow | `IconLabelTextGlyph`, to follow |
+| Labels selector, Glyph | `IconLabelGlyph` | `IconLabelGlyph`, to follow | `IconLabelGlyph`, to follow | `IconLabelGlyph`, to follow |
+| Labels selector, Reactive | `IconLabelReactive` | `IconLabelReactive`, to follow | `IconLabelReactive`, to follow | `IconLabelReactive`, to follow |
+| Row height selector, Compact | `IconRowCompact` | none | none | `IconRowCompact`, to follow |
+| Row height selector, Medium | `IconRowMedium` | none | none | `IconRowMedium`, to follow |
+| Row height selector, Comfortable | `IconRowComfortable` | none | none | `IconRowComfortable`, to follow |
 
 <br>
 
@@ -177,12 +184,12 @@ TowerTorch wears the assortment on its own controls and on the Unraid buttons it
 | Drag to reorder | `IconGrip` | `Grip`, standard |
 | Move elsewhere | `IconMove` | `Move`, standard |
 | Compute, calculate | `IconCompute` | `Compute`, standard |
-| Labels selector, Text | `IconLabelText` | `IconLabelText`, standard |
-| Labels selector, Text and glyph | `IconLabelTextGlyph` | `IconLabelTextGlyph`, standard |
-| Labels selector, Glyph | `IconLabelGlyph` | `IconLabelGlyph`, standard |
-| Labels selector, Reactive | `IconLabelReactive` | `IconLabelReactive`, standard |
+| Labels selector, Text | `IconLabelText` | `IconLabelText`, switch |
+| Labels selector, Text and glyph | `IconLabelTextGlyph` | `IconLabelTextGlyph`, switch |
+| Labels selector, Glyph | `IconLabelGlyph` | `IconLabelGlyph`, switch |
+| Labels selector, Reactive | `IconLabelReactive` | `IconLabelReactive`, switch |
 
-KnightLoader still draws its own grip, three rows of two dots in an 8 by 12 box, which is why its row above says switch.
+KnightLoader still draws its own grip, three rows of two dots in an 8 by 12 box, which is why its row above says switch. TowerTorch still wears the four label glyphs it drew, a rounded block beside bars, and moves to the assortment's discs.
 
 <br>
 

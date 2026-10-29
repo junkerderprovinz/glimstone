@@ -2,6 +2,22 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+The Labels selector gets new glyphs, and a Row height selector gets three of its own.
+
+**Adopting apps:**
+
+- **Glyphs:** copy `IconLabelText`, `IconLabelTextGlyph`, `IconLabelGlyph` and `IconLabelReactive` from `reference/glyphs.json` again and put them on the Labels selector's segments. An app with a Row height selector takes `IconRowCompact`, `IconRowMedium` and `IconRowComfortable` for it.
+
+## ✨ Added
+
+- **Three glyphs for a Row height selector.** `IconRowCompact`, `IconRowMedium` and `IconRowComfortable` are bars across the width, four close together, three, and two far apart.
+
+## 🎨 Design
+
+- **The label glyphs are redrawn with a disc for the glyph.** Three bars stand for Text, a small disc before two bars for Text and glyph, a large disc for Glyph, and a disc with a pointer arrow for Reactive. `IconLabelGlyph` and `IconLabelReactive` take a viewBox cropped to their ink.
+
 ## 3.7.0 - 2026-10-27
 
 Nine findings from TowerTorch, the Unraid plugin that restyles the host's own pages. Two rules keep a live page fast, the tooltip leaves structure alone, the label engine reaches buttons the app does not own, a move mode wiggles, and the glyph set grows by six and redraws its grip. A star marks the default entry and a card's own buttons move to its foot. What's new shows one card per release, and a number field that React hides no longer blanks the page.
