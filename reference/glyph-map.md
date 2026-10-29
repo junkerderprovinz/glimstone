@@ -79,7 +79,7 @@
 | A protection is on, turn it on | `IconShieldOn` | `IconShieldOn`, standard | `IconShieldOn`, standard |
 | A protection is off, turn it off | `IconShieldOff` | `IconShieldOff`, standard | to follow |
 | Store uncompressed | `IconCompressOff` | `IconCompressOff`, standard | none |
-| Let the tool choose the compression | `IconCompressAuto` | `IconCompressAuto`, standard | none |
+| Automatic, the app chooses | `IconCompressAuto` | `IconCompressAuto`, standard | to follow |
 | Compress as far as possible | `IconCompressMax` | `IconCompressMax`, standard | none |
 | Script, code, variables | `IconCode` | none | `IconCode`, standard |
 | Dark look | `IconMoon` | none | `IconMoon`, standard |
@@ -96,6 +96,7 @@
 | Open the log | `IconLog` | none | to follow |
 | Install | `IconInstall` | to follow | to follow |
 | Fetch an update, update now | `IconUpdate` | none | to follow |
+| Up to date after an update check | `IconUpToDate` | `IconCheck`, switch | none |
 | An update is available | `IconUpdateAvailable` | `IconSearch`, switch | none |
 
 <br>
@@ -225,6 +226,7 @@ ArrowLoop picks a button's glyph from its translation key. The rows below are th
 | Keep the right version | `IconKeepRight` | to follow |
 | Sign in | `IconSignIn` | `IconSave`, switch |
 | Forgot password | `IconForgotPassword` | `IconRefresh`, switch |
+| Up to date after an update check | `IconUpToDate` | to follow |
 | An update is available | `IconUpdateAvailable` | to follow |
 | What's new | `IconWhatsNew` | to follow, beside the dot its button wears |
 | Open or show the app | `IconApp` | `IconTabApp` on the tray's Open, switch |

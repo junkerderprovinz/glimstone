@@ -4,7 +4,7 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
-Buttons that only had words in BombVault, KnightLoader and ArrowLoop get glyphs, so the Glyph choice of the label setting reaches them too. Twenty-two glyphs join the assortment, four meanings move off the glyphs they shared, and `IconSignIn` is turned so its arrow points into the door.
+Buttons that only had words in BombVault, KnightLoader and ArrowLoop get glyphs, so the Glyph choice of the label setting reaches them too. Twenty-three glyphs join the assortment, four meanings move off the glyphs they shared, and `IconSignIn` is turned so its arrow points into the door.
 
 **Adopting apps:**
 
@@ -13,13 +13,14 @@ Buttons that only had words in BombVault, KnightLoader and ArrowLoop get glyphs,
 
 ## ✨ Added
 
-- **Twenty-two glyphs for buttons that had none**, all from Streamline's free set: `IconRetry`, `IconImport`, `IconExport`, `IconConfirm`, `IconReject`, `IconApply`, `IconUndo`, `IconEmpty`, `IconForgotPassword`, `IconCompact`, `IconKeepBoth`, `IconKeepLeft`, `IconKeepRight`, `IconMerge`, `IconSendTest`, `IconStopAsking`, `IconCookies`, `IconLog`, `IconInstall`, `IconUpdate`, `IconUpdateAvailable` and `IconWhatsNew`. `IconReject` is the thumb of `IconConfirm` mirrored to point down, and the gift of `IconWhatsNew` has its ribbon drawn as a filled shape instead of a line.
+- **Twenty-three glyphs for buttons that had none**, all from Streamline's free set: `IconRetry`, `IconImport`, `IconExport`, `IconConfirm`, `IconReject`, `IconApply`, `IconUndo`, `IconEmpty`, `IconForgotPassword`, `IconCompact`, `IconKeepBoth`, `IconKeepLeft`, `IconKeepRight`, `IconMerge`, `IconSendTest`, `IconStopAsking`, `IconCookies`, `IconLog`, `IconInstall`, `IconUpdate`, `IconUpToDate`, `IconUpdateAvailable` and `IconWhatsNew`. `IconUpToDate` is the cloud of `IconUpdate` with a tick, for the update check that found nothing new. `IconReject` is the thumb of `IconConfirm` mirrored to point down, and the gift of `IconWhatsNew` has its ribbon drawn as a filled shape instead of a line.
 - **An ArrowLoop table in `glyph-map.md`** with the button meanings it has.
 
 ## 🔁 Changed
 
 - **`IconSignIn` is turned half a turn**, so its arrow points into the door while `IconSignOut`'s leaves it. The turn is part of the path, so the ink box and the view box stay as they were.
 - **Four meanings get a glyph of their own.** `IconRefresh` marks a reset to the default, and trying again, reloading and refreshing wear `IconRetry`. `IconUpload` and `IconDownload` move files, while `IconImport` and `IconExport` read in and write out. `IconCheck` keeps a test and its success, and `IconConfirm` takes Done, Confirm and Got it.
+- **`IconCompressAuto` means Automatic, the app chooses.** The magic wand covers the compression the tool picks and the order KnightLoader picks for its providers. The name stays, so apps that generate from the list keep working.
 - **Existing glyphs name their new buttons.** The meanings of `IconAdd`, `IconClose`, `IconPencil`, `IconTrash`, `IconPlay`, `IconForward`, `IconKey`, `IconKeyRevoke`, `IconGear`, `IconSliders`, `IconCode`, `IconApp`, `IconShieldOn` and `IconShieldOff` now cover buttons such as Create, Dismiss, Rename, Set password and Variables.
 
 ## 3.7.0 - 2026-10-27

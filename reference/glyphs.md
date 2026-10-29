@@ -136,7 +136,7 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconShieldOn` | A protection is on, turn it on | Drawn for GlimStone |
 | `IconShieldOff` | A protection is off, turn it off | Drawn for GlimStone |
 | `IconCompressOff` | Store uncompressed | Streamline `shipping/shipping-box-1.svg` |
-| `IconCompressAuto` | Let the tool choose the compression | Streamline `interface-essential/magic-wand-2.svg` |
+| `IconCompressAuto` | Automatic, the app chooses | Streamline `interface-essential/magic-wand-2.svg` |
 | `IconCompressMax` | Compress as far as possible | Streamline `interface-essential/arrow-shrink.svg` |
 | `IconCode` | Script, code, variables | Drawn for GlimStone |
 | `IconMoon` | Dark look | Streamline `interface-essential/waning-cresent-moon.svg` |
@@ -153,6 +153,7 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconLog` | Open the log | Streamline `programming/file-code-1.svg` |
 | `IconInstall` | Install | Streamline `programming/browser-add.svg` |
 | `IconUpdate` | Fetch an update, update now | Streamline `programming/cloud-refresh.svg` |
+| `IconUpToDate` | Up to date after an update check | Streamline `programming/cloud-check.svg` |
 | `IconUpdateAvailable` | An update is available | Streamline `interface-essential/megaphone-2.svg` |
 
 ### Navigation and domain
@@ -245,7 +246,7 @@ The Design selector's Dark and Light segments wear `IconMoon` and `IconSun` from
 
 **Pairs share one drawing turned or mirrored.** `IconFirst` is `IconLatest` mirrored top to bottom, `IconMoveDown` is `IconMoveUp` mirrored and `IconReject`, the thumb down, is `IconConfirm` mirrored, so the two halves of each pair cannot drift apart. `IconEye` and `IconEyeOff` are Streamline's `visible` and `invisible-1`, and a Show phrase button and the reveal toggle in a password field wear the same two. `IconMail` rests on a mail button and `IconMailOpen` takes its place under the pointer or a finger; `MAIL_SVG` in `appMarks.ts` carries the pair. `IconManual`, the closed book, and `IconManualOpen` do the same on the manual button, and `MANUAL_SVG` carries them.
 
-**Close meanings wear different drawings.** `IconRetry` tries again, reloads or refreshes, and `IconRefresh` goes back to the default whatever its name says. `IconUpload` and `IconDownload` move a file to or from somewhere else, while `IconImport` and `IconExport` read a list or settings in and write them out. `IconCheck` marks a test and the success it reports, and `IconConfirm` is a person agreeing: Done, Confirm, Got it. `IconApply` takes something over in place of what was there, which is not saving.
+**Close meanings wear different drawings.** `IconRetry` tries again, reloads or refreshes, and `IconRefresh` goes back to the default whatever its name says. `IconUpload` and `IconDownload` move a file to or from somewhere else, while `IconImport` and `IconExport` read a list or settings in and write them out. `IconCheck` marks a test and the success it reports, and `IconConfirm` is a person agreeing: Done, Confirm, Got it. `IconApply` takes something over in place of what was there, which is not saving. `IconCompressAuto` marks anything the app chooses by itself, the compression as well as the order of the providers, and keeps its name for the apps that generate from this list. `IconUpdate` fetches an update and `IconUpToDate` reports that there was none to fetch: the same cloud, with a tick in place of the arrows.
 
 **A brand mark is the brand's own and goes only where it is meant.** `IconCoffee` is Buy Me a Coffee's mark and stands only on the button that leads there, and `IconCaptcha` is reCAPTCHA's mark and stands only where a captcha is the subject. `IconContainers` and `IconGithub` follow the same rule (section 1).
 
