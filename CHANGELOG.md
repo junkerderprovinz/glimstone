@@ -4,14 +4,14 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
-Select becomes the one dropdown that can do everything, with KnightLoader's dropdown as the standard. It splits its list into groups with headings, opens submenus beside their rows, carries a glyph per option and takes one of four widths. The wheel steps it while it has focus, it stays busy while an answer is out and shakes when one is refused. It mirrors under a right-to-left language, gives a finger taller rows and keeps still under reduced motion. The design language has a section of its own for it.
+Select becomes the one dropdown that can do everything, with KnightLoader's dropdown as the standard. It splits its list into groups with headings, opens submenus beside their rows, carries a glyph per option and takes one of three sizes and four widths. An outside label can name it and a long value can wrap. The wheel steps it while it has focus, it stays busy while an answer is out and shakes when one is refused. It mirrors under a right-to-left language, gives a finger taller rows and keeps still under reduced motion. The design language has a section of its own for it.
 
 **Adopting apps:**
 
-- **KnightLoader:** keep `Dropdown.tsx` and check it against `reference/react/Select.tsx` and "The dropdown". The widths are the same four under new names: `widest` is `steady`, `shrink` is `squeeze` and `value` is `hug`. Its list has no typeahead yet, its rows stay under 44px on a touch screen, and it closes on every scroll event, where the reference closes on the person's wheel or finger, so a page that glides to a focused trigger does not shut the list as it opens. Take the reference's answers for those three.
+- **KnightLoader:** keep `Dropdown.tsx` and check it against `reference/react/Select.tsx` and "The dropdown". The widths are the same four under new names: `widest` is `steady`, `shrink` is `squeeze` and `value` is `hug`. Of the looks, `dense` is the `row` size and `inset` keeps its name. Its list has no typeahead yet, its rows stay under 44px on a touch screen, and it closes on every scroll event, where the reference closes on the person's wheel or finger, so a page that glides to a focused trigger does not shut the list as it opens. Take the reference's answers for those three.
 - **ArrowLoop:** replace `Choice` in `Field.tsx`, the sort list in `ListBar.tsx` and the share list in `Targets.tsx`, which draw their own trigger over the deprecated `DropdownListbox`, with `Select`. A language's flag goes in as the option's `glyph`, `roomy` becomes a `className` on the trigger, and the wheel comes built in. Install `@zag-js/react`, `@zag-js/select` and `@zag-js/menu`, and copy `reference/selectScroll.ts` beside the components folder.
-- **BombVault:** `SelectField` already runs on the select machine with glyphs, the wheel and the portal hue. Take groups and headings, the four widths (its stacked labels are `steady`), a `null` value with a placeholder, `busy`, `shake`, `tip` and submenus from `Select`, and install `@zag-js/menu`. Move the lists still on `DropdownListbox` (the backup list bar, the container stop editor, the streaming card, the ZFS item settings and the exceptions) to it as well.
-- **Every app:** copy the select rules from `reference/tokens.css` again. The open list is at least 13rem wide, at most 22rem, scrolls from 24rem and never runs past the window; this reaches the Combobox's list too.
+- **BombVault:** replace `SelectField` with `Select` and install `@zag-js/menu`. Its `id`, `ref` and `wrap` carry over under the same names, its stacked labels are `width="steady"`, and its glyphs are the options' `glyph`. Groups and headings, a `null` value with a placeholder, `busy`, `shake`, `tip` and submenus come with it. Move the lists still on `DropdownListbox` (the backup list bar, the container stop editor, the streaming card, the ZFS item settings and the exceptions) to it as well.
+- **Every app:** copy the select rules from `reference/tokens.css` again. The open list is at least 13rem wide, under a narrow trigger too, at most 22rem, scrolls from 24rem and never runs past the window; this reaches the Combobox's list too.
 
 ## ✨ Added
 
@@ -19,9 +19,11 @@ Select becomes the one dropdown that can do everything, with KnightLoader's drop
 - **Submenus.** An entry with `options` of its own opens them beside its row. A list with one runs on Zag's menu machine with radio items, since a listbox cannot nest.
 - **Four widths.** `fill`, `steady`, `squeeze` and `hug`, from KnightLoader's `fill`, `widest`, `shrink` and `value`.
 - **The wheel, built in.** A closed Select with focus steps through every option in list order, skipping disabled ones and stopping at both ends.
+- **Three sizes.** `field`, `row` for a list or table row and `inset` inside another field, from KnightLoader's `field`, `dense` and `inset` looks.
+- **An outside label and a long value.** `id` names the trigger for a `<label htmlFor>`, `ref` hands the caller its node, and `wrap` lets a value run onto a second line.
 - **Glyphs, a placeholder, busy, shake and tip.** An option can carry a glyph, a `null` value shows the placeholder, `busy` keeps the focus and takes no input, each bump of `shake` shakes the trigger once, and `tip` gives a trigger without a label a hover bubble.
 - **The framework-free mount takes groups, widths and the wheel.** `reference/select.ts` gets them too; submenus need the React component.
-- **Seventeen contract rows** for Select on the site, each a Playwright test, among them right to left, reduced motion and touch.
+- **Twenty-one contract rows** for Select on the site, each a Playwright test, among them right to left, reduced motion and touch.
 
 ## 🔁 Changed
 
