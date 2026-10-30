@@ -265,6 +265,289 @@ test.describe("Select", () => {
     await page.locator("main h1").click();
     await expect(list(page)).toBeHidden();
   });
+
+  test("[select-scroll-away] a scroll outside closes", async ({ page }) => {
+    await openSelect(page);
+    // The wheel inside the list scrolls the list.
+    await list(page).hover();
+    await page.mouse.wheel(0, 40);
+    await expect(list(page)).toBeVisible();
+    const vp = page.viewportSize()!;
+    await page.mouse.move(vp.width - 20, vp.height - 20);
+    await page.mouse.wheel(0, 40);
+    await expect(list(page)).toBeHidden();
+  });
+
+  test("[select-wheel] the wheel steps the focused trigger", async ({ page }) => {
+    await open(page, "/components/select");
+    await trigger(page).focus();
+    await trigger(page).hover();
+    await page.mouse.wheel(0, 100);
+    await expect(trigger(page)).toHaveText(/Europe\/Berlin/);
+    await page.mouse.wheel(0, -100);
+    await page.mouse.wheel(0, -100);
+    await expect(trigger(page)).toHaveText(/Europe\/Vienna/);
+    await expect(list(page)).toBeHidden();
+
+    // "Network share" at the end is disabled, so the wheel stops on the one before it.
+    const target = stage(page, "SelectGroups").locator(".glim-select-trigger").nth(1);
+    await target.focus();
+    await target.hover();
+    await page.mouse.wheel(0, 100);
+    await expect(target).toHaveText(/Cloud storage/);
+    await page.mouse.wheel(0, 100);
+    await expect(target).toHaveText(/Cloud storage/);
+  });
+
+  test("[select-wheel-hover] the wheel leaves a trigger without focus alone", async ({ page }) => {
+    await open(page, "/components/select");
+    await page.locator("main h1").click();
+    await trigger(page).hover();
+    await page.mouse.wheel(0, 100);
+    await expect(trigger(page)).toHaveText(/Europe\/Vienna/);
+  });
+
+  test("[select-groups] named groups, arrows run through all", async ({ page }) => {
+    await open(page, "/components/select");
+    const format = stage(page, "SelectGroups").locator(".glim-select-trigger").first();
+    await format.focus();
+    await page.keyboard.press("Enter");
+    const box = page.getByRole("listbox", { name: "Audio format" });
+    await expect(box).toBeVisible();
+    await expect(box.getByRole("group", { name: "Convert to" }).getByRole("option")).toHaveText(["FLAC", "WAV"]);
+    const lit = () => box.locator(".glim-select-item[data-highlighted]").innerText();
+    await expect.poll(lit).toBe("Opus");
+    await page.keyboard.press("End");
+    expect(await lit()).toBe("WAV");
+    await page.keyboard.press("Home");
+    expect(await lit()).toBe("Auto");
+    await page.keyboard.press("ArrowDown");
+    expect(await lit()).toBe("Opus");
+  });
+
+  test("[select-placeholder] null shows the placeholder", async ({ page }) => {
+    await open(page, "/components/select");
+    const backend = stage(page, "SelectStates").locator(".glim-select-trigger").first();
+    await expect(backend).toHaveText("Mixed");
+    await backend.click();
+    const box = page.getByRole("listbox", { name: "Backend" });
+    await expect(box).toBeVisible();
+    await expect(box.locator('[aria-selected="true"]')).toHaveCount(0);
+  });
+
+  test("[select-busy] busy keeps focus and takes nothing", async ({ page }) => {
+    await open(page, "/components/select");
+    const backend = stage(page, "SelectStates").locator(".glim-select-trigger").first();
+    await backend.click();
+    await page.getByRole("option", { name: "Real-Debrid" }).click();
+    await expect(backend).toHaveAttribute("aria-busy", "true");
+    await expect(backend).toBeFocused();
+    await page.keyboard.press("Enter");
+    await expect(page.getByRole("listbox", { name: "Backend" })).toBeHidden();
+    await backend.hover();
+    await page.mouse.wheel(0, 100);
+    await expect(backend).toHaveText(/Real-Debrid/);
+    await expect(backend).not.toHaveAttribute("aria-busy", "true");
+  });
+
+  test("[select-shake] a refused value shakes the trigger", async ({ page }) => {
+    await open(page, "/components/select");
+    const backend = stage(page, "SelectStates").locator(".glim-select-trigger").first();
+    // The shake is over in a fifth of a second, so it is counted as it starts.
+    await backend.evaluate((el) => {
+      el.dataset.shakes = "0";
+      el.addEventListener("animationstart", (e) => {
+        if ((e as AnimationEvent).animationName.startsWith("glim-shake")) el.dataset.shakes = String(Number(el.dataset.shakes) + 1);
+      });
+    });
+    await backend.click();
+    await page.getByRole("option", { name: "AllDebrid" }).click();
+    await expect(backend).toHaveAttribute("data-shakes", "1");
+    await expect(backend).toHaveText("Mixed");
+  });
+
+  test("[select-tip] the tip shows in the house bubble", async ({ page }) => {
+    await open(page, "/components/select");
+    const backend = stage(page, "SelectStates").locator(".glim-select-trigger").first();
+    // In view first, since a scroll puts the bubble away again.
+    await backend.evaluate((el) => el.scrollIntoView({ block: "center", behavior: "instant" }));
+    await backend.focus();
+    await expect(page.getByRole("tooltip")).toHaveText("Which service fetches the selected links");
+  });
+
+  test("[select-widths] each width does what it says", async ({ page }) => {
+    await open(page, "/components/select");
+    const row = (w: string) => stage(page, "SelectWidths").locator(`[data-width="${w}"]`);
+    const width = async (w: string) => (await row(w).locator(".glim-select-trigger").boundingBox())!.width;
+    // Widths measured in the fallback font are not the ones the house font gives.
+    await page.evaluate(() => document.fonts.ready);
+    const before = Object.fromEntries(await Promise.all(["fill", "steady", "squeeze", "hug"].map(async (w) => [w, await width(w)])));
+
+    // The rows are 360px, less the 64px name and a 12px gap.
+    expect(before.fill).toBeCloseTo(284, 0);
+    expect(before.squeeze).toBeLessThan(before.steady);
+    expect(before.squeeze).toBeGreaterThanOrEqual(64);
+    expect(before.hug).toBeLessThan(before.steady);
+
+    for (const w of ["fill", "steady", "hug"]) {
+      await row(w).locator(".glim-select-trigger").click();
+      await page.getByRole("listbox", { name: `Keep backups, ${w}` }).getByRole("option", { name: "Until somebody removes them" }).click();
+    }
+    expect(await width("fill")).toBeCloseTo(before.fill, 0);
+    expect(await width("steady")).toBeCloseTo(before.steady, 0);
+    expect(await width("hug")).toBeGreaterThan(before.hug);
+  });
+});
+
+test.describe("Select with submenus", () => {
+  const trigger = (page: Page) => stage(page, "SelectSubmenu").locator(".glim-select-trigger");
+  const root = (page: Page) => page.getByRole("menu", { name: "Server time zone" });
+  const europe = (page: Page) => page.getByRole("menu", { name: "Europe" });
+  // A submenu is a list of its own on the body, so a menu holds only its own rows.
+  const lit = (menu: ReturnType<typeof root>) => menu.locator(".glim-select-item[data-highlighted]").innerText();
+
+  // The submenu takes the keys once it holds the focus.
+  async function enterEurope(page: Page) {
+    await page.keyboard.press("ArrowRight");
+    await expect(europe(page)).toBeVisible();
+    await expect.poll(() => lit(europe(page))).toBe("Berlin");
+    await expect.poll(() => page.evaluate(() => document.activeElement?.getAttribute("aria-label"))).toBe("Europe");
+  }
+
+  async function openMenu(page: Page) {
+    await open(page, "/components/select");
+    await trigger(page).focus();
+    await page.keyboard.press("Enter");
+    await expect(root(page)).toBeVisible();
+    await expect.poll(() => lit(root(page))).toBe("Europe");
+  }
+
+  test("[select-submenu-home] opens on the row that holds the value", async ({ page }) => {
+    await openMenu(page);
+    await expect(trigger(page)).toHaveAccessibleName("Server time zone: Vienna");
+  });
+
+  test("[select-submenu-open] ArrowRight opens the submenu", async ({ page }) => {
+    await openMenu(page);
+    await enterEurope(page);
+    const parent = (await root(page).boundingBox())!;
+    await expect.poll(async () => (await europe(page).boundingBox())!.x - (parent.x + parent.width)).toBeGreaterThanOrEqual(-8);
+    await expect(europe(page).getByRole("menuitemradio", { name: "Vienna" })).toHaveAttribute("aria-checked", "true");
+  });
+
+  test("[select-submenu-back] ArrowLeft closes it", async ({ page }) => {
+    await openMenu(page);
+    await enterEurope(page);
+    await page.keyboard.press("ArrowLeft");
+    await expect(europe(page)).toBeHidden();
+    await expect(root(page)).toBeVisible();
+    expect(await lit(root(page))).toBe("Europe");
+  });
+
+  test("[select-submenu-pick] Enter chooses and closes everything", async ({ page }) => {
+    await openMenu(page);
+    await enterEurope(page);
+    await page.keyboard.press("ArrowDown");
+    await expect.poll(() => lit(europe(page))).toBe("Lisbon");
+    await page.keyboard.press("Enter");
+    await expect(root(page)).toBeHidden();
+    await expect(europe(page)).toBeHidden();
+    await expect(trigger(page)).toHaveAccessibleName("Server time zone: Lisbon");
+    await expect(trigger(page)).toBeFocused();
+  });
+});
+
+test.describe("Select right to left", () => {
+  test.beforeEach(async ({ page }) => {
+    // The script runs before <html> exists, so it waits for it.
+    await page.addInitScript(() => {
+      new MutationObserver((_, watch) => {
+        if (!document.documentElement) return;
+        document.documentElement.dir = "rtl";
+        watch.disconnect();
+      }).observe(document, { childList: true });
+    });
+  });
+
+  test("[select-rtl] lines up on the right and opens submenus to the left", async ({ page }) => {
+    await open(page, "/components/select");
+    // The hug trigger is narrower than its list, so the side it lines up on shows.
+    const unit = stage(page, "SelectWidths").locator('[data-width="hug"] .glim-select-trigger');
+    await unit.click();
+    const box = page.getByRole("listbox", { name: "Keep backups, hug" });
+    await expect(box).toBeVisible();
+    const t = (await unit.boundingBox())!;
+    // Zag places the list on the frame after it shows.
+    await expect.poll(async () => {
+      const l = (await box.boundingBox())!;
+      return Math.abs(l.x + l.width - (t.x + t.width));
+    }).toBeLessThanOrEqual(2);
+    expect((await box.boundingBox())!.width).toBeGreaterThan(t.width + 20);
+    await page.keyboard.press("Escape");
+
+    const sub = stage(page, "SelectSubmenu").locator(".glim-select-trigger");
+    await sub.evaluate((el) => el.scrollIntoView({ block: "center", behavior: "instant" }));
+    await sub.focus();
+    await page.keyboard.press("Enter");
+    const root = page.getByRole("menu", { name: "Server time zone" });
+    await expect.poll(() => root.locator(".glim-select-item[data-highlighted]").innerText()).toBe("Europe");
+    await page.keyboard.press("ArrowLeft");
+    const europe = page.getByRole("menu", { name: "Europe" });
+    await expect(europe).toBeVisible();
+    const p = (await root.boundingBox())!;
+    await expect.poll(async () => {
+      const c = (await europe.boundingBox())!;
+      return c.x + c.width - p.x;
+    }).toBeLessThanOrEqual(8);
+  });
+});
+
+test.describe("Select under reduced motion", () => {
+  test.use({ reducedMotion: "reduce" });
+
+  test("[select-reduced-motion] the list appears without a fade", async ({ page }) => {
+    await open(page, "/components/select");
+    await stage(page, "SelectZag").locator(".glim-select-trigger").click();
+    const box = page.getByRole("listbox", { name: "Time zone", exact: true });
+    await expect(box).toBeVisible();
+    expect(await box.evaluate((el) => getComputedStyle(el).animationName)).toBe("none");
+  });
+});
+
+test.describe("Select on a touch screen", () => {
+  test.use({ hasTouch: true });
+
+  test("[select-touch] a tap opens it and rows fit a finger", async ({ page }) => {
+    await open(page, "/components/select");
+    await stage(page, "SelectZag").locator(".glim-select-trigger").tap();
+    const box = page.getByRole("listbox", { name: "Time zone", exact: true });
+    await expect(box).toBeVisible();
+    const heights = await box.getByRole("option").evaluateAll((els) => els.map((e) => e.getBoundingClientRect().height));
+    expect(Math.min(...heights)).toBeGreaterThanOrEqual(44);
+
+    await box.getByRole("option", { name: "UTC" }).tap();
+    await expect(box).toBeHidden();
+    const sub = stage(page, "SelectSubmenu").locator(".glim-select-trigger");
+    await sub.tap();
+    await page.getByRole("menuitem", { name: "America" }).tap();
+    await expect(page.getByRole("menu", { name: "America" })).toBeVisible();
+  });
+});
+
+test.describe("Select without a framework", () => {
+  test("[select-vanilla] groups and the wheel", async ({ page }) => {
+    await open(page, "/components/select");
+    const zone = stage(page, "SelectVanilla").locator(".glim-select-trigger");
+    await zone.click();
+    const box = page.getByRole("listbox", { name: "Time zone, no framework" });
+    await expect(box.getByRole("group", { name: "Europe" }).getByRole("option")).toHaveText(["Europe/Berlin", "Europe/Vienna"]);
+    await page.keyboard.press("Escape");
+    await expect(box).toBeHidden();
+    await zone.focus();
+    await zone.hover();
+    await page.mouse.wheel(0, 100);
+    await expect(zone).toHaveText(/Europe\/Berlin/);
+  });
 });
 
 test.describe("Combobox", () => {

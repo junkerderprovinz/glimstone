@@ -21,7 +21,10 @@ function ZagNote({ file }: { file: string }) {
 export function SelectPage() {
   return (
     <>
-      <p className="lead">Picks one value from a short list. It takes over from DropdownListbox.</p>
+      <p className="lead">
+        The one dropdown. It picks one value from a short list, in groups with headings and submenus where the list
+        needs them. It takes over from DropdownListbox.
+      </p>
       <ZagNote file="react/Select.tsx" />
       <Demo name="SelectZag" />
       <Code
@@ -29,9 +32,51 @@ export function SelectPage() {
 
 <Select label="Time zone" options={zones} value={zone} onChange={setZone} />`}
       />
+      <H2>Groups and glyphs</H2>
+      <p>
+        <code>groups</code> splits the list into runs with a hairline between them. A run with a heading is a named
+        group for a screen reader too. An option can carry a glyph; once one does, every row keeps room for one, so the
+        labels line up.
+      </p>
+      <Demo name="SelectGroups" />
+      <Code
+        code={`<Select
+  label="Audio format"
+  value={format}
+  onChange={setFormat}
+  groups={[
+    { entries: [auto] },
+    { entries: [opus, aac, mp3] },
+    { heading: "Convert to", entries: [flac, wav] },
+  ]}
+/>`}
+      />
+      <H2>Submenus</H2>
+      <p>
+        An entry with <code>options</code> of its own opens them beside its row, for a list too long to show flat. A
+        listbox cannot nest, so a list with a submenu runs on Zag's menu machine with radio items. The keys, the wheel
+        and the look stay the same.
+      </p>
+      <Demo name="SelectSubmenu" />
+      <H2>Widths</H2>
+      <p>
+        <code>fill</code> takes its line like a text field. <code>steady</code> is as wide as the longest option, so
+        choosing never moves what stands beside it. <code>squeeze</code> is steady where there is room and gives way down
+        to a few letters and an ellipsis where there is not. <code>hug</code> fits the value on show. The open list shows
+        every option in full in all four.
+      </p>
+      <Demo name="SelectWidths" />
+      <H2>Placeholder, busy and refused</H2>
+      <p>
+        A <code>null</code> value shows the placeholder and ticks nothing. While <code>busy</code>, the trigger keeps its
+        focus and takes no input. Each bump of <code>shake</code> shakes it once, for a value the server refused. Pick
+        AllDebrid to see it.
+      </p>
+      <Demo name="SelectStates" />
       <H2>Without a framework</H2>
       <p>
         The same machine and the same rules, mounted into an empty element. This is how an Unraid plugin page uses it.
+        Groups, headings, the widths and the wheel come along; submenus need the React component.
       </p>
       <Demo name="SelectVanilla" />
       <Code code={vanillaSource} />
@@ -39,6 +84,12 @@ export function SelectPage() {
       <ul>
         <li>The closed select is a field at field height, so it never stands taller than the inputs beside it.</li>
         <li>In a settings row the label stands at the row's start; pass hideLabel and the name stays for screen readers.</li>
+        <li>
+          With focus on the closed trigger, the mouse wheel steps through the options, skipping disabled ones and
+          stopping at both ends. Hovering alone changes nothing.
+        </li>
+        <li>The list opens below the trigger on the side its text starts from, and above or end-aligned where that does not fit.</li>
+        <li>A scroll or a resize outside the open list closes it.</li>
         <li>A list longer than a screen is a <a href="#/components/combobox">Combobox</a>.</li>
       </ul>
       <H2>Behaviour</H2>

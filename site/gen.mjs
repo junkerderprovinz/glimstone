@@ -52,7 +52,7 @@ function propsOf(name, file) {
   }
   let members;
   if (ts.isTypeLiteralNode(param.type)) members = param.type.members;
-  else members = interfaces.get(param.type.getText(src)).members;
+  else members = interfaces.get(param.type.getText(src).replace(/<.*>$/, "")).members;
   return members.filter(ts.isPropertySignature).map((m) => {
     const key = m.name.getText(src);
     const type = clean(m.type.getText(src));
