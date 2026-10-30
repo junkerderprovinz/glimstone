@@ -399,6 +399,51 @@ test.describe("Select", () => {
   });
 });
 
+test.describe("Select sizes and labels", () => {
+  test("[select-sizes] row and inset", async ({ page }) => {
+    await open(page, "/components/select");
+    const row = stage(page, "SelectSizes").locator('[data-size="row"] .glim-select-trigger');
+    const inset = stage(page, "SelectSizes").locator('[data-size="inset"] .glim-select-trigger');
+    expect((await row.boundingBox())!.height).toBeCloseTo(32, 0);
+    expect(await row.evaluate((el) => getComputedStyle(el).fontSize)).toBe("12px");
+    expect((await inset.boundingBox())!.height).toBeCloseTo(24, 0);
+    for (const t of [row, inset]) await expect(t.locator("xpath=../..")).toHaveClass(/glim-select--steady/);
+  });
+
+  test("[select-min-width] a small trigger opens a full list", async ({ page }) => {
+    await open(page, "/components/select");
+    const row = stage(page, "SelectSizes").locator('[data-size="row"] .glim-select-trigger');
+    await row.click();
+    const box = page.getByRole("listbox", { name: "Quality" });
+    await expect(box).toBeVisible();
+    expect((await row.boundingBox())!.width).toBeLessThan(208);
+    expect((await box.boundingBox())!.width).toBeGreaterThanOrEqual(208);
+  });
+
+  test("[select-label-for] an outside label and a ref", async ({ page }) => {
+    await open(page, "/components/select");
+    const demo = stage(page, "SelectLabelled");
+    const trigger = demo.locator(".glim-select-trigger");
+    await expect(trigger).toHaveAttribute("id", "backup-destination");
+    await demo.locator('label[for="backup-destination"]').click();
+    await expect(page.getByRole("listbox", { name: "Destination" })).toBeVisible();
+    await page.keyboard.press("Escape");
+    await demo.getByRole("button", { name: "Choose the destination" }).click();
+    await expect(trigger).toBeFocused();
+  });
+
+  test("[select-wrap] a long value wraps", async ({ page }) => {
+    await open(page, "/components/select");
+    await page.evaluate(() => document.fonts.ready);
+    const trigger = stage(page, "SelectLabelled").locator(".glim-select-trigger");
+    expect((await trigger.boundingBox())!.height).toBeGreaterThan(40);
+    const cut = await trigger
+      .locator(".glim-select-value > *")
+      .evaluateAll((els) => els.some((e) => e.scrollWidth > e.clientWidth + 1));
+    expect(cut).toBe(false);
+  });
+});
+
 test.describe("Select with submenus", () => {
   const trigger = (page: Page) => stage(page, "SelectSubmenu").locator(".glim-select-trigger");
   const root = (page: Page) => page.getByRole("menu", { name: "Server time zone" });

@@ -66,6 +66,21 @@ export function SelectPage() {
         every option in full in all four.
       </p>
       <Demo name="SelectWidths" />
+      <H2>Sizes</H2>
+      <p>
+        <code>field</code> stands among text fields at their height and type. <code>row</code> keeps that height in
+        small type, for a list or table row and beside a compact field. <code>inset</code> sits inside another field,
+        such as a search box's scope, and is smaller than one. The smaller two default to <code>steady</code>. The open
+        list is never narrower than 13rem, under a small trigger too, so its rows stay readable.
+      </p>
+      <Demo name="SelectSizes" />
+      <H2>An outside label and a long value</H2>
+      <p>
+        <code>id</code> lets a <code>&lt;label htmlFor&gt;</code> of the row name the trigger, and <code>ref</code> hands
+        the caller its node, to give it the focus. <code>wrap</code> lets a value whose end matters, such as a path,
+        run onto a second line instead of ending in an ellipsis.
+      </p>
+      <Demo name="SelectLabelled" />
       <H2>Placeholder, busy and refused</H2>
       <p>
         A <code>null</code> value shows the placeholder and ticks nothing. While <code>busy</code>, the trigger keeps its
