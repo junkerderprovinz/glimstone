@@ -21,7 +21,7 @@ would then have to be re-applied by hand in three places.
 | `Toggle.tsx` | The switch. Never a checkbox |
 | `Card.tsx` | The surface, and the one place a section heading is drawn |
 | `Badge.tsx` | Status pills and the filled section heading the card draws |
-| `Select.tsx` | Picks one value from a short list, on Zag's select machine: typeahead, focus kept on the trigger, the list in a portal |
+| `Select.tsx` | The one dropdown, on Zag's select machine and on its menu machine for a list with submenus: groups with headings, glyphs, four widths, the wheel, busy and refused states, the list in a portal. It imports `../selectScroll.ts` |
 | `Combobox.tsx` | A field that filters a long list as somebody types, on Zag's combobox machine |
 | `Slider.tsx` | A value on a range, on Zag's slider machine, with the value in words beside the label |
 | `DropdownListbox.tsx` | Deprecated, use `Select`. The list panel of a dropdown whose trigger the caller draws |
@@ -38,7 +38,7 @@ would then have to be re-applied by hand in three places.
 | `useLabelMode.ts`, `useTipBubble.tsx`, `bubblePosition.ts`, `portalHue.ts` | The small hooks the components above need |
 | `glyphs.tsx` | The marks the components draw themselves (close, cancel, check, expand and the three window buttons), plus the seam an app registers its own icon set through |
 
-Select, Combobox and Slider need `@zag-js/react` and their machine package (`@zag-js/select`, `@zag-js/combobox`, `@zag-js/slider`) in the app. The interactive ones carry a behaviour contract, tested on every push; see "Behaviour contracts" in the design language and each component's page on the [site](https://junkerderprovinz.github.io/glimstone/).
+Select, Combobox and Slider need `@zag-js/react` and their machine packages (`@zag-js/select` and `@zag-js/menu`, `@zag-js/combobox`, `@zag-js/slider`) in the app. The interactive ones carry a behaviour contract, tested on every push; see "Behaviour contracts" in the design language and each component's page on the [site](https://junkerderprovinz.github.io/glimstone/).
 
 ## What is deliberately NOT here
 
