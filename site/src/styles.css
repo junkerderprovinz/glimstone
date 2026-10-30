@@ -141,6 +141,23 @@ body {
   min-height: 9rem;
 }
 .demo-stage.left { justify-content: flex-start; align-items: stretch; }
+/* The title bar's demo stands in a window of its own. The transform makes the
+   bar's fixed position relative to that window, and the site itself keeps no
+   room for a bar. */
+:root:has(.demo-window .glim-window-bar) { --window-bar: 0px; }
+.demo-window {
+  --window-bar: 2.5rem;
+  position: relative;
+  transform: translateZ(0);
+  width: min(100%, 32rem);
+  min-height: 9rem;
+  padding-top: var(--window-bar);
+  border: 1px solid var(--carbon-border);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  background: var(--carbon-bg);
+}
+.demo-window-log { margin: 0; padding: 1rem 1.25rem; color: var(--carbon-text-sub); font-size: var(--text-subline); }
 .demo-bar {
   display: flex;
   align-items: center;

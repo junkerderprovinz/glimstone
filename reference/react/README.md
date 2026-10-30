@@ -34,8 +34,9 @@ would then have to be re-applied by hand in three places.
 | `CoffeeDialog.tsx` | Buy Me a Coffee's widget inside a house window |
 | `PaypalDialog.tsx` + `usePaypalButtons.ts` | How often and how much in house controls, then PayPal's wallet and card buttons |
 | `UnavailableNotice.tsx` | What stands where a control would be, when the environment forbids the thing entirely |
+| `WindowBar.tsx` | A desktop app's own title bar on Windows and Linux: a strip to drag and the minimise, maximise and close buttons. The app passes the window calls |
 | `useLabelMode.ts`, `useTipBubble.tsx`, `bubblePosition.ts`, `portalHue.ts` | The small hooks the components above need |
-| `glyphs.tsx` | The four marks the components draw themselves (close, cancel, check, expand), plus the seam an app registers its own icon set through |
+| `glyphs.tsx` | The marks the components draw themselves (close, cancel, check, expand and the three window buttons), plus the seam an app registers its own icon set through |
 
 Select, Combobox and Slider need `@zag-js/react` and their machine package (`@zag-js/select`, `@zag-js/combobox`, `@zag-js/slider`) in the app. The interactive ones carry a behaviour contract, tested on every push; see "Behaviour contracts" in the design language and each component's page on the [site](https://junkerderprovinz.github.io/glimstone/).
 

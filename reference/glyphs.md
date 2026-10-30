@@ -85,6 +85,9 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconEmpty` | Clear, empty a list | Streamline `interface-essential/clipboard-remove.svg` |
 | `IconAdd` | Add, create | Drawn for GlimStone |
 | `IconClose` | Close, cancel, dismiss | Drawn for GlimStone |
+| `IconWindowMinimise` | Minimise a window | Drawn for KnightLoader |
+| `IconWindowMaximise` | Maximise a window | Drawn for KnightLoader |
+| `IconWindowRestore` | Restore a maximised window | Drawn for KnightLoader |
 | `IconPencil` | Edit, rename, change | Streamline `interface-essential/pencil.svg` |
 | `IconCopy` | Copy | Tabler Icons, filled `copy` (MIT) |
 | `IconCheck` | Test, verify, success | Drawn for GlimStone |
@@ -252,6 +255,8 @@ The Design selector's Dark and Light segments wear `IconMoon` and `IconSun` from
 **Close meanings wear different drawings.** `IconRetry` tries again, reloads or refreshes, and `IconRefresh` goes back to the default whatever its name says. `IconUpload` and `IconDownload` move a file to or from somewhere else, while `IconImport` and `IconExport` read a list or settings in and write them out. `IconCheck` marks a test and the success it reports, and `IconConfirm` is a person agreeing: Done, Confirm, Got it. `IconApply` takes something over in place of what was there, which is not saving. `IconCompressAuto` marks anything the app chooses by itself, the compression as well as the order of the providers, and keeps its name for the apps that generate from this list. `IconUpdate` fetches an update and `IconUpToDate` reports that there was none to fetch: the same cloud, with a tick in place of the arrows.
 
 **A brand mark is the brand's own and goes only where it is meant.** `IconCoffee` is Buy Me a Coffee's mark and stands only on the button that leads there, and `IconCaptcha` is reCAPTCHA's mark and stands only where a captcha is the subject. `IconContainers` and `IconGithub` follow the same rule (section 1).
+
+**The title bar wears three glyphs of its own and `IconClose`.** `IconWindowMinimise` is a bar as wide as the grid, `IconWindowMaximise` the window as a rounded frame filling it, and `IconWindowRestore` a smaller frame in front of the corner of another, all drawn with a 2-unit line and filling the grid like the close mark beside them. A window that gets restored is not a backup that does, so the title bar never wears `IconRestore`.
 
 **Drawn for GlimStone** means drawn on Streamline's 14-unit grid as filled shapes: lines as strokes buffered with round caps, cut-outs as real holes. `IconAdd` and `IconClose` are Streamline's `add-1` and `delete-1` with a 2.5-unit bar instead of 2.
 

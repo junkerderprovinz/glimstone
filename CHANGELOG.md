@@ -4,16 +4,20 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
-Every button and every Look selector in the family can now wear a glyph. The Labels selector gets new glyphs and a Row height selector three of its own; buttons that only had words in BombVault, KnightLoader and ArrowLoop get theirs, so the Glyph choice of the label setting reaches them too. Twenty-three glyphs join the assortment, four meanings move off the glyphs they shared, and `IconSignIn` is turned so its arrow points into the door.
+A desktop app draws its own title bar on Windows and Linux, in the app's look rather than the system's, and keeps the system's on macOS. Every button and every Look selector in the family can now wear a glyph. The Labels selector gets new glyphs and a Row height selector three of its own; buttons that only had words in BombVault, KnightLoader and ArrowLoop get theirs, so the Glyph choice of the label setting reaches them too. Twenty-three glyphs join the assortment, four meanings move off the glyphs they shared, and `IconSignIn` is turned so its arrow points into the door.
 
 **Adopting apps:**
 
+- **Desktop window frame:** make the main window frameless on Windows and Linux and render `reference/react/WindowBar.tsx` only there, with the app's own window calls. Copy the window frame rules from `reference/tokens.css`, mark the frame that holds the rail and the content with `.glim-shell`, and size a full-height shell and anything fixed to the top edge with `--window-bar`.
+- **Window glyphs:** copy `reference/react/glyphs.tsx` again, and take `IconWindowMinimise`, `IconWindowMaximise` and `IconWindowRestore` from `reference/glyphs.json` where the app has a title bar.
 - **Look glyphs:** copy `IconLabelText`, `IconLabelTextGlyph`, `IconLabelGlyph` and `IconLabelReactive` from `reference/glyphs.json` again and put them on the Labels selector's segments. An app with a Row height selector takes `IconRowCompact`, `IconRowMedium` and `IconRowComfortable` for it.
 - **Button glyphs:** copy `IconSignIn` from `reference/glyphs.json` again, and take the new glyphs where the app has those buttons. `reference/glyph-map.md` says which button moves where in BombVault, KnightLoader and ArrowLoop.
 - **Label keys:** point retry, reload and refresh at `IconRetry` and a reset at `IconRefresh`, import and export at `IconImport` and `IconExport`, Done, Confirm and Got it at `IconConfirm`, decline at `IconReject`, apply at `IconApply` and undo at `IconUndo`.
 
 ## ✨ Added
 
+- **The desktop window frame.** `WindowBar` is a strip to drag with minimise, maximise and close, and no mark or name, since the rail shows both. The page and a dialog's scrim start under the 2.5rem bar, so the window can still be moved and closed while a dialog is open. Windows 11's snap layouts do not open on the drawn maximise button.
+- **Three window glyphs.** `IconWindowMinimise`, `IconWindowMaximise` and `IconWindowRestore`, drawn on the 14-unit grid and filling it like `IconClose`.
 - **Three glyphs for a Row height selector.** `IconRowCompact`, `IconRowMedium` and `IconRowComfortable` are bars across the width, four close together, three, and two far apart.
 - **Twenty-three glyphs for buttons that had none**, all from Streamline's free set: `IconRetry`, `IconImport`, `IconExport`, `IconConfirm`, `IconReject`, `IconApply`, `IconUndo`, `IconEmpty`, `IconForgotPassword`, `IconCompact`, `IconKeepBoth`, `IconKeepLeft`, `IconKeepRight`, `IconMerge`, `IconSendTest`, `IconStopAsking`, `IconCookies`, `IconLog`, `IconInstall`, `IconUpdate`, `IconUpToDate`, `IconUpdateAvailable` and `IconWhatsNew`. `IconUpToDate` is the cloud of `IconUpdate` with a tick, for the update check that found nothing new. `IconReject` is the thumb of `IconConfirm` mirrored to point down, and the gift of `IconWhatsNew` has its ribbon drawn as a filled shape instead of a line.
 - **An ArrowLoop table in `glyph-map.md`** with the button meanings it has.

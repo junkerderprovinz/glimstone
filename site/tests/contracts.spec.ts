@@ -461,3 +461,92 @@ test.describe("Toast", () => {
     await expect(page.getByRole("alert").filter({ hasText: "The target is almost full." })).toBeVisible();
   });
 });
+
+test.describe("WindowBar", () => {
+  const bar = (page: Page) => stage(page, "WindowBarDemo").locator(".glim-window-bar");
+  const button = (page: Page, name: string) => bar(page).getByRole("button", { name, exact: true });
+  const log = (page: Page) => stage(page, "WindowBarDemo").getByRole("status");
+
+  // A spot on the bar away from its buttons.
+  const EMPTY = { x: 24, y: 20 };
+
+  // Rests the pointer on the bar, where it stands once the page has settled.
+  async function restOn(page: Page) {
+    await bar(page).hover({ position: EMPTY });
+    const box = (await bar(page).boundingBox())!;
+    return { x: box.x + EMPTY.x, y: box.y + EMPTY.y };
+  }
+
+  test("[window-name] named after the app, no text, three buttons", async ({ page }) => {
+    await open(page, "/components/window-bar");
+    await expect(bar(page)).toHaveAttribute("aria-label", "Example");
+    await expect(bar(page)).toHaveText("");
+    await expect(bar(page).getByRole("button")).toHaveCount(3);
+    for (const name of ["Minimise", "Maximise", "Close"]) await expect(button(page, name)).toHaveCount(1);
+  });
+
+  test("[window-order] Tab goes from minimise to maximise to close", async ({ page }) => {
+    await open(page, "/components/window-bar");
+    await button(page, "Minimise").focus();
+    await page.keyboard.press("Tab");
+    await expect(button(page, "Maximise")).toBeFocused();
+    await page.keyboard.press("Tab");
+    await expect(button(page, "Close")).toBeFocused();
+  });
+
+  test("[window-keys] Enter and Space act", async ({ page }) => {
+    await open(page, "/components/window-bar");
+    await button(page, "Minimise").focus();
+    await page.keyboard.press("Enter");
+    await expect(log(page)).toHaveText("Minimised");
+    await button(page, "Close").focus();
+    await page.keyboard.press("Space");
+    await expect(log(page)).toHaveText("Closed");
+  });
+
+  test("[window-restore] a maximised window offers to restore", async ({ page }) => {
+    await open(page, "/components/window-bar");
+    await button(page, "Maximise").click();
+    await expect(button(page, "Restore")).toHaveCount(1);
+    await expect(button(page, "Maximise")).toHaveCount(0);
+  });
+
+  test("[window-tip] the name shows in the house bubble", async ({ page }) => {
+    await open(page, "/components/window-bar");
+    await button(page, "Close").focus();
+    await expect(page.getByRole("tooltip")).toHaveText("Close");
+    await expect(button(page, "Close")).not.toHaveAttribute("title", /.*/);
+  });
+
+  test("[window-drag] a press that moves drags, one that does not stays a click", async ({ page }) => {
+    await open(page, "/components/window-bar");
+    const { x, y } = await restOn(page);
+    await page.mouse.down();
+    await page.mouse.up();
+    await expect(log(page)).toHaveText("Nothing yet");
+    await page.mouse.down();
+    await page.mouse.move(x + 30, y);
+    await page.mouse.up();
+    await expect(log(page)).toHaveText("Moving the window");
+  });
+
+  test("[window-drag-button] a press on a button never drags", async ({ page }) => {
+    await open(page, "/components/window-bar");
+    await button(page, "Minimise").hover();
+    const box = (await button(page, "Minimise").boundingBox())!;
+    await page.mouse.down();
+    await page.mouse.move(box.x - 30, box.y + box.height / 2);
+    await page.mouse.up();
+    await expect(log(page)).not.toHaveText("Moving the window");
+  });
+
+  test("[window-dblclick] the bar maximises and restores, a button does not", async ({ page }) => {
+    await open(page, "/components/window-bar");
+    await bar(page).dblclick({ position: EMPTY });
+    await expect(button(page, "Restore")).toHaveCount(1);
+    await button(page, "Minimise").dblclick();
+    await expect(button(page, "Restore")).toHaveCount(1);
+    await bar(page).dblclick({ position: EMPTY });
+    await expect(button(page, "Maximise")).toHaveCount(1);
+  });
+});

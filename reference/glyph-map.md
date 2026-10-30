@@ -28,6 +28,9 @@
 | Clear, empty a list | `IconEmpty` | none | to follow |
 | Add, create | `IconAdd` | `IconAdd`, standard | `IconAdd`, standard |
 | Close, cancel, dismiss | `IconClose` | `IconClose`, standard | `IconClose`, standard |
+| Minimise a window | `IconWindowMinimise` | none | `IconWindowMinimise`, switch |
+| Maximise a window | `IconWindowMaximise` | none | `IconWindowMaximise`, switch |
+| Restore a maximised window | `IconWindowRestore` | none | `IconWindowRestore`, switch |
 | Edit, rename, change | `IconPencil` | `IconPencil`, standard | `IconPencil`, standard |
 | Copy | `IconCopy` | `IconCopy`, standard | `IconCopy`, standard |
 | Test, verify, success | `IconCheck` | `IconCheck`, standard | `IconCheck`, standard |
@@ -144,6 +147,8 @@
 | Time left on a captcha | `IconCaptchaTimer` | none | `IconCaptchaTimer`, standard |
 | Resolvers, download quality and format | `IconResolvers` | none | `IconResolvers`, standard |
 | What's new | `IconWhatsNew` | none | to follow |
+
+KnightLoader draws the three window glyphs in its own `icons.tsx`, with the same paths as the standard ones, which is why their rows say switch.
 
 <br>
 
