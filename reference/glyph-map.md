@@ -223,7 +223,7 @@ TowerTorch wears the assortment on its own controls and on the Unraid buttons it
 | Pause | `IconPause` | `Pause`, standard |
 | Stop, abort | `IconStop` | `Stop`, standard |
 | Power on and off | `IconPower` | `Power`, standard |
-| Sleep, spin down, rest, hibernate | `IconSleep` | `Moon` on Spin down, a resting disk and Hibernate, to follow |
+| Sleep, spin down, rest, hibernate | `IconSleep` | `Sleep` on Spin down, a resting disk and Hibernate, standard |
 | Delete, remove | `IconTrash` | `Trash`, standard |
 | Delete with its files | `IconTrashFiles` | `TrashFiles`, standard |
 | Clear, empty a list | `IconEmpty` | `Empty`, standard |
