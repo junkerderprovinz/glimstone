@@ -4,7 +4,9 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
-TowerTorch, ShipLog, ArrowLoop and BombVault wear the standard glyphs on their pushed branches, and `glyph-map.md` follows them row by row. `IconUnlink` and `IconSleep` join the assortment, `IconUpdate` also covers the update check, a passkey sign-in wears `IconKey`, and the Version card shows its numbers without a "v". Bars that change all the time get a class of their own.
+## 3.7.2 - 2026-10-30
+
+KnightLoader, TowerTorch, ShipLog, ArrowLoop and BombVault wear the standard glyphs on their pushed branches, and `glyph-map.md` follows them row by row. `IconUnlink` and `IconSleep` join the assortment, `IconUpdate` also covers the update check, a passkey sign-in wears `IconKey`, and the Version card shows its numbers without a "v". Bars that change all the time get a class of their own.
 
 **Adopting apps:**
 

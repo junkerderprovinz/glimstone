@@ -45,7 +45,7 @@
 | Revoke a key, remove a password or passkey | `IconKeyRevoke` | `IconKeyRevoke`, standard | `IconKeyRevoke`, standard |
 | Forgot password | `IconForgotPassword` | `IconKey`, switch | `IconForgotPassword`, standard |
 | Sign in | `IconSignIn` | `IconSignIn`, switch | `IconSignIn`, standard |
-| Sign in with a passkey | `IconKey` | to follow | `IconKey`, standard |
+| Sign in with a passkey | `IconKey` | `IconSignIn`, switch | `IconKey`, standard |
 | Sign out | `IconSignOut` | `IconSignOut`, standard | `IconSignOut`, standard |
 | Information | `IconInfo` | `IconInfo`, standard | `IconInfo`, standard |
 | Help | `IconHelp` | none | `IconHelp`, standard |
