@@ -113,4 +113,16 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "toast-dismiss", when: "The dismiss button is pressed", then: "Only that toast leaves." },
     ],
   },
+  WindowBar: {
+    rows: [
+      { id: "window-name", when: "Always", then: "The bar is named after the app, shows no text and holds three buttons." },
+      { id: "window-order", keys: ["Tab"], when: "Focus is in the bar", then: "It moves from Minimise to Maximise to Close." },
+      { id: "window-keys", keys: ["Enter", "Space"], when: "A button has focus", then: "It acts, once per press." },
+      { id: "window-restore", when: "The window is maximised", then: "The middle button is named Restore." },
+      { id: "window-tip", keys: ["Tab"], when: "A button receives keyboard focus", then: "Its name shows in the house bubble." },
+      { id: "window-drag", when: "A press on the bar starts to move", then: "The window moves; a press that does not move stays a click." },
+      { id: "window-drag-button", when: "A press on a button moves", then: "The window stays where it is." },
+      { id: "window-dblclick", when: "The bar is double-clicked", then: "The window maximises or restores; a double click on a button does not." },
+    ],
+  },
 };

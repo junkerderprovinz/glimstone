@@ -20,6 +20,7 @@ import {
   InfoBubblePage,
   TogglePage,
   ToastPage,
+  WindowBarPage,
 } from "./pages/components";
 
 interface Page {
@@ -53,6 +54,7 @@ const PAGES: Page[] = [
   { path: "/components/slider", title: "Slider", group: "Components", Comp: SliderPage, tag: "Zag" },
   { path: "/components/toast", title: "Toast", group: "Components", Comp: ToastPage },
   { path: "/components/toggle", title: "Toggle", group: "Components", Comp: TogglePage },
+  { path: "/components/window-bar", title: "WindowBar", group: "Components", Comp: WindowBarPage },
 ];
 const GROUPS = ["Guide", "Engines", "Components"];
 

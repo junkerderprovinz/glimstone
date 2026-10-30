@@ -326,3 +326,56 @@ setToasts((list) => addToast(list, { id, message: "Settings saved.", severity: "
     </>
   );
 }
+
+export function WindowBarPage() {
+  return (
+    <>
+      <p className="lead">
+        A desktop app's own title bar on Windows and Linux: a strip to drag and three buttons, in the app's look rather
+        than the system's.
+      </p>
+      <Head file="react/WindowBar.tsx" />
+      <Demo name="WindowBarDemo" />
+      <Usage
+        code={`<WindowBar
+  appName="Example"
+  maximised={maximised}
+  text={{ minimise: t("window.minimise"), maximise: t("window.maximise"), restore: t("window.restore"), close: t("window.close") }}
+  onMinimise={minimise}
+  onToggleMaximise={toggleMaximise}
+  onClose={close}
+  onDragStart={startDrag}
+/>`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>
+          Minimise, maximise or restore, and close. No mark, no name and no menu: the rail right below already shows
+          them.
+        </li>
+        <li>Close hovers grey like its neighbours. It hides or quits the way the native button does.</li>
+        <li>
+          The bar is fixed to the top. <code>body</code> starts under it, a scrim stops under it, and the frame marked{" "}
+          <code>.glim-shell</code> drops its top gutter, because the bar already is the margin.
+        </li>
+        <li>A press drags the window once it moves, and a double click maximises or restores.</li>
+        <li>macOS keeps its own title bar, and a browser never shows this one.</li>
+        <li>
+          Windows 11's snap layouts do not open on this maximise button. Snapping to a screen edge still works.
+        </li>
+      </ul>
+      <H2>Accessibility</H2>
+      <ul>
+        <li>
+          The bar is a <code>header</code> named after the app, since it shows no name of its own.
+        </li>
+        <li>Each button is named after its action, and the name shows in the house bubble on hover and on focus.</li>
+        <li>The focus ring is drawn on the square, not around the full-height button.</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="WindowBar" />
+      <H2>API</H2>
+      <PropsTable of="WindowBar" />
+    </>
+  );
+}

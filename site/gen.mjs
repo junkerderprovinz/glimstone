@@ -20,6 +20,7 @@ const COMPONENTS = {
   Select: "react/Select.tsx",
   Combobox: "react/Combobox.tsx",
   Slider: "react/Slider.tsx",
+  WindowBar: "react/WindowBar.tsx",
 };
 
 const clean = (s) => s.replace(/\s+/g, " ").trim();
