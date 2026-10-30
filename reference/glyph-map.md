@@ -23,7 +23,7 @@
 | Pause | `IconPause` | none | `IconPause`, standard |
 | Stop, abort | `IconStop` | `IconStop`, standard | `IconStop`, standard |
 | Power on and off | `IconPower` | `IconPower`, standard | `IconPower`, standard |
-| Sleep, spin down, rest, hibernate | `IconSleep` | none | none |
+| Sleep, spin down, rest, hibernate | `IconSleep` | none | `IconSleep` on Send this machine to sleep and Quiet mode, standard |
 | Delete, remove | `IconTrash` | `IconTrash`, standard | `IconTrash`, standard |
 | Delete with its files | `IconTrashFiles` | none | `IconTrashFiles`, standard |
 | Clear, empty a list | `IconEmpty` | none | `IconEmpty`, standard |
@@ -40,7 +40,7 @@
 | Apply, take over, use this one | `IconApply` | `IconSave`, switch | `IconApply`, standard |
 | Undo | `IconUndo` | `IconRestore`, switch | `IconUndo`, standard |
 | Connect, pair | `IconLink` | `IconLink`, standard | `IconLink`, standard |
-| Unlink, drop a connection | `IconUnlink` | `IconLink`, switch | none |
+| Unlink, drop a connection | `IconUnlink` | `IconLink`, switch | `IconUnlink` on Leave group on the pairing page, standard |
 | Credentials, key, set a password, sign in with a passkey | `IconKey` | `IconKey`, standard | `IconKey`, standard |
 | Revoke a key, remove a password or passkey | `IconKeyRevoke` | `IconKeyRevoke`, standard | `IconKeyRevoke`, standard |
 | Forgot password | `IconForgotPassword` | `IconKey`, switch | `IconForgotPassword`, standard |
@@ -234,6 +234,7 @@ TowerTorch wears the assortment on its own controls and on the Unraid buttons it
 | Test, verify, success | `IconCheck` | `Check`, standard |
 | Done, confirm, got it | `IconConfirm` | `Confirm`, standard |
 | Apply, take over, use this one | `IconApply` | `Apply`, standard |
+| Sign in | `IconSignIn` | `SignIn` on the login page, standard |
 | Credentials, key, set a password, sign in with a passkey | `IconKey` | `Key`, standard |
 | Information | `IconInfo` | `Info`, standard |
 | Help | `IconHelp` | `Help`, standard |
@@ -293,7 +294,7 @@ ArrowLoop picks a button's glyph from its translation key. The rows below are th
 | Stop, abort | `IconStop` | `IconStop`, standard |
 | Clear, empty a list | `IconEmpty` | `IconEmpty`, standard |
 | Add, create | `IconAdd` | `IconAdd`, standard |
-| Done, confirm, got it | `IconConfirm` | `IconConfirm`, standard |
+| Done, confirm, got it | `IconConfirm` | `IconConfirm`, also on `twoFactor.recoverySaved`, standard |
 | Apply, take over, use this one | `IconApply` | `IconApply`, standard |
 | Credentials, key, set a password, sign in with a passkey | `IconKey` | `IconKey`, standard |
 | Revoke a key, remove a password or passkey | `IconKeyRevoke` | `IconKeyRevoke`, standard |
@@ -303,7 +304,7 @@ ArrowLoop picks a button's glyph from its translation key. The rows below are th
 | Keep the left version | `IconKeepLeft` | `IconKeepLeft`, standard |
 | Keep the right version | `IconKeepRight` | `IconKeepRight`, standard |
 | Sign in | `IconSignIn` | `IconSignIn`, standard |
-| Sign in with a passkey | `IconKey` | to follow |
+| Sign in with a passkey | `IconKey` | `IconKey`, standard |
 | Forgot password | `IconForgotPassword` | `IconForgotPassword`, standard |
 | A protection is on, turn it on | `IconShieldOn` | `IconShieldOn`, standard |
 | A protection is off, turn it off | `IconShieldOff` | `IconShieldOff`, standard |

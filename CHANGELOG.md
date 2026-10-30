@@ -30,6 +30,7 @@ Select becomes the one dropdown that can do everything, with KnightLoader's drop
 - **The list opens on the side the trigger's text starts from**, and ends where the trigger ends or opens above where that does not fit. It used to take the trigger's exact width.
 - **A wheel or a finger moving the page past the open list closes it, as a resize does.** The page's own scroll events do not, since the list follows its trigger.
 - **`value` can be `null` and `options` is optional** next to `groups`. Both widen the types, so existing call sites compile as they are.
+- **`glyph-map.md` catches up with the apps.** TowerTorch wears `IconSignIn` on its login page. ArrowLoop's Sign in with a passkey is on `IconKey`, and its Done covers `twoFactor.recoverySaved` too. KnightLoader wears `IconUnlink` on Leave group on the pairing page, and `IconSleep` on Send this machine to sleep and on Quiet mode.
 
 ## 3.8.0 - 2026-10-30
 
