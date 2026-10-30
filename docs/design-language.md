@@ -1374,19 +1374,26 @@ The table matches a caption in lower case, with trailing spaces, colons, dots an
 
 | Glyph | English | German |
 | --- | --- | --- |
-| `IconSave` | apply, save, save changes, save raw config | anwenden, übernehmen, speichern, änderungen speichern |
-| `IconCheck` | done, ok, i understand | fertig, ok |
-| `IconShieldOn` | check | prüfen |
+| `IconApply` | apply | anwenden, übernehmen |
+| `IconSave` | save, save changes, save raw config | speichern, änderungen speichern |
+| `IconConfirm` | done, ok, i understand | fertig, ok |
+| `IconCheck` | check | prüfen |
 | `IconClose` | cancel, close | abbrechen, schließen |
 | `IconBack` | back | zurück |
-| `IconRestore` | reset, default, restore, restore backup | zurücksetzen, standard, wiederherstellen |
+| `IconRefresh` | reset, default | zurücksetzen, standard |
+| `IconRestore` | restore, restore backup | wiederherstellen |
 | `IconSelectAll` | select all | alles auswählen, alle auf der seite auswählen |
 | `IconClearSelection` | select none, reset selection | alles abwählen, auswahl zurücksetzen |
-| `IconTrash` | delete, remove, clear, erase, empty, delete pool, remove pool, clear stats, clear log, delete tunnel, delete peer, remove selected plugins | löschen, entfernen, leeren, pool löschen, pool entfernen, statistiken löschen, protokoll leeren, tunnel löschen, peer löschen, ausgewählte plugins entfernen |
+| `IconTrash` | delete, remove, erase, delete pool, remove pool, delete tunnel, delete peer, remove selected plugins | löschen, entfernen, pool löschen, pool entfernen, tunnel löschen, peer löschen, ausgewählte plugins entfernen |
+| `IconEmpty` | clear, empty, clear stats, clear log | leeren, statistiken löschen, protokoll leeren |
 | `IconAdd` | add, create, add share, add user, add vm, add container, add pool, add peer, add tunnel, add route, add new script, add remote smb/nfs share, add iso file share, add root share | hinzufügen, erstellen, freigabe hinzufügen, benutzer hinzufügen, vm hinzufügen, container hinzufügen, pool hinzufügen, peer hinzufügen, tunnel hinzufügen, route hinzufügen, remote-smb/nfs-freigabe hinzufügen, iso-datei-freigabe hinzufügen, root-freigabe hinzufügen |
-| `IconDownload` | download, download log, install, install selected, read | herunterladen, installieren, ausgewählte installieren, lesen |
-| `IconUpload` | upload, write | hochladen, schreiben |
-| `IconRefresh` | update, refresh, update all, check for updates, restart | aktualisieren, aktualisierung, neu laden, alle aktualisieren, alle plugins aktualisieren, nach aktualisierungen suchen, neustart |
+| `IconDownload` | download, download log | herunterladen |
+| `IconUpload` | upload | hochladen |
+| `IconInstall` | install, install selected | installieren, ausgewählte installieren |
+| `IconImport` | read | lesen |
+| `IconExport` | write | schreiben |
+| `IconUpdate` | update, update all, check for updates | aktualisieren, aktualisierung, alle aktualisieren, alle plugins aktualisieren, nach aktualisierungen suchen |
+| `IconRetry` | refresh, restart | neu laden, neustart |
 | `IconSearch` | search, find, browse, rescan | suche, suchen, durchsuchen, neu prüfen, erneut scannen |
 | `IconPlay` | start, start all, spin up, run script | starten, alle starten, platten anlaufen lassen |
 | Resume | resume, resume all | fortsetzen, alle fortsetzen |
@@ -1400,7 +1407,7 @@ The table matches a caption in lower case, with trailing spaces, colons, dots an
 | `IconCompute` | compute, compute all, calculate | berechnen, alle berechnen |
 | `IconPrune` | clean up | aufräumen |
 | `IconEye` | show, view | anzeigen |
-| Log | view log, show log | protokoll anzeigen |
+| `IconLog` | view log, show log | protokoll anzeigen |
 | `IconInfo` | info, php info | php-info |
 | `IconSchedules` | history | verlauf |
 | `IconBackupNow` | boot device backup | |
@@ -1408,7 +1415,7 @@ The table matches a caption in lower case, with trailing spaces, colons, dots an
 | `IconKey` | permission, set password, install key | berechtigung, passwort festlegen, lizenz installieren |
 | ViewList | jobs | aufträge |
 
-Resume, Log and ViewList are drawings TowerTorch made for itself, and the assortment does not hold them yet. Found in TowerTorch (`scripts/labels.js`, `sheets/TowerTorch.Labels.css`), where a Labels card in the settings picks the mode for Unraid's own buttons, its four choices wearing `IconLabelText`, `IconLabelTextGlyph`, `IconLabelGlyph` and `IconLabelReactive`.
+Resume and ViewList are drawings TowerTorch made for itself, and the assortment does not hold them yet. Found in TowerTorch (`scripts/labels.js`, `sheets/TowerTorch.Labels.css`), where a Labels card in the settings picks the mode for Unraid's own buttons, its four choices wearing `IconLabelText`, `IconLabelTextGlyph`, `IconLabelGlyph` and `IconLabelReactive`.
 
 ## Behaviour contracts
 

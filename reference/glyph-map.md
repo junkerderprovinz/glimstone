@@ -15,7 +15,7 @@
 | Reset to the default | `IconRefresh` | `IconClearSelection`, switch | to follow |
 | Retry, reload, refresh | `IconRetry` | `IconRefresh`, switch | `IconRefresh`, switch |
 | Upload | `IconUpload` | `IconUpload`, standard | `IconUpload`, standard |
-| Import, read in | `IconImport` | to follow | `IconUpload`, switch |
+| Import, read in | `IconImport` | `IconImport`, standard | `IconUpload`, switch |
 | Download | `IconDownload` | `IconDownload`, standard | `IconDownload`, standard |
 | Export | `IconExport` | `IconDownload`, switch | `IconDownload`, switch |
 | Search | `IconSearch` | `IconSearch`, standard | `IconSearch`, standard |
@@ -39,6 +39,7 @@
 | Apply, take over, use this one | `IconApply` | `IconSave`, switch | to follow |
 | Undo | `IconUndo` | `IconRestore`, switch | to follow |
 | Connect, pair | `IconLink` | `IconLink`, standard | `IconLink`, standard |
+| Unlink, drop a connection | `IconUnlink` | `IconLink`, switch | none |
 | Credentials, key, set a password | `IconKey` | `IconKey`, standard | `IconKey`, standard |
 | Revoke a key, remove a password or passkey | `IconKeyRevoke` | `IconKeyRevoke`, standard | to follow |
 | Forgot password | `IconForgotPassword` | `IconKey`, switch | to follow |
@@ -48,7 +49,7 @@
 | Help | `IconHelp` | none | `IconHelp`, standard |
 | More | `IconMore` | `IconMore`, standard | `IconMore`, standard |
 | Menu | `IconMenu` | none | `IconMenu`, standard |
-| Save | `IconSave` | `IconSave`, switch | to follow |
+| Save | `IconSave` | `IconSave`, standard | to follow |
 | Unlock, clear a lock | `IconUnlock` | `IconUnlock`, standard | none |
 | Prune, reclaim space | `IconPrune` | `IconPrune`, standard | none |
 | Compact a database | `IconCompact` | none | to follow |
@@ -59,7 +60,7 @@
 | Jump to the start | `IconFirst` | none | `IconFirst`, standard |
 | Move up one | `IconMoveUp` | none | `IconMoveUp`, standard |
 | Move down one | `IconMoveDown` | none | `IconMoveDown`, standard |
-| Move elsewhere | `IconMove` | none | none |
+| Move elsewhere | `IconMove` | `IconMove`, standard | none |
 | Expand | `IconExpand` | none | `IconExpand`, standard |
 | Collapse | `IconCollapse` | none | `IconCollapse`, standard |
 | Select all | `IconSelectAll` | `IconSelectAll`, standard | `IconSelectAll`, standard |
@@ -72,7 +73,7 @@
 | Filter | `IconFilter` | none | `IconFilter`, standard |
 | Pin | `IconPin` | none | `IconPin`, standard |
 | Priority | `IconPriority` | none | `IconPriority`, standard |
-| Drag to reorder | `IconGrip` | none | `IconGrip`, switch |
+| Drag to reorder | `IconGrip` | `IconGrip`, standard | `IconGrip`, switch |
 | Open a service's own site | `IconExternalLink` | none | `IconExternalLink`, standard |
 | Warning | `IconWarning` | none | `IconWarning`, standard |
 | Right away | `IconBolt` | none | `IconBolt`, standard |
@@ -96,9 +97,9 @@
 | Default, preferred | `IconStar` | `IconStar`, standard on the Default badge and the Make default button | none |
 | Stop asking | `IconStopAsking` | none | to follow |
 | Store cookies | `IconCookies` | none | to follow |
-| Open the log | `IconLog` | none | to follow |
-| Install | `IconInstall` | to follow | to follow |
-| Fetch an update, update now | `IconUpdate` | none | to follow |
+| Open the log | `IconLog` | `IconLog`, standard | to follow |
+| Install | `IconInstall` | `IconInstall`, standard | to follow |
+| Fetch an update, check for one, update now | `IconUpdate` | `IconUpdate`, standard | to follow |
 | Up to date after an update check | `IconUpToDate` | `IconCheck`, switch | none |
 | An update is available | `IconUpdateAvailable` | `IconSearch`, switch | none |
 
@@ -112,7 +113,7 @@
 | Dashboard, overview | `IconDashboard` | `IconDashboard`, standard | `IconDashboard`, standard |
 | A folder | `IconFolder` | `IconFolder`, standard | `IconFolder`, standard |
 | An open folder | `IconFolderOpen` | none | `IconFolderOpen`, standard |
-| New folder | `IconFolderAdd` | none | `IconFolderAdd`, standard |
+| New folder | `IconFolderAdd` | `IconFolderAdd`, standard | `IconFolderAdd`, standard |
 | Archive | `IconArchive` | none | `IconArchive`, standard |
 | Instances, other boxes | `IconFleet` | `IconFleet`, standard | `IconFleet`, standard |
 | Collector, taking links in | `IconCollector` | none | `IconCollector`, standard |
@@ -146,7 +147,7 @@
 | Queued | `IconQueued` | none | `IconQueued`, standard |
 | Time left on a captcha | `IconCaptchaTimer` | none | `IconCaptchaTimer`, standard |
 | Resolvers, download quality and format | `IconResolvers` | none | `IconResolvers`, standard |
-| What's new | `IconWhatsNew` | none | to follow |
+| What's new | `IconWhatsNew` | `IconWhatsNew` with the dot in front, to follow | to follow |
 
 KnightLoader draws the three window glyphs in its own `icons.tsx`, with the same paths as the standard ones, which is why their rows say switch.
 
@@ -205,13 +206,50 @@ ArrowLoop drew the glyphs for the segments of its Design, Corners and Motion sel
 
 ## TowerTorch
 
-TowerTorch wears the assortment on its own controls and on the Unraid buttons it draws as badges, and it drew the glyphs below for them. Its other rows are not listed here yet.
+TowerTorch wears the assortment on its own controls and on the Unraid buttons it draws as badges, and it drew `IconGrip`, `IconMove` and `IconCompute` for them. Its other rows are not listed here yet.
 
 | Meaning | GlimStone | TowerTorch |
 | --- | --- | --- |
-| Drag to reorder | `IconGrip` | `Grip`, standard |
-| Move elsewhere | `IconMove` | `Move`, standard |
+| Show, reveal | `IconEye` | `Eye`, standard |
+| Reset to the default | `IconRefresh` | `Refresh`, standard |
+| Retry, reload, refresh | `IconRetry` | `Retry`, standard |
+| Upload | `IconUpload` | `Upload`, standard |
+| Import, read in | `IconImport` | `Import`, standard |
+| Export | `IconExport` | `Export`, standard |
+| Search | `IconSearch` | `Search`, standard |
+| Start, run now, play | `IconPlay` | `Play`, standard |
+| Stop, abort | `IconStop` | `Stop`, standard |
+| Power on and off | `IconPower` | `Power`, standard |
+| Delete, remove | `IconTrash` | `Trash`, standard |
+| Delete with its files | `IconTrashFiles` | `TrashFiles`, standard |
+| Clear, empty a list | `IconEmpty` | `Empty`, standard |
+| Add, create | `IconAdd` | `Add`, standard |
+| Close, cancel, dismiss | `IconClose` | `Close`, standard |
+| Edit, rename, change | `IconPencil` | `Pencil`, standard |
+| Copy | `IconCopy` | `Copy`, standard |
+| Test, verify, success | `IconCheck` | `Check`, standard |
+| Done, confirm, got it | `IconConfirm` | `Confirm`, standard |
+| Apply, take over, use this one | `IconApply` | `Apply`, standard |
+| Help | `IconHelp` | `Help`, standard |
+| Save | `IconSave` | `Save`, standard |
 | Compute, calculate | `IconCompute` | `Compute`, standard |
+| Move elsewhere | `IconMove` | `Move`, standard |
+| Expand | `IconExpand` | `Expand`, standard |
+| Select all | `IconSelectAll` | `SelectAll`, standard |
+| Clear the selection | `IconClearSelection` | `ClearSelection`, standard |
+| Drag to reorder | `IconGrip` | `Grip`, standard |
+| Warning | `IconWarning` | `Warning`, standard |
+| Open the log | `IconLog` | `Log`, standard |
+| Install | `IconInstall` | `Install`, standard |
+| Fetch an update, check for one, update now | `IconUpdate` | `Update`, standard |
+| Up to date after an update check | `IconUpToDate` | `UpToDate`, standard |
+| An update is available | `IconUpdateAvailable` | `UpdateAvailable`, standard |
+| Settings, open a setting | `IconGear` | `Gear`, standard |
+| A folder | `IconFolder` | `Folder`, standard |
+| Docker containers | `IconContainers` | `Containers`, standard |
+| Restore | `IconRestore` | `Restore`, standard |
+| The GitHub repository | `IconGithub` | `Github`, standard |
+| What's new | `IconWhatsNew` | `WhatsNew`, standard |
 | Labels selector, Text | `IconLabelText` | `IconLabelText`, standard |
 | Labels selector, Text and glyph | `IconLabelTextGlyph` | `IconLabelTextGlyph`, standard |
 | Labels selector, Glyph | `IconLabelGlyph` | `IconLabelGlyph`, standard |
@@ -231,20 +269,54 @@ ArrowLoop picks a button's glyph from its translation key. The rows below are th
 | Meaning | GlimStone | ArrowLoop |
 | --- | --- | --- |
 | Reset to the default | `IconRefresh` | `IconRefresh`, standard |
-| Import, read in | `IconImport` | `IconUpload`, switch |
-| Export | `IconExport` | `IconDownload`, switch |
-| Done, confirm, got it | `IconConfirm` | `IconSave`, switch |
-| Apply, take over, use this one | `IconApply` | `IconSave`, switch |
-| Send a test | `IconSendTest` | `IconCheck`, switch |
-| Keep both versions | `IconKeepBoth` | to follow |
-| Keep the left version | `IconKeepLeft` | to follow |
-| Keep the right version | `IconKeepRight` | to follow |
-| Sign in | `IconSignIn` | `IconSave`, switch |
-| Forgot password | `IconForgotPassword` | `IconRefresh`, switch |
-| Up to date after an update check | `IconUpToDate` | to follow |
-| An update is available | `IconUpdateAvailable` | to follow |
-| What's new | `IconWhatsNew` | to follow, beside the dot its button wears |
-| Open or show the app | `IconApp` | `IconTabApp` on the tray's Open, switch |
+| Retry, reload, refresh | `IconRetry` | `IconRetry` after a failed check, standard |
+| Import, read in | `IconImport` | `IconImport`, standard |
+| Export | `IconExport` | `IconExport`, standard |
+| Stop, abort | `IconStop` | `IconStop`, standard |
+| Clear, empty a list | `IconEmpty` | `IconEmpty`, standard |
+| Add, create | `IconAdd` | `IconAdd`, standard |
+| Done, confirm, got it | `IconConfirm` | `IconConfirm`, standard |
+| Apply, take over, use this one | `IconApply` | `IconApply`, standard |
+| Credentials, key, set a password | `IconKey` | `IconKey`, standard |
+| Revoke a key, remove a password or passkey | `IconKeyRevoke` | `IconKeyRevoke`, standard |
+| Prune, reclaim space | `IconPrune` | `IconPrune`, standard |
+| Send a test | `IconSendTest` | `IconSendTest`, standard |
+| Keep both versions | `IconKeepBoth` | `IconKeepBoth`, standard |
+| Keep the left version | `IconKeepLeft` | `IconKeepLeft`, standard |
+| Keep the right version | `IconKeepRight` | `IconKeepRight`, standard |
+| Sign in | `IconSignIn` | `IconSignIn`, standard |
+| Forgot password | `IconForgotPassword` | `IconForgotPassword`, standard |
+| A protection is on, turn it on | `IconShieldOn` | `IconShieldOn`, standard |
+| A protection is off, turn it off | `IconShieldOff` | `IconShieldOff`, standard |
+| Fetch an update, check for one, update now | `IconUpdate` | `IconUpdate` on Check for updates, standard |
+| Up to date after an update check | `IconUpToDate` | `IconUpToDate`, standard |
+| An update is available | `IconUpdateAvailable` | `IconUpdateAvailable`, standard |
+| Restore | `IconRestore` | `IconRestore` on `trash.restore` and `anomaly.restore`, standard |
+| What's new | `IconWhatsNew` | `IconWhatsNew` with the dot in front, standard |
+| Open or show the app | `IconApp` | `IconApp` on the tray's Open, standard |
+
+<br>
+
+## ShipLog
+
+ShipLog wears the assortment on its settings page and in the changelog window it opens from Unraid's Docker list.
+
+| Meaning | GlimStone | ShipLog |
+| --- | --- | --- |
+| Show, reveal | `IconEye` | `Eye`, standard |
+| Hide again | `IconEyeOff` | `EyeOff`, standard |
+| Close, cancel, dismiss | `IconClose` | `Close`, standard |
+| Copy | `IconCopy` | `Copy`, standard |
+| Test, verify, success | `IconCheck` | `Check` on every Check button and a passed test, standard |
+| Connect, pair | `IconLink` | `Link` on the Sources tab, standard |
+| Information | `IconInfo` | `Info`, standard |
+| Open a service's own site | `IconExternalLink` | `ExternalLink`, standard |
+| Warning | `IconWarning` | `Warning`, standard |
+| Send a test | `IconSendTest` | `SendTest`, standard |
+| Automatic, the app chooses | `IconCompressAuto` | `CompressAuto` on Autodetect, standard |
+| Fetch an update, check for one, update now | `IconUpdate` | `Update` on the Updates tab, Update now and Update all, standard |
+| General tab | `IconTabGeneral` | `TabGeneral`, standard |
+| Notifications | `IconNotifications` | `Notifications`, standard |
 
 <br>
 
@@ -253,4 +325,5 @@ ArrowLoop picks a button's glyph from its translation key. The rows below are th
 - **ArrowLoop:** `scripts/gen_glyphs.py` writes the app's glyphs, and the Look settings glyphs come from it, for the web and, through `scripts/gen_glyph_data.py`, for the phone. `web/src/lib/glyphName.ts` maps a translation key to a glyph name, and a key it does not know keeps its text.
 - **BombVault:** `scripts/gen_glyphs.py` writes `web/src/components/glyphs.tsx` and `navGlyphs.tsx` from a copy of `glyphs.json` at 16px; the phone app shows the web launcher and uses the same files. `glyphFor.tsx` maps a translation key to a glyph when a button passes none; a button that passes one wins.
 - **KnightLoader:** `web/scripts/gen-glyphs.mjs` writes `web/src/lib/glyphs.tsx` at 22px with the ink at three quarters of the box; the Android app has no SVG and shows tinted bitmaps rendered from the same list into `mobile/assets/`. Every call site passes its glyph; Settings page glyphs are mapped in `pages/settings/pageIcons.tsx`. The browser extension copies the eye and a few others in `extension/src/`.
+- **ShipLog:** `include/glyphs.php` holds a copy of every entry it draws. `shiplog.page` uses them on the settings page, and `shiplog.Docker.page` hands four of them to `scripts/docker.js` for the changelog window.
 - **TowerTorch:** `scripts/cc-theme.js` holds a copy of every entry it draws, the square viewBox and the drawing, for its own controls and for Unraid's buttons; Unraid's own icons keep their Font Awesome. The glyphs of its settings selectors sit in `scripts/settings.js`, and `scripts/labels.js` maps Unraid's button captions to glyph names.
