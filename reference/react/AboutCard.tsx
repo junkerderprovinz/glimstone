@@ -141,8 +141,8 @@ export interface InfoVersionCardProps {
   /** Opens the app's window on the running version's release notes, for an
    *  app that marks no changes. */
   onReleaseNotes?: () => void;
-  /** The app's own "New · n" button, which opens the window with both tabs.
-   *  It takes the place of "Release notes", so the card has one button there. */
+  /** The app's own "New · n" button, wearing `IconWhatsNew` with the dot in
+   *  front. It takes the place of "Release notes", so the card has one button there. */
   whatsNew?: ReactNode;
   openUrl?: OpenUrl;
   hueIndex?: number;
@@ -244,6 +244,12 @@ export function releaseTag(version: string): string {
   return bare.startsWith("v") ? bare : `v${bare}`;
 }
 
+/** A version as the card shows it: `v3.7.1` reads "3.7.1". The "v" names the tag, not the version. */
+export function shownVersion(version: string): string {
+  const trimmed = version.trim();
+  return /^v\d/.test(trimmed) ? trimmed.slice(1) : trimmed;
+}
+
 /**
  * The number at a row's end, a link to its release page when it is a published
  * release. It has no underline; the ink lifts on hover.
@@ -259,11 +265,12 @@ function VersionNumber({
 }) {
   const tag = releaseTag(row.version);
   const released = /^v\d+\.\d+\.\d+$/.test(tag);
+  const shown = shownVersion(row.version);
   if (!released) {
-    return <span className="glim-num shrink-0 text-sm text-carbon-textSub">{unreleased(row.version)}</span>;
+    return <span className="glim-num shrink-0 text-sm text-carbon-textSub">{unreleased(shown)}</span>;
   }
   if (!row.repoUrl) {
-    return <span className="glim-num shrink-0 text-sm text-carbon-textSub">{row.version}</span>;
+    return <span className="glim-num shrink-0 text-sm text-carbon-textSub">{shown}</span>;
   }
   const href = `${row.repoUrl}/releases/tag/${encodeURIComponent(`${row.tagPrefix ?? ""}${tag}`)}`;
   return (
@@ -277,7 +284,7 @@ function VersionNumber({
       }}
       className="glim-num shrink-0 text-sm text-carbon-textSub no-underline hover:text-carbon-text"
     >
-      {row.version}
+      {shown}
     </a>
   );
 }

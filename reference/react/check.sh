@@ -56,11 +56,18 @@ done < <(grep -nE '"[^"]*bg-carbon-surface[23][^"]*"' reference/react/*.tsx)
 
 # 6. A :has() never tests the class or style attribute (rule 36). Chrome then
 #    restyles the whole page whenever a class or an inline style changes, and a
-#    page that animates a bar through either stalls on every frame. Comments are
-#    dropped first, and the argument is matched with its nested parentheses.
+#    page that animates a bar through either stalls on every frame. The scripts
+#    and components are read too, for a Tailwind variant such as
+#    `has-[[class*=open]]:` in a class list. Comments are dropped first, and the
+#    argument is matched with its nested brackets.
 while IFS= read -r hit; do
   note "a :has() reads the class or style attribute (rule 36): $hit"
-done < <(perl -0777 -ne 's{/\*.*?\*/}{}gs; while (/:has(\((?:[^()]++|(?1))*\))/g) { my $a = $1; print "$ARGV :has$a\n" if $a =~ /\[\s*(?:class|style)\b/ }' reference/*.css)
+done < <(perl -0777 -ne '
+  s{/\*.*?\*/}{}gs; s{^\s*//.*$}{}gm;
+  while (/(:has(\((?:[^()]++|(?2))*\))|\bhas-(\[(?:[^\[\]]++|(?3))*\]))/g) {
+    my ($hit, $arg) = ($1, $2 // $3);
+    print "$ARGV $hit\n" if $arg =~ /\[\s*(?:class|style)\b/;
+  }' reference/*.css reference/*.ts reference/react/*.ts reference/react/*.tsx)
 
 if [ "$fail" -eq 0 ]; then
   echo "OK  every class, utility and property the components use is defined here"
