@@ -4,6 +4,31 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
+Select becomes the one dropdown that can do everything, with KnightLoader's dropdown as the standard. It splits its list into groups with headings, opens submenus beside their rows, carries a glyph per option and takes one of four widths. The wheel steps it while it has focus, it stays busy while an answer is out and shakes when one is refused. It mirrors under a right-to-left language, gives a finger taller rows and keeps still under reduced motion. The design language has a section of its own for it.
+
+**Adopting apps:**
+
+- **KnightLoader:** keep `Dropdown.tsx` and check it against `reference/react/Select.tsx` and "The dropdown". The widths are the same four under new names: `widest` is `steady`, `shrink` is `squeeze` and `value` is `hug`. Its list has no typeahead yet, its rows stay under 44px on a touch screen, and it closes on every scroll event, where the reference closes on the person's wheel or finger, so a page that glides to a focused trigger does not shut the list as it opens. Take the reference's answers for those three.
+- **ArrowLoop:** replace `Choice` in `Field.tsx`, the sort list in `ListBar.tsx` and the share list in `Targets.tsx`, which draw their own trigger over the deprecated `DropdownListbox`, with `Select`. A language's flag goes in as the option's `glyph`, `roomy` becomes a `className` on the trigger, and the wheel comes built in. Install `@zag-js/react`, `@zag-js/select` and `@zag-js/menu`, and copy `reference/selectScroll.ts` beside the components folder.
+- **BombVault:** `SelectField` already runs on the select machine with glyphs, the wheel and the portal hue. Take groups and headings, the four widths (its stacked labels are `steady`), a `null` value with a placeholder, `busy`, `shake`, `tip` and submenus from `Select`, and install `@zag-js/menu`. Move the lists still on `DropdownListbox` (the backup list bar, the container stop editor, the streaming card, the ZFS item settings and the exceptions) to it as well.
+- **Every app:** copy the select rules from `reference/tokens.css` again. The open list is at least 13rem wide, at most 22rem, scrolls from 24rem and never runs past the window; this reaches the Combobox's list too.
+
+## ✨ Added
+
+- **Groups and headings.** `groups` splits the list into runs with a hairline between them, and a run with a heading is a named group for a screen reader.
+- **Submenus.** An entry with `options` of its own opens them beside its row. A list with one runs on Zag's menu machine with radio items, since a listbox cannot nest.
+- **Four widths.** `fill`, `steady`, `squeeze` and `hug`, from KnightLoader's `fill`, `widest`, `shrink` and `value`.
+- **The wheel, built in.** A closed Select with focus steps through every option in list order, skipping disabled ones and stopping at both ends.
+- **Glyphs, a placeholder, busy, shake and tip.** An option can carry a glyph, a `null` value shows the placeholder, `busy` keeps the focus and takes no input, each bump of `shake` shakes the trigger once, and `tip` gives a trigger without a label a hover bubble.
+- **The framework-free mount takes groups, widths and the wheel.** `reference/select.ts` gets them too; submenus need the React component.
+- **Seventeen contract rows** for Select on the site, each a Playwright test, among them right to left, reduced motion and touch.
+
+## 🔁 Changed
+
+- **The list opens on the side the trigger's text starts from**, and ends where the trigger ends or opens above where that does not fit. It used to take the trigger's exact width.
+- **A wheel or a finger moving the page past the open list closes it, as a resize does.** The page's own scroll events do not, since the list follows its trigger.
+- **`value` can be `null` and `options` is optional** next to `groups`. Both widen the types, so existing call sites compile as they are.
+
 ## 3.8.0 - 2026-10-30
 
 Desktop apps get a title bar of their own, and every button and Look selector in the family can now wear a glyph. On Windows and Linux the bar is drawn in the app's look, while macOS keeps its own. The Labels selector gets new glyphs and a Row height selector three of its own. Buttons that only had words in BombVault, KnightLoader and ArrowLoop get theirs, so the Glyph choice of the label setting reaches them too. Twenty-three glyphs join the assortment, four meanings move off the glyphs they shared, and `IconSignIn` turns so its arrow points into the door. KnightLoader, TowerTorch, ShipLog, ArrowLoop and BombVault wear the standard glyphs, and `glyph-map.md` follows them row by row. `IconUnlink` and `IconSleep` join the assortment, `IconUpdate` also covers the update check, a passkey sign-in wears `IconKey`, and the Version card shows its numbers without a "v". Bars that change all the time get a class of their own.
