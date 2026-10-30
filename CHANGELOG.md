@@ -4,6 +4,16 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
+**Adopting apps:**
+
+- **Window feet:** give Cancel, Close, Back and every other answer in a window's foot a filled tone, and keep unfilled buttons to toolbars and rows. A source check like KnightLoader's `buttonSources.test.ts` keeps them filled.
+- **Notices:** give every notice that can be switched off a "Don't show again" checkbox in the house look, store the choice per kind of notice and offer a way back in Settings.
+
+## 🎨 Design
+
+- **Rule 38: every answer in a window's foot is filled, Cancel included.** A button without a fill read as a word next to the one it answers. Unfilled buttons are for toolbars and rows.
+- **Rule 39: a notice that can be switched off has a checkbox.** "Don't show again" under a notice is a checkbox in the house look, the one exception to the switch.
+
 ## 3.8.0 - 2026-10-30
 
 Desktop apps get a title bar of their own, and every button and Look selector in the family can now wear a glyph. On Windows and Linux the bar is drawn in the app's look, while macOS keeps its own. The Labels selector gets new glyphs and a Row height selector three of its own. Buttons that only had words in BombVault, KnightLoader and ArrowLoop get theirs, so the Glyph choice of the label setting reaches them too. Twenty-three glyphs join the assortment, four meanings move off the glyphs they shared, and `IconSignIn` turns so its arrow points into the door. KnightLoader, TowerTorch, ShipLog, ArrowLoop and BombVault wear the standard glyphs, and `glyph-map.md` follows them row by row. `IconUnlink` and `IconSleep` join the assortment, `IconUpdate` also covers the update check, a passkey sign-in wears `IconKey`, and the Version card shows its numbers without a "v". Bars that change all the time get a class of their own. Select becomes the one dropdown that can do everything, with KnightLoader's dropdown as the standard. It splits its list into groups with headings, opens submenus beside their rows, carries a glyph per option and takes one of three sizes and four widths. An outside label can name it and a long value can wrap. The wheel steps it while it has focus, it stays busy while an answer is out and shakes when one is refused. It mirrors under a right-to-left language, gives a finger taller rows and keeps still under reduced motion. The design language has a section of its own for it.
