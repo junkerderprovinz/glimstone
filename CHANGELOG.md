@@ -4,7 +4,9 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
-A desktop app draws its own title bar on Windows and Linux, in the app's look rather than the system's, and keeps the system's on macOS. Every button and every Look selector in the family can now wear a glyph. The Labels selector gets new glyphs and a Row height selector three of its own; buttons that only had words in BombVault, KnightLoader and ArrowLoop get theirs, so the Glyph choice of the label setting reaches them too. Twenty-three glyphs join the assortment, four meanings move off the glyphs they shared, and `IconSignIn` is turned so its arrow points into the door.
+## 3.7.1 - 2026-10-30
+
+Desktop apps get a title bar of their own, and every button and Look selector in the family can now wear a glyph. On Windows and Linux the bar is drawn in the app's look, while macOS keeps its own. The Labels selector gets new glyphs and a Row height selector three of its own. Buttons that only had words in BombVault, KnightLoader and ArrowLoop get theirs, so the Glyph choice of the label setting reaches them too. Twenty-three glyphs join the assortment, four meanings move off the glyphs they shared, and `IconSignIn` turns so its arrow points into the door.
 
 **Adopting apps:**
 
@@ -13,6 +15,7 @@ A desktop app draws its own title bar on Windows and Linux, in the app's look ra
 - **Look glyphs:** copy `IconLabelText`, `IconLabelTextGlyph`, `IconLabelGlyph` and `IconLabelReactive` from `reference/glyphs.json` again and put them on the Labels selector's segments. An app with a Row height selector takes `IconRowCompact`, `IconRowMedium` and `IconRowComfortable` for it.
 - **Button glyphs:** copy `IconSignIn` from `reference/glyphs.json` again, and take the new glyphs where the app has those buttons. `reference/glyph-map.md` says which button moves where in BombVault, KnightLoader and ArrowLoop.
 - **Label keys:** point retry, reload and refresh at `IconRetry` and a reset at `IconRefresh`, import and export at `IconImport` and `IconExport`, Done, Confirm and Got it at `IconConfirm`, decline at `IconReject`, apply at `IconApply` and undo at `IconUndo`.
+- **Version:** copy `reference/react/version.ts` again.
 
 ## ✨ Added
 
