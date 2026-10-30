@@ -23,6 +23,7 @@
 | Pause | `IconPause` | none | `IconPause`, standard |
 | Stop, abort | `IconStop` | `IconStop`, standard | `IconStop`, standard |
 | Power on and off | `IconPower` | `IconPower`, standard | `IconPower`, standard |
+| Sleep, spin down, rest, hibernate | `IconSleep` | none | none |
 | Delete, remove | `IconTrash` | `IconTrash`, standard | `IconTrash`, standard |
 | Delete with its files | `IconTrashFiles` | none | `IconTrashFiles`, standard |
 | Clear, empty a list | `IconEmpty` | none | `IconEmpty`, standard |
@@ -40,10 +41,11 @@
 | Undo | `IconUndo` | `IconRestore`, switch | `IconUndo`, standard |
 | Connect, pair | `IconLink` | `IconLink`, standard | `IconLink`, standard |
 | Unlink, drop a connection | `IconUnlink` | `IconLink`, switch | none |
-| Credentials, key, set a password | `IconKey` | `IconKey`, standard | `IconKey`, standard |
+| Credentials, key, set a password, sign in with a passkey | `IconKey` | `IconKey`, standard | `IconKey`, standard |
 | Revoke a key, remove a password or passkey | `IconKeyRevoke` | `IconKeyRevoke`, standard | `IconKeyRevoke`, standard |
 | Forgot password | `IconForgotPassword` | `IconKey`, switch | `IconForgotPassword`, standard |
 | Sign in | `IconSignIn` | `IconSignIn`, switch | `IconSignIn`, standard |
+| Sign in with a passkey | `IconKey` | to follow | `IconKey`, standard |
 | Sign out | `IconSignOut` | `IconSignOut`, standard | `IconSignOut`, standard |
 | Information | `IconInfo` | `IconInfo`, standard | `IconInfo`, standard |
 | Help | `IconHelp` | none | `IconHelp`, standard |
@@ -85,7 +87,7 @@
 | Store uncompressed | `IconCompressOff` | `IconCompressOff`, standard | none |
 | Automatic, the app chooses | `IconCompressAuto` | `IconCompressAuto`, standard | `IconCompressAuto`, standard |
 | Compress as far as possible | `IconCompressMax` | `IconCompressMax`, standard | none |
-| Script, code, variables | `IconCode` | none | `IconCode`, standard |
+| Script, code, variables, console | `IconCode` | none | `IconCode`, standard |
 | Dark look | `IconMoon` | none | `IconMoon`, standard |
 | Light look | `IconSun` | none | `IconSun`, standard |
 | Paste | `IconPaste` | none | `IconPaste`, standard |
@@ -94,7 +96,7 @@
 | Write to us, under the pointer or a finger | `IconMailOpen` | `IconMailOpen`, standard | `IconMailOpen`, standard |
 | Open the manual | `IconManual`; on the Help card's button the README's book in `MANUAL_SVG` | `IconManual`, switch to `MANUAL_SVG` on the Help card | `MANUAL_SVG`, standard |
 | Open the manual, under the pointer, a finger or the focus | `IconManualOpen` | `IconManualOpen`, standard | `IconManualOpen`, standard |
-| Default, preferred | `IconStar` | `IconStar`, standard on the Default badge and the Make default button | none |
+| Default, preferred, favourite | `IconStar` | `IconStar`, standard on the Default badge and the Make default button | none |
 | Stop asking | `IconStopAsking` | none | `IconStopAsking`, standard |
 | Store cookies | `IconCookies` | none | `IconCookies`, standard |
 | Open the log | `IconLog` | `IconLog`, standard | `IconLog`, standard |
@@ -221,6 +223,7 @@ TowerTorch wears the assortment on its own controls and on the Unraid buttons it
 | Pause | `IconPause` | `Pause`, standard |
 | Stop, abort | `IconStop` | `Stop`, standard |
 | Power on and off | `IconPower` | `Power`, standard |
+| Sleep, spin down, rest, hibernate | `IconSleep` | `Moon` on Spin down, a resting disk and Hibernate, to follow |
 | Delete, remove | `IconTrash` | `Trash`, standard |
 | Delete with its files | `IconTrashFiles` | `TrashFiles`, standard |
 | Clear, empty a list | `IconEmpty` | `Empty`, standard |
@@ -231,7 +234,7 @@ TowerTorch wears the assortment on its own controls and on the Unraid buttons it
 | Test, verify, success | `IconCheck` | `Check`, standard |
 | Done, confirm, got it | `IconConfirm` | `Confirm`, standard |
 | Apply, take over, use this one | `IconApply` | `Apply`, standard |
-| Credentials, key, set a password | `IconKey` | `Key`, standard |
+| Credentials, key, set a password, sign in with a passkey | `IconKey` | `Key`, standard |
 | Information | `IconInfo` | `Info`, standard |
 | Help | `IconHelp` | `Help`, standard |
 | More | `IconMore` | `More`, standard |
@@ -247,10 +250,9 @@ TowerTorch wears the assortment on its own controls and on the Unraid buttons it
 | Open a service's own site | `IconExternalLink` | `ExternalLink` on WebUI and a project page, standard |
 | Warning | `IconWarning` | `Warning`, standard |
 | A protection is on, turn it on | `IconShieldOn` | `ShieldOn` on a protected share, standard |
-| Script, code, variables | `IconCode` | `Code` on a container's console, standard |
-| Dark look | `IconMoon` | `Moon` on Spin down, a resting disk and Hibernate, standard |
+| Script, code, variables, console | `IconCode` | `Code` on a container's console, standard |
 | Open the manual | `IconManual` | `Manual` on Read me first, standard |
-| Default, preferred | `IconStar` | `Star` on Community Applications' spotlight and the Favorites tab, standard |
+| Default, preferred, favourite | `IconStar` | `Star` on Community Applications' spotlight and the Favorites tab, standard |
 | Open the log | `IconLog` | `Log`, standard |
 | Install | `IconInstall` | `Install`, standard |
 | Fetch an update, check for one, update now | `IconUpdate` | `Update`, standard |
@@ -293,7 +295,7 @@ ArrowLoop picks a button's glyph from its translation key. The rows below are th
 | Add, create | `IconAdd` | `IconAdd`, standard |
 | Done, confirm, got it | `IconConfirm` | `IconConfirm`, standard |
 | Apply, take over, use this one | `IconApply` | `IconApply`, standard |
-| Credentials, key, set a password | `IconKey` | `IconKey`, standard |
+| Credentials, key, set a password, sign in with a passkey | `IconKey` | `IconKey`, standard |
 | Revoke a key, remove a password or passkey | `IconKeyRevoke` | `IconKeyRevoke`, standard |
 | Prune, reclaim space | `IconPrune` | `IconPrune`, standard |
 | Send a test | `IconSendTest` | `IconSendTest`, standard |
@@ -301,6 +303,7 @@ ArrowLoop picks a button's glyph from its translation key. The rows below are th
 | Keep the left version | `IconKeepLeft` | `IconKeepLeft`, standard |
 | Keep the right version | `IconKeepRight` | `IconKeepRight`, standard |
 | Sign in | `IconSignIn` | `IconSignIn`, standard |
+| Sign in with a passkey | `IconKey` | to follow |
 | Forgot password | `IconForgotPassword` | `IconForgotPassword`, standard |
 | A protection is on, turn it on | `IconShieldOn` | `IconShieldOn`, standard |
 | A protection is off, turn it off | `IconShieldOff` | `IconShieldOff`, standard |

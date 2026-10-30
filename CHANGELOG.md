@@ -4,7 +4,7 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
-TowerTorch, ShipLog, ArrowLoop and BombVault wear the standard glyphs on their pushed branches, and `glyph-map.md` follows them row by row. `IconUnlink` joins the assortment, `IconUpdate` also covers the update check, and the Version card shows its numbers without a "v". Bars that change all the time get a class of their own.
+TowerTorch, ShipLog, ArrowLoop and BombVault wear the standard glyphs on their pushed branches, and `glyph-map.md` follows them row by row. `IconUnlink` and `IconSleep` join the assortment, `IconUpdate` also covers the update check, a passkey sign-in wears `IconKey`, and the Version card shows its numbers without a "v". Bars that change all the time get a class of their own.
 
 **Adopting apps:**
 
@@ -12,6 +12,9 @@ TowerTorch, ShipLog, ArrowLoop and BombVault wear the standard glyphs on their p
 - **What's new:** give the New button `IconWhatsNew`, with the green dot in front of the glyph.
 - **Update check:** give Check for updates `IconUpdate`, and its answer `IconUpToDate` or `IconUpdateAvailable`.
 - **Unlink:** copy `IconUnlink` from `reference/glyphs.json` for a button that drops a connection. In BombVault that is the button that drops a former name.
+- **Sleep:** copy `IconSleep` for spinning a disk down, resting and hibernating, and keep `IconMoon` for the dark look alone.
+- **Passkey:** give the button that signs in with a passkey `IconKey`.
+- **Charts:** where the person picks the second series' colour, keep that colour and its fill.
 - **Bars:** copy `.glim-meter` from `reference/tokens.css` and put it on every bar or meter that changes all the time, beside the class that gives it a height.
 - **Tests:** run the end-to-end specs of a list in move mode with reduced motion. An app that checks rule 36 in its own code also reads Tailwind's `has-[…]` variants.
 - **Selectors on a phone:** give a selector whose labels run long, such as the Labels selector, a way to set its segments two to a row below 600px: a wrapping strip that stretches its rows, each segment at `flex: 1 0 var(--seg-basis, auto)`, and `--seg-basis: calc(50% - 0.25rem)` under 600px. A label that does not fit its half wraps instead of being cut off.
@@ -21,6 +24,7 @@ TowerTorch, ShipLog, ArrowLoop and BombVault wear the standard glyphs on their p
 ## ✨ Added
 
 - **`IconUnlink`** for Unlink, drop a connection: Streamline's broken link, a chain with a slash through it like `IconEyeOff`, `IconKeyRevoke` and `IconShieldOff`.
+- **`IconSleep`** for Sleep, spin down, rest, hibernate: Streamline's Zzz. TowerTorch's spin down and hibernate move to it from `IconMoon`.
 - **`.glim-meter`** carries rule 37's `contain: size layout`, so a bar does not have to spell it out.
 - **A ShipLog table in `glyph-map.md`**, and where ShipLog keeps its glyphs.
 - **`check.sh` also reads Tailwind variants.** A `has-[…]` in a component's class list that tests the class or style attribute fails the check like a `:has()` in a stylesheet.
@@ -31,10 +35,12 @@ TowerTorch, ShipLog, ArrowLoop and BombVault wear the standard glyphs on their p
 - **A version number has no "v".** The Version card reads "3.7.1" for the app and for GlimStone; the "v" belongs to the tag.
 - **The New button wears `IconWhatsNew`.** The green dot stands in front of the glyph and still says whether anything is unseen.
 - **A selector with long labels goes two by two on a phone.** Below 600px its segments stand two to a row, so four options make a grid of two by two. With its glyph, "Text and symbol" no longer fits half of a 360px row, and the Labels selector fell into a different layout from its neighbours.
+- **A chart's second series keeps a colour the person picked.** The text-colour line without fill stays the rule while nobody has chosen; KnightLoader draws seeding as a filled area in a colour picked on its Appearance page.
 
 ## 🔁 Changed
 
 - **`IconUpdate` means Fetch an update, check for one, update now.** The check answers with `IconUpToDate` or `IconUpdateAvailable`.
+- **Three meanings widen.** `IconStar` also marks a favourite, such as Community Applications' spotlight and a Favorites tab, `IconCode` also opens a console, and `IconKey` also signs in with a passkey.
 - **TowerTorch's caption table gives more meanings their own glyph.** Apply, confirm, check, reset, restore, clear, install, import, export, update, retry and the log no longer share a drawing with a neighbour.
 - **`glyph-map.md` marks what the apps wear now.** TowerTorch's table lists every glyph TowerTorch wears, fifty-five of them new, and names the five drawings it keeps for itself. Every ArrowLoop row is standard and eleven are new, and BombVault's column catches up on move, grip, new folder, log, install, import, save, the update check with its two answers, and What's new. Thirty-three of KnightLoader's rows turn standard, its own window glyphs and grip among them.
 - **A plugin page names TowerTorch as its companion** and `html.cc-popups-on` as the class that turns its GlimStone look on, in place of an unnamed companion app.

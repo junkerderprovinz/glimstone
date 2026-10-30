@@ -80,6 +80,7 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconPause` | Pause | Streamline `entertainment/button-pause-2.svg` |
 | `IconStop` | Stop, abort | Streamline `entertainment/button-stop.svg` |
 | `IconPower` | Power on and off | Streamline `entertainment/button-power-1.svg` |
+| `IconSleep` | Sleep, spin down, rest, hibernate | Streamline `interface-essential/sleep.svg` |
 | `IconTrash` | Delete, remove | Streamline `interface-essential/recycle-bin-2.svg` |
 | `IconTrashFiles` | Delete with its files | Streamline `interface-essential/file-delete-alternate.svg` |
 | `IconEmpty` | Clear, empty a list | Streamline `interface-essential/clipboard-remove.svg` |
@@ -97,7 +98,7 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconUndo` | Undo | Streamline `computer-devices/return-2.svg` |
 | `IconLink` | Connect, pair | Streamline `interface-essential/link-chain.svg` |
 | `IconUnlink` | Unlink, drop a connection | Streamline `interface-essential/broken-link-2.svg` |
-| `IconKey` | Credentials, key, set a password | Streamline `interface-essential/key.svg` |
+| `IconKey` | Credentials, key, set a password, sign in with a passkey | Streamline `interface-essential/key.svg` |
 | `IconKeyRevoke` | Revoke a key, remove a password or passkey | Streamline `key` with a bar cut through it |
 | `IconForgotPassword` | Forgot password | Streamline `interface-essential/lock-rotation.svg` |
 | `IconSignIn` | Sign in | Streamline `interface-essential/login-1.svg` turned half a turn, so the arrow points into the door |
@@ -142,7 +143,7 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconCompressOff` | Store uncompressed | Streamline `shipping/shipping-box-1.svg` |
 | `IconCompressAuto` | Automatic, the app chooses | Streamline `interface-essential/magic-wand-2.svg` |
 | `IconCompressMax` | Compress as far as possible | Streamline `interface-essential/arrow-shrink.svg` |
-| `IconCode` | Script, code, variables | Drawn for GlimStone |
+| `IconCode` | Script, code, variables, console | Drawn for GlimStone |
 | `IconMoon` | Dark look | Streamline `interface-essential/waning-cresent-moon.svg` |
 | `IconSun` | Light look | Streamline `interface-essential/brightness-1.svg` |
 | `IconPaste` | Paste | Streamline `interface-essential/empty-clipboard.svg` |
@@ -151,7 +152,7 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconMailOpen` | Write to us, under the pointer or a finger | Material Design Icons `email-open` (Apache 2.0) |
 | `IconManual` | Manual | Drawn for BombVault's Help card |
 | `IconManualOpen` | Manual, under the pointer, a finger or the focus | Drawn for BombVault's Help card |
-| `IconStar` | Default, preferred | Tabler Icons, filled `star` (MIT) |
+| `IconStar` | Default, preferred, favourite | Tabler Icons, filled `star` (MIT) |
 | `IconStopAsking` | Stop asking | Streamline `interface-essential/block-bell-notification.svg` |
 | `IconCookies` | Store cookies | Streamline `interface-essential/paperclip-1.svg` |
 | `IconLog` | Open the log | Streamline `programming/file-code-1.svg` |
@@ -255,7 +256,7 @@ The Design selector's Dark and Light segments wear `IconMoon` and `IconSun` from
 
 **Taking something away draws a slash through it.** `IconEyeOff`, `IconKeyRevoke`, `IconShieldOff` and `IconUnlink` are an eye, a key, a shield and a chain link with one bar from the top left to the bottom right, so the undoing reads the same on every one of them.
 
-**Close meanings wear different drawings.** `IconRetry` tries again, reloads or refreshes, and `IconRefresh` goes back to the default whatever its name says. `IconUpload` and `IconDownload` move a file to or from somewhere else, while `IconImport` and `IconExport` read a list or settings in and write them out. `IconCheck` marks a test and the success it reports, and `IconConfirm` is a person agreeing: Done, Confirm, Got it. `IconApply` takes something over in place of what was there, which is not saving. `IconCompressAuto` marks anything the app chooses by itself, the compression as well as the order of the providers, and keeps its name for the apps that generate from this list. `IconUpdate` fetches an update and also checks whether there is one. The check answers with `IconUpToDate` when there was none to fetch, the same cloud with a tick in place of the arrows, and with `IconUpdateAvailable` when there is.
+**Close meanings wear different drawings.** `IconRetry` tries again, reloads or refreshes, and `IconRefresh` goes back to the default whatever its name says. `IconUpload` and `IconDownload` move a file to or from somewhere else, while `IconImport` and `IconExport` read a list or settings in and write them out. `IconCheck` marks a test and the success it reports, and `IconConfirm` is a person agreeing: Done, Confirm, Got it. `IconApply` takes something over in place of what was there, which is not saving. `IconCompressAuto` marks anything the app chooses by itself, the compression as well as the order of the providers, and keeps its name for the apps that generate from this list. `IconUpdate` fetches an update and also checks whether there is one. The check answers with `IconUpToDate` when there was none to fetch, the same cloud with a tick in place of the arrows, and with `IconUpdateAvailable` when there is. `IconMoon` is the dark look and nothing else; a disk spinning down, a machine going to rest and a VM put into hibernation wear `IconSleep`.
 
 **A brand mark is the brand's own and goes only where it is meant.** `IconCoffee` is Buy Me a Coffee's mark and stands only on the button that leads there, and `IconCaptcha` is reCAPTCHA's mark and stands only where a captcha is the subject. `IconContainers` and `IconGithub` follow the same rule (section 1).
 
