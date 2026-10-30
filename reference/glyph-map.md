@@ -12,12 +12,12 @@
 | --- | --- | --- | --- |
 | Show, reveal | `IconEye` | `IconEye`, standard | `IconEye`, standard |
 | Hide again | `IconEyeOff` | `IconEyeOff`, standard | `IconEyeOff`, standard |
-| Reset to the default | `IconRefresh` | `IconClearSelection`, switch | to follow |
-| Retry, reload, refresh | `IconRetry` | `IconRefresh`, switch | `IconRefresh`, switch |
+| Reset to the default | `IconRefresh` | `IconClearSelection`, switch | `IconRefresh`, standard |
+| Retry, reload, refresh | `IconRetry` | `IconRefresh`, switch | `IconRetry`, standard |
 | Upload | `IconUpload` | `IconUpload`, standard | `IconUpload`, standard |
-| Import, read in | `IconImport` | `IconImport`, standard | `IconUpload`, switch |
+| Import, read in | `IconImport` | `IconImport`, standard | `IconImport`, standard |
 | Download | `IconDownload` | `IconDownload`, standard | `IconDownload`, standard |
-| Export | `IconExport` | `IconDownload`, switch | `IconDownload`, switch |
+| Export | `IconExport` | `IconDownload`, switch | `IconExport`, standard |
 | Search | `IconSearch` | `IconSearch`, standard | `IconSearch`, standard |
 | Start, run now, play | `IconPlay` | `IconPlay`, standard | `IconPlay`, standard |
 | Pause | `IconPause` | none | `IconPause`, standard |
@@ -25,34 +25,34 @@
 | Power on and off | `IconPower` | `IconPower`, standard | `IconPower`, standard |
 | Delete, remove | `IconTrash` | `IconTrash`, standard | `IconTrash`, standard |
 | Delete with its files | `IconTrashFiles` | none | `IconTrashFiles`, standard |
-| Clear, empty a list | `IconEmpty` | none | to follow |
+| Clear, empty a list | `IconEmpty` | none | `IconEmpty`, standard |
 | Add, create | `IconAdd` | `IconAdd`, standard | `IconAdd`, standard |
 | Close, cancel, dismiss | `IconClose` | `IconClose`, standard | `IconClose`, standard |
-| Minimise a window | `IconWindowMinimise` | none | `IconWindowMinimise`, switch |
-| Maximise a window | `IconWindowMaximise` | none | `IconWindowMaximise`, switch |
-| Restore a maximised window | `IconWindowRestore` | none | `IconWindowRestore`, switch |
+| Minimise a window | `IconWindowMinimise` | none | `IconWindowMinimise`, standard |
+| Maximise a window | `IconWindowMaximise` | none | `IconWindowMaximise`, standard |
+| Restore a maximised window | `IconWindowRestore` | none | `IconWindowRestore`, standard |
 | Edit, rename, change | `IconPencil` | `IconPencil`, standard | `IconPencil`, standard |
 | Copy | `IconCopy` | `IconCopy`, standard | `IconCopy`, standard |
 | Test, verify, success | `IconCheck` | `IconCheck`, standard | `IconCheck`, standard |
-| Done, confirm, got it | `IconConfirm` | `IconCheck`, switch | to follow |
-| Refuse, decline | `IconReject` | `IconClose`, switch | to follow |
-| Apply, take over, use this one | `IconApply` | `IconSave`, switch | to follow |
-| Undo | `IconUndo` | `IconRestore`, switch | to follow |
+| Done, confirm, got it | `IconConfirm` | `IconCheck`, switch | `IconConfirm`, standard |
+| Refuse, decline | `IconReject` | `IconClose`, switch | `IconReject`, standard |
+| Apply, take over, use this one | `IconApply` | `IconSave`, switch | `IconApply`, standard |
+| Undo | `IconUndo` | `IconRestore`, switch | `IconUndo`, standard |
 | Connect, pair | `IconLink` | `IconLink`, standard | `IconLink`, standard |
 | Unlink, drop a connection | `IconUnlink` | `IconLink`, switch | none |
 | Credentials, key, set a password | `IconKey` | `IconKey`, standard | `IconKey`, standard |
-| Revoke a key, remove a password or passkey | `IconKeyRevoke` | `IconKeyRevoke`, standard | to follow |
-| Forgot password | `IconForgotPassword` | `IconKey`, switch | to follow |
-| Sign in | `IconSignIn` | `IconSignIn`, switch | to follow |
+| Revoke a key, remove a password or passkey | `IconKeyRevoke` | `IconKeyRevoke`, standard | `IconKeyRevoke`, standard |
+| Forgot password | `IconForgotPassword` | `IconKey`, switch | `IconForgotPassword`, standard |
+| Sign in | `IconSignIn` | `IconSignIn`, switch | `IconSignIn`, standard |
 | Sign out | `IconSignOut` | `IconSignOut`, standard | `IconSignOut`, standard |
 | Information | `IconInfo` | `IconInfo`, standard | `IconInfo`, standard |
 | Help | `IconHelp` | none | `IconHelp`, standard |
 | More | `IconMore` | `IconMore`, standard | `IconMore`, standard |
 | Menu | `IconMenu` | none | `IconMenu`, standard |
-| Save | `IconSave` | `IconSave`, standard | to follow |
+| Save | `IconSave` | `IconSave`, standard | `IconSave`, standard |
 | Unlock, clear a lock | `IconUnlock` | `IconUnlock`, standard | none |
 | Prune, reclaim space | `IconPrune` | `IconPrune`, standard | none |
-| Compact a database | `IconCompact` | none | to follow |
+| Compact a database | `IconCompact` | none | `IconCompact`, standard |
 | Compute, calculate | `IconCompute` | none | none |
 | Back | `IconBack` | `IconBack`, standard | `IconBack`, standard |
 | Next, continue | `IconForward` | `IconForward`, standard | `IconForward`, standard |
@@ -60,30 +60,30 @@
 | Jump to the start | `IconFirst` | none | `IconFirst`, standard |
 | Move up one | `IconMoveUp` | none | `IconMoveUp`, standard |
 | Move down one | `IconMoveDown` | none | `IconMoveDown`, standard |
-| Move elsewhere | `IconMove` | `IconMove`, standard | none |
+| Move elsewhere | `IconMove` | `IconMove`, standard | `IconMove`, standard |
 | Expand | `IconExpand` | none | `IconExpand`, standard |
 | Collapse | `IconCollapse` | none | `IconCollapse`, standard |
 | Select all | `IconSelectAll` | `IconSelectAll`, standard | `IconSelectAll`, standard |
 | Clear the selection | `IconClearSelection` | `IconClearSelection`, standard | `IconClearSelection`, standard |
 | Compare | `IconCompare` | `IconCompare`, standard | none |
-| Keep both versions | `IconKeepBoth` | none | to follow |
+| Keep both versions | `IconKeepBoth` | none | `IconKeepBoth`, standard |
 | Keep the left version | `IconKeepLeft` | none | none |
 | Keep the right version | `IconKeepRight` | none | none |
-| Merge | `IconMerge` | none | to follow |
+| Merge | `IconMerge` | none | `IconMerge`, standard |
 | Filter | `IconFilter` | none | `IconFilter`, standard |
 | Pin | `IconPin` | none | `IconPin`, standard |
 | Priority | `IconPriority` | none | `IconPriority`, standard |
-| Drag to reorder | `IconGrip` | `IconGrip`, standard | `IconGrip`, switch |
+| Drag to reorder | `IconGrip` | `IconGrip`, standard | `IconGrip`, standard |
 | Open a service's own site | `IconExternalLink` | none | `IconExternalLink`, standard |
 | Warning | `IconWarning` | none | `IconWarning`, standard |
 | Right away | `IconBolt` | none | `IconBolt`, standard |
 | Write to us | `IconMail` | `IconMail`, standard | `IconMail`, standard |
-| Send a test | `IconSendTest` | `IconCheck`, switch | to follow |
+| Send a test | `IconSendTest` | `IconCheck`, switch | `IconSendTest`, standard |
 | Buy the author a coffee | `IconCoffee` | `IconCoffee`, standard | none |
 | A protection is on, turn it on | `IconShieldOn` | `IconShieldOn`, standard | `IconShieldOn`, standard |
-| A protection is off, turn it off | `IconShieldOff` | `IconShieldOff`, standard | to follow |
+| A protection is off, turn it off | `IconShieldOff` | `IconShieldOff`, standard | `IconShieldOff`, standard |
 | Store uncompressed | `IconCompressOff` | `IconCompressOff`, standard | none |
-| Automatic, the app chooses | `IconCompressAuto` | `IconCompressAuto`, standard | to follow |
+| Automatic, the app chooses | `IconCompressAuto` | `IconCompressAuto`, standard | `IconCompressAuto`, standard |
 | Compress as far as possible | `IconCompressMax` | `IconCompressMax`, standard | none |
 | Script, code, variables | `IconCode` | none | `IconCode`, standard |
 | Dark look | `IconMoon` | none | `IconMoon`, standard |
@@ -95,13 +95,13 @@
 | Open the manual | `IconManual`; on the Help card's button the README's book in `MANUAL_SVG` | `IconManual`, switch to `MANUAL_SVG` on the Help card | `MANUAL_SVG`, standard |
 | Open the manual, under the pointer, a finger or the focus | `IconManualOpen` | `IconManualOpen`, standard | `IconManualOpen`, standard |
 | Default, preferred | `IconStar` | `IconStar`, standard on the Default badge and the Make default button | none |
-| Stop asking | `IconStopAsking` | none | to follow |
-| Store cookies | `IconCookies` | none | to follow |
-| Open the log | `IconLog` | `IconLog`, standard | to follow |
-| Install | `IconInstall` | `IconInstall`, standard | to follow |
-| Fetch an update, check for one, update now | `IconUpdate` | `IconUpdate`, standard | to follow |
-| Up to date after an update check | `IconUpToDate` | `IconUpToDate`, standard | none |
-| An update is available | `IconUpdateAvailable` | `IconUpdateAvailable`, standard | none |
+| Stop asking | `IconStopAsking` | none | `IconStopAsking`, standard |
+| Store cookies | `IconCookies` | none | `IconCookies`, standard |
+| Open the log | `IconLog` | `IconLog`, standard | `IconLog`, standard |
+| Install | `IconInstall` | `IconInstall`, standard | `IconInstall`, standard |
+| Fetch an update, check for one, update now | `IconUpdate` | `IconUpdate`, standard | `IconUpdate`, standard |
+| Up to date after an update check | `IconUpToDate` | `IconUpToDate`, standard | `IconUpToDate`, standard |
+| An update is available | `IconUpdateAvailable` | `IconUpdateAvailable`, standard | `IconUpdateAvailable`, standard |
 
 <br>
 
@@ -129,7 +129,7 @@
 | Files and folder sets | `IconFiles` | `IconFiles`, standard | none |
 | Receiver, an incoming transfer | `IconReceiver` | `IconReceiver`, standard | none |
 | Back up now | `IconBackupNow` | `IconBackupNow`, standard | none |
-| Restore | `IconRestore` | `IconRestore`, standard | to follow |
+| Restore | `IconRestore` | `IconRestore`, standard | `IconRestore`, standard |
 | Replicate, synchronise | `IconSync` | `IconSync`, standard | none |
 | Recovery, rebuild from backups | `IconRecovery` | `IconRecovery`, standard | none |
 | Live, running now | `IconLive` | `IconLive`, standard | none |
@@ -147,9 +147,7 @@
 | Queued | `IconQueued` | none | `IconQueued`, standard |
 | Time left on a captcha | `IconCaptchaTimer` | none | `IconCaptchaTimer`, standard |
 | Resolvers, download quality and format | `IconResolvers` | none | `IconResolvers`, standard |
-| What's new | `IconWhatsNew` | `IconWhatsNew` with the dot in front, to follow | to follow |
-
-KnightLoader draws the three window glyphs in its own `icons.tsx`, with the same paths as the standard ones, which is why their rows say switch.
+| What's new | `IconWhatsNew` | `IconWhatsNew` with the dot in front, to follow | `IconWhatsNew` with the dot in front, standard |
 
 <br>
 
@@ -277,8 +275,6 @@ TowerTorch wears the assortment on its own controls and on the Unraid buttons it
 | Row height selector, Comfortable | `IconRowComfortable` | `IconRowComfortable`, standard |
 
 TowerTorch also wears five drawings of its own that the assortment does not hold yet: `Resume`, `ViewList` and `ViewGrid` for its list and tile views, and `Shield` and `ShieldAlert`, the outline of `IconShieldOn` empty and with an exclamation mark, for a share whose protection is idle or needs attention.
-
-KnightLoader still draws its own grip, three rows of two dots in an 8 by 12 box, which is why its row above says switch.
 
 <br>
 
