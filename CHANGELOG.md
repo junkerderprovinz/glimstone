@@ -4,13 +4,18 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
-## 3.7.2 - 2026-10-30
+## 3.8.0 - 2026-10-30
 
-KnightLoader, TowerTorch, ShipLog, ArrowLoop and BombVault wear the standard glyphs on their pushed branches, and `glyph-map.md` follows them row by row. `IconUnlink` and `IconSleep` join the assortment, `IconUpdate` also covers the update check, a passkey sign-in wears `IconKey`, and the Version card shows its numbers without a "v". Bars that change all the time get a class of their own.
+Desktop apps get a title bar of their own, and every button and Look selector in the family can now wear a glyph. On Windows and Linux the bar is drawn in the app's look, while macOS keeps its own. The Labels selector gets new glyphs and a Row height selector three of its own. Buttons that only had words in BombVault, KnightLoader and ArrowLoop get theirs, so the Glyph choice of the label setting reaches them too. Twenty-three glyphs join the assortment, four meanings move off the glyphs they shared, and `IconSignIn` turns so its arrow points into the door. KnightLoader, TowerTorch, ShipLog, ArrowLoop and BombVault wear the standard glyphs, and `glyph-map.md` follows them row by row. `IconUnlink` and `IconSleep` join the assortment, `IconUpdate` also covers the update check, a passkey sign-in wears `IconKey`, and the Version card shows its numbers without a "v". Bars that change all the time get a class of their own.
 
 **Adopting apps:**
 
-- **Version card:** copy `reference/react/AboutCard.tsx` again. It shows "3.7.1" where the build hands it `v3.7.1`, and an app that prints a version anywhere else drops the "v" there too. The link keeps pointing at the tag.
+- **Desktop window frame:** make the main window frameless on Windows and Linux and render `reference/react/WindowBar.tsx` only there, with the app's own window calls. Copy the window frame rules from `reference/tokens.css`, mark the frame that holds the rail and the content with `.glim-shell`, and size a full-height shell and anything fixed to the top edge with `--window-bar`.
+- **Window glyphs:** copy `reference/react/glyphs.tsx` again, and take `IconWindowMinimise`, `IconWindowMaximise` and `IconWindowRestore` from `reference/glyphs.json` where the app has a title bar.
+- **Look glyphs:** copy `IconLabelText`, `IconLabelTextGlyph`, `IconLabelGlyph` and `IconLabelReactive` from `reference/glyphs.json` again and put them on the Labels selector's segments. An app with a Row height selector takes `IconRowCompact`, `IconRowMedium` and `IconRowComfortable` for it.
+- **Button glyphs:** copy `IconSignIn` from `reference/glyphs.json` again, and take the new glyphs where the app has those buttons. `reference/glyph-map.md` says which button moves where in BombVault, KnightLoader and ArrowLoop.
+- **Label keys:** point retry, reload and refresh at `IconRetry` and a reset at `IconRefresh`, import and export at `IconImport` and `IconExport`, Done, Confirm and Got it at `IconConfirm`, decline at `IconReject`, apply at `IconApply` and undo at `IconUndo`.
+- **Version card:** copy `reference/react/AboutCard.tsx` again. It shows "3.8.0" where the build hands it `v3.8.0`, and an app that prints a version anywhere else drops the "v" there too. The link keeps pointing at the tag.
 - **What's new:** give the New button `IconWhatsNew`, with the green dot in front of the glyph.
 - **Update check:** give Check for updates `IconUpdate`, and its answer `IconUpToDate` or `IconUpdateAvailable`.
 - **Unlink:** copy `IconUnlink` from `reference/glyphs.json` for a button that drops a connection. In BombVault that is the button that drops a former name.
@@ -25,6 +30,11 @@ KnightLoader, TowerTorch, ShipLog, ArrowLoop and BombVault wear the standard gly
 
 ## ✨ Added
 
+- **The desktop window frame.** `WindowBar` is a strip to drag with minimise, maximise and close, and no mark or name, since the rail shows both. The page and a dialog's scrim start under the 2.5rem bar, so the window can still be moved and closed while a dialog is open. Windows 11's snap layouts do not open on the drawn maximise button.
+- **Three window glyphs.** `IconWindowMinimise`, `IconWindowMaximise` and `IconWindowRestore`, drawn on the 14-unit grid and filling it like `IconClose`.
+- **Three glyphs for a Row height selector.** `IconRowCompact`, `IconRowMedium` and `IconRowComfortable` are bars across the width, four close together, three, and two far apart.
+- **Twenty-three glyphs for buttons that had none**, all from Streamline's free set: `IconRetry`, `IconImport`, `IconExport`, `IconConfirm`, `IconReject`, `IconApply`, `IconUndo`, `IconEmpty`, `IconForgotPassword`, `IconCompact`, `IconKeepBoth`, `IconKeepLeft`, `IconKeepRight`, `IconMerge`, `IconSendTest`, `IconStopAsking`, `IconCookies`, `IconLog`, `IconInstall`, `IconUpdate`, `IconUpToDate`, `IconUpdateAvailable` and `IconWhatsNew`. `IconUpToDate` is the cloud of `IconUpdate` with a tick, for the update check that found nothing new. `IconReject` is the thumb of `IconConfirm` mirrored to point down, and the gift of `IconWhatsNew` has its ribbon drawn as a filled shape instead of a line.
+- **An ArrowLoop table in `glyph-map.md`** with the button meanings it has.
 - **`IconUnlink`** for Unlink, drop a connection: Streamline's broken link, a chain with a slash through it like `IconEyeOff`, `IconKeyRevoke` and `IconShieldOff`.
 - **`IconSleep`** for Sleep, spin down, rest, hibernate: Streamline's Zzz. TowerTorch's spin down and hibernate move to it from `IconMoon`.
 - **`.glim-meter`** carries rule 37's `contain: size layout`, so a bar does not have to spell it out.
@@ -34,43 +44,11 @@ KnightLoader, TowerTorch, ShipLog, ArrowLoop and BombVault wear the standard gly
 
 ## 🎨 Design
 
-- **A version number has no "v".** The Version card reads "3.7.1" for the app and for GlimStone; the "v" belongs to the tag.
+- **The label glyphs are redrawn with a disc for the glyph.** Three bars stand for Text, a small disc before two bars for Text and glyph, a large disc for Glyph, and a disc with a pointer arrow for Reactive. `IconLabelGlyph` and `IconLabelReactive` take a viewBox cropped to their ink.
+- **A version number has no "v".** The Version card reads "3.8.0" for the app and for GlimStone; the "v" belongs to the tag.
 - **The New button wears `IconWhatsNew`.** The green dot stands in front of the glyph and still says whether anything is unseen.
 - **A selector with long labels goes two by two on a phone.** Below 600px its segments stand two to a row, so four options make a grid of two by two. With its glyph, "Text and symbol" no longer fits half of a 360px row, and the Labels selector fell into a different layout from its neighbours.
 - **A chart's second series keeps a colour the person picked.** The text-colour line without fill stays the rule while nobody has chosen; KnightLoader draws seeding as a filled area in a colour picked on its Appearance page.
-
-## 🔁 Changed
-
-- **`IconUpdate` means Fetch an update, check for one, update now.** The check answers with `IconUpToDate` or `IconUpdateAvailable`.
-- **Three meanings widen.** `IconStar` also marks a favourite, such as Community Applications' spotlight and a Favorites tab, `IconCode` also opens a console, and `IconKey` also signs in with a passkey.
-- **TowerTorch's caption table gives more meanings their own glyph.** Apply, confirm, check, reset, restore, clear, install, import, export, update, retry and the log no longer share a drawing with a neighbour.
-- **`glyph-map.md` marks what the apps wear now.** TowerTorch's table lists every glyph TowerTorch wears, fifty-five of them new, and names the five drawings it keeps for itself. Every ArrowLoop row is standard and eleven are new, and BombVault's column catches up on move, grip, new folder, log, install, import, save, the update check with its two answers, and What's new. Thirty-three of KnightLoader's rows turn standard, its own window glyphs and grip among them.
-- **A plugin page names TowerTorch as its companion** and `html.cc-popups-on` as the class that turns its GlimStone look on, in place of an unnamed companion app.
-
-## 3.7.1 - 2026-10-30
-
-Desktop apps get a title bar of their own, and every button and Look selector in the family can now wear a glyph. On Windows and Linux the bar is drawn in the app's look, while macOS keeps its own. The Labels selector gets new glyphs and a Row height selector three of its own. Buttons that only had words in BombVault, KnightLoader and ArrowLoop get theirs, so the Glyph choice of the label setting reaches them too. Twenty-three glyphs join the assortment, four meanings move off the glyphs they shared, and `IconSignIn` turns so its arrow points into the door.
-
-**Adopting apps:**
-
-- **Desktop window frame:** make the main window frameless on Windows and Linux and render `reference/react/WindowBar.tsx` only there, with the app's own window calls. Copy the window frame rules from `reference/tokens.css`, mark the frame that holds the rail and the content with `.glim-shell`, and size a full-height shell and anything fixed to the top edge with `--window-bar`.
-- **Window glyphs:** copy `reference/react/glyphs.tsx` again, and take `IconWindowMinimise`, `IconWindowMaximise` and `IconWindowRestore` from `reference/glyphs.json` where the app has a title bar.
-- **Look glyphs:** copy `IconLabelText`, `IconLabelTextGlyph`, `IconLabelGlyph` and `IconLabelReactive` from `reference/glyphs.json` again and put them on the Labels selector's segments. An app with a Row height selector takes `IconRowCompact`, `IconRowMedium` and `IconRowComfortable` for it.
-- **Button glyphs:** copy `IconSignIn` from `reference/glyphs.json` again, and take the new glyphs where the app has those buttons. `reference/glyph-map.md` says which button moves where in BombVault, KnightLoader and ArrowLoop.
-- **Label keys:** point retry, reload and refresh at `IconRetry` and a reset at `IconRefresh`, import and export at `IconImport` and `IconExport`, Done, Confirm and Got it at `IconConfirm`, decline at `IconReject`, apply at `IconApply` and undo at `IconUndo`.
-- **Version:** copy `reference/react/version.ts` again.
-
-## ✨ Added
-
-- **The desktop window frame.** `WindowBar` is a strip to drag with minimise, maximise and close, and no mark or name, since the rail shows both. The page and a dialog's scrim start under the 2.5rem bar, so the window can still be moved and closed while a dialog is open. Windows 11's snap layouts do not open on the drawn maximise button.
-- **Three window glyphs.** `IconWindowMinimise`, `IconWindowMaximise` and `IconWindowRestore`, drawn on the 14-unit grid and filling it like `IconClose`.
-- **Three glyphs for a Row height selector.** `IconRowCompact`, `IconRowMedium` and `IconRowComfortable` are bars across the width, four close together, three, and two far apart.
-- **Twenty-three glyphs for buttons that had none**, all from Streamline's free set: `IconRetry`, `IconImport`, `IconExport`, `IconConfirm`, `IconReject`, `IconApply`, `IconUndo`, `IconEmpty`, `IconForgotPassword`, `IconCompact`, `IconKeepBoth`, `IconKeepLeft`, `IconKeepRight`, `IconMerge`, `IconSendTest`, `IconStopAsking`, `IconCookies`, `IconLog`, `IconInstall`, `IconUpdate`, `IconUpToDate`, `IconUpdateAvailable` and `IconWhatsNew`. `IconUpToDate` is the cloud of `IconUpdate` with a tick, for the update check that found nothing new. `IconReject` is the thumb of `IconConfirm` mirrored to point down, and the gift of `IconWhatsNew` has its ribbon drawn as a filled shape instead of a line.
-- **An ArrowLoop table in `glyph-map.md`** with the button meanings it has.
-
-## 🎨 Design
-
-- **The label glyphs are redrawn with a disc for the glyph.** Three bars stand for Text, a small disc before two bars for Text and glyph, a large disc for Glyph, and a disc with a pointer arrow for Reactive. `IconLabelGlyph` and `IconLabelReactive` take a viewBox cropped to their ink.
 
 ## 🔁 Changed
 
@@ -78,6 +56,11 @@ Desktop apps get a title bar of their own, and every button and Look selector in
 - **Four meanings get a glyph of their own.** `IconRefresh` marks a reset to the default, and trying again, reloading and refreshing wear `IconRetry`. `IconUpload` and `IconDownload` move files, while `IconImport` and `IconExport` read in and write out. `IconCheck` keeps a test and its success, and `IconConfirm` takes Done, Confirm and Got it.
 - **`IconCompressAuto` means Automatic, the app chooses.** The magic wand covers the compression the tool picks and the order KnightLoader picks for its providers. The name stays, so apps that generate from the list keep working.
 - **Existing glyphs name their new buttons.** The meanings of `IconAdd`, `IconClose`, `IconPencil`, `IconTrash`, `IconPlay`, `IconForward`, `IconKey`, `IconKeyRevoke`, `IconGear`, `IconSliders`, `IconCode`, `IconApp`, `IconShieldOn` and `IconShieldOff` now cover buttons such as Create, Dismiss, Rename, Set password and Variables.
+- **`IconUpdate` means Fetch an update, check for one, update now.** The check answers with `IconUpToDate` or `IconUpdateAvailable`.
+- **Three meanings widen.** `IconStar` also marks a favourite, such as Community Applications' spotlight and a Favorites tab, `IconCode` also opens a console, and `IconKey` also signs in with a passkey.
+- **TowerTorch's caption table gives more meanings their own glyph.** Apply, confirm, check, reset, restore, clear, install, import, export, update, retry and the log no longer share a drawing with a neighbour.
+- **`glyph-map.md` marks what the apps wear now.** TowerTorch's table lists every glyph TowerTorch wears, fifty-five of them new, and names the five drawings it keeps for itself. Every ArrowLoop row is standard and eleven are new, and BombVault's column catches up on move, grip, new folder, log, install, import, save, the update check with its two answers, and What's new. Thirty-three of KnightLoader's rows turn standard, its own window glyphs and grip among them.
+- **A plugin page names TowerTorch as its companion** and `html.cc-popups-on` as the class that turns its GlimStone look on, in place of an unnamed companion app.
 
 ## 3.7.0 - 2026-10-27
 
