@@ -61,7 +61,7 @@ Five rounds of live review went into these, each one starting from a report that
 
 Every glyph below is in [`glyphs.json`](glyphs.json) with its drawing, its measured ink box and the square viewBox cropped to it (rule 3), so an app generates its file from that list instead of hunting the sources down again. The drawings were picked one meaning at a time. Meanings are the contract: an app that needs "delete" uses `IconTrash`, it does not pick a different bin.
 
-Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one exception, because the Off-site tab is the off-site meaning itself.
+Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one exception, because the Off-site tab is the off-site meaning itself. `IconCookies` borrows the paperclip of `IconFile` until cookies get a drawing of their own.
 
 ### Actions, the verbs a button wears
 
@@ -154,7 +154,7 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconManualOpen` | Manual, under the pointer, a finger or the focus | Drawn for BombVault's Help card |
 | `IconStar` | Default, preferred, favourite | Tabler Icons, filled `star` (MIT) |
 | `IconStopAsking` | Stop asking | Streamline `interface-essential/block-bell-notification.svg` |
-| `IconCookies` | Store cookies | Streamline `interface-essential/paperclip-1.svg` |
+| `IconCookies` | Store cookies | Streamline `interface-essential/paperclip-1.svg`, shared with `IconFile` until cookies get a drawing of their own |
 | `IconLog` | Open the log | Streamline `programming/file-code-1.svg` |
 | `IconInstall` | Install | Streamline `programming/browser-add.svg` |
 | `IconUpdate` | Fetch an update, check for one, update now | Streamline `programming/cloud-refresh.svg` |
@@ -171,6 +171,12 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconFolderOpen` | An open folder | Font Awesome Free folder-open (CC BY 4.0) |
 | `IconFolderAdd` | New folder | Streamline `interface-essential/folder-add.svg` |
 | `IconArchive` | Archive | Streamline `interface-essential/archive-box.svg` |
+| `IconFileVideo` | A video file | Streamline `images-photography/film-slate.svg` |
+| `IconFileAudio` | An audio file | Streamline `entertainment/music-note-1.svg` |
+| `IconFileImage` | An image, a thumbnail | Streamline `images-photography/landscape-2.svg` |
+| `IconFileSubtitles` | A subtitle file | Streamline `mail/chat-bubble-text-square.svg` |
+| `IconFileText` | A description or another text file | Streamline `interface-essential/paragraph.svg` |
+| `IconFile` | A file, an attachment | Streamline `interface-essential/paperclip-1.svg` |
 | `IconFleet` | Instances, other boxes | Streamline `interface-essential/hierarchy-2.svg` |
 | `IconCollector` | Collector, taking links in | Streamline `mail/inbox-tray-1.svg` |
 | `IconAccounts` | Accounts | KnightLoader's drawing on a 20-unit grid |

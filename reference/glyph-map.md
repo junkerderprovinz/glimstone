@@ -98,12 +98,14 @@
 | Open the manual, under the pointer, a finger or the focus | `IconManualOpen` | `IconManualOpen`, standard | `IconManualOpen`, standard |
 | Default, preferred, favourite | `IconStar` | `IconStar`, standard on the Default badge and the Make default button | none |
 | Stop asking | `IconStopAsking` | none | `IconStopAsking`, standard |
-| Store cookies | `IconCookies` | none | `IconCookies`, standard |
+| Store cookies | `IconCookies` | none | `IconCookies`, standard until cookies get a drawing of their own |
 | Open the log | `IconLog` | `IconLog`, standard | `IconLog`, standard |
 | Install | `IconInstall` | `IconInstall`, standard | `IconInstall`, standard |
 | Fetch an update, check for one, update now | `IconUpdate` | `IconUpdate`, standard | `IconUpdate`, standard |
 | Up to date after an update check | `IconUpToDate` | `IconUpToDate`, standard | `IconUpToDate`, standard |
 | An update is available | `IconUpdateAvailable` | `IconUpdateAvailable`, standard | `IconUpdateAvailable`, standard |
+
+`IconCookies` wears Streamline's paperclip, the drawing `IconFile` carries for a file or an attachment. Cookies need a drawing of their own, and until one is chosen the two share it.
 
 <br>
 
@@ -116,7 +118,13 @@
 | A folder | `IconFolder` | `IconFolder`, standard | `IconFolder`, standard |
 | An open folder | `IconFolderOpen` | none | `IconFolderOpen`, standard |
 | New folder | `IconFolderAdd` | `IconFolderAdd`, standard | `IconFolderAdd`, standard |
-| Archive | `IconArchive` | none | `IconArchive`, standard |
+| Archive | `IconArchive` | none | `IconArchive`, also before an archive's name in the list, standard |
+| A video file | `IconFileVideo` | none | `IconFileVideo` before a video's name in the list, standard |
+| An audio file | `IconFileAudio` | none | `IconFileAudio` before a sound track's name, standard |
+| An image, a thumbnail | `IconFileImage` | none | `IconFileImage` before an image or a thumbnail, standard |
+| A subtitle file | `IconFileSubtitles` | none | `IconFileSubtitles` before a subtitle file, standard |
+| A description or another text file | `IconFileText` | none | `IconFileText` before a description or a text file, standard |
+| A file, an attachment | `IconFile` | none | `IconFile` before any other file, standard |
 | Instances, other boxes | `IconFleet` | `IconFleet`, standard | `IconFleet`, standard |
 | Collector, taking links in | `IconCollector` | none | `IconCollector`, standard |
 | Accounts | `IconAccounts` | none | `IconAccounts`, standard |
@@ -340,10 +348,27 @@ ShipLog wears the assortment on its settings page and in the changelog window it
 
 <br>
 
+## FireSquire
+
+FireSquire wears seven glyphs on the buttons of its pre-reboot check and on the status of each finding.
+
+| Meaning | GlimStone | FireSquire |
+| --- | --- | --- |
+| Retry, reload, refresh | `IconRetry` | `Retry` on Check again, standard |
+| Close, cancel, dismiss | `IconClose` | `Close` on Close and on a failed finding, standard |
+| Copy | `IconCopy` | `Copy` on the crypto address, standard |
+| Test, verify, success | `IconCheck` | `Check` on the button beside Reboot, the dashboard tile, the button that runs the check and a passed finding, standard |
+| Information | `IconInfo` | `Info` on Release notes and an informational finding, standard |
+| Next, continue | `IconForward` | `Forward` on Go to the source, standard |
+| Warning | `IconWarning` | `Warning` on a finding that calls for caution, standard |
+
+<br>
+
 ## Where each app keeps its glyphs
 
 - **ArrowLoop:** `scripts/gen_glyphs.py` writes the app's glyphs, and the Look settings glyphs come from it, for the web and, through `scripts/gen_glyph_data.py`, for the phone. `web/src/lib/glyphName.ts` maps a translation key to a glyph name, and a key it does not know keeps its text.
 - **BombVault:** `scripts/gen_glyphs.py` writes `web/src/components/glyphs.tsx` and `navGlyphs.tsx` from a copy of `glyphs.json` at 16px; the phone app shows the web launcher and uses the same files. `glyphFor.tsx` maps a translation key to a glyph when a button passes none; a button that passes one wins.
+- **FireSquire:** `firesquire-glyphs.js` beside its scripts holds a copy of every entry it draws, the square viewBox and the drawing, and names the GlimStone release it came from. `plugin/test/glyphs.test.js` checks that every glyph a button asks for is in the copy.
 - **KnightLoader:** `web/scripts/gen-glyphs.mjs` writes `web/src/lib/glyphs.tsx` at 22px with the ink at three quarters of the box; the Android app has no SVG and shows tinted bitmaps rendered from the same list into `mobile/assets/`. Every call site passes its glyph; Settings page glyphs are mapped in `pages/settings/pageIcons.tsx`. The browser extension copies the eye and a few others in `extension/src/`.
 - **ShipLog:** `include/glyphs.php` holds a copy of every entry it draws. `shiplog.page` uses them on the settings page, and `shiplog.Docker.page` hands four of them to `scripts/docker.js` for the changelog window.
 - **TowerTorch:** `scripts/cc-theme.js` holds a copy of every entry it draws, the square viewBox and the drawing, for its own controls and for Unraid's buttons; Unraid's own icons keep their Font Awesome. The glyphs of its settings selectors sit in `scripts/settings.js`, and `scripts/labels.js` maps Unraid's button captions to glyph names.

@@ -4,15 +4,31 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
+## 3.8.1 - 2026-10-31
+
+Every answer in a window's foot is filled, Cancel included, and a notice or a confirmation that can be switched off carries a checkbox for it, the one place a checkbox stands instead of a switch. Six glyphs say what kind of file a row holds: a video, a sound track, an image, subtitles, a text file and any other file. They come from KnightLoader, which shows one before every link's name, and match its drawings exactly. `glyph-map.md` gets a FireSquire table, and `IconCookies` shares the paperclip of `IconFile` until cookies get a drawing of their own.
+
 **Adopting apps:**
 
 - **Window feet:** give Cancel, Close, Back and every other answer in a window's foot a filled tone, and keep unfilled buttons to toolbars and rows. A source check like KnightLoader's `buttonSources.test.ts` keeps them filled.
-- **Notices:** give every notice that can be switched off a "Don't show again" checkbox in the house look, store the choice per kind of notice and offer a way back in Settings.
+- **Notices:** give every notice that can be switched off a "Don't show again" checkbox in the house look, and a confirmation a "Don't ask again" one. Store the choice per kind of notice and offer a way back in Settings.
+- **File kinds:** copy `IconFileVideo`, `IconFileAudio`, `IconFileImage`, `IconFileSubtitles`, `IconFileText` and `IconFile` from `reference/glyphs.json` where a list shows what kind of file a row holds, and give an archive `IconArchive`.
+- **Version:** copy `reference/react/version.ts` again.
+
+## ✨ Added
+
+- **Six glyphs for the kind of a file**, all from Streamline's free set: `IconFileVideo` is a film slate, `IconFileAudio` a music note, `IconFileImage` a landscape, `IconFileSubtitles` a speech bubble with lines, `IconFileText` a paragraph mark and `IconFile` a paperclip for any other file. They carry KnightLoader's drawings and ink boxes, so an app that generates from `glyphs.json` draws them the way KnightLoader does.
+- **A FireSquire table in `glyph-map.md`** with the seven glyphs on its buttons and findings, all of them standard, and where FireSquire keeps its copy.
 
 ## 🎨 Design
 
 - **Rule 38: every answer in a window's foot is filled, Cancel included.** A button without a fill read as a word next to the one it answers. Unfilled buttons are for toolbars and rows.
-- **Rule 39: a notice that can be switched off has a checkbox.** "Don't show again" under a notice is a checkbox in the house look, the one exception to the switch.
+- **Rule 39: a notice that can be switched off has a checkbox.** "Don't show again" under a notice and "Don't ask again" under a confirmation are checkboxes in the house look, the one exception to the switch.
+
+## 🔁 Changed
+
+- **The paperclip means a file or an attachment.** `IconFile` wears it, and `IconCookies` borrows it until cookies get a drawing of their own.
+- **KnightLoader's rows in `glyph-map.md`** list the six file glyphs, and `IconArchive` also stands before an archive's name in its list.
 
 ## 3.8.0 - 2026-10-30
 
