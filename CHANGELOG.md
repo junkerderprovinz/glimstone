@@ -14,7 +14,7 @@ TowerTorch, ShipLog, ArrowLoop and BombVault wear the standard glyphs on their p
 - **Unlink:** copy `IconUnlink` from `reference/glyphs.json` for a button that drops a connection. In BombVault that is the button that drops a former name.
 - **Bars:** copy `.glim-meter` from `reference/tokens.css` and put it on every bar or meter that changes all the time, beside the class that gives it a height.
 - **Tests:** run the end-to-end specs of a list in move mode with reduced motion. An app that checks rule 36 in its own code also reads Tailwind's `has-[…]` variants.
-- **Look selectors:** below 600px stand them two to a row.
+- **Selectors on a phone:** give a selector whose labels run long, such as the Labels selector, a way to set its segments two to a row below 600px: a wrapping strip that stretches its rows, each segment at `flex: 1 0 var(--seg-basis, auto)`, and `--seg-basis: calc(50% - 0.25rem)` under 600px. A label that does not fit its half wraps instead of being cut off.
 - **Unraid plugins:** gate the GlimStone look of a plugin page on `html.cc-popups-on`, which TowerTorch sets on every page.
 - **Version:** copy `reference/react/version.ts` again.
 
@@ -30,7 +30,7 @@ TowerTorch, ShipLog, ArrowLoop and BombVault wear the standard glyphs on their p
 
 - **A version number has no "v".** The Version card reads "3.7.1" for the app and for GlimStone; the "v" belongs to the tag.
 - **The New button wears `IconWhatsNew`.** The green dot stands in front of the glyph and still says whether anything is unseen.
-- **Look selectors on a phone stand two to a row.** With its glyph, "Text and symbol" no longer fits half of a 360px row.
+- **A selector with long labels goes two by two on a phone.** Below 600px its segments stand two to a row, so four options make a grid of two by two. With its glyph, "Text and symbol" no longer fits half of a 360px row, and the Labels selector fell into a different layout from its neighbours.
 
 ## 🔁 Changed
 

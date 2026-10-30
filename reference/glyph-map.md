@@ -147,7 +147,7 @@
 | Queued | `IconQueued` | none | `IconQueued`, standard |
 | Time left on a captcha | `IconCaptchaTimer` | none | `IconCaptchaTimer`, standard |
 | Resolvers, download quality and format | `IconResolvers` | none | `IconResolvers`, standard |
-| What's new | `IconWhatsNew` | `IconWhatsNew` with the dot in front, to follow | `IconWhatsNew` with the dot in front, standard |
+| What's new | `IconWhatsNew` | `IconWhatsNew` with the dot in front, standard | `IconWhatsNew` with the dot in front, standard |
 
 <br>
 
