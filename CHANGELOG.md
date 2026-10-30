@@ -4,6 +4,41 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
+TowerTorch, ShipLog, ArrowLoop and BombVault wear the standard glyphs on their pushed branches, and `glyph-map.md` follows them row by row. `IconUnlink` joins the assortment, `IconUpdate` also covers the update check, and the Version card shows its numbers without a "v". Bars that change all the time get a class of their own.
+
+**Adopting apps:**
+
+- **Version card:** copy `reference/react/AboutCard.tsx` again. It shows "3.7.1" where the build hands it `v3.7.1`, and an app that prints a version anywhere else drops the "v" there too. The link keeps pointing at the tag.
+- **What's new:** give the New button `IconWhatsNew`, with the green dot in front of the glyph.
+- **Update check:** give Check for updates `IconUpdate`, and its answer `IconUpToDate` or `IconUpdateAvailable`.
+- **Unlink:** copy `IconUnlink` from `reference/glyphs.json` for a button that drops a connection. In BombVault that is the button that drops a former name.
+- **Bars:** copy `.glim-meter` from `reference/tokens.css` and put it on every bar or meter that changes all the time, beside the class that gives it a height.
+- **Tests:** run the end-to-end specs of a list in move mode with reduced motion. An app that checks rule 36 in its own code also reads Tailwind's `has-[…]` variants.
+- **Look selectors:** below 600px stand them two to a row.
+- **Unraid plugins:** gate the GlimStone look of a plugin page on `html.cc-popups-on`, which TowerTorch sets on every page.
+- **Version:** copy `reference/react/version.ts` again.
+
+## ✨ Added
+
+- **`IconUnlink`** for Unlink, drop a connection: Streamline's broken link, a chain with a slash through it like `IconEyeOff`, `IconKeyRevoke` and `IconShieldOff`.
+- **`.glim-meter`** carries rule 37's `contain: size layout`, so a bar does not have to spell it out.
+- **A ShipLog table in `glyph-map.md`**, and where ShipLog keeps its glyphs.
+- **`check.sh` also reads Tailwind variants.** A `has-[…]` in a component's class list that tests the class or style attribute fails the check like a `:has()` in a stylesheet.
+- **Move mode in end-to-end tests.** Playwright waits for a row to hold still before it clicks it, and a wiggling row never does, so those specs run with reduced motion.
+
+## 🎨 Design
+
+- **A version number has no "v".** The Version card reads "3.7.1" for the app and for GlimStone; the "v" belongs to the tag.
+- **The New button wears `IconWhatsNew`.** The green dot stands in front of the glyph and still says whether anything is unseen.
+- **Look selectors on a phone stand two to a row.** With its glyph, "Text and symbol" no longer fits half of a 360px row.
+
+## 🔁 Changed
+
+- **`IconUpdate` means Fetch an update, check for one, update now.** The check answers with `IconUpToDate` or `IconUpdateAvailable`.
+- **TowerTorch's caption table gives more meanings their own glyph.** Apply, confirm, check, reset, restore, clear, install, import, export, update, retry and the log no longer share a drawing with a neighbour.
+- **`glyph-map.md` marks what the apps wear now.** TowerTorch's table grows by thirty-seven rows, every ArrowLoop row is standard and eleven are new, and BombVault's column catches up on move, grip, new folder, log, install, import, save, the update check and What's new.
+- **A plugin page names TowerTorch as its companion** and `html.cc-popups-on` as the class that turns its GlimStone look on, in place of an unnamed companion app.
+
 ## 3.7.1 - 2026-10-30
 
 Desktop apps get a title bar of their own, and every button and Look selector in the family can now wear a glyph. On Windows and Linux the bar is drawn in the app's look, while macOS keeps its own. The Labels selector gets new glyphs and a Row height selector three of its own. Buttons that only had words in BombVault, KnightLoader and ArrowLoop get theirs, so the Glyph choice of the label setting reaches them too. Twenty-three glyphs join the assortment, four meanings move off the glyphs they shared, and `IconSignIn` turns so its arrow points into the door.
