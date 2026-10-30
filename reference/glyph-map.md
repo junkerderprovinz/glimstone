@@ -100,8 +100,8 @@
 | Open the log | `IconLog` | `IconLog`, standard | to follow |
 | Install | `IconInstall` | `IconInstall`, standard | to follow |
 | Fetch an update, check for one, update now | `IconUpdate` | `IconUpdate`, standard | to follow |
-| Up to date after an update check | `IconUpToDate` | `IconCheck`, switch | none |
-| An update is available | `IconUpdateAvailable` | `IconSearch`, switch | none |
+| Up to date after an update check | `IconUpToDate` | `IconUpToDate`, standard | none |
+| An update is available | `IconUpdateAvailable` | `IconUpdateAvailable`, standard | none |
 
 <br>
 
@@ -206,18 +206,21 @@ ArrowLoop drew the glyphs for the segments of its Design, Corners and Motion sel
 
 ## TowerTorch
 
-TowerTorch wears the assortment on its own controls and on the Unraid buttons it draws as badges, and it drew `IconGrip`, `IconMove` and `IconCompute` for them. Its other rows are not listed here yet.
+TowerTorch wears the assortment on its own controls and on the Unraid buttons it draws as badges, and it drew `IconGrip`, `IconMove` and `IconCompute` for them.
 
 | Meaning | GlimStone | TowerTorch |
 | --- | --- | --- |
 | Show, reveal | `IconEye` | `Eye`, standard |
+| Hide again | `IconEyeOff` | `EyeOff` on Hide stopped, standard |
 | Reset to the default | `IconRefresh` | `Refresh`, standard |
 | Retry, reload, refresh | `IconRetry` | `Retry`, standard |
 | Upload | `IconUpload` | `Upload`, standard |
 | Import, read in | `IconImport` | `Import`, standard |
+| Download | `IconDownload` | `Download`, standard |
 | Export | `IconExport` | `Export`, standard |
 | Search | `IconSearch` | `Search`, standard |
 | Start, run now, play | `IconPlay` | `Play`, standard |
+| Pause | `IconPause` | `Pause`, standard |
 | Stop, abort | `IconStop` | `Stop`, standard |
 | Power on and off | `IconPower` | `Power`, standard |
 | Delete, remove | `IconTrash` | `Trash`, standard |
@@ -230,15 +233,26 @@ TowerTorch wears the assortment on its own controls and on the Unraid buttons it
 | Test, verify, success | `IconCheck` | `Check`, standard |
 | Done, confirm, got it | `IconConfirm` | `Confirm`, standard |
 | Apply, take over, use this one | `IconApply` | `Apply`, standard |
+| Credentials, key, set a password | `IconKey` | `Key`, standard |
+| Information | `IconInfo` | `Info`, standard |
 | Help | `IconHelp` | `Help`, standard |
+| More | `IconMore` | `More`, standard |
 | Save | `IconSave` | `Save`, standard |
+| Prune, reclaim space | `IconPrune` | `Prune` on Clean up, standard |
 | Compute, calculate | `IconCompute` | `Compute`, standard |
+| Back | `IconBack` | `Back`, standard |
 | Move elsewhere | `IconMove` | `Move`, standard |
 | Expand | `IconExpand` | `Expand`, standard |
 | Select all | `IconSelectAll` | `SelectAll`, standard |
 | Clear the selection | `IconClearSelection` | `ClearSelection`, standard |
 | Drag to reorder | `IconGrip` | `Grip`, standard |
+| Open a service's own site | `IconExternalLink` | `ExternalLink` on WebUI and a project page, standard |
 | Warning | `IconWarning` | `Warning`, standard |
+| A protection is on, turn it on | `IconShieldOn` | `ShieldOn` on a protected share, standard |
+| Script, code, variables | `IconCode` | `Code` on a container's console, standard |
+| Dark look | `IconMoon` | `Moon` on Spin down, a resting disk and Hibernate, standard |
+| Open the manual | `IconManual` | `Manual` on Read me first, standard |
+| Default, preferred | `IconStar` | `Star` on Community Applications' spotlight and the Favorites tab, standard |
 | Open the log | `IconLog` | `Log`, standard |
 | Install | `IconInstall` | `Install`, standard |
 | Fetch an update, check for one, update now | `IconUpdate` | `Update`, standard |
@@ -246,10 +260,14 @@ TowerTorch wears the assortment on its own controls and on the Unraid buttons it
 | An update is available | `IconUpdateAvailable` | `UpdateAvailable`, standard |
 | Settings, open a setting | `IconGear` | `Gear`, standard |
 | A folder | `IconFolder` | `Folder`, standard |
+| Accounts | `IconAccounts` | `Accounts` on Owner, standard |
 | Docker containers | `IconContainers` | `Containers`, standard |
+| Virtual machines | `IconVM` | `VM` on a VM's console, standard |
+| Back up now | `IconBackupNow` | `BackupNow` on Boot device backup and Create snapshot, standard |
 | Restore | `IconRestore` | `Restore`, standard |
 | The GitHub repository | `IconGithub` | `Github`, standard |
 | What's new | `IconWhatsNew` | `WhatsNew`, standard |
+| Schedules, automation | `IconSchedules` | `Schedules` on History, standard |
 | Labels selector, Text | `IconLabelText` | `IconLabelText`, standard |
 | Labels selector, Text and glyph | `IconLabelTextGlyph` | `IconLabelTextGlyph`, standard |
 | Labels selector, Glyph | `IconLabelGlyph` | `IconLabelGlyph`, standard |
@@ -257,6 +275,8 @@ TowerTorch wears the assortment on its own controls and on the Unraid buttons it
 | Row height selector, Compact | `IconRowCompact` | `IconRowCompact`, standard |
 | Row height selector, Medium | `IconRowMedium` | `IconRowMedium`, standard |
 | Row height selector, Comfortable | `IconRowComfortable` | `IconRowComfortable`, standard |
+
+TowerTorch also wears five drawings of its own that the assortment does not hold yet: `Resume`, `ViewList` and `ViewGrid` for its list and tile views, and `Shield` and `ShieldAlert`, the outline of `IconShieldOn` empty and with an exclamation mark, for a share whose protection is idle or needs attention.
 
 KnightLoader still draws its own grip, three rows of two dots in an 8 by 12 box, which is why its row above says switch.
 

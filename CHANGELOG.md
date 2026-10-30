@@ -36,7 +36,7 @@ TowerTorch, ShipLog, ArrowLoop and BombVault wear the standard glyphs on their p
 
 - **`IconUpdate` means Fetch an update, check for one, update now.** The check answers with `IconUpToDate` or `IconUpdateAvailable`.
 - **TowerTorch's caption table gives more meanings their own glyph.** Apply, confirm, check, reset, restore, clear, install, import, export, update, retry and the log no longer share a drawing with a neighbour.
-- **`glyph-map.md` marks what the apps wear now.** TowerTorch's table grows by thirty-seven rows, every ArrowLoop row is standard and eleven are new, and BombVault's column catches up on move, grip, new folder, log, install, import, save, the update check and What's new.
+- **`glyph-map.md` marks what the apps wear now.** TowerTorch's table lists every glyph TowerTorch wears, fifty-five of them new, and names the five drawings it keeps for itself. Every ArrowLoop row is standard and eleven are new, and BombVault's column catches up on move, grip, new folder, log, install, import, save, the update check with its two answers, and What's new.
 - **A plugin page names TowerTorch as its companion** and `html.cc-popups-on` as the class that turns its GlimStone look on, in place of an unnamed companion app.
 
 ## 3.7.1 - 2026-10-30
