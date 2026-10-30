@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, type ReactNode, type RefObject } from "react";
+import { useEffect, useId, useRef, type ReactNode, type Ref, type RefObject } from "react";
 import * as menu from "@zag-js/menu";
 import * as select from "@zag-js/select";
 import { normalizeProps, Portal, useMachine } from "@zag-js/react";
@@ -50,6 +50,14 @@ export interface SelectGroup<T extends string = string> {
  */
 export type SelectWidth = "fill" | "steady" | "squeeze" | "hug";
 
+/**
+ * How big the trigger is. `field` stands among text fields at their height and
+ * type. `row` keeps that height in small type, for a list or table row and
+ * beside a compact field. `inset` sits inside another field, such as a search
+ * box's scope, and is smaller than one.
+ */
+export type SelectSize = "field" | "row" | "inset";
+
 export interface SelectProps<T extends string = string> {
   /** The field's name, always the accessible name. */
   label: string;
@@ -64,7 +72,15 @@ export interface SelectProps<T extends string = string> {
   onChange: (value: T) => void;
   /** Shown while the value is null. */
   placeholder?: string;
+  /** Defaults to `fill` for a field and to `steady` for the smaller sizes. */
   width?: SelectWidth;
+  size?: SelectSize;
+  /** Lets a long value run onto a second line instead of ending in an ellipsis, for one whose end says as much as its start, such as a path. */
+  wrap?: boolean;
+  /** The trigger's id, for a `<label htmlFor>` outside the select. */
+  id?: string;
+  /** The trigger's own node, for a caller that hands it the focus. */
+  ref?: Ref<HTMLButtonElement>;
   disabled?: boolean;
   /** A choice is out and its answer not back yet: the trigger keeps its focus but takes no input. */
   busy?: boolean;
@@ -81,6 +97,12 @@ const WIDTH: Record<SelectWidth, string> = {
   steady: "glim-select--steady",
   squeeze: "glim-select--squeeze",
   hug: "glim-select--hug",
+};
+
+const SIZE: Record<SelectSize, string> = {
+  field: "",
+  row: "glim-select-trigger--row",
+  inset: "glim-select-trigger--inset",
 };
 
 // Below the trigger on the side its text starts from; where that does not fit,
@@ -100,17 +122,27 @@ function isSubmenu<T extends string>(e: SelectEntry<T>): e is SelectSubmenu<T> {
 const pageDir = (): "ltr" | "rtl" =>
   typeof document !== "undefined" && document.documentElement.dir === "rtl" ? "rtl" : "ltr";
 
-export function Select<T extends string = string>({ width = "fill", ...rest }: SelectProps<T>) {
-  const groups = rest.groups ?? [{ entries: rest.options ?? [] }];
-  const nested = groups.some((g) => g.entries.some(isSubmenu));
+export function Select<T extends string = string>({
+  size = "field",
+  width = size === "field" ? "fill" : "steady",
+  wrap = false,
+  className = "",
+  options,
+  groups,
+  ...rest
+}: SelectProps<T>) {
+  const runs = groups ?? [{ entries: options ?? [] }];
+  const nested = runs.some((g) => g.entries.some(isSubmenu));
+  const look = ["glim-select-trigger", SIZE[size], wrap ? "glim-select-trigger--wrap" : "", className].filter(Boolean).join(" ");
   return nested ? (
-    <MenuSelect {...rest} width={width} groups={groups} />
+    <MenuSelect {...rest} width={width} groups={runs} className={look} />
   ) : (
-    <ListSelect {...rest} width={width} groups={groups} />
+    <ListSelect {...rest} width={width} groups={runs} className={look} />
   );
 }
 
-type Inner<T extends string> = Omit<SelectProps<T>, "groups" | "options" | "width"> & {
+/** What the two machines take: the runs resolved and `className` the trigger's whole class list. */
+type Inner<T extends string> = Omit<SelectProps<T>, "groups" | "options" | "width" | "size" | "wrap"> & {
   groups: SelectGroup<T>[];
   width: SelectWidth;
 };
@@ -127,7 +159,9 @@ function ListSelect<T extends string>({
   busy,
   tip,
   shake,
-  className = "",
+  className,
+  id,
+  ref,
 }: Inner<T>) {
   const uid = useId();
   const all = flatten(groups);
@@ -139,6 +173,7 @@ function ListSelect<T extends string>({
   });
   const service = useMachine(select.machine, {
     id: uid,
+    ids: id ? { trigger: id } : undefined,
     dir: pageDir(),
     collection,
     value: value === null ? [] : [value],
@@ -151,7 +186,7 @@ function ListSelect<T extends string>({
     positioning: POSITIONING,
   });
   const api = select.connect(service, normalizeProps);
-  const trigger = useTrigger({ all, value, onChange, inert: !!(disabled || busy), tip, disabled, shake });
+  const trigger = useTrigger({ all, value, onChange, inert: !!(disabled || busy), tip, disabled, shake, outer: ref });
   useCloseOnScroll(api.open, () => api.setOpen(false));
   const hue = usePortalHue(api.open, trigger.ref);
   const glyphs = all.some((o) => o.glyph);
@@ -170,7 +205,7 @@ function ListSelect<T extends string>({
             ref={trigger.attach}
             {...trigger.handlers(tp)}
             aria-busy={busy || undefined}
-            className={`glim-select-trigger ${className}`}
+            className={className}
           >
             <Face all={all} value={value} placeholder={placeholder} width={width} glyphs={glyphs} />
             <span {...api.getIndicatorProps()} className="glim-select-indicator">
@@ -228,18 +263,21 @@ function MenuSelect<T extends string>({
   busy,
   tip,
   shake,
-  className = "",
+  className,
+  id,
+  ref,
 }: Inner<T>) {
   const uid = useId();
   const service = useMachine(menu.machine, {
     id: uid,
+    ids: id ? { trigger: id } : undefined,
     dir: pageDir(),
     "aria-label": label,
     positioning: POSITIONING,
   });
   const api = menu.connect(service, normalizeProps);
   const all = flatten(groups);
-  const trigger = useTrigger({ all, value, onChange, inert: !!(disabled || busy), tip, disabled, shake });
+  const trigger = useTrigger({ all, value, onChange, inert: !!(disabled || busy), tip, disabled, shake, outer: ref });
   useCloseOnScroll(api.open, () => api.setOpen(false));
   const hue = usePortalHue(api.open, trigger.ref);
   const glyphs = all.some((o) => o.glyph);
@@ -301,7 +339,7 @@ function MenuSelect<T extends string>({
             data-readonly={busy ? "" : undefined}
             aria-busy={busy || undefined}
             aria-label={`${label}: ${text}`}
-            className={`glim-select-trigger ${className}`}
+            className={className}
           >
             <Face all={all} value={value} placeholder={placeholder} width={width} glyphs={glyphs} />
             <span {...api.getIndicatorProps()} className="glim-select-indicator">
@@ -495,6 +533,7 @@ function useTrigger<T extends string>(o: {
   tip?: string;
   disabled?: boolean;
   shake?: number;
+  outer?: Ref<HTMLButtonElement>;
 }) {
   const ref = useRef<HTMLButtonElement | null>(null);
   const tip = useTipBubble(o.tip, o.disabled);
@@ -534,6 +573,8 @@ function useTrigger<T extends string>(o: {
     attach: (el: HTMLButtonElement | null) => {
       ref.current = el;
       tip.ref(el);
+      if (typeof o.outer === "function") o.outer(el);
+      else if (o.outer) o.outer.current = el;
     },
     /** The bubble's handlers chained after the machine's own. */
     handlers: (tp: { onFocus?: unknown; onBlur?: unknown }) => {

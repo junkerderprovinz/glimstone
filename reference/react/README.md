@@ -21,7 +21,7 @@ would then have to be re-applied by hand in three places.
 | `Toggle.tsx` | The switch. Never a checkbox |
 | `Card.tsx` | The surface, and the one place a section heading is drawn |
 | `Badge.tsx` | Status pills and the filled section heading the card draws |
-| `Select.tsx` | The one dropdown, on Zag's select machine and on its menu machine for a list with submenus: groups with headings, glyphs, four widths, the wheel, busy and refused states, the list in a portal. It imports `../selectScroll.ts` |
+| `Select.tsx` | The one dropdown, on Zag's select machine and on its menu machine for a list with submenus: groups with headings, glyphs, three sizes, four widths, the wheel, busy and refused states, the list in a portal. It imports `../selectScroll.ts` |
 | `Combobox.tsx` | A field that filters a long list as somebody types, on Zag's combobox machine |
 | `Slider.tsx` | A value on a range, on Zag's slider machine, with the value in words beside the label |
 | `DropdownListbox.tsx` | Deprecated, use `Select`. The list panel of a dropdown whose trigger the caller draws |
