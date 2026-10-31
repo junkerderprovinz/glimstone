@@ -24,6 +24,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "button-name", when: "The label mode hides the words", then: "The label stays the accessible name." },
       { id: "button-width", when: "The label mode changes", then: "The button keeps its width to the pixel." },
       { id: "button-busy", when: "busy turns on", then: "The width stays and the button announces it is busy." },
+      { id: "button-tint", when: "The pointer rests on a neutral or subtle button", then: "Its ground takes a little of the accent and its glyph all of it." },
     ],
   },
   Toggle: {

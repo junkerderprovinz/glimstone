@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { Button } from "@gs/react/Button";
 import { Select } from "@gs/react/Select";
 
 const PLACES = [
@@ -28,9 +29,8 @@ export default function SelectLabelled() {
           onChange={setPlace}
         />
       </div>
-      <button type="button" className="field" onClick={() => trigger.current?.focus()}>
-        Choose the destination
-      </button>
+      <Button label="Choose the destination" labelKey={null} onClick={() => trigger.current?.focus()} />
+
     </div>
   );
 }

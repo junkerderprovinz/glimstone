@@ -61,6 +61,28 @@ test.describe("Button", () => {
     expect((await button.boundingBox())!.width).toBeCloseTo(before, 0);
     await expect(button).toHaveAttribute("aria-busy", "true");
   });
+
+  test("[button-tint] a surface button takes the accent under the pointer", async ({ page }) => {
+    await open(page, "/components/button", { labels: "textGlyph" });
+    for (const name of ["Refresh", "Copy"]) {
+      const button = stage(page, "ButtonTones").getByRole("button", { name });
+      const ground = () => button.evaluate((b) => getComputedStyle(b).backgroundColor);
+      const ink = () => button.locator(".glim-btn-glyph").evaluate((g) => getComputedStyle(g).color);
+      // A probe inside the button resolves --btn-tint where the button reads it.
+      const tint = await button.evaluate((b) => {
+        const probe = b.appendChild(document.createElement("span"));
+        probe.style.color = "var(--btn-tint)";
+        const c = getComputedStyle(probe).color;
+        probe.remove();
+        return c;
+      });
+      const rest = await ground();
+      expect(await ink()).not.toBe(tint);
+      await button.hover();
+      await expect.poll(ground).not.toBe(rest);
+      await expect.poll(ink).toBe(tint);
+    }
+  });
 });
 
 test.describe("Toggle", () => {

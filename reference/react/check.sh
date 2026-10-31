@@ -38,7 +38,7 @@ grep -n "index\.css" reference/react/*.tsx && note "a comment names an app's own
 # 5. Hover moves up the surface ramp (rule 21). On the dark ramp `--carbon-hover`
 #    is #353535, below surface2's #393939, so a control filled with surface2 or
 #    surface3 that hovers to it goes darker. Only filled controls are examined: a
-#    bare control on a card, such as the toast's close button, is right to use
+#    bare control on a card, such as a row's glyph button, is right to use
 #    `--carbon-hover`.
 #    The name must end there, or `hover:bg-carbon-hoverRaised` would match
 #    `hover:bg-carbon-hover`.
