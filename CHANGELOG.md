@@ -4,7 +4,7 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
-## 3.9.0 - 2026-10-31
+## 3.8.2 - 2026-10-31
 
 Every button with words now has a fill, wherever it stands, and every button takes the accent when the pointer or the keyboard reaches it. A list page drops the Filter, Sort and Search buttons over its list: the cards stand on top, the list below, and sorting, filtering, searching and the actions on many rows move into the list's header and menus. F-Droid joins the brand marks with its own logo, and a small script finds bare buttons with words in an app's sources. All of it comes from KnightLoader.
 
