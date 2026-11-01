@@ -4,11 +4,14 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
+## 3.8.6 - 2026-11-02
+
 Updating now wears the two arrows of `IconSync`, as checking for an update already does. The cloud of `IconUpdate` stays for an updates tab or section, where it has room to read. Chosen on ShipLog's Update now.
 
 **Adopting apps:**
 
 - **Update now and Update all:** give the button `IconSync` from `reference/glyphs.json`. Keep `IconUpdate` for a tab or a section about updates.
+- **Version:** copy `reference/react/version.ts` again.
 
 ## 🔁 Changed
 
