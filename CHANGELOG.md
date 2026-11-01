@@ -7,9 +7,11 @@ All notable changes to the GlimStone design language are documented here. Versio
 **Adopting apps:**
 
 - **List pages:** keep the actions on many rows where they are seen, in the list's More button or on the row. Leave out the right-click menu and the command palette unless the app already has them; they are KnightLoader's.
+- **Check for updates:** give the check button `IconSync` from `reference/glyphs.json`, and keep `IconUpdate` for fetching and installing an update.
 
 ## 🔁 Changed
 
+- **Checking for updates wears `IconSync`.** The two arrows of the sync drawing read as "look again" at button size, where the cloud of `IconUpdate` turned into a smudge. `IconSync` now means "Replicate, synchronise, check for updates" and `IconUpdate` "Fetch an update, update now". Taken from KnightLoader's Check all.
 - **The right-click menu and the command palette are KnightLoader's, not the house's.** 3.8.2 moved a list's More actions into both for every app. An app without them keeps its More button and its row buttons, and the hint line names a right-click only where there is one. Found when ArrowLoop took 3.8.2 and grew menus nobody wanted there.
 
 ## 3.8.2 - 2026-10-31

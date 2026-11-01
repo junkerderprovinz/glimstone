@@ -101,7 +101,7 @@
 | Store cookies | `IconCookies` | none | `IconCookies`, standard until cookies get a drawing of their own |
 | Open the log | `IconLog` | `IconLog`, standard | `IconLog`, standard |
 | Install | `IconInstall` | `IconInstall`, standard | `IconInstall`, standard |
-| Fetch an update, check for one, update now | `IconUpdate` | `IconUpdate`, standard | `IconUpdate`, standard |
+| Fetch an update, update now | `IconUpdate` | `IconUpdate`, standard | `IconUpdate`, standard |
 | Up to date after an update check | `IconUpToDate` | `IconUpToDate`, standard | `IconUpToDate`, standard |
 | An update is available | `IconUpdateAvailable` | `IconUpdateAvailable`, standard | `IconUpdateAvailable`, standard |
 
@@ -140,7 +140,7 @@
 | Receiver, an incoming transfer | `IconReceiver` | `IconReceiver`, standard | none |
 | Back up now | `IconBackupNow` | `IconBackupNow`, standard | none |
 | Restore | `IconRestore` | `IconRestore`, standard | `IconRestore`, standard |
-| Replicate, synchronise | `IconSync` | `IconSync`, standard | none |
+| Replicate, synchronise, check for updates | `IconSync` | `IconSync`, standard; `IconUpdate` on Check for updates, switch | `IconSync` on Check all, standard |
 | Recovery, rebuild from backups | `IconRecovery` | `IconRecovery`, standard | none |
 | Live, running now | `IconLive` | `IconLive`, standard | none |
 | Configuration self-backup | `IconConfig` | `IconConfig`, standard | none |
@@ -264,7 +264,7 @@ TowerTorch wears the assortment on its own controls and on the Unraid buttons it
 | Default, preferred, favourite | `IconStar` | `Star` on Community Applications' spotlight and the Favorites tab, standard |
 | Open the log | `IconLog` | `Log`, standard |
 | Install | `IconInstall` | `Install`, standard |
-| Fetch an update, check for one, update now | `IconUpdate` | `Update`, standard |
+| Fetch an update, update now | `IconUpdate` | `Update`, standard |
 | Up to date after an update check | `IconUpToDate` | `UpToDate`, standard |
 | An update is available | `IconUpdateAvailable` | `UpdateAvailable`, standard |
 | Settings, open a setting | `IconGear` | `Gear`, standard |
@@ -316,7 +316,7 @@ ArrowLoop picks a button's glyph from its translation key. The rows below are th
 | Forgot password | `IconForgotPassword` | `IconForgotPassword`, standard |
 | A protection is on, turn it on | `IconShieldOn` | `IconShieldOn`, standard |
 | A protection is off, turn it off | `IconShieldOff` | `IconShieldOff`, standard |
-| Fetch an update, check for one, update now | `IconUpdate` | `IconUpdate` on Check for updates, standard |
+| Replicate, synchronise, check for updates | `IconSync` | `IconSync` on Check for updates, standard |
 | Up to date after an update check | `IconUpToDate` | `IconUpToDate`, standard |
 | An update is available | `IconUpdateAvailable` | `IconUpdateAvailable`, standard |
 | Restore | `IconRestore` | `IconRestore` on `trash.restore` and `anomaly.restore`, standard |
@@ -342,7 +342,7 @@ ShipLog wears the assortment on its settings page and in the changelog window it
 | Warning | `IconWarning` | `Warning`, standard |
 | Send a test | `IconSendTest` | `SendTest`, standard |
 | Automatic, the app chooses | `IconCompressAuto` | `CompressAuto` on Autodetect, standard |
-| Fetch an update, check for one, update now | `IconUpdate` | `Update` on the Updates tab, Update now and Update all, standard |
+| Fetch an update, update now | `IconUpdate` | `Update` on the Updates tab, Update now and Update all, standard |
 | General tab | `IconTabGeneral` | `TabGeneral`, standard |
 | Notifications | `IconNotifications` | `Notifications`, standard |
 

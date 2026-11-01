@@ -157,7 +157,7 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconCookies` | Store cookies | Streamline `interface-essential/paperclip-1.svg`, shared with `IconFile` until cookies get a drawing of their own |
 | `IconLog` | Open the log | Streamline `programming/file-code-1.svg` |
 | `IconInstall` | Install | Streamline `programming/browser-add.svg` |
-| `IconUpdate` | Fetch an update, check for one, update now | Streamline `programming/cloud-refresh.svg` |
+| `IconUpdate` | Fetch an update, update now | Streamline `programming/cloud-refresh.svg` |
 | `IconUpToDate` | Up to date after an update check | Streamline `programming/cloud-check.svg` |
 | `IconUpdateAvailable` | An update is available | Streamline `interface-essential/megaphone-2.svg` |
 
@@ -192,7 +192,7 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconReceiver` | Receiver, an incoming transfer | Streamline `interface-essential/download-computer.svg` |
 | `IconBackupNow` | Back up now | Streamline `computer-devices/database-check.svg` |
 | `IconRestore` | Restore | Streamline `interface-essential/arrow-reload-vertical-1.svg` |
-| `IconSync` | Replicate, synchronise | Streamline `interface-essential/arrow-reload-horizontal-2.svg` |
+| `IconSync` | Replicate, synchronise, check for updates | Streamline `interface-essential/arrow-reload-horizontal-2.svg` |
 | `IconRecovery` | Recovery, rebuild from backups | Streamline `interface-essential/arrow-reload-vertical-2.svg` |
 | `IconLive` | Live, running now | Streamline `interface-essential/live-video.svg` |
 | `IconConfig` | Configuration self-backup | Streamline `computer-devices/database-setting.svg` |
