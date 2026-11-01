@@ -4,6 +4,17 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
+Updating now wears the two arrows of `IconSync`, as checking for an update already does. The cloud of `IconUpdate` stays for an updates tab or section, where it has room to read. Chosen on ShipLog's Update now.
+
+**Adopting apps:**
+
+- **Update now and Update all:** give the button `IconSync` from `reference/glyphs.json`. Keep `IconUpdate` for a tab or a section about updates.
+
+## 🔁 Changed
+
+- **Updating now wears `IconSync`.** At button size the cloud of `IconUpdate` turned into a smudge, the same reason checking for updates moved to the two arrows in 3.8.3. `IconSync` now means "Replicate, synchronise, check for updates, update now" and `IconUpdate` "An updates tab or section". BombVault and KnightLoader switch; KnightLoader's Update now wears `IconRefresh` today.
+- **TowerTorch's label table gives `aktualisieren` and `update` the sync glyph.**
+
 ## 3.8.5 - 2026-11-01
 
 `takePageHue()` counts every button that carries the tint, so an app's own glyph buttons light up in their own colours under rainbow too.

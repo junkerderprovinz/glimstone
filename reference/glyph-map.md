@@ -101,7 +101,7 @@
 | Store cookies | `IconCookies` | none | `IconCookies`, standard until cookies get a drawing of their own |
 | Open the log | `IconLog` | `IconLog`, standard | `IconLog`, standard |
 | Install | `IconInstall` | `IconInstall`, standard | `IconInstall`, standard |
-| Fetch an update, update now | `IconUpdate` | `IconUpdate`, standard | `IconUpdate`, standard |
+| Fetch an update, update now | `IconSync` | `IconUpdate`, switch | `IconRefresh` on Update now, switch |
 | Up to date after an update check | `IconUpToDate` | `IconUpToDate`, standard | `IconUpToDate`, standard |
 | An update is available | `IconUpdateAvailable` | `IconUpdateAvailable`, standard | `IconUpdateAvailable`, standard |
 
@@ -264,7 +264,7 @@ TowerTorch wears the assortment on its own controls and on the Unraid buttons it
 | Default, preferred, favourite | `IconStar` | `Star` on Community Applications' spotlight and the Favorites tab, standard |
 | Open the log | `IconLog` | `Log`, standard |
 | Install | `IconInstall` | `Install`, standard |
-| Fetch an update, update now | `IconUpdate` | `Update`, standard |
+| Fetch an update, update now | `IconSync` | `Update`, switch |
 | Up to date after an update check | `IconUpToDate` | `UpToDate`, standard |
 | An update is available | `IconUpdateAvailable` | `UpdateAvailable`, standard |
 | Settings, open a setting | `IconGear` | `Gear`, standard |
@@ -342,7 +342,8 @@ ShipLog wears the assortment on its settings page and in the changelog window it
 | Warning | `IconWarning` | `Warning`, standard |
 | Send a test | `IconSendTest` | `SendTest`, standard |
 | Automatic, the app chooses | `IconCompressAuto` | `CompressAuto` on Autodetect, standard |
-| Fetch an update, update now | `IconUpdate` | `Update` on the Updates tab, Update now and Update all, standard |
+| Fetch an update, update now | `IconSync` | `Sync` on Update now and Update all, standard |
+| An updates tab or section | `IconUpdate` | `Update` on the Updates tab, standard |
 | General tab | `IconTabGeneral` | `TabGeneral`, standard |
 | Notifications | `IconNotifications` | `Notifications`, standard |
 

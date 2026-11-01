@@ -1587,7 +1587,7 @@
  },
  {
   "name": "IconSync",
-  "means": "Replicate, synchronise, check for updates",
+  "means": "Replicate, synchronise, check for updates, update now",
   "source": "Streamline interface-essential/arrow-reload-horizontal-2.svg",
   "viewBox": "0 0 14 14",
   "ink": [
@@ -2185,7 +2185,7 @@
  },
  {
   "name": "IconUpdate",
-  "means": "Fetch an update, update now",
+  "means": "An updates tab or section",
   "source": "Streamline programming/cloud-refresh.svg",
   "viewBox": "0.013 0.013 13.974 13.974",
   "ink": [
