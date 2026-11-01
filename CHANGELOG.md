@@ -4,10 +4,15 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
+## 3.8.3 - 2026-11-01
+
+A list keeps the actions on many rows where they are seen, in its More button or on the row; the right-click menu and the command palette are KnightLoader's and not part of the house. Checking for updates wears the sync glyph, as KnightLoader's Check all does. Both came out of ArrowLoop taking 3.8.2.
+
 **Adopting apps:**
 
 - **List pages:** keep the actions on many rows where they are seen, in the list's More button or on the row. Leave out the right-click menu and the command palette unless the app already has them; they are KnightLoader's.
 - **Check for updates:** give the check button `IconSync` from `reference/glyphs.json`, and keep `IconUpdate` for fetching and installing an update.
+- **Version:** copy `reference/react/version.ts` again.
 
 ## 🔁 Changed
 
