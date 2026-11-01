@@ -4,6 +4,14 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
+**Adopting apps:**
+
+- **List pages:** keep the actions on many rows where they are seen, in the list's More button or on the row. Leave out the right-click menu and the command palette unless the app already has them; they are KnightLoader's.
+
+## 🔁 Changed
+
+- **The right-click menu and the command palette are KnightLoader's, not the house's.** 3.8.2 moved a list's More actions into both for every app. An app without them keeps its More button and its row buttons, and the hint line names a right-click only where there is one. Found when ArrowLoop took 3.8.2 and grew menus nobody wanted there.
+
 ## 3.8.2 - 2026-10-31
 
 Every button with words now has a fill, wherever it stands, and every button takes the accent when the pointer or the keyboard reaches it. A list page drops the Filter, Sort and Search buttons over its list: the cards stand on top, the list below, and sorting, filtering, searching and the actions on many rows move into the list's header and menus. F-Droid joins the brand marks with its own logo, and a small script finds bare buttons with words in an app's sources. All of it comes from KnightLoader.
