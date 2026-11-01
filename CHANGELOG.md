@@ -4,9 +4,14 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
+## 3.8.4 - 2026-11-01
+
+Under rainbow every button lights up in a colour of its own when the pointer or the keyboard reaches it. The buttons of a page count through the palette in the order they stand, so the buttons of one card no longer all light up alike.
+
 **Adopting apps:**
 
 - **Rainbow hover:** copy `reference/appearance.ts` and `reference/react/Button.tsx` again. An app with its own Button calls `takePageHue(el)` when the pointer or the keyboard reaches one of its surface-filled or bare buttons.
+- **Version:** copy `reference/react/version.ts` again.
 
 ## 🎨 Design
 
