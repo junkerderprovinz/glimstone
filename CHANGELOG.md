@@ -4,9 +4,14 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
+## 3.8.5 - 2026-11-01
+
+`takePageHue()` counts every button that carries the tint, so an app's own glyph buttons light up in their own colours under rainbow too.
+
 **Adopting apps:**
 
 - **Rainbow hover:** copy `reference/appearance.ts` again. Buttons of the app's own that carry `.glim-btn-bare` count too; call `takePageHue()` for them, for example from one `pointerover` and `focusin` listener at the app's root.
+- **Version:** copy `reference/react/version.ts` again.
 
 ## 🐛 Fixed
 
