@@ -4,6 +4,14 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
+**Adopting apps:**
+
+- **Rainbow hover:** copy `reference/appearance.ts` and `reference/react/Button.tsx` again. An app with its own Button calls `takePageHue(el)` when the pointer or the keyboard reaches one of its surface-filled or bare buttons.
+
+## 🎨 Design
+
+- **Under rainbow every button lights up in a colour of its own.** The buttons of a page count through the palette in the order they stand, read when the pointer or the keyboard reaches one, so two buttons side by side never share a colour. A button with its own palette position keeps it. This reverses rule 40's "a button takes the hue of its card or row", under which every button of a card lit up alike; reported on ArrowLoop.
+
 ## 3.8.3 - 2026-11-01
 
 A list keeps the actions on many rows where they are seen, in its More button or on the row; the right-click menu and the command palette are KnightLoader's and not part of the house. Checking for updates wears the sync glyph, as KnightLoader's Check all does. Both came out of ArrowLoop taking 3.8.2.

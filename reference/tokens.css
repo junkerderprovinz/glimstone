@@ -1822,8 +1822,8 @@ body {
 /* Rule 40. A surface-filled button's hovered ground takes 22% of the tint and
    its glyph all of it; its words keep the text colour, which the accent on a
    tinted ground would not be legible against. A bare glyph button has no
-   ground to tint. `--btn-tint` reads `--accent-glyph`, so a button inside a
-   hued element takes that element's hue. */
+   ground to tint. `--btn-tint` reads `--accent-glyph`; under rainbow
+   takePageHue() sets it inline to the button's own position on the page. */
 .glim-btn-neutral,
 .glim-btn-subtle,
 .glim-btn-bare {
