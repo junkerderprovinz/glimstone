@@ -1,6 +1,6 @@
 {
   "name": "@glimstone/react",
-  "version": "3.8.6",
+  "version": "4.0.0",
   "description": "GlimStone's components for React",
   "license": "AGPL-3.0-only",
   "repository": { "type": "git", "url": "git+https://github.com/junkerderprovinz/glimstone.git", "directory": "packages/react" },
@@ -16,7 +16,7 @@
     "build": "tsc -p tsconfig.build.json"
   },
   "dependencies": {
-    "@glimstone/core": "3.8.6"
+    "@glimstone/core": "4.0.0"
   },
   "peerDependencies": {
     "@zag-js/combobox": "^1.46.0",
