@@ -1,0 +1,30 @@
+{
+  "name": "@glimstone/react",
+  "version": "3.8.6",
+  "description": "GlimStone's components for React",
+  "license": "AGPL-3.0-only",
+  "repository": { "type": "git", "url": "git+https://github.com/junkerderprovinz/glimstone.git", "directory": "packages/react" },
+  "homepage": "https://junkerderprovinz.github.io/glimstone/",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" },
+    "./*": { "types": "./dist/*.d.ts", "default": "./dist/*.js" }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json"
+  },
+  "dependencies": {
+    "@glimstone/core": "3.8.6"
+  },
+  "peerDependencies": {
+    "@zag-js/combobox": "^1.46.0",
+    "@zag-js/menu": "^1.46.0",
+    "@zag-js/react": "^1.46.0",
+    "@zag-js/select": "^1.46.0",
+    "@zag-js/slider": "^1.46.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}

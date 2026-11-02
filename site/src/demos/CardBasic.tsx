@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { Card } from "@gs/react/Card";
-import { Toggle } from "@gs/react/Toggle";
-import { Button } from "@gs/react/Button";
+import { Card, Toggle, Button } from "@glimstone/react";
 
 export default function CardBasic() {
   const [nightly, setNightly] = useState(true);

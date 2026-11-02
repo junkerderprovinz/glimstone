@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from "react";
 
-import { groupStage } from "../controls";
+import { groupStage } from "@glimstone/core";
 import { Button, type ButtonTone } from "./Button";
 import { Card } from "./Card";
 import { ReadmeButton } from "./ReadmeButton";

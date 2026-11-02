@@ -1,5 +1,5 @@
-import glyphs from "@gs/glyphs.json";
-import { setGlyphResolver } from "@gs/react/glyphs";
+import glyphs from "@glimstone/core/glyphs.json";
+import { setGlyphResolver } from "@glimstone/react";
 
 export interface GlyphEntry {
   name: string;

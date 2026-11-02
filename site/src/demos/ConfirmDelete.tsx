@@ -1,7 +1,5 @@
 import { useRef, useState } from "react";
-import { Button } from "@gs/react/Button";
-import { Toggle } from "@gs/react/Toggle";
-import { useConfirm } from "@gs/react/useConfirm";
+import { Button, Toggle, useConfirm } from "@glimstone/react";
 
 // `extra` is kept as it was when confirm() was called, so a switch inside it
 // holds its own state and reports it out.

@@ -1,4 +1,4 @@
-import { Badge } from "@gs/react/Badge";
+import { Badge } from "@glimstone/react";
 
 export default function BadgeTones() {
   return (

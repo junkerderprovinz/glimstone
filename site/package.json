@@ -8,29 +8,5 @@
     "typecheck": "node gen.mjs && tsc --noEmit",
     "test": "playwright test",
     "results": "node collect.mjs"
-  },
-  "dependencies": {
-    "@fontsource-variable/noto-sans": "^5.3.0",
-    "@tailwindcss/vite": "^4.3.3",
-    "@typescript/native": "npm:typescript@^7.0.2",
-    "@vitejs/plugin-react": "^6.1.2",
-    "@zag-js/combobox": "^1.46.0",
-    "@zag-js/menu": "^1.46.0",
-    "@zag-js/react": "^1.46.0",
-    "@zag-js/select": "^1.46.0",
-    "@zag-js/slider": "^1.46.0",
-    "@zag-js/vanilla": "^1.46.0",
-    "react": "^19.3.1",
-    "react-dom": "^19.3.1",
-    "sugar-high": "^2.6.0",
-    "tailwindcss": "^4.3.3",
-    "typescript": "npm:@typescript/typescript6@^6.0.2",
-    "vite": "^8.3.4"
-  },
-  "devDependencies": {
-    "@playwright/test": "^1.64.1",
-    "@types/node": "^24.19.2",
-    "@types/react": "^19.3.0",
-    "@types/react-dom": "^19.3.0"
   }
 }

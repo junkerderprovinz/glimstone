@@ -3,24 +3,21 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { fileURLToPath } from "node:url";
 
-const reference = fileURLToPath(new URL("../reference", import.meta.url));
-const local = (p: string) => fileURLToPath(new URL(`./node_modules/${p}`, import.meta.url));
+const packages = fileURLToPath(new URL("../packages", import.meta.url));
 
-// The reference files sit outside this folder, where walking up finds no
-// node_modules, so their bare imports resolve to the site's own copies.
-const fromSite = ["react-dom", "react", "@zag-js"].flatMap((pkg) => {
-  const name = pkg.replace("/", "\\/");
-  return [
-    { find: new RegExp(`^${name}/(.*)$`), replacement: local(`${pkg}/$1`) },
-    { find: new RegExp(`^${name}$`), replacement: local(pkg) },
-  ];
-});
+// The site runs on the packages' sources, so a change shows without building
+// them first. The assets sit beside the core's sources, not in them.
+const alias = [
+  { find: /^@glimstone\/core\/(tokens\.css|tailwind-theme\.css|glyphs\.json)$/, replacement: `${packages}/core/$1` },
+  { find: /^@glimstone\/(core|react)$/, replacement: `${packages}/$1/src/index.ts` },
+  { find: /^@glimstone\/(core|react)\/(.*)$/, replacement: `${packages}/$1/src/$2` },
+];
 
 export default defineConfig({
   base: "./",
   plugins: [react(), tailwindcss()],
-  resolve: { alias: [{ find: "@gs", replacement: reference }, ...fromSite] },
+  resolve: { alias },
   // One page carries every demo, the machines and the font; splitting it buys nothing.
   build: { chunkSizeWarningLimit: 1600 },
-  server: { fs: { allow: [".", reference, fileURLToPath(new URL("../.github/assets", import.meta.url))] } },
+  server: { fs: { allow: [".."] } },
 });

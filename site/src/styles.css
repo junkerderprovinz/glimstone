@@ -1,7 +1,7 @@
 @import "./gen/tokens.css";
 @import "./gen/tailwind-theme.css";
 @source "./";
-@source "../../reference/react";
+@source "../../packages/react/src";
 
 html {
   background: var(--carbon-bg);

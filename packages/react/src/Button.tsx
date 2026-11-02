@@ -1,6 +1,5 @@
 import type { CSSProperties, FocusEvent, MouseEvent, ReactNode, Ref } from "react";
-import { hueVars, takePageHue } from "../appearance";
-import { hidesLabel, labelWidth, widthStage, type WidthStage } from "../controls";
+import { hidesLabel, hueVars, labelWidth, takePageHue, widthStage, type WidthStage } from "@glimstone/core";
 import { useLabelMode } from "./useLabelMode";
 import { useTipBubble } from "./useTipBubble";
 import { glyphFor } from "./glyphs";
@@ -198,7 +197,7 @@ export function Button({
       }
     : tooltip.handlers;
   // The reveal's ceiling in the label's visual units (see `.glim-label-reactive`
-  // in reference/tokens.css).
+  // in packages/core/tokens.css).
   const hueStyle = {
     ...(hueOn ? (hueVars(hueIndex) as CSSProperties) : {}),
     ...(reactive ? ({ "--reactive-chars": labelWidth(label) } as CSSProperties) : {}),

@@ -2,7 +2,7 @@ import { useEffect, useId, useRef, type ReactNode, type Ref, type RefObject } fr
 import * as menu from "@zag-js/menu";
 import * as select from "@zag-js/select";
 import { normalizeProps, Portal, useMachine } from "@zag-js/react";
-import { enableWheelStep, stepIndex } from "../selectScroll";
+import { enableWheelStep, stepIndex } from "@glimstone/core";
 import { IconCheck, IconExpand } from "./glyphs";
 import { usePortalHue, type PortalHue } from "./portalHue";
 import { useTipBubble } from "./useTipBubble";

@@ -25,9 +25,12 @@ jobs:
         with:
           node-version: 24
           cache: npm
-          cache-dependency-path: site/package-lock.json
+          cache-dependency-path: package-lock.json
       - run: npm ci
-      - run: bash reference/react/check.sh
+        working-directory: .
+      - run: bash packages/react/check.sh
+        working-directory: .
+      - run: npm run build:packages
         working-directory: .
       - run: npm run typecheck
       - run: npx playwright install --with-deps chromium

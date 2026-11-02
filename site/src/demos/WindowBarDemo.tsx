@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { WindowBar } from "@gs/react/WindowBar";
+import { WindowBar } from "@glimstone/react";
 
 export default function WindowBarDemo() {
   const [maximised, setMaximised] = useState(false);

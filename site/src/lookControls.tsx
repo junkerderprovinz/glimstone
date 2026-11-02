@@ -1,5 +1,4 @@
-import { ACCENTS, MOTION_LEVELS, SHAPES } from "@gs/appearance";
-import { LABEL_MODES, type LabelMode } from "@gs/controls";
+import { ACCENTS, MOTION_LEVELS, SHAPES, LABEL_MODES, type LabelMode } from "@glimstone/core";
 import { Glyph } from "./glyph";
 import { setLook, useLook, type Rainbow, type Theme } from "./look";
 import { Selector } from "./ui";

@@ -1,4 +1,4 @@
-import { Button } from "@gs/react/Button";
+import { Button } from "@glimstone/react";
 
 export default function ButtonTones() {
   return (

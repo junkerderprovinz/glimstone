@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "@gs/react/Button";
+import { Button } from "@glimstone/react";
 
 export default function ButtonStates() {
   const [busy, setBusy] = useState(false);

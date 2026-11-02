@@ -1,4 +1,4 @@
-import { Button } from "@gs/react/Button";
+import { Button } from "@glimstone/react";
 import { AccentControl, LabelControl, MotionControl, RainbowControl, ShapeControl, ThemeControl } from "../lookControls";
 import { SampleSurface } from "../sample";
 import { Callout, Code, H2, SourceLink } from "../ui";

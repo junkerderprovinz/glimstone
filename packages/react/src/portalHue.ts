@@ -3,7 +3,7 @@
 // out of that subtree, so without this hook the panel falls back to the global
 // accent while the control that opened it wears its card's hue.
 import { useLayoutEffect, useState, type RefObject } from "react";
-import { hueVars } from "../appearance";
+import { hueVars } from "@glimstone/core";
 
 // Read off hueVars() so the list cannot drift from the properties it writes. Any
 // hex yields the same keys.

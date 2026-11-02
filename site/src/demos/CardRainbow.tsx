@@ -1,5 +1,4 @@
-import { Card } from "@gs/react/Card";
-import { Button } from "@gs/react/Button";
+import { Card, Button } from "@glimstone/react";
 
 const SECTIONS = ["Sources", "Targets", "Retention"];
 

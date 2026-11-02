@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getLabelMode, type LabelAxis, type LabelMode } from "../controls";
+import { getLabelMode, type LabelAxis, type LabelMode } from "@glimstone/core";
 
 const LABEL_MODE_CHANGED = "bv:label-mode-changed";
 

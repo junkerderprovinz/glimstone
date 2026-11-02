@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
-import { hueVars } from "../appearance";
+import { hueVars } from "@glimstone/core";
 import { Badge } from "./Badge";
 import { InfoBubble } from "./InfoBubble";
 

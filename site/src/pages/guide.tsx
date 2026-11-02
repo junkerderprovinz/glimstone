@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { GLIMSTONE_VERSION } from "@gs/react/version";
+import { GLIMSTONE_VERSION } from "@glimstone/react";
 import tokens from "../gen/tokens.json";
 import { Glyph, GLYPHS } from "../glyph";
 import { Callout, Code, H2, SourceLink } from "../ui";

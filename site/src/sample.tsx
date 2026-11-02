@@ -1,8 +1,5 @@
 import { useState } from "react";
-import { Card } from "@gs/react/Card";
-import { Button } from "@gs/react/Button";
-import { Badge } from "@gs/react/Badge";
-import { Toggle } from "@gs/react/Toggle";
+import { Card, Button, Badge, Toggle } from "@glimstone/react";
 
 /** A small slice of an app, so an engine page shows what a setting does to real controls. */
 export function SampleSurface() {

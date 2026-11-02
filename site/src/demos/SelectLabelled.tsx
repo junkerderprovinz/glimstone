@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
-import { Button } from "@gs/react/Button";
-import { Select } from "@gs/react/Select";
+import { Button, Select } from "@glimstone/react";
 
 const PLACES = [
   "/mnt/user/backups",

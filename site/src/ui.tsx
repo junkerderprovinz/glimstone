@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, type ComponentType, type KeyboardEvent, type ReactNode } from "react";
 import { highlight } from "sugar-high";
-import { Button } from "@gs/react/Button";
-import { Badge } from "@gs/react/Badge";
+import { Button, Badge } from "@glimstone/react";
 import propsData from "./gen/props.json";
 import { CONTRACTS } from "./contracts";
 import { Glyph } from "./glyph";
@@ -118,9 +117,7 @@ export function Demo({ name, left }: { name: string; left?: boolean }) {
   const [copied, doCopy] = useCopied();
   if (!mod) return <div className="callout">Missing demo {name}</div>;
   const Comp = mod.default;
-  // The demo files import from "@gs/react/..."; an app copies the component
-  // next to its own code, so the shown source points there.
-  const shown = raw.replace(/@gs\/react\//g, "./components/").replace(/@gs\//g, "./lib/").trim();
+  const shown = raw.trim();
   return (
     <div className="demo">
       {view === "preview" ? (
@@ -196,16 +193,23 @@ export function PropsTable({ of }: { of: keyof typeof propsData }) {
   );
 }
 
+// "react/Button.tsx" lives in the React package, "appearance.ts" in the core's
+// sources and "tokens.css" beside them.
+function repoPath(file: string): string {
+  if (file.startsWith("react/")) return `packages/react/src/${file.slice(6)}`;
+  return file.endsWith(".ts") ? `packages/core/src/${file}` : `packages/core/${file}`;
+}
+
 export function SourceLink({ file }: { file: string }) {
   return (
     <a
       className="nav-link"
       style={{ display: "inline-flex", padding: "0.25rem 0.625rem", background: "var(--carbon-surface2)" }}
-      href={`https://github.com/junkerderprovinz/glimstone/blob/main/reference/${file}`}
+      href={`https://github.com/junkerderprovinz/glimstone/blob/main/${repoPath(file)}`}
       target="_blank"
       rel="noreferrer"
     >
-      reference/{file}
+      {repoPath(file)}
     </a>
   );
 }

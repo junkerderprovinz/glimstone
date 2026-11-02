@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Toggle } from "@gs/react/Toggle";
+import { Toggle } from "@glimstone/react";
 
 export default function ToggleBasic() {
   const [quiet, setQuiet] = useState(true);

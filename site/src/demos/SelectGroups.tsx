@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Select } from "@gs/react/Select";
+import { Select } from "@glimstone/react";
 import { Glyph } from "../glyph";
 
 export default function SelectGroups() {

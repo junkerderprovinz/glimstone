@@ -1,7 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type ComponentType } from "react";
-import { GLIMSTONE_VERSION } from "@gs/react/version";
-import { Badge } from "@gs/react/Badge";
-import { Button } from "@gs/react/Button";
+import { GLIMSTONE_VERSION, Badge, Button } from "@glimstone/react";
 import logoForLight from "../../.github/assets/glimstone-dunkel.svg?raw";
 import logoForDark from "../../.github/assets/glimstone-hell.svg?raw";
 import { Glyph } from "./glyph";

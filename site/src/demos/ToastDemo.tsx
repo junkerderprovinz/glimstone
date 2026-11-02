@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Button } from "@gs/react/Button";
-import { ToastViewport } from "@gs/react/Toast";
-import { addToast, pauseToast, removeToast, resumeToast, type ToastEntry, type ToastSeverity } from "@gs/react/toastEngine";
+import { Button, ToastViewport, addToast, pauseToast, removeToast, resumeToast, type ToastEntry, type ToastSeverity } from "@glimstone/react";
 
 const MESSAGES: Record<ToastSeverity, string> = {
   success: "Settings saved.",

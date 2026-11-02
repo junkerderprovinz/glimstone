@@ -428,7 +428,7 @@ body {
    this sets a real one. */
 .glim-meter { contain: size layout; }
 
-/* The tooltip and info bubble (rule 8), placed by reference/tooltip.ts at
+/* The tooltip and info bubble (rule 8), placed by packages/core/src/tooltip.ts at
    body level so no scroll container, card or table clips it. It is clamped
    into the viewport, flips above the trigger when below would clip
    (.glim-bubble--above), and its arrow follows the trigger when the bubble is
@@ -475,7 +475,7 @@ body {
   border-color: var(--carbon-surface) transparent transparent transparent;
 }
 
-/* The "(i)" trigger (reference/tooltip.ts's infoIcon()): a bare stroked glyph,
+/* The "(i)" trigger (packages/core/src/tooltip.ts's infoIcon()): a bare stroked glyph,
    never a filled badge, since a fill would read as a control. Opacity carries
    hover and focus. The radius shapes the focus ring around the round glyph. */
 .glim-info-icon {
@@ -506,7 +506,7 @@ body {
   outline-offset: 2px;
 }
 
-/* The colour picker (reference/colorPicker.ts): a saturation/value square and
+/* The colour picker (packages/core/src/colorPicker.ts): a saturation/value square and
    a hue bar in the page's own DOM. It is a rectangular field, so it follows
    --radius-control. */
 .glim-picker {
@@ -589,7 +589,7 @@ body {
 }
 
 /* Rainbow, the accent in its plural form (docs/design-language.md; the JS side
-   is hueVars and applyRainbow in reference/appearance.ts). An element that owns
+   is hueVars and applyRainbow in packages/core/src/appearance.ts). An element that owns
    a palette position sets --item-hue and carries .glim-hue, and these rules
    redefine --accent for its subtree, so components need not know the mode.
 
@@ -1674,7 +1674,7 @@ body {
 }
 
 
-/* The number field (reference/numberField.ts; docs/design-language.md, "Never a
+/* The number field (packages/core/src/numberField.ts; docs/design-language.md, "Never a
    native number spinner either"): our own arrows inside the box, with no ground
    of their own, and inline padding so the digits never run under them. */
 
@@ -1750,7 +1750,7 @@ body {
   .glim-num-step { transition: none; }
 }
 
-/* The button box and the reactive label. The components in reference/react/
+/* The button box and the reactive label. The components in packages/react/src/
    carry no dimensions of their own, so changing the box here changes every
    button.
 
@@ -2172,7 +2172,7 @@ body {
 
 /* The row action while the label mode shows no words: a square at the button
    height, sized by its glyph. In a mode that shows words it is an ordinary
-   button with its label (see `ButtonVariant` in reference/react/Button.tsx). */
+   button with its label (see `ButtonVariant` in packages/react/src/Button.tsx). */
 .glim-btn-icon {
   width: var(--btn-h);
   min-width: 0;
@@ -2347,7 +2347,7 @@ body {
   .glim-modal-card { animation: glim-modal-in var(--motion-modal-dur) cubic-bezier(.2, .6, .2, 1) both; }
 }
 
-/* The desktop window frame (reference/react/WindowBar.tsx): the title bar an
+/* The desktop window frame (packages/react/src/WindowBar.tsx): the title bar an
    app draws where its window has no native one. It is fixed over the top of
    the window. The page starts under it and a scrim leaves it clear, so the
    window can still be moved and closed while a dialog is open. Without the bar

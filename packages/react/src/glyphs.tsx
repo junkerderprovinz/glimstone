@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 // The icon on a "Save" button or a nav item is the app's vocabulary, so GlimStone
-// ships the assortment as a specification (`reference/glyphs.md`) and lets the app
+// ships the assortment as a specification (`packages/core/glyphs.md`) and lets the app
 // register a resolver. `Button` then picks a glyph by meaning. Without a resolver a
 // button falls back to the glyph it was handed, and with neither, to text alone.
 

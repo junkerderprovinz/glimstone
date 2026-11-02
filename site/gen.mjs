@@ -1,9 +1,10 @@
-// Reads the props tables and the colour tokens out of the reference files, so the
+// Reads the props tables and the colour tokens out of the packages, so the
 // site documents what the components accept rather than what somebody wrote down.
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import ts from "typescript";
 
-const ref = new URL("../reference/", import.meta.url);
+const core = new URL("../packages/core/", import.meta.url);
+const reactSrc = new URL("../packages/react/src/", import.meta.url);
 const out = new URL("./src/gen/", import.meta.url);
 mkdirSync(out, { recursive: true });
 
@@ -32,7 +33,7 @@ function docOf(node) {
 }
 
 function propsOf(name, file) {
-  const path = new URL(file, ref);
+  const path = new URL(file.replace("react/", ""), reactSrc);
   const src = ts.createSourceFile(file, readFileSync(path, "utf8"), ts.ScriptTarget.Latest, true);
   const aliases = new Map();
   const interfaces = new Map();
@@ -72,7 +73,7 @@ writeFileSync(new URL("props.json", out), JSON.stringify(props, null, 1));
 
 // The colour tokens of the dark block, in file order, each with the comment that
 // stands above it.
-const css = readFileSync(new URL("tokens.css", ref), "utf8");
+const css = readFileSync(new URL("tokens.css", core), "utf8");
 const dark = css.slice(css.indexOf('[data-theme="dark"] {'), css.indexOf('[data-theme="light"] {'));
 const tokens = [];
 let comment = "";
@@ -97,7 +98,7 @@ for (const raw of dark.split("\n")) {
 writeFileSync(new URL("tokens.json", out), JSON.stringify(tokens, null, 1));
 
 // The theme layer imports "tailwindcss", which only resolves from in here.
-writeFileSync(new URL("tailwind-theme.css", out), readFileSync(new URL("tailwind-theme.css", ref)));
+writeFileSync(new URL("tailwind-theme.css", out), readFileSync(new URL("tailwind-theme.css", core)));
 writeFileSync(new URL("tokens.css", out), css);
 
 // Filled by the test run; the site shows "not tested yet" until then.

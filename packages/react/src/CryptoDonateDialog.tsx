@@ -11,7 +11,7 @@
 // props because a QR code needs a library and a coin's mark is someone else's
 // brand; without them the window shows the address, a copy button and tickers.
 import type { CSSProperties, ReactNode, Ref } from "react";
-import { hueVars } from "../appearance";
+import { hueVars } from "@glimstone/core";
 import { Badge } from "./Badge";
 import { Button } from "./Button";
 import { useLabelMode } from "./useLabelMode";

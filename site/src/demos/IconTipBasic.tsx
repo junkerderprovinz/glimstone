@@ -1,4 +1,4 @@
-import { IconTipButton } from "@gs/react/IconTipButton";
+import { IconTipButton } from "@glimstone/react";
 import { Glyph } from "../glyph";
 
 const ROW = "inline-flex h-8 w-8 items-center justify-center rounded-pill text-carbon-textSub hover:bg-carbon-hover hover:text-carbon-text";

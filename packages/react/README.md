@@ -102,7 +102,7 @@ The glyphs on the update check come from the app's resolver under the keys
 
 ## Checking that the folder is complete
 
-`bash reference/react/check.sh` from the repository root asks the one question
+`bash packages/react/check.sh` from the repository root asks the one question
 TypeScript cannot: does every class, themed utility and custom property these
 components touch actually exist in `../tokens.css` and `../tailwind-theme.css`?
 

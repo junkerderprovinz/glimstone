@@ -7,11 +7,14 @@ import {
   DEFAULT_ACCENT,
   DEFAULT_MOTION,
   DEFAULT_SHAPE,
+  CONTROL_AXES,
+  DEFAULT_LABEL_MODE,
+  setLabelMode,
+  type LabelMode,
   type Motion,
   type Shape,
-} from "@gs/appearance";
-import { CONTROL_AXES, DEFAULT_LABEL_MODE, setLabelMode, type LabelMode } from "@gs/controls";
-import { labelModeChanged } from "@gs/react/useLabelMode";
+} from "@glimstone/core";
+import { labelModeChanged } from "@glimstone/react";
 
 export type Theme = "system" | "dark" | "light";
 export type Rainbow = "off" | "on" | "reactive";

@@ -37,7 +37,7 @@
 // `absolute top-0 -translate-y-1/2` and lays the badges out with flexbox.
 
 import type { CSSProperties, ReactNode } from "react";
-import { hueVars } from "../appearance";
+import { hueVars } from "@glimstone/core";
 import { IconTipButton } from "./IconTipButton";
 
 export type BadgeTone = "ok" | "fail" | "warn" | "active" | "neutral" | "heading" | "muted";

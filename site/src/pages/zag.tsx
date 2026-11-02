@@ -1,4 +1,4 @@
-import vanillaSource from "@gs/select.ts?raw";
+import vanillaSource from "@glimstone/core/select.ts?raw";
 import { CONTRACTS } from "../contracts";
 import { Callout, Code, ContractTable, Demo, H2, PropsTable, SourceLink } from "../ui";
 import results from "../gen/test-results.json";

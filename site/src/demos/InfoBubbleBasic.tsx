@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { InfoBubble } from "@gs/react/InfoBubble";
-import { Toggle } from "@gs/react/Toggle";
+import { InfoBubble, Toggle } from "@glimstone/react";
 
 export default function InfoBubbleBasic() {
   const [on, setOn] = useState(true);

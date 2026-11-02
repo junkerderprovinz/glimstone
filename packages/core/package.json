@@ -1,0 +1,25 @@
+{
+  "name": "@glimstone/core",
+  "version": "3.8.6",
+  "description": "GlimStone's tokens, glyphs and engines, without a framework",
+  "license": "AGPL-3.0-only",
+  "repository": { "type": "git", "url": "git+https://github.com/junkerderprovinz/glimstone.git", "directory": "packages/core" },
+  "homepage": "https://junkerderprovinz.github.io/glimstone/",
+  "type": "module",
+  "sideEffects": ["*.css"],
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" },
+    "./tokens.css": "./tokens.css",
+    "./tailwind-theme.css": "./tailwind-theme.css",
+    "./glyphs.json": "./glyphs.json",
+    "./*": { "types": "./dist/*.d.ts", "default": "./dist/*.js" }
+  },
+  "files": ["dist", "tokens.css", "tailwind-theme.css", "glyphs.json", "glyphs.md", "glyph-map.md", "check-bare-buttons.mjs"],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json"
+  },
+  "dependencies": {
+    "@zag-js/select": "^1.46.0",
+    "@zag-js/vanilla": "^1.46.0"
+  }
+}

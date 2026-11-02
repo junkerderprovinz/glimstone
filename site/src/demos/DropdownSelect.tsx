@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { DropdownListbox } from "@gs/react/DropdownListbox";
+import { DropdownListbox } from "@glimstone/react";
 
 const ZONES = ["Europe/Vienna", "Europe/Berlin", "America/New_York", "Asia/Tokyo", "UTC"];
 

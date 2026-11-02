@@ -8,7 +8,7 @@
 // them. Like the other give windows it holds no state: the app owns the
 // selection, Escape and the portal, and passes its own horizontal selector in.
 import type { ReactNode, Ref, RefObject } from "react";
-import type { GiveFrequency } from "../paypal";
+import type { GiveFrequency } from "@glimstone/core";
 import { Badge } from "./Badge";
 import { Button } from "./Button";
 

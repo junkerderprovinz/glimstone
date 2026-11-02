@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { mountSelect } from "@gs/select";
+import { mountSelect } from "@glimstone/core";
 
 const zone = (z: string) => ({ value: z, label: z });
 
