@@ -95,7 +95,7 @@ applyStoredLabelModes();`}
         ask the app for icons through <code>setGlyphResolver</code>.
       </p>
       <Code
-        code={`import { setGlyphResolver } from "./components/glyphs";
+        code={`import { setGlyphResolver } from "@glimstone/react";
 
 setGlyphResolver((key) => ICONS[key]);`}
       />

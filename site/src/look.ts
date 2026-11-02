@@ -9,12 +9,12 @@ import {
   DEFAULT_SHAPE,
   CONTROL_AXES,
   DEFAULT_LABEL_MODE,
+  labelModeChanged,
   setLabelMode,
   type LabelMode,
   type Motion,
   type Shape,
 } from "@glimstone/core";
-import { labelModeChanged } from "@glimstone/react";
 
 export type Theme = "system" | "dark" | "light";
 export type Rainbow = "off" | "on" | "reactive";

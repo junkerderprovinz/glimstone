@@ -1,6 +1,6 @@
 // Reads the props tables and the colour tokens out of the packages, so the
 // site documents what the components accept rather than what somebody wrote down.
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import ts from "typescript";
 
 const core = new URL("../packages/core/", import.meta.url);
@@ -32,10 +32,19 @@ function docOf(node) {
   return clean(typeof jsdoc === "string" ? jsdoc : jsdoc.map((c) => c.text).join(""));
 }
 
+// A prop typed with a union from the core, such as ButtonTone, lists its values too.
+const coreAliases = new Map();
+for (const f of readdirSync(new URL("src/", core)).filter((f) => f.endsWith(".ts"))) {
+  const src = ts.createSourceFile(f, readFileSync(new URL(`src/${f}`, core), "utf8"), ts.ScriptTarget.Latest, true);
+  src.forEachChild((n) => {
+    if (ts.isTypeAliasDeclaration(n)) coreAliases.set(n.name.text, n.type.getText(src));
+  });
+}
+
 function propsOf(name, file) {
   const path = new URL(file.replace("react/", ""), reactSrc);
   const src = ts.createSourceFile(file, readFileSync(path, "utf8"), ts.ScriptTarget.Latest, true);
-  const aliases = new Map();
+  const aliases = new Map(coreAliases);
   const interfaces = new Map();
   let fn;
   src.forEachChild((n) => {

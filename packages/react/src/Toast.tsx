@@ -1,4 +1,4 @@
-import type { ToastSeverity } from "./toastEngine";
+import type { ToastSeverity } from "@glimstone/core";
 
 // The toast system's presentational half (design-language.md, "Toasts"). These
 // components hold no state, so a test can call them with props; the companion

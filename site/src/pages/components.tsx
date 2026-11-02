@@ -25,7 +25,7 @@ export function ButtonPage() {
       </p>
       <Head file="react/Button.tsx" />
       <Demo name="ButtonTones" />
-      <Usage code={`import { Button } from "./components/Button";\n\n<Button label="Save" labelKey="save" tone="accent" onClick={save} />`} />
+      <Usage code={`import { Button } from "@glimstone/react";\n\n<Button label="Save" labelKey="save" tone="accent" onClick={save} />`} />
       <H2>Tones</H2>
       <p>
         <code>accent</code> is the one action a view is for. <code>neutral</code> is the default, <code>subtle</code>{" "}
@@ -78,7 +78,7 @@ export function TogglePage() {
       <p className="lead">The switch. Every on/off control is this one, never a native checkbox.</p>
       <Head file="react/Toggle.tsx" />
       <Demo name="ToggleBasic" />
-      <Usage code={`import { Toggle } from "./components/Toggle";\n\n<Toggle label="Quiet notifications" checked={quiet} onChange={setQuiet} />`} />
+      <Usage code={`import { Toggle } from "@glimstone/react";\n\n<Toggle label="Quiet notifications" checked={quiet} onChange={setQuiet} />`} />
       <H2>Rules</H2>
       <ul>
         <li>
@@ -115,7 +115,7 @@ export function BadgePage() {
       <p className="lead">Status pills, counts, and the filled section heading every card wears.</p>
       <Head file="react/Badge.tsx" />
       <Demo name="BadgeTones" />
-      <Usage code={`import { Badge } from "./components/Badge";\n\n<Badge tone="ok">Settled</Badge>`} />
+      <Usage code={`import { Badge } from "@glimstone/react";\n\n<Badge tone="ok">Settled</Badge>`} />
       <H2>Sizes and shapes</H2>
       <Demo name="BadgeSizes" />
       <p>
@@ -144,7 +144,7 @@ export function CardPage() {
       <p className="lead">The one raised surface, and the one place a section heading is drawn.</p>
       <Head file="react/Card.tsx" />
       <Demo name="CardBasic" />
-      <Usage code={`import { Card } from "./components/Card";\n\n<Card title="Schedule" hint="When the backup runs on its own.">\n  ...\n</Card>`} />
+      <Usage code={`import { Card } from "@glimstone/react";\n\n<Card title="Schedule" hint="When the backup runs on its own.">\n  ...\n</Card>`} />
       <H2>The heading notch</H2>
       <p>
         The title is a filled badge that straddles the card's top edge. The <code>hint</code> becomes an "(i)" inside it,
@@ -175,7 +175,7 @@ export function ConfirmDialogPage() {
       <Head file="react/ConfirmDialog.tsx" />
       <Demo name="ConfirmDelete" />
       <Usage
-        code={`import { useConfirm } from "./components/useConfirm";
+        code={`import { useConfirm } from "@glimstone/react";
 
 const { confirm, confirmDialog } = useConfirm({ title: "Confirm", cancel: "Cancel", confirm: "Confirm" });
 
@@ -304,7 +304,7 @@ export function ToastPage() {
       <Head file="react/Toast.tsx" />
       <Demo name="ToastDemo" />
       <Usage
-        code={`import { addToast } from "./components/toastEngine";
+        code={`import { addToast } from "@glimstone/core";
 
 setToasts((list) => addToast(list, { id, message: "Settings saved.", severity: "success" }, Date.now()));`}
       />

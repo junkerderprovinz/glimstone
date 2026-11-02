@@ -9,7 +9,7 @@ import {
   type RefObject,
 } from "react";
 import { createPortal } from "react-dom";
-import { computeBubblePosition } from "./bubblePosition";
+import { computeBubblePosition } from "@glimstone/core";
 import { usePortalHue } from "./portalHue";
 
 // The `role="listbox"` panel a button-opens-a-list picker drops open. It is

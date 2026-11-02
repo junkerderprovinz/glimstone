@@ -126,6 +126,28 @@ export function applyStoredLabelModes(extraAxes: LabelAxis[] = []): void {
   for (const axis of [...CONTROL_AXES, ...extraAxes]) applyLabelMode(axis, getLabelMode(axis));
 }
 
+const LABEL_MODE_CHANGED = 'bv:label-mode-changed';
+
+/** Announce that a label mode changed, so every mounted control re-reads it. */
+export function labelModeChanged(): void {
+  window.dispatchEvent(new Event(LABEL_MODE_CHANGED));
+}
+
+/**
+ * Calls `fn` whenever a label mode may have changed, here or in another tab of
+ * the same app, and returns the unsubscribe. The mode is set in one place and
+ * read by every button, nav row and tab strip at once, so an event keeps them
+ * in step without a reload; two tabs with different chrome would read as a bug.
+ */
+export function subscribeLabelMode(fn: () => void): () => void {
+  window.addEventListener(LABEL_MODE_CHANGED, fn);
+  window.addEventListener('storage', fn);
+  return () => {
+    window.removeEventListener(LABEL_MODE_CHANGED, fn);
+    window.removeEventListener('storage', fn);
+  };
+}
+
 // Width stages. A control keeps the same width in all four modes so switching
 // never reflows the page, which means the width comes from the label, present
 // in every mode at least as the accessible name. A stage is a pure function of

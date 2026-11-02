@@ -2,6 +2,7 @@
 @import "./gen/tailwind-theme.css";
 @source "./";
 @source "../../packages/react/src";
+@source "../../packages/core/src";
 
 html {
   background: var(--carbon-bg);

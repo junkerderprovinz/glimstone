@@ -8,6 +8,9 @@ set -uo pipefail
 cd "$(dirname "$0")/../.."
 
 fail=0
+
+# The core modules that hand class names to the components.
+views="packages/core/src/button.ts"
 note() { echo "MISSING  $1"; fail=1; }
 
 # 1. Every glim-* class the components put in a className.
@@ -16,14 +19,14 @@ note() { echo "MISSING  $1"; fail=1; }
 #    The match has to end the name, or `.glim-btn-chip` would answer for a
 #    deleted `.glim-btn`.
 #    A name counts as defined as a selector, a keyframes name or a custom property.
-for c in $(grep -ohE "\bglim-[a-z0-9-]+" packages/react/src/*.tsx | sort -u); do
+for c in $(grep -ohE "\bglim-[a-z0-9-]+" packages/react/src/*.tsx $views | sort -u); do
   [ "$c" = "glim-convention-exception" ] && continue
   grep -qE "(\.|@keyframes |--)${c}([^a-zA-Z0-9-]|$)" packages/core/tokens.css \
     || note "class $c (not in packages/core/tokens.css)"
 done
 
 # 2. Every themed Tailwind utility, against the @theme layer that maps them.
-for u in $(grep -ohE "\b(bg|text|border|ring|fill|stroke)-(carbon|accent|status)[A-Za-z0-9-]*|\brounded-(card|control|pill)\b|\btext-(title|body|subline|meta|heading|dense|caption)\b" packages/react/src/*.tsx | sort -u); do
+for u in $(grep -ohE "\b(bg|text|border|ring|fill|stroke)-(carbon|accent|status)[A-Za-z0-9-]*|\brounded-(card|control|pill)\b|\btext-(title|body|subline|meta|heading|dense|caption)\b" packages/react/src/*.tsx $views | sort -u); do
   grep -q "${u#*-}" packages/core/tailwind-theme.css || note "utility $u (not in packages/core/tailwind-theme.css)"
 done
 
@@ -52,7 +55,7 @@ while IFS= read -r line; do
         && note "a surface-filled control hovers down the ramp (rule 21): ${line%%:*}"
       ;;
   esac
-done < <(grep -nE '"[^"]*bg-carbon-surface[23][^"]*"' packages/react/src/*.tsx)
+done < <(grep -nE '"[^"]*bg-carbon-surface[23][^"]*"' packages/react/src/*.tsx $views)
 
 # 6. A :has() never tests the class or style attribute (rule 36). Chrome then
 #    restyles the whole page whenever a class or an inline style changes, and a

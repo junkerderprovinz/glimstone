@@ -28,7 +28,7 @@ export function SelectPage() {
       <ZagNote file="react/Select.tsx" />
       <Demo name="SelectZag" />
       <Code
-        code={`import { Select } from "./components/Select";
+        code={`import { Select } from "@glimstone/react";
 
 <Select label="Time zone" options={zones} value={zone} onChange={setZone} />`}
       />

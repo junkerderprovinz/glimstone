@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
 import { createPortal } from "react-dom";
+import { focusedAsker, returnFocus, trapDialogKeys } from "@glimstone/core";
 import { ConfirmDialog } from "./ConfirmDialog";
 
 // useConfirm replaces window.confirm() with ConfirmDialog, keeping the
@@ -40,9 +41,6 @@ interface Pending extends ConfirmOptions {
   message: string;
 }
 
-const FOCUSABLE =
-  'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
-
 export function useConfirm(text: ConfirmText) {
   const [pending, setPending] = useState<Pending | null>(null);
   const resolveRef = useRef<((value: boolean) => void) | null>(null);
@@ -50,9 +48,7 @@ export function useConfirm(text: ConfirmText) {
   const askerRef = useRef<HTMLElement | null>(null);
 
   const confirm = useCallback((message: string, options?: ConfirmOptions) => {
-    // Read before the dialog renders, which moves focus into it.
-    const active = document.activeElement;
-    askerRef.current = active instanceof HTMLElement && active !== document.body ? active : null;
+    askerRef.current = focusedAsker();
     return new Promise<boolean>((resolve) => {
       resolveRef.current = resolve;
       setPending({ message, ...options });
@@ -63,9 +59,8 @@ export function useConfirm(text: ConfirmText) {
     resolveRef.current?.(result);
     resolveRef.current = null;
     setPending(null);
-    const asker = askerRef.current;
+    returnFocus(askerRef.current);
     askerRef.current = null;
-    if (asker && document.contains(asker)) asker.focus();
   }, []);
 
   /** For a caller whose question stopped making sense while it was open. */
@@ -98,34 +93,5 @@ export function useConfirm(text: ConfirmText) {
 /** Escape from anywhere and a Tab trap over the dialog's own controls, so focus
  *  never reaches the page it covers. Exported for any other modal window. */
 export function useDialogKeys(open: boolean, dialogRef: RefObject<HTMLDivElement | null>, onCancel: () => void): void {
-  useEffect(() => {
-    if (!open) return;
-    function onKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") {
-        e.preventDefault();
-        onCancel();
-        return;
-      }
-      if (e.key !== "Tab") return;
-      const card = dialogRef.current;
-      if (!card) return;
-      const focusables = Array.from(card.querySelectorAll<HTMLElement>(FOCUSABLE));
-      if (focusables.length === 0) return;
-      const first = focusables[0];
-      const last = focusables[focusables.length - 1];
-      const active = document.activeElement;
-      const inside = active instanceof Node && card.contains(active);
-      if (e.shiftKey) {
-        if (!inside || active === first) {
-          e.preventDefault();
-          last.focus();
-        }
-      } else if (!inside || active === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    }
-    document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
-  }, [open, dialogRef, onCancel]);
+  useEffect(() => (open ? trapDialogKeys(() => dialogRef.current, onCancel) : undefined), [open, dialogRef, onCancel]);
 }
