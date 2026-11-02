@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 
 // Each test is named after its contract row, "[id] ...", which is how the site
 // finds its result.
@@ -15,6 +15,13 @@ async function open(page: Page, path: string, look?: object) {
 }
 
 const stage = (page: Page, demo: string) => page.locator(`[data-demo="${demo}"]`);
+
+// A scroll puts a bubble away, and the scroll event of scrollIntoView arrives a
+// frame later, so whatever opens a bubble waits for it.
+async function centre(el: Locator) {
+  await el.evaluate((e) => e.scrollIntoView({ block: "center", behavior: "instant" }));
+  await el.page().evaluate(() => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done))));
+}
 
 // For a component that has no Vue twin, so the Vue run says so instead of
 // passing over an empty stage.
@@ -409,10 +416,7 @@ test.describe("Select", () => {
   test("[select-tip] the tip shows in the house bubble", async ({ page }) => {
     await open(page, "/components/select");
     const backend = stage(page, "SelectStates").locator(".glim-select-trigger").first();
-    // In view first, since a scroll puts the bubble away again. The scroll
-    // event of scrollIntoView arrives a frame later, so focus waits for it.
-    await backend.evaluate((el) => el.scrollIntoView({ block: "center", behavior: "instant" }));
-    await page.evaluate(() => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done))));
+    await centre(backend);
     await backend.focus();
     await expect(page.getByRole("tooltip")).toHaveText("Which service fetches the selected links");
   });
@@ -575,7 +579,7 @@ test.describe("Select right to left", () => {
     await page.keyboard.press("Escape");
 
     const sub = stage(page, "SelectSubmenu").locator(".glim-select-trigger");
-    await sub.evaluate((el) => el.scrollIntoView({ block: "center", behavior: "instant" }));
+    await centre(sub);
     await sub.focus();
     await page.keyboard.press("Enter");
     const root = page.getByRole("menu", { name: "Server time zone" });
@@ -1025,7 +1029,7 @@ test.describe("Selector", () => {
     await expect(look).toHaveCount(1);
     const shownText = await look.evaluate((b) => [...b.querySelectorAll("*")].some((e) => e.textContent === "Look"));
     expect(shownText).toBe(false);
-    await look.evaluate((el) => el.scrollIntoView({ block: "center", behavior: "instant" }));
+    await centre(look);
     await look.focus();
     await expect(page.getByRole("tooltip")).toHaveText("Look");
   });
@@ -1102,7 +1106,7 @@ test.describe("Selector", () => {
     await open(page, "/components/selector", { labels: "glyph" });
     // 3.25rem against 12.75rem with words.
     expect(await column(page).evaluate((c) => c.getBoundingClientRect().width)).toBeLessThan(60);
-    await tile(page, "Look").evaluate((el) => el.scrollIntoView({ block: "center", behavior: "instant" }));
+    await centre(tile(page, "Look"));
     await tile(page, "Look").focus();
     await expect(page.getByRole("tooltip")).toHaveText("Look");
   });
@@ -1221,7 +1225,7 @@ test.describe("SidebarRow", () => {
 
   test("[nav-tip] the name shows in the bubble on keyboard focus", async ({ page }) => {
     await open(page, "/components/sidebar-row", { labels: "glyph" });
-    await row(page, "Restore").evaluate((el) => el.scrollIntoView({ block: "center", behavior: "instant" }));
+    await centre(row(page, "Restore"));
     await row(page, "Restore").focus();
     await expect(page.getByRole("tooltip")).toHaveText("Restore");
   });
