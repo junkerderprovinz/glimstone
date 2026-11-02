@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Select } from "@glimstone/react";
+import { Select } from "@glimstone/react/Select";
 
 const ZONES = ["Europe/Vienna", "Europe/Berlin", "America/New_York", "Asia/Tokyo", "UTC"].map((z) => ({ value: z, label: z }));
 

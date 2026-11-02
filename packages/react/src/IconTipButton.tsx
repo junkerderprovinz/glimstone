@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
-import { useTipBubble } from "./useTipBubble";
+import { useTipBubble } from "./useTipBubble.tsx";
 
 // An icon-only <button> whose accessible name and hover or focus explanation is
 // a `.glim-bubble` tooltip rather than the native `title=` balloon. `tip` is

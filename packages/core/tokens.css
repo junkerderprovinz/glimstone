@@ -1843,30 +1843,6 @@ body {
   background-color: transparent;
 }
 
-/* The fills a button can take (ButtonTone). `ok`, `danger` and `warn` put the
-   solid status tokens under the ground's ink: in both themes the solid values
-   sit at the opposite lightness to the ground, so one ink reads on both.
-
-   Filled tones hover up their own ramp (rule 21). `--carbon-hover` is for
-   controls with no fill, and on the dark ramp it is darker than surface2. The
-   accent and status fills have no ramp, so each steps toward the theme's text
-   colour; `opacity` would let the card show through and move the other way.
-   The tint above outranks these, so a surface tone still takes it. */
-.glim-btn--accent { background-color: var(--accent); color: var(--accent-contrast); }
-.glim-btn--neutral { background-color: var(--carbon-surface3); color: var(--carbon-text); }
-.glim-btn--subtle { background-color: var(--carbon-surface2); color: var(--carbon-text); }
-.glim-btn--ok { background-color: var(--status-ok-solid); color: var(--carbon-bg); }
-.glim-btn--danger { background-color: var(--status-fail-solid); color: var(--carbon-bg); }
-.glim-btn--warn { background-color: var(--status-warn-solid); color: var(--carbon-bg); }
-@media (hover: hover) {
-  .glim-btn--accent:hover { background-color: var(--accent-hover); }
-  .glim-btn--neutral:hover { background-color: var(--carbon-hover-raised); }
-  .glim-btn--subtle:hover { background-color: var(--carbon-surface3); }
-  .glim-btn--ok:hover { background-color: var(--status-ok-hover); }
-  .glim-btn--danger:hover { background-color: var(--status-fail-hover); }
-  .glim-btn--warn:hover { background-color: var(--status-warn-hover); }
-}
-
 /* The single-colour marks at rest. A published brand colour fails on one of
    the two grounds, so the Info tile's marks take the adjusted theme tokens,
    and the house mark follows the accent and, under rainbow, its position. */
@@ -2143,7 +2119,6 @@ body {
 }
 
 .glim-readme-btn-hint {
-  color: var(--carbon-text-sub);
   position: absolute;
   top: 50%;
   inset-inline-end: 0.625rem;
@@ -2359,80 +2334,11 @@ body {
    every window in one place, and a system that asks for less transparency gets
    the darkening without the blur. */
 .glim-modal-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
   background: var(--glim-scrim);
   -webkit-backdrop-filter: blur(var(--glim-scrim-blur));
   backdrop-filter: blur(var(--glim-scrim-blur));
 }
 
-/* The window on the scrim: a head with the title notch and, where there is
-   one, the close button; a body that scrolls on its own; and a foot with the
-   actions, forward on the right. The card is `relative` and does not scroll,
-   so the notch straddling its top edge is not clipped. */
-.glim-modal-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 28rem;
-  max-height: 85vh;
-  border-radius: var(--radius-card);
-  background-color: var(--carbon-surface);
-  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-}
-.glim-modal-card--wide { max-width: 32rem; }
-/* A window around an embedded page keeps one height while the page loads. */
-.glim-modal-card--tall {
-  height: calc(100vh - 7rem);
-  max-height: none;
-}
-.glim-modal-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 1rem 1.25rem;
-}
-.glim-modal-title {
-  display: flex;
-  align-items: center;
-  margin: 0;
-  font-size: inherit;
-  font-weight: inherit;
-}
-.glim-modal-close { flex-shrink: 0; }
-.glim-modal-body {
-  flex: 1 1 0%;
-  min-height: 0;
-  overflow-y: auto;
-  padding: 1rem 1.25rem;
-}
-.glim-modal-text {
-  margin: 0;
-  font-size: 0.875rem;
-  line-height: 1.625;
-  color: var(--carbon-text-sub);
-  overflow-wrap: break-word;
-}
-.glim-modal-extra {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  margin-top: 1rem;
-}
-.glim-modal-foot {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.75rem;
-  padding: 1rem 1.25rem;
-}
 @media (prefers-reduced-transparency: reduce) {
   :root { --glim-scrim-blur: 0px; }
 }
@@ -2790,7 +2696,7 @@ body {
   :where([class*="glim-"]) :where(*, ::before, ::after) {
     box-sizing: border-box;
   }
-  :where(.glim-btn, .glim-badge, .glim-toggle-track, .glim-toast-dismiss, .glim-window-button, .glim-give-network, .glim-give-coin, .glim-give-amount) {
+  :where(.glim-btn, .glim-badge, .glim-readme-btn, .glim-toggle-track, .glim-toast-dismiss, .glim-window-button, .glim-give-network, .glim-give-coin, .glim-give-amount) {
     margin: 0;
     padding: 0;
     border: 0 solid;
@@ -2799,144 +2705,6 @@ body {
     letter-spacing: inherit;
     color: inherit;
   }
-}
-
-/* The switch (Toggle). It is never a checkbox (rule 23). The thumb reads the
-   same `--radius-pill` as the track so both reshape together, and at "round"
-   it stays a circle. The focus ring sits 2px out, on the card surface its 3:1
-   contrast was measured against. */
-.glim-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.glim-toggle-label {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  color: var(--carbon-text);
-}
-.glim-toggle-track {
-  position: relative;
-  display: inline-flex;
-  flex-shrink: 0;
-  align-items: center;
-  width: 2.25rem;
-  height: 1.25rem;
-  border-radius: var(--radius-pill);
-  background-color: var(--carbon-surface3);
-  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-.glim-toggle-track[aria-checked="true"] { background-color: var(--accent); }
-.glim-toggle-track:focus-visible {
-  outline: 2px solid var(--focus-ring);
-  outline-offset: 2px;
-}
-.glim-toggle-track:disabled { opacity: 0.5; }
-.glim-toggle-thumb {
-  display: inline-block;
-  width: 0.875rem;
-  height: 0.875rem;
-  border-radius: var(--radius-pill);
-  background-color: var(--carbon-bg);
-  translate: 3px 0;
-  transition: translate 150ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-.glim-toggle-track[aria-checked="true"] .glim-toggle-thumb { translate: 18px 0; }
-/* The flex track already mirrors the thumb's rest position under RTL, so the
-   shift turns round with it. */
-.glim-toggle-thumb:dir(rtl) { translate: -3px 0; }
-.glim-toggle-track[aria-checked="true"] .glim-toggle-thumb:dir(rtl) { translate: -18px 0; }
-
-/* The badge (badgeClassName in packages/core/src/badge.ts). The size stage
-   sets the height and the inline padding together; `--wrap` turns the height
-   into a floor so a second line grows the box. As a button or a link it keeps
-   the box of a span: no native chrome, padding inside the height, and no
-   stretching from a flex or grid parent. */
-.glim-badge {
-  display: inline-flex;
-  box-sizing: border-box;
-  align-items: center;
-  justify-content: center;
-  gap: 0.25rem;
-  height: var(--badge-h);
-  min-height: 0;
-  padding-inline: var(--badge-px);
-  border-radius: var(--radius-pill);
-  font-size: var(--text-meta);
-  font-weight: 500;
-  line-height: 1;
-}
-.glim-badge--small { --badge-h: 18px; --badge-px: 0.375rem; }
-.glim-badge--medium { --badge-h: 1.25rem; --badge-px: 0.5rem; }
-.glim-badge--large { --badge-h: 1.5rem; --badge-px: 0.625rem; }
-.glim-badge--icon { --badge-h: 2rem; --badge-px: 0.5rem; }
-.glim-badge--heading {
-  --badge-h: 22px;
-  --badge-px: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-.glim-badge--wrap {
-  height: auto;
-  min-height: var(--badge-h);
-  padding-block: 0.125rem;
-  line-height: 1.25;
-  overflow-wrap: break-word;
-}
-.glim-badge--icon-only {
-  padding-inline: 0;
-  aspect-ratio: 1;
-}
-
-/* warn uses the strong wash, which is meant for small chips; the plain one is
-   for panels that hold paragraphs. active is the accent-soft wash, not a solid
-   fill, because several running rows can show at once; its ink is accent-ink
-   because the flat accent measures 1.5:1 on that wash in the light theme.
-   solid is the heading's fill: any translucent accent wash reads as dimmed.
-   muted has no ground at all, for a quiet caption such as a version link. */
-.glim-badge--ok { background-color: var(--status-ok-bg); color: var(--status-ok-text); }
-.glim-badge--fail { background-color: var(--status-fail-bg); color: var(--status-fail-text); }
-.glim-badge--warn { background-color: var(--status-warn-bg-strong); color: var(--status-warn-text); }
-.glim-badge--active { background-color: var(--accent-soft); color: var(--accent-ink); }
-.glim-badge--neutral { background-color: var(--carbon-surface2); color: var(--carbon-text-sub); }
-.glim-badge--solid { background-color: var(--accent); color: var(--accent-contrast); }
-.glim-badge--muted { color: var(--carbon-text-muted); }
-
-/* The heading notch centres on the card's top edge at any height: a
-   percentage resolves against the badge's own height, where a fixed -11px
-   would bury the card's first line once a heading wraps. Without a start
-   offset it sits at its static position, which is direction-aware. It takes
-   the elevation without the hairline, which belongs to a surface's own edge,
-   and z-index only has to clear its own card's content. */
-.glim-badge--notch { box-shadow: var(--elevation); }
-.glim-badge--notch-placed {
-  position: absolute;
-  top: 0;
-  z-index: 10;
-  translate: 0 -50%;
-}
-.glim-badge--inset-4 { inset-inline-start: 1rem; }
-.glim-badge--inset-5 { inset-inline-start: 1.25rem; }
-.glim-badge--inset-6 { inset-inline-start: 1.5rem; }
-
-/* A badge that acts hovers by a colour step; `opacity` would let the card
-   show through. A wash steps toward its own ink, read where the badge sits,
-   so a hued badge steps from its hue. Neutral and muted take the tint of
-   `.glim-btn-subtle` and `.glim-btn-bare` instead. */
-.glim-badge-action {
-  appearance: none;
-  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1), color 150ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-.glim-badge-action:disabled {
-  pointer-events: none;
-  opacity: 0.5;
-}
-@media (hover: hover) {
-  .glim-badge-action.glim-badge--ok:hover { background-color: color-mix(in srgb, var(--status-ok-bg), var(--status-ok-text) 12%); }
-  .glim-badge-action.glim-badge--fail:hover { background-color: color-mix(in srgb, var(--status-fail-bg), var(--status-fail-text) 12%); }
-  .glim-badge-action.glim-badge--warn:hover { background-color: color-mix(in srgb, var(--status-warn-bg-strong), var(--status-warn-text) 12%); }
-  .glim-badge-action.glim-badge--active:hover { background-color: color-mix(in srgb, var(--accent-soft), var(--accent) 12%); }
-  .glim-badge-action.glim-badge--solid:hover { background-color: var(--accent-hover); }
 }
 
 /* The "(i)" inside a filled accent badge, such as a card heading, takes the
@@ -2948,422 +2716,666 @@ body {
 }
 .glim-info-icon:focus { opacity: 1; }
 
-/* A card (Card): the surface a section sits on, and the one place a section
-   heading is drawn. It is `relative` so the heading notch resolves against it.
-   A nested card drops its surface and side padding but keeps its top padding,
-   which the notch pokes into. */
-.glim-panel {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding: 1.25rem;
-  border-radius: var(--radius-card);
-  background-color: var(--carbon-surface);
-}
-.glim-panel--nested {
-  padding: 1.25rem 0 0;
-  border-radius: 0;
-  background-color: transparent;
-}
-.glim-panel-heading {
-  display: flex;
-  align-items: center;
-  margin: 0;
-  font-size: inherit;
-  font-weight: inherit;
-}
+/* The backdrop's layout, its window's parts and every component's own
+   classes sit in the `components` layer. Without Tailwind that changes
+   nothing; under Tailwind an app's utilities on the same element, such as
+   a wider `max-w-*` on a window, still win. */
+@layer components {
+  .glim-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
 
-/* What stands in place of a control the environment forbids
-   (UnavailableNotice). A paragraph, because there is no control to hang an
-   info bubble off. */
-.glim-notice {
-  padding: 0.75rem 1rem;
-  border-radius: var(--radius-card);
-  background-color: var(--status-warn-bg-soft);
-}
-.glim-notice-title,
-.glim-notice-reason {
-  margin: 0;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-}
-.glim-notice-title {
-  font-weight: 500;
-  color: var(--carbon-text);
-}
-.glim-notice-reason {
-  margin-top: 0.25rem;
-  color: var(--carbon-text-sub);
-}
-.glim-notice-action { margin-top: 0.75rem; }
+  /* The window on the scrim: a head with the title notch and, where there is
+     one, the close button; a body that scrolls on its own; and a foot with the
+     actions, forward on the right. The card is `relative` and does not scroll,
+     so the notch straddling its top edge is not clipped. */
+  .glim-modal-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 28rem;
+    max-height: 85vh;
+    border-radius: var(--radius-card);
+    background-color: var(--carbon-surface);
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  }
+  .glim-modal-card--wide { max-width: 32rem; }
+  /* A window around an embedded page keeps one height while the page loads. */
+  .glim-modal-card--tall {
+    height: calc(100vh - 7rem);
+    max-height: none;
+  }
+  .glim-modal-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+  }
+  .glim-modal-title {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    font-size: inherit;
+    font-weight: inherit;
+  }
+  .glim-modal-close { flex-shrink: 0; }
+  .glim-modal-body {
+    flex: 1 1 0%;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 1rem 1.25rem;
+  }
+  .glim-modal-text {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.625;
+    color: var(--carbon-text-sub);
+    overflow-wrap: break-word;
+  }
+  .glim-modal-extra {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+  .glim-modal-foot {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+  }
 
-/* The three ways to give (CoffeeDialog, PaypalDialog, CryptoDonateDialog) sit
-   in a `.glim-modal-card` with a body and a foot of their own: the appeal and
-   the intro, then what the donor picks. */
-.glim-give-body {
-  display: flex;
-  flex: 1 1 0%;
-  flex-direction: column;
-  gap: 1rem;
-  min-height: 0;
-  padding: 0 1.25rem 1.25rem;
-}
-.glim-give-body--scroll { overflow-y: auto; }
-.glim-give-appeal,
-.glim-give-intro,
-.glim-give-status {
-  margin: 0;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-}
-.glim-give-appeal { color: var(--carbon-text); }
-.glim-give-intro { color: var(--carbon-text-sub); }
-.glim-give-status--ok { color: var(--status-ok-text); }
-.glim-give-status--fail { color: var(--status-fail-text); }
-.glim-give-foot {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
-  padding: 0 1.25rem 1.25rem;
-}
+  /* The fills a button can take (ButtonTone). `ok`, `danger` and `warn` put the
+     solid status tokens under the ground's ink: in both themes the solid values
+     sit at the opposite lightness to the ground, so one ink reads on both.
 
-/* Buy Me a Coffee's page in a frame. White behind it, so the first paint is
-   not a dark hole on the dark theme; the page is light either way. */
-.glim-give-frame {
-  display: flex;
-  flex: 1 1 0%;
-  min-height: 0;
-  padding: 0.5rem;
-  border-radius: var(--radius-card);
-  background-color: var(--carbon-surface2);
-}
-.glim-give-iframe {
-  flex: 1 1 0%;
-  width: 100%;
-  min-height: 0;
-  border: 0;
-  border-radius: var(--radius-control);
-  background-color: white;
-}
+     Filled tones hover up their own ramp (rule 21). `--carbon-hover` is for
+     controls with no fill, and on the dark ramp it is darker than surface2. The
+     accent and status fills have no ramp, so each steps toward the theme's text
+     colour; `opacity` would let the card show through and move the other way.
+     The tint above outranks these, so a surface tone still takes it. */
+  .glim-btn--accent { background-color: var(--accent); color: var(--accent-contrast); }
+  .glim-btn--neutral { background-color: var(--carbon-surface3); color: var(--carbon-text); }
+  .glim-btn--subtle { background-color: var(--carbon-surface2); color: var(--carbon-text); }
+  .glim-btn--ok { background-color: var(--status-ok-solid); color: var(--carbon-bg); }
+  .glim-btn--danger { background-color: var(--status-fail-solid); color: var(--carbon-bg); }
+  .glim-btn--warn { background-color: var(--status-warn-solid); color: var(--carbon-bg); }
+  @media (hover: hover) {
+    .glim-btn--accent:hover { background-color: var(--accent-hover); }
+    .glim-btn--neutral:hover { background-color: var(--carbon-hover-raised); }
+    .glim-btn--subtle:hover { background-color: var(--carbon-surface3); }
+    .glim-btn--ok:hover { background-color: var(--status-ok-hover); }
+    .glim-btn--danger:hover { background-color: var(--status-fail-hover); }
+    .glim-btn--warn:hover { background-color: var(--status-warn-hover); }
+  }
 
-/* PayPal: how often and how much in house controls, then PayPal's buttons. */
-.glim-give-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.375rem;
-}
-.glim-give-amounts {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.5rem;
-}
-.glim-give-amounts > :first-child { align-self: stretch; }
-.glim-give-amount {
-  box-sizing: border-box;
-  width: 9rem;
-  height: 2.25rem;
-  padding-inline: 0.625rem;
-  border: 1px solid var(--carbon-border);
-  border-radius: var(--radius-control);
-  background-color: var(--carbon-surface);
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  color: var(--carbon-text);
-}
-.glim-give-amount--valid { border-color: var(--accent); }
-/* PayPal's buttons are cross-origin frames drawn light; under the dark scheme
-   the browser would paint them an opaque white strip, so their box declares
-   the light scheme. The space above separates PayPal's controls from ours. */
-.glim-give-wallet {
-  min-height: 7rem;
-  margin-top: 1rem;
-  color-scheme: light;
-}
-.glim-give-loading {
-  margin: 0;
-  padding-block: 0.5rem;
-  text-align: center;
-  font-size: 0.75rem;
-  line-height: 1rem;
-  color: var(--carbon-text-muted);
-}
-
-/* Crypto: the address of the chosen chain in a well, its chains under it, and
-   the coins as tiles, since a coin is recognised by its mark faster than its
-   name is read. */
-.glim-give-well {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1rem;
-  border-radius: var(--radius-card);
-  background-color: var(--carbon-surface2);
-}
-.glim-give-address {
-  width: 100%;
-  margin: 0;
-  word-break: break-all;
-  text-align: center;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 0.75rem;
-  line-height: 1rem;
-  color: var(--carbon-text);
-}
-.glim-give-networks {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.5rem;
-}
-.glim-give-network {
-  padding: 0.25rem 0.75rem;
-  border-radius: var(--radius-pill);
-  background-color: var(--carbon-surface3);
-  font-size: 0.75rem;
-  font-weight: 500;
-  line-height: 1rem;
-  color: var(--carbon-text-sub);
-  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1), color 150ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-.glim-give-network.glim-active {
-  background-color: var(--accent);
-  color: var(--accent-contrast);
-}
-/* Warn-coloured so a donor looking for a memo or destination tag finds it
-   next to the address. */
-.glim-give-note {
-  margin: 0;
-  text-align: center;
-  font-size: 0.75rem;
-  line-height: 1rem;
-  color: var(--status-warn-text);
-}
-.glim-give-coins {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.5rem;
-}
-.glim-give-coin {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.75rem 0.5rem;
-  border-radius: var(--radius-control);
-  background-color: var(--carbon-surface2);
-  color: var(--carbon-text-sub);
-}
-.glim-give-coin.glim-active,
-.glim-give-coin--plain {
-  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1), color 150ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-.glim-give-coin.glim-active {
-  background-color: var(--accent);
-  color: var(--accent-contrast);
-}
-.glim-give-ticker {
-  font-size: 0.75rem;
-  font-weight: 500;
-  line-height: 1rem;
-}
-@media (hover: hover) {
-  .glim-give-network:not(.glim-active):hover {
-    background-color: var(--carbon-hover-raised);
+  /* The switch (Toggle). It is never a checkbox (rule 23). The thumb reads the
+     same `--radius-pill` as the track so both reshape together, and at "round"
+     it stays a circle. The focus ring sits 2px out, on the card surface its 3:1
+     contrast was measured against. */
+  .glim-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .glim-toggle-label {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
     color: var(--carbon-text);
   }
-  .glim-give-coin--plain:hover {
+  .glim-toggle-track {
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    width: 2.25rem;
+    height: 1.25rem;
+    border-radius: var(--radius-pill);
     background-color: var(--carbon-surface3);
+    transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .glim-toggle-track[aria-checked="true"] { background-color: var(--accent); }
+  .glim-toggle-track:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+  .glim-toggle-track:disabled { opacity: 0.5; }
+  .glim-toggle-thumb {
+    display: inline-block;
+    width: 0.875rem;
+    height: 0.875rem;
+    border-radius: var(--radius-pill);
+    background-color: var(--carbon-bg);
+    translate: 3px 0;
+    transition: translate 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .glim-toggle-track[aria-checked="true"] .glim-toggle-thumb { translate: 18px 0; }
+  /* The flex track already mirrors the thumb's rest position under RTL, so the
+     shift turns round with it. */
+  .glim-toggle-thumb:dir(rtl) { translate: -3px 0; }
+  .glim-toggle-track[aria-checked="true"] .glim-toggle-thumb:dir(rtl) { translate: -18px 0; }
+
+  /* The badge (badgeClassName in packages/core/src/badge.ts). The size stage
+     sets the height and the inline padding together; `--wrap` turns the height
+     into a floor so a second line grows the box. As a button or a link it keeps
+     the box of a span: no native chrome, padding inside the height, and no
+     stretching from a flex or grid parent. */
+  .glim-badge {
+    display: inline-flex;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    height: var(--badge-h);
+    min-height: 0;
+    padding-inline: var(--badge-px);
+    border-radius: var(--radius-pill);
+    font-size: var(--text-meta);
+    font-weight: 500;
+    line-height: 1;
+  }
+  .glim-badge--small { --badge-h: 18px; --badge-px: 0.375rem; }
+  .glim-badge--medium { --badge-h: 1.25rem; --badge-px: 0.5rem; }
+  .glim-badge--large { --badge-h: 1.5rem; --badge-px: 0.625rem; }
+  .glim-badge--icon { --badge-h: 2rem; --badge-px: 0.5rem; }
+  .glim-badge--heading {
+    --badge-h: 22px;
+    --badge-px: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .glim-badge--wrap {
+    height: auto;
+    min-height: var(--badge-h);
+    padding-block: 0.125rem;
+    line-height: 1.25;
+    overflow-wrap: break-word;
+  }
+  .glim-badge--icon-only {
+    padding-inline: 0;
+    aspect-ratio: 1;
+  }
+
+  /* warn uses the strong wash, which is meant for small chips; the plain one is
+     for panels that hold paragraphs. active is the accent-soft wash, not a solid
+     fill, because several running rows can show at once; its ink is accent-ink
+     because the flat accent measures 1.5:1 on that wash in the light theme.
+     solid is the heading's fill: any translucent accent wash reads as dimmed.
+     muted has no ground at all, for a quiet caption such as a version link. */
+  .glim-badge--ok { background-color: var(--status-ok-bg); color: var(--status-ok-text); }
+  .glim-badge--fail { background-color: var(--status-fail-bg); color: var(--status-fail-text); }
+  .glim-badge--warn { background-color: var(--status-warn-bg-strong); color: var(--status-warn-text); }
+  .glim-badge--active { background-color: var(--accent-soft); color: var(--accent-ink); }
+  .glim-badge--neutral { background-color: var(--carbon-surface2); color: var(--carbon-text-sub); }
+  .glim-badge--solid { background-color: var(--accent); color: var(--accent-contrast); }
+  .glim-badge--muted { color: var(--carbon-text-muted); }
+
+  /* The heading notch centres on the card's top edge at any height: a
+     percentage resolves against the badge's own height, where a fixed -11px
+     would bury the card's first line once a heading wraps. Without a start
+     offset it sits at its static position, which is direction-aware. It takes
+     the elevation without the hairline, which belongs to a surface's own edge,
+     and z-index only has to clear its own card's content. */
+  .glim-badge--notch { box-shadow: var(--elevation); }
+  .glim-badge--notch-placed {
+    position: absolute;
+    top: 0;
+    z-index: 10;
+    translate: 0 -50%;
+  }
+  .glim-badge--inset-4 { inset-inline-start: 1rem; }
+  .glim-badge--inset-5 { inset-inline-start: 1.25rem; }
+  .glim-badge--inset-6 { inset-inline-start: 1.5rem; }
+
+  /* A badge that acts hovers by a colour step; `opacity` would let the card
+     show through. A wash steps toward its own ink, read where the badge sits,
+     so a hued badge steps from its hue. Neutral and muted take the tint of
+     `.glim-btn-subtle` and `.glim-btn-bare` instead. */
+  .glim-badge-action {
+    appearance: none;
+    transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1), color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .glim-badge-action:disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+  @media (hover: hover) {
+    .glim-badge-action.glim-badge--ok:hover { background-color: color-mix(in srgb, var(--status-ok-bg), var(--status-ok-text) 12%); }
+    .glim-badge-action.glim-badge--fail:hover { background-color: color-mix(in srgb, var(--status-fail-bg), var(--status-fail-text) 12%); }
+    .glim-badge-action.glim-badge--warn:hover { background-color: color-mix(in srgb, var(--status-warn-bg-strong), var(--status-warn-text) 12%); }
+    .glim-badge-action.glim-badge--active:hover { background-color: color-mix(in srgb, var(--accent-soft), var(--accent) 12%); }
+    .glim-badge-action.glim-badge--solid:hover { background-color: var(--accent-hover); }
+  }
+
+
+  /* A card (Card): the surface a section sits on, and the one place a section
+     heading is drawn. It is `relative` so the heading notch resolves against it.
+     A nested card drops its surface and side padding but keeps its top padding,
+     which the notch pokes into. */
+  .glim-panel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem;
+    border-radius: var(--radius-card);
+    background-color: var(--carbon-surface);
+  }
+  .glim-panel--nested {
+    padding: 1.25rem 0 0;
+    border-radius: 0;
+    background-color: transparent;
+  }
+  .glim-panel-heading {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    font-size: inherit;
+    font-weight: inherit;
+  }
+
+  /* What stands in place of a control the environment forbids
+     (UnavailableNotice). A paragraph, because there is no control to hang an
+     info bubble off. */
+  .glim-notice {
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-card);
+    background-color: var(--status-warn-bg-soft);
+  }
+  .glim-notice-title,
+  .glim-notice-reason {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+  .glim-notice-title {
+    font-weight: 500;
     color: var(--carbon-text);
   }
-}
+  .glim-notice-reason {
+    margin-top: 0.25rem;
+    color: var(--carbon-text-sub);
+  }
+  .glim-notice-action { margin-top: 0.75rem; }
 
-/* The toast stack (ToastViewport) in the bottom-end corner, which follows the
-   writing direction. It never blocks the page: the stack takes no pointer and
-   each card turns it back on. The inset is padding inside the box rather than
-   an offset of it, because `overflow-y: auto` also clips horizontally and
-   would cut off the cards' shadows and the sideways slide of their entrance. */
-.glim-toast-stack {
-  position: fixed;
-  bottom: 0;
-  inset-inline-end: 0;
-  z-index: 70;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  max-height: 100vh;
-  overflow-y: auto;
-  padding: 1rem;
-  pointer-events: none;
-}
-.glim-toast-card {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.625rem;
-  width: 20rem;
-  max-width: calc(100vw - 2rem);
-  padding: 0.75rem 0.875rem;
-  border-radius: var(--radius-card);
-  background-color: var(--carbon-surface);
-  color: var(--carbon-text);
-  pointer-events: auto;
-}
-/* Severity shows only in the glyph's state hue (rule 4), never as a coloured
-   rail on the card (rule 5). */
-.glim-toast-glyph {
-  flex-shrink: 0;
-  margin-top: 0.125rem;
-}
-.glim-toast-glyph--success { color: var(--status-ok-solid); }
-.glim-toast-glyph--warn { color: var(--status-warn-solid); }
-.glim-toast-glyph--fail { color: var(--status-fail-solid); }
-.glim-toast-message {
-  flex: 1 1 0%;
-  min-width: 0;
-  margin: 0;
-  font-size: 0.875rem;
-  line-height: 1.375;
-  overflow-wrap: break-word;
-}
-.glim-toast-dismiss {
-  flex-shrink: 0;
-  margin: -0.25rem;
-  padding: 0.25rem;
-  border-radius: var(--radius-pill);
-  color: var(--carbon-text-muted);
-  opacity: 0.8;
-}
-.glim-toast-dismiss:focus-visible { opacity: 1; }
-@media (hover: hover) {
-  .glim-toast-dismiss:hover { opacity: 1; }
-}
+  /* The three ways to give (CoffeeDialog, PaypalDialog, CryptoDonateDialog) sit
+     in a `.glim-modal-card` with a body and a foot of their own: the appeal and
+     the intro, then what the donor picks. */
+  .glim-give-body {
+    display: flex;
+    flex: 1 1 0%;
+    flex-direction: column;
+    gap: 1rem;
+    min-height: 0;
+    padding: 0 1.25rem 1.25rem;
+  }
+  .glim-give-body--scroll { overflow-y: auto; }
+  .glim-give-appeal,
+  .glim-give-intro,
+  .glim-give-status {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+  .glim-give-appeal { color: var(--carbon-text); }
+  .glim-give-intro { color: var(--carbon-text-sub); }
+  .glim-give-status--ok { color: var(--status-ok-text); }
+  .glim-give-status--fail { color: var(--status-fail-text); }
+  .glim-give-foot {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding: 0 1.25rem 1.25rem;
+  }
 
-/* The busy spinner in place of a button's glyph. */
-.glim-spinner {
-  display: inline-block;
-  width: 0.875rem;
-  height: 0.875rem;
-  border: 2px solid currentColor;
-  border-top-color: transparent;
-  border-radius: 9999px;
-  animation: glim-spin 1s linear infinite;
-}
-@keyframes glim-spin {
-  to { transform: rotate(360deg); }
-}
+  /* Buy Me a Coffee's page in a frame. White behind it, so the first paint is
+     not a dark hole on the dark theme; the page is light either way. */
+  .glim-give-frame {
+    display: flex;
+    flex: 1 1 0%;
+    min-height: 0;
+    padding: 0.5rem;
+    border-radius: var(--radius-card);
+    background-color: var(--carbon-surface2);
+  }
+  .glim-give-iframe {
+    flex: 1 1 0%;
+    width: 100%;
+    min-height: 0;
+    border: 0;
+    border-radius: var(--radius-control);
+    background-color: white;
+  }
 
-/* The marks the components draw (MARKS) never give way in a flex row. */
-.glim-mark { flex-shrink: 0; }
+  /* PayPal: how often and how much in house controls, then PayPal's buttons. */
+  .glim-give-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+  .glim-give-amounts {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+  }
+  .glim-give-amounts > :first-child { align-self: stretch; }
+  .glim-give-amount {
+    box-sizing: border-box;
+    width: 9rem;
+    height: 2.25rem;
+    padding-inline: 0.625rem;
+    border: 1px solid var(--carbon-border);
+    border-radius: var(--radius-control);
+    background-color: var(--carbon-surface);
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: var(--carbon-text);
+  }
+  .glim-give-amount--valid { border-color: var(--accent); }
+  /* PayPal's buttons are cross-origin frames drawn light; under the dark scheme
+     the browser would paint them an opaque white strip, so their box declares
+     the light scheme. The space above separates PayPal's controls from ours. */
+  .glim-give-wallet {
+    min-height: 7rem;
+    margin-top: 1rem;
+    color-scheme: light;
+  }
+  .glim-give-loading {
+    margin: 0;
+    padding-block: 0.5rem;
+    text-align: center;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: var(--carbon-text-muted);
+  }
 
-/* A disabled control with a tip sits in this box, since a disabled <button>
-   emits no mouse events. */
-.glim-tip-wrap { display: inline-flex; }
+  /* Crypto: the address of the chosen chain in a well, its chains under it, and
+     the coins as tiles, since a coin is recognised by its mark faster than its
+     name is read. */
+  .glim-give-well {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-radius: var(--radius-card);
+    background-color: var(--carbon-surface2);
+  }
+  .glim-give-address {
+    width: 100%;
+    margin: 0;
+    word-break: break-all;
+    text-align: center;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: var(--carbon-text);
+  }
+  .glim-give-networks {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  .glim-give-network {
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-pill);
+    background-color: var(--carbon-surface3);
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1rem;
+    color: var(--carbon-text-sub);
+    transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1), color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .glim-give-network.glim-active {
+    background-color: var(--accent);
+    color: var(--accent-contrast);
+  }
+  /* Warn-coloured so a donor looking for a memo or destination tag finds it
+     next to the address. */
+  .glim-give-note {
+    margin: 0;
+    text-align: center;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: var(--status-warn-text);
+  }
+  .glim-give-coins {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+  .glim-give-coin {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.75rem 0.5rem;
+    border-radius: var(--radius-control);
+    background-color: var(--carbon-surface2);
+    color: var(--carbon-text-sub);
+  }
+  .glim-give-coin.glim-active,
+  .glim-give-coin--plain {
+    transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1), color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .glim-give-coin.glim-active {
+    background-color: var(--accent);
+    color: var(--accent-contrast);
+  }
+  .glim-give-ticker {
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1rem;
+  }
+  @media (hover: hover) {
+    .glim-give-network:not(.glim-active):hover {
+      background-color: var(--carbon-hover-raised);
+      color: var(--carbon-text);
+    }
+    .glim-give-coin--plain:hover {
+      background-color: var(--carbon-surface3);
+      color: var(--carbon-text);
+    }
+  }
 
-/* Words a screen reader reads and the screen does not show, such as a
-   button's label in glyph mode. */
-.glim-sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-  border-width: 0;
-}
+  /* The toast stack (ToastViewport) in the bottom-end corner, which follows the
+     writing direction. It never blocks the page: the stack takes no pointer and
+     each card turns it back on. The inset is padding inside the box rather than
+     an offset of it, because `overflow-y: auto` also clips horizontally and
+     would cut off the cards' shadows and the sideways slide of their entrance. */
+  .glim-toast-stack {
+    position: fixed;
+    bottom: 0;
+    inset-inline-end: 0;
+    z-index: 70;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 100vh;
+    overflow-y: auto;
+    padding: 1rem;
+    pointer-events: none;
+  }
+  .glim-toast-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+    width: 20rem;
+    max-width: calc(100vw - 2rem);
+    padding: 0.75rem 0.875rem;
+    border-radius: var(--radius-card);
+    background-color: var(--carbon-surface);
+    color: var(--carbon-text);
+    pointer-events: auto;
+  }
+  /* Severity shows only in the glyph's state hue (rule 4), never as a coloured
+     rail on the card (rule 5). */
+  .glim-toast-glyph {
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+  }
+  .glim-toast-glyph--success { color: var(--status-ok-solid); }
+  .glim-toast-glyph--warn { color: var(--status-warn-solid); }
+  .glim-toast-glyph--fail { color: var(--status-fail-solid); }
+  .glim-toast-message {
+    flex: 1 1 0%;
+    min-width: 0;
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.375;
+    overflow-wrap: break-word;
+  }
+  .glim-toast-dismiss {
+    flex-shrink: 0;
+    margin: -0.25rem;
+    padding: 0.25rem;
+    border-radius: var(--radius-pill);
+    color: var(--carbon-text-muted);
+    opacity: 0.8;
+  }
+  .glim-toast-dismiss:focus-visible { opacity: 1; }
+  @media (hover: hover) {
+    .glim-toast-dismiss:hover { opacity: 1; }
+  }
 
-/* The slider and the combobox lay out their label above the control. A
-   slider's value in words stands beside its label. */
-.glim-slider {
-  display: grid;
-  gap: 0.625rem;
-  min-width: 0;
-}
-.glim-slider-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.75rem;
-}
-.glim-combobox {
-  display: grid;
-  gap: 0.375rem;
-  min-width: 0;
-}
-/* Zag's positioner places the open list; it only has to clear the page. */
-.glim-select-positioner { z-index: 50; }
+  /* The busy spinner in place of a button's glyph. */
+  .glim-spinner {
+    display: inline-block;
+    width: 0.875rem;
+    height: 0.875rem;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 9999px;
+    animation: glim-spin 1s linear infinite;
+  }
+  @keyframes glim-spin {
+    to { transform: rotate(360deg); }
+  }
 
-/* The list panel of the deprecated DropdownListbox, portalled to <body>. */
-.glim-listbox {
-  position: fixed;
-  z-index: 50;
-  max-height: 15rem;
-  overflow-y: auto;
-  border-radius: var(--radius-card);
-  background-color: var(--carbon-surface);
-  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-  scrollbar-color: var(--carbon-border) transparent;
-}
+  /* The marks the components draw (MARKS) never give way in a flex row. */
+  .glim-mark { flex-shrink: 0; }
 
-/* The Info tile (InfoTile in AboutCard): the Version card's rows, each the
-   name of a part on the start side and its number on the end side, and the
-   sentences of the Help and About cards. */
-.glim-info-text {
-  margin: 0;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  color: var(--carbon-text-sub);
-}
-.glim-version-rows {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.glim-version-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-}
-.glim-version-name {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-.glim-version-part {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  color: var(--carbon-text);
-}
-.glim-version-sub {
-  font-size: var(--text-subline);
-  line-height: 1.5;
-  color: var(--carbon-text-muted);
-}
-.glim-version-number {
-  flex-shrink: 0;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  color: var(--carbon-text-sub);
-  text-decoration: none;
-}
-@media (hover: hover) {
-  a.glim-version-number:hover { color: var(--carbon-text); }
-}
-.glim-version-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: flex-end;
-  gap: 0.75rem;
-}
+  /* A disabled control with a tip sits in this box, since a disabled <button>
+     emits no mouse events. */
+  .glim-tip-wrap { display: inline-flex; }
 
-/* A brand mark's SVG stands in its parent's box as if it were the parent's
-   own child. */
-.glim-brand-svg { display: contents; }
+  /* Words a screen reader reads and the screen does not show, such as a
+     button's label in glyph mode. */
+  .glim-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  /* The slider and the combobox lay out their label above the control. A
+     slider's value in words stands beside its label. */
+  .glim-slider {
+    display: grid;
+    gap: 0.625rem;
+    min-width: 0;
+  }
+  .glim-slider-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+  .glim-combobox {
+    display: grid;
+    gap: 0.375rem;
+    min-width: 0;
+  }
+  /* Zag's positioner places the open list; it only has to clear the page. */
+  .glim-select-positioner { z-index: 50; }
+
+  /* The list panel of the deprecated DropdownListbox, portalled to <body>. */
+  .glim-listbox {
+    position: fixed;
+    z-index: 50;
+    max-height: 15rem;
+    overflow-y: auto;
+    border-radius: var(--radius-card);
+    background-color: var(--carbon-surface);
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    scrollbar-color: var(--carbon-border) transparent;
+  }
+
+  /* The Info tile (InfoTile in AboutCard): the Version card's rows, each the
+     name of a part on the start side and its number on the end side, and the
+     sentences of the Help and About cards. */
+  .glim-info-text {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: var(--carbon-text-sub);
+  }
+  .glim-version-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .glim-version-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .glim-version-name {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .glim-version-part {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: var(--carbon-text);
+  }
+  .glim-version-sub {
+    font-size: var(--text-subline);
+    line-height: 1.5;
+    color: var(--carbon-text-muted);
+  }
+  .glim-version-number {
+    flex-shrink: 0;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: var(--carbon-text-sub);
+    text-decoration: none;
+  }
+  @media (hover: hover) {
+    a.glim-version-number:hover { color: var(--carbon-text); }
+  }
+  .glim-version-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: 0.75rem;
+  }
+
+  /* A brand mark's SVG stands in its parent's box as if it were the parent's
+     own child. */
+  .glim-brand-svg { display: contents; }
+
+  .glim-readme-btn-hint { color: var(--carbon-text-sub); }
+}

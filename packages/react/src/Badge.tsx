@@ -9,7 +9,7 @@
 
 import type { CSSProperties, ReactNode } from "react";
 import { badgeClassName, hueVars, type BadgeShape, type BadgeSize, type BadgeTone, type NotchInset } from "@glimstone/core";
-import { IconTipButton } from "./IconTipButton";
+import { IconTipButton } from "./IconTipButton.tsx";
 
 export type { BadgeShape, BadgeSize, BadgeTone, NotchInset } from "@glimstone/core";
 

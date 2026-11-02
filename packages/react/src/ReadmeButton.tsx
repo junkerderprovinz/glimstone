@@ -7,7 +7,7 @@ import {
   type ReadmeBrand,
   type ReadmePart,
 } from "@glimstone/core";
-import { InfoBubble } from "./InfoBubble";
+import { InfoBubble } from "./InfoBubble.tsx";
 
 // A button in the shape of the README's download buttons, on the App tab and
 // the About card ("The App tab" in design-language.md). The first part carries

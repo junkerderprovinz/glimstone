@@ -3,8 +3,9 @@
 // a palette handed out by position. All of it is applied to the document root,
 // so every component picks it up through the tokens it already reads.
 //
-// The file has no framework dependency, since an adopting app copies it whole;
-// a React app wraps it in a small hook.
+// It has no framework dependency; the React and Vue packages wrap it.
+
+import { storageKey } from './storage.ts';
 
 /**
  * The corner shapes. Like the motion levels these strings are a wire format:
@@ -380,9 +381,7 @@ function luminance(r: number, g: number, b: number): number {
 }
 
 // Appearance is mirrored into localStorage only so the first paint after a
-// reload is right; wherever settings live stays the source of truth. Each app
-// should use its own key.
-const CACHE = 'glim-appearance';
+// reload is right; wherever settings live stays the source of truth.
 
 interface Cached {
   shape?: string;
@@ -395,7 +394,7 @@ export function cacheAppearance(shape: string, accent: string, rainbow?: Rainbow
     // The conditional spread omits the key under exactOptionalPropertyTypes
     // instead of storing it as undefined.
     const payload: Cached = { shape, accent, ...(rainbow !== undefined ? { rainbow } : {}) };
-    localStorage.setItem(CACHE, JSON.stringify(payload));
+    localStorage.setItem(storageKey('appearance'), JSON.stringify(payload));
   } catch {
     // With storage disabled the default look flashes once per load.
   }
@@ -404,7 +403,7 @@ export function cacheAppearance(shape: string, accent: string, rainbow?: Rainbow
 /** Applied at boot, before the app renders anything. */
 export function applyCachedAppearance(): void {
   try {
-    const raw = localStorage.getItem(CACHE);
+    const raw = localStorage.getItem(storageKey('appearance'));
     if (!raw) {
       applyShape(DEFAULT_SHAPE);
       applyRainbow(undefined);

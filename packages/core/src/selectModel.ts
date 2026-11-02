@@ -2,7 +2,7 @@
 // placement, the wheel, closing on a page move and the shake. The glyph type is
 // the framework's own, a ReactNode in React and a component in Vue.
 
-import { stepIndex } from "./selectScroll";
+import { stepIndex } from "./selectScroll.ts";
 
 export interface SelectChoice<T extends string = string, G = unknown> {
   value: T;

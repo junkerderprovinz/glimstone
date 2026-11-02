@@ -58,6 +58,34 @@ export const MARKS = {
     size: 16,
     body: '<path fill-rule="evenodd" clip-rule="evenodd" d="M2.5 3h6A2.5 2.5 0 0 1 11 5.5v6A2.5 2.5 0 0 1 8.5 14h-6A2.5 2.5 0 0 1 0 11.5v-6A2.5 2.5 0 0 1 2.5 3Zm0 2a.5.5 0 0 0-.5.5v6a.5.5 0 0 0 .5.5h6a.5.5 0 0 0 .5-.5v-6a.5.5 0 0 0-.5-.5Z"/><path d="M5 0h6.5A2.5 2.5 0 0 1 14 2.5V9h-2V2.5a.5.5 0 0 0-.5-.5H5Z"/>',
   },
+  /** The small cross that dismisses a toast. */
+  dismiss: {
+    viewBox: "0 0 16 16",
+    size: 14,
+    body: '<rect x="6.8" y="2.5" width="2.4" height="11" rx="0.6" transform="rotate(45 8 8)"/><rect x="6.8" y="2.5" width="2.4" height="11" rx="0.6" transform="rotate(-45 8 8)"/>',
+  },
+} satisfies Record<string, Mark>;
+
+// The toast's severity as filled shapes (design-language.md, "Icon glyphs"). The
+// mark inside each is painted in the card's own surface colour so it reads as a
+// cutout.
+const CUTOUT = 'fill="var(--carbon-surface, transparent)"';
+export const TOAST_MARKS = {
+  success: {
+    viewBox: "0 0 16 16",
+    size: 16,
+    body: `<circle cx="8" cy="8" r="6.4"/><rect x="4.5" y="8.4" width="3.5" height="1.5" rx="0.75" ${CUTOUT} transform="rotate(45 6.25 9.15)"/><rect x="5.815" y="7.25" width="6.27" height="1.5" rx="0.75" ${CUTOUT} transform="rotate(-50.2 8.95 8)"/>`,
+  },
+  warn: {
+    viewBox: "0 0 16 16",
+    size: 16,
+    body: `<path d="M8 2.2 14.5 13.6H1.5L8 2.2Z"/><rect x="7.3" y="6.6" width="1.4" height="3" rx="0.7" ${CUTOUT}/><circle cx="8" cy="11.9" r="0.85" ${CUTOUT}/>`,
+  },
+  fail: {
+    viewBox: "0 0 16 16",
+    size: 16,
+    body: `<circle cx="8" cy="8" r="6.4"/><rect x="7.3" y="4.6" width="1.4" height="4" rx="0.7" ${CUTOUT}/><circle cx="8" cy="10.9" r="0.85" ${CUTOUT}/>`,
+  },
 } satisfies Record<string, Mark>;
 
 /** A mark as SVG markup, for a page that writes HTML. */

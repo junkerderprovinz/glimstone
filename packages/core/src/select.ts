@@ -8,9 +8,9 @@
 
 import * as select from '@zag-js/select';
 import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla';
-import { markSvg, MARKS } from './marks';
-import { selectRootClass, type SelectWidth } from './selectModel';
-import { enableWheelStep, stepIndex } from './selectScroll';
+import { markSvg, MARKS } from './marks.ts';
+import { selectRootClass, type SelectWidth } from './selectModel.ts';
+import { enableWheelStep, stepIndex } from './selectScroll.ts';
 
 export interface SelectOption {
   value: string;

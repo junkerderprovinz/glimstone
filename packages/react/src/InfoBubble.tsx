@@ -1,4 +1,4 @@
-import { useTipBubble } from "./useTipBubble";
+import { useTipBubble } from "./useTipBubble.tsx";
 
 // A neutral (i) icon beside a label that reveals a short help text on hover and
 // keyboard focus. Explanations live here rather than as a permanent grey

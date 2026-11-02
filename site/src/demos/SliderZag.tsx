@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Slider } from "@glimstone/react";
+import { Slider } from "@glimstone/react/Slider";
 
 export default function SliderZag() {
   const [days, setDays] = useState(30);

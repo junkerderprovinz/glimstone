@@ -25,9 +25,9 @@ import {
   type SelectSubmenu as Submenu,
   type SelectWidth,
 } from "@glimstone/core";
-import { IconCheck, IconExpand } from "./glyphs";
-import { usePortalHue, type PortalHue } from "./portalHue";
-import { useTipBubble } from "./useTipBubble";
+import { IconCheck, IconExpand } from "./glyphs.tsx";
+import { usePortalHue, type PortalHue } from "./portalHue.ts";
+import { useTipBubble } from "./useTipBubble.tsx";
 
 // The one dropdown. Zag carries the behaviour the contract asks for (typeahead,
 // Home and End, focus back on the trigger, dismissal, placement), and the

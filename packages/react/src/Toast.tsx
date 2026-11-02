@@ -1,4 +1,5 @@
-import type { ToastSeverity } from "@glimstone/core";
+import { TOAST_MARKS, MARKS, type ToastSeverity } from "@glimstone/core";
+import { MarkSvg } from "./glyphs.tsx";
 
 // The toast system's presentational half (design-language.md, "Toasts"). These
 // components hold no state, so a test can call them with props; the companion
@@ -26,38 +27,6 @@ export interface ToastCardProps {
 // so no separate aria-live wrapper is needed.
 function roleFor(severity: ToastSeverity): "alert" | "status" {
   return severity === "success" ? "status" : "alert";
-}
-
-// Filled shapes (design-language.md, "Icon glyphs"). The mark inside each is
-// painted in the card's own surface colour so it reads as a cutout.
-function ToastGlyph({ severity }: { severity: ToastSeverity }) {
-  const className = `glim-toast-glyph glim-toast-glyph--${severity}`;
-  const cutout = "var(--carbon-surface, transparent)";
-  if (severity === "fail") {
-    return (
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" className={className}>
-        <circle cx="8" cy="8" r="6.4" />
-        <rect x="7.3" y="4.6" width="1.4" height="4" rx="0.7" fill={cutout} />
-        <circle cx="8" cy="10.9" r="0.85" fill={cutout} />
-      </svg>
-    );
-  }
-  if (severity === "warn") {
-    return (
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" className={className}>
-        <path d="M8 2.2 14.5 13.6H1.5L8 2.2Z" />
-        <rect x="7.3" y="6.6" width="1.4" height="3" rx="0.7" fill={cutout} />
-        <circle cx="8" cy="11.9" r="0.85" fill={cutout} />
-      </svg>
-    );
-  }
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" className={className}>
-      <circle cx="8" cy="8" r="6.4" />
-      <rect x="4.5" y="8.4" width="3.5" height="1.5" rx="0.75" fill={cutout} transform="rotate(45 6.25 9.15)" />
-      <rect x="5.815" y="7.25" width="6.27" height="1.5" rx="0.75" fill={cutout} transform="rotate(-50.2 8.95 8)" />
-    </svg>
-  );
 }
 
 export function ToastCard({
@@ -88,7 +57,7 @@ export function ToastCard({
       }}
       className="glim-toast glim-toast-card"
     >
-      <ToastGlyph severity={severity} />
+      <MarkSvg mark={TOAST_MARKS[severity]} className={`glim-toast-glyph glim-toast-glyph--${severity}`} />
       <p className="glim-toast-message">{message}</p>
       <button
         type="button"
@@ -96,10 +65,7 @@ export function ToastCard({
         aria-label={dismissLabel}
         className="glim-btn-bare glim-toast-dismiss"
       >
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-          <rect x="6.8" y="2.5" width="2.4" height="11" rx="0.6" transform="rotate(45 8 8)" />
-          <rect x="6.8" y="2.5" width="2.4" height="11" rx="0.6" transform="rotate(-45 8 8)" />
-        </svg>
+        <MarkSvg mark={MARKS.dismiss} />
       </button>
     </div>
   );

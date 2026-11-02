@@ -2,8 +2,8 @@
 // design-language.md): which version is a release with a page to open, what the
 // update check shows on itself, and whether the Help card offers mail.
 
-import type { ButtonTone } from "./button";
-import { groupStage, type WidthStage } from "./controls";
+import type { ButtonTone } from "./button.ts";
+import { groupStage, type WidthStage } from "./controls.ts";
 
 export type OpenUrl = (url: string) => void;
 

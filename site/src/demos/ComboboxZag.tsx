@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Combobox } from "@glimstone/react";
+import { Combobox } from "@glimstone/react/Combobox";
 
 const CONTAINERS = [
   "audiobookshelf", "bazarr", "bombvault", "crafty", "duplicati", "filebrowser", "gitea", "grafana",

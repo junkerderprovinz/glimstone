@@ -6,8 +6,8 @@
 // BMAC offers there, card and wallet payments included. Mount the window only
 // while it is open, so nothing from BMAC loads before somebody asks for it.
 import type { Ref } from "react";
-import { Badge } from "./Badge";
-import { Button } from "./Button";
+import { Badge } from "./Badge.tsx";
+import { Button } from "./Button.tsx";
 
 export interface CoffeeDialogProps {
   /** `https://buymeacoffee.com/widget/page/<handle>` with its query. */

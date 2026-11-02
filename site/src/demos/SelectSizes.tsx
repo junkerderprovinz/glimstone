@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Select } from "@glimstone/react";
+import { Select } from "@glimstone/react/Select";
 
 const QUALITY = ["Auto", "1080p", "720p", "480p"].map((q) => ({ value: q, label: q }));
 const SCOPE = [

@@ -8,9 +8,9 @@
 // because Escape and the trap must work after focus has left this subtree.
 // `ref` (a plain prop in React 19) is the card the hook traps focus in.
 import type { ReactNode, Ref } from "react";
-import { Badge } from "./Badge";
-import { Button } from "./Button";
-import { IconCancel, IconClose } from "./glyphs";
+import { Badge } from "./Badge.tsx";
+import { Button } from "./Button.tsx";
+import { IconCancel, IconClose } from "./glyphs.tsx";
 
 export interface ConfirmDialogProps {
   /** A generic title such as "Confirm"; the call site's own text is `message`. */

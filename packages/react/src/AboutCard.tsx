@@ -12,9 +12,9 @@ import {
   type UpdateVerdict,
   type VersionRow,
 } from "@glimstone/core";
-import { Button } from "./Button";
-import { Card } from "./Card";
-import { ReadmeButton } from "./ReadmeButton";
+import { Button } from "./Button.tsx";
+import { Card } from "./Card.tsx";
+import { ReadmeButton } from "./ReadmeButton.tsx";
 
 // The Info tile, the last tile in Settings ("The Info tile and the About card"
 // in design-language.md): the Version card with every version the app is made

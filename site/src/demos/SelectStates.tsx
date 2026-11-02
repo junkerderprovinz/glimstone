@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Select } from "@glimstone/react";
+import { Select } from "@glimstone/react/Select";
 
 const BACKENDS = [
   { value: "auto", label: "Automatic" },

@@ -9,7 +9,9 @@
     "rootDir": "src",
     "outDir": "dist",
     "skipLibCheck": true,
-    "noEmitOnError": true
+    "noEmitOnError": true,
+    "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": true
   },
   "include": ["src"]
 }

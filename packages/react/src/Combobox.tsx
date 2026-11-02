@@ -1,8 +1,8 @@
 import { useId, useState } from "react";
 import * as combobox from "@zag-js/combobox";
 import { normalizeProps, Portal, useMachine } from "@zag-js/react";
-import { IconCheck, IconExpand } from "./glyphs";
-import type { SelectOption } from "./Select";
+import { IconCheck, IconExpand } from "./glyphs.tsx";
+import type { SelectOption } from "./Select.tsx";
 
 // A field that filters a list while somebody types, for lists too long for a
 // Select: containers, time zones, languages. Focus stays in the field while

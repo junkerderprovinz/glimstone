@@ -2,7 +2,7 @@
 // redefines `--accent` for its subtree. A panel rendered into <body> leaves
 // that subtree, so without this it falls back to the global accent while the
 // control that opened it wears its card's hue.
-import { hueVars } from "./appearance";
+import { hueVars } from "./appearance.ts";
 
 // Read off hueVars() so the list cannot drift from the properties it writes.
 // Any index yields the same keys.

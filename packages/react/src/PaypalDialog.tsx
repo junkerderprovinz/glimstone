@@ -9,8 +9,8 @@
 // selection, Escape and the portal, and passes its own horizontal selector in.
 import type { ReactNode, Ref, RefObject } from "react";
 import type { GiveFrequency } from "@glimstone/core";
-import { Badge } from "./Badge";
-import { Button } from "./Button";
+import { Badge } from "./Badge.tsx";
+import { Button } from "./Button.tsx";
 
 export interface SelectorProps {
   labelledBy: string;

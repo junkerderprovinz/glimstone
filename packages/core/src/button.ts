@@ -8,8 +8,8 @@
 // tooltip; and the colour engine position. A button without a glyph shows its
 // text in every mode, since a row of blank squares cannot be identified.
 
-import { hueVars } from "./appearance";
-import { hidesLabel, labelWidth, widthStage, type LabelMode, type WidthStage } from "./controls";
+import { hueVars } from "./appearance.ts";
+import { hidesLabel, labelWidth, widthStage, type LabelMode, type WidthStage } from "./controls.ts";
 
 const STAGE_CLASS: Record<WidthStage, string> = {
   xs: "glim-btn-xs",

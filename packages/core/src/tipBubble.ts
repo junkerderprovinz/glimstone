@@ -3,7 +3,7 @@
 // bubble"). The framework owns the open state and renders the bubble into
 // <body>; these place it and close it again.
 
-import { computeBubblePosition } from "./bubblePosition";
+import { computeBubblePosition } from "./bubblePosition.ts";
 
 /**
  * Places a rendered bubble against its trigger. Call it after the bubble

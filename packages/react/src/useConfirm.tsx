@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
 import { createPortal } from "react-dom";
 import { focusedAsker, returnFocus, trapDialogKeys } from "@glimstone/core";
-import { ConfirmDialog } from "./ConfirmDialog";
+import { ConfirmDialog } from "./ConfirmDialog.tsx";
 
 // useConfirm replaces window.confirm() with ConfirmDialog, keeping the
 // one-question-in, boolean-out shape, only async:

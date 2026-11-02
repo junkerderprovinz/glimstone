@@ -12,9 +12,9 @@
 // brand; without them the window shows the address, a copy button and tickers.
 import type { CSSProperties, ReactNode, Ref } from "react";
 import { hueVars } from "@glimstone/core";
-import { Badge } from "./Badge";
-import { Button } from "./Button";
-import { useLabelMode } from "./useLabelMode";
+import { Badge } from "./Badge.tsx";
+import { Button } from "./Button.tsx";
+import { useLabelMode } from "./useLabelMode.ts";
 
 /** One address, and the chain it lives on. */
 export interface CryptoNetwork {

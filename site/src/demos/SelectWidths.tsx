@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Select, type SelectWidth } from "@glimstone/react";
+import { Select, type SelectWidth } from "@glimstone/react/Select";
 
 const KEEP = [
   { value: "d", label: "Days" },

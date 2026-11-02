@@ -10,7 +10,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { computeBubblePosition } from "@glimstone/core";
-import { usePortalHue } from "./portalHue";
+import { usePortalHue } from "./portalHue.ts";
 
 // The `role="listbox"` panel a button-opens-a-list picker drops open. It is
 // portalled to document.body, because a card with `overflow: hidden` clips an

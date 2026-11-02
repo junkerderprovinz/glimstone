@@ -2,8 +2,9 @@
 // glyph, or both. Like the shape and motion engines it turns one setting into
 // attributes on the document root, and components pick the answer up from CSS.
 //
-// The file has no framework dependency, since an adopting app copies it whole;
-// a React app wraps it in a small hook.
+// It has no framework dependency; the React and Vue packages wrap it.
+
+import { storageKey } from './storage.ts';
 
 /**
  * The four modes.
@@ -63,14 +64,6 @@ export const CONTROL_AXES: ControlAxis[] = ['buttons', 'sidebar', 'tabs'];
  */
 export const BOTTOM_BAR_AXIS: BarAxis = 'bottombar';
 
-/** Per-axis storage keys. Prefix them per app the way `bv-shape` is prefixed. */
-const STORAGE_KEY: Record<LabelAxis, string> = {
-  buttons: 'glim-labels-buttons',
-  sidebar: 'glim-labels-sidebar',
-  tabs: 'glim-labels-tabs',
-  bottombar: 'glim-labels-bottombar',
-};
-
 const ATTRIBUTE: Record<LabelAxis, string> = {
   buttons: 'data-labels-buttons',
   sidebar: 'data-labels-sidebar',
@@ -89,7 +82,7 @@ function isLabelMode(v: unknown): v is LabelMode {
 export function getLabelMode(axis: LabelAxis): LabelMode {
   let stored: string | null = null;
   try {
-    stored = localStorage.getItem(STORAGE_KEY[axis]);
+    stored = localStorage.getItem(storageKey(`labels-${axis}`));
   } catch {
     // Private windows and blocked site data throw here instead of returning null.
   }
@@ -110,7 +103,7 @@ export function applyLabelMode(axis: LabelAxis, mode: LabelMode | string | undef
 /** Persists the choice and applies it at once. */
 export function setLabelMode(axis: LabelAxis, mode: LabelMode): void {
   try {
-    localStorage.setItem(STORAGE_KEY[axis], mode);
+    localStorage.setItem(storageKey(`labels-${axis}`), mode);
   } catch {
     // The choice still applies for this session.
   }

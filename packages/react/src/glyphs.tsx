@@ -22,24 +22,25 @@ export function glyphFor(labelKey: string): ReactNode | undefined {
   return resolver ? resolver(labelKey) : undefined;
 }
 
-function MarkSvg({ mark }: { mark: Mark }) {
+/** A mark from the core, drawn in the current colour. */
+export function MarkSvg({ mark, className }: { mark: Mark; className?: string }) {
   return (
     <svg
       width={mark.size}
       height={mark.size}
       viewBox={mark.viewBox}
       fill="currentColor"
-      className="glim-mark"
+      className={className}
       aria-hidden="true"
       dangerouslySetInnerHTML={{ __html: mark.body }}
     />
   );
 }
 
-export const IconClose = () => <MarkSvg mark={MARKS.close} />;
-export const IconCancel = () => <MarkSvg mark={MARKS.cancel} />;
-export const IconCheck = () => <MarkSvg mark={MARKS.check} />;
-export const IconExpand = () => <MarkSvg mark={MARKS.expand} />;
-export const IconWindowMinimise = () => <MarkSvg mark={MARKS.windowMinimise} />;
-export const IconWindowMaximise = () => <MarkSvg mark={MARKS.windowMaximise} />;
-export const IconWindowRestore = () => <MarkSvg mark={MARKS.windowRestore} />;
+export const IconClose = () => <MarkSvg mark={MARKS.close} className="glim-mark" />;
+export const IconCancel = () => <MarkSvg mark={MARKS.cancel} className="glim-mark" />;
+export const IconCheck = () => <MarkSvg mark={MARKS.check} className="glim-mark" />;
+export const IconExpand = () => <MarkSvg mark={MARKS.expand} className="glim-mark" />;
+export const IconWindowMinimise = () => <MarkSvg mark={MARKS.windowMinimise} className="glim-mark" />;
+export const IconWindowMaximise = () => <MarkSvg mark={MARKS.windowMaximise} className="glim-mark" />;
+export const IconWindowRestore = () => <MarkSvg mark={MARKS.windowRestore} className="glim-mark" />;

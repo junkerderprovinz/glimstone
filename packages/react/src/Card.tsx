@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import { hueVars } from "@glimstone/core";
-import { Badge } from "./Badge";
-import { InfoBubble } from "./InfoBubble";
+import { Badge } from "./Badge.tsx";
+import { InfoBubble } from "./InfoBubble.tsx";
 
 /**
  * The surface everything else sits on, and the one place a section heading is

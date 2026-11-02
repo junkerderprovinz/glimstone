@@ -2,7 +2,7 @@
 // bubble"): one floating bubble, placed from the trigger's bounding box, shared
 // by every hover tooltip and every "(i)" info icon.
 
-import { pointerWasLast, trackInputModality } from './inputModality';
+import { pointerWasLast, trackInputModality } from './inputModality.ts';
 
 const BUBBLE_ID = 'glim-bubble';
 let currentTrigger: Element | null = null;

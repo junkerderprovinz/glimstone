@@ -1,8 +1,8 @@
 import type { FocusEvent, MouseEvent, ReactNode, Ref } from "react";
 import { buttonView, takePageHue, type ButtonTone, type ButtonVariant, type WidthStage } from "@glimstone/core";
-import { useLabelMode } from "./useLabelMode";
-import { useTipBubble } from "./useTipBubble";
-import { glyphFor, IconClose } from "./glyphs";
+import { useLabelMode } from "./useLabelMode.ts";
+import { useTipBubble } from "./useTipBubble.tsx";
+import { glyphFor, IconClose } from "./glyphs.tsx";
 
 export type { ButtonTone, ButtonVariant } from "@glimstone/core";
 
