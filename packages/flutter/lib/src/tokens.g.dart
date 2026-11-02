@@ -53,6 +53,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     required this.glimScrim,
     required this.focusRing,
     required this.inkMix,
+    this.shape = GlimShape.soft,
   });
 
   final Color carbonBg;
@@ -102,6 +103,9 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
 
   /// How much of the accent an ink keeps against black, as in tokens.css.
   final double inkMix;
+
+  /// The shape the user chose; it sets the radii of cards, controls and pills.
+  final GlimShape shape;
 
   static const dark = GlimTheme(
     carbonBg: Color(0xFF161616),
@@ -246,6 +250,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     Color? glimScrim,
     Color? focusRing,
     double? inkMix,
+    GlimShape? shape,
   }) =>
       GlimTheme(
         carbonBg: carbonBg ?? this.carbonBg,
@@ -293,6 +298,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
         glimScrim: glimScrim ?? this.glimScrim,
         focusRing: focusRing ?? this.focusRing,
         inkMix: inkMix ?? this.inkMix,
+        shape: shape ?? this.shape,
       );
 
   @override
@@ -344,15 +350,26 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
       glimScrim: Color.lerp(glimScrim, other.glimScrim, t)!,
       focusRing: Color.lerp(focusRing, other.focusRing, t)!,
       inkMix: inkMix + (other.inkMix - inkMix) * t,
+      shape: t < 0.5 ? shape : other.shape,
     );
   }
 }
 
+/// The shape engine: how round cards, controls and pills are, in logical pixels.
+enum GlimShape {
+  round(card: 20, control: 12, pill: 9999),
+  soft(card: 8, control: 5, pill: 5),
+  square(card: 0, control: 0, pill: 0);
+
+  const GlimShape({required this.card, required this.control, required this.pill});
+
+  final double card;
+  final double control;
+  final double pill;
+}
+
 /// The lengths of tokens.css in logical pixels, one rem being 16.
 abstract final class GlimMetrics {
-  static const double radiusCard = 20;
-  static const double radiusControl = 12;
-  static const double radiusPill = 9999;
   static const double textStatus = 22;
   static const double textTitle = 16;
   static const double textBody = 14;

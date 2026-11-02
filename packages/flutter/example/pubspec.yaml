@@ -11,3 +11,10 @@ dependencies:
     sdk: flutter
   glimstone:
     path: ..
+
+flutter:
+  # The house font, which an app ships itself; the variable file carries every weight.
+  fonts:
+    - family: Noto Sans
+      fonts:
+        - asset: fonts/NotoSans.ttf

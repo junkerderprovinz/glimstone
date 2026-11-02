@@ -41,12 +41,20 @@ const colours = Object.keys(dark).filter((k) => dartColor(dark[k]) && light[k] &
 const inkMix = (theme) => Number.parseFloat(theme["--ink-mix"] ?? "100") / 100;
 
 const px = (value) => {
+  if (value === "0") return 0;
   const m = value.match(/^([\d.]+)(rem|px)$/);
   return m ? (m[2] === "rem" ? Number(m[1]) * 16 : Number(m[1])) : null;
 };
 const metrics = Object.entries(root)
-  .filter(([k, v]) => /^--(radius|text|btn)-/.test(k) && px(v) !== null)
+  .filter(([k, v]) => /^--(text|btn)-/.test(k) && px(v) !== null)
   .map(([k, v]) => `  static const double ${camel(k)} = ${px(v)};`);
+
+// The shape engine's three offered shapes; leaf stays hidden, as on the web.
+const shapes = { round: root, soft: block(':root[data-shape="soft"]'), square: block(':root[data-shape="square"]') };
+const shapeEnum = Object.entries(shapes)
+  .map(([name, b]) => `  ${name}(card: ${px(b["--radius-card"])}, control: ${px(b["--radius-control"])}, pill: ${px(b["--radius-pill"])})`)
+  .join(",\n");
+const defaultShape = readFileSync(new URL("src/appearance.ts", core), "utf8").match(/DEFAULT_SHAPE: Shape = '(\w+)'/)[1];
 
 const fields = colours.map((k) => camel(k));
 const palette = (theme) => colours.map((k) => `    ${camel(k)}: ${dartColor(theme[k])},`).join("\n");
@@ -63,12 +71,16 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
   const GlimTheme({
 ${fields.map((f) => `    required this.${f},`).join("\n")}
     required this.inkMix,
+    this.shape = GlimShape.${defaultShape},
   });
 
 ${fields.map((f) => `  final Color ${f};`).join("\n")}
 
   /// How much of the accent an ink keeps against black, as in tokens.css.
   final double inkMix;
+
+  /// The shape the user chose; it sets the radii of cards, controls and pills.
+  final GlimShape shape;
 
   static const dark = GlimTheme(
 ${palette(dark)}
@@ -84,10 +96,12 @@ ${palette(light)}
   GlimTheme copyWith({
 ${fields.map((f) => `    Color? ${f},`).join("\n")}
     double? inkMix,
+    GlimShape? shape,
   }) =>
       GlimTheme(
 ${fields.map((f) => `        ${f}: ${f} ?? this.${f},`).join("\n")}
         inkMix: inkMix ?? this.inkMix,
+        shape: shape ?? this.shape,
       );
 
   @override
@@ -96,8 +110,20 @@ ${fields.map((f) => `        ${f}: ${f} ?? this.${f},`).join("\n")}
     return GlimTheme(
 ${fields.map((f) => `      ${f}: Color.lerp(${f}, other.${f}, t)!,`).join("\n")}
       inkMix: inkMix + (other.inkMix - inkMix) * t,
+      shape: t < 0.5 ? shape : other.shape,
     );
   }
+}
+
+/// The shape engine: how round cards, controls and pills are, in logical pixels.
+enum GlimShape {
+${shapeEnum};
+
+  const GlimShape({required this.card, required this.control, required this.pill});
+
+  final double card;
+  final double control;
+  final double pill;
 }
 
 /// The lengths of tokens.css in logical pixels, one rem being 16.
@@ -150,4 +176,4 @@ if (process.argv.includes("--check")) {
 } else {
   for (const [name, text] of files) writeFileSync(new URL(name, out), text);
 }
-console.log(`${colours.length} colours, ${metrics.length} lengths, ${glyphs.length} glyphs`);
+console.log(`${colours.length} colours, ${Object.keys(shapes).length} shapes, ${metrics.length} lengths, ${glyphs.length} glyphs`);

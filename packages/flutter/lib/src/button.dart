@@ -104,6 +104,8 @@ class _GlimButtonState extends State<GlimButton> {
                   color: ink,
                   fontSize: GlimMetrics.textBody,
                   fontWeight: FontWeight.w500,
+                  // A variable font such as Noto Sans takes its weight here.
+                  fontVariations: const [FontVariation.weight(500)],
                   height: 1.4),
             ),
           ),
@@ -146,7 +148,7 @@ class _GlimButtonState extends State<GlimButton> {
                       horizontal: GlimMetrics.btnPadX),
                   decoration: BoxDecoration(
                     color: ground,
-                    borderRadius: BorderRadius.circular(GlimMetrics.radiusPill),
+                    borderRadius: BorderRadius.circular(glim.shape.pill),
                     border: _focus
                         ? Border.all(color: glim.accent, width: 2)
                         : null,
