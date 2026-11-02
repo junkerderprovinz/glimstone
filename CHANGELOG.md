@@ -4,6 +4,31 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
+GlimStone ships as packages: a core without a framework and one package each for React, Vue and Flutter, all with one version number. The components draw only with `glim-` classes, so an app without Tailwind gets the same pixels.
+
+**Adopting apps:**
+
+- **Nothing changes until an app moves.** The copied files keep working. Moving means installing `@glimstone/core` with `@glimstone/react` and importing from them instead of `./components/…`; Select, Combobox and Slider come from `@glimstone/react/Select` and its siblings.
+- **Stored choices:** call `setStoragePrefix("bv")` (the app's own prefix) at boot, before `applyCachedAppearance()` and `applyStoredLabelModes()`.
+
+## ✨ Added
+
+- **`@glimstone/core`, `@glimstone/react`, `@glimstone/vue` and the Dart package `glimstone`.** `reference/` is `packages/core`, `reference/react` is `packages/react`.
+- **The Vue package**: every component as a Vue 3 single-file component with `v-model` and `@zag-js/vue`, the engines as composables.
+- **The Flutter package**: `GlimTheme`, `GlimShape` and `GlimMetrics` written from `tokens.css`, the glyphs as `GlimGlyphs`, and `GlimButton`.
+- **Five components the apps built for themselves**: `Selector` with its tiles, `NumberField`, `SidebarRow`, `EmptyState` and `SubCard`, in React and Vue.
+- **The site shows React, Vue and Flutter side by side**, and every contract row runs once per framework.
+
+## 🔁 Changed
+
+- **The logic of every component lives in the core**: `buttonView`, `badgeClassName`, the select's model, the Info tile's version links and update check, the bubble's placement, the dialog's keys.
+- **No Tailwind in the components.** Their look is `glim-` classes in `@layer components`, with a reset in `@layer base` standing in for a preflight; `scripts/check-classes.sh` fails on a Tailwind class in a component.
+
+## 🐛 Fixed
+
+- **A badge that acts in ok, fail or warn kept its ground under the pointer.** It mixed in tokens that do not exist and turned transparent.
+- **`[button-width]` tests what it says.** It put the first label mode back on every reload and compared text with text. Measured properly, a short label with its glyph outgrows its width stage, so the row reads as an expected failure until the stages are settled.
+
 ## 3.8.6 - 2026-11-02
 
 Updating now wears the two arrows of `IconSync`, as checking for an update already does. The cloud of `IconUpdate` stays for an updates tab or section, where it has room to read. Chosen on ShipLog's Update now.
