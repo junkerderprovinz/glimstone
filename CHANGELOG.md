@@ -4,120 +4,55 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
-## 3.8.6 - 2026-11-02
+## 3.9.0 - 2026-11-03
 
-Updating now wears the two arrows of `IconSync`, as checking for an update already does. The cloud of `IconUpdate` stays for an updates tab or section, where it has room to read. Chosen on ShipLog's Update now.
-
-**Adopting apps:**
-
-- **Update now and Update all:** give the button `IconSync` from `reference/glyphs.json`. Keep `IconUpdate` for a tab or a section about updates.
-- **Version:** copy `reference/react/version.ts` again.
-
-## 🔁 Changed
-
-- **Updating now wears `IconSync`.** At button size the cloud of `IconUpdate` turned into a smudge, the same reason checking for updates moved to the two arrows in 3.8.3. `IconSync` now means "Replicate, synchronise, check for updates, update now" and `IconUpdate` "An updates tab or section". BombVault and KnightLoader switch; KnightLoader's Update now wears `IconRefresh` today.
-- **TowerTorch's label table gives `aktualisieren` and `update` the sync glyph.**
-
-## 3.8.5 - 2026-11-01
-
-`takePageHue()` counts every button that carries the tint, so an app's own glyph buttons light up in their own colours under rainbow too.
+Every button with words has a fill, wherever it stands and Cancel included, and every button takes the accent when the pointer or the keyboard reaches it. Under rainbow each button lights up in a colour of its own. A list page drops the Filter, Sort and Search buttons over its list: the cards stand on top, the list below, and sorting, filtering and searching move into the list's header. A notice or a confirmation that can be switched off carries a checkbox for it, the one place a checkbox stands instead of a switch. Six glyphs say what kind of file a row holds, F-Droid joins the brand marks with its own logo, and checking for an update and installing it both wear the two arrows of `IconSync`. A small script finds bare buttons with words in an app's sources. Most of it comes from KnightLoader.
 
 **Adopting apps:**
 
-- **Rainbow hover:** copy `reference/appearance.ts` again. Buttons of the app's own that carry `.glim-btn-bare` count too; call `takePageHue()` for them, for example from one `pointerover` and `focusin` listener at the app's root.
-- **Version:** copy `reference/react/version.ts` again.
-
-## 🐛 Fixed
-
-- **`takePageHue()` counts every button that carries the tint.** It counted only `.glim-btn`, so an app's own glyph buttons with `.glim-btn-bare` alone all took the same colour. It counts `.glim-btn-neutral`, `.glim-btn-subtle` and `.glim-btn-bare`.
-
-## 3.8.4 - 2026-11-01
-
-Under rainbow every button lights up in a colour of its own when the pointer or the keyboard reaches it. The buttons of a page count through the palette in the order they stand, so the buttons of one card no longer all light up alike.
-
-**Adopting apps:**
-
-- **Rainbow hover:** copy `reference/appearance.ts` and `reference/react/Button.tsx` again. An app with its own Button calls `takePageHue(el)` when the pointer or the keyboard reaches one of its surface-filled or bare buttons.
-- **Version:** copy `reference/react/version.ts` again.
-
-## 🎨 Design
-
-- **Under rainbow every button lights up in a colour of its own.** The buttons of a page count through the palette in the order they stand, read when the pointer or the keyboard reaches one, so two buttons side by side never share a colour. A button with its own palette position keeps it. This reverses rule 40's "a button takes the hue of its card or row", under which every button of a card lit up alike; reported on ArrowLoop.
-
-## 3.8.3 - 2026-11-01
-
-A list keeps the actions on many rows where they are seen, in its More button or on the row; the right-click menu and the command palette are KnightLoader's and not part of the house. Checking for updates wears the sync glyph, as KnightLoader's Check all does. Both came out of ArrowLoop taking 3.8.2.
-
-**Adopting apps:**
-
-- **List pages:** keep the actions on many rows where they are seen, in the list's More button or on the row. Leave out the right-click menu and the command palette unless the app already has them; they are KnightLoader's.
-- **Check for updates:** give the check button `IconSync` from `reference/glyphs.json`, and keep `IconUpdate` for fetching and installing an update.
-- **Version:** copy `reference/react/version.ts` again.
-
-## 🔁 Changed
-
-- **Checking for updates wears `IconSync`.** The two arrows of the sync drawing read as "look again" at button size, where the cloud of `IconUpdate` turned into a smudge. `IconSync` now means "Replicate, synchronise, check for updates" and `IconUpdate` "Fetch an update, update now". Taken from KnightLoader's Check all.
-- **The right-click menu and the command palette are KnightLoader's, not the house's.** 3.8.2 moved a list's More actions into both for every app. An app without them keeps its More button and its row buttons, and the hint line names a right-click only where there is one. Found when ArrowLoop took 3.8.2 and grew menus nobody wanted there.
-
-## 3.8.2 - 2026-10-31
-
-Every button with words now has a fill, wherever it stands, and every button takes the accent when the pointer or the keyboard reaches it. A list page drops the Filter, Sort and Search buttons over its list: the cards stand on top, the list below, and sorting, filtering, searching and the actions on many rows move into the list's header and menus. F-Droid joins the brand marks with its own logo, and a small script finds bare buttons with words in an app's sources. All of it comes from KnightLoader.
-
-**Adopting apps:**
-
-- **Buttons with words:** give every button that shows a word a fill, anywhere in the app. Keep the ghost kind for glyph-only buttons in toolbars and list rows.
+- **Buttons with words:** give every button that shows a word a fill, anywhere in the app. That includes every answer in a window's foot, Cancel, Close and Back among them. Keep the ghost kind for glyph-only buttons in toolbars and list rows. A source check like KnightLoader's `buttonSources.test.ts` keeps them filled.
 - **Bare button check:** copy `reference/check-bare-buttons.mjs` beside the web sources and run `node check-bare-buttons.mjs src` in CI. Pass `--bare` and `--worded` if the app's Button spells its bare kind or its label prop differently.
-- **Hover tint:** copy the rule 40 block after `.glim-btn-lg` in `reference/tokens.css`, and copy `reference/react/Button.tsx`, `Badge.tsx` and `Toast.tsx` again. An app with its own Button puts `.glim-btn-neutral` or `.glim-btn-subtle` on its surface-filled kinds and `.glim-btn-bare` on its glyph-only buttons without a fill.
+- **Hover tint:** copy the rule 40 block after `.glim-btn-lg` in `reference/tokens.css`, and copy `reference/appearance.ts` and `reference/react/Button.tsx`, `Badge.tsx` and `Toast.tsx` again. An app with its own Button puts `.glim-btn-neutral` or `.glim-btn-subtle` on its surface-filled kinds and `.glim-btn-bare` on its glyph-only buttons without a fill. It calls `takePageHue(el)` when the pointer or the keyboard reaches one of them, for example from one `pointerover` and `focusin` listener at the app's root.
 - **KnightLoader:** its `.glim-btn-secondary` and `.glim-btn-ghost` are `.glim-btn-subtle` and `.glim-btn-bare` here. Rename them the next time it copies `tokens.css`.
-- **List pages:** take Filter, Sort and Search off the page and off the cards. Sort on a click on the column header, filter through a ▾ in the header, and mark an active filter in the header and in the totals card. Open a floating search inside the list when somebody types there or presses Ctrl+F, and close it on Esc. Move a list's More actions into the right-click menu and the command palette. Show the hint line on header hover, once by itself on the first visit, and on a long press under a finger.
-- **F-Droid:** copy `FDROID_SVG` from `reference/appMarks.ts`, `.glim-tile-fdroid` from `reference/tokens.css` and `reference/react/ReadmeButton.tsx` again, then give an F-Droid button `brand="fdroid"`.
-- **Version:** copy `reference/react/version.ts` again.
-
-## ✨ Added
-
-- **`reference/check-bare-buttons.mjs`.** It reads every `.tsx` under the folders you give it and fails on a bare `<Button>` that shows words, as children or through a label prop. `--bare` and `--worded` fit it to an app's own names. It comes from KnightLoader's `web/check-bare-buttons.mjs`.
-- **F-Droid's logo as a brand mark.** `FDROID_SVG` is the 2015 logo from F-Droid's artwork repository in its own greens, with the robot's eyes cut out as real holes so the tile shows through. Its licence, CC BY-SA 3.0 or GPL-3.0-or-later, is noted beside it. `.glim-tile-fdroid` lights the button in the blue of F-Droid's README button, and `ReadmeButton` takes `brand="fdroid"`.
-- **`--btn-tint` and the three classes that set it:** `.glim-btn-neutral`, `.glim-btn-subtle` and `.glim-btn-bare` in `tokens.css`.
-- **A contract row for the tint**, `button-tint`, with a Playwright test on the site.
-
-## 🎨 Design
-
-- **Rule 38 widens: every button that carries words is filled, anywhere in the app.** It used to cover a window's foot. A ghost button is now only for a glyph alone in a toolbar or a list row.
-- **Rule 40: every button takes the accent when it is reached for.** A neutral or subtle button mixes 22% of `--btn-tint` into its hovered ground and turns its glyph to the tint, while its words keep the text colour. A bare glyph button turns its glyph to the accent. Keyboard focus looks the same, and a disabled button stays as it is. `--btn-tint` is `--accent-glyph`: the accent itself on the dark theme, and on the light one 55 parts accent to 45 parts black. Under rainbow a button takes the hue of the card or row it sits in.
-- **A list page has two areas, the cards and the list.** No tool button stands above the list, on a card or on a card's edge. Sorting is a click on a column header, filtering a ▾ in the header, and an active filter shows in the header and in the totals card. Typing in the list or Ctrl+F opens a search that floats inside it, and Esc closes it. The actions on many rows live in the right-click menu and the command palette. A hint line on header hover explains this, once by itself on the first visit, and a long press on a header shows it on a touch screen.
-
-## 🔁 Changed
-
-- **The Lists rules no longer put Filter, Sort and Search over the list.** A tile's action moves into the right-click menu and the command palette, and the list's own More button goes.
-- **A list page has no Search button.** On a log or an accounts page the search still starts as a button; on a list, typing opens the floating search.
-- **`Button`, `Badge` and `Toast` wear the tint classes:** the neutral and subtle tones, a neutral or muted Badge that is a button or a link, and the toast's close cross.
-- **The demo button beside the labelled Select has a fill.** "Choose the destination" is a neutral `Button` where it was drawn like a field.
-
-## 3.8.1 - 2026-10-31
-
-Every answer in a window's foot is filled, Cancel included, and a notice or a confirmation that can be switched off carries a checkbox for it, the one place a checkbox stands instead of a switch. Six glyphs say what kind of file a row holds: a video, a sound track, an image, subtitles, a text file and any other file. They come from KnightLoader, which shows one before every link's name, and match its drawings exactly. `glyph-map.md` gets a FireSquire table, and `IconCookies` shares the paperclip of `IconFile` until cookies get a drawing of their own.
-
-**Adopting apps:**
-
-- **Window feet:** give Cancel, Close, Back and every other answer in a window's foot a filled tone, and keep unfilled buttons to toolbars and rows. A source check like KnightLoader's `buttonSources.test.ts` keeps them filled.
+- **List pages:** take Filter, Sort and Search off the page and off the cards. Sort on a click on the column header, filter through a ▾ in the header, and mark an active filter in the header and in the totals card. Open a floating search inside the list when somebody types there or presses Ctrl+F, and close it on Esc. Keep the actions on many rows where they are seen, in the list's More button or on the row, and leave out the right-click menu and the command palette unless the app already has them. Show the hint line on header hover, once by itself on the first visit, and on a long press under a finger.
 - **Notices:** give every notice that can be switched off a "Don't show again" checkbox in the house look, and a confirmation a "Don't ask again" one. Store the choice per kind of notice and offer a way back in Settings.
 - **File kinds:** copy `IconFileVideo`, `IconFileAudio`, `IconFileImage`, `IconFileSubtitles`, `IconFileText` and `IconFile` from `reference/glyphs.json` where a list shows what kind of file a row holds, and give an archive `IconArchive`.
+- **F-Droid:** copy `FDROID_SVG` from `reference/appMarks.ts`, `.glim-tile-fdroid` from `reference/tokens.css` and `reference/react/ReadmeButton.tsx` again, then give an F-Droid button `brand="fdroid"`.
+- **Updates:** give Check for updates, Update now and Update all `IconSync` from `reference/glyphs.json`. Keep `IconUpdate` for a tab or a section about updates.
 - **Version:** copy `reference/react/version.ts` again.
 
 ## ✨ Added
 
 - **Six glyphs for the kind of a file**, all from Streamline's free set: `IconFileVideo` is a film slate, `IconFileAudio` a music note, `IconFileImage` a landscape, `IconFileSubtitles` a speech bubble with lines, `IconFileText` a paragraph mark and `IconFile` a paperclip for any other file. They carry KnightLoader's drawings and ink boxes, so an app that generates from `glyphs.json` draws them the way KnightLoader does.
+- **`reference/check-bare-buttons.mjs`.** It reads every `.tsx` under the folders you give it and fails on a bare `<Button>` that shows words, as children or through a label prop. `--bare` and `--worded` fit it to an app's own names. It comes from KnightLoader's `web/check-bare-buttons.mjs`.
+- **F-Droid's logo as a brand mark.** `FDROID_SVG` is the 2015 logo from F-Droid's artwork repository in its own greens, with the robot's eyes cut out as real holes so the tile shows through. Its licence, CC BY-SA 3.0 or GPL-3.0-or-later, is noted beside it. `.glim-tile-fdroid` lights the button in the blue of F-Droid's README button, and `ReadmeButton` takes `brand="fdroid"`.
+- **`--btn-tint` and the three classes that set it:** `.glim-btn-neutral`, `.glim-btn-subtle` and `.glim-btn-bare` in `tokens.css`.
+- **A contract row for the tint**, `button-tint`, with a Playwright test on the site.
 - **A FireSquire table in `glyph-map.md`** with the seven glyphs on its buttons and findings, all of them standard, and where FireSquire keeps its copy.
 
 ## 🎨 Design
 
-- **Rule 38: every answer in a window's foot is filled, Cancel included.** A button without a fill read as a word next to the one it answers. Unfilled buttons are for toolbars and rows.
+- **Rule 38: every button that carries words is filled, anywhere in the app.** An answer in a window's foot without a fill, Cancel included, read as a word next to the one it answers. A ghost button is only for a glyph alone in a toolbar or a list row.
 - **Rule 39: a notice that can be switched off has a checkbox.** "Don't show again" under a notice and "Don't ask again" under a confirmation are checkboxes in the house look, the one exception to the switch.
+- **Rule 40: every button takes the accent when it is reached for.** A neutral or subtle button mixes 22% of `--btn-tint` into its hovered ground and turns its glyph to the tint, while its words keep the text colour. A bare glyph button turns its glyph to the accent. Keyboard focus looks the same, and a disabled button stays as it is. `--btn-tint` is `--accent-glyph`: the accent itself on the dark theme, and on the light one 55 parts accent to 45 parts black.
+- **Under rainbow every button lights up in a colour of its own.** The buttons of a page count through the palette in the order they stand, read when the pointer or the keyboard reaches one, so two buttons side by side never share a colour. A button with its own palette position keeps it. `takePageHue()` counts every button that carries the tint, `.glim-btn-neutral`, `.glim-btn-subtle` and `.glim-btn-bare` as well as `.glim-btn`, so an app's own glyph buttons light up in their own colours too.
+- **A list page has two areas, the cards and the list.** No tool button stands above the list, on a card or on a card's edge. Sorting is a click on a column header, filtering a ▾ in the header, and an active filter shows in the header and in the totals card. Typing in the list or Ctrl+F opens a search that floats inside it, and Esc closes it. A hint line on header hover explains this, once by itself on the first visit, and a long press on a header shows it on a touch screen. It names a right-click only in an app that has the menu.
+- **Actions on many rows stay where they are seen,** in the list's More button or on the row. The right-click menu and the command palette are KnightLoader's and not part of the house, so an app without them does not grow them for its lists.
 
 ## 🔁 Changed
 
+- **Checking for updates and updating now wear `IconSync`.** The two arrows read as "look again" at button size, where the cloud of `IconUpdate` turned into a smudge. `IconSync` now means "Replicate, synchronise, check for updates, update now" and `IconUpdate` "An updates tab or section". Taken from KnightLoader's Check all and chosen on ShipLog's Update now. BombVault and KnightLoader switch, and KnightLoader's Update now wears `IconRefresh` today.
+- **TowerTorch's label table gives `aktualisieren` and `update` the sync glyph.**
+- **The Lists rules no longer put Filter, Sort and Search over the list.**
+- **A list page has no Search button.** On a log or an accounts page the search still starts as a button. On a list, typing opens the floating search.
+- **`Button`, `Badge` and `Toast` wear the tint classes:** the neutral and subtle tones, a neutral or muted Badge that is a button or a link, and the toast's close cross.
+- **The demo button beside the labelled Select has a fill.** "Choose the destination" is a neutral `Button` where it was drawn like a field.
 - **The paperclip means a file or an attachment.** `IconFile` wears it, and `IconCookies` borrows it until cookies get a drawing of their own.
 - **KnightLoader's rows in `glyph-map.md`** list the six file glyphs, and `IconArchive` also stands before an archive's name in its list.
+
+## 🐛 Fixed
+
+- **The More menu rule no longer says a list page has no More button.** Outside KnightLoader a list keeps its actions on many rows in its More button, as the Lists section says.
 
 ## 3.8.0 - 2026-10-30
 
