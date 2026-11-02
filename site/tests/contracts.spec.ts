@@ -5,13 +5,23 @@ import { expect, test, type Page } from "@playwright/test";
 
 const SITE = "/";
 
+// Each Playwright project runs every row against one framework's demos alone.
 async function open(page: Page, path: string, look?: object) {
   if (look) await page.addInitScript((l) => localStorage.setItem("gs-docs-look", JSON.stringify(l)), look);
-  await page.goto(`${SITE}#${path}`);
+  await page.goto(`${SITE}#${path}?fw=${test.info().project.name}`);
   await page.locator("main h1").waitFor();
+  // A width measured before the font arrives is the fallback's.
+  await page.evaluate(() => document.fonts.ready);
 }
 
 const stage = (page: Page, demo: string) => page.locator(`[data-demo="${demo}"]`);
+
+// For a component that has no Vue twin, so the Vue run says so instead of
+// passing over an empty stage.
+function reactOnly() {
+  test.beforeEach(({}, info) => test.skip(info.project.name !== "react", "React only"));
+}
+
 const focusedText = (page: Page) => page.evaluate(() => document.activeElement?.textContent?.trim());
 
 test.describe("Button", () => {
@@ -175,6 +185,7 @@ test.describe("ConfirmDialog", () => {
 });
 
 test.describe("DropdownListbox", () => {
+  reactOnly();
   async function openList(page: Page) {
     await open(page, "/components/dropdown-listbox");
     const trigger = stage(page, "DropdownSelect").locator("button.field");
@@ -446,8 +457,10 @@ test.describe("Select sizes and labels", () => {
     await open(page, "/components/select");
     const demo = stage(page, "SelectLabelled");
     const trigger = demo.locator(".glim-select-trigger");
-    await expect(trigger).toHaveAttribute("id", "backup-destination");
-    await demo.locator('label[for="backup-destination"]').click();
+    // Each framework's demo names its own id, since both stand on one page.
+    const label = demo.locator("label[for]").first();
+    await expect(trigger).toHaveAttribute("id", (await label.getAttribute("for"))!);
+    await label.click();
     await expect(page.getByRole("listbox", { name: "Destination" })).toBeVisible();
     await page.keyboard.press("Escape");
     await demo.getByRole("button", { name: "Choose the destination" }).click();
@@ -602,6 +615,7 @@ test.describe("Select on a touch screen", () => {
 });
 
 test.describe("Select without a framework", () => {
+  reactOnly();
   test("[select-vanilla] groups and the wheel", async ({ page }) => {
     await open(page, "/components/select");
     const zone = stage(page, "SelectVanilla").locator(".glim-select-trigger");
@@ -813,6 +827,7 @@ test.describe("Toast", () => {
 });
 
 test.describe("WindowBar", () => {
+  reactOnly();
   const bar = (page: Page) => stage(page, "WindowBarDemo").locator(".glim-window-bar");
   const button = (page: Page, name: string) => bar(page).getByRole("button", { name, exact: true });
   const log = (page: Page) => stage(page, "WindowBarDemo").getByRole("status");

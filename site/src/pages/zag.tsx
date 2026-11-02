@@ -1,7 +1,6 @@
 import vanillaSource from "@glimstone/core/select.ts?raw";
 import { CONTRACTS } from "../contracts";
-import { Callout, Code, ContractTable, Demo, H2, PropsTable, SourceLink } from "../ui";
-import results from "../gen/test-results.json";
+import { Callout, Code, ContractTable, Demo, FRAMEWORKS, H2, PropsTable, results, SourceLink } from "../ui";
 
 function ZagNote({ file }: { file: string }) {
   return (
@@ -28,7 +27,7 @@ export function SelectPage() {
       <ZagNote file="react/Select.tsx" />
       <Demo name="SelectZag" />
       <Code
-        code={`import { Select } from "@glimstone/react";
+        code={`import { Select } from "@glimstone/react/Select";
 
 <Select label="Time zone" options={zones} value={zone} onChange={setZone} />`}
       />
@@ -156,10 +155,7 @@ export function SliderPage() {
   );
 }
 
-type Results = { rows: Record<string, { ok: boolean }> };
-
 export function BehaviourGuide() {
-  const rows = (results as unknown as Results).rows ?? {};
   return (
     <>
       <p className="lead">
@@ -182,24 +178,33 @@ export function BehaviourGuide() {
           <tr>
             <th>Component</th>
             <th>Rows</th>
-            <th>Pass</th>
+            {FRAMEWORKS.map((f) => (
+              <th key={f.id}>{f.name}</th>
+            ))}
           </tr>
         </thead>
         <tbody>
-          {Object.entries(CONTRACTS).map(([name, c]) => {
-            const pass = c.rows.filter((r) => rows[r.id]?.ok).length;
-            return (
-              <tr key={name}>
-                <td className="pname">{name}</td>
-                <td>{c.rows.length}</td>
-                <td>
-                  <span className={`tested ${pass === c.rows.length ? "pass" : "fail"}`}>
-                    {pass} / {c.rows.length}
-                  </span>
-                </td>
-              </tr>
-            );
-          })}
+          {Object.entries(CONTRACTS).map(([name, c]) => (
+            <tr key={name}>
+              <td className="pname">{name}</td>
+              <td>{c.rows.length}</td>
+              {FRAMEWORKS.map((f) => {
+                const tested = c.rows.filter((r) => results?.rows[r.id]?.[f.id]);
+                const pass = tested.filter((r) => results!.rows[r.id][f.id]!.ok).length;
+                return (
+                  <td key={f.id}>
+                    {tested.length === 0 ? (
+                      <span className="tested none">-</span>
+                    ) : (
+                      <span className={`tested ${pass === tested.length ? "pass" : "fail"}`}>
+                        {pass} / {tested.length}
+                      </span>
+                    )}
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
         </tbody>
       </table>
       <H2>Zag for the hard parts</H2>

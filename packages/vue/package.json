@@ -1,0 +1,49 @@
+{
+  "name": "@glimstone/vue",
+  "version": "3.8.6",
+  "description": "GlimStone's components for Vue",
+  "license": "AGPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/junkerderprovinz/glimstone.git",
+    "directory": "packages/vue"
+  },
+  "homepage": "https://junkerderprovinz.github.io/glimstone/",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./Select": {
+      "types": "./dist/entries/select.d.ts",
+      "default": "./dist/Select.js"
+    },
+    "./Combobox": {
+      "types": "./dist/entries/combobox.d.ts",
+      "default": "./dist/Combobox.js"
+    },
+    "./Slider": {
+      "types": "./dist/entries/slider.d.ts",
+      "default": "./dist/Slider.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build && vue-tsc -p tsconfig.build.json"
+  },
+  "dependencies": {
+    "@glimstone/core": "3.8.6"
+  },
+  "peerDependencies": {
+    "@zag-js/combobox": "^1.46.0",
+    "@zag-js/menu": "^1.46.0",
+    "@zag-js/select": "^1.46.0",
+    "@zag-js/slider": "^1.46.0",
+    "@zag-js/vue": "^1.46.0",
+    "vue": "^3.5.0"
+  }
+}

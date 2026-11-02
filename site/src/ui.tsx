@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState, type ComponentType, type KeyboardEvent, type ReactNode } from "react";
+import type { Component as VueComponent } from "vue";
 import { highlight } from "sugar-high";
 import { Button, Badge } from "@glimstone/react";
 import propsData from "./gen/props.json";
 import { CONTRACTS } from "./contracts";
 import { Glyph } from "./glyph";
+import { VueIsland } from "./vueIsland";
 
 const demoModules = import.meta.glob<{ default: ComponentType }>("./demos/*.tsx", { eager: true });
 const demoSources = import.meta.glob<string>("./demos/*.tsx", { eager: true, query: "?raw", import: "default" });
@@ -109,20 +111,44 @@ export function Code({ code, copy = true }: { code: string; copy?: boolean }) {
   );
 }
 
-/** A live demo from src/demos, with its own source one click away. */
+const vueModules = import.meta.glob<{ default: VueComponent }>("./vue-demos/*.vue", { eager: true });
+const vueSources = import.meta.glob<string>("./vue-demos/*.vue", { eager: true, query: "?raw", import: "default" });
+
+/** `?fw=react` or `?fw=vue` in the address shows one framework's demos alone, as each test run does. */
+function onlyFramework(): string | null {
+  return new URLSearchParams(location.hash.split("?")[1] ?? "").get("fw");
+}
+
+type View = "preview" | "react" | "vue";
+
+/**
+ * A live demo from src/demos, beside its Vue twin from src/vue-demos where
+ * there is one, with each source one click away.
+ */
 export function Demo({ name, left }: { name: string; left?: boolean }) {
   const mod = demoModules[`./demos/${name}.tsx`];
-  const raw = demoSources[`./demos/${name}.tsx`] ?? "";
-  const [view, setView] = useState<"preview" | "code">("preview");
+  const vue = vueModules[`./vue-demos/${name}.vue`];
+  const [view, setView] = useState<View>("preview");
   const [copied, doCopy] = useCopied();
   if (!mod) return <div className="callout">Missing demo {name}</div>;
-  const Comp = mod.default;
-  const shown = raw.trim();
+  const only = onlyFramework();
+  const showReact = only !== "vue";
+  const showVue = !!vue && only !== "react";
+  const shown = (view === "vue" ? vueSources[`./vue-demos/${name}.vue`] : demoSources[`./demos/${name}.tsx`])?.trim() ?? "";
+  const stage = (framework: "react" | "vue", body: ReactNode) => (
+    <div className="demo-cell">
+      {showReact && showVue && <span className="demo-fw">{framework === "react" ? "React" : "Vue"}</span>}
+      <div className={`demo-stage${left ? " left" : ""}`} data-demo={name} data-framework={framework}>
+        {body}
+      </div>
+    </div>
+  );
   return (
     <div className="demo">
       {view === "preview" ? (
-        <div className={`demo-stage${left ? " left" : ""}`} data-demo={name}>
-          <Comp />
+        <div className={showReact && showVue ? "demo-pair" : undefined}>
+          {showReact && stage("react", <mod.default />)}
+          {showVue && stage("vue", <VueIsland component={vue.default} />)}
         </div>
       ) : (
         <pre className="code" style={{ maxHeight: "28rem" }}>
@@ -136,7 +162,8 @@ export function Demo({ name, left }: { name: string; left?: boolean }) {
           onChange={setView}
           options={[
             { value: "preview", label: "Preview" },
-            { value: "code", label: "Code" },
+            { value: "react", label: vue ? "React" : "Code" },
+            ...(vue ? [{ value: "vue" as const, label: "Vue" }] : []),
           ]}
         />
         <span style={{ flex: 1 }} />
@@ -144,7 +171,7 @@ export function Demo({ name, left }: { name: string; left?: boolean }) {
           label={copied ? "Copied" : "Copy code"}
           labelKey={copied ? "copied" : "copy"}
           tone="subtle"
-          onClick={() => doCopy(shown)}
+          onClick={() => doCopy(view === "preview" ? demoSources[`./demos/${name}.tsx`].trim() : shown)}
         />
       </div>
     </div>
@@ -222,17 +249,44 @@ export function A({ to, children }: { to: string; children: ReactNode }) {
   return <a href={`#${to}`}>{children}</a>;
 }
 
-const results = Object.values(
-  import.meta.glob<{ ranAt: string; rows: Record<string, { ok: boolean; error?: string }> }>("./gen/test-results.json", {
-    eager: true,
-    import: "default",
-  }),
+type RowResult = { ok: boolean; error?: string };
+export type Results = { ranAt: string; rows: Record<string, Partial<Record<Framework, RowResult>>> };
+
+/** The frameworks the contracts run against, in the order the tables show them. */
+export const FRAMEWORKS = [
+  { id: "react", name: "React" },
+  { id: "vue", name: "Vue" },
+] as const;
+export type Framework = (typeof FRAMEWORKS)[number]["id"];
+
+export const results = Object.values(
+  import.meta.glob<Results>("./gen/test-results.json", { eager: true, import: "default" }),
 ).find((r) => r.ranAt);
 
-/** The behaviour table, with each row's result from the last test run. */
+function Verdict({ res }: { res?: RowResult }) {
+  if (!res) return <span className="tested none">-</span>;
+  return res.ok ? (
+    <span className="tested pass">
+      <Glyph name="IconCheck" size={12} /> pass
+    </span>
+  ) : (
+    <span className="tested fail" title={res.error}>
+      <Glyph name="IconClose" size={12} /> fails
+    </span>
+  );
+}
+
+/**
+ * The behaviour table, with each row's result per framework from the last
+ * test run. A dash is a framework that has no such component.
+ */
 export function ContractTable({ of }: { of: keyof typeof CONTRACTS }) {
   const contract = CONTRACTS[of];
-  const passed = contract.rows.filter((r) => results?.rows[r.id]?.ok).length;
+  const shown = FRAMEWORKS.filter((f) => contract.rows.some((r) => results?.rows[r.id]?.[f.id]));
+  const tally = shown.map((f) => {
+    const tested = contract.rows.filter((r) => results?.rows[r.id]?.[f.id]);
+    return `${tested.filter((r) => results!.rows[r.id][f.id]!.ok).length} of ${tested.length} in ${f.name}`;
+  });
   return (
     <>
       <p>
@@ -242,9 +296,9 @@ export function ContractTable({ of }: { of: keyof typeof CONTRACTS }) {
             Practices.{" "}
           </>
         )}
-        {results ? (
+        {results && shown.length > 0 ? (
           <>
-            {passed} of {contract.rows.length} rows pass in Chromium, tested {new Date(results.ranAt).toLocaleString("en-GB")}.
+            Rows passing in Chromium: {tally.join(", ")}, tested {new Date(results.ranAt).toLocaleString("en-GB")}.
           </>
         ) : (
           "Not tested yet."
@@ -256,37 +310,28 @@ export function ContractTable({ of }: { of: keyof typeof CONTRACTS }) {
             <th>Keys</th>
             <th>When</th>
             <th>Then</th>
-            <th>Test</th>
+            {(shown.length > 0 ? shown : FRAMEWORKS.slice(0, 1)).map((f) => (
+              <th key={f.id}>{f.name}</th>
+            ))}
           </tr>
         </thead>
         <tbody>
-          {contract.rows.map((r) => {
-            const res = results?.rows[r.id];
-            return (
-              <tr key={r.id}>
-                <td>
-                  <span className="kbd-row">
-                    {r.keys ? r.keys.map((k) => <span key={k} className="kbd">{k}</span>) : <span style={{ color: "var(--carbon-text-muted)" }}>-</span>}
-                  </span>
+          {contract.rows.map((r) => (
+            <tr key={r.id}>
+              <td>
+                <span className="kbd-row">
+                  {r.keys ? r.keys.map((k) => <span key={k} className="kbd">{k}</span>) : <span style={{ color: "var(--carbon-text-muted)" }}>-</span>}
+                </span>
+              </td>
+              <td>{r.when}</td>
+              <td>{r.then}</td>
+              {(shown.length > 0 ? shown : FRAMEWORKS.slice(0, 1)).map((f) => (
+                <td key={f.id}>
+                  <Verdict res={results?.rows[r.id]?.[f.id]} />
                 </td>
-                <td>{r.when}</td>
-                <td>{r.then}</td>
-                <td title={res?.error}>
-                  {!res ? (
-                    <span className="tested none">untested</span>
-                  ) : res.ok ? (
-                    <span className="tested pass">
-                      <Glyph name="IconCheck" size={12} /> pass
-                    </span>
-                  ) : (
-                    <span className="tested fail">
-                      <Glyph name="IconClose" size={12} /> fails
-                    </span>
-                  )}
-                </td>
-              </tr>
-            );
-          })}
+              ))}
+            </tr>
+          ))}
         </tbody>
       </table>
     </>

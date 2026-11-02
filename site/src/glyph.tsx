@@ -1,18 +1,10 @@
-import glyphs from "@glimstone/core/glyphs.json";
 import { setGlyphResolver } from "@glimstone/react";
+import { glyphByName, glyphNameFor } from "./glyphData";
 
-export interface GlyphEntry {
-  name: string;
-  means: string;
-  viewBox: string;
-  svg: string;
-}
-
-export const GLYPHS = glyphs as GlyphEntry[];
-const byName = new Map(GLYPHS.map((g) => [g.name, g]));
+export { GLYPHS, type GlyphEntry } from "./glyphData";
 
 export function Glyph({ name, size = 16 }: { name: string; size?: number }) {
-  const g = byName.get(name);
+  const g = glyphByName.get(name);
   if (!g) return null;
   return (
     <svg
@@ -26,33 +18,7 @@ export function Glyph({ name, size = 16 }: { name: string; size?: number }) {
   );
 }
 
-// The site's own label keys. A real app maps its translation keys the same way.
-const KEYS: Record<string, string> = {
-  save: "IconSave",
-  delete: "IconTrash",
-  cancel: "IconClose",
-  copy: "IconCopy",
-  copied: "IconCheck",
-  success: "IconCheck",
-  confirm: "IconConfirm",
-  refresh: "IconRetry",
-  download: "IconDownload",
-  upload: "IconUpload",
-  add: "IconAdd",
-  edit: "IconPencil",
-  search: "IconSearch",
-  settings: "IconGear",
-  link: "IconLink",
-  play: "IconPlay",
-  pause: "IconPause",
-  restore: "IconRestore",
-  backup: "IconBackupNow",
-  look: "IconTabLook",
-  reset: "IconRefresh",
-  open: "IconExternalLink",
-};
-
 setGlyphResolver((key) => {
-  const name = KEYS[key] ?? `Icon${key.charAt(0).toUpperCase()}${key.slice(1)}`;
-  return byName.has(name) ? <Glyph name={name} /> : undefined;
+  const name = glyphNameFor(key);
+  return name ? <Glyph name={name} /> : undefined;
 });

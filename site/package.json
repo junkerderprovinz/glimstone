@@ -5,7 +5,7 @@
   "scripts": {
     "gen": "node gen.mjs",
     "build": "node gen.mjs && vite build",
-    "typecheck": "node gen.mjs && tsc --noEmit",
+    "typecheck": "node gen.mjs && tsc --noEmit && vue-tsc -p tsconfig.vue.json --noEmit",
     "test": "playwright test",
     "results": "node collect.mjs"
   }
