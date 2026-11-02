@@ -59,3 +59,8 @@ export const MARKS = {
     body: '<path fill-rule="evenodd" clip-rule="evenodd" d="M2.5 3h6A2.5 2.5 0 0 1 11 5.5v6A2.5 2.5 0 0 1 8.5 14h-6A2.5 2.5 0 0 1 0 11.5v-6A2.5 2.5 0 0 1 2.5 3Zm0 2a.5.5 0 0 0-.5.5v6a.5.5 0 0 0 .5.5h6a.5.5 0 0 0 .5-.5v-6a.5.5 0 0 0-.5-.5Z"/><path d="M5 0h6.5A2.5 2.5 0 0 1 14 2.5V9h-2V2.5a.5.5 0 0 0-.5-.5H5Z"/>',
   },
 } satisfies Record<string, Mark>;
+
+/** A mark as SVG markup, for a page that writes HTML. */
+export function markSvg(mark: Mark): string {
+  return `<svg width="${mark.size}" height="${mark.size}" viewBox="${mark.viewBox}" fill="currentColor" aria-hidden="true">${mark.body}</svg>`;
+}

@@ -17,6 +17,7 @@ export * from "./paypal";
 export * from "./portalHue";
 export * from "./segmentLayout";
 export * from "./select";
+export * from "./selectModel";
 export * from "./selectScroll";
 export * from "./tipBubble";
 export * from "./toastEngine";

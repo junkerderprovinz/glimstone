@@ -1,14 +1,15 @@
-// The select for a page without React (design-language.md, "Behaviour
-// contracts"): the same Zag machine as react/Select.tsx and the same
+// The select for a page without a framework (design-language.md, "Behaviour
+// contracts"): the same Zag machine as the React and Vue Select and the same
 // `.glim-select-*` rules, mounted into an empty element. A plugin page gets the
-// keys, the focus handling, the groups, the wheel and the look of the React
-// apps. Submenus need react/Select.tsx.
+// keys, the focus handling, the groups, the wheel and the look of the apps.
+// Submenus need a framework Select.
 //
-// Needs `@zag-js/select` and `@zag-js/vanilla`, bundled or loaded as modules,
-// and ./selectScroll.ts beside it.
+// Needs `@zag-js/select` and `@zag-js/vanilla`, bundled or loaded as modules.
 
 import * as select from '@zag-js/select';
 import { normalizeProps, spreadProps, VanillaMachine } from '@zag-js/vanilla';
+import { markSvg, MARKS } from './marks';
+import { selectRootClass, type SelectWidth } from './selectModel';
 import { enableWheelStep, stepIndex } from './selectScroll';
 
 export interface SelectOption {
@@ -23,9 +24,6 @@ export interface SelectGroup {
   options: SelectOption[];
 }
 
-/** As in react/Select.tsx: `fill` takes its line, `steady` is as wide as the longest option, `squeeze` is steady until the room runs out, `hug` fits the value on show. */
-export type SelectWidth = 'fill' | 'steady' | 'squeeze' | 'hug';
-
 export interface MountedSelect {
   /** Choose a value without firing onChange. */
   setValue: (value: string) => void;
@@ -33,18 +31,8 @@ export interface MountedSelect {
   destroy: () => void;
 }
 
-// The chevron and the check of glyphs.json, IconExpand and IconCheck.
-const EXPAND =
-  '<svg width="14" height="14" viewBox="3.6 2.95 12.8 12.8" fill="currentColor" aria-hidden="true"><path d="M10 13.4 3.6 7l1.7-1.7L10 10l4.7-4.7L16.4 7 10 13.4Z"/></svg>';
-const CHECK =
-  '<svg width="14" height="14" viewBox="0.3 0.549 13.399 13.399" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4.381 12.219 L4.574 12.378 L4.793 12.497 L5.032 12.572 L5.155 12.592 L5.405 12.596 L5.651 12.552 L5.884 12.461 L6.096 12.328 L6.278 12.157 L13.457 3.957 L13.584 3.736 L13.666 3.495 L13.699 3.242 L13.683 2.988 L13.656 2.863 L13.566 2.625 L13.431 2.408 L13.257 2.222 L13.05 2.074 L12.936 2.016 L12.695 1.934 L12.442 1.901 L12.188 1.917 L11.942 1.983 L11.713 2.096 L11.511 2.251 L5.238 9.399 L2.519 6.681 L2.425 6.595 L2.213 6.454 L1.977 6.356 L1.854 6.325 L1.6 6.3 L1.346 6.325 L1.223 6.356 L0.987 6.454 L0.775 6.595 L0.595 6.775 L0.454 6.987 L0.399 7.103 L0.325 7.346 L0.3 7.6 L0.306 7.727 L0.356 7.977 L0.399 8.097 L0.519 8.322 L0.681 8.519Z"/></svg>';
-
-const WIDTH: Record<SelectWidth, string> = {
-  fill: '',
-  steady: 'glim-select--steady',
-  squeeze: 'glim-select--squeeze',
-  hug: 'glim-select--hug',
-};
+const EXPAND = markSvg(MARKS.expand);
+const CHECK = markSvg(MARKS.check);
 
 export function mountSelect(
   root: HTMLElement,
@@ -65,7 +53,7 @@ export function mountSelect(
   const all = groups.flatMap((g) => g.options);
   const width = opts.width ?? 'fill';
 
-  root.className = `glim-select ${WIDTH[width]}`.trim();
+  root.className = selectRootClass(width);
   root.innerHTML =
     '<label class="glim-field-label"></label>' +
     `<div><button type="button" class="glim-select-trigger"><span class="glim-select-value"></span><span class="glim-select-indicator">${EXPAND}</span></button></div>` +
