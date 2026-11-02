@@ -39,22 +39,15 @@ export type ButtonTone = "accent" | "neutral" | "subtle" | "ok" | "danger" | "wa
  */
 export type ButtonVariant = "default" | "chip" | "icon";
 
-// `ok`, `danger` and `warn` put the solid status tokens under `carbon-background`
-// ink: in both themes the solid values sit at the opposite lightness to the
-// background, so one ink reads on both.
-//
-// Filled tones hover up their own ramp (rule 21). `--carbon-hover` is for
-// controls with no fill, and on the dark ramp it is darker than surface2. The
-// accent and status fills have no ramp, so each steps toward the theme's text
-// colour; `opacity` would let the card show through and move the other way.
-// The two surface tones also take the accent tint of rule 40 from tokens.css.
+// The fills live in tokens.css (`.glim-btn--accent` and its siblings). The two
+// surface tones also take the accent tint of rule 40.
 const TONE_CLASS: Record<ButtonTone, string> = {
-  accent: "bg-accent text-accentContrast hover:bg-accentHover",
-  neutral: "glim-btn-neutral bg-carbon-surface3 text-carbon-text hover:bg-carbon-hoverRaised",
-  subtle: "glim-btn-subtle bg-carbon-surface2 text-carbon-text hover:bg-carbon-surface3",
-  ok: "bg-statusOkSolid text-carbon-background hover:bg-statusOkHover",
-  danger: "bg-statusFailSolid text-carbon-background hover:bg-statusFailHover",
-  warn: "bg-statusWarnSolid text-carbon-background hover:bg-statusWarnHover",
+  accent: "glim-btn--accent",
+  neutral: "glim-btn-neutral glim-btn--neutral",
+  subtle: "glim-btn-subtle glim-btn--subtle",
+  ok: "glim-btn--ok",
+  danger: "glim-btn--danger",
+  warn: "glim-btn--warn",
 };
 
 export interface ButtonInput {
@@ -140,7 +133,7 @@ export function buttonView(b: ButtonInput): ButtonView {
 
   return {
     showGlyph: effective !== "text" && b.hasGlyph,
-    labelClass: showText ? "glim-btn-label" : reactive ? "glim-label-reactive" : "sr-only",
+    labelClass: showText ? "glim-btn-label" : reactive ? "glim-label-reactive" : "glim-sr-only",
     className: `glim-btn ${stage} ${chip ? "" : TONE_CLASS[b.tone]}${hueOn ? " glim-hue" : ""}${reactive ? " glim-reactive" : ""}`,
     style: Object.keys(style).length ? style : undefined,
     tip: reactive && !b.disabled ? undefined : tip,

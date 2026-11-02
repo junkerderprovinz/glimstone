@@ -27,10 +27,10 @@ export function UnavailableNotice({
   action?: ReactNode;
 }) {
   return (
-    <div className="rounded-card bg-statusWarnBgSoft px-4 py-3">
-      <p className="text-sm font-medium text-carbon-text">{title}</p>
-      <p className="mt-1 text-sm text-carbon-textSub">{reason}</p>
-      {action ? <div className="mt-3">{action}</div> : null}
+    <div className="glim-notice">
+      <p className="glim-notice-title">{title}</p>
+      <p className="glim-notice-reason">{reason}</p>
+      {action ? <div className="glim-notice-action">{action}</div> : null}
     </div>
   );
 }

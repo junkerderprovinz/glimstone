@@ -39,13 +39,13 @@ export function Card({
 }) {
   return (
     <div
-      className={`relative glim-notch-card flex flex-col gap-4 ${
-        nested ? "pt-5" : "bg-carbon-surface rounded-card p-5"
+      className={`glim-panel glim-notch-card${
+        nested ? " glim-panel--nested" : ""
       }${hueIndex !== undefined ? " glim-hue" : ""}`}
       style={hueIndex !== undefined ? (hueVars(hueIndex) as CSSProperties) : undefined}
     >
       {(title || hint) && (
-        <h2 className="flex items-center">
+        <h2 className="glim-panel-heading">
           <Badge tone="heading" size="heading" wrap hueIndex={hueIndex}>
             {title}
             {hint && <InfoBubble tip={hint} onAccent />}

@@ -108,7 +108,7 @@ export function useTipBubble(tip?: string, disabled = false): TipBubble {
       : null,
     wrap: (node: ReactNode) =>
       disabled && tip ? (
-        <span className="inline-flex" onMouseEnter={show} onMouseLeave={hide}>
+        <span className="glim-tip-wrap" onMouseEnter={show} onMouseLeave={hide}>
           {node}
         </span>
       ) : (

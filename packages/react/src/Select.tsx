@@ -195,7 +195,7 @@ function ListSelect<T extends string>({
 
   return (
     <div {...api.getRootProps()} className={`glim-select ${WIDTH[width]}`}>
-      <label {...api.getLabelProps()} className={hideLabel ? "sr-only" : "glim-field-label"}>
+      <label {...api.getLabelProps()} className={hideLabel ? "glim-sr-only" : "glim-field-label"}>
         {label}
       </label>
       <div {...api.getControlProps()}>
@@ -216,7 +216,7 @@ function ListSelect<T extends string>({
       </div>
       {trigger.tip.bubble}
       <Portal>
-        <div {...positioner} style={{ ...positioner.style, ...hue.style }} className={`z-50 ${hue.className}`}>
+        <div {...positioner} style={{ ...positioner.style, ...hue.style }} className={`glim-select-positioner ${hue.className}`.trim()}>
           <div {...api.getContentProps()} className={`glim-select-content glim-fade${glyphs ? " glim-select-content--glyphs" : ""}`}>
             {groups.map((g, gi) => {
               const items = g.entries as SelectOption<T>[];
@@ -350,7 +350,7 @@ function MenuSelect<T extends string>({
       </div>
       {trigger.tip.bubble}
       <Portal>
-        <div {...positioner} style={{ ...positioner.style, ...hue.style }} className={`z-50 ${hue.className}`}>
+        <div {...positioner} style={{ ...positioner.style, ...hue.style }} className={`glim-select-positioner ${hue.className}`.trim()}>
           <div {...api.getContentProps()} className={`glim-select-content glim-fade${glyphs ? " glim-select-content--glyphs" : ""}`}>
             {groups.map((g, gi) => {
               if (g.entries.length === 0) return null;
@@ -431,7 +431,7 @@ function Submenu<T extends string>({
         </span>
       </div>
       <Portal>
-        <div {...positioner} style={{ ...positioner.style, ...hue.style }} className={`z-50 ${hue.className}`}>
+        <div {...positioner} style={{ ...positioner.style, ...hue.style }} className={`glim-select-positioner ${hue.className}`.trim()}>
           <div {...api.getContentProps()} className={`glim-select-content glim-fade${glyphs ? " glim-select-content--glyphs" : ""}`}>
             {entry.options.map((o) => (
               <Choice key={o.value} api={api} option={o} value={value} onChange={onChange} glyphs={glyphs} />

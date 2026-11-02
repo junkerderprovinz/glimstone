@@ -32,8 +32,8 @@ export function Slider({ label, value, onChange, min, max, step = 1, format, dis
   const api = slider.connect(service, normalizeProps);
 
   return (
-    <div {...api.getRootProps()} className="grid min-w-0 gap-2.5">
-      <div className="flex items-baseline justify-between gap-3">
+    <div {...api.getRootProps()} className="glim-slider">
+      <div className="glim-slider-head">
         <label {...api.getLabelProps()} className="glim-field-label">
           {label}
         </label>

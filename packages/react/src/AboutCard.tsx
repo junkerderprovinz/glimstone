@@ -63,9 +63,9 @@ export function InfoAboutCard({
     <Card title={text.title} hueIndex={hueIndex}>
       {/* No reading-width cap: a reading width belongs to a whole page, and a
           cap on this card alone reads as hand-set line breaks. */}
-      <p className="text-sm text-carbon-textSub">{text.body}</p>
+      <p className="glim-info-text">{text.body}</p>
 
-      <p className="text-sm text-carbon-textSub">{text.coffee}</p>
+      <p className="glim-info-text">{text.coffee}</p>
       {/* The hosted payment routes first and the wallet, which needs no
           account, last. One line per button, as on the README, so nothing
           moves up under the pointer. */}
@@ -161,19 +161,19 @@ export function InfoVersionCard({
   const notes = !whatsNew && onReleaseNotes && text.releaseNotes;
   return (
     <Card title={text.title} hint={text.hint} hueIndex={hueIndex}>
-      <ul className="flex flex-col gap-3">
+      <ul className="glim-version-rows">
         {rows.map((row) => (
-          <li key={row.name} className="flex items-center justify-between gap-4">
-            <span className="flex min-w-0 flex-col">
-              <span className="text-sm text-carbon-text">{row.name}</span>
-              {row.sub && <span className="text-subline text-carbon-textMuted">{row.sub}</span>}
+          <li key={row.name} className="glim-version-row">
+            <span className="glim-version-name">
+              <span className="glim-version-part">{row.name}</span>
+              {row.sub && <span className="glim-version-sub">{row.sub}</span>}
             </span>
             <VersionNumber row={row} unreleased={text.unreleased} openUrl={openUrl} />
           </li>
         ))}
       </ul>
       {(notes || whatsNew || updateCheck) && (
-        <div className="flex flex-wrap items-end justify-end gap-3">
+        <div className="glim-version-actions">
           {notes && <Button label={notes} labelKey="about.releaseNotes" onClick={onReleaseNotes} />}
           {whatsNew}
           {updateCheck && <UpdateCheckButton {...updateCheck} />}
@@ -227,7 +227,7 @@ function UpdateCheckButton({ run, text }: UpdateCheck) {
         onClick={() => void check()}
         className={shake > 0 ? "glim-shake" : ""}
       />
-      <span role="status" className="sr-only">
+      <span role="status" className="glim-sr-only">
         {announced}
       </span>
     </>
@@ -267,10 +267,10 @@ function VersionNumber({
   const released = /^v\d+\.\d+\.\d+$/.test(tag);
   const shown = shownVersion(row.version);
   if (!released) {
-    return <span className="glim-num shrink-0 text-sm text-carbon-textSub">{unreleased(shown)}</span>;
+    return <span className="glim-num glim-version-number">{unreleased(shown)}</span>;
   }
   if (!row.repoUrl) {
-    return <span className="glim-num shrink-0 text-sm text-carbon-textSub">{shown}</span>;
+    return <span className="glim-num glim-version-number">{shown}</span>;
   }
   const href = `${row.repoUrl}/releases/tag/${encodeURIComponent(`${row.tagPrefix ?? ""}${tag}`)}`;
   return (
@@ -282,7 +282,7 @@ function VersionNumber({
         e.preventDefault();
         openUrl(href);
       }}
-      className="glim-num shrink-0 text-sm text-carbon-textSub no-underline hover:text-carbon-text"
+      className="glim-num glim-version-number"
     >
       {shown}
     </a>
@@ -347,7 +347,7 @@ export function InfoHelpCard({
 
   return (
     <Card title={text.title} hint={text.hint} hueIndex={hueIndex}>
-      <p className="text-sm text-carbon-textSub">{text.report}</p>
+      <p className="glim-info-text">{text.report}</p>
       <div className="glim-readme-btn-rows">
         <ReadmeButton
           brand="github"

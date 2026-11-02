@@ -127,14 +127,7 @@ export function Button({
         >
           {view.showGlyph && (
             <span className="glim-btn-glyph">
-              {busy ? (
-                <span
-                  className="h-3.5 w-3.5 rounded-full border-2 border-t-transparent animate-spin inline-block"
-                  style={{ borderColor: "currentColor", borderTopColor: "transparent" }}
-                />
-              ) : (
-                resolved
-              )}
+              {busy ? <span className="glim-spinner" /> : resolved}
             </span>
           )}
           <span className={view.labelClass}>{label}</span>

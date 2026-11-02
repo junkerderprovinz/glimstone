@@ -1,5 +1,6 @@
 export * from "./appearance";
 export * from "./appMarks";
+export * from "./badge";
 export * from "./bubblePosition";
 export * from "./button";
 export * from "./colorPicker";

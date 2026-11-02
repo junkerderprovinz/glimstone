@@ -21,14 +21,6 @@ export interface ToastCardProps {
   onBlur: (id: string) => void;
 }
 
-// Severity shows only in the glyph's state hue (rule 4), never as a coloured
-// rail on the card (rule 5).
-const SEVERITY_ICON_CLASS: Record<ToastSeverity, string> = {
-  success: "text-statusOkSolid",
-  warn: "text-statusWarnSolid",
-  fail: "text-statusFailSolid",
-};
-
 // "alert" is assertive, so a failure interrupts the screen reader; "status" is
 // polite. Each toast is a new element, which both roles announce on insertion,
 // so no separate aria-live wrapper is needed.
@@ -39,7 +31,7 @@ function roleFor(severity: ToastSeverity): "alert" | "status" {
 // Filled shapes (design-language.md, "Icon glyphs"). The mark inside each is
 // painted in the card's own surface colour so it reads as a cutout.
 function ToastGlyph({ severity }: { severity: ToastSeverity }) {
-  const className = `mt-0.5 shrink-0 ${SEVERITY_ICON_CLASS[severity]}`;
+  const className = `glim-toast-glyph glim-toast-glyph--${severity}`;
   const cutout = "var(--carbon-surface, transparent)";
   if (severity === "fail") {
     return (
@@ -94,15 +86,15 @@ export function ToastCard({
           onDismiss(id);
         }
       }}
-      className="glim-toast pointer-events-auto flex w-80 max-w-[calc(100vw-2rem)] items-start gap-2.5 rounded-card bg-carbon-surface px-3.5 py-3 text-carbon-text"
+      className="glim-toast glim-toast-card"
     >
       <ToastGlyph severity={severity} />
-      <p className="min-w-0 flex-1 text-sm leading-snug wrap-break-word">{message}</p>
+      <p className="glim-toast-message">{message}</p>
       <button
         type="button"
         onClick={() => onDismiss(id)}
         aria-label={dismissLabel}
-        className="glim-btn-bare -m-1 shrink-0 rounded-pill p-1 text-carbon-textMuted opacity-80 hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--focus-ring)"
+        className="glim-btn-bare glim-toast-dismiss"
       >
         <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
           <rect x="6.8" y="2.5" width="2.4" height="11" rx="0.6" transform="rotate(45 8 8)" />
@@ -131,16 +123,10 @@ export interface ToastViewportProps {
   onBlur: (id: string) => void;
 }
 
-// The bottom-end corner follows writing direction. Toasts render in array order,
-// so the newest sits nearest the bottom edge. The overflow only matters on a
-// very short viewport, where it keeps the stack scrollable.
-//
-// The inset is padding inside the box rather than an offset of it, because
-// `overflow-y: auto` also clips horizontally and would cut off the cards'
-// shadows and the sideways slide of their entrance.
+// Toasts render in array order, so the newest sits nearest the bottom edge.
 export function ToastViewport({ toasts, dismissLabel, onDismiss, onMouseEnter, onMouseLeave, onFocus, onBlur }: ToastViewportProps) {
   return (
-    <div className="pointer-events-none fixed bottom-0 end-0 z-[70] flex max-h-screen flex-col gap-2 overflow-y-auto p-4">
+    <div className="glim-toast-stack">
       {toasts.map((t) => (
         <ToastCard
           key={t.id}

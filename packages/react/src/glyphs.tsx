@@ -29,7 +29,7 @@ function MarkSvg({ mark }: { mark: Mark }) {
       height={mark.size}
       viewBox={mark.viewBox}
       fill="currentColor"
-      className="shrink-0"
+      className="glim-mark"
       aria-hidden="true"
       dangerouslySetInnerHTML={{ __html: mark.body }}
     />

@@ -28,7 +28,7 @@ jobs:
           cache-dependency-path: package-lock.json
       - run: npm ci
         working-directory: .
-      - run: bash packages/react/check.sh
+      - run: bash scripts/check-classes.sh
         working-directory: .
       - run: npm run build:packages
         working-directory: .

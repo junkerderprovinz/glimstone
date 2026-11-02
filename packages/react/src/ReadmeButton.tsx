@@ -132,7 +132,7 @@ export function ReadmeButton({ brand, parts, mark, markClass, art, hint, note, s
       })}
       {!soon && <span className="glim-readme-btn-sheen" aria-hidden />}
       {hint && (
-        <span className="glim-readme-btn-hint text-carbon-textSub">
+        <span className="glim-readme-btn-hint">
           <InfoBubble tip={hint} />
         </span>
       )}
@@ -156,5 +156,5 @@ export function fitReadmeText(root: HTMLElement): void {
 
 /** A vendor mark kept as its own markup, from appMarks.ts. */
 export function BrandMark({ svg }: { svg: string }) {
-  return <span className="contents" aria-hidden dangerouslySetInnerHTML={{ __html: svg }} />;
+  return <span className="glim-brand-svg" aria-hidden dangerouslySetInnerHTML={{ __html: svg }} />;
 }

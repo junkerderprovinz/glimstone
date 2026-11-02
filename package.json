@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "check": "bash packages/react/check.sh",
+    "check": "bash scripts/check-classes.sh",
     "build:packages": "tsc -p packages/core/tsconfig.build.json && tsc -p packages/react/tsconfig.build.json"
   },
   "dependencies": {

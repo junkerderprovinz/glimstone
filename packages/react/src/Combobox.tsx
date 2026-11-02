@@ -51,8 +51,8 @@ export function Combobox({ label, hideLabel, options, value, onChange, placehold
   const api = combobox.connect(service, normalizeProps);
 
   return (
-    <div {...api.getRootProps()} className="grid min-w-0 gap-1.5">
-      <label {...api.getLabelProps()} className={hideLabel ? "sr-only" : "glim-field-label"}>
+    <div {...api.getRootProps()} className="glim-combobox">
+      <label {...api.getLabelProps()} className={hideLabel ? "glim-sr-only" : "glim-field-label"}>
         {label}
       </label>
       <div {...api.getControlProps()} className="glim-combobox-control">
@@ -64,7 +64,7 @@ export function Combobox({ label, hideLabel, options, value, onChange, placehold
         </button>
       </div>
       <Portal>
-        <div {...api.getPositionerProps()} className="z-50">
+        <div {...api.getPositionerProps()} className="glim-select-positioner">
           <ul {...api.getContentProps()} className="glim-select-content">
             {shown.length === 0 && <li className="glim-select-empty">{empty}</li>}
             {shown.map((item) => (

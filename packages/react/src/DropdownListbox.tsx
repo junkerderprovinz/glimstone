@@ -215,9 +215,7 @@ export function DropdownListbox({
       }}
       aria-multiselectable={multiselectable ? "true" : undefined}
       aria-label={label}
-      className={`fixed z-50 max-h-60 overflow-y-auto rounded-card bg-carbon-surface shadow-xl glim-fade${
-        hue.className ? ` ${hue.className}` : ""
-      }`}
+      className={`glim-listbox glim-fade${hue.className ? ` ${hue.className}` : ""}`}
       style={{
         // Parked off-screen until measured, since the panel needs to be in the
         // DOM at its real width to have a height.
@@ -225,7 +223,6 @@ export function DropdownListbox({
         top: pos?.top ?? -9999,
         width: pos?.width,
         transform: "translateX(-50%)",
-        scrollbarColor: "var(--carbon-border) transparent",
         ...(hue.style ?? {}),
       } as CSSProperties}
     >
