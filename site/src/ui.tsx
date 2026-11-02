@@ -136,8 +136,8 @@ function FlutterFrame({ name }: { name: string }) {
   return (
     <iframe
       title={`${name} in Flutter`}
-      src={`flutter/index.html?demo=${name}&theme=${theme}&labels=${look.labels}`}
-      style={{ display: "block", width: "100%", height: 112, border: 0 }}
+      src={`flutter/index.html?demo=${name}&theme=${theme}&shape=${look.shape}&labels=${look.labels}`}
+      style={{ display: "block", width: "100%", height: 160, border: 0, colorScheme: "normal" }}
     />
   );
 }

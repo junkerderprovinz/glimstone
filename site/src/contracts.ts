@@ -22,7 +22,7 @@ export const CONTRACTS: Record<string, Contract> = {
     rows: [
       { id: "button-keys", keys: ["Enter", "Space"], when: "The button has focus", then: "It acts, once per press." },
       { id: "button-name", when: "The label mode hides the words", then: "The label stays the accessible name." },
-      { id: "button-width", when: "The label mode changes", then: "The button keeps its width to the pixel." },
+      { id: "button-width", when: "The label mode changes between text and text with glyph", then: "The button keeps its width to the pixel; the modes that hide the words hug the glyph." },
       { id: "button-busy", when: "busy turns on", then: "The width stays and the button announces it is busy." },
       { id: "button-tint", when: "The pointer rests on a neutral or subtle button", then: "Its ground takes a little of the accent and its glyph all of it." },
     ],
@@ -145,6 +145,62 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "window-drag", when: "A press on the bar starts to move", then: "The window moves; a press that does not move stays a click." },
       { id: "window-drag-button", when: "A press on a button moves", then: "The window stays where it is." },
       { id: "window-dblclick", when: "The bar is double-clicked", then: "The window maximises or restores; a double click on a button does not." },
+    ],
+  },
+  Selector: {
+    pattern: { name: "Tabs", url: `${APG}tabs/` },
+    rows: [
+      { id: "sel-tabs-role", when: "select is one", then: "role=\"tablist\" of tabs with aria-selected; the chosen tab controls the panel, which is named by it." },
+      { id: "sel-one-stop", keys: ["Tab"], when: "Focus enters the strip", then: "It lands on the chosen segment; the strip is one tab stop." },
+      { id: "sel-arrows", keys: ["ArrowRight", "ArrowLeft"], when: "A tab has focus", then: "Focus moves to the next or previous tab and chooses it, wrapping at the ends." },
+      { id: "sel-home-end", keys: ["Home", "End"], when: "A tab has focus", then: "Focus moves to the first or last tab and chooses it." },
+      { id: "sel-rtl", keys: ["ArrowLeft"], when: "The page runs right to left", then: "Focus moves to the next segment, the one on its left." },
+      { id: "sel-manual", keys: ["ArrowRight", "Space"], when: "activation is manual", then: "A radio group: the arrows move the focus and keep the choice, Space chooses." },
+      { id: "sel-many", keys: ["Space"], when: "select is many", then: "Each segment is a toggle button with aria-pressed, and a press changes only that one." },
+      { id: "sel-disabled", when: "A segment is disabled", then: "The arrows skip it, and its reason is its description." },
+      { id: "sel-name", when: "The label mode hides the words", then: "The label stays the accessible name and shows in the bubble on keyboard focus." },
+      { id: "sel-equal", when: "equalWidth is on", then: "Every segment is as wide as the widest, and the strip spans its box." },
+      { id: "sel-colour", when: "Rainbow is on", then: "Each tab's glyph shows a hue of its own, and two selectors that set values wear two colours." },
+      { id: "tiles-role", when: "orientation is vertical", then: "A vertical tablist of links; the chosen tile has aria-selected and aria-current=\"page\"." },
+      { id: "tiles-arrows", keys: ["ArrowDown", "ArrowUp", "Home", "End"], when: "A tile has focus", then: "Focus moves along the column and the open page stays." },
+      { id: "tiles-open", keys: ["Enter", "Space"], when: "A tile has focus", then: "Its page opens." },
+      { id: "tiles-link", when: "Always", then: "Every tile is a link to its page's own address." },
+      { id: "tiles-glyph", when: "The label mode shows glyphs alone", then: "The column narrows, and each name stays the tile's name and shows in the bubble." },
+      { id: "tiles-height", when: "The column has room", then: "The tiles share its height, each at least 40px tall." },
+    ],
+  },
+  NumberField: {
+    pattern: { name: "Spinbutton", url: `${APG}spinbutton/` },
+    rows: [
+      { id: "num-role", when: "Always", then: "A native spinbutton named by its label, with its range." },
+      { id: "num-arrows", keys: ["ArrowUp", "ArrowDown"], when: "The field has focus", then: "The value moves by one step." },
+      { id: "num-steppers", when: "An arrow inside the field is pressed", then: "The value steps, the app hears it, and focus stays in the field." },
+      { id: "num-ends", when: "The value is at its maximum", then: "The up arrow greys out and does nothing." },
+      { id: "num-wheel", keys: ["Wheel"], when: "The field has focus", then: "The value steps, up for more, and the page does not scroll." },
+      { id: "num-wheel-hover", keys: ["Wheel"], when: "The pointer is over a field without focus", then: "The value stays." },
+      { id: "num-hidden", keys: ["Tab"], when: "Focus leaves the field", then: "It skips the arrows, which are hidden from screen readers." },
+    ],
+  },
+  SidebarRow: {
+    pattern: { name: "Link", url: `${APG}link/` },
+    rows: [
+      { id: "nav-current", when: "A row's destination is showing", then: "It is a link with aria-current=\"page\"; no other row has it." },
+      { id: "nav-enter", keys: ["Enter"], when: "A row has focus", then: "It follows the link." },
+      { id: "nav-name", when: "The label mode hides the words", then: "The name stays the link's name." },
+      { id: "nav-tip", keys: ["Tab"], when: "A row without visible words receives keyboard focus", then: "Its name shows in the house bubble." },
+      { id: "nav-count", when: "A row has a count", then: "The count is read in words and the bare figure is hidden." },
+    ],
+  },
+  EmptyState: {
+    rows: [
+      { id: "empty-text", when: "Always", then: "The glyph is hidden from screen readers; the title and the hint are read as text." },
+      { id: "empty-action", when: "It has an action", then: "The action is a filled button with words." },
+    ],
+  },
+  SubCard: {
+    rows: [
+      { id: "subcard-region", when: "Always", then: "A region named by its title alone." },
+      { id: "subcard-step", when: "A field or a quiet button stands inside it", then: "It takes a surface of its own, one step up from the sub-card's." },
     ],
   },
 };

@@ -60,6 +60,11 @@ needs none of them.
 | `InfoTile` | The Info tile with its Version, Help and About cards, each also on its own |
 | `ReadmeButton` | The button in the shape of the README's, with its segments |
 | `CryptoDonateDialog`, `CoffeeDialog`, `PaypalDialog` | The three windows to give |
+| `Selector` | The one horizontal selector: tabs, filter bars, segmented pickers, one value or many, and with `orientation="vertical"` the column of tiles beside a settings area's pages |
+| `NumberField` | A number with its two steppers inside the field and the wheel while it has focus |
+| `SidebarRow` | One row of the rail: glyph, words by the label mode, the current page and a count |
+| `EmptyState` | What a list, table or panel shows when it holds nothing |
+| `SubCard` | A filled inset group inside a card, which replaces a fold-out |
 | `UnavailableNotice` | What stands where a control would be, when the environment forbids the thing entirely |
 | `WindowBar` | A desktop app's own title bar on Windows and Linux |
 | `useLabelMode`, `useTipBubble`, `usePortalHue` | The small hooks the components need |

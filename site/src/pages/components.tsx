@@ -384,3 +384,219 @@ export function WindowBarPage() {
     </>
   );
 }
+
+export function SelectorPage() {
+  return (
+    <>
+      <p className="lead">
+        The one horizontal selector: tabs, filter bars, segmented controls and pickers are the same control, and its
+        second form stands the tabs on their side as a column of tiles.
+      </p>
+      <Head file="react/Selector.tsx" />
+      <Demo name="SelectorTabs" />
+      <Usage
+        code={`import { Selector } from "@glimstone/react";
+
+<Selector label="Settings pages" items={pages} value={page} onChange={setPage} size="lg" variant="chip" hueOffset={0} />`}
+      />
+      <H2>One or many, auto or manual</H2>
+      <Demo name="SelectorPickers" />
+      <p>
+        With <code>select="one"</code> the strip is a tab list and the arrow keys choose as they move. A strip that
+        saves a setting takes <code>activation="manual"</code> and becomes a radio group: the arrows move the focus and
+        Space, Enter or a click chooses. <code>select="many"</code> makes every segment a toggle button.
+      </p>
+      <p>
+        A caption such as "Show" is a plain span beside the strip, never a <code>label</code> around it: a label around
+        several segments hands its clicks to the first one.
+      </p>
+      <H2>Two stylings, two scales</H2>
+      <ul>
+        <li>
+          <code>chip</code> is the bare strip, every segment a quiet badge at rest. <code>well</code> sets the segments in
+          one groove, and only the chosen one is filled.
+        </li>
+        <li>
+          <code>equalWidth</code> pins every segment to the widest label, at least 200px where the row has room, so the
+          page-level pickers of a page come out at one width. Without it the segments hug their labels.
+        </li>
+        <li>
+          A selector with the card to itself spans the card and its segments share the width. <code>inline</code> hugs
+          them, for a strip in a toolbar row.
+        </li>
+        <li>A strip that wraps fills every row evenly, so six options go three and three, never four and two.</li>
+        <li>
+          <code>pairsOnPhone</code> sets the segments two to a row below 600px and lets their labels wrap.{" "}
+          <code>fit</code> keeps page tabs on one row and drops their words before it would wrap.
+        </li>
+      </ul>
+      <H2>Colour</H2>
+      <p>
+        Under rainbow a selector that sets a value wears one colour on its chosen segment, its place among the page's
+        selectors. A tab strip, given a <code>hueOffset</code>, keeps a colour per tab, and an idle tab's glyph shows it
+        in every mode but reactive.
+      </p>
+      <H2>Vertical tiles</H2>
+      <Demo name="SelectorTiles" left />
+      <p>
+        A settings area with many pages stands its tabs in a column beside the content. Each tile is a link to the
+        page's own address, so it opens in a new tab on a modified click; a plain click calls <code>onChange</code> for
+        the app's router. The tiles share the column's height above a 40px floor, a long name takes a second line, and
+        the column follows the rail's label mode and shows glyphs alone below 1024px.
+      </p>
+      <p>
+        The arrow keys only move the focus here, since every page change is a history entry. Enter, Space or a click
+        opens the page. A page with nothing on it yet is dimmed with <code>dim</code>, not hidden.
+      </p>
+      <H2>Accessibility</H2>
+      <ul>
+        <li>The strip is one tab stop with a roving tabindex; the arrows follow the reading direction.</li>
+        <li>A disabled segment is skipped by the arrows and keeps its reason as its description.</li>
+        <li>In a mode that hides the words, the label stays the accessible name and shows in the bubble.</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="Selector" />
+      <H2>API</H2>
+      <PropsTable of="Selector" />
+    </>
+  );
+}
+
+export function NumberFieldPage() {
+  return (
+    <>
+      <p className="lead">A number input with its two arrows inside the field, in place of the browser's spinner.</p>
+      <Head file="react/NumberField.tsx" />
+      <Demo name="NumberFieldBasic" />
+      <Usage
+        code={`import { NumberField } from "@glimstone/react";\n\n<NumberField min={1} max={30} value={keep} onChange={(e) => setKeep(e.target.valueAsNumber)} />`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>
+          The browser's spinner is an OS widget on its own ground. These arrows have no ground at all; only their ink
+          changes on hover, and the digits never run under them.
+        </li>
+        <li>Each arrow greys out at its own end. A control that looks pressable and does nothing is worse.</li>
+        <li>The wheel steps the value only while the field has focus, so scrolling past a field never changes it.</li>
+        <li>
+          The range lives on the input alone: the arrows, the arrow keys and the wheel all go through{" "}
+          <code>stepUp()</code>.
+        </li>
+        <li>The width belongs to the input and has to be definite, since the arrows sit against its end.</li>
+        <li>Under a finger the arrows sit side by side, each the field's full height.</li>
+      </ul>
+      <H2>Accessibility</H2>
+      <ul>
+        <li>
+          It stays a native <code>input type="number"</code>: a spinbutton with its range, the arrow keys and a phone's
+          number pad.
+        </li>
+        <li>The arrows are hidden from screen readers and out of the tab order, since the input already does their job.</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="NumberField" />
+      <H2>API</H2>
+      <PropsTable of="NumberField" />
+    </>
+  );
+}
+
+export function SidebarRowPage() {
+  return (
+    <>
+      <p className="lead">One destination of the navigation rail: a glyph, a name and, where it has one, a count.</p>
+      <Head file="react/SidebarRow.tsx" />
+      <Demo name="SidebarRail" />
+      <Usage
+        code={`import { SidebarRow } from "@glimstone/react";\n\n<SidebarRow label="Backups" glyph={<IconArchive />} href="/backups" active={here} hueIndex={1} />`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>
+          The rail is real navigation, so a row is a link marked <code>aria-current="page"</code>, not a tab. The rail
+          itself, with its brand block and its groups, belongs to the app.
+        </li>
+        <li>The active row is filled with the accent. Nothing else marks it: no bar beside it, no border.</li>
+        <li>
+          An idle row shows its colour on its glyph at rest, the accent or its rainbow position. Only reactive rests it
+          grey until the pointer comes.
+        </li>
+        <li>
+          The rail has a label mode of its own. Glyph mode narrows the rail to <code>--rail-narrow</code>; reactive keeps
+          the full width and slides the name back in.
+        </li>
+        <li>A count wears its row's colours, and on the active row the two swap.</li>
+      </ul>
+      <H2>Accessibility</H2>
+      <ul>
+        <li>The name stays the link's name in every mode, and shows in the bubble where it is hidden.</li>
+        <li>A count is read in words, such as "3 need attention"; the bare figure is hidden from screen readers.</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="SidebarRow" />
+      <H2>API</H2>
+      <PropsTable of="SidebarRow" />
+    </>
+  );
+}
+
+export function EmptyStatePage() {
+  return (
+    <>
+      <p className="lead">What a list, table or panel shows when it holds nothing.</p>
+      <Head file="react/EmptyState.tsx" />
+      <Demo name="EmptyStateBasic" />
+      <Usage
+        code={`import { EmptyState } from "@glimstone/react";\n\n<EmptyState glyph={<IconArchive />} title="No backups yet" action={<Button label="Add a backup" labelKey="add" />} />`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>An empty list gets a deliberate state, never blank space.</li>
+        <li>The glyph is the page's own, muted and large, so the empty state echoes where it is.</li>
+        <li>
+          "Nothing here yet" and "nothing matches the filter" take the same shape with different words. Calling the
+          first one "No results" sends people looking for a filter that was never set.
+        </li>
+        <li>The hint is one line. Its button carries words, so it is filled like every other.</li>
+        <li>
+          Inside a card it takes <code>nested</code> and drops its own surface, since a card never holds another card.
+        </li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="EmptyState" />
+      <H2>API</H2>
+      <PropsTable of="EmptyState" />
+    </>
+  );
+}
+
+export function SubCardPage() {
+  return (
+    <>
+      <p className="lead">A flat, filled group inside a card, under a small uppercase title.</p>
+      <Head file="react/SubCard.tsx" />
+      <Demo name="SubCardBasic" />
+      <Usage
+        code={`import { SubCard } from "@glimstone/react";\n\n<Card title="Snapshots">\n  <SubCard title="Retention">...</SubCard>\n</Card>`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>
+          A card never holds another card. Where a card lists things that each need to be seen as one, each becomes a
+          sub-card: the second surface at the card radius, without a shadow.
+        </li>
+        <li>It replaces a fold-out. What used to hide behind a chevron stays in view.</li>
+        <li>
+          Fields, quiet buttons and bare selector segments inside it step up one surface, or they would vanish into its
+          fill.
+        </li>
+        <li>Its title is not a badge: only a card's outermost heading is.</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="SubCard" />
+      <H2>API</H2>
+      <PropsTable of="SubCard" />
+    </>
+  );
+}

@@ -22,6 +22,11 @@ const COMPONENTS = {
   Combobox: "react/Combobox.tsx",
   Slider: "react/Slider.tsx",
   WindowBar: "react/WindowBar.tsx",
+  Selector: "react/Selector.tsx",
+  NumberField: "react/NumberField.tsx",
+  SidebarRow: "react/SidebarRow.tsx",
+  EmptyState: "react/EmptyState.tsx",
+  SubCard: "react/SubCard.tsx",
 };
 
 const clean = (s) => s.replace(/\s+/g, " ").trim();

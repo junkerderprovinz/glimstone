@@ -144,7 +144,8 @@ body {
    other where it is not. Each names its framework above its stage. */
 .demo-pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); }
 .demo-pair > .demo-cell + .demo-cell { border-inline-start: 1px solid var(--carbon-border); }
-.demo-pair > .demo-cell { position: relative; min-width: 0; }
+.demo-pair > .demo-cell { position: relative; display: flex; flex-direction: column; min-width: 0; }
+.demo-pair > .demo-cell > .demo-stage { flex: 1; }
 .demo-fw {
   position: absolute;
   top: 0.5rem;
