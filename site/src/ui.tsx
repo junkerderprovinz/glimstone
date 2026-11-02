@@ -5,6 +5,7 @@ import { Button, Badge } from "@glimstone/react";
 import propsData from "./gen/props.json";
 import { CONTRACTS } from "./contracts";
 import { Glyph } from "./glyph";
+import { useLook } from "./look";
 import { VueIsland } from "./vueIsland";
 
 const demoModules = import.meta.glob<{ default: ComponentType }>("./demos/*.tsx", { eager: true });
@@ -114,30 +115,58 @@ export function Code({ code, copy = true }: { code: string; copy?: boolean }) {
 const vueModules = import.meta.glob<{ default: VueComponent }>("./vue-demos/*.vue", { eager: true });
 const vueSources = import.meta.glob<string>("./vue-demos/*.vue", { eager: true, query: "?raw", import: "default" });
 
+// The Flutter demos are one web app, built from packages/flutter/example and
+// placed under public/flutter, which draws a demo by its name.
+const FLUTTER_DEMOS = new Set(["ButtonTones", "ButtonStates"]);
+const flutterSource = Object.values(
+  import.meta.glob<string>("../../packages/flutter/example/lib/main.dart", { eager: true, query: "?raw", import: "default" }),
+)[0];
+
 /** `?fw=react` or `?fw=vue` in the address shows one framework's demos alone, as each test run does. */
 function onlyFramework(): string | null {
   return new URLSearchParams(location.hash.split("?")[1] ?? "").get("fw");
 }
 
-type View = "preview" | "react" | "vue";
+type View = "preview" | Framework;
+
+function FlutterFrame({ name }: { name: string }) {
+  const look = useLook();
+  const theme =
+    look.theme === "system" ? (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark") : look.theme;
+  return (
+    <iframe
+      title={`${name} in Flutter`}
+      src={`flutter/index.html?demo=${name}&theme=${theme}&labels=${look.labels}`}
+      style={{ display: "block", width: "100%", height: 112, border: 0 }}
+    />
+  );
+}
 
 /**
- * A live demo from src/demos, beside its Vue twin from src/vue-demos where
- * there is one, with each source one click away.
+ * A live demo from src/demos, beside its Vue twin from src/vue-demos and its
+ * Flutter twin where there are ones, with each source one click away.
  */
 export function Demo({ name, left }: { name: string; left?: boolean }) {
   const mod = demoModules[`./demos/${name}.tsx`];
   const vue = vueModules[`./vue-demos/${name}.vue`];
+  const flutter = FLUTTER_DEMOS.has(name);
   const [view, setView] = useState<View>("preview");
   const [copied, doCopy] = useCopied();
   if (!mod) return <div className="callout">Missing demo {name}</div>;
   const only = onlyFramework();
   const showReact = only !== "vue";
   const showVue = !!vue && only !== "react";
-  const shown = (view === "vue" ? vueSources[`./vue-demos/${name}.vue`] : demoSources[`./demos/${name}.tsx`])?.trim() ?? "";
-  const stage = (framework: "react" | "vue", body: ReactNode) => (
+  const showFlutter = flutter && only === null;
+  const several = [showReact, showVue, showFlutter].filter(Boolean).length > 1;
+  const sources: Record<Framework, string | undefined> = {
+    react: demoSources[`./demos/${name}.tsx`],
+    vue: vueSources[`./vue-demos/${name}.vue`],
+    flutter: flutterSource,
+  };
+  const shown = (view === "preview" ? sources.react : sources[view])?.trim() ?? "";
+  const stage = (framework: Framework, body: ReactNode) => (
     <div className="demo-cell">
-      {showReact && showVue && <span className="demo-fw">{framework === "react" ? "React" : "Vue"}</span>}
+      {several && <span className="demo-fw">{FRAMEWORKS.find((f) => f.id === framework)!.name}</span>}
       <div className={`demo-stage${left ? " left" : ""}`} data-demo={name} data-framework={framework}>
         {body}
       </div>
@@ -146,9 +175,10 @@ export function Demo({ name, left }: { name: string; left?: boolean }) {
   return (
     <div className="demo">
       {view === "preview" ? (
-        <div className={showReact && showVue ? "demo-pair" : undefined}>
+        <div className={several ? "demo-pair" : undefined}>
           {showReact && stage("react", <mod.default />)}
           {showVue && stage("vue", <VueIsland component={vue.default} />)}
+          {showFlutter && stage("flutter", <FlutterFrame name={name} />)}
         </div>
       ) : (
         <pre className="code" style={{ maxHeight: "28rem" }}>
@@ -162,8 +192,9 @@ export function Demo({ name, left }: { name: string; left?: boolean }) {
           onChange={setView}
           options={[
             { value: "preview", label: "Preview" },
-            { value: "react", label: vue ? "React" : "Code" },
+            { value: "react", label: vue || flutter ? "React" : "Code" },
             ...(vue ? [{ value: "vue" as const, label: "Vue" }] : []),
+            ...(flutter ? [{ value: "flutter" as const, label: "Flutter" }] : []),
           ]}
         />
         <span style={{ flex: 1 }} />
@@ -171,7 +202,7 @@ export function Demo({ name, left }: { name: string; left?: boolean }) {
           label={copied ? "Copied" : "Copy code"}
           labelKey={copied ? "copied" : "copy"}
           tone="subtle"
-          onClick={() => doCopy(view === "preview" ? demoSources[`./demos/${name}.tsx`].trim() : shown)}
+          onClick={() => doCopy(shown)}
         />
       </div>
     </div>
@@ -256,6 +287,7 @@ export type Results = { ranAt: string; rows: Record<string, Partial<Record<Frame
 export const FRAMEWORKS = [
   { id: "react", name: "React" },
   { id: "vue", name: "Vue" },
+  { id: "flutter", name: "Flutter" },
 ] as const;
 export type Framework = (typeof FRAMEWORKS)[number]["id"];
 

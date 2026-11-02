@@ -13,8 +13,8 @@
 The shared design language behind a family of apps by the same author: one low-noise palette,<br>
 four engines a user drives from the app root, and a house style for the componentry.<br>
 <br>
-No build step and no package. Adoption is copy-and-paste by design, so a plain-CSS Unraid plugin<br>
-and a React app can speak the same language without sharing a runtime. Published for reference<br>
+One core without a framework and a package each for React, Vue and Flutter, so a plain-CSS<br>
+Unraid plugin, a React app and a Vue app speak the same language. Published for reference<br>
 rather than for outside adoption; <a href="docs/design-language.md">docs/design-language.md</a> carries the reasoning and everything else.
 </p>
 
@@ -59,20 +59,13 @@ If it has earned a place on your server or computer, toss a coin to your knight:
 
 - [`docs/design-language.md`](docs/design-language.md) is the full spec: the palette, the name and its etymology, all the rules, the componentry vocabulary (info bubble, horizontal selector and its vertical tiles, the settings search and the search button, switches, the reveal eye, badges, toasts, empty states, destructive actions, charts, the sidebar and the phone's bottom bar), all four engines, the token contract, and the adoption steps. This is the document to read start to finish; everything below just points back into it.
 - [`site/`](site/) is the documentation site at [junkerderprovinz.github.io/glimstone](https://junkerderprovinz.github.io/glimstone/). It shows every component live under every look a user can pick, its source, its props as the code declares them, and its behaviour contract: the keys, the focus and what a screen reader hears, each row tested on every push with the result printed beside it.
-- [`reference/tokens.css`](reference/tokens.css) is the palette and component classes as plain CSS custom properties, and where the shape, colour and motion engines resolve to actual values. No build step, no framework. Copy the parts an app needs.
-- [`reference/tailwind-theme.css`](reference/tailwind-theme.css) is the optional Tailwind v4 `@theme` layer that maps the tokens onto utility classes. Skip it entirely on a non-Tailwind app.
-- [`reference/appearance.ts`](reference/appearance.ts) holds the shape, accent, rainbow and motion logic, including the four fixed motion level names and `stormTap()`, the gesture behind the hidden fourth one, and `leafTap()`, the same gesture for the hidden shape. Framework-free (talks only to `document.documentElement` and `localStorage`), so it drops into any app unchanged.
-- [`reference/controls.ts`](reference/controls.ts) is the label engine: four modes (text, text+glyph, glyph, reactive) across three independent surfaces, plus the width stages that let a mode change happen without the page reflowing. Framework-free the same way.
-- [`reference/colorPicker.ts`](reference/colorPicker.ts) is the floating saturation/value picker, drawn in the app's own DOM. Never a native `<input type="color">`, which hands off to a surface outside the page.
-- [`reference/numberField.ts`](reference/numberField.ts) adds in-field steppers for a plain `<input type="number">`, driving the input's own `stepUp()`/`stepDown()` so min/max/step stay in the markup.
-- [`reference/tooltip.ts`](reference/tooltip.ts) is the shared tooltip and info-bubble mechanism, so an explanation never becomes a native `title` balloon.
-- [`reference/select.ts`](reference/select.ts) mounts the house select without a framework, on the same Zag machine as the React one, so a plugin page gets the same keys, focus handling and look.
-- [`reference/selectScroll.ts`](reference/selectScroll.ts) lets a closed dropdown step through its options on the wheel while it has focus (rule 14).
-- [`reference/segmentLayout.ts`](reference/segmentLayout.ts) decides how a selector's pinned segments share their room: pinned, spread by content so no label wraps, or in even rows. The app measures, the file decides.
-- [`reference/flagEmoji.ts`](reference/flagEmoji.ts) turns an ISO 3166-1 alpha-2 code into its regional-indicator emoji, for language options a native `<option>` can actually hold.
-- [`reference/glyphs.md`](reference/glyphs.md) is the shared glyph assortment: which icon means what, where each comes from and under which licence, and the sizing rules that make a set of icons read as one set.
-- [`reference/react/`](reference/react/) holds the components themselves, as React source: `Button`, `Toggle`, `Card`, `Badge`, `Select`, `Combobox`, `Slider`, `ConfirmDialog` with `useConfirm`, `Toast`, `InfoBubble`, `IconTipButton`, `UnavailableNotice`, `AboutCard`, `CryptoDonateDialog`, plus the small hooks they need. Select, Combobox and Slider run on [Zag](https://zagjs.com) state machines and need its packages installed. The files above say what a control must look like; these say what it **is**. Two apps built from the prose alone produced the same language under different names, one `Toggle` and one `Switch`, one `ConfirmDialog` and one `Confirm`, and a third would have invented a third set. Every string is a prop and no component fetches anything, so the same file serves an app in any language.
+- [`packages/core`](packages/core) is `@glimstone/core`: [`tokens.css`](packages/core/tokens.css), the palette and every component class as plain CSS custom properties, where the shape, colour and motion engines resolve to actual values; the optional [`tailwind-theme.css`](packages/core/tailwind-theme.css), which maps the tokens onto Tailwind v4 utilities; the glyph assortment in [`glyphs.json`](packages/core/glyphs.json) and [`glyphs.md`](packages/core/glyphs.md); and the logic of every engine and component in plain TypeScript. Its parts that run without a framework (the select, the tooltips, the colour picker, the number field's steppers) serve a page such as an Unraid plugin as they are.
+- [`packages/react`](packages/react) is `@glimstone/react`, the components for React: `Button`, `Toggle`, `Card`, `Badge`, `ConfirmDialog` with `useConfirm`, `ToastViewport`, `InfoBubble`, `IconTipButton`, `UnavailableNotice`, the Info tile, the README buttons, the three windows to give, `WindowBar`, and `Select`, `Combobox` and `Slider` on [Zag](https://zagjs.com) state machines from entries of their own.
+- [`packages/vue`](packages/vue) is `@glimstone/vue`, the same components for Vue 3, with the engines as composables.
+- [`packages/flutter`](packages/flutter) is the Dart package `glimstone`: the tokens as a `ThemeExtension`, the glyphs as a set, and the first widget. Its tokens are written from `tokens.css` by [`scripts/gen-flutter.mjs`](scripts/gen-flutter.mjs).
 - [`CHANGELOG.md`](CHANGELOG.md) records what changed in the language itself, versioned.
+
+The files say what a control must look like; the components say what it **is**. Two apps built from the prose alone produced the same language under different names, one `Toggle` and one `Switch`, one `ConfirmDialog` and one `Confirm`, and a third would have invented a third set. Every string is a prop and no component fetches anything, so the same component serves an app in any language. Install with `npm install @glimstone/core @glimstone/react` (or `@glimstone/vue`) and load `@glimstone/core/tokens.css` first; [the design language](docs/design-language.md#adopting-glimstone-in-another-app) has the rest of the steps.
 
 <br>
 
@@ -92,10 +85,10 @@ An engine is a single mechanism that turns one setting into every token a compon
 
 | Engine | Drives | Set on `<html>` | Values | Default | Reference |
 |---|---|---|---|---|---|
-| **Shape** | corner shape | `data-shape` | `round` (card 20px, field 12px, pressable things pills) · `soft` (8/5px) · `square` (0), plus `leaf` below the picker's floor | `soft` | [`tokens.css`](reference/tokens.css), [`appearance.ts`](reference/appearance.ts) |
-| **Colour** | theme, accent, rainbow | `data-theme`, `--accent` | `light` · `dark` · unset (follows the OS); any accent, eight rainbow positions | system theme, Sunflower gold `#FCC419` | [`tokens.css`](reference/tokens.css), [`appearance.ts`](reference/appearance.ts), [`colorPicker.ts`](reference/colorPicker.ts) |
-| **Motion** | motion intensity | `data-motion` | `off` · `subtle` · `wild`, plus `storm` below the picker's floor | `subtle` | [`tokens.css`](reference/tokens.css), [`appearance.ts`](reference/appearance.ts) |
-| **Label** | how much of a control is shown | `data-labels-buttons`, `data-labels-sidebar`, `data-labels-tabs` | `text` · `textGlyph` · `glyph` · `reactive` | `textGlyph` | [`controls.ts`](reference/controls.ts) |
+| **Shape** | corner shape | `data-shape` | `round` (card 20px, field 12px, pressable things pills) · `soft` (8/5px) · `square` (0), plus `leaf` below the picker's floor | `soft` | [`tokens.css`](packages/core/tokens.css), [`appearance.ts`](packages/core/src/appearance.ts) |
+| **Colour** | theme, accent, rainbow | `data-theme`, `--accent` | `light` · `dark` · unset (follows the OS); any accent, eight rainbow positions | system theme, Sunflower gold `#FCC419` | [`tokens.css`](packages/core/tokens.css), [`appearance.ts`](packages/core/src/appearance.ts), [`colorPicker.ts`](packages/core/src/colorPicker.ts) |
+| **Motion** | motion intensity | `data-motion` | `off` · `subtle` · `wild`, plus `storm` below the picker's floor | `subtle` | [`tokens.css`](packages/core/tokens.css), [`appearance.ts`](packages/core/src/appearance.ts) |
+| **Label** | how much of a control is shown | `data-labels-buttons`, `data-labels-sidebar`, `data-labels-tabs` | `text` · `textGlyph` · `glyph` · `reactive` | `textGlyph` | [`controls.ts`](packages/core/src/controls.ts) |
 
 Before adopting them:
 
@@ -117,7 +110,7 @@ Three settings have a hidden extra that no picker lists. They exist mostly for t
 | **Disco** | Rainbow | Turn Rainbow Mode on five times, each within three seconds of the last. | The rainbow colours step one position every second. | `discoTap()`, `applyDisco()` |
 | **Leaf** | Corners | Set the shape to `square`, then tap `square` five more times. | A fourth shape: the top-left and bottom-right corners rounded, the other two sharp. | `leafTap()`, `:root[data-shape='leaf']` |
 
-The functions live in [`reference/appearance.ts`](reference/appearance.ts) and the token blocks in [`reference/tokens.css`](reference/tokens.css).
+The functions live in [`packages/core/src/appearance.ts`](packages/core/src/appearance.ts) and the token blocks in [`packages/core/tokens.css`](packages/core/tokens.css).
 
 ### The rules every egg follows
 
@@ -145,16 +138,13 @@ An adopting app may add eggs of its own. They belong in that app's own notes, an
 
 ## 5. Adopting GlimStone in an app
 
-1. Copy the `:root` / `[data-theme="light"]` blocks from [`reference/tokens.css`](reference/tokens.css) into the app's stylesheet.
-2. Copy `.glim-card` / `.glim-well` / `.glim-eyebrow` / `.glim-num`, plus the base `body`/font rules and the scrollbar and focus rules, from the same file.
-3. Add whatever tokens the app doesn't have yet. The full list is in the file's own comments and in the design-language doc's token table.
-4. Replace hard-coded `rounded-lg` / `shadow-*` with `.glim-card`; fill the selected nav item, tab or segment with the accent.
-5. For rainbow, copy [`reference/appearance.ts`](reference/appearance.ts) as-is.
-6. For the label engine, copy [`reference/controls.ts`](reference/controls.ts) as-is, and call `applyStoredLabelModes()` at the app root before first render, not from the settings page that edits it, or the app opens in the default mode and snaps over on load.
-7. For icons, generate from [`reference/glyphs.md`](reference/glyphs.md) rather than copying SVGs, and take its sizing rules with them: artwork from different sets fills its own viewBox by wildly different amounts, so a set assembled without normalising arrives on screen at several sizes.
-8. For the controls themselves, copy [`reference/react/`](reference/react/) as a folder and register the app's own icons through its `setGlyphResolver`. This is the step that decides whether two apps end up the same: rebuilt from the prose, the same switch becomes `Toggle` in one app and `Switch` inside a shared `Field.tsx` in the next, and every rule in this repo then has to be applied by hand in both.
+1. Install the core and the framework package: `npm install @glimstone/core @glimstone/react`, or `@glimstone/vue`. Select, Combobox and Slider come from their own entries (`@glimstone/react/Select`) and need the Zag packages beside them.
+2. Load `@glimstone/core/tokens.css` before the app's own stylesheet, and under Tailwind v4 `@glimstone/core/tailwind-theme.css` after it.
+3. At the app root, before the first render, call `applyCachedAppearance()` and `applyStoredLabelModes()`, or the app opens in the default look and snaps over on load. `setStoragePrefix()` first keeps choices an app already stored under its own name.
+4. Register the app's own icons once through the package's `setGlyphResolver`, and take the glyph sizing rules in [`glyphs.md`](packages/core/glyphs.md) with them: artwork from different sets fills its own viewBox by wildly different amounts.
+5. Use the components rather than rebuilding them. This is the step that decides whether two apps end up the same: rebuilt from the prose, the same switch becomes `Toggle` in one app and `Switch` inside a shared `Field.tsx` in the next, and every rule in this repo then has to be applied by hand in both.
 
-Nothing else is required. Component markup stays as it is, because every colour already flows through a token. Full detail (including the three traps that have bitten every adopter so far) is in [`docs/design-language.md`](docs/design-language.md#adopting-glimstone-in-another-app).
+A page without a framework takes the core alone, and a Flutter app adds `GlimTheme` to its theme's extensions. Full detail (including the three traps that have bitten every adopter so far) is in [`docs/design-language.md`](docs/design-language.md#adopting-glimstone-in-another-app).
 
 <br>
 

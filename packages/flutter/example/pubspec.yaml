@@ -1,0 +1,13 @@
+name: glimstone_demos
+description: The Flutter demos on the GlimStone site.
+publish_to: none
+version: 1.0.0
+
+environment:
+  sdk: ">=3.5.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  glimstone:
+    path: ..

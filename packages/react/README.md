@@ -1,59 +1,85 @@
-# The components
+# @glimstone/react
 
-The framework-free files one level up say what a control must look like and how
-the engines resolve. These say what a control **is**, as React source an app
-copies rather than rebuilds.
+The components of [GlimStone](https://junkerderprovinz.github.io/glimstone/) for
+React 19. `@glimstone/core` says what a control must look like and decides what
+it shows; these say what a control **is**, so an app uses them rather than
+rebuilding them.
 
-That distinction is the reason this folder exists. Two apps built from the prose
-alone arrived at the same design language in two different dialects: one calls
-the switch `Toggle` and keeps it in `components/Toggle.tsx`, the other calls it
-`Switch` and keeps it inside a `Field.tsx` next to six other controls; one has
-`ConfirmDialog`, the other has `Confirm`; one has `DropdownListbox`, the other
-has `Choice`. Every one of those is a correct reading of the same document. A
-third app would have invented a third set of names, and every rule written here
-would then have to be re-applied by hand in three places.
+That distinction is the reason this package exists. Two apps built from the
+prose alone arrived at the same design language in two different dialects: one
+calls the switch `Toggle` and keeps it in `components/Toggle.tsx`, the other
+calls it `Switch` and keeps it inside a `Field.tsx` next to six other controls;
+one has `ConfirmDialog`, the other has `Confirm`. Every one of those is a correct
+reading of the same document, and every rule would then have to be re-applied
+by hand in each dialect.
+
+## Using it
+
+```sh
+npm install @glimstone/core @glimstone/react
+```
+
+```tsx
+import "@glimstone/core/tokens.css";
+import { applyCachedAppearance, applyStoredLabelModes } from "@glimstone/core";
+import { Button, setGlyphResolver } from "@glimstone/react";
+import { Select } from "@glimstone/react/Select";
+
+applyCachedAppearance();
+applyStoredLabelModes();
+setGlyphResolver((key) => appGlyphs[key]);
+```
+
+Call the two `apply` functions at the app root before the first render, not
+from the settings page that edits them, or the app opens in the default look
+and snaps over. `setStoragePrefix()` before them keeps choices an app already
+stored under its own name. Under Tailwind v4 load
+`@glimstone/core/tailwind-theme.css` after the tokens; the components themselves
+use no Tailwind class.
+
+`Select`, `Combobox` and `Slider` come from their own entries and need
+`@zag-js/react` with their machine packages (`@zag-js/select` and
+`@zag-js/menu`, `@zag-js/combobox`, `@zag-js/slider`). The rest of the package
+needs none of them.
 
 ## What's here
 
-| File | What it is |
+| Component | What it is |
 |---|---|
-| `Button.tsx` | Every button, including the label engine's text/glyph/both modes and the chip form |
-| `Toggle.tsx` | The switch. Never a checkbox |
-| `Card.tsx` | The surface, and the one place a section heading is drawn |
-| `Badge.tsx` | Status pills and the filled section heading the card draws |
-| `Select.tsx` | The one dropdown, on Zag's select machine and on its menu machine for a list with submenus: groups with headings, glyphs, three sizes, four widths, the wheel, busy and refused states, the list in a portal. It imports `../selectScroll.ts` |
-| `Combobox.tsx` | A field that filters a long list as somebody types, on Zag's combobox machine |
-| `Slider.tsx` | A value on a range, on Zag's slider machine, with the value in words beside the label |
-| `DropdownListbox.tsx` | Deprecated, use `Select`. The list panel of a dropdown whose trigger the caller draws |
-| `ConfirmDialog.tsx` + `useConfirm.tsx` | The confirm surface for a destructive action, and the hook that gives it a portal, Escape, the Tab trap and focus back to the control that asked |
-| `Toast.tsx` + `toastEngine.ts` | Transient feedback, including the shake a failing control does |
-| `InfoBubble.tsx`, `IconTipButton.tsx` | The "(i)" explanation and the hover name on an icon-only control |
-| `AboutCard.tsx` | The Info tile: `InfoTile` renders its Version, Help and About cards in their fixed order, with the app's own "New · n" button in the Version card where it has one and "Release notes" where it has not, and each is exported on its own (`InfoVersionCard`, `InfoHelpCard`, `InfoAboutCard`). `AboutCard` takes the 3.2.0 props and lays them out as the tile |
-| `ReadmeButton.tsx` | The button in the shape of the README's, with its segments: one way to get the app on the App tab, live, acting or still to come, and the Info tile's give and report buttons; the marks are in `../appMarks.ts` |
-| `CryptoDonateDialog.tsx` | Giving from a wallet: one address per chain, as text and as a code |
-| `CoffeeDialog.tsx` | Buy Me a Coffee's widget inside a house window |
-| `PaypalDialog.tsx` + `usePaypalButtons.ts` | How often and how much in house controls, then PayPal's wallet and card buttons |
-| `UnavailableNotice.tsx` | What stands where a control would be, when the environment forbids the thing entirely |
-| `WindowBar.tsx` | A desktop app's own title bar on Windows and Linux: a strip to drag and the minimise, maximise and close buttons. The app passes the window calls |
-| `useLabelMode.ts`, `useTipBubble.tsx`, `bubblePosition.ts`, `portalHue.ts` | The small hooks the components above need |
-| `glyphs.tsx` | The marks the components draw themselves (close, cancel, check, expand and the three window buttons), plus the seam an app registers its own icon set through |
+| `Button` | Every button, including the label engine's text/glyph/both modes and the chip form |
+| `Toggle` | The switch. Never a checkbox |
+| `Card` | The surface, and the one place a section heading is drawn |
+| `Badge` | Status pills and the filled section heading the card draws |
+| `Select` | The one dropdown, on Zag's select machine and on its menu machine for a list with submenus |
+| `Combobox` | A field that filters a long list as somebody types |
+| `Slider` | A value on a range, with the value in words beside the label |
+| `DropdownListbox` | Deprecated, use `Select` |
+| `ConfirmDialog` + `useConfirm` | The confirm surface for a destructive action, and the hook that gives it a portal, Escape, the Tab trap and focus back to the control that asked |
+| `ToastViewport` | Transient feedback; the queue is the core's `toastEngine` |
+| `InfoBubble`, `IconTipButton` | The "(i)" explanation and the hover name on an icon-only control |
+| `InfoTile` | The Info tile with its Version, Help and About cards, each also on its own |
+| `ReadmeButton` | The button in the shape of the README's, with its segments |
+| `CryptoDonateDialog`, `CoffeeDialog`, `PaypalDialog` | The three windows to give |
+| `UnavailableNotice` | What stands where a control would be, when the environment forbids the thing entirely |
+| `WindowBar` | A desktop app's own title bar on Windows and Linux |
+| `useLabelMode`, `useTipBubble`, `usePortalHue` | The small hooks the components need |
+| `glyphs` | The marks the components draw themselves, and `setGlyphResolver`, the seam an app registers its own icon set through |
 
-Select, Combobox and Slider need `@zag-js/react` and their machine packages (`@zag-js/select` and `@zag-js/menu`, `@zag-js/combobox`, `@zag-js/slider`) in the app. The interactive ones carry a behaviour contract, tested on every push; see "Behaviour contracts" in the design language and each component's page on the [site](https://junkerderprovinz.github.io/glimstone/).
+## What is not here
 
-## What is deliberately NOT here
-
-**The icon set.** An icon's meaning belongs to the app: only it knows that its own
-action is called "backup now". GlimStone ships the assortment as a specification
-(`../glyphs.md`) and one function, `setGlyphResolver`, that a button asks by
-meaning. Register it once at boot and every button can be shown in glyph mode;
-skip it and buttons fall back to the glyph they are handed, then to text alone.
+**The icon set.** An icon's meaning belongs to the app: only it knows that its
+own action is called "backup now". GlimStone ships the assortment as a
+specification (`glyphs.md` in the core) and one function, `setGlyphResolver`,
+that a button asks by meaning. Register it once at boot and every button can be
+shown in glyph mode; skip it and buttons fall back to the glyph they are handed,
+then to text alone.
 
 **Translation.** Every string is a prop. The components carry the order and the
 behaviour, the app carries its own language.
 
-**Data.** No component here fetches anything. The Version card takes its versions
+**Data.** No component fetches anything. The Version card takes its versions
 as props and its update check as a function rather than reading a health
-endpoint, so the same file serves an app with a different one.
+endpoint, so the same component serves an app with a different one.
 
 ## The Info tile
 
@@ -86,38 +112,3 @@ The glyphs on the update check come from the app's resolver under the keys
 `about.checkUpdates`, `about.upToDate`, `about.updatesFound` and
 `about.checkFailed`, and the one on "Release notes" under `about.releaseNotes`.
 
-## Copying them in
-
-1. Put this folder's files next to each other in the app, and keep
-   `../appearance.ts` and `../controls.ts` one level up; those two imports are
-   the only paths that leave the folder.
-2. Call `applyStoredLabelModes()` (from `controls.ts`) at the app root before
-   first render, not from the settings page that edits it, or the app opens in
-   the default mode and snaps over on load.
-3. Register the app's own icons with `setGlyphResolver` at the same place.
-4. Tailwind v4 apps take `../tailwind-theme.css` for the utility names these
-   files use (`bg-carbon-surface`, `text-carbon-textSub`, `rounded-card`). An app
-   without Tailwind maps those few names itself; the tokens underneath are the
-   same either way.
-
-## Checking that the folder is complete
-
-`bash packages/react/check.sh` from the repository root asks the one question
-TypeScript cannot: does every class, themed utility and custom property these
-components touch actually exist in `../tokens.css` and `../tailwind-theme.css`?
-
-It exists because the first cut of this folder shipped components reading
-thirteen classes and seven tokens that were defined nowhere here - they had been
-living in one app's own stylesheet the whole time, so a button copied out of
-here arrived with no height, no padding and no radius. Every file typechecked
-perfectly. The defect was only visible on screen, in the app that adopted it.
-
-One name is skipped deliberately: `glim-convention-exception` is not a class but
-a marker written inside a comment, tagging a departure from a rule that was
-reviewed and kept on purpose, so a later reader knows it is a decision rather
-than an oversight.
-
-A component copied from here and then edited in the app is a fork, and the next
-release of this folder will not reach it. Where an app genuinely needs different
-behaviour, add a prop here and copy the file again, so every sibling gets the
-same choice.
