@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
@@ -7,6 +9,13 @@ import 'package:glimstone/glimstone.dart';
 // Each test is named after its contract row in site/src/contracts.ts, "[id] ...",
 // which is how the site finds its result.
 
+// Widths are measured in the house font; the test font draws every letter as a
+// square, so no label would fit its stage.
+Future<void> loadNotoSans() async {
+  final bytes = File('example/fonts/NotoSans.ttf').readAsBytesSync();
+  await (FontLoader('Noto Sans')..addFont(Future.value(ByteData.sublistView(bytes)))).load();
+}
+
 Widget host(Widget child, {Brightness brightness = Brightness.dark}) =>
     MaterialApp(
       theme: glimThemeData(brightness),
@@ -14,6 +23,8 @@ Widget host(Widget child, {Brightness brightness = Brightness.dark}) =>
     );
 
 void main() {
+  setUpAll(loadNotoSans);
+
   testWidgets('[button-keys] Enter and Space act', (tester) async {
     var presses = 0;
     await tester.pumpWidget(host(GlimButton(
@@ -72,9 +83,6 @@ void main() {
         expect(glyph[i], lessThan(text[i]));
       }
     },
-    // As in the web packages: the width stages count the words only, so a
-    // glyph and its gap push a short label past its floor.
-    skip: true,
   );
 
   testWidgets('[button-busy] busy keeps the width and says so', (tester) async {

@@ -12,7 +12,7 @@ import type { GiveFrequency } from "@glimstone/core";
 import { Badge } from "./Badge.tsx";
 import { Button } from "./Button.tsx";
 
-export interface SelectorProps {
+export interface PaypalSelectorProps {
   labelledBy: string;
   options: { value: string; label: string }[];
   /** Null when no segment is picked, as while a typed amount applies. */
@@ -50,7 +50,7 @@ export interface PaypalDialogProps {
   typedValid: boolean;
   onTyped: (text: string) => void;
   /** The app's own horizontal selector. */
-  renderSelector: (props: SelectorProps) => ReactNode;
+  renderSelector: (props: PaypalSelectorProps) => ReactNode;
   /** From usePaypalButtons. */
   buttonsRef: RefObject<HTMLDivElement | null>;
   status: "idle" | "done" | "failed";

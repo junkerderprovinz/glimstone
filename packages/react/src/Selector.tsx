@@ -67,7 +67,7 @@ export interface SelectorItem {
   dim?: boolean;
 }
 
-export interface SelectorStripProps<M extends SelectMode = "one"> {
+export interface SelectorProps<M extends SelectMode = "one"> {
   items: SelectorItem[];
   /** The accessible name of the strip, such as "Sort" or "Settings pages". */
   label: string;
@@ -139,7 +139,7 @@ export function Selector<M extends SelectMode = "one">({
   disabled = false,
   panelId,
   className = "",
-}: SelectorStripProps<M>) {
+}: SelectorProps<M>) {
   const vertical = orientation === "vertical";
   const many = select === "many";
   const mode = useLabelMode(selectorAxis(size, orientation));

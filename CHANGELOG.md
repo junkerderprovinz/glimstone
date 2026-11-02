@@ -10,6 +10,8 @@ GlimStone ships as packages: a core without a framework and one package each for
 
 - **Nothing changes until an app moves.** The copied files keep working. Moving means installing `@glimstone/core` with `@glimstone/react` and importing from them instead of `./components/…`; Select, Combobox and Slider come from `@glimstone/react/Select` and its siblings.
 - **Stored choices:** call `setStoragePrefix("bv")` (the app's own prefix) at boot, before `applyCachedAppearance()` and `applyStoredLabelModes()`.
+- **PayPal window:** its selector's props type is `PaypalSelectorProps`; `SelectorProps` belongs to `Selector`.
+- **Button widths:** a button with a glyph may take the next width stage up; check rows that were tight.
 
 ## ✨ Added
 
@@ -27,7 +29,7 @@ GlimStone ships as packages: a core without a framework and one package each for
 ## 🐛 Fixed
 
 - **A badge that acts in ok, fail or warn kept its ground under the pointer.** It mixed in tokens that do not exist and turned transparent.
-- **`[button-width]` tests what it says.** It put the first label mode back on every reload and compared text with text. Measured properly, a short label with its glyph outgrows its width stage, so the row reads as an expected failure until the stages are settled.
+- **A button keeps its width between text and text with glyph.** Its width stage counts the glyph and its gap, about five characters, so a short label with its glyph no longer outgrows the stage. `widthStage(label, glyph)` takes the second argument. The test for it had put the first label mode back on every reload and compared text with text.
 
 ## 3.8.6 - 2026-11-02
 

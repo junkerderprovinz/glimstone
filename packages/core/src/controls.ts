@@ -187,9 +187,14 @@ export function labelWidth(label: string): number {
   return total;
 }
 
-/** The stage a label belongs to. */
-export function widthStage(label: string): WidthStage {
-  const w = labelWidth(label);
+// A glyph and its gap take about five units beside the words. A control that
+// can show a glyph counts them in every mode, so turning the glyph on or off
+// never moves it.
+const GLYPH_CHROME = '     ';
+
+/** The stage a label belongs to, with room for a glyph where the control has one. */
+export function widthStage(label: string, glyph = false): WidthStage {
+  const w = labelWidth(glyph ? label + GLYPH_CHROME : label);
   for (const [stage, max] of STAGE_MAX) {
     if (w <= max) return stage;
   }

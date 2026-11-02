@@ -49,7 +49,6 @@ test.describe("Button", () => {
   });
 
   test("[button-width] the width does not move between text and text with glyph", async ({ page }) => {
-    test.fail(true, "The width stages count the words only, so a glyph and its gap push a short label past its floor");
     const buttons = () => stage(page, "ButtonTones").getByRole("button");
     const widths = () => buttons().evaluateAll((els) => els.map((e) => Math.round(e.getBoundingClientRect().width * 10) / 10));
     // The look is set on the page and reloaded rather than through an init

@@ -112,7 +112,7 @@ export function buttonView(b: ButtonInput): ButtonView {
         : ""
       : reactive
         ? ""
-        : STAGE_CLASS[b.stage ?? widthStage(b.label)];
+        : STAGE_CLASS[b.stage ?? widthStage(b.label, b.hasGlyph)];
 
   // Where the label is hidden the tooltip carries it joined with the title,
   // once if they are the same words. Reactive counts as showing text, since

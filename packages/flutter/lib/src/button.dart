@@ -12,10 +12,10 @@ enum GlimTone { accent, neutral, subtle, ok, danger, warn }
 enum GlimLabelMode { text, textGlyph, glyph, reactive }
 
 /// The width a label needs, as `widthStage` in the core: a fullwidth
-/// character counts twice, and each stage is a floor so a mode change never
-/// moves the row.
-double glimStageWidth(String label) {
-  var units = 0;
+/// character counts twice, a glyph and its gap about five, and each stage is a
+/// floor so a mode change never moves the row.
+double glimStageWidth(String label, {bool glyph = false}) {
+  var units = glyph ? 5 : 0;
   for (final rune in label.runes) {
     final fullwidth = (rune >= 0x1100 && rune <= 0x115f) ||
         (rune >= 0x2e80 && rune <= 0xa4cf) ||
@@ -143,7 +143,7 @@ class _GlimButtonState extends State<GlimButton> {
                   // hide them hug the glyph.
                   constraints: hides && hasGlyph
                       ? null
-                      : BoxConstraints(minWidth: glimStageWidth(widget.label)),
+                      : BoxConstraints(minWidth: glimStageWidth(widget.label, glyph: hasGlyph)),
                   padding: const EdgeInsets.symmetric(
                       horizontal: GlimMetrics.btnPadX),
                   decoration: BoxDecoration(

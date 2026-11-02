@@ -22,7 +22,7 @@ export const CONTRACTS: Record<string, Contract> = {
     rows: [
       { id: "button-keys", keys: ["Enter", "Space"], when: "The button has focus", then: "It acts, once per press." },
       { id: "button-name", when: "The label mode hides the words", then: "The label stays the accessible name." },
-      { id: "button-width", when: "The label mode changes between text and text with glyph", then: "The button keeps its width to the pixel; the modes that hide the words hug the glyph." },
+      { id: "button-width", when: "The label mode changes between text and text with glyph", then: "The button keeps its width to the pixel, since its stage counts the glyph; the modes that hide the words hug the glyph." },
       { id: "button-busy", when: "busy turns on", then: "The width stays and the button announces it is busy." },
       { id: "button-tint", when: "The pointer rests on a neutral or subtle button", then: "Its ground takes a little of the accent and its glyph all of it." },
     ],
