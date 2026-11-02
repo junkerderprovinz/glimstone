@@ -1,7 +1,18 @@
 import { useState, type ReactNode } from "react";
-
-import { groupStage } from "@glimstone/core";
-import { Button, type ButtonTone } from "./Button";
+import {
+  mailHref,
+  offersMail,
+  openInBrowser,
+  runUpdateCheck,
+  updateFace,
+  updateStage,
+  versionLink,
+  type OpenUrl,
+  type UpdateCheck,
+  type UpdateVerdict,
+  type VersionRow,
+} from "@glimstone/core";
+import { Button } from "./Button";
 import { Card } from "./Card";
 import { ReadmeButton } from "./ReadmeButton";
 
@@ -12,9 +23,7 @@ import { ReadmeButton } from "./ReadmeButton";
 // the give row. Each sentence sits directly above the buttons it asks for, and
 // no card names a route no control on it can reach. Every string is passed in.
 
-type OpenUrl = (url: string) => void;
-
-const openInBrowser: OpenUrl = (url) => window.open(url, "_blank", "noopener,noreferrer");
+export type { UpdateCheck, VersionRow } from "@glimstone/core";
 
 export interface InfoAboutCardProps {
   text: {
@@ -94,36 +103,6 @@ export function InfoAboutCard({
   );
 }
 
-export interface VersionRow {
-  /** The component's name at the row's start. It is not a link. */
-  name: string;
-  /** What the component is, as a sub-line under the name. */
-  sub?: string;
-  /** Read from the build or from the copied files that own it, never typed in. */
-  version: string;
-  /** The repository whose release page the number opens. Without one the
-   *  number is plain text. */
-  repoUrl?: string;
-  /** Stands in front of the tag where one repository ships several artefacts,
-   *  such as `mobile/`. */
-  tagPrefix?: string;
-}
-
-export interface UpdateCheck {
-  /**
-   * Checks every listed component at once and resolves to how many have a
-   * newer release. It rejects when the check cannot run; the app puts the
-   * reason in a toast, and the button shakes.
-   */
-  run: () => Promise<number>;
-  text: {
-    check: string;
-    upToDate: string;
-    updatesFound: (count: number) => string;
-    checkFailed: string;
-  };
-}
-
 export interface InfoVersionCardProps {
   text: {
     title: string;
@@ -183,37 +162,11 @@ export function InfoVersionCard({
   );
 }
 
-type Verdict = { kind: "idle" | "busy" | "current" | "failed" } | { kind: "found"; count: number };
-
 /** The update check shows its verdict on itself, like a test button. */
-function UpdateCheckButton({ run, text }: UpdateCheck) {
-  const [verdict, setVerdict] = useState<Verdict>({ kind: "idle" });
+function UpdateCheckButton(check: UpdateCheck) {
+  const [verdict, setVerdict] = useState<UpdateVerdict>({ kind: "idle" });
   const [shake, setShake] = useState(0);
-
-  const check = async () => {
-    if (verdict.kind === "busy") return;
-    setVerdict({ kind: "busy" });
-    try {
-      const count = await run();
-      setVerdict(count > 0 ? { kind: "found", count } : { kind: "current" });
-    } catch {
-      setVerdict({ kind: "failed" });
-      setShake((n) => n + 1);
-    }
-  };
-
-  const face: { label: string; labelKey: string; tone: ButtonTone } =
-    verdict.kind === "current"
-      ? { label: text.upToDate, labelKey: "about.upToDate", tone: "ok" }
-      : verdict.kind === "found"
-        ? { label: text.updatesFound(verdict.count), labelKey: "about.updatesFound", tone: "warn" }
-        : verdict.kind === "failed"
-          ? { label: text.checkFailed, labelKey: "about.checkFailed", tone: "danger" }
-          : { label: text.check, labelKey: "about.checkUpdates", tone: "neutral" };
-  // One width for every verdict, so the button does not jump when its word
-  // changes.
-  const stage = groupStage([text.check, text.upToDate, text.updatesFound(2), text.checkFailed, face.label]);
-  const announced = verdict.kind === "idle" || verdict.kind === "busy" ? "" : face.label;
+  const face = updateFace(verdict, check.text);
 
   return (
     <>
@@ -222,57 +175,30 @@ function UpdateCheckButton({ run, text }: UpdateCheck) {
         label={face.label}
         labelKey={face.labelKey}
         tone={face.tone}
-        stage={stage}
+        stage={updateStage(check.text, face.label)}
         busy={verdict.kind === "busy"}
-        onClick={() => void check()}
+        onClick={() =>
+          void runUpdateCheck(check, verdict, (v) => {
+            setVerdict(v);
+            if (v.kind === "failed") setShake((n) => n + 1);
+          })
+        }
         className={shake > 0 ? "glim-shake" : ""}
       />
       <span role="status" className="glim-sr-only">
-        {announced}
+        {face.announced}
       </span>
     </>
   );
 }
 
 /**
- * The tag behind a running version string: for `v8.3.1+feature-branch.59b73a6`
- * it is the part before the semver build metadata.
- */
-export function releaseTag(version: string): string {
-  const bare = (version.split("+")[0] ?? "").trim();
-  if (!bare) return "";
-  return bare.startsWith("v") ? bare : `v${bare}`;
-}
-
-/** A version as the card shows it: `v3.8.0` reads "3.8.0". The "v" names the tag, not the version. */
-export function shownVersion(version: string): string {
-  const trimmed = version.trim();
-  return /^v\d/.test(trimmed) ? trimmed.slice(1) : trimmed;
-}
-
-/**
  * The number at a row's end, a link to its release page when it is a published
  * release. It has no underline; the ink lifts on hover.
  */
-function VersionNumber({
-  row,
-  unreleased,
-  openUrl,
-}: {
-  row: VersionRow;
-  unreleased: (version: string) => string;
-  openUrl: OpenUrl;
-}) {
-  const tag = releaseTag(row.version);
-  const released = /^v\d+\.\d+\.\d+$/.test(tag);
-  const shown = shownVersion(row.version);
-  if (!released) {
-    return <span className="glim-num glim-version-number">{unreleased(shown)}</span>;
-  }
-  if (!row.repoUrl) {
-    return <span className="glim-num glim-version-number">{shown}</span>;
-  }
-  const href = `${row.repoUrl}/releases/tag/${encodeURIComponent(`${row.tagPrefix ?? ""}${tag}`)}`;
+function VersionNumber({ row, unreleased, openUrl }: { row: VersionRow; unreleased: (version: string) => string; openUrl: OpenUrl }) {
+  const { shown, released, href } = versionLink(row);
+  if (!href) return <span className="glim-num glim-version-number">{released ? shown : unreleased(shown)}</span>;
   return (
     <a
       href={href}
@@ -343,7 +269,7 @@ export function InfoHelpCard({
   openUrl = openInBrowser,
   hueIndex,
 }: InfoHelpCardProps) {
-  const wantsMail = /e-?mail/i.test(text.report) && Boolean(mailAddress);
+  const wantsMail = offersMail(text.report, mailAddress);
 
   return (
     <Card title={text.title} hint={text.hint} hueIndex={hueIndex}>
@@ -356,15 +282,14 @@ export function InfoHelpCard({
           markClass="glim-github-mark"
         />
         {wantsMail && (
-          // Subject only: a prefilled body reads as a form to fill in. This
-          // button reaches the app's own authors rather than a third party, so
-          // it follows the user's accent and rainbow.
+          // This button reaches the app's own authors rather than a third
+          // party, so it follows the user's accent and rainbow.
           <ReadmeButton
             brand="house"
             parts={[
               {
                 name: text.mailButton,
-                onClick: () => openUrl(`mailto:${mailAddress}?subject=${encodeURIComponent(text.mailSubject)}`),
+                onClick: () => openUrl(mailHref(mailAddress!, text.mailSubject)),
               },
             ]}
             mark={mailGlyph}

@@ -1,4 +1,12 @@
 import { useLayoutEffect, useRef, type MouseEvent, type ReactNode } from "react";
+import {
+  keepReadmeFit,
+  readmePartClass,
+  readmeSoon,
+  readmeUnitClass,
+  type ReadmeBrand,
+  type ReadmePart,
+} from "@glimstone/core";
 import { InfoBubble } from "./InfoBubble";
 
 // A button in the shape of the README's download buttons, on the App tab and
@@ -9,36 +17,11 @@ import { InfoBubble } from "./InfoBubble";
 // listing, a button where it does something on the page, and a quiet unit with
 // "Soon" as its second line where the listing does not exist yet.
 
-// The brands tokens.css carries a tile colour for, each with its class.
-const TILES = {
-  windows: "glim-tile-windows",
-  apple: "glim-tile-apple",
-  linux: "glim-tile-linux",
-  android: "glim-tile-android",
-  play: "glim-tile-play",
-  fdroid: "glim-tile-fdroid",
-  docker: "glim-tile-docker",
-  unraid: "glim-tile-unraid",
-  zip: "glim-tile-zip",
-  github: "glim-tile-github",
-  paypal: "glim-tile-paypal",
-  bitcoin: "glim-tile-bitcoin",
-  coffee: "glim-tile-coffee",
-  house: "glim-tile-house",
-  docs: "glim-tile-docs",
-} as const;
-
-export interface ReadmePart {
-  name: string;
-  /** The second line, shown under the pointer. Without one the name stays in the middle. */
-  sub?: string;
-  href?: string;
-  onClick?: () => void;
-}
+export type { ReadmeBrand, ReadmePart } from "@glimstone/core";
 
 export interface ReadmeButtonProps {
   /** The brand whose colour the unit lights up in. */
-  brand: keyof typeof TILES;
+  brand: ReadmeBrand;
   /** The button, then its segments. */
   parts: [ReadmePart, ...ReadmePart[]];
   mark?: ReactNode;
@@ -60,30 +43,16 @@ export interface ReadmeButtonProps {
 
 export function ReadmeButton({ brand, parts, mark, markClass, art, hint, note, soonLabel, onLinkClick }: ReadmeButtonProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const soon = !parts[0].href && !parts[0].onClick;
+  const soon = readmeSoon(parts);
   const words = parts.map((p) => `${p.name}\n${p.sub ?? ""}`).join("\n") + (soon ? soonLabel : "");
-  useLayoutEffect(() => {
-    const root = ref.current;
-    if (!root) return;
-    const fit = () => fitReadmeText(root);
-    fit();
-    const observer = new ResizeObserver(fit);
-    observer.observe(root);
-    void document.fonts?.ready.then(fit);
-    return () => observer.disconnect();
-  }, [words]);
-
-  const unit = ["glim-readme-btn-unit", "group", TILES[brand]];
-  if (parts.length > 1) unit.push("glim-readme-btn-group");
-  if (note) unit.push("glim-readme-btn-unit--note");
-  if (soon) unit.push("glim-readme-btn-soon");
+  useLayoutEffect(() => (ref.current ? keepReadmeFit(ref.current) : undefined), [words]);
 
   return (
-    <div ref={ref} className={unit.join(" ")}>
+    <div ref={ref} className={readmeUnitClass(brand, parts.length, !!note, soon)}>
       {parts.map((part, i) => {
         const sub = soon ? soonLabel : part.sub;
         const label = sub ? `${part.name} ${sub}` : part.name;
-        const className = `glim-readme-btn${i > 0 ? " glim-readme-btn-seg" : ""}${soon ? "" : " glim-brand-tile"}`;
+        const className = readmePartClass(i, soon);
         const face =
           i === 0 && art ? (
             <span className="glim-readme-btn-art" aria-hidden>
@@ -138,20 +107,6 @@ export function ReadmeButton({ brand, parts, mark, markClass, art, hint, note, s
       )}
     </div>
   );
-}
-
-/**
- * Shrinks a translation longer than its button instead of cutting it off. A
- * line in a hidden tab measures nothing, so the button fits it again when a
- * resize shows it.
- */
-export function fitReadmeText(root: HTMLElement): void {
-  for (const line of root.querySelectorAll<HTMLElement>(".glim-readme-btn-name, .glim-readme-btn-sub")) {
-    line.style.fontSize = "";
-    if (line.clientWidth === 0) continue;
-    const over = line.scrollWidth / line.clientWidth;
-    if (over > 1) line.style.fontSize = `${parseFloat(getComputedStyle(line).fontSize) / over}px`;
-  }
 }
 
 /** A vendor mark kept as its own markup, from appMarks.ts. */
