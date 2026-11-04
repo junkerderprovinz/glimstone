@@ -348,6 +348,44 @@ abstract final class GlimGlyphs {
   static const upToDate = GlimGlyphData('IconUpToDate', '0.013 -0.306 13.974 13.974', r'''<g> <path fill="currentColor" fill-rule="evenodd" d="M7.88332 0.11451c-0.99185 -0.12022494 -1.99495 0.103213 -2.842 0.633054C4.253 1.24066 3.64418 1.97141 3.30086 2.83169c-0.42873 0.0473 -0.84627 0.1694 -1.23354 0.36115 -0.43457 0.21516 -0.8225 0.51382 -1.141648 0.87891 -0.644549 0.73733 -0.9697938 1.7005 -0.904186 2.67764 0.0656077 0.97714 0.516694 1.88819 1.254024 2.53274 0.31549 0.27578 0.67232 0.49311 1.0539 0.64638 0.02237 -0.03391 0.04589 -0.06735 0.07059 -0.10028 0.66274 -0.88366 1.91634 -1.06274 2.8 -0.4l0.52779 0.39584L8.50518 6.6995c0.73384 -0.82556 1.99802 -0.89993 2.82352 -0.16609 0.8256 0.73384 0.9 1.99798 0.1661 2.82355l-0.7382 0.83044h0.0163l0.003 0c0.7905 -0.0047 1.5518 -0.29913 2.1398 -0.8275 0.588 -0.52837 0.9618 -1.254 1.0507 -2.03949 0.0889 -0.7855 -0.1133 -1.57633 -0.5684 -2.22274 -0.4174 -0.59301 -1.021 -1.02671 -1.7119 -1.23428 -0.1253 -0.92329 -0.543 -1.78423 -1.1943 -2.45516C9.79584 0.691356 8.87518 0.234735 7.88332 0.11451ZM10.5606 8.5265c0.2751 -0.30959 0.2473 -0.78364 -0.0623 -1.05883 -0.3096 -0.27519 -0.78367 -0.2473 -1.05886 0.06229L5.89792 11.5142 4.45 10.4282c-0.33137 -0.2485 -0.80147 -0.1813 -1.05 0.15 -0.24853 0.3314 -0.18137 0.8015 0.15 1.05l2 1.5c0.31205 0.2341 0.75141 0.1898 1.01056 -0.1017l4.00004 -4.5Z" clip-rule="evenodd" stroke-width="1"></path> </g>''');
   /// An update is available
   static const updateAvailable = GlimGlyphData('IconUpdateAvailable', '0 0.096 14 14', r'''<g> <path fill="currentColor" fill-rule="evenodd" d="M5.25 3.49994 11.9563 0.794702C12.9396 0.412306 14 1.13767 14 2.19271v8.22609c0 1.0238 -1.003 1.7468 -1.9743 1.423L5.25 9.49994v-6ZM3 3.5h1v7c0 0.5523 0.44772 1 1 1h0.5c0.55228 0 1 0.4477 1 1s-0.44772 1 -1 1H5c-1.65685 0 -3 -1.3431 -3 -3V9.32929C0.834808 8.91746 0 7.80622 0 6.5c0 -1.65685 1.34315 -3 3 -3Z" clip-rule="evenodd" stroke-width="1"></path> </g>''');
+  /// Reset one row of a colour card to its defaults
+  static const resetArrow = GlimGlyphData('IconResetArrow', '1.5 1 13 13', r'''<path fill="currentColor" d="M14 8A6 6 0 1 1 8 2L8 4.7A3.3 3.3 0 1 0 11.3 8Z"/><path fill="currentColor" d="M8 1 3.5 3 8 5Z"/>''');
+  /// Give through PayPal
+  static const payPal = GlimGlyphData('IconPayPal', '0 0 24 24', r'''<path fill="currentColor" d="M15.607 4.653H8.941L6.645 19.251H1.82L4.862 0h7.995c3.754 0 6.375 2.294 6.473 5.513-.648-.478-2.105-.86-3.722-.86m6.57 5.546c0 3.41-3.01 6.853-6.958 6.853h-2.493L11.595 24H6.74l1.845-11.538h3.592c4.208 0 7.346-3.634 7.153-6.949a5.24 5.24 0 0 1 2.848 4.686M9.653 5.546h6.408c.907 0 1.942.222 2.363.541-.195 2.741-2.655 5.483-6.441 5.483H8.714Z"/>''');
+  /// Give from a crypto wallet
+  static const bitcoin = GlimGlyphData('IconBitcoin', '3.961 4.178 15.2 15.2', r'''<path fill="currentColor" d="M17.288 10.291c.24-1.59-.974-2.45-2.64-3.03l.54-2.153-1.315-.33-.525 2.107c-.345-.087-.705-.167-1.064-.25l.526-2.127-1.32-.33-.54 2.165c-.285-.067-.565-.132-.84-.2l-1.815-.45-.35 1.407s.975.225.955.236c.535.136.63.486.615.766l-1.477 5.92c-.075.166-.24.406-.614.314.015.02-.96-.24-.96-.24l-.66 1.51 1.71.426.93.242-.54 2.19 1.32.327.54-2.17c.36.1.705.19 1.05.273l-.51 2.154 1.32.33.545-2.19c2.24.427 3.93.257 4.64-1.774.57-1.637-.03-2.58-1.217-3.196.854-.193 1.5-.76 1.68-1.93h.01zm-3.01 4.22c-.404 1.64-3.157.75-4.05.53l.72-2.9c.896.23 3.757.67 3.33 2.37zm.41-4.24c-.37 1.49-2.662.735-3.405.55l.654-2.64c.744.18 3.137.524 2.75 2.084v.006z"/>''');
+  /// A RAW photo straight from the camera
+  static const fileRaw = GlimGlyphData('IconFileRaw', '0.5 0.5 13 13', r'''<path fill="currentColor" fill-rule="evenodd" d="M2 3H4L4.8 1.5H9.2L10 3H12A1.5 1.5 0 0 1 13.5 4.5V11A1.5 1.5 0 0 1 12 12.5H2A1.5 1.5 0 0 1 0.5 11V4.5A1.5 1.5 0 0 1 2 3ZM4 7.75A3 3 0 1 0 10 7.75A3 3 0 1 0 4 7.75ZM5.5 7.75A1.5 1.5 0 1 0 8.5 7.75A1.5 1.5 0 1 0 5.5 7.75Z"></path>''');
+  /// A design or vector graphic
+  static const fileDesign = GlimGlyphData('IconFileDesign', '0.625 0.75 12.75 12.75', r'''<path fill="currentColor" fill-rule="evenodd" d="M7 0.75L11.5 6.25L9 11.75H5L2.5 6.25ZM5.85 7A1.15 1.15 0 1 0 8.15 7A1.15 1.15 0 1 0 5.85 7ZM6.6 1.9H7.4V5.8H6.6ZM5 12.5H9A0.5 0.5 0 0 1 9.5 13V13A0.5 0.5 0 0 1 9 13.5H5A0.5 0.5 0 0 1 4.5 13V13A0.5 0.5 0 0 1 5 12.5Z"></path>''');
+  /// A playlist
+  static const filePlaylist = GlimGlyphData('IconFilePlaylist', '0.75 1.127 12.75 12.75', r'''<path fill="currentColor" fill-rule="evenodd" d="M1.5 1.75H9A0.75 0.75 0 0 1 9.75 2.5V2.5A0.75 0.75 0 0 1 9 3.25H1.5A0.75 0.75 0 0 1 0.75 2.5V2.5A0.75 0.75 0 0 1 1.5 1.75ZM1.5 5.25H9A0.75 0.75 0 0 1 9.75 6V6A0.75 0.75 0 0 1 9 6.75H1.5A0.75 0.75 0 0 1 0.75 6V6A0.75 0.75 0 0 1 1.5 5.25ZM1.5 8.75H5A0.75 0.75 0 0 1 5.75 9.5V9.5A0.75 0.75 0 0 1 5 10.25H1.5A0.75 0.75 0 0 1 0.75 9.5V9.5A0.75 0.75 0 0 1 1.5 8.75ZM11.5 4.25H12.75L13.5 5V6.25L12.75 5.75V11.25A2 2 0 1 1 11.5 9.4Z"></path>''');
+  /// A PDF document
+  static const filePdf = GlimGlyphData('IconFilePdf', '0.5 0.5 13 13', r'''<path fill="currentColor" fill-rule="evenodd" d="M3.5 0.5H8.75L12 3.75V12A1.5 1.5 0 0 1 10.5 13.5H3.5A1.5 1.5 0 0 1 2 12V2A1.5 1.5 0 0 1 3.5 0.5ZM5 5H7.75A1.75 1.75 0 0 1 7.75 8.5H6.5V11H5ZM6.5 6.25H7.65A0.5 0.5 0 0 1 7.65 7.25H6.5Z"></path>''');
+  /// A text document from an office suite
+  static const fileDoc = GlimGlyphData('IconFileDoc', '0.5 0.5 13 13', r'''<path fill="currentColor" fill-rule="evenodd" d="M3.5 0.5H8.75L12 3.75V12A1.5 1.5 0 0 1 10.5 13.5H3.5A1.5 1.5 0 0 1 2 12V2A1.5 1.5 0 0 1 3.5 0.5ZM4.55 5.25H9.45A0.55 0.55 0 0 1 10 5.8V5.8A0.55 0.55 0 0 1 9.45 6.35H4.55A0.55 0.55 0 0 1 4 5.8V5.8A0.55 0.55 0 0 1 4.55 5.25ZM4.55 7.5H9.45A0.55 0.55 0 0 1 10 8.05V8.05A0.55 0.55 0 0 1 9.45 8.6H4.55A0.55 0.55 0 0 1 4 8.05V8.05A0.55 0.55 0 0 1 4.55 7.5ZM4.55 9.75H7.45A0.55 0.55 0 0 1 8 10.3V10.3A0.55 0.55 0 0 1 7.45 10.85H4.55A0.55 0.55 0 0 1 4 10.3V10.3A0.55 0.55 0 0 1 4.55 9.75Z"></path>''');
+  /// A spreadsheet
+  static const fileSheet = GlimGlyphData('IconFileSheet', '0.5 0.5 13 13', r'''<path fill="currentColor" fill-rule="evenodd" d="M3.5 0.5H8.75L12 3.75V12A1.5 1.5 0 0 1 10.5 13.5H3.5A1.5 1.5 0 0 1 2 12V2A1.5 1.5 0 0 1 3.5 0.5ZM4 5H6.6V6.75H4ZM7.4 5H10V6.75H7.4ZM4 7.5H6.6V9.25H4ZM7.4 7.5H10V9.25H7.4ZM4 10H6.6V11.75H4ZM7.4 10H10V11.75H7.4Z"></path>''');
+  /// A presentation
+  static const fileSlides = GlimGlyphData('IconFileSlides', '0.5 0.625 13 13', r'''<path fill="currentColor" fill-rule="evenodd" d="M1.75 1H12.25A1.25 1.25 0 0 1 13.5 2.25V8.25A1.25 1.25 0 0 1 12.25 9.5H1.75A1.25 1.25 0 0 1 0.5 8.25V2.25A1.25 1.25 0 0 1 1.75 1ZM3 5.5H4.5V8H3ZM6.25 3.5H7.75V8H6.25ZM9.5 4.5H11V8H9.5ZM6.25 9.5H7.75V12H6.25ZM4.125 12H9.875A0.625 0.625 0 0 1 10.5 12.625V12.625A0.625 0.625 0 0 1 9.875 13.25H4.125A0.625 0.625 0 0 1 3.5 12.625V12.625A0.625 0.625 0 0 1 4.125 12Z"></path>''');
+  /// An e-book
+  static const book = GlimGlyphData('IconBook', '0.5 0.655 13 13', r'''<path fill="currentColor" fill-rule="evenodd" d="M0.5 2Q3.5 1.2 6.5 2.6V12.6Q3.5 11.2 0.5 12ZM13.5 2Q10.5 1.2 7.5 2.6V12.6Q10.5 11.2 13.5 12Z"></path>''');
+  /// A disk image or virtual disk
+  static const disc = GlimGlyphData('IconDisc', '0.5 0.5 13 13', r'''<path fill="currentColor" fill-rule="evenodd" d="M0.5 7A6.5 6.5 0 1 0 13.5 7A6.5 6.5 0 1 0 0.5 7ZM4.5 7A2.5 2.5 0 1 0 9.5 7A2.5 2.5 0 1 0 4.5 7ZM5.9 7A1.1 1.1 0 1 0 8.1 7A1.1 1.1 0 1 0 5.9 7Z"></path>''');
+  /// A program or installable package
+  static const fileProgram = GlimGlyphData('IconFileProgram', '0.5 0.5 13 13', r'''<path fill="currentColor" fill-rule="evenodd" d="M2 1H12A1.5 1.5 0 0 1 13.5 2.5V11.5A1.5 1.5 0 0 1 12 13H2A1.5 1.5 0 0 1 0.5 11.5V2.5A1.5 1.5 0 0 1 2 1ZM0.5 3.75H13.5V4.5H0.5ZM1.85 2.4A0.55 0.55 0 1 0 2.95 2.4A0.55 0.55 0 1 0 1.85 2.4ZM3.65 2.4A0.55 0.55 0 1 0 4.75 2.4A0.55 0.55 0 1 0 3.65 2.4ZM5.5 6.25L10 8.75L5.5 11.25Z"></path>''');
+  /// A font
+  static const font = GlimGlyphData('IconFont', '1 1 12 12', r'''<path fill="currentColor" fill-rule="evenodd" d="M5.6 1H8.4L13 13H10.4L9.4 10.25H4.6L3.6 13H1ZM7 4.2L8.6 8.4H5.4Z"></path>''');
+  /// A checksum or signature
+  static const hash = GlimGlyphData('IconHash', '0.75 0.75 12.5 12.5', r'''<path fill="currentColor" fill-rule="nonzero" d="M4.65 1H6.15L5.15 13H3.65ZM8.85 1H10.35L9.35 13H7.85ZM1.75 3.9H12.5A0.75 0.75 0 0 1 13.25 4.65V4.65A0.75 0.75 0 0 1 12.5 5.4H1.75A0.75 0.75 0 0 1 1 4.65V4.65A0.75 0.75 0 0 1 1.75 3.9ZM1.5 8.6H12.25A0.75 0.75 0 0 1 13 9.35V9.35A0.75 0.75 0 0 1 12.25 10.1H1.5A0.75 0.75 0 0 1 0.75 9.35V9.35A0.75 0.75 0 0 1 1.5 8.6Z"></path>''');
+  /// A torrent or magnet link
+  static const magnet = GlimGlyphData('IconMagnet', '1.25 1 11.5 11.5', r'''<path fill="currentColor" fill-rule="evenodd" d="M1.5 1H5.5V7A1.5 1.5 0 0 0 8.5 7V1H12.5V7A5.5 5.5 0 0 1 1.5 7ZM1.5 3.2H5.5V3.95H1.5ZM8.5 3.2H12.5V3.95H8.5Z"></path>''');
+  /// A 3D model or CAD drawing
+  static const cube = GlimGlyphData('IconCube', '0.5 0.5 13 13', r'''<path fill="currentColor" fill-rule="evenodd" d="M7 0.5L13 3.75V10.25L7 13.5L1 10.25V3.75ZM2.115 3.844L7 6.49L11.885 3.844L12.315 4.636L7.45 7.27V12.6H6.55V7.27L1.685 4.636Z"></path>''');
+  /// A calendar or contact card
+  static const calendar = GlimGlyphData('IconCalendar', '0.625 0.5 12.75 12.75', r'''<path fill="currentColor" fill-rule="evenodd" d="M2.25 2H11.75A1.5 1.5 0 0 1 13.25 3.5V11.75A1.5 1.5 0 0 1 11.75 13.25H2.25A1.5 1.5 0 0 1 0.75 11.75V3.5A1.5 1.5 0 0 1 2.25 2ZM3.25 0.5H4.5V2H3.25ZM9.5 0.5H10.75V2H9.5ZM2.25 6H4.75V8.25H2.25ZM5.75 6H8.25V8.25H5.75ZM9.25 6H11.75V8.25H9.25ZM2.25 9.5H4.75V11.75H2.25ZM5.75 9.5H8.25V11.75H5.75Z"></path>''');
+  /// A backup, temporary or unfinished file
+  static const hourglass = GlimGlyphData('IconHourglass', '0.5 0.5 13 13', r'''<path fill="currentColor" fill-rule="evenodd" d="M2.625 0.5H11.375A0.625 0.625 0 0 1 12 1.125V1.125A0.625 0.625 0 0 1 11.375 1.75H2.625A0.625 0.625 0 0 1 2 1.125V1.125A0.625 0.625 0 0 1 2.625 0.5ZM2.625 12.25H11.375A0.625 0.625 0 0 1 12 12.875V12.875A0.625 0.625 0 0 1 11.375 13.5H2.625A0.625 0.625 0 0 1 2 12.875V12.875A0.625 0.625 0 0 1 2.625 12.25ZM3 1.75H11V3.2C11 5 8.4 6.2 8.4 7C8.4 7.8 11 9 11 10.8V12.25H3V10.8C3 9 5.6 7.8 5.6 7C5.6 6.2 3 5 3 3.2ZM4.4 2.9H9.6C9.3 4.1 7.5 5.1 7 5.7C6.5 5.1 4.7 4.1 4.4 2.9Z"></path>''');
 
   /// Every glyph by its name in glyphs.json, such as `IconSave`.
   static const byName = <String, GlimGlyphData>{
@@ -522,5 +560,24 @@ abstract final class GlimGlyphs {
     'IconUpdate': update,
     'IconUpToDate': upToDate,
     'IconUpdateAvailable': updateAvailable,
+    'IconResetArrow': resetArrow,
+    'IconPayPal': payPal,
+    'IconBitcoin': bitcoin,
+    'IconFileRaw': fileRaw,
+    'IconFileDesign': fileDesign,
+    'IconFilePlaylist': filePlaylist,
+    'IconFilePdf': filePdf,
+    'IconFileDoc': fileDoc,
+    'IconFileSheet': fileSheet,
+    'IconFileSlides': fileSlides,
+    'IconBook': book,
+    'IconDisc': disc,
+    'IconFileProgram': fileProgram,
+    'IconFont': font,
+    'IconHash': hash,
+    'IconMagnet': magnet,
+    'IconCube': cube,
+    'IconCalendar': calendar,
+    'IconHourglass': hourglass,
   };
 }

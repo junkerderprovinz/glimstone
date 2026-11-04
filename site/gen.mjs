@@ -27,6 +27,12 @@ const COMPONENTS = {
   SidebarRow: "react/SidebarRow.tsx",
   EmptyState: "react/EmptyState.tsx",
   SubCard: "react/SubCard.tsx",
+  Window: "react/Window.tsx",
+  ContextMenu: "react/ContextMenu.tsx",
+  MenuBar: "react/MenuBar.tsx",
+  Checkbox: "react/Checkbox.tsx",
+  Kbd: "react/Kbd.tsx",
+  Pill: "react/Pill.tsx",
 };
 
 const clean = (s) => s.replace(/\s+/g, " ").trim();

@@ -2718,7 +2718,7 @@ body {
   :where([class*="glim-"]) :where(*, ::before, ::after) {
     box-sizing: border-box;
   }
-  :where(.glim-btn, .glim-badge, .glim-readme-btn, .glim-toggle-track, .glim-toast-dismiss, .glim-window-button, .glim-give-network, .glim-give-coin, .glim-give-amount, .glim-sel-seg, .glim-num-field) {
+  :where(.glim-btn, .glim-badge, .glim-readme-btn, .glim-toggle-track, .glim-toast-dismiss, .glim-window-button, .glim-give-network, .glim-give-coin, .glim-give-amount, .glim-sel-seg, .glim-num-field, .glim-menu-item, .glim-menu-head-edit, .glim-menubar-item, .glim-checkbox) {
     margin: 0;
     padding: 0;
     border: 0 solid;
@@ -3815,4 +3815,252 @@ body {
   .glim-subcard .glim-sel--chip .glim-sel-seg:not(.glim-active):not(:disabled):hover {
     background-color: var(--carbon-hover-raised);
   }
+
+  /* The general window (Window): the confirm surface's frame, grown to hold a
+     form, a list or a whole tool at three widths. Its notch sits in the card's
+     padding, so the body starts far enough down to clear it, and the start of
+     the foot holds one quiet line, such as where the work carries on. */
+  .glim-window { max-width: 40rem; }
+  .glim-window--wide { max-width: 58rem; }
+  .glim-window--full {
+    max-width: 80rem;
+    height: calc(100vh - 2rem - var(--window-bar));
+    max-height: none;
+  }
+  .glim-window-title { margin: 0; }
+  .glim-window-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-top: 1.75rem;
+  }
+  .glim-window-start {
+    margin-inline-end: auto;
+    font-size: var(--text-meta);
+    color: var(--carbon-text-muted);
+  }
+
+  /* The context menu and the menus of the bar (ContextMenu, MenuBar). Both sit
+     on the body, so no card or scroll box clips them, and a submenu is a menu
+     of its own beside its row: inside the first one, that menu's scrolling
+     would cut it off. Above windows, below toasts and bubbles. */
+  .glim-menu {
+    position: fixed;
+    z-index: 60;
+    display: flex;
+    flex-direction: column;
+    min-width: 16rem;
+    max-height: calc(100vh - 2rem);
+    overflow: auto;
+    padding: 0.35rem;
+    border-radius: var(--radius-card);
+    background-color: var(--carbon-surface);
+    box-shadow: var(--elevation), var(--hairline);
+  }
+  .glim-menu-item {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: 0.6rem;
+    height: 2rem;
+    padding-inline: 0.6rem;
+    border-radius: var(--radius-control);
+    font-size: var(--text-body);
+    text-align: start;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .glim-menu-item:hover,
+  .glim-menu-item:focus-visible,
+  .glim-menu-item[aria-expanded="true"] { background-color: var(--carbon-hover); }
+  .glim-menu-item:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+  .glim-menu-item:disabled:hover { background-color: transparent; }
+  /* The current choice of a radio group, washed rather than filled, since the
+     tick at its end already says which. */
+  .glim-menu-item--current { background-color: var(--accent-soft); }
+  /* Also the empty room of a row without a glyph, so every label starts at one edge. */
+  .glim-menu-glyph {
+    display: inline-grid;
+    flex: none;
+    width: 0.95rem;
+    height: 0.95rem;
+    color: var(--accent-glyph);
+  }
+  .glim-menu-glyph > svg {
+    width: 100%;
+    height: 100%;
+  }
+  .glim-menu-dot {
+    flex: none;
+    width: 0.95rem;
+    height: 0.95rem;
+    border-radius: var(--radius-pill);
+  }
+  .glim-menu-label {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .glim-menu-end {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    margin-inline-start: auto;
+  }
+  .glim-menu-tick { color: var(--accent-glyph); }
+  .glim-menu-count {
+    padding-inline-start: 1.2rem;
+    font-size: var(--text-meta);
+    color: var(--carbon-text-muted);
+  }
+  .glim-menu-caret { color: var(--carbon-text-muted); }
+  .glim-menu-caret svg {
+    width: 0.7rem;
+    height: 0.7rem;
+    rotate: -90deg;
+  }
+  .glim-menu-caret:dir(rtl) svg { rotate: 90deg; }
+  .glim-menu-sep {
+    flex: none;
+    height: 1px;
+    margin: 0.3rem 0.4rem;
+    background-color: color-mix(in srgb, var(--carbon-text) 9%, transparent);
+  }
+  .glim-menu-head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 1.6rem;
+    padding-block: 0.35rem 0.2rem;
+    padding-inline: 0.6rem 0.3rem;
+    font-size: var(--text-meta);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--carbon-text-muted);
+  }
+  .glim-menu-head-edit {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    margin-inline-start: auto;
+    border-radius: var(--radius-control);
+    color: var(--accent-glyph);
+    cursor: pointer;
+  }
+  .glim-menu-head-edit:hover,
+  .glim-menu-head-edit:focus-visible { background-color: var(--carbon-hover); }
+  .glim-menu-head-edit svg {
+    width: 0.85rem;
+    height: 0.85rem;
+  }
+
+  /* The menu bar of a desktop-style app's head row: bare words that take the
+     second surface under the pointer and while their menu is open. */
+  .glim-menubar {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: 2px;
+  }
+  .glim-menubar-item {
+    height: 2.2rem;
+    padding-inline: 0.7rem;
+    border-radius: var(--radius-pill);
+    font-weight: 500;
+    color: var(--carbon-text-sub);
+    cursor: pointer;
+  }
+  .glim-menubar-item:hover,
+  .glim-menubar-item[aria-expanded="true"] {
+    background-color: var(--carbon-surface2);
+    color: var(--carbon-text);
+  }
+
+  /* The checkbox (Checkbox, and the box of a menu's checkbox item): the one
+     place a box stands instead of a switch (rule 39). Drawn rather than the
+     system's, at the control radius held small enough to stay a box, and when
+     ticked the accent with the tick in its contrast ink. */
+  .glim-checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 2rem;
+    padding-inline: 0.4rem;
+    border-radius: var(--radius-control);
+    text-align: start;
+    cursor: pointer;
+  }
+  .glim-checkbox:hover { background-color: var(--carbon-hover); }
+  .glim-checkbox:disabled {
+    opacity: 0.55;
+    cursor: default;
+  }
+  .glim-checkbox:disabled:hover { background-color: transparent; }
+  .glim-checkbox-box {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 1.125rem;
+    height: 1.125rem;
+    border-radius: min(var(--radius-control), 5px);
+    background-color: color-mix(in srgb, var(--carbon-surface3) 60%, transparent);
+    color: transparent;
+  }
+  .glim-checkbox-box > svg {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+  [aria-checked="true"] > .glim-checkbox-box {
+    background-color: var(--accent);
+    color: var(--accent-contrast);
+  }
+
+  /* A key cap (Kbd), in the app's own type rather than the browser's monospace. */
+  .glim-kbd {
+    display: inline-grid;
+    place-items: center;
+    height: 1.2rem;
+    padding-inline: 0.4rem;
+    border-radius: var(--radius-control);
+    background-color: var(--carbon-surface3);
+    font-family: inherit;
+    font-size: var(--text-meta);
+    color: var(--carbon-text-sub);
+    white-space: nowrap;
+  }
+
+  /* The data pill (Pill): one value of a row, quiet at rest. A state takes a
+     wash of its solid colour over the second surface, so the text keeps the
+     body ink and a column of pills still reads as one column. */
+  .glim-pill {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    height: 1.35rem;
+    padding-inline: 0.55rem;
+    border-radius: var(--radius-pill);
+    background-color: var(--carbon-surface2);
+    font-size: var(--text-meta);
+    color: var(--carbon-text-sub);
+    white-space: nowrap;
+  }
+  .glim-pill--state { background-color: var(--carbon-surface3); color: var(--carbon-text); }
+  .glim-pill--ok { background-color: color-mix(in srgb, var(--carbon-surface2), var(--status-ok-solid) 30%); color: var(--carbon-text); }
+  .glim-pill--warn { background-color: color-mix(in srgb, var(--carbon-surface2), var(--status-warn-solid) 35%); color: var(--carbon-text); }
+  .glim-pill--fail { background-color: color-mix(in srgb, var(--carbon-surface2), var(--status-fail-solid) 35%); color: var(--carbon-text); }
+}
+
+/* Outside the layer, or the house ring's offset would win: inside a menu the
+   ring is drawn on the row, where the menu's edge cannot clip it. */
+.glim-menu-item:focus-visible,
+.glim-menu-head-edit:focus-visible { outline-offset: -2px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .glim-checkbox-box { transition: background-color var(--motion-control-dur) ease; }
 }

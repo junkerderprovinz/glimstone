@@ -43,6 +43,7 @@ export const IconClose = markComponent(MARKS.close);
 export const IconCancel = markComponent(MARKS.cancel);
 export const IconCheck = markComponent(MARKS.check);
 export const IconExpand = markComponent(MARKS.expand);
+export const IconPencil = markComponent(MARKS.pencil);
 export const IconWindowMinimise = markComponent(MARKS.windowMinimise);
 export const IconWindowMaximise = markComponent(MARKS.windowMaximise);
 export const IconWindowRestore = markComponent(MARKS.windowRestore);

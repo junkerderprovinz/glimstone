@@ -70,6 +70,7 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconEye` | Show, reveal | Streamline `interface-essential/visible.svg` |
 | `IconEyeOff` | Hide again | Streamline `interface-essential/invisible-1.svg` |
 | `IconRefresh` | Reset to the default | Streamline `interface-essential/arrow-round-left.svg` |
+| `IconResetArrow` | Reset one row of a colour card to its defaults | Drawn for BombVault's accent card |
 | `IconRetry` | Retry, reload, refresh | Streamline `interface-essential/arrow-reload-horizontal-1.svg` |
 | `IconUpload` | Upload | Streamline `interface-essential/upload-circle.svg` |
 | `IconImport` | Import, read in | Streamline `interface-essential/upload-file.svg` |
@@ -138,6 +139,8 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconMail` | Write to us | Streamline `mail/mail-send-envelope.svg` |
 | `IconSendTest` | Send a test | Streamline `mail/mail-send-email-message.svg` |
 | `IconCoffee` | Buy the author a coffee | Simple Icons `buymeacoffee` (CC0, a trademark used descriptively) |
+| `IconPayPal` | Give through PayPal | Simple Icons `paypal` (CC0, a trademark used descriptively) |
+| `IconBitcoin` | Give from a crypto wallet | Simple Icons `bitcoin`, the letter without its disc (CC0, a trademark used descriptively) |
 | `IconShieldOn` | A protection is on, turn it on | Drawn for GlimStone |
 | `IconShieldOff` | A protection is off, turn it off | Drawn for GlimStone |
 | `IconCompressOff` | Store uncompressed | Streamline `shipping/shipping-box-1.svg` |
@@ -211,6 +214,29 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconResolvers` | Resolvers, download quality and format | Material Design Icons `movie-cog` (Apache 2.0) |
 | `IconWhatsNew` | What's new | Streamline `money-shopping/gift.svg`, its stroked ribbon drawn as a filled shape |
 
+### File kinds, what a file manager marks a file as
+
+| Name | Means | Source |
+| --- | --- | --- |
+| `IconFileRaw` | A RAW photo straight from the camera | Drawn for CastleCommander |
+| `IconFileDesign` | A design or vector graphic | Drawn for CastleCommander |
+| `IconFilePlaylist` | A playlist | Drawn for CastleCommander |
+| `IconFilePdf` | A PDF document | Drawn for CastleCommander |
+| `IconFileDoc` | A text document from an office suite | Drawn for CastleCommander |
+| `IconFileSheet` | A spreadsheet | Drawn for CastleCommander |
+| `IconFileSlides` | A presentation | Drawn for CastleCommander |
+| `IconBook` | An e-book | Drawn for CastleCommander |
+| `IconDisc` | A disk image or virtual disk | Drawn for CastleCommander |
+| `IconFileProgram` | A program or installable package | Drawn for CastleCommander |
+| `IconFont` | A font | Drawn for CastleCommander |
+| `IconHash` | A checksum or signature | Drawn for CastleCommander |
+| `IconMagnet` | A torrent or magnet link | Drawn for CastleCommander |
+| `IconCube` | A 3D model or CAD drawing | Drawn for CastleCommander |
+| `IconCalendar` | A calendar or contact card | Drawn for CastleCommander |
+| `IconHourglass` | A backup, temporary or unfinished file | Drawn for CastleCommander |
+
+A file manager tells a file's kind by its glyph before its name is read, so these stand beside `IconFileVideo`, `IconFileAudio`, `IconFileImage`, `IconFileText` and `IconArchive` above. The documents start from one page with its top corner folded and differ only in what is printed on it. The rest are a single object each, large enough to read at 16px: a camera, a pen nib, a disc, a cube, an hourglass.
+
 ### Settings tabs
 
 | Name | Means | Source |
@@ -262,9 +288,9 @@ The Design selector's Dark and Light segments wear `IconMoon` and `IconSun` from
 
 **Taking something away draws a slash through it.** `IconEyeOff`, `IconKeyRevoke`, `IconShieldOff` and `IconUnlink` are an eye, a key, a shield and a chain link with one bar from the top left to the bottom right, so the undoing reads the same on every one of them.
 
-**Close meanings wear different drawings.** `IconRetry` tries again, reloads or refreshes, and `IconRefresh` goes back to the default whatever its name says. `IconUpload` and `IconDownload` move a file to or from somewhere else, while `IconImport` and `IconExport` read a list or settings in and write them out. `IconCheck` marks a test and the success it reports, and `IconConfirm` is a person agreeing: Done, Confirm, Got it. `IconApply` takes something over in place of what was there, which is not saving. `IconCompressAuto` marks anything the app chooses by itself, the compression as well as the order of the providers, and keeps its name for the apps that generate from this list. `IconSync` checks for an update and fetches it, and `IconUpdate` marks an updates tab or section, where its cloud has room to read. The check answers with `IconUpToDate` when there was none to fetch, the cloud with a tick, and with `IconUpdateAvailable` when there is. `IconMoon` is the dark look and nothing else; a disk spinning down, a machine going to rest and a VM put into hibernation wear `IconSleep`.
+**Close meanings wear different drawings.** `IconRetry` tries again, reloads or refreshes, and `IconRefresh` goes back to the default whatever its name says. `IconResetArrow` does the same for one row inside a colour card, where a full-size reset beside the swatches would read as resetting the card. `IconQueued` waits its turn, and `IconHourglass` marks a file that is a backup copy or not finished yet. `IconUpload` and `IconDownload` move a file to or from somewhere else, while `IconImport` and `IconExport` read a list or settings in and write them out. `IconCheck` marks a test and the success it reports, and `IconConfirm` is a person agreeing: Done, Confirm, Got it. `IconApply` takes something over in place of what was there, which is not saving. `IconCompressAuto` marks anything the app chooses by itself, the compression as well as the order of the providers, and keeps its name for the apps that generate from this list. `IconSync` checks for an update and fetches it, and `IconUpdate` marks an updates tab or section, where its cloud has room to read. The check answers with `IconUpToDate` when there was none to fetch, the cloud with a tick, and with `IconUpdateAvailable` when there is. `IconMoon` is the dark look and nothing else; a disk spinning down, a machine going to rest and a VM put into hibernation wear `IconSleep`.
 
-**A brand mark is the brand's own and goes only where it is meant.** `IconCoffee` is Buy Me a Coffee's mark and stands only on the button that leads there, and `IconCaptcha` is reCAPTCHA's mark and stands only where a captcha is the subject. `IconContainers` and `IconGithub` follow the same rule (section 1).
+**A brand mark is the brand's own and goes only where it is meant.** `IconCoffee` is Buy Me a Coffee's mark and stands only on the button that leads there, and `IconCaptcha` is reCAPTCHA's mark and stands only where a captcha is the subject. `IconPayPal` and `IconBitcoin` stand only on the buttons that open the PayPal and the crypto window. `IconContainers` and `IconGithub` follow the same rule (section 1).
 
 **The title bar wears three glyphs of its own and `IconClose`.** `IconWindowMinimise` is a bar as wide as the grid, `IconWindowMaximise` the window as a rounded frame filling it, and `IconWindowRestore` a smaller frame in front of the corner of another, all drawn with a 2-unit line and filling the grid like the close mark beside them. A window that gets restored is not a backup that does, so the title bar never wears `IconRestore`.
 

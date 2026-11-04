@@ -67,6 +67,10 @@ needs none of them.
 | `SubCard` | A filled inset group inside a card, which replaces a fold-out |
 | `UnavailableNotice` | What stands where a control would be, when the environment forbids the thing entirely |
 | `WindowBar` | A desktop app's own title bar on Windows and Linux |
+| `Window` | The general window: the title notch, a body for anything and a foot that adds Cancel or Close by itself; windows stack |
+| `ContextMenu`, `MenuBar` | A menu at a point and the row of menus in a head bar, with submenus, rows that tick a box, choices, key caps and counts |
+| `Checkbox` | The drawn box for "Don't show again" and for choices applied together. Every setting is a `Toggle` |
+| `Kbd`, `Pill` | A key cap, and the quiet data pill of a list row |
 | `useLabelMode`, `useTipBubble`, `usePortalHue` | The small hooks the components need |
 | `glyphs` | The marks the components draw themselves, and `setGlyphResolver`, the seam an app registers its own icon set through |
 

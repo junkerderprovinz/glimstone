@@ -22,6 +22,11 @@ npm install @glimstone/core
   select's list model, the Info tile's version links and update check, the
   README button's classes, where a bubble goes, a dialog's keys and the toast
   queue.
+- What windows and menus share: `windowFoot` adds the way out, `stackWindow`
+  gives Escape and Tab to the window in front, and `menu.ts` holds the menu
+  model with `tidyMenu`, `menuRowView`, `placeMenu`, `menuMove` and
+  `claimMenu`. `menuIsOpen` and `windowIsOpen` tell an app's own key handler
+  to stand back.
 - What runs without a framework: `mountSelect`, `wireTooltips` with
   `infoIcon`, `openColorPickerPopover`, `attachNumberSteppers`,
   `enableSelectScroll` and `flagEmoji`.

@@ -600,3 +600,279 @@ export function SubCardPage() {
     </>
   );
 }
+
+export function WindowPage() {
+  return (
+    <>
+      <p className="lead">
+        The window for everything that is more than a question: a form, a list to pick from, a tool. A notch with its
+        title, a body that scrolls on its own and a foot with the answers at its end.
+      </p>
+      <Head file="react/Window.tsx" />
+      <Demo name="WindowColumns" />
+      <Usage
+        code={`import { Window } from "@glimstone/react";
+
+{open && (
+  <Window
+    title="Columns"
+    size="wide"
+    text={{ cancel: t("cancel"), close: t("close") }}
+    start="Drag a column's header to move it"
+    actions={[{ label: t("apply"), labelKey: "apply", primary: true, onClick: apply }]}
+    onClose={() => setOpen(false)}
+  >
+    ...
+  </Window>
+)}`}
+      />
+      <H2>The way out</H2>
+      <p>
+        Every window can be left from its foot. When none of its actions is a way out, the window adds one before them:
+        Cancel when an action goes forward, Close when the window only shows something. An action that already leaves,
+        such as Got it, says so with <code>wayOut</code>, and then nothing is added.
+      </p>
+      <p>
+        An action closes the window once it has run. One that changes something in view, such as a reset, returns{" "}
+        <code>false</code> and the window stays for a second look.
+      </p>
+      <H2>Rules</H2>
+      <ul>
+        <li>The content is as wide as the window, and the answers stand at the end of the foot, the forward one last.</li>
+        <li>
+          <code>start</code> holds one quiet line at the start of the foot, such as where the work carries on. A link out
+          of the app goes there too.
+        </li>
+        <li>
+          Three widths: <code>normal</code> for a question or a form, <code>wide</code> for a list and <code>full</code>{" "}
+          for a tool that needs the screen.
+        </li>
+        <li>Windows stack. Escape and Tab belong to the one in front, and a press beside an open menu closes only the menu.</li>
+      </ul>
+      <H2>Accessibility</H2>
+      <ul>
+        <li>
+          <code>role="dialog"</code> with <code>aria-modal</code>, named by its notch.
+        </li>
+        <li>Focus lands on the first field, so typing can start at once, or on the forward action when there is no field.</li>
+        <li>When the window closes, focus goes back to the control that opened it.</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="Window" />
+      <H2>API</H2>
+      <PropsTable of="Window" />
+    </>
+  );
+}
+
+export function ContextMenuPage() {
+  return (
+    <>
+      <p className="lead">
+        A menu at a point: a right-click on a row, a More button, or one menu of the bar. Its rows can carry a glyph, a
+        key, a count, a box to tick or a submenu.
+      </p>
+      <Head file="react/ContextMenu.tsx" />
+      <Demo name="ContextMenuRows" />
+      <Usage
+        code={`import { ContextMenu, type MenuEntry } from "@glimstone/react";
+
+const items: MenuEntry[] = [
+  { label: "Open", glyph: <IconFolderOpen />, shortcut: "Enter", onSelect: open },
+  "-",
+  { label: "Sort by", sub: sorts.map((s) => ({ label: s, radio: true, checked: sort === s, onSelect: () => setSort(s) })) },
+  { label: "Show hidden files", checked: hidden, onSelect: () => setHidden(!hidden) },
+];
+
+{at && <ContextMenu x={at.x} y={at.y} items={items} onClose={() => setAt(null)} />}`}
+      />
+      <H2>What a row can be</H2>
+      <ul>
+        <li>
+          A plain row runs its action and closes the menu. A row without a glyph keeps the glyph's room, so every label
+          starts at one edge.
+        </li>
+        <li>
+          A row with <code>checked</code> is on or off. It shows a box where its glyph would be and leaves the menu open,
+          so several can be ticked in a row.
+        </li>
+        <li>
+          With <code>radio</code> as well it is one choice among several: it keeps its glyph, the current choice is ticked
+          at the end, and choosing closes the menu.
+        </li>
+        <li>
+          <code>shortcut</code> shows the key that does the same, and <code>count</code> a figure at the end.{" "}
+          <code>color</code> puts a dot where the glyph would be.
+        </li>
+        <li>
+          <code>sub</code> opens its rows beside the row, one level deep. The submenu is a menu of its own on the body, so
+          the first menu's scrolling cannot cut it off.
+        </li>
+        <li>
+          A heading groups the rows under it. With <code>edit</code> it carries a pencil for a group people keep
+          themselves, such as bookmarks.
+        </li>
+        <li>
+          Separators at either end, twice in a row or right under a heading are dropped, so a menu put together from parts
+          needs no care.
+        </li>
+      </ul>
+      <H2>Rules</H2>
+      <ul>
+        <li>One menu is open at a time. Opening another closes the first.</li>
+        <li>
+          It stays inside the window: near an edge it moves back in by its own size, and a submenu opens on the other side
+          when there is no room.
+        </li>
+        <li>A menu over a window closes before the window does: Escape and a press beside it reach the menu first.</li>
+      </ul>
+      <H2>Accessibility</H2>
+      <ul>
+        <li>
+          <code>role="menu"</code> with <code>menuitem</code>, <code>menuitemcheckbox</code> and{" "}
+          <code>menuitemradio</code> rows. A box or a tick is drawn, and the state is in <code>aria-checked</code>.
+        </li>
+        <li>
+          The arrows move through the rows and skip disabled ones. Right opens a submenu and left closes it, mirrored under
+          right to left.
+        </li>
+        <li>
+          A choice or Escape gives the focus back to where it was, or to <code>opener</code>.
+        </li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="ContextMenu" />
+      <H2>API</H2>
+      <PropsTable of="ContextMenu" />
+    </>
+  );
+}
+
+export function MenuBarPage() {
+  return (
+    <>
+      <p className="lead">
+        The row of menus in a desktop-style app's head bar, which moves between its menus the way a desktop program does.
+      </p>
+      <Head file="react/MenuBar.tsx" />
+      <Demo name="MenuBarDemo" />
+      <Usage
+        code={`import { MenuBar, type MenuBarHandle } from "@glimstone/react";
+
+const bar = useRef<MenuBarHandle>(null);
+// F10 is the app's key, so the app opens the first menu itself.
+onKey("F10", () => bar.current?.open(0));
+
+<MenuBar ref={bar} label="Menu" menus={[{ label: "File", items: fileItems }, { label: "Edit", items: editItems }]} />`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>Each word opens its menu below it. The rows are the same as a ContextMenu's.</li>
+        <li>While a menu is open, the pointer on another word opens that one instead, and so do left and right.</li>
+        <li>Clicking the open menu's word closes it.</li>
+        <li>
+          On a narrow screen the bar gives way to one button that lists every menu under its own heading. That button
+          belongs to the app.
+        </li>
+      </ul>
+      <H2>Accessibility</H2>
+      <ul>
+        <li>
+          <code>role="menubar"</code> named by its label, one tab stop. Each word is a <code>menuitem</code> with{" "}
+          <code>aria-haspopup</code> and <code>aria-expanded</code>.
+        </li>
+        <li>Left and right move between the words, and down or Enter opens a menu with the focus on its first row.</li>
+        <li>Escape closes the menu and puts the focus back on its word.</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="MenuBar" />
+      <H2>API</H2>
+      <PropsTable of="MenuBar" />
+    </>
+  );
+}
+
+export function CheckboxPage() {
+  return (
+    <>
+      <p className="lead">The box for the few places where a switch is the wrong answer.</p>
+      <Head file="react/Checkbox.tsx" />
+      <Demo name="CheckboxBasic" />
+      <Usage
+        code={`import { Checkbox } from "@glimstone/react";\n\n<Checkbox label="Don't show again" checked={again} onChange={setAgain} />`}
+      />
+      <H2>When to use it</H2>
+      <ul>
+        <li>
+          Under a notice that can be switched off, as "Don't show again" (rule 39). A switch there looks like a setting
+          that strayed into the notice.
+        </li>
+        <li>
+          In a column of choices that are applied together, such as which columns a list shows, and in a menu row that is
+          on or off.
+        </li>
+        <li>
+          Every setting stays a <a href="#/components/toggle">Toggle</a>.
+        </li>
+      </ul>
+      <H2>Rules</H2>
+      <ul>
+        <li>Drawn, never the system's box. It reads the control radius, held small enough to stay a box.</li>
+        <li>Ticked, it fills with the accent and the tick takes the accent's contrast ink.</li>
+        <li>The whole row is the target, the words as well as the box.</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="Checkbox" />
+      <H2>API</H2>
+      <PropsTable of="Checkbox" />
+    </>
+  );
+}
+
+export function KbdPage() {
+  return (
+    <>
+      <p className="lead">A key or a key combination, as it is written on the keys.</p>
+      <Head file="react/Kbd.tsx" />
+      <Demo name="KbdBasic" />
+      <Usage code={`import { Kbd } from "@glimstone/react";\n\n<Kbd>Ctrl+K</Kbd>`} />
+      <H2>Rules</H2>
+      <ul>
+        <li>The words are the app's own, so a German app writes Strg and Entf.</li>
+        <li>It is set in the app's type, not the browser's monospace, and sits on the third surface.</li>
+        <li>A menu row draws its key with it, at the end of the row.</li>
+      </ul>
+      <H2>API</H2>
+      <PropsTable of="Kbd" />
+    </>
+  );
+}
+
+export function PillPage() {
+  return (
+    <>
+      <p className="lead">One value of a list row: a size, a date or what the row is doing.</p>
+      <Head file="react/Pill.tsx" />
+      <Demo name="PillTones" />
+      <Usage code={`import { Pill } from "@glimstone/react";\n\n<Pill className="glim-num">4.2 GB</Pill>\n<Pill tone="ok">Done</Pill>`} />
+      <H2>A pill or a badge</H2>
+      <p>
+        A <a href="#/components/badge">Badge</a> says something about a row and is coloured to be seen. A pill is one of
+        the row's values and stays quiet, so a column of them reads as one column. A state washes it in its colour over
+        the second surface, and the words keep the body ink.
+      </p>
+      <H2>Rules</H2>
+      <ul>
+        <li>
+          <code>glim-num</code> lines figures up, so sizes and percentages in a column do not jitter.
+        </li>
+        <li>
+          <code>state</code> lifts a word that says what the row is doing. <code>ok</code>, <code>warn</code> and{" "}
+          <code>fail</code> are the state colours and nothing else.
+        </li>
+      </ul>
+      <H2>API</H2>
+      <PropsTable of="Pill" />
+    </>
+  );
+}

@@ -4,6 +4,17 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
+## ✨ Added
+
+- **`Window`**, the general window for React and Vue: a notch with the title, a body for anything and a foot that adds Cancel or Close by itself. Windows stack, Escape and Tab belong to the one in front, and focus lands on the first field.
+- **`ContextMenu` and `MenuBar`**: a menu at a point and the row of menus in a head bar, with submenus on the body, rows that tick a box and stay open, choices with a tick, key caps, counts and a heading with a pencil. The arrows move between the menus of the bar. The model, the placing and the keys are `menu.ts` in the core.
+- **`Checkbox`, `Kbd` and `Pill`**: the drawn box for "Don't show again" and for choices applied together, a key cap, and the quiet data pill of a list row.
+- **19 glyphs**: the file kinds a file manager tells apart (`IconFileRaw`, `IconFileDesign`, `IconFilePlaylist`, `IconFilePdf`, `IconFileDoc`, `IconFileSheet`, `IconFileSlides`, `IconBook`, `IconDisc`, `IconFileProgram`, `IconFont`, `IconHash`, `IconMagnet`, `IconCube`, `IconCalendar`, `IconHourglass`), `IconResetArrow` for one row of a colour card, and `IconPayPal` and `IconBitcoin` for the give buttons.
+
+## 🔁 Changed
+
+- **`keepTabInside`** is the Tab trap on its own, shared by `trapDialogKeys` and the window stack.
+
 ## 4.0.0 - 2026-11-03
 
 GlimStone ships as packages: a core without a framework and one package each for React, Vue and Flutter, all with one version number. The components draw only with `glim-` classes, so an app without Tailwind gets the same pixels.

@@ -1269,3 +1269,360 @@ test.describe("SubCard", () => {
     expect(await bg(".glim-btn")).not.toBe(sub);
   });
 });
+
+test.describe("Window", () => {
+  const columns = (page: Page) => page.getByRole("dialog", { name: "Columns" });
+  const about = (page: Page) => page.getByRole("dialog", { name: "About columns" });
+  const footNames = (dialog: Locator) =>
+    dialog.locator(".glim-modal-foot").getByRole("button").evaluateAll((els) => els.map((e) => e.getAttribute("aria-label") ?? e.textContent?.trim()));
+
+  async function openColumns(page: Page) {
+    await open(page, "/components/window");
+    const trigger = stage(page, "WindowColumns").getByRole("button", { name: "Choose columns" });
+    await trigger.focus();
+    await page.keyboard.press("Enter");
+    await expect(columns(page)).toBeVisible();
+    return trigger;
+  }
+
+  test("[window-role] named by its notch, modal", async ({ page }) => {
+    await openColumns(page);
+    await expect(columns(page)).toHaveAttribute("aria-modal", "true");
+  });
+
+  test("[window-focus] focus lands on the first field, else on the forward button", async ({ page }) => {
+    await openColumns(page);
+    await expect(page.getByRole("searchbox", { name: "Find a column" })).toBeFocused();
+    await columns(page).getByRole("button", { name: "About columns" }).click();
+    await expect(about(page).getByRole("button", { name: "Got it" })).toBeFocused();
+  });
+
+  test("[window-way-out] Cancel comes first, the forward action last", async ({ page }) => {
+    await openColumns(page);
+    expect(await footNames(columns(page))).toEqual(["Cancel", "Reset", "Apply"]);
+  });
+
+  test("[window-own-way-out] an action that leaves gets no Cancel beside it", async ({ page }) => {
+    await openColumns(page);
+    await columns(page).getByRole("button", { name: "About columns" }).click();
+    expect(await footNames(about(page))).toEqual(["Got it"]);
+  });
+
+  test("[window-keep] an action that returns false keeps the window", async ({ page }) => {
+    await openColumns(page);
+    const kind = columns(page).getByRole("checkbox", { name: "Kind" });
+    await kind.click();
+    await expect(kind).toHaveAttribute("aria-checked", "true");
+    await columns(page).getByRole("button", { name: "Reset" }).click();
+    await expect(columns(page)).toBeVisible();
+    await expect(kind).toHaveAttribute("aria-checked", "false");
+  });
+
+  test("[window-escape] Escape closes only the window in front", async ({ page }) => {
+    await openColumns(page);
+    await columns(page).getByRole("button", { name: "About columns" }).click();
+    await expect(about(page)).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(about(page)).toHaveCount(0);
+    await expect(columns(page)).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(columns(page)).toHaveCount(0);
+  });
+
+  test("[window-trap] Tab wraps inside the window in front", async ({ page }) => {
+    await openColumns(page);
+    for (const key of ["Tab", "Shift+Tab"]) {
+      for (let i = 0; i < 10; i++) {
+        await page.keyboard.press(key);
+        expect(await page.evaluate(() => !!document.activeElement?.closest('[role="dialog"]')), `after ${i + 1} ${key}`).toBe(true);
+      }
+    }
+  });
+
+  test("[window-return] focus returns to the opener", async ({ page }) => {
+    const trigger = await openColumns(page);
+    await page.keyboard.press("Escape");
+    await expect(columns(page)).toHaveCount(0);
+    await expect(trigger).toBeFocused();
+  });
+
+  test("[window-backdrop] a press beside the window closes it", async ({ page }) => {
+    await openColumns(page);
+    await page.mouse.click(8, 400);
+    await expect(columns(page)).toHaveCount(0);
+  });
+});
+
+test.describe("ContextMenu", () => {
+  const menu = (page: Page) => page.getByRole("menu", { name: "File" });
+  const sortMenu = (page: Page) => page.getByRole("menu", { name: "Sort by" });
+  const last = (page: Page) => stage(page, "ContextMenuRows").locator("[data-last]");
+
+  async function openMenu(page: Page) {
+    await open(page, "/components/context-menu");
+    const more = stage(page, "ContextMenuRows").getByRole("button", { name: "More" });
+    await more.focus();
+    await page.keyboard.press("Enter");
+    await expect(menu(page)).toBeVisible();
+    return more;
+  }
+
+  test("[menu-role] a menu of items, checkboxes and radios", async ({ page }) => {
+    await openMenu(page);
+    await expect(menu(page).getByRole("menuitem", { name: "Open" })).toHaveCount(1);
+    await expect(menu(page).getByRole("menuitemcheckbox", { name: "Show hidden files" })).toHaveAttribute("aria-checked", "false");
+    await menu(page).getByRole("menuitem", { name: "Sort by" }).hover();
+    await expect(sortMenu(page).getByRole("menuitemradio", { name: "Name" })).toHaveAttribute("aria-checked", "true");
+    await expect(sortMenu(page).getByRole("menuitemradio", { name: "Size" })).toHaveAttribute("aria-checked", "false");
+  });
+
+  test("[menu-focus] focus is on the first row", async ({ page }) => {
+    await openMenu(page);
+    await expect(menu(page).getByRole("menuitem", { name: "Open" })).toBeFocused();
+  });
+
+  test("[menu-arrows] the arrows skip disabled rows and wrap", async ({ page }) => {
+    await openMenu(page);
+    // A row is named by its label and then its key, as a desktop menu reads it.
+    const row = (name: string) => menu(page).getByRole("menuitem", { name: new RegExp(`^${name}`) });
+    await page.keyboard.press("ArrowDown");
+    await expect(row("Rename")).toBeFocused();
+    await page.keyboard.press("ArrowDown");
+    await expect(row("Sort by")).toBeFocused();
+    await page.keyboard.press("ArrowUp");
+    await page.keyboard.press("ArrowUp");
+    await expect(row("Open")).toBeFocused();
+    await page.keyboard.press("ArrowUp");
+    await expect(row("Downloads")).toBeFocused();
+    await page.keyboard.press("ArrowDown");
+    await expect(row("Open")).toBeFocused();
+  });
+
+  test("[menu-home-end] Home and End reach the ends", async ({ page }) => {
+    await openMenu(page);
+    await page.keyboard.press("End");
+    await expect(menu(page).getByRole("menuitem", { name: "Downloads" })).toBeFocused();
+    await page.keyboard.press("Home");
+    await expect(menu(page).getByRole("menuitem", { name: "Open" })).toBeFocused();
+  });
+
+  test("[menu-pick] a choice runs, closes and hands focus back", async ({ page }) => {
+    const more = await openMenu(page);
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("Enter");
+    await expect(menu(page)).toHaveCount(0);
+    await expect(last(page)).toContainText("Last choice: Rename");
+    await expect(more).toBeFocused();
+  });
+
+  test("[menu-check] an on or off row flips and the menu stays", async ({ page }) => {
+    await openMenu(page);
+    const hidden = menu(page).getByRole("menuitemcheckbox", { name: "Show hidden files" });
+    await hidden.focus();
+    await page.keyboard.press("Enter");
+    await expect(hidden).toHaveAttribute("aria-checked", "true");
+    await expect(hidden).toBeFocused();
+    await page.keyboard.press("Space");
+    await expect(hidden).toHaveAttribute("aria-checked", "false");
+    await expect(menu(page)).toBeVisible();
+  });
+
+  test("[menu-radio] a choice in a submenu is ticked and every menu closes", async ({ page }) => {
+    await openMenu(page);
+    await menu(page).getByRole("menuitem", { name: "Sort by" }).focus();
+    await page.keyboard.press("ArrowRight");
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("Enter");
+    await expect(page.getByRole("menu")).toHaveCount(0);
+    await expect(last(page)).toContainText("Sorted by Size");
+  });
+
+  test("[menu-sub-open] ArrowRight opens the submenu beside its row, on the body", async ({ page }) => {
+    await openMenu(page);
+    const host = menu(page).getByRole("menuitem", { name: "Sort by" });
+    await host.focus();
+    await page.keyboard.press("ArrowRight");
+    await expect(sortMenu(page).getByRole("menuitemradio", { name: "Name" })).toBeFocused();
+    await expect(host).toHaveAttribute("aria-expanded", "true");
+    expect(await sortMenu(page).evaluate((m) => m.parentElement === document.body)).toBe(true);
+    const row = (await host.boundingBox())!;
+    const box = (await sortMenu(page).boundingBox())!;
+    expect(box.x).toBeGreaterThanOrEqual(row.x + row.width);
+  });
+
+  test("[menu-sub-back] ArrowLeft closes the submenu and returns to its row", async ({ page }) => {
+    await openMenu(page);
+    const host = menu(page).getByRole("menuitem", { name: "Sort by" });
+    await host.focus();
+    await page.keyboard.press("ArrowRight");
+    await expect(sortMenu(page)).toBeVisible();
+    await page.keyboard.press("ArrowLeft");
+    await expect(sortMenu(page)).toHaveCount(0);
+    await expect(host).toBeFocused();
+  });
+
+  test("[menu-sub-hover] the pointer opens and closes a submenu", async ({ page }) => {
+    await openMenu(page);
+    await menu(page).getByRole("menuitem", { name: "Sort by" }).hover();
+    await expect(sortMenu(page)).toBeVisible();
+    await menu(page).getByRole("menuitem", { name: "Rename" }).hover();
+    await expect(sortMenu(page)).toHaveCount(0);
+  });
+
+  test("[menu-head-edit] the pencil is a row named by its tip", async ({ page }) => {
+    await openMenu(page);
+    await page.keyboard.press("End");
+    await page.keyboard.press("ArrowUp");
+    await expect(menu(page).getByRole("menuitem", { name: "Edit bookmarks" })).toBeFocused();
+    await page.keyboard.press("Enter");
+    await expect(menu(page)).toHaveCount(0);
+    await expect(last(page)).toContainText("Last choice: Edit bookmarks");
+  });
+
+  test("[menu-tidy] doubled and trailing separators are dropped", async ({ page }) => {
+    await openMenu(page);
+    await expect(menu(page).getByRole("separator")).toHaveCount(2);
+  });
+
+  test("[menu-escape] Escape closes every menu and hands focus back", async ({ page }) => {
+    const more = await openMenu(page);
+    await menu(page).getByRole("menuitem", { name: "Sort by" }).focus();
+    await page.keyboard.press("ArrowRight");
+    await expect(sortMenu(page)).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(page.getByRole("menu")).toHaveCount(0);
+    await expect(more).toBeFocused();
+  });
+
+  test("[menu-outside] a click outside closes it", async ({ page }) => {
+    await openMenu(page);
+    await page.locator("main h1").click();
+    await expect(menu(page)).toHaveCount(0);
+  });
+
+  test("[menu-edge] the menu stays inside the window", async ({ page }) => {
+    await open(page, "/components/context-menu");
+    const list = stage(page, "ContextMenuRows").getByRole("list", { name: "Files" });
+    await list.evaluate((el) =>
+      el.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: innerWidth - 4, clientY: innerHeight - 4 })),
+    );
+    await expect(menu(page)).toBeVisible();
+    const box = (await menu(page).boundingBox())!;
+    const view = page.viewportSize()!;
+    expect(box.x).toBeGreaterThanOrEqual(0);
+    expect(box.y).toBeGreaterThanOrEqual(0);
+    expect(box.x + box.width).toBeLessThanOrEqual(view.width);
+    expect(box.y + box.height).toBeLessThanOrEqual(view.height);
+  });
+});
+
+test.describe("MenuBar", () => {
+  const bar = (page: Page) => stage(page, "MenuBarDemo").getByRole("menubar", { name: "Menu" });
+  const word = (page: Page, name: string) => bar(page).getByRole("menuitem", { name });
+  const menuOf = (page: Page, name: string) => page.getByRole("menu", { name });
+
+  test("[bar-role] a named menubar of words that open menus", async ({ page }) => {
+    await open(page, "/components/menu-bar");
+    await expect(bar(page).getByRole("menuitem")).toHaveCount(4);
+    await expect(word(page, "File")).toHaveAttribute("aria-haspopup", "menu");
+    await expect(word(page, "File")).toHaveAttribute("aria-expanded", "false");
+  });
+
+  test("[bar-one-stop] the bar is one tab stop", async ({ page }) => {
+    await open(page, "/components/menu-bar");
+    await expect(bar(page).locator('[tabindex="0"]')).toHaveCount(1);
+    await word(page, "File").focus();
+    await page.keyboard.press("Tab");
+    expect(await bar(page).evaluate((b) => b.contains(document.activeElement))).toBe(false);
+  });
+
+  test("[bar-arrows] the arrows move between the words and wrap", async ({ page }) => {
+    await open(page, "/components/menu-bar");
+    await word(page, "File").focus();
+    await page.keyboard.press("ArrowRight");
+    await expect(word(page, "Edit")).toBeFocused();
+    await page.keyboard.press("ArrowLeft");
+    await page.keyboard.press("ArrowLeft");
+    await expect(word(page, "Help")).toBeFocused();
+  });
+
+  test("[bar-open] ArrowDown and Enter open the menu on its first row", async ({ page }) => {
+    await open(page, "/components/menu-bar");
+    await word(page, "File").focus();
+    await page.keyboard.press("ArrowDown");
+    await expect(menuOf(page, "File").getByRole("menuitem", { name: "New folder" })).toBeFocused();
+    await page.keyboard.press("Escape");
+    await page.keyboard.press("Enter");
+    await expect(menuOf(page, "File").getByRole("menuitem", { name: "New folder" })).toBeFocused();
+    await expect(word(page, "File")).toHaveAttribute("aria-expanded", "true");
+  });
+
+  test("[bar-step] left and right move to the next menu", async ({ page }) => {
+    await open(page, "/components/menu-bar");
+    await word(page, "File").focus();
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("ArrowRight");
+    await expect(menuOf(page, "File")).toHaveCount(0);
+    await expect(menuOf(page, "Edit").getByRole("menuitem", { name: "Copy" })).toBeFocused();
+    await page.keyboard.press("ArrowLeft");
+    await expect(menuOf(page, "File").getByRole("menuitem", { name: "New folder" })).toBeFocused();
+  });
+
+  test("[bar-hover] the pointer on another word opens its menu", async ({ page }) => {
+    await open(page, "/components/menu-bar");
+    await word(page, "File").click();
+    await expect(menuOf(page, "File")).toBeVisible();
+    await word(page, "Edit").hover();
+    await expect(menuOf(page, "Edit")).toBeVisible();
+    await expect(menuOf(page, "File")).toHaveCount(0);
+  });
+
+  test("[bar-toggle] a click on the open menu's word closes it", async ({ page }) => {
+    await open(page, "/components/menu-bar");
+    await word(page, "File").click();
+    await expect(menuOf(page, "File")).toBeVisible();
+    await word(page, "File").click();
+    await expect(menuOf(page, "File")).toHaveCount(0);
+  });
+
+  test("[bar-escape] Escape closes the menu and returns to its word", async ({ page }) => {
+    await open(page, "/components/menu-bar");
+    await word(page, "View").click();
+    await expect(menuOf(page, "View")).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(menuOf(page, "View")).toHaveCount(0);
+    await expect(word(page, "View")).toBeFocused();
+  });
+});
+
+test.describe("Checkbox", () => {
+  const again = (page: Page) => stage(page, "CheckboxBasic").getByRole("checkbox", { name: "Don't show again" });
+
+  test("[check-role] checkbox with aria-checked", async ({ page }) => {
+    await open(page, "/components/checkbox");
+    await expect(again(page)).toHaveAttribute("aria-checked", "false");
+  });
+
+  test("[check-space] Space flips", async ({ page }) => {
+    await open(page, "/components/checkbox");
+    await again(page).focus();
+    await page.keyboard.press("Space");
+    await expect(again(page)).toHaveAttribute("aria-checked", "true");
+  });
+
+  test("[check-name] the label is the name, also hidden", async ({ page }) => {
+    await open(page, "/components/checkbox");
+    await expect(again(page)).toHaveCount(1);
+    const write = stage(page, "CheckboxBasic").getByRole("checkbox", { name: "The owner may write" });
+    await expect(write).toHaveCount(1);
+    await expect(write).toHaveText("");
+  });
+
+  test("[check-disabled] a disabled box ignores clicks", async ({ page }) => {
+    await open(page, "/components/checkbox");
+    const name = stage(page, "CheckboxBasic").getByRole("checkbox", { name: "Name, always shown" });
+    await expect(name).toBeDisabled();
+    await name.click({ force: true });
+    await expect(name).toHaveAttribute("aria-checked", "true");
+  });
+});
