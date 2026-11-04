@@ -47,3 +47,6 @@ export const IconPencil = markComponent(MARKS.pencil);
 export const IconWindowMinimise = markComponent(MARKS.windowMinimise);
 export const IconWindowMaximise = markComponent(MARKS.windowMaximise);
 export const IconWindowRestore = markComponent(MARKS.windowRestore);
+export const IconEye = markComponent(MARKS.eye);
+export const IconEyeOff = markComponent(MARKS.eyeOff);
+export const IconCopy = markComponent(MARKS.copy);

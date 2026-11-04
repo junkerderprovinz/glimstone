@@ -876,3 +876,177 @@ export function PillPage() {
     </>
   );
 }
+
+export function PasswordFieldPage() {
+  return (
+    <>
+      <p className="lead">A field for a secret, with the eye that shows it inside the field.</p>
+      <Head file="react/PasswordField.tsx" />
+      <Demo name="PasswordFieldBasic" />
+      <Usage
+        code={`import { PasswordField } from "@glimstone/react";\n\n<PasswordField aria-label={t("password")} value={pw} onChange={(e) => setPw(e.target.value)} text={{ show: t("show"), hide: t("hide") }} />`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>The eye is a bare glyph in the field's trailing padding, neutral and never the accent. It means look, not act.</li>
+        <li>
+          The field is as wide as a plain field in the same column. A width goes on the wrapper through{" "}
+          <code>className</code>.
+        </li>
+        <li>Edge's own eye is switched off, so there is only one.</li>
+        <li>
+          A secret that is already stored is a row with Change, not an empty field on every visit ("The reveal eye" in the
+          design language).
+        </li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="PasswordField" />
+      <H2>API</H2>
+      <PropsTable of="PasswordField" />
+    </>
+  );
+}
+
+export function CopyFieldPage() {
+  return (
+    <>
+      <p className="lead">A value to copy rather than type: a token, a path, an address.</p>
+      <Head file="react/CopyField.tsx" />
+      <Demo name="CopyFieldBasic" />
+      <Usage
+        code={`import { CopyField } from "@glimstone/react";\n\n<CopyField label={t("token")} value={token} text={{ copy: t("copy"), copied: t("copied") }} />`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>The value is set in monospace and stays selectable, so a part of it can be copied by hand.</li>
+        <li>The button says Copied with a tick for a moment, and a screen reader hears it from a status line.</li>
+        <li>
+          The Clipboard API needs a secure context. Over plain http on the local network the copy takes the older way, and
+          where the browser refuses both, the value is selected so Ctrl+C works.
+        </li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="CopyField" />
+      <H2>API</H2>
+      <PropsTable of="CopyField" />
+    </>
+  );
+}
+
+export function MeterPage() {
+  return (
+    <>
+      <p className="lead">A level that stands, such as how full a disk is.</p>
+      <Head file="react/Meter.tsx" />
+      <Demo name="MeterLevels" />
+      <Usage
+        code={`import { Meter } from "@glimstone/react";\n\n<Meter size="small" value={used / total} label={disk.name} valueText={t("freeOf", { free, total })} />`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>
+          <code>small</code> sits beside a row's name, as in a rail of disks. <code>medium</code> is as wide as its column.
+        </li>
+        <li>
+          From <code>threshold</code> on, 0.9 unless set, the fill takes the fault colour. A nearly full disk is a problem
+          to see from across the room.
+        </li>
+        <li>
+          Without a value it runs indeterminate: a light crosses the track. Where nothing may move, the track shows stripes.
+        </li>
+        <li>In the active row of a rail it takes the row's contrast ink.</li>
+        <li>The track is contained (rule 37), so a meter that changes all the time lays out nothing around it.</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="Meter" />
+      <H2>API</H2>
+      <PropsTable of="Meter" />
+    </>
+  );
+}
+
+export function ProgressBarPage() {
+  return (
+    <>
+      <p className="lead">Work that moves toward its end, with a sheen while it runs.</p>
+      <Head file="react/ProgressBar.tsx" />
+      <Demo name="ProgressBarStates" />
+      <Usage
+        code={`import { ProgressBar } from "@glimstone/react";\n\n<ProgressBar value={done / total} label={t("copying")} paused={job.paused} failed={job.failed} />`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>The sheen runs only while the work does. It stops when the work is paused, done or failed.</li>
+        <li>Paused takes the waiting tone and failed the fault colour, so the state hues stay four (rule 4).</li>
+        <li>
+          The sheen reads <code>--motion-progress-sheen-dur</code> and the light of a bar without a value{" "}
+          <code>--motion-indeterminate-dur</code>. Both stop at "off" and under reduced motion.
+        </li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="ProgressBar" />
+      <H2>API</H2>
+      <PropsTable of="ProgressBar" />
+    </>
+  );
+}
+
+export function ColorPickerPage() {
+  return (
+    <>
+      <p className="lead">
+        The colour picker as a component: a square and a hue bar, a preview with the name the colour proposes, the hex
+        field and Apply.
+      </p>
+      <Head file="react/ColorPicker.tsx" />
+      <Demo name="ColorPickerSwatch" />
+      <Usage
+        code={`import { ColorPicker } from "@glimstone/react";
+
+<button className="swatch" style={{ background: hex }} onClick={(e) => setAnchor(e.currentTarget)} />
+{anchor && (
+  <ColorPicker
+    value={hex}
+    anchor={anchor}
+    text={{ apply: t("apply"), hex: t("hex"), area: t("saturationBrightness"), hue: t("hue") }}
+    onApply={(hex, name) => save(hex, name)}
+    onClose={() => setAnchor(null)}
+  />
+)}`}
+      />
+      <H2>Floating or in the page</H2>
+      <p>
+        With an <code>anchor</code> the picker floats beside the control that opened it, below it or above where there is
+        no room. It is the document's one open menu, so Escape and a click beside it close the picker before a window under
+        it. Without an anchor it sits in the page, for a settings page with room for it.
+      </p>
+      <Demo name="ColorPickerInline" />
+      <H2>The name</H2>
+      <p>
+        The name is the nearest entry of a list, measured in OKLab, where distances follow what the eye sees.{" "}
+        <code>COLOR_NAMES_DE</code> in the core holds about ninety German names and is the default. <code>names</code>{" "}
+        takes another list of <code>[name, hex]</code> pairs, and <code>false</code> shows none. The name goes to{" "}
+        <code>onApply</code> with the colour, so a label can start out named.
+      </p>
+      <H2>Rules</H2>
+      <ul>
+        <li>
+          Nothing changes before Apply. <code>onInput</code> reports every step for a live preview elsewhere.
+        </li>
+        <li>Mouse, pen and finger drag the same way and keep dragging past the square's edge.</li>
+        <li>
+          The arrow keys move the colour, Shift in bigger steps. On the square left and right are saturation, up and down
+          brightness. Home and End go to the ends of the hue bar.
+        </li>
+        <li>
+          Never a native <code>{`<input type="color">`}</code>, which can open a window of its own outside the page ("The
+          user-owned axes" in the design language).
+        </li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="ColorPicker" />
+      <H2>API</H2>
+      <PropsTable of="ColorPicker" />
+    </>
+  );
+}

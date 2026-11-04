@@ -10,10 +10,15 @@ All notable changes to the GlimStone design language are documented here. Versio
 - **`ContextMenu` and `MenuBar`**: a menu at a point and the row of menus in a head bar, with submenus on the body, rows that tick a box and stay open, choices with a tick, key caps, counts and a heading with a pencil. The arrows move between the menus of the bar. The model, the placing and the keys are `menu.ts` in the core.
 - **`Checkbox`, `Kbd` and `Pill`**: the drawn box for "Don't show again" and for choices applied together, a key cap, and the quiet data pill of a list row.
 - **19 glyphs**: the file kinds a file manager tells apart (`IconFileRaw`, `IconFileDesign`, `IconFilePlaylist`, `IconFilePdf`, `IconFileDoc`, `IconFileSheet`, `IconFileSlides`, `IconBook`, `IconDisc`, `IconFileProgram`, `IconFont`, `IconHash`, `IconMagnet`, `IconCube`, `IconCalendar`, `IconHourglass`), `IconResetArrow` for one row of a colour card, and `IconPayPal` and `IconBitcoin` for the give buttons.
+- **`PasswordField` and `CopyField`**: a secret with the reveal eye inside the field, and a value in monospace with a button that copies it and says Copied for a moment. Over plain http the copy falls back to the older way, and where the browser refuses both, the value is selected for Ctrl+C.
+- **`Meter` and `ProgressBar`**: a level in two sizes that turns red from a threshold (0.9 unless set), and work toward its end with a sheen while it runs. Paused takes the waiting tone, a failure the fault colour, and without a value both run indeterminate. The sheen and the light read two new dials, `--motion-progress-sheen-dur` and `--motion-indeterminate-dur`.
+- **`ColorPicker`** for React and Vue: the square and the hue bar, a preview with the name the colour proposes, the hex field and Apply, in the page or floating beside its swatch. Mouse, pen, finger and the arrow keys move it. The name is the nearest in OKLab of `COLOR_NAMES_DE`, about ninety German names in the core, or of a list of your own, and it can be switched off.
+- **The calibration page** on the site draws the CastleCommander prototype's controls beside the Vue components, row by row.
 
 ## 🔁 Changed
 
 - **`keepTabInside`** is the Tab trap on its own, shared by `trapDialogKeys` and the window stack.
+- **The colour picker's square and hue bar** answer the arrow keys and are named sliders, drag with pointer events, so a pen works as well as a mouse or a finger, and the handle shows the colour it stands on. `openColorPickerPopover` gets all of it.
 
 ## 4.0.0 - 2026-11-03
 

@@ -1626,3 +1626,294 @@ test.describe("Checkbox", () => {
     await expect(name).toHaveAttribute("aria-checked", "true");
   });
 });
+
+// A custom property as the element resolves it, through a probe inside it.
+function token(el: Locator, name: string) {
+  return el.evaluate((e, n) => {
+    const probe = e.appendChild(document.createElement("span"));
+    probe.style.color = `var(${n})`;
+    const c = getComputedStyle(probe).color;
+    probe.remove();
+    return c;
+  }, name);
+}
+
+test.describe("PasswordField", () => {
+  const field = (page: Page, name: string) => stage(page, "PasswordFieldBasic").locator(`input[aria-label="${name}"]`);
+  // A disabled eye sits in the box that keeps its bubble, so it is found from the wrapper.
+  const eye = (page: Page, name: string) => field(page, name).locator("xpath=..").getByRole("button");
+
+  test("[pw-hidden] hidden at first, the eye named Show", async ({ page }) => {
+    await open(page, "/components/password-field");
+    await expect(field(page, "Password")).toHaveAttribute("type", "password");
+    await expect(eye(page, "Password")).toHaveAccessibleName("Show");
+  });
+
+  test("[pw-reveal] Enter shows, Space hides again", async ({ page }) => {
+    await open(page, "/components/password-field");
+    await eye(page, "Password").focus();
+    await page.keyboard.press("Enter");
+    await expect(field(page, "Password")).toHaveAttribute("type", "text");
+    await expect(eye(page, "Password")).toHaveAccessibleName("Hide");
+    await page.keyboard.press("Space");
+    await expect(field(page, "Password")).toHaveAttribute("type", "password");
+    await expect(eye(page, "Password")).toHaveAccessibleName("Show");
+  });
+
+  test("[pw-keep] the value stays as typed", async ({ page }) => {
+    await open(page, "/components/password-field");
+    await field(page, "Password").fill("hunter2 and more");
+    await eye(page, "Password").click();
+    await expect(field(page, "Password")).toHaveValue("hunter2 and more");
+  });
+
+  test("[pw-width] as wide as a plain field, the eye inside", async ({ page }) => {
+    await open(page, "/components/password-field");
+    const plain = (await field(page, "User name").boundingBox())!;
+    const secret = (await field(page, "Password").boundingBox())!;
+    const glyph = (await eye(page, "Password").boundingBox())!;
+    expect(secret.width).toBeCloseTo(plain.width, 0);
+    expect(glyph.x).toBeGreaterThan(secret.x);
+    expect(glyph.x + glyph.width).toBeLessThanOrEqual(secret.x + secret.width);
+  });
+
+  test("[pw-disabled] a disabled field has a disabled eye", async ({ page }) => {
+    await open(page, "/components/password-field");
+    await expect(field(page, "Token")).toBeDisabled();
+    await expect(eye(page, "Token")).toBeDisabled();
+  });
+});
+
+test.describe("CopyField", () => {
+  const value = (page: Page) => stage(page, "CopyFieldBasic").getByRole("textbox", { name: "Share address" });
+  const button = (page: Page) => stage(page, "CopyFieldBasic").getByRole("button");
+
+  test("[copy-name] a read-only field and a Copy button", async ({ page }) => {
+    await open(page, "/components/copy-field");
+    await expect(value(page)).toHaveAttribute("readonly", "");
+    await expect(value(page)).toHaveValue("smb://bottich/media/filme");
+    await expect(button(page)).toHaveAccessibleName("Copy");
+  });
+
+  test("[copy-press] Enter copies and says so", async ({ page, context }) => {
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    await open(page, "/components/copy-field");
+    await button(page).focus();
+    await page.keyboard.press("Enter");
+    await expect(button(page)).toHaveAccessibleName("Copied");
+    await expect(stage(page, "CopyFieldBasic").getByRole("status")).toHaveText("Copied");
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe("smb://bottich/media/filme");
+  });
+
+  test("[copy-back] the button reads Copy again", async ({ page, context }) => {
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    await open(page, "/components/copy-field");
+    await button(page).click();
+    await expect(button(page)).toHaveAccessibleName("Copied");
+    await expect(button(page)).toHaveAccessibleName("Copy", { timeout: 4000 });
+  });
+
+  test("[copy-refused] the value is selected instead", async ({ page }) => {
+    await page.addInitScript(() => {
+      Object.defineProperty(navigator, "clipboard", { value: { writeText: () => Promise.reject(new Error("denied")) } });
+      document.execCommand = () => false;
+    });
+    await open(page, "/components/copy-field");
+    await button(page).click();
+    await expect(value(page)).toBeFocused();
+    const selected = await value(page).evaluate((e: HTMLInputElement) => e.value.slice(e.selectionStart!, e.selectionEnd!));
+    expect(selected).toBe("smb://bottich/media/filme");
+    await expect(button(page)).toHaveAccessibleName("Copy");
+  });
+});
+
+test.describe("Meter", () => {
+  const meters = (page: Page) => stage(page, "MeterLevels");
+
+  test("[meter-role] a meter with its value and words", async ({ page }) => {
+    await open(page, "/components/meter");
+    const disk = meters(page).getByRole("meter", { name: "disk1" });
+    await expect(disk).toHaveAttribute("aria-valuenow", "42");
+    await expect(disk).toHaveAttribute("aria-valuetext", "2.3 TB free of 4 TB");
+  });
+
+  test("[meter-full] at the threshold the fill is the fault colour", async ({ page }) => {
+    await open(page, "/components/meter");
+    const fill = (name: string) => meters(page).getByRole("meter", { name }).locator(".glim-meter-fill");
+    const fault = await token(meters(page), "--status-fail-solid");
+    expect(await fill("cache").evaluate((e) => getComputedStyle(e).backgroundColor)).toBe(fault);
+    expect(await fill("backups").evaluate((e) => getComputedStyle(e).backgroundColor)).toBe(fault);
+    expect(await fill("disk1").evaluate((e) => getComputedStyle(e).backgroundColor)).not.toBe(fault);
+  });
+
+  test("[meter-busy] without a value a busy progressbar with a moving light", async ({ page }) => {
+    await open(page, "/components/meter");
+    const disk = meters(page).getByRole("progressbar", { name: "disk2" });
+    await expect(disk).toHaveAttribute("aria-busy", "true");
+    await expect(disk).not.toHaveAttribute("aria-valuenow");
+    expect(await disk.locator(".glim-meter-fill").evaluate((e) => getComputedStyle(e).animationName)).toBe("glim-indeterminate");
+  });
+
+  test("[meter-tip] the words show in the bubble", async ({ page }) => {
+    await open(page, "/components/meter");
+    const disk = meters(page).getByRole("meter", { name: "cache" });
+    await centre(disk);
+    await disk.hover();
+    await expect(page.getByRole("tooltip")).toHaveText("50 GB free of 1 TB");
+  });
+});
+
+test.describe("ProgressBar", () => {
+  const bar = (page: Page, name: string) => stage(page, "ProgressBarStates").getByRole("progressbar", { name });
+  const sheen = (page: Page, name: string) =>
+    bar(page, name).locator(".glim-progress-fill").evaluate((e) => getComputedStyle(e, "::after").animationName);
+
+  test("[progress-role] a progressbar with its value", async ({ page }) => {
+    await open(page, "/components/progress-bar");
+    await expect(bar(page, "Copying")).toHaveAttribute("aria-valuenow", "62");
+    await expect(bar(page, "Copying")).toHaveAttribute("aria-valuetext", "2.5 GB of 4 GB");
+  });
+
+  test("[progress-sheen] a sheen crosses the fill while the work runs", async ({ page }) => {
+    await open(page, "/components/progress-bar");
+    expect(await sheen(page, "Copying")).toBe("glim-progress-sheen");
+  });
+
+  test("[progress-still] paused, done and failed stand still", async ({ page }) => {
+    await open(page, "/components/progress-bar");
+    for (const name of ["Paused", "Done", "Failed"]) expect(await sheen(page, name)).toBe("none");
+    const fill = (name: string) => bar(page, name).locator(".glim-progress-fill").evaluate((e) => getComputedStyle(e).backgroundColor);
+    const states = stage(page, "ProgressBarStates");
+    expect(await fill("Paused")).toBe(await token(states, "--status-neutral-solid"));
+    expect(await fill("Failed")).toBe(await token(states, "--status-fail-solid"));
+  });
+
+  test("[progress-reduced] no sheen under reduced motion", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await open(page, "/components/progress-bar");
+    expect(await sheen(page, "Copying")).toBe("none");
+    expect(await bar(page, "Preparing").locator(".glim-progress-fill").evaluate((e) => getComputedStyle(e).animationName)).toBe("none");
+  });
+
+  test("[progress-busy] without a value no aria-valuenow and a moving light", async ({ page }) => {
+    await open(page, "/components/progress-bar");
+    await expect(bar(page, "Preparing")).not.toHaveAttribute("aria-valuenow");
+    expect(await bar(page, "Preparing").locator(".glim-progress-fill").evaluate((e) => getComputedStyle(e).animationName)).toBe("glim-indeterminate");
+  });
+});
+
+test.describe("ColorPicker", () => {
+  const swatch = (page: Page, name = "Label colour") => page.getByRole("button", { name, exact: true });
+  const panel = (page: Page) => page.locator(".glim-picker-panel--float");
+  const square = (page: Page) => panel(page).getByRole("slider", { name: "Saturation and brightness" });
+  const hue = (page: Page) => panel(page).getByRole("slider", { name: "Hue" });
+  const hex = (page: Page) => panel(page).getByRole("textbox", { name: "Hex" });
+  const applied = (page: Page) => stage(page, "ColorPickerSwatch").locator("[data-applied]").first();
+
+  async function openPicker(page: Page) {
+    await open(page, "/components/color-picker");
+    await centre(swatch(page));
+    await swatch(page).click();
+    await expect(panel(page)).toBeVisible();
+  }
+
+  test("[picker-role] two named sliders, the square's value the colour", async ({ page }) => {
+    await openPicker(page);
+    await expect(square(page)).toHaveAttribute("aria-valuetext", "#1b6b73");
+    await expect(hue(page)).toHaveAttribute("aria-valuenow", /^\d+$/);
+  });
+
+  test("[picker-open] it floats beside its control, focus on the square", async ({ page }) => {
+    await openPicker(page);
+    await expect(square(page)).toBeFocused();
+    const trigger = (await swatch(page).boundingBox())!;
+    const box = (await panel(page).boundingBox())!;
+    expect(box.y).toBeGreaterThanOrEqual(trigger.y + trigger.height);
+  });
+
+  test("[picker-arrows] the arrows move the colour, Shift further", async ({ page }) => {
+    await openPicker(page);
+    await page.keyboard.press("ArrowRight");
+    await expect(hex(page)).not.toHaveValue("#1b6b73");
+    await expect(hex(page)).toHaveValue(await square(page).getAttribute("aria-valuetext") as string);
+    await hue(page).focus();
+    const before = Number(await hue(page).getAttribute("aria-valuenow"));
+    await page.keyboard.press("ArrowRight");
+    await expect(hue(page)).toHaveAttribute("aria-valuenow", String(before + 3));
+    await page.keyboard.press("Shift+ArrowRight");
+    await expect(hue(page)).toHaveAttribute("aria-valuenow", String(before + 33));
+  });
+
+  test("[picker-drag] the handle follows past the edge", async ({ page }) => {
+    await openPicker(page);
+    const box = (await square(page).boundingBox())!;
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(box.x + box.width + 60, box.y + box.height + 60, { steps: 4 });
+    await page.mouse.up();
+    await expect(hex(page)).toHaveValue("#000000");
+    // The handle stands on the square's far corner, though the pointer went past it.
+    const corner = await square(page)
+      .locator(".glim-picker-dot")
+      .evaluate((dot) => [parseFloat(getComputedStyle(dot).left) - dot.parentElement!.clientWidth, parseFloat(getComputedStyle(dot).top) - dot.parentElement!.clientHeight]);
+    corner.forEach((d) => expect(Math.abs(d)).toBeLessThan(0.5));
+  });
+
+  test("[picker-hex] a typed colour moves the square and the name", async ({ page }) => {
+    await openPicker(page);
+    await hex(page).fill("#e53935");
+    await expect(square(page)).toHaveAttribute("aria-valuetext", "#e53935");
+    await expect(panel(page).locator(".glim-picker-name")).toHaveText("Rot");
+  });
+
+  test("[picker-name] the nearest name in OKLab", async ({ page }) => {
+    await openPicker(page);
+    await expect(panel(page).locator(".glim-picker-name")).toHaveText("Petrol");
+    await hex(page).fill("#2a90f5");
+    await expect(panel(page).locator(".glim-picker-name")).toHaveText("Azurblau");
+  });
+
+  test("[picker-apply] Enter applies, closes and gives the focus back", async ({ page }) => {
+    await openPicker(page);
+    await hex(page).fill("#1e6fe0");
+    await page.keyboard.press("Enter");
+    await expect(panel(page)).toHaveCount(0);
+    await expect(applied(page)).toHaveText("Blau #1e6fe0");
+    await expect(swatch(page)).toBeFocused();
+  });
+
+  test("[picker-escape] Escape closes without applying", async ({ page }) => {
+    await openPicker(page);
+    await page.keyboard.press("ArrowRight");
+    await page.keyboard.press("Escape");
+    await expect(panel(page)).toHaveCount(0);
+    await expect(applied(page)).toHaveText("Petrol #1b6b73");
+    await expect(swatch(page)).toBeFocused();
+  });
+
+  test("[picker-outside] a click beside it closes without applying", async ({ page }) => {
+    await openPicker(page);
+    await page.keyboard.press("ArrowUp");
+    await page.locator("main h1").click();
+    await expect(panel(page)).toHaveCount(0);
+    await expect(applied(page)).toHaveText("Petrol #1b6b73");
+  });
+
+  test("[picker-window] over a window, Escape and Tab stay with the picker", async ({ page }) => {
+    await open(page, "/components/color-picker");
+    await stage(page, "ColorPickerSwatch").getByRole("button", { name: "Open in a window" }).click();
+    const dialog = page.getByRole("dialog", { name: "Label" });
+    await expect(dialog).toBeVisible();
+    await swatch(page, "Label colour in the window").click();
+    await expect(square(page)).toBeFocused();
+    for (let i = 0; i < 6; i++) {
+      await page.keyboard.press("Tab");
+      expect(await page.evaluate(() => !!document.activeElement?.closest(".glim-picker-panel"))).toBe(true);
+    }
+    await page.keyboard.press("Escape");
+    await expect(panel(page)).toHaveCount(0);
+    await expect(dialog).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(dialog).toHaveCount(0);
+  });
+});

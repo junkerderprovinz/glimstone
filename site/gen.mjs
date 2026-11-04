@@ -33,6 +33,11 @@ const COMPONENTS = {
   Checkbox: "react/Checkbox.tsx",
   Kbd: "react/Kbd.tsx",
   Pill: "react/Pill.tsx",
+  PasswordField: "react/PasswordField.tsx",
+  CopyField: "react/CopyField.tsx",
+  Meter: "react/Meter.tsx",
+  ProgressBar: "react/ProgressBar.tsx",
+  ColorPicker: "react/ColorPicker.tsx",
 };
 
 const clean = (s) => s.replace(/\s+/g, " ").trim();

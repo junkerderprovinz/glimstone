@@ -71,6 +71,9 @@ needs none of them.
 | `ContextMenu`, `MenuBar` | A menu at a point and the row of menus in a head bar, with submenus, rows that tick a box, choices, key caps and counts |
 | `Checkbox` | The drawn box for "Don't show again" and for choices applied together. Every setting is a `Toggle` |
 | `Kbd`, `Pill` | A key cap, and the quiet data pill of a list row |
+| `PasswordField`, `CopyField` | A secret with the reveal eye inside the field, and a value in monospace with a button that copies it |
+| `Meter`, `ProgressBar` | A level such as a disk's, red from a threshold, and work toward its end with a sheen while it runs, both indeterminate without a value |
+| `ColorPicker` | The square, the hue bar, a preview with the name the colour proposes, the hex field and Apply, in the page or floating beside its swatch |
 | `useLabelMode`, `useTipBubble`, `usePortalHue` | The small hooks the components need |
 | `glyphs` | The marks the components draw themselves, and `setGlyphResolver`, the seam an app registers its own icon set through |
 

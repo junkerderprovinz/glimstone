@@ -27,6 +27,10 @@ npm install @glimstone/core
   model with `tidyMenu`, `menuRowView`, `placeMenu`, `menuMove` and
   `claimMenu`. `menuIsOpen` and `windowIsOpen` tell an app's own key handler
   to stand back.
+- What fields and bars share: `meterView` and `progressView` for a Meter and a
+  ProgressBar, `copyText` with its fallback for plain http, and for the
+  ColorPicker `floatColorPicker`, `placeColorPicker` and `nearestColorName`,
+  which finds the closest name in OKLab in a list such as `COLOR_NAMES_DE`.
 - What runs without a framework: `mountSelect`, `wireTooltips` with
   `infoIcon`, `openColorPickerPopover`, `attachNumberSteppers`,
   `enableSelectScroll` and `flagEmoji`.

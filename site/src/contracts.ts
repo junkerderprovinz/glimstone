@@ -253,6 +253,59 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "check-disabled", when: "The box is disabled", then: "A click changes nothing." },
     ],
   },
+  PasswordField: {
+    pattern: { name: "Button", url: `${APG}button/` },
+    rows: [
+      { id: "pw-hidden", when: "Always at first", then: "The secret is hidden and the eye inside the field is a button named Show." },
+      { id: "pw-reveal", keys: ["Enter", "Space"], when: "The eye has focus", then: "The secret shows as text and the eye is named Hide. Pressed again, it hides." },
+      { id: "pw-keep", when: "The eye is pressed", then: "The value stays as typed." },
+      { id: "pw-width", when: "It stands in a column with a plain field", then: "Both are as wide, the eye inside the field." },
+      { id: "pw-disabled", when: "The field is disabled", then: "The eye is disabled too." },
+    ],
+  },
+  CopyField: {
+    pattern: { name: "Button", url: `${APG}button/` },
+    rows: [
+      { id: "copy-name", when: "Always", then: "The value is a read-only field named by its label, and the button is named Copy." },
+      { id: "copy-press", keys: ["Enter"], when: "The button has focus", then: "The value is on the clipboard, the button is named Copied and a status line says so." },
+      { id: "copy-back", when: "A moment after copying", then: "The button reads Copy again." },
+      { id: "copy-refused", when: "The browser refuses to copy", then: "The value is selected in the field, so Ctrl+C works." },
+    ],
+  },
+  Meter: {
+    pattern: { name: "Meter", url: `${APG}meter/` },
+    rows: [
+      { id: "meter-role", when: "It has a value", then: "role=\"meter\" named by its label, with the value in whole percent and its words as aria-valuetext." },
+      { id: "meter-full", when: "The value reaches the threshold", then: "The fill takes the fault colour." },
+      { id: "meter-busy", when: "It has no value", then: "A busy progressbar without a value, and a light crosses the track." },
+      { id: "meter-tip", when: "The pointer rests on it", then: "Its words show in the bubble." },
+    ],
+  },
+  ProgressBar: {
+    pattern: { name: "Meter", url: `${APG}meter/` },
+    rows: [
+      { id: "progress-role", when: "It has a value", then: "role=\"progressbar\" named by its label, with the value in whole percent." },
+      { id: "progress-sheen", when: "The work runs", then: "A sheen crosses the fill." },
+      { id: "progress-still", when: "The work is paused, done or failed", then: "The sheen stops. Paused takes the waiting tone and failed the fault colour." },
+      { id: "progress-reduced", when: "The system asks for reduced motion", then: "No sheen runs." },
+      { id: "progress-busy", when: "It has no value", then: "No aria-valuenow, and a light crosses the track." },
+    ],
+  },
+  ColorPicker: {
+    pattern: { name: "Slider", url: `${APG}slider/` },
+    rows: [
+      { id: "picker-role", when: "The picker is open", then: "The square and the hue bar are sliders named by their words, and the square's value is the hex colour." },
+      { id: "picker-open", when: "The control that opens it is pressed", then: "The picker floats beside it with focus on the square." },
+      { id: "picker-arrows", keys: ["ArrowRight", "ArrowUp"], when: "The square or the hue bar has focus", then: "The colour moves, Shift in bigger steps, and the hex field follows." },
+      { id: "picker-drag", when: "The square is dragged with mouse, pen or finger", then: "The handle follows, also past the square's edge." },
+      { id: "picker-hex", when: "A valid hex colour is typed", then: "The square, the preview and the name follow." },
+      { id: "picker-name", when: "Names are on", then: "The name is the nearest of the list in OKLab, such as Petrol for #1b6b73." },
+      { id: "picker-apply", keys: ["Enter"], when: "Inside the picker", then: "The colour and its name are applied, the picker closes and focus goes back to its control." },
+      { id: "picker-escape", keys: ["Escape"], when: "The picker is open", then: "It closes without applying and focus goes back to its control." },
+      { id: "picker-outside", when: "A click lands beside the picker", then: "It closes without applying." },
+      { id: "picker-window", keys: ["Escape", "Tab"], when: "The picker floats over a window", then: "Escape closes the picker alone, and Tab stays inside the picker." },
+    ],
+  },
   SubCard: {
     rows: [
       { id: "subcard-region", when: "Always", then: "A region named by its title alone." },
