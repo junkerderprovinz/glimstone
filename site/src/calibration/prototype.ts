@@ -57,6 +57,14 @@ svg { display: block; }
 .dbar { height: .55rem; border-radius: var(--radius-pill); background: var(--carbon-surface3); overflow: hidden; }
 .dbar i { display: block; height: 100%; border-radius: inherit; background: var(--accent); }
 .dbar.full i { background: var(--status-fail-solid, #ff6b72); }
+.lfoot { display: flex; align-items: center; gap: .5rem; padding: .5rem .5rem 0; font-size: 12px; color: var(--carbon-text-muted); }
+.meter { width: 5rem; height: .35rem; border-radius: var(--radius-pill); background: var(--carbon-surface2); overflow: hidden; }
+.meter i { display: block; height: 100%; background: var(--carbon-text-muted); border-radius: inherit; }
+.lfree { display: flex; align-items: center; gap: .5rem; height: 1.5rem; padding: 0 .45rem; margin: 0 -.45rem; border-radius: var(--radius-control); color: inherit; font: inherit; }
+.lfree:hover { background: var(--carbon-hover); color: var(--carbon-text); }
+.lfree:hover .meter i { background: var(--accent); }
+.glyph { width: 1.25rem; display: grid; place-items: center; flex: none; }
+.glyph .cbox { width: 1.05rem; height: 1.05rem; }
 
 .notch { position: absolute; top: 0; left: 1rem; transform: translateY(-50%); height: 1.6rem; padding: 0 .8rem; border-radius: var(--radius-pill); background: var(--accent); color: var(--accent-contrast); font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; display: inline-flex; align-items: center; gap: .45rem; white-space: nowrap; max-width: calc(100% - 2rem); overflow: hidden; z-index: 1; }
 .pill { height: 1.35rem; padding: 0 .55rem; border-radius: var(--radius-pill); background: var(--carbon-surface2); color: var(--carbon-text-sub); font-size: 12px; display: inline-flex; align-items: center; justify-self: end; white-space: nowrap; flex: none; }
@@ -138,6 +146,8 @@ svg { display: block; }
 .cp-act { display: flex; justify-content: flex-end; }
 
 .menu, .cpick { position: relative; z-index: auto; }
+.lrow { display: flex; align-items: center; gap: .6rem; height: 2.25rem; padding: 0 .5rem; border-radius: var(--radius-control); font-size: 13px; }
+.lrow:hover { background: var(--carbon-hover); }
 .row { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; }
 .col { display: grid; gap: .75rem; }
 `;
@@ -193,6 +203,12 @@ export const PROTOTYPE_ROWS: Record<string, string> = {
   <div class="row">cache <span class="vmeter full"><i style="width:95%"></i></span></div>
   <span class="dbar"><i style="width:31%"></i></span>
   <span class="dbar full"><i style="width:92%"></i></span>
+</div>`,
+  footmeter: `<div class="lfoot" style="width: 22rem"><span>3 Elemente</span><span style="flex: 1"></span><button class="lfree"><span>1,4 TB frei</span><span class="meter"><i style="width:66%"></i></span></button></div>`,
+  rowcheck: `<div class="col" style="width: 18rem; gap: 2px">
+  <div class="lrow"><span class="glyph"><span class="cbox on">${g("IconCheck")}</span></span>thumbs.db</div>
+  <div class="lrow"><span class="glyph"><span class="cbox">${g("IconCheck")}</span></span>desktop.ini</div>
+  <div class="lrow"><span class="glyph"><span class="cbox">${g("IconCheck")}</span></span>old-cache.tmp</div>
 </div>`,
   progress: `<div class="col" style="width: 22rem">
   <div class="track" style="margin: 0"><div class="fill" style="width:62%"></div></div>

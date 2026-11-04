@@ -1381,6 +1381,25 @@ test.describe("ContextMenu", () => {
     await expect(menu(page).getByRole("menuitem", { name: "Open" })).toBeFocused();
   });
 
+  test("[menu-focus-ring] opened with the pointer, the ring waits for a key", async ({ page }) => {
+    const outline = (el: Locator) => el.evaluate((e) => getComputedStyle(e).outlineStyle);
+    const wash = (el: Locator) => el.evaluate((e) => getComputedStyle(e).backgroundColor);
+    const row = (name: string) => menu(page).getByRole("menuitem", { name: new RegExp(`^${name}`) });
+    const more = await openMenu(page);
+    expect(await outline(row("Open"))).toBe("solid");
+    await page.keyboard.press("Escape");
+    await expect(menu(page)).toHaveCount(0);
+
+    await more.click();
+    await expect(row("Open")).toBeFocused();
+    await page.mouse.move(0, 0);
+    expect(await outline(row("Open"))).toBe("none");
+    expect(await wash(row("Open"))).toBe("rgba(0, 0, 0, 0)");
+    await page.keyboard.press("ArrowDown");
+    await expect(row("Rename")).toBeFocused();
+    expect(await outline(row("Rename"))).toBe("solid");
+  });
+
   test("[menu-arrows] the arrows skip disabled rows and wrap", async ({ page }) => {
     await openMenu(page);
     // A row is named by its label and then its key, as a desktop menu reads it.
@@ -1618,6 +1637,20 @@ test.describe("Checkbox", () => {
     await expect(write).toHaveText("");
   });
 
+  test("[check-slim] a slim box is the box alone, named by its label", async ({ page }) => {
+    await open(page, "/components/checkbox");
+    const box = stage(page, "CheckboxSlim").getByRole("checkbox", { name: "desktop.ini" });
+    await expect(box).toHaveAttribute("aria-checked", "false");
+    await expect(box).toHaveText("");
+    expect(await box.evaluate((e) => getComputedStyle(e).paddingInlineStart)).toBe("0px");
+    const size = await box.evaluate((e) => [e.getBoundingClientRect().width, (e.firstElementChild as HTMLElement).getBoundingClientRect().width]);
+    expect(size[0]).toBe(size[1]);
+    await box.hover();
+    expect(await box.evaluate((e) => getComputedStyle(e).backgroundColor)).toBe("rgba(0, 0, 0, 0)");
+    await box.click();
+    await expect(box).toHaveAttribute("aria-checked", "true");
+  });
+
   test("[check-disabled] a disabled box ignores clicks", async ({ page }) => {
     await open(page, "/components/checkbox");
     const name = stage(page, "CheckboxBasic").getByRole("checkbox", { name: "Name, always shown" });
@@ -1746,12 +1779,40 @@ test.describe("Meter", () => {
     expect(await fill("disk1").evaluate((e) => getComputedStyle(e).backgroundColor)).not.toBe(fault);
   });
 
-  test("[meter-busy] without a value a busy progressbar with a moving light", async ({ page }) => {
+  test("[meter-busy] without a value a busy progressbar with still stripes", async ({ page }) => {
     await open(page, "/components/meter");
     const disk = meters(page).getByRole("progressbar", { name: "disk2" });
     await expect(disk).toHaveAttribute("aria-busy", "true");
     await expect(disk).not.toHaveAttribute("aria-valuenow");
-    expect(await disk.locator(".glim-meter-fill").evaluate((e) => getComputedStyle(e).animationName)).toBe("glim-indeterminate");
+    const fill = disk.locator(".glim-meter-fill");
+    expect(await fill.evaluate((e) => getComputedStyle(e).backgroundImage)).toContain("repeating-linear-gradient");
+    expect(await fill.evaluate((e) => getComputedStyle(e).animationName)).toBe("none");
+  });
+
+  test("[meter-still] nothing moves on a meter, even in a storm", async ({ page }) => {
+    await open(page, "/components/meter", { motion: "storm" });
+    for (const demo of ["MeterLevels", "MeterQuiet"]) {
+      const moving = await stage(page, demo).evaluate((root) =>
+        Array.from(root.querySelectorAll(".glim-meter-track, .glim-meter-fill")).filter(
+          (e) => getComputedStyle(e).animationName !== "none" || getComputedStyle(e, "::after").animationName !== "none",
+        ).length,
+      );
+      expect(moving).toBe(0);
+    }
+  });
+
+  test("[meter-quiet] slim and grey, the accent under the pointer, red from the threshold", async ({ page }) => {
+    await open(page, "/components/meter");
+    const quiet = stage(page, "MeterQuiet");
+    const fill = (name: string) => quiet.getByRole("meter", { name }).locator(".glim-meter-fill");
+    const colour = (el: Locator) => el.evaluate((e) => getComputedStyle(e).backgroundColor);
+    const track = quiet.getByRole("meter", { name: "holiday.mkv" });
+    expect(await track.evaluate((e) => e.getBoundingClientRect().height)).toBeLessThanOrEqual(6);
+    expect(await colour(fill("holiday.mkv"))).toBe(await token(quiet, "--carbon-text-muted"));
+    expect(await colour(fill("photos"))).toBe(await token(quiet, "--status-fail-solid"));
+    expect(await colour(fill("disk1"))).toBe(await token(quiet, "--carbon-text-muted"));
+    await quiet.getByRole("button", { name: /free/ }).hover();
+    expect(await colour(fill("disk1"))).toBe(await token(quiet, "--accent"));
   });
 
   test("[meter-tip] the words show in the bubble", async ({ page }) => {

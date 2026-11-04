@@ -725,6 +725,10 @@ const items: MenuEntry[] = [
           when there is no room.
         </li>
         <li>A menu over a window closes before the window does: Escape and a press beside it reach the menu first.</li>
+        <li>
+          Opened with the pointer, the first row holds the focus without showing it: no ring and no wash until a key is
+          pressed in the menu. Opened from the keyboard, the ring shows at once.
+        </li>
       </ul>
       <H2>Accessibility</H2>
       <ul>
@@ -821,6 +825,13 @@ export function CheckboxPage() {
         <li>Ticked, it fills with the accent and the tick takes the accent's contrast ink.</li>
         <li>The whole row is the target, the words as well as the box.</li>
       </ul>
+      <H2>Slim</H2>
+      <p>
+        <code>slim</code> draws the box alone, without the padding and the hover ground, for a row or a cell of a dense
+        list whose choices are applied together, such as the files a cleanup removes. The row around it gives the hover,
+        and the label is the box's accessible name.
+      </p>
+      <Demo name="CheckboxSlim" />
       <H2>Behaviour</H2>
       <ContractTable of="Checkbox" />
       <H2>API</H2>
@@ -952,11 +963,20 @@ export function MeterPage() {
           to see from across the room.
         </li>
         <li>
-          Without a value it runs indeterminate: a light crosses the track. Where nothing may move, the track shows stripes.
+          Nothing moves on a meter. It shows a level that stands, so it has no sheen, and without a value the track shows
+          still stripes. A light that travels belongs to a <a href="#/components/progress-bar">ProgressBar</a>, where
+          something runs.
         </li>
         <li>In the active row of a rail it takes the row's contrast ink.</li>
         <li>The track is contained (rule 37), so a meter that changes all the time lays out nothing around it.</li>
       </ul>
+      <H2>Quiet</H2>
+      <p>
+        <code>quiet</code> is the meter for a footer line or a dense list, where an accent bar on every row would outshout
+        the names beside it: a slim track on the second surface and a grey fill. Inside a button it takes the accent while
+        the button is reached, and the threshold still turns it red.
+      </p>
+      <Demo name="MeterQuiet" />
       <H2>Behaviour</H2>
       <ContractTable of="Meter" />
       <H2>API</H2>
@@ -976,7 +996,10 @@ export function ProgressBarPage() {
       />
       <H2>Rules</H2>
       <ul>
-        <li>The sheen runs only while the work does. It stops when the work is paused, done or failed.</li>
+        <li>
+          The sheen runs only while the work does. It stops when the work is paused, done or failed, and a{" "}
+          <a href="#/components/meter">Meter</a> never has one.
+        </li>
         <li>Paused takes the waiting tone and failed the fault colour, so the state hues stay four (rule 4).</li>
         <li>
           The sheen reads <code>--motion-progress-sheen-dur</code> and the light of a bar without a value{" "}

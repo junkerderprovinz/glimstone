@@ -34,14 +34,16 @@ const ROWS: Row[] = [
   { id: "field", title: "Field", vue: "the glim-input class", note: "GlimStone has no text field component. The class is what PasswordField and CopyField draw with." },
   { id: "password", title: "Password field", vue: "PasswordField" },
   { id: "copy", title: "Copy field", vue: "CopyField" },
-  { id: "menu", title: "Menu", vue: "ContextMenu", note: "The Vue menu opens from its button, since it takes the focus and floats." },
+  { id: "menu", title: "Menu", vue: "ContextMenu", note: "The Vue menu opens from its button, since it takes the focus and floats. Opened with the mouse, its first row shows no ring until a key is pressed." },
   { id: "menubar", title: "Menu bar", vue: "MenuBar" },
   { id: "window", title: "Window", vue: "Window", note: "The Vue window opens from its button, over the page.", wide: true },
   { id: "checkbox", title: "Checkbox", vue: "Checkbox" },
   { id: "kbd", title: "Key cap", vue: "Kbd" },
   { id: "pill", title: "Pill", vue: "Pill" },
   { id: "meter", title: "Meter", vue: "Meter" },
-  { id: "progress", title: "Progress bar", vue: "ProgressBar", note: "The prototype's bar with the sheen is the transfer window's, the plain one the upload list's." },
+  { id: "footmeter", title: "Footer meter", vue: "Meter quiet", note: "The free space in a list's footer line, grey until the pointer reaches its button." },
+  { id: "rowcheck", title: "Row checkmark", vue: "Checkbox slim", note: "The box alone in a row of a dense list. The prototype's box is a mark drawn inside the row, the Vue one a checkbox of its own, named by the row." },
+  { id: "progress", title: "Progress bar", vue: "ProgressBar", note: "The prototype's bar with the sheen is the transfer window's, the plain one the upload list's. In GlimStone every bar whose work runs has the sheen, and a meter never does." },
   { id: "colour", title: "Colour picker", vue: "ColorPicker", wide: true },
 ];
 

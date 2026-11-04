@@ -4,10 +4,10 @@ import {
   claimMenu,
   closeMenuOutside,
   focusedAsker,
+  focusFirstMenuRow,
   focusMenuRow,
   isMenuHead,
   menuMove,
-  menuRows,
   menuRowView,
   placeMenu,
   placeSubmenu,
@@ -81,7 +81,7 @@ onMounted(() => {
     () => [menu.value, subMenu.value, props.opener],
     () => finish(false),
   );
-  if (menu.value) menuRows(menu.value)[0]?.focus();
+  if (menu.value) focusFirstMenuRow(menu.value);
 });
 onUnmounted(() => {
   release?.();
@@ -97,7 +97,7 @@ watch(
     if (!open || !row || !el) return;
     const rtl = getComputedStyle(menu.value!).direction === "rtl";
     subPos.value = placeSubmenu(row.getBoundingClientRect(), { width: el.offsetWidth, height: el.offsetHeight }, viewport(), rtl);
-    if (open.focus) menuRows(el)[0]?.focus();
+    if (open.focus) focusFirstMenuRow(el);
   },
   { flush: "post" },
 );

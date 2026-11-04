@@ -7,7 +7,7 @@ export type { MeterSize } from "@glimstone/core";
 // decides when it turns red and how it runs without a value.
 
 export interface MeterProps {
-  /** From 0 to 1. Without it the meter runs indeterminate, while the level is still being read. */
+  /** From 0 to 1. Without it the meter shows stripes while the level is still being read. */
   value?: number | null;
   /** The accessible name, such as the disk's. */
   label: string;
@@ -15,13 +15,15 @@ export interface MeterProps {
   size?: MeterSize;
   /** From here on the fill is the fault colour. */
   threshold?: number;
+  /** Slim and grey, for a footer line or a dense list. Inside a button it takes the accent when the button is reached. */
+  quiet?: boolean;
   /** The level in words, such as "120 GB free of 4 TB": read out, and shown in the bubble. */
   valueText?: string;
   className?: string;
 }
 
-export function Meter({ value, label, size = "medium", threshold = 0.9, valueText, className }: MeterProps) {
-  const view = meterView(value, size, threshold);
+export function Meter({ value, label, size = "medium", threshold, quiet, valueText, className }: MeterProps) {
+  const view = meterView(value, { size, threshold, quiet });
   const tip = useTipBubble(valueText);
   const busy = view.percent === null;
   return (

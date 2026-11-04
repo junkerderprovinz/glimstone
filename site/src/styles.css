@@ -172,6 +172,32 @@ body {
   box-shadow: inset 0 0 0 1px var(--carbon-border);
   cursor: pointer;
 }
+/* A list footer's free-space button and a dense list's row, as an app draws
+   them around a quiet meter and a slim checkbox. */
+.demo-footer-line {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-self: start;
+  height: 1.5rem;
+  padding: 0 0.45rem;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: none;
+  font: inherit;
+  color: var(--carbon-text-muted);
+  cursor: pointer;
+}
+.demo-footer-line:hover { background: var(--carbon-hover); color: var(--carbon-text); }
+.demo-dense-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  height: 1.75rem;
+  padding-inline: 0.5rem;
+  border-radius: var(--radius-control);
+}
+.demo-dense-row:hover { background: var(--carbon-hover); }
 /* React and Vue side by side where the page is wide enough, one above the
    other where it is not. Each names its framework above its stage. */
 .demo-pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); }

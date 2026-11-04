@@ -10,7 +10,7 @@ import TipBubble from "./TipBubble.vue";
 defineOptions({ inheritAttrs: false });
 const props = withDefaults(
   defineProps<{
-    /** From 0 to 1. Without it the meter runs indeterminate, while the level is still being read. */
+    /** From 0 to 1. Without it the meter shows stripes while the level is still being read. */
     value?: number | null;
     /** The accessible name, such as the disk's. */
     label: string;
@@ -18,12 +18,14 @@ const props = withDefaults(
     size?: MeterSize;
     /** From here on the fill is the fault colour. */
     threshold?: number;
+    /** Slim and grey, for a footer line or a dense list. Inside a button it takes the accent when the button is reached. */
+    quiet?: boolean;
     /** The level in words, such as "120 GB free of 4 TB": read out, and shown in the bubble. */
     valueText?: string;
   }>(),
-  { value: null, size: "medium", threshold: 0.9 },
+  { value: null, size: "medium", threshold: 0.9, quiet: false },
 );
-const view = computed(() => meterView(props.value, props.size, props.threshold));
+const view = computed(() => meterView(props.value, { size: props.size, threshold: props.threshold, quiet: props.quiet }));
 const busy = computed(() => view.value.percent === null);
 const bubble = useTipBubble(() => props.valueText);
 </script>

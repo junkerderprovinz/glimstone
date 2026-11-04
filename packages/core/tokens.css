@@ -973,8 +973,8 @@ body {
     --motion-slosh-splash-tilt: 7deg;
     --motion-slosh-splash-run: 3.4;
     --motion-slosh-splash-ripple: 1.5;
-    /* A bar without a value: one sweep of its light across the track. A
-       progress bar's sheen: one pass over the filled part. */
+    /* A progress bar without a value: one sweep of its light across the
+       track. Its sheen: one pass over the filled part. */
     --motion-indeterminate-dur: 1.4s;
     --motion-progress-sheen-dur: 1.6s;
   }
@@ -1075,11 +1075,13 @@ body {
     --motion-indeterminate-dur: 60s;
     --motion-progress-sheen-dur: 60s;
   }
-  /* A bar without a value sends a short light across its track, and a running
-     progress bar a sheen over its fill. Both stop at "off", where a bar
-     without a value keeps its stripes, and under reduced motion even for
-     storm: wanting more movement is not wanting something that never stops. */
-  :root:not([data-motion='off']) :is(.glim-meter-track--busy, .glim-progress--busy) > :is(.glim-meter-fill, .glim-progress-fill) {
+  /* A progress bar without a value sends a short light across its track, and
+     a running one a sheen over its fill. A meter never moves: it shows a level
+     that stands, and a light on it would say something is under way. Both
+     stop at "off", where a bar without a value keeps its stripes, and under
+     reduced motion even for storm: wanting more movement is not wanting
+     something that never stops. */
+  :root:not([data-motion='off']) .glim-progress--busy > .glim-progress-fill {
     width: 35%;
     background: var(--accent);
     opacity: 1;
@@ -3963,8 +3965,10 @@ body {
     white-space: nowrap;
     cursor: pointer;
   }
+  /* A menu the pointer opened carries data-pointer until a key is pressed in
+     it, so the first row it focused stays unlit (focusFirstMenuRow). */
   .glim-menu-item:hover,
-  .glim-menu-item:focus-visible,
+  .glim-menu:not([data-pointer]) .glim-menu-item:focus-visible,
   .glim-menu-item[aria-expanded="true"] { background-color: var(--carbon-hover); }
   .glim-menu-item:disabled {
     opacity: 0.45;
@@ -4047,7 +4051,7 @@ body {
     cursor: pointer;
   }
   .glim-menu-head-edit:hover,
-  .glim-menu-head-edit:focus-visible { background-color: var(--carbon-hover); }
+  .glim-menu:not([data-pointer]) .glim-menu-head-edit:focus-visible { background-color: var(--carbon-hover); }
   .glim-menu-head-edit svg {
     width: 0.85rem;
     height: 0.85rem;
@@ -4112,6 +4116,18 @@ body {
   [aria-checked="true"] > .glim-checkbox-box {
     background-color: var(--accent);
     color: var(--accent-contrast);
+  }
+  /* The slim checkbox: the box alone, for a row or a cell of a dense list,
+     where the frame's padding and hover ground would crowd the row. The row
+     around it gives the hover, and the box only firms up. */
+  .glim-checkbox--slim {
+    min-height: 0;
+    padding: 0;
+    border-radius: min(var(--radius-control), 5px);
+  }
+  .glim-checkbox--slim:hover { background-color: transparent; }
+  .glim-checkbox--slim[aria-checked="false"]:not(:disabled):hover > .glim-checkbox-box {
+    background-color: var(--carbon-surface3);
   }
 
   /* A key cap (Kbd), in the app's own type rather than the browser's monospace. */
@@ -4258,6 +4274,18 @@ body {
     border-radius: inherit;
     background-color: var(--accent);
   }
+  /* The quiet meter: slim and grey, for a footer line or a dense list, where
+     an accent bar on every row would outshout the names beside it. Inside a
+     button it takes the accent when the button is reached, as the button's
+     own glyph does (rule 40). The threshold still turns it red. */
+  .glim-meter-track--quiet {
+    height: 0.35rem;
+    background-color: var(--carbon-surface2);
+  }
+  .glim-meter-track--quiet > .glim-meter-fill { background-color: var(--carbon-text-muted); }
+  :is(button, a):is(:hover, :focus-visible) .glim-meter-track--quiet:not(.glim-meter-track--full) > .glim-meter-fill {
+    background-color: var(--accent);
+  }
   .glim-meter-track--full .glim-meter-fill { background-color: var(--status-fail-solid); }
   .glim-active .glim-meter-track { background-color: color-mix(in srgb, var(--accent-contrast) 22%, transparent); }
   .glim-active .glim-meter-fill { background-color: var(--accent-contrast); }
@@ -4292,9 +4320,9 @@ body {
   .glim-progress--paused .glim-progress-fill { background-color: var(--status-neutral-solid); }
   .glim-progress--failed .glim-progress-fill { background-color: var(--status-fail-solid); }
 
-  /* Without a value the fill is a light that crosses the track, set up in the
-     motion gate. Where nothing moves the track shows stripes instead, which
-     no value could be mistaken for. */
+  /* Without a value the track shows stripes, which no value could be
+     mistaken for. A progress bar swaps them for a light that crosses the
+     track, set up in the motion gate. */
   :is(.glim-meter-track--busy, .glim-progress--busy) > :is(.glim-meter-fill, .glim-progress-fill) {
     position: absolute;
     inset-block: 0;
@@ -4303,12 +4331,16 @@ body {
     background: repeating-linear-gradient(-45deg, var(--accent) 0 4px, transparent 4px 8px);
     opacity: 0.5;
   }
+  .glim-meter-track--quiet.glim-meter-track--busy > .glim-meter-fill {
+    background: repeating-linear-gradient(-45deg, var(--carbon-text-muted) 0 4px, transparent 4px 8px);
+  }
 }
 
 /* Outside the layer, or the house ring's offset would win: inside a menu the
    ring is drawn on the row, where the menu's edge cannot clip it. */
 .glim-menu-item:focus-visible,
 .glim-menu-head-edit:focus-visible { outline-offset: -2px; }
+.glim-menu[data-pointer] :focus-visible { outline: none; }
 
 @media (prefers-reduced-motion: no-preference) {
   .glim-checkbox-box { transition: background-color var(--motion-control-dur) ease; }

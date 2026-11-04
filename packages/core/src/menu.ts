@@ -2,6 +2,12 @@
 // tidied, what each row shows, where a menu goes on the screen and which key
 // does what. The frameworks only draw it; the glyph type is theirs.
 
+import { pointerWasLast, trackInputModality } from "./inputModality.ts";
+
+// Listening starts with the module rather than with the first menu, which
+// mounts after the press that opened it and would miss it.
+trackInputModality();
+
 export interface MenuItem<G> {
   label: string;
   glyph?: G;
@@ -145,6 +151,20 @@ export function menuMove(key: string, rtl = false): MenuMove | null {
 /** The rows a key can reach, in order: every enabled button of the menu. */
 export function menuRows(menu: HTMLElement): HTMLElement[] {
   return Array.from(menu.querySelectorAll<HTMLElement>("button:not([disabled])"));
+}
+
+/**
+ * Puts the focus on a menu's first row as it opens. A menu the pointer opened
+ * carries `data-pointer` until a key is pressed in it, and the row shows no
+ * ring or wash meanwhile: the mouse never asked for that focus, and a lit
+ * first row reads as a choice already made.
+ */
+export function focusFirstMenuRow(menu: HTMLElement): void {
+  if (pointerWasLast()) {
+    menu.dataset.pointer = "";
+    menu.addEventListener("keydown", () => delete menu.dataset.pointer, { once: true });
+  }
+  menuRows(menu)[0]?.focus();
 }
 
 /** Moves the focus along a menu's rows, wrapping at both ends. */

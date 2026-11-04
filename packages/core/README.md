@@ -24,8 +24,8 @@ npm install @glimstone/core
   queue.
 - What windows and menus share: `windowFoot` adds the way out, `stackWindow`
   gives Escape and Tab to the window in front, and `menu.ts` holds the menu
-  model with `tidyMenu`, `menuRowView`, `placeMenu`, `menuMove` and
-  `claimMenu`. `menuIsOpen` and `windowIsOpen` tell an app's own key handler
+  model with `tidyMenu`, `menuRowView`, `placeMenu`, `menuMove`,
+  `focusFirstMenuRow` and `claimMenu`. `menuIsOpen` and `windowIsOpen` tell an app's own key handler
   to stand back.
 - What fields and bars share: `meterView` and `progressView` for a Meter and a
   ProgressBar, `copyText` with its fallback for plain http, and for the

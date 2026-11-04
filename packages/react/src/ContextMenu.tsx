@@ -12,10 +12,10 @@ import {
   claimMenu,
   closeMenuOutside,
   focusedAsker,
+  focusFirstMenuRow,
   focusMenuRow,
   isMenuHead,
   menuMove,
-  menuRows,
   menuRowView,
   placeMenu,
   placeSubmenu,
@@ -174,7 +174,7 @@ export function ContextMenu({ x, y, items, above = false, label, opener, onClose
       () => [menu.current, subMenu.current, latest.current.opener],
       () => finish(false),
     );
-    menuRows(menu.current!)[0]?.focus();
+    focusFirstMenuRow(menu.current!);
     return () => {
       release();
       outside();
@@ -191,7 +191,7 @@ export function ContextMenu({ x, y, items, above = false, label, opener, onClose
     const rtl = getComputedStyle(menu.current!).direction === "rtl";
     const el = subMenu.current;
     setSubPos(placeSubmenu(row.getBoundingClientRect(), { width: el.offsetWidth, height: el.offsetHeight }, viewport(), rtl));
-    if (sub.focus) menuRows(el)[0]?.focus();
+    if (sub.focus) focusFirstMenuRow(el);
   }, [sub]);
 
   function pick(list: MenuEntry[], at: number) {

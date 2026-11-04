@@ -216,6 +216,7 @@ export const CONTRACTS: Record<string, Contract> = {
     rows: [
       { id: "menu-role", when: "The menu is open", then: "role=\"menu\" of menuitem rows; an on or off row is a menuitemcheckbox and a choice a menuitemradio, each with aria-checked." },
       { id: "menu-focus", when: "The menu opens", then: "Focus is on its first row that can be chosen." },
+      { id: "menu-focus-ring", keys: ["ArrowDown"], when: "The pointer opened the menu", then: "The first row shows no ring until a key is pressed in the menu. Opened from the keyboard, it shows the ring at once." },
       { id: "menu-arrows", keys: ["ArrowDown", "ArrowUp"], when: "A row has focus", then: "Focus moves to the next or previous row, skips disabled ones and wraps at the ends." },
       { id: "menu-home-end", keys: ["Home", "End"], when: "A row has focus", then: "Focus moves to the first or last row." },
       { id: "menu-pick", keys: ["Enter"], when: "A row is chosen", then: "Its action runs, the menu closes and focus goes back to where it was." },
@@ -251,6 +252,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "check-space", keys: ["Space"], when: "The box has focus", then: "It flips." },
       { id: "check-name", when: "Always", then: "The label is the accessible name, also with hideLabel." },
       { id: "check-disabled", when: "The box is disabled", then: "A click changes nothing." },
+      { id: "check-slim", when: "It is slim", then: "Only the box shows, without padding or hover ground, and the label is its accessible name." },
     ],
   },
   PasswordField: {
@@ -277,7 +279,9 @@ export const CONTRACTS: Record<string, Contract> = {
     rows: [
       { id: "meter-role", when: "It has a value", then: "role=\"meter\" named by its label, with the value in whole percent and its words as aria-valuetext." },
       { id: "meter-full", when: "The value reaches the threshold", then: "The fill takes the fault colour." },
-      { id: "meter-busy", when: "It has no value", then: "A busy progressbar without a value, and a light crosses the track." },
+      { id: "meter-busy", when: "It has no value", then: "A busy progressbar without a value, with still stripes on the track." },
+      { id: "meter-still", when: "Always", then: "Nothing moves on a meter, at every motion level." },
+      { id: "meter-quiet", when: "It is quiet", then: "The track is slim, the fill grey, and inside a button it takes the accent under the pointer. The threshold still turns it red." },
       { id: "meter-tip", when: "The pointer rests on it", then: "Its words show in the bubble." },
     ],
   },

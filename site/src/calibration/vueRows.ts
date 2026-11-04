@@ -188,6 +188,34 @@ export const VUE_ROWS: Record<string, Component> = {
       h(Meter, { value: 0.31, label: "media" }),
       h(Meter, { value: 0.92, label: "backups" }),
     ]),
+  footmeter: () =>
+    h("div", { style: { display: "flex", alignItems: "center", gap: "0.5rem", width: "22rem", fontSize: "12px", color: "var(--carbon-text-muted)" } }, [
+      h("span", "3 Elemente"),
+      h("span", { style: { flex: 1 } }),
+      h("button", { type: "button", class: "demo-footer-line" }, ["1,4 TB frei", h(Meter, { quiet: true, size: "small", value: 0.66, label: "disk1" })]),
+    ]),
+  rowcheck: stateful(new Set(["thumbs.db"]), (s) =>
+    h(
+      "div",
+      { style: { display: "grid", gap: "2px", width: "18rem", fontSize: "13px" } },
+      ["thumbs.db", "desktop.ini", "old-cache.tmp"].map((name) =>
+        h("div", { class: "demo-dense-row", style: { height: "2.25rem" } }, [
+          h(Checkbox, {
+            slim: true,
+            label: name,
+            modelValue: s.value.has(name),
+            "onUpdate:modelValue": (on: boolean) => {
+              const next = new Set(s.value);
+              if (on) next.add(name);
+              else next.delete(name);
+              s.value = next;
+            },
+          }),
+          name,
+        ]),
+      ),
+    ),
+  ),
   progress: () =>
     h("div", { style: col("22rem") }, [h(ProgressBar, { value: 0.62, label: "Kopieren" }), h(ProgressBar, { value: 0.4, label: "Hochladen" })]),
   colour: stateful("#1b6b73", (s) =>

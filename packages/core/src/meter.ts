@@ -1,7 +1,7 @@
 // What a Meter and a ProgressBar show for a value. A meter is a level that
 // stands, such as how full a disk is; a progress bar is work that moves toward
-// its end. Both take a value from 0 to 1, and without one they run
-// indeterminate: the level is still being read, or the work has no measure yet.
+// its end. Both take a value from 0 to 1, and without one they are busy: the
+// level is still being read, or the work has no measure yet.
 
 export type MeterSize = "small" | "medium";
 
@@ -20,13 +20,24 @@ function measure(value: number | null | undefined): { v: number | null; width: s
   return { v, width: `${Math.round(v * 1000) / 10}%`, percent: Math.round(v * 100) };
 }
 
+export interface MeterOptions {
+  size?: MeterSize;
+  /** From here on the fill is the fault colour. */
+  threshold?: number;
+  /** Slim and grey, for a footer line or a dense list where an accent bar on
+   *  every row would shout. */
+  quiet?: boolean;
+}
+
 /**
  * A meter's look. At or past `threshold` the fill turns to the fault colour,
- * since a disk that is nearly full is a problem to see from across the room.
+ * quiet or not, since a disk that is nearly full is a problem to see from
+ * across the room.
  */
-export function meterView(value: number | null | undefined, size: MeterSize = "medium", threshold = 0.9): BarView {
+export function meterView(value: number | null | undefined, { size = "medium", threshold = 0.9, quiet = false }: MeterOptions = {}): BarView {
   const { v, width, percent } = measure(value);
   const classes = ["glim-meter", "glim-meter-track", `glim-meter-track--${size}`];
+  if (quiet) classes.push("glim-meter-track--quiet");
   if (v === null) classes.push("glim-meter-track--busy");
   else if (v >= threshold) classes.push("glim-meter-track--full");
   return { className: classes.join(" "), width, percent };
