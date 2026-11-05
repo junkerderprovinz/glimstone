@@ -22,6 +22,9 @@ npm install @glimstone/core
   select's list model, the Info tile's version links and update check, the
   README button's classes, where a bubble goes, a dialog's keys and the toast
   queue.
+- What a text field and its row share: `textFieldClass` and `fieldWidthClass`
+  say how a field looks and how wide it is, `pressRowControl` does what a click
+  on a row's label does, and `treeRows` and `treeStep` hold a tree's rows and keys.
 - What windows and menus share: `windowFoot` adds the way out, `stackWindow`
   gives Escape and Tab to the window in front, and `menu.ts` holds the menu
   model with `tidyMenu`, `menuRowView`, `placeMenu`, `menuMove`,

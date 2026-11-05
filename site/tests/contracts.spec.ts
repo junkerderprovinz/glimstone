@@ -1795,6 +1795,481 @@ function token(el: Locator, name: string) {
   }, name);
 }
 
+test.describe("TextField", () => {
+  const box = (page: Page, name: string) => stage(page, "TextFieldBasic").getByRole("textbox", { name, exact: true });
+
+  test("[text-name] the label names the field", async ({ page }) => {
+    await open(page, "/components/text-field");
+    await expect(box(page, "Job name")).toHaveCount(1);
+  });
+
+  test("[text-model] the value follows the typing", async ({ page }) => {
+    await open(page, "/components/text-field");
+    await box(page, "Job name").fill("nightly");
+    await expect(stage(page, "TextFieldBasic").locator("output")).toHaveText("nightly");
+  });
+
+  test("[text-width] the widths", async ({ page }) => {
+    await open(page, "/components/text-field");
+    const width = (name: string) => box(page, name).evaluate((e) => e.getBoundingClientRect().width);
+    expect(await width("Port")).toBeCloseTo(88, 0);
+    expect(await width("Job name")).toBeCloseTo(352, 0);
+    expect(await width("Group")).toBeCloseTo(192, 0);
+    const column = await stage(page, "TextFieldBasic").locator("[data-column]").evaluate((e) => e.getBoundingClientRect().width);
+    expect(await width("Address")).toBeCloseTo(column, 0);
+  });
+
+  test("[text-attrs] attributes land on the field", async ({ page }) => {
+    await open(page, "/components/text-field");
+    await expect(box(page, "Port")).toHaveAttribute("data-hook", "port");
+    await expect(box(page, "Port")).toHaveAttribute("maxlength", "5");
+  });
+
+  test("[text-focus] focus is a step up the ramp, without a ring", async ({ page }) => {
+    await open(page, "/components/text-field");
+    const look = () => box(page, "Address").evaluate((e) => ({ outline: getComputedStyle(e).outlineStyle, ground: getComputedStyle(e).backgroundColor }));
+    const rest = await look();
+    await box(page, "Address").focus();
+    const held = await look();
+    expect(held.outline).toBe("none");
+    expect(held.ground).not.toBe(rest.ground);
+  });
+
+  test("[text-area] a text area is taller and grows", async ({ page }) => {
+    await open(page, "/components/text-field");
+    const notes = box(page, "Notes");
+    await expect(notes).toHaveJSProperty("tagName", "TEXTAREA");
+    const look = await notes.evaluate((e) => ({ height: e.getBoundingClientRect().height, resize: getComputedStyle(e).resize }));
+    expect(look.height).toBeGreaterThan(40);
+    expect(look.resize).toBe("vertical");
+  });
+});
+
+test.describe("FieldRow", () => {
+  const rows = (page: Page) => stage(page, "FieldRowBasic");
+
+  test("[row-name] the row names its control", async ({ page }) => {
+    await open(page, "/components/field-row");
+    await expect(rows(page).getByRole("textbox", { name: "Name", exact: true })).toHaveCount(1);
+    await expect(rows(page).getByRole("switch", { name: "Notify", exact: true })).toHaveCount(1);
+    await expect(rows(page).getByRole("radiogroup", { name: "Compression", exact: true })).toHaveCount(1);
+    await expect(rows(page).getByRole("combobox", { name: "Keep", exact: true })).toHaveCount(1);
+    await expect(rows(page).getByRole("spinbutton", { name: "Copies", exact: true })).toHaveCount(1);
+    await expect(rows(page).locator('input[aria-label="Password"]')).toHaveCount(1);
+    await expect(rows(page).getByRole("textbox", { name: "Link", exact: true })).toHaveValue("smb://bottich/media");
+  });
+
+  test("[row-own-name] a control's own label wins", async ({ page }) => {
+    await open(page, "/components/field-row");
+    await expect(rows(page).getByRole("textbox", { name: "Its own name", exact: true })).toHaveCount(1);
+  });
+
+  test("[row-press] a click on the label reaches the control", async ({ page }) => {
+    await open(page, "/components/field-row");
+    await rows(page).getByText("Name", { exact: true }).click();
+    await expect(rows(page).getByRole("textbox", { name: "Name", exact: true })).toBeFocused();
+    const notify = rows(page).getByRole("switch", { name: "Notify", exact: true });
+    await expect(notify).toHaveAttribute("aria-checked", "true");
+    await rows(page).getByText("Notify", { exact: true }).click();
+    await expect(notify).toHaveAttribute("aria-checked", "false");
+    await rows(page).getByText("Compression", { exact: true }).click();
+    await expect(rows(page).getByRole("radio", { name: "Even" })).toHaveAttribute("aria-checked", "true");
+  });
+
+  test("[row-hint] the (i) stays out of the control's name", async ({ page }) => {
+    await open(page, "/components/field-row");
+    await expect(rows(page).locator('.glim-info-icon[aria-label="Shown in the list of jobs."]')).toHaveCount(1);
+    await expect(rows(page).getByRole("textbox", { name: "Name", exact: true })).toHaveAccessibleName("Name");
+  });
+
+  test("[row-words] markup in the label leaves the name alone", async ({ page }) => {
+    await open(page, "/components/field-row");
+    await expect(rows(page).locator(".glim-field-row-label small")).toHaveText("optional");
+    await expect(rows(page).getByRole("textbox", { name: "Token", exact: true })).toHaveCount(1);
+  });
+
+  test("[row-value] a lone value is a pill at the row's end", async ({ page }) => {
+    await open(page, "/components/field-row");
+    await expect(rows(page).locator(".glim-field-row .glim-pill", { hasText: "2 hours ago" })).toHaveCount(1);
+    await expect(rows(page).locator(".glim-pill--fail", { hasText: "3" })).toHaveCount(1);
+    const ends = await rows(page).locator(".glim-field-row", { hasText: "Last run" }).evaluate((row) => {
+      const end = row.querySelector(".glim-pill")!.getBoundingClientRect().right;
+      return Math.abs(end - row.getBoundingClientRect().right);
+    });
+    expect(ends).toBeLessThan(1);
+  });
+
+  test("[row-widths] a field keeps its width beside the label", async ({ page }) => {
+    await open(page, "/components/field-row");
+    const place = (hasText: string, field: string) =>
+      rows(page).locator(".glim-field-row", { hasText }).evaluate((r, f) => {
+        const box = r.querySelector(f)!.getBoundingClientRect();
+        const name = r.querySelector(".glim-field-row-name")!.getBoundingClientRect();
+        return { width: Math.round(box.width), beside: box.left >= name.right, end: Math.round(r.getBoundingClientRect().right - box.right) };
+      }, field);
+    expect(await place("Password", ".glim-secret")).toEqual({ width: 192, beside: true, end: 0 });
+    expect(await place("Link", ".glim-copy")).toEqual({ width: 352, beside: true, end: 0 });
+    expect(await place("Address", "input")).toEqual({ width: 352, beside: true, end: 0 });
+  });
+
+  test("[row-narrow] without room the control moves under the label", async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 800 });
+    await open(page, "/components/field-row");
+    const row = rows(page).locator(".glim-field-row", { hasText: "Address" });
+    const place = await row.evaluate((r) => {
+      const name = r.querySelector(".glim-field-row-name")!.getBoundingClientRect();
+      const field = r.querySelector("input")!.getBoundingClientRect();
+      return { under: field.top >= name.bottom, end: Math.abs(field.right - r.getBoundingClientRect().right), inside: field.left >= r.getBoundingClientRect().left };
+    });
+    expect(place.under).toBe(true);
+    expect(place.end).toBeLessThan(1);
+    expect(place.inside).toBe(true);
+  });
+});
+
+test.describe("PathField", () => {
+  const demo = (page: Page) => stage(page, "PathFieldBasic");
+  const field = (page: Page) => demo(page).getByRole("textbox", { name: "Target", exact: true });
+  const button = (page: Page) => demo(page).getByRole("button", { name: "Choose a folder" });
+  const picker = (page: Page) => page.getByRole("dialog", { name: "Choose a folder" });
+
+  test("[path-name] the row names the field, its words the button", async ({ page }) => {
+    await open(page, "/components/path-field");
+    await expect(field(page)).toHaveValue("/mnt/user/media");
+    await expect(button(page)).toHaveCount(1);
+  });
+
+  test("[path-pick] the answer lands in the field", async ({ page }) => {
+    await open(page, "/components/path-field");
+    await button(page).click();
+    await expect(picker(page).getByRole("treeitem", { name: "media" })).toHaveAttribute("aria-selected", "true");
+    await picker(page).getByRole("treeitem", { name: "archive" }).click();
+    await picker(page).getByRole("button", { name: "Choose", exact: true }).click();
+    await expect(field(page)).toHaveValue("/mnt/user/archive");
+    await expect(field(page)).toBeFocused();
+    await expect(demo(page).locator("output")).toHaveText("Picked /mnt/user/archive");
+  });
+
+  test("[path-keep] no answer leaves the field as it was", async ({ page }) => {
+    await open(page, "/components/path-field");
+    await button(page).click();
+    await picker(page).getByRole("button", { name: "Cancel" }).click();
+    await expect(field(page)).toHaveValue("/mnt/user/media");
+    await expect(field(page)).toBeFocused();
+  });
+
+  test("[path-button] the button follows the label mode", async ({ page }) => {
+    await open(page, "/components/path-field", { labels: "glyph" });
+    const look = await button(page).evaluate((b) => ({ w: b.getBoundingClientRect().width, h: b.getBoundingClientRect().height }));
+    expect(look.w).toBeCloseTo(look.h, 0);
+    await page.evaluate(() => localStorage.setItem("gs-docs-look", JSON.stringify({ labels: "text" })));
+    await page.reload();
+    await page.locator("main h1").waitFor();
+    await expect(button(page).getByText("Choose a folder")).toBeVisible();
+  });
+
+  test("[path-attrs] attributes reach the field and the button", async ({ page }) => {
+    await open(page, "/components/path-field");
+    await expect(field(page)).toHaveAttribute("data-hook", "target");
+    await expect(button(page)).toHaveAttribute("data-pick-for", "target");
+  });
+});
+
+test.describe("Tree", () => {
+  const tree = (page: Page) => stage(page, "TreeBasic").getByRole("tree", { name: "Folders" });
+  const item = (page: Page, name: string) => tree(page).getByRole("treeitem", { name, exact: true });
+  const note = (page: Page) => stage(page, "TreeBasic").locator("output");
+
+  async function start(page: Page) {
+    await open(page, "/components/tree");
+    await expect(item(page, "user")).toBeVisible();
+  }
+
+  test("[tree-role] a tree of items that say their place", async ({ page }) => {
+    await start(page);
+    await expect(item(page, "mnt")).toHaveAttribute("aria-level", "1");
+    await expect(item(page, "mnt")).toHaveAttribute("aria-expanded", "true");
+    await expect(item(page, "user")).toHaveAttribute("aria-level", "2");
+    await expect(item(page, "user")).toHaveAttribute("aria-expanded", "false");
+    await expect(item(page, "boot")).not.toHaveAttribute("aria-expanded", /./);
+  });
+
+  test("[tree-one-stop] one tab stop on the chosen row", async ({ page }) => {
+    await start(page);
+    const stops = await tree(page).getByRole("treeitem").evaluateAll((rows) => rows.filter((r) => (r as HTMLElement).tabIndex === 0).map((r) => r.textContent?.trim()));
+    expect(stops).toEqual(["user"]);
+  });
+
+  test("[tree-arrows] the arrows move the focus and the choice", async ({ page }) => {
+    await start(page);
+    await item(page, "user").focus();
+    await page.keyboard.press("ArrowDown");
+    await expect(item(page, "disk1")).toBeFocused();
+    await expect(item(page, "disk1")).toHaveAttribute("aria-selected", "true");
+    await page.keyboard.press("ArrowUp");
+    await expect(item(page, "user")).toBeFocused();
+  });
+
+  test("[tree-right] right opens, then goes to the first child", async ({ page }) => {
+    await start(page);
+    await item(page, "user").focus();
+    await page.keyboard.press("ArrowRight");
+    await expect(item(page, "user")).toHaveAttribute("aria-expanded", "true");
+    await expect(item(page, "media")).toBeVisible();
+    await expect(item(page, "user")).toBeFocused();
+    await page.keyboard.press("ArrowRight");
+    await expect(item(page, "media")).toBeFocused();
+  });
+
+  test("[tree-left] left closes, then goes to the parent", async ({ page }) => {
+    await start(page);
+    await item(page, "disk1").focus();
+    await page.keyboard.press("ArrowLeft");
+    await expect(item(page, "mnt")).toBeFocused();
+    await page.keyboard.press("ArrowLeft");
+    await expect(item(page, "mnt")).toHaveAttribute("aria-expanded", "false");
+    await expect(item(page, "disk1")).toHaveCount(0);
+  });
+
+  test("[tree-home-end] Home and End", async ({ page }) => {
+    await start(page);
+    await item(page, "user").focus();
+    await page.keyboard.press("End");
+    await expect(item(page, "boot")).toBeFocused();
+    await page.keyboard.press("Home");
+    await expect(item(page, "mnt")).toBeFocused();
+  });
+
+  test("[tree-type] a letter jumps", async ({ page }) => {
+    await start(page);
+    await item(page, "mnt").focus();
+    await page.keyboard.press("b");
+    await expect(item(page, "boot")).toBeFocused();
+  });
+
+  test("[tree-press] a click chooses, the chevron only opens", async ({ page }) => {
+    await start(page);
+    await item(page, "disk1").click();
+    await expect(item(page, "disk1")).toHaveAttribute("aria-selected", "true");
+    await expect(item(page, "user")).toHaveAttribute("aria-selected", "false");
+    await item(page, "user").locator(".glim-tree-toggle").click();
+    await expect(item(page, "user")).toHaveAttribute("aria-expanded", "true");
+    await expect(item(page, "disk1")).toHaveAttribute("aria-selected", "true");
+    await item(page, "boot").focus();
+    await page.keyboard.press("Space");
+    await expect(item(page, "boot")).toHaveAttribute("aria-selected", "true");
+  });
+
+  test("[tree-activate] Enter and a double click act on a row", async ({ page }) => {
+    await start(page);
+    await item(page, "boot").focus();
+    await page.keyboard.press("Enter");
+    await expect(note(page)).toContainText("Acted on /boot");
+    await item(page, "disk1").dblclick();
+    await expect(note(page)).toContainText("Acted on /mnt/disk1");
+  });
+
+  test("[tree-lazy] a list is asked for once", async ({ page }) => {
+    await start(page);
+    await expect(note(page)).toContainText("2 lists asked for");
+    await item(page, "user").locator(".glim-tree-toggle").click();
+    await expect(note(page)).toContainText("3 lists asked for");
+    await item(page, "user").locator(".glim-tree-toggle").click();
+    await item(page, "user").locator(".glim-tree-toggle").click();
+    await expect(item(page, "media")).toBeVisible();
+    await expect(note(page)).toContainText("3 lists asked for");
+  });
+
+  test("[tree-start-open] rows open from the start show their children", async ({ page }) => {
+    await start(page);
+    await expect(item(page, "disk1")).toBeVisible();
+  });
+
+  test("[tree-attrs] a node's attributes reach its row", async ({ page }) => {
+    await start(page);
+    await expect(item(page, "boot")).toHaveAttribute("data-pick", "/boot");
+  });
+});
+
+test.describe("RowMark", () => {
+  const marks = (page: Page) => stage(page, "RowMarkBasic").locator(".glim-rowmark");
+
+  test("[mark-look] on fills with the accent and shows the tick", async ({ page }) => {
+    await open(page, "/components/row-mark");
+    const look = (at: number) =>
+      marks(page).nth(at).evaluate((m) => {
+        const accent = document.createElement("span");
+        accent.style.color = "var(--accent)";
+        m.appendChild(accent);
+        const want = getComputedStyle(accent).color;
+        accent.remove();
+        return { ground: getComputedStyle(m).backgroundColor === want, tick: getComputedStyle(m).color };
+      });
+    const on = await look(0);
+    const off = await look(1);
+    expect(on.ground).toBe(true);
+    expect(on.tick).not.toBe("rgba(0, 0, 0, 0)");
+    expect(off.ground).toBe(false);
+    expect(off.tick).toBe("rgba(0, 0, 0, 0)");
+  });
+
+  test("[mark-round] it reads the pill radius", async ({ page }) => {
+    await open(page, "/components/row-mark");
+    const radius = async (shape: string) => {
+      await page.evaluate((s) => localStorage.setItem("gs-docs-look", JSON.stringify({ shape: s })), shape);
+      await page.reload();
+      await page.locator("main h1").waitFor();
+      return marks(page).first().evaluate((m) => getComputedStyle(m).borderTopLeftRadius);
+    };
+    expect(await radius("square")).not.toBe(await radius("round"));
+  });
+
+  test("[mark-hidden] hidden from screen readers", async ({ page }) => {
+    await open(page, "/components/row-mark");
+    await expect(marks(page).first()).toHaveAttribute("aria-hidden", "true");
+  });
+});
+
+test.describe("ListRow", () => {
+  const demo = (page: Page) => stage(page, "ListRowBasic");
+  const row = (page: Page, name: string) => demo(page).getByRole("group", { name, exact: true });
+  const actions = (page: Page, name: string) => row(page, name).locator(".glim-list-row-actions");
+  const shown = (el: Locator) => el.evaluate((e) => getComputedStyle(e).opacity);
+
+  test("[list-row-rest] the buttons are out of sight at rest", async ({ page }) => {
+    await open(page, "/components/list-row");
+    await page.mouse.move(0, 0);
+    await expect(row(page, "nightly-backup").locator(".glim-pill").first()).toBeVisible();
+    await expect.poll(() => shown(actions(page, "nightly-backup"))).toBe("0");
+  });
+
+  test("[list-row-hover] the pointer brings the buttons and fills the tile", async ({ page }) => {
+    await open(page, "/components/list-row");
+    const tile = row(page, "nightly-backup").locator(".glim-list-row-tile");
+    const ground = () => tile.evaluate((e) => getComputedStyle(e).backgroundColor);
+    const rest = await ground();
+    await row(page, "nightly-backup").hover();
+    await expect.poll(() => shown(actions(page, "nightly-backup"))).toBe("1");
+    await expect.poll(ground).not.toBe(rest);
+    await actions(page, "nightly-backup").getByRole("button", { name: "Edit" }).hover();
+    await expect.poll(() => shown(actions(page, "nightly-backup"))).toBe("1");
+  });
+
+  test("[list-row-focus] the focus brings the buttons", async ({ page }) => {
+    await open(page, "/components/list-row");
+    await row(page, "nightly-backup").focus();
+    await expect.poll(() => shown(actions(page, "nightly-backup"))).toBe("1");
+    await page.keyboard.press("Tab");
+    await expect(page.locator(":focus")).toHaveAttribute("aria-label", "Runs at three in the morning.");
+    await page.keyboard.press("Tab");
+    await expect(actions(page, "nightly-backup").getByRole("button", { name: "Edit" })).toBeFocused();
+  });
+
+  test("[list-row-open] a click, Enter and Space open the row", async ({ page }) => {
+    await open(page, "/components/list-row");
+    await row(page, "nightly-backup").click({ position: { x: 60, y: 10 } });
+    await expect(demo(page).locator("output")).toHaveText("Opened 1");
+    await row(page, "nightly-backup").focus();
+    await page.keyboard.press("Enter");
+    await expect(demo(page).locator("output")).toHaveText("Opened 2");
+    await page.keyboard.press("Space");
+    await expect(demo(page).locator("output")).toHaveText("Opened 3");
+  });
+
+  test("[list-row-still] a row without a handler is no tab stop", async ({ page }) => {
+    await open(page, "/components/list-row");
+    await expect(row(page, "archive-copy")).not.toHaveAttribute("tabindex", /./);
+  });
+
+  test("[list-row-actions] its buttons and its (i) do not open it", async ({ page }) => {
+    await open(page, "/components/list-row");
+    await row(page, "nightly-backup").hover();
+    await actions(page, "nightly-backup").getByRole("button", { name: "Edit" }).click();
+    await row(page, "nightly-backup").locator(".glim-info-icon").click();
+    await expect(demo(page).locator("output")).toHaveText("Opened 0");
+  });
+
+  test("[list-row-ellipsis] a long name ends in an ellipsis", async ({ page }) => {
+    await open(page, "/components/list-row");
+    const look = await demo(page).locator(".glim-list-row-title").last().evaluate((t) => ({ cut: t.scrollWidth > t.clientWidth, height: t.closest(".glim-list-row")!.getBoundingClientRect().height }));
+    const other = await row(page, "nightly-backup").evaluate((r) => r.getBoundingClientRect().height);
+    expect(look.cut).toBe(true);
+    expect(look.height).toBe(other);
+  });
+
+  test("[list-row-narrow] below 600px the badges go", async ({ page }) => {
+    await page.setViewportSize({ width: 480, height: 800 });
+    await open(page, "/components/list-row");
+    await expect(row(page, "nightly-backup").locator(".glim-list-row-badges")).toBeHidden();
+  });
+});
+
+test.describe("ListRow on a touch screen", () => {
+  test.use({ hasTouch: true, isMobile: true, viewport: { width: 800, height: 800 } });
+
+  test("[list-row-touch] the buttons stay visible", async ({ page }) => {
+    await open(page, "/components/list-row");
+    const actions = stage(page, "ListRowBasic").locator(".glim-list-row-actions").first();
+    expect(await actions.evaluate((e) => getComputedStyle(e).opacity)).toBe("1");
+  });
+});
+
+test.describe("IconButton", () => {
+  const demo = (page: Page) => stage(page, "IconButtonBasic");
+  const copy = (page: Page) => demo(page).getByRole("button", { name: "Copy the path" });
+
+  test("[icon-modes] a square with its glyph alone in every label mode", async ({ page }) => {
+    await open(page, "/components/icon-button");
+    for (const labels of ["text", "textGlyph", "glyph", "reactive"]) {
+      await page.evaluate((l) => localStorage.setItem("gs-docs-look", JSON.stringify({ labels: l })), labels);
+      await page.reload();
+      await page.locator("main h1").waitFor();
+      const look = await copy(page).evaluate((b) => ({ w: b.getBoundingClientRect().width, h: b.getBoundingClientRect().height, words: b.textContent, glyph: !!b.querySelector("svg") }));
+      expect(look).toEqual({ w: 32, h: 32, words: "", glyph: true });
+    }
+  });
+
+  test("[icon-name] the tip is the name", async ({ page }) => {
+    await open(page, "/components/icon-button");
+    await expect(copy(page)).toHaveCount(1);
+  });
+
+  test("[icon-tip] the tip shows in the bubble", async ({ page }) => {
+    await open(page, "/components/icon-button");
+    await centre(copy(page));
+    await copy(page).hover();
+    await expect(page.locator(".glim-bubble", { hasText: "Copy the path" })).toBeVisible();
+  });
+
+  test("[icon-keys] Enter and Space act", async ({ page }) => {
+    await open(page, "/components/icon-button");
+    await copy(page).focus();
+    await page.keyboard.press("Enter");
+    await expect(demo(page).locator("output")).toHaveText("Pressed 1");
+    await page.keyboard.press("Space");
+    await expect(demo(page).locator("output")).toHaveText("Pressed 2");
+  });
+
+  test("[icon-reach] the glyph takes the accent, the ground stays clear", async ({ page }) => {
+    await open(page, "/components/icon-button");
+    await page.mouse.move(0, 0);
+    const look = () => copy(page).evaluate((b) => ({ ink: getComputedStyle(b).color, ground: getComputedStyle(b).backgroundColor }));
+    const rest = await look();
+    await centre(copy(page));
+    await copy(page).hover();
+    await expect.poll(async () => (await look()).ink).not.toBe(rest.ink);
+    expect((await look()).ground).toBe("rgba(0, 0, 0, 0)");
+  });
+
+  test("[icon-disabled] a disabled one does nothing", async ({ page }) => {
+    await open(page, "/components/icon-button");
+    const off = demo(page).getByRole("button", { name: "Delete" });
+    await expect(off).toBeDisabled();
+    await off.click({ force: true });
+    await expect(demo(page).locator("output")).toHaveText("Pressed 0");
+  });
+});
+
 test.describe("PasswordField", () => {
   const field = (page: Page, name: string) => stage(page, "PasswordFieldBasic").locator(`input[aria-label="${name}"]`);
   // A disabled eye sits in the box that keeps its bubble, so it is found from the wrapper.

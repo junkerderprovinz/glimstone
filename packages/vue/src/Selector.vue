@@ -23,6 +23,7 @@ import {
   type SelectorVariant,
 } from "@glimstone/core";
 import { useLabelMode } from "./engines";
+import { useFieldName } from "./fieldName";
 import SelectorSegment from "./SelectorSegment.vue";
 import type { SelectorItem } from "./selectorItem";
 
@@ -33,8 +34,8 @@ import type { SelectorItem } from "./selectorItem";
 const props = withDefaults(
   defineProps<{
     items: SelectorItem<V>[];
-    /** The accessible name of the strip, such as "Sort" or "Settings pages". */
-    label: string;
+    /** The accessible name of the strip, such as "Sort" or "Settings pages". Inside a FieldRow the row gives it. */
+    label?: string;
     select?: SelectMode;
     /** `vertical` is the column of tiles beside a settings area's pages. */
     orientation?: SelectorOrientation;
@@ -44,7 +45,7 @@ const props = withDefaults(
     activation?: SelectorActivation;
     /** Pin every segment to the widest one's measured width; the page-level picker. */
     equalWidth?: boolean;
-    /** Hug the segments, for a strip that shares a toolbar row. */
+    /** Hug the segments, for a strip that shares a toolbar row, as it does inside a FieldRow. */
     inline?: boolean;
     /** Keep every segment on one row, for page tabs. */
     fit?: boolean;
@@ -76,7 +77,7 @@ const props = withDefaults(
   },
 );
 const model = defineModel<V | null | V[]>({ required: true });
-/** Every press, before the choice changes, also one on the segment already chosen. */
+/** Every press and every arrow key that chooses, before the choice changes, also one on the segment already chosen. */
 const emit = defineEmits<{ press: [id: V] }>();
 
 function useMedia(query: string) {
@@ -85,6 +86,8 @@ function useMedia(query: string) {
   return on;
 }
 
+const name = useFieldName(() => props.label);
+const inline = computed(() => props.inline || (props.label === undefined && name.value !== undefined));
 const mode = useLabelMode(selectorAxis(props.size, props.orientation));
 const desktop = useMedia(DESKTOP_QUERY);
 const wide = useMedia(WIDE_QUERY);
@@ -97,7 +100,7 @@ const strip = computed(() =>
     size: props.size,
     variant: props.variant,
     equalWidth: props.equalWidth,
-    inline: props.inline,
+    inline: inline.value,
     fit: props.fit,
     pairsOnPhone: props.pairsOnPhone,
     hue: props.hue,
@@ -132,13 +135,13 @@ measured(
   (el) => (strip.value.counted ? countSelector(el) : undefined),
 );
 measured(
-  () => [strip.value.pinWidth, props.equalWidth, props.inline, itemsKey.value, disabledKey.value, props.size, strip.value.mode].join("|"),
+  () => [strip.value.pinWidth, props.equalWidth, inline.value, itemsKey.value, disabledKey.value, props.size, strip.value.mode].join("|"),
   (el) => {
     if (!strip.value.pinWidth) {
       rows.value = null;
       return;
     }
-    return watchSelectorRows(el, { inline: props.inline, equalWidth: props.equalWidth }, (r) => (rows.value = r));
+    return watchSelectorRows(el, { inline: inline.value, equalWidth: props.equalWidth }, (r) => (rows.value = r));
   },
 );
 measured(
@@ -156,7 +159,7 @@ const layout = computed(() =>
   selectorFlex({
     rows: rows.value,
     pinWidth: strip.value.pinWidth,
-    inline: props.inline,
+    inline: inline.value,
     fit: props.fit,
     fitMode: fitMode.value,
     pairsOnPhone: props.pairsOnPhone,
@@ -196,7 +199,7 @@ function onKeydown(e: KeyboardEvent) {
   <div
     ref="track"
     :role="strip.role"
-    :aria-label="label"
+    :aria-label="name"
     :aria-orientation="strip.role === 'group' ? undefined : orientation"
     :class="strip.className"
     :style="layout.track"

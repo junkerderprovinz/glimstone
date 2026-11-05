@@ -1,6 +1,7 @@
 <script setup lang="ts" generic="T extends string">
 import { computed } from "vue";
 import { defaultWidth, hasSubmenu, selectTriggerClass, type SelectRows, type SelectSize, type SelectWidth } from "@glimstone/core";
+import { useFieldName } from "./fieldName";
 import ListSelect from "./ListSelect.vue";
 import MenuSelect from "./MenuSelect.vue";
 import type { SelectGroup, SelectOption } from "./selectParts";
@@ -11,8 +12,8 @@ import type { SelectGroup, SelectOption } from "./selectParts";
 // <body>, so no card or scroll box can clip them.
 const props = withDefaults(
   defineProps<{
-    /** The field's name, always the accessible name. */
-    label: string;
+    /** The field's name, always the accessible name. Inside a FieldRow the row gives it and draws the words. */
+    label?: string;
     /** Draw the label off screen, for a settings row that names the field at its start. */
     hideLabel?: boolean;
     /** Every choice, in list order, for a list without groups. */
@@ -21,7 +22,7 @@ const props = withDefaults(
     groups?: SelectGroup<T>[];
     /** Shown while the value is null. */
     placeholder?: string;
-    /** Defaults to `fill` for a field and to `steady` for the smaller sizes. */
+    /** Defaults to `fill` for a field and to `steady` for the smaller sizes and inside a FieldRow. */
     width?: SelectWidth;
     size?: SelectSize;
     /** `menu` draws the open list with a context menu's rows, so an app with both shows one kind of menu row. */
@@ -44,13 +45,15 @@ const props = withDefaults(
 const model = defineModel<T | null>({ required: true });
 
 const runs = computed(() => props.groups ?? [{ entries: props.options ?? [] }]);
+const name = useFieldName(() => props.label);
+const fromRow = computed(() => props.label === undefined);
 const shared = computed(() => ({
-  label: props.label,
-  hideLabel: props.hideLabel,
+  label: name.value ?? "",
+  hideLabel: props.hideLabel || fromRow.value,
   groups: runs.value,
   value: model.value,
   placeholder: props.placeholder,
-  width: props.width ?? defaultWidth(props.size),
+  width: props.width ?? (fromRow.value ? "steady" : defaultWidth(props.size)),
   rows: props.rows,
   triggerClass: selectTriggerClass(props.size, props.wrap),
   id: props.id,

@@ -1,5 +1,6 @@
 import { useEffect, useRef, type ChangeEventHandler, type InputHTMLAttributes, type Ref } from "react";
 import { attachNumberSteppers, syncNumberSteppers } from "@glimstone/core";
+import { useFieldName } from "./fieldName.ts";
 
 // A number input with its two steppers inside the field; the steppers, the
 // wheel and the greying at the ends come from numberField.ts in the core.
@@ -8,7 +9,7 @@ import { attachNumberSteppers, syncNumberSteppers } from "@glimstone/core";
 // for `<NumberField` and keeps its own onChange. It draws the wrap itself:
 // React removes a node from the parent it put it in, so an input the helper
 // moved into a span of its own would take the page down the first time the
-// field is hidden while its row stays.
+// field is hidden while its row stays. Inside a FieldRow the row names it.
 
 export interface NumberFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "type"> {
   /** The bounds and the step. The steppers, the arrow keys and the wheel all
@@ -25,7 +26,8 @@ export interface NumberFieldProps extends Omit<InputHTMLAttributes<HTMLInputElem
   ref?: Ref<HTMLInputElement>;
 }
 
-export function NumberField({ className = "", ref, ...rest }: NumberFieldProps) {
+export function NumberField({ className = "", ref, "aria-label": ariaLabel, ...rest }: NumberFieldProps) {
+  const name = useFieldName(ariaLabel);
   const own = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => attachNumberSteppers(own.current!), []);
@@ -39,6 +41,7 @@ export function NumberField({ className = "", ref, ...rest }: NumberFieldProps) 
     <span className="glim-num-wrap">
       <input
         {...rest}
+        aria-label={name}
         ref={(el) => {
           own.current = el;
           if (typeof ref === "function") ref(el);

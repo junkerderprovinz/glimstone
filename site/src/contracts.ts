@@ -207,6 +207,85 @@ export const CONTRACTS: Record<string, Contract> = {
   Card: {
     rows: [{ id: "card-title", when: "It has a title", then: "The heading's words are the title, with nothing after it." }],
   },
+  TextField: {
+    rows: [
+      { id: "text-name", when: "It has a label", then: "The label is the field's accessible name." },
+      { id: "text-model", when: "Somebody types", then: "The value follows." },
+      { id: "text-width", when: "It has a width", then: "short, medium and wide are fixed widths, and fill takes its column." },
+      { id: "text-attrs", when: "It is given attributes", then: "They land on the field." },
+      { id: "text-focus", when: "The field has focus", then: "Its fill steps up the ramp and no ring shows (rule 14)." },
+      { id: "text-area", when: "It is a TextArea", then: "It starts taller than a line and can be dragged taller." },
+    ],
+  },
+  FieldRow: {
+    rows: [
+      { id: "row-name", when: "A control stands in the row", then: "The row's label is its accessible name, for a field, a switch, a selector and a dropdown alike." },
+      { id: "row-own-name", when: "The control has a label of its own", then: "That one names it." },
+      { id: "row-press", when: "The label is clicked", then: "A field takes the focus and a switch flips. A selector stays as it is, since no one segment is the row's." },
+      { id: "row-hint", when: "It has a hint", then: "An (i) stands beside the label and stays out of the control's name." },
+      { id: "row-words", when: "The label is drawn with markup of its own", then: "The control's name stays the label's words." },
+      { id: "row-value", when: "It holds only a value", then: "The value stands at the row's end as a pill, in its tone." },
+      { id: "row-widths", when: "The control has a width", then: "It keeps it beside the label, at the row's end." },
+      { id: "row-narrow", when: "The row has no room for both", then: "The control moves under the label and keeps the row's end." },
+    ],
+  },
+  PathField: {
+    rows: [
+      { id: "path-name", when: "It stands in a row or has a label", then: "That names the field, and the button is named by its words." },
+      { id: "path-pick", when: "The button is pressed and the picker answers", then: "It is asked with the path in the field, the answer lands in the field and the field takes the focus." },
+      { id: "path-keep", when: "The picker answers with nothing", then: "The field stays as it was and takes the focus." },
+      { id: "path-button", when: "A label mode hides words", then: "The button follows it like any other." },
+      { id: "path-attrs", when: "It is given attributes", then: "They land on the field, and buttonAttrs on the button." },
+    ],
+  },
+  Tree: {
+    pattern: { name: "Tree view", url: `${APG}treeview/` },
+    rows: [
+      { id: "tree-role", when: "Always", then: "role=\"tree\" named by its label, with treeitems that say their level and whether they are open." },
+      { id: "tree-one-stop", keys: ["Tab"], when: "Focus enters the tree", then: "It lands on the chosen row; the tree is one tab stop." },
+      { id: "tree-arrows", keys: ["ArrowDown", "ArrowUp"], when: "A row has focus", then: "Focus and the choice move to the next or previous row on show." },
+      { id: "tree-right", keys: ["ArrowRight"], when: "A row has focus", then: "A closed row opens, and an open row hands the focus to its first child." },
+      { id: "tree-left", keys: ["ArrowLeft"], when: "A row has focus", then: "An open row closes, and any other row hands the focus to its parent." },
+      { id: "tree-home-end", keys: ["Home", "End"], when: "A row has focus", then: "Focus moves to the first or last row on show." },
+      { id: "tree-type", when: "A letter is typed", then: "Focus moves to the next row starting with it." },
+      { id: "tree-press", keys: ["Space"], when: "A row is clicked or has focus", then: "It becomes the choice. The chevron opens and closes without choosing." },
+      { id: "tree-activate", keys: ["Enter"], when: "A row has focus or is double-clicked", then: "The tree reports it as acted on, for a picker that takes it at once." },
+      { id: "tree-lazy", when: "A row opens", then: "Its children are asked for once, and a list already there is not asked for again." },
+      { id: "tree-start-open", when: "Rows are named as open from the start", then: "Their children are asked for and shown." },
+      { id: "tree-attrs", when: "A node names attributes", then: "Its row carries them." },
+    ],
+  },
+  RowMark: {
+    rows: [
+      { id: "mark-look", when: "It is on", then: "It fills with the accent and shows a tick in the contrast ink. Off, it is a quiet round ground without a tick." },
+      { id: "mark-round", when: "Always", then: "It follows the pill radius, so it stays apart from a checkbox's box." },
+      { id: "mark-hidden", when: "Always", then: "It is hidden from screen readers, since the row says it is picked." },
+    ],
+  },
+  ListRow: {
+    rows: [
+      { id: "list-row-rest", when: "The row is at rest", then: "Its name and badges show and its buttons are out of sight (rule 6)." },
+      { id: "list-row-hover", when: "The pointer is over the row", then: "The buttons come in and the tile fills with the accent." },
+      { id: "list-row-focus", when: "The focus is inside the row", then: "The buttons come in, and they can be reached with Tab." },
+      { id: "list-row-touch", when: "The screen has no hover", then: "The buttons stay visible." },
+      { id: "list-row-open", keys: ["Enter", "Space"], when: "The row has a click handler", then: "It is one tab stop that opens on a click, Enter or Space." },
+      { id: "list-row-still", when: "The row has no click handler", then: "It is no tab stop." },
+      { id: "list-row-actions", when: "A button of the row or its (i) is pressed", then: "The row does not open." },
+      { id: "list-row-ellipsis", when: "The name is too long", then: "It ends in an ellipsis and the row keeps its height." },
+      { id: "list-row-narrow", when: "The window is narrower than 600px", then: "The badges go and the name keeps the room." },
+    ],
+  },
+  IconButton: {
+    pattern: { name: "Button", url: `${APG}button/` },
+    rows: [
+      { id: "icon-modes", when: "Any label mode is on", then: "It stays a square at the button height with its glyph alone." },
+      { id: "icon-name", when: "Always", then: "The tip is its accessible name." },
+      { id: "icon-tip", when: "The pointer rests on it", then: "The tip shows in the bubble." },
+      { id: "icon-keys", keys: ["Enter", "Space"], when: "It has focus", then: "It acts." },
+      { id: "icon-reach", when: "The pointer is over it", then: "Its glyph takes the accent and its ground stays clear (rule 40)." },
+      { id: "icon-disabled", when: "It is disabled", then: "A click changes nothing." },
+    ],
+  },
   Window: {
     pattern: { name: "Dialog (modal)", url: `${APG}dialog-modal/` },
     rows: [

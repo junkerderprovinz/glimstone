@@ -1,12 +1,13 @@
-// The Vue names of what a Window and a menu are handed: the core's models with
-// a component for a glyph.
+// The Vue names of what a Window, a menu and a tree are handed: the core's models
+// with a component for a glyph.
 
 import type { Component } from "vue";
-import type { MenuEntry as CoreMenuEntry, MenuHead as CoreMenuHead, MenuItem as CoreMenuItem } from "@glimstone/core";
+import type { MenuEntry as CoreMenuEntry, MenuHead as CoreMenuHead, MenuItem as CoreMenuItem, TreeNode as CoreTreeNode } from "@glimstone/core";
 
 export type MenuEntry = CoreMenuEntry<Component>;
 export type MenuItem = CoreMenuItem<Component>;
 export type MenuHead = CoreMenuHead<Component>;
+export type TreeNode = CoreTreeNode<Component>;
 
 export interface MenuBarMenu {
   label: string;

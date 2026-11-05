@@ -27,6 +27,7 @@ import {
   type SelectSubmenu as Submenu,
   type SelectWidth,
 } from "@glimstone/core";
+import { useFieldName } from "./fieldName.ts";
 import { IconCheck, IconExpand } from "./glyphs.tsx";
 import { usePortalHue, type PortalHue } from "./portalHue.ts";
 import { useTipBubble } from "./useTipBubble.tsx";
@@ -47,8 +48,8 @@ export type SelectGroup<T extends string = string> = SelectRun<T, ReactNode>;
 export type { SelectRows, SelectSize, SelectWidth } from "@glimstone/core";
 
 export interface SelectProps<T extends string = string> {
-  /** The field's name, always the accessible name. */
-  label: string;
+  /** The field's name, always the accessible name. Inside a FieldRow the row gives it and draws the words. */
+  label?: string;
   /** Draw the label off screen, for a settings row that names the field at its start. */
   hideLabel?: boolean;
   /** Every choice, in list order, for a list without groups. */
@@ -60,7 +61,7 @@ export interface SelectProps<T extends string = string> {
   onChange: (value: T) => void;
   /** Shown while the value is null. */
   placeholder?: string;
-  /** Defaults to `fill` for a field and to `steady` for the smaller sizes. */
+  /** Defaults to `fill` for a field and to `steady` for the smaller sizes and inside a FieldRow. */
   width?: SelectWidth;
   size?: SelectSize;
   /** `menu` draws the open list with a context menu's rows, so an app with both shows one kind of menu row. */
@@ -85,24 +86,30 @@ export interface SelectProps<T extends string = string> {
 export function Select<T extends string = string>({
   size = "field",
   rows = "list",
-  width = defaultWidth(size),
+  label,
+  hideLabel,
+  width,
   wrap = false,
   className = "",
   options,
   groups,
   ...rest
 }: SelectProps<T>) {
+  const name = useFieldName(label);
+  const fromRow = label === undefined;
+  const shared = { label: name ?? "", hideLabel: hideLabel || fromRow, width: width ?? (fromRow ? "steady" : defaultWidth(size)), rows };
   const runs = groups ?? [{ entries: options ?? [] }];
   const look = `${selectTriggerClass(size, wrap)} ${className}`.trim();
   return hasSubmenu(runs) ? (
-    <MenuSelect {...rest} width={width} rows={rows} groups={runs} className={look} />
+    <MenuSelect {...rest} {...shared} groups={runs} className={look} />
   ) : (
-    <ListSelect {...rest} width={width} rows={rows} groups={runs} className={look} />
+    <ListSelect {...rest} {...shared} groups={runs} className={look} />
   );
 }
 
 /** What the two machines take: the runs resolved and `className` the trigger's whole class list. */
-type Inner<T extends string> = Omit<SelectProps<T>, "groups" | "options" | "width" | "size" | "rows" | "wrap"> & {
+type Inner<T extends string> = Omit<SelectProps<T>, "groups" | "options" | "label" | "width" | "size" | "rows" | "wrap"> & {
+  label: string;
   groups: SelectGroup<T>[];
   width: SelectWidth;
   rows: SelectRows;

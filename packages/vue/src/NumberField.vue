@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, shallowRef, useAttrs, watch } from "vue";
 import { attachNumberSteppers, syncNumberSteppers } from "@glimstone/core";
+import { useFieldName } from "./fieldName";
 
 // A number input with its two steppers inside the field, bound with v-model:
 // the number, or null while the field is empty. The steppers, the wheel and
 // the greying at the ends come from numberField.ts in the core; min, max, step
 // and every other attribute go to the <input>, where the range lives alone.
+// Inside a FieldRow the row names it.
 defineOptions({ inheritAttrs: false });
 const model = defineModel<number | null>({ default: null });
 const attrs = useAttrs();
+const name = useFieldName(() => attrs["aria-label"] as string | undefined);
 const input = shallowRef<HTMLInputElement | null>(null);
 
 let detach: (() => void) | undefined;
@@ -45,6 +48,6 @@ function onInput(e: Event) {
 
 <template>
   <span class="glim-num-wrap">
-    <input v-bind="$attrs" ref="input" type="number" class="glim-num-input glim-num-field glim-num" @input="onInput" />
+    <input v-bind="$attrs" ref="input" :aria-label="name" type="number" class="glim-num-input glim-num-field glim-num" @input="onInput" />
   </span>
 </template>

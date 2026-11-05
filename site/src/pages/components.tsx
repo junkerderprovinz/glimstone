@@ -419,8 +419,8 @@ export function SelectorPage() {
       <H2>Numbers, hooks and presses</H2>
       <p>
         An item's <code>id</code> may be a number, and it comes back as one. <code>attrs</code> puts attributes on the
-        item's own segment, such as a data hook. <code>onPress</code> hears every press before the choice changes, also
-        one on the segment already chosen, which <code>onChange</code> says nothing about in Vue.
+        item's own segment, such as a data hook. <code>onPress</code>, <code>@press</code> in Vue, hears every press and
+        every arrow key that chooses, before the choice changes, also one on the segment already chosen.
       </p>
       <Demo name="SelectorSteps" />
       <H2>Two stylings, two scales</H2>
@@ -934,6 +934,241 @@ export function PasswordFieldPage() {
       <ContractTable of="PasswordField" />
       <H2>API</H2>
       <PropsTable of="PasswordField" />
+    </>
+  );
+}
+
+export function TextFieldPage() {
+  return (
+    <>
+      <p className="lead">A line of text and a few lines of text, borderless and filled.</p>
+      <Head file="react/TextField.tsx" />
+      <Demo name="TextFieldBasic" />
+      <Usage
+        code={`import { TextArea, TextField } from "@glimstone/react";
+
+<TextField label={t("name")} width="wide" value={name} onChange={(e) => setName(e.target.value)} />
+<TextArea label={t("notes")} rows={3} value={notes} onChange={(e) => setNotes(e.target.value)} />`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>Focus is a step up the ramp, never a ring: the fill and the caret say where the typing goes (rule 14).</li>
+        <li>
+          A field beside its name stands in a <a href="#/components/field-row">FieldRow</a>, which names it (rule 35).
+          A text area keeps its name above it, because it needs the column's width.
+        </li>
+        <li>
+          Four widths and the column: <code>short</code> for a port or a time, <code>medium</code> for a word,{" "}
+          <code>wide</code> for a line of text, <code>grow</code> for what a row has left, and <code>fill</code> for the
+          whole column. <code>PasswordField</code> takes the same <code>width</code>, and any other wrapper the class{" "}
+          <code>glim-field--wide</code> and its siblings.
+        </li>
+        <li>
+          <code>mono</code> sets a path or a token in monospace.
+        </li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="TextField" />
+      <H2>API</H2>
+      <PropsTable of="TextField" />
+      <H2>TextArea</H2>
+      <PropsTable of="TextArea" />
+    </>
+  );
+}
+
+export function FieldRowPage() {
+  return (
+    <>
+      <p className="lead">One labelled row of a card or a window: the name at its start, the control at its end.</p>
+      <Head file="react/FieldRow.tsx" />
+      <Demo name="FieldRowBasic" />
+      <Usage
+        code={`import { FieldRow, Toggle } from "@glimstone/react";
+
+<FieldRow label={t("notify")} hint={t("notifyHint")}>
+  <Toggle checked={notify} onChange={setNotify} />
+</FieldRow>
+<FieldRow label={t("lastRun")} value={lastRun} />`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>
+          The label names the control, so <code>Toggle</code>, <code>Selector</code>, <code>Select</code>,{" "}
+          <code>TextField</code>, <code>TextArea</code>, <code>PasswordField</code>, <code>NumberField</code>,{" "}
+          <code>CopyField</code> and <code>PathField</code> need no <code>label</code> of their own there. An app's own
+          control asks <code>useFieldName</code> for it.
+        </li>
+        <li>A click on the label focuses a field and flips a switch, as a real label does. A selector stays as it is.</li>
+        <li>
+          <code>hint</code> is the "(i)" beside the name (rule 8). Words in other markup, such as a quiet "optional", go
+          into <code>drawn</code> in React and the <code>label</code> slot in Vue; the <code>label</code> stays the name.
+        </li>
+        <li>
+          With only a <code>value</code> the row shows it as a <a href="#/components/pill">Pill</a>, in its{" "}
+          <code>tone</code>.
+        </li>
+        <li>Where the row is too narrow for both, the control moves under the name and keeps the row's end (rule 35).</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="FieldRow" />
+      <H2>API</H2>
+      <PropsTable of="FieldRow" />
+    </>
+  );
+}
+
+export function PathFieldPage() {
+  return (
+    <>
+      <p className="lead">A path to type, and a button beside it that asks the app for one.</p>
+      <Head file="react/PathField.tsx" />
+      <Demo name="PathFieldBasic" />
+      <Usage
+        code={`import { PathField } from "@glimstone/react";
+
+<PathField label={t("target")} value={path} onChange={setPath} pick={openFolderPicker} text={{ pick: t("choose") }} />`}
+      />
+      <H2>The picker is the app's</H2>
+      <p>
+        GlimStone does not know where an app's folders come from. <code>pick</code> is handed the path in the field and
+        answers with a path, or with nothing when the person left, and it may take its time. Most apps open a{" "}
+        <a href="#/components/window">Window</a> with a <a href="#/components/tree">Tree</a>, as this demo does.
+      </p>
+      <H2>Rules</H2>
+      <ul>
+        <li>The path is set in monospace, and the field takes the focus back once the picker has answered.</li>
+        <li>The button is an ordinary icon button that follows the label mode. <code>glyph</code> swaps the open folder for a file.</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="PathField" />
+      <H2>API</H2>
+      <PropsTable of="PathField" />
+    </>
+  );
+}
+
+export function TreePage() {
+  return (
+    <>
+      <p className="lead">A hierarchy to walk through, such as the folders of a picker, loaded as it opens.</p>
+      <Head file="react/Tree.tsx" />
+      <Demo name="TreeBasic" />
+      <Usage
+        code={`import { Tree } from "@glimstone/react";
+
+<Tree label={t("folders")} load={listFolder} defaultOpen={["/mnt"]} value={chosen} onChange={setChosen} onActivate={take} />`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>
+          <code>load</code> is asked for the children of a row the first time it opens, and for the top with{" "}
+          <code>null</code>. It may be async, and a list that failed is asked for again on the next opening.
+        </li>
+        <li>
+          This is the one thing that opens in place (rule 26), because the rows are what it is for: a fold hides a part of
+          a page, and a tree's rows are the content being walked through.
+        </li>
+        <li>The chosen row is filled with the accent. Double click and Enter report the row as acted on, for a picker that takes it at once.</li>
+        <li>A row gets the glyph it names, and <code>openGlyph</code> while it is open.</li>
+        <li>It draws no ground of its own, so it goes into a <code>glim-well</code> or a card as it is.</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="Tree" />
+      <H2>API</H2>
+      <PropsTable of="Tree" />
+    </>
+  );
+}
+
+export function RowMarkPage() {
+  return (
+    <>
+      <p className="lead">The round mark on a row picked for an action on many.</p>
+      <Head file="react/RowMark.tsx" />
+      <Demo name="RowMarkBasic" />
+      <Usage code={`import { RowMark } from "@glimstone/react";\n\n<RowMark on={picked.has(file.id)} />`} />
+      <H2>Rules</H2>
+      <ul>
+        <li>
+          Picking rows for a bulk action is this mark, never a <a href="#/components/checkbox">Checkbox</a> (rule 39).
+          Round, so the two do not read as one control.
+        </li>
+        <li>Show it once something in the list is picked or while the pointer is over the row, in the glyph's place.</li>
+        <li>On, it fills with <code>--accent</code>, so in a row with a rainbow position it takes that hue.</li>
+        <li>The mark is a picture. The row says it is picked, with <code>aria-selected</code>.</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="RowMark" />
+      <H2>API</H2>
+      <PropsTable of="RowMark" />
+    </>
+  );
+}
+
+export function ListRowPage() {
+  return (
+    <>
+      <p className="lead">One row of a list: its tile and name, its badges, and buttons that come in on hover.</p>
+      <Head file="react/ListRow.tsx" />
+      <Demo name="ListRowBasic" />
+      <Usage
+        code={`import { IconButton, ListRow, Pill } from "@glimstone/react";
+
+<ListRow
+  name={job.name}
+  tip={job.note}
+  onClick={() => open(job)}
+  tile={<IconFolder />}
+  badges={<Pill>{job.size}</Pill>}
+  actions={<IconButton tip={t("edit")} glyph={<IconPencil />} onClick={() => edit(job)} />}
+/>`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>At rest a row shows its name and its badges. Its buttons come in on hover and on focus, and stay in on a touch screen (rule 6).</li>
+        <li>The tile fills with the accent while the row is hovered or focused ("Lists").</li>
+        <li>A click handler makes the whole row the way into its object, with Enter and Space. A press on one of its buttons or its "(i)" stays there.</li>
+        <li>Rows in a list share one height, so a long name ends in an ellipsis.</li>
+        <li>Below 600px the badges go and the name keeps the room.</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="ListRow" />
+      <H2>API</H2>
+      <PropsTable of="ListRow" />
+    </>
+  );
+}
+
+export function IconButtonPage() {
+  return (
+    <>
+      <p className="lead">A glyph in a square, in every label mode, for a row that keeps its text.</p>
+      <Head file="react/IconButton.tsx" />
+      <Demo name="IconButtonBasic" />
+      <Usage code={`import { IconButton } from "@glimstone/react";\n\n<IconButton tip={t("copy")} glyph={<IconCopy />} onClick={copy} />`} />
+      <H2>When to use it</H2>
+      <ul>
+        <li>
+          For the buttons of a list row or a dense toolbar, where words would push out the row's own text. Every other
+          button with one action stays a <a href="#/components/button">Button</a> with <code>variant="icon"</code>,
+          which follows the label mode (rule 13).
+        </li>
+        <li>
+          It has no ground. The glyph takes the accent under the pointer and the square stays clear (rules 38 and 40).
+        </li>
+        <li>
+          The empty <code>glim-icon-btn-gap</code> holds the place of a button a row does not have, so the others stay
+          where they are in every row.
+        </li>
+        <li>
+          <a href="#/components/icon-tip-button">IconTipButton</a> stays the bare control for a box the caller draws itself.
+        </li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="IconButton" />
+      <H2>API</H2>
+      <PropsTable of="IconButton" />
     </>
   );
 }

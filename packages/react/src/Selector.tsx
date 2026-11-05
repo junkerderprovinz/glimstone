@@ -34,6 +34,7 @@ import {
   type SelectorVariant,
   type SelectorView,
 } from "@glimstone/core";
+import { useFieldName } from "./fieldName.ts";
 import { useLabelMode } from "./useLabelMode.ts";
 import { useTipBubble } from "./useTipBubble.tsx";
 
@@ -71,15 +72,15 @@ export interface SelectorItem<V extends string | number = string> {
 
 export interface SelectorProps<M extends SelectMode = "one", V extends string | number = string> {
   items: SelectorItem<V>[];
-  /** The accessible name of the strip, such as "Sort" or "Settings pages". */
-  label: string;
+  /** The accessible name of the strip, such as "Sort" or "Settings pages". Inside a FieldRow the row gives it. */
+  label?: string;
   /** `one` picks a value, `many` toggles any number of them. Default `one`. */
   select?: M;
   /** The chosen id, or the chosen ids for `many`. */
   value: M extends "many" ? readonly V[] : V | null;
   /** Called with the new id, or the new list for `many`. */
   onChange: (next: M extends "many" ? V[] : V) => void;
-  /** Called on every press, before the choice changes, also one on the segment already chosen. */
+  /** Called on every press and every arrow key that chooses, before the choice changes, also one on the segment already chosen. */
   onPress?: (id: V) => void;
   /** `vertical` is the column of tiles beside a settings area's pages. */
   orientation?: SelectorOrientation;
@@ -92,7 +93,7 @@ export interface SelectorProps<M extends SelectMode = "one", V extends string | 
    *  floor where the row has room; the page-level picker. */
   equalWidth?: boolean;
   /** Hug the segments instead of spanning the box, for a strip that shares a
-   *  toolbar row. */
+   *  toolbar row, as it does inside a FieldRow. */
   inline?: boolean;
   /** Keep every segment on one row, for page tabs: once the labels do not fit
    *  together every segment shows its glyph alone. */
@@ -135,7 +136,7 @@ export function Selector<M extends SelectMode = "one", V extends string | number
   variant = "well",
   activation = "auto",
   equalWidth = false,
-  inline = false,
+  inline: ownInline = false,
   fit = false,
   pairsOnPhone = false,
   buttonHeight = false,
@@ -145,6 +146,8 @@ export function Selector<M extends SelectMode = "one", V extends string | number
   panelId,
   className = "",
 }: SelectorProps<M, V>) {
+  const name = useFieldName(label);
+  const inline = ownInline || (label === undefined && name !== undefined);
   const vertical = orientation === "vertical";
   const many = select === "many";
   const mode = useLabelMode(selectorAxis(size, orientation));
@@ -225,7 +228,7 @@ export function Selector<M extends SelectMode = "one", V extends string | number
     <div
       ref={track}
       role={strip.role}
-      aria-label={label}
+      aria-label={name}
       aria-orientation={strip.role === "group" ? undefined : orientation}
       onKeyDown={onKeyDown}
       className={`${strip.className} ${className}`.trim()}

@@ -71,7 +71,12 @@ needs none of them.
 | `ContextMenu`, `MenuBar` | A menu at a point and the row of menus in a head bar, with submenus, rows that tick a box, choices, key caps and counts. Opened with the pointer, the first row shows its ring only once a key is pressed |
 | `Checkbox` | The drawn box for "Don't show again" and for choices applied together, `slim` for the box alone in a dense row. Every setting is a `Toggle` |
 | `Kbd`, `Pill` | A key cap, and the quiet data pill of a list row |
+| `TextField`, `TextArea` | A line of text and a few lines of text, borderless and filled, in the widths a row needs |
+| `FieldRow` | One labelled row: the name at its start with an "(i)", the control at its end, named by the row, or a lone value as a pill. `useFieldName` gives an app's own control the same name |
 | `PasswordField`, `CopyField` | A secret with the reveal eye inside the field, and a value in monospace with a button that copies it |
+| `PathField`, `Tree` | A path with a button that asks the app for one, and a hierarchy loaded as it opens, for the picker behind that button |
+| `ListRow`, `RowMark` | One row of a list with a tile, badges and buttons that come in on hover, and the round mark on a row picked for an action on many |
+| `IconButton` | A glyph in a square in every label mode, for a row that keeps its text |
 | `Meter`, `ProgressBar` | A level such as a disk's, red from a threshold and `quiet` for a footer line, and work toward its end with a sheen while it runs. Only the bar moves |
 | `ColorPicker` | The square, the hue bar, a preview with the name the colour proposes, the hex field and Apply, in the page or floating beside its swatch |
 | `useLabelMode`, `useTipBubble`, `usePortalHue` | The small hooks the components need |

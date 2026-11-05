@@ -2841,7 +2841,7 @@ body {
   :where([class*="glim-"]) :where(*, ::before, ::after) {
     box-sizing: border-box;
   }
-  :where(.glim-btn, .glim-badge, .glim-readme-btn, .glim-toggle-track, .glim-toast-dismiss, .glim-window-button, .glim-give-network, .glim-give-coin, .glim-give-amount, .glim-sel-seg, .glim-num-field, .glim-menu-item, .glim-menu-head-edit, .glim-menubar-item, .glim-checkbox, .glim-input, .glim-secret-eye) {
+  :where(.glim-btn, .glim-badge, .glim-readme-btn, .glim-toggle-track, .glim-toast-dismiss, .glim-window-button, .glim-give-network, .glim-give-coin, .glim-give-amount, .glim-sel-seg, .glim-num-field, .glim-menu-item, .glim-menu-head-edit, .glim-menubar-item, .glim-checkbox, .glim-input, .glim-secret-eye, .glim-icon-btn) {
     margin: 0;
     padding: 0;
     border: 0 solid;
@@ -4214,8 +4214,10 @@ body {
     line-height: 1.25rem;
   }
   .glim-input:focus,
-  .glim-well .glim-input { background-color: var(--carbon-surface3); }
-  .glim-well .glim-input:focus { background-color: var(--carbon-hover-raised); }
+  .glim-well .glim-input,
+  .glim-subcard .glim-input { background-color: var(--carbon-surface3); }
+  .glim-well .glim-input:focus,
+  .glim-subcard .glim-input:focus { background-color: var(--carbon-hover-raised); }
   .glim-input:disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -4225,6 +4227,237 @@ body {
     font-family: ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
     font-size: var(--text-subline);
     text-overflow: ellipsis;
+  }
+
+  /* A few lines of text (TextArea): the field's look, grown by its corner. */
+  .glim-input--area {
+    display: block;
+    height: auto;
+    min-height: calc(var(--btn-h) * 2);
+    padding-block: 0.4rem;
+    resize: vertical;
+  }
+
+  /* One labelled row (FieldRow, rule 35): the name at the start and the control
+     at the end, which drops under the name where the row has no room for both
+     and keeps the row's end there. */
+  .glim-field-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.75rem;
+    min-height: var(--btn-h);
+  }
+  .glim-field-row-name {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    gap: 0.35rem;
+    min-width: 0;
+  }
+  .glim-field-row-label small {
+    font-size: var(--text-meta);
+    color: var(--carbon-text-muted);
+  }
+  .glim-field-row > :not(.glim-field-row-name) {
+    max-width: 100%;
+    margin-inline-start: auto;
+  }
+
+  /* A path and its picker's button (PathField). */
+  .glim-path {
+    display: flex;
+    flex: 1 1 22rem;
+    align-items: center;
+    gap: 0.4rem;
+    min-width: 0;
+    max-width: 30rem;
+  }
+  .glim-path > .glim-input { flex: 1; }
+
+  /* A hierarchy to walk through (Tree). Each level steps in by the chevron's
+     width, and the chosen row is filled as a selection is (rule 3). */
+  .glim-tree {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    overflow: auto;
+  }
+  .glim-tree-row {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: 0.3rem;
+    height: var(--btn-h);
+    padding-inline: calc(0.3rem + var(--tree-level, 0) * 0.85rem) 0.55rem;
+    border-radius: var(--radius-control);
+    font-size: var(--text-body);
+    cursor: pointer;
+    user-select: none;
+  }
+  .glim-tree-row:hover { background-color: var(--carbon-hover); }
+  .glim-well .glim-tree-row:hover { background-color: var(--carbon-surface3); }
+  .glim-tree-row[aria-selected="true"] {
+    background-color: var(--accent);
+    color: var(--accent-contrast);
+  }
+  .glim-tree-toggle {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: var(--radius-control);
+    color: var(--carbon-text-muted);
+  }
+  .glim-tree-toggle:hover {
+    background-color: color-mix(in srgb, currentColor 18%, transparent);
+    color: var(--carbon-text);
+  }
+  .glim-tree-toggle > svg {
+    width: 0.7rem;
+    height: 0.7rem;
+    rotate: -90deg;
+  }
+  .glim-tree-toggle:dir(rtl) > svg { rotate: 90deg; }
+  [aria-expanded="true"] > .glim-tree-toggle > svg { rotate: none; }
+  .glim-tree-glyph {
+    display: inline-grid;
+    flex: none;
+    width: 1.05rem;
+    height: 1.05rem;
+    color: var(--accent-glyph);
+  }
+  .glim-tree-glyph > svg {
+    width: 100%;
+    height: 100%;
+  }
+  [aria-selected="true"] > :is(.glim-tree-toggle, .glim-tree-glyph) { color: var(--accent-contrast); }
+  .glim-tree-label {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* The round mark on a row picked for an action on many (RowMark, rule 39).
+     The fill reads --accent, so a row with a rainbow position hands it its hue. */
+  .glim-rowmark {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 1.125rem;
+    height: 1.125rem;
+    border-radius: var(--radius-pill);
+    background-color: color-mix(in srgb, var(--carbon-surface3) 60%, transparent);
+    color: transparent;
+  }
+  .glim-rowmark > svg {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+  .glim-rowmark--on {
+    background-color: var(--accent);
+    color: var(--accent-contrast);
+  }
+
+  /* One row of a list (ListRow). The buttons stand at their place while out of
+     sight, so a hover moves nothing, and a row without hover shows them (rule 6). */
+  .glim-list-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-width: 0;
+    min-height: 2.6rem;
+    padding-inline: 0.5rem;
+    border-radius: var(--radius-control);
+  }
+  .glim-list-row:is(:hover, :focus-within) { background-color: var(--carbon-hover); }
+  .glim-list-row--opens { cursor: pointer; }
+  .glim-list-row-tile {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: var(--radius-control);
+    color: var(--accent-glyph);
+  }
+  .glim-list-row-tile > svg {
+    width: 1.05rem;
+    height: 1.05rem;
+  }
+  .glim-list-row:is(:hover, :focus-within) > .glim-list-row-tile {
+    background-color: var(--accent);
+    color: var(--accent-contrast);
+  }
+  .glim-list-row-name {
+    display: flex;
+    flex: 1 1 0;
+    align-items: center;
+    gap: 0.4rem;
+    min-width: 0;
+    white-space: nowrap;
+  }
+  .glim-list-row-name--mono {
+    font-family: ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+    font-size: var(--text-subline);
+  }
+  .glim-list-row-title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .glim-list-row-tip { display: contents; }
+  .glim-list-row-badges {
+    display: flex;
+    flex: none;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.35rem;
+  }
+  .glim-list-row-actions {
+    display: flex;
+    flex: none;
+    gap: 0.15rem;
+    opacity: 0;
+  }
+  .glim-list-row:is(:hover, :focus-within) > .glim-list-row-actions { opacity: 1; }
+  @media (hover: none) {
+    .glim-list-row-actions { opacity: 1; }
+  }
+  @media (max-width: 600px) {
+    .glim-list-row-badges { display: none; }
+  }
+
+  /* A glyph in a square in every label mode (IconButton), half its box as any
+     glyph alone (rule 13). It has no ground, so .glim-btn-bare turns the glyph
+     to the tint when it is reached (rule 40). The gap holds the place of a
+     button a row does not have. */
+  .glim-icon-btn {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: var(--btn-h);
+    height: var(--btn-h);
+    border-radius: var(--radius-control);
+    color: var(--carbon-text-sub);
+    cursor: pointer;
+  }
+  .glim-icon-btn > svg {
+    width: 1rem;
+    height: 1rem;
+  }
+  .glim-icon-btn:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+  .glim-icon-btn-gap {
+    flex: none;
+    width: var(--btn-h);
+    height: var(--btn-h);
   }
 
   /* The reveal eye ("The reveal eye" in the design language): a bare glyph in
@@ -4268,6 +4501,28 @@ body {
     min-width: 0;
   }
   .glim-copy > .glim-input { flex: 1; }
+
+  /* A field's width (FieldWidth), on the input or on the wrapper that holds it.
+     After the wrappers, whose own width it replaces. */
+  .glim-field--short {
+    flex: none;
+    width: 5.5rem;
+  }
+  .glim-field--medium {
+    flex: none;
+    width: 12rem;
+    max-width: 100%;
+  }
+  .glim-field--wide {
+    flex: none;
+    width: 22rem;
+    max-width: 100%;
+  }
+  .glim-field--grow {
+    flex: 1 1 13rem;
+    width: auto;
+    min-width: 0;
+  }
 
   /* Words for a screen reader alone, such as the "Copied" a copy button
      announces. */
@@ -4374,12 +4629,17 @@ body {
 /* Outside the layer, or the house ring's offset would win: inside a menu the
    ring is drawn on the row, where the menu's edge cannot clip it. */
 .glim-menu-item:focus-visible,
-.glim-menu-head-edit:focus-visible { outline-offset: -2px; }
+.glim-menu-head-edit:focus-visible,
+.glim-tree-row:focus-visible,
+.glim-list-row:focus-visible { outline-offset: -2px; }
 .glim-menu[data-pointer] :focus-visible { outline: none; }
 /* Also outside the layer: a field says it has the focus with its fill and its
    caret, not with a ring (rule 14). */
 .glim-input:focus-visible { outline: none; }
 
 @media (prefers-reduced-motion: no-preference) {
-  .glim-checkbox-box { transition: background-color var(--motion-control-dur) ease; }
+  .glim-checkbox-box,
+  .glim-rowmark { transition: background-color var(--motion-control-dur) ease; }
+  .glim-list-row-actions { transition: opacity var(--motion-control-dur) ease; }
+  .glim-tree-toggle > svg { transition: rotate var(--motion-control-dur) ease; }
 }

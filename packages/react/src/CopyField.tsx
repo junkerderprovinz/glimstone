@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { COPIED_MS, copyText } from "@glimstone/core";
 import { Button } from "./Button.tsx";
+import { useFieldName } from "./fieldName.ts";
 import { IconCheck, IconCopy } from "./glyphs.tsx";
 
 // A value somebody copies rather than types, such as a token, a path or an
@@ -10,8 +11,8 @@ import { IconCheck, IconCopy } from "./glyphs.tsx";
 
 export interface CopyFieldProps {
   value: string;
-  /** The field's accessible name, such as "Token". */
-  label: string;
+  /** The field's accessible name, such as "Token". Inside a FieldRow the row gives it. */
+  label?: string;
   /** The button's words, before and for a moment after it copied. */
   text?: { copy: string; copied: string };
   /** Called after every press, with whether the value reached the clipboard. */
@@ -21,6 +22,7 @@ export interface CopyFieldProps {
 }
 
 export function CopyField({ value, label, text = { copy: "Copy", copied: "Copied" }, onCopy, className }: CopyFieldProps) {
+  const name = useFieldName(label);
   const [copied, setCopied] = useState(false);
   const field = useRef<HTMLInputElement>(null);
   const timer = useRef<number>(undefined);
@@ -41,7 +43,7 @@ export function CopyField({ value, label, text = { copy: "Copy", copied: "Copied
 
   return (
     <span className={className ? `glim-copy ${className}` : "glim-copy"}>
-      <input ref={field} readOnly value={value} aria-label={label} spellCheck={false} className="glim-input glim-input--mono" />
+      <input ref={field} readOnly value={value} aria-label={name} spellCheck={false} className="glim-input glim-input--mono" />
       <Button
         label={copied ? text.copied : text.copy}
         labelKey={copied ? "copied" : "copy"}

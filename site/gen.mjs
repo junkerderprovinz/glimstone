@@ -38,6 +38,14 @@ const COMPONENTS = {
   Meter: "react/Meter.tsx",
   ProgressBar: "react/ProgressBar.tsx",
   ColorPicker: "react/ColorPicker.tsx",
+  TextField: "react/TextField.tsx",
+  TextArea: "react/TextField.tsx",
+  FieldRow: "react/FieldRow.tsx",
+  PathField: "react/PathField.tsx",
+  Tree: "react/Tree.tsx",
+  RowMark: "react/RowMark.tsx",
+  ListRow: "react/ListRow.tsx",
+  IconButton: "react/IconButton.tsx",
 };
 
 const clean = (s) => s.replace(/\s+/g, " ").trim();
