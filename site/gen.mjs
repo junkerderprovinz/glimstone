@@ -46,6 +46,9 @@ const COMPONENTS = {
   RowMark: "react/RowMark.tsx",
   ListRow: "react/ListRow.tsx",
   IconButton: "react/IconButton.tsx",
+  GlyphField: "react/GlyphField.tsx",
+  GlyphTile: "react/GlyphTile.tsx",
+  Table: "react/Table.tsx",
 };
 
 const clean = (s) => s.replace(/\s+/g, " ").trim();

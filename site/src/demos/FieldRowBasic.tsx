@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { CopyField, FieldRow, NumberField, PasswordField, Selector, TextField, Toggle } from "@glimstone/react";
+import { Combobox } from "@glimstone/react/Combobox";
 import { Select } from "@glimstone/react/Select";
+import { Slider } from "@glimstone/react/Slider";
 
 const LEVELS = [
   { id: "fast", label: "Fast" },
@@ -13,10 +15,17 @@ const KEEP = [
   { value: "year", label: "One year" },
 ];
 
+const ZONES = [
+  { value: "vienna", label: "Vienna" },
+  { value: "berlin", label: "Berlin" },
+];
+
 export default function FieldRowBasic() {
   const [notify, setNotify] = useState(true);
   const [level, setLevel] = useState("even");
   const [keep, setKeep] = useState("month");
+  const [volume, setVolume] = useState(40);
+  const [zone, setZone] = useState("vienna");
   return (
     <div style={{ display: "grid", gap: 8, width: "100%", maxWidth: 560 }}>
       <FieldRow label="Name" hint="Shown in the list of jobs.">
@@ -55,6 +64,12 @@ export default function FieldRowBasic() {
       <FieldRow label="Hours">
         <TextField label="From" width="short" defaultValue="08:00" />
         <TextField label="To" width="short" defaultValue="17:00" />
+      </FieldRow>
+      <FieldRow label="Volume">
+        <Slider value={volume} onChange={setVolume} min={0} max={100} format={(v) => `${v}%`} />
+      </FieldRow>
+      <FieldRow label="Zone">
+        <Combobox options={ZONES} value={zone} onChange={setZone} empty="No match" toggleLabel="Show all zones" />
       </FieldRow>
       <FieldRow label="Last run" value="2 hours ago" />
       <FieldRow label="Failed" value="3" tone="fail" />

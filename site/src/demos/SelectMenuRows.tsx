@@ -10,6 +10,7 @@ export default function SelectMenuRows() {
       <Select
         label="Sort by"
         rows="menu"
+        triggerAttrs={{ "data-val": sort }}
         value={sort}
         onChange={setSort}
         options={[
@@ -22,6 +23,7 @@ export default function SelectMenuRows() {
       <Select
         label="Open with"
         rows="menu"
+        triggerAttrs={{ "data-val": app }}
         value={app}
         onChange={setApp}
         groups={[

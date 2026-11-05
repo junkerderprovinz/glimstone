@@ -1,5 +1,5 @@
-import { useRef, type InputHTMLAttributes, type ReactNode, type Ref } from "react";
-import { fieldWidthClass, type FieldWidth } from "@glimstone/core";
+import { useEffect, useRef, useState, type InputHTMLAttributes, type ReactNode, type Ref } from "react";
+import { fieldWidthClass, PATH_ROOM_PX, type FieldWidth } from "@glimstone/core";
 import { Button } from "./Button.tsx";
 import { useFieldName } from "./fieldName.ts";
 import { IconFolderOpen } from "./glyphs.tsx";
@@ -24,6 +24,8 @@ export interface PathFieldProps extends Omit<InputHTMLAttributes<HTMLInputElemen
   text?: { pick: string };
   /** The button's glyph, an open folder unless set, such as a file for a picker of files. */
   glyph?: ReactNode;
+  /** Shows the button's glyph alone, as it does by itself with less than 20rem of room. */
+  compact?: boolean;
   /** Attributes for the button, such as a data hook. */
   buttonAttrs?: Record<string, string>;
   /** Classes for the wrapper, which carries the width. */
@@ -40,6 +42,7 @@ export function PathField({
   width,
   text = { pick: "Choose" },
   glyph = <IconFolderOpen />,
+  compact = false,
   buttonAttrs,
   className,
   style,
@@ -49,6 +52,13 @@ export function PathField({
 }: PathFieldProps) {
   const name = useFieldName(label);
   const own = useRef<HTMLInputElement | null>(null);
+  const box = useRef<HTMLSpanElement>(null);
+  const [tight, setTight] = useState(false);
+  useEffect(() => {
+    const watcher = new ResizeObserver(([entry]) => setTight(entry.contentRect.width < PATH_ROOM_PX));
+    watcher.observe(box.current!);
+    return () => watcher.disconnect();
+  }, []);
 
   async function ask() {
     const answer = await pick(value);
@@ -59,7 +69,7 @@ export function PathField({
   }
 
   return (
-    <span className={["glim-path", fieldWidthClass(width), className].filter(Boolean).join(" ")} style={style}>
+    <span ref={box} className={["glim-path", fieldWidthClass(width), className].filter(Boolean).join(" ")} style={style}>
       <input
         spellCheck={false}
         autoComplete="off"
@@ -76,7 +86,7 @@ export function PathField({
         onChange={(e) => onChange(e.target.value)}
         className="glim-input glim-input--mono"
       />
-      <Button {...buttonAttrs} variant="icon" label={text.pick} labelKey={null} glyph={glyph} disabled={disabled} onClick={ask} />
+      <Button {...buttonAttrs} variant="icon" label={text.pick} labelKey={null} glyph={glyph} compact={compact || tight} disabled={disabled} onClick={ask} />
     </span>
   );
 }

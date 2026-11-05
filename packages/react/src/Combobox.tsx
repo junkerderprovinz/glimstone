@@ -1,5 +1,6 @@
 import { useId, useState } from "react";
 import * as combobox from "@zag-js/combobox";
+import { useFieldName } from "./fieldName.ts";
 import { normalizeProps, Portal, useMachine } from "@zag-js/react";
 import { IconCheck, IconExpand } from "./glyphs.tsx";
 import type { SelectOption } from "./Select.tsx";
@@ -10,7 +11,7 @@ import type { SelectOption } from "./Select.tsx";
 // instead of closing, since a list that vanishes reads as a broken field.
 
 export interface ComboboxProps {
-  label: string;
+  label?: string;
   hideLabel?: boolean;
   options: SelectOption[];
   /** The chosen value, or "" while nothing is chosen. */
@@ -25,6 +26,7 @@ export interface ComboboxProps {
 }
 
 export function Combobox({ label, hideLabel, options, value, onChange, placeholder, empty, toggleLabel, disabled }: ComboboxProps) {
+  const name = useFieldName(label);
   const [shown, setShown] = useState(options);
   const collection = combobox.collection({
     items: shown,
@@ -52,8 +54,8 @@ export function Combobox({ label, hideLabel, options, value, onChange, placehold
 
   return (
     <div {...api.getRootProps()} className="glim-combobox">
-      <label {...api.getLabelProps()} className={hideLabel ? "glim-sr-only" : "glim-field-label"}>
-        {label}
+      <label {...api.getLabelProps()} className={hideLabel || label === undefined ? "glim-sr-only" : "glim-field-label"}>
+        {name}
       </label>
       <div {...api.getControlProps()} className="glim-combobox-control">
         <input {...api.getInputProps()} className="glim-combobox-input" />

@@ -1,13 +1,15 @@
 import { useId } from "react";
 import * as slider from "@zag-js/slider";
 import { normalizeProps, useMachine } from "@zag-js/react";
+import { useFieldName } from "./fieldName.ts";
 
 // A value on a range, for numbers people adjust rather than type. The value
 // stands beside the label in words ("30 days"), and the same words are what a
-// screen reader hears, through `format`.
+// screen reader hears, through `format`. Inside a FieldRow the row names it and
+// draws the words.
 
 export interface SliderProps {
-  label: string;
+  label?: string;
   value: number;
   onChange: (value: number) => void;
   min: number;
@@ -19,6 +21,7 @@ export interface SliderProps {
 }
 
 export function Slider({ label, value, onChange, min, max, step = 1, format, disabled }: SliderProps) {
+  const name = useFieldName(label);
   const service = useMachine(slider.machine, {
     id: useId(),
     value: [value],
@@ -34,8 +37,8 @@ export function Slider({ label, value, onChange, min, max, step = 1, format, dis
   return (
     <div {...api.getRootProps()} className="glim-slider">
       <div className="glim-slider-head">
-        <label {...api.getLabelProps()} className="glim-field-label">
-          {label}
+        <label {...api.getLabelProps()} className={label === undefined ? "glim-sr-only" : "glim-field-label"}>
+          {name}
         </label>
         <output {...api.getValueTextProps()} className="glim-slider-value">
           {format(api.value[0])}

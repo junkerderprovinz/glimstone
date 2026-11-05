@@ -57,6 +57,6 @@ function toggleMore() {
       <Button ref="more" label="More" label-key="more" @click="toggleMore" />
       <span data-last>Last choice: {{ last }}. Sorted by {{ sort }}. Hidden files {{ hidden ? "shown" : "hidden" }}.</span>
     </div>
-    <ContextMenu v-if="at" :x="at.x" :y="at.y" :items="items" label="File" :opener="at.opener" @close="at = null" />
+    <ContextMenu v-if="at" id="demo-file-menu" :x="at.x" :y="at.y" :items="items" label="File" :opener="at.opener" @close="at = null" />
   </div>
 </template>

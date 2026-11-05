@@ -14,7 +14,7 @@ note() { echo "MISSING  $1"; fail=1; }
 tokens=packages/core/tokens.css
 # The component sources, and the core modules that hand them class names.
 components=$(ls packages/react/src/*.tsx packages/vue/src/*.vue 2>/dev/null)
-views="packages/core/src/button.ts packages/core/src/badge.ts packages/core/src/selectModel.ts packages/core/src/readmeButton.ts packages/core/src/selector.ts packages/core/src/sidebarRow.ts packages/core/src/field.ts"
+views="packages/core/src/button.ts packages/core/src/badge.ts packages/core/src/selectModel.ts packages/core/src/readmeButton.ts packages/core/src/selector.ts packages/core/src/sidebarRow.ts packages/core/src/field.ts packages/core/src/table.ts"
 
 # 1. Every glim-* class the components put in a class list. A name that ends in
 #    a hyphen is the fixed part of a template such as `glim-badge--${size}`.

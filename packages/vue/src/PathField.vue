@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { shallowRef, type Component, type StyleValue } from "vue";
-import { fieldWidthClass, type FieldWidth } from "@glimstone/core";
+import { onBeforeUnmount, onMounted, ref, shallowRef, type Component, type StyleValue } from "vue";
+import { fieldWidthClass, PATH_ROOM_PX, type FieldWidth } from "@glimstone/core";
 import Button from "./Button.vue";
 import { useFieldName } from "./fieldName";
 import { IconFolderOpen } from "./glyphs";
@@ -22,6 +22,8 @@ const props = withDefaults(
     text?: { pick: string };
     /** The button's glyph, an open folder unless set, such as a file for a picker of files. */
     glyph?: Component;
+    /** Shows the button's glyph alone, as it does by itself with less than 20rem of room. */
+    compact?: boolean;
     /** Attributes for the button, such as a data hook. */
     buttonAttrs?: Record<string, string>;
     disabled?: boolean;
@@ -35,6 +37,12 @@ const name = useFieldName(() => props.label);
 const input = shallowRef<HTMLInputElement | null>(null);
 defineExpose({ input });
 
+const box = shallowRef<HTMLElement | null>(null);
+const tight = ref(false);
+const watcher = new ResizeObserver(([entry]) => (tight.value = entry.contentRect.width < PATH_ROOM_PX));
+onMounted(() => watcher.observe(box.value!));
+onBeforeUnmount(() => watcher.disconnect());
+
 async function ask() {
   const answer = await props.pick(value.value);
   input.value?.focus();
@@ -45,7 +53,7 @@ async function ask() {
 </script>
 
 <template>
-  <span :class="['glim-path', fieldWidthClass(width), $attrs.class]" :style="$attrs.style as StyleValue">
+  <span ref="box" :class="['glim-path', fieldWidthClass(width), $attrs.class]" :style="$attrs.style as StyleValue">
     <input
       ref="input"
       v-model="value"
@@ -63,6 +71,7 @@ async function ask() {
       :label="text.pick"
       :label-key="null"
       :glyph="glyph ?? IconFolderOpen"
+      :compact="compact || tight"
       :disabled="disabled"
       @click="ask"
     />

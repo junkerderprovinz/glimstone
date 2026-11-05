@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { CopyField, FieldRow, NumberField, PasswordField, Selector, TextField, Toggle } from "@glimstone/vue";
+import { Combobox } from "@glimstone/vue/Combobox";
 import { Select } from "@glimstone/vue/Select";
+import { Slider } from "@glimstone/vue/Slider";
 
 const LEVELS = [
   { id: "fast", label: "Fast" },
@@ -13,6 +15,12 @@ const KEEP = [
   { value: "month", label: "One month" },
   { value: "year", label: "One year" },
 ];
+const ZONES = [
+  { value: "vienna", label: "Vienna" },
+  { value: "berlin", label: "Berlin" },
+];
+const volume = ref(40);
+const zone = ref("vienna");
 const name = ref("backup-weekly");
 const notify = ref(true);
 const level = ref("even");
@@ -61,6 +69,12 @@ const address = ref("smb://bottich/media");
     <FieldRow label="Hours">
       <TextField model-value="08:00" label="From" width="short" />
       <TextField model-value="17:00" label="To" width="short" />
+    </FieldRow>
+    <FieldRow label="Volume">
+      <Slider v-model="volume" :min="0" :max="100" :format="(v: number) => `${v}%`" />
+    </FieldRow>
+    <FieldRow label="Zone">
+      <Combobox v-model="zone" :options="ZONES" empty="No match" toggle-label="Show all zones" />
     </FieldRow>
     <FieldRow label="Last run" value="2 hours ago" />
     <FieldRow label="Failed" value="3" tone="fail" />

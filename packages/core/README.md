@@ -24,7 +24,8 @@ npm install @glimstone/core
   queue.
 - What a text field and its row share: `textFieldClass` and `fieldWidthClass`
   say how a field looks and how wide it is, `pressRowControl` does what a click
-  on a row's label does, and `treeRows` and `treeStep` hold a tree's rows and keys.
+  on a row's label does, `treeRows` and `treeStep` hold a tree's rows and keys, and
+  `tableCellClass` says what a table's cell wears.
 - What windows and menus share: `windowFoot` adds the way out, `stackWindow`
   gives Escape and Tab to the window in front, and `menu.ts` holds the menu
   model with `tidyMenu`, `menuRowView`, `placeMenu`, `menuMove`,

@@ -34,6 +34,8 @@ const props = withDefaults(
     above?: boolean;
     /** The menu's accessible name. */
     label?: string;
+    /** The menu element's id, for a caller or a script that looks for it. */
+    id?: string;
     /** The control that opened the menu. A click on it is not a click outside,
      *  and focus goes back to it; without one, focus goes back to wherever it was. */
     opener?: HTMLElement | null;
@@ -157,6 +159,7 @@ function hover(e: MouseEvent) {
 <template>
   <Teleport to="body">
     <div
+      :id="id"
       ref="menu"
       role="menu"
       :aria-label="label"

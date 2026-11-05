@@ -15,6 +15,8 @@ export interface IconButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonEle
   href?: string;
   /** Set for a button that stays on or off: it says so, and the accent washes it while it is on. */
   pressed?: boolean;
+  /** Draws no button and keeps its square, so the others of a row stay where they are. */
+  absent?: boolean;
   disabled?: boolean;
   type?: "button" | "submit";
   className?: string;
@@ -22,7 +24,8 @@ export interface IconButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonEle
 
 const reach = (e: SyntheticEvent<HTMLElement>) => takePageHue(e.currentTarget);
 
-export function IconButton({ tip, glyph, pressed, className, ...rest }: IconButtonProps) {
+export function IconButton({ tip, glyph, pressed, absent, className, ...rest }: IconButtonProps) {
+  if (absent) return <span className="glim-icon-btn-gap" aria-hidden="true" />;
   return (
     <IconTipButton
       {...rest}

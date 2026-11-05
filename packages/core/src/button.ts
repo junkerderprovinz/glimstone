@@ -39,6 +39,9 @@ export type ButtonTone = "accent" | "neutral" | "subtle" | "ok" | "danger" | "wa
  */
 export type ButtonVariant = "default" | "chip" | "icon";
 
+/** `key` is the second height, for the button a surface exists for (rule 19). */
+export type ButtonSize = "normal" | "key";
+
 // The fills live in tokens.css (`.glim-btn--accent` and its siblings). The two
 // surface tones also take the accent tint of rule 40.
 const TONE_CLASS: Record<ButtonTone, string> = {
@@ -61,6 +64,9 @@ export interface ButtonInput {
   variant: ButtonVariant;
   disabled: boolean;
   keepLabel: boolean;
+  /** Its glyph alone in a square in every label mode, where the words have no room. */
+  compact?: boolean;
+  size?: ButtonSize;
   title?: string;
   hueIndex?: number;
   stage?: WidthStage;
@@ -83,10 +89,11 @@ export interface ButtonView {
 
 export function buttonView(b: ButtonInput): ButtonView {
   const chip = b.variant === "chip";
-  const iconOnly = b.variant === "icon";
+  const compact = !!b.compact && b.hasGlyph;
+  const iconOnly = b.variant === "icon" || compact;
   // A glyphless button shows its text in both hiding modes, and keepLabel
   // keeps the glyph beside the text when there is one.
-  const effective: LabelMode = chip
+  const effective: LabelMode = chip || compact
     ? "glyph"
     : b.keepLabel
       ? b.hasGlyph
@@ -134,7 +141,7 @@ export function buttonView(b: ButtonInput): ButtonView {
   return {
     showGlyph: effective !== "text" && b.hasGlyph,
     labelClass: showText ? "glim-btn-label" : reactive ? "glim-label-reactive" : "glim-sr-only",
-    className: `glim-btn ${stage} ${chip ? "" : TONE_CLASS[b.tone]}${hueOn ? " glim-hue" : ""}${reactive ? " glim-reactive" : ""}`,
+    className: `glim-btn ${stage} ${chip ? "" : TONE_CLASS[b.tone]}${b.size === "key" ? " glim-btn-key" : ""}${hueOn ? " glim-hue" : ""}${reactive ? " glim-reactive" : ""}`,
     style: Object.keys(style).length ? style : undefined,
     tip: reactive && !b.disabled ? undefined : tip,
     // The surface tones carry rule 40's tint; a button with its own palette

@@ -42,6 +42,8 @@ export interface ContextMenuProps {
   above?: boolean;
   /** The menu's accessible name. */
   label?: string;
+  /** The menu element's id, for a caller or a script that looks for it. */
+  id?: string;
   /** The control that opened the menu. A click on it is not a click outside,
    *  and focus goes back to it; without one, focus goes back to wherever it was. */
   opener?: HTMLElement | null;
@@ -139,7 +141,7 @@ function Rows({
   });
 }
 
-export function ContextMenu({ x, y, items, above = false, label, opener, onClose, onStep }: ContextMenuProps) {
+export function ContextMenu({ x, y, items, above = false, label, id, opener, onClose, onStep }: ContextMenuProps) {
   const menu = useRef<HTMLDivElement>(null);
   const subMenu = useRef<HTMLDivElement>(null);
   const [asker] = useState(focusedAsker);
@@ -250,6 +252,7 @@ export function ContextMenu({ x, y, items, above = false, label, opener, onClose
         <div
           ref={menu}
           role="menu"
+          id={id}
           aria-label={label}
           className="glim-menu"
           style={pos}

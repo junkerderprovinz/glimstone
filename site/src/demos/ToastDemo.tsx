@@ -36,6 +36,19 @@ export default function ToastDemo() {
         Date.now(),
       ),
     );
+  const longPath = () =>
+    setToasts((list) =>
+      addToast(
+        list,
+        {
+          id: String(next.current++),
+          message: "2 files restored to /mnt/user/documents/projects/twenty-twenty-six/reports",
+          severity: "success",
+          action: { label: "Open", onClick: () => {} },
+        },
+        Date.now(),
+      ),
+    );
   const pause = (id: string) => setToasts((list) => pauseToast(list, id, Date.now()));
   const resume = (id: string) => setToasts((list) => resumeToast(list, id, Date.now()));
 
@@ -45,6 +58,7 @@ export default function ToastDemo() {
       <Button label="Warning" labelKey="warning" tone="warn" onClick={() => show("warn")} />
       <Button label="Failure" labelKey="close" tone="danger" onClick={() => show("fail")} />
       <Button label="With an action" labelKey={null} onClick={undoable} />
+      <Button label="A long path" labelKey={null} onClick={longPath} />
       <output>Put back {putBack}</output>
       <ToastViewport
         toasts={toasts}

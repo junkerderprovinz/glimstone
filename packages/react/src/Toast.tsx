@@ -1,4 +1,5 @@
-import { TOAST_MARKS, MARKS, type ToastAction, type ToastSeverity } from "@glimstone/core";
+import { Fragment } from "react";
+import { MARKS, softBreaks, TOAST_MARKS, type ToastAction, type ToastSeverity } from "@glimstone/core";
 import { Button } from "./Button.tsx";
 import { MarkSvg } from "./glyphs.tsx";
 
@@ -62,19 +63,28 @@ export function ToastCard({
       className="glim-toast glim-toast-card"
     >
       <MarkSvg mark={TOAST_MARKS[severity]} className={`glim-toast-glyph glim-toast-glyph--${severity}`} />
-      <p className="glim-toast-message">{message}</p>
-      {action && (
-        <Button
-          className="glim-toast-action"
-          tone="subtle"
-          label={action.label}
-          labelKey={null}
-          onClick={() => {
-            action.onClick();
-            onDismiss(id);
-          }}
-        />
-      )}
+      <div className="glim-toast-body">
+        <p className="glim-toast-message">
+          {softBreaks(message).map((part, i) => (
+            <Fragment key={i}>
+              {i > 0 && <wbr />}
+              {part}
+            </Fragment>
+          ))}
+        </p>
+        {action && (
+          <Button
+            className="glim-toast-action"
+            tone="subtle"
+            label={action.label}
+            labelKey={null}
+            onClick={() => {
+              action.onClick();
+              onDismiss(id);
+            }}
+          />
+        )}
+      </div>
       <button
         type="button"
         onClick={() => onDismiss(id)}

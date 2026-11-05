@@ -2,16 +2,18 @@
 import { computed, shallowRef, useId, watch } from "vue";
 import * as combobox from "@zag-js/combobox";
 import { normalizeProps, useMachine } from "@zag-js/vue";
+import { useFieldName } from "./fieldName";
 import { IconCheck, IconExpand } from "./glyphs";
 import type { SelectOption } from "./selectParts";
 
 // A field that filters a list while somebody types, for lists too long for a
 // Select: containers, time zones, languages. Focus stays in the field while
 // the arrows move through the list, and a search that finds nothing says so
-// instead of closing, since a list that vanishes reads as a broken field.
+// instead of closing, since a list that vanishes reads as a broken field. Inside
+// a FieldRow the row names it and draws the words.
 const props = withDefaults(
   defineProps<{
-    label: string;
+    label?: string;
     hideLabel?: boolean;
     options: SelectOption[];
     placeholder?: string;
@@ -26,6 +28,7 @@ const props = withDefaults(
 /** The chosen value, or "" while nothing is chosen. */
 const model = defineModel<string>({ required: true });
 
+const name = useFieldName(() => props.label);
 const id = useId();
 const shown = shallowRef(props.options);
 watch(
@@ -66,7 +69,7 @@ const api = computed(() => combobox.connect(service, normalizeProps));
 
 <template>
   <div v-bind="api.getRootProps()" class="glim-combobox">
-    <label v-bind="api.getLabelProps()" :class="hideLabel ? 'glim-sr-only' : 'glim-field-label'">{{ label }}</label>
+    <label v-bind="api.getLabelProps()" :class="hideLabel || label === undefined ? 'glim-sr-only' : 'glim-field-label'">{{ name }}</label>
     <div v-bind="api.getControlProps()" class="glim-combobox-control">
       <input v-bind="api.getInputProps()" class="glim-combobox-input" />
       <button v-bind="api.getTriggerProps()" :aria-label="toggleLabel" class="glim-combobox-toggle">

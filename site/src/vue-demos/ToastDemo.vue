@@ -31,6 +31,17 @@ const undoable = () =>
     },
     Date.now(),
   ));
+const longPath = () =>
+  (toasts.value = addToast(
+    toasts.value,
+    {
+      id: String(next++),
+      message: "2 files restored to /mnt/user/documents/projects/twenty-twenty-six/reports",
+      severity: "success",
+      action: { label: "Open", onClick: () => {} },
+    },
+    Date.now(),
+  ));
 const dismiss = (id: string) => (toasts.value = removeToast(toasts.value, id));
 const pause = (id: string) => (toasts.value = pauseToast(toasts.value, id, Date.now()));
 const resume = (id: string) => (toasts.value = resumeToast(toasts.value, id, Date.now()));
@@ -41,6 +52,7 @@ const resume = (id: string) => (toasts.value = resumeToast(toasts.value, id, Dat
   <Button label="Warning" label-key="warning" tone="warn" @click="show('warn')" />
   <Button label="Failure" label-key="close" tone="danger" @click="show('fail')" />
   <Button label="With an action" :label-key="null" @click="undoable" />
+  <Button label="A long path" :label-key="null" @click="longPath" />
   <output>Put back {{ putBack }}</output>
   <ToastViewport
     :toasts="toasts"

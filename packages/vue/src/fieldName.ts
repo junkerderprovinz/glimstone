@@ -3,6 +3,7 @@
 import { computed, inject, type ComputedRef, type InjectionKey } from "vue";
 
 export const FIELD_ROW: InjectionKey<ComputedRef<string>> = Symbol("glimstone.fieldRow");
+export const FIELD_ROW_GROUP: InjectionKey<boolean> = Symbol("glimstone.fieldRowGroup");
 
 /** A control's accessible name: its own, or the label of the row it stands in. */
 export function useFieldName(own: () => string | undefined): ComputedRef<string | undefined> {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, shallowRef, type Component } from "vue";
-import { buttonView, takePageHue, type ButtonTone, type ButtonVariant, type WidthStage } from "@glimstone/core";
+import { computed, shallowRef, watchEffect, type Component } from "vue";
+import { buttonView, mediaMatches, narrowerThan, subscribeMedia, takePageHue, type ButtonSize, type ButtonTone, type ButtonVariant, type WidthStage } from "@glimstone/core";
 import { useLabelMode } from "./engines";
 import { glyphFor, IconClose } from "./glyphs";
 import { useTipBubble } from "./tipBubble";
@@ -43,11 +43,24 @@ const props = withDefaults(
     stage?: WidthStage;
     /** Keeps the label visible in every mode, for a label that is content rather than a verb. */
     keepLabel?: boolean;
+    /** Its glyph alone in a square in every label mode, where the words have no room. The label stays the name and the bubble. */
+    compact?: boolean;
+    /** Turns compact while the window is narrower than this many pixels. */
+    compactBelow?: number;
+    size?: ButtonSize;
   }>(),
   { tone: "neutral", variant: "default", disabled: false, type: "button", busy: false, keepLabel: false },
 );
 
 const mode = useLabelMode("buttons");
+const narrow = shallowRef(false);
+watchEffect((onCleanup) => {
+  if (props.compactBelow === undefined) return void (narrow.value = false);
+  const query = narrowerThan(props.compactBelow);
+  const read = () => (narrow.value = mediaMatches(query));
+  read();
+  onCleanup(subscribeMedia(query, read));
+});
 // A chip always closes, so it has a glyph even when no call site passes one.
 const resolved = computed(
   () => props.glyph ?? (props.labelKey ? glyphFor(props.labelKey) : undefined) ?? (props.variant === "chip" ? IconClose : undefined),
@@ -61,6 +74,8 @@ const view = computed(() =>
     variant: props.variant,
     disabled: props.disabled,
     keepLabel: props.keepLabel,
+    compact: props.compact || narrow.value,
+    size: props.size,
     title: props.title,
     hueIndex: props.hueIndex,
     stage: props.stage,

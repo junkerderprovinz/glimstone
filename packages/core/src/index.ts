@@ -32,6 +32,7 @@ export * from "./selectScroll.ts";
 export * from "./sidebarRow.ts";
 export * from "./storage.ts";
 export * from "./tipBubble.ts";
+export * from "./table.ts";
 export * from "./toastEngine.ts";
 export * from "./tooltip.ts";
 export * from "./tree.ts";

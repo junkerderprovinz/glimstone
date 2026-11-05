@@ -17,6 +17,9 @@ export function textFieldClass({ width, mono, area }: { width?: FieldWidth; mono
   return ["glim-input", area && "glim-input--area", mono && "glim-input--mono", fieldWidthClass(width)].filter(Boolean).join(" ");
 }
 
+/** Below this width a PathField's button shows its glyph alone and leaves the room to the path. */
+export const PATH_ROOM_PX = 320;
+
 const FIELD = 'input:not([type="hidden"]), textarea';
 const PRESSABLE = '[role="switch"], [role="checkbox"], .glim-select-trigger';
 

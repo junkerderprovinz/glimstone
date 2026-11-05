@@ -1,6 +1,6 @@
-import { useRef, type HTMLAttributes, type ReactNode } from "react";
+import { useContext, useRef, type HTMLAttributes, type ReactNode } from "react";
 import { pressRowControl, type PillTone } from "@glimstone/core";
-import { FieldRowContext } from "./fieldName.ts";
+import { FieldRowContext, FieldRowGroupContext } from "./fieldName.ts";
 import { InfoBubble } from "./InfoBubble.tsx";
 import { Pill } from "./Pill.tsx";
 
@@ -25,6 +25,14 @@ export interface FieldRowProps extends Omit<HTMLAttributes<HTMLDivElement>, "chi
 
 export function FieldRow({ label, drawn, hint, value, tone, children, className, ...rest }: FieldRowProps) {
   const row = useRef<HTMLDivElement>(null);
+  const inGroup = useContext(FieldRowGroupContext);
+  const control =
+    children ??
+    (value !== undefined && (
+      <Pill className="glim-num" tone={tone}>
+        {value}
+      </Pill>
+    ));
   return (
     <FieldRowContext.Provider value={label}>
       <div {...rest} ref={row} className={className ? `glim-field-row ${className}` : "glim-field-row"}>
@@ -34,12 +42,7 @@ export function FieldRow({ label, drawn, hint, value, tone, children, className,
           </span>
           {hint && <InfoBubble tip={hint} />}
         </span>
-        {children ??
-          (value !== undefined && (
-            <Pill className="glim-num" tone={tone}>
-              {value}
-            </Pill>
-          ))}
+        {inGroup ? <span className="glim-field-row-controls">{control}</span> : control}
       </div>
     </FieldRowContext.Provider>
   );

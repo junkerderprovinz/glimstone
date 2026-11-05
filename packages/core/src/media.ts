@@ -7,6 +7,11 @@ export const DESKTOP_QUERY = "(min-width: 48rem)";
 /** At least this wide, the column of tiles shows words; below it glyphs alone. */
 export const WIDE_QUERY = "(min-width: 64rem)";
 
+/** The query for a window narrower than this many pixels. */
+export function narrowerThan(px: number): string {
+  return `(max-width: ${px - 0.02}px)`;
+}
+
 export function mediaMatches(query: string): boolean {
   return typeof matchMedia === "function" && matchMedia(query).matches;
 }

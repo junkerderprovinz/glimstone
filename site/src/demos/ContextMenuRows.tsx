@@ -65,7 +65,7 @@ export default function ContextMenuRows() {
         </span>
       </div>
       {at && (
-        <ContextMenu x={at.x} y={at.y} items={items} label="File" opener={at.opener} onClose={() => setAt(null)} />
+        <ContextMenu id="demo-file-menu" x={at.x} y={at.y} items={items} label="File" opener={at.opener} onClose={() => setAt(null)} />
       )}
     </div>
   );

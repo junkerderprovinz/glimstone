@@ -21,6 +21,9 @@ export const CONTRACTS: Record<string, Contract> = {
     pattern: { name: "Button", url: `${APG}button/` },
     rows: [
       { id: "button-keys", keys: ["Enter", "Space"], when: "The button has focus", then: "It acts, once per press." },
+      { id: "button-compact", when: "compact is on", then: "It is a square with its glyph alone in every label mode, and the label stays its name and its bubble." },
+      { id: "button-compact-below", when: "The window is narrower than compactBelow", then: "It turns compact, and back again when the window grows." },
+      { id: "button-key", when: "size is key", then: "It stands at the key height, with the bigger glyph." },
       { id: "button-flex", when: "It stands in a flex row without room for its words", then: "It keeps its words, and what stands beside it gives way." },
       { id: "button-href", when: "It has an href", then: "It is a link with the button's look, and a disabled one is a disabled button." },
       { id: "button-slots", when: "It has something before or after its words", then: "That stands inside the button, in that order, and the label stays its name." },
@@ -68,6 +71,7 @@ export const CONTRACTS: Record<string, Contract> = {
     pattern: { name: "Select-only combobox", url: `${APG}combobox/examples/combobox-select-only/` },
     rows: [
       { id: "select-menu-rows", when: "rows is menu", then: "The options are the rows of a context menu: the glyph's room, the words, the tick at the end and the wash on the value in force." },
+      { id: "select-trigger-attrs", when: "triggerAttrs are given", then: "The trigger carries them, and they follow the value." },
       { id: "select-well", when: "The trigger stands in a well or a sub-card", then: "It takes the same ground as a field there, and hovers up the ramp." },
       { id: "select-closed", when: "The list is closed", then: "What holds it on the body takes no room and no pointer." },
       { id: "select-menu-keys", keys: ["ArrowDown", "Enter"], when: "rows is menu", then: "The keys, the typing and the choosing stay those of the select." },
@@ -144,6 +148,9 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "toast-pause", when: "The pointer rests on it", then: "It stays, and the time left is kept." },
       { id: "toast-dismiss", when: "The dismiss button is pressed", then: "Only that toast leaves." },
       { id: "toast-action", when: "A toast has an action", then: "Its button keeps its words beside a long message, and a press runs it and dismisses the toast." },
+      { id: "toast-room", when: "A toast has an action", then: "The action stands under the message, so the message keeps the width of the card." },
+      { id: "toast-path", when: "The message holds a path", then: "It breaks after a slash rather than inside a word." },
+      { id: "toast-phone", when: "The window is a phone's", then: "A toast takes the window's width, the newest two show, and the page stays in view." },
     ],
   },
   WindowBar: {
@@ -201,6 +208,9 @@ export const CONTRACTS: Record<string, Contract> = {
     pattern: { name: "Link", url: `${APG}link/` },
     rows: [
       { id: "nav-current", when: "A row's destination is showing", then: "It is a link with aria-current=\"page\"; no other row has it." },
+      { id: "nav-button", keys: ["Enter"], when: "It has no href", then: "It is a button that acts on a press, with the row's look." },
+      { id: "nav-slots", when: "It has something before or after its words", then: "Those stand in the row in that order, and the whole row still answers a click." },
+      { id: "nav-slots-press", when: "A control in those slots is pressed", then: "It acts and the row does not." },
       { id: "nav-enter", keys: ["Enter"], when: "A row has focus", then: "It follows the link." },
       { id: "nav-name", when: "The label mode hides the words", then: "The name stays the link's name." },
       { id: "nav-tip", keys: ["Tab"], when: "A row without visible words receives keyboard focus", then: "Its name shows in the house bubble." },
@@ -240,6 +250,8 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "row-widths", when: "The control has a width", then: "It keeps it beside the label, at the row's end." },
       { id: "row-grow", when: "The control's width is grow", then: "It takes all the room the label leaves." },
       { id: "row-many", when: "The row holds more than one control", then: "They stand together at the row's end." },
+      { id: "row-group", when: "Rows stand in a FieldRowGroup", then: "Their names share one column as wide as the longest, so growing fields start at one edge." },
+      { id: "row-group-phone", when: "A FieldRowGroup stands in a window narrower than 600px", then: "The rows go back to wrapping on their own." },
       { id: "row-narrow", when: "The row has no room for both", then: "The control moves under the label and keeps the row's end." },
     ],
   },
@@ -252,6 +264,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "path-attrs", when: "It is given attributes", then: "They land on the field, and buttonAttrs on the button." },
       { id: "path-half", when: "It stands in a row of a half column", then: "It stays beside the label." },
       { id: "path-width", when: "It has a width", then: "It takes the same widths as a text field." },
+      { id: "path-narrow", when: "It has less than 20rem of room", then: "The button shows its glyph alone and leaves the room to the path, and its label stays its name." },
     ],
   },
   Tree: {
@@ -299,10 +312,37 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "icon-name", when: "Always", then: "The tip is its accessible name." },
       { id: "icon-tip", when: "The pointer rests on it", then: "The tip shows in the bubble." },
       { id: "icon-keys", keys: ["Enter", "Space"], when: "It has focus", then: "It acts." },
+      { id: "icon-absent", when: "absent is on", then: "No button is drawn and its square stays, so the others keep their places." },
       { id: "icon-pressed", when: "It has a pressed state", then: "It says so with aria-pressed, and the accent washes its ground while it is on." },
       { id: "icon-href", when: "It has an href", then: "It is a link in the same square." },
       { id: "icon-reach", when: "The pointer is over it", then: "Its glyph takes the accent and its ground stays clear (rule 40)." },
       { id: "icon-disabled", when: "It is disabled", then: "A click changes nothing." },
+    ],
+  },
+  GlyphField: {
+    rows: [
+      { id: "glyph-field-name", when: "It has a label or stands in a FieldRow", then: "That names the field, and the glyph is hidden from screen readers." },
+      { id: "glyph-field-focus", when: "The field has focus", then: "The whole box steps up the ramp and no ring shows (rule 14)." },
+      { id: "glyph-field-press", when: "The glyph is clicked", then: "The field takes the focus." },
+      { id: "glyph-field-after", when: "A control stands in the box after the field", then: "It acts on its own and the field keeps its room." },
+      { id: "glyph-field-attrs", when: "It is given attributes", then: "They land on the field, and a class on the box." },
+    ],
+  },
+  GlyphTile: {
+    rows: [
+      { id: "tile-look", when: "It has a ground or is quiet", then: "ground gives it the third surface, and quiet takes the accent off its glyph." },
+      { id: "tile-active", when: "It is active, or the row around it is reached", then: "It fills with the accent and its glyph takes the contrast ink." },
+      { id: "tile-hidden", when: "Always", then: "It is hidden from screen readers, since the words beside it name the row." },
+    ],
+  },
+  Table: {
+    pattern: { name: "Table", url: `${APG}table/` },
+    rows: [
+      { id: "table-role", when: "Always", then: "A real table named by its label, with column headers where the columns have words." },
+      { id: "table-no-head", when: "No column has words", then: "It draws no header row." },
+      { id: "table-end", when: "A column is set to end", then: "Its cells and its header stand at the end, in figures that line up." },
+      { id: "table-cell", when: "A cell is drawn by the caller", then: "That stands in the cell, and the others show their value." },
+      { id: "table-more", when: "It has a more line", then: "It spans the columns under the last row." },
     ],
   },
   Window: {
@@ -322,6 +362,8 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "window-title-slot", when: "The notch holds markup, such as a count", then: "It is drawn, and the title alone stays the window's name." },
       { id: "window-foot-steady", when: "A long text stands at the start of the foot", then: "The text wraps and the buttons keep their words." },
       { id: "window-foot-wrap", when: "The foot has no room for its buttons, as on a phone", then: "They wrap inside the card instead of shrinking." },
+      { id: "window-foot-one-line", when: "The foot holds a start text and three buttons, or four buttons", then: "They hug their words and stand on one line in a normal window." },
+      { id: "window-foot-floor", when: "A foot button's word is short", then: "It keeps the smallest width floor, so it stays easy to hit." },
     ],
   },
   Pill: {
@@ -331,6 +373,7 @@ export const CONTRACTS: Record<string, Contract> = {
     pattern: { name: "Menu", url: `${APG}menubar/` },
     rows: [
       { id: "menu-role", when: "The menu is open", then: "role=\"menu\" of menuitem rows; an on or off row is a menuitemcheckbox and a choice a menuitemradio, each with aria-checked." },
+      { id: "menu-id", when: "It has an id", then: "The menu element carries it." },
       { id: "menu-focus", when: "The menu opens", then: "Focus is on its first row that can be chosen." },
       { id: "menu-focus-ring", keys: ["ArrowDown"], when: "The pointer opened the menu", then: "The first row shows no ring until a key is pressed in the menu. Opened from the keyboard, it shows the ring at once." },
       { id: "menu-arrows", keys: ["ArrowDown", "ArrowUp"], when: "A row has focus", then: "Focus moves to the next or previous row, skips disabled ones and wraps at the ends." },

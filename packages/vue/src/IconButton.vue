@@ -14,6 +14,8 @@ withDefaults(defineProps<{
   href?: string;
   /** Set for a button that stays on or off: it says so, and the accent washes it while it is on. */
   pressed?: boolean;
+  /** Draws no button and keeps its square, so the others of a row stay where they are. */
+  absent?: boolean;
   disabled?: boolean;
 }>(), { pressed: undefined });
 
@@ -23,7 +25,8 @@ function reach(e: Event) {
 </script>
 
 <template>
-  <IconTipButton :tip="tip" :href="href" :aria-pressed="pressed" :disabled="disabled" class="glim-btn-bare glim-icon-btn" @pointerenter="reach" @focusin="reach">
+  <span v-if="absent" class="glim-icon-btn-gap" aria-hidden="true" />
+  <IconTipButton v-else :tip="tip" :href="href" :aria-pressed="pressed" :disabled="disabled" class="glim-btn-bare glim-icon-btn" @pointerenter="reach" @focusin="reach">
     <component :is="glyph" />
   </IconTipButton>
 </template>

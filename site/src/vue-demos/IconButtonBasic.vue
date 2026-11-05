@@ -9,9 +9,9 @@ const pinned = ref(false);
 
 <template>
   <div style="display: grid; gap: 8px; justify-items: start">
-    <div style="display: flex; gap: 2px">
+    <div data-row style="display: flex; gap: 2px">
       <IconButton tip="Copy the path" :glyph="glyph('IconCopy')" data-hook="copy" @click="pressed++" />
-      <span class="glim-icon-btn-gap" />
+      <IconButton tip="Move up" :glyph="glyph('IconMoveUp')" absent />
       <IconButton tip="Delete" :glyph="glyph('IconTrash')" disabled @click="pressed++" />
       <IconButton tip="Pin" :glyph="glyph('IconPencil')" :pressed="pinned" @click="pinned = !pinned" />
       <IconButton tip="Open the manual" :glyph="glyph('IconBook')" href="#/guide/palette" />

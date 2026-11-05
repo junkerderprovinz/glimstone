@@ -36,6 +36,7 @@ const props = defineProps<{
   rows: SelectRows;
   triggerClass: string;
   id?: string;
+  triggerAttrs?: Record<string, string>;
   disabled?: boolean;
   busy?: boolean;
   tip?: string;
@@ -99,7 +100,7 @@ const triggerProps = computed(() => {
     if (props.busy) e.preventDefault();
     else (tp[name] as ((e: Event) => void) | undefined)?.(e);
   };
-  return { ...tp, onPointerdown: hold("onPointerdown"), onClick: hold("onClick"), onKeydown: hold("onKeydown") };
+  return { ...props.triggerAttrs, ...tp, onPointerdown: hold("onPointerdown"), onClick: hold("onClick"), onKeydown: hold("onKeydown") };
 });
 
 function attach(el: unknown) {

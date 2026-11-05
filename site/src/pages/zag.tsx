@@ -50,6 +50,10 @@ export function SelectPage() {
   ]}
 />`}
       />
+      <H2>Hooks</H2>
+      <p>
+        <code>triggerAttrs</code> go on the trigger, such as a data hook that says the value in force.
+      </p>
       <H2>In a well</H2>
       <p>
         In a <code>glim-well</code> or a <a href="#/components/sub-card">SubCard</a> the trigger takes the ground of the

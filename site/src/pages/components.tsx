@@ -26,6 +26,13 @@ export function ButtonPage() {
       <Head file="react/Button.tsx" />
       <Demo name="ButtonTones" />
       <Usage code={`import { Button } from "@glimstone/react";\n\n<Button label="Save" labelKey="save" tone="accent" onClick={save} />`} />
+      <H2>Compact and key</H2>
+      <p>
+        <code>compact</code> leaves the glyph alone in a square in every label mode, for a narrow place, and{" "}
+        <code>compactBelow</code> does so below a window width in pixels. The label stays the name and the bubble.{" "}
+        <code>size="key"</code> is the second height, for the button a surface exists for (rule 19).
+      </p>
+      <Demo name="ButtonCompact" />
       <H2>Links, and what stands around the words</H2>
       <p>
         <code>href</code> makes it a link with the button's look, and a disabled one is a disabled button.{" "}
@@ -335,7 +342,8 @@ setToasts((list) => addToast(list, { id, message: "Settings saved.", severity: "
         <li>Quiet mode hides routine successes, never warnings or failures.</li>
         <li>The severity shows in the glyph's colour only, never as a coloured rail on the card.</li>
         <li>
-          An entry's <code>action</code> is a filled button such as Undo. A press runs it and dismisses the toast.
+          An entry's <code>action</code> is a filled button such as Undo, under the message. A press runs it and dismisses
+          the toast.
         </li>
       </ul>
       <H2>Accessibility</H2>
@@ -568,6 +576,13 @@ export function SidebarRowPage() {
         <li>The name stays the link's name in every mode, and shows in the bubble where it is hidden.</li>
         <li>A count is read in words, such as "3 need attention"; the bare figure is hidden from screen readers.</li>
       </ul>
+      <H2>Without a link, and with more in the row</H2>
+      <p>
+        Without an <code>href</code> the row is a button. <code>before</code> and <code>after</code>, slots in Vue, hold a
+        tree's toggle, a meter, free space or a pin. A control there answers on its own, and a click anywhere else still
+        goes to the row. In the narrow rail they step aside for the glyph.
+      </p>
+      <Demo name="SidebarSlots" />
       <H2>Behaviour</H2>
       <ContractTable of="SidebarRow" />
       <H2>API</H2>
@@ -671,6 +686,12 @@ export function WindowPage() {
         An action closes the window once it has run. One that changes something in view, such as a reset, returns{" "}
         <code>false</code> and the window stays for a second look.
       </p>
+      <H2>A full foot</H2>
+      <p>
+        Foot buttons hug their words down to the smallest width floor, so a start text and three buttons, or four buttons,
+        stand on one line in a normal window.
+      </p>
+      <Demo name="WindowBusyFoot" />
       <H2>Hooks</H2>
       <p>
         An action's <code>attrs</code> go on its foot button. <code>ref</code> in React and the exposed{" "}
@@ -1022,12 +1043,19 @@ export function FieldRowPage() {
 </FieldRow>
 <FieldRow label={t("lastRun")} value={lastRun} />`}
       />
+      <H2>A group of rows</H2>
+      <p>
+        <code>FieldRowGroup</code> gives the rows in it one column for their names, as wide as the longest, so fields
+        that grow start at one edge. The rows stand directly in it. Below 600px they wrap on their own again.
+      </p>
+      <Demo name="FieldRowGroup" />
       <H2>Rules</H2>
       <ul>
         <li>
           The label names the control, so <code>Toggle</code>, <code>Selector</code>, <code>Select</code>,{" "}
-          <code>TextField</code>, <code>TextArea</code>, <code>PasswordField</code>, <code>NumberField</code>,{" "}
-          <code>CopyField</code> and <code>PathField</code> need no <code>label</code> of their own there. An app's own
+          <code>TextField</code>, <code>TextArea</code>, <code>GlyphField</code>, <code>PasswordField</code>,{" "}
+          <code>NumberField</code>, <code>CopyField</code>, <code>PathField</code>, <code>Slider</code> and{" "}
+          <code>Combobox</code> need no <code>label</code> of their own there. An app's own
           control asks <code>useFieldName</code> for it.
         </li>
         <li>Several controls stand together at the row's end, and one with <code>width="grow"</code> takes all the room the name leaves.</li>
@@ -1071,6 +1099,7 @@ export function PathFieldPage() {
       <ul>
         <li>The path is set in monospace, and the field takes the focus back once the picker has answered.</li>
         <li>The button is an ordinary icon button that follows the label mode. <code>glyph</code> swaps the open folder for a file.</li>
+        <li>With less than 20rem of room, or with <code>compact</code>, the button shows its glyph alone and leaves the room to the path.</li>
       </ul>
       <H2>Behaviour</H2>
       <ContractTable of="PathField" />
@@ -1194,8 +1223,8 @@ export function IconButtonPage() {
           off, which the accent washes while it is on.
         </li>
         <li>
-          The empty <code>glim-icon-btn-gap</code> holds the place of a button a row does not have, so the others stay
-          where they are in every row.
+          <code>absent</code> holds the place of a button a row does not have, so the others stay where they are in
+          every row.
         </li>
         <li>
           <a href="#/components/icon-tip-button">IconTipButton</a> stays the bare control for a box the caller draws itself.
@@ -1205,6 +1234,79 @@ export function IconButtonPage() {
       <ContractTable of="IconButton" />
       <H2>API</H2>
       <PropsTable of="IconButton" />
+    </>
+  );
+}
+
+export function GlyphFieldPage() {
+  return (
+    <>
+      <p className="lead">A field with a glyph inside it, such as a filter or a search.</p>
+      <Head file="react/GlyphField.tsx" />
+      <Demo name="GlyphFieldBasic" />
+      <Usage code={`import { GlyphField } from "@glimstone/react";\n\n<GlyphField label={t("filter")} glyph={<IconSearch />} value={query} onChange={(e) => setQuery(e.target.value)} />`} />
+      <H2>Rules</H2>
+      <ul>
+        <li>The box is the field: it is filled, it steps up the ramp while the field has focus, and a click on the glyph reaches the field (rule 14).</li>
+        <li>
+          <code>after</code>, a slot in Vue, holds controls inside the box, such as a clear button. They stay out of the
+          field's name.
+        </li>
+        <li>It takes the widths of a text field, and a FieldRow names it.</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="GlyphField" />
+      <H2>API</H2>
+      <PropsTable of="GlyphField" />
+    </>
+  );
+}
+
+export function GlyphTilePage() {
+  return (
+    <>
+      <p className="lead">A small holder for a glyph at the start of a row or beside a name.</p>
+      <Head file="react/GlyphTile.tsx" />
+      <Demo name="GlyphTileBasic" />
+      <Usage code={`import { GlyphTile } from "@glimstone/react";\n\n<GlyphTile glyph={<IconFolder />} />`} />
+      <H2>Rules</H2>
+      <ul>
+        <li>The glyph takes the accent, and <code>quiet</code> takes it off for a file among folders.</li>
+        <li><code>ground</code> sets it on the third surface, for a place where a bare glyph gets lost.</li>
+        <li>It fills with the accent while <code>active</code>, and while a row, button or link around it is reached ("Lists").</li>
+        <li>It is a picture, so the words beside it name the row.</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="GlyphTile" />
+      <H2>API</H2>
+      <PropsTable of="GlyphTile" />
+    </>
+  );
+}
+
+export function TablePage() {
+  return (
+    <>
+      <p className="lead">A short list of facts in columns, inside a card or a window.</p>
+      <Head file="react/Table.tsx" />
+      <Demo name="TableBasic" />
+      <Usage
+        code={`import { Table } from "@glimstone/react";
+
+<Table label={t("largest")} columns={[{ key: "name", label: t("name") }, { key: "size", label: t("size"), end: true }]} rows={files} />`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>It holds a few facts to read. A list a person works through is a list of <a href="#/components/list-row">rows</a> ("Lists").</li>
+        <li>Rows are parted by hairlines at low opacity, and there is no box around them (rule 5).</li>
+        <li><code>end</code> sets a column of figures at the end with digits that line up (rule 7).</li>
+        <li><code>tone</code> is <code>muted</code> for a quiet column and <code>accent</code> for what changes.</li>
+        <li><code>more</code> is one quiet line under the last row, such as how many more there are.</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="Table" />
+      <H2>API</H2>
+      <PropsTable of="Table" />
     </>
   );
 }

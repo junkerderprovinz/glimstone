@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { computed, type Component } from "vue";
+import { computed, type Component, type StyleValue } from "vue";
 import { sidebarRowView } from "@glimstone/core";
 import { useLabelMode } from "./engines";
-import { useTipBubble } from "./tipBubble";
-import TipBubble from "./TipBubble.vue";
+import SidebarRowLink from "./SidebarRowLink.vue";
 
 // One destination of the navigation rail; what it shows comes from
-// sidebarRowView() in the core. Listeners and attributes go to the <a>, so a
-// router can take the click.
+// sidebarRowView() in the core. Listeners and attributes go to the link, so a
+// router can take the click. The slots `before` and `after` hold what stands in
+// the row beside it, such as a tree's toggle, a meter or a pin. They are not
+// inside the link, whose press still covers the rest of the row.
 defineOptions({ inheritAttrs: false });
 
 const props = withDefaults(
@@ -16,7 +17,8 @@ const props = withDefaults(
     label: string;
     /** Without one the row shows its name in every mode. */
     glyph?: Component;
-    href: string;
+    /** Without one the row is a button. */
+    href?: string;
     /** This destination is showing; the row is filled and marked as the current page. */
     active?: boolean;
     /** The row's rank among the rows the rail shows. */
@@ -38,33 +40,18 @@ const view = computed(() =>
     count: props.count?.value,
   }),
 );
-const bubble = useTipBubble(() => view.value.tip);
-
-function attach(node: unknown) {
-  bubble.trigger.value = node as HTMLElement | null;
-}
+const link = computed(() => ({ view: view.value, label: props.label, glyph: props.glyph, href: props.href, active: props.active, count: props.count }));
 </script>
 
 <template>
-  <a
-    v-bind="$attrs"
-    :ref="attach"
-    :href="href"
-    :aria-current="active ? 'page' : undefined"
-    :aria-describedby="bubble.describedBy.value"
-    :class="view.className"
-    :style="view.style"
-    @mouseenter="bubble.show"
-    @mouseleave="bubble.hide"
-    @focus="bubble.showOnFocus"
-    @blur="bubble.hide"
+  <div
+    v-if="$slots.before || $slots.after"
+    :class="[view.className, 'glim-nav-row--slots', $attrs.class]"
+    :style="[view.style, $attrs.style as StyleValue]"
   >
-    <component :is="glyph" v-if="view.showGlyph && glyph" />
-    <span :class="view.labelClass">{{ label }}</span>
-    <template v-if="view.countClass && count">
-      <span :class="view.countClass" aria-hidden="true">{{ count.value }}</span>
-      <span class="glim-sr-only">{{ count.label }}</span>
-    </template>
-  </a>
-  <TipBubble :state="bubble" />
+    <span v-if="$slots.before" class="glim-nav-row-slot"><slot name="before" /></span>
+    <SidebarRowLink v-bind="{ ...$attrs, ...link, class: undefined, style: undefined }" class-name="glim-nav-row-main" />
+    <span v-if="$slots.after" class="glim-nav-row-slot"><slot name="after" /></span>
+  </div>
+  <SidebarRowLink v-else v-bind="{ ...$attrs, ...link, class: undefined }" :class-name="view.className" :class="$attrs.class" :style="view.style" />
 </template>

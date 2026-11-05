@@ -1,10 +1,11 @@
 import type { ButtonHTMLAttributes, FocusEvent, MouseEvent, ReactNode, Ref } from "react";
-import { buttonView, takePageHue, type ButtonTone, type ButtonVariant, type WidthStage } from "@glimstone/core";
+import { useSyncExternalStore } from "react";
+import { buttonView, mediaMatches, narrowerThan, subscribeMedia, takePageHue, type ButtonSize, type ButtonTone, type ButtonVariant, type WidthStage } from "@glimstone/core";
 import { useLabelMode } from "./useLabelMode.ts";
 import { useTipBubble } from "./useTipBubble.tsx";
 import { glyphFor, IconClose } from "./glyphs.tsx";
 
-export type { ButtonTone, ButtonVariant } from "@glimstone/core";
+export type { ButtonSize, ButtonTone, ButtonVariant } from "@glimstone/core";
 
 // The one clickable control; what it shows and how wide it is come from
 // buttonView() in the core. The other props of a <button> go to the element.
@@ -60,6 +61,12 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
    *  `groupStage([labelA, labelB])` to both. Use it only for such a pair.
    *  Ignored in glyph and reactive mode, which take no stage. */
   stage?: WidthStage;
+  /** Its glyph alone in a square in every label mode, where the words have no
+   *  room. The label stays the name and the bubble. */
+  compact?: boolean;
+  /** Turns compact while the window is narrower than this many pixels. */
+  compactBelow?: number;
+  size?: ButtonSize;
   /** Keeps the label visible in every mode, for a button whose label is
    *  content rather than a verb, such as a directory row in a folder browser.
    *  The glyph still shows beside it. */
@@ -83,6 +90,9 @@ export function Button({
   autoFocus = false,
   stage: stageOverride,
   keepLabel = false,
+  compact = false,
+  compactBelow,
+  size,
   href,
   before,
   after,
@@ -90,6 +100,12 @@ export function Button({
   ...rest
 }: ButtonProps) {
   const mode = useLabelMode("buttons");
+  const query = compactBelow === undefined ? null : narrowerThan(compactBelow);
+  const narrow = useSyncExternalStore(
+    (fn) => (query ? subscribeMedia(query, fn) : () => {}),
+    () => (query ? mediaMatches(query) : false),
+    () => false,
+  );
   // A chip always closes, so it has a glyph even when no call site passes one.
   const resolved =
     glyph ?? (labelKey ? glyphFor(labelKey) : undefined) ?? (variant === "chip" ? <IconClose /> : undefined);
@@ -101,6 +117,8 @@ export function Button({
     variant,
     disabled,
     keepLabel,
+    compact: compact || narrow,
+    size,
     title,
     hueIndex,
     stage: stageOverride,

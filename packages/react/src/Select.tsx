@@ -70,6 +70,8 @@ export interface SelectProps<T extends string = string> {
   wrap?: boolean;
   /** The trigger's id, for a `<label htmlFor>` outside the select. */
   id?: string;
+  /** Attributes for the trigger, such as a data hook that says the value. */
+  triggerAttrs?: Record<string, string>;
   /** The trigger's own node, for a caller that hands it the focus. */
   ref?: Ref<HTMLButtonElement>;
   disabled?: boolean;
@@ -130,6 +132,7 @@ function ListSelect<T extends string>({
   shake,
   className,
   id,
+  triggerAttrs,
   ref,
 }: Inner<T>) {
   const uid = useId();
@@ -171,6 +174,7 @@ function ListSelect<T extends string>({
       <div {...api.getControlProps()}>
         {trigger.tip.wrap(
           <button
+            {...triggerAttrs}
             {...tp}
             ref={trigger.attach}
             {...trigger.handlers(tp)}
@@ -236,6 +240,7 @@ function MenuSelect<T extends string>({
   shake,
   className,
   id,
+  triggerAttrs,
   ref,
 }: Inner<T>) {
   const uid = useId();
@@ -290,6 +295,7 @@ function MenuSelect<T extends string>({
       <div>
         {trigger.tip.wrap(
           <button
+            {...triggerAttrs}
             {...tp}
             ref={trigger.attach}
             {...trigger.handlers(tp)}

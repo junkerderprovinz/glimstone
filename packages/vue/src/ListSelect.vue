@@ -30,6 +30,7 @@ const props = defineProps<{
   rows: SelectRows;
   triggerClass: string;
   id?: string;
+  triggerAttrs?: Record<string, string>;
   disabled?: boolean;
   busy?: boolean;
   tip?: string;
@@ -98,7 +99,7 @@ defineExpose({ trigger });
     <div v-bind="api.getControlProps()">
       <TipWrap :on="!!disabled && !!tip" :show="bubble.show" :hide="bubble.hide">
         <button
-          v-bind="api.getTriggerProps()"
+          v-bind="{ ...triggerAttrs, ...api.getTriggerProps() }"
           :ref="attach"
           :aria-busy="busy || undefined"
           :aria-describedby="bubble.describedBy.value"

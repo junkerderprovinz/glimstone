@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed, provide, shallowRef } from "vue";
+import { computed, inject, provide, shallowRef } from "vue";
 import { pressRowControl, type PillTone } from "@glimstone/core";
-import { FIELD_ROW } from "./fieldName";
+import { FIELD_ROW, FIELD_ROW_GROUP } from "./fieldName";
 import InfoBubble from "./InfoBubble.vue";
 import Pill from "./Pill.vue";
 
@@ -21,6 +21,7 @@ const props = defineProps<{
 
 provide(FIELD_ROW, computed(() => props.label));
 
+const inGroup = inject(FIELD_ROW_GROUP, false);
 const row = shallowRef<HTMLElement | null>(null);
 </script>
 
@@ -30,7 +31,12 @@ const row = shallowRef<HTMLElement | null>(null);
       <span class="glim-field-row-label" @click="pressRowControl(row!)"><slot name="label">{{ label }}</slot></span>
       <InfoBubble v-if="hint" :tip="hint" />
     </span>
-    <slot>
+    <span v-if="inGroup" class="glim-field-row-controls">
+      <slot>
+        <Pill v-if="value !== undefined" class="glim-num" :tone="tone">{{ value }}</Pill>
+      </slot>
+    </span>
+    <slot v-else>
       <Pill v-if="value !== undefined" class="glim-num" :tone="tone">{{ value }}</Pill>
     </slot>
   </div>

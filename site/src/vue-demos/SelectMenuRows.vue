@@ -37,7 +37,7 @@ const APPS: SelectGroup[] = [
 
 <template>
   <div style="display: grid; gap: 16px; width: 260px">
-    <Select v-model="sort" label="Sort by" rows="menu" :options="SORTS" />
-    <Select v-model="app" label="Open with" rows="menu" :groups="APPS" />
+    <Select v-model="sort" label="Sort by" rows="menu" :options="SORTS" :trigger-attrs="{ 'data-val': sort ?? '' }" />
+    <Select v-model="app" label="Open with" rows="menu" :groups="APPS" :trigger-attrs="{ 'data-val': app ?? '' }" />
   </div>
 </template>

@@ -394,7 +394,7 @@ body {
    row is a bigger target, and in glyph mode the symbol is the whole row.
    `flex: none` because a flex line squeezes the glyph beside a long label
    first. */
-.glim-nav-row > svg {
+:is(.glim-nav-row, .glim-nav-row-main) > svg {
   width: 1.25rem;
   height: 1.25rem;
   flex: none;
@@ -1940,6 +1940,11 @@ body {
 .glim-btn-sm { min-width: var(--btn-w-sm); }
 .glim-btn-md { min-width: var(--btn-w-md); }
 .glim-btn-lg { min-width: var(--btn-w-lg); }
+/* A foot holds several answers in one row, so they hug their words down to the
+   smallest floor. An explicit stage is a width of its own and stays. */
+.glim-modal-foot > :is(.glim-btn-sm, .glim-btn-md, .glim-btn-lg),
+.glim-modal-foot > .glim-tip-wrap > :is(.glim-btn-sm, .glim-btn-md, .glim-btn-lg) { min-width: var(--btn-w-xs); }
+.glim-path > .glim-btn { min-width: 0; }
 
 /* Rule 40. A surface-filled button's hovered ground takes 22% of the tint and
    its glyph all of it; its words keep the text colour, which the accent on a
@@ -2838,6 +2843,7 @@ body {
 .glim-slider-thumb[data-dragging] { cursor: grabbing; }
 .glim-slider-thumb[data-disabled] { opacity: 0.5; cursor: default; }
 .glim-slider-value {
+  margin-inline-start: auto;
   color: var(--carbon-text);
   font-size: var(--text-body);
   font-variant-numeric: tabular-nums;
@@ -2856,7 +2862,7 @@ body {
   :where([class*="glim-"]) :where(*, ::before, ::after) {
     box-sizing: border-box;
   }
-  :where(.glim-btn, .glim-badge, .glim-readme-btn, .glim-toggle-track, .glim-toast-dismiss, .glim-window-button, .glim-give-network, .glim-give-coin, .glim-give-amount, .glim-sel-seg, .glim-num-field, .glim-menu-item, .glim-menu-head-edit, .glim-menubar-item, .glim-checkbox, .glim-input, .glim-secret-eye, .glim-icon-btn) {
+  :where(.glim-btn, .glim-badge, .glim-readme-btn, .glim-toggle-track, .glim-toast-dismiss, .glim-window-button, .glim-give-network, .glim-give-coin, .glim-give-amount, .glim-sel-seg, .glim-num-field, .glim-menu-item, .glim-menu-head-edit, .glim-menubar-item, .glim-checkbox, .glim-input, .glim-secret-eye, .glim-icon-btn, .glim-glyph-field-input, .glim-nav-row-main, button.glim-nav-row) {
     margin: 0;
     padding: 0;
     border: 0 solid;
@@ -3380,7 +3386,7 @@ body {
     display: flex;
     align-items: flex-start;
     gap: 0.625rem;
-    width: 20rem;
+    width: 24rem;
     max-width: calc(100vw - 2rem);
     padding: 0.75rem 0.875rem;
     border-radius: var(--radius-card);
@@ -3397,13 +3403,31 @@ body {
   .glim-toast-glyph--success { color: var(--status-ok-solid); }
   .glim-toast-glyph--warn { color: var(--status-warn-solid); }
   .glim-toast-glyph--fail { color: var(--status-fail-solid); }
-  .glim-toast-message {
+  .glim-toast-body {
+    display: flex;
     flex: 1 1 0%;
+    flex-direction: column;
+    gap: 0.5rem;
     min-width: 0;
+  }
+  .glim-toast-message {
     margin: 0;
+    text-wrap: pretty;
     font-size: 0.875rem;
     line-height: 1.375;
     overflow-wrap: break-word;
+  }
+  /* A phone keeps the window in view: the newest two across its width. */
+  @media (max-width: 600px) {
+    .glim-toast-stack {
+      inset-inline-start: 0;
+      padding: 0.5rem;
+    }
+    .glim-toast-stack > :nth-last-child(n + 3) { display: none; }
+    .glim-toast-card {
+      width: 100%;
+      max-width: none;
+    }
   }
   .glim-toast-dismiss {
     flex-shrink: 0;
@@ -3708,7 +3732,8 @@ body {
      its glyph reads the fill's ink. */
   .glim-sel-seg.glim-hue-icon:not(.glim-active) > svg,
   .glim-sel-tile.glim-hue-icon:not(.glim-active) > svg,
-  .glim-nav-row:not(.glim-active) > svg {
+  .glim-nav-row:not(.glim-active) > svg,
+  .glim-nav-row:not(.glim-active) > .glim-nav-row-main > svg {
     color: var(--accent-glyph);
   }
 
@@ -3838,6 +3863,41 @@ body {
     .glim-nav-row:not(.glim-active):hover:dir(rtl) { translate: -2px 0; }
   }
   .glim-nav-row--centred { justify-content: center; }
+  button.glim-nav-row {
+    width: 100%;
+    text-align: start;
+    cursor: pointer;
+  }
+  /* A row with something beside its link. The link's press covers the row, and
+     what stands in a slot lies above that press. The narrow rail has no room for
+     a slot. */
+  .glim-nav-row--slots { gap: 0.5rem; }
+  .glim-nav-row-main {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
+    text-align: start;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .glim-nav-row-main::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+  .glim-nav-row--centred > .glim-nav-row-main { justify-content: center; }
+  .glim-nav-row--centred > .glim-nav-row-slot { display: none; }
+  .glim-nav-row-slot {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: 0.25rem;
+  }
   .glim-nav-label {
     min-width: 0;
     overflow: hidden;
@@ -4295,6 +4355,126 @@ body {
   }
   .glim-field-row > :not(.glim-field-row-name) { max-width: 100%; }
 
+  .glim-field-row > .glim-slider {
+    flex: 1 1 13rem;
+    min-width: 0;
+  }
+  .glim-field-row > .glim-combobox {
+    flex: 0 1 16rem;
+    min-width: 0;
+  }
+
+  /* Rows that share a column for their names (FieldRowGroup): a grid as wide as
+     the longest name, handed down to each row. Their controls sit in one cell,
+     and on a phone the rows go back to wrapping on their own. */
+  .glim-field-row-group {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: 0.5rem 0.75rem;
+  }
+  .glim-field-row-group > .glim-field-row {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+  }
+  .glim-field-row-controls {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.35rem 0.75rem;
+    min-width: 0;
+  }
+  @media (max-width: 600px) {
+    .glim-field-row-group {
+      display: flex;
+      flex-direction: column;
+    }
+    .glim-field-row-group > .glim-field-row { display: flex; }
+    .glim-field-row-controls { flex: 1 1 13rem; }
+  }
+
+  /* A field with a glyph inside (GlyphField). The box is the field, so it takes
+     the input's focus step, and what stands after the input sits in its room. */
+  .glim-glyph-field {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding-inline: 0.65rem 0.15rem;
+    cursor: text;
+  }
+  .glim-glyph-field:focus-within { background-color: var(--carbon-surface3); }
+  :is(.glim-well, .glim-subcard) .glim-glyph-field:focus-within { background-color: var(--carbon-hover-raised); }
+  .glim-glyph-field-glyph {
+    display: inline-grid;
+    flex: none;
+    width: 0.95rem;
+    height: 0.95rem;
+    color: var(--carbon-text-sub);
+  }
+  .glim-glyph-field-glyph > svg {
+    width: 100%;
+    height: 100%;
+  }
+  .glim-glyph-field-input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    text-overflow: ellipsis;
+  }
+  .glim-glyph-field-input::placeholder { color: var(--carbon-text-muted); }
+  .glim-glyph-field > .glim-icon-btn {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+
+  /* A small holder for a glyph (GlyphTile). It fills with the accent while the
+     row, button or link around it is reached ("Lists"). */
+  .glim-tile {
+    display: inline-grid;
+    flex: none;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: var(--radius-control);
+    color: var(--accent-glyph);
+  }
+  .glim-tile > svg {
+    width: 1rem;
+    height: 1rem;
+  }
+  .glim-tile--quiet { color: var(--carbon-text-sub); }
+  .glim-tile--ground { background-color: var(--carbon-surface3); }
+  .glim-tile--active,
+  :is(button, a, .glim-list-row, .glim-nav-row):is(:hover, :focus-visible, :focus-within) > .glim-tile {
+    background-color: var(--accent);
+    color: var(--accent-contrast);
+  }
+
+  /* A short list of facts in columns (Table). Hairlines at low opacity part the
+     rows, and there is no box around them (rule 5). */
+  .glim-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-subline);
+  }
+  .glim-table :is(th, td) {
+    padding: 0.4rem 0.5rem;
+    text-align: start;
+    white-space: nowrap;
+  }
+  .glim-table th {
+    font-size: var(--text-meta);
+    font-weight: 500;
+    color: var(--carbon-text-muted);
+  }
+  .glim-table tr + tr td,
+  .glim-table thead + tbody tr:first-child td {
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--carbon-text) 7%, transparent);
+  }
+  .glim-table :is(th, td).glim-table-end { text-align: end; }
+  .glim-table td.glim-table-muted { color: var(--carbon-text-muted); }
+  .glim-table td.glim-table-accent { color: var(--accent-ink); }
+
   /* A path and its picker's button (PathField). */
   .glim-path {
     display: flex;
@@ -4671,17 +4851,24 @@ body {
 /* Also outside the layer: a field says it has the focus with its fill and its
    caret, not with a ring (rule 14). */
 .glim-input:focus-visible,
-.glim-num-field:focus-visible { outline: none; }
+.glim-num-field:focus-visible,
+.glim-glyph-field-input:focus-visible { outline: none; }
+/* The ring of a row with slots goes around the row, not around its link alone. */
+.glim-nav-row-main:focus-visible { outline: none; }
+.glim-nav-row--slots:has(> .glim-nav-row-main:focus-visible) {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
 /* An app's own rule for links outranks the layer, so a link with a button's look
    takes its colour back from there. */
 a:is(.glim-btn, .glim-icon-btn) {
   color: revert-layer;
   text-decoration: none;
 }
-/* The stage's floor is for a row of buttons, and a toast has no room for it. */
+/* Under the message, at its end. The stage's floor is for a row of buttons. */
 .glim-toast-action {
+  align-self: flex-end;
   min-width: 0;
-  margin-block: -0.25rem;
 }
 
 @media (prefers-reduced-motion: no-preference) {
