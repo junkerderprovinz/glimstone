@@ -214,6 +214,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "nav-slots", when: "It has something before or after its words", then: "Those stand in the row in that order, and the whole row still answers a click." },
       { id: "nav-slots-press", when: "A control in those slots is pressed", then: "It acts and the row does not." },
       { id: "nav-slots-centred", when: "A row with slots stands in a label mode that hides the words", then: "Its slots stay in the row and answer, and the row is not centred." },
+      { id: "nav-slots-gap", when: "A row with a slot before its link stands in any label mode", then: "A small gap parts the slot from the glyph." },
       { id: "nav-depth", when: "A row has a depth", then: "It steps in by its depth in every label mode, with a smaller glyph and gap, so a deep name keeps its room." },
       { id: "nav-enter", keys: ["Enter"], when: "A row has focus", then: "It follows the link." },
       { id: "nav-name", when: "The label mode hides the words", then: "The name stays the link's name." },

@@ -406,7 +406,8 @@ body {
 }
 
 /* A closed reactive row must not reserve a gap beside a zero-width label. */
-.glim-nav-row.glim-reactive {
+.glim-nav-row.glim-reactive:not(.glim-nav-row--slots),
+.glim-nav-row--slots.glim-reactive > .glim-nav-row-main {
   gap: 0;
 }
 

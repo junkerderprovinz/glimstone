@@ -870,6 +870,16 @@ test.describe("SidebarRow with slots", () => {
     await expect(demo(page).locator("output")).toHaveText("Opened Media");
   });
 
+  test("[nav-slots-gap] the slot keeps a gap to the glyph in reactive mode", async ({ page }) => {
+    await open(page, "/components/sidebar-row", { labels: "reactive" });
+    const gap = await demo(page).locator(".glim-nav-row", { hasText: "Media" }).evaluate((r) => {
+      const slot = r.querySelector("[data-slot=before]")!.getBoundingClientRect();
+      const glyph = r.querySelector(".glim-nav-row-main > svg")!.getBoundingClientRect();
+      return Math.round(glyph.left - slot.right);
+    });
+    expect(gap).toBeGreaterThan(0);
+  });
+
   test("[nav-slots-centred] the slots stay where the words hide", async ({ page }) => {
     await open(page, "/components/sidebar-row", { labels: "glyph" });
     const row = demo(page).locator(".glim-nav-row", { hasText: "Media" });
