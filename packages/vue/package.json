@@ -1,6 +1,6 @@
 {
   "name": "@glimstone/vue",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "description": "GlimStone's components for Vue",
   "license": "AGPL-3.0-only",
   "repository": {
@@ -36,7 +36,7 @@
     "build": "vite build && vue-tsc -p tsconfig.build.json"
   },
   "dependencies": {
-    "@glimstone/core": "4.1.0"
+    "@glimstone/core": "4.1.1"
   },
   "peerDependencies": {
     "@zag-js/combobox": "^1.46.0",
