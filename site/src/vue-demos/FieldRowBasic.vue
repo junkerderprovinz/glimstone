@@ -43,7 +43,7 @@ const address = ref("smb://bottich/media");
       <NumberField v-model="copies" min="1" max="9" />
     </FieldRow>
     <FieldRow label="Link">
-      <CopyField value="smb://bottich/media" class="glim-field--wide" />
+      <CopyField value="smb://bottich/media" width="wide" />
     </FieldRow>
     <FieldRow label="Token">
       <template #label>Token <small>optional</small></template>
@@ -54,6 +54,13 @@ const address = ref("smb://bottich/media");
     </FieldRow>
     <FieldRow label="Address">
       <TextField v-model="address" width="wide" mono />
+    </FieldRow>
+    <FieldRow label="Share link">
+      <TextField model-value="https://bottich/s/3f9a" width="grow" mono />
+    </FieldRow>
+    <FieldRow label="Hours">
+      <TextField model-value="08:00" label="From" width="short" />
+      <TextField model-value="17:00" label="To" width="short" />
     </FieldRow>
     <FieldRow label="Last run" value="2 hours ago" />
     <FieldRow label="Failed" value="3" tone="fail" />

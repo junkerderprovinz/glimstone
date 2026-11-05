@@ -50,6 +50,12 @@ export function SelectPage() {
   ]}
 />`}
       />
+      <H2>In a well</H2>
+      <p>
+        In a <code>glim-well</code> or a <a href="#/components/sub-card">SubCard</a> the trigger takes the ground of the
+        fields beside it.
+      </p>
+      <Demo name="SelectWell" />
       <H2>Menu rows</H2>
       <p>
         <code>rows="menu"</code> draws the list with the rows of a <a href="#/components/context-menu">ContextMenu</a>,

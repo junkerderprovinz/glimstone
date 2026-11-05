@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { Button, Card, NumberField, SubCard } from "@glimstone/vue";
+import { Button, Card, NumberField, SubCard, TextField } from "@glimstone/vue";
 
 const days = ref<number | null>(14);
 </script>
@@ -13,6 +13,9 @@ const days = ref<number | null>(14);
           <span>Days to keep</span>
           <NumberField v-model="days" :min="1" :max="365" />
         </label>
+      </SubCard>
+      <SubCard>
+        <TextField label="A note" placeholder="A group needs no title" />
       </SubCard>
       <SubCard title="Commands">
         <div class="row" style="justify-content: flex-end">

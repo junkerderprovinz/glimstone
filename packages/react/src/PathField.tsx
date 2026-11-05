@@ -1,4 +1,5 @@
 import { useRef, type InputHTMLAttributes, type ReactNode, type Ref } from "react";
+import { fieldWidthClass, type FieldWidth } from "@glimstone/core";
 import { Button } from "./Button.tsx";
 import { useFieldName } from "./fieldName.ts";
 import { IconFolderOpen } from "./glyphs.tsx";
@@ -8,7 +9,7 @@ import { IconFolderOpen } from "./glyphs.tsx";
 // whatever it opens and answers with a path. The other props of an <input> go
 // to the field.
 
-export interface PathFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "value" | "onChange" | "type"> {
+export interface PathFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "value" | "onChange" | "type" | "width"> {
   value: string;
   /** Called with the path as it is typed and as the picker answers. */
   onChange: (path: string) => void;
@@ -18,6 +19,7 @@ export interface PathFieldProps extends Omit<InputHTMLAttributes<HTMLInputElemen
   onPicked?: (path: string) => void;
   /** The accessible name. Inside a FieldRow the row gives it. */
   label?: string;
+  width?: FieldWidth;
   /** The button's words. */
   text?: { pick: string };
   /** The button's glyph, an open folder unless set, such as a file for a picker of files. */
@@ -35,6 +37,7 @@ export function PathField({
   pick,
   onPicked,
   label,
+  width,
   text = { pick: "Choose" },
   glyph = <IconFolderOpen />,
   buttonAttrs,
@@ -56,7 +59,7 @@ export function PathField({
   }
 
   return (
-    <span className={className ? `glim-path ${className}` : "glim-path"} style={style}>
+    <span className={["glim-path", fieldWidthClass(width), className].filter(Boolean).join(" ")} style={style}>
       <input
         spellCheck={false}
         autoComplete="off"

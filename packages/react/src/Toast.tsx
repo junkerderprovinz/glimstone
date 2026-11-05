@@ -1,4 +1,5 @@
-import { TOAST_MARKS, MARKS, type ToastSeverity } from "@glimstone/core";
+import { TOAST_MARKS, MARKS, type ToastAction, type ToastSeverity } from "@glimstone/core";
+import { Button } from "./Button.tsx";
 import { MarkSvg } from "./glyphs.tsx";
 
 // The toast system's presentational half (design-language.md, "Toasts"). These
@@ -13,6 +14,8 @@ export interface ToastCardProps {
   id: string;
   message: string;
   severity: ToastSeverity;
+  /** A button such as Undo. A press runs it and dismisses the toast. */
+  action?: ToastAction;
   /** Accessible name for the dismiss button, the same for every toast. */
   dismissLabel: string;
   onDismiss: (id: string) => void;
@@ -33,6 +36,7 @@ export function ToastCard({
   id,
   message,
   severity,
+  action,
   dismissLabel,
   onDismiss,
   onMouseEnter,
@@ -59,6 +63,18 @@ export function ToastCard({
     >
       <MarkSvg mark={TOAST_MARKS[severity]} className={`glim-toast-glyph glim-toast-glyph--${severity}`} />
       <p className="glim-toast-message">{message}</p>
+      {action && (
+        <Button
+          className="glim-toast-action"
+          tone="subtle"
+          label={action.label}
+          labelKey={null}
+          onClick={() => {
+            action.onClick();
+            onDismiss(id);
+          }}
+        />
+      )}
       <button
         type="button"
         onClick={() => onDismiss(id)}
@@ -75,6 +91,7 @@ export interface ToastViewportEntry {
   id: string;
   message: string;
   severity: ToastSeverity;
+  action?: ToastAction;
 }
 
 export interface ToastViewportProps {
@@ -99,6 +116,7 @@ export function ToastViewport({ toasts, dismissLabel, onDismiss, onMouseEnter, o
           id={t.id}
           message={t.message}
           severity={t.severity}
+          action={t.action}
           dismissLabel={dismissLabel}
           onDismiss={onDismiss}
           onMouseEnter={onMouseEnter}

@@ -7,7 +7,7 @@ import InfoBubble from "./InfoBubble.vue";
 // step up one surface, so they do not vanish into its fill.
 defineProps<{
   /** The group's name, set small and uppercase above it. */
-  title: string;
+  title?: string;
   /** One line on what the group does, drawn as an "(i)" beside the title. */
   hint?: string;
 }>();
@@ -15,10 +15,10 @@ const titleId = useId();
 </script>
 
 <template>
-  <section class="glim-subcard" :aria-labelledby="titleId">
+  <section class="glim-subcard" :aria-labelledby="title ? titleId : undefined">
     <!-- The id is on the words alone, or the bubble's text would join the
          group's name. -->
-    <h3 class="glim-subcard-title">
+    <h3 v-if="title" class="glim-subcard-title">
       <span :id="titleId">{{ title }}</span>
       <InfoBubble v-if="hint" :tip="hint" />
     </h3>

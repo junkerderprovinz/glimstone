@@ -52,6 +52,14 @@ export default function PathFieldBasic() {
           buttonAttrs={{ "data-pick-for": "target" }}
         />
       </FieldRow>
+      <div style={{ width: 340 }}>
+        <FieldRow label="Half">
+          <PathField value={path} onChange={setPath} pick={() => null} />
+        </FieldRow>
+      </div>
+      <FieldRow label="Short">
+        <PathField value={path} onChange={setPath} pick={() => null} width="medium" />
+      </FieldRow>
       <output>{picked}</output>
       {asked && (
         <Window

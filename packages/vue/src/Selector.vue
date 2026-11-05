@@ -1,4 +1,4 @@
-<script setup lang="ts" generic="V extends string | number = string">
+<script setup lang="ts" generic="V extends string | number = string, M extends SelectMode = 'one'">
 import { computed, onScopeDispose, ref, shallowRef, watch } from "vue";
 import {
   countSelector,
@@ -36,7 +36,9 @@ const props = withDefaults(
     items: SelectorItem<V>[];
     /** The accessible name of the strip, such as "Sort" or "Settings pages". Inside a FieldRow the row gives it. */
     label?: string;
-    select?: SelectMode;
+    /** The chosen id, or the list of chosen ids for select="many". */
+    modelValue: M extends "many" ? V[] : V | null;
+    select?: M;
     /** `vertical` is the column of tiles beside a settings area's pages. */
     orientation?: SelectorOrientation;
     size?: SelectorSize;
@@ -62,7 +64,6 @@ const props = withDefaults(
     panelId?: string;
   }>(),
   {
-    select: "one",
     orientation: "horizontal",
     size: "md",
     variant: "well",
@@ -76,9 +77,9 @@ const props = withDefaults(
     disabled: false,
   },
 );
-const model = defineModel<V | null | V[]>({ required: true });
-/** Every press and every arrow key that chooses, before the choice changes, also one on the segment already chosen. */
-const emit = defineEmits<{ press: [id: V] }>();
+/** `press` on every press and every arrow key that chooses, before the choice changes, also one on the segment already chosen. */
+const emit = defineEmits<{ "update:modelValue": [value: M extends "many" ? V[] : V]; press: [id: V] }>();
+const model = computed(() => props.modelValue as V | null | V[]);
 
 function useMedia(query: string) {
   const on = shallowRef(mediaMatches(query));
@@ -94,7 +95,7 @@ const wide = useMedia(WIDE_QUERY);
 const strip = computed(() =>
   selectorView({
     mode: mode.value,
-    select: props.select,
+    select: props.select === "many" ? "many" : "one",
     activation: props.activation,
     orientation: props.orientation,
     size: props.size,
@@ -172,9 +173,8 @@ const roved = computed(() => rovedIndex(disabledFlags.value, props.items.findInd
 
 function choose(id: V) {
   emit("press", id);
-  model.value = many.value
-    ? toggleSelection((model.value as V[] | null) ?? [], id, props.items.map((it) => it.id))
-    : id;
+  const next = many.value ? toggleSelection((model.value as V[] | null) ?? [], id, props.items.map((it) => it.id)) : id;
+  if (next !== model.value) emit("update:modelValue", next as M extends "many" ? V[] : V);
 }
 
 function onKeydown(e: KeyboardEvent) {

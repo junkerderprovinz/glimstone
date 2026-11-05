@@ -1,6 +1,6 @@
 ## 4.1.1
 
-- The same number as the other packages. Nothing changed for Flutter.
+- `GlimTheme` gains `toggleOff`, the off track of a switch, written from the tokens. Nothing else changed for Flutter.
 
 ## 4.1.0
 

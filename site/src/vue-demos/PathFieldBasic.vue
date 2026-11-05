@@ -62,6 +62,14 @@ const actions = () => [{ label: "Choose", labelKey: null, glyph: glyph("IconChec
         @picked="picked = `Picked ${$event}`"
       />
     </FieldRow>
+    <div style="width: 340px">
+      <FieldRow label="Half">
+        <PathField v-model="path" :pick="() => null" />
+      </FieldRow>
+    </div>
+    <FieldRow label="Short">
+      <PathField v-model="path" :pick="() => null" width="medium" />
+    </FieldRow>
     <output>{{ picked }}</output>
     <Window v-if="chosen !== null" title="Choose a folder" :text="TEXT" :actions="actions()" @close="finish(null)">
       <div class="glim-well" style="padding: 8px">

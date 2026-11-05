@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, useAttrs, type StyleValue } from "vue";
+import { computed, ref, shallowRef, useAttrs, type StyleValue } from "vue";
 import { fieldWidthClass, type FieldWidth } from "@glimstone/core";
 import { useFieldName } from "./fieldName";
 import { IconEye, IconEyeOff } from "./glyphs";
@@ -14,6 +14,8 @@ defineOptions({ inheritAttrs: false });
 const props = withDefaults(
   defineProps<{
     width?: FieldWidth;
+    /** Attributes for the eye, such as a data hook. */
+    eyeAttrs?: Record<string, string>;
     /** The eye's name and bubble while the secret is hidden, and once it shows. */
     text?: { show: string; hide: string };
     disabled?: boolean;
@@ -25,11 +27,14 @@ const shown = ref(false);
 const attrs = useAttrs();
 const name = useFieldName(() => attrs["aria-label"] as string | undefined);
 const widthClass = computed(() => fieldWidthClass(props.width));
+const input = shallowRef<HTMLInputElement | null>(null);
+defineExpose({ input });
 </script>
 
 <template>
   <span :class="['glim-secret', widthClass, $attrs.class]" :style="$attrs.style as StyleValue">
     <input
+      ref="input"
       v-model="value"
       autocomplete="current-password"
       spellcheck="false"
@@ -39,7 +44,7 @@ const widthClass = computed(() => fieldWidthClass(props.width));
       :type="shown ? 'text' : 'password'"
       class="glim-input"
     />
-    <IconTipButton :tip="shown ? text.hide : text.show" class="glim-secret-eye" :disabled="disabled" @click="shown = !shown">
+    <IconTipButton v-bind="eyeAttrs" :tip="shown ? text.hide : text.show" class="glim-secret-eye" :disabled="disabled" @click="shown = !shown">
       <component :is="shown ? IconEyeOff : IconEye" />
     </IconTipButton>
   </span>

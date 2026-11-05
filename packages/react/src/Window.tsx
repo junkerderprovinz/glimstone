@@ -39,6 +39,8 @@ export interface WindowAction {
 export interface WindowProps extends Omit<HTMLAttributes<HTMLDivElement>, "title" | "children"> {
   /** The notch's words, also the window's accessible name. */
   title: string;
+  /** Takes the words' place in the notch with markup, such as a count. `title` alone stays the name. */
+  drawn?: ReactNode;
   children: ReactNode;
   /** The foot's buttons, in reading order. Cancel or Close is added before
    *  them unless one of them is a way out itself. */
@@ -56,7 +58,7 @@ export interface WindowProps extends Omit<HTMLAttributes<HTMLDivElement>, "title
   ref?: Ref<HTMLDivElement>;
 }
 
-export function Window({ title, children, actions = [], start, size = "normal", text, onClose, className, ref, ...rest }: WindowProps) {
+export function Window({ title, drawn, children, actions = [], start, size = "normal", text, onClose, className, ref, ...rest }: WindowProps) {
   const card = useRef<HTMLDivElement>(null);
   useImperativeHandle(ref, () => card.current!);
   const titleId = useId();
@@ -97,12 +99,13 @@ export function Window({ title, children, actions = [], start, size = "normal", 
         ref={card}
         role="dialog"
         aria-modal="true"
-        aria-labelledby={titleId}
+        aria-labelledby={drawn ? undefined : titleId}
+        aria-label={drawn ? title : undefined}
         className={["glim-modal-card", "glim-window", size !== "normal" && `glim-window--${size}`, className].filter(Boolean).join(" ")}
       >
         <h2 id={titleId} className="glim-window-title">
           <Badge tone="heading" size="heading" wrap insetStart={5}>
-            {title}
+            {drawn ?? title}
           </Badge>
         </h2>
         <div className="glim-modal-body glim-window-body">{children}</div>

@@ -107,6 +107,9 @@
   --carbon-surface3:   #525252;
   --carbon-hover:      #353535;
   --carbon-hover-raised: #6f6f6f;
+  /* A switch that is off. On the light ramp surface3 stands too close to a card
+     and to the knob to see, so the track goes down to 3:1 against both. */
+  --toggle-off: #525252;
   --carbon-border:     #393939;
 
   /* The About card's brand marks at rest, adjusted from the published brand
@@ -213,6 +216,7 @@
     --carbon-surface3:   #d1d1d1;
     --carbon-hover:      #e0e0e0;
     --carbon-hover-raised: #c6c6c6;
+    --toggle-off: #8d8d8d;
     --carbon-border:     #d1d1d1;
 
     /* Warm brands deepened, dark ones left dark (see the dark block). */
@@ -278,6 +282,7 @@
   --carbon-surface3:   #d1d1d1;
   --carbon-hover:      #e0e0e0;
   --carbon-hover-raised: #c6c6c6;
+  --toggle-off: #8d8d8d;
   --carbon-border:     #d1d1d1;
 
   /* The same brand values as the media block, for an explicit light choice. */
@@ -1956,7 +1961,7 @@ body {
 .glim-btn-bare:not(:disabled):is(:hover, :focus-visible) {
   color: var(--btn-tint);
 }
-.glim-btn-bare:is(:hover, :focus-visible) {
+.glim-btn-bare:not([aria-pressed="true"]):is(:hover, :focus-visible) {
   background-color: transparent;
 }
 
@@ -2588,6 +2593,13 @@ body {
   outline: 2px solid var(--focus-ring);
   outline-offset: 1px;
 }
+/* In a well or a sub-card the trigger stands among fields, so it takes their
+   ground and hovers up the ramp (rule 21). */
+:is(.glim-well, .glim-subcard) :is(.glim-select-trigger:not(.glim-select-trigger--inset), .glim-combobox-control) {
+  border-color: transparent;
+  background: var(--carbon-surface3);
+}
+:is(.glim-well, .glim-subcard) .glim-select-trigger:not(.glim-select-trigger--inset):hover { background: var(--carbon-hover-raised); }
 .glim-select-trigger[data-disabled] { opacity: 0.5; cursor: default; }
 /* Busy: the trigger keeps its focus and takes no input until the answer is back. */
 .glim-select-trigger[data-readonly] { opacity: 0.5; cursor: progress; }
@@ -2756,6 +2768,9 @@ body {
 @media (pointer: coarse) {
   .glim-select-item { min-height: 2.75rem; }
 }
+/* The box a closed list hangs from stays on the body for the machine, out of
+   the way. */
+.glim-select-positioner:has(> [hidden]) { display: none; }
 /* A list that draws a context menu's rows (Select with rows="menu"): the menu's
    panel, and the states the machine marks with attributes instead of the focus.
    The wash comes before the highlight, which covers it, as a hover does in the
@@ -2939,11 +2954,14 @@ body {
     gap: 0.75rem;
     padding: 1rem 1.25rem;
   }
-  /* A button keeps its words: out of room it moves to the next line. */
-  .glim-modal-foot > :is(.glim-btn, .glim-tip-wrap) {
-    flex: none;
+  /* A button keeps its words: in a flex row what stands beside it gives way, and
+     in a foot it moves to the next line. In the layer, so an app's own flex
+     rule for a button still wins. */
+  .glim-btn {
+    flex-shrink: 0;
     max-width: 100%;
   }
+  .glim-modal-foot > .glim-tip-wrap { flex: none; }
 
   /* The fills a button can take (ButtonTone). `ok`, `danger` and `warn` put the
      solid status tokens under the ground's ink: in both themes the solid values
@@ -2991,7 +3009,7 @@ body {
     width: 2.25rem;
     height: 1.25rem;
     border-radius: var(--radius-pill);
-    background-color: var(--carbon-surface3);
+    background-color: var(--toggle-off);
     transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
   }
   .glim-toggle-track[aria-checked="true"] { background-color: var(--accent); }
@@ -3561,7 +3579,12 @@ body {
      so two always fit a row. */
   .glim-sel--pairs { align-items: stretch; }
   @media (max-width: 600px) {
-    .glim-sel--pairs { --seg-basis: calc(50% - 0.25rem); }
+    .glim-sel--pairs {
+      --seg-basis: calc(50% - 0.25rem);
+      width: 100%;
+    }
+    /* A pill around several rows bulges at its ends. */
+    .glim-sel--pairs.glim-sel--well { border-radius: var(--radius-card); }
   }
 
   .glim-sel-seg {
@@ -3669,6 +3692,7 @@ body {
   .glim-sel-label--wrap {
     white-space: normal;
     text-wrap: balance;
+    overflow-wrap: break-word;
   }
 
   /* Under a finger a 20px pill is too small to hit. A well is a row of
@@ -4182,6 +4206,11 @@ body {
   /* The data pill (Pill): one value of a row, quiet at rest. A state takes a
      wash of its solid colour over the second surface, so the text keeps the
      body ink and a column of pills still reads as one column. */
+  .glim-well,
+  .glim-subcard {
+    --pill-ground: var(--carbon-surface3);
+    --pill-state: var(--carbon-hover-raised);
+  }
   .glim-pill {
     display: inline-flex;
     flex: none;
@@ -4189,15 +4218,15 @@ body {
     height: 1.35rem;
     padding-inline: 0.55rem;
     border-radius: var(--radius-pill);
-    background-color: var(--carbon-surface2);
+    background-color: var(--pill-ground, var(--carbon-surface2));
     font-size: var(--text-meta);
     color: var(--carbon-text-sub);
     white-space: nowrap;
   }
-  .glim-pill--state { background-color: var(--carbon-surface3); color: var(--carbon-text); }
-  .glim-pill--ok { background-color: color-mix(in srgb, var(--carbon-surface2), var(--status-ok-solid) 30%); color: var(--carbon-text); }
-  .glim-pill--warn { background-color: color-mix(in srgb, var(--carbon-surface2), var(--status-warn-solid) 35%); color: var(--carbon-text); }
-  .glim-pill--fail { background-color: color-mix(in srgb, var(--carbon-surface2), var(--status-fail-solid) 35%); color: var(--carbon-text); }
+  .glim-pill--state { background-color: var(--pill-state, var(--carbon-surface3)); color: var(--carbon-text); }
+  .glim-pill--ok { background-color: color-mix(in srgb, var(--pill-ground, var(--carbon-surface2)), var(--status-ok-solid) 30%); color: var(--carbon-text); }
+  .glim-pill--warn { background-color: color-mix(in srgb, var(--pill-ground, var(--carbon-surface2)), var(--status-warn-solid) 35%); color: var(--carbon-text); }
+  .glim-pill--fail { background-color: color-mix(in srgb, var(--pill-ground, var(--carbon-surface2)), var(--status-fail-solid) 35%); color: var(--carbon-text); }
 
   /* A text field (PasswordField, CopyField): borderless and filled (rule 14),
      a step up the ramp on focus and inside a sub-card, like the number field.
@@ -4216,6 +4245,8 @@ body {
   .glim-input:focus,
   .glim-well .glim-input,
   .glim-subcard .glim-input { background-color: var(--carbon-surface3); }
+  .glim-well .glim-num-field { background-color: var(--carbon-surface3); }
+  .glim-well .glim-num-field:focus { background-color: var(--carbon-hover-raised); }
   .glim-well .glim-input:focus,
   .glim-subcard .glim-input:focus { background-color: var(--carbon-hover-raised); }
   .glim-input:disabled {
@@ -4238,36 +4269,36 @@ body {
     resize: vertical;
   }
 
-  /* One labelled row (FieldRow, rule 35): the name at the start and the control
-     at the end, which drops under the name where the row has no room for both
-     and keeps the row's end there. */
+  /* One labelled row (FieldRow, rule 35): the name at the start and its controls
+     together at the end. The name's margin takes the free room, so a growing
+     control gets all of it, and a control that drops under the name keeps the
+     row's end through the justify. */
   .glim-field-row {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    justify-content: flex-end;
     gap: 0.35rem 0.75rem;
     min-height: var(--btn-h);
   }
   .glim-field-row-name {
     display: flex;
-    flex: 1 1 auto;
+    flex: 0 1 auto;
     align-items: center;
     gap: 0.35rem;
     min-width: 0;
+    margin-inline-end: auto;
   }
   .glim-field-row-label small {
     font-size: var(--text-meta);
     color: var(--carbon-text-muted);
   }
-  .glim-field-row > :not(.glim-field-row-name) {
-    max-width: 100%;
-    margin-inline-start: auto;
-  }
+  .glim-field-row > :not(.glim-field-row-name) { max-width: 100%; }
 
   /* A path and its picker's button (PathField). */
   .glim-path {
     display: flex;
-    flex: 1 1 22rem;
+    flex: 1 1 13rem;
     align-items: center;
     gap: 0.4rem;
     min-width: 0;
@@ -4296,8 +4327,8 @@ body {
     cursor: pointer;
     user-select: none;
   }
-  .glim-tree-row:hover { background-color: var(--carbon-hover); }
-  .glim-well .glim-tree-row:hover { background-color: var(--carbon-surface3); }
+  .glim-tree-row:not([aria-selected="true"]):hover { background-color: var(--carbon-hover); }
+  .glim-well .glim-tree-row:not([aria-selected="true"]):hover { background-color: var(--carbon-surface3); }
   .glim-tree-row[aria-selected="true"] {
     background-color: var(--accent);
     color: var(--accent-contrast);
@@ -4453,6 +4484,10 @@ body {
   .glim-icon-btn:disabled {
     opacity: 0.45;
     cursor: default;
+  }
+  .glim-icon-btn[aria-pressed="true"] {
+    background-color: var(--accent-soft);
+    color: var(--accent-glyph);
   }
   .glim-icon-btn-gap {
     flex: none;
@@ -4635,7 +4670,19 @@ body {
 .glim-menu[data-pointer] :focus-visible { outline: none; }
 /* Also outside the layer: a field says it has the focus with its fill and its
    caret, not with a ring (rule 14). */
-.glim-input:focus-visible { outline: none; }
+.glim-input:focus-visible,
+.glim-num-field:focus-visible { outline: none; }
+/* An app's own rule for links outranks the layer, so a link with a button's look
+   takes its colour back from there. */
+a:is(.glim-btn, .glim-icon-btn) {
+  color: revert-layer;
+  text-decoration: none;
+}
+/* The stage's floor is for a row of buttons, and a toast has no room for it. */
+.glim-toast-action {
+  min-width: 0;
+  margin-block: -0.25rem;
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .glim-checkbox-box,

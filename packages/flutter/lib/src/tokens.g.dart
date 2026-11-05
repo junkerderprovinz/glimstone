@@ -15,6 +15,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     required this.carbonSurface3,
     required this.carbonHover,
     required this.carbonHoverRaised,
+    required this.toggleOff,
     required this.carbonBorder,
     required this.brandCoffee,
     required this.brandDocs,
@@ -63,6 +64,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
   final Color carbonSurface3;
   final Color carbonHover;
   final Color carbonHoverRaised;
+  final Color toggleOff;
   final Color carbonBorder;
   final Color brandCoffee;
   final Color brandDocs;
@@ -115,6 +117,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     carbonSurface3: Color(0xFF525252),
     carbonHover: Color(0xFF353535),
     carbonHoverRaised: Color(0xFF6F6F6F),
+    toggleOff: Color(0xFF525252),
     carbonBorder: Color(0xFF393939),
     brandCoffee: Color(0xFFFFDD00),
     brandDocs: Color(0xFFFFDD00),
@@ -163,6 +166,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     carbonSurface3: Color(0xFFD1D1D1),
     carbonHover: Color(0xFFE0E0E0),
     carbonHoverRaised: Color(0xFFC6C6C6),
+    toggleOff: Color(0xFF8D8D8D),
     carbonBorder: Color(0xFFD1D1D1),
     brandCoffee: Color(0xFF8A6D00),
     brandDocs: Color(0xFF8A6D00),
@@ -212,6 +216,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     Color? carbonSurface3,
     Color? carbonHover,
     Color? carbonHoverRaised,
+    Color? toggleOff,
     Color? carbonBorder,
     Color? brandCoffee,
     Color? brandDocs,
@@ -260,6 +265,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
         carbonSurface3: carbonSurface3 ?? this.carbonSurface3,
         carbonHover: carbonHover ?? this.carbonHover,
         carbonHoverRaised: carbonHoverRaised ?? this.carbonHoverRaised,
+        toggleOff: toggleOff ?? this.toggleOff,
         carbonBorder: carbonBorder ?? this.carbonBorder,
         brandCoffee: brandCoffee ?? this.brandCoffee,
         brandDocs: brandDocs ?? this.brandDocs,
@@ -312,6 +318,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
       carbonSurface3: Color.lerp(carbonSurface3, other.carbonSurface3, t)!,
       carbonHover: Color.lerp(carbonHover, other.carbonHover, t)!,
       carbonHoverRaised: Color.lerp(carbonHoverRaised, other.carbonHoverRaised, t)!,
+      toggleOff: Color.lerp(toggleOff, other.toggleOff, t)!,
       carbonBorder: Color.lerp(carbonBorder, other.carbonBorder, t)!,
       brandCoffee: Color.lerp(brandCoffee, other.brandCoffee, t)!,
       brandDocs: Color.lerp(brandDocs, other.brandDocs, t)!,

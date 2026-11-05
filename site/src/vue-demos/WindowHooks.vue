@@ -29,6 +29,7 @@ watch(
     :actions="ACTIONS"
     @close="open = false"
   >
+    <template #title>Move files <span data-count>1,204</span></template>
     <p style="margin: 0">{{ width }} px wide</p>
   </Window>
 </template>

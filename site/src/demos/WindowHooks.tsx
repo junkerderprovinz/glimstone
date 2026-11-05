@@ -18,6 +18,11 @@ export default function WindowHooks() {
         <Window
           ref={card}
           title="Move files"
+          drawn={
+            <>
+              Move files <span data-count>1,204</span>
+            </>
+          }
           text={TEXT}
           start="1,204 files from /mnt/user/media to /mnt/user/archive, about 38 GB, and both panels stay usable while they move"
           actions={[{ label: "Move all 1,204 files to the archive", labelKey: null, glyph: <Glyph name="IconFolder" />, primary: true, attrs: { "data-action": "move" } }]}

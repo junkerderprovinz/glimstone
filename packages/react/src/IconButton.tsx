@@ -11,6 +11,10 @@ export interface IconButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonEle
   /** The hover and focus explanation, and the button's accessible name. */
   tip: string;
   glyph: ReactNode;
+  /** Makes it a link in the same square. */
+  href?: string;
+  /** Set for a button that stays on or off: it says so, and the accent washes it while it is on. */
+  pressed?: boolean;
   disabled?: boolean;
   type?: "button" | "submit";
   className?: string;
@@ -18,11 +22,12 @@ export interface IconButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonEle
 
 const reach = (e: SyntheticEvent<HTMLElement>) => takePageHue(e.currentTarget);
 
-export function IconButton({ tip, glyph, className, ...rest }: IconButtonProps) {
+export function IconButton({ tip, glyph, pressed, className, ...rest }: IconButtonProps) {
   return (
     <IconTipButton
       {...rest}
       tip={tip}
+      ariaPressed={pressed}
       className={`glim-btn-bare glim-icon-btn ${className ?? ""}`.trim()}
       onPointerEnter={reach}
       onFocusCapture={reach}

@@ -26,6 +26,13 @@ export function ButtonPage() {
       <Head file="react/Button.tsx" />
       <Demo name="ButtonTones" />
       <Usage code={`import { Button } from "@glimstone/react";\n\n<Button label="Save" labelKey="save" tone="accent" onClick={save} />`} />
+      <H2>Links, and what stands around the words</H2>
+      <p>
+        <code>href</code> makes it a link with the button's look, and a disabled one is a disabled button.{" "}
+        <code>before</code> and <code>after</code>, slots in Vue, hold a count or a key cap inside it. In a flex row a
+        button keeps its words and whatever stands beside it gives way.
+      </p>
+      <Demo name="ButtonRow" />
       <H2>Tones</H2>
       <p>
         <code>accent</code> is the one action a view is for. <code>neutral</code> is the default, <code>subtle</code>{" "}
@@ -154,6 +161,12 @@ export function CardPage() {
         The title is a filled badge that straddles the card's top edge. The <code>hint</code> becomes an "(i)" inside it,
         because grey prose under a heading is read once and then costs space forever.
       </p>
+      <H2>Markup in the notch</H2>
+      <p>
+        <code>drawn</code> in React and the <code>title</code> slot in Vue hold a count or an unsaved dot beside the
+        words.
+      </p>
+      <Demo name="CardTitleSlot" />
       <H2>Rainbow positions</H2>
       <Demo name="CardRainbow" />
       <p>
@@ -321,6 +334,9 @@ setToasts((list) => addToast(list, { id, message: "Settings saved.", severity: "
         <li>Hover or focus pauses the countdown and keeps the time that was left.</li>
         <li>Quiet mode hides routine successes, never warnings or failures.</li>
         <li>The severity shows in the glyph's colour only, never as a coloured rail on the card.</li>
+        <li>
+          An entry's <code>action</code> is a filled button such as Undo. A press runs it and dismisses the toast.
+        </li>
       </ul>
       <H2>Accessibility</H2>
       <ul>
@@ -416,6 +432,12 @@ export function SelectorPage() {
         A caption such as "Show" is a plain span beside the strip, never a <code>label</code> around it: a label around
         several segments hands its clicks to the first one.
       </p>
+      <H2>Pairs on a phone</H2>
+      <p>
+        <code>pairsOnPhone</code> sets two segments to a row below 600px with labels that wrap, inside a track with a
+        card's corners, since a pill around three rows does not read as one shape. A row of its own, at any width.
+      </p>
+      <Demo name="SelectorPairs" />
       <H2>Numbers, hooks and presses</H2>
       <p>
         An item's <code>id</code> may be a number, and it comes back as one. <code>attrs</code> puts attributes on the
@@ -604,7 +626,7 @@ export function SubCardPage() {
           Fields, quiet buttons and bare selector segments inside it step up one surface, or they would vanish into its
           fill.
         </li>
-        <li>Its title is not a badge: only a card's outermost heading is.</li>
+        <li>Its title is not a badge: only a card's outermost heading is. A group that needs no name goes without one.</li>
       </ul>
       <H2>Behaviour</H2>
       <ContractTable of="SubCard" />
@@ -653,7 +675,8 @@ export function WindowPage() {
       <p>
         An action's <code>attrs</code> go on its foot button. <code>ref</code> in React and the exposed{" "}
         <code>card</code> in Vue hand over the card element, for a caller that measures it or looks for something inside.
-        A long <code>start</code> wraps, and the buttons keep their words beside it.
+        A long <code>start</code> wraps, and the buttons keep their words beside it. <code>drawn</code> in React and the{" "}
+        <code>title</code> slot in Vue hold a count in the notch, and <code>title</code> alone stays the window's name.
       </p>
       <Demo name="WindowHooks" />
       <H2>Rules</H2>
@@ -902,6 +925,14 @@ export function PillPage() {
           <code>fail</code> are the state colours and nothing else.
         </li>
       </ul>
+      <H2>In a well</H2>
+      <p>
+        In a <code>glim-well</code> or a <a href="#/components/sub-card">SubCard</a> a pill steps up one surface, so it
+        does not vanish into the ground, and a state keeps its wash.
+      </p>
+      <Demo name="PillWell" />
+      <H2>Behaviour</H2>
+      <ContractTable of="Pill" />
       <H2>API</H2>
       <PropsTable of="Pill" />
     </>
@@ -921,8 +952,8 @@ export function PasswordFieldPage() {
       <ul>
         <li>The eye is a bare glyph in the field's trailing padding, neutral and never the accent. It means look, not act.</li>
         <li>
-          The field is as wide as a plain field in the same column. A width goes on the wrapper through{" "}
-          <code>className</code>.
+          The field is as wide as a plain field in the same column, or takes <code>width</code>. In Vue a template ref
+          reaches the input as <code>input</code>, and <code>eyeAttrs</code> go on the eye.
         </li>
         <li>Edge's own eye is switched off, so there is only one.</li>
         <li>
@@ -960,8 +991,8 @@ export function TextFieldPage() {
         <li>
           Four widths and the column: <code>short</code> for a port or a time, <code>medium</code> for a word,{" "}
           <code>wide</code> for a line of text, <code>grow</code> for what a row has left, and <code>fill</code> for the
-          whole column. <code>PasswordField</code> takes the same <code>width</code>, and any other wrapper the class{" "}
-          <code>glim-field--wide</code> and its siblings.
+          whole column. <code>PasswordField</code>, <code>CopyField</code> and <code>PathField</code> take the same{" "}
+          <code>width</code>, and any other wrapper the class <code>glim-field--wide</code> and its siblings.
         </li>
         <li>
           <code>mono</code> sets a path or a token in monospace.
@@ -999,6 +1030,7 @@ export function FieldRowPage() {
           <code>CopyField</code> and <code>PathField</code> need no <code>label</code> of their own there. An app's own
           control asks <code>useFieldName</code> for it.
         </li>
+        <li>Several controls stand together at the row's end, and one with <code>width="grow"</code> takes all the room the name leaves.</li>
         <li>A click on the label focuses a field and flips a switch, as a real label does. A selector stays as it is.</li>
         <li>
           <code>hint</code> is the "(i)" beside the name (rule 8). Words in other markup, such as a quiet "optional", go
@@ -1156,6 +1188,10 @@ export function IconButtonPage() {
         </li>
         <li>
           It has no ground. The glyph takes the accent under the pointer and the square stays clear (rules 38 and 40).
+        </li>
+        <li>
+          <code>href</code> makes it a link in the same square. <code>pressed</code> makes it a button that stays on or
+          off, which the accent washes while it is on.
         </li>
         <li>
           The empty <code>glim-icon-btn-gap</code> holds the place of a button a row does not have, so the others stay

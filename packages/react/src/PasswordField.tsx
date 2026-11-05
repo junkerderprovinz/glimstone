@@ -11,6 +11,8 @@ import { IconTipButton } from "./IconTipButton.tsx";
 
 export interface PasswordFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "width"> {
   width?: FieldWidth;
+  /** Attributes for the eye, such as a data hook. */
+  eyeAttrs?: Record<string, string>;
   /** The eye's name and bubble while the secret is hidden, and once it shows. */
   text?: { show: string; hide: string };
   /** Classes for the wrapper, which carries the field's width. */
@@ -18,7 +20,7 @@ export interface PasswordFieldProps extends Omit<InputHTMLAttributes<HTMLInputEl
   ref?: Ref<HTMLInputElement>;
 }
 
-export function PasswordField({ width, text = { show: "Show", hide: "Hide" }, className, ref, disabled, "aria-label": ariaLabel, ...rest }: PasswordFieldProps) {
+export function PasswordField({ width, eyeAttrs, text = { show: "Show", hide: "Hide" }, className, ref, disabled, "aria-label": ariaLabel, ...rest }: PasswordFieldProps) {
   const [shown, setShown] = useState(false);
   const name = useFieldName(ariaLabel);
   return (
@@ -33,7 +35,7 @@ export function PasswordField({ width, text = { show: "Show", hide: "Hide" }, cl
         type={shown ? "text" : "password"}
         className="glim-input"
       />
-      <IconTipButton tip={shown ? text.hide : text.show} className="glim-secret-eye" disabled={disabled} onClick={() => setShown(!shown)}>
+      <IconTipButton {...eyeAttrs} tip={shown ? text.hide : text.show} className="glim-secret-eye" disabled={disabled} onClick={() => setShown(!shown)}>
         {shown ? <IconEyeOff /> : <IconEye />}
       </IconTipButton>
     </span>

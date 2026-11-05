@@ -18,7 +18,8 @@ import type { WindowAction } from "./windowParts";
 // whose actions stand at the end. It owns the teleport, its place on the
 // stack, Escape, the Tab trap and the focus, so a caller mounts it with v-if
 // and unmounts it on `close`. A `class` goes to the card, and a template ref
-// reaches the card element as `card`.
+// reaches the card element as `card`. The `title` slot holds markup for the
+// notch, such as a count, and the `title` alone stays the window's name.
 defineOptions({ inheritAttrs: false });
 
 const props = withDefaults(
@@ -84,11 +85,12 @@ function pressBeside() {
         ref="card"
         role="dialog"
         aria-modal="true"
-        :aria-labelledby="titleId"
+        :aria-labelledby="$slots.title ? undefined : titleId"
+        :aria-label="$slots.title ? title : undefined"
         :class="['glim-modal-card', 'glim-window', size !== 'normal' && `glim-window--${size}`]"
       >
         <h2 :id="titleId" class="glim-window-title">
-          <Badge tone="heading" size="heading" wrap :inset-start="5">{{ title }}</Badge>
+          <Badge tone="heading" size="heading" wrap :inset-start="5"><slot name="title">{{ title }}</slot></Badge>
         </h2>
         <div class="glim-modal-body glim-window-body"><slot /></div>
         <div v-if="foot.length" class="glim-modal-foot">

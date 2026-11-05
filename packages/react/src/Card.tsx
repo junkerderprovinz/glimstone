@@ -18,6 +18,7 @@ import { InfoBubble } from "./InfoBubble.tsx";
  */
 export function Card({
   title,
+  drawn,
   hint,
   children,
   hueIndex,
@@ -26,6 +27,8 @@ export function Card({
   /** The section name. Omit it where a control inside already carries the same
    *  name; the badge still renders to keep the card's hue notch. */
   title?: string;
+  /** Takes the title's place in the notch with markup, such as an unsaved dot. */
+  drawn?: ReactNode;
   /** One line saying what this whole card does, drawn as an "(i)" beside the
    *  title. */
   hint?: string;
@@ -44,10 +47,10 @@ export function Card({
       }${hueIndex !== undefined ? " glim-hue" : ""}`}
       style={hueIndex !== undefined ? (hueVars(hueIndex) as CSSProperties) : undefined}
     >
-      {(title || hint) && (
+      {(title || drawn || hint) && (
         <h2 className="glim-panel-heading">
           <Badge tone="heading" size="heading" wrap hueIndex={hueIndex}>
-            {title}
+            {drawn ?? title}
             {hint && <InfoBubble tip={hint} onAccent />}
           </Badge>
         </h2>

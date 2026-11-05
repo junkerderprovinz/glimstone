@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onBeforeUnmount, ref, shallowRef } from "vue";
-import { COPIED_MS, copyText } from "@glimstone/core";
+import { COPIED_MS, copyText, fieldWidthClass, type FieldWidth } from "@glimstone/core";
 import Button from "./Button.vue";
 import { useFieldName } from "./fieldName";
 import { IconCheck, IconCopy } from "./glyphs";
@@ -14,6 +14,7 @@ const props = withDefaults(
     value: string;
     /** The field's accessible name, such as "Token". Inside a FieldRow the row gives it. */
     label?: string;
+    width?: FieldWidth;
     /** The button's words, before and for a moment after it copied. */
     text?: { copy: string; copied: string };
   }>(),
@@ -43,7 +44,7 @@ async function copy() {
 </script>
 
 <template>
-  <span class="glim-copy">
+  <span :class="['glim-copy', fieldWidthClass(width)]">
     <input ref="field" readonly :value="value" :aria-label="name" spellcheck="false" class="glim-input glim-input--mono" />
     <Button
       :label="copied ? text.copied : text.copy"

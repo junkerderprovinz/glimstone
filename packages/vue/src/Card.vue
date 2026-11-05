@@ -7,8 +7,9 @@ import InfoBubble from "./InfoBubble.vue";
 // The surface everything else sits on, and the one place a section heading is
 // drawn. The heading is a filled badge straddling the card's top edge, and the
 // `hint` rides inside it because the badge is out of normal flow. With a
-// `hueIndex` the card sets `--accent` once for everything inside it. A card
-// with neither `title` nor `hint` draws no heading.
+// `hueIndex` the card sets `--accent` once for everything inside it. The `title`
+// slot holds markup for the notch, such as an unsaved dot. A card with no title
+// of either kind and no `hint` draws no heading.
 const props = defineProps<{
   /** Omit it where a control inside already carries the same name. */
   title?: string;
@@ -28,9 +29,9 @@ const style = computed(() => (props.hueIndex !== undefined ? hueVars(props.hueIn
     :class="['glim-panel', 'glim-notch-card', { 'glim-panel--nested': nested, 'glim-hue': hueIndex !== undefined }]"
     :style="style"
   >
-    <h2 v-if="title || hint" class="glim-panel-heading">
+    <h2 v-if="title || hint || $slots.title" class="glim-panel-heading">
       <Badge tone="heading" size="heading" wrap :hue-index="hueIndex">
-        {{ title }}<InfoBubble v-if="hint" :tip="hint" on-accent />
+        <slot name="title">{{ title }}</slot><InfoBubble v-if="hint" :tip="hint" on-accent />
       </Badge>
     </h2>
     <slot />

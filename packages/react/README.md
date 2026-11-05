@@ -76,7 +76,7 @@ needs none of them.
 | `PasswordField`, `CopyField` | A secret with the reveal eye inside the field, and a value in monospace with a button that copies it |
 | `PathField`, `Tree` | A path with a button that asks the app for one, and a hierarchy loaded as it opens, for the picker behind that button |
 | `ListRow`, `RowMark` | One row of a list with a tile, badges and buttons that come in on hover, and the round mark on a row picked for an action on many |
-| `IconButton` | A glyph in a square in every label mode, for a row that keeps its text |
+| `IconButton` | A glyph in a square in every label mode, for a row that keeps its text, as a link with `href` and on or off with `pressed` |
 | `Meter`, `ProgressBar` | A level such as a disk's, red from a threshold and `quiet` for a footer line, and work toward its end with a sheen while it runs. Only the bar moves |
 | `ColorPicker` | The square, the hue bar, a preview with the name the colour proposes, the hex field and Apply, in the page or floating beside its swatch |
 | `useLabelMode`, `useTipBubble`, `usePortalHue` | The small hooks the components need |

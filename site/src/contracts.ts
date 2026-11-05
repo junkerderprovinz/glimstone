@@ -21,6 +21,9 @@ export const CONTRACTS: Record<string, Contract> = {
     pattern: { name: "Button", url: `${APG}button/` },
     rows: [
       { id: "button-keys", keys: ["Enter", "Space"], when: "The button has focus", then: "It acts, once per press." },
+      { id: "button-flex", when: "It stands in a flex row without room for its words", then: "It keeps its words, and what stands beside it gives way." },
+      { id: "button-href", when: "It has an href", then: "It is a link with the button's look, and a disabled one is a disabled button." },
+      { id: "button-slots", when: "It has something before or after its words", then: "That stands inside the button, in that order, and the label stays its name." },
       { id: "button-name", when: "The label mode hides the words", then: "The label stays the accessible name." },
       { id: "button-width", when: "The label mode changes between text and text with glyph", then: "The button keeps its width to the pixel, since its stage counts the glyph; the modes that hide the words hug the glyph." },
       { id: "button-busy", when: "busy turns on", then: "The width stays and the button announces it is busy." },
@@ -36,6 +39,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "toggle-name", when: "Always", then: "The label is the accessible name, also with hideLabel." },
       { id: "toggle-disabled", when: "The switch is disabled", then: "A click changes nothing." },
       { id: "toggle-attrs", when: "It is given an id, a data attribute or a listener", then: "They land on the switch itself, and a class stays on the frame." },
+      { id: "toggle-off-contrast", when: "It is off, in the light theme", then: "Its track holds 3:1 against the card and against its knob." },
     ],
   },
   ConfirmDialog: {
@@ -64,6 +68,8 @@ export const CONTRACTS: Record<string, Contract> = {
     pattern: { name: "Select-only combobox", url: `${APG}combobox/examples/combobox-select-only/` },
     rows: [
       { id: "select-menu-rows", when: "rows is menu", then: "The options are the rows of a context menu: the glyph's room, the words, the tick at the end and the wash on the value in force." },
+      { id: "select-well", when: "The trigger stands in a well or a sub-card", then: "It takes the same ground as a field there, and hovers up the ramp." },
+      { id: "select-closed", when: "The list is closed", then: "What holds it on the body takes no room and no pointer." },
       { id: "select-menu-keys", keys: ["ArrowDown", "Enter"], when: "rows is menu", then: "The keys, the typing and the choosing stay those of the select." },
       { id: "select-menu-sub", when: "rows is menu and the list has submenus", then: "Headings, options and submenu rows are drawn as in a context menu." },
       { id: "select-open-focus", keys: ["Enter", "Space", "ArrowDown"], when: "The trigger has focus", then: "The list opens on the selected option." },
@@ -137,6 +143,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "toast-expire", when: "Nobody touches it", then: "It leaves after four seconds." },
       { id: "toast-pause", when: "The pointer rests on it", then: "It stays, and the time left is kept." },
       { id: "toast-dismiss", when: "The dismiss button is pressed", then: "Only that toast leaves." },
+      { id: "toast-action", when: "A toast has an action", then: "Its button keeps its words beside a long message, and a press runs it and dismisses the toast." },
     ],
   },
   WindowBar: {
@@ -155,6 +162,7 @@ export const CONTRACTS: Record<string, Contract> = {
     pattern: { name: "Tabs", url: `${APG}tabs/` },
     rows: [
       { id: "sel-numeric", when: "An item's id is a number", then: "The value comes back as that number." },
+      { id: "sel-pairs", when: "pairsOnPhone is on and the window is narrower than 600px", then: "Two segments stand to a row, every label wraps instead of being cut, and the track keeps a card's corners." },
       { id: "sel-press", keys: ["Space", "Enter"], when: "A segment is pressed, also the one already chosen", then: "The press is reported before the choice changes." },
       { id: "sel-attrs", when: "An item names attributes", then: "Its segment carries them." },
       { id: "sel-tabs-role", when: "select is one", then: "role=\"tablist\" of tabs with aria-selected; the chosen tab controls the panel, which is named by it." },
@@ -180,6 +188,7 @@ export const CONTRACTS: Record<string, Contract> = {
     pattern: { name: "Spinbutton", url: `${APG}spinbutton/` },
     rows: [
       { id: "num-role", when: "Always", then: "A native spinbutton named by its label, with its range." },
+      { id: "num-focus", when: "The field has focus", then: "Its fill steps up the ramp and no ring shows (rule 14)." },
       { id: "num-arrows", keys: ["ArrowUp", "ArrowDown"], when: "The field has focus", then: "The value moves by one step." },
       { id: "num-steppers", when: "An arrow inside the field is pressed", then: "The value steps, the app hears it, and focus stays in the field." },
       { id: "num-ends", when: "The value is at its maximum", then: "The up arrow greys out and does nothing." },
@@ -205,7 +214,10 @@ export const CONTRACTS: Record<string, Contract> = {
     ],
   },
   Card: {
-    rows: [{ id: "card-title", when: "It has a title", then: "The heading's words are the title, with nothing after it." }],
+    rows: [
+      { id: "card-title", when: "It has a title", then: "The heading's words are the title, with nothing after it." },
+      { id: "card-title-slot", when: "The notch holds markup, such as an unsaved dot", then: "It is drawn in the notch." },
+    ],
   },
   TextField: {
     rows: [
@@ -226,6 +238,8 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "row-words", when: "The label is drawn with markup of its own", then: "The control's name stays the label's words." },
       { id: "row-value", when: "It holds only a value", then: "The value stands at the row's end as a pill, in its tone." },
       { id: "row-widths", when: "The control has a width", then: "It keeps it beside the label, at the row's end." },
+      { id: "row-grow", when: "The control's width is grow", then: "It takes all the room the label leaves." },
+      { id: "row-many", when: "The row holds more than one control", then: "They stand together at the row's end." },
       { id: "row-narrow", when: "The row has no room for both", then: "The control moves under the label and keeps the row's end." },
     ],
   },
@@ -236,6 +250,8 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "path-keep", when: "The picker answers with nothing", then: "The field stays as it was and takes the focus." },
       { id: "path-button", when: "A label mode hides words", then: "The button follows it like any other." },
       { id: "path-attrs", when: "It is given attributes", then: "They land on the field, and buttonAttrs on the button." },
+      { id: "path-half", when: "It stands in a row of a half column", then: "It stays beside the label." },
+      { id: "path-width", when: "It has a width", then: "It takes the same widths as a text field." },
     ],
   },
   Tree: {
@@ -253,6 +269,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "tree-lazy", when: "A row opens", then: "Its children are asked for once, and a list already there is not asked for again." },
       { id: "tree-start-open", when: "Rows are named as open from the start", then: "Their children are asked for and shown." },
       { id: "tree-attrs", when: "A node names attributes", then: "Its row carries them." },
+      { id: "tree-chosen-hover", when: "The pointer rests on the chosen row, also in a well", then: "It stays filled with the accent." },
     ],
   },
   RowMark: {
@@ -282,6 +299,8 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "icon-name", when: "Always", then: "The tip is its accessible name." },
       { id: "icon-tip", when: "The pointer rests on it", then: "The tip shows in the bubble." },
       { id: "icon-keys", keys: ["Enter", "Space"], when: "It has focus", then: "It acts." },
+      { id: "icon-pressed", when: "It has a pressed state", then: "It says so with aria-pressed, and the accent washes its ground while it is on." },
+      { id: "icon-href", when: "It has an href", then: "It is a link in the same square." },
       { id: "icon-reach", when: "The pointer is over it", then: "Its glyph takes the accent and its ground stays clear (rule 40)." },
       { id: "icon-disabled", when: "It is disabled", then: "A click changes nothing." },
     ],
@@ -300,9 +319,13 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "window-backdrop", when: "A press lands beside the window", then: "It closes." },
       { id: "window-action-attrs", when: "An action names attributes", then: "Its foot button carries them." },
       { id: "window-card", when: "The caller asks for the card", then: "The window hands over its card element." },
+      { id: "window-title-slot", when: "The notch holds markup, such as a count", then: "It is drawn, and the title alone stays the window's name." },
       { id: "window-foot-steady", when: "A long text stands at the start of the foot", then: "The text wraps and the buttons keep their words." },
       { id: "window-foot-wrap", when: "The foot has no room for its buttons, as on a phone", then: "They wrap inside the card instead of shrinking." },
     ],
+  },
+  Pill: {
+    rows: [{ id: "pill-well", when: "It stands in a well or a sub-card", then: "It steps up one surface, and a state pill keeps its wash." }],
   },
   ContextMenu: {
     pattern: { name: "Menu", url: `${APG}menubar/` },
@@ -357,12 +380,14 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "pw-width", when: "It stands in a column with a plain field", then: "Both are as wide, the eye inside the field." },
       { id: "pw-disabled", when: "The field is disabled", then: "The eye is disabled too." },
       { id: "pw-focus", when: "The field has focus", then: "Its fill steps up the ramp and no ring shows (rule 14)." },
+      { id: "pw-expose", when: "The caller asks for the input", then: "The field hands it over, and eyeAttrs land on the eye." },
     ],
   },
   CopyField: {
     pattern: { name: "Button", url: `${APG}button/` },
     rows: [
       { id: "copy-name", when: "Always", then: "The value is a read-only field named by its label, and the button is named Copy." },
+      { id: "copy-width", when: "It has a width", then: "It takes the same widths as a text field." },
       { id: "copy-press", keys: ["Enter"], when: "The button has focus", then: "The value is on the clipboard, the button is named Copied and a status line says so." },
       { id: "copy-back", when: "A moment after copying", then: "The button reads Copy again." },
       { id: "copy-refused", when: "The browser refuses to copy", then: "The value is selected in the field, so Ctrl+C works." },
@@ -407,6 +432,7 @@ export const CONTRACTS: Record<string, Contract> = {
   SubCard: {
     rows: [
       { id: "subcard-region", when: "Always", then: "A region named by its title alone." },
+      { id: "subcard-no-title", when: "It has no title", then: "It draws no heading and keeps its ground, and what stands inside still steps up." },
       { id: "subcard-step", when: "A field or a quiet button stands inside it", then: "It takes a surface of its own, one step up from the sub-card's." },
     ],
   },

@@ -8,7 +8,8 @@ import TipBubble from "./TipBubble.vue";
 import { TipWrap } from "./TipWrap";
 
 // The one clickable control; what it shows and how wide it is come from
-// buttonView() in the core. Listeners and attributes go to the <button>.
+// buttonView() in the core. Listeners and attributes go to the element. The slots
+// `before` and `after` hold what stands around the words, such as a count.
 defineOptions({ inheritAttrs: false });
 
 const props = withDefaults(
@@ -27,6 +28,8 @@ const props = withDefaults(
     /** "chip" inside a pill, "icon" for a row action; see ButtonVariant. */
     variant?: ButtonVariant;
     disabled?: boolean;
+    /** Makes it a link with the button's look. A disabled one stays a disabled button. */
+    href?: string;
     type?: "button" | "submit";
     /** Extra explanation, and the place for anything that changes. It shows
      *  in the hover and focus bubble, joined with the label where the label
@@ -63,6 +66,7 @@ const view = computed(() =>
     stage: props.stage,
   }),
 );
+const link = computed(() => !!props.href && !props.disabled);
 const bubble = useTipBubble(() => view.value.tip, () => props.disabled);
 const el = shallowRef<HTMLButtonElement | null>(null);
 
@@ -84,11 +88,13 @@ defineExpose({ el });
 
 <template>
   <TipWrap :on="disabled && !!view.tip" :show="bubble.show" :hide="bubble.hide">
-    <button
+    <component
+      :is="link ? 'a' : 'button'"
       v-bind="$attrs"
       :ref="attach"
-      :type="type"
-      :disabled="disabled"
+      :href="link ? href : undefined"
+      :type="link ? undefined : type"
+      :disabled="link ? undefined : disabled"
       :aria-busy="busy || undefined"
       :aria-describedby="bubble.describedBy.value"
       :style="view.style"
@@ -98,12 +104,14 @@ defineExpose({ el });
       @focus="focus"
       @blur="bubble.hide"
     >
+      <slot name="before" />
       <span v-if="view.showGlyph" class="glim-btn-glyph">
         <span v-if="busy" class="glim-spinner" />
         <component :is="resolved" v-else />
       </span>
       <span :class="view.labelClass">{{ label }}</span>
-    </button>
+      <slot name="after" />
+    </component>
   </TipWrap>
   <TipBubble :state="bubble" />
 </template>

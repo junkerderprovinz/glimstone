@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Card, NumberField, SubCard } from "@glimstone/react";
+import { Button, Card, NumberField, SubCard, TextField } from "@glimstone/react";
 
 const row = { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 };
 
@@ -18,6 +18,9 @@ export default function SubCardBasic() {
               onChange={(e) => setDays(e.target.value === "" ? "" : e.target.valueAsNumber)}
             />
           </label>
+        </SubCard>
+        <SubCard>
+          <TextField label="A note" placeholder="A group needs no title" />
         </SubCard>
         <SubCard title="Commands">
           <div style={{ ...row, justifyContent: "flex-end" }}>

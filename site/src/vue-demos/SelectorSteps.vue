@@ -9,11 +9,12 @@ const LEVELS = [
 ];
 const level = ref(5);
 const presses = ref(0);
+const choose = (id: number) => (level.value = id);
 </script>
 
 <template>
   <div style="display: grid; gap: 8px; justify-items: start">
-    <Selector v-model="level" label="Compression" :items="LEVELS" activation="manual" size="sm" inline @press="presses++" />
+    <Selector :model-value="level" label="Compression" :items="LEVELS" activation="manual" size="sm" inline @press="presses++" @update:model-value="choose" />
     <output class="glim-num">Value {{ JSON.stringify(level) }}, pressed {{ presses }}</output>
   </div>
 </template>

@@ -38,7 +38,7 @@ export default function FieldRowBasic() {
         <NumberField defaultValue={3} min={1} max={9} />
       </FieldRow>
       <FieldRow label="Link">
-        <CopyField value="smb://bottich/media" className="glim-field--wide" />
+        <CopyField value="smb://bottich/media" width="wide" />
       </FieldRow>
       <FieldRow label="Token" drawn={<>Token <small>optional</small></>}>
         <TextField width="medium" />
@@ -48,6 +48,13 @@ export default function FieldRowBasic() {
       </FieldRow>
       <FieldRow label="Address">
         <TextField width="wide" mono defaultValue="smb://bottich/media" />
+      </FieldRow>
+      <FieldRow label="Share link">
+        <TextField width="grow" mono defaultValue="https://bottich/s/3f9a" />
+      </FieldRow>
+      <FieldRow label="Hours">
+        <TextField label="From" width="short" defaultValue="08:00" />
+        <TextField label="To" width="short" defaultValue="17:00" />
       </FieldRow>
       <FieldRow label="Last run" value="2 hours ago" />
       <FieldRow label="Failed" value="3" tone="fail" />

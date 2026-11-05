@@ -7,7 +7,7 @@ import { glyphFor, IconClose } from "./glyphs.tsx";
 export type { ButtonTone, ButtonVariant } from "@glimstone/core";
 
 // The one clickable control; what it shows and how wide it is come from
-// buttonView() in the core. The other props of a <button> go to the button.
+// buttonView() in the core. The other props of a <button> go to the element.
 
 export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children" | "className" | "disabled" | "onClick" | "title" | "type" | "autoFocus"> {
   /** The button's words, present in every mode: visible, or hidden but
@@ -31,6 +31,12 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
   /** "chip" inside a pill, "icon" for a row action; see ButtonVariant. */
   variant?: ButtonVariant;
   disabled?: boolean;
+  /** Makes it a link with the button's look. A disabled one stays a disabled button. */
+  href?: string;
+  /** What stands before the glyph, such as a count. */
+  before?: ReactNode;
+  /** What stands after the words, such as a key cap. */
+  after?: ReactNode;
   type?: "button" | "submit";
   /** Extra explanation, and the place for anything that changes: the running
    *  state, or why the button is unavailable. It shows in the hover and focus
@@ -77,6 +83,9 @@ export function Button({
   autoFocus = false,
   stage: stageOverride,
   keepLabel = false,
+  href,
+  before,
+  after,
   ref,
   ...rest
 }: ButtonProps) {
@@ -97,6 +106,8 @@ export function Button({
     stage: stageOverride,
   });
   const tooltip = useTipBubble(view.tip, disabled);
+  const Element = (href && !disabled ? "a" : "button") as "button";
+  const own = href && !disabled ? { href } : { type, disabled, autoFocus };
   const handlers = view.pageHue
     ? {
         ...tooltip.handlers,
@@ -116,26 +127,26 @@ export function Button({
       {/* `wrap` boxes only a disabled button with a tip, since a disabled
           <button> emits no mouse events. */}
       {tooltip.wrap(
-        <button
+        <Element
           {...rest}
+          {...own}
           ref={mergeRefs(ref, tooltip.ref)}
-          type={type}
           onClick={onClick}
-          disabled={disabled}
-          autoFocus={autoFocus}
           aria-busy={busy || undefined}
           aria-describedby={tooltip.describedBy}
           {...handlers}
           style={view.style}
           className={`${view.className} ${className}`.trim()}
         >
+          {before}
           {view.showGlyph && (
             <span className="glim-btn-glyph">
               {busy ? <span className="glim-spinner" /> : resolved}
             </span>
           )}
           <span className={view.labelClass}>{label}</span>
-        </button>,
+          {after}
+        </Element>,
       )}
       {tooltip.bubble}
     </>

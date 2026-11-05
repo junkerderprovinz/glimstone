@@ -22,20 +22,23 @@ export interface IconTipButtonProps extends Omit<ButtonHTMLAttributes<HTMLButton
   /** Inline style, so a hued Badge can set its `--item-hue*` properties. */
   style?: CSSProperties;
   children: ReactNode;
+  /** Makes it a link. A disabled one stays a disabled button. */
+  href?: string;
   type?: "button" | "submit";
 }
 
-export function IconTipButton({ tip, disabled, className, style, children, type = "button", ariaPressed, ariaExpanded, ...rest }: IconTipButtonProps) {
+export function IconTipButton({ tip, disabled, className, style, children, href, type = "button", ariaPressed, ariaExpanded, ...rest }: IconTipButtonProps) {
   const tooltip = useTipBubble(tip, disabled);
+  const Element = (href && !disabled ? "a" : "button") as "button";
+  const own = href && !disabled ? { href } : { type, disabled };
 
   return (
     <>
       {tooltip.wrap(
-        <button
+        <Element
           {...rest}
+          {...own}
           ref={tooltip.ref}
-          type={type}
-          disabled={disabled}
           aria-label={tip}
           aria-pressed={ariaPressed}
           aria-expanded={ariaExpanded}
@@ -45,7 +48,7 @@ export function IconTipButton({ tip, disabled, className, style, children, type 
           style={style}
         >
           {children}
-        </button>,
+        </Element>,
       )}
       {tooltip.bubble}
     </>

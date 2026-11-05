@@ -13,6 +13,8 @@ const props = withDefaults(
     /** The hover and focus explanation, and the button's `aria-label`. */
     tip: string;
     disabled?: boolean;
+    /** Makes it a link. A disabled one stays a disabled button. */
+    href?: string;
     type?: "button" | "submit";
   }>(),
   { disabled: false, type: "button" },
@@ -22,11 +24,13 @@ const bubble = useTipBubble(() => props.tip, () => props.disabled);
 
 <template>
   <TipWrap :on="disabled" :show="bubble.show" :hide="bubble.hide">
-    <button
+    <component
+      :is="href && !disabled ? 'a' : 'button'"
       v-bind="$attrs"
-      :ref="(el) => (bubble.trigger.value = el as HTMLElement | null)"
-      :type="type"
-      :disabled="disabled"
+      :ref="(el: unknown) => (bubble.trigger.value = el as HTMLElement | null)"
+      :href="disabled ? undefined : href"
+      :type="href && !disabled ? undefined : type"
+      :disabled="href && !disabled ? undefined : disabled"
       :aria-label="tip"
       :aria-describedby="bubble.describedBy.value"
       @mouseenter="bubble.show"
@@ -35,7 +39,7 @@ const bubble = useTipBubble(() => props.tip, () => props.disabled);
       @blur="bubble.hide"
     >
       <slot />
-    </button>
+    </component>
   </TipWrap>
   <TipBubble :state="bubble" />
 </template>

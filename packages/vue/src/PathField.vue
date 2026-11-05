@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { shallowRef, type Component, type StyleValue } from "vue";
+import { fieldWidthClass, type FieldWidth } from "@glimstone/core";
 import Button from "./Button.vue";
 import { useFieldName } from "./fieldName";
 import { IconFolderOpen } from "./glyphs";
@@ -16,6 +17,7 @@ const props = withDefaults(
     pick: (current: string) => string | null | undefined | Promise<string | null | undefined>;
     /** The accessible name. Inside a FieldRow the row gives it. */
     label?: string;
+    width?: FieldWidth;
     /** The button's words. */
     text?: { pick: string };
     /** The button's glyph, an open folder unless set, such as a file for a picker of files. */
@@ -43,7 +45,7 @@ async function ask() {
 </script>
 
 <template>
-  <span :class="['glim-path', $attrs.class]" :style="$attrs.style as StyleValue">
+  <span :class="['glim-path', fieldWidthClass(width), $attrs.class]" :style="$attrs.style as StyleValue">
     <input
       ref="input"
       v-model="value"
