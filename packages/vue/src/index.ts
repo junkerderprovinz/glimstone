@@ -36,7 +36,7 @@ export type { InfoAboutCardProps, InfoHelpCardProps, InfoVersionCardProps } from
 export type { SelectEntry, SelectGroup, SelectOption, SelectSubmenu } from "./selectParts";
 export type { SelectorItem } from "./selectorItem";
 export type { MenuBarMenu, MenuEntry, MenuHead, MenuItem, WindowAction } from "./windowParts";
-export type { ColorName, ColorPickerPanelText, MeterSize, PillTone, WindowSize } from "@glimstone/core";
+export type { ColorName, ColorPickerPanelText, MeterSize, PillTone, SelectRows, WindowSize } from "@glimstone/core";
 export { selectorTabId } from "@glimstone/core";
 export { useTipBubble, type TipBubble } from "./tipBubble";
 export { GLIMSTONE_VERSION } from "@glimstone/core";

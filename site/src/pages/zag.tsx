@@ -50,6 +50,13 @@ export function SelectPage() {
   ]}
 />`}
       />
+      <H2>Menu rows</H2>
+      <p>
+        <code>rows="menu"</code> draws the list with the rows of a <a href="#/components/context-menu">ContextMenu</a>,
+        so an app that has both shows one kind of menu row: the glyph's room in every row, the wash on the value in force
+        and the tick at the end. The keys, the wheel and the typing stay those of the select.
+      </p>
+      <Demo name="SelectMenuRows" />
       <H2>Submenus</H2>
       <p>
         An entry with <code>options</code> of its own opens them beside its row, for a list too long to show flat. A

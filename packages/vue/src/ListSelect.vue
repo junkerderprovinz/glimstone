@@ -7,8 +7,9 @@ import {
   flattenRuns,
   pageDir,
   SELECT_POSITIONING,
-  selectContentClass,
   selectRootClass,
+  selectRowParts,
+  type SelectRows,
   type SelectWidth,
 } from "@glimstone/core";
 import { IconCheck, IconExpand } from "./glyphs";
@@ -26,6 +27,7 @@ const props = defineProps<{
   value: T | null;
   placeholder?: string;
   width: SelectWidth;
+  rows: SelectRows;
   triggerClass: string;
   id?: string;
   disabled?: boolean;
@@ -38,6 +40,7 @@ const emit = defineEmits<{ change: [value: T] }>();
 const uid = useId();
 const all = computed(() => flattenRuns(props.groups));
 const glyphs = computed(() => all.value.some((o) => o.glyph));
+const parts = computed(() => selectRowParts(props.rows, glyphs.value));
 const collection = computed(() =>
   select.collection({
     items: all.value,
@@ -117,25 +120,25 @@ defineExpose({ trigger });
         :style="hue.style.value"
         :class="['glim-select-positioner', hue.className.value]"
       >
-        <div v-bind="api.getContentProps()" :class="selectContentClass(glyphs)">
+        <div v-bind="api.getContentProps()" :class="parts.content">
           <template v-for="(g, gi) in groups" :key="gi">
             <div
               v-if="g.entries.length > 0"
               v-bind="g.heading ? api.getItemGroupProps({ id: `${uid}-g${gi}` }) : {}"
               class="glim-select-group"
             >
-              <div v-if="g.heading" v-bind="api.getItemGroupLabelProps({ htmlFor: `${uid}-g${gi}` })" class="glim-select-heading">
+              <div v-if="g.heading" v-bind="api.getItemGroupLabelProps({ htmlFor: `${uid}-g${gi}` })" :class="parts.heading">
                 {{ g.heading }}
               </div>
               <div
                 v-for="item in g.entries as SelectOption<T>[]"
                 :key="item.value"
                 v-bind="api.getItemProps({ item })"
-                class="glim-select-item"
+                :class="parts.item"
               >
-                <span v-if="glyphs" class="glim-select-glyph"><component :is="item.glyph" v-if="item.glyph" /></span>
-                <span v-bind="api.getItemTextProps({ item })" class="glim-select-label">{{ item.label }}</span>
-                <span v-bind="api.getItemIndicatorProps({ item })" class="glim-select-check"><IconCheck /></span>
+                <span v-if="parts.glyph" :class="parts.glyph"><component :is="item.glyph" v-if="item.glyph" /></span>
+                <span v-bind="api.getItemTextProps({ item })" :class="parts.label">{{ item.label }}</span>
+                <span v-bind="api.getItemIndicatorProps({ item })" :class="parts.check"><IconCheck /></span>
               </div>
             </div>
           </template>

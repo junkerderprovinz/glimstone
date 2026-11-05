@@ -47,9 +47,9 @@ export { selectorTabId } from "@glimstone/core";
 // <label> around the row: a label around several segments hands its clicks to
 // the first one and gives a screen reader that segment's name.
 
-export interface SelectorItem {
-  /** Stable id, handed back by onChange. */
-  id: string;
+export interface SelectorItem<V extends string | number = string> {
+  /** Stable id, handed back by onChange as it stands here. */
+  id: V;
   label: string;
   /** Shown before the label; in a tab strip it is tinted with its tab's hue. */
   glyph?: ReactNode;
@@ -65,18 +65,22 @@ export interface SelectorItem {
   href?: string;
   /** Tiles only: a page with nothing on it yet, dimmed rather than hidden. */
   dim?: boolean;
+  /** Attributes for the item's own segment, such as a data hook. */
+  attrs?: Record<string, string>;
 }
 
-export interface SelectorProps<M extends SelectMode = "one"> {
-  items: SelectorItem[];
+export interface SelectorProps<M extends SelectMode = "one", V extends string | number = string> {
+  items: SelectorItem<V>[];
   /** The accessible name of the strip, such as "Sort" or "Settings pages". */
   label: string;
   /** `one` picks a value, `many` toggles any number of them. Default `one`. */
   select?: M;
   /** The chosen id, or the chosen ids for `many`. */
-  value: M extends "many" ? readonly string[] : string | null;
+  value: M extends "many" ? readonly V[] : V | null;
   /** Called with the new id, or the new list for `many`. */
-  onChange: (next: M extends "many" ? string[] : string) => void;
+  onChange: (next: M extends "many" ? V[] : V) => void;
+  /** Called on every press, before the choice changes, also one on the segment already chosen. */
+  onPress?: (id: V) => void;
   /** `vertical` is the column of tiles beside a settings area's pages. */
   orientation?: SelectorOrientation;
   size?: SelectorSize;
@@ -119,12 +123,13 @@ function useMedia(query: string): boolean {
   );
 }
 
-export function Selector<M extends SelectMode = "one">({
+export function Selector<M extends SelectMode = "one", V extends string | number = string>({
   items,
   label,
   select,
   value,
   onChange,
+  onPress,
   orientation = "horizontal",
   size = "md",
   variant = "well",
@@ -139,7 +144,7 @@ export function Selector<M extends SelectMode = "one">({
   disabled = false,
   panelId,
   className = "",
-}: SelectorProps<M>) {
+}: SelectorProps<M, V>) {
   const vertical = orientation === "vertical";
   const many = select === "many";
   const mode = useLabelMode(selectorAxis(size, orientation));
@@ -191,13 +196,14 @@ export function Selector<M extends SelectMode = "one">({
   }, [strip.canSqueeze, itemsKey, disabledKey, size]);
 
   const layout = selectorFlex({ rows, pinWidth: strip.pinWidth, inline, fit, fitMode, pairsOnPhone });
-  const chosen = many ? (value as readonly string[]) : null;
-  const isOn = (id: string) => (chosen ? chosen.includes(id) : value === id);
+  const chosen = many ? (value as readonly V[]) : null;
+  const isOn = (id: V) => (chosen ? chosen.includes(id) : value === id);
   const disabledFlags = items.map((it) => disabled || !!it.disabled);
   const roved = rovedIndex(disabledFlags, items.findIndex((it) => isOn(it.id)));
 
-  function choose(id: string) {
-    const change = onChange as (next: string | string[]) => void;
+  function choose(id: V) {
+    onPress?.(id);
+    const change = onChange as (next: V | V[]) => void;
     change(chosen ? toggleSelection(chosen, id, items.map((it) => it.id)) : id);
   }
 
@@ -211,7 +217,8 @@ export function Selector<M extends SelectMode = "one">({
     const node = roveSelector(track.current!, e.key, orientation);
     if (!node) return;
     e.preventDefault();
-    if (strip.autoSelect && node.dataset.selId) choose(node.dataset.selId);
+    const item = items.find((it) => String(it.id) === node.dataset.selId);
+    if (strip.autoSelect && item) choose(item.id);
   }
 
   return (
@@ -272,7 +279,7 @@ function Segment({
   panelId,
   onSelect,
 }: {
-  item: SelectorItem;
+  item: SelectorItem<string | number>;
   index: number;
   strip: SelectorView;
   on: boolean;
@@ -342,6 +349,7 @@ function Segment({
     return (
       <>
         <a
+          {...item.attrs}
           ref={tooltip.ref}
           href={item.href}
           data-sel-id={item.id}
@@ -364,6 +372,7 @@ function Segment({
 
   const button = (
     <button
+      {...item.attrs}
       ref={tooltip.ref}
       type="button"
       data-sel-id={item.id}

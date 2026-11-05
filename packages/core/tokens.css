@@ -2756,6 +2756,34 @@ body {
 @media (pointer: coarse) {
   .glim-select-item { min-height: 2.75rem; }
 }
+/* A list that draws a context menu's rows (Select with rows="menu"): the menu's
+   panel, and the states the machine marks with attributes instead of the focus.
+   The wash comes before the highlight, which covers it, as a hover does in the
+   menu. */
+.glim-select-content--menu {
+  min-width: max(var(--reference-width, 0px), 16rem);
+  padding: 0.35rem;
+  box-shadow: var(--elevation), var(--hairline);
+}
+.glim-select-content--menu .glim-menu-item[data-state="checked"] { background-color: var(--accent-soft); }
+.glim-select-content--menu .glim-menu-item[data-highlighted] { background-color: var(--carbon-hover); }
+.glim-select-content--menu .glim-menu-item[data-disabled] {
+  opacity: 0.45;
+  background-color: transparent;
+  cursor: default;
+}
+.glim-select-content--menu .glim-menu-tick:not([data-state="checked"]) { visibility: hidden; }
+.glim-select-content--menu .glim-select-group + .glim-select-group {
+  margin-top: 0.3rem;
+  padding-top: 0.3rem;
+  border-top-color: color-mix(in srgb, var(--carbon-text) 9%, transparent);
+}
+@media (pointer: coarse) {
+  .glim-select-content--menu .glim-menu-item {
+    height: auto;
+    min-height: 2.75rem;
+  }
+}
 .glim-select-empty {
   padding: 0.5rem 0.75rem;
   color: var(--carbon-text-muted);
@@ -2905,10 +2933,16 @@ body {
   }
   .glim-modal-foot {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: flex-end;
     gap: 0.75rem;
     padding: 1rem 1.25rem;
+  }
+  /* A button keeps its words: out of room it moves to the next line. */
+  .glim-modal-foot > :is(.glim-btn, .glim-tip-wrap) {
+    flex: none;
+    max-width: 100%;
   }
 
   /* The fills a button can take (ButtonTone). `ok`, `danger` and `warn` put the
@@ -3930,7 +3964,8 @@ body {
     padding-top: 1.75rem;
   }
   .glim-window-start {
-    margin-inline-end: auto;
+    flex: 1 1 0;
+    min-width: min(8rem, 100%);
     font-size: var(--text-meta);
     color: var(--carbon-text-muted);
   }
@@ -4341,6 +4376,9 @@ body {
 .glim-menu-item:focus-visible,
 .glim-menu-head-edit:focus-visible { outline-offset: -2px; }
 .glim-menu[data-pointer] :focus-visible { outline: none; }
+/* Also outside the layer: a field says it has the focus with its fill and its
+   caret, not with a ring (rule 14). */
+.glim-input:focus-visible { outline: none; }
 
 @media (prefers-reduced-motion: no-preference) {
   .glim-checkbox-box { transition: background-color var(--motion-control-dur) ease; }

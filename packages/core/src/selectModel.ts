@@ -72,6 +72,47 @@ export function selectContentClass(glyphs: boolean): string {
   return `glim-select-content glim-fade${glyphs ? " glim-select-content--glyphs" : ""}`;
 }
 
+/**
+ * Which rows an open list draws. `menu` takes a context menu's, so an app with
+ * both shows one kind of menu row.
+ */
+export type SelectRows = "list" | "menu";
+
+export interface SelectRowParts {
+  content: string;
+  item: string;
+  /** The glyph's room, or null where no row of a list has one. A menu row keeps it always. */
+  glyph: string | null;
+  label: string;
+  check: string;
+  caret: string;
+  heading: string;
+}
+
+/** The classes of an open list and its rows. */
+export function selectRowParts(rows: SelectRows, glyphs: boolean): SelectRowParts {
+  const content = selectContentClass(glyphs);
+  return rows === "menu"
+    ? {
+        content: `${content} glim-select-content--menu`,
+        item: "glim-menu-item",
+        glyph: "glim-menu-glyph",
+        label: "glim-menu-label",
+        check: "glim-menu-end glim-menu-tick",
+        caret: "glim-menu-end glim-menu-caret",
+        heading: "glim-menu-head",
+      }
+    : {
+        content,
+        item: "glim-select-item",
+        glyph: glyphs ? "glim-select-glyph" : null,
+        label: "glim-select-label",
+        check: "glim-select-check",
+        caret: "glim-select-caret",
+        heading: "glim-select-heading",
+      };
+}
+
 /** A field defaults to `fill`, the smaller sizes to `steady`. */
 export function defaultWidth(size: SelectSize): SelectWidth {
   return size === "field" ? "fill" : "steady";

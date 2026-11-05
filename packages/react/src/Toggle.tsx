@@ -1,10 +1,13 @@
+import type { ButtonHTMLAttributes } from "react";
+
 // The shared switch control.
 //
 // The label is always the accessible name; `hideLabel` only drops the visible
 // caption. Indenting a sub-switch is the caller's layout, per the design
-// language's "flush, no indent" rule.
+// language's "flush, no indent" rule. The other props of a <button> go to the
+// switch, which is what a script asks for its state.
 
-export interface ToggleProps {
+export interface ToggleProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "onChange" | "children" | "type" | "role"> {
   /** Current on/off state. */
   checked: boolean;
   /** Called with the flipped value when the switch is activated. */
@@ -20,19 +23,23 @@ export interface ToggleProps {
   className?: string;
 }
 
-export function Toggle({ checked, onChange, label, hideLabel = false, disabled, className }: ToggleProps) {
+export function Toggle({ checked, onChange, label, hideLabel = false, disabled, className, style, onClick, ...rest }: ToggleProps) {
   return (
-    <span className={`glim-toggle${className ? ` ${className}` : ""}`}>
+    <span className={`glim-toggle${className ? ` ${className}` : ""}`} style={style}>
       {!hideLabel && <span className="glim-toggle-label">{label}</span>}
       {/* No `title=`: the label is always visible beside the switch, so a
           tooltip would only repeat it. */}
       <button
+        {...rest}
         type="button"
         role="switch"
         aria-checked={checked}
         aria-label={label}
         disabled={disabled}
-        onClick={() => onChange(!checked)}
+        onClick={(e) => {
+          onClick?.(e);
+          onChange(!checked);
+        }}
         className="glim-toggle-track"
       >
         <span className="glim-toggle-thumb" />

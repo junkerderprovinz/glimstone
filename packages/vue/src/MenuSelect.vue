@@ -10,8 +10,9 @@ import {
   isSubmenu,
   pageDir,
   SELECT_POSITIONING,
-  selectContentClass,
   selectRootClass,
+  selectRowParts,
+  type SelectRows,
   type SelectWidth,
 } from "@glimstone/core";
 import { IconExpand } from "./glyphs";
@@ -32,6 +33,7 @@ const props = defineProps<{
   value: T | null;
   placeholder?: string;
   width: SelectWidth;
+  rows: SelectRows;
   triggerClass: string;
   id?: string;
   disabled?: boolean;
@@ -55,6 +57,7 @@ const service = useMachine(
 const api = computed(() => menu.connect(service, normalizeProps));
 const all = computed(() => flattenRuns(props.groups));
 const glyphs = computed(() => all.value.some((o) => o.glyph));
+const parts = computed(() => selectRowParts(props.rows, glyphs.value));
 const text = computed(() => faceLabels(all.value, props.value, props.placeholder, props.width).text);
 const subId = (gi: number, ei: number) => `${uid}-sub-${gi}-${ei}`;
 
@@ -134,10 +137,10 @@ defineExpose({ trigger });
     <TipBubble :state="bubble" />
     <Teleport to="body">
       <div v-bind="api.getPositionerProps()" :style="hue.style.value" :class="['glim-select-positioner', hue.className.value]">
-        <div v-bind="api.getContentProps()" :class="selectContentClass(glyphs)">
+        <div v-bind="api.getContentProps()" :class="parts.content">
           <template v-for="(g, gi) in groups" :key="gi">
             <div v-if="g.entries.length > 0" v-bind="g.heading ? api.getItemGroupProps({ id: `g${gi}` }) : {}" class="glim-select-group">
-              <div v-if="g.heading" v-bind="api.getItemGroupLabelProps({ htmlFor: `g${gi}` })" class="glim-select-heading">
+              <div v-if="g.heading" v-bind="api.getItemGroupLabelProps({ htmlFor: `g${gi}` })" :class="parts.heading">
                 {{ g.heading }}
               </div>
               <template v-for="(e, ei) in g.entries" :key="isSubmenu(e) ? `s${ei}` : e.value">
@@ -148,7 +151,7 @@ defineExpose({ trigger });
                   :trigger-id="subId(gi, ei)"
                   :entry="e as SelectSubmenu<T>"
                   :value="value"
-                  :glyphs="glyphs"
+                  :parts="parts"
                   :hue-style="hue.style.value"
                   :hue-class="hue.className.value"
                   @change="emit('change', $event)"
@@ -158,7 +161,7 @@ defineExpose({ trigger });
                   :api="api"
                   :option="e as SelectOption<T>"
                   :value="value"
-                  :glyphs="glyphs"
+                  :parts="parts"
                   @change="emit('change', $event)"
                 />
               </template>

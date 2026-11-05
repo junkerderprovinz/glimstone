@@ -13,13 +13,15 @@ import {
   isSubmenu,
   pageDir,
   SELECT_POSITIONING,
-  selectContentClass,
   selectRootClass,
+  selectRowParts,
   selectTriggerClass,
   shake as shakeOnce,
   wheelValue,
   type SelectChoice,
   type SelectEntry as Entry,
+  type SelectRowParts,
+  type SelectRows,
   type SelectRun,
   type SelectSize,
   type SelectSubmenu as Submenu,
@@ -42,7 +44,7 @@ export type SelectOption<T extends string = string> = SelectChoice<T, ReactNode>
 export type SelectSubmenu<T extends string = string> = Submenu<T, ReactNode>;
 export type SelectEntry<T extends string = string> = Entry<T, ReactNode>;
 export type SelectGroup<T extends string = string> = SelectRun<T, ReactNode>;
-export type { SelectSize, SelectWidth } from "@glimstone/core";
+export type { SelectRows, SelectSize, SelectWidth } from "@glimstone/core";
 
 export interface SelectProps<T extends string = string> {
   /** The field's name, always the accessible name. */
@@ -61,6 +63,8 @@ export interface SelectProps<T extends string = string> {
   /** Defaults to `fill` for a field and to `steady` for the smaller sizes. */
   width?: SelectWidth;
   size?: SelectSize;
+  /** `menu` draws the open list with a context menu's rows, so an app with both shows one kind of menu row. */
+  rows?: SelectRows;
   /** Lets a long value run onto a second line instead of ending in an ellipsis, for one whose end says as much as its start, such as a path. */
   wrap?: boolean;
   /** The trigger's id, for a `<label htmlFor>` outside the select. */
@@ -80,6 +84,7 @@ export interface SelectProps<T extends string = string> {
 
 export function Select<T extends string = string>({
   size = "field",
+  rows = "list",
   width = defaultWidth(size),
   wrap = false,
   className = "",
@@ -90,16 +95,17 @@ export function Select<T extends string = string>({
   const runs = groups ?? [{ entries: options ?? [] }];
   const look = `${selectTriggerClass(size, wrap)} ${className}`.trim();
   return hasSubmenu(runs) ? (
-    <MenuSelect {...rest} width={width} groups={runs} className={look} />
+    <MenuSelect {...rest} width={width} rows={rows} groups={runs} className={look} />
   ) : (
-    <ListSelect {...rest} width={width} groups={runs} className={look} />
+    <ListSelect {...rest} width={width} rows={rows} groups={runs} className={look} />
   );
 }
 
 /** What the two machines take: the runs resolved and `className` the trigger's whole class list. */
-type Inner<T extends string> = Omit<SelectProps<T>, "groups" | "options" | "width" | "size" | "wrap"> & {
+type Inner<T extends string> = Omit<SelectProps<T>, "groups" | "options" | "width" | "size" | "rows" | "wrap"> & {
   groups: SelectGroup<T>[];
   width: SelectWidth;
+  rows: SelectRows;
 };
 
 function ListSelect<T extends string>({
@@ -110,6 +116,7 @@ function ListSelect<T extends string>({
   onChange,
   placeholder,
   width,
+  rows,
   disabled,
   busy,
   tip,
@@ -145,6 +152,7 @@ function ListSelect<T extends string>({
   useEffect(() => (api.open ? closeOnPageMove(() => api.setOpen(false)) : undefined), [api.open]); // eslint-disable-line react-hooks/exhaustive-deps
   const hue = usePortalHue(api.open, trigger.ref);
   const glyphs = all.some((o) => o.glyph);
+  const parts = selectRowParts(rows, glyphs);
   const tp = api.getTriggerProps();
   const positioner = api.getPositionerProps();
 
@@ -172,7 +180,7 @@ function ListSelect<T extends string>({
       {trigger.tip.bubble}
       <Portal>
         <div {...positioner} style={{ ...positioner.style, ...hue.style }} className={`glim-select-positioner ${hue.className}`.trim()}>
-          <div {...api.getContentProps()} className={selectContentClass(glyphs)}>
+          <div {...api.getContentProps()} className={parts.content}>
             {groups.map((g, gi) => {
               const items = g.entries as SelectOption<T>[];
               if (items.length === 0) return null;
@@ -180,17 +188,17 @@ function ListSelect<T extends string>({
               return (
                 <div key={gi} {...(g.heading ? api.getItemGroupProps({ id }) : {})} className="glim-select-group">
                   {g.heading && (
-                    <div {...api.getItemGroupLabelProps({ htmlFor: id })} className="glim-select-heading">
+                    <div {...api.getItemGroupLabelProps({ htmlFor: id })} className={parts.heading}>
                       {g.heading}
                     </div>
                   )}
                   {items.map((item) => (
-                    <div key={item.value} {...api.getItemProps({ item })} className="glim-select-item">
-                      {glyphs && <span className="glim-select-glyph">{item.glyph}</span>}
-                      <span {...api.getItemTextProps({ item })} className="glim-select-label">
+                    <div key={item.value} {...api.getItemProps({ item })} className={parts.item}>
+                      {parts.glyph && <span className={parts.glyph}>{item.glyph}</span>}
+                      <span {...api.getItemTextProps({ item })} className={parts.label}>
                         {item.label}
                       </span>
-                      <span {...api.getItemIndicatorProps({ item })} className="glim-select-check">
+                      <span {...api.getItemIndicatorProps({ item })} className={parts.check}>
                         <IconCheck />
                       </span>
                     </div>
@@ -214,6 +222,7 @@ function MenuSelect<T extends string>({
   onChange,
   placeholder,
   width,
+  rows,
   disabled,
   busy,
   tip,
@@ -236,6 +245,7 @@ function MenuSelect<T extends string>({
   useEffect(() => (api.open ? closeOnPageMove(() => api.setOpen(false)) : undefined), [api.open]); // eslint-disable-line react-hooks/exhaustive-deps
   const hue = usePortalHue(api.open, trigger.ref);
   const glyphs = all.some((o) => o.glyph);
+  const parts = selectRowParts(rows, glyphs);
   const subId = (gi: number, ei: number) => `${uid}-sub-${gi}-${ei}`;
 
   // Zag highlights on the frame after the list opens, so the home row goes one
@@ -296,14 +306,14 @@ function MenuSelect<T extends string>({
       {trigger.tip.bubble}
       <Portal>
         <div {...positioner} style={{ ...positioner.style, ...hue.style }} className={`glim-select-positioner ${hue.className}`.trim()}>
-          <div {...api.getContentProps()} className={selectContentClass(glyphs)}>
+          <div {...api.getContentProps()} className={parts.content}>
             {groups.map((g, gi) => {
               if (g.entries.length === 0) return null;
               const id = `g${gi}`;
               return (
                 <div key={gi} {...(g.heading ? api.getItemGroupProps({ id }) : {})} className="glim-select-group">
                   {g.heading && (
-                    <div {...api.getItemGroupLabelProps({ htmlFor: id })} className="glim-select-heading">
+                    <div {...api.getItemGroupLabelProps({ htmlFor: id })} className={parts.heading}>
                       {g.heading}
                     </div>
                   )}
@@ -317,11 +327,11 @@ function MenuSelect<T extends string>({
                         entry={e}
                         value={value}
                         onChange={onChange}
-                        glyphs={glyphs}
+                        parts={parts}
                         hue={hue}
                       />
                     ) : (
-                      <Choice key={e.value} api={api} option={e} value={value} onChange={onChange} glyphs={glyphs} />
+                      <Choice key={e.value} api={api} option={e} value={value} onChange={onChange} parts={parts} />
                     ),
                   )}
                 </div>
@@ -341,7 +351,7 @@ function SubmenuList<T extends string>({
   entry,
   value,
   onChange,
-  glyphs,
+  parts,
   hue,
 }: {
   parent: menu.Service;
@@ -350,7 +360,7 @@ function SubmenuList<T extends string>({
   entry: SelectSubmenu<T>;
   value: T | null;
   onChange: (value: T) => void;
-  glyphs: boolean;
+  parts: SelectRowParts;
   hue: PortalHue;
 }) {
   const service = useMachine(menu.machine, {
@@ -368,18 +378,18 @@ function SubmenuList<T extends string>({
 
   return (
     <>
-      <div {...parentApi.getTriggerItemProps(api)} className="glim-select-item">
-        {glyphs && <span className="glim-select-glyph">{entry.glyph}</span>}
-        <span className="glim-select-label">{entry.label}</span>
-        <span aria-hidden="true" className="glim-select-caret">
+      <div {...parentApi.getTriggerItemProps(api)} className={parts.item}>
+        {parts.glyph && <span className={parts.glyph}>{entry.glyph}</span>}
+        <span className={parts.label}>{entry.label}</span>
+        <span aria-hidden="true" className={parts.caret}>
           <IconExpand />
         </span>
       </div>
       <Portal>
         <div {...positioner} style={{ ...positioner.style, ...hue.style }} className={`glim-select-positioner ${hue.className}`.trim()}>
-          <div {...api.getContentProps()} className={selectContentClass(glyphs)}>
+          <div {...api.getContentProps()} className={parts.content}>
             {entry.options.map((o) => (
-              <Choice key={o.value} api={api} option={o} value={value} onChange={onChange} glyphs={glyphs} />
+              <Choice key={o.value} api={api} option={o} value={value} onChange={onChange} parts={parts} />
             ))}
           </div>
         </div>
@@ -393,13 +403,13 @@ function Choice<T extends string>({
   option,
   value,
   onChange,
-  glyphs,
+  parts,
 }: {
   api: menu.Api;
   option: SelectOption<T>;
   value: T | null;
   onChange: (value: T) => void;
-  glyphs: boolean;
+  parts: SelectRowParts;
 }) {
   const checked = option.value === value;
   const item = {
@@ -413,12 +423,12 @@ function Choice<T extends string>({
     },
   };
   return (
-    <div {...api.getOptionItemProps(item)} className="glim-select-item">
-      {glyphs && <span className="glim-select-glyph">{option.glyph}</span>}
-      <span {...api.getItemTextProps(item)} className="glim-select-label">
+    <div {...api.getOptionItemProps(item)} className={parts.item}>
+      {parts.glyph && <span className={parts.glyph}>{option.glyph}</span>}
+      <span {...api.getItemTextProps(item)} className={parts.label}>
         {option.label}
       </span>
-      <span aria-hidden="true" data-state={checked ? "checked" : "unchecked"} className="glim-select-check">
+      <span aria-hidden="true" data-state={checked ? "checked" : "unchecked"} className={parts.check}>
         <IconCheck />
       </span>
     </div>

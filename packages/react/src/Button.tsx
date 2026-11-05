@@ -1,4 +1,4 @@
-import type { FocusEvent, MouseEvent, ReactNode, Ref } from "react";
+import type { ButtonHTMLAttributes, FocusEvent, MouseEvent, ReactNode, Ref } from "react";
 import { buttonView, takePageHue, type ButtonTone, type ButtonVariant, type WidthStage } from "@glimstone/core";
 import { useLabelMode } from "./useLabelMode.ts";
 import { useTipBubble } from "./useTipBubble.tsx";
@@ -7,26 +7,9 @@ import { glyphFor, IconClose } from "./glyphs.tsx";
 export type { ButtonTone, ButtonVariant } from "@glimstone/core";
 
 // The one clickable control; what it shows and how wide it is come from
-// buttonView() in the core.
+// buttonView() in the core. The other props of a <button> go to the button.
 
-export function Button({
-  label,
-  labelKey,
-  glyph,
-  onClick,
-  tone = "neutral",
-  variant = "default",
-  disabled = false,
-  type = "button",
-  className = "",
-  title,
-  hueIndex,
-  busy = false,
-  autoFocus = false,
-  stage: stageOverride,
-  keepLabel = false,
-  ref,
-}: {
+export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children" | "className" | "disabled" | "onClick" | "title" | "type" | "autoFocus"> {
   /** The button's words, present in every mode: visible, or hidden but
    *  announced and shown as the tooltip. Keep it stable, since a label that
    *  changes while the button works would resize it; put changing state in
@@ -49,7 +32,6 @@ export function Button({
   variant?: ButtonVariant;
   disabled?: boolean;
   type?: "button" | "submit";
-  className?: string;
   /** Extra explanation, and the place for anything that changes: the running
    *  state, or why the button is unavailable. It shows in the hover and focus
    *  bubble, joined with the label where the label is hidden, and still
@@ -76,7 +58,28 @@ export function Button({
    *  content rather than a verb, such as a directory row in a folder browser.
    *  The glyph still shows beside it. */
   keepLabel?: boolean;
-}) {
+  className?: string;
+}
+
+export function Button({
+  label,
+  labelKey,
+  glyph,
+  onClick,
+  tone = "neutral",
+  variant = "default",
+  disabled = false,
+  type = "button",
+  className = "",
+  title,
+  hueIndex,
+  busy = false,
+  autoFocus = false,
+  stage: stageOverride,
+  keepLabel = false,
+  ref,
+  ...rest
+}: ButtonProps) {
   const mode = useLabelMode("buttons");
   // A chip always closes, so it has a glyph even when no call site passes one.
   const resolved =
@@ -114,6 +117,7 @@ export function Button({
           <button> emits no mouse events. */}
       {tooltip.wrap(
         <button
+          {...rest}
           ref={mergeRefs(ref, tooltip.ref)}
           type={type}
           onClick={onClick}

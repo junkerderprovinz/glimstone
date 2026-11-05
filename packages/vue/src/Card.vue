@@ -30,8 +30,7 @@ const style = computed(() => (props.hueIndex !== undefined ? hueVars(props.hueIn
   >
     <h2 v-if="title || hint" class="glim-panel-heading">
       <Badge tone="heading" size="heading" wrap :hue-index="hueIndex">
-        {{ title }}
-        <InfoBubble v-if="hint" :tip="hint" on-accent />
+        {{ title }}<InfoBubble v-if="hint" :tip="hint" on-accent />
       </Badge>
     </h2>
     <slot />

@@ -112,6 +112,13 @@ test.describe("Button", () => {
 test.describe("Toggle", () => {
   const quiet = (page: Page) => stage(page, "ToggleBasic").getByRole("switch", { name: "Quiet notifications" });
 
+  test("[toggle-attrs] an id and a data hook reach the switch, a class stays on the frame", async ({ page }) => {
+    await open(page, "/components/toggle");
+    await expect(stage(page, "ToggleBasic").locator("#quiet-notifications")).toHaveAttribute("role", "switch");
+    await expect(stage(page, "ToggleBasic").locator('[data-hook="quiet"]')).toHaveAttribute("role", "switch");
+    await expect(stage(page, "ToggleBasic").locator(".glim-toggle.demo-toggle").getByRole("switch")).toHaveCount(1);
+  });
+
   test("[toggle-role] switch with aria-checked", async ({ page }) => {
     await open(page, "/components/toggle");
     await expect(quiet(page)).toHaveAttribute("aria-checked", "true");
@@ -489,6 +496,51 @@ test.describe("Select sizes and labels", () => {
       .locator(".glim-select-value > *")
       .evaluateAll((els) => els.some((e) => e.scrollWidth > e.clientWidth + 1));
     expect(cut).toBe(false);
+  });
+});
+
+test.describe("Select with menu rows", () => {
+  const sort = (page: Page) => stage(page, "SelectMenuRows").locator(".glim-select-trigger").first();
+  const list = (page: Page) => page.getByRole("listbox", { name: "Sort by", exact: true });
+
+  async function openSort(page: Page) {
+    await open(page, "/components/select");
+    await sort(page).focus();
+    await page.keyboard.press("Enter");
+    await expect(list(page)).toBeVisible();
+    await expect.poll(() => page.evaluate(() => !!document.activeElement?.closest('[role="listbox"]'))).toBe(true);
+  }
+
+  test("[select-menu-rows] the list draws the rows of a context menu", async ({ page }) => {
+    await openSort(page);
+    const name = list(page).getByRole("option", { name: "Name" });
+    await expect(name).toHaveClass(/glim-menu-item/);
+    await expect(name.locator(".glim-menu-glyph svg")).toBeVisible();
+    await expect(name.locator(".glim-menu-label")).toHaveText("Name");
+    await expect(name.locator(".glim-menu-tick")).toBeVisible();
+    await expect(list(page).getByRole("option", { name: "Kind" }).locator(".glim-menu-tick")).toBeHidden();
+    const ground = (row: string) => list(page).getByRole("option", { name: row }).evaluate((e) => getComputedStyle(e).backgroundColor);
+    expect(await ground("Name")).not.toBe(await ground("Kind"));
+  });
+
+  test("[select-menu-keys] the keys and the choosing stay those of the select", async ({ page }) => {
+    await openSort(page);
+    await page.keyboard.press("k");
+    await expect(list(page).locator('[role="option"][data-highlighted]')).toHaveText("Kind");
+    await page.keyboard.press("Enter");
+    await expect(sort(page)).toContainText("Kind");
+    await expect(list(page)).toBeHidden();
+    await expect(sort(page)).toBeFocused();
+  });
+
+  test("[select-menu-sub] a list with submenus draws them alike", async ({ page }) => {
+    await open(page, "/components/select");
+    await stage(page, "SelectMenuRows").locator(".glim-select-trigger").last().click();
+    const menu = page.getByRole("menu", { name: "Open with", exact: true });
+    await expect(menu).toBeVisible();
+    await expect(menu.locator(".glim-menu-head")).toHaveText("Viewers");
+    await expect(menu.getByRole("menuitemradio", { name: "Text" })).toHaveClass(/glim-menu-item/);
+    await expect(menu.getByRole("menuitem", { name: "Other" }).locator(".glim-menu-caret")).toBeVisible();
   });
 });
 
@@ -936,6 +988,30 @@ test.describe("Selector", () => {
   const shown = (page: Page) => stage(page, "SelectorPickers").getByRole("group", { name: "Show" });
   const column = (page: Page) => stage(page, "SelectorTiles").getByRole("tablist", { name: "Settings pages" });
   const tile = (page: Page, name: string) => column(page).getByRole("tab", { name });
+  const steps = (page: Page) => stage(page, "SelectorSteps");
+
+  test("[sel-numeric] a numeric id comes back as a number", async ({ page }) => {
+    await open(page, "/components/selector");
+    await expect(steps(page).getByRole("radio", { name: "Even" })).toHaveAttribute("aria-checked", "true");
+    await steps(page).getByRole("radio", { name: "Small" }).click();
+    await expect(steps(page).getByRole("radio", { name: "Small" })).toHaveAttribute("aria-checked", "true");
+    await expect(steps(page).locator("output")).toHaveText("Value 9, pressed 1");
+  });
+
+  test("[sel-press] a press on the chosen segment is reported and changes nothing", async ({ page }) => {
+    await open(page, "/components/selector");
+    await steps(page).getByRole("radio", { name: "Even" }).click();
+    await expect(steps(page).locator("output")).toHaveText("Value 5, pressed 1");
+    await steps(page).getByRole("radio", { name: "Even" }).focus();
+    await page.keyboard.press("Space");
+    await expect(steps(page).locator("output")).toHaveText("Value 5, pressed 2");
+  });
+
+  test("[sel-attrs] a segment carries the attributes its item names", async ({ page }) => {
+    await open(page, "/components/selector");
+    await expect(steps(page).locator('[data-level="9"]')).toHaveAttribute("role", "radio");
+    await expect(steps(page).locator('[data-level="9"]')).toHaveAccessibleName("Small");
+  });
 
   test("[sel-tabs-role] a tab list whose chosen tab names the panel", async ({ page }) => {
     await open(page, "/components/selector");
@@ -1270,8 +1346,56 @@ test.describe("SubCard", () => {
   });
 });
 
+test.describe("Card", () => {
+  test("[card-title] the heading's words end with the title", async ({ page }) => {
+    await open(page, "/components/card");
+    const words = await stage(page, "CardBasic").locator(".glim-panel-heading").evaluate((h) => {
+      const walk = document.createTreeWalker(h, NodeFilter.SHOW_TEXT);
+      // A framework's empty anchors are text nodes too.
+      while (walk.nextNode()) if (walk.currentNode.textContent) return walk.currentNode.textContent;
+    });
+    expect(words).toBe("Schedule");
+  });
+});
+
 test.describe("Window", () => {
   const columns = (page: Page) => page.getByRole("dialog", { name: "Columns" });
+  const move = (page: Page) => page.getByRole("dialog", { name: "Move files" });
+
+  async function openMove(page: Page) {
+    await open(page, "/components/window");
+    await stage(page, "WindowHooks").getByRole("button", { name: "Move files" }).click();
+    await expect(move(page)).toBeVisible();
+  }
+
+  test("[window-action-attrs] a foot button carries the attributes its action names", async ({ page }) => {
+    await openMove(page);
+    await expect(move(page).locator('.glim-modal-foot [data-action="move"]')).toHaveAccessibleName("Move all 1,204 files to the archive");
+  });
+
+  test("[window-card] the card element is within reach", async ({ page }) => {
+    await openMove(page);
+    await expect(move(page).getByText(/^\d{3,} px wide$/)).toBeVisible();
+  });
+
+  test("[window-foot-steady] foot buttons keep their words beside a long start text", async ({ page }) => {
+    await openMove(page);
+    const whole = await move(page).locator(".glim-modal-foot .glim-btn-label").evaluateAll((els) => els.map((e) => e.scrollWidth <= e.clientWidth));
+    expect(whole).toEqual([true, true]);
+  });
+
+  test("[window-foot-wrap] on a phone the foot buttons stay inside the card", async ({ page }) => {
+    await page.setViewportSize({ width: 340, height: 700 });
+    await openMove(page);
+    const room = await move(page).evaluate((card) => {
+      const edge = card.getBoundingClientRect().right;
+      return [...card.querySelectorAll(".glim-modal-foot .glim-btn")].map((b) => {
+        const label = b.querySelector(".glim-btn-label")!;
+        return b.getBoundingClientRect().right <= edge && label.scrollWidth <= label.clientWidth;
+      });
+    });
+    expect(room).toEqual([true, true]);
+  });
   const about = (page: Page) => page.getByRole("dialog", { name: "About columns" });
   const footNames = (dialog: Locator) =>
     dialog.locator(".glim-modal-foot").getByRole("button").evaluateAll((els) => els.map((e) => e.getAttribute("aria-label") ?? e.textContent?.trim()));
@@ -1675,6 +1799,17 @@ test.describe("PasswordField", () => {
   const field = (page: Page, name: string) => stage(page, "PasswordFieldBasic").locator(`input[aria-label="${name}"]`);
   // A disabled eye sits in the box that keeps its bubble, so it is found from the wrapper.
   const eye = (page: Page, name: string) => field(page, name).locator("xpath=..").getByRole("button");
+
+  test("[pw-focus] focus is a step up the ramp, without a ring", async ({ page }) => {
+    await open(page, "/components/password-field");
+    const box = field(page, "Password");
+    const look = () => box.evaluate((e) => ({ outline: getComputedStyle(e).outlineStyle, ground: getComputedStyle(e).backgroundColor }));
+    const rest = await look();
+    await box.focus();
+    const held = await look();
+    expect(held.outline).toBe("none");
+    expect(held.ground).not.toBe(rest.ground);
+  });
 
   test("[pw-hidden] hidden at first, the eye named Show", async ({ page }) => {
     await open(page, "/components/password-field");

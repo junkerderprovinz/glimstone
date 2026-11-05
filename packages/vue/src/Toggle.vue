@@ -1,7 +1,13 @@
 <script setup lang="ts">
+import type { StyleValue } from "vue";
+
 // The shared switch, bound with v-model. The label is always the accessible
 // name; `hideLabel` only drops the visible caption. No `title`: the label is
-// visible beside the switch, so a tooltip would only repeat it.
+// visible beside the switch, so a tooltip would only repeat it. Attributes and
+// listeners go to the switch, which is what a script asks for its state; `class`
+// and `style` go to the frame, which carries the row's layout.
+defineOptions({ inheritAttrs: false });
+
 withDefaults(
   defineProps<{
     label: string;
@@ -16,9 +22,10 @@ const checked = defineModel<boolean>({ required: true });
 </script>
 
 <template>
-  <span class="glim-toggle">
+  <span :class="['glim-toggle', $attrs.class]" :style="$attrs.style as StyleValue">
     <span v-if="!hideLabel" class="glim-toggle-label">{{ label }}</span>
     <button
+      v-bind="{ ...$attrs, class: undefined, style: undefined }"
       type="button"
       role="switch"
       :aria-checked="checked"

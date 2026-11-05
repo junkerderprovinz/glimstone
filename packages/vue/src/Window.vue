@@ -17,7 +17,8 @@ import type { WindowAction } from "./windowParts";
 // The general window: a notch with the title, a body for anything and a foot
 // whose actions stand at the end. It owns the teleport, its place on the
 // stack, Escape, the Tab trap and the focus, so a caller mounts it with v-if
-// and unmounts it on `close`. A `class` goes to the card.
+// and unmounts it on `close`. A `class` goes to the card, and a template ref
+// reaches the card element as `card`.
 defineOptions({ inheritAttrs: false });
 
 const props = withDefaults(
@@ -64,6 +65,8 @@ onUnmounted(() => {
   returnFocus(asker);
 });
 
+defineExpose({ card });
+
 function press(action: WindowAction) {
   if (action.onClick?.() !== false) emit("close");
 }
@@ -92,6 +95,7 @@ function pressBeside() {
           <span v-if="hasStart" class="glim-window-start"><slot name="start">{{ start }}</slot></span>
           <Button
             v-for="(a, i) in foot"
+            v-bind="a.attrs"
             :key="i"
             :label="a.label"
             :label-key="a.labelKey"

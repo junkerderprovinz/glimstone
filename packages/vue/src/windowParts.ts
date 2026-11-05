@@ -23,6 +23,8 @@ export interface WindowAction {
   /** This action already leaves the window, such as Done, so no Cancel or Close is added. */
   wayOut?: boolean;
   disabled?: boolean;
+  /** Attributes for the action's button, such as a data hook. */
+  attrs?: Record<string, string>;
   /** Runs on press. The window closes afterwards unless it returns false. */
   onClick?: () => void | false;
 }

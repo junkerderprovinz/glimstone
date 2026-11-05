@@ -35,6 +35,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "toggle-enter", keys: ["Enter"], when: "The switch has focus", then: "It flips." },
       { id: "toggle-name", when: "Always", then: "The label is the accessible name, also with hideLabel." },
       { id: "toggle-disabled", when: "The switch is disabled", then: "A click changes nothing." },
+      { id: "toggle-attrs", when: "It is given an id, a data attribute or a listener", then: "They land on the switch itself, and a class stays on the frame." },
     ],
   },
   ConfirmDialog: {
@@ -62,6 +63,9 @@ export const CONTRACTS: Record<string, Contract> = {
   Select: {
     pattern: { name: "Select-only combobox", url: `${APG}combobox/examples/combobox-select-only/` },
     rows: [
+      { id: "select-menu-rows", when: "rows is menu", then: "The options are the rows of a context menu: the glyph's room, the words, the tick at the end and the wash on the value in force." },
+      { id: "select-menu-keys", keys: ["ArrowDown", "Enter"], when: "rows is menu", then: "The keys, the typing and the choosing stay those of the select." },
+      { id: "select-menu-sub", when: "rows is menu and the list has submenus", then: "Headings, options and submenu rows are drawn as in a context menu." },
       { id: "select-open-focus", keys: ["Enter", "Space", "ArrowDown"], when: "The trigger has focus", then: "The list opens on the selected option." },
       { id: "select-arrows", keys: ["ArrowDown", "ArrowUp"], when: "The list is open", then: "The highlight moves to the next or previous option." },
       { id: "select-home-end", keys: ["Home", "End"], when: "The list is open", then: "The highlight moves to the first or last option." },
@@ -150,6 +154,9 @@ export const CONTRACTS: Record<string, Contract> = {
   Selector: {
     pattern: { name: "Tabs", url: `${APG}tabs/` },
     rows: [
+      { id: "sel-numeric", when: "An item's id is a number", then: "The value comes back as that number." },
+      { id: "sel-press", keys: ["Space", "Enter"], when: "A segment is pressed, also the one already chosen", then: "The press is reported before the choice changes." },
+      { id: "sel-attrs", when: "An item names attributes", then: "Its segment carries them." },
       { id: "sel-tabs-role", when: "select is one", then: "role=\"tablist\" of tabs with aria-selected; the chosen tab controls the panel, which is named by it." },
       { id: "sel-one-stop", keys: ["Tab"], when: "Focus enters the strip", then: "It lands on the chosen segment; the strip is one tab stop." },
       { id: "sel-arrows", keys: ["ArrowRight", "ArrowLeft"], when: "A tab has focus", then: "Focus moves to the next or previous tab and chooses it, wrapping at the ends." },
@@ -197,6 +204,9 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "empty-action", when: "It has an action", then: "The action is a filled button with words." },
     ],
   },
+  Card: {
+    rows: [{ id: "card-title", when: "It has a title", then: "The heading's words are the title, with nothing after it." }],
+  },
   Window: {
     pattern: { name: "Dialog (modal)", url: `${APG}dialog-modal/` },
     rows: [
@@ -209,6 +219,10 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "window-trap", keys: ["Tab", "Shift+Tab"], when: "Focus is on the last or first control", then: "Focus wraps inside the window in front." },
       { id: "window-return", when: "The window closes", then: "Focus goes back to the control that opened it." },
       { id: "window-backdrop", when: "A press lands beside the window", then: "It closes." },
+      { id: "window-action-attrs", when: "An action names attributes", then: "Its foot button carries them." },
+      { id: "window-card", when: "The caller asks for the card", then: "The window hands over its card element." },
+      { id: "window-foot-steady", when: "A long text stands at the start of the foot", then: "The text wraps and the buttons keep their words." },
+      { id: "window-foot-wrap", when: "The foot has no room for its buttons, as on a phone", then: "They wrap inside the card instead of shrinking." },
     ],
   },
   ContextMenu: {
@@ -263,6 +277,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "pw-keep", when: "The eye is pressed", then: "The value stays as typed." },
       { id: "pw-width", when: "It stands in a column with a plain field", then: "Both are as wide, the eye inside the field." },
       { id: "pw-disabled", when: "The field is disabled", then: "The eye is disabled too." },
+      { id: "pw-focus", when: "The field has focus", then: "Its fill steps up the ramp and no ring shows (rule 14)." },
     ],
   },
   CopyField: {

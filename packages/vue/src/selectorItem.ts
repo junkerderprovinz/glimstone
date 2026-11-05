@@ -1,8 +1,8 @@
 import type { Component } from "vue";
 
-export interface SelectorItem {
-  /** Stable id, handed back through v-model. */
-  id: string;
+export interface SelectorItem<V extends string | number = string> {
+  /** Stable id, handed back through v-model as it stands here. */
+  id: V;
   label: string;
   /** Shown before the label; in a tab strip it is tinted with its tab's hue. */
   glyph?: Component;
@@ -17,4 +17,6 @@ export interface SelectorItem {
   href?: string;
   /** Tiles only: a page with nothing on it yet, dimmed rather than hidden. */
   dim?: boolean;
+  /** Attributes for the item's own segment, such as a data hook. */
+  attrs?: Record<string, string>;
 }

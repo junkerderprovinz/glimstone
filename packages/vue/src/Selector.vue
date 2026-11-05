@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="V extends string | number = string">
 import { computed, onScopeDispose, ref, shallowRef, watch } from "vue";
 import {
   countSelector,
@@ -32,7 +32,7 @@ import type { SelectorItem } from "./selectorItem";
 // "Sort by:" belongs in a <span> outside it, never a <label> around it.
 const props = withDefaults(
   defineProps<{
-    items: SelectorItem[];
+    items: SelectorItem<V>[];
     /** The accessible name of the strip, such as "Sort" or "Settings pages". */
     label: string;
     select?: SelectMode;
@@ -75,7 +75,9 @@ const props = withDefaults(
     disabled: false,
   },
 );
-const model = defineModel<string | null | string[]>({ required: true });
+const model = defineModel<V | null | V[]>({ required: true });
+/** Every press, before the choice changes, also one on the segment already chosen. */
+const emit = defineEmits<{ press: [id: V] }>();
 
 function useMedia(query: string) {
   const on = shallowRef(mediaMatches(query));
@@ -161,13 +163,14 @@ const layout = computed(() =>
   }),
 );
 const many = computed(() => props.select === "many");
-const isOn = (id: string) => (many.value ? ((model.value as string[] | null) ?? []).includes(id) : model.value === id);
+const isOn = (id: V) => (many.value ? ((model.value as V[] | null) ?? []).includes(id) : model.value === id);
 const disabledFlags = computed(() => props.items.map((it) => props.disabled || !!it.disabled));
 const roved = computed(() => rovedIndex(disabledFlags.value, props.items.findIndex((it) => isOn(it.id))));
 
-function choose(id: string) {
+function choose(id: V) {
+  emit("press", id);
   model.value = many.value
-    ? toggleSelection((model.value as string[] | null) ?? [], id, props.items.map((it) => it.id))
+    ? toggleSelection((model.value as V[] | null) ?? [], id, props.items.map((it) => it.id))
     : id;
 }
 
@@ -182,7 +185,8 @@ function onKeydown(e: KeyboardEvent) {
   const node = roveSelector(track.value!, e.key, props.orientation);
   if (!node) return;
   e.preventDefault();
-  if (strip.value.autoSelect && node.dataset.selId) choose(node.dataset.selId);
+  const item = props.items.find((it) => String(it.id) === node.dataset.selId);
+  if (strip.value.autoSelect && item) choose(item.id);
 }
 </script>
 

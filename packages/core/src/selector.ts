@@ -57,7 +57,7 @@ export function pinnedWidth(widest: number, count: number, room: number, gap: nu
 }
 
 /** The id of a tab in a strip that switches `panelId`; the panel names itself after it. */
-export function selectorTabId(panelId: string, itemId: string): string {
+export function selectorTabId(panelId: string, itemId: string | number): string {
   return `${panelId}-tab-${itemId}`;
 }
 
@@ -100,7 +100,7 @@ export function rovedIndex(disabled: boolean[], activeIndex: number): number {
 }
 
 /** The value of a "many" selector once `id` is toggled, in the items' order. */
-export function toggleSelection(value: readonly string[], id: string, order: readonly string[]): string[] {
+export function toggleSelection<V>(value: readonly V[], id: V, order: readonly V[]): V[] {
   const on = !value.includes(id);
   return order.filter((x) => (x === id ? on : value.includes(x)));
 }

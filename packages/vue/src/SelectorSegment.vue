@@ -16,7 +16,7 @@ import type { SelectorItem } from "./selectorItem";
 // One segment or tile of Selector, a component of its own so each holds its
 // own bubble.
 const props = defineProps<{
-  item: SelectorItem;
+  item: SelectorItem<string | number>;
   index: number;
   strip: SelectorView;
   on: boolean;
@@ -84,6 +84,7 @@ function open(e: MouseEvent) {
 <template>
   <template v-if="orientation === 'vertical'">
     <a
+      v-bind="item.attrs"
       :ref="attach"
       :href="item.href"
       :data-sel-id="item.id"
@@ -109,6 +110,7 @@ function open(e: MouseEvent) {
          has nothing for it to pass on. -->
     <TipWrap :on="hiddenTip" :show="bubble.show" :hide="bubble.hide" v-bind="hiddenTip ? { style: share } : {}">
       <button
+        v-bind="item.attrs"
         :ref="attach"
         type="button"
         :data-sel-id="item.id"

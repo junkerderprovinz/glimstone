@@ -1,6 +1,6 @@
 <script setup lang="ts" generic="T extends string">
 import { computed } from "vue";
-import { defaultWidth, hasSubmenu, selectTriggerClass, type SelectSize, type SelectWidth } from "@glimstone/core";
+import { defaultWidth, hasSubmenu, selectTriggerClass, type SelectRows, type SelectSize, type SelectWidth } from "@glimstone/core";
 import ListSelect from "./ListSelect.vue";
 import MenuSelect from "./MenuSelect.vue";
 import type { SelectGroup, SelectOption } from "./selectParts";
@@ -24,6 +24,8 @@ const props = withDefaults(
     /** Defaults to `fill` for a field and to `steady` for the smaller sizes. */
     width?: SelectWidth;
     size?: SelectSize;
+    /** `menu` draws the open list with a context menu's rows, so an app with both shows one kind of menu row. */
+    rows?: SelectRows;
     /** Lets a long value run onto a second line, for one whose end says as much as its start. */
     wrap?: boolean;
     /** The trigger's id, for a `<label for>` outside the select. */
@@ -36,7 +38,7 @@ const props = withDefaults(
     /** The caller's failure counter. Each bump shakes the trigger once, as the value snaps back. */
     shake?: number;
   }>(),
-  { hideLabel: false, size: "field", wrap: false, disabled: false, busy: false },
+  { hideLabel: false, size: "field", rows: "list", wrap: false, disabled: false, busy: false },
 );
 /** Null when there is no one value, such as over a selection whose rows disagree. */
 const model = defineModel<T | null>({ required: true });
@@ -49,6 +51,7 @@ const shared = computed(() => ({
   value: model.value,
   placeholder: props.placeholder,
   width: props.width ?? defaultWidth(props.size),
+  rows: props.rows,
   triggerClass: selectTriggerClass(props.size, props.wrap),
   id: props.id,
   disabled: props.disabled,

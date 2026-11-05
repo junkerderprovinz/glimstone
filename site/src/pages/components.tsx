@@ -99,6 +99,10 @@ export function TogglePage() {
           The label is always the accessible name. <code>hideLabel</code> drops only the visible caption, for a row
           that draws the same text right beside it.
         </li>
+        <li>
+          An <code>id</code>, a data attribute or a listener lands on the switch itself, which is what a script asks for
+          its state. A class stays on the frame.
+        </li>
         <li>The thumb mirrors under right-to-left.</li>
       </ul>
       <H2>Behaviour</H2>
@@ -162,6 +166,8 @@ export function CardPage() {
         <li>One raised level. Never a card inside a card; a nested card drops its surface and side padding.</li>
         <li>Hierarchy comes from type size and colour step, not from borders.</li>
       </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="Card" />
       <H2>API</H2>
       <PropsTable of="Card" />
     </>
@@ -410,6 +416,13 @@ export function SelectorPage() {
         A caption such as "Show" is a plain span beside the strip, never a <code>label</code> around it: a label around
         several segments hands its clicks to the first one.
       </p>
+      <H2>Numbers, hooks and presses</H2>
+      <p>
+        An item's <code>id</code> may be a number, and it comes back as one. <code>attrs</code> puts attributes on the
+        item's own segment, such as a data hook. <code>onPress</code> hears every press before the choice changes, also
+        one on the segment already chosen, which <code>onChange</code> says nothing about in Vue.
+      </p>
+      <Demo name="SelectorSteps" />
       <H2>Two stylings, two scales</H2>
       <ul>
         <li>
@@ -636,6 +649,13 @@ export function WindowPage() {
         An action closes the window once it has run. One that changes something in view, such as a reset, returns{" "}
         <code>false</code> and the window stays for a second look.
       </p>
+      <H2>Hooks</H2>
+      <p>
+        An action's <code>attrs</code> go on its foot button. <code>ref</code> in React and the exposed{" "}
+        <code>card</code> in Vue hand over the card element, for a caller that measures it or looks for something inside.
+        A long <code>start</code> wraps, and the buttons keep their words beside it.
+      </p>
+      <Demo name="WindowHooks" />
       <H2>Rules</H2>
       <ul>
         <li>The content is as wide as the window, and the answers stand at the end of the foot, the forward one last.</li>

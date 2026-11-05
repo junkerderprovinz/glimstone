@@ -8,7 +8,7 @@ const sound = ref(false);
 
 <template>
   <div style="display: grid; gap: 16px">
-    <Toggle v-model="quiet" label="Quiet notifications" />
+    <Toggle id="quiet-notifications" v-model="quiet" data-hook="quiet" class="demo-toggle" label="Quiet notifications" />
     <Toggle v-model="sound" label="Play a sound" :disabled="!quiet" />
   </div>
 </template>
