@@ -399,6 +399,11 @@ body {
   height: 1.25rem;
   flex: none;
 }
+/* A tree's row keeps a deep name its room with a smaller glyph. */
+:is(.glim-nav-row--tree, .glim-nav-row--tree > .glim-nav-row-main) > svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
 
 /* A closed reactive row must not reserve a gap beside a zero-width label. */
 .glim-nav-row.glim-reactive {
@@ -1944,7 +1949,7 @@ body {
    smallest floor. An explicit stage is a width of its own and stays. */
 .glim-modal-foot > :is(.glim-btn-sm, .glim-btn-md, .glim-btn-lg),
 .glim-modal-foot > .glim-tip-wrap > :is(.glim-btn-sm, .glim-btn-md, .glim-btn-lg) { min-width: var(--btn-w-xs); }
-.glim-path > .glim-btn { min-width: 0; }
+.glim-path > .glim-btn:not(.glim-btn-icon) { min-width: 0; }
 
 /* Rule 40. A surface-filled button's hovered ground takes 22% of the tint and
    its glyph all of it; its words keep the text colour, which the accent on a
@@ -2301,14 +2306,17 @@ body {
    height, sized by its glyph. In a mode that shows words it is an ordinary
    button with its label (see `ButtonVariant` in packages/react/src/Button.tsx). */
 .glim-btn-icon {
-  width: var(--btn-h);
-  min-width: 0;
+  min-width: var(--btn-h);
   padding-inline: 0;
+}
+/* A square that holds more than its glyph, such as a count, grows to hold it. */
+.glim-btn-icon:has(> :not(.glim-btn-glyph, .glim-sr-only)) {
+  padding-inline: var(--btn-pad-x);
 }
 
 /* A row action promoted to a key control stays square at the other height. */
 .glim-btn-icon.glim-btn-key {
-  width: var(--btn-h-key);
+  min-width: var(--btn-h-key);
 }
 
 /* A glyph alone in a square fills half its box, as on a 32px icon badge with a
@@ -3872,6 +3880,13 @@ body {
      what stands in a slot lies above that press. The narrow rail has no room for
      a slot. */
   .glim-nav-row--slots { gap: 0.5rem; }
+  /* A tree's row: each level steps in by the chevron's width, and the smaller
+     glyph and gap leave a deep name its room. */
+  .glim-nav-row--tree {
+    gap: 0.5rem;
+    padding-inline-start: calc(0.5rem + var(--nav-depth, 0) * 0.85rem);
+  }
+  .glim-nav-row--tree > .glim-nav-row-main { gap: 0.5rem; }
   .glim-nav-row-main {
     display: flex;
     flex: 1 1 auto;
@@ -3888,8 +3903,6 @@ body {
     inset: 0;
     border-radius: inherit;
   }
-  .glim-nav-row--centred > .glim-nav-row-main { justify-content: center; }
-  .glim-nav-row--centred > .glim-nav-row-slot { display: none; }
   .glim-nav-row-slot {
     position: relative;
     z-index: 1;
@@ -4047,9 +4060,12 @@ body {
     gap: 1rem;
     padding-top: 1.75rem;
   }
+  /* The start text gives way first and wraps, so a button does not drop to the
+     next line for a few pixels. */
   .glim-window-start {
     flex: 1 1 0;
-    min-width: min(8rem, 100%);
+    min-width: min(4rem, 100%);
+    overflow-wrap: anywhere;
     font-size: var(--text-meta);
     color: var(--carbon-text-muted);
   }
@@ -4369,14 +4385,17 @@ body {
      and on a phone the rows go back to wrapping on their own. */
   .glim-field-row-group {
     display: grid;
-    grid-template-columns: max-content minmax(0, 1fr);
-    gap: 0.5rem 0.75rem;
+    grid-template-columns: repeat(var(--field-columns, 1), max-content minmax(0, 1fr));
+    gap: 0.5rem 1.5rem;
   }
   .glim-field-row-group > .glim-field-row {
     display: grid;
-    grid-column: 1 / -1;
+    grid-column: span 2;
     grid-template-columns: subgrid;
+    column-gap: 0.75rem;
   }
+  .glim-field-row-group > .glim-field-row--wide { grid-column: 1 / -1; }
+  .glim-field-row--wide > .glim-field-row-controls { grid-column: 2 / -1; }
   .glim-field-row-controls {
     display: flex;
     align-items: center;

@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactNode } from "react";
+import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
 import { FieldRowGroupContext } from "./fieldName.ts";
 
 // Rows that share one column for their names, as wide as the longest, so fields
@@ -7,13 +7,15 @@ import { FieldRowGroupContext } from "./fieldName.ts";
 export interface FieldRowGroupProps extends HTMLAttributes<HTMLDivElement> {
   /** The FieldRows. */
   children: ReactNode;
+  /** Rows side by side, each column lining up its own names. A `wide` row spans them all. */
+  columns?: 1 | 2;
   className?: string;
 }
 
-export function FieldRowGroup({ children, className, ...rest }: FieldRowGroupProps) {
+export function FieldRowGroup({ children, columns, className, style, ...rest }: FieldRowGroupProps) {
   return (
     <FieldRowGroupContext.Provider value={true}>
-      <div {...rest} className={className ? `glim-field-row-group ${className}` : "glim-field-row-group"}>
+      <div {...rest} style={columns ? ({ ...style, "--field-columns": columns } as CSSProperties) : style} className={className ? `glim-field-row-group ${className}` : "glim-field-row-group"}>
         {children}
       </div>
     </FieldRowGroupContext.Provider>

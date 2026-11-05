@@ -20,6 +20,7 @@ export default function ContextMenuRows() {
     "-",
     {
       label: "Sort by",
+      subId: "demo-sort-menu",
       glyph: <Glyph name="IconSort" />,
       sub: ["Name", "Size", "Modified"].map((s) => ({ label: s, checked: sort === s, radio: true, onSelect: () => setSort(s) })),
     },

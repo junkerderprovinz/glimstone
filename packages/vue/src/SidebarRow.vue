@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, type Component, type StyleValue } from "vue";
+import { computed, useSlots, type Component, type StyleValue } from "vue";
 import { sidebarRowView } from "@glimstone/core";
 import { useLabelMode } from "./engines";
 import SidebarRowLink from "./SidebarRowLink.vue";
@@ -25,11 +25,14 @@ const props = withDefaults(
     hueIndex?: number;
     /** The figure on the row, with the figure in words as `label`. Nothing shows at zero. */
     count?: { value: number; label: string };
+    /** A tree's row at this level, stepped in with a smaller glyph and gap. */
+    depth?: number;
   }>(),
   { active: false },
 );
 
 const mode = useLabelMode("sidebar");
+const slots = useSlots();
 const view = computed(() =>
   sidebarRowView({
     mode: mode.value,
@@ -38,6 +41,8 @@ const view = computed(() =>
     active: props.active,
     hueIndex: props.hueIndex,
     count: props.count?.value,
+    framed: !!(slots.before || slots.after),
+    depth: props.depth,
   }),
 );
 const link = computed(() => ({ view: view.value, label: props.label, glyph: props.glyph, href: props.href, active: props.active, count: props.count }));

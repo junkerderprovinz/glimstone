@@ -33,6 +33,8 @@ const props = withDefaults(
     id?: string;
     /** Attributes for the trigger, such as a data hook that says the value. */
     triggerAttrs?: Record<string, string>;
+    /** The open list's id. */
+    listId?: string;
     disabled?: boolean;
     /** A choice is out and its answer not back yet: the trigger keeps its focus but takes no input. */
     busy?: boolean;
@@ -60,6 +62,7 @@ const shared = computed(() => ({
   triggerClass: selectTriggerClass(props.size, props.wrap),
   id: props.id,
   triggerAttrs: props.triggerAttrs,
+  listId: props.listId,
   disabled: props.disabled,
   busy: props.busy,
   tip: props.tip,

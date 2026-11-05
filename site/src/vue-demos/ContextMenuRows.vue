@@ -20,6 +20,7 @@ const items = computed<MenuEntry[]>(() => [
   "-",
   {
     label: "Sort by",
+    subId: "demo-sort-menu",
     glyph: glyph("IconSort"),
     sub: ["Name", "Size", "Modified"].map((s) => ({ label: s, checked: sort.value === s, radio: true, onSelect: () => (sort.value = s) })),
   },

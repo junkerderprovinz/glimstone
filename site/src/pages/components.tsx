@@ -580,7 +580,9 @@ export function SidebarRowPage() {
       <p>
         Without an <code>href</code> the row is a button. <code>before</code> and <code>after</code>, slots in Vue, hold a
         tree's toggle, a meter, free space or a pin. A control there answers on its own, and a click anywhere else still
-        goes to the row. In the narrow rail they step aside for the glyph.
+        goes to the row. A row with slots is never centred, so they stay in reach in every label mode.{" "}
+        <code>depth</code> steps a tree's row in by its level, with a smaller glyph and gap, so a deep name keeps its
+        room.
       </p>
       <Demo name="SidebarSlots" />
       <H2>Behaviour</H2>
@@ -1049,6 +1051,11 @@ export function FieldRowPage() {
         that grow start at one edge. The rows stand directly in it. Below 600px they wrap on their own again.
       </p>
       <Demo name="FieldRowGroup" />
+      <p>
+        <code>columns={2}</code> sets two columns of rows side by side, each lining up its own names, and{" "}
+        <code>wide</code> lets a row span both.
+      </p>
+      <Demo name="FieldRowColumns" />
       <H2>Rules</H2>
       <ul>
         <li>

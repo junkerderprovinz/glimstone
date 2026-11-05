@@ -28,6 +28,8 @@ export interface SidebarRowProps extends Omit<AnchorHTMLAttributes<HTMLAnchorEle
   hueIndex?: number;
   /** The figure on the row, such as items that need attention. Nothing shows at zero. */
   count?: SidebarCount;
+  /** A tree's row at this level, stepped in with a smaller glyph and gap. */
+  depth?: number;
   /** What stands in the row before the link, such as a tree's toggle. */
   before?: ReactNode;
   /** What stands in the row after the link, such as a meter or a pin. The link's
@@ -35,9 +37,9 @@ export interface SidebarRowProps extends Omit<AnchorHTMLAttributes<HTMLAnchorEle
   after?: ReactNode;
 }
 
-export function SidebarRow({ label, glyph, href, active = false, hueIndex, count, before, after, className = "", style, ...rest }: SidebarRowProps) {
+export function SidebarRow({ label, glyph, href, active = false, hueIndex, count, depth, before, after, className = "", style, ...rest }: SidebarRowProps) {
   const mode = useLabelMode("sidebar");
-  const view = sidebarRowView({ mode, label, hasGlyph: !!glyph, active, hueIndex, count: count?.value });
+  const view = sidebarRowView({ mode, label, hasGlyph: !!glyph, active, hueIndex, count: count?.value, framed: !!(before || after), depth });
   const tooltip = useTipBubble(view.tip);
   const framed = before || after;
   const Element = (href ? "a" : "button") as "a";

@@ -52,7 +52,8 @@ export function SelectPage() {
       />
       <H2>Hooks</H2>
       <p>
-        <code>triggerAttrs</code> go on the trigger, such as a data hook that says the value in force.
+        <code>triggerAttrs</code> go on the trigger, such as a data hook that says the value in force, and{" "}
+        <code>listId</code> is the open list's id.
       </p>
       <H2>In a well</H2>
       <p>

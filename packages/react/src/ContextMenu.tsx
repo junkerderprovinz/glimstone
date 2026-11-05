@@ -268,6 +268,7 @@ export function ContextMenu({ x, y, items, above = false, label, id, opener, onC
         createPortal(
           <div
             ref={subMenu}
+            id={(host as MenuItem).subId}
             role="menu"
             aria-label={(host as MenuItem).label}
             className="glim-menu"

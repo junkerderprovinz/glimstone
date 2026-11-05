@@ -23,6 +23,17 @@ export default function SidebarSlots() {
           </span>
         }
       />
+      {["mnt", "user", "Big Buck Bunny and the other films"].map((name, depth) => (
+        <SidebarRow
+          key={name}
+          data-depth={depth}
+          label={name}
+          glyph={<Glyph name="IconFolder" />}
+          depth={depth}
+          onClick={() => setNote(`Opened ${name}`)}
+          before={<span data-toggle>›</span>}
+        />
+      ))}
       <SidebarRow label="Trash" glyph={<Glyph name="IconTrash" />} onClick={() => setNote("Opened Trash")} />
       <output>{unpinned ? `Unpinned ${unpinned}` : note}</output>
     </div>

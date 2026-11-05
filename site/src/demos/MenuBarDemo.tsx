@@ -10,6 +10,7 @@ export default function MenuBarDemo() {
   const menus: MenuBarMenu[] = [
     {
       label: "File",
+      id: "demo-bar-file",
       items: [
         { label: "New folder", glyph: <Glyph name="IconFolderAdd" />, shortcut: "F7", onSelect: run("New folder") },
         { label: "Upload", glyph: <Glyph name="IconUpload" />, onSelect: run("Upload") },

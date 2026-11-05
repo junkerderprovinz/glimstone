@@ -12,6 +12,8 @@ export type TreeNode = CoreTreeNode<Component>;
 export interface MenuBarMenu {
   label: string;
   items: MenuEntry[];
+  /** The id of the open menu, for a caller or a script that looks for it. */
+  id?: string;
 }
 
 export interface WindowAction {

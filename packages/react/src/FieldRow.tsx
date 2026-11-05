@@ -18,12 +18,14 @@ export interface FieldRowProps extends Omit<HTMLAttributes<HTMLDivElement>, "chi
   value?: string | number;
   /** The pill's tone. */
   tone?: PillTone;
+  /** In a FieldRowGroup with columns, spans all of them. */
+  wide?: boolean;
   /** The control. */
   children?: ReactNode;
   className?: string;
 }
 
-export function FieldRow({ label, drawn, hint, value, tone, children, className, ...rest }: FieldRowProps) {
+export function FieldRow({ label, drawn, hint, value, tone, wide, children, className, ...rest }: FieldRowProps) {
   const row = useRef<HTMLDivElement>(null);
   const inGroup = useContext(FieldRowGroupContext);
   const control =
@@ -35,7 +37,7 @@ export function FieldRow({ label, drawn, hint, value, tone, children, className,
     ));
   return (
     <FieldRowContext.Provider value={label}>
-      <div {...rest} ref={row} className={className ? `glim-field-row ${className}` : "glim-field-row"}>
+      <div {...rest} ref={row} className={["glim-field-row", wide && "glim-field-row--wide", className].filter(Boolean).join(" ")}>
         <span className="glim-field-row-name">
           <span className="glim-field-row-label" onClick={() => pressRowControl(row.current!)}>
             {drawn ?? label}

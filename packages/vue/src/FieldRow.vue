@@ -17,6 +17,8 @@ const props = defineProps<{
   value?: string | number;
   /** The pill's tone. */
   tone?: PillTone;
+  /** In a FieldRowGroup with columns, spans all of them. */
+  wide?: boolean;
 }>();
 
 provide(FIELD_ROW, computed(() => props.label));
@@ -26,7 +28,7 @@ const row = shallowRef<HTMLElement | null>(null);
 </script>
 
 <template>
-  <div ref="row" class="glim-field-row">
+  <div ref="row" :class="['glim-field-row', { 'glim-field-row--wide': wide }]">
     <span class="glim-field-row-name">
       <span class="glim-field-row-label" @click="pressRowControl(row!)"><slot name="label">{{ label }}</slot></span>
       <InfoBubble v-if="hint" :tip="hint" />

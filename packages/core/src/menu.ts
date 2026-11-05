@@ -26,6 +26,8 @@ export interface MenuItem<G> {
   radio?: boolean;
   /** Entries that open beside this row. */
   sub?: MenuEntry<G>[];
+  /** The id of the menu `sub` opens, for a caller or a script that looks for it. */
+  subId?: string;
   onSelect?: () => void;
 }
 

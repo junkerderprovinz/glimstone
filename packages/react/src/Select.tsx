@@ -72,6 +72,8 @@ export interface SelectProps<T extends string = string> {
   id?: string;
   /** Attributes for the trigger, such as a data hook that says the value. */
   triggerAttrs?: Record<string, string>;
+  /** The open list's id. */
+  listId?: string;
   /** The trigger's own node, for a caller that hands it the focus. */
   ref?: Ref<HTMLButtonElement>;
   disabled?: boolean;
@@ -133,6 +135,7 @@ function ListSelect<T extends string>({
   className,
   id,
   triggerAttrs,
+  listId,
   ref,
 }: Inner<T>) {
   const uid = useId();
@@ -145,7 +148,7 @@ function ListSelect<T extends string>({
   });
   const service = useMachine(select.machine, {
     id: uid,
-    ids: id ? { trigger: id } : undefined,
+    ids: { trigger: id, content: listId },
     dir: pageDir(),
     collection,
     value: value === null ? [] : [value],
@@ -241,12 +244,13 @@ function MenuSelect<T extends string>({
   className,
   id,
   triggerAttrs,
+  listId,
   ref,
 }: Inner<T>) {
   const uid = useId();
   const service = useMachine(menu.machine, {
     id: uid,
-    ids: id ? { trigger: id } : undefined,
+    ids: { trigger: id, content: listId },
     dir: pageDir(),
     "aria-label": label,
     positioning: SELECT_POSITIONING,

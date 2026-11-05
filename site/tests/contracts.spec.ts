@@ -34,6 +34,9 @@ const hexToRgb = (hex: string) => {
   return `rgb(${r}, ${g}, ${b})`;
 };
 
+// Zag moves focus into an open list on the next frame; nobody types faster than that.
+const listHasFocus = (page: Page) => page.evaluate(() => !!document.activeElement?.closest('[role="listbox"], [role="menu"]'));
+
 const focusedText = (page: Page) => page.evaluate(() => document.activeElement?.textContent?.trim());
 
 test.describe("Button", () => {
@@ -68,6 +71,16 @@ test.describe("Button", () => {
     await expect.poll(() => square(find)).toBe(true);
     await page.setViewportSize({ width: 1280, height: 800 });
     await expect.poll(() => square(find)).toBe(false);
+  });
+
+  test("[button-compact-after] a compact button holds its count", async ({ page }) => {
+    await open(page, "/components/button");
+    const inside = await sizes(page).locator("button:has([data-count])").evaluate((b) => {
+      const box = b.getBoundingClientRect();
+      const count = b.querySelector("[data-count]")!.getBoundingClientRect();
+      return count.left >= box.left && count.right <= box.right;
+    });
+    expect(inside).toBe(true);
   });
 
   test("[button-key] the key height", async ({ page }) => {
@@ -464,8 +477,7 @@ test.describe("Select", () => {
     await expect(box.getByRole("group", { name: "Convert to" }).getByRole("option")).toHaveText(["FLAC", "WAV"]);
     const lit = () => box.locator(".glim-select-item[data-highlighted]").innerText();
     await expect.poll(lit).toBe("Opus");
-    // Zag moves focus into the list on the next frame; nobody types faster than that.
-    await expect.poll(() => page.evaluate(() => !!document.activeElement?.closest('[role="listbox"]'))).toBe(true);
+    await expect.poll(() => listHasFocus(page)).toBe(true);
     await page.keyboard.press("End");
     expect(await lit()).toBe("WAV");
     await page.keyboard.press("Home");
@@ -577,6 +589,7 @@ test.describe("Select sizes and labels", () => {
     await expect(trigger).toHaveAttribute("id", (await label.getAttribute("for"))!);
     await label.click();
     await expect(page.getByRole("listbox", { name: "Destination" })).toBeVisible();
+    await expect.poll(() => listHasFocus(page)).toBe(true);
     await page.keyboard.press("Escape");
     await demo.getByRole("button", { name: "Choose the destination" }).click();
     await expect(trigger).toBeFocused();
@@ -595,6 +608,15 @@ test.describe("Select sizes and labels", () => {
 });
 
 test.describe("Select's trigger attributes", () => {
+  test("[select-list-id] the open list carries its id", async ({ page }) => {
+    await open(page, "/components/select");
+    await stage(page, "SelectMenuRows").locator(".glim-select-trigger").first().click();
+    await expect(page.locator("#demo-sort-list")).toHaveAttribute("role", "listbox");
+    await page.keyboard.press("Escape");
+    await stage(page, "SelectMenuRows").locator(".glim-select-trigger").last().click();
+    await expect(page.locator("#demo-open-with")).toHaveAttribute("role", "menu");
+  });
+
   test("[select-trigger-attrs] the trigger carries them and they follow", async ({ page }) => {
     await open(page, "/components/select");
     const trigger = stage(page, "SelectMenuRows").locator(".glim-select-trigger").first();
@@ -694,6 +716,7 @@ test.describe("Select with submenus", () => {
     await page.keyboard.press("Enter");
     await expect(root(page)).toBeVisible();
     await expect.poll(() => lit(root(page))).toBe("Europe");
+    await expect.poll(() => listHasFocus(page)).toBe(true);
   }
 
   test("[select-submenu-home] opens on the row that holds the value", async ({ page }) => {
@@ -757,6 +780,7 @@ test.describe("Select right to left", () => {
       return Math.abs(l.x + l.width - (t.x + t.width));
     }).toBeLessThanOrEqual(2);
     expect((await box.boundingBox())!.width).toBeGreaterThan(t.width + 20);
+    await expect.poll(() => listHasFocus(page)).toBe(true);
     await page.keyboard.press("Escape");
 
     const sub = stage(page, "SelectSubmenu").locator(".glim-select-trigger");
@@ -765,6 +789,7 @@ test.describe("Select right to left", () => {
     await page.keyboard.press("Enter");
     const root = page.getByRole("menu", { name: "Server time zone" });
     await expect.poll(() => root.locator(".glim-select-item[data-highlighted]").innerText()).toBe("Europe");
+    await expect.poll(() => listHasFocus(page)).toBe(true);
     await page.keyboard.press("ArrowLeft");
     const europe = page.getByRole("menu", { name: "Europe" });
     await expect(europe).toBeVisible();
@@ -844,6 +869,30 @@ test.describe("SidebarRow with slots", () => {
     await row.click({ position: { x: 100, y: 8 } });
     await expect(demo(page).locator("output")).toHaveText("Opened Media");
   });
+
+  test("[nav-slots-centred] the slots stay where the words hide", async ({ page }) => {
+    await open(page, "/components/sidebar-row", { labels: "glyph" });
+    const row = demo(page).locator(".glim-nav-row", { hasText: "Media" });
+    await expect(row).not.toHaveClass(/glim-nav-row--centred/);
+    await row.getByRole("button", { name: "Unpin" }).click();
+    await expect(demo(page).locator("output")).toHaveText("Unpinned 1");
+  });
+
+  for (const labels of ["textGlyph", "glyph"]) {
+    test(`[nav-depth] a deep row steps in, ${labels}`, async ({ page }) => {
+      await open(page, "/components/sidebar-row", { labels });
+      const look = await demo(page).locator("[data-depth]").evaluateAll((rows) =>
+        // The data hook lands on the row's link, inside the row.
+        rows.map((link) => {
+          const g = link.querySelector("svg")!.getBoundingClientRect();
+          return { left: Math.round(g.left - link.closest(".glim-nav-row")!.getBoundingClientRect().left), size: Math.round(g.width * 10) / 10 };
+        }),
+      );
+      expect(look[1].left - look[0].left).toBeGreaterThan(10);
+      expect(look[2].left - look[1].left).toBeGreaterThan(10);
+      expect(look[0].size).toBeLessThan(20);
+    });
+  }
 
   test("[nav-slots-press] a control in a slot does not press the row", async ({ page }) => {
     await open(page, "/components/sidebar-row");
@@ -1786,6 +1835,23 @@ test.describe("Window", () => {
     });
   }
 
+  test("[window-foot-start] the start text gives way before a button wraps", async ({ page }) => {
+    await open(page, "/components/window");
+    await stage(page, "WindowBusyFoot").getByRole("button", { name: "Compare" }).click();
+    const card = page.getByRole("dialog", { name: "Compare two folders" });
+    const look = await card.evaluate((c) => {
+      const foot = c.querySelector<HTMLElement>(".glim-modal-foot")!;
+      const buttons = [...foot.querySelectorAll<HTMLElement>(".glim-btn")];
+      const pad = parseFloat(getComputedStyle(foot).paddingLeft) + parseFloat(getComputedStyle(foot).paddingRight);
+      const gap = parseFloat(getComputedStyle(foot).columnGap);
+      const need = buttons.reduce((sum, b) => sum + b.getBoundingClientRect().width, 0) + gap * buttons.length;
+      (c as HTMLElement).style.width = `${need + pad + 72}px`;
+      (c as HTMLElement).style.maxWidth = "none";
+      return [...new Set(buttons.map((b) => Math.round(b.getBoundingClientRect().top)))].length;
+    });
+    expect(look).toBe(1);
+  });
+
   test("[window-foot-floor] a short word keeps the smallest floor", async ({ page }) => {
     await open(page, "/components/window");
     await stage(page, "WindowBusyFoot").getByRole("button", { name: "Unsaved" }).click();
@@ -1994,6 +2060,12 @@ test.describe("ContextMenu", () => {
     await expect(last(page)).toContainText("Sorted by Size");
   });
 
+  test("[menu-sub-id] a submenu carries the id its row names", async ({ page }) => {
+    await openMenu(page);
+    await menu(page).getByRole("menuitem", { name: "Sort by" }).hover();
+    await expect(page.locator("#demo-sort-menu")).toHaveAttribute("role", "menu");
+  });
+
   test("[menu-sub-open] ArrowRight opens the submenu beside its row, on the body", async ({ page }) => {
     await openMenu(page);
     const host = menu(page).getByRole("menuitem", { name: "Sort by" });
@@ -2077,6 +2149,12 @@ test.describe("MenuBar", () => {
   const bar = (page: Page) => stage(page, "MenuBarDemo").getByRole("menubar", { name: "Menu" });
   const word = (page: Page, name: string) => bar(page).getByRole("menuitem", { name });
   const menuOf = (page: Page, name: string) => page.getByRole("menu", { name });
+
+  test("[bar-id] a menu of the bar carries its id", async ({ page }) => {
+    await open(page, "/components/menu-bar");
+    await word(page, "File").click();
+    await expect(page.locator("#demo-bar-file")).toHaveAttribute("role", "menu");
+  });
 
   test("[bar-role] a named menubar of words that open menus", async ({ page }) => {
     await open(page, "/components/menu-bar");
@@ -2365,6 +2443,26 @@ test.describe("FieldRow", () => {
       return Math.round(b.getBoundingClientRect().left - a.getBoundingClientRect().right);
     });
     expect(hours).toBe(12);
+  });
+
+  test("[row-group-columns] two columns line up their own names", async ({ page }) => {
+    await open(page, "/components/field-row");
+    const look = await stage(page, "FieldRowColumns").locator(".glim-field-row-group").evaluate((g) => {
+      const left = (name: string) => {
+        const r = [...g.querySelectorAll(".glim-field-row")].find((x) => x.querySelector(".glim-field-row-label")!.textContent === name)!;
+        return Math.round(r.querySelector("input")!.getBoundingClientRect().left);
+      };
+      const wide = [...g.querySelectorAll(".glim-field-row")].find((x) => x.querySelector(".glim-field-row-label")!.textContent === "Look in")!;
+      return {
+        first: [left("Name"), left("Size at least")],
+        second: [left("Changed"), left("Owner")],
+        wide: [Math.round(wide.querySelector("input")!.getBoundingClientRect().left), Math.round(g.getBoundingClientRect().right - wide.querySelector("input")!.getBoundingClientRect().right)],
+      };
+    });
+    expect(look.first[0]).toBe(look.first[1]);
+    expect(look.second[0]).toBe(look.second[1]);
+    expect(look.second[0]).toBeGreaterThan(look.first[0] + 100);
+    expect(look.wide).toEqual([look.first[0], 0]);
   });
 
   test("[row-group-phone] on a phone the rows wrap on their own", async ({ page }) => {

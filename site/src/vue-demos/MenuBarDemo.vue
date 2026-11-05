@@ -11,6 +11,7 @@ const run = (label: string) => () => (last.value = label);
 const menus = computed<MenuBarMenu[]>(() => [
   {
     label: "File",
+    id: "demo-bar-file",
     items: [
       { label: "New folder", glyph: glyph("IconFolderAdd"), shortcut: "F7", onSelect: run("New folder") },
       { label: "Upload", glyph: glyph("IconUpload"), onSelect: run("Upload") },

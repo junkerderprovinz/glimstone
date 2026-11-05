@@ -31,6 +31,7 @@ const props = defineProps<{
   triggerClass: string;
   id?: string;
   triggerAttrs?: Record<string, string>;
+  listId?: string;
   disabled?: boolean;
   busy?: boolean;
   tip?: string;
@@ -54,7 +55,7 @@ const service = useMachine(
   select.machine,
   computed(() => ({
     id: uid,
-    ids: props.id ? { trigger: props.id } : undefined,
+    ids: { trigger: props.id, content: props.listId },
     dir: pageDir(),
     collection: collection.value,
     value: props.value === null ? [] : [props.value],

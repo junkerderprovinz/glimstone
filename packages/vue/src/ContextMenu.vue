@@ -173,6 +173,7 @@ function hover(e: MouseEvent) {
     </div>
     <div
       v-if="subRows"
+      :id="host?.subId"
       ref="subMenu"
       role="menu"
       :aria-label="host?.label"

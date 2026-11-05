@@ -18,6 +18,17 @@ const unpinned = ref(0);
         </span>
       </template>
     </SidebarRow>
+    <SidebarRow
+      v-for="(name, depth) in ['mnt', 'user', 'Big Buck Bunny and the other films']"
+      :key="name"
+      :data-depth="depth"
+      :label="name"
+      :glyph="glyph('IconFolder')"
+      :depth="depth"
+      @click="note = `Opened ${name}`"
+    >
+      <template #before><span data-toggle>›</span></template>
+    </SidebarRow>
     <SidebarRow label="Trash" :glyph="glyph('IconTrash')" @click="note = 'Opened Trash'" />
     <output>{{ unpinned ? `Unpinned ${unpinned}` : note }}</output>
   </div>

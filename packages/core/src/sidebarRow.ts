@@ -20,6 +20,10 @@ export interface SidebarRowInput {
   hueIndex?: number;
   /** The figure on the row; nothing shows at zero. */
   count?: number;
+  /** Something stands beside the link in the row, so it is never centred. */
+  framed?: boolean;
+  /** A tree's row: stepped in by its level, with a smaller glyph and gap. */
+  depth?: number;
 }
 
 export interface SidebarRowView {
@@ -42,14 +46,19 @@ export function sidebarRowView(r: SidebarRowInput): SidebarRowView {
   const showLabel = !hidesLabel(mode);
   const reactive = mode === "reactive";
   const hued = r.hueIndex !== undefined;
+  const tree = r.depth !== undefined;
+  // A tree's depth and a slot's control mean nothing in the middle of the row.
+  const centred = !showLabel && !r.framed && !tree;
   const style: Record<string, string> = {
     ...(hued ? hueVars(r.hueIndex!) : {}),
+    ...(tree ? { "--nav-depth": String(r.depth) } : {}),
     ...(reactive ? { "--reactive-chars": String(labelWidth(r.label)) } : {}),
   };
   return {
     className: [
       "glim-nav-row",
-      !showLabel && "glim-nav-row--centred",
+      centred && "glim-nav-row--centred",
+      tree && "glim-nav-row--tree",
       reactive && "glim-reactive",
       hued && "glim-hue glim-hue-icon",
       r.active && "glim-active",

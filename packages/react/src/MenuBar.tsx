@@ -9,6 +9,8 @@ import { ContextMenu, type MenuEntry } from "./ContextMenu.tsx";
 export interface MenuBarMenu {
   label: string;
   items: MenuEntry[];
+  /** The id of the open menu, for a caller or a script that looks for it. */
+  id?: string;
 }
 
 export interface MenuBarHandle {
@@ -83,6 +85,7 @@ export function MenuBar({ label, menus, ref, className }: MenuBarProps) {
           y={open.y}
           items={menus[open.at].items}
           label={menus[open.at].label}
+          id={menus[open.at].id}
           opener={buttons.current[open.at]}
           onClose={() => setOpen(null)}
           onStep={(d) => show((open.at + d + count) % count)}

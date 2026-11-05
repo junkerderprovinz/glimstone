@@ -75,6 +75,7 @@ function keys(e: KeyboardEvent, at: number) {
       :y="open.y"
       :items="menus[open.at].items"
       :label="menus[open.at].label"
+      :id="menus[open.at].id"
       :opener="buttons[open.at]"
       @close="open = null"
       @step="(d) => open && show(wrap(open.at + d))"

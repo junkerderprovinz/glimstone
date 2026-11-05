@@ -11,6 +11,7 @@ export default function SelectMenuRows() {
         label="Sort by"
         rows="menu"
         triggerAttrs={{ "data-val": sort }}
+        listId="demo-sort-list"
         value={sort}
         onChange={setSort}
         options={[
@@ -24,6 +25,7 @@ export default function SelectMenuRows() {
         label="Open with"
         rows="menu"
         triggerAttrs={{ "data-val": app }}
+        listId="demo-open-with"
         value={app}
         onChange={setApp}
         groups={[
