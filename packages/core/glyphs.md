@@ -218,22 +218,22 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 
 | Name | Means | Source |
 | --- | --- | --- |
-| `IconFileRaw` | A RAW photo straight from the camera | Drawn for CastleCommander |
-| `IconFileDesign` | A design or vector graphic | Drawn for CastleCommander |
-| `IconFilePlaylist` | A playlist | Drawn for CastleCommander |
-| `IconFilePdf` | A PDF document | Drawn for CastleCommander |
-| `IconFileDoc` | A text document from an office suite | Drawn for CastleCommander |
-| `IconFileSheet` | A spreadsheet | Drawn for CastleCommander |
-| `IconFileSlides` | A presentation | Drawn for CastleCommander |
-| `IconBook` | An e-book | Drawn for CastleCommander |
-| `IconDisc` | A disk image or virtual disk | Drawn for CastleCommander |
-| `IconFileProgram` | A program or installable package | Drawn for CastleCommander |
-| `IconFont` | A font | Drawn for CastleCommander |
-| `IconHash` | A checksum or signature | Drawn for CastleCommander |
-| `IconMagnet` | A torrent or magnet link | Drawn for CastleCommander |
-| `IconCube` | A 3D model or CAD drawing | Drawn for CastleCommander |
-| `IconCalendar` | A calendar or contact card | Drawn for CastleCommander |
-| `IconHourglass` | A backup, temporary or unfinished file | Drawn for CastleCommander |
+| `IconFileRaw` | A RAW photo straight from the camera | Drawn for CannonCommander |
+| `IconFileDesign` | A design or vector graphic | Drawn for CannonCommander |
+| `IconFilePlaylist` | A playlist | Drawn for CannonCommander |
+| `IconFilePdf` | A PDF document | Drawn for CannonCommander |
+| `IconFileDoc` | A text document from an office suite | Drawn for CannonCommander |
+| `IconFileSheet` | A spreadsheet | Drawn for CannonCommander |
+| `IconFileSlides` | A presentation | Drawn for CannonCommander |
+| `IconBook` | An e-book | Drawn for CannonCommander |
+| `IconDisc` | A disk image or virtual disk | Drawn for CannonCommander |
+| `IconFileProgram` | A program or installable package | Drawn for CannonCommander |
+| `IconFont` | A font | Drawn for CannonCommander |
+| `IconHash` | A checksum or signature | Drawn for CannonCommander |
+| `IconMagnet` | A torrent or magnet link | Drawn for CannonCommander |
+| `IconCube` | A 3D model or CAD drawing | Drawn for CannonCommander |
+| `IconCalendar` | A calendar or contact card | Drawn for CannonCommander |
+| `IconHourglass` | A backup, temporary or unfinished file | Drawn for CannonCommander |
 
 A file manager tells a file's kind by its glyph before its name is read, so these stand beside `IconFileVideo`, `IconFileAudio`, `IconFileImage`, `IconFileText` and `IconArchive` above. The documents start from one page with its top corner folded and differ only in what is printed on it. The rest are a single object each, large enough to read at 16px: a camera, a pen nib, a disc, a cube, an hourglass.
 

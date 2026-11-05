@@ -1,4 +1,4 @@
-// The controls of the CastleCommander prototype, copied so the calibration
+// The controls of the CannonCommander prototype, copied so the calibration
 // page can draw them beside the Vue components without depending on the
 // prototype. The rules are the prototype's own, word for word, from
 // prototype/src/css/app.css, the kits in src/js/features (a-00-kit.js,

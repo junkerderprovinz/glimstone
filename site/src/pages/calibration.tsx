@@ -51,7 +51,7 @@ export function Calibration() {
   return (
     <>
       <p className="lead">
-        The controls of the CastleCommander prototype beside the Vue components that replace them, row by row, so a
+        The controls of the CannonCommander prototype beside the Vue components that replace them, row by row, so a
         difference in the look shows before an app moves over.
       </p>
       <p>

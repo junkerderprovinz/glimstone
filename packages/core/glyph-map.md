@@ -384,11 +384,11 @@ FireSquire wears seven glyphs on the buttons of its pre-reboot check and on the 
 
 <br>
 
-## CastleCommander
+## CannonCommander
 
-CastleCommander's new interface draws every glyph from the assortment. The rows below are the meanings that came into it with the file manager, and the others follow once its screens are built.
+CannonCommander's new interface draws every glyph from the assortment. The rows below are the meanings that came into it with the file manager, and the others follow once its screens are built.
 
-| Meaning | GlimStone | CastleCommander |
+| Meaning | GlimStone | CannonCommander |
 | --- | --- | --- |
 | Reset one row of a colour card to its defaults | `IconResetArrow` | `IconResetArrow`, standard |
 | Give through PayPal | `IconPayPal` | `IconPayPal`, standard |
@@ -416,7 +416,7 @@ CastleCommander's new interface draws every glyph from the assortment. The rows 
 
 - **ArrowLoop:** `scripts/gen_glyphs.py` writes the app's glyphs, and the Look settings glyphs come from it, for the web and, through `scripts/gen_glyph_data.py`, for the phone. `web/src/lib/glyphName.ts` maps a translation key to a glyph name, and a key it does not know keeps its text.
 - **BombVault:** `scripts/gen_glyphs.py` writes `web/src/components/glyphs.tsx` and `navGlyphs.tsx` from a copy of `glyphs.json` at 16px; the phone app shows the web launcher and uses the same files. `glyphFor.tsx` maps a translation key to a glyph when a button passes none; a button that passes one wins.
-- **CastleCommander:** the frontend maps a file's kind to a glyph name through `prototype/src/formats.json` and draws the entry from `glyphs.json` through `@glimstone/vue`.
+- **CannonCommander:** the frontend maps a file's kind to a glyph name through `prototype/src/formats.json` and draws the entry from `glyphs.json` through `@glimstone/vue`.
 - **FireSquire:** `firesquire-glyphs.js` beside its scripts holds a copy of every entry it draws, the square viewBox and the drawing, and names the GlimStone release it came from. `plugin/test/glyphs.test.js` checks that every glyph a button asks for is in the copy.
 - **KnightLoader:** `web/scripts/gen-glyphs.mjs` writes `web/src/lib/glyphs.tsx` at 22px with the ink at three quarters of the box; the Android app has no SVG and shows tinted bitmaps rendered from the same list into `mobile/assets/`. Every call site passes its glyph; Settings page glyphs are mapped in `pages/settings/pageIcons.tsx`. The browser extension copies the eye and a few others in `extension/src/`.
 - **ShipLog:** `include/glyphs.php` holds a copy of every entry it draws. `shiplog.page` uses them on the settings page, and `shiplog.Docker.page` hands four of them to `scripts/docker.js` for the changelog window.
