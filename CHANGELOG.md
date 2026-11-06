@@ -2,6 +2,21 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+A sign-in card for every app with a login: `SignInCard` in React and Vue, with the flow in the core, drawn after BombVault's login. The design language gains "The sign-in card" with its checklist.
+
+**Adopting apps:**
+
+- **The sign-in page:** an app's own login page can become a `SignInCard`. The app hands in its logo, its name, its words and the callbacks `onSignIn`, `onPasskey`, `onAskCode` and `onSetPassword`. A name field or "Stay signed in" goes into `fields`, a single sign-on button into `actions`, and a step of the app's own, such as recovery codes or the page after a reset, into `step`.
+- **What leaves the page:** a server name under the logo, a pill over the card, a language picker and a version number under the card. Labels stand above their fields in normal case, and every button is full width.
+- **The theme before sign-in:** the page follows what the app stored in the browser for accent, theme, shape and motion, and the system's light or dark when nothing is stored. An app whose first-frame default was "dark" moves it to "system".
+
+## ✨ Added
+
+- **`SignInCard` and `SignInField`**: the logo large above the centred name, the password, the code field when the app asks for one, the passkey where it is offered and "Forgot password?" with the reset form in the same card. Sign in waits for the password, the first empty field takes the focus, and a refused try shakes its button and selects the refused field. The card is 24rem wide and takes a phone's width less 16px either side.
+- **`createSignInFlow`, `showRefusal` and `signInTextEn`** in the core, the parts both frameworks share.
+
 ## 4.2.1 - 2026-11-07
 
 The wand glyph's recorded ink matches its drawing.

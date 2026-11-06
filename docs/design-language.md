@@ -693,6 +693,39 @@ The maxim the whole section hangs on: **a login gains a way IN, never a way INST
 
 **Provenance, and the three things that are NOT the language.** Built for an Unraid backup app, where the default install is reached over `https://[IP]:3443` with a certificate covering only localhost - so the case the first bullet describes is that app's REGULAR case, not its edge case. That frequency is local. So is the number of recovery codes. And so is deriving the relying-party identifier from the request's own host rather than from a setting - though the reason behind it does generalise, and is the one line worth carrying: **a capability tied to the ADDRESS the page is currently open on must not read its address from a setting, because the same box is usually reachable under more than one.**
 
+## The sign-in card
+
+Every app with a login shows the same page before anything else, and four apps had built it four ways: a logo here and none there, a pill over one card, a version under another, labels in capitals, a narrow button. `SignInCard` in React and Vue is that page now. It draws BombVault's login, which "The first way in" names as the reference, and the flow behind it lives in the core (`createSignInFlow`), so both frameworks sign in, ask for a code and reset the password the same way. The app hands in its logo, its name, its words and four callbacks, and puts whatever is its own into three slots.
+
+- **The head is the app's logo, large, with the app's name centred under it, inside the card.** The page has no rail and no title bar, so this is how somebody knows which instance they are about to unlock. The name is the page's `<h1>`, and the logo stays hidden from assistive technology because the name already says it. There is no server name under it and no pill over the card: "Sign in" is what the button says, and a pill that says it again is a second heading for a page that has one.
+- **Labels stand above their fields, in normal case.** A sign-in form is a page of its own, not a settings row, so rule 35's label beside the field does not apply here. Capitals would add a weight the form does not need.
+- **The first empty field has the focus when the card opens**, shown the way a field always shows it, a step up the ramp (rule 14), never a thicker ring of the app's own. The first field is usually the password; with a name field in the slot it is the name, and once the app has filled the name in, it is the password again. When the card changes form (the code step, the reset form, back) the focus moves to the first empty field of the new one.
+- **Sign in stays disabled until the password field holds something.** In the code step it waits for the code instead. Pressing an empty form only to be told it is empty teaches nothing.
+- **Every button is as wide as the fields.** Sign in, the passkey, the app's own buttons, Forgot password?, Set password and Back stack at full width, because the longer translations do not fit side by side.
+- **"Forgot password?" carries its question mark** in every language, and stays the quiet full-width button "The first way in" describes, last in the form. It is never a text link.
+- **A refused try shakes the button that sent it and puts the focus back in the refused field with its content selected.** A wrong password shakes Sign in and selects the password, so the next try starts by typing; a wrong code shakes Sign in and empties the code field; a wrong code from the log, a short password or two that differ shake Set password. The reason stands above the button as an alert and stays until the next try. The shake is `glim-shake` through the core's `shake()`, the same one every failed action uses ("Failure feedback"), so the motion engine decides how much it moves: at off, and under reduced motion, nothing moves and the sentence says it alone.
+- **The code step opens under the password and keeps it.** The first answer that asks for a code only opens the field, and only a refused code is an error. In the code step the passkey and the app's actions step aside, and Back takes the place of Forgot password?, since the password was already accepted. A passkey that asks for a code hides the password field, which it does not need.
+- **The reset form takes the sign-in form's place in the same card**, exactly as "The first way in" describes it: the code from the log with its (i), the new password and its confirmation, Set password over Back, mismatches and short passwords caught before anything is sent.
+- **The app's own parts go into slots, never around the card.** `fields` stand above the password (a name for an app with several users, "Stay signed in"), `actions` stand under Sign in and the passkey (a single sign-on button), and `step` takes the forms' place for a step the app runs itself (recovery codes shown once, the page after a reset, a first password of its own). `SignInField` gives a field of the app's own the same label above it.
+- **Nothing else on the page.** No language picker, which belongs to the settings and follows the browser until then ("The user-owned axes"), and no version number, which a stranger at the login page has no use for.
+- **The page follows the engines in full before anybody is signed in.** No server preferences exist yet, so the page uses what the app stored in this browser: the accent, light or dark, the shape and the motion level all apply. Only when nothing is stored does it fall back to the defaults, which means the system's light or dark. An app whose first-frame theme was "dark" changes that default to "system".
+- **The card is 24rem wide in every app, and on a phone it takes the full width with 16px either side.** The page centres it on the ground colour.
+
+### The sign-in card's checklist
+
+- [ ] The app's logo large above its name, centred inside the card, with no server name and no pill.
+- [ ] Labels above the fields, in normal case.
+- [ ] The first empty field has the focus on open, as a field shows it, and the focus follows each change of form.
+- [ ] Sign in disabled until the password field holds something, and in the code step until the code does.
+- [ ] Every button full width; "Forgot password?" with its question mark, quiet and last.
+- [ ] A refused password, code or reset shakes its button through `glim-shake` once and selects the refused field; nothing moves at motion off or under reduced motion.
+- [ ] The code step keeps the password, and Back replaces Forgot password? there.
+- [ ] The reset form in the same card, as "The first way in" lists it.
+- [ ] The app's extras in the `fields`, `actions` and `step` slots.
+- [ ] No language picker and no version number on the page.
+- [ ] The accent, theme, shape and motion stored in the browser apply before sign-in; with nothing stored, the system's light or dark.
+- [ ] 24rem wide, full width less 16px either side on a phone.
+
 ## Dates and times
 
 **A day with a time is spelled out wherever there is room.** *Sunday, 04:10* reads at a glance, *Sun 04:10* has to be decoded. Today and yesterday are words, and an older date keeps its digits.
@@ -1552,7 +1585,7 @@ GlimStone ships as one core and one package per framework. All of them carry the
 | Package | What it holds |
 |---|---|
 | `@glimstone/core` | `tokens.css`, `tailwind-theme.css`, `glyphs.json` with `glyphs.md`, and the logic of every engine and component in plain TypeScript: the appearance and label engines, what a button or badge shows and which classes it wears, the select's list model, where a bubble goes, a dialog's keys, the toast queue, and the parts that run without a framework (`mountSelect`, `wireTooltips`, the colour picker, the number field's steppers). |
-| `@glimstone/react` | The components for React 19, as thin wrappers around the core: the button, the switch, the card and the sub-card, the badge, the one horizontal selector with its tiles, the select, combobox and slider, the number field, the rail's row, the empty state, the confirm window and the general window, the context menu and the menu bar, the checkbox, key caps and data pills, the text, password, copy and path fields, the field row, the list row with its mark, glyph tile and icon button, the glyph field, the tree, the table, the meter and the progress bar, the colour picker, toasts, the bubbles, the Info tile and the windows to give. |
+| `@glimstone/react` | The components for React 19, as thin wrappers around the core: the button, the switch, the card and the sub-card, the badge, the one horizontal selector with its tiles, the select, combobox and slider, the number field, the rail's row, the empty state, the confirm window and the general window, the context menu and the menu bar, the checkbox, key caps and data pills, the text, password, copy and path fields, the sign-in card, the field row, the list row with its mark, glyph tile and icon button, the glyph field, the tree, the table, the meter and the progress bar, the colour picker, toasts, the bubbles, the Info tile and the windows to give. |
 | `@glimstone/vue` | The same components for Vue 3: single-file components, `v-model` for values, `@zag-js/vue` for the state machines, and the engines as composables (`useLabelMode`, `useRainbow`, `useShape`, `useMotion`, `useAccent`, `useHue`). |
 | `glimstone` (Dart) | Flutter: the tokens as `GlimTheme`, a `ThemeExtension`, and `GlimMetrics`; the glyphs as `GlimGlyphs` with the `GlimGlyph` widget; and `GlimButton`. More widgets follow the same pattern. |
 
