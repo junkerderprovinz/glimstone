@@ -1186,7 +1186,9 @@ test.describe("Toast", () => {
     await open(page, "/components/toast");
     await press(page, "With an action");
     const toast = page.getByRole("status").filter({ hasText: "1,204 files moved to the trash" });
-    const look = await toast.evaluate((t) => {
+    const look = await toast.evaluate(async (t) => {
+      // Mid-slide the card's edges sit at fractions, and their difference picks up rounding.
+      await Promise.all(t.getAnimations().map((a) => a.finished));
       const message = t.querySelector(".glim-toast-message")!.getBoundingClientRect();
       const action = t.querySelector(".glim-toast-action")!.getBoundingClientRect();
       return { card: t.getBoundingClientRect().width, under: action.top >= message.bottom, room: message.width };

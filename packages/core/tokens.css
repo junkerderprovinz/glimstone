@@ -1950,6 +1950,19 @@ body {
    smallest floor. An explicit stage is a width of its own and stays. */
 .glim-modal-foot > :is(.glim-btn-sm, .glim-btn-md, .glim-btn-lg),
 .glim-modal-foot > .glim-tip-wrap > :is(.glim-btn-sm, .glim-btn-md, .glim-btn-lg) { min-width: var(--btn-w-xs); }
+/* A button wider than the whole foot, as on a phone, runs its words onto a
+   second line and grows with them instead of ending in an ellipsis. */
+:is(.glim-modal-foot, .glim-modal-foot > .glim-tip-wrap) > .glim-btn {
+  height: auto;
+  min-height: var(--btn-h);
+  padding-block: 0.375rem;
+}
+:is(.glim-modal-foot, .glim-modal-foot > .glim-tip-wrap) > .glim-btn-key { min-height: var(--btn-h-key); }
+:is(.glim-modal-foot, .glim-modal-foot > .glim-tip-wrap) > .glim-btn > .glim-btn-label {
+  white-space: normal;
+  text-wrap: balance;
+  text-align: center;
+}
 .glim-path > .glim-btn:not(.glim-btn-icon) { min-width: 0; }
 
 /* Rule 40. A surface-filled button's hovered ground takes 22% of the tint and
