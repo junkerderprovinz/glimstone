@@ -28,6 +28,10 @@ npm install @glimstone/core
   say how a field looks and how wide it is, `pressRowControl` does what a click
   on a row's label does, `treeRows` and `treeStep` hold a tree's rows and keys, and
   `tableCellClass` says what a table's cell wears.
+- The sign-in card's flow: `createSignInFlow` keeps what was typed and which
+  form shows while the app answers each step, `signInTextEn` holds the English
+  words, and `showRefusal` shakes the button of a refused try and selects the
+  refused field.
 - What windows and menus share: `windowFoot` adds the way out, `stackWindow`
   gives Escape and Tab to the window in front, and `menu.ts` holds the menu
   model with `tidyMenu`, `menuRowView`, `placeMenu`, `menuMove`,

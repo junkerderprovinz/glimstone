@@ -32,6 +32,7 @@ export * from "./selector.ts";
 export * from "./selectModel.ts";
 export * from "./selectScroll.ts";
 export * from "./sidebarRow.ts";
+export * from "./signIn.ts";
 export * from "./storage.ts";
 export * from "./tipBubble.ts";
 export * from "./table.ts";
