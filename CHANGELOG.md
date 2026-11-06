@@ -4,6 +4,12 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
+## 4.1.2 - 2026-11-06
+
+## 🐛 Fixed
+
+- **Window:** on a phone, a foot button too wide for the foot now wraps its words onto a second line instead of cutting them off with an ellipsis.
+
 ## 4.1.1 - 2026-11-05
 
 New components, because a file manager kept building them itself: `TextField` and `TextArea`, `FieldRow` and `FieldRowGroup`, `PathField`, `GlyphField`, `Tree`, `Table`, `RowMark`, `GlyphTile`, `ListRow` and `IconButton`, all in React and Vue. `Button`, `Toggle`, `Selector`, `Window`, `Select`, `ContextMenu`, `SidebarRow`, `Card`, `SubCard`, `PasswordField`, `CopyField` and the toasts take the hooks an app kept working around, and a few small bugs are gone.
