@@ -33,6 +33,7 @@ export * from "./ReadmeButton.tsx";
 export * from "./RowMark.tsx";
 export * from "./Selector.tsx";
 export * from "./SidebarRow.tsx";
+export * from "./SignInCard.tsx";
 export * from "./SubCard.tsx";
 export * from "./Table.tsx";
 export * from "./TextField.tsx";

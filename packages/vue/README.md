@@ -45,6 +45,9 @@ const { confirm, ConfirmHost } = useConfirm({ title: "Confirm", cancel: "Cancel"
 - The engines are composables: `useLabelMode`, `useRainbow`, `useShape`,
   `useMotion`, `useAccent` and `useHue`, each a writable ref that follows the
   document.
+- A component that waits for the app's answer, such as `SignInCard`, takes
+  async callbacks as props (`:on-sign-in`, or `@sign-in`, which Vue binds to the
+  same prop), since an emitted event cannot answer.
 - `Select`, `Combobox` and `Slider` come from their own entries and need
   `@zag-js/vue` with their machine packages (`@zag-js/select` and
   `@zag-js/menu`, `@zag-js/combobox`, `@zag-js/slider`).

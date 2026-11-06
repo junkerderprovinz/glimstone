@@ -32,6 +32,8 @@ export { default as ReadmeButton } from "./ReadmeButton.vue";
 export { default as RowMark } from "./RowMark.vue";
 export { default as Selector } from "./Selector.vue";
 export { default as SidebarRow } from "./SidebarRow.vue";
+export { default as SignInCard } from "./SignInCard.vue";
+export { default as SignInField } from "./SignInField.vue";
 export { default as SubCard } from "./SubCard.vue";
 export { default as Table } from "./Table.vue";
 export { default as TextArea } from "./TextArea.vue";
@@ -49,6 +51,7 @@ export type { InfoAboutCardProps, InfoHelpCardProps, InfoVersionCardProps } from
 export type { SelectEntry, SelectGroup, SelectOption, SelectSubmenu } from "./selectParts";
 export type { SelectorItem } from "./selectorItem";
 export type { MenuBarMenu, MenuEntry, MenuHead, MenuItem, TreeNode, WindowAction } from "./windowParts";
+export type { ResetAnswer, SignInAnswer, SignInText } from "@glimstone/core";
 export type { ButtonSize, ColorName, ColorPickerPanelText, FieldWidth, MeterSize, PillTone, SelectRows, TableColumn, ToastAction, WindowSize } from "@glimstone/core";
 export { selectorTabId } from "@glimstone/core";
 export { useTipBubble, type TipBubble } from "./tipBubble";
