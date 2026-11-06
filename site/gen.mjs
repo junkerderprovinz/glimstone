@@ -49,6 +49,7 @@ const COMPONENTS = {
   GlyphField: "react/GlyphField.tsx",
   GlyphTile: "react/GlyphTile.tsx",
   Table: "react/Table.tsx",
+  SignInCard: "react/SignInCard.tsx",
 };
 
 const clean = (s) => s.replace(/\s+/g, " ").trim();

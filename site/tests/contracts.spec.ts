@@ -9,7 +9,7 @@ const SITE = "/";
 async function open(page: Page, path: string, look?: object) {
   if (look) await page.addInitScript((l) => localStorage.setItem("gs-docs-look", JSON.stringify(l)), look);
   await page.goto(`${SITE}#${path}?fw=${test.info().project.name}`);
-  await page.locator("main h1").waitFor();
+  await page.locator("main h1").first().waitFor();
   // A width measured before the font arrives is the fallback's.
   await page.evaluate(() => document.fonts.ready);
 }
@@ -3232,5 +3232,328 @@ test.describe("ColorPicker", () => {
     await expect(dialog).toBeVisible();
     await page.keyboard.press("Escape");
     await expect(dialog).toHaveCount(0);
+  });
+});
+
+test.describe("SignInCard", () => {
+  const card = (page: Page, demo = "SignInCardBasic") => stage(page, demo).locator(".glim-signin-card");
+  const field = (page: Page, name: string, demo?: string) => card(page, demo).getByLabel(name, { exact: true });
+  const button = (page: Page, name: string, demo?: string) => card(page, demo).getByRole("button", { name, exact: true });
+  const said = (page: Page) => stage(page, "SignInCardBasic").locator('[data-hook="said"]');
+  const box = async (el: Locator) => (await el.boundingBox())!;
+  // A token's colour as the browser computes it, to compare with a computed background.
+  const token = (page: Page, name: string) =>
+    page.evaluate((n) => {
+      const probe = document.body.appendChild(document.createElement("div"));
+      probe.style.backgroundColor = `var(${n})`;
+      const colour = getComputedStyle(probe).backgroundColor;
+      probe.remove();
+      return colour;
+    }, name);
+  const ground = (el: Locator) => el.evaluate((e) => getComputedStyle(e).backgroundColor);
+
+  async function openReset(page: Page, demo?: string) {
+    await button(page, "Forgot password?", demo).click();
+    await expect(field(page, "Code from the container log", demo)).toBeVisible();
+  }
+
+  test("[signin-head] the logo large above the centred name, no pill", async ({ page }) => {
+    await open(page, "/components/sign-in-card");
+    const logo = await box(card(page).locator(".glim-signin-logo"));
+    const name = card(page).getByRole("heading", { level: 1, name: "GlimStone" });
+    const head = await box(name);
+    const frame = await box(card(page));
+    expect(logo.height).toBeGreaterThanOrEqual(56);
+    expect(logo.y + logo.height).toBeLessThanOrEqual(head.y);
+    expect(Math.abs(logo.x + logo.width / 2 - (frame.x + frame.width / 2))).toBeLessThan(1);
+    expect(await name.evaluate((e) => getComputedStyle(e).textAlign)).toBe("center");
+    expect(Math.abs(head.x + head.width / 2 - (frame.x + frame.width / 2))).toBeLessThan(1);
+    await expect(stage(page, "SignInCardBasic").locator(".glim-badge, .glim-eyebrow")).toHaveCount(0);
+  });
+
+  test("[signin-labels] each label above its field, in normal case", async ({ page }) => {
+    await open(page, "/components/sign-in-card");
+    const label = card(page).locator("label", { hasText: /^Password$/ });
+    expect(await label.evaluate((e) => getComputedStyle(e).textTransform)).toBe("none");
+    expect((await box(label)).y + (await box(label)).height).toBeLessThanOrEqual((await box(field(page, "Password"))).y);
+    await openReset(page);
+    for (const name of ["Code from the container log", "New password", "Confirm password"]) {
+      const own = card(page).locator("label", { hasText: name });
+      expect(await own.evaluate((e) => getComputedStyle(e).textTransform)).toBe("none");
+      expect((await box(own)).y).toBeLessThan((await box(field(page, name))).y);
+    }
+  });
+
+  test("[signin-focus] the first empty field has the focus, as a field shows it", async ({ page }) => {
+    await open(page, "/components/sign-in-card");
+    const password = field(page, "Password");
+    await expect(password).toBeFocused();
+    expect(await password.evaluate((e) => getComputedStyle(e).outlineStyle)).toBe("none");
+    expect(await ground(password)).toBe(await token(page, "--carbon-surface3"));
+    await expect(field(page, "Name", "SignInCardSlots")).not.toBeFocused();
+  });
+
+  test("[signin-disabled] Sign in waits for the password", async ({ page }) => {
+    await open(page, "/components/sign-in-card");
+    const signIn = button(page, "Sign in");
+    await expect(signIn).toBeDisabled();
+    await field(page, "Password").pressSequentially("l");
+    await expect(signIn).toBeEnabled();
+    await field(page, "Password").fill("");
+    await expect(signIn).toBeDisabled();
+  });
+
+  test("[signin-wide] every button as wide as the fields", async ({ page }) => {
+    await open(page, "/components/sign-in-card");
+    const width = (await box(card(page).locator(".glim-secret"))).width;
+    for (const name of ["Sign in", "Sign in with a passkey", "Forgot password?"]) {
+      expect((await box(button(page, name))).width).toBeCloseTo(width, 0);
+    }
+    await openReset(page);
+    for (const name of ["Set password", "Back"]) {
+      expect((await box(button(page, name))).width).toBeCloseTo(width, 0);
+    }
+  });
+
+  test("[signin-error] a refusal stands above Sign in", async ({ page }) => {
+    await open(page, "/components/sign-in-card");
+    await field(page, "Password").fill("wrong");
+    await page.keyboard.press("Enter");
+    const alert = card(page).getByRole("alert");
+    await expect(alert).toHaveText("That password is not right");
+    expect((await box(alert)).y).toBeLessThan((await box(button(page, "Sign in"))).y);
+    await expect(field(page, "Password")).toHaveValue("wrong");
+  });
+
+  test("[signin-code] the code field after the password", async ({ page }) => {
+    await open(page, "/components/sign-in-card");
+    await field(page, "Password").fill("two-step");
+    await button(page, "Sign in").click();
+    const code = field(page, "Code");
+    await expect(code).toBeFocused();
+    await expect(card(page).getByRole("alert")).toHaveCount(0);
+    await expect(field(page, "Password")).toHaveValue("two-step");
+    await expect(button(page, "Sign in")).toBeDisabled();
+    await expect(button(page, "Forgot password?")).toHaveCount(0);
+    await expect(button(page, "Sign in with a passkey")).toHaveCount(0);
+    await code.fill("000000");
+    await page.keyboard.press("Enter");
+    await expect(card(page).getByRole("alert")).toHaveText("That code is not valid");
+    await expect(code).toHaveValue("");
+    await code.fill("123456");
+    await page.keyboard.press("Enter");
+    await expect(said(page)).toHaveText("Signed in with a code");
+  });
+
+  test("[signin-code] Back leaves the code step", async ({ page }) => {
+    await open(page, "/components/sign-in-card");
+    await field(page, "Password").fill("two-step");
+    await button(page, "Sign in").click();
+    await button(page, "Back").click();
+    await expect(field(page, "Code")).toHaveCount(0);
+    await expect(button(page, "Forgot password?")).toBeVisible();
+  });
+
+  test("[signin-passkey] the passkey button only where it is offered", async ({ page }) => {
+    await open(page, "/components/sign-in-card");
+    const passkey = button(page, "Sign in with a passkey");
+    expect((await box(passkey)).y).toBeGreaterThan((await box(button(page, "Sign in"))).y);
+    await expect(button(page, "Sign in with a passkey", "SignInCardSlots")).toHaveCount(0);
+    await passkey.click();
+    await expect(field(page, "Code")).toBeFocused();
+    await expect(field(page, "Password")).toBeHidden();
+  });
+
+  test("[signin-reset] the reset form in the same card, and back", async ({ page }) => {
+    await open(page, "/components/sign-in-card");
+    await openReset(page);
+    await expect(field(page, "Code from the container log")).toBeFocused();
+    await expect(field(page, "Password")).toHaveCount(0);
+    await expect(card(page).getByRole("heading", { level: 1, name: "GlimStone" })).toBeVisible();
+    await button(page, "Back").click();
+    await expect(field(page, "Password")).toBeVisible();
+    await expect(field(page, "Code from the container log")).toHaveCount(0);
+  });
+
+  test("[signin-reset-check] a short or mismatched password is caught before sending", async ({ page }) => {
+    await open(page, "/components/sign-in-card");
+    await openReset(page);
+    await field(page, "Code from the container log").fill("ABCD-EFGH-JKLM");
+    await field(page, "New password").fill("short");
+    await field(page, "Confirm password").fill("short");
+    await button(page, "Set password").click();
+    await expect(card(page).getByRole("alert")).toHaveText("The new password needs at least 12 characters.");
+    await field(page, "New password").fill("correct horse battery");
+    await field(page, "Confirm password").fill("correct horse batterx");
+    await button(page, "Set password").click();
+    await expect(card(page).getByRole("alert")).toHaveText("The two passwords are not the same.");
+    await expect(said(page)).toHaveText("Nothing yet");
+    await field(page, "Confirm password").fill("correct horse battery");
+    await button(page, "Set password").click();
+    await expect(said(page)).toHaveText("Password set");
+  });
+
+  test("[signin-slots] the app's fields above the password, its actions under Sign in", async ({ page }) => {
+    await open(page, "/components/sign-in-card");
+    const demo = "SignInCardSlots";
+    const y = async (el: Locator) => (await box(el)).y;
+    expect(await y(field(page, "Name", demo))).toBeLessThan(await y(field(page, "Password", demo)));
+    expect(await y(card(page, demo).getByRole("switch", { name: "Stay signed in" }))).toBeLessThan(await y(field(page, "Password", demo)));
+    const extra = button(page, "Sign in with Authentik", demo);
+    expect(await y(extra)).toBeGreaterThan(await y(button(page, "Sign in", demo)));
+    expect(await y(extra)).toBeLessThan(await y(button(page, "Forgot password?", demo)));
+    expect((await box(extra)).width).toBeCloseTo((await box(button(page, "Sign in", demo))).width, 0);
+  });
+
+  test("[signin-step] the app's own step under the same head", async ({ page }) => {
+    await open(page, "/components/sign-in-card");
+    const demo = "SignInCardSlots";
+    await openReset(page, demo);
+    await field(page, "Code from the container log", demo).fill("ABCD-EFGH-JKLM");
+    await field(page, "New password", demo).fill("correct horse battery");
+    await field(page, "Confirm password", demo).fill("correct horse battery");
+    await button(page, "Set password", demo).click();
+    await expect(card(page, demo).getByRole("status")).toHaveText(/Your new password is set/);
+    await expect(card(page, demo).getByRole("heading", { level: 1, name: "GlimStone" })).toBeVisible();
+    await expect(button(page, "Set password", demo)).toHaveCount(0);
+  });
+
+  test("[signin-theme] the page and the card follow the system theme", async ({ page }) => {
+    const seen: string[] = [];
+    for (const colorScheme of ["dark", "light"] as const) {
+      await page.emulateMedia({ colorScheme });
+      await open(page, "/components/sign-in-card");
+      const surface = await ground(card(page));
+      expect(await ground(stage(page, "SignInCardBasic").locator(".glim-signin"))).toBe(await token(page, "--carbon-bg"));
+      expect(surface).toBe(await token(page, "--carbon-surface"));
+      seen.push(surface);
+    }
+    expect(seen[0]).not.toBe(seen[1]);
+  });
+
+  test("[signin-width] 24rem wide, a phone's width less 16px either side", async ({ page }) => {
+    await open(page, "/components/sign-in-card");
+    expect((await box(card(page))).width).toBeCloseTo(384, 0);
+    await page.setViewportSize({ width: 390, height: 844 });
+    await expect.poll(async () => (await box(card(page))).width).toBeLessThan(384);
+    const frame = await box(stage(page, "SignInCardBasic").locator(".glim-signin"));
+    const narrow = await box(card(page));
+    expect(narrow.width).toBeCloseTo(frame.width - 32, 0);
+    expect(narrow.x - frame.x).toBeCloseTo(16, 0);
+  });
+});
+
+test.describe("SignInCard refusals and engines", () => {
+  const card = (page: Page) => stage(page, "SignInCardBasic").locator(".glim-signin-card");
+  const field = (page: Page, name: string) => card(page).getByLabel(name, { exact: true });
+  const button = (page: Page, name: string) => card(page).getByRole("button", { name, exact: true });
+  const shaking = (el: Locator) => expect.poll(() => el.evaluate((e) => e.classList.contains("glim-shake")));
+  const selected = (el: Locator) => el.evaluate((e: HTMLInputElement) => e.selectionStart === 0 && e.selectionEnd === e.value.length && e.value.length > 0);
+  // Every transform the button wears while a refused password comes back.
+  const movesOnRefusal = (page: Page) =>
+    card(page).evaluate((c) => {
+      // Found again on every frame, since the busy bubble wraps the button in a new node.
+      const button = () => c.querySelector<HTMLButtonElement>('[data-signin="submit"]')!;
+      const seen = new Set<string>();
+      const start = performance.now();
+      return new Promise<string[]>((done) => {
+        const tick = () => {
+          seen.add(getComputedStyle(button()).transform);
+          if (performance.now() - start < 900) requestAnimationFrame(tick);
+          else done([...seen].filter((t) => t !== "none"));
+        };
+        button().click();
+        tick();
+      });
+    });
+  const tokenStyle = (page: Page, prop: string, value: string) =>
+    page.evaluate(
+      ([p, v]) => {
+        const probe = document.body.appendChild(document.createElement("div"));
+        probe.style.setProperty(p, v);
+        const out = getComputedStyle(probe).getPropertyValue(p);
+        probe.remove();
+        return out;
+      },
+      [prop, value],
+    );
+
+  test("[signin-shake] a refused password shakes Sign in and selects the password", async ({ page }) => {
+    await open(page, "/components/sign-in-card");
+    await field(page, "Password").fill("wrong");
+    await page.keyboard.press("Enter");
+    await shaking(button(page, "Sign in")).toBe(true);
+    await expect(card(page).getByRole("alert")).toHaveText("That password is not right");
+    await expect(field(page, "Password")).toBeFocused();
+    expect(await selected(field(page, "Password"))).toBe(true);
+  });
+
+  test("[signin-shake] a refused code shakes Sign in and takes the code field", async ({ page }) => {
+    await open(page, "/components/sign-in-card");
+    await field(page, "Password").fill("two-step");
+    await page.keyboard.press("Enter");
+    await expect(field(page, "Code")).toBeFocused();
+    expect(await button(page, "Sign in").evaluate((e) => e.classList.contains("glim-shake"))).toBe(false);
+    await field(page, "Code").fill("000000");
+    await page.keyboard.press("Enter");
+    await shaking(button(page, "Sign in")).toBe(true);
+    await expect(field(page, "Code")).toBeFocused();
+  });
+
+  test("[signin-shake] a refused new password shakes Set password", async ({ page }) => {
+    await open(page, "/components/sign-in-card");
+    await button(page, "Forgot password?").click();
+    await field(page, "Code from the container log").fill("ABCD-EFGH-JKLM");
+    await field(page, "New password").fill("correct horse battery");
+    await field(page, "Confirm password").fill("correct horse batterx");
+    await page.keyboard.press("Enter");
+    await shaking(button(page, "Set password")).toBe(true);
+    await expect(field(page, "Confirm password")).toBeFocused();
+    expect(await selected(field(page, "Confirm password"))).toBe(true);
+  });
+
+  test("[signin-still] the shake moves at the default motion", async ({ page }) => {
+    await open(page, "/components/sign-in-card");
+    await field(page, "Password").fill("wrong");
+    expect((await movesOnRefusal(page)).length).toBeGreaterThan(0);
+  });
+
+  test("[signin-still] nothing moves with motion off", async ({ page }) => {
+    await open(page, "/components/sign-in-card", { motion: "off" });
+    await field(page, "Password").fill("wrong");
+    expect(await movesOnRefusal(page)).toEqual([]);
+    await expect(card(page).getByRole("alert")).toHaveText("That password is not right");
+  });
+
+  test("[signin-still] nothing moves under reduced motion", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await open(page, "/components/sign-in-card");
+    await field(page, "Password").fill("wrong");
+    expect(await movesOnRefusal(page)).toEqual([]);
+    await expect(card(page).getByRole("alert")).toHaveText("That password is not right");
+  });
+
+  test("[signin-engines] Sign in wears the accent", async ({ page }) => {
+    await open(page, "/components/sign-in-card", { accent: "#4DABF7" });
+    await field(page, "Password").fill("x");
+    expect(await button(page, "Sign in").evaluate((e) => getComputedStyle(e).backgroundColor)).toBe("rgb(77, 171, 247)");
+  });
+
+  test("[signin-engines] the card, fields and buttons take the shape", async ({ context }) => {
+    const radii: Record<string, string[]> = {};
+    for (const shape of ["round", "square"]) {
+      // A page of its own per shape, since the look is read when the page loads.
+      const page = await context.newPage();
+      await open(page, "/components/sign-in-card", { shape });
+      const radius = (el: Locator) => el.evaluate((e) => getComputedStyle(e).borderTopLeftRadius);
+      const seen = [await radius(card(page)), await radius(field(page, "Password")), await radius(button(page, "Sign in"))];
+      expect(seen).toEqual([
+        await tokenStyle(page, "border-top-left-radius", "var(--radius-card)"),
+        await tokenStyle(page, "border-top-left-radius", "var(--radius-control)"),
+        await tokenStyle(page, "border-top-left-radius", "var(--radius-pill)"),
+      ]);
+      radii[shape] = seen;
+    }
+    expect(radii.square).not.toEqual(radii.round);
   });
 });

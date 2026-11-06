@@ -623,6 +623,60 @@ export function EmptyStatePage() {
   );
 }
 
+export function SignInCardPage() {
+  return (
+    <>
+      <p className="lead">
+        The way into an app with a login: its logo and name, the password, a code when the server asks for one, a
+        passkey, and the reset form in the same card.
+      </p>
+      <Head file="react/SignInCard.tsx" />
+      <Demo name="SignInCardBasic" />
+      <Usage
+        code={`import { SignInCard } from "@glimstone/react";
+
+<SignInCard
+  logo="/logo.svg"
+  appName="BombVault"
+  text={text}
+  passkey={offerPasskey}
+  reset
+  minPassword={12}
+  onSignIn={({ password, code }) => api.login(password, code)}
+  onPasskey={() => api.loginWithPasskey()}
+  onAskCode={() => api.startPasswordReset()}
+  onSetPassword={({ code, password }) => api.finishPasswordReset(code, password)}
+/>`}
+      />
+      <H2>Slots</H2>
+      <p>
+        <code>fields</code> stand above the password, such as a name and a switch to stay signed in. <code>actions</code>{" "}
+        stand under Sign in and the passkey, such as a second way in through a single sign-on. <code>step</code> takes
+        the forms' place for a step the app runs itself, such as recovery codes or the page after a reset. In Vue they
+        are slots of the same names. <code>SignInField</code> gives a field of the app's own the label above it.
+      </p>
+      <Demo name="SignInCardSlots" />
+      <H2>Rules</H2>
+      <ul>
+        <li>The logo stands large and the name under it, centred in the card. No server name, no pill above the card.</li>
+        <li>Labels stand above their fields, in normal case. The first empty field has the focus when the card opens.</li>
+        <li>Sign in stays disabled until the password field holds something. Every button is as wide as the fields.</li>
+        <li>
+          A refused try shakes the button that sent it and selects the refused field. At motion off and under reduced
+          motion nothing moves, and the reason above the button says it alone.
+        </li>
+        <li>The accent, theme, shape and motion the app stored in the browser apply before anybody is signed in.</li>
+        <li>No language picker and no version number on the page. It follows the system theme.</li>
+        <li>The card is 24rem wide, and on a phone it fills the width with 16px either side.</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="SignInCard" />
+      <H2>API</H2>
+      <PropsTable of="SignInCard" />
+    </>
+  );
+}
+
 export function SubCardPage() {
   return (
     <>

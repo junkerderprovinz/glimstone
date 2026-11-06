@@ -140,6 +140,9 @@ body {
   min-height: 9rem;
 }
 .demo-stage.left { justify-content: flex-start; align-items: stretch; }
+/* A sign-in page fills the screen; on the site it takes the stage instead. */
+.signin-demo { width: 100%; display: grid; gap: 0.75rem; justify-items: center; }
+.signin-demo .glim-signin { min-height: 0; width: 100%; }
 /* The calibration page: the prototype and the Vue component side by side, on
    the surface a card or a window gives them and in the prototype's 14px. */
 .cal-pair {
