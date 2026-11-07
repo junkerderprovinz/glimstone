@@ -1268,6 +1268,34 @@ test.describe("Toast", () => {
     await expect(success).toHaveCount(0);
     await expect(page.getByRole("alert").filter({ hasText: "The target is almost full." })).toBeVisible();
   });
+
+  // A toast on a half pixel puts every toast above it there too, and Chromium
+  // rounds those edges a pixel up or down from one paint to the next.
+  test("[toast-pixels] every toast stands on whole pixels", async ({ context }) => {
+    test.setTimeout(120_000);
+    for (const width of [1280, 390]) {
+      for (const dir of ["ltr", "rtl"]) {
+        for (const labels of ["text", "textGlyph", "glyph", "reactive"]) {
+          const page = await context.newPage();
+          await page.setViewportSize({ width, height: 860 });
+          await open(page, "/components/toast", { labels });
+          await page.evaluate((d) => (document.documentElement.dir = d), dir);
+          for (const name of ["Success", "Warning", "Failure", "With an action", "A long path"]) await press(page, name);
+          const halves = await page.locator(".glim-toast-stack").evaluate(async (s) => {
+            await Promise.all(s.getAnimations({ subtree: true }).map((a) => a.finished));
+            return [...s.querySelectorAll<HTMLElement>(".glim-toast-card")]
+              .filter((c) => getComputedStyle(c).display !== "none")
+              .flatMap((c) => {
+                const r = c.getBoundingClientRect();
+                return [r.top, r.height].filter((v) => v % 1 !== 0).map((v) => `${c.textContent}: ${v}`);
+              });
+          });
+          expect(halves, `${width}px, ${dir}, ${labels}`).toEqual([]);
+          await page.close();
+        }
+      }
+    }
+  });
 });
 
 test.describe("WindowBar", () => {

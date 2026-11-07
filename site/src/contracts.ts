@@ -153,6 +153,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "toast-room", when: "A toast has an action", then: "The action stands under the message, so the message keeps the width of the card." },
       { id: "toast-path", when: "The message holds a path", then: "It breaks after a slash rather than inside a word." },
       { id: "toast-phone", when: "The window is a phone's", then: "A toast takes the window's width, the newest two show, and the page stays in view." },
+      { id: "toast-pixels", when: "Toasts stack up", then: "Each one is a whole number of pixels tall, whatever its severity, label mode or width, and right to left too, so none of them lands on a half pixel." },
     ],
   },
   WindowBar: {

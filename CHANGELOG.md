@@ -11,11 +11,16 @@ A sign-in card for every app with a login: `SignInCard` in React and Vue, with t
 - **The sign-in page:** an app's own login page can become a `SignInCard`. The app hands in its logo, its name, its words and the callbacks `onSignIn`, `onPasskey`, `onAskCode` and `onSetPassword`. A name field or "Stay signed in" goes into `fields`, a single sign-on button into `actions`, and a step of the app's own, such as recovery codes or the page after a reset, into `step`.
 - **What leaves the page:** a server name under the logo, a pill over the card, a language picker and a version number under the card. Labels stand above their fields in normal case, and every button is full width.
 - **The theme before sign-in:** the page follows what the app stored in the browser for accent, theme, shape and motion, and the system's light or dark when nothing is stored. An app whose first-frame default was "dark" moves it to "system".
+- **Toasts:** a screenshot test that holds toasts sees each line 0.75px taller.
 
 ## ✨ Added
 
 - **`SignInCard` and `SignInField`**: the logo large above the centred name, the password, the code field when the app asks for one, the passkey where it is offered and "Forgot password?" with the reset form in the same card. Sign in waits for the password, the first empty field takes the focus, and a refused try shakes its button and selects the refused field. The card is 24rem wide and takes a phone's width less 16px either side.
 - **`createSignInFlow`, `showRefusal` and `signInTextEn`** in the core, the parts both frameworks share.
+
+## 🐛 Fixed
+
+- **Toasts:** the message stands on a 20px line instead of 19.25px, so every toast is a whole number of pixels tall. The toasts stacked beside it sat on a fraction before, and Chromium drew their edges a pixel higher or lower from one paint to the next. Each line of a toast is 0.75px taller.
 
 ## 4.2.1 - 2026-11-07
 

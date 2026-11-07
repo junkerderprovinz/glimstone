@@ -3576,7 +3576,9 @@ body {
     margin: 0;
     text-wrap: pretty;
     font-size: 0.875rem;
-    line-height: 1.375;
+    /* Whole pixels per line, or every toast stacked beside this one lands on a
+       fraction and Chromium rounds its edges differently from paint to paint. */
+    line-height: 1.25rem;
     overflow-wrap: break-word;
   }
   /* A phone keeps the window in view: the newest two across its width. */
