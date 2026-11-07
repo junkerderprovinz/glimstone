@@ -2,17 +2,19 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 4.2.4 - 2026-11-07
 
 The sign-in card's logo is larger and keeps its own shape, and the card holds still when a password is refused. Both came from KnightLoader's test instance.
 
 **Adopting apps:**
 
+- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.2.4, all at the same number. Nothing is renamed or removed.
 - **The logo:** the call stays as it is. `SignInCard` draws every logo 7.5rem tall and as wide as its shape asks, up to the card's content width. Hand in an image address or an inline `<svg>` with a viewBox. A width and height on the `<svg>`, such as ArrowLoop's `LogoMark size={64}`, are overridden.
 - **The card's place:** `.glim-signin` sets `align-items: flex-start` and `padding: max(1rem, calc((100dvh - var(--window-bar)) / 2 - 14rem)) 1rem 1rem`. `--window-bar` is 0 without a window bar, so a browser page gets plain `100dvh`. The reason line still appears only on a refusal, and the spacing is as it was.
 - **Local overrides:** KnightLoader's 7.5rem box on `.glim-signin-logo` and its top padding on `.glim-signin` can go, and so can any other app's rule that sizes the logo or anchors the card itself. So can a reason line kept in the form at all times to stop the jump, an empty alert with a `min-height` and negative margins. An app that keeps its own copy of the sign-in styles takes the new `.glim-signin` and `.glim-signin-logo` blocks from `tokens.css`.
 - **Screenshot tests:** a sign-in page shows a taller head, and the card sits near the middle rather than exactly on it.
-- **Flutter:** nothing changed there.
+- **Flutter:** move the git dependency to `ref: v4.2.4`. Nothing changed there.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.2.4.
 
 ## 🎨 Design
 
