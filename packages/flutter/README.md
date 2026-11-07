@@ -10,7 +10,7 @@ dependencies:
     git:
       url: https://github.com/junkerderprovinz/glimstone.git
       path: packages/flutter
-      ref: v4.2.2
+      ref: v4.2.3
 ```
 
 ```dart
