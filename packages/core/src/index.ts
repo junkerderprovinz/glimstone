@@ -1,6 +1,7 @@
 export * from "./appearance.ts";
 export * from "./appMarks.ts";
 export * from "./badge.ts";
+export * from "./browserAccent.ts";
 export * from "./bubblePosition.ts";
 export * from "./button.ts";
 export * from "./clipboard.ts";
