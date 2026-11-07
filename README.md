@@ -20,6 +20,23 @@ rather than for outside adoption; <a href="docs/design-language.md">docs/design-
 
 <br>
 
+<p><a id="table-of-contents" href="#table-of-contents"><picture><source media="(prefers-color-scheme: dark)" srcset=".github/assets/sections/table-of-contents-dark.svg"><img src=".github/assets/sections/table-of-contents.svg" alt="Table of Contents" width="100%"></picture></a></p>
+
+1. [Support](#1-support)
+2. [What's in this repo](#2-whats-in-this-repo)
+3. [The short version](#3-the-short-version)
+4. [The engines](#4-the-engines)
+5. [Easter eggs](#5-easter-eggs)
+6. [Adopting GlimStone in an app](#6-adopting-glimstone-in-an-app)
+7. [Where per-app detail lives](#7-where-per-app-detail-lives)
+8. [Versioning](#8-versioning)
+9. [License](#9-license)
+10. [How AI is used here](#10-how-ai-is-used-here)
+
+<br>
+
+<p><a id="1-support" href="#1-support"><picture><source media="(prefers-color-scheme: dark)" srcset=".github/assets/sections/1-support-dark.svg"><img src=".github/assets/sections/1-support.svg" alt="1. Support" width="100%"></picture></a></p>
+
 <p align="center">
 A one-knight job: I build it, keep it running, work through the issues and add what people ask for, until nothing is missing. It is free, with no accounts, no telemetry, no ads and no paid tier. No asterisk anywhere. Nothing readable ever leaves your own walls. Forged on evenings and weekends, with heart and stubbornness.
 </p>
@@ -40,22 +57,7 @@ If it has earned a place on your server or computer, toss a coin to your knight:
 
 <br>
 
-## Contents
-
-1. [What's in this repo](#1-whats-in-this-repo)
-2. [The short version](#2-the-short-version)
-3. [The engines](#3-the-engines)
-4. [Easter eggs](#4-easter-eggs)
-5. [Adopting GlimStone in an app](#5-adopting-glimstone-in-an-app)
-6. [Where per-app detail lives](#6-where-per-app-detail-lives)
-7. [Versioning](#7-versioning)
-8. [License](#8-license)
-9. [How AI is used here](#9-how-ai-is-used-here)
-10. [Support this project](#10-support-this-project)
-
-<br>
-
-## 1. What's in this repo
+<p><a id="2-whats-in-this-repo" href="#2-whats-in-this-repo"><picture><source media="(prefers-color-scheme: dark)" srcset=".github/assets/sections/2-whats-in-this-repo-dark.svg"><img src=".github/assets/sections/2-whats-in-this-repo.svg" alt="2. What's in this repo" width="100%"></picture></a></p>
 
 - [`docs/design-language.md`](docs/design-language.md) is the full spec: the palette, the name and its etymology, all the rules, the componentry vocabulary (info bubble, horizontal selector and its vertical tiles, the settings search and the search button, switches, the reveal eye, badges, toasts, empty states, destructive actions, charts, the sidebar and the phone's bottom bar), all four engines, the token contract, and the adoption steps. This is the document to read start to finish; everything below just points back into it.
 - [`site/`](site/) is the documentation site at [junkerderprovinz.github.io/glimstone](https://junkerderprovinz.github.io/glimstone/). It shows every component live under every look a user can pick, its source, its props as the code declares them, and its behaviour contract: the keys, the focus and what a screen reader hears, each row tested on every push with the result printed beside it.
@@ -69,7 +71,7 @@ The files say what a control must look like; the components say what it **is**. 
 
 <br>
 
-## 2. The short version
+<p><a id="3-the-short-version" href="#3-the-short-version"><picture><source media="(prefers-color-scheme: dark)" srcset=".github/assets/sections/3-the-short-version-dark.svg"><img src=".github/assets/sections/3-the-short-version.svg" alt="3. The short version" width="100%"></picture></a></p>
 
 IBM Carbon's neutral greys for the ground and surfaces, one accent that means "this is happening" and nothing else, four state hues total, hierarchy from type and colour rather than borders, and every heading rendered as a filled section badge rather than bare text.
 
@@ -79,7 +81,7 @@ See [`docs/design-language.md`](docs/design-language.md) for the palette table a
 
 <br>
 
-## 3. The engines
+<p><a id="4-the-engines" href="#4-the-engines"><picture><source media="(prefers-color-scheme: dark)" srcset=".github/assets/sections/4-the-engines-dark.svg"><img src=".github/assets/sections/4-the-engines.svg" alt="4. The engines" width="100%"></picture></a></p>
 
 An engine is a single mechanism that turns one setting into every token a component reads, so nothing downstream has to know which setting produced the value it got. All four are applied once at the app root, never by the page that edits them. Otherwise two pages would be free to disagree about how "square" looks.
 
@@ -100,7 +102,7 @@ A new control has to point its own CSS at these tokens as it is built. Adopting 
 
 <br>
 
-## 4. Easter eggs
+<p><a id="5-easter-eggs" href="#5-easter-eggs"><picture><source media="(prefers-color-scheme: dark)" srcset=".github/assets/sections/5-easter-eggs-dark.svg"><img src=".github/assets/sections/5-easter-eggs.svg" alt="5. Easter eggs" width="100%"></picture></a></p>
 
 Three settings have a hidden extra that no picker lists. They exist mostly for the rules that come with them, and those rules apply to any egg an adopting app adds.
 
@@ -136,7 +138,7 @@ An adopting app may add eggs of its own. They belong in that app's own notes, an
 
 <br>
 
-## 5. Adopting GlimStone in an app
+<p><a id="6-adopting-glimstone-in-an-app" href="#6-adopting-glimstone-in-an-app"><picture><source media="(prefers-color-scheme: dark)" srcset=".github/assets/sections/6-adopting-glimstone-in-an-app-dark.svg"><img src=".github/assets/sections/6-adopting-glimstone-in-an-app.svg" alt="6. Adopting GlimStone in an app" width="100%"></picture></a></p>
 
 1. Install the core and the framework package: `npm install @glimstone/core @glimstone/react`, or `@glimstone/vue`. Select, Combobox and Slider come from their own entries (`@glimstone/react/Select`) and need the Zag packages beside them.
 2. Load `@glimstone/core/tokens.css` before the app's own stylesheet, and under Tailwind v4 `@glimstone/core/tailwind-theme.css` after it.
@@ -148,19 +150,19 @@ A page without a framework takes the core alone, and a Flutter app adds `GlimThe
 
 <br>
 
-## 6. Where per-app detail lives
+<p><a id="7-where-per-app-detail-lives" href="#7-where-per-app-detail-lives"><picture><source media="(prefers-color-scheme: dark)" srcset=".github/assets/sections/7-where-per-app-detail-lives-dark.svg"><img src=".github/assets/sections/7-where-per-app-detail-lives.svg" alt="7. Where per-app detail lives" width="100%"></picture></a></p>
 
 This repository is deliberately app-agnostic. Anything true for only one app belongs in that app's own style guide, not here: its exact token names if they diverge from the reference, class prefixes, measured pixel values, quirks of a specific host UI it runs inside. If the same rule shows up in both places, it gets deleted from the app-specific one: universal belongs here, an exception belongs there.
 
 <br>
 
-## 7. Versioning
+<p><a id="8-versioning" href="#8-versioning"><picture><source media="(prefers-color-scheme: dark)" srcset=".github/assets/sections/8-versioning-dark.svg"><img src=".github/assets/sections/8-versioning.svg" alt="8. Versioning" width="100%"></picture></a></p>
 
 GlimStone the language is versioned independently of any app that adopts it, so a rule added here doesn't imply every adopting app has picked it up yet. See [`CHANGELOG.md`](CHANGELOG.md) for what changed and when.
 
 <br>
 
-## 8. License
+<p><a id="9-license" href="#9-license"><picture><source media="(prefers-color-scheme: dark)" srcset=".github/assets/sections/9-license-dark.svg"><img src=".github/assets/sections/9-license.svg" alt="9. License" width="100%"></picture></a></p>
 
 **Copyright (C) 2026 Junker der Provinz.**
 
@@ -170,7 +172,7 @@ GlimStone is free software under the **GNU Affero General Public License v3.0** 
 
 <br>
 
-## 9. How AI is used here
+<p><a id="10-how-ai-is-used-here" href="#10-how-ai-is-used-here"><picture><source media="(prefers-color-scheme: dark)" srcset=".github/assets/sections/10-how-ai-is-used-here-dark.svg"><img src=".github/assets/sections/10-how-ai-is-used-here.svg" alt="10. How AI is used here" width="100%"></picture></a></p>
 
 One knight builds this, and AI is one of the tools I work with, the same way I work with an editor or a compiler. It helps me write code and documentation and it checks my work, and that saves me a good many evenings. It does not make the decisions, though. I read and understand everything before it ships, and if something here breaks, that is on me and not on the tool.
 
@@ -178,18 +180,4 @@ You do not have to take my word for it. The code is open and every release note 
 
 <br>
 
-## 10. Support this project
-
 Bugs, ideas or questions? Please [open a GitHub issue](https://github.com/junkerderprovinz/glimstone/issues).
-
-A one-knight job: I build it, keep it running, work through the issues and add what people ask for, until nothing is missing. It is free, with no accounts, no telemetry, no ads and no paid tier. No asterisk anywhere. Nothing readable ever leaves your own walls. Forged on evenings and weekends, with heart and stubbornness.
-
-If it has earned a place on your server or computer, toss a coin to your knight: it helps cover the costs and keeps the project alive. It also makes this knight's heart beat a little faster. Three ways below, whichever suits you.
-
-<p align="center">
-  <a href="https://buymeacoffee.com/junkerderprovinz"><img src="https://raw.githubusercontent.com/junkerderprovinz/junkerderprovinz/main/donate/buttons/give.svg#svgView(viewBox(0,0,841.9,245.3))" alt="Buy me a coffee" width="160" height="46.62"></a>
-  &nbsp;
-  <a href="https://www.paypal.com/donate/?hosted_button_id=76FVV52TKXTUS"><img src="https://raw.githubusercontent.com/junkerderprovinz/junkerderprovinz/main/donate/buttons/give.svg#svgView(viewBox(841.9,0,841.9,245.3))" alt="PayPal" width="160" height="46.62"></a>
-  &nbsp;
-  <a href="https://junkerderprovinz.github.io/junkerderprovinz/"><img src="https://raw.githubusercontent.com/junkerderprovinz/junkerderprovinz/main/donate/buttons/give.svg#svgView(viewBox(1683.8,0,841.9,245.3))" alt="Donate with crypto" width="160" height="46.62"></a>
-</p>
