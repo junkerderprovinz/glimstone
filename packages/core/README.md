@@ -15,9 +15,11 @@ npm install @glimstone/core
   onto Tailwind v4 utilities for an app that uses Tailwind.
 - `glyphs.json` and `glyphs.md` are the glyph assortment: which mark means
   what, where each comes from, and the sizing rules that make them one set.
-- The engines: `appearance` (shape, accent, rainbow, motion), `controls` (the
-  label engine and its width stages) and `setStoragePrefix`, which keeps an
-  app's own names for what it stores.
+- The engines: `appearance` (shape, accent, rainbow, motion), `theme` (OLED
+  and whether dark is showing), `contrast` (the inks that hold 4.5:1),
+  `browserAccent` (the browser as a source for the system accent), `controls`
+  (the label engine and its width stages) and `setStoragePrefix`, which keeps
+  an app's own names for what it stores.
 - What a component shows, as functions: `buttonView`, `badgeClassName`, the
   select's list model, the Info tile's version links and update check, the
   README button's classes, where a bubble goes, a dialog's keys and the toast

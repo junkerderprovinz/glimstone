@@ -76,8 +76,7 @@ export function ColourEngine() {
       />
       <Callout>
         The system's colour can be anything, a pale wallpaper tone as well as a dark navy. The engine pushes the ink on
-        it and the accent text toward black or white just far enough to keep 4.5:1, so nothing has to be checked by
-        hand.
+        it and the accent text toward black or white just far enough to keep 4.5:1, so nobody has to check it by hand.
       </Callout>
       <H2>Rainbow</H2>
       <p>
