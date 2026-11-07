@@ -196,6 +196,8 @@ abstract final class GlimGlyphs {
   static const rowMedium = GlimGlyphData('IconRowMedium', '0 0 14 14', r'''<path fill-rule="evenodd" clip-rule="evenodd" d="M0 2A1 1 0 0 1 1 1H13A1 1 0 0 1 13 3H1A1 1 0 0 1 0 2ZM0 7A1 1 0 0 1 1 6H13A1 1 0 0 1 13 8H1A1 1 0 0 1 0 7ZM0 12A1 1 0 0 1 1 11H13A1 1 0 0 1 13 13H1A1 1 0 0 1 0 12Z" />''');
   /// Comfortable rows
   static const rowComfortable = GlimGlyphData('IconRowComfortable', '0 0 14 14', r'''<path fill-rule="evenodd" clip-rule="evenodd" d="M0 3A1.2 1.2 0 0 1 1.2 1.8H12.8A1.2 1.2 0 0 1 12.8 4.2H1.2A1.2 1.2 0 0 1 0 3ZM0 11A1.2 1.2 0 0 1 1.2 9.8H12.8A1.2 1.2 0 0 1 12.8 12.2H1.2A1.2 1.2 0 0 1 0 11Z" />''');
+  /// The accent takes the system's colour
+  static const accentSystem = GlimGlyphData('IconAccentSystem', '0.5 0.5 13 13', r'''<path fill="currentColor" d="M0.793 11.793L6.893 5.693A1 1 0 0 1 8.307 7.107L2.207 13.207A1 1 0 0 1 0.793 11.793ZM10.5 0.5Q11 3 13.5 3.5Q11 4 10.5 6.5Q10 4 7.5 3.5Q10 3 10.5 0.5ZM3.75 2.25Q4.1 3.65 5.5 4Q4.1 4.35 3.75 5.75Q3.4 4.35 2 4Q3.4 3.65 3.75 2.25ZM11 9Q11.35 10.4 12.75 10.75Q11.35 11.1 11 12.5Q10.65 11.1 9.25 10.75Q10.65 10.4 11 9Z"></path>''');
   /// Settings, open a setting
   static const gear = GlimGlyphData('IconGear', '-0.001 0 14 14', r'''<g> <path fill="currentColor" fill-rule="evenodd" d="m5.557 0.69 -0.463 1.195 -1.594 0.904 -1.27 -0.194a1.077 1.077 0 0 0 -1.078 0.528l-0.43 0.754a1.077 1.077 0 0 0 0.086 1.217l0.807 1.001v1.81L0.83 8.906a1.077 1.077 0 0 0 -0.086 1.217l0.43 0.754a1.077 1.077 0 0 0 1.078 0.528l1.27 -0.194 1.573 0.904 0.463 1.196a1.076 1.076 0 0 0 1 0.689h0.905a1.076 1.076 0 0 0 1.002 -0.69l0.463 -1.195 1.572 -0.904 1.27 0.194a1.077 1.077 0 0 0 1.078 -0.528l0.43 -0.754a1.077 1.077 0 0 0 -0.086 -1.217l-0.807 -1.001v-1.81l0.786 -1.001a1.077 1.077 0 0 0 0.086 -1.217l-0.43 -0.754a1.076 1.076 0 0 0 -1.078 -0.528l-1.27 0.194 -1.573 -0.904L8.443 0.689A1.077 1.077 0 0 0 7.442 0h-0.884a1.077 1.077 0 0 0 -1.001 0.69ZM7 9.25a2.25 2.25 0 1 0 0 -4.5 2.25 2.25 0 0 0 0 4.5Z" clip-rule="evenodd" stroke-width="1"></path> </g>''');
   /// Dashboard, overview
@@ -484,6 +486,7 @@ abstract final class GlimGlyphs {
     'IconRowCompact': rowCompact,
     'IconRowMedium': rowMedium,
     'IconRowComfortable': rowComfortable,
+    'IconAccentSystem': accentSystem,
     'IconGear': gear,
     'IconDashboard': dashboard,
     'IconFolder': folder,

@@ -228,6 +228,7 @@ ArrowLoop drew the glyphs for the segments of its Design, Corners and Motion sel
 | Row height selector, Compact | `IconRowCompact` | none | none | `IconRowCompact`, standard |
 | Row height selector, Medium | `IconRowMedium` | none | none | `IconRowMedium`, standard |
 | Row height selector, Comfortable | `IconRowComfortable` | none | none | `IconRowComfortable`, standard |
+| Accent row, the swatch that takes the system's colour | `IconAccentSystem` | none | none | none |
 
 <br>
 
