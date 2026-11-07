@@ -3099,6 +3099,22 @@ body {
     outline-offset: 2px;
   }
   .glim-toggle-track:disabled { opacity: 0.5; }
+  /* A refused switch keeps its focus, so the fill dims rather than the whole
+     button, whose focus ring has to stay at full strength. */
+  .glim-toggle-track[aria-disabled="true"] { background-color: color-mix(in srgb, var(--toggle-off) 50%, transparent); }
+  .glim-toggle-track[aria-disabled="true"][aria-checked="true"] { background-color: color-mix(in srgb, var(--accent) 50%, transparent); }
+  /* Why it refuses. A pointer finds that in the bubble, and a touch screen,
+     which has no hover, shows it as a line under the row. */
+  .glim-toggle-refusal { display: none; }
+  @media (hover: none) {
+    .glim-toggle-refusal {
+      display: block;
+      flex-basis: 100%;
+      font-size: var(--text-meta);
+      color: var(--carbon-text-sub);
+    }
+    .glim-field-row-controls:has(> .glim-toggle-refusal) { flex-wrap: wrap; }
+  }
   .glim-toggle-thumb {
     display: inline-block;
     width: 0.875rem;

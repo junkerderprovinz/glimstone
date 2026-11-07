@@ -104,6 +104,15 @@ export function TogglePage() {
         <li>Switching something on is one click. Its options live on its own page.</li>
         <li>The knob reads the same radius token as the track, so it follows the shape engine too.</li>
       </ul>
+      <H2>Refusing for now</H2>
+      <p>
+        A switch that cannot be flipped right now takes <code>refused</code>, the sentence that says why. OLED does so
+        while Light is chosen, since there is no dark to put on black. It keeps its state and its place in the tab order,
+        its track dims, and a press shakes it. The sentence is its bubble, and on a touch screen a line under the row.
+        Under System the switch stays free, for the device's dark.
+      </p>
+      <Demo name="ToggleRefused" />
+      <Usage code={`import { oledRefusal } from "@glimstone/core";\n\n<Toggle label="OLED" checked={oled} onChange={setOled} refused={oledRefusal(theme)} />`} />
       <H2>Accessibility</H2>
       <ul>
         <li>

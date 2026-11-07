@@ -44,6 +44,10 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "toggle-disabled", when: "The switch is disabled", then: "A click changes nothing." },
       { id: "toggle-attrs", when: "It is given an id, a data attribute or a listener", then: "They land on the switch itself, and a class stays on the frame." },
       { id: "toggle-off-contrast", when: "It is off, in the light theme", then: "Its track holds 3:1 against the card and against its knob." },
+      { id: "toggle-refused", keys: ["Space"], when: "It is refused, as OLED while Light is chosen", then: "It keeps its state and its focus, its track dims, and a click or a key shakes it." },
+      { id: "toggle-refused-tip", when: "It is refused and the pointer rests on it", then: "Its bubble says why, and the reason is its description." },
+      { id: "toggle-refused-line", when: "It is refused on a touch screen", then: "The reason stands as a line under the row." },
+      { id: "toggle-refused-lifted", when: "The refusal is lifted, as OLED under System", then: "It flips again." },
     ],
   },
   ConfirmDialog: {

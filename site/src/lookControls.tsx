@@ -6,6 +6,7 @@ import {
   LABEL_MODES,
   SYSTEM_ACCENT,
   contrastOn,
+  oledRefusal,
   subscribeSystemAccent,
   systemAccent,
   type LabelMode,
@@ -32,8 +33,8 @@ export function ThemeControl() {
           { value: "system", label: "System", glyph: <Glyph name="IconThemeSystem" /> },
         ]}
       />
-      <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-        <Toggle label="OLED" checked={oled} onChange={(oled) => setLook({ oled })} />
+      <span style={{ display: "inline-flex", flexWrap: "wrap", alignItems: "center", gap: 6 }}>
+        <Toggle label="OLED" checked={oled} onChange={(oled) => setLook({ oled })} refused={oledRefusal(theme)} />
         <InfoBubble tip="True black for OLED and AMOLED screens, whenever the dark look is showing." />
       </span>
     </div>

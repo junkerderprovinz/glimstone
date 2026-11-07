@@ -1,7 +1,16 @@
 import { beforeEach, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { fakeDocument } from './fakeDocument.ts';
-import { applyOled, darkShowing, resolvesDark, storedOled, watchDarkShowing } from '../src/theme.ts';
+import {
+  applyOled,
+  darkShowing,
+  oledRefusal,
+  oledRefusalEn,
+  oledSwitchable,
+  resolvesDark,
+  storedOled,
+  watchDarkShowing,
+} from '../src/theme.ts';
 
 let root: ReturnType<typeof fakeDocument>;
 beforeEach(() => {
@@ -51,4 +60,23 @@ test('OLED is remembered on this device', () => {
   assert.equal(storedOled(), true);
   applyOled(false);
   assert.equal(storedOled(), false);
+});
+
+test('OLED can be switched under Dark and System, and not under Light', () => {
+  assert.equal(oledSwitchable('dark'), true);
+  assert.equal(oledSwitchable('system'), true);
+  assert.equal(oledSwitchable(null), true);
+  assert.equal(oledSwitchable('light'), false);
+});
+
+test('the refusal speaks only under Light', () => {
+  assert.equal(oledRefusal('dark'), undefined);
+  assert.equal(oledRefusal(null), undefined);
+  assert.equal(oledRefusal('light'), 'Only with Dark or System. Light is chosen above.');
+});
+
+test('the refusal fills in the sentence and theme names an app gives it', () => {
+  const de = { sentence: 'Nur mit {dark} oder {system}. Oben ist {light} gewählt.', dark: 'Dunkel', system: 'System', light: 'Hell' };
+  assert.equal(oledRefusal('light', de), 'Nur mit Dunkel oder System. Oben ist Hell gewählt.');
+  assert.equal(oledRefusalEn.sentence, 'Only with {dark} or {system}. {light} is chosen above.');
 });

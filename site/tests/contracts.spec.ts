@@ -257,6 +257,63 @@ test.describe("Toggle", () => {
     await sound.click({ force: true });
     await expect(sound).toHaveAttribute("aria-checked", "false");
   });
+
+  const oled = (page: Page) => stage(page, "ToggleRefused").getByRole("switch", { name: "OLED" });
+  const REASON = "Only with Dark or System. Light is chosen above.";
+  // aria-disabled counts as disabled for Playwright's own checks, so a press goes in with force.
+  const shakes = (sw: Locator) => expect.poll(() => sw.evaluate((e) => !!e.closest(".glim-toggle")?.classList.contains("glim-shake")));
+
+  test("[toggle-refused] a refused switch keeps its state and its focus, dims its track and shakes", async ({ page }) => {
+    await open(page, "/components/toggle");
+    const sw = oled(page);
+    await expect(sw).toHaveAttribute("aria-disabled", "true");
+    await expect(sw).not.toHaveAttribute("disabled");
+    expect(await sw.evaluate((e) => getComputedStyle(e).backgroundColor)).toMatch(/\/ 0\.5\)$/);
+    await sw.click({ force: true });
+    await expect(sw).toHaveAttribute("aria-checked", "true");
+    await shakes(sw).toBe(true);
+    await shakes(sw).toBe(false);
+    await sw.focus();
+    await page.keyboard.press("Space");
+    await shakes(sw).toBe(true);
+    await expect(sw).toHaveAttribute("aria-checked", "true");
+    await expect(sw).toBeFocused();
+  });
+
+  test("[toggle-refused-tip] its bubble says why", async ({ page }) => {
+    await open(page, "/components/toggle");
+    const sw = oled(page);
+    await centre(sw);
+    await sw.hover({ force: true });
+    await expect(page.locator(".glim-bubble", { hasText: REASON })).toBeVisible();
+    await expect(sw).toHaveAccessibleDescription(REASON);
+    await expect(stage(page, "ToggleRefused").getByText(REASON)).toBeHidden();
+  });
+
+  test("[toggle-refused-lifted] under System it flips again", async ({ page }) => {
+    await open(page, "/components/toggle");
+    await stage(page, "ToggleRefused").getByRole("radio", { name: "System" }).click();
+    const sw = oled(page);
+    await expect(sw).not.toHaveAttribute("aria-disabled");
+    await sw.click();
+    await expect(sw).toHaveAttribute("aria-checked", "false");
+  });
+});
+
+test.describe("Toggle on a touch screen", () => {
+  test.use({ hasTouch: true, isMobile: true, viewport: { width: 390, height: 844 } });
+
+  test("[toggle-refused-line] the reason stands as a line under the row", async ({ page }) => {
+    await open(page, "/components/toggle");
+    const demo = stage(page, "ToggleRefused");
+    const line = demo.getByText("Only with Dark or System. Light is chosen above.");
+    await expect(line).toBeVisible();
+    const row = await demo.locator(".glim-field-row-label").boundingBox();
+    const sw = await demo.getByRole("switch", { name: "OLED" }).boundingBox();
+    const under = await line.boundingBox();
+    expect(under!.y).toBeGreaterThanOrEqual(sw!.y + sw!.height);
+    expect(under!.x).toBeCloseTo(row!.x, 0);
+  });
 });
 
 test.describe("ConfirmDialog", () => {

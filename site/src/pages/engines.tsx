@@ -51,11 +51,13 @@ export function ColourEngine() {
       <p>
         The OLED switch under it puts the dark look on true black for OLED and AMOLED screens. It sets{" "}
         <code>data-oled</code> on <code>&lt;html&gt;</code>, which counts whenever dark is showing, chosen or from the
-        system. The surfaces move one step down and the text stays as it is. It belongs to the screen, so it is kept on
-        the device and never synced.
+        system. The surfaces move one step down and the text stays as it is. A card has no ring: its fill is its edge on
+        black. It belongs to the screen, so it is kept on the device and never synced. While Light is chosen the switch
+        refuses: it keeps its state, its track dims, a press shakes it and its bubble says why. Under System it stays
+        free, for the device's dark.
       </p>
       <Code
-        code={`import { applyOled, darkShowing } from "@glimstone/core";\n\napplyOled(true); // kept on this device\ndarkShowing(); // whether OLED is in effect now`}
+        code={`import { applyOled, darkShowing, oledRefusal } from "@glimstone/core";\n\napplyOled(true); // kept on this device\ndarkShowing(); // whether OLED is in effect now\noledRefusal(theme); // why the switch refuses, or undefined`}
       />
       <H2>Accent</H2>
       <p>
