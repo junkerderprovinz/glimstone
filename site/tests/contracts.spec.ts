@@ -3780,3 +3780,66 @@ test.describe("SignInCard refusals and engines", () => {
     expect(radii.square).not.toEqual(radii.round);
   });
 });
+
+test.describe("useDragArmed", () => {
+  const list = (page: Page) => stage(page, "DragArmedTiles").getByRole("list");
+
+  async function hold(page: Page, name: string) {
+    const tile = list(page).getByRole("listitem").filter({ hasText: name });
+    await centre(tile);
+    const box = (await tile.boundingBox())!;
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.down();
+  }
+
+  // The largest turn of each tile over a few frames, longer than a beat at every level.
+  const turns = (page: Page) =>
+    list(page).evaluate(async (l) => {
+      const most: Record<string, number> = {};
+      for (let frame = 0; frame < 16; frame++) {
+        for (const tile of l.children) {
+          const name = tile.textContent!.trim();
+          most[name] = Math.max(most[name] ?? 0, Math.abs(parseFloat(getComputedStyle(tile).rotate) || 0));
+        }
+        await new Promise((done) => requestAnimationFrame(done));
+      }
+      return most;
+    });
+
+  const othersTremble = async (page: Page, held: string) => {
+    const seen = await turns(page);
+    expect(seen[held]).toBe(0);
+    for (const [name, turn] of Object.entries(seen)) if (name !== held) expect(turn, name).toBeGreaterThan(0.5);
+  };
+
+  test("[drag-wiggle] the others tremble while one is held", async ({ page }) => {
+    await open(page, "/engines/motion");
+    await hold(page, "Mail");
+    await othersTremble(page, "Mail");
+    const delays = await list(page).evaluate((l) => [...l.children].slice(1).map((t) => getComputedStyle(t).animationDelay));
+    expect(new Set(delays).size).toBeGreaterThan(1);
+    await page.mouse.up();
+    expect(Object.values(await turns(page))).toEqual([0, 0, 0, 0, 0, 0]);
+  });
+
+  test("[drag-wiggle-rerender] the tremble outlasts the list's own class", async ({ page }) => {
+    await open(page, "/engines/motion");
+    await hold(page, "Music");
+    await page.mouse.move(0, 0, { steps: 4 });
+    await expect(list(page)).toHaveClass(/is-moving/);
+    await othersTremble(page, "Music");
+  });
+
+  for (const [what, look, reduce] of [
+    ["with motion off", { motion: "off" }, false],
+    ["under reduced motion", undefined, true],
+  ] as const) {
+    test(`[drag-wiggle-still] nothing trembles ${what}`, async ({ page }) => {
+      if (reduce) await page.emulateMedia({ reducedMotion: "reduce" });
+      await open(page, "/engines/motion", look);
+      await hold(page, "Mail");
+      await expect(list(page).getByRole("listitem").filter({ hasText: "Mail" })).toHaveClass(/glim-drag-lift/);
+      expect(Object.values(await turns(page))).toEqual([0, 0, 0, 0, 0, 0]);
+    });
+  }
+});

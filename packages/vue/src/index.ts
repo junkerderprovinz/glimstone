@@ -44,6 +44,7 @@ export { default as Tree } from "./Tree.vue";
 export { default as UnavailableNotice } from "./UnavailableNotice.vue";
 export { default as Window } from "./Window.vue";
 export { useConfirm, type ConfirmOptions, type ConfirmText } from "./confirm";
+export { useDragArmed } from "./dragArmed";
 export { useFieldName } from "./fieldName";
 export { useAccent, useHue, useLabelMode, useMotion, useRainbow, useShape } from "./engines";
 export * from "./glyphs";

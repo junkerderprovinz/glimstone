@@ -1,7 +1,7 @@
 import { Button } from "@glimstone/react";
 import { AccentControl, LabelControl, MotionControl, RainbowControl, ShapeControl, ThemeControl } from "../lookControls";
 import { SampleSurface } from "../sample";
-import { Callout, Code, H2, SourceLink } from "../ui";
+import { Callout, Code, ContractTable, Demo, H2, SourceLink } from "../ui";
 import { useLook } from "../look";
 
 function Live({ children }: { children: React.ReactNode }) {
@@ -155,6 +155,27 @@ export function MotionEngine() {
   transition-duration: var(--motion-control-dur);
 }`}
       />
+      <H2>Reordering</H2>
+      <p>
+        Hold a tile and the others tremble, which says at once that they can be moved. It happens in every list and grid
+        that can be reordered by dragging, so the class comes from the drag gesture rather than from each list:{" "}
+        <code>useDragArmed</code> puts <code>glim-drag-armed</code> on the list while an item is held and takes it off on
+        release, also when the list rewrites its own class in between.
+      </p>
+      <Demo name="DragArmedTiles" />
+      <Code
+        code={`import { useDragArmed } from "@glimstone/react";
+
+// In the app's drag hook, beside the item it lifts.
+useDragArmed(list, held !== null);
+
+// Vue: useDragArmed(list, () => held.value !== null), from @glimstone/vue.`}
+      />
+      <p>
+        The tremble reads <code>--motion-wiggle-angle</code> and <code>--motion-wiggle-dur</code>: 2deg every 120ms at
+        wild, 1.4deg every 140ms at subtle, 2.8deg every 100ms at storm, and nothing at off or under reduced motion.
+      </p>
+      <ContractTable of="useDragArmed" />
     </>
   );
 }

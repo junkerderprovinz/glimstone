@@ -517,4 +517,11 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "signin-width", when: "The window is wide, or a phone's", then: "The card is 24rem wide, and on a phone it fills the width with 16px either side." },
     ],
   },
+  useDragArmed: {
+    rows: [
+      { id: "drag-wiggle", when: "An item of a reorderable list is held", then: "Every other item trembles out of step with its neighbours, and the held one does not. On release they stop." },
+      { id: "drag-wiggle-rerender", when: "The list rewrites its own class while the item is held", then: "The others keep trembling." },
+      { id: "drag-wiggle-still", when: "Motion is off, or the system asks for reduced motion", then: "Nothing trembles; the held item still lifts." },
+    ],
+  },
 };

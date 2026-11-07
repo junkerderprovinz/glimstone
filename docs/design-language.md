@@ -1147,7 +1147,8 @@ KnightLoader's and BombVault's phone apps open their settings from a gear beside
 A list whose order MEANS something (a download queue, a playlist, a set of rules evaluated in sequence) is reordered by dragging, and the gesture is the same everywhere:
 
 - **A long press arms it, never a plain touch.** On a touch screen a drag that starts on contact fights the list's own scrolling, and every attempt to tell the two apart by distance or direction gets one of them wrong on some device. On a pointer, a plain press-and-move is fine, because a mouse has no scroll gesture to be confused with. Same rule, read from the input, not two different rules.
-- **Everything in the list wiggles while it is armed**: a small rotation oscillation, a degree or less. The wiggle is a MODE indicator: it says "this list is editable now" about the LIST, which is why every row does it and not only the one under the finger. It is also the affordance that teaches the gesture, because nothing else on screen announces that a long press does anything. A move mode that a switch keeps on is the one exception: there the row under the pointer, the focused row and the row being carried hold still ("Move mode" under "The motion engine").
+- **While an item is held, every other item of the list trembles, always.** In every list and grid that can be reordered by dragging, and no list is exempt: the tremble is what says at once that the things in front of you can be moved, and nothing else on screen announces that a long press does anything. It is a quick turn to both sides, big enough to be seen straight away rather than noticed later: 2deg every 120ms at `wild`, 1.4deg every 140ms at `subtle`, 2.8deg every 100ms at `storm`. At the old 0.3deg every 360ms of `subtle` nobody saw it. Neighbours tremble out of step, so the list reads as loose items and not as one block tilting, and the held item stays still under the pointer. It follows the motion levels like everything else that moves: nothing trembles at `off` or under reduced motion. In a move mode that a switch keeps on, the row under the pointer and the focused row hold still as well ("Move mode" under "The motion engine").
+- **The drag gesture sets the tremble, not the list.** `useDragArmed` in `@glimstone/react` and `@glimstone/vue` keeps `glim-drag-armed` on the list while an item is held, also when the list rewrites its own class in between, so a list cannot forget it. An app calls it once in its own drag hook. Found in BombVault, where every list set the class by hand and the settings tiles had forgotten it.
 - **Where the host makes the whole row the handle, a grip badge shows it.** `IconGrip` in a small round badge on the corner of the row's picture tile, filled with `--carbon-surface3` and ringed in the page's ground colour so it parts from a tile of the same fill. It takes the row's colour, the accent or the row's rainbow position, while the row has the pointer or is being carried, and it is there only while the list can be reordered. It has `pointer-events: none`: the press belongs to the row, and the badge only says so. The slot the row will land in shows as a shaded gap. Found in TowerTorch's Docker list, where the grip took the place of Unraid's orange move arrow.
 - **The dragged row lifts**: a small scale (about 1.03), a shadow, and drawn above its neighbours. On a platform that has both, set `elevation` AND `z-index`: one is read on Android and the other everywhere else, and a row that lifts on one and slides under its neighbour on the other is exactly the defect nobody sees until it is on somebody else's device.
 - **The lifted item follows the pointer; it does not swap places under a still finger.** It floats under the pointer along the list's axis, and on both axes where the items wrap (tiles, a grid), and it stays inside the area the items cover, so a drag never grows a scrollbar. A list that only swaps positions while the pointer moves hides what is being carried: the reorder reads only when the thing picked up moves with the hand.
@@ -1161,9 +1162,26 @@ A list whose order MEANS something (a download queue, a playlist, a set of rules
 - **The order is written whole, not as a diff.** One call carrying the band's full sequence, the same call the app's other surfaces make. Two clients dragging the same list are then merging orders rather than merging opinions about what moved.
 - **Reduced motion** drops the wiggle and the lift's scale, keeps the shadow and the gap. The gesture still has to be legible; it just stops moving decoratively.
 
-The web reference carries the look in `packages/core/tokens.css`: `--drag-lift-scale`, `--drag-lift-shadow`, `--drag-lift-z`, `--drag-settle-dur` and `--drag-settle-ease`, read by three classes. `.glim-drag-lift` is the carried item, `.glim-drag-shift` the ones making room, `.glim-drag-settle` the item landing. The script sets only each item's `translate` and switches the classes; the separate `translate` and `scale` properties leave a wiggle's `transform` alone. An app whose own stylesheet puts a `transition` on every element, for a shape morph say, has to outrank it on these three classes, or its transition replaces theirs.
+The web reference carries the look in `packages/core/tokens.css`: `--drag-lift-scale`, `--drag-lift-shadow`, `--drag-lift-z`, `--drag-settle-dur` and `--drag-settle-ease`, read by three classes, and `.glim-drag-armed` on the list runs the tremble. `.glim-drag-lift` is the carried item, `.glim-drag-shift` the ones making room, `.glim-drag-settle` the item landing. The script sets only each item's `translate` and switches the classes; the separate `translate` and `scale` properties leave a wiggle's `transform` alone. An app whose own stylesheet puts a `transition` on every element, for a shape morph say, has to outrank it on these three classes, or its transition replaces theirs.
 
 Where a gesture library is available, use it: the animation runs off the main thread and the result is smoother. Where adding one means new NATIVE dependencies in an app whose build is already fragile, the platform's own pan and animation primitives are enough for a reorder, and the trade is worth naming in the code rather than discovering later: a reorder gesture is not worth putting a build at risk for.
+
+### The reorder's checklist
+
+One line per rule above, for a session that brings an app's reorderable lists to this version.
+
+- [ ] A long press arms the list on touch, a press and move with a mouse.
+- [ ] While an item is held every other item trembles, in every reorderable list and grid, set by `useDragArmed` in the drag gesture and never by hand in a list.
+- [ ] The app keeps no local values for `--motion-wiggle-angle` or `--motion-wiggle-dur`.
+- [ ] Where the whole row is the handle, a grip badge says so.
+- [ ] The held item lifts and follows the pointer, inside the area the items cover.
+- [ ] The others make room as it passes, and it lands in that gap on release; Escape puts everything back.
+- [ ] The click after a drag is swallowed.
+- [ ] A list that scrolls keeps room for the lift inside its edge.
+- [ ] A drop where the item started writes nothing.
+- [ ] Rows stay in their band, and the target search measures each row.
+- [ ] The order is written whole, in one call.
+- [ ] Reduced motion keeps the shadow and the gap and drops the tremble and the scale.
 
 ## The overview cards
 

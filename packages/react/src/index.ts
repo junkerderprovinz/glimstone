@@ -46,6 +46,7 @@ export * from "./WindowBar.tsx";
 export * from "./glyphs.tsx";
 export * from "./portalHue.ts";
 export * from "./useConfirm.tsx";
+export * from "./useDragArmed.ts";
 export * from "./useLabelMode.ts";
 export * from "./usePaypalButtons.ts";
 export * from "./useTipBubble.tsx";
