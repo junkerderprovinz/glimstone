@@ -2,6 +2,21 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 4.2.1 - 2026-11-07
+
+The wand glyph's recorded ink matches its drawing.
+
+**Adopting apps:**
+
+- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.2.1, all at the same number. Nothing is renamed or removed.
+- **Glyph data:** an app that copies `glyphs.json` takes the new `IconAccentSystem` entry. A glyph test that compares the recorded ink with the drawing passes again.
+- **Flutter:** move the git dependency to `ref: v4.2.1`. Nothing changed there.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.2.1.
+
+## 🐛 Fixed
+
+- **`IconAccentSystem`**: its ink was recorded as 0.51 and 12.99 where the drawing reaches 0.5 and 13.5, a hundredth off its own viewBox. It reads `[0.5, 0.5, 13, 13]` now.
+
 ## 4.2.0 - 2026-11-07
 
 OLED and the system's colour, both asked for in ArrowLoop. A switch under the Design picker puts the dark look on true black for OLED and AMOLED screens, and a wand swatch before the accent presets takes the device's own colour wherever the platform has one. The colour engine also keeps every ink it computes at 4.5:1, whatever colour feeds it, so a picked or a system colour reads as well as the presets do.
