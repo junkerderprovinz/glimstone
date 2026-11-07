@@ -6,6 +6,7 @@ const FIREFOX = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100
 const SAFARI = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 14_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15';
 const CHROME = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36';
 const EDGE = `${CHROME} Edg/141.0.0.0`;
+const HEADLESS = CHROME.replace('Chrome/', 'HeadlessChrome/');
 
 const listeners = new Map<string, Set<() => void>>();
 let resolved = 'rgb(0, 120, 212)';
@@ -50,6 +51,8 @@ test('Chromium browsers answer with a fixed colour, so they count as no source',
   browser(CHROME);
   assert.equal(browserAccentWorks(), false);
   browser(EDGE);
+  assert.equal(browserAccentWorks(), false);
+  browser(HEADLESS);
   assert.equal(browserAccentWorks(), false);
   assert.equal(browserAccent(), undefined);
 });

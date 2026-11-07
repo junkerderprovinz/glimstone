@@ -18,7 +18,8 @@
 /** Whether `AccentColor` carries the system's colour in this browser. */
 export function browserAccentWorks(): boolean {
   if (typeof CSS === 'undefined' || !CSS.supports('color', 'AccentColor')) return false;
-  return !/\bChrom(e|ium)\//.test(navigator.userAgent);
+  // No word boundary, so a headless Chrome's `HeadlessChrome/` counts as well.
+  return !/Chrom(e|ium)\//.test(navigator.userAgent);
 }
 
 /** The system's accent as the browser reports it, or undefined where it is no source. */
