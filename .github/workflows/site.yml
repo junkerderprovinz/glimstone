@@ -30,6 +30,8 @@ jobs:
         working-directory: .
       - run: bash scripts/check-classes.sh
         working-directory: .
+      - run: npm test
+        working-directory: .
       - run: npm run build:packages
         working-directory: .
       - run: node scripts/gen-flutter.mjs --check

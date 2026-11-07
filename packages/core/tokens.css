@@ -154,11 +154,13 @@
      the same colour and the light theme is where they part, so use this rather
      than --accent whenever the colour is read.
 
-     The theme sets only --ink-mix, which <html> passes down, so the one-line
-     mix is right in both themes and the rainbow blocks need no light twin.
-     100% of a colour mixed with black is that colour. */
+     The theme sets --ink-mix, which <html> passes down, so the one-line mix
+     is right in both themes and the rainbow blocks need no light twin. 100% of
+     a colour mixed with black is that colour. An accent the mix leaves under
+     4.5:1 on a ramp's card gets that ramp's ink from applyAccent instead, as
+     --accent-ink-dark or --accent-ink-light; no preset needs one. */
   --ink-mix:           100%;
-  --accent-ink:        color-mix(in srgb, var(--accent) var(--ink-mix), black);
+  --accent-ink:        var(--accent-ink-dark, color-mix(in srgb, var(--accent) var(--ink-mix), black));
   /* The same ink for a line-drawn glyph. Rainbow never colours text, so a hued
      subtree redefines this one and leaves --accent-ink on the single accent. */
   --accent-glyph:      var(--accent-ink);
@@ -240,6 +242,7 @@
     --accent-contrast:   #161616;
     --accent-soft:       rgba(252, 196, 25, 0.14);
     --ink-mix:           55%;
+    --accent-ink:        var(--accent-ink-light, color-mix(in srgb, var(--accent) var(--ink-mix), black));
 
     --status-info-text:    #8E6A00;
     --status-info-bg:      rgba(142, 106, 0, 0.12);
@@ -313,6 +316,7 @@
   --accent-contrast:   #161616;
   --accent-soft:       rgba(252, 196, 25, 0.14);
   --ink-mix:           55%;
+  --accent-ink:        var(--accent-ink-light, color-mix(in srgb, var(--accent) var(--ink-mix), black));
 
   --status-info-text:    #8E6A00;
   --status-info-bg:      rgba(142, 106, 0, 0.12);

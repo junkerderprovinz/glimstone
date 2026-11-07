@@ -5,7 +5,11 @@
 //
 // It has no framework dependency; the React and Vue packages wrap it.
 
+import { accentInks, contrastOn, validHex as valid } from './contrast.ts';
 import { storageKey } from './storage.ts';
+
+// Also reachable through the @glimstone/core/appearance subpath.
+export { contrastOn };
 
 /**
  * The corner shapes. Like the motion levels these strings are a wire format:
@@ -191,25 +195,31 @@ export function stormTap(state: { taps: number }, tapped: string, current: strin
 
 /**
  * Overrides the accent tokens, or clears the override so the theme's gold comes
- * back. The contrast colour is computed, so a light accent never gets white
+ * back. The ink on the fill is computed, so a light accent never gets white
  * text.
  *
- * `--accent-ink`, `--accent-glyph` and `--accent-hover` are not set here:
- * tokens.css derives them from --accent with color-mix, so they also follow a
- * later light or dark switch.
+ * `--accent-ink`, `--accent-glyph` and `--accent-hover` are derived in
+ * tokens.css with color-mix, so they also follow a later light or dark switch.
+ * Where that mix would fall short of 4.5:1 on a ramp, the ramp's ink is set
+ * here instead, as `--accent-ink-light` or `--accent-ink-dark`.
  */
 export function applyAccent(hex: string | undefined): void {
   const root = document.documentElement.style;
+  const inks = valid(hex) ? accentInks(hex) : { light: undefined, dark: undefined };
+  for (const [ramp, ink] of Object.entries(inks)) {
+    if (ink) root.setProperty(`--accent-ink-${ramp}`, ink);
+    else root.removeProperty(`--accent-ink-${ramp}`);
+  }
   if (!valid(hex)) {
     root.removeProperty('--accent');
     root.removeProperty('--accent-contrast');
     root.removeProperty('--accent-soft');
     return;
   }
-  const { r, g, b } = parse(hex);
+  const n = parseInt(hex.slice(1), 16);
   root.setProperty('--accent', hex);
   root.setProperty('--accent-contrast', contrastOn(hex));
-  root.setProperty('--accent-soft', `rgba(${r}, ${g}, ${b}, 0.14)`);
+  root.setProperty('--accent-soft', `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, 0.14)`);
 }
 
 // The rainbow state belongs to the document, not a component: the sidebar and a
@@ -349,35 +359,6 @@ export function rainbowFromSettings(s: {
 function usablePalette(p: string[] | undefined): string[] {
   if (!p || p.length !== RAINBOW.length || !p.every(valid)) return RAINBOW;
   return p;
-}
-
-/** Black or white, whichever is readable on the given colour. */
-export function contrastOn(hex: string): string {
-  if (!valid(hex)) return '#FFFFFF';
-  const { r, g, b } = parse(hex);
-  // Carbon's own ink: on a yellow accent a brown-tinted black reads as a smudge.
-  return luminance(r, g, b) > 0.55 ? '#161616' : '#FFFFFF';
-}
-
-function valid(hex: string | undefined): hex is string {
-  return !!hex && /^#[0-9a-fA-F]{6}$/.test(hex);
-}
-
-function parse(hex: string): { r: number; g: number; b: number } {
-  const n = parseInt(hex.slice(1), 16);
-  return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
-}
-
-/**
- * Relative luminance, used to pick black or white on top. The channels are
- * linearised first because raw sRGB overstates blue and understates green.
- */
-function luminance(r: number, g: number, b: number): number {
-  const lin = (c: number) => {
-    const v = c / 255;
-    return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
-  };
-  return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
 }
 
 // Appearance is mirrored into localStorage only so the first paint after a

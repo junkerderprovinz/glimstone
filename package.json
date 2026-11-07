@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "check": "bash scripts/check-classes.sh",
+    "test": "node --test \"packages/core/test/**/*.test.ts\"",
     "build:packages": "tsc -p packages/core/tsconfig.build.json && tsc -p packages/react/tsconfig.build.json && npm run build --prefix packages/vue"
   },
   "dependencies": {

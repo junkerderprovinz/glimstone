@@ -6,6 +6,7 @@ export * from "./button.ts";
 export * from "./clipboard.ts";
 export * from "./colorNames.ts";
 export * from "./colorPicker.ts";
+export * from "./contrast.ts";
 export * from "./controls.ts";
 export * from "./dialog.ts";
 export * from "./disco.ts";
