@@ -4,18 +4,20 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
-A list of full-width rows trembles with a small lift instead of a turn, and a held item stays still whether a class or an attribute marks it. Both came from KnightLoader.
+A list of full-width rows trembles with a small lift instead of a turn, and a held item stays still whether a class or an attribute marks it. The rule also says how a carried item of a different size finds its place. All three came from KnightLoader.
 
 **Adopting apps:**
 
 - **Lists of rows:** add `glim-drag-rows` to the own class of every reorderable list whose rows are as wide as the list, beside where `useDragArmed` adds `glim-drag-armed`. Tiles, cards and narrower items need nothing. Drop any local rule that switches a list to `glim-row-wiggle`.
 - **The held item:** mark it with `glim-drag-lift`, `aria-grabbed="true"` or `data-held="true"`, and drop any local rule that stops it trembling. A marker of the app's own, such as `data-col-drag="held"`, does not count.
+- **Placing by the leading edge:** a drag hook that places items of different sizes by the carried item's centre changes to its leading edge in the direction of travel, measured where it is held, so a wide item can reach both ends of the list.
 - **Local overrides:** an app with its own copy of the motion blocks takes `--motion-row-tremble-tilt` and `--motion-row-tremble-lift` at every level and the two `.glim-drag-armed` rules from `tokens.css`.
 - **Flutter:** nothing changed there.
 
 ## 🎨 Design
 
 - **Rows tremble by lifting.** At a tile's 2deg the ends of a full-width row swing by about 20px. A list marked `glim-drag-rows` runs the row wiggle of move mode on the tremble's beat instead: 1.5px and .15deg at wild, 1px and .1deg at subtle, 2px and .2deg at storm, nothing at off or under reduced motion.
+- **Items of different sizes are placed by the leading edge**, never by the centre, a new line under "Reordering by dragging" and in its checklist. By the centre a wide column held at the table's start could never pass a narrow first column.
 
 ## ✨ Added
 
