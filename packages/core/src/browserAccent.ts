@@ -1,7 +1,7 @@
 // The browser as a source for the system accent: the CSS system colour
 // `AccentColor`, read off a probe element. An app inside a native shell feeds
 // setSystemAccent from the shell instead (Material You on Android, the desktop
-// accent in Electron or Tauri); this is for the plain web.
+// accent in a desktop shell); this is for the plain web.
 //
 // Limits, all of them the browser's:
 //   · Firefox and Safari resolve AccentColor to the system's colour. Chromium
