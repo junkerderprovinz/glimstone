@@ -2,15 +2,17 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 4.2.5 - 2026-11-07
 
 Hold an item of a reorderable list and the others tremble, in every list and grid, clearly enough to be seen at once. `useDragArmed` in React and Vue sets the class from the drag gesture, so no list can forget it. Both came from BombVault, whose settings tiles never wiggled and whose wiggle at Subtle nobody saw.
 
 **Adopting apps:**
 
+- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.2.5, all at the same number. Nothing is renamed or removed.
 - **The drag gesture:** call `useDragArmed(list, held !== null)` from `@glimstone/react`, or `useDragArmed(list, () => held.value !== null)` from `@glimstone/vue`, once in the app's own drag hook, beside the code that lifts the item. Then drop `glim-drag-armed` from every list's own `className` or `:class`. An app with its own copy of the hook calls `classList.toggle("glim-drag-armed", held)` after every render instead: in React a `useLayoutEffect` without a dependency list, in Vue a post-flush `watchEffect` with `onUpdated`.
 - **Local overrides:** drop the app's own values for `--motion-wiggle-angle` and `--motion-wiggle-dur` at every level. An app with its own copy of the motion blocks takes the new values and the two `.glim-drag-armed > :nth-child` rules from `tokens.css`, and changes `.glim-drag-armed > *` to `.glim-drag-armed > :not(.glim-drag-lift)`.
-- **Flutter:** nothing changed there.
+- **Flutter:** move the git dependency to `ref: v4.2.5`. Nothing changed there.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.2.5.
 
 ## 🎨 Design
 
