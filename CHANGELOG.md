@@ -2,16 +2,19 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 4.2.2 - 2026-11-07
 
 A sign-in card for every app with a login: `SignInCard` in React and Vue, with the flow in the core, drawn after BombVault's login. The design language gains "The sign-in card" with its checklist. Toasts stand on whole pixels and keep no transform once they are in.
 
 **Adopting apps:**
 
+- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.2.2, all at the same number. Nothing is renamed or removed.
 - **The sign-in page:** an app's own login page can become a `SignInCard`. The app hands in its logo, its name, its words and the callbacks `onSignIn`, `onPasskey`, `onAskCode` and `onSetPassword`. A name field or "Stay signed in" goes into `fields`, a single sign-on button into `actions`, and a step of the app's own, such as recovery codes or the page after a reset, into `step`.
 - **What leaves the page:** a server name under the logo, a pill over the card, a language picker and a version number under the card. Labels stand above their fields in normal case, and every button is full width.
 - **The theme before sign-in:** the page follows what the app stored in the browser for accent, theme, OLED, shape and motion, and the system's light or dark when nothing is stored. An app whose first-frame default was "dark" moves it to "system".
 - **Toasts:** an app's own `animation-fill-mode: backwards` on a toast can go. A screenshot test that holds toasts sees each line 0.75px taller.
+- **Flutter:** move the git dependency to `ref: v4.2.2`. Nothing changed there.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.2.2.
 
 ## ✨ Added
 
