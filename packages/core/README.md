@@ -41,6 +41,8 @@ npm install @glimstone/core
   ProgressBar, `copyText` with its fallback for plain http, and for the
   ColorPicker `floatColorPicker`, `placeColorPicker` and `nearestColorName`,
   which finds the closest name in OKLab in a list such as `COLOR_NAMES_DE`.
+- Where a dragged item goes: `dropIndex` places it among the others by its
+  leading edge, along a row, down a column or line by line in a grid.
 - What runs without a framework: `mountSelect`, `wireTooltips` with
   `infoIcon`, `openColorPickerPopover`, `attachNumberSteppers`,
   `enableSelectScroll` and `flagEmoji`.

@@ -12,6 +12,7 @@ export * from "./controls.ts";
 export * from "./dialog.ts";
 export * from "./disco.ts";
 export * from "./discoLoop.ts";
+export * from "./dropIndex.ts";
 export * from "./field.ts";
 export * from "./flagEmoji.ts";
 export * from "./infoTile.ts";
