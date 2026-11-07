@@ -2,6 +2,29 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+The sign-in card's logo is larger and keeps its own shape, and the card holds still when a password is refused. Both came from KnightLoader's test instance.
+
+**Adopting apps:**
+
+- **The logo:** the call stays as it is. `SignInCard` draws every logo 7.5rem tall and as wide as its shape asks, up to the card's content width. Hand in an image address or an inline `<svg>` with a viewBox. A width and height on the `<svg>`, such as ArrowLoop's `LogoMark size={64}`, are overridden.
+- **Local overrides:** KnightLoader's 7.5rem box on `.glim-signin-logo` and its top padding on `.glim-signin` can go, and so can any other app's rule that sizes the logo or anchors the card itself. An app that keeps its own copy of the sign-in styles takes the new `.glim-signin` and `.glim-signin-logo` blocks from `tokens.css`.
+- **Screenshot tests:** a sign-in page shows a taller head, and the card sits near the middle rather than exactly on it.
+- **Flutter:** nothing changed there.
+
+## 🎨 Design
+
+- **The sign-in logo** stands 7.5rem tall at its own proportions instead of fitting a 4rem square. An upright logo used to get about 42 by 64 pixels and now gets 78 by 120, as tall as a square or a wide one. "The sign-in card" and its checklist name the height.
+
+## 🐛 Fixed
+
+- **The sign-in card** no longer jumps when a refusal appears. It was centred on the page, so each reason above Sign in moved the whole card up by half a line. Its top edge now sits where a card of the usual height starts when centred and stays there, and a reason, the code field or the reset form makes the card grow downwards. Only the refused button moves.
+
+## ✨ Added
+
+- **The site:** the sign-in demo refuses `too-many` with a reason two lines long, and two contract rows check the logo's height and the card's still top edge in React and Vue.
+
 ## 4.2.3 - 2026-11-07
 
 Two changes to OLED, both asked for on KnightLoader's test instance. Cards lose the ring that framed them on black, and the OLED switch refuses while Light is chosen. `Toggle` gains `refused` for any switch that cannot be flipped right now, and the core words the OLED reason with `oledRefusal`.

@@ -3378,6 +3378,63 @@ test.describe("SignInCard", () => {
     await expect(stage(page, "SignInCardBasic").locator(".glim-badge, .glim-eyebrow")).toHaveCount(0);
   });
 
+  // A logo the way apps ship one: a viewBox, and no width or height unless given.
+  async function setLogo(page: Page, as: "img" | "svg", [w, h]: number[], size?: number) {
+    await card(page)
+      .locator(".glim-signin-logo")
+      .evaluate(
+        async (span, { as, markup, size }) => {
+          if (as === "img") {
+            const img = document.createElement("img");
+            img.src = `data:image/svg+xml,${encodeURIComponent(markup)}`;
+            span.replaceChildren(img);
+            await img.decode();
+          } else {
+            span.innerHTML = markup;
+            if (size) for (const side of ["width", "height"]) span.firstElementChild!.setAttribute(side, String(size));
+          }
+        },
+        { as, markup: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><rect width="${w}" height="${h}" fill="#888"/></svg>`, size },
+      );
+    return box(card(page).locator(`.glim-signin-logo > ${as}`));
+  }
+
+  test("[signin-logo] every logo 7.5rem tall at its own proportions", async ({ page }) => {
+    await open(page, "/components/sign-in-card");
+    const frame = await box(card(page));
+    const own = await box(card(page).locator(".glim-signin-logo > img"));
+    expect(own.height).toBeCloseTo(120, 0);
+    expect(own.width).toBeCloseTo((120 * 331.5) / 172.9, 0);
+    const shapes = [
+      [587, 901.8],
+      [1000, 1000],
+      [331.5, 172.9],
+    ];
+    for (const as of ["img", "svg"] as const) {
+      for (const [w, h] of shapes) {
+        const logo = await setLogo(page, as, [w, h]);
+        expect(logo.height, `${as} ${w}x${h}`).toBeCloseTo(120, 0);
+        expect(logo.width, `${as} ${w}x${h}`).toBeCloseTo((120 * w) / h, 0);
+        expect(Math.abs(logo.x + logo.width / 2 - (frame.x + frame.width / 2))).toBeLessThan(1);
+      }
+    }
+    const sized = await setLogo(page, "svg", [411.74, 411.73], 64);
+    expect(sized.height).toBeCloseTo(120, 0);
+    expect(sized.width).toBeCloseTo(120, 0);
+  });
+
+  test("[signin-logo] a wide logo stays inside the card on a phone", async ({ page }) => {
+    await open(page, "/components/sign-in-card");
+    await page.setViewportSize({ width: 375, height: 812 });
+    await expect.poll(async () => (await box(card(page))).width).toBeLessThan(384);
+    const frame = await box(card(page));
+    for (const as of ["img", "svg"] as const) {
+      const logo = await setLogo(page, as, [1000, 100]);
+      expect(logo.x).toBeGreaterThanOrEqual(frame.x + 32 - 0.5);
+      expect(logo.x + logo.width).toBeLessThanOrEqual(frame.x + frame.width - 32 + 0.5);
+    }
+  });
+
   test("[signin-labels] each label above its field, in normal case", async ({ page }) => {
     await open(page, "/components/sign-in-card");
     const label = card(page).locator("label", { hasText: /^Password$/ });
@@ -3430,6 +3487,58 @@ test.describe("SignInCard", () => {
     await expect(alert).toHaveText("That password is not right");
     expect((await box(alert)).y).toBeLessThan((await box(button(page, "Sign in"))).y);
     await expect(field(page, "Password")).toHaveValue("wrong");
+  });
+
+  test("[signin-steady] the card's top edge stays put through refusals and steps", async ({ page }) => {
+    for (const viewport of [{ width: 1280, height: 860 }, { width: 375, height: 812 }]) {
+      await page.setViewportSize(viewport);
+      // A fresh page, since the hash alone does not reload it.
+      await page.goto("about:blank");
+      await open(page, "/components/sign-in-card");
+      // The demo stands in the page's flow, and the real page fills the window.
+      await stage(page, "SignInCardBasic").evaluate((demo) => {
+        const wrap = demo.querySelector(".signin-demo")!;
+        wrap.classList.remove("signin-demo");
+        Object.assign(wrap.querySelector<HTMLElement>(".glim-signin")!.style, { position: "fixed", inset: "0", zIndex: "100", overflow: "auto" });
+      });
+      // Every top edge the card has in any frame from here on.
+      await card(page).evaluate((c) => {
+        const tops = new Set<number>();
+        Object.assign(window, { signinTops: tops });
+        const tick = () => {
+          tops.add(Math.round(c.getBoundingClientRect().top * 10) / 10);
+          requestAnimationFrame(tick);
+        };
+        tick();
+      });
+      const alert = card(page).getByRole("alert");
+      await field(page, "Password").fill("wrong");
+      await page.keyboard.press("Enter");
+      await expect(alert).toHaveText("That password is not right");
+      await field(page, "Password").fill("too-many");
+      await page.keyboard.press("Enter");
+      await expect(alert).toContainText("Too many tries");
+      expect((await box(alert)).height).toBeGreaterThan(24);
+
+      await field(page, "Password").fill("two-step");
+      await page.keyboard.press("Enter");
+      await expect(field(page, "Code")).toBeFocused();
+      await expect(alert).toHaveCount(0);
+      await field(page, "Code").fill("000000");
+      await page.keyboard.press("Enter");
+      await expect(alert).toHaveText("That code is not valid");
+      await button(page, "Back").click();
+
+      await openReset(page);
+      await field(page, "Code from the container log").fill("ABCD-EFGH-JKLM");
+      await field(page, "New password").fill("short");
+      await field(page, "Confirm password").fill("short");
+      await button(page, "Set password").click();
+      await expect(alert).toHaveText("The new password needs at least 12 characters.");
+      await button(page, "Back").click();
+      await expect(field(page, "Password")).toBeVisible();
+      expect(await page.evaluate(() => [...(window as typeof window & { signinTops: Set<number> }).signinTops])).toHaveLength(1);
+    }
   });
 
   test("[signin-code] the code field after the password", async ({ page }) => {

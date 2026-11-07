@@ -497,12 +497,14 @@ export const CONTRACTS: Record<string, Contract> = {
   SignInCard: {
     rows: [
       { id: "signin-head", when: "Always", then: "The app's logo stands large above its name, both centred in the card, and the name is the page's heading. No pill sits above the card." },
+      { id: "signin-logo", when: "The logo is upright, square or wide, an image or an inline SVG", then: "It stands 7.5rem tall at its own proportions, centred, and never wider than the card's content." },
       { id: "signin-labels", when: "Always", then: "Each label stands above its field, in normal case, and names it." },
       { id: "signin-focus", when: "The card opens", then: "The first empty field has the focus, shown as a field shows it, a step up the ramp." },
       { id: "signin-disabled", when: "The password field is empty", then: "Sign in is disabled, and the first character turns it on." },
       { id: "signin-wide", when: "Always", then: "Every button is as wide as the fields." },
       { id: "signin-error", when: "The app refuses the password", then: "Its reason stands above Sign in as an alert, and the password stays as typed." },
       { id: "signin-shake", when: "The app refuses a password, a code or the code from the log", then: "The button that sent it shakes once, and the refused field takes the focus with its content selected." },
+      { id: "signin-steady", when: "A reason comes or goes, or the card changes to the code step or the reset form", then: "The card's top edge stays where it is in every frame, and the card grows or shrinks downwards. Only the button that sent the try moves." },
       { id: "signin-still", when: "Motion is off, or the system asks for reduced motion", then: "Nothing moves; the reason above the button says it alone." },
       { id: "signin-engines", when: "The accent or the shape changes", then: "Sign in takes the accent, and the card, the fields and the buttons take the shape's corners." },
       { id: "signin-code", when: "The app asks for a code", then: "A code field appears under the password and takes the focus. Sign in waits for a code, and Back replaces Forgot password?." },

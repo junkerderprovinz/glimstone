@@ -705,7 +705,7 @@ The maxim the whole section hangs on: **a login gains a way IN, never a way INST
 
 Every app with a login shows the same page before anything else, and four apps had built it four ways: a logo here and none there, a pill over one card, a version under another, labels in capitals, a narrow button. `SignInCard` in React and Vue is that page now. It draws BombVault's login, which "The first way in" names as the reference, and the flow behind it lives in the core (`createSignInFlow`), so both frameworks sign in, ask for a code and reset the password the same way. The app hands in its logo, its name, its words and four callbacks, and puts whatever is its own into three slots.
 
-- **The head is the app's logo, large, with the app's name centred under it, inside the card.** The page has no rail and no title bar, so this is how somebody knows which instance they are about to unlock. The name is the page's `<h1>`, and the logo stays hidden from assistive technology because the name already says it. There is no server name under it and no pill over the card: "Sign in" is what the button says, and a pill that says it again is a second heading for a page that has one.
+- **The head is the app's logo, large, with the app's name centred under it, inside the card.** The page has no rail and no title bar, so this is how somebody knows which instance they are about to unlock. Every logo is 7.5rem tall and as wide as its own shape asks, up to the card's content width, so an upright knight, a round target and a wide mark all stand equally large. A square box would shrink whichever shape fits it worst. The app hands in an image or an inline SVG with a viewBox, and neither needs a width or a height of its own. The name is the page's `<h1>`, and the logo stays hidden from assistive technology because the name already says it. There is no server name under it and no pill over the card: "Sign in" is what the button says, and a pill that says it again is a second heading for a page that has one.
 - **Labels stand above their fields, in normal case.** A sign-in form is a page of its own, not a settings row, so rule 35's label beside the field does not apply here. Capitals would add a weight the form does not need.
 - **The first empty field has the focus when the card opens**, shown the way a field always shows it, a step up the ramp (rule 14), never a thicker ring of the app's own. The first field is usually the password; with a name field in the slot it is the name, and once the app has filled the name in, it is the password again. When the card changes form (the code step, the reset form, back) the focus moves to the first empty field of the new one.
 - **Sign in stays disabled until the password field holds something.** In the code step it waits for the code instead. Pressing an empty form only to be told it is empty teaches nothing.
@@ -717,11 +717,11 @@ Every app with a login shows the same page before anything else, and four apps h
 - **The app's own parts go into slots, never around the card.** `fields` stand above the password (a name for an app with several users, "Stay signed in"), `actions` stand under Sign in and the passkey (a single sign-on button), and `step` takes the forms' place for a step the app runs itself (recovery codes shown once, the page after a reset, a first password of its own). `SignInField` gives a field of the app's own the same label above it.
 - **Nothing else on the page.** No language picker, which belongs to the settings and follows the browser until then ("The user-owned axes"), and no version number, which a stranger at the login page has no use for.
 - **The page follows the engines in full before anybody is signed in.** No server preferences exist yet, so the page uses what the app stored in this browser: the accent (the system's own colour too, where the platform gives one), light or dark with OLED, the shape and the motion level all apply. Only when nothing is stored does it fall back to the defaults, which means the system's light or dark. An app whose first-frame theme was "dark" changes that default to "system".
-- **The card is 24rem wide in every app, and on a phone it takes the full width with 16px either side.** The page centres it on the ground colour.
+- **The card is 24rem wide in every app, and on a phone it takes the full width with 16px either side.** It stands on the ground colour with its top edge where a card of the usual height starts when centred, and that edge stays put. A reason above Sign in, the code field and the reset form make the card grow downwards, so the only thing that moves on a refusal is the button that shakes. A card centred outright would jump by half a line every time.
 
 ### The sign-in card's checklist
 
-- [ ] The app's logo large above its name, centred inside the card, with no server name and no pill.
+- [ ] The app's logo 7.5rem tall at its own proportions above its name, centred inside the card, with no server name and no pill.
 - [ ] Labels above the fields, in normal case.
 - [ ] The first empty field has the focus on open, as a field shows it, and the focus follows each change of form.
 - [ ] Sign in disabled until the password field holds something, and in the code step until the code does.
@@ -732,7 +732,7 @@ Every app with a login shows the same page before anything else, and four apps h
 - [ ] The app's extras in the `fields`, `actions` and `step` slots.
 - [ ] No language picker and no version number on the page.
 - [ ] The accent, theme, OLED, shape and motion stored in the browser apply before sign-in; with nothing stored, the system's light or dark.
-- [ ] 24rem wide, full width less 16px either side on a phone.
+- [ ] 24rem wide, full width less 16px either side on a phone, and the top edge still through a refusal, the code step and the reset form.
 
 ## Dates and times
 

@@ -667,7 +667,7 @@ export function SignInCardPage() {
       <Demo name="SignInCardSlots" />
       <H2>Rules</H2>
       <ul>
-        <li>The logo stands large and the name under it, centred in the card. No server name, no pill above the card.</li>
+        <li>The logo stands 7.5rem tall at its own proportions with the name under it, centred in the card. No server name, no pill above the card.</li>
         <li>Labels stand above their fields, in normal case. The first empty field has the focus when the card opens.</li>
         <li>Sign in stays disabled until the password field holds something. Every button is as wide as the fields.</li>
         <li>
@@ -676,7 +676,10 @@ export function SignInCardPage() {
         </li>
         <li>The accent, theme, shape and motion the app stored in the browser apply before anybody is signed in.</li>
         <li>No language picker and no version number on the page. It follows the system theme.</li>
-        <li>The card is 24rem wide, and on a phone it fills the width with 16px either side.</li>
+        <li>
+          The card is 24rem wide, and on a phone it fills the width with 16px either side. Its top edge stays where it is when a
+          reason, the code field or the reset form makes it taller.
+        </li>
       </ul>
       <H2>Behaviour</H2>
       <ContractTable of="SignInCard" />

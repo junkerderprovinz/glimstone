@@ -11,10 +11,11 @@ import TextField from "./TextField.vue";
 // callback prop, which `@sign-in` and its siblings bind as well, and brings its
 // own words. The slot `fields` stands above the password, `actions` under Sign
 // in, and `step` takes the forms' place for a step the app runs itself. The
-// slot `logo` takes the place of the `logo` address.
+// slot `logo` takes the place of the `logo` address, with an `<svg>` that has a
+// viewBox.
 const props = withDefaults(
   defineProps<{
-    /** The address of the app's logo. It stands large above the name. */
+    /** The address of the app's logo. It stands 7.5rem tall above the name, as wide as its shape asks. */
     logo?: string;
     /** The page's heading. */
     appName: string;
