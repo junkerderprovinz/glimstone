@@ -6,10 +6,12 @@ import { expect, test, type Locator, type Page } from "@playwright/test";
 const SITE = "/";
 
 // Each Playwright project runs every row against one framework's demos alone.
-async function open(page: Page, path: string, look?: object) {
+async function open(page: Page, path: string, look?: Record<string, unknown>) {
   if (look) await page.addInitScript((l) => localStorage.setItem("gs-docs-look", JSON.stringify(l)), look);
   await page.goto(`${SITE}#${path}?fw=${test.info().project.name}`);
   await page.locator("main h1").first().waitFor();
+  const motion = look?.motion;
+  if (motion) expect(await page.evaluate(() => document.documentElement.dataset.motion)).toBe(motion);
   // A width measured before the font arrives is the fallback's.
   await page.evaluate(() => document.fonts.ready);
 }
@@ -3861,10 +3863,21 @@ test.describe("useDragArmed", () => {
     await othersTremble(tiles(page), "Music");
   });
 
-  for (const look of [undefined, { motion: "subtle" }, { motion: "storm" }]) {
-    test(`[drag-wiggle-rows] full-width rows tremble with the row wiggle at ${look?.motion ?? "wild"}`, async ({ page }) => {
-      await open(page, "/engines/motion", look);
+  // Each level's beat in ms and row lift in px from tokens.css, read back before
+  // measuring so a variant cannot run at another level. Compared as numbers,
+  // since the built stylesheet writes 100ms as .1s.
+  const ROW_DIALS = { wild: [120, 1.5], subtle: [140, 1], storm: [100, 2] } as const;
+
+  for (const motion of ["wild", "subtle", "storm"] as const) {
+    test(`[drag-wiggle-rows] full-width rows tremble with the row wiggle at ${motion}`, async ({ page }) => {
+      await open(page, "/engines/motion", { motion });
       await hold(rows(page), "debian-13.iso");
+      const dials = await item(rows(page), "podcast-episode-212.mp3").evaluate((r) => {
+        const dur = getComputedStyle(r).getPropertyValue("--motion-wiggle-dur").trim();
+        const lift = getComputedStyle(r).getPropertyValue("--motion-row-tremble-lift").trim();
+        return [parseFloat(dur) * (dur.endsWith("ms") ? 1 : 1000), parseFloat(lift)];
+      });
+      expect(dials).toEqual(ROW_DIALS[motion]);
       const names = await animations(rows(page));
       expect(names["debian-13.iso"]).toBe("none");
       for (const [name, animation] of Object.entries(names)) if (name !== "debian-13.iso") expect(animation, name).toBe("glim-row-wiggle");
