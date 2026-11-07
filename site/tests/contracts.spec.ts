@@ -3808,16 +3808,31 @@ test.describe("useDragArmed", () => {
       return most;
     });
 
-  // How far the top edge of each item's box travels over more than a beat of the row wiggle.
+  // How far the top edge of each item's box travels over a whole cycle of its
+  // animation, read by seeking it while paused. Frames watched for a while can
+  // miss a swing: an alternating beat goes three quarters of its cycle without
+  // reaching one extreme, and the first frames after the start stand still.
   const travel = (list: Locator) =>
-    list.evaluate(async (l) => {
-      const tops: Record<string, number[]> = {};
-      for (let frame = 0; frame < 24; frame++) {
-        for (const row of l.children) (tops[row.textContent!.trim()] ??= []).push(row.getBoundingClientRect().top);
-        await new Promise((done) => requestAnimationFrame(done));
-      }
-      return Object.fromEntries(Object.entries(tops).map(([name, t]) => [name, Math.max(...t) - Math.min(...t)]));
-    });
+    list.evaluate((l) =>
+      Object.fromEntries(
+        [...l.children].map((row) => {
+          const tops = [row.getBoundingClientRect().top];
+          for (const a of row.getAnimations()) {
+            const { duration, direction } = a.effect!.getTiming();
+            const cycle = Number(duration) * (direction?.startsWith("alternate") ? 2 : 1);
+            const at = a.currentTime;
+            a.pause();
+            for (let step = 0; step <= 64; step++) {
+              a.currentTime = (cycle * step) / 64;
+              tops.push(row.getBoundingClientRect().top);
+            }
+            a.currentTime = at;
+            a.play();
+          }
+          return [row.textContent!.trim(), Math.max(...tops) - Math.min(...tops)];
+        }),
+      ),
+    );
 
   const animations = (list: Locator) =>
     list.evaluate((l) => Object.fromEntries([...l.children].map((i) => [i.textContent!.trim(), getComputedStyle(i).animationName])));
