@@ -72,3 +72,26 @@ test("the OLED switch sits under the theme selector and turns OLED on", async ({
   await page.getByRole("switch", { name: "OLED" }).first().click();
   expect(await ground(page)).toBe("rgb(0, 0, 0)");
 });
+
+// The shadow a fresh element of the class casts under the current look.
+const shadowOf = (page: Page, cls: string) =>
+  page.evaluate((c) => {
+    const el = document.createElement("div");
+    el.className = c;
+    document.body.append(el);
+    const shadow = getComputedStyle(el).boxShadow;
+    el.remove();
+    return shadow;
+  }, cls);
+
+test("OLED draws no ring round a card", async ({ page }) => {
+  await open(page, { theme: "dark", oled: true });
+  expect(await shadowOf(page, "glim-card")).not.toMatch(/0px 0px 0px 1px/);
+});
+
+test("under OLED a bubble keeps the dark look's shadow, which lifts it off a card", async ({ page }) => {
+  await open(page, { theme: "dark", oled: false });
+  const dark = await shadowOf(page, "glim-bubble");
+  await page.evaluate(() => document.documentElement.setAttribute("data-oled", ""));
+  expect(await shadowOf(page, "glim-bubble")).toBe(dark);
+});
