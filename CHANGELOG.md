@@ -2,6 +2,30 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+A list of full-width rows trembles with a small lift instead of a turn, and a held item stays still whether a class or an attribute marks it. Both came from KnightLoader.
+
+**Adopting apps:**
+
+- **Lists of rows:** add `glim-drag-rows` to the own class of every reorderable list whose rows are as wide as the list, beside where `useDragArmed` adds `glim-drag-armed`. Tiles, cards and narrower items need nothing. Drop any local rule that switches a list to `glim-row-wiggle`.
+- **The held item:** mark it with `glim-drag-lift`, `aria-grabbed="true"` or `data-held="true"`, and drop any local rule that stops it trembling. A marker of the app's own, such as `data-col-drag="held"`, does not count.
+- **Local overrides:** an app with its own copy of the motion blocks takes `--motion-row-tremble-tilt` and `--motion-row-tremble-lift` at every level and the two `.glim-drag-armed` rules from `tokens.css`.
+- **Flutter:** nothing changed there.
+
+## 🎨 Design
+
+- **Rows tremble by lifting.** At a tile's 2deg the ends of a full-width row swing by about 20px. A list marked `glim-drag-rows` runs the row wiggle of move mode on the tremble's beat instead: 1.5px and .15deg at wild, 1px and .1deg at subtle, 2px and .2deg at storm, nothing at off or under reduced motion.
+
+## ✨ Added
+
+- **`glim-drag-rows`** and the two dials `--motion-row-tremble-tilt` and `--motion-row-tremble-lift`.
+- **The site:** the motion page shows a list of rows beside the tiles, and two contract rows check the row tremble at every lively level and a held item marked by each attribute, in React and Vue.
+
+## 🐛 Fixed
+
+- **A held item marked with `aria-grabbed="true"` or `data-held="true"` trembled**, because only `glim-drag-lift` kept it still.
+
 ## 4.2.5 - 2026-11-07
 
 Hold an item of a reorderable list and the others tremble, in every list and grid, clearly enough to be seen at once. `useDragArmed` in React and Vue sets the class from the drag gesture, so no list can forget it. Both came from BombVault, whose settings tiles never wiggled and whose wiggle at Subtle nobody saw.

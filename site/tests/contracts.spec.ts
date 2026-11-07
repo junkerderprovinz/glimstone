@@ -3782,19 +3782,21 @@ test.describe("SignInCard refusals and engines", () => {
 });
 
 test.describe("useDragArmed", () => {
-  const list = (page: Page) => stage(page, "DragArmedTiles").getByRole("list");
+  const tiles = (page: Page) => stage(page, "DragArmedTiles").getByRole("list");
+  const rows = (page: Page) => stage(page, "DragArmedRows").getByRole("list");
+  const item = (list: Locator, name: string) => list.getByRole("listitem").filter({ hasText: name });
 
-  async function hold(page: Page, name: string) {
-    const tile = list(page).getByRole("listitem").filter({ hasText: name });
-    await centre(tile);
-    const box = (await tile.boundingBox())!;
-    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-    await page.mouse.down();
+  async function hold(list: Locator, name: string) {
+    const held = item(list, name);
+    await centre(held);
+    const box = (await held.boundingBox())!;
+    await list.page().mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await list.page().mouse.down();
   }
 
   // The largest turn of each tile over a few frames, longer than a beat at every level.
-  const turns = (page: Page) =>
-    list(page).evaluate(async (l) => {
+  const turns = (list: Locator) =>
+    list.evaluate(async (l) => {
       const most: Record<string, number> = {};
       for (let frame = 0; frame < 16; frame++) {
         for (const tile of l.children) {
@@ -3806,29 +3808,75 @@ test.describe("useDragArmed", () => {
       return most;
     });
 
-  const othersTremble = async (page: Page, held: string) => {
-    const seen = await turns(page);
+  // How far the top edge of each item's box travels over more than a beat of the row wiggle.
+  const travel = (list: Locator) =>
+    list.evaluate(async (l) => {
+      const tops: Record<string, number[]> = {};
+      for (let frame = 0; frame < 24; frame++) {
+        for (const row of l.children) (tops[row.textContent!.trim()] ??= []).push(row.getBoundingClientRect().top);
+        await new Promise((done) => requestAnimationFrame(done));
+      }
+      return Object.fromEntries(Object.entries(tops).map(([name, t]) => [name, Math.max(...t) - Math.min(...t)]));
+    });
+
+  const animations = (list: Locator) =>
+    list.evaluate((l) => Object.fromEntries([...l.children].map((i) => [i.textContent!.trim(), getComputedStyle(i).animationName])));
+
+  const othersTremble = async (list: Locator, held: string) => {
+    const seen = await turns(list);
     expect(seen[held]).toBe(0);
     for (const [name, turn] of Object.entries(seen)) if (name !== held) expect(turn, name).toBeGreaterThan(0.5);
   };
 
   test("[drag-wiggle] the others tremble while one is held", async ({ page }) => {
     await open(page, "/engines/motion");
-    await hold(page, "Mail");
-    await othersTremble(page, "Mail");
-    const delays = await list(page).evaluate((l) => [...l.children].slice(1).map((t) => getComputedStyle(t).animationDelay));
+    await hold(tiles(page), "Mail");
+    await othersTremble(tiles(page), "Mail");
+    const delays = await tiles(page).evaluate((l) => [...l.children].slice(1).map((t) => getComputedStyle(t).animationDelay));
     expect(new Set(delays).size).toBeGreaterThan(1);
     await page.mouse.up();
-    expect(Object.values(await turns(page))).toEqual([0, 0, 0, 0, 0, 0]);
+    expect(Object.values(await turns(tiles(page)))).toEqual([0, 0, 0, 0, 0, 0]);
   });
 
   test("[drag-wiggle-rerender] the tremble outlasts the list's own class", async ({ page }) => {
     await open(page, "/engines/motion");
-    await hold(page, "Music");
+    await hold(tiles(page), "Music");
     await page.mouse.move(0, 0, { steps: 4 });
-    await expect(list(page)).toHaveClass(/is-moving/);
-    await othersTremble(page, "Music");
+    await expect(tiles(page)).toHaveClass(/is-moving/);
+    await othersTremble(tiles(page), "Music");
   });
+
+  for (const look of [undefined, { motion: "subtle" }, { motion: "storm" }]) {
+    test(`[drag-wiggle-rows] full-width rows tremble with the row wiggle at ${look?.motion ?? "wild"}`, async ({ page }) => {
+      await open(page, "/engines/motion", look);
+      await hold(rows(page), "debian-13.iso");
+      const names = await animations(rows(page));
+      expect(names["debian-13.iso"]).toBe("none");
+      for (const [name, animation] of Object.entries(names)) if (name !== "debian-13.iso") expect(animation, name).toBe("glim-row-wiggle");
+      const seen = await travel(rows(page));
+      for (const [name, moved] of Object.entries(seen)) if (name !== "debian-13.iso") expect(moved, name).toBeGreaterThanOrEqual(1.5);
+      expect(Math.max(...Object.values(seen))).toBeLessThan(6);
+      await page.mouse.up();
+      expect(Object.values(await animations(rows(page)))).toEqual(Array(5).fill("none"));
+    });
+  }
+
+  for (const marker of ["aria-grabbed", "data-held"]) {
+    test(`[drag-wiggle-held] an item marked ${marker}="true" stays still`, async ({ page }) => {
+      await open(page, "/engines/motion");
+      for (const [list, held, marked] of [
+        [tiles(page), "Mail", "Notes"],
+        [rows(page), "debian-13.iso", "firmware-v4.bin"],
+      ] as const) {
+        await hold(list, held);
+        await item(list, marked).evaluate((el, m) => el.setAttribute(m, "true"), marker);
+        expect((await animations(list))[marked]).toBe("none");
+        expect((await travel(list))[marked]).toBe(0);
+        await item(list, marked).evaluate((el, m) => el.removeAttribute(m), marker);
+        await page.mouse.up();
+      }
+    });
+  }
 
   for (const [what, look, reduce] of [
     ["with motion off", { motion: "off" }, false],
@@ -3837,9 +3885,13 @@ test.describe("useDragArmed", () => {
     test(`[drag-wiggle-still] nothing trembles ${what}`, async ({ page }) => {
       if (reduce) await page.emulateMedia({ reducedMotion: "reduce" });
       await open(page, "/engines/motion", look);
-      await hold(page, "Mail");
-      await expect(list(page).getByRole("listitem").filter({ hasText: "Mail" })).toHaveClass(/glim-drag-lift/);
-      expect(Object.values(await turns(page))).toEqual([0, 0, 0, 0, 0, 0]);
+      await hold(tiles(page), "Mail");
+      await expect(item(tiles(page), "Mail")).toHaveClass(/glim-drag-lift/);
+      expect(Object.values(await turns(tiles(page)))).toEqual([0, 0, 0, 0, 0, 0]);
+      await page.mouse.up();
+      await hold(rows(page), "debian-13.iso");
+      await expect(item(rows(page), "debian-13.iso")).toHaveClass(/glim-drag-lift/);
+      expect(Object.values(await travel(rows(page)))).toEqual([0, 0, 0, 0, 0]);
     });
   }
 });

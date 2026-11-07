@@ -215,6 +215,16 @@ body {
   user-select: none;
   touch-action: none;
 }
+.demo-drag-rows { display: grid; gap: 0.25rem; width: 100%; }
+.demo-drag-row {
+  padding: 0.625rem 0.75rem;
+  border-radius: var(--radius-control);
+  background: var(--carbon-surface2);
+  font-size: 13px;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
 /* React and Vue side by side where the page is wide enough, one above the
    other where it is not. Each names its framework above its stage. */
 .demo-pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); }

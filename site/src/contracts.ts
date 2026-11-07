@@ -521,6 +521,8 @@ export const CONTRACTS: Record<string, Contract> = {
     rows: [
       { id: "drag-wiggle", when: "An item of a reorderable list is held", then: "Every other item trembles out of step with its neighbours, and the held one does not. On release they stop." },
       { id: "drag-wiggle-rerender", when: "The list rewrites its own class while the item is held", then: "The others keep trembling." },
+      { id: "drag-wiggle-rows", when: "A row of a list marked glim-drag-rows is held, at wild, subtle and storm", then: "The other rows lift and tilt with the row wiggle, at least 1.5px and well short of a wide turn's swing, and stop on release." },
+      { id: "drag-wiggle-held", when: "An item is marked held with aria-grabbed=\"true\" or data-held=\"true\" instead of glim-drag-lift", then: "It stays still, in a list of tiles and in a list of rows." },
       { id: "drag-wiggle-still", when: "Motion is off, or the system asks for reduced motion", then: "Nothing trembles; the held item still lifts." },
     ],
   },

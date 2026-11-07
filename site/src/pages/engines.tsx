@@ -163,6 +163,11 @@ export function MotionEngine() {
         release, also when the list rewrites its own class in between.
       </p>
       <Demo name="DragArmedTiles" />
+      <p>
+        A row as wide as the list would swing its ends far at the same angle, so a list of full-width rows also carries{" "}
+        <code>glim-drag-rows</code> in its own class, and its rows lift and tilt a little with the row wiggle instead.
+      </p>
+      <Demo name="DragArmedRows" />
       <Code
         code={`import { useDragArmed } from "@glimstone/react";
 
@@ -173,7 +178,10 @@ useDragArmed(list, held !== null);
       />
       <p>
         The tremble reads <code>--motion-wiggle-angle</code> and <code>--motion-wiggle-dur</code>: 2deg every 120ms at
-        wild, 1.4deg every 140ms at subtle, 2.8deg every 100ms at storm, and nothing at off or under reduced motion.
+        wild, 1.4deg every 140ms at subtle, 2.8deg every 100ms at storm, and nothing at off or under reduced motion. Rows
+        read <code>--motion-row-tremble-lift</code> and <code>--motion-row-tremble-tilt</code> on the same beat: 1.5px and
+        .15deg at wild, 1px and .1deg at subtle, 2px and .2deg at storm. The held item stays still when it carries{" "}
+        <code>glim-drag-lift</code>, <code>aria-grabbed="true"</code> or <code>data-held="true"</code>.
       </p>
       <ContractTable of="useDragArmed" />
     </>
