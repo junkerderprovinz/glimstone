@@ -21,6 +21,7 @@ function block(selector) {
 
 const dark = block(':root,\n[data-theme="dark"]');
 const light = block('[data-theme="light"]');
+const oled = { ...dark, ...block('[data-theme="dark"][data-oled]') };
 const root = { ...block(":root {"), ...block(":root {\n  --btn-h") };
 
 const camel = (name) => name.replace(/^--/, "").replace(/-([a-z0-9])/g, (_, c) => c.toUpperCase());
@@ -85,6 +86,12 @@ ${fields.map((f) => `  final Color ${f};`).join("\n")}
   static const dark = GlimTheme(
 ${palette(dark)}
     inkMix: ${inkMix(dark)},
+  );
+
+  /// The dark ramp on true black, for OLED and AMOLED screens.
+  static const oled = GlimTheme(
+${palette(oled)}
+    inkMix: ${inkMix(oled)},
   );
 
   static const light = GlimTheme(

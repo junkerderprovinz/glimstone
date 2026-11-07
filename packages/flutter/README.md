@@ -27,7 +27,8 @@ MaterialApp(
 
 - `GlimTheme.dark` and `GlimTheme.light` carry every colour of `tokens.css`;
   an app with a theme of its own adds one to `ThemeData.extensions` and reads it
-  with `Theme.of(context).extension<GlimTheme>()`. `GlimMetrics` holds the
+  with `Theme.of(context).extension<GlimTheme>()`. `GlimTheme.oled` is the dark
+  one on true black, and `glimThemeData(Brightness.dark, oled: true)` uses it. `GlimMetrics` holds the
   lengths: radii, the type scale, button heights and width stages.
 - `GlimGlyphs` holds every glyph by meaning, and `GlimGlyph` draws one in the
   ambient icon colour.

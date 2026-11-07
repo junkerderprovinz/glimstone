@@ -16,9 +16,11 @@ extension GlimDerived on GlimTheme {
 
 /// A [ThemeData] that carries GlimStone's colours, for an app that has none
 /// of its own yet. An app with a theme adds [GlimTheme.dark] or
-/// [GlimTheme.light] to its own `extensions` instead.
-ThemeData glimThemeData(Brightness brightness, {GlimShape shape = GlimShape.soft}) {
-  final glim = (brightness == Brightness.dark ? GlimTheme.dark : GlimTheme.light).copyWith(shape: shape);
+/// [GlimTheme.light] to its own `extensions` instead. [oled] puts the dark
+/// theme on true black and leaves the light one as it is.
+ThemeData glimThemeData(Brightness brightness, {GlimShape shape = GlimShape.soft, bool oled = false}) {
+  final dark = oled ? GlimTheme.oled : GlimTheme.dark;
+  final glim = (brightness == Brightness.dark ? dark : GlimTheme.light).copyWith(shape: shape);
   return ThemeData(
     brightness: brightness,
     scaffoldBackgroundColor: glim.carbonBg,

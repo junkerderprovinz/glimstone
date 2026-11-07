@@ -7,6 +7,7 @@
 
 import { accentInks, contrastOn, validHex as valid } from './contrast.ts';
 import { storageKey } from './storage.ts';
+import { applyOled, storedOled } from './theme.ts';
 
 // Also reachable through the @glimstone/core/appearance subpath.
 export { contrastOn };
@@ -383,6 +384,7 @@ export function cacheAppearance(shape: string, accent: string, rainbow?: Rainbow
 
 /** Applied at boot, before the app renders anything. */
 export function applyCachedAppearance(): void {
+  applyOled(storedOled());
   try {
     const raw = localStorage.getItem(storageKey('appearance'));
     if (!raw) {
