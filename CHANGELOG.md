@@ -2,55 +2,20 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 4.2.0 - 2026-11-07
 
 OLED and the system's colour, both asked for in ArrowLoop. A switch under the Design picker puts the dark look on true black for OLED and AMOLED screens, and a wand swatch before the accent presets takes the device's own colour wherever the platform has one. The colour engine also keeps every ink it computes at 4.5:1, whatever colour feeds it, so a picked or a system colour reads as well as the presets do.
 
+There are new components too, because a file manager kept building them itself: `TextField` and `TextArea`, `FieldRow` and `FieldRowGroup`, `PathField`, `GlyphField`, `Tree`, `Table`, `RowMark`, `GlyphTile`, `ListRow` and `IconButton`, all in React and Vue. `Button`, `Toggle`, `Selector`, `Window`, `Select`, `ContextMenu`, `SidebarRow`, `Card`, `SubCard`, `PasswordField`, `CopyField` and the toasts take the hooks an app kept working around, and a few small bugs are gone.
+
 **Adopting apps:**
 
-- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at vNEXT, all at the same number. Nothing is renamed or removed.
+- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.2.0, all at the same number. Nothing is renamed or removed.
 - **OLED:** put a `Toggle` labelled OLED under the Design picker, with an info bubble that says it gives true black for OLED and AMOLED screens. Call `applyOled(on)` from `@glimstone/core`, which keeps the choice on the device, and keep it out of any settings a server syncs. `applyCachedAppearance()` applies it at boot, and an app that boots its own way calls `applyOled(storedOled())`. `darkShowing()` and `watchDarkShowing()` tell a settings page whether OLED is in effect.
 - **The system colour:** feed the device's colour with `setSystemAccent(hex)`, from Material You on Android, from the desktop's accent in a native shell, or with `watchBrowserAccent(setSystemAccent)` on the plain web. While `systemAccent()` returns a colour, draw a swatch with `IconAccentSystem` first in the accent row and store a click on it as `SYSTEM_ACCENT`, the word `system`, never as the hex. `subscribeSystemAccent()` says when the swatch should come or go.
 - **Ink on a fill:** `contrastOn()` and `--accent-contrast` take whichever of white and `#161616` reads better, so Blue, Red, Purple, Orange and Magenta carry near-black ink where they carried white, in the accent and in the rainbow alike. A test of the app's own that expects white on those fills needs the new value.
 - **Accent text:** an app stylesheet that defines `--accent-ink` itself should read `--accent-ink-light` and `--accent-ink-dark` first, as `tokens.css` does, or a very pale or very dark accent loses its 4.5:1.
 - **`contrastOn`** lives in `contrast.ts` and is still exported from `appearance.ts` and from the package.
-- **Flutter:** move the git dependency to `ref: vNEXT`. `GlimTheme.oled` holds the OLED colours, and `glimThemeData(Brightness.dark, oled: true)` uses them.
-- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads vNEXT.
-
-## ✨ Added
-
-- **OLED**: `data-oled` on `<html>` puts the dark ramp on a black ground whenever dark shows, chosen or from the system. The surfaces move one step down (card and rail `#161616`, surface2 `#262626`, surface3 `#393939`, border `#262626`), the hover steps keep their place, the shadow becomes a ring and a lit brand tile gets an edge. The text stays as it is. `applyOled`, `storedOled`, `darkShowing`, `watchDarkShowing` and `resolvesDark` are in the new `theme.ts`.
-- **The system accent**: the accent setting can be `system`. `setSystemAccent` feeds the device's colour, the core repaints whenever it changes, and the last colour is remembered on the device so the first frame after a reload is already right. `resolveAccent`, `systemAccent` and `subscribeSystemAccent` come with it.
-- **The browser as a source**: `watchBrowserAccent`, `browserAccent` and `browserAccentWorks` read CSS `AccentColor` where it carries the system's colour, which is Firefox and Safari. Chromium answers with a fixed colour, so it counts as no source. The file lists the other limits.
-- **`contrast.ts`**: `contrastRatio`, `contrastOn`, `accentInks` and `MIN_TEXT_CONTRAST`, the arithmetic behind the 4.5:1.
-- **`IconAccentSystem`**: a wand with three sparks for the system colour swatch, drawn for GlimStone.
-- **Unit tests for the core**, with `npm test` and in CI: the contrast math with near white, near black, mid grey, saturated blue and yellow, the accent modes, OLED and the browser source.
-- **The site** has the OLED switch under the theme picker, the wand swatch in Firefox and Safari, and an OLED column on the palette page.
-
-## 🎨 Design
-
-- **Rule 43: OLED is the dark look on true black, a switch under the Design picker and not a fourth theme.** It counts whenever dark shows, so somebody who follows the system gets black at night without touching it again. It belongs to the screen, so it is kept on the device and never synced.
-- **Rule 44: the system's colour is a source for the accent, and a wand swatch stands first wherever there is one.** It is stored as `system`, so one device's wallpaper never travels to another. Where there is no source the swatch is not shown. The wand does not bring back the ninth swatch, because there is nothing in it to edit.
-- **Rule 45: every ink the colour engine computes reaches 4.5:1, whatever colour feeds it.** The ink is pushed toward black or white only as far as it needs, so every preset keeps its accent text exactly.
-
-## 🐛 Fixed
-
-- **Ink on five presets:** white on Blue, Red, Purple, Orange and Magenta read at only 2.3 to 3.0:1. They carry `#161616` instead, at 5.9 to 7.7:1.
-- **Accent text in a light panel on a dark page:** a `[data-theme="light"]` element inside a dark page took the dark ramp's `--accent-ink`. It gets the light one.
-
-## 4.1.2 - 2026-11-06
-
-## 🐛 Fixed
-
-- **Window:** on a phone, a foot button too wide for the foot now wraps its words onto a second line instead of cutting them off with an ellipsis.
-
-## 4.1.1 - 2026-11-05
-
-New components, because a file manager kept building them itself: `TextField` and `TextArea`, `FieldRow` and `FieldRowGroup`, `PathField`, `GlyphField`, `Tree`, `Table`, `RowMark`, `GlyphTile`, `ListRow` and `IconButton`, all in React and Vue. `Button`, `Toggle`, `Selector`, `Window`, `Select`, `ContextMenu`, `SidebarRow`, `Card`, `SubCard`, `PasswordField`, `CopyField` and the toasts take the hooks an app kept working around, and a few small bugs are gone.
-
-**Adopting apps:**
-
-- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.1.1, all at the same number. Nothing is renamed or removed.
 - **Fields:** a raw `<input class="glim-input">` can become a `TextField`, and a width class of the app's own can become `width="short"`, `"medium"`, `"wide"` or `"grow"`. A rule of the app's own for `textarea.glim-input` can go.
 - **Rows:** a row of the app's own can become a `FieldRow`. The controls inside it drop their `label`, and `Toggle` also drops `hideLabel`, since the row draws the words.
 - **A field's focus:** `.glim-input` and `.glim-num-field` no longer show the focus ring (rule 14). If an app restyled a field's focus around the ring, look at it again.
@@ -62,11 +27,18 @@ New components, because a file manager kept building them itself: `TextField` an
 - **Inside a well or a sub-card:** a `Select` trigger and a `Pill` step up one surface, as a field does. A `NumberField` does so in a well too.
 - **Toggle in Vue:** an `id`, a data attribute or a listener passed to `Toggle` lands on the switch, not on its frame. `class` and `style` stay on the frame, so a script that went looking for the switch inside the frame can drop that.
 - **Selector in Vue:** `update:modelValue` hands a plain id with one choice and a list with `select="many"`, so a cast around the handler can go.
-- **Flutter:** move the git dependency to `ref: v4.1.1`. `GlimTheme` gains `toggleOff`. Nothing else changes there.
-- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.1.1.
+- **Flutter:** move the git dependency to `ref: v4.2.0`. `GlimTheme` gains `toggleOff`, and `GlimTheme.oled` holds the OLED colours, which `glimThemeData(Brightness.dark, oled: true)` uses.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.2.0.
 
 ## ✨ Added
 
+- **OLED**: `data-oled` on `<html>` puts the dark ramp on a black ground whenever dark shows, chosen or from the system. The surfaces move one step down (card and rail `#161616`, surface2 `#262626`, surface3 `#393939`, border `#262626`), the hover steps keep their place, the shadow becomes a ring and a lit brand tile gets an edge. The text stays as it is. `applyOled`, `storedOled`, `darkShowing`, `watchDarkShowing` and `resolvesDark` are in the new `theme.ts`.
+- **The system accent**: the accent setting can be `system`. `setSystemAccent` feeds the device's colour, the core repaints whenever it changes, and the last colour is remembered on the device so the first frame after a reload is already right. `resolveAccent`, `systemAccent` and `subscribeSystemAccent` come with it.
+- **The browser as a source**: `watchBrowserAccent`, `browserAccent` and `browserAccentWorks` read CSS `AccentColor` where it carries the system's colour, which is Firefox and Safari. Chromium answers with a fixed colour, so it counts as no source. The file lists the other limits.
+- **`contrast.ts`**: `contrastRatio`, `contrastOn`, `accentInks` and `MIN_TEXT_CONTRAST`, the arithmetic behind the 4.5:1.
+- **`IconAccentSystem`**: a wand with three sparks for the system colour swatch, drawn for GlimStone.
+- **Unit tests for the core**, with `npm test` and in CI: the contrast math with near white, near black, mid grey, saturated blue and yellow, the accent modes, OLED and the browser source.
+- **The site** has the OLED switch under the theme picker, the wand swatch in Firefox and Safari, and an OLED column on the palette page.
 - **`TextField` and `TextArea`**: a line of text and a few lines of text, borderless and filled, in the widths `short`, `medium`, `wide` and `grow`, with `mono` for a path or a token. `PasswordField`, `CopyField` and `PathField` take the same `width`.
 - **`FieldRow`**: the name at the start of a row with an "(i)", its controls together at the end. `Toggle`, `Selector`, `Select`, `TextField`, `TextArea`, `PasswordField`, `NumberField`, `CopyField`, `PathField`, `Slider` and `Combobox` take their accessible name from the row, and `useFieldName` gives an app's own control the same. A click on the name focuses a field or flips a switch. A row with only a value shows it as a pill.
 - **`FieldRowGroup`**: rows in it share one column for their names, as wide as the longest, so fields that grow start at one edge. With `columns={2}` the rows stand in two columns that each line up their own names, and a `wide` row spans both.
@@ -94,9 +66,14 @@ New components, because a file manager kept building them itself: `TextField` an
 - **Rule 13: `IconButton` is the one button that stays a glyph in every label mode.** It goes in list rows and dense toolbars only, and rule 38 names it as the ghost that never prints a word.
 - **Rule 26: a tree is not a fold.** A fold hides a part of a page, and a tree's rows are the content being walked through.
 - **Rule 35: `FieldRow` is the row.** It names the control, and a click on the name reaches it. A `<label>` around the row would do that too, but it breaks a selector's strip.
+- **Rule 43: OLED is the dark look on true black, a switch under the Design picker and not a fourth theme.** It counts whenever dark shows, so somebody who follows the system gets black at night without touching it again. It belongs to the screen, so it is kept on the device and never synced.
+- **Rule 44: the system's colour is a source for the accent, and a wand swatch stands first wherever there is one.** It is stored as `system`, so one device's wallpaper never travels to another. Where there is no source the swatch is not shown. The wand does not bring back the ninth swatch, because there is nothing in it to edit.
+- **Rule 45: every ink the colour engine computes reaches 4.5:1, whatever colour feeds it.** The ink is pushed toward black or white only as far as it needs, so every preset keeps its accent text exactly.
 
 ## 🐛 Fixed
 
+- **Ink on five presets:** white on Blue, Red, Purple, Orange and Magenta read at only 2.3 to 3.0:1. They carry `#161616` instead, at 5.9 to 7.7:1.
+- **Accent text in a light panel on a dark page:** a `[data-theme="light"]` element inside a dark page took the dark ramp's `--accent-ink`. It gets the light one.
 - **`Toggle`** put its attributes on the frame in Vue and took none in React, while an id or a data hook belongs on the switch.
 - **`.glim-input` and `.glim-num-field`** showed the global focus ring against rule 14. Focus shows as the fill stepping up the ramp.
 - **`Button` in a flex row** shrank to an ellipsis once its words passed the width floor. In a window's foot, beside a long start text, this was easy to hit.
@@ -105,6 +82,7 @@ New components, because a file manager kept building them itself: `TextField` an
 - **`Card` in Vue** added a space after the title.
 - **`.glim-input` in a `SubCard`** vanished into its ground, since it only stepped up in a `.glim-well`.
 - **A closed `Select`** left an empty box on the body. The box stays, since the machine needs it, but it takes no room.
+- **Window:** on a phone, a foot button too wide for the foot now wraps its words onto a second line instead of cutting them off with an ellipsis.
 
 ## 4.1.0 - 2026-11-04
 

@@ -1,10 +1,6 @@
-## 4.1.2
+## 4.2.0
 
-- The same number as the other packages. Nothing changed for Flutter.
-
-## 4.1.1
-
-- `GlimTheme` gains `toggleOff`, the off track of a switch, written from the tokens. Nothing else changed for Flutter.
+- `GlimTheme` gains `toggleOff`, the off track of a switch, and `GlimTheme.oled`, the dark ramp on true black, both written from the tokens. `glimThemeData(Brightness.dark, oled: true)` uses the OLED colours.
 
 ## 4.1.0
 
