@@ -708,7 +708,7 @@ Every app with a login shows the same page before anything else, and four apps h
 - **The reset form takes the sign-in form's place in the same card**, exactly as "The first way in" describes it: the code from the log with its (i), the new password and its confirmation, Set password over Back, mismatches and short passwords caught before anything is sent.
 - **The app's own parts go into slots, never around the card.** `fields` stand above the password (a name for an app with several users, "Stay signed in"), `actions` stand under Sign in and the passkey (a single sign-on button), and `step` takes the forms' place for a step the app runs itself (recovery codes shown once, the page after a reset, a first password of its own). `SignInField` gives a field of the app's own the same label above it.
 - **Nothing else on the page.** No language picker, which belongs to the settings and follows the browser until then ("The user-owned axes"), and no version number, which a stranger at the login page has no use for.
-- **The page follows the engines in full before anybody is signed in.** No server preferences exist yet, so the page uses what the app stored in this browser: the accent, light or dark, the shape and the motion level all apply. Only when nothing is stored does it fall back to the defaults, which means the system's light or dark. An app whose first-frame theme was "dark" changes that default to "system".
+- **The page follows the engines in full before anybody is signed in.** No server preferences exist yet, so the page uses what the app stored in this browser: the accent (the system's own colour too, where the platform gives one), light or dark with OLED, the shape and the motion level all apply. Only when nothing is stored does it fall back to the defaults, which means the system's light or dark. An app whose first-frame theme was "dark" changes that default to "system".
 - **The card is 24rem wide in every app, and on a phone it takes the full width with 16px either side.** The page centres it on the ground colour.
 
 ### The sign-in card's checklist
@@ -723,7 +723,7 @@ Every app with a login shows the same page before anything else, and four apps h
 - [ ] The reset form in the same card, as "The first way in" lists it.
 - [ ] The app's extras in the `fields`, `actions` and `step` slots.
 - [ ] No language picker and no version number on the page.
-- [ ] The accent, theme, shape and motion stored in the browser apply before sign-in; with nothing stored, the system's light or dark.
+- [ ] The accent, theme, OLED, shape and motion stored in the browser apply before sign-in; with nothing stored, the system's light or dark.
 - [ ] 24rem wide, full width less 16px either side on a phone.
 
 ## Dates and times

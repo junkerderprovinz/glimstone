@@ -10,7 +10,7 @@ A sign-in card for every app with a login: `SignInCard` in React and Vue, with t
 
 - **The sign-in page:** an app's own login page can become a `SignInCard`. The app hands in its logo, its name, its words and the callbacks `onSignIn`, `onPasskey`, `onAskCode` and `onSetPassword`. A name field or "Stay signed in" goes into `fields`, a single sign-on button into `actions`, and a step of the app's own, such as recovery codes or the page after a reset, into `step`.
 - **What leaves the page:** a server name under the logo, a pill over the card, a language picker and a version number under the card. Labels stand above their fields in normal case, and every button is full width.
-- **The theme before sign-in:** the page follows what the app stored in the browser for accent, theme, shape and motion, and the system's light or dark when nothing is stored. An app whose first-frame default was "dark" moves it to "system".
+- **The theme before sign-in:** the page follows what the app stored in the browser for accent, theme, OLED, shape and motion, and the system's light or dark when nothing is stored. An app whose first-frame default was "dark" moves it to "system".
 - **Toasts:** an app's own `animation-fill-mode: backwards` on a toast can go. A screenshot test that holds toasts sees each line 0.75px taller.
 
 ## ✨ Added

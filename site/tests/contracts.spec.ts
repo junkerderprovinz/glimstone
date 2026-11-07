@@ -3481,6 +3481,13 @@ test.describe("SignInCard", () => {
     expect(seen[0]).not.toBe(seen[1]);
   });
 
+  test("[signin-theme] OLED puts the page on black and the card one step down", async ({ page }) => {
+    await page.emulateMedia({ colorScheme: "dark" });
+    await open(page, "/components/sign-in-card", { oled: true });
+    expect(await ground(stage(page, "SignInCardBasic").locator(".glim-signin"))).toBe("rgb(0, 0, 0)");
+    expect(await ground(card(page))).toBe(hexToRgb("#161616"));
+  });
+
   test("[signin-width] 24rem wide, a phone's width less 16px either side", async ({ page }) => {
     await open(page, "/components/sign-in-card");
     expect((await box(card(page))).width).toBeCloseTo(384, 0);
