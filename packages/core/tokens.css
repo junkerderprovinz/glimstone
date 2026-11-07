@@ -962,10 +962,13 @@ body {
       glim-page-in var(--motion-page-dur) var(--motion-page-ease) both,
       glim-fade-in var(--motion-page-dur) ease-out both;
   }
+  /* Backwards, not both: a held end is an identity matrix rather than none,
+     and any transform makes the card the containing block of a fixed element
+     inside it. */
   .glim-toast {
     animation:
-      glim-toast-in var(--motion-toast-dur) var(--motion-toast-ease, var(--motion-page-ease)) both,
-      glim-fade-in var(--motion-toast-dur) ease-out both;
+      glim-toast-in var(--motion-toast-dur) var(--motion-toast-ease, var(--motion-page-ease)) backwards,
+      glim-fade-in var(--motion-toast-dur) ease-out backwards;
   }
   .glim-live { animation: glim-pulse var(--motion-pulse-dur) ease-in-out infinite; }
   /* Short, because the pointer is already waiting for the bubble. */
@@ -1237,7 +1240,7 @@ body {
    state is hidden. */
 @media (prefers-reduced-motion: reduce) {
   :root:not([data-motion='storm']) .glim-page-enter { animation: glim-fade-in 180ms ease both; }
-  :root:not([data-motion='storm']) .glim-toast { animation: glim-fade-in 160ms ease both; }
+  :root:not([data-motion='storm']) .glim-toast { animation: glim-fade-in 160ms ease backwards; }
   /* An infinite animation stops outright, fully opaque, so "this is live"
      reads from colour and position. Storm is not exempt here: wanting more
      movement is not wanting something that never stops. */
@@ -1252,8 +1255,8 @@ body {
   }
   :root[data-motion='storm'] .glim-toast {
     animation:
-      glim-toast-in var(--motion-toast-dur) var(--motion-toast-ease, var(--motion-page-ease)) both,
-      glim-fade-in var(--motion-toast-dur) ease-out both;
+      glim-toast-in var(--motion-toast-dur) var(--motion-toast-ease, var(--motion-page-ease)) backwards,
+      glim-fade-in var(--motion-toast-dur) ease-out backwards;
   }
   :root[data-motion='storm'] .glim-shake { animation: glim-shake var(--motion-shake-dur) ease-in-out; }
 }

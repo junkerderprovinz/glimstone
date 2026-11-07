@@ -1296,6 +1296,28 @@ test.describe("Toast", () => {
       }
     }
   });
+
+  test("[toast-settled] a toast that has come in holds no transform", async ({ context }) => {
+    const levels: [string, boolean][] = [["off", false], ["subtle", false], ["wild", false], ["storm", false], ["subtle", true], ["storm", true]];
+    for (const [motion, reduce] of levels) {
+      const page = await context.newPage();
+      if (reduce) await page.emulateMedia({ reducedMotion: "reduce" });
+      await open(page, "/components/toast", { motion });
+      await press(page, "Success");
+      const settled = await page.locator(".glim-toast-card").first().evaluate(async (card) => {
+        await Promise.all(card.getAnimations().map((a) => a.finished));
+        const pin = document.createElement("div");
+        pin.style.cssText = "position: fixed; inset: 0";
+        card.append(pin);
+        const r = pin.getBoundingClientRect();
+        pin.remove();
+        const view = document.documentElement;
+        return { transform: getComputedStyle(card).transform, pinnedToWindow: r.width === view.clientWidth && r.height === view.clientHeight };
+      });
+      expect(settled, `${motion}${reduce ? ", reduced" : ""}`).toEqual({ transform: "none", pinnedToWindow: true });
+      await page.close();
+    }
+  });
 });
 
 test.describe("WindowBar", () => {

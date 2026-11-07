@@ -154,6 +154,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "toast-path", when: "The message holds a path", then: "It breaks after a slash rather than inside a word." },
       { id: "toast-phone", when: "The window is a phone's", then: "A toast takes the window's width, the newest two show, and the page stays in view." },
       { id: "toast-pixels", when: "Toasts stack up", then: "Each one is a whole number of pixels tall, whatever its severity, label mode or width, and right to left too, so none of them lands on a half pixel." },
+      { id: "toast-settled", when: "A toast has come in", then: "It holds no transform at any motion level, so a fixed element inside it is placed against the window." },
     ],
   },
   WindowBar: {
