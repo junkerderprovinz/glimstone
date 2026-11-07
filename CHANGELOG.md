@@ -2,17 +2,19 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 4.2.6 - 2026-11-07
 
 A list of full-width rows trembles with a small lift instead of a turn, and a held item stays still whether a class or an attribute marks it. The rule also says how a carried item of a different size finds its place. All three came from KnightLoader.
 
 **Adopting apps:**
 
+- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.2.6, all at the same number. Nothing is renamed or removed.
 - **Lists of rows:** add `glim-drag-rows` to the own class of every reorderable list whose rows are as wide as the list, beside where `useDragArmed` adds `glim-drag-armed`. Tiles, cards and narrower items need nothing. Drop any local rule that switches a list to `glim-row-wiggle`.
 - **The held item:** mark it with `glim-drag-lift`, `aria-grabbed="true"` or `data-held="true"`, and drop any local rule that stops it trembling. A marker of the app's own, such as `data-col-drag="held"`, does not count.
 - **Placing by the leading edge:** a drag hook that places items of different sizes by the carried item's centre changes to its leading edge in the direction of travel, measured where it is held, so a wide item can reach both ends of the list.
 - **Local overrides:** an app with its own copy of the motion blocks takes `--motion-row-tremble-tilt` and `--motion-row-tremble-lift` at every level and the two `.glim-drag-armed` rules from `tokens.css`.
-- **Flutter:** nothing changed there.
+- **Flutter:** move the git dependency to `ref: v4.2.6`. Nothing changed there.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.2.6.
 
 ## 🎨 Design
 
