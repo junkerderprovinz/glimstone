@@ -168,11 +168,20 @@ export function MotionEngine() {
         <code>glim-drag-rows</code> in its own class, and its rows lift and tilt a little with the row wiggle instead.
       </p>
       <Demo name="DragArmedRows" />
+      <p>
+        Where a dropped item lands is up to <code>dropIndex</code> from <code>@glimstone/core</code>. It passes a
+        neighbour once its edge in the direction of travel crosses that neighbour's middle, so a wide item still reaches
+        both ends. It takes plain boxes: the held item where it is held, its place, and the others in their order.
+      </p>
       <Code
-        code={`import { useDragArmed } from "@glimstone/react";
+        code={`import { dropIndex } from "@glimstone/core";
+import { useDragArmed } from "@glimstone/react";
 
 // In the app's drag hook, beside the item it lifts.
 useDragArmed(list, held !== null);
+
+// On each move, or on the drop: the held item's index among the others.
+const index = dropIndex(heldBox, fromBox, otherBoxes, { axis: "grid" });
 
 // Vue: useDragArmed(list, () => held.value !== null), from @glimstone/vue.`}
       />

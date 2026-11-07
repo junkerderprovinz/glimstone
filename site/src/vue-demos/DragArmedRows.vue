@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, shallowRef } from "vue";
+import { dropIndex } from "@glimstone/core";
 import { useDragArmed } from "@glimstone/vue";
 
 const list = shallowRef<HTMLElement | null>(null);
@@ -17,18 +18,18 @@ function press(e: PointerEvent, name: string) {
 function move(e: PointerEvent) {
   if (held.value !== null) shift.value = e.clientY - start;
 }
-function drop(e: PointerEvent) {
+function drop() {
   const name = held.value;
   if (name === null) return;
-  const target = [...list.value!.children].findIndex((row, i) => {
-    const r = row.getBoundingClientRect();
-    return order.value[i] !== name && e.clientY >= r.top && e.clientY <= r.bottom;
+  const boxes = [...list.value!.children].map((r) => {
+    const row = r as HTMLElement;
+    return { left: row.offsetLeft, top: row.offsetTop, width: row.offsetWidth, height: row.offsetHeight };
   });
-  if (target >= 0) {
-    const next = order.value.filter((n) => n !== name);
-    next.splice(target, 0, name);
-    order.value = next;
-  }
+  const at = order.value.indexOf(name);
+  const from = boxes[at];
+  const next = order.value.filter((n) => n !== name);
+  next.splice(dropIndex({ ...from, top: from.top + shift.value }, from, boxes.filter((_, i) => i !== at)), 0, name);
+  order.value = next;
   cancel();
 }
 function cancel() {

@@ -1,4 +1,5 @@
 import { useRef, useState, type PointerEvent } from "react";
+import { dropIndex } from "@glimstone/core";
 import { useDragArmed } from "@glimstone/react";
 
 const DOWNLOADS = ["debian-13.iso", "podcast-episode-212.mp3", "photos-2026.zip", "firmware-v4.bin", "dataset.tar.gz"];
@@ -23,17 +24,17 @@ export default function DragArmedRows() {
     setHeld(null);
     setShift(0);
   };
-  const drop = (e: PointerEvent<HTMLDivElement>) => {
+  const drop = () => {
     if (held === null) return;
-    const target = [...list.current!.children].findIndex((row, i) => {
-      const r = row.getBoundingClientRect();
-      return order[i] !== held && e.clientY >= r.top && e.clientY <= r.bottom;
+    const boxes = [...list.current!.children].map((r) => {
+      const row = r as HTMLElement;
+      return { left: row.offsetLeft, top: row.offsetTop, width: row.offsetWidth, height: row.offsetHeight };
     });
-    if (target >= 0) {
-      const next = order.filter((n) => n !== held);
-      next.splice(target, 0, held);
-      setOrder(next);
-    }
+    const at = order.indexOf(held);
+    const from = boxes[at];
+    const next = order.filter((n) => n !== held);
+    next.splice(dropIndex({ ...from, top: from.top + shift }, from, boxes.filter((_, i) => i !== at)), 0, held);
+    setOrder(next);
     cancel();
   };
 

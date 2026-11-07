@@ -3878,6 +3878,36 @@ test.describe("useDragArmed", () => {
     });
   }
 
+  test("[drag-drop-edge] an item passes its neighbour once its leading edge crosses the neighbour's middle", async ({ page }) => {
+    await open(page, "/engines/motion");
+    for (const [list, axis] of [
+      [tiles(page), "x"],
+      [rows(page), "y"],
+    ] as const) {
+      const names = () => list.getByRole("listitem").allTextContents();
+      const [first, second, ...rest] = await names();
+      await centre(item(list, first));
+      const held = (await item(list, first).boundingBox())!;
+      const next = (await item(list, second).boundingBox())!;
+      // How far the held item's leading edge is from the next one's middle.
+      const reach = axis === "x" ? next.x + next.width / 2 - (held.x + held.width) : next.y + next.height / 2 - (held.y + held.height);
+      // Pressed by its trailing edge, so the pointer is still over the item
+      // when its leading edge is already past the neighbour's middle.
+      const x = axis === "x" ? held.x + 4 : held.x + held.width / 2;
+      const y = axis === "y" ? held.y + 4 : held.y + held.height / 2;
+      for (const [by, order] of [
+        [reach - 6, [first, second, ...rest]],
+        [reach + 6, [second, first, ...rest]],
+      ] as const) {
+        await page.mouse.move(x, y);
+        await page.mouse.down();
+        await page.mouse.move(axis === "x" ? x + by : x, axis === "y" ? y + by : y, { steps: 4 });
+        await page.mouse.up();
+        expect(await names()).toEqual(order);
+      }
+    }
+  });
+
   for (const [what, look, reduce] of [
     ["with motion off", { motion: "off" }, false],
     ["under reduced motion", undefined, true],

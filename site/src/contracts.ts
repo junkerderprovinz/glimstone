@@ -524,6 +524,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "drag-wiggle-rows", when: "A row of a list marked glim-drag-rows is held, at wild, subtle and storm", then: "The other rows lift and tilt with the row wiggle, at least 1.5px and well short of a wide turn's swing, and stop on release." },
       { id: "drag-wiggle-held", when: "An item is marked held with aria-grabbed=\"true\" or data-held=\"true\" instead of glim-drag-lift", then: "It stays still, in a list of tiles and in a list of rows." },
       { id: "drag-wiggle-still", when: "Motion is off, or the system asks for reduced motion", then: "Nothing trembles; the held item still lifts." },
+      { id: "drag-drop-edge", when: "A tile or a row is dropped with its leading edge just short of the next one's middle, then just past it", then: "Short of it the item goes back to its place; past it the item lands after that neighbour." },
     ],
   },
 };

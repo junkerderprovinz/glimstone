@@ -1,4 +1,5 @@
 import { useRef, useState, type PointerEvent } from "react";
+import { dropIndex } from "@glimstone/core";
 import { useDragArmed } from "@glimstone/react";
 
 const APPS = ["Mail", "Photos", "Music", "Notes", "Maps", "Files"];
@@ -19,17 +20,19 @@ export default function DragArmedTiles() {
   const move = (e: PointerEvent<HTMLDivElement>) => {
     if (held !== null) setShift({ x: e.clientX - start.current.x, y: e.clientY - start.current.y });
   };
-  const drop = (e: PointerEvent<HTMLDivElement>) => {
+  const drop = () => {
     if (held === null) return;
-    const target = [...list.current!.children].findIndex((tile, i) => {
-      const r = tile.getBoundingClientRect();
-      return order[i] !== held && e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+    // Offsets leave out the lift's scale and translate, so each box is a tile's place.
+    const boxes = [...list.current!.children].map((t) => {
+      const tile = t as HTMLElement;
+      return { left: tile.offsetLeft, top: tile.offsetTop, width: tile.offsetWidth, height: tile.offsetHeight };
     });
-    if (target >= 0) {
-      const next = order.filter((n) => n !== held);
-      next.splice(target, 0, held);
-      setOrder(next);
-    }
+    const at = order.indexOf(held);
+    const from = boxes[at];
+    const moved = { ...from, left: from.left + (shift?.x ?? 0), top: from.top + (shift?.y ?? 0) };
+    const next = order.filter((n) => n !== held);
+    next.splice(dropIndex(moved, from, boxes.filter((_, i) => i !== at), { axis: "grid" }), 0, held);
+    setOrder(next);
     setHeld(null);
     setShift(null);
   };

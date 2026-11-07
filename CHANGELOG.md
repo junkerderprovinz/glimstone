@@ -2,6 +2,22 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+Where a dragged item lands is one function in the core: `dropIndex` places it by its leading edge, along a row, down a column or line by line in a grid. Until now each app wrote that comparison itself.
+
+**Adopting apps:**
+
+- **ArrowLoop:** `aheadOf` in `web/src/lib/dragLift.ts` can go. `aim` hands the offset boxes it already measures to `dropIndex(held, slot, others)`.
+- **KnightLoader:** in `liveColumnOrder`, the loop that counts passed columns becomes `dropIndex(held, from, others, { axis: "x", rtl })`. The splice around it stays.
+- **Apps that compare centres:** a drag hook that places by the held item's centre or by the pointer over an item's middle hands the held item's box, its place and the others' boxes to `dropIndex` instead, with `axis: "grid"` where the items wrap. BombVault's `aim` is one, and so are CannonCommander's job queue, settings tabs and list columns.
+- **Flutter:** nothing changed there.
+
+## ✨ Added
+
+- **`dropIndex`** in `@glimstone/core`: the index a carried item goes to among the others, from plain boxes, along `"x"`, `"y"` or a `"grid"` read line by line, and right to left with `rtl`. "Reordering by dragging" and its checklist point to it.
+- **The site:** the tiles and rows on the motion page drop through `dropIndex`, and a contract row checks, in React and Vue, that an item dropped just short of its neighbour's middle goes back and one dropped just past it lands after it.
+
 ## 4.2.6 - 2026-11-07
 
 A list of full-width rows trembles with a small lift instead of a turn, and a held item stays still whether a class or an attribute marks it. The rule also says how a carried item of a different size finds its place. All three came from KnightLoader.
