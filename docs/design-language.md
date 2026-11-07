@@ -717,7 +717,7 @@ Every app with a login shows the same page before anything else, and four apps h
 - **The app's own parts go into slots, never around the card.** `fields` stand above the password (a name for an app with several users, "Stay signed in"), `actions` stand under Sign in and the passkey (a single sign-on button), and `step` takes the forms' place for a step the app runs itself (recovery codes shown once, the page after a reset, a first password of its own). `SignInField` gives a field of the app's own the same label above it.
 - **Nothing else on the page.** No language picker, which belongs to the settings and follows the browser until then ("The user-owned axes"), and no version number, which a stranger at the login page has no use for.
 - **The page follows the engines in full before anybody is signed in.** No server preferences exist yet, so the page uses what the app stored in this browser: the accent (the system's own colour too, where the platform gives one), light or dark with OLED, the shape and the motion level all apply. Only when nothing is stored does it fall back to the defaults, which means the system's light or dark. An app whose first-frame theme was "dark" changes that default to "system".
-- **The card is 24rem wide in every app, and on a phone it takes the full width with 16px either side.** It stands on the ground colour with its top edge where a card of the usual height starts when centred, and that edge stays put. A reason above Sign in, the code field and the reset form make the card grow downwards, so the only thing that moves on a refusal is the button that shakes. A card centred outright would jump by half a line every time.
+- **The card is 24rem wide in every app, and on a phone it takes the full width with 16px either side.** It stands on the ground colour with its top edge where a card of the usual height starts when centred: half the window's height less 14rem, and never closer than 1rem to the top. An app with a window bar takes the bar's height off the window first (`--window-bar`, which is 0 elsewhere). That edge stays put in every frame. The reason above Sign in appears only on a refusal and no line is held open for it, so the spacing stays even, and the reason, the code field and the reset form make the card grow downwards. The only thing that moves on a refusal is the button that shakes. A card centred outright would jump by half a line every time.
 
 ### The sign-in card's checklist
 
@@ -732,7 +732,9 @@ Every app with a login shows the same page before anything else, and four apps h
 - [ ] The app's extras in the `fields`, `actions` and `step` slots.
 - [ ] No language picker and no version number on the page.
 - [ ] The accent, theme, OLED, shape and motion stored in the browser apply before sign-in; with nothing stored, the system's light or dark.
-- [ ] 24rem wide, full width less 16px either side on a phone, and the top edge still through a refusal, the code step and the reset form.
+- [ ] 24rem wide, full width less 16px either side on a phone.
+- [ ] The top edge at half the window's height less 14rem, at least 1rem, and still in every frame through a refusal, the code step and the reset form.
+- [ ] The reason above Sign in only on a refusal, with no line held open for it.
 
 ## Dates and times
 
