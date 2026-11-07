@@ -2,6 +2,30 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+Two changes to OLED, both asked for on KnightLoader's test instance. Cards lose the ring that framed them on black, and the OLED switch refuses while Light is chosen. `Toggle` gains `refused` for any switch that cannot be flipped right now, and the core words the OLED reason with `oledRefusal`.
+
+**Adopting apps:**
+
+- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at the new number, all at the same number. Nothing is renamed or removed.
+- **OLED cards:** `tokens.css` no longer sets `--elevation` under OLED, so the dark look's shadow stays. It cannot be seen on black, so a card's `#161616` is its edge, and over a card it still lifts a bubble or a menu off it. An app that keeps its own copy of the OLED blocks removes the `--elevation` line there too, whether it reads `0 0 0 1px #262626` or `0 0 #0000`. A screenshot test of a card under OLED loses the ring.
+- **The OLED switch:** pass `refused={oledRefusal(theme)}` to the OLED `Toggle`, where `theme` is the Design picker's choice: `"dark"`, `"light"`, or `"system"` or null for following the device. An app in another language hands in its own words, for example `oledRefusal(theme, { sentence: t("settings.oledLight"), dark: t("theme.dark"), system: t("theme.system"), light: t("theme.light") })`. The English under `settings.oledLight` is "Only with {dark} or {system}. {light} is chosen above.", and KnightLoader has the sentence in 42 languages to copy from.
+- **A switch of the app's own:** set `aria-disabled="true"` while `oledSwitchable(theme)` is false, keep the switch focusable and its state as it is, dim the track's fill rather than the whole button, call `shake()` on a press instead of flipping, and show the sentence as its bubble and, on a touch screen, as a line under the row. A native app does the same with its own shake.
+- **Toggle beside other things:** with `refused` set, `Toggle` renders the reason line after its frame. A pointer never sees it. On a touch screen it takes a line of its own in a parent that wraps, as `FieldRow` does, so a hand-made row around the switch wants `flex-wrap: wrap`.
+- **Flutter:** move the git dependency to the new tag. Nothing changed there.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads the new number.
+
+## ✨ Added
+
+- **`refused` on `Toggle`**, in React and Vue: the sentence that says why the switch cannot be flipped right now. The switch keeps its state and its place in the tab order, `aria-disabled` dims its track, a click or a key shakes it through `glim-shake`, and the sentence is its bubble and its description. On a touch screen it stands as a line under the row.
+- **`oledSwitchable`, `oledRefusal` and `oledRefusalEn`** in the core's `theme.ts`: whether OLED can be flipped under a theme choice, and the sentence for the switch with the theme names filled in.
+- **The site** shows a refused switch beside a Design picker on the Toggle page, and its own OLED switch refuses under Light.
+
+## 🎨 Design
+
+- **OLED** keeps the dark look's shadow instead of a ring in the border colour, so a card on black has no frame. Rule 43 describes the refusal and gains a checklist.
+
 ## 4.2.2 - 2026-11-07
 
 A sign-in card for every app with a login: `SignInCard` in React and Vue, with the flow in the core, drawn after BombVault's login. The design language gains "The sign-in card" with its checklist. Toasts stand on whole pixels and keep no transform once they are in.
