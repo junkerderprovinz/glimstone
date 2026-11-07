@@ -48,13 +48,37 @@ export function ColourEngine() {
         follows the system, and that is the default: an app that opens dark on a light desktop made a choice nobody
         asked it to make. The selector always has a System segment, so a choice once made can be undone.
       </p>
+      <p>
+        The OLED switch under it puts the dark look on true black for OLED and AMOLED screens. It sets{" "}
+        <code>data-oled</code> on <code>&lt;html&gt;</code>, which counts whenever dark is showing, chosen or from the
+        system. The surfaces move one step down and the text stays as it is. It belongs to the screen, so it is kept on
+        the device and never synced.
+      </p>
+      <Code
+        code={`import { applyOled, darkShowing } from "@glimstone/core";\n\napplyOled(true); // kept on this device\ndarkShowing(); // whether OLED is in effect now`}
+      />
       <H2>Accent</H2>
       <p>
         One colour that means "this is happening" and nothing else: the active nav row, the primary action, progress.
         The default is Sunflower <code>#FCC419</code> in every app, so the family opens as one product. The text colour
-        on top of it is computed from its luminance, never asked for as a second setting.
+        on top of it is computed, never asked for as a second setting, and every ink the engine computes reaches 4.5:1,
+        whatever colour somebody picks.
       </p>
       <Code code={`import { applyAccent } from "./glimstone/appearance";\n\napplyAccent("#1D99F3");`} />
+      <p>
+        Where the device has a colour of its own, a swatch with a wand stands before the presets and takes it. The
+        setting is stored as <code>system</code>, never as the colour, so one device's colour never travels to another.
+        The app feeds the colour from its source. The browser is one in Firefox and Safari, so that is where the wand
+        shows on this page.
+      </p>
+      <Code
+        code={`import { applyAccent, setSystemAccent, watchBrowserAccent, SYSTEM_ACCENT } from "@glimstone/core";\n\n// Or feed Material You, or the desktop's accent colour.\nwatchBrowserAccent(setSystemAccent);\napplyAccent(SYSTEM_ACCENT);`}
+      />
+      <Callout>
+        The system's colour can be anything, a pale wallpaper tone as well as a dark navy. The engine pushes the ink on
+        it and the accent text toward black or white just far enough to keep 4.5:1, so nothing has to be checked by
+        hand.
+      </Callout>
       <H2>Rainbow</H2>
       <p>
         With the rainbow on, sections take positions on an eight-colour wheel instead of the single accent. A card with a{" "}

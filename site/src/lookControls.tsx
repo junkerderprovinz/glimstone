@@ -1,4 +1,16 @@
-import { ACCENTS, MOTION_LEVELS, SHAPES, LABEL_MODES, type LabelMode } from "@glimstone/core";
+import { useSyncExternalStore } from "react";
+import {
+  ACCENTS,
+  MOTION_LEVELS,
+  SHAPES,
+  LABEL_MODES,
+  SYSTEM_ACCENT,
+  contrastOn,
+  subscribeSystemAccent,
+  systemAccent,
+  type LabelMode,
+} from "@glimstone/core";
+import { InfoBubble, Toggle } from "@glimstone/react";
 import { Glyph } from "./glyph";
 import { setLook, useLook, type Rainbow, type Theme } from "./look";
 import { Selector } from "./ui";
@@ -7,18 +19,24 @@ const LABEL_NAMES: Record<LabelMode, string> = { text: "Text", textGlyph: "Both"
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 export function ThemeControl() {
-  const { theme } = useLook();
+  const { theme, oled } = useLook();
   return (
-    <Selector<Theme>
-      label="Theme"
-      value={theme}
-      onChange={(theme) => setLook({ theme })}
-      options={[
-        { value: "dark", label: "Dark", glyph: <Glyph name="IconMoon" /> },
-        { value: "light", label: "Light", glyph: <Glyph name="IconSun" /> },
-        { value: "system", label: "System", glyph: <Glyph name="IconThemeSystem" /> },
-      ]}
-    />
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 8 }}>
+      <Selector<Theme>
+        label="Theme"
+        value={theme}
+        onChange={(theme) => setLook({ theme })}
+        options={[
+          { value: "dark", label: "Dark", glyph: <Glyph name="IconMoon" /> },
+          { value: "light", label: "Light", glyph: <Glyph name="IconSun" /> },
+          { value: "system", label: "System", glyph: <Glyph name="IconThemeSystem" /> },
+        ]}
+      />
+      <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+        <Toggle label="OLED" checked={oled} onChange={(oled) => setLook({ oled })} />
+        <InfoBubble tip="True black for OLED and AMOLED screens, whenever the dark look is showing." />
+      </span>
+    </div>
   );
 }
 
@@ -76,6 +94,7 @@ export function RainbowControl() {
 
 export function AccentControl() {
   const { accent, rainbow } = useLook();
+  const system = useSyncExternalStore(subscribeSystemAccent, systemAccent);
   return (
     <div
       role="radiogroup"
@@ -88,6 +107,20 @@ export function AccentControl() {
         pointerEvents: rainbow === "off" ? "auto" : "none",
       }}
     >
+      {system && (
+        <button
+          type="button"
+          role="radio"
+          className="swatch swatch-system"
+          aria-label="System colour"
+          title="System colour"
+          aria-checked={accent === SYSTEM_ACCENT}
+          style={{ background: system, color: contrastOn(system) }}
+          onClick={() => setLook({ accent: SYSTEM_ACCENT })}
+        >
+          <Glyph name="IconAccentSystem" />
+        </button>
+      )}
       {ACCENTS.map((a) => (
         <button
           key={a.hex}

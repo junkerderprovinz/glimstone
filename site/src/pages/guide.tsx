@@ -124,19 +124,23 @@ export function Palette() {
         The greys are IBM Carbon's, so every app in the family stands on the same ground. GlimStone adds the system on
         top: the rules, the engines and the rainbow.
       </p>
-      <p>Each swatch below is drawn from the live token, once under the dark ramp and once under the light one.</p>
+      <p>Each swatch below is drawn from the live token, under the dark ramp, under OLED and under the light ramp.</p>
       {groups.map((g, i) => (
         <div key={i}>
           {g.doc && <p style={{ marginTop: 32 }}>{g.doc}</p>}
-          <div className="swatch-row" style={{ borderBottom: 0 }}>
+          <div className="swatch-row swatch-row--three" style={{ borderBottom: 0 }}>
             <span />
             <span className="look-label" style={{ margin: 0, textAlign: "center" }}>Dark</span>
+            <span className="look-label" style={{ margin: 0, textAlign: "center" }}>OLED</span>
             <span className="look-label" style={{ margin: 0, textAlign: "center" }}>Light</span>
           </div>
           {g.items.map((t) => (
-            <div className="swatch-row" key={t.name}>
+            <div className="swatch-row swatch-row--three" key={t.name}>
               <code style={{ justifySelf: "start" }}>{t.name}</code>
               <div data-theme="dark" style={{ background: "transparent" }}>
+                <div className="swatch-chip" style={{ background: `var(${t.name})` }} />
+              </div>
+              <div data-theme="dark" data-oled="" style={{ background: "transparent" }}>
                 <div className="swatch-chip" style={{ background: `var(${t.name})` }} />
               </div>
               <div data-theme="light" style={{ background: "transparent" }}>

@@ -2,6 +2,7 @@ import { useSyncExternalStore } from "react";
 import {
   applyAccent,
   applyMotion,
+  applyOled,
   applyRainbow,
   applyShape,
   DEFAULT_ACCENT,
@@ -11,6 +12,8 @@ import {
   DEFAULT_LABEL_MODE,
   labelModeChanged,
   setLabelMode,
+  setSystemAccent,
+  watchBrowserAccent,
   type LabelMode,
   type Motion,
   type Shape,
@@ -21,6 +24,7 @@ export type Rainbow = "off" | "on" | "reactive";
 
 export interface Look {
   theme: Theme;
+  oled: boolean;
   shape: Shape;
   accent: string;
   rainbow: Rainbow;
@@ -31,6 +35,7 @@ export interface Look {
 const KEY = "gs-docs-look";
 const DEFAULT: Look = {
   theme: "system",
+  oled: false,
   shape: DEFAULT_SHAPE,
   accent: DEFAULT_ACCENT,
   rainbow: "off",
@@ -51,6 +56,7 @@ function apply(l: Look) {
   const root = document.documentElement;
   if (l.theme === "system") root.removeAttribute("data-theme");
   else root.setAttribute("data-theme", l.theme);
+  applyOled(l.oled);
   applyShape(l.shape);
   applyAccent(l.accent);
   applyMotion(l.motion);
@@ -84,4 +90,5 @@ export function useLook(): Look {
   );
 }
 
+watchBrowserAccent(setSystemAccent);
 apply(look);
