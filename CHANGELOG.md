@@ -2,6 +2,21 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+Two fixes to `dropIndex`, both found by ArrowLoop while adopting it.
+
+**Adopting apps:**
+
+- **Measured boxes:** hand `getBoundingClientRect()` results straight to `dropIndex`, also with `rtl`. A copy into plain objects before the call can go.
+- **Strict builds:** `dropIndex` compiles under `noUncheckedIndexedAccess`, so a build with that flag can take it unchanged.
+- **Flutter:** nothing changed there.
+
+## 🐛 Fixed
+
+- **`dropIndex` with `rtl`** placed real `DOMRect`s wrongly. It mirrored each box with a spread, and a `DOMRect` keeps its sides as getters a spread drops, so the copy had no width or height. It copies the sides by name now.
+- **`dropIndex`** no longer reads a list position that may be missing, which `noUncheckedIndexedAccess` reported twice.
+
 ## 4.2.7 - 2026-11-08
 
 Where a dragged item lands is one function in the core: `dropIndex` places it by its leading edge, along a row, down a column or line by line in a grid. Until now each app wrote that comparison itself.

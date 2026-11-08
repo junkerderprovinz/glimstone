@@ -148,3 +148,33 @@ test('a right-to-left grid reads each line from the right', () => {
   assert.equal(carryTile(mirrored, 0, 150, 0, true), 1);
   assert.equal(carryTile(mirrored, 0, 0, 70, true), 5);
 });
+
+// DOMRect keeps its sides on the prototype, so a copy made with spread has none of them.
+class MeasuredBox {
+  #left: number;
+  #top: number;
+  #width: number;
+  #height: number;
+  constructor(r: DropRect) {
+    this.#left = r.left;
+    this.#top = r.top;
+    this.#width = r.width;
+    this.#height = r.height;
+  }
+  get left() { return this.#left; }
+  get top() { return this.#top; }
+  get width() { return this.#width; }
+  get height() { return this.#height; }
+}
+
+test('measured boxes place a right to left row and grid as plain boxes do', () => {
+  const row = lay('x', [300, 100, 100]).map((b) => ({ ...b, left: 500 - b.left - b.width }));
+  const measured = row.map((b) => new MeasuredBox(b));
+  for (const at of [0, 120, 250, 380]) {
+    const plain = dropIndex({ ...row[0], left: at }, row[0], row.slice(1), { axis: 'x', rtl: true });
+    const real = dropIndex(new MeasuredBox({ ...row[0], left: at }), measured[0], measured.slice(1), { axis: 'x', rtl: true });
+    assert.equal(real, plain, `held at ${at}`);
+    const grid = dropIndex(new MeasuredBox({ ...row[0], left: at }), measured[0], measured.slice(1), { axis: 'grid', rtl: true });
+    assert.equal(grid, plain, `grid, held at ${at}`);
+  }
+});
