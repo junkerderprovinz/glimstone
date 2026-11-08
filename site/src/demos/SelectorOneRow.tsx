@@ -14,18 +14,23 @@ const LOOKS = [
 ];
 
 const THEMES = [
-  { id: "system", label: "Donaudampfschifffahrtsgesellschaft" },
+  { id: "system", label: "Follow the system" },
   { id: "light", label: "Always the light theme" },
   { id: "dark", label: "Always the dark theme" },
-  { id: "bright", label: "Bright with a high contrast" },
-  { id: "custom", label: "Your own colours" },
+];
+
+const JOBS = [
+  { id: "running", label: "Running" },
+  { id: "queued", label: "Waiting in the queue" },
+  { id: "done", label: "Finished in the last 30 days" },
 ];
 
 export default function SelectorOneRow() {
   const [shown, setShown] = useState("open");
   const [look, setLook] = useState("light");
-  const [a, setA] = useState("light");
-  const [b, setB] = useState("light");
+  const [a, setA] = useState("system");
+  const [b, setB] = useState("system");
+  const [jobs, setJobs] = useState<string[]>(["running"]);
   return (
     <div style={{ display: "grid", gap: 16, width: "100%", maxWidth: 560 }}>
       <div data-row="labels">
@@ -34,11 +39,14 @@ export default function SelectorOneRow() {
       <div data-row="glyphs">
         <Selector label="Look" items={LOOKS} value={look} onChange={setLook} activation="manual" size="lg" equalWidth />
       </div>
-      <div data-row="cut">
+      <div data-row="list">
         <Selector label="Theme" items={THEMES} value={a} onChange={setA} activation="manual" />
       </div>
-      <div data-row="cut-inline">
+      <div data-row="list-inline">
         <Selector label="Theme, inline" items={THEMES} value={b} onChange={setB} activation="manual" size="sm" inline buttonHeight />
+      </div>
+      <div data-row="cut">
+        <Selector label="Jobs" select="many" items={JOBS} value={jobs} onChange={setJobs} />
       </div>
     </div>
   );

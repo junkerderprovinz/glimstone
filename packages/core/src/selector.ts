@@ -150,6 +150,9 @@ export interface SelectorView {
   pinWidth: boolean;
   /** Whether the strip may drop its labels for glyphs to keep to its row. */
   canSqueeze: boolean;
+  /** Whether the strip may turn into a dropdown where its labels do not fit;
+   *  a dropdown holds one value, so a "many" strip cuts its labels instead. */
+  canList: boolean;
   /** Each segment keeps a palette position of its own, as a tab does. */
   perTab: boolean;
   /** The selector takes its colour from its place on the page (countSelector). */
@@ -192,6 +195,7 @@ export function selectorView(s: SelectorInput): SelectorView {
     autoSelect: !many && !manual,
     pinWidth,
     canSqueeze: !vertical && mode === "textGlyph" && allGlyphs,
+    canList: !vertical && !many,
     perTab,
     counted: s.hue && !perTab,
     mode,
@@ -364,12 +368,12 @@ export function measureSegments(segs: HTMLElement[]): number[] {
  * Watches how the segments of `track` share its one row, at once and whenever
  * the box or a segment resizes, since a late web font changes what a label
  * needs, and hands each new layout to `onLayout`. Labels dropped for glyphs
- * are put back on screen for the reading, so a strip sees when they fit
- * again. Returns the teardown.
+ * and segments hidden behind the dropdown are put back for the reading, so a
+ * strip sees when they fit again. Returns the teardown.
  */
 export function watchSelectorFit(
   track: HTMLElement,
-  { pinWidth, fit, canSqueeze }: { pinWidth: boolean; fit: boolean; canSqueeze: boolean },
+  { pinWidth, fit, canSqueeze, canList }: { pinWidth: boolean; fit: boolean; canSqueeze: boolean; canList: boolean },
   onLayout: (layout: SelectorLayout) => void,
 ): () => void {
   let last: SelectorLayout | null = null;
@@ -378,6 +382,8 @@ export function watchSelectorFit(
     if (segs.length === 0) return;
     const hidden = Array.from(track.querySelectorAll("[data-sel-label].glim-sr-only"));
     for (const l of hidden) l.classList.remove("glim-sr-only");
+    const listed = track.classList.contains("glim-sel--listed");
+    track.classList.remove("glim-sel--listed");
     // A hugging track is only as wide as its segments; given the whole box for
     // the reading, it shows the room it could take.
     const { width, minWidth } = track.style;
@@ -389,11 +395,12 @@ export function watchSelectorFit(
     const gap = parseFloat(own.columnGap) || 0;
     Object.assign(track.style, { width, minWidth });
     for (const l of hidden) l.classList.add("glim-sr-only");
+    if (listed) track.classList.add("glim-sel--listed");
     // A hidden box measures nothing; it is laid out once it shows.
     if (room <= 0) return;
     const pinned = pinWidth ? pinnedWidth(Math.max(...oneLine), segs.length, room, gap) : 0;
     const even = pinned || (fit ? Math.floor((room - gap * (segs.length - 1)) / segs.length) : null);
-    const fits = segmentFit(room, even, oneLine, gap, canSqueeze);
+    const fits = segmentFit(room, even, oneLine, gap, canSqueeze, canList);
     const row = fits.fit === "even" ? (even ?? 0) * segs.length : fits.fit === "content" ? oneLine.reduce((sum, w) => sum + w, 0) : 0;
     // A pixel over, so rounding cannot leave the last segment short of room.
     const hug = row && row + gap * (segs.length - 1) + inset + 1;
@@ -434,7 +441,7 @@ export function selectorFlex({ layout, inline, fit }: { layout: SelectorLayout |
   const pinned = layout?.pinned ?? 0;
   const cap: Record<string, string> = fit ? { maxWidth: `${MAX_PINNED_WIDTH}px` } : {};
   const segment: Record<string, string> =
-    mode === "squeezed" || mode === "truncated"
+    mode === "squeezed" || mode === "list" || mode === "truncated"
       ? { flex: "1 1 0", minWidth: "0", ...cap }
       : fit
         ? { flex: mode === "content" ? "1 0 auto" : "1 1 0", minWidth: "0", ...cap }

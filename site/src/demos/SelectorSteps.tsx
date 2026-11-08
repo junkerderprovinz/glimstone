@@ -11,7 +11,7 @@ export default function SelectorSteps() {
   const [level, setLevel] = useState(5);
   const [presses, setPresses] = useState(0);
   return (
-    <div style={{ display: "grid", gap: 8, justifyItems: "start" }}>
+    <div style={{ display: "grid", gap: 8, justifyItems: "start", width: "100%" }}>
       <Selector
         label="Compression"
         items={LEVELS}

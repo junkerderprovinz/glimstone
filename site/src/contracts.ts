@@ -177,7 +177,8 @@ export const CONTRACTS: Record<string, Contract> = {
     pattern: { name: "Tabs", url: `${APG}tabs/` },
     rows: [
       { id: "sel-numeric", when: "An item's id is a number", then: "The value comes back as that number." },
-      { id: "sel-one-row", when: "The window is too narrow for the pinned widths", then: "Every strip stays on one row and every label on one line: the labels share the row while they fit, a strip with a glyph on each segment shows glyphs alone, and any other cuts its long labels short with the whole label in the bubble." },
+      { id: "sel-one-row", when: "The window is too narrow for the pinned widths", then: "Every strip stays on one row and every label on one line: the labels share the row while they fit, a strip with a glyph on each segment shows glyphs alone, and a many strip cuts its long labels short with the whole label in the bubble." },
+      { id: "sel-list", when: "The labels of a strip of one do not fit its row and not every segment has a glyph", then: "It shows the dropdown with the chosen value and every label whole, under the strip's name; its segments stay out of sight and out of the tab order, and come back once they fit." },
       { id: "sel-press", keys: ["Space", "Enter"], when: "A segment is pressed, also the one already chosen", then: "The press is reported before the choice changes." },
       { id: "sel-attrs", when: "An item names attributes", then: "Its segment carries them." },
       { id: "sel-tabs-role", when: "select is one", then: "role=\"tablist\" of tabs with aria-selected; the chosen tab controls the panel, which is named by it." },

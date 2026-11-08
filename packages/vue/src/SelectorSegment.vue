@@ -22,6 +22,8 @@ const props = defineProps<{
   on: boolean;
   disabled: boolean;
   roved: boolean;
+  /** The strip shows its dropdown, and the segment is only there to be measured. */
+  listed: boolean;
   share: Record<string, string>;
   squeezed: boolean;
   cut: boolean;
@@ -122,8 +124,9 @@ function open(e: MouseEvent) {
         :aria-pressed="strip.kind === 'toggle' ? on : undefined"
         :aria-label="view.ariaLabel"
         :aria-describedby="described"
+        :aria-hidden="listed || undefined"
         :disabled="disabled"
-        :tabindex="roved ? 0 : -1"
+        :tabindex="roved && !listed ? 0 : -1"
         :class="view.className"
         :style="style"
         @click="emit('select')"

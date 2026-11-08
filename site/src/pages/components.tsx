@@ -453,9 +453,10 @@ export function SelectorPage() {
       <p>
         A selector never wraps and never scrolls, and a label never takes a second line. Where the segments do not fit
         at their pinned width they share the row by their labels. Where the labels do not fit either, a strip with a
-        glyph on every segment shows the glyphs alone, and any other strip shares the row evenly and cuts the long
-        labels short. Either way the whole label stays the segment's name and shows in its bubble. Narrow the window to
-        see it.
+        glyph on every segment shows the glyphs alone, the whole label staying the segment's name and its bubble. Any
+        other strip of one turns into the dropdown, showing the chosen value with every label whole in its list, and
+        comes back as segments once they fit. A <code>select="many"</code> strip cuts its long labels short instead,
+        with the whole label in the bubble, since a dropdown holds one value. Narrow the window to see it.
       </p>
       <Demo name="SelectorOneRow" />
       <H2>Numbers, hooks and presses</H2>

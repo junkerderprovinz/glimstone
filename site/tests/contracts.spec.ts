@@ -1508,7 +1508,7 @@ test.describe("Selector", () => {
       };
     });
 
-  for (const demo of ["labels", "glyphs", "cut", "cut-inline"]) {
+  for (const demo of ["labels", "glyphs", "cut"]) {
     test(`[sel-one-row] a narrow window keeps the strip on one row, ${demo}`, async ({ page }) => {
       await narrow(page);
       const look = await lay(row(page, demo));
@@ -1536,15 +1536,84 @@ test.describe("Selector", () => {
     await expect(page.getByRole("tooltip")).toHaveText("Always the dark theme");
   });
 
-  test("[sel-one-row] a label cut short keeps its whole text in the bubble", async ({ page }) => {
+  test("[sel-one-row] a label of a many strip cut short keeps its whole text in the bubble", async ({ page }) => {
     await narrow(page);
     const strip = row(page, "cut");
     await expect.poll(async () => (await lay(strip)).cut).toContain(true);
-    expect((await lay(strip)).shown).toBe(5);
-    const long = strip.getByRole("radio", { name: "Donaudampfschifffahrtsgesellschaft" });
+    expect((await lay(strip)).shown).toBe(3);
+    const long = strip.getByRole("button", { name: "Finished in the last 30 days" });
     await centre(long);
     await long.focus();
-    await expect(page.getByRole("tooltip")).toHaveText("Donaudampfschifffahrtsgesellschaft");
+    await expect(page.getByRole("tooltip")).toHaveText("Finished in the last 30 days");
+  });
+
+  const box = (page: Page, demo: string) => stage(page, "SelectorOneRow").locator(`[data-row="${demo}"]`);
+
+  // The class of the track over a run of frames, so a strip that flips
+  // between its segments and its dropdown shows more than one.
+  const classesOver = (strip: Locator) =>
+    strip.evaluate(async (s) => {
+      const seen = new Set<string>();
+      for (let i = 0; i < 12; i++) {
+        seen.add(s.className);
+        await new Promise((done) => requestAnimationFrame(done));
+      }
+      return [...seen];
+    });
+
+  test("[sel-list] a strip of one whose labels do not fit becomes a dropdown of whole labels", async ({ page }) => {
+    await narrow(page);
+    const demo = box(page, "list");
+    await expect(demo.getByRole("radiogroup")).toHaveCount(0);
+    const list = demo.getByRole("combobox", { name: "Theme" });
+    await expect(list).toBeVisible();
+    await expect(list).toHaveText("Follow the system");
+    expect(await classesOver(row(page, "list"))).toHaveLength(1);
+    const edge = await demo.evaluate((d) => d.getBoundingClientRect().right);
+    expect((await list.boundingBox())!.x + (await list.boundingBox())!.width).toBeLessThanOrEqual(edge + 0.5);
+    await list.click();
+    const options = page.getByRole("option");
+    await expect(options).toHaveText(["Follow the system", "Always the light theme", "Always the dark theme"]);
+    await page.getByRole("option", { name: "Always the dark theme" }).click();
+    await expect(list).toHaveText("Always the dark theme");
+  });
+
+  test("[sel-list] the segments behind the dropdown take no focus and no name", async ({ page }) => {
+    await narrow(page);
+    const strip = row(page, "list");
+    await expect(box(page, "list").getByRole("combobox")).toBeVisible();
+    await expect(box(page, "list").getByRole("radio")).toHaveCount(0);
+    const segs = await strip.evaluate((s) =>
+      [...s.querySelectorAll<HTMLElement>("[data-sel-id]")].map((e) => ({
+        hidden: e.getAttribute("aria-hidden"),
+        tab: e.tabIndex,
+        boxes: e.getClientRects().length,
+      })),
+    );
+    expect(segs).toHaveLength(3);
+    expect(segs).toEqual(segs.map(() => ({ hidden: "true", tab: -1, boxes: 0 })));
+  });
+
+  test("[sel-list] a strip of one comes back as segments once its labels fit", async ({ page }) => {
+    await narrow(page);
+    const demo = box(page, "list");
+    await demo.getByRole("combobox", { name: "Theme" }).click();
+    await page.getByRole("option", { name: "Always the light theme" }).click();
+    await demo.evaluate((d) => (d.parentElement!.style.width = "560px"));
+    const group = demo.getByRole("radiogroup", { name: "Theme" });
+    await expect(group).toBeVisible();
+    await expect(group.getByRole("radio", { name: "Always the light theme" })).toHaveAttribute("aria-checked", "true");
+    await expect(demo.getByRole("combobox")).toHaveCount(0);
+    expect(await classesOver(row(page, "list"))).toHaveLength(1);
+  });
+
+  test("[sel-list] a hugging strip of one turns into a dropdown that spans its box", async ({ page }) => {
+    await narrow(page);
+    const demo = box(page, "list-inline");
+    const list = demo.getByRole("combobox", { name: "Theme, inline" });
+    await expect(list).toBeVisible();
+    const room = await demo.evaluate((d) => d.getBoundingClientRect().width);
+    expect((await list.boundingBox())!.width).toBeGreaterThan(room - 2);
   });
 
   test("[sel-one-row] a wide window keeps the pinned widths", async ({ page }) => {

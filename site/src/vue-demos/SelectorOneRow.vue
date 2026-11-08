@@ -15,17 +15,22 @@ const LOOKS = [
 ];
 
 const THEMES = [
-  { id: "system", label: "Donaudampfschifffahrtsgesellschaft" },
+  { id: "system", label: "Follow the system" },
   { id: "light", label: "Always the light theme" },
   { id: "dark", label: "Always the dark theme" },
-  { id: "bright", label: "Bright with a high contrast" },
-  { id: "custom", label: "Your own colours" },
+];
+
+const JOBS = [
+  { id: "running", label: "Running" },
+  { id: "queued", label: "Waiting in the queue" },
+  { id: "done", label: "Finished in the last 30 days" },
 ];
 
 const shown = ref("open");
 const look = ref("light");
-const a = ref("light");
-const b = ref("light");
+const a = ref("system");
+const b = ref("system");
+const jobs = ref(["running"]);
 </script>
 
 <template>
@@ -36,11 +41,14 @@ const b = ref("light");
     <div data-row="glyphs">
       <Selector v-model="look" label="Look" :items="LOOKS" activation="manual" size="lg" equal-width />
     </div>
-    <div data-row="cut">
+    <div data-row="list">
       <Selector v-model="a" label="Theme" :items="THEMES" activation="manual" />
     </div>
-    <div data-row="cut-inline">
+    <div data-row="list-inline">
       <Selector v-model="b" label="Theme, inline" :items="THEMES" activation="manual" size="sm" inline button-height />
+    </div>
+    <div data-row="cut">
+      <Selector v-model="jobs" label="Jobs" select="many" :items="JOBS" />
     </div>
   </div>
 </template>

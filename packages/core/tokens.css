@@ -3815,6 +3815,18 @@ body {
     background-color: var(--carbon-surface3);
   }
   .glim-sel--chip { gap: 0.25rem; }
+  /* A strip of one whose labels do not fit shows a dropdown in its place and
+     no groove around it. watchSelectorFit lifts the class for each reading,
+     so it measures the segments and the room as the strip would show them. */
+  .glim-sel--listed {
+    padding: 0;
+    background-color: transparent;
+  }
+  .glim-sel--listed > :not(.glim-sel-list) { display: none; }
+  .glim-sel-list {
+    flex: 1 1 0;
+    min-width: 0;
+  }
 
   .glim-sel-seg {
     display: inline-flex;

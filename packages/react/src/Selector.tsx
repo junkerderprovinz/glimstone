@@ -32,6 +32,7 @@ import {
   type SelectorView,
 } from "@glimstone/core";
 import { useFieldName } from "./fieldName.ts";
+import { Select } from "./Select.tsx";
 import { useLabelMode } from "./useLabelMode.ts";
 import { useTipBubble } from "./useTipBubble.tsx";
 
@@ -44,6 +45,9 @@ export { selectorTabId } from "@glimstone/core";
 // A caption such as "Sort by:" belongs in a plain <span> outside it, not a
 // <label> around the row: a label around several segments hands its clicks to
 // the first one and gives a screen reader that segment's name.
+//
+// A strip of one whose labels do not fit its row shows the one dropdown in
+// their place, inside the track, so the track keeps the box it measures.
 
 export interface SelectorItem<V extends string | number = string> {
   /** Stable id, handed back by onChange as it stands here. */
@@ -95,7 +99,8 @@ export interface SelectorProps<M extends SelectMode = "one", V extends string | 
   inline?: boolean;
   /** Share the row evenly without a pinned width, for page tabs. Every strip
    *  keeps to one row; once its labels do not fit together it shows glyphs
-   *  alone where every segment has one, and cuts its labels short otherwise. */
+   *  alone where every segment has one, a strip of one turns into a dropdown
+   *  otherwise, and a `many` strip cuts its labels short. */
   fit?: boolean;
   /** Has no effect: every strip keeps to one row. */
   pairsOnPhone?: boolean;
@@ -182,10 +187,12 @@ export function Selector<M extends SelectMode = "one", V extends string | number
       setLayout(null);
       return;
     }
-    return watchSelectorFit(track.current!, { pinWidth: strip.pinWidth, fit, canSqueeze: strip.canSqueeze }, setLayout);
-  }, [vertical, strip.pinWidth, fit, strip.canSqueeze, inline, itemsKey, disabledKey, size, strip.mode]);
+    const { pinWidth, canSqueeze, canList } = strip;
+    return watchSelectorFit(track.current!, { pinWidth, fit, canSqueeze, canList }, setLayout);
+  }, [vertical, strip.pinWidth, fit, strip.canSqueeze, strip.canList, inline, itemsKey, disabledKey, size, strip.mode]);
 
   const flex = selectorFlex({ layout, inline, fit });
+  const listed = layout?.fit === "list";
   const chosen = many ? (value as readonly V[]) : null;
   const isOn = (id: V) => (chosen ? chosen.includes(id) : value === id);
   const disabledFlags = items.map((it) => disabled || !!it.disabled);
@@ -198,6 +205,8 @@ export function Selector<M extends SelectMode = "one", V extends string | number
   }
 
   function onKeyDown(e: KeyboardEvent<HTMLDivElement>) {
+    // The dropdown's keys reach the track through the portal too.
+    if (listed) return;
     // A tile is a link, and Space does not follow a link on its own.
     if (vertical && e.key === " " && (e.target as HTMLElement).dataset.selId) {
       e.preventDefault();
@@ -214,11 +223,11 @@ export function Selector<M extends SelectMode = "one", V extends string | number
   return (
     <div
       ref={track}
-      role={strip.role}
-      aria-label={name}
-      aria-orientation={strip.role === "group" ? undefined : orientation}
+      role={listed ? undefined : strip.role}
+      aria-label={listed ? undefined : name}
+      aria-orientation={listed || strip.role === "group" ? undefined : orientation}
       onKeyDown={onKeyDown}
-      className={`${strip.className} ${className}`.trim()}
+      className={`${strip.className}${listed ? " glim-sel--listed" : ""} ${className}`.trim()}
       style={flex.track as CSSProperties}
     >
       {items.map((item, i) => (
@@ -230,6 +239,7 @@ export function Selector<M extends SelectMode = "one", V extends string | number
           on={isOn(item.id)}
           disabled={disabledFlags[i]}
           roved={i === roved}
+          listed={listed}
           share={vertical ? undefined : (flex.segment as CSSProperties)}
           squeezed={layout?.fit === "squeezed"}
           cut={!!layout?.cut[i]}
@@ -244,6 +254,24 @@ export function Selector<M extends SelectMode = "one", V extends string | number
           onSelect={() => choose(item.id)}
         />
       ))}
+      {listed && (
+        <div className="glim-sel-list">
+          <Select
+            label={name ?? ""}
+            hideLabel
+            wrap
+            width="fill"
+            size={size === "sm" ? "row" : "field"}
+            options={items.map((it, i) => ({ value: String(it.id), label: it.label, glyph: it.glyph, disabled: disabledFlags[i] }))}
+            value={value === null ? null : String(value)}
+            onChange={(next) => {
+              const item = items.find((it) => String(it.id) === next);
+              if (item) choose(item.id);
+            }}
+            disabled={disabledFlags.every(Boolean)}
+          />
+        </div>
+      )}
     </div>
   );
 }
@@ -256,6 +284,7 @@ function Segment({
   on,
   disabled,
   roved,
+  listed,
   share,
   squeezed,
   cut,
@@ -275,6 +304,8 @@ function Segment({
   on: boolean;
   disabled: boolean;
   roved: boolean;
+  /** The strip shows its dropdown, and the segment is only there to be measured. */
+  listed: boolean;
   share: CSSProperties | undefined;
   squeezed: boolean;
   cut: boolean;
@@ -374,8 +405,9 @@ function Segment({
       aria-pressed={strip.kind === "toggle" ? on : undefined}
       aria-label={view.ariaLabel}
       aria-describedby={described}
+      aria-hidden={listed || undefined}
       disabled={disabled}
-      tabIndex={roved ? 0 : -1}
+      tabIndex={roved && !listed ? 0 : -1}
       className={view.className}
       style={style}
       onClick={onSelect}

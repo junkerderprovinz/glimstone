@@ -7,32 +7,44 @@ import { segmentView, selectorFlex, selectorView, type SelectorInput } from '../
 const GAP = 4;
 
 test('pinned segments that fit side by side keep their pinned width', () => {
-  assert.deepEqual(segmentFit(620, 200, [120, 150, 180], GAP, false), { fit: 'even', cut: [false, false, false] });
+  assert.deepEqual(segmentFit(620, 200, [120, 150, 180], GAP, false, false), { fit: 'even', cut: [false, false, false] });
 });
 
 test('a strip too narrow for its pinned widths stays on one row, sized by its labels', () => {
-  assert.equal(segmentFit(360, 200, [100, 110, 120], GAP, false).fit, 'content');
+  assert.equal(segmentFit(360, 200, [100, 110, 120], GAP, false, false).fit, 'content');
 });
 
 test('a label longer than the pinned width sizes the row by labels instead of breaking', () => {
-  assert.equal(segmentFit(900, 200, [90, 260, 90], GAP, false).fit, 'content');
+  assert.equal(segmentFit(900, 200, [90, 260, 90], GAP, false, false).fit, 'content');
 });
 
 test('a hugging strip whose labels fit keeps them', () => {
-  assert.equal(segmentFit(400, null, [80, 90, 100], GAP, false).fit, 'content');
+  assert.equal(segmentFit(400, null, [80, 90, 100], GAP, false, false).fit, 'content');
 });
 
 test('a strip whose labels do not fit drops them for glyphs when every segment has one', () => {
-  assert.deepEqual(segmentFit(300, 200, [140, 150, 160], GAP, true), { fit: 'squeezed', cut: [false, false, false] });
+  assert.deepEqual(segmentFit(300, 200, [140, 150, 160], GAP, true, false), { fit: 'squeezed', cut: [false, false, false] });
 });
 
 test('a strip without glyphs for every segment shares the row evenly and cuts only the labels too long for a share', () => {
   // (300 - 2 * 4) / 3 leaves each segment 97.33px.
-  assert.deepEqual(segmentFit(300, 200, [60, 150, 97], GAP, false), { fit: 'truncated', cut: [false, true, false] });
+  assert.deepEqual(segmentFit(300, 200, [60, 150, 97], GAP, false, false), { fit: 'truncated', cut: [false, true, false] });
+});
+
+test('a strip of one whose labels do not fit becomes a list rather than cutting them', () => {
+  assert.deepEqual(segmentFit(300, 200, [60, 150, 97], GAP, false, true), { fit: 'list', cut: [false, false, false] });
+});
+
+test('a strip with glyphs on every segment drops to them before it becomes a list', () => {
+  assert.equal(segmentFit(300, 200, [140, 150, 160], GAP, true, true).fit, 'squeezed');
+});
+
+test('a strip whose labels fit together never becomes a list', () => {
+  assert.equal(segmentFit(360, 200, [100, 110, 120], GAP, false, true).fit, 'content');
 });
 
 test('a row that fits to the pixel is not cut short by clientWidth rounding', () => {
-  assert.equal(segmentFit(299, null, [100, 100, 99.6], 0, false).fit, 'content');
+  assert.equal(segmentFit(299, null, [100, 100, 99.6], 0, false, false).fit, 'content');
 });
 
 function strip(over: Partial<SelectorInput> = {}) {
@@ -63,8 +75,15 @@ test('every horizontal strip with glyphs on every segment may squeeze to them', 
   assert.equal(strip({ items: [{ hasGlyph: true, iconOnly: false }, { hasGlyph: false, iconOnly: false }] }).canSqueeze, false);
 });
 
+test('only a horizontal strip that picks one value may become a list', () => {
+  assert.equal(strip().canList, true);
+  assert.equal(strip({ activation: 'auto' }).canList, true);
+  assert.equal(strip({ select: 'many' }).canList, false);
+  assert.equal(strip({ orientation: 'vertical' }).canList, false);
+});
+
 test('the styles never wrap the track', () => {
-  for (const fit of ['even', 'content', 'squeezed', 'truncated'] as const) {
+  for (const fit of ['even', 'content', 'squeezed', 'list', 'truncated'] as const) {
     for (const inline of [false, true]) {
       const { segment, track } = selectorFlex({ layout: { fit, pinned: 200, hug: 0, cut: [false, false] }, inline, fit: false });
       assert.equal(segment.flexWrap, undefined);
@@ -86,6 +105,11 @@ test('squeezed and truncated segments share the row evenly', () => {
     assert.equal(segment.flex, '1 1 0');
     assert.equal(segment.minWidth, '0');
   }
+});
+
+test('a hugging track shown as a dropdown takes its box', () => {
+  const listed = selectorFlex({ layout: { fit: 'list', pinned: 0, hug: 0, cut: [] }, inline: true, fit: false });
+  assert.equal(listed.track.width, '100%');
 });
 
 test('a hugging track ends where its segments do while they fit and takes its box once they do not', () => {
@@ -142,6 +166,9 @@ test('the stylesheet lets no horizontal selector wrap its track or its labels', 
     assert.doesNotMatch(body, /white-space:\s*normal/, selector);
   }
   const track = rules.find(({ selector }) => selector === '.glim-sel')!;
+  const hidden = rules.find(({ selector }) => selector === '.glim-sel--listed > :not(.glim-sel-list)');
+  assert.ok(hidden, 'the segments behind the dropdown');
+  assert.match(hidden.body, /display:\s*none/);
   assert.match(track.body, /flex-wrap:\s*nowrap/);
   // Without it a grid or flex parent grows to hold the whole row, and the
   // strip never sees that it has run out of room.

@@ -21,13 +21,16 @@ import {
 } from "@glimstone/core";
 import { useLabelMode } from "./engines";
 import { useFieldName } from "./fieldName";
+import Select from "./Select.vue";
 import SelectorSegment from "./SelectorSegment.vue";
 import type { SelectorItem } from "./selectorItem";
 
 // The one horizontal selector and its vertical form, bound with v-model: the
 // chosen id, or the list of chosen ids for select="many". Roles, classes,
 // layout and keys come from selector.ts in the core. A caption such as
-// "Sort by:" belongs in a <span> outside it, never a <label> around it.
+// "Sort by:" belongs in a <span> outside it, never a <label> around it. A
+// strip of one whose labels do not fit its row shows the one dropdown in their
+// place, inside the track, so the track keeps the box it measures.
 const props = withDefaults(
   defineProps<{
     items: SelectorItem<V>[];
@@ -46,7 +49,8 @@ const props = withDefaults(
     equalWidth?: boolean;
     /** Hug the segments, for a strip that shares a toolbar row, as it does inside a FieldRow. */
     inline?: boolean;
-    /** Share the row evenly without a pinned width, for page tabs. Every strip keeps to one row. */
+    /** Share the row evenly without a pinned width, for page tabs. Every strip keeps to one row, a strip of one
+     *  turning into a dropdown where its labels do not fit and not every segment has a glyph. */
     fit?: boolean;
     /** Has no effect: every strip keeps to one row. */
     pairsOnPhone?: boolean;
@@ -130,18 +134,34 @@ measured(
 );
 measured(
   () =>
-    [props.orientation, strip.value.pinWidth, props.fit, strip.value.canSqueeze, inline.value, itemsKey.value, disabledKey.value, props.size, strip.value.mode].join("|"),
+    [
+      props.orientation,
+      strip.value.pinWidth,
+      props.fit,
+      strip.value.canSqueeze,
+      strip.value.canList,
+      inline.value,
+      itemsKey.value,
+      disabledKey.value,
+      props.size,
+      strip.value.mode,
+    ].join("|"),
   (el) => {
     if (props.orientation === "vertical") {
       layout.value = null;
       return;
     }
-    const { pinWidth, canSqueeze } = strip.value;
-    return watchSelectorFit(el, { pinWidth, fit: props.fit, canSqueeze }, (l) => (layout.value = l));
+    const { pinWidth, canSqueeze, canList } = strip.value;
+    return watchSelectorFit(el, { pinWidth, fit: props.fit, canSqueeze, canList }, (l) => (layout.value = l));
   },
 );
 
 const flex = computed(() => selectorFlex({ layout: layout.value, inline: inline.value, fit: props.fit }));
+const listed = computed(() => layout.value?.fit === "list");
+const options = computed(() =>
+  props.items.map((it, i) => ({ value: String(it.id), label: it.label, glyph: it.glyph, disabled: disabledFlags.value[i] })),
+);
+const listValue = computed(() => (model.value === null ? null : String(model.value)));
 const many = computed(() => props.select === "many");
 const isOn = (id: V) => (many.value ? ((model.value as V[] | null) ?? []).includes(id) : model.value === id);
 const disabledFlags = computed(() => props.items.map((it) => props.disabled || !!it.disabled));
@@ -153,7 +173,13 @@ function choose(id: V) {
   if (next !== model.value) emit("update:modelValue", next as M extends "many" ? V[] : V);
 }
 
+function chooseFromList(next: string | null) {
+  const item = props.items.find((it) => String(it.id) === next);
+  if (item) choose(item.id);
+}
+
 function onKeydown(e: KeyboardEvent) {
+  if (listed.value) return;
   const target = e.target as HTMLElement;
   // A tile is a link, and Space does not follow a link on its own.
   if (props.orientation === "vertical" && e.key === " " && target.dataset.selId) {
@@ -174,10 +200,10 @@ function onKeydown(e: KeyboardEvent) {
        the attribute, and with it the colour countSelector set on the track. -->
   <div
     ref="track"
-    :role="strip.role"
-    :aria-label="name"
-    :aria-orientation="strip.role === 'group' ? undefined : orientation"
-    :class="strip.className"
+    :role="listed ? undefined : strip.role"
+    :aria-label="listed ? undefined : name"
+    :aria-orientation="listed || strip.role === 'group' ? undefined : orientation"
+    :class="[strip.className, { 'glim-sel--listed': listed }]"
     :style="flex.track"
     @keydown="onKeydown"
   >
@@ -190,6 +216,7 @@ function onKeydown(e: KeyboardEvent) {
       :on="isOn(item.id)"
       :disabled="disabledFlags[i]"
       :roved="i === roved"
+      :listed="listed"
       :share="orientation === 'vertical' ? {} : flex.segment"
       :squeezed="layout?.fit === 'squeezed'"
       :cut="!!layout?.cut[i]"
@@ -203,5 +230,18 @@ function onKeydown(e: KeyboardEvent) {
       :panel-id="panelId"
       @select="choose(item.id)"
     />
+    <div v-if="listed" class="glim-sel-list">
+      <Select
+        :model-value="listValue"
+        :label="name ?? ''"
+        hide-label
+        wrap
+        width="fill"
+        :size="size === 'sm' ? 'row' : 'field'"
+        :options="options"
+        :disabled="disabledFlags.every(Boolean)"
+        @update:model-value="chooseFromList"
+      />
+    </div>
   </div>
 </template>
