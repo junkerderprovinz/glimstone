@@ -2,6 +2,23 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 4.3.1 - 2026-11-09
+
+The design language, the changelogs, the site and the glyph data describe each rule on its own, without naming the apps that use GlimStone. No rule, token or component changed.
+
+**Adopting apps:**
+
+- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.3.1, all at the same number. Nothing is renamed or removed.
+- **Glyph map:** `glyph-map.md` is one table of meanings and glyphs per section, without the columns and sections per app. An app that copied its own column keeps that copy.
+- **Glyph data:** the `source` values in `glyphs.json` read "Drawn for GlimStone" or "Drawn on a 20-unit grid" instead of naming an app. No code reads `source`.
+- **Flutter:** move the git dependency to `ref: v4.3.1`. Nothing changed there.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.3.1.
+
+## 🎨 Design
+
+- **The design language names no app.** Every case a rule was found in is told on its own, and the round markers of past redesigns are gone. Each rule keeps its reason and its examples.
+- **The changelogs and every release note name no app** either, and the GitHub release texts match them.
+
 ## 4.3.0 - 2026-11-08
 
 A horizontal selector keeps to one row at every width and turns into a dropdown where its labels do not fit. The release also brings `dropIndex` for where a dragged item lands, a tremble of every reorderable list while an item is held, the sign-in card for every app with a login, a quieter OLED look, steadier toasts and a corrected wand glyph.
