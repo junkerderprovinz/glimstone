@@ -4,7 +4,7 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## 4.3.0 - 2026-11-08
 
-A horizontal selector keeps to one row at every width. Found in BombVault, whose relay card wrapped three large segments onto two rows on a phone and whose anomalies filter stacked "Open" over "Closed in the last 30 days".
+A horizontal selector keeps to one row at every width and turns into a dropdown where its labels do not fit. The release also brings `dropIndex` for where a dragged item lands, a tremble of every reorderable list while an item is held, the sign-in card for every app with a login, a quieter OLED look, steadier toasts and a corrected wand glyph.
 
 **Adopting apps:**
 
@@ -16,10 +16,53 @@ A horizontal selector keeps to one row at every width. Found in BombVault, whose
 - **Classes:** `.glim-sel--pairs`, `.glim-sel-label--wrap` and `.glim-sel--fit` are gone. `.glim-sel--listed` marks a track that shows its dropdown, and `.glim-sel-list` holds the dropdown.
 - **Flutter:** move the git dependency to `ref: v4.3.0`. Nothing changed there.
 - **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.3.0.
+- **Measured boxes:** hand `getBoundingClientRect()` results straight to `dropIndex`, also with `rtl`. A copy into plain objects before the call can go.
+- **Strict builds:** `dropIndex` compiles under `noUncheckedIndexedAccess`, so a build with that flag can take it unchanged.
+- **ArrowLoop:** `aheadOf` in `web/src/lib/dragLift.ts` can go. `aim` hands the offset boxes it already measures to `dropIndex(held, slot, others)`.
+- **KnightLoader:** in `liveColumnOrder`, the loop that counts passed columns becomes `dropIndex(held, from, others, { axis: "x", rtl })`. The splice around it stays.
+- **Apps that compare centres:** a drag hook that places by the held item's centre or by the pointer over an item's middle hands the held item's box, its place and the others' boxes to `dropIndex` instead, with `axis: "grid"` where the items wrap. BombVault's `aim` is one, and so are CannonCommander's job queue, settings tabs and list columns.
+- **Lists of rows:** add `glim-drag-rows` to the own class of every reorderable list whose rows are as wide as the list, beside where `useDragArmed` adds `glim-drag-armed`. Tiles, cards and narrower items need nothing. Drop any local rule that switches a list to `glim-row-wiggle`.
+- **The held item:** mark it with `glim-drag-lift`, `aria-grabbed="true"` or `data-held="true"`, and drop any local rule that stops it trembling. A marker of the app's own, such as `data-col-drag="held"`, does not count.
+- **Placing by the leading edge:** a drag hook that places items of different sizes by the carried item's centre changes to its leading edge in the direction of travel, measured where it is held, so a wide item can reach both ends of the list.
+- **Local overrides:** an app with its own copy of the motion blocks takes `--motion-row-tremble-tilt` and `--motion-row-tremble-lift` at every level and the two `.glim-drag-armed` rules from `tokens.css`. drop the app's own values for `--motion-wiggle-angle` and `--motion-wiggle-dur` at every level. An app with its own copy of the motion blocks takes the new values and the two `.glim-drag-armed > :nth-child` rules from `tokens.css`, and changes `.glim-drag-armed > *` to `.glim-drag-armed > :not(.glim-drag-lift)`. KnightLoader's 7.5rem box on `.glim-signin-logo` and its top padding on `.glim-signin` can go, and so can any other app's rule that sizes the logo or anchors the card itself. So can a reason line kept in the form at all times to stop the jump, an empty alert with a `min-height` and negative margins. An app that keeps its own copy of the sign-in styles takes the new `.glim-signin` and `.glim-signin-logo` blocks from `tokens.css`.
+- **The drag gesture:** call `useDragArmed(list, held !== null)` from `@glimstone/react`, or `useDragArmed(list, () => held.value !== null)` from `@glimstone/vue`, once in the app's own drag hook, beside the code that lifts the item. Then drop `glim-drag-armed` from every list's own `className` or `:class`. An app with its own copy of the hook calls `classList.toggle("glim-drag-armed", held)` after every render instead: in React a `useLayoutEffect` without a dependency list, in Vue a post-flush `watchEffect` with `onUpdated`.
+- **The logo:** the call stays as it is. `SignInCard` draws every logo 7.5rem tall and as wide as its shape asks, up to the card's content width. Hand in an image address or an inline `<svg>` with a viewBox. A width and height on the `<svg>`, such as ArrowLoop's `LogoMark size={64}`, are overridden.
+- **The card's place:** `.glim-signin` sets `align-items: flex-start` and `padding: max(1rem, calc((100dvh - var(--window-bar)) / 2 - 14rem)) 1rem 1rem`. `--window-bar` is 0 without a window bar, so a browser page gets plain `100dvh`. The reason line still appears only on a refusal, and the spacing is as it was.
+- **Screenshot tests:** a sign-in page shows a taller head, and the card sits near the middle rather than exactly on it.
+- **OLED cards:** `tokens.css` no longer sets `--elevation` under OLED, so the dark look's shadow stays. It cannot be seen on black, so a card's `#161616` is its edge, and over a card it still lifts a bubble or a menu off it. An app that keeps its own copy of the OLED blocks removes the `--elevation` line there too, whether it reads `0 0 0 1px #262626` or `0 0 #0000`. A screenshot test of a card under OLED loses the ring.
+- **The OLED switch:** pass `refused={oledRefusal(theme)}` to the OLED `Toggle`, where `theme` is the Design picker's choice: `"dark"`, `"light"`, or `"system"` or null for following the device. An app in another language hands in its own words, for example `oledRefusal(theme, { sentence: t("settings.oledLight"), dark: t("theme.dark"), system: t("theme.system"), light: t("theme.light") })`. The English under `settings.oledLight` is "Only with {dark} or {system}. {light} is chosen above.", and KnightLoader has the sentence in 42 languages to copy from.
+- **A switch of the app's own:** set `aria-disabled="true"` while `oledSwitchable(theme)` is false, keep the switch focusable and its state as it is, dim the track's fill rather than the whole button, call `shake()` on a press instead of flipping, and show the sentence as its bubble and, on a touch screen, as a line under the row. A native app does the same with its own shake.
+- **Toggle beside other things:** with `refused` set, `Toggle` renders the reason line after its frame. A pointer never sees it. On a touch screen it takes a line of its own in a parent that wraps, as `FieldRow` does, so a hand-made row around the switch wants `flex-wrap: wrap`.
+- **The sign-in page:** an app's own login page can become a `SignInCard`. The app hands in its logo, its name, its words and the callbacks `onSignIn`, `onPasskey`, `onAskCode` and `onSetPassword`. A name field or "Stay signed in" goes into `fields`, a single sign-on button into `actions`, and a step of the app's own, such as recovery codes or the page after a reset, into `step`.
+- **What leaves the page:** a server name under the logo, a pill over the card, a language picker and a version number under the card. Labels stand above their fields in normal case, and every button is full width.
+- **The theme before sign-in:** the page follows what the app stored in the browser for accent, theme, OLED, shape and motion, and the system's light or dark when nothing is stored. An app whose first-frame default was "dark" moves it to "system".
+- **Toasts:** an app's own `animation-fill-mode: backwards` on a toast can go. A screenshot test that holds toasts sees each line 0.75px taller.
+- **Glyph data:** an app that copies `glyphs.json` takes the new `IconAccentSystem` entry. A glyph test that compares the recorded ink with the drawing passes again.
 
 ## 🎨 Design
 
 - **"It wraps, it never scrolls" is reversed** to "It keeps to one row, at every width" under "The one horizontal selector". The rules written for wrapping strips (a strip that wraps fills its box, a label wraps only when its box has no room left, the even count per row, the partial last row and the phone's two to a row) are marked reversed, each with what replaces it.
+- **Rows tremble by lifting.** At a tile's 2deg the ends of a full-width row swing by about 20px. A list marked `glim-drag-rows` runs the row wiggle of move mode on the tremble's beat instead: 1.5px and .15deg at wild, 1px and .1deg at subtle, 2px and .2deg at storm, nothing at off or under reduced motion.
+- **Items of different sizes are placed by the leading edge**, never by the centre, a new line under "Reordering by dragging" and in its checklist. By the centre a wide column held at the table's start could never pass a narrow first column.
+- **The tremble while an item is held** is a fixed rule under "Reordering by dragging": every other item of every reorderable list and grid trembles, always, and the held item stays still under the pointer. The section gains a checklist.
+- **The tremble is big enough to see.** `--motion-wiggle-angle` and `--motion-wiggle-dur` go from 0.6deg every 280ms to 2deg every 120ms at wild, from 0.3deg every 360ms to 1.4deg every 140ms at subtle, and from 1deg every 220ms to 2.8deg every 100ms at storm. Off stays still. Every second and third item starts half and a third of a beat early, so neighbours tremble out of step.
+- **The sign-in logo** stands 7.5rem tall at its own proportions instead of fitting a 4rem square. An upright logo used to get about 42 by 64 pixels and now gets 78 by 120, as tall as a square or a wide one. "The sign-in card" and its checklist name the height.
+- **OLED** keeps the dark look's shadow instead of a ring in the border colour, so a card on black has no frame. Rule 43 describes the refusal and gains a checklist.
+
+## ✨ Added
+
+- **`dropIndex`** in `@glimstone/core`: the index a carried item goes to among the others, from plain boxes, along `"x"`, `"y"` or a `"grid"` read line by line, and right to left with `rtl`. "Reordering by dragging" and its checklist point to it.
+- **The site:** the tiles and rows on the motion page drop through `dropIndex`, and a contract row checks, in React and Vue, that an item dropped just short of its neighbour's middle goes back and one dropped just past it lands after it.
+- **`glim-drag-rows`** and the two dials `--motion-row-tremble-tilt` and `--motion-row-tremble-lift`.
+- **The site:** the motion page shows a list of rows beside the tiles, and two contract rows check the row tremble at every lively level and a held item marked by each attribute, in React and Vue.
+- **`useDragArmed`** in `@glimstone/react` and `@glimstone/vue`: keeps `glim-drag-armed` on a list while an item is held, also when the list rewrites its own class in between.
+- **The site:** the motion page shows a set of tiles to hold, and three contract rows check the tremble, its survival of the list's own class, and its absence at off and under reduced motion, in React and Vue. A unit test holds every level but off to at least 1.2deg at most every 160ms.
+- **The site:** the sign-in demo refuses `too-many` with a reason two lines long, and two contract rows check the logo's height and the card's still top edge in React and Vue.
+- **`refused` on `Toggle`**, in React and Vue: the sentence that says why the switch cannot be flipped right now. The switch keeps its state and its place in the tab order, `aria-disabled` dims its track, a click or a key shakes it through `glim-shake`, and the sentence is its bubble and its description. On a touch screen it stands as a line under the row.
+- **`oledSwitchable`, `oledRefusal` and `oledRefusalEn`** in the core's `theme.ts`: whether OLED can be flipped under a theme choice, and the sentence for the switch with the theme names filled in.
+- **The site** shows a refused switch beside a Design picker on the Toggle page, and its own OLED switch refuses under Light.
+- **`SignInCard` and `SignInField`**: the logo large above the centred name, the password, the code field when the app asks for one, the passkey where it is offered and "Forgot password?" with the reset form in the same card. Sign in waits for the password, the first empty field takes the focus, and a refused try shakes its button and selects the refused field. The card is 24rem wide and takes a phone's width less 16px either side.
+- **`createSignInFlow`, `showRefusal` and `signInTextEn`** in the core, the parts both frameworks share.
 
 ## 🔁 Changed
 
@@ -29,178 +72,14 @@ A horizontal selector keeps to one row at every width. Found in BombVault, whose
 - **`fit`** shares the row evenly among page tabs. Keeping to one row is every strip's.
 - **The site:** the Selector page shows one row at every width in place of the pairs demo, with a strip turning into the dropdown and a `many` strip cut short. The contract `sel-one-row` takes over from `sel-pairs`, and `sel-list` covers the dropdown.
 
-## 4.2.8 - 2026-11-08
-
-Two fixes to `dropIndex`, both found by ArrowLoop while adopting it.
-
-**Adopting apps:**
-
-- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.2.8, all at the same number. Nothing is renamed or removed.
-- **Measured boxes:** hand `getBoundingClientRect()` results straight to `dropIndex`, also with `rtl`. A copy into plain objects before the call can go.
-- **Strict builds:** `dropIndex` compiles under `noUncheckedIndexedAccess`, so a build with that flag can take it unchanged.
-- **Flutter:** move the git dependency to `ref: v4.2.8`. Nothing changed there.
-- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.2.8.
-
 ## 🐛 Fixed
 
 - **`dropIndex` with `rtl`** placed real `DOMRect`s wrongly. It mirrored each box with a spread, and a `DOMRect` keeps its sides as getters a spread drops, so the copy had no width or height. It copies the sides by name now.
 - **`dropIndex`** no longer reads a list position that may be missing, which `noUncheckedIndexedAccess` reported twice.
-
-## 4.2.7 - 2026-11-08
-
-Where a dragged item lands is one function in the core: `dropIndex` places it by its leading edge, along a row, down a column or line by line in a grid. Until now each app wrote that comparison itself.
-
-**Adopting apps:**
-
-- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.2.7, all at the same number. Nothing is renamed or removed.
-- **ArrowLoop:** `aheadOf` in `web/src/lib/dragLift.ts` can go. `aim` hands the offset boxes it already measures to `dropIndex(held, slot, others)`.
-- **KnightLoader:** in `liveColumnOrder`, the loop that counts passed columns becomes `dropIndex(held, from, others, { axis: "x", rtl })`. The splice around it stays.
-- **Apps that compare centres:** a drag hook that places by the held item's centre or by the pointer over an item's middle hands the held item's box, its place and the others' boxes to `dropIndex` instead, with `axis: "grid"` where the items wrap. BombVault's `aim` is one, and so are CannonCommander's job queue, settings tabs and list columns.
-- **Flutter:** move the git dependency to `ref: v4.2.7`. Nothing changed there.
-- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.2.7.
-
-## ✨ Added
-
-- **`dropIndex`** in `@glimstone/core`: the index a carried item goes to among the others, from plain boxes, along `"x"`, `"y"` or a `"grid"` read line by line, and right to left with `rtl`. "Reordering by dragging" and its checklist point to it.
-- **The site:** the tiles and rows on the motion page drop through `dropIndex`, and a contract row checks, in React and Vue, that an item dropped just short of its neighbour's middle goes back and one dropped just past it lands after it.
-
-## 4.2.6 - 2026-11-07
-
-A list of full-width rows trembles with a small lift instead of a turn, and a held item stays still whether a class or an attribute marks it. The rule also says how a carried item of a different size finds its place. All three came from KnightLoader.
-
-**Adopting apps:**
-
-- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.2.6, all at the same number. Nothing is renamed or removed.
-- **Lists of rows:** add `glim-drag-rows` to the own class of every reorderable list whose rows are as wide as the list, beside where `useDragArmed` adds `glim-drag-armed`. Tiles, cards and narrower items need nothing. Drop any local rule that switches a list to `glim-row-wiggle`.
-- **The held item:** mark it with `glim-drag-lift`, `aria-grabbed="true"` or `data-held="true"`, and drop any local rule that stops it trembling. A marker of the app's own, such as `data-col-drag="held"`, does not count.
-- **Placing by the leading edge:** a drag hook that places items of different sizes by the carried item's centre changes to its leading edge in the direction of travel, measured where it is held, so a wide item can reach both ends of the list.
-- **Local overrides:** an app with its own copy of the motion blocks takes `--motion-row-tremble-tilt` and `--motion-row-tremble-lift` at every level and the two `.glim-drag-armed` rules from `tokens.css`.
-- **Flutter:** move the git dependency to `ref: v4.2.6`. Nothing changed there.
-- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.2.6.
-
-## 🎨 Design
-
-- **Rows tremble by lifting.** At a tile's 2deg the ends of a full-width row swing by about 20px. A list marked `glim-drag-rows` runs the row wiggle of move mode on the tremble's beat instead: 1.5px and .15deg at wild, 1px and .1deg at subtle, 2px and .2deg at storm, nothing at off or under reduced motion.
-- **Items of different sizes are placed by the leading edge**, never by the centre, a new line under "Reordering by dragging" and in its checklist. By the centre a wide column held at the table's start could never pass a narrow first column.
-
-## ✨ Added
-
-- **`glim-drag-rows`** and the two dials `--motion-row-tremble-tilt` and `--motion-row-tremble-lift`.
-- **The site:** the motion page shows a list of rows beside the tiles, and two contract rows check the row tremble at every lively level and a held item marked by each attribute, in React and Vue.
-
-## 🐛 Fixed
-
 - **A held item marked with `aria-grabbed="true"` or `data-held="true"` trembled**, because only `glim-drag-lift` kept it still.
-
-## 4.2.5 - 2026-11-07
-
-Hold an item of a reorderable list and the others tremble, in every list and grid, clearly enough to be seen at once. `useDragArmed` in React and Vue sets the class from the drag gesture, so no list can forget it. Both came from BombVault, whose settings tiles never wiggled and whose wiggle at Subtle nobody saw.
-
-**Adopting apps:**
-
-- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.2.5, all at the same number. Nothing is renamed or removed.
-- **The drag gesture:** call `useDragArmed(list, held !== null)` from `@glimstone/react`, or `useDragArmed(list, () => held.value !== null)` from `@glimstone/vue`, once in the app's own drag hook, beside the code that lifts the item. Then drop `glim-drag-armed` from every list's own `className` or `:class`. An app with its own copy of the hook calls `classList.toggle("glim-drag-armed", held)` after every render instead: in React a `useLayoutEffect` without a dependency list, in Vue a post-flush `watchEffect` with `onUpdated`.
-- **Local overrides:** drop the app's own values for `--motion-wiggle-angle` and `--motion-wiggle-dur` at every level. An app with its own copy of the motion blocks takes the new values and the two `.glim-drag-armed > :nth-child` rules from `tokens.css`, and changes `.glim-drag-armed > *` to `.glim-drag-armed > :not(.glim-drag-lift)`.
-- **Flutter:** move the git dependency to `ref: v4.2.5`. Nothing changed there.
-- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.2.5.
-
-## 🎨 Design
-
-- **The tremble while an item is held** is a fixed rule under "Reordering by dragging": every other item of every reorderable list and grid trembles, always, and the held item stays still under the pointer. The section gains a checklist.
-- **The tremble is big enough to see.** `--motion-wiggle-angle` and `--motion-wiggle-dur` go from 0.6deg every 280ms to 2deg every 120ms at wild, from 0.3deg every 360ms to 1.4deg every 140ms at subtle, and from 1deg every 220ms to 2.8deg every 100ms at storm. Off stays still. Every second and third item starts half and a third of a beat early, so neighbours tremble out of step.
-
-## ✨ Added
-
-- **`useDragArmed`** in `@glimstone/react` and `@glimstone/vue`: keeps `glim-drag-armed` on a list while an item is held, also when the list rewrites its own class in between.
-- **The site:** the motion page shows a set of tiles to hold, and three contract rows check the tremble, its survival of the list's own class, and its absence at off and under reduced motion, in React and Vue. A unit test holds every level but off to at least 1.2deg at most every 160ms.
-
-## 4.2.4 - 2026-11-07
-
-The sign-in card's logo is larger and keeps its own shape, and the card holds still when a password is refused. Both came from KnightLoader's test instance.
-
-**Adopting apps:**
-
-- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.2.4, all at the same number. Nothing is renamed or removed.
-- **The logo:** the call stays as it is. `SignInCard` draws every logo 7.5rem tall and as wide as its shape asks, up to the card's content width. Hand in an image address or an inline `<svg>` with a viewBox. A width and height on the `<svg>`, such as ArrowLoop's `LogoMark size={64}`, are overridden.
-- **The card's place:** `.glim-signin` sets `align-items: flex-start` and `padding: max(1rem, calc((100dvh - var(--window-bar)) / 2 - 14rem)) 1rem 1rem`. `--window-bar` is 0 without a window bar, so a browser page gets plain `100dvh`. The reason line still appears only on a refusal, and the spacing is as it was.
-- **Local overrides:** KnightLoader's 7.5rem box on `.glim-signin-logo` and its top padding on `.glim-signin` can go, and so can any other app's rule that sizes the logo or anchors the card itself. So can a reason line kept in the form at all times to stop the jump, an empty alert with a `min-height` and negative margins. An app that keeps its own copy of the sign-in styles takes the new `.glim-signin` and `.glim-signin-logo` blocks from `tokens.css`.
-- **Screenshot tests:** a sign-in page shows a taller head, and the card sits near the middle rather than exactly on it.
-- **Flutter:** move the git dependency to `ref: v4.2.4`. Nothing changed there.
-- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.2.4.
-
-## 🎨 Design
-
-- **The sign-in logo** stands 7.5rem tall at its own proportions instead of fitting a 4rem square. An upright logo used to get about 42 by 64 pixels and now gets 78 by 120, as tall as a square or a wide one. "The sign-in card" and its checklist name the height.
-
-## 🐛 Fixed
-
 - **The sign-in card** no longer jumps when a refusal appears. It was centred on the page, so each reason above Sign in moved the whole card up by half a line. Its top edge now sits where a card of the usual height starts when centred and stays there, and a reason, the code field or the reset form makes the card grow downwards. Only the refused button moves.
-
-## ✨ Added
-
-- **The site:** the sign-in demo refuses `too-many` with a reason two lines long, and two contract rows check the logo's height and the card's still top edge in React and Vue.
-
-## 4.2.3 - 2026-11-07
-
-Two changes to OLED, both asked for on KnightLoader's test instance. Cards lose the ring that framed them on black, and the OLED switch refuses while Light is chosen. `Toggle` gains `refused` for any switch that cannot be flipped right now, and the core words the OLED reason with `oledRefusal`.
-
-**Adopting apps:**
-
-- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.2.3, all at the same number. Nothing is renamed or removed.
-- **OLED cards:** `tokens.css` no longer sets `--elevation` under OLED, so the dark look's shadow stays. It cannot be seen on black, so a card's `#161616` is its edge, and over a card it still lifts a bubble or a menu off it. An app that keeps its own copy of the OLED blocks removes the `--elevation` line there too, whether it reads `0 0 0 1px #262626` or `0 0 #0000`. A screenshot test of a card under OLED loses the ring.
-- **The OLED switch:** pass `refused={oledRefusal(theme)}` to the OLED `Toggle`, where `theme` is the Design picker's choice: `"dark"`, `"light"`, or `"system"` or null for following the device. An app in another language hands in its own words, for example `oledRefusal(theme, { sentence: t("settings.oledLight"), dark: t("theme.dark"), system: t("theme.system"), light: t("theme.light") })`. The English under `settings.oledLight` is "Only with {dark} or {system}. {light} is chosen above.", and KnightLoader has the sentence in 42 languages to copy from.
-- **A switch of the app's own:** set `aria-disabled="true"` while `oledSwitchable(theme)` is false, keep the switch focusable and its state as it is, dim the track's fill rather than the whole button, call `shake()` on a press instead of flipping, and show the sentence as its bubble and, on a touch screen, as a line under the row. A native app does the same with its own shake.
-- **Toggle beside other things:** with `refused` set, `Toggle` renders the reason line after its frame. A pointer never sees it. On a touch screen it takes a line of its own in a parent that wraps, as `FieldRow` does, so a hand-made row around the switch wants `flex-wrap: wrap`.
-- **Flutter:** move the git dependency to `ref: v4.2.3`. Nothing changed there.
-- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.2.3.
-
-## ✨ Added
-
-- **`refused` on `Toggle`**, in React and Vue: the sentence that says why the switch cannot be flipped right now. The switch keeps its state and its place in the tab order, `aria-disabled` dims its track, a click or a key shakes it through `glim-shake`, and the sentence is its bubble and its description. On a touch screen it stands as a line under the row.
-- **`oledSwitchable`, `oledRefusal` and `oledRefusalEn`** in the core's `theme.ts`: whether OLED can be flipped under a theme choice, and the sentence for the switch with the theme names filled in.
-- **The site** shows a refused switch beside a Design picker on the Toggle page, and its own OLED switch refuses under Light.
-
-## 🎨 Design
-
-- **OLED** keeps the dark look's shadow instead of a ring in the border colour, so a card on black has no frame. Rule 43 describes the refusal and gains a checklist.
-
-## 4.2.2 - 2026-11-07
-
-A sign-in card for every app with a login: `SignInCard` in React and Vue, with the flow in the core, drawn after BombVault's login. The design language gains "The sign-in card" with its checklist. Toasts stand on whole pixels and keep no transform once they are in.
-
-**Adopting apps:**
-
-- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.2.2, all at the same number. Nothing is renamed or removed.
-- **The sign-in page:** an app's own login page can become a `SignInCard`. The app hands in its logo, its name, its words and the callbacks `onSignIn`, `onPasskey`, `onAskCode` and `onSetPassword`. A name field or "Stay signed in" goes into `fields`, a single sign-on button into `actions`, and a step of the app's own, such as recovery codes or the page after a reset, into `step`.
-- **What leaves the page:** a server name under the logo, a pill over the card, a language picker and a version number under the card. Labels stand above their fields in normal case, and every button is full width.
-- **The theme before sign-in:** the page follows what the app stored in the browser for accent, theme, OLED, shape and motion, and the system's light or dark when nothing is stored. An app whose first-frame default was "dark" moves it to "system".
-- **Toasts:** an app's own `animation-fill-mode: backwards` on a toast can go. A screenshot test that holds toasts sees each line 0.75px taller.
-- **Flutter:** move the git dependency to `ref: v4.2.2`. Nothing changed there.
-- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.2.2.
-
-## ✨ Added
-
-- **`SignInCard` and `SignInField`**: the logo large above the centred name, the password, the code field when the app asks for one, the passkey where it is offered and "Forgot password?" with the reset form in the same card. Sign in waits for the password, the first empty field takes the focus, and a refused try shakes its button and selects the refused field. The card is 24rem wide and takes a phone's width less 16px either side.
-- **`createSignInFlow`, `showRefusal` and `signInTextEn`** in the core, the parts both frameworks share.
-
-## 🐛 Fixed
-
 - **Toasts:** the message stands on a 20px line instead of 19.25px, so every toast is a whole number of pixels tall. The toasts stacked beside it sat on a fraction before, and Chromium drew their edges a pixel higher or lower from one paint to the next. Each line of a toast is 0.75px taller.
 - **Toasts:** a toast that has come in holds no transform. Its entrance used to leave an identity transform on the card, which made the card the containing block of any fixed element inside it.
-
-## 4.2.1 - 2026-11-07
-
-The wand glyph's recorded ink matches its drawing.
-
-**Adopting apps:**
-
-- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.2.1, all at the same number. Nothing is renamed or removed.
-- **Glyph data:** an app that copies `glyphs.json` takes the new `IconAccentSystem` entry. A glyph test that compares the recorded ink with the drawing passes again.
-- **Flutter:** move the git dependency to `ref: v4.2.1`. Nothing changed there.
-- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.2.1.
-
-## 🐛 Fixed
-
 - **`IconAccentSystem`**: its ink was recorded as 0.51 and 12.99 where the drawing reaches 0.5 and 13.5, a hundredth off its own viewBox. It reads `[0.5, 0.5, 13, 13]` now.
 
 ## 4.2.0 - 2026-11-07
