@@ -2,18 +2,20 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 4.3.0 - 2026-11-08
 
 A horizontal selector keeps to one row at every width. Found in BombVault, whose relay card wrapped three large segments onto two rows on a phone and whose anomalies filter stacked "Open" over "Closed in the last 30 days".
 
 **Adopting apps:**
 
+- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.3.0, all at the same number.
 - **`pairsOnPhone`** is still accepted and has no effect. BombVault can drop it from the Labels selector, the anomaly settings and the role dialogs.
 - **A strip that wrapped stays on its row:** its segments share the row by their labels, then show their glyphs alone where every segment has one. After that a strip of one turns into the dropdown with every label whole, and a `many` strip cuts its labels short with the whole label in the bubble. A `many` set that does not fit even then wants the vertical tiles or a list.
 - **Selector needs Select's Zag packages** (`@zag-js/select`, `@zag-js/menu` and the adapter), since a strip of one that runs out of room turns into Select. Both are peer dependencies already.
 - **The core's measuring changed.** `watchSelectorRows`, `SelectorRows`, `segmentLayout`, `perRowFor`, `SegmentLayout` and `SegmentWidths` are gone. `watchSelectorFit` takes `{ pinWidth, fit, canSqueeze }` and hands over a `SelectorLayout`, `selectorFlex` takes that layout, `measureSegments` returns the one-line widths, `watchSelectorFit` also takes `canList`, `segmentFit` takes a last `list` argument, and `SelectorFit` gains `"list"` and `"truncated"`. Only an app that measures its own selector is affected.
 - **Classes:** `.glim-sel--pairs`, `.glim-sel-label--wrap` and `.glim-sel--fit` are gone. `.glim-sel--listed` marks a track that shows its dropdown, and `.glim-sel-list` holds the dropdown.
-- **Flutter:** nothing changed there.
+- **Flutter:** move the git dependency to `ref: v4.3.0`. Nothing changed there.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.3.0.
 
 ## 🎨 Design
 
