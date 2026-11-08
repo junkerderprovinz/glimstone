@@ -9,9 +9,10 @@ A horizontal selector keeps to one row at every width. Found in BombVault, whose
 **Adopting apps:**
 
 - **`pairsOnPhone`** is still accepted and has no effect. BombVault can drop it from the Labels selector, the anomaly settings and the role dialogs.
-- **A strip that wrapped stays on its row:** its segments share the row by their labels, then show their glyphs alone where every segment has one, then cut their labels short with the whole label in the bubble. A set that does not fit even then wants the vertical tiles, a list or a dropdown.
-- **The core's measuring changed.** `watchSelectorRows`, `SelectorRows`, `segmentLayout`, `perRowFor`, `SegmentLayout` and `SegmentWidths` are gone. `watchSelectorFit` takes `{ pinWidth, fit, canSqueeze }` and hands over a `SelectorLayout`, `selectorFlex` takes that layout, `measureSegments` returns the one-line widths, and `SelectorFit` gains `"truncated"`. Only an app that measures its own selector is affected.
-- **Classes:** `.glim-sel--pairs`, `.glim-sel-label--wrap` and `.glim-sel--fit` are gone.
+- **A strip that wrapped stays on its row:** its segments share the row by their labels, then show their glyphs alone where every segment has one. After that a strip of one turns into the dropdown with every label whole, and a `many` strip cuts its labels short with the whole label in the bubble. A `many` set that does not fit even then wants the vertical tiles or a list.
+- **Selector needs Select's Zag packages** (`@zag-js/select`, `@zag-js/menu` and the adapter), since a strip of one that runs out of room turns into Select. Both are peer dependencies already.
+- **The core's measuring changed.** `watchSelectorRows`, `SelectorRows`, `segmentLayout`, `perRowFor`, `SegmentLayout` and `SegmentWidths` are gone. `watchSelectorFit` takes `{ pinWidth, fit, canSqueeze }` and hands over a `SelectorLayout`, `selectorFlex` takes that layout, `measureSegments` returns the one-line widths, `watchSelectorFit` also takes `canList`, `segmentFit` takes a last `list` argument, and `SelectorFit` gains `"list"` and `"truncated"`. Only an app that measures its own selector is affected.
+- **Classes:** `.glim-sel--pairs`, `.glim-sel-label--wrap` and `.glim-sel--fit` are gone. `.glim-sel--listed` marks a track that shows its dropdown, and `.glim-sel-list` holds the dropdown.
 - **Flutter:** nothing changed there.
 
 ## 🎨 Design
@@ -20,11 +21,11 @@ A horizontal selector keeps to one row at every width. Found in BombVault, whose
 
 ## 🔁 Changed
 
-- **Every horizontal strip measures its labels**, not only the pinned and `fit` ones, and drops them for glyphs or cuts them short once they do not fit. A label cut short keeps its whole text in the segment's bubble.
+- **Every horizontal strip measures its labels**, not only the pinned and `fit` ones, and drops them for glyphs once they do not fit. A strip of one then shows the dropdown with the chosen value, its segments hidden behind it and still measured, so it comes back once they fit. A `many` strip cuts its labels short, and a label cut short keeps its whole text in the segment's bubble. Decided after BombVault's keep presets and its role dialog's place picker showed cut labels at 320px.
 - **The track carries `contain: inline-size`**, so a row that does not fit gives way inside its box instead of widening a grid or flex parent around it. A hugging strip takes its width from the measurement.
 - **A well below the desktop shell hugs its labels as it does on a desktop.** Pinning it to the widest label kept wrapped rows even, which one row does not need.
 - **`fit`** shares the row evenly among page tabs. Keeping to one row is every strip's.
-- **The site:** the Selector page shows one row at every width in place of the pairs demo, and the contract `sel-one-row` takes over from `sel-pairs`.
+- **The site:** the Selector page shows one row at every width in place of the pairs demo, with a strip turning into the dropdown and a `many` strip cut short. The contract `sel-one-row` takes over from `sel-pairs`, and `sel-list` covers the dropdown.
 
 ## 4.2.8 - 2026-11-08
 
