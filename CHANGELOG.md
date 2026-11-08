@@ -2,15 +2,17 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 4.2.8 - 2026-11-08
 
 Two fixes to `dropIndex`, both found by ArrowLoop while adopting it.
 
 **Adopting apps:**
 
+- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.2.8, all at the same number. Nothing is renamed or removed.
 - **Measured boxes:** hand `getBoundingClientRect()` results straight to `dropIndex`, also with `rtl`. A copy into plain objects before the call can go.
 - **Strict builds:** `dropIndex` compiles under `noUncheckedIndexedAccess`, so a build with that flag can take it unchanged.
-- **Flutter:** nothing changed there.
+- **Flutter:** move the git dependency to `ref: v4.2.8`. Nothing changed there.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.2.8.
 
 ## 🐛 Fixed
 

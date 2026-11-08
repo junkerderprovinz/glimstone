@@ -1,3 +1,7 @@
+## 4.2.8
+
+- The same number as the other packages. Nothing changed for Flutter.
+
 ## 4.2.7
 
 - The same number as the other packages. Nothing changed for Flutter.
