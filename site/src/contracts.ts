@@ -177,7 +177,7 @@ export const CONTRACTS: Record<string, Contract> = {
     pattern: { name: "Tabs", url: `${APG}tabs/` },
     rows: [
       { id: "sel-numeric", when: "An item's id is a number", then: "The value comes back as that number." },
-      { id: "sel-pairs", when: "pairsOnPhone is on and the window is narrower than 600px", then: "Two segments stand to a row, every label wraps instead of being cut, and the track keeps a card's corners." },
+      { id: "sel-one-row", when: "The window is too narrow for the pinned widths", then: "Every strip stays on one row and every label on one line: the labels share the row while they fit, a strip with a glyph on each segment shows glyphs alone, and any other cuts its long labels short with the whole label in the bubble." },
       { id: "sel-press", keys: ["Space", "Enter"], when: "A segment is pressed, also the one already chosen", then: "The press is reported before the choice changes." },
       { id: "sel-attrs", when: "An item names attributes", then: "Its segment carries them." },
       { id: "sel-tabs-role", when: "select is one", then: "role=\"tablist\" of tabs with aria-selected; the chosen tab controls the panel, which is named by it." },

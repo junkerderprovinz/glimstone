@@ -3790,17 +3790,21 @@ body {
   /* The one horizontal selector (selector.ts; "The one horizontal selector").
      The track spans its box and its segments share the width, so a card of
      stacked selectors ends in one edge; `--inline` hugs the segments for a
-     toolbar row. A track wraps, it never scrolls. */
+     toolbar row. A track keeps to one row: it never wraps and never scrolls,
+     and watchSelectorFit gives its segments the room by their labels, then
+     their glyphs, then cut labels. A row that does not fit gives way inside
+     its box, so its labels must not widen the box around it: without the
+     containment a grid or flex parent grows to hold the whole row. */
   .glim-sel {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: center;
     width: 100%;
+    contain: inline-size;
   }
-  .glim-sel--inline {
-    width: fit-content;
-    max-width: 100%;
-  }
+  /* selectorFlex sets the width: the segments side by side, or the whole box
+     once they do not fit. */
+  .glim-sel--inline { max-width: 100%; }
   /* The groove is surface3, one step off both parents a well may sit on, a
      card and a sub-card; 0.2rem is the thinnest ring that still reads as a
      groove. */
@@ -3811,20 +3815,6 @@ body {
     background-color: var(--carbon-surface3);
   }
   .glim-sel--chip { gap: 0.25rem; }
-  /* Page tabs stay on one row and give up their words first. */
-  .glim-sel--fit { flex-wrap: nowrap; }
-  /* Paired segments stretch, so a label that wraps keeps its neighbour on the
-     same top and at the same height. Half the strip less half the larger gap,
-     so two always fit a row. */
-  .glim-sel--pairs { align-items: stretch; }
-  @media (max-width: 600px) {
-    .glim-sel--pairs {
-      --seg-basis: calc(50% - 0.25rem);
-      width: 100%;
-    }
-    /* A pill around several rows bulges at its ends. */
-    .glim-sel--pairs.glim-sel--well { border-radius: var(--radius-card); }
-  }
 
   .glim-sel-seg {
     display: inline-flex;
@@ -3888,7 +3878,7 @@ body {
   }
   /* A segment with a glyph, or one in a strip beside a button, has the
      button's box; a box sized by its text comes out shorter than the controls
-     around it. A floor rather than a height, so a wrapped label grows it. */
+     around it. */
   .glim-sel-seg--btn {
     min-height: var(--btn-h);
     padding-block: 0;
@@ -3920,18 +3910,13 @@ body {
     height: 1.25rem;
   }
 
+  /* A label never takes a second line. Cut short, it keeps its full text in
+     the segment's bubble. */
   .glim-sel-label {
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-  }
-  /* A pinned segment lets its label break instead of cutting it off;
-     segmentLayout decides when that may happen. */
-  .glim-sel-label--wrap {
-    white-space: normal;
-    text-wrap: balance;
-    overflow-wrap: break-word;
   }
 
   /* Under a finger a 20px pill is too small to hit. A well is a row of

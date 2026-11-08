@@ -24,12 +24,12 @@ const props = defineProps<{
   roved: boolean;
   share: Record<string, string>;
   squeezed: boolean;
+  cut: boolean;
   orientation: SelectorOrientation;
   size: SelectorSize;
   variant: SelectorVariant;
   equalWidth: boolean;
   buttonHeight: boolean;
-  pairsOnPhone: boolean;
   hue: boolean;
   hueOffset?: number;
   panelId?: string;
@@ -44,7 +44,6 @@ const view = computed(() =>
     variant: props.variant,
     equalWidth: props.equalWidth,
     buttonHeight: props.buttonHeight,
-    pairsOnPhone: props.pairsOnPhone,
     hue: props.hue,
     hueOffset: props.hueOffset,
     index: props.index,
@@ -57,6 +56,7 @@ const view = computed(() =>
     disabled: props.disabled,
     dim: props.item.dim,
     squeezed: props.squeezed,
+    cut: props.cut,
   }),
 );
 const bubble = useTipBubble(() => view.value.tip, () => props.disabled);

@@ -11,7 +11,6 @@ import {
 } from "react";
 import {
   countSelector,
-  DESKTOP_QUERY,
   mediaMatches,
   roveSelector,
   rovedIndex,
@@ -23,13 +22,11 @@ import {
   subscribeMedia,
   toggleSelection,
   watchSelectorFit,
-  watchSelectorRows,
   WIDE_QUERY,
   type SelectMode,
   type SelectorActivation,
-  type SelectorFit,
+  type SelectorLayout,
   type SelectorOrientation,
-  type SelectorRows,
   type SelectorSize,
   type SelectorVariant,
   type SelectorView,
@@ -90,15 +87,17 @@ export interface SelectorProps<M extends SelectMode = "one", V extends string | 
    *  click, as a radio group; for a strip that saves a setting. */
   activation?: SelectorActivation;
   /** Pin every segment to the widest one's measured width, at least the shared
-   *  floor where the row has room; the page-level picker. */
+   *  floor where the row has room; the page-level picker. Where the pinned
+   *  widths do not fit the row, the segments share it by their labels. */
   equalWidth?: boolean;
   /** Hug the segments instead of spanning the box, for a strip that shares a
    *  toolbar row, as it does inside a FieldRow. */
   inline?: boolean;
-  /** Keep every segment on one row, for page tabs: once the labels do not fit
-   *  together every segment shows its glyph alone. */
+  /** Share the row evenly without a pinned width, for page tabs. Every strip
+   *  keeps to one row; once its labels do not fit together it shows glyphs
+   *  alone where every segment has one, and cuts its labels short otherwise. */
   fit?: boolean;
-  /** Below 600px, two segments to a row with labels that wrap. */
+  /** Has no effect: every strip keeps to one row. */
   pairsOnPhone?: boolean;
   /** The button height for every segment, for a strip beside a Button. */
   buttonHeight?: boolean;
@@ -138,7 +137,6 @@ export function Selector<M extends SelectMode = "one", V extends string | number
   equalWidth = false,
   inline: ownInline = false,
   fit = false,
-  pairsOnPhone = false,
   buttonHeight = false,
   hue = true,
   hueOffset,
@@ -161,10 +159,8 @@ export function Selector<M extends SelectMode = "one", V extends string | number
     equalWidth,
     inline,
     fit,
-    pairsOnPhone,
     hue,
     hueOffset,
-    desktop: useMedia(DESKTOP_QUERY),
     wide: useMedia(WIDE_QUERY),
     items: items.map((it) => ({ hasGlyph: !!it.glyph, iconOnly: !!it.iconOnly })),
   });
@@ -180,25 +176,16 @@ export function Selector<M extends SelectMode = "one", V extends string | number
   // watch moves to it through disabledKey.
   const itemsKey = items.map((it) => it.label).join("\n");
   const disabledKey = items.map((it) => (disabled || it.disabled ? "1" : "0")).join("");
-  const [rows, setRows] = useState<SelectorRows | null>(null);
+  const [layout, setLayout] = useState<SelectorLayout | null>(null);
   useLayoutEffect(() => {
-    if (!strip.pinWidth) {
-      setRows(null);
+    if (vertical) {
+      setLayout(null);
       return;
     }
-    return watchSelectorRows(track.current!, { inline, equalWidth }, setRows);
-  }, [strip.pinWidth, equalWidth, inline, itemsKey, disabledKey, size, strip.mode]);
+    return watchSelectorFit(track.current!, { pinWidth: strip.pinWidth, fit, canSqueeze: strip.canSqueeze }, setLayout);
+  }, [vertical, strip.pinWidth, fit, strip.canSqueeze, inline, itemsKey, disabledKey, size, strip.mode]);
 
-  const [fitMode, setFitMode] = useState<SelectorFit>("even");
-  useLayoutEffect(() => {
-    if (!strip.canSqueeze) {
-      setFitMode("even");
-      return;
-    }
-    return watchSelectorFit(track.current!, setFitMode);
-  }, [strip.canSqueeze, itemsKey, disabledKey, size]);
-
-  const layout = selectorFlex({ rows, pinWidth: strip.pinWidth, inline, fit, fitMode, pairsOnPhone });
+  const flex = selectorFlex({ layout, inline, fit });
   const chosen = many ? (value as readonly V[]) : null;
   const isOn = (id: V) => (chosen ? chosen.includes(id) : value === id);
   const disabledFlags = items.map((it) => disabled || !!it.disabled);
@@ -232,7 +219,7 @@ export function Selector<M extends SelectMode = "one", V extends string | number
       aria-orientation={strip.role === "group" ? undefined : orientation}
       onKeyDown={onKeyDown}
       className={`${strip.className} ${className}`.trim()}
-      style={layout.track as CSSProperties}
+      style={flex.track as CSSProperties}
     >
       {items.map((item, i) => (
         <Segment
@@ -243,14 +230,14 @@ export function Selector<M extends SelectMode = "one", V extends string | number
           on={isOn(item.id)}
           disabled={disabledFlags[i]}
           roved={i === roved}
-          share={vertical ? undefined : (layout.segment as CSSProperties)}
-          squeezed={strip.canSqueeze && fitMode === "squeezed"}
+          share={vertical ? undefined : (flex.segment as CSSProperties)}
+          squeezed={layout?.fit === "squeezed"}
+          cut={!!layout?.cut[i]}
           orientation={orientation}
           size={size}
           variant={variant}
           equalWidth={equalWidth}
           buttonHeight={buttonHeight}
-          pairsOnPhone={pairsOnPhone}
           hue={hue}
           hueOffset={hueOffset}
           panelId={panelId}
@@ -271,12 +258,12 @@ function Segment({
   roved,
   share,
   squeezed,
+  cut,
   orientation,
   size,
   variant,
   equalWidth,
   buttonHeight,
-  pairsOnPhone,
   hue,
   hueOffset,
   panelId,
@@ -290,12 +277,12 @@ function Segment({
   roved: boolean;
   share: CSSProperties | undefined;
   squeezed: boolean;
+  cut: boolean;
   orientation: SelectorOrientation;
   size: SelectorSize;
   variant: SelectorVariant;
   equalWidth: boolean;
   buttonHeight: boolean;
-  pairsOnPhone: boolean;
   hue: boolean;
   hueOffset?: number;
   panelId?: string;
@@ -308,7 +295,6 @@ function Segment({
     variant,
     equalWidth,
     buttonHeight,
-    pairsOnPhone,
     hue,
     hueOffset,
     index,
@@ -321,6 +307,7 @@ function Segment({
     disabled,
     dim: item.dim,
     squeezed,
+    cut,
   });
   const tooltip = useTipBubble(view.tip, disabled);
   // A disabled segment takes no hover or focus, so its reason is a

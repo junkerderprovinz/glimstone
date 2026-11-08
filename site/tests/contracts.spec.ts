@@ -1478,32 +1478,82 @@ test.describe("Selector", () => {
   const tile = (page: Page, name: string) => column(page).getByRole("tab", { name });
   const steps = (page: Page) => stage(page, "SelectorSteps");
 
-  for (const demo of ["plain", "tight"]) {
-    test(`[sel-pairs] two to a row with labels that wrap, ${demo}`, async ({ page }) => {
-      await page.setViewportSize({ width: 360, height: 800 });
-      await open(page, "/components/selector");
-      const strip = stage(page, "SelectorPairs").locator(`[data-pairs="${demo}"] .glim-sel`);
-      const look = await strip.evaluate((s) => {
-        const segs = [...s.querySelectorAll<HTMLElement>("[data-sel-id]")];
-        const tops = new Set(segs.map((e) => Math.round(e.getBoundingClientRect().top)));
-        const labels = segs.map((e) => {
-          const l = e.querySelector("[data-sel-label]")!;
-          const box = e.getBoundingClientRect();
-          const text = l.getBoundingClientRect();
-          return l.scrollWidth <= l.clientWidth && l.scrollHeight <= l.clientHeight && text.bottom <= box.bottom + 0.5 && text.top >= box.top - 0.5;
-        });
-        const card = document.createElement("div");
-        card.style.borderRadius = "var(--radius-card)";
-        s.appendChild(card);
-        const want = getComputedStyle(card).borderTopLeftRadius;
-        card.remove();
-        return { rows: tops.size, count: segs.length, labels, radius: getComputedStyle(s).borderTopLeftRadius === want };
-      });
-      expect(look.rows).toBe(Math.ceil(look.count / 2));
-      expect(look.labels).toEqual(look.labels.map(() => true));
-      expect(look.radius).toBe(true);
+  const row = (page: Page, demo: string) => stage(page, "SelectorOneRow").locator(`[data-row="${demo}"] .glim-sel`);
+
+  // The docs page keeps its stage wide on a phone, so the demo's own box is
+  // narrowed to a phone's card.
+  async function narrow(page: Page) {
+    await open(page, "/components/selector");
+    await stage(page, "SelectorOneRow").locator("[data-row]").first().evaluate((r) => (r.parentElement!.style.width = "320px"));
+    await page.evaluate(() => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done))));
+  }
+
+  // How a strip sits: how many rows its segments take, whether it stays inside
+  // its box, and for each label on screen whether it keeps to one line and
+  // whether it is cut short.
+  const lay = (strip: Locator) =>
+    strip.evaluate((s) => {
+      const segs = [...s.querySelectorAll<HTMLElement>("[data-sel-id]")];
+      const labels = segs
+        .map((e) => e.querySelector<HTMLElement>("[data-sel-label]"))
+        .filter((l): l is HTMLElement => !!l && !l.classList.contains("glim-sr-only"));
+      const box = s.parentElement!.getBoundingClientRect();
+      return {
+        rows: new Set(segs.map((e) => Math.round(e.getBoundingClientRect().top))).size,
+        wrap: getComputedStyle(s).flexWrap,
+        inside: s.getBoundingClientRect().right <= box.right + 0.5 && s.scrollWidth <= s.clientWidth,
+        oneLine: labels.map((l) => l.getClientRects().length === 1 && l.scrollHeight <= l.clientHeight),
+        cut: labels.map((l) => l.scrollWidth > l.clientWidth),
+        shown: labels.length,
+      };
+    });
+
+  for (const demo of ["labels", "glyphs", "cut", "cut-inline"]) {
+    test(`[sel-one-row] a narrow window keeps the strip on one row, ${demo}`, async ({ page }) => {
+      await narrow(page);
+      const look = await lay(row(page, demo));
+      expect(look.rows).toBe(1);
+      expect(look.wrap).toBe("nowrap");
+      expect(look.inside).toBe(true);
+      expect(look.oneLine).toEqual(look.oneLine.map(() => true));
     });
   }
+
+  test("[sel-one-row] labels that fit together share the row whole", async ({ page }) => {
+    await narrow(page);
+    const look = await lay(row(page, "labels"));
+    expect(look.shown).toBe(2);
+    expect(look.cut).toEqual([false, false]);
+  });
+
+  test("[sel-one-row] a strip with a glyph on every segment shows the glyphs alone", async ({ page }) => {
+    await narrow(page);
+    const strip = row(page, "glyphs");
+    await expect.poll(async () => (await lay(strip)).shown).toBe(0);
+    const dark = strip.getByRole("radio", { name: "Always the dark theme" });
+    await centre(dark);
+    await dark.focus();
+    await expect(page.getByRole("tooltip")).toHaveText("Always the dark theme");
+  });
+
+  test("[sel-one-row] a label cut short keeps its whole text in the bubble", async ({ page }) => {
+    await narrow(page);
+    const strip = row(page, "cut");
+    await expect.poll(async () => (await lay(strip)).cut).toContain(true);
+    expect((await lay(strip)).shown).toBe(5);
+    const long = strip.getByRole("radio", { name: "Donaudampfschifffahrtsgesellschaft" });
+    await centre(long);
+    await long.focus();
+    await expect(page.getByRole("tooltip")).toHaveText("Donaudampfschifffahrtsgesellschaft");
+  });
+
+  test("[sel-one-row] a wide window keeps the pinned widths", async ({ page }) => {
+    await open(page, "/components/selector");
+    const widths = await row(page, "labels")
+      .getByRole("radio")
+      .evaluateAll((els) => els.map((e) => e.getBoundingClientRect().width));
+    expect(widths[0]).toBeCloseTo(widths[1], 0);
+  });
 
   test("[sel-numeric] a numeric id comes back as a number", async ({ page }) => {
     await open(page, "/components/selector");

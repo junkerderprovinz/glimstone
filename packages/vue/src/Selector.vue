@@ -1,8 +1,7 @@
 <script setup lang="ts" generic="V extends string | number = string, M extends SelectMode = 'one'">
-import { computed, onScopeDispose, ref, shallowRef, watch } from "vue";
+import { computed, onScopeDispose, shallowRef, watch } from "vue";
 import {
   countSelector,
-  DESKTOP_QUERY,
   mediaMatches,
   roveSelector,
   rovedIndex,
@@ -12,13 +11,11 @@ import {
   subscribeMedia,
   toggleSelection,
   watchSelectorFit,
-  watchSelectorRows,
   WIDE_QUERY,
   type SelectMode,
   type SelectorActivation,
-  type SelectorFit,
+  type SelectorLayout,
   type SelectorOrientation,
-  type SelectorRows,
   type SelectorSize,
   type SelectorVariant,
 } from "@glimstone/core";
@@ -45,13 +42,13 @@ const props = withDefaults(
     variant?: SelectorVariant;
     /** "manual" moves the focus and chooses on Space, Enter or a click, for a strip that saves a setting. */
     activation?: SelectorActivation;
-    /** Pin every segment to the widest one's measured width; the page-level picker. */
+    /** Pin every segment to the widest one's measured width while they fit the row; the page-level picker. */
     equalWidth?: boolean;
     /** Hug the segments, for a strip that shares a toolbar row, as it does inside a FieldRow. */
     inline?: boolean;
-    /** Keep every segment on one row, for page tabs. */
+    /** Share the row evenly without a pinned width, for page tabs. Every strip keeps to one row. */
     fit?: boolean;
-    /** Below 600px, two segments to a row with labels that wrap. */
+    /** Has no effect: every strip keeps to one row. */
     pairsOnPhone?: boolean;
     /** The button height for every segment, for a strip beside a Button. */
     buttonHeight?: boolean;
@@ -90,7 +87,6 @@ function useMedia(query: string) {
 const name = useFieldName(() => props.label);
 const inline = computed(() => props.inline || (props.label === undefined && name.value !== undefined));
 const mode = useLabelMode(selectorAxis(props.size, props.orientation));
-const desktop = useMedia(DESKTOP_QUERY);
 const wide = useMedia(WIDE_QUERY);
 const strip = computed(() =>
   selectorView({
@@ -103,18 +99,15 @@ const strip = computed(() =>
     equalWidth: props.equalWidth,
     inline: inline.value,
     fit: props.fit,
-    pairsOnPhone: props.pairsOnPhone,
     hue: props.hue,
     hueOffset: props.hueOffset,
-    desktop: desktop.value,
     wide: wide.value,
     items: props.items.map((it) => ({ hasGlyph: !!it.glyph, iconOnly: !!it.iconOnly })),
   }),
 );
 
 const track = shallowRef<HTMLElement | null>(null);
-const rows = shallowRef<SelectorRows | null>(null);
-const fitMode = ref<SelectorFit>("even");
+const layout = shallowRef<SelectorLayout | null>(null);
 const itemsKey = computed(() => props.items.map((it) => it.label).join("\n"));
 const disabledKey = computed(() => props.items.map((it) => (props.disabled || it.disabled ? "1" : "0")).join(""));
 
@@ -136,36 +129,19 @@ measured(
   (el) => (strip.value.counted ? countSelector(el) : undefined),
 );
 measured(
-  () => [strip.value.pinWidth, props.equalWidth, inline.value, itemsKey.value, disabledKey.value, props.size, strip.value.mode].join("|"),
+  () =>
+    [props.orientation, strip.value.pinWidth, props.fit, strip.value.canSqueeze, inline.value, itemsKey.value, disabledKey.value, props.size, strip.value.mode].join("|"),
   (el) => {
-    if (!strip.value.pinWidth) {
-      rows.value = null;
+    if (props.orientation === "vertical") {
+      layout.value = null;
       return;
     }
-    return watchSelectorRows(el, { inline: inline.value, equalWidth: props.equalWidth }, (r) => (rows.value = r));
-  },
-);
-measured(
-  () => [strip.value.canSqueeze, itemsKey.value, disabledKey.value, props.size].join("|"),
-  (el) => {
-    if (!strip.value.canSqueeze) {
-      fitMode.value = "even";
-      return;
-    }
-    return watchSelectorFit(el, (f) => (fitMode.value = f));
+    const { pinWidth, canSqueeze } = strip.value;
+    return watchSelectorFit(el, { pinWidth, fit: props.fit, canSqueeze }, (l) => (layout.value = l));
   },
 );
 
-const layout = computed(() =>
-  selectorFlex({
-    rows: rows.value,
-    pinWidth: strip.value.pinWidth,
-    inline: inline.value,
-    fit: props.fit,
-    fitMode: fitMode.value,
-    pairsOnPhone: props.pairsOnPhone,
-  }),
-);
+const flex = computed(() => selectorFlex({ layout: layout.value, inline: inline.value, fit: props.fit }));
 const many = computed(() => props.select === "many");
 const isOn = (id: V) => (many.value ? ((model.value as V[] | null) ?? []).includes(id) : model.value === id);
 const disabledFlags = computed(() => props.items.map((it) => props.disabled || !!it.disabled));
@@ -202,7 +178,7 @@ function onKeydown(e: KeyboardEvent) {
     :aria-label="name"
     :aria-orientation="strip.role === 'group' ? undefined : orientation"
     :class="strip.className"
-    :style="layout.track"
+    :style="flex.track"
     @keydown="onKeydown"
   >
     <SelectorSegment
@@ -214,14 +190,14 @@ function onKeydown(e: KeyboardEvent) {
       :on="isOn(item.id)"
       :disabled="disabledFlags[i]"
       :roved="i === roved"
-      :share="orientation === 'vertical' ? {} : layout.segment"
-      :squeezed="strip.canSqueeze && fitMode === 'squeezed'"
+      :share="orientation === 'vertical' ? {} : flex.segment"
+      :squeezed="layout?.fit === 'squeezed'"
+      :cut="!!layout?.cut[i]"
       :orientation="orientation"
       :size="size"
       :variant="variant"
       :equal-width="equalWidth"
       :button-height="buttonHeight"
-      :pairs-on-phone="pairsOnPhone"
       :hue="hue"
       :hue-offset="hueOffset"
       :panel-id="panelId"

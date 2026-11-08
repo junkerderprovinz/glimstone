@@ -449,12 +449,15 @@ export function SelectorPage() {
         A caption such as "Show" is a plain span beside the strip, never a <code>label</code> around it: a label around
         several segments hands its clicks to the first one.
       </p>
-      <H2>Pairs on a phone</H2>
+      <H2>One row at every width</H2>
       <p>
-        <code>pairsOnPhone</code> sets two segments to a row below 600px with labels that wrap, inside a track with a
-        card's corners, since a pill around three rows does not read as one shape. A row of its own, at any width.
+        A selector never wraps and never scrolls, and a label never takes a second line. Where the segments do not fit
+        at their pinned width they share the row by their labels. Where the labels do not fit either, a strip with a
+        glyph on every segment shows the glyphs alone, and any other strip shares the row evenly and cuts the long
+        labels short. Either way the whole label stays the segment's name and shows in its bubble. Narrow the window to
+        see it.
       </p>
-      <Demo name="SelectorPairs" />
+      <Demo name="SelectorOneRow" />
       <H2>Numbers, hooks and presses</H2>
       <p>
         An item's <code>id</code> may be a number, and it comes back as one. <code>attrs</code> puts attributes on the
@@ -476,10 +479,9 @@ export function SelectorPage() {
           A selector with the card to itself spans the card and its segments share the width. <code>inline</code> hugs
           them, for a strip in a toolbar row.
         </li>
-        <li>A strip that wraps fills every row evenly, so six options go three and three, never four and two.</li>
         <li>
-          <code>pairsOnPhone</code> sets the segments two to a row below 600px and lets their labels wrap.{" "}
-          <code>fit</code> keeps page tabs on one row and drops their words before it would wrap.
+          <code>fit</code> shares the row evenly among page tabs without pinning them to a measured width.{" "}
+          <code>pairsOnPhone</code> is still accepted and has no effect.
         </li>
       </ul>
       <H2>Colour</H2>
