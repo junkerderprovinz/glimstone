@@ -2,6 +2,30 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+A horizontal selector keeps to one row at every width. Found in BombVault, whose relay card wrapped three large segments onto two rows on a phone and whose anomalies filter stacked "Open" over "Closed in the last 30 days".
+
+**Adopting apps:**
+
+- **`pairsOnPhone`** is still accepted and has no effect. BombVault can drop it from the Labels selector, the anomaly settings and the role dialogs.
+- **A strip that wrapped stays on its row:** its segments share the row by their labels, then show their glyphs alone where every segment has one, then cut their labels short with the whole label in the bubble. A set that does not fit even then wants the vertical tiles, a list or a dropdown.
+- **The core's measuring changed.** `watchSelectorRows`, `SelectorRows`, `segmentLayout`, `perRowFor`, `SegmentLayout` and `SegmentWidths` are gone. `watchSelectorFit` takes `{ pinWidth, fit, canSqueeze }` and hands over a `SelectorLayout`, `selectorFlex` takes that layout, `measureSegments` returns the one-line widths, and `SelectorFit` gains `"truncated"`. Only an app that measures its own selector is affected.
+- **Classes:** `.glim-sel--pairs` and `.glim-sel-label--wrap` are gone.
+- **Flutter:** nothing changed there.
+
+## 🎨 Design
+
+- **"It wraps, it never scrolls" is reversed** to "It keeps to one row, at every width" under "The one horizontal selector". The rules written for wrapping strips (a strip that wraps fills its box, a label wraps only when its box has no room left, the even count per row, the partial last row and the phone's two to a row) are marked reversed, each with what replaces it.
+
+## 🔁 Changed
+
+- **Every horizontal strip measures its labels**, not only the pinned and `fit` ones, and drops them for glyphs or cuts them short once they do not fit. A label cut short keeps its whole text in the segment's bubble.
+- **The track carries `contain: inline-size`**, so a row that does not fit gives way inside its box instead of widening a grid or flex parent around it. A hugging strip takes its width from the measurement.
+- **A well below the desktop shell hugs its labels as it does on a desktop.** Pinning it to the widest label kept wrapped rows even, which one row does not need.
+- **`fit`** shares the row evenly among page tabs. Keeping to one row is every strip's.
+- **The site:** the Selector page shows one row at every width in place of the pairs demo, and the contract `sel-one-row` takes over from `sel-pairs`.
+
 ## 4.2.8 - 2026-11-08
 
 Two fixes to `dropIndex`, both found by ArrowLoop while adopting it.
