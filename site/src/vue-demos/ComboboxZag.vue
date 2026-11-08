@@ -3,8 +3,8 @@ import { ref } from "vue";
 import { Combobox } from "@glimstone/vue/Combobox";
 
 const CONTAINERS = [
-  "audiobookshelf", "bazarr", "bombvault", "crafty", "duplicati", "filebrowser", "gitea", "grafana",
-  "homeassistant", "immich", "jellyfin", "knightloader", "lidarr", "mariadb", "nextcloud", "nginx",
+  "audiobookshelf", "bazarr", "calibre", "crafty", "duplicati", "filebrowser", "gitea", "grafana",
+  "homeassistant", "immich", "jellyfin", "kavita", "lidarr", "mariadb", "nextcloud", "nginx",
   "paperless-ngx", "plex", "postgres", "prowlarr", "radarr", "redis", "sabnzbd", "sonarr", "syncthing",
   "tautulli", "unifi", "uptime-kuma", "vaultwarden", "wireguard",
 ].map((c) => ({ value: c, label: c }));

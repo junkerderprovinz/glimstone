@@ -649,7 +649,7 @@ export function SignInCardPage() {
 
 <SignInCard
   logo="/logo.svg"
-  appName="BombVault"
+  appName="GlimStone"
   text={text}
   passkey={offerPasskey}
   reset

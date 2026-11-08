@@ -1,12 +1,8 @@
-// The controls of the CannonCommander prototype, copied so the calibration
-// page can draw them beside the Vue components without depending on the
-// prototype. The rules are the prototype's own, word for word, from
-// prototype/src/css/app.css, the kits in src/js/features (a-00-kit.js,
-// b-00-kit.js), src/js/25-columns.js, src/js/32-labels.js and the transfer
-// preview's bar. The markup is what the prototype's builders (btn, sw, seg,
-// menuHTML, win, pwField, copyField, pickColour) write. Only the last block is
-// the page's: it stands the menu, the window and the picker in the page,
-// where the prototype floats them.
+// The controls of a desktop app prototype, copied so the calibration page can
+// draw them beside the Vue components without depending on the prototype. The
+// rules and the markup are the prototype's own, word for word. Only the last
+// block is the page's: it stands the menu, the window and the picker in the
+// page, where the prototype floats them.
 import { hexToHsv } from "@glimstone/core";
 import { glyphByName } from "../glyphData";
 

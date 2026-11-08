@@ -1,112 +1,110 @@
-# Which glyph each app wears
+# Which glyph each meaning wears
 
-[`glyphs.md`](glyphs.md) says which drawing means what. This file says where each app stands against it: one row per meaning, the GlimStone name, the component each app renders for it today, and whether that is already the standard drawing. An app that adds or swaps a glyph changes its row here in the same commit.
-
-"Standard" means the app's next release renders the drawing from [`glyphs.json`](glyphs.json). "Switch" means it still renders its own and moves to the standard one. "To follow" means the app has the setting and takes the standard drawing in a later release. "None" means the app has no such meaning.
+[`glyphs.md`](glyphs.md) says which drawing means what and where it comes from. This file goes the other way: one row per meaning a button, a tab or a setting carries, and the glyph from [`glyphs.json`](glyphs.json) that stands for it. A meaning that gets a glyph or moves to another one changes its row here in the same commit.
 
 <br>
 
 ## Actions, the verbs a button wears
 
-| Meaning | GlimStone | BombVault | KnightLoader |
-| --- | --- | --- | --- |
-| Show, reveal | `IconEye` | `IconEye`, standard | `IconEye`, standard |
-| Hide again | `IconEyeOff` | `IconEyeOff`, standard | `IconEyeOff`, standard |
-| Reset to the default | `IconRefresh` | `IconClearSelection`, switch | `IconRefresh`, standard |
-| Reset one row of a colour card to its defaults | `IconResetArrow` | `IconResetArrow` in `AccentCard.tsx`, switch | none |
-| Retry, reload, refresh | `IconRetry` | `IconRefresh`, switch | `IconRetry`, standard |
-| Upload | `IconUpload` | `IconUpload`, standard | `IconUpload`, standard |
-| Import, read in | `IconImport` | `IconImport`, standard | `IconImport`, standard |
-| Download | `IconDownload` | `IconDownload`, standard | `IconDownload`, standard |
-| Export | `IconExport` | `IconDownload`, switch | `IconExport`, standard |
-| Search | `IconSearch` | `IconSearch`, standard | `IconSearch`, standard |
-| Start, run now, play | `IconPlay` | `IconPlay`, standard | `IconPlay`, standard |
-| Pause | `IconPause` | none | `IconPause`, standard |
-| Stop, abort | `IconStop` | `IconStop`, standard | `IconStop`, standard |
-| Power on and off | `IconPower` | `IconPower`, standard | `IconPower`, standard |
-| Sleep, spin down, rest, hibernate | `IconSleep` | none | `IconSleep` on Send this machine to sleep and Quiet mode, standard |
-| Delete, remove | `IconTrash` | `IconTrash`, standard | `IconTrash`, standard |
-| Delete with its files | `IconTrashFiles` | none | `IconTrashFiles`, standard |
-| Clear, empty a list | `IconEmpty` | none | `IconEmpty`, standard |
-| Add, create | `IconAdd` | `IconAdd`, standard | `IconAdd`, standard |
-| Close, cancel, dismiss | `IconClose` | `IconClose`, standard | `IconClose`, standard |
-| Minimise a window | `IconWindowMinimise` | none | `IconWindowMinimise`, standard |
-| Maximise a window | `IconWindowMaximise` | none | `IconWindowMaximise`, standard |
-| Restore a maximised window | `IconWindowRestore` | none | `IconWindowRestore`, standard |
-| Edit, rename, change | `IconPencil` | `IconPencil`, standard | `IconPencil`, standard |
-| Copy | `IconCopy` | `IconCopy`, standard | `IconCopy`, standard |
-| Test, verify, success | `IconCheck` | `IconCheck`, standard | `IconCheck`, standard |
-| Done, confirm, got it | `IconConfirm` | `IconCheck`, switch | `IconConfirm`, standard |
-| Refuse, decline | `IconReject` | `IconClose`, switch | `IconReject`, standard |
-| Apply, take over, use this one | `IconApply` | `IconSave`, switch | `IconApply`, standard |
-| Undo | `IconUndo` | `IconRestore`, switch | `IconUndo`, standard |
-| Connect, pair | `IconLink` | `IconLink`, standard | `IconLink`, standard |
-| Unlink, drop a connection | `IconUnlink` | `IconLink`, switch | `IconUnlink` on Leave group on the pairing page, standard |
-| Credentials, key, set a password, sign in with a passkey | `IconKey` | `IconKey`, standard | `IconKey`, standard |
-| Revoke a key, remove a password or passkey | `IconKeyRevoke` | `IconKeyRevoke`, standard | `IconKeyRevoke`, standard |
-| Forgot password | `IconForgotPassword` | `IconKey`, switch | `IconForgotPassword`, standard |
-| Sign in | `IconSignIn` | `IconSignIn`, switch | `IconSignIn`, standard |
-| Sign in with a passkey | `IconKey` | `IconSignIn`, switch | `IconKey`, standard |
-| Sign out | `IconSignOut` | `IconSignOut`, standard | `IconSignOut`, standard |
-| Information | `IconInfo` | `IconInfo`, standard | `IconInfo`, standard |
-| Help | `IconHelp` | none | `IconHelp`, standard |
-| More | `IconMore` | `IconMore`, standard | `IconMore`, standard |
-| Menu | `IconMenu` | none | `IconMenu`, standard |
-| Save | `IconSave` | `IconSave`, standard | `IconSave`, standard |
-| Unlock, clear a lock | `IconUnlock` | `IconUnlock`, standard | none |
-| Prune, reclaim space | `IconPrune` | `IconPrune`, standard | none |
-| Compact a database | `IconCompact` | none | `IconCompact`, standard |
-| Compute, calculate | `IconCompute` | none | none |
-| Back | `IconBack` | `IconBack`, standard | `IconBack`, standard |
-| Next, continue | `IconForward` | `IconForward`, standard | `IconForward`, standard |
-| Jump to the newest entry, the end | `IconLatest` | `IconLatest`, standard | `IconLatest`, standard |
-| Jump to the start | `IconFirst` | none | `IconFirst`, standard |
-| Move up one | `IconMoveUp` | none | `IconMoveUp`, standard |
-| Move down one | `IconMoveDown` | none | `IconMoveDown`, standard |
-| Move elsewhere | `IconMove` | `IconMove`, standard | `IconMove`, standard |
-| Expand | `IconExpand` | none | `IconExpand`, standard |
-| Collapse | `IconCollapse` | none | `IconCollapse`, standard |
-| Select all | `IconSelectAll` | `IconSelectAll`, standard | `IconSelectAll`, standard |
-| Clear the selection | `IconClearSelection` | `IconClearSelection`, standard | `IconClearSelection`, standard |
-| Compare | `IconCompare` | `IconCompare`, standard | none |
-| Keep both versions | `IconKeepBoth` | none | `IconKeepBoth`, standard |
-| Keep the left version | `IconKeepLeft` | none | none |
-| Keep the right version | `IconKeepRight` | none | none |
-| Merge | `IconMerge` | none | `IconMerge`, standard |
-| Filter | `IconFilter` | none | `IconFilter`, standard |
-| Pin | `IconPin` | none | `IconPin`, standard |
-| Priority | `IconPriority` | none | `IconPriority`, standard |
-| Drag to reorder | `IconGrip` | `IconGrip`, standard | `IconGrip`, standard |
-| Open a service's own site | `IconExternalLink` | none | `IconExternalLink`, standard |
-| Warning | `IconWarning` | none | `IconWarning`, standard |
-| Right away | `IconBolt` | none | `IconBolt`, standard |
-| Write to us | `IconMail` | `IconMail`, standard | `IconMail`, standard |
-| Send a test | `IconSendTest` | `IconCheck`, switch | `IconSendTest`, standard |
-| Buy the author a coffee | `IconCoffee` | `IconCoffee`, standard | none |
-| Give through PayPal | `IconPayPal` | `IconPayPal` in `donateMarks.tsx`, switch | `IconPayPal` in `donateMarks.tsx`, switch |
-| Give from a crypto wallet | `IconBitcoin` | `IconBitcoin` in `donateMarks.tsx`, switch | `IconBitcoin` in `donateMarks.tsx`, switch |
-| A protection is on, turn it on | `IconShieldOn` | `IconShieldOn`, standard | `IconShieldOn`, standard |
-| A protection is off, turn it off | `IconShieldOff` | `IconShieldOff`, standard | `IconShieldOff`, standard |
-| Store uncompressed | `IconCompressOff` | `IconCompressOff`, standard | none |
-| Automatic, the app chooses | `IconCompressAuto` | `IconCompressAuto`, standard | `IconCompressAuto`, standard |
-| Compress as far as possible | `IconCompressMax` | `IconCompressMax`, standard | none |
-| Script, code, variables, console | `IconCode` | none | `IconCode`, standard |
-| Dark look | `IconMoon` | none | `IconMoon`, standard |
-| Light look | `IconSun` | none | `IconSun`, standard |
-| Paste | `IconPaste` | none | `IconPaste`, standard |
-| Sort direction | `IconSort` | none | `IconSort`, standard |
-| Up one folder | `IconFolderUp` | none | `IconFolderUp`, standard |
-| Write to us, under the pointer or a finger | `IconMailOpen` | `IconMailOpen`, standard | `IconMailOpen`, standard |
-| Open the manual | `IconManual`; on the Help card's button the README's book in `MANUAL_SVG` | `IconManual`, switch to `MANUAL_SVG` on the Help card | `MANUAL_SVG`, standard |
-| Open the manual, under the pointer, a finger or the focus | `IconManualOpen` | `IconManualOpen`, standard | `IconManualOpen`, standard |
-| Default, preferred, favourite | `IconStar` | `IconStar`, standard on the Default badge and the Make default button | none |
-| Stop asking | `IconStopAsking` | none | `IconStopAsking`, standard |
-| Store cookies | `IconCookies` | none | `IconCookies`, standard until cookies get a drawing of their own |
-| Open the log | `IconLog` | `IconLog`, standard | `IconLog`, standard |
-| Install | `IconInstall` | `IconInstall`, standard | `IconInstall`, standard |
-| Fetch an update, update now | `IconSync` | `IconUpdate`, switch | `IconRefresh` on Update now, switch |
-| Up to date after an update check | `IconUpToDate` | `IconUpToDate`, standard | `IconUpToDate`, standard |
-| An update is available | `IconUpdateAvailable` | `IconUpdateAvailable`, standard | `IconUpdateAvailable`, standard |
+| Meaning | GlimStone |
+| --- | --- |
+| Show, reveal | `IconEye` |
+| Hide again | `IconEyeOff` |
+| Reset to the default | `IconRefresh` |
+| Reset one row of a colour card to its defaults | `IconResetArrow` |
+| Retry, reload, refresh | `IconRetry` |
+| Upload | `IconUpload` |
+| Import, read in | `IconImport` |
+| Download | `IconDownload` |
+| Export | `IconExport` |
+| Search | `IconSearch` |
+| Start, run now, play | `IconPlay` |
+| Pause | `IconPause` |
+| Stop, abort | `IconStop` |
+| Power on and off | `IconPower` |
+| Sleep, spin down, rest, hibernate | `IconSleep` |
+| Delete, remove | `IconTrash` |
+| Delete with its files | `IconTrashFiles` |
+| Clear, empty a list | `IconEmpty` |
+| Add, create | `IconAdd` |
+| Close, cancel, dismiss | `IconClose` |
+| Minimise a window | `IconWindowMinimise` |
+| Maximise a window | `IconWindowMaximise` |
+| Restore a maximised window | `IconWindowRestore` |
+| Edit, rename, change | `IconPencil` |
+| Copy | `IconCopy` |
+| Test, verify, success | `IconCheck` |
+| Done, confirm, got it | `IconConfirm` |
+| Refuse, decline | `IconReject` |
+| Apply, take over, use this one | `IconApply` |
+| Undo | `IconUndo` |
+| Connect, pair | `IconLink` |
+| Unlink, drop a connection | `IconUnlink` |
+| Credentials, key, set a password, sign in with a passkey | `IconKey` |
+| Revoke a key, remove a password or passkey | `IconKeyRevoke` |
+| Forgot password | `IconForgotPassword` |
+| Sign in | `IconSignIn` |
+| Sign in with a passkey | `IconKey` |
+| Sign out | `IconSignOut` |
+| Information | `IconInfo` |
+| Help | `IconHelp` |
+| More | `IconMore` |
+| Menu | `IconMenu` |
+| Save | `IconSave` |
+| Unlock, clear a lock | `IconUnlock` |
+| Prune, reclaim space | `IconPrune` |
+| Compact a database | `IconCompact` |
+| Compute, calculate | `IconCompute` |
+| Back | `IconBack` |
+| Next, continue | `IconForward` |
+| Jump to the newest entry, the end | `IconLatest` |
+| Jump to the start | `IconFirst` |
+| Move up one | `IconMoveUp` |
+| Move down one | `IconMoveDown` |
+| Move elsewhere | `IconMove` |
+| Expand | `IconExpand` |
+| Collapse | `IconCollapse` |
+| Select all | `IconSelectAll` |
+| Clear the selection | `IconClearSelection` |
+| Compare | `IconCompare` |
+| Keep both versions | `IconKeepBoth` |
+| Keep the left version | `IconKeepLeft` |
+| Keep the right version | `IconKeepRight` |
+| Merge | `IconMerge` |
+| Filter | `IconFilter` |
+| Pin | `IconPin` |
+| Priority | `IconPriority` |
+| Drag to reorder | `IconGrip` |
+| Open a service's own site | `IconExternalLink` |
+| Warning | `IconWarning` |
+| Right away | `IconBolt` |
+| Write to us | `IconMail` |
+| Send a test | `IconSendTest` |
+| Buy the author a coffee | `IconCoffee` |
+| Give through PayPal | `IconPayPal` |
+| Give from a crypto wallet | `IconBitcoin` |
+| A protection is on, turn it on | `IconShieldOn` |
+| A protection is off, turn it off | `IconShieldOff` |
+| Store uncompressed | `IconCompressOff` |
+| Automatic, the app chooses | `IconCompressAuto` |
+| Compress as far as possible | `IconCompressMax` |
+| Script, code, variables, console | `IconCode` |
+| Dark look | `IconMoon` |
+| Light look | `IconSun` |
+| Paste | `IconPaste` |
+| Sort direction | `IconSort` |
+| Up one folder | `IconFolderUp` |
+| Write to us, under the pointer or a finger | `IconMailOpen` |
+| Open the manual | `IconManual`, and on the Help card's button the README's book in `MANUAL_SVG` |
+| Open the manual, under the pointer, a finger or the focus | `IconManualOpen` |
+| Default, preferred, favourite | `IconStar` |
+| Stop asking | `IconStopAsking` |
+| Store cookies | `IconCookies` |
+| Open the log | `IconLog` |
+| Install | `IconInstall` |
+| Fetch an update, update now | `IconSync` |
+| Up to date after an update check | `IconUpToDate` |
+| An update is available | `IconUpdateAvailable` |
 
 `IconCookies` wears Streamline's paperclip, the drawing `IconFile` carries for a file or an attachment. Cookies need a drawing of their own, and until one is chosen the two share it.
 
@@ -114,311 +112,119 @@
 
 ## Navigation and domain
 
-| Meaning | GlimStone | BombVault | KnightLoader |
-| --- | --- | --- | --- |
-| Settings, open a setting | `IconGear` | `IconGear`, standard | `IconGear`, standard |
-| Dashboard, overview | `IconDashboard` | `IconDashboard`, standard | `IconDashboard`, standard |
-| A folder | `IconFolder` | `IconFolder`, standard | `IconFolder`, standard |
-| An open folder | `IconFolderOpen` | none | `IconFolderOpen`, standard |
-| New folder | `IconFolderAdd` | `IconFolderAdd`, standard | `IconFolderAdd`, standard |
-| Archive | `IconArchive` | none | `IconArchive`, also before an archive's name in the list, standard |
-| A video file | `IconFileVideo` | none | `IconFileVideo` before a video's name in the list, standard |
-| An audio file | `IconFileAudio` | none | `IconFileAudio` before a sound track's name, standard |
-| An image, a thumbnail | `IconFileImage` | none | `IconFileImage` before an image or a thumbnail, standard |
-| A subtitle file | `IconFileSubtitles` | none | `IconFileSubtitles` before a subtitle file, standard |
-| A description or another text file | `IconFileText` | none | `IconFileText` before a description or a text file, standard |
-| A file, an attachment | `IconFile` | none | `IconFile` before any other file, standard |
-| A RAW photo straight from the camera | `IconFileRaw` | none | none |
-| A design or vector graphic | `IconFileDesign` | none | none |
-| A playlist | `IconFilePlaylist` | none | none |
-| A PDF document | `IconFilePdf` | none | none |
-| A text document from an office suite | `IconFileDoc` | none | none |
-| A spreadsheet | `IconFileSheet` | none | none |
-| A presentation | `IconFileSlides` | none | none |
-| An e-book | `IconBook` | none | none |
-| A disk image or virtual disk | `IconDisc` | none | none |
-| A program or installable package | `IconFileProgram` | none | none |
-| A font | `IconFont` | none | none |
-| A checksum or signature | `IconHash` | none | none |
-| A torrent or magnet link | `IconMagnet` | none | none |
-| A 3D model or CAD drawing | `IconCube` | none | none |
-| A calendar or contact card | `IconCalendar` | none | none |
-| A backup, temporary or unfinished file | `IconHourglass` | none | none |
-| Instances, other boxes | `IconFleet` | `IconFleet`, standard | `IconFleet`, standard |
-| Collector, taking links in | `IconCollector` | none | `IconCollector`, standard |
-| Accounts | `IconAccounts` | none | `IconAccounts`, standard |
-| Network, connections | `IconNetwork` | none | `IconNetwork`, standard |
-| Phone | `IconPhone` | none | `IconPhone`, standard |
-| Browser | `IconBrowser` | none | `IconBrowser`, standard |
-| Open or show the app | `IconApp` | none | `IconApp`, standard |
-| Modules | `IconModules` | none | `IconModules`, standard |
-| Captcha | `IconCaptcha` | none | `IconCaptcha`, standard |
-| Docker containers | `IconContainers` | `IconContainers`, standard | none |
-| Virtual machines | `IconVM` | `IconVM`, standard | none |
-| Files and folder sets | `IconFiles` | `IconFiles`, standard | none |
-| Receiver, an incoming transfer | `IconReceiver` | `IconReceiver`, standard | none |
-| Back up now | `IconBackupNow` | `IconBackupNow`, standard | none |
-| Restore | `IconRestore` | `IconRestore`, standard | `IconRestore`, standard |
-| Replicate, synchronise, check for updates | `IconSync` | `IconSync`, standard; `IconUpdate` on Check for updates, switch | `IconSync` on Check all, standard |
-| Recovery, rebuild from backups | `IconRecovery` | `IconRecovery`, standard | none |
-| Live, running now | `IconLive` | `IconLive`, standard | none |
-| Configuration self-backup | `IconConfig` | `IconConfig`, standard | none |
-| Simple view | `IconViewSimple` | `IconViewSimple`, standard | none |
-| Advanced view | `IconViewAdvanced` | `IconViewAdvanced`, standard | none |
-| Boot flash drive | `IconFlash` | `IconFlash`, standard | none |
-| Off-site, cloud | `IconCloud` | `IconCloud`, standard | none |
-| Local storage | `IconLocal` | `IconLocal`, standard | none |
-| A database | `IconDatabase` | `IconDatabase`, standard | none |
-| ZFS datasets | `IconZFS` | `IconZFS`, standard | none |
-| Anomalies | `IconAnomalies` | `IconAnomalies`, standard | none |
-| The GitHub repository | `IconGithub` | `IconGithub`, standard | `IconGithub`, standard |
-| Health of the services | `IconHealth` | none | `IconHealth`, standard |
-| Queued | `IconQueued` | none | `IconQueued`, standard |
-| Time left on a captcha | `IconCaptchaTimer` | none | `IconCaptchaTimer`, standard |
-| Resolvers, download quality and format | `IconResolvers` | none | `IconResolvers`, standard |
-| What's new | `IconWhatsNew` | `IconWhatsNew` with the dot in front, standard | `IconWhatsNew` with the dot in front, standard |
+| Meaning | GlimStone |
+| --- | --- |
+| Settings, open a setting | `IconGear` |
+| Dashboard, overview | `IconDashboard` |
+| A folder | `IconFolder` |
+| An open folder | `IconFolderOpen` |
+| New folder | `IconFolderAdd` |
+| Archive | `IconArchive` |
+| A video file | `IconFileVideo` |
+| An audio file | `IconFileAudio` |
+| An image, a thumbnail | `IconFileImage` |
+| A subtitle file | `IconFileSubtitles` |
+| A description or another text file | `IconFileText` |
+| A file, an attachment | `IconFile` |
+| A RAW photo straight from the camera | `IconFileRaw` |
+| A design or vector graphic | `IconFileDesign` |
+| A playlist | `IconFilePlaylist` |
+| A PDF document | `IconFilePdf` |
+| A text document from an office suite | `IconFileDoc` |
+| A spreadsheet | `IconFileSheet` |
+| A presentation | `IconFileSlides` |
+| An e-book | `IconBook` |
+| A disk image or virtual disk | `IconDisc` |
+| A program or installable package | `IconFileProgram` |
+| A font | `IconFont` |
+| A checksum or signature | `IconHash` |
+| A torrent or magnet link | `IconMagnet` |
+| A 3D model or CAD drawing | `IconCube` |
+| A calendar or contact card | `IconCalendar` |
+| A backup, temporary or unfinished file | `IconHourglass` |
+| Instances, other boxes | `IconFleet` |
+| Collector, taking links in | `IconCollector` |
+| Accounts | `IconAccounts` |
+| Network, connections | `IconNetwork` |
+| Phone | `IconPhone` |
+| Browser | `IconBrowser` |
+| Open or show the app | `IconApp` |
+| Modules | `IconModules` |
+| Captcha | `IconCaptcha` |
+| Docker containers | `IconContainers` |
+| Virtual machines | `IconVM` |
+| Files and folder sets | `IconFiles` |
+| Receiver, an incoming transfer | `IconReceiver` |
+| Back up now | `IconBackupNow` |
+| Restore | `IconRestore` |
+| Replicate, synchronise, check for updates | `IconSync` |
+| Recovery, rebuild from backups | `IconRecovery` |
+| Live, running now | `IconLive` |
+| Configuration self-backup | `IconConfig` |
+| Simple view | `IconViewSimple` |
+| Advanced view | `IconViewAdvanced` |
+| Boot flash drive | `IconFlash` |
+| Off-site, cloud | `IconCloud` |
+| Local storage | `IconLocal` |
+| A database | `IconDatabase` |
+| ZFS datasets | `IconZFS` |
+| Anomalies | `IconAnomalies` |
+| The GitHub repository | `IconGithub` |
+| Health of the services | `IconHealth` |
+| Queued | `IconQueued` |
+| Time left on a captcha | `IconCaptchaTimer` |
+| Resolvers, download quality and format | `IconResolvers` |
+| What's new | `IconWhatsNew` |
+| An updates tab or section | `IconUpdate` |
 
 <br>
 
 ## Settings tabs
 
-| Meaning | GlimStone | BombVault | KnightLoader |
-| --- | --- | --- | --- |
-| General tab | `IconTabGeneral` | `IconTabGeneral`, standard | `IconTabGeneral`, standard |
-| Look tab | `IconTabLook` | `IconTabLook`, standard | `IconTabLook`, standard |
-| Security tab | `IconTabSecurity` | `IconTabSecurity`, standard | `IconTabSecurity`, standard |
-| Advanced tab | `IconTabAdvanced` | none | `IconTabAdvanced`, standard |
-| App tab, the other forms of the product | `IconTabApp` | none | `IconTabApp`, standard |
-| Apps tab, the companions | `IconTabApps` | `IconTabApps`, standard | none |
-| System tab | `IconTabSystem` | `IconTabSystem`, standard | none |
-| Paths and storage tab | `IconTabStorage` | `IconTabStorage`, standard | none |
-| Retention tab, how long backups are kept | `IconTabRetention` | `IconTabRetention`, standard | none |
-| Integrity tab, checks | `IconTabIntegrity` | `IconTabIntegrity`, standard | none |
-| Recovery tab and rail entry | `IconTabRecovery` | `IconTabRecovery`, switch | none |
-| Off-site tab | `IconTabOffsite` | `IconTabOffsite`, standard | none |
-| Schedules, automation | `IconSchedules` | `IconSchedules`, standard | `IconSchedules`, standard |
-| Notifications | `IconNotifications` | `IconNotifications`, standard | `IconNotifications`, standard |
-| Schedule sliders, set limits | `IconSliders` | none | `IconSliders`, standard |
-| Diagnostics | `IconDiagnostics` | none | `IconDiagnostics`, standard |
-| Keyboard shortcuts | `IconKeyboard` | none | `IconKeyboard`, standard |
+| Meaning | GlimStone |
+| --- | --- |
+| General tab | `IconTabGeneral` |
+| Look tab | `IconTabLook` |
+| Security tab | `IconTabSecurity` |
+| Advanced tab | `IconTabAdvanced` |
+| App tab, the other forms of the product | `IconTabApp` |
+| Apps tab, the companions | `IconTabApps` |
+| System tab | `IconTabSystem` |
+| Paths and storage tab | `IconTabStorage` |
+| Retention tab, how long backups are kept | `IconTabRetention` |
+| Integrity tab, checks | `IconTabIntegrity` |
+| Recovery tab and rail entry | `IconTabRecovery` |
+| Off-site tab | `IconTabOffsite` |
+| Schedules, automation | `IconSchedules` |
+| Notifications | `IconNotifications` |
+| Schedule sliders, set limits | `IconSliders` |
+| Diagnostics | `IconDiagnostics` |
+| Keyboard shortcuts | `IconKeyboard` |
 
 <br>
 
 ## Look settings
 
-ArrowLoop drew the glyphs for the segments of its Design, Corners and Motion selectors, so this table gets a column for it. BombVault and KnightLoader wear them too. The Labels and Row height glyphs were drawn for GlimStone; only KnightLoader has a Row height selector.
+Every segment of the Look selectors has a glyph of its own.
 
-| Meaning | GlimStone | ArrowLoop | BombVault | KnightLoader |
-| --- | --- | --- | --- | --- |
-| Design selector, System | `IconThemeSystem` | `IconThemeSystem`, standard | `IconThemeSystem`, standard | `IconThemeSystem`, standard |
-| Design selector, Dark | `IconMoon` | `IconMoon`, standard | `IconMoon`, standard | `IconMoon`, standard |
-| Design selector, Light | `IconSun` | `IconSun`, standard | `IconSun`, standard | `IconSun`, standard |
-| Corners selector, Round | `IconCornerRound` | `IconCornerRound`, standard | `IconCornerRound`, standard | `IconCornerRound`, standard |
-| Corners selector, Soft | `IconCornerSoft` | `IconCornerSoft`, standard | `IconCornerSoft`, standard | `IconCornerSoft`, standard |
-| Corners selector, Square | `IconCornerSquare` | `IconCornerSquare`, standard | `IconCornerSquare`, standard | `IconCornerSquare`, standard |
-| Corners selector, the hidden leaf | `IconCornerLeaf` | `IconCornerLeaf`, standard | `IconCornerLeaf`, standard | `IconCornerLeaf`, standard |
-| Motion selector, Off | `IconMotionOff` | `IconMotionOff`, standard | `IconMotionOff`, standard | `IconMotionOff`, standard |
-| Motion selector, Subtle | `IconMotionSubtle` | `IconMotionSubtle`, standard | `IconMotionSubtle`, standard | `IconMotionSubtle`, standard |
-| Motion selector, Wild | `IconMotionWild` | `IconMotionWild`, standard | `IconMotionWild`, standard | `IconMotionWild`, standard |
-| Motion selector, the hidden storm | `IconMotionStorm` | `IconMotionStorm`, standard | `IconMotionStorm`, standard | `IconMotionStorm`, standard |
-| Labels selector, Text | `IconLabelText` | `IconLabelText`, standard | `IconLabelText`, standard | `IconLabelText`, standard |
-| Labels selector, Text and glyph | `IconLabelTextGlyph` | `IconLabelTextGlyph`, standard | `IconLabelTextGlyph`, standard | `IconLabelTextGlyph`, standard |
-| Labels selector, Glyph | `IconLabelGlyph` | `IconLabelGlyph`, standard | `IconLabelGlyph`, standard | `IconLabelGlyph`, standard |
-| Labels selector, Reactive | `IconLabelReactive` | `IconLabelReactive`, standard | `IconLabelReactive`, standard | `IconLabelReactive`, standard |
-| Row height selector, Compact | `IconRowCompact` | none | none | `IconRowCompact`, standard |
-| Row height selector, Medium | `IconRowMedium` | none | none | `IconRowMedium`, standard |
-| Row height selector, Comfortable | `IconRowComfortable` | none | none | `IconRowComfortable`, standard |
-| Accent row, the swatch that takes the system's colour | `IconAccentSystem` | none | none | none |
-
-<br>
-
-## TowerTorch
-
-TowerTorch wears the assortment on its own controls and on the Unraid buttons it draws as badges, and it drew `IconGrip`, `IconMove` and `IconCompute` for them.
-
-| Meaning | GlimStone | TowerTorch |
-| --- | --- | --- |
-| Show, reveal | `IconEye` | `Eye`, standard |
-| Hide again | `IconEyeOff` | `EyeOff` on Hide stopped, standard |
-| Reset to the default | `IconRefresh` | `Refresh`, standard |
-| Retry, reload, refresh | `IconRetry` | `Retry`, standard |
-| Upload | `IconUpload` | `Upload`, standard |
-| Import, read in | `IconImport` | `Import`, standard |
-| Download | `IconDownload` | `Download`, standard |
-| Export | `IconExport` | `Export`, standard |
-| Search | `IconSearch` | `Search`, standard |
-| Start, run now, play | `IconPlay` | `Play`, standard |
-| Pause | `IconPause` | `Pause`, standard |
-| Stop, abort | `IconStop` | `Stop`, standard |
-| Power on and off | `IconPower` | `Power`, standard |
-| Sleep, spin down, rest, hibernate | `IconSleep` | `Sleep` on Spin down, a resting disk and Hibernate, standard |
-| Delete, remove | `IconTrash` | `Trash`, standard |
-| Delete with its files | `IconTrashFiles` | `TrashFiles`, standard |
-| Clear, empty a list | `IconEmpty` | `Empty`, standard |
-| Add, create | `IconAdd` | `Add`, standard |
-| Close, cancel, dismiss | `IconClose` | `Close`, standard |
-| Edit, rename, change | `IconPencil` | `Pencil`, standard |
-| Copy | `IconCopy` | `Copy`, standard |
-| Test, verify, success | `IconCheck` | `Check`, standard |
-| Done, confirm, got it | `IconConfirm` | `Confirm`, standard |
-| Apply, take over, use this one | `IconApply` | `Apply`, standard |
-| Sign in | `IconSignIn` | `SignIn` on the login page, standard |
-| Credentials, key, set a password, sign in with a passkey | `IconKey` | `Key`, standard |
-| Information | `IconInfo` | `Info`, standard |
-| Help | `IconHelp` | `Help`, standard |
-| More | `IconMore` | `More`, standard |
-| Save | `IconSave` | `Save`, standard |
-| Prune, reclaim space | `IconPrune` | `Prune` on Clean up, standard |
-| Compute, calculate | `IconCompute` | `Compute`, standard |
-| Back | `IconBack` | `Back`, standard |
-| Move elsewhere | `IconMove` | `Move`, standard |
-| Expand | `IconExpand` | `Expand`, standard |
-| Select all | `IconSelectAll` | `SelectAll`, standard |
-| Clear the selection | `IconClearSelection` | `ClearSelection`, standard |
-| Drag to reorder | `IconGrip` | `Grip`, standard |
-| Open a service's own site | `IconExternalLink` | `ExternalLink` on WebUI and a project page, standard |
-| Warning | `IconWarning` | `Warning`, standard |
-| A protection is on, turn it on | `IconShieldOn` | `ShieldOn` on a protected share, standard |
-| Script, code, variables, console | `IconCode` | `Code` on a container's console, standard |
-| Open the manual | `IconManual` | `Manual` on Read me first, standard |
-| Default, preferred, favourite | `IconStar` | `Star` on Community Applications' spotlight and the Favorites tab, standard |
-| Open the log | `IconLog` | `Log`, standard |
-| Install | `IconInstall` | `Install`, standard |
-| Fetch an update, update now | `IconSync` | `Update`, switch |
-| Up to date after an update check | `IconUpToDate` | `UpToDate`, standard |
-| An update is available | `IconUpdateAvailable` | `UpdateAvailable`, standard |
-| Settings, open a setting | `IconGear` | `Gear`, standard |
-| A folder | `IconFolder` | `Folder`, standard |
-| Accounts | `IconAccounts` | `Accounts` on Owner, standard |
-| Docker containers | `IconContainers` | `Containers`, standard |
-| Virtual machines | `IconVM` | `VM` on a VM's console, standard |
-| Back up now | `IconBackupNow` | `BackupNow` on Boot device backup and Create snapshot, standard |
-| Restore | `IconRestore` | `Restore`, standard |
-| The GitHub repository | `IconGithub` | `Github`, standard |
-| What's new | `IconWhatsNew` | `WhatsNew`, standard |
-| Schedules, automation | `IconSchedules` | `Schedules` on History, standard |
-| Labels selector, Text | `IconLabelText` | `IconLabelText`, standard |
-| Labels selector, Text and glyph | `IconLabelTextGlyph` | `IconLabelTextGlyph`, standard |
-| Labels selector, Glyph | `IconLabelGlyph` | `IconLabelGlyph`, standard |
-| Labels selector, Reactive | `IconLabelReactive` | `IconLabelReactive`, standard |
-| Row height selector, Compact | `IconRowCompact` | `IconRowCompact`, standard |
-| Row height selector, Medium | `IconRowMedium` | `IconRowMedium`, standard |
-| Row height selector, Comfortable | `IconRowComfortable` | `IconRowComfortable`, standard |
-
-TowerTorch also wears five drawings of its own that the assortment does not hold yet: `Resume`, `ViewList` and `ViewGrid` for its list and tile views, and `Shield` and `ShieldAlert`, the outline of `IconShieldOn` empty and with an exclamation mark, for a share whose protection is idle or needs attention.
-
-<br>
-
-## ArrowLoop
-
-ArrowLoop picks a button's glyph from its translation key. The rows below are the button meanings where it has a button; its other rows are not listed here yet.
-
-| Meaning | GlimStone | ArrowLoop |
-| --- | --- | --- |
-| Reset to the default | `IconRefresh` | `IconRefresh`, standard |
-| Retry, reload, refresh | `IconRetry` | `IconRetry` after a failed check, standard |
-| Import, read in | `IconImport` | `IconImport`, standard |
-| Export | `IconExport` | `IconExport`, standard |
-| Stop, abort | `IconStop` | `IconStop`, standard |
-| Clear, empty a list | `IconEmpty` | `IconEmpty`, standard |
-| Add, create | `IconAdd` | `IconAdd`, standard |
-| Done, confirm, got it | `IconConfirm` | `IconConfirm`, also on `twoFactor.recoverySaved`, standard |
-| Apply, take over, use this one | `IconApply` | `IconApply`, standard |
-| Credentials, key, set a password, sign in with a passkey | `IconKey` | `IconKey`, standard |
-| Revoke a key, remove a password or passkey | `IconKeyRevoke` | `IconKeyRevoke`, standard |
-| Prune, reclaim space | `IconPrune` | `IconPrune`, standard |
-| Send a test | `IconSendTest` | `IconSendTest`, standard |
-| Keep both versions | `IconKeepBoth` | `IconKeepBoth`, standard |
-| Keep the left version | `IconKeepLeft` | `IconKeepLeft`, standard |
-| Keep the right version | `IconKeepRight` | `IconKeepRight`, standard |
-| Sign in | `IconSignIn` | `IconSignIn`, standard |
-| Sign in with a passkey | `IconKey` | `IconKey`, standard |
-| Forgot password | `IconForgotPassword` | `IconForgotPassword`, standard |
-| A protection is on, turn it on | `IconShieldOn` | `IconShieldOn`, standard |
-| A protection is off, turn it off | `IconShieldOff` | `IconShieldOff`, standard |
-| Replicate, synchronise, check for updates | `IconSync` | `IconSync` on Check for updates, standard |
-| Up to date after an update check | `IconUpToDate` | `IconUpToDate`, standard |
-| An update is available | `IconUpdateAvailable` | `IconUpdateAvailable`, standard |
-| Restore | `IconRestore` | `IconRestore` on `trash.restore` and `anomaly.restore`, standard |
-| What's new | `IconWhatsNew` | `IconWhatsNew` with the dot in front, standard |
-| Open or show the app | `IconApp` | `IconApp` on the tray's Open, standard |
-
-<br>
-
-## ShipLog
-
-ShipLog wears the assortment on its settings page and in the changelog window it opens from Unraid's Docker list.
-
-| Meaning | GlimStone | ShipLog |
-| --- | --- | --- |
-| Show, reveal | `IconEye` | `Eye`, standard |
-| Hide again | `IconEyeOff` | `EyeOff`, standard |
-| Close, cancel, dismiss | `IconClose` | `Close`, standard |
-| Copy | `IconCopy` | `Copy`, standard |
-| Test, verify, success | `IconCheck` | `Check` on every Check button and a passed test, standard |
-| Connect, pair | `IconLink` | `Link` on the Sources tab, standard |
-| Information | `IconInfo` | `Info`, standard |
-| Open a service's own site | `IconExternalLink` | `ExternalLink`, standard |
-| Warning | `IconWarning` | `Warning`, standard |
-| Send a test | `IconSendTest` | `SendTest`, standard |
-| Automatic, the app chooses | `IconCompressAuto` | `CompressAuto` on Autodetect, standard |
-| Fetch an update, update now | `IconSync` | `Sync` on Update now and Update all, standard |
-| An updates tab or section | `IconUpdate` | `Update` on the Updates tab, standard |
-| General tab | `IconTabGeneral` | `TabGeneral`, standard |
-| Notifications | `IconNotifications` | `Notifications`, standard |
-
-<br>
-
-## FireSquire
-
-FireSquire wears seven glyphs on the buttons of its pre-reboot check and on the status of each finding.
-
-| Meaning | GlimStone | FireSquire |
-| --- | --- | --- |
-| Retry, reload, refresh | `IconRetry` | `Retry` on Check again, standard |
-| Close, cancel, dismiss | `IconClose` | `Close` on Close and on a failed finding, standard |
-| Copy | `IconCopy` | `Copy` on the crypto address, standard |
-| Test, verify, success | `IconCheck` | `Check` on the button beside Reboot, the dashboard tile, the button that runs the check and a passed finding, standard |
-| Information | `IconInfo` | `Info` on Release notes and an informational finding, standard |
-| Next, continue | `IconForward` | `Forward` on Go to the source, standard |
-| Warning | `IconWarning` | `Warning` on a finding that calls for caution, standard |
-
-<br>
-
-## CannonCommander
-
-CannonCommander's new interface draws every glyph from the assortment. The rows below are the meanings that came into it with the file manager, and the others follow once its screens are built.
-
-| Meaning | GlimStone | CannonCommander |
-| --- | --- | --- |
-| Reset one row of a colour card to its defaults | `IconResetArrow` | `IconResetArrow`, standard |
-| Give through PayPal | `IconPayPal` | `IconPayPal`, standard |
-| Give from a crypto wallet | `IconBitcoin` | `IconBitcoin`, standard |
-| A RAW photo straight from the camera | `IconFileRaw` | `IconFileRaw`, standard |
-| A design or vector graphic | `IconFileDesign` | `IconFileDesign`, standard |
-| A playlist | `IconFilePlaylist` | `IconFilePlaylist`, standard |
-| A PDF document | `IconFilePdf` | `IconFilePdf`, standard |
-| A text document from an office suite | `IconFileDoc` | `IconFileDoc`, standard |
-| A spreadsheet | `IconFileSheet` | `IconFileSheet`, standard |
-| A presentation | `IconFileSlides` | `IconFileSlides`, standard |
-| An e-book | `IconBook` | `IconBook`, standard |
-| A disk image or virtual disk | `IconDisc` | `IconDisc`, standard |
-| A program or installable package | `IconFileProgram` | `IconFileProgram`, standard |
-| A font | `IconFont` | `IconFont`, standard |
-| A checksum or signature | `IconHash` | `IconHash`, standard |
-| A torrent or magnet link | `IconMagnet` | `IconMagnet`, standard |
-| A 3D model or CAD drawing | `IconCube` | `IconCube`, standard |
-| A calendar or contact card | `IconCalendar` | `IconCalendar`, standard |
-| A backup, temporary or unfinished file | `IconHourglass` | `IconHourglass`, standard |
-
-<br>
-
-## Where each app keeps its glyphs
-
-- **ArrowLoop:** `scripts/gen_glyphs.py` writes the app's glyphs, and the Look settings glyphs come from it, for the web and, through `scripts/gen_glyph_data.py`, for the phone. `web/src/lib/glyphName.ts` maps a translation key to a glyph name, and a key it does not know keeps its text.
-- **BombVault:** `scripts/gen_glyphs.py` writes `web/src/components/glyphs.tsx` and `navGlyphs.tsx` from a copy of `glyphs.json` at 16px; the phone app shows the web launcher and uses the same files. `glyphFor.tsx` maps a translation key to a glyph when a button passes none; a button that passes one wins.
-- **CannonCommander:** the frontend maps a file's kind to a glyph name through `prototype/src/formats.json` and draws the entry from `glyphs.json` through `@glimstone/vue`.
-- **FireSquire:** `firesquire-glyphs.js` beside its scripts holds a copy of every entry it draws, the square viewBox and the drawing, and names the GlimStone release it came from. `plugin/test/glyphs.test.js` checks that every glyph a button asks for is in the copy.
-- **KnightLoader:** `web/scripts/gen-glyphs.mjs` writes `web/src/lib/glyphs.tsx` at 22px with the ink at three quarters of the box; the Android app has no SVG and shows tinted bitmaps rendered from the same list into `mobile/assets/`. Every call site passes its glyph; Settings page glyphs are mapped in `pages/settings/pageIcons.tsx`. The browser extension copies the eye and a few others in `extension/src/`.
-- **ShipLog:** `include/glyphs.php` holds a copy of every entry it draws. `shiplog.page` uses them on the settings page, and `shiplog.Docker.page` hands four of them to `scripts/docker.js` for the changelog window.
-- **TowerTorch:** `scripts/cc-theme.js` holds a copy of every entry it draws, the square viewBox and the drawing, for its own controls and for Unraid's buttons; Unraid's own icons keep their Font Awesome. The glyphs of its settings selectors sit in `scripts/settings.js`, and `scripts/labels.js` maps Unraid's button captions to glyph names.
+| Meaning | GlimStone |
+| --- | --- |
+| Design selector, System | `IconThemeSystem` |
+| Design selector, Dark | `IconMoon` |
+| Design selector, Light | `IconSun` |
+| Corners selector, Round | `IconCornerRound` |
+| Corners selector, Soft | `IconCornerSoft` |
+| Corners selector, Square | `IconCornerSquare` |
+| Corners selector, the hidden leaf | `IconCornerLeaf` |
+| Motion selector, Off | `IconMotionOff` |
+| Motion selector, Subtle | `IconMotionSubtle` |
+| Motion selector, Wild | `IconMotionWild` |
+| Motion selector, the hidden storm | `IconMotionStorm` |
+| Labels selector, Text | `IconLabelText` |
+| Labels selector, Text and glyph | `IconLabelTextGlyph` |
+| Labels selector, Glyph | `IconLabelGlyph` |
+| Labels selector, Reactive | `IconLabelReactive` |
+| Row height selector, Compact | `IconRowCompact` |
+| Row height selector, Medium | `IconRowMedium` |
+| Row height selector, Comfortable | `IconRowComfortable` |
+| Accent row, the swatch that takes the system's colour | `IconAccentSystem` |

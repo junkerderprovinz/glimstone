@@ -70,7 +70,7 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconEye` | Show, reveal | Streamline `interface-essential/visible.svg` |
 | `IconEyeOff` | Hide again | Streamline `interface-essential/invisible-1.svg` |
 | `IconRefresh` | Reset to the default | Streamline `interface-essential/arrow-round-left.svg` |
-| `IconResetArrow` | Reset one row of a colour card to its defaults | Drawn for BombVault's accent card |
+| `IconResetArrow` | Reset one row of a colour card to its defaults | Drawn for GlimStone |
 | `IconRetry` | Retry, reload, refresh | Streamline `interface-essential/arrow-reload-horizontal-1.svg` |
 | `IconUpload` | Upload | Streamline `interface-essential/upload-circle.svg` |
 | `IconImport` | Import, read in | Streamline `interface-essential/upload-file.svg` |
@@ -87,9 +87,9 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconEmpty` | Clear, empty a list | Streamline `interface-essential/clipboard-remove.svg` |
 | `IconAdd` | Add, create | Drawn for GlimStone |
 | `IconClose` | Close, cancel, dismiss | Drawn for GlimStone |
-| `IconWindowMinimise` | Minimise a window | Drawn for KnightLoader |
-| `IconWindowMaximise` | Maximise a window | Drawn for KnightLoader |
-| `IconWindowRestore` | Restore a maximised window | Drawn for KnightLoader |
+| `IconWindowMinimise` | Minimise a window | Drawn for GlimStone |
+| `IconWindowMaximise` | Maximise a window | Drawn for GlimStone |
+| `IconWindowRestore` | Restore a maximised window | Drawn for GlimStone |
 | `IconPencil` | Edit, rename, change | Streamline `interface-essential/pencil.svg` |
 | `IconCopy` | Copy | Tabler Icons, filled `copy` (MIT) |
 | `IconCheck` | Test, verify, success | Drawn for GlimStone |
@@ -107,21 +107,21 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconInfo` | Information | Streamline `interface-essential/information-circle.svg` |
 | `IconHelp` | Help | Streamline `interface-essential/help-question-1.svg` |
 | `IconMore` | More | Streamline `interface-essential/horizontal-menu-circle.svg` |
-| `IconMenu` | Menu | KnightLoader's drawing on a 20-unit grid |
+| `IconMenu` | Menu | Drawn on a 20-unit grid |
 | `IconSave` | Save | Material Design Icons `content-save` (Apache 2.0) |
 | `IconUnlock` | Unlock, clear a lock | Drawn for GlimStone |
 | `IconPrune` | Prune, reclaim space | Streamline `computer-devices/shredder.svg` |
 | `IconCompact` | Compact a database | Streamline `interface-essential/arrow-shrink-diagonal-1.svg` |
-| `IconCompute` | Compute, calculate | Drawn for TowerTorch, commit `a13c2ef`: a calculator |
-| `IconBack` | Back | KnightLoader's drawing on a 20-unit grid |
-| `IconForward` | Next, continue | KnightLoader's drawing on a 20-unit grid |
+| `IconCompute` | Compute, calculate | Drawn for GlimStone: a calculator |
+| `IconBack` | Back | Drawn on a 20-unit grid |
+| `IconForward` | Next, continue | Drawn on a 20-unit grid |
 | `IconLatest` | Jump to the newest entry, the end | Streamline `interface-essential/arrow-down-2.svg` |
 | `IconFirst` | Jump to the start | `IconLatest` mirrored |
 | `IconMoveUp` | Move up one | Streamline `interface-essential/arrow-up-1.svg` |
 | `IconMoveDown` | Move down one | Streamline `arrow-up-1` mirrored |
 | `IconMove` | Move elsewhere | Streamline `arrow-up-1` turned to point right |
-| `IconExpand` | Expand | KnightLoader's drawing on a 20-unit grid |
-| `IconCollapse` | Collapse | KnightLoader's drawing on a 20-unit grid |
+| `IconExpand` | Expand | Drawn on a 20-unit grid |
+| `IconCollapse` | Collapse | Drawn on a 20-unit grid |
 | `IconSelectAll` | Select all | Streamline `interface-essential/check-square.svg` |
 | `IconClearSelection` | Clear the selection | Streamline `interface-essential/subtract-square.svg` |
 | `IconCompare` | Compare | Streamline `interface-essential/layers-2.svg` |
@@ -130,12 +130,12 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconKeepRight` | Keep the right version | Streamline `interface-essential/align-right.svg` |
 | `IconMerge` | Merge | Streamline `interface-essential/pathfinder-union.svg` |
 | `IconFilter` | Filter | Streamline `interface-essential/filter-2.svg` |
-| `IconPin` | Pin | KnightLoader's drawing on a 20-unit grid |
-| `IconPriority` | Priority | KnightLoader's drawing on a 20-unit grid |
-| `IconGrip` | Drag to reorder | Drawn for TowerTorch, commit `25aab69`: two columns of three dots |
+| `IconPin` | Pin | Drawn on a 20-unit grid |
+| `IconPriority` | Priority | Drawn on a 20-unit grid |
+| `IconGrip` | Drag to reorder | Drawn for GlimStone: two columns of three dots |
 | `IconExternalLink` | Open a service's own site | Streamline `interface-essential/expand-window-2.svg` |
 | `IconWarning` | Warning | Streamline `interface-essential/warning-triangle.svg` |
-| `IconBolt` | Right away | KnightLoader's drawing on a 20-unit grid |
+| `IconBolt` | Right away | Drawn on a 20-unit grid |
 | `IconMail` | Write to us | Streamline `mail/mail-send-envelope.svg` |
 | `IconSendTest` | Send a test | Streamline `mail/mail-send-email-message.svg` |
 | `IconCoffee` | Buy the author a coffee | Simple Icons `buymeacoffee` (CC0, a trademark used descriptively) |
@@ -153,8 +153,8 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconSort` | Sort direction | Streamline `interface-essential/ascending-number-order.svg` |
 | `IconFolderUp` | Up one folder | Material Design Icons `folder-arrow-up` (Apache 2.0) |
 | `IconMailOpen` | Write to us, under the pointer or a finger | Material Design Icons `email-open` (Apache 2.0) |
-| `IconManual` | Manual | Drawn for BombVault's Help card |
-| `IconManualOpen` | Manual, under the pointer, a finger or the focus | Drawn for BombVault's Help card |
+| `IconManual` | Manual | Drawn for GlimStone |
+| `IconManualOpen` | Manual, under the pointer, a finger or the focus | Drawn for GlimStone |
 | `IconStar` | Default, preferred, favourite | Tabler Icons, filled `star` (MIT) |
 | `IconStopAsking` | Stop asking | Streamline `interface-essential/block-bell-notification.svg` |
 | `IconCookies` | Store cookies | Streamline `interface-essential/paperclip-1.svg`, shared with `IconFile` until cookies get a drawing of their own |
@@ -182,7 +182,7 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconFile` | A file, an attachment | Streamline `interface-essential/paperclip-1.svg` |
 | `IconFleet` | Instances, other boxes | Streamline `interface-essential/hierarchy-2.svg` |
 | `IconCollector` | Collector, taking links in | Streamline `mail/inbox-tray-1.svg` |
-| `IconAccounts` | Accounts | KnightLoader's drawing on a 20-unit grid |
+| `IconAccounts` | Accounts | Drawn on a 20-unit grid |
 | `IconNetwork` | Network, connections | Streamline `computer-devices/wifi.svg` |
 | `IconPhone` | Phone | Streamline `phone/phone-mobile-phone.svg` |
 | `IconBrowser` | Browser | Streamline `programming/browser-website-1.svg` |
@@ -218,22 +218,22 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 
 | Name | Means | Source |
 | --- | --- | --- |
-| `IconFileRaw` | A RAW photo straight from the camera | Drawn for CannonCommander |
-| `IconFileDesign` | A design or vector graphic | Drawn for CannonCommander |
-| `IconFilePlaylist` | A playlist | Drawn for CannonCommander |
-| `IconFilePdf` | A PDF document | Drawn for CannonCommander |
-| `IconFileDoc` | A text document from an office suite | Drawn for CannonCommander |
-| `IconFileSheet` | A spreadsheet | Drawn for CannonCommander |
-| `IconFileSlides` | A presentation | Drawn for CannonCommander |
-| `IconBook` | An e-book | Drawn for CannonCommander |
-| `IconDisc` | A disk image or virtual disk | Drawn for CannonCommander |
-| `IconFileProgram` | A program or installable package | Drawn for CannonCommander |
-| `IconFont` | A font | Drawn for CannonCommander |
-| `IconHash` | A checksum or signature | Drawn for CannonCommander |
-| `IconMagnet` | A torrent or magnet link | Drawn for CannonCommander |
-| `IconCube` | A 3D model or CAD drawing | Drawn for CannonCommander |
-| `IconCalendar` | A calendar or contact card | Drawn for CannonCommander |
-| `IconHourglass` | A backup, temporary or unfinished file | Drawn for CannonCommander |
+| `IconFileRaw` | A RAW photo straight from the camera | Drawn for GlimStone |
+| `IconFileDesign` | A design or vector graphic | Drawn for GlimStone |
+| `IconFilePlaylist` | A playlist | Drawn for GlimStone |
+| `IconFilePdf` | A PDF document | Drawn for GlimStone |
+| `IconFileDoc` | A text document from an office suite | Drawn for GlimStone |
+| `IconFileSheet` | A spreadsheet | Drawn for GlimStone |
+| `IconFileSlides` | A presentation | Drawn for GlimStone |
+| `IconBook` | An e-book | Drawn for GlimStone |
+| `IconDisc` | A disk image or virtual disk | Drawn for GlimStone |
+| `IconFileProgram` | A program or installable package | Drawn for GlimStone |
+| `IconFont` | A font | Drawn for GlimStone |
+| `IconHash` | A checksum or signature | Drawn for GlimStone |
+| `IconMagnet` | A torrent or magnet link | Drawn for GlimStone |
+| `IconCube` | A 3D model or CAD drawing | Drawn for GlimStone |
+| `IconCalendar` | A calendar or contact card | Drawn for GlimStone |
+| `IconHourglass` | A backup, temporary or unfinished file | Drawn for GlimStone |
 
 A file manager tells a file's kind by its glyph before its name is read, so these stand beside `IconFileVideo`, `IconFileAudio`, `IconFileImage`, `IconFileText` and `IconArchive` above. The documents start from one page with its top corner folded and differ only in what is printed on it. The rest are a single object each, large enough to read at 16px: a camera, a pen nib, a disc, a cube, an hourglass.
 
@@ -263,15 +263,15 @@ A file manager tells a file's kind by its glyph before its name is read, so thes
 
 | Name | Means | Source |
 | --- | --- | --- |
-| `IconThemeSystem` | The look follows the device, light or dark | Drawn for ArrowLoop after BombVault's System theme mark, ArrowLoop commit `771005df` |
-| `IconCornerRound` | Round corners | Drawn for ArrowLoop, commit `771005df` |
-| `IconCornerSoft` | Softly rounded corners | Drawn for ArrowLoop, commit `771005df` |
-| `IconCornerSquare` | Square corners | Drawn for ArrowLoop, commit `771005df` |
-| `IconCornerLeaf` | The leaf: two opposite corners round, the other two square | Drawn for ArrowLoop, commit `771005df` |
-| `IconMotionOff` | No motion | Drawn for ArrowLoop, commit `771005df` |
-| `IconMotionSubtle` | Gentle motion | Drawn for ArrowLoop, commit `771005df` |
-| `IconMotionWild` | Wild motion | Drawn for ArrowLoop, commit `771005df` |
-| `IconMotionStorm` | The storm, the hidden level above wild | Drawn for ArrowLoop, commit `771005df` |
+| `IconThemeSystem` | The look follows the device, light or dark | Drawn for GlimStone |
+| `IconCornerRound` | Round corners | Drawn for GlimStone |
+| `IconCornerSoft` | Softly rounded corners | Drawn for GlimStone |
+| `IconCornerSquare` | Square corners | Drawn for GlimStone |
+| `IconCornerLeaf` | The leaf: two opposite corners round, the other two square | Drawn for GlimStone |
+| `IconMotionOff` | No motion | Drawn for GlimStone |
+| `IconMotionSubtle` | Gentle motion | Drawn for GlimStone |
+| `IconMotionWild` | Wild motion | Drawn for GlimStone |
+| `IconMotionStorm` | The storm, the hidden level above wild | Drawn for GlimStone |
 | `IconLabelText` | Label mode, the words alone | Drawn for GlimStone |
 | `IconLabelTextGlyph` | Label mode, glyph and words | Drawn for GlimStone |
 | `IconLabelGlyph` | Label mode, the glyph alone | Drawn for GlimStone |
@@ -283,7 +283,7 @@ A file manager tells a file's kind by its glyph before its name is read, so thes
 
 The Design selector's Dark and Light segments wear `IconMoon` and `IconSun` from the actions above, and System wears `IconThemeSystem`, a ring with one half filled. Each corner glyph is a frame drawn with the corners it names, so the four read as one family whatever corners the selector around them has. The motion glyphs are one line that swings further at each level, just as a level is the same animation with bigger numbers. `IconCornerLeaf` and `IconMotionStorm` belong to the hidden shape and the hidden level and stand only where the selector offers those. The four label glyphs draw a choice with a disc for the glyph and bars for the words: three bars for Text, a small disc before two bars for Text and glyph, a large disc alone for Glyph, and for Reactive a disc with a pointer arrow at its corner, since that mode opens the words under the pointer. The row glyphs are bars across the full width at three spacings, four close ones for Compact, three for Medium and two far apart for Comfortable. Only the gap between the bars sets the three apart. `IconAccentSystem` stands on the swatch before the accent presets that takes the colour from the device: a wand with a large spark at its tip and two small ones beside it.
 
-**`IconGrip` is two columns of three dots**, the handle TowerTorch and KnightLoader each drew for a row that drags.
+**`IconGrip` is two columns of three dots**, the common handle for a row that drags.
 
 **Pairs share one drawing turned or mirrored.** `IconFirst` is `IconLatest` mirrored top to bottom, `IconMoveDown` is `IconMoveUp` mirrored and `IconReject`, the thumb down, is `IconConfirm` mirrored, so the two halves of each pair cannot drift apart. `IconEye` and `IconEyeOff` are Streamline's `visible` and `invisible-1`, and a Show phrase button and the reveal toggle in a password field wear the same two. `IconMail` rests on a mail button and `IconMailOpen` takes its place under the pointer or a finger; `MAIL_SVG` in `appMarks.ts` carries the pair. `IconManual`, the closed book, and `IconManualOpen` do the same on the manual button, and `MANUAL_SVG` carries them.
 
@@ -309,9 +309,7 @@ Adoption is a script, not a package. The shape that works:
 4. Record each fitted glyph's measured ink box next to its entry, and let one constant drive the fit: a redrawn coordinate is a second place to forget.
 5. Pin the arithmetic with a test that RECOMPUTES the transform from the measured boxes rather than snapshotting what the generator emitted. A transform that merely exists proves nothing; a wrong scale renders perfectly well.
 
-BombVault's `scripts/gen_glyphs.py` is the working reference implementation of all five.
-
-**Keep a glyph from a second source in its own table.** ArrowLoop's generator carries a `LICENSED` list beside the Streamline one: name, meaning, source-and-licence line, the measured crop, and the paths verbatim. It earns the separation twice over - the doc comment it emits names the real source rather than claiming the drawing was made here, and the box sitting next to the paths is the only place the measurement can be read back from later. `scripts/measure_ink.py` in the same repo produces that box without a browser, by flattening every curve and taking the extremes; the reference's own measuring step, in a form a generator can be handed.
+**Keep a glyph from a second source in its own table.** A generator can carry a `LICENSED` list beside the Streamline one: name, meaning, source-and-licence line, the measured crop, and the paths verbatim. It earns the separation twice over: the doc comment it emits names the real source rather than claiming the drawing was made here, and the box sitting next to the paths is the only place the measurement can be read back from later. A measuring script can produce that box without a browser, by flattening every curve and taking the extremes, which is the reference's own measuring step in a form a generator can be handed.
 
 <br>
 
