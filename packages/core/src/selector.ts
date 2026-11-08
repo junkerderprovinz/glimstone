@@ -182,7 +182,6 @@ export function selectorView(s: SelectorInput): SelectorView {
         "glim-sel",
         well ? "glim-sel--well" : "glim-sel--chip",
         s.inline && !s.fit && "glim-sel--inline",
-        s.fit && "glim-sel--fit",
       ]
         .filter(Boolean)
         .join(" ");

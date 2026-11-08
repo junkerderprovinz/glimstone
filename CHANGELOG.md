@@ -11,7 +11,7 @@ A horizontal selector keeps to one row at every width. Found in BombVault, whose
 - **`pairsOnPhone`** is still accepted and has no effect. BombVault can drop it from the Labels selector, the anomaly settings and the role dialogs.
 - **A strip that wrapped stays on its row:** its segments share the row by their labels, then show their glyphs alone where every segment has one, then cut their labels short with the whole label in the bubble. A set that does not fit even then wants the vertical tiles, a list or a dropdown.
 - **The core's measuring changed.** `watchSelectorRows`, `SelectorRows`, `segmentLayout`, `perRowFor`, `SegmentLayout` and `SegmentWidths` are gone. `watchSelectorFit` takes `{ pinWidth, fit, canSqueeze }` and hands over a `SelectorLayout`, `selectorFlex` takes that layout, `measureSegments` returns the one-line widths, and `SelectorFit` gains `"truncated"`. Only an app that measures its own selector is affected.
-- **Classes:** `.glim-sel--pairs` and `.glim-sel-label--wrap` are gone.
+- **Classes:** `.glim-sel--pairs`, `.glim-sel-label--wrap` and `.glim-sel--fit` are gone.
 - **Flutter:** nothing changed there.
 
 ## 🎨 Design
