@@ -2,16 +2,18 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 4.2.7 - 2026-11-08
 
 Where a dragged item lands is one function in the core: `dropIndex` places it by its leading edge, along a row, down a column or line by line in a grid. Until now each app wrote that comparison itself.
 
 **Adopting apps:**
 
+- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.2.7, all at the same number. Nothing is renamed or removed.
 - **ArrowLoop:** `aheadOf` in `web/src/lib/dragLift.ts` can go. `aim` hands the offset boxes it already measures to `dropIndex(held, slot, others)`.
 - **KnightLoader:** in `liveColumnOrder`, the loop that counts passed columns becomes `dropIndex(held, from, others, { axis: "x", rtl })`. The splice around it stays.
 - **Apps that compare centres:** a drag hook that places by the held item's centre or by the pointer over an item's middle hands the held item's box, its place and the others' boxes to `dropIndex` instead, with `axis: "grid"` where the items wrap. BombVault's `aim` is one, and so are CannonCommander's job queue, settings tabs and list columns.
-- **Flutter:** nothing changed there.
+- **Flutter:** move the git dependency to `ref: v4.2.7`. Nothing changed there.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.2.7.
 
 ## ✨ Added
 
