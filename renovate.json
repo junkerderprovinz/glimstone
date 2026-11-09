@@ -15,6 +15,12 @@
   "constraints": { "node": "24", "npm": "<12" },
   "packageRules": [
     {
+      "description": "The constraints above set the Node and npm that Renovate itself runs for lockfile updates, so they move by hand",
+      "matchManagers": ["renovate-config"],
+      "matchDepNames": ["node", "npm"],
+      "enabled": false
+    },
+    {
       "description": "Node stays on 24 until 26 is tested. This covers the node image, node-version in setup-node (looked up as actions/node-versions), .nvmrc, engines and @types/node.",
       "matchPackageNames": ["node", "actions/node-versions", "@types/node"],
       "allowedVersions": "<25"
