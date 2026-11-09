@@ -26,6 +26,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     required this.brandUnraidFrom,
     required this.brandUnraidTo,
     required this.brandWindows,
+    required this.brandFlatpak,
     required this.brandGithub,
     required this.carbonText,
     required this.carbonTextSub,
@@ -75,6 +76,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
   final Color brandUnraidFrom;
   final Color brandUnraidTo;
   final Color brandWindows;
+  final Color brandFlatpak;
   final Color brandGithub;
   final Color carbonText;
   final Color carbonTextSub;
@@ -128,6 +130,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     brandUnraidFrom: Color(0xFFE32929),
     brandUnraidTo: Color(0xFFFF8D30),
     brandWindows: Color(0xFF2B88D8),
+    brandFlatpak: Color(0xFF4A90D9),
     brandGithub: Color(0xFFFFFFFF),
     carbonText: Color(0xFFF4F4F4),
     carbonTextSub: Color(0xFFC6C6C6),
@@ -178,6 +181,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     brandUnraidFrom: Color(0xFFE32929),
     brandUnraidTo: Color(0xFFFF8D30),
     brandWindows: Color(0xFF2B88D8),
+    brandFlatpak: Color(0xFF4A90D9),
     brandGithub: Color(0xFFFFFFFF),
     carbonText: Color(0xFFF4F4F4),
     carbonTextSub: Color(0xFFC6C6C6),
@@ -227,6 +231,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     brandUnraidFrom: Color(0xFFE32929),
     brandUnraidTo: Color(0xFFFF8D30),
     brandWindows: Color(0xFF0078D4),
+    brandFlatpak: Color(0xFF4A90D9),
     brandGithub: Color(0xFF181717),
     carbonText: Color(0xFF161616),
     carbonTextSub: Color(0xFF525252),
@@ -277,6 +282,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     Color? brandUnraidFrom,
     Color? brandUnraidTo,
     Color? brandWindows,
+    Color? brandFlatpak,
     Color? brandGithub,
     Color? carbonText,
     Color? carbonTextSub,
@@ -326,6 +332,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
         brandUnraidFrom: brandUnraidFrom ?? this.brandUnraidFrom,
         brandUnraidTo: brandUnraidTo ?? this.brandUnraidTo,
         brandWindows: brandWindows ?? this.brandWindows,
+        brandFlatpak: brandFlatpak ?? this.brandFlatpak,
         brandGithub: brandGithub ?? this.brandGithub,
         carbonText: carbonText ?? this.carbonText,
         carbonTextSub: carbonTextSub ?? this.carbonTextSub,
@@ -379,6 +386,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
       brandUnraidFrom: Color.lerp(brandUnraidFrom, other.brandUnraidFrom, t)!,
       brandUnraidTo: Color.lerp(brandUnraidTo, other.brandUnraidTo, t)!,
       brandWindows: Color.lerp(brandWindows, other.brandWindows, t)!,
+      brandFlatpak: Color.lerp(brandFlatpak, other.brandFlatpak, t)!,
       brandGithub: Color.lerp(brandGithub, other.brandGithub, t)!,
       carbonText: Color.lerp(carbonText, other.carbonText, t)!,
       carbonTextSub: Color.lerp(carbonTextSub, other.carbonTextSub, t)!,

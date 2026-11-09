@@ -4,22 +4,25 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
-A README button's segment names only what differs, in one line, and can carry the whole name as its accessible name.
+A README button's segment names only what differs, in one line, and can carry the whole name as its accessible name. Flatpak joins the brands with its mark and its blue tile.
 
 **Adopting apps:**
 
 - **Segments:** a part after the first one gets one word and no second line, such as `{ name: "ARM", label: "Windows ARM", href }` beside `{ name: "Windows", sub: "x64", href }`. A segment that repeats the system's name with the variant as its second line reads "Windows | Windows" at rest.
 - **`label` on `ReadmePart`:** optional. Where it is set it is the part's `aria-label`. Without it the accessible name stays the name and the second line. An app with its own copy of `ReadmeButton` takes `readmePartLabel(part, sub)` from `@glimstone/core` for the label.
-- **Flutter:** nothing changed there.
+- **Flatpak:** give the button `brand="flatpak"`, `mark={<BrandMark svg={FLATPAK_SVG} />}` and `markClass="glim-flatpak-mark"`. An app that keeps its own copy of the tokens takes `--brand-flatpak` in all three theme blocks, its line in the lit tile's block, `.glim-flatpak-mark` and `.glim-tile-flatpak` from `tokens.css`.
+- **Flutter:** `GlimTheme` gains `brandFlatpak`.
 
 ## 🎨 Design
 
 - **The first part names the product, a segment names only what differs**, a new line under "The App tab": the mark and the full name with its second line on the first part, one word on a segment, "ARM" or "Portable", and the whole name as the segment's `label`.
+- **Flatpak's tile** is the mark's blue, `#4a90d9`, with white ink at 3.3:1. "The App tab" lists its mark beside the others.
 
 ## ✨ Added
 
 - **`label` on `ReadmePart`**, in React and Vue: the accessible name of a segment whose word reads right only beside the first part.
 - **`readmePartLabel`** in `@glimstone/core`: a part's accessible name from its `label`, or from its name and second line.
+- **`FLATPAK_SVG`** in `appMarks.ts`, Simple Icons' path of the Flatpak mark (CC BY 3.0), with `--brand-flatpak`, `.glim-flatpak-mark`, `.glim-tile-flatpak` and `"flatpak"` among the `ReadmeBrand`s.
 
 ## 4.3.1 - 2026-11-09
 
