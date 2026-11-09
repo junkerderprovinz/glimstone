@@ -20,4 +20,5 @@ test('takes the ignore list and the terms as options', () => {
 test('hands out the glossary itself', () => {
   assert.equal(glossary.terms.relay.de.singular, 'Relay');
   assert.equal(glossary.terms.backup.de.singular, 'Sicherung');
+  assert.deepEqual(glossary.terms.permission.de, { singular: 'Erlaubnis', plural: 'Erlaubnisse', gender: 'f', stems: ['erlaubnis'] });
 });

@@ -30,7 +30,7 @@ const glossary = {
     permission: {
       enforce: false,
       en: { singular: 'permission', plural: 'permissions', stems: ['permission', 'permissions'] },
-      de: { singular: 'Freigabe', plural: 'Freigaben', stems: ['freigab'], forbidden: ['erlaubnis'] },
+      de: { singular: 'Erlaubnis', plural: 'Erlaubnisse', stems: ['erlaubnis'], forbidden: ['genehmigung*'] },
     },
   },
 };
@@ -156,9 +156,9 @@ test('does not ask an untranslated text for the term', () => {
 test('checks a term that is not enforced for its forbidden variants alone', () => {
   const found = run({
     en: at('en', { a: 'File permissions', b: 'Allowed' }),
-    de: at('de', { a: 'Dateirechte', b: 'Mit Erlaubnis' }),
+    de: at('de', { a: 'Dateirechte', b: 'Mit Genehmigung' }),
   });
-  assert.deepEqual(brief(found), ['de b permission forbidden erlaubnis']);
+  assert.deepEqual(brief(found), ['de b permission forbidden genehmigung*']);
 });
 
 test('limits the run to the terms it is given', () => {

@@ -1334,11 +1334,11 @@
         ]
       },
       "de": {
-        "singular": "Freigabe",
-        "plural": "Freigaben",
+        "singular": "Erlaubnis",
+        "plural": "Erlaubnisse",
         "gender": "f",
         "stems": [
-          "freigab"
+          "erlaubnis"
         ]
       },
       "ar": {

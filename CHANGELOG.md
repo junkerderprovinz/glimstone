@@ -11,7 +11,7 @@ A glossary joins the packages: `@glimstone/terms` holds the words an interface u
 - **Installing:** `npm install --save-dev @glimstone/terms`. It ships at the same number as the other packages and depends on nothing.
 - **In CI:** `npx glimstone-terms <locale files or folders>` prints every break with file, line, language and key and exits with 1. `--terms=relay,backup` takes the terms on one at a time, and `--ignore=<file>` leaves out keys that name something else, such as a fixed product name.
 - **In a test:** `checkLocales(paths, { ignore, terms })` returns the same breaks as a list, so a Vitest file can expect it to be empty.
-- **Two rules:** a translation whose English carries a term carries that term's word, and no translation uses a forbidden variant. In German that means "Relay", never "Relais", "Sicherung" and not "Backup" in running text, and "Phrase", never "Festungs-Phrase".
+- **Two rules:** a translation whose English carries a term carries that term's word, and no translation uses a forbidden variant. In German that means "Relay", never "Relais", "Sicherung" and not "Backup" in running text, "Phrase", never "Festungs-Phrase", and "Erlaubnis" for what one app may start in another, since "Freigabe" already names network and device shares.
 - **Flutter:** nothing changed there.
 
 ## ✨ Added
