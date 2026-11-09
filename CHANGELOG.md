@@ -2,6 +2,25 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+A README button's segment names only what differs, in one line, and can carry the whole name as its accessible name.
+
+**Adopting apps:**
+
+- **Segments:** a part after the first one gets one word and no second line, such as `{ name: "ARM", label: "Windows ARM", href }` beside `{ name: "Windows", sub: "x64", href }`. A segment that repeats the system's name with the variant as its second line reads "Windows | Windows" at rest.
+- **`label` on `ReadmePart`:** optional. Where it is set it is the part's `aria-label`. Without it the accessible name stays the name and the second line. An app with its own copy of `ReadmeButton` takes `readmePartLabel(part, sub)` from `@glimstone/core` for the label.
+- **Flutter:** nothing changed there.
+
+## 🎨 Design
+
+- **The first part names the product, a segment names only what differs**, a new line under "The App tab": the mark and the full name with its second line on the first part, one word on a segment, "ARM" or "Portable", and the whole name as the segment's `label`.
+
+## ✨ Added
+
+- **`label` on `ReadmePart`**, in React and Vue: the accessible name of a segment whose word reads right only beside the first part.
+- **`readmePartLabel`** in `@glimstone/core`: a part's accessible name from its `label`, or from its name and second line.
+
 ## 4.3.1 - 2026-11-09
 
 The design language, the changelogs, the site and the glyph data describe each rule on its own, without naming the apps that use GlimStone. No rule, token or component changed.

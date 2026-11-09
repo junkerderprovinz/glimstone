@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { computed, onScopeDispose, shallowRef, watch, type Component } from "vue";
-import { keepReadmeFit, readmePartClass, readmeSoon, readmeUnitClass, type ReadmeBrand, type ReadmePart } from "@glimstone/core";
+import { keepReadmeFit, readmePartClass, readmePartLabel, readmeSoon, readmeUnitClass, type ReadmeBrand, type ReadmePart } from "@glimstone/core";
 import InfoBubble from "./InfoBubble.vue";
 
 // A button in the shape of the README's download buttons ("The App tab" in
 // design-language.md). The first part carries the mark and the full name; the
-// parts after it are segments that name only what differs. The unit lights up
-// as one in its brand's colour. A link where a part leads to a file or a
-// listing, a button where it does something, and a quiet unit with "Soon" as
-// its second line where the listing does not exist yet. The mark and a
-// vendor's own artwork go in the `mark` and `art` slots.
+// parts after it are segments that name only what differs, such as ARM beside
+// Windows. The unit lights up as one in its brand's colour. A link where a part
+// leads to a file or a listing, a button where it does something, and a quiet
+// unit with "Soon" as its second line where the listing does not exist yet. The
+// mark and a vendor's own artwork go in the `mark` and `art` slots.
 const props = withDefaults(
   defineProps<{
     brand: ReadmeBrand;
@@ -44,7 +44,7 @@ watch(
 onScopeDispose(() => stop?.());
 
 const sub = (p: ReadmePart) => (soon.value ? props.soonLabel : p.sub);
-const label = (p: ReadmePart) => (sub(p) ? `${p.name} ${sub(p)}` : p.name);
+const label = (p: ReadmePart) => readmePartLabel(p, sub(p));
 const tag = (p: ReadmePart): string | Component => (soon.value ? "span" : p.href ? "a" : "button");
 const attrs = (p: ReadmePart) =>
   soon.value

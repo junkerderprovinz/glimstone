@@ -26,6 +26,9 @@ export interface ReadmePart {
   name: string;
   /** The second line, shown under the pointer. Without one the name stays in the middle. */
   sub?: string;
+  /** The accessible name of a segment whose word reads right only beside the
+   *  first part, such as "Windows ARM" for ARM. */
+  label?: string;
   href?: string;
   onClick?: () => void;
 }
@@ -33,6 +36,11 @@ export interface ReadmePart {
 /** A unit whose first part goes nowhere is still to come. */
 export function readmeSoon(parts: ReadmePart[]): boolean {
   return !parts[0].href && !parts[0].onClick;
+}
+
+/** The part's accessible name, with `sub` the second line it shows. */
+export function readmePartLabel(part: ReadmePart, sub: string | undefined): string {
+  return part.label ?? (sub ? `${part.name} ${sub}` : part.name);
 }
 
 export function readmeUnitClass(brand: ReadmeBrand, parts: number, note: boolean, soon: boolean): string {
