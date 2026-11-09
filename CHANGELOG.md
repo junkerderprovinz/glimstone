@@ -2,6 +2,24 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+A glossary joins the packages: `@glimstone/terms` holds the words an interface uses for the same thing in all 42 languages, and checks an app's translations against them.
+
+**Adopting apps:**
+
+- **Installing:** `npm install --save-dev @glimstone/terms`. It ships at the same number as the other packages and depends on nothing.
+- **In CI:** `npx glimstone-terms <locale files or folders>` prints every break with file, line, language and key and exits with 1. `--terms=relay,backup` takes the terms on one at a time, and `--ignore=<file>` leaves out keys that name something else, such as a fixed product name.
+- **In a test:** `checkLocales(paths, { ignore, terms })` returns the same breaks as a list, so a Vitest file can expect it to be empty.
+- **Two rules:** a translation whose English carries a term carries that term's word, and no translation uses a forbidden variant. In German that means "Relay", never "Relais", "Sicherung" and not "Backup" in running text, and "Phrase", never "Festungs-Phrase".
+- **Flutter:** nothing changed there.
+
+## ✨ Added
+
+- **Nine terms:** fortress, instance, member, permission, relay, backup, pairing, phrase and job, each with a definition, singular, plural, gender and stems in every language. Where the existing translations disagree, the word most of them use is the one the glossary keeps, and the others are listed as forbidden variants.
+- **Stems, not fixed words:** a stem finds every inflection of a word, and in languages that build compounds it finds the word inside one.
+- **Placeholders, paths and addresses** such as `{backup}`, `/relay/connect` and `wss://host` do not count as words.
+
 ## 4.3.1 - 2026-11-09
 
 The design language, the changelogs, the site and the glyph data describe each rule on its own, without naming the apps that use GlimStone. No rule, token or component changed.
