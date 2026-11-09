@@ -1,3 +1,7 @@
+## 4.3.2
+
+- `GlimTheme` gains `brandFlatpak`, the Flatpak mark's blue, written from the tokens.
+
 ## 4.3.1
 
 - The same number as the other packages. Nothing changed for Flutter.

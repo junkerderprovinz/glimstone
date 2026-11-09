@@ -2,16 +2,18 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 4.3.2 - 2026-11-09
 
 A README button's segment names only what differs, in one line, and can carry the whole name as its accessible name. Flatpak joins the brands with its mark and its blue tile.
 
 **Adopting apps:**
 
+- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.3.2, all at the same number. Nothing is renamed or removed.
 - **Segments:** a part after the first one gets one word and no second line, such as `{ name: "ARM", label: "Windows ARM", href }` beside `{ name: "Windows", sub: "x64", href }`. A segment that repeats the system's name with the variant as its second line reads "Windows | Windows" at rest.
 - **`label` on `ReadmePart`:** optional. Where it is set it is the part's `aria-label`. Without it the accessible name stays the name and the second line. An app with its own copy of `ReadmeButton` takes `readmePartLabel(part, sub)` from `@glimstone/core` for the label.
 - **Flatpak:** give the button `brand="flatpak"`, `mark={<BrandMark svg={FLATPAK_SVG} />}` and `markClass="glim-flatpak-mark"`. An app that keeps its own copy of the tokens takes `--brand-flatpak` in all three theme blocks, its line in the lit tile's block, `.glim-flatpak-mark` and `.glim-tile-flatpak` from `tokens.css`.
-- **Flutter:** `GlimTheme` gains `brandFlatpak`.
+- **Flutter:** move the git dependency to `ref: v4.3.2`. `GlimTheme` gains `brandFlatpak`.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.3.2.
 
 ## 🎨 Design
 
