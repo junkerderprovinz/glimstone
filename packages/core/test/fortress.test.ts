@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
+  appCardView,
   createFortressFlow,
   enterWords,
   othersSummary,
@@ -245,4 +246,38 @@ test('every change reaches the subscribers, and a closed window starts clean nex
   flow.close();
   assert.equal(heard, 4);
   assert.deepEqual(flow.state().window, null);
+});
+
+test('an app card names its forms, its instance count and the instance that opens', async () => {
+  const { en } = await import('../src/fortressLocales/en.ts');
+  const view = appCardView(
+    {
+      id: 'alpha',
+      name: 'Alpha',
+      instances: [
+        { id: 'a1', device: 'Atlas', form: 'container', version: '2.1.0', address: '10.0.0.5:8080', presence: 'connected', open: { href: 'https://atlas:8080' } },
+        { id: 'a2', device: 'Pocket', form: 'android', version: '2.1.0', presence: 'away', lastSeen: '07:40', needs: 'A captcha waits' },
+      ],
+    },
+    en,
+    'en',
+  );
+  assert.equal(view.eyebrow, 'Container, Android app');
+  assert.deepEqual(view.facts, ['2 instances', '10.0.0.5:8080', 'v2.1.0']);
+  assert.equal(view.needs, 'A captcha waits');
+  assert.equal(view.presence, 'connected');
+  assert.deepEqual(view.rows.map((r) => r.sub), ['Container · v2.1.0', 'Android app · v2.1.0 · Last seen 07:40']);
+  assert.deepEqual(view.open, { label: 'Open', href: 'https://atlas:8080' });
+});
+
+test('an app with one instance names its device, and one that opens elsewhere says where', async () => {
+  const { en } = await import('../src/fortressLocales/en.ts');
+  const plugin = appCardView({ id: 'p', name: 'P', instances: [{ id: 'p1', device: 'Atlas', form: 'plugin', presence: 'connected', open: { href: 'https://atlas/P', host: 'Unraid' } }] }, en, 'en');
+  assert.deepEqual(plugin.facts, ['Atlas']);
+  assert.deepEqual(plugin.rows, []);
+  assert.equal(plugin.open?.label, 'Open in Unraid');
+  const phone = appCardView({ id: 'q', name: 'Q', instances: [{ id: 'q1', device: 'Pocket', form: 'Watch app', presence: 'away' }] }, en, 'en');
+  assert.equal(phone.open, null);
+  assert.equal(phone.note, 'Opens only on Pocket');
+  assert.equal(phone.eyebrow, 'Watch app');
 });

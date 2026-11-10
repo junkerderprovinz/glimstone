@@ -5,6 +5,7 @@
 // callback and hands in its data; nothing here talks to a server.
 
 import type { BadgeTone } from "./badge.ts";
+import { fill, plural, type FortressText } from "./fortressText.ts";
 import { storageKey } from "./storage.ts";
 
 export const PHRASE_LENGTH = 12;
@@ -65,6 +66,47 @@ export function othersSummary(apps: FortressApp[]): { instances: number; devices
 /** The instance an app's card names in its facts: the one that opens in the browser, else the first. */
 export function shownInstance(app: FortressApp): FortressInstance {
   return app.instances.find((i) => i.open) ?? app.instances[0];
+}
+
+/** What an app's card shows, worked out once for every framework. */
+export interface AppCardView {
+  main: FortressInstance;
+  presence: FortressPresence;
+  relay: boolean;
+  needs: string | undefined;
+  eyebrow: string;
+  facts: string[];
+  /** A row per instance, or none when the app runs in one place. */
+  rows: { instance: FortressInstance; sub: string }[];
+  open: { label: string; href: string } | null;
+  /** Where it opens instead, when it has no page to open from here. */
+  note: string | undefined;
+}
+
+const formName = (text: FortressText, form: string | undefined) =>
+  form === undefined ? undefined : (text.forms as Record<string, string>)[form] ?? form;
+
+export function appCardView(app: FortressApp, text: FortressText, lang: string): AppCardView {
+  const main = shownInstance(app);
+  const many = app.instances.length > 1;
+  const version = (i: FortressInstance) => (i.version ? `v${i.version}` : undefined);
+  const rowSub = (i: FortressInstance) =>
+    [formName(text, i.form), version(i), i.presence === "away" && i.lastSeen ? fill(text.lastSeen, { time: i.lastSeen }) : undefined]
+      .filter(Boolean)
+      .join(" · ");
+  return {
+    main,
+    presence: main.presence,
+    relay: !!main.relay,
+    needs: app.instances.find((i) => i.needs)?.needs,
+    eyebrow: [...new Set(app.instances.map((i) => formName(text, i.form)).filter(Boolean))].join(", "),
+    facts: [many ? plural(lang, text.instanceCount, app.instances.length) : main.device, main.address, version(main)].filter(
+      (f): f is string => !!f,
+    ),
+    rows: many ? app.instances.map((instance) => ({ instance, sub: rowSub(instance) })) : [],
+    open: main.open ? { label: main.open.host ? fill(text.openIn, { host: main.open.host }) : text.open, href: main.open.href } : null,
+    note: main.open ? undefined : fill(text.openOnlyOn, { device: main.device }),
+  };
 }
 
 export function presenceTone(presence: FortressPresence): BadgeTone {
