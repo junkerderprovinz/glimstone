@@ -1,0 +1,5 @@
+{
+  "@@locale": "en",
+  "relayTitle": "Relay",
+  "@relayTitle": { "description": "Card title" }
+}

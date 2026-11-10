@@ -1,0 +1,3614 @@
+{
+  "languages": {
+    "en": {
+      "name": "English",
+      "stems": "whole",
+      "genders": []
+    },
+    "de": {
+      "name": "Deutsch",
+      "stems": "inside",
+      "genders": [
+        "m",
+        "f",
+        "n"
+      ]
+    },
+    "ar": {
+      "name": "العربية",
+      "stems": "inside",
+      "genders": [
+        "m",
+        "f"
+      ]
+    },
+    "bg": {
+      "name": "Български",
+      "stems": "start",
+      "genders": [
+        "m",
+        "f",
+        "n"
+      ]
+    },
+    "ca": {
+      "name": "Català",
+      "stems": "start",
+      "genders": [
+        "m",
+        "f"
+      ]
+    },
+    "cs": {
+      "name": "Čeština",
+      "stems": "start",
+      "genders": [
+        "m",
+        "f",
+        "n"
+      ]
+    },
+    "da": {
+      "name": "Dansk",
+      "stems": "inside",
+      "genders": [
+        "c",
+        "n"
+      ]
+    },
+    "el": {
+      "name": "Ελληνικά",
+      "stems": "start",
+      "genders": [
+        "m",
+        "f",
+        "n"
+      ]
+    },
+    "es": {
+      "name": "Español",
+      "stems": "start",
+      "genders": [
+        "m",
+        "f"
+      ]
+    },
+    "et": {
+      "name": "Eesti",
+      "stems": "inside",
+      "genders": []
+    },
+    "eu": {
+      "name": "Euskara",
+      "stems": "start",
+      "genders": []
+    },
+    "fa": {
+      "name": "فارسی",
+      "stems": "start",
+      "genders": []
+    },
+    "fi": {
+      "name": "Suomi",
+      "stems": "inside",
+      "genders": []
+    },
+    "fr": {
+      "name": "Français",
+      "stems": "start",
+      "genders": [
+        "m",
+        "f"
+      ]
+    },
+    "gl": {
+      "name": "Galego",
+      "stems": "start",
+      "genders": [
+        "m",
+        "f"
+      ]
+    },
+    "he": {
+      "name": "עברית",
+      "stems": "inside",
+      "genders": [
+        "m",
+        "f"
+      ]
+    },
+    "hi": {
+      "name": "हिन्दी",
+      "stems": "start",
+      "genders": [
+        "m",
+        "f"
+      ]
+    },
+    "hr": {
+      "name": "Hrvatski",
+      "stems": "start",
+      "genders": [
+        "m",
+        "f",
+        "n"
+      ]
+    },
+    "hu": {
+      "name": "Magyar",
+      "stems": "start",
+      "genders": []
+    },
+    "id": {
+      "name": "Bahasa Indonesia",
+      "stems": "start",
+      "genders": []
+    },
+    "is": {
+      "name": "Íslenska",
+      "stems": "inside",
+      "genders": [
+        "m",
+        "f",
+        "n"
+      ]
+    },
+    "it": {
+      "name": "Italiano",
+      "stems": "start",
+      "genders": [
+        "m",
+        "f"
+      ]
+    },
+    "ja": {
+      "name": "日本語",
+      "stems": "inside",
+      "genders": []
+    },
+    "ko": {
+      "name": "한국어",
+      "stems": "inside",
+      "genders": []
+    },
+    "lt": {
+      "name": "Lietuvių",
+      "stems": "start",
+      "genders": [
+        "m",
+        "f"
+      ]
+    },
+    "lv": {
+      "name": "Latviešu",
+      "stems": "start",
+      "genders": [
+        "m",
+        "f"
+      ]
+    },
+    "ms": {
+      "name": "Bahasa Melayu",
+      "stems": "start",
+      "genders": []
+    },
+    "nl": {
+      "name": "Nederlands",
+      "stems": "inside",
+      "genders": [
+        "c",
+        "n"
+      ]
+    },
+    "no": {
+      "name": "Norsk",
+      "stems": "inside",
+      "genders": [
+        "m",
+        "f",
+        "n"
+      ]
+    },
+    "pl": {
+      "name": "Polski",
+      "stems": "start",
+      "genders": [
+        "m",
+        "f",
+        "n"
+      ]
+    },
+    "pt": {
+      "name": "Português",
+      "stems": "start",
+      "genders": [
+        "m",
+        "f"
+      ]
+    },
+    "ro": {
+      "name": "Română",
+      "stems": "start",
+      "genders": [
+        "m",
+        "f",
+        "n"
+      ]
+    },
+    "ru": {
+      "name": "Русский",
+      "stems": "start",
+      "genders": [
+        "m",
+        "f",
+        "n"
+      ]
+    },
+    "sk": {
+      "name": "Slovenčina",
+      "stems": "start",
+      "genders": [
+        "m",
+        "f",
+        "n"
+      ]
+    },
+    "sl": {
+      "name": "Slovenščina",
+      "stems": "start",
+      "genders": [
+        "m",
+        "f",
+        "n"
+      ]
+    },
+    "sr": {
+      "name": "Српски",
+      "stems": "start",
+      "genders": [
+        "m",
+        "f",
+        "n"
+      ]
+    },
+    "sv": {
+      "name": "Svenska",
+      "stems": "inside",
+      "genders": [
+        "c",
+        "n"
+      ]
+    },
+    "th": {
+      "name": "ไทย",
+      "stems": "inside",
+      "genders": []
+    },
+    "tr": {
+      "name": "Türkçe",
+      "stems": "start",
+      "genders": []
+    },
+    "uk": {
+      "name": "Українська",
+      "stems": "start",
+      "genders": [
+        "m",
+        "f",
+        "n"
+      ]
+    },
+    "vi": {
+      "name": "Tiếng Việt",
+      "stems": "start",
+      "genders": []
+    },
+    "zh": {
+      "name": "中文",
+      "stems": "inside",
+      "genders": []
+    }
+  },
+  "terms": {
+    "fortress": {
+      "definition": "Every app of one household joined with the same phrase. Its members see the state and the log of every app in it.",
+      "en": {
+        "singular": "fortress",
+        "plural": "fortresses",
+        "stems": [
+          "fortress",
+          "fortresses"
+        ]
+      },
+      "de": {
+        "singular": "Festung",
+        "plural": "Festungen",
+        "gender": "f",
+        "stems": [
+          "festung"
+        ]
+      },
+      "ar": {
+        "singular": "حصن",
+        "plural": "حصون",
+        "gender": "m",
+        "stems": [
+          "حصن",
+          "حصون"
+        ]
+      },
+      "bg": {
+        "singular": "крепост",
+        "plural": "крепости",
+        "gender": "f",
+        "stems": [
+          "крепост"
+        ]
+      },
+      "ca": {
+        "singular": "fortalesa",
+        "plural": "fortaleses",
+        "gender": "f",
+        "stems": [
+          "fortales"
+        ]
+      },
+      "cs": {
+        "singular": "pevnost",
+        "plural": "pevnosti",
+        "gender": "f",
+        "stems": [
+          "pevnost"
+        ]
+      },
+      "da": {
+        "singular": "fæstning",
+        "plural": "fæstninger",
+        "gender": "c",
+        "stems": [
+          "fæstning"
+        ]
+      },
+      "el": {
+        "singular": "φρούριο",
+        "plural": "φρούρια",
+        "gender": "n",
+        "stems": [
+          "φρουρι"
+        ]
+      },
+      "es": {
+        "singular": "fortaleza",
+        "plural": "fortalezas",
+        "gender": "f",
+        "stems": [
+          "fortalez"
+        ]
+      },
+      "et": {
+        "singular": "kindlus",
+        "plural": "kindlused",
+        "stems": [
+          "kindlus"
+        ]
+      },
+      "eu": {
+        "singular": "gotorlekua",
+        "plural": "gotorlekuak",
+        "stems": [
+          "gotorleku"
+        ]
+      },
+      "fa": {
+        "singular": "دژ",
+        "plural": "دژها",
+        "stems": [
+          "دژ"
+        ]
+      },
+      "fi": {
+        "singular": "linnoitus",
+        "plural": "linnoitukset",
+        "stems": [
+          "linnoitu"
+        ]
+      },
+      "fr": {
+        "singular": "forteresse",
+        "plural": "forteresses",
+        "gender": "f",
+        "stems": [
+          "forteress"
+        ]
+      },
+      "gl": {
+        "singular": "fortaleza",
+        "plural": "fortalezas",
+        "gender": "f",
+        "stems": [
+          "fortalez"
+        ]
+      },
+      "he": {
+        "singular": "מבצר",
+        "plural": "מבצרים",
+        "gender": "m",
+        "stems": [
+          "מבצר"
+        ]
+      },
+      "hi": {
+        "singular": "किला",
+        "plural": "किले",
+        "gender": "m",
+        "stems": [
+          "किला",
+          "किले",
+          "किलों"
+        ]
+      },
+      "hr": {
+        "singular": "utvrda",
+        "plural": "utvrde",
+        "gender": "f",
+        "stems": [
+          "utvrd"
+        ]
+      },
+      "hu": {
+        "singular": "erőd",
+        "plural": "erődök",
+        "stems": [
+          "erőd"
+        ]
+      },
+      "id": {
+        "singular": "benteng",
+        "plural": "benteng",
+        "stems": [
+          "benteng"
+        ]
+      },
+      "is": {
+        "singular": "vígi",
+        "plural": "vígi",
+        "gender": "n",
+        "stems": [
+          "vígi",
+          "vígj"
+        ]
+      },
+      "it": {
+        "singular": "fortezza",
+        "plural": "fortezze",
+        "gender": "f",
+        "stems": [
+          "fortezz"
+        ]
+      },
+      "ja": {
+        "singular": "要塞",
+        "plural": "要塞",
+        "stems": [
+          "要塞"
+        ]
+      },
+      "ko": {
+        "singular": "요새",
+        "plural": "요새",
+        "stems": [
+          "요새"
+        ]
+      },
+      "lt": {
+        "singular": "tvirtovė",
+        "plural": "tvirtovės",
+        "gender": "f",
+        "stems": [
+          "tvirtov"
+        ]
+      },
+      "lv": {
+        "singular": "cietoksnis",
+        "plural": "cietokšņi",
+        "gender": "m",
+        "stems": [
+          "cietoksn",
+          "cietokšņ"
+        ]
+      },
+      "ms": {
+        "singular": "kubu",
+        "plural": "kubu",
+        "stems": [
+          "kubu"
+        ]
+      },
+      "nl": {
+        "singular": "vesting",
+        "plural": "vestingen",
+        "gender": "c",
+        "stems": [
+          "vesting"
+        ]
+      },
+      "no": {
+        "singular": "festning",
+        "plural": "festninger",
+        "gender": "m",
+        "stems": [
+          "festning"
+        ]
+      },
+      "pl": {
+        "singular": "twierdza",
+        "plural": "twierdze",
+        "gender": "f",
+        "stems": [
+          "twierdz"
+        ]
+      },
+      "pt": {
+        "singular": "fortaleza",
+        "plural": "fortalezas",
+        "gender": "f",
+        "stems": [
+          "fortalez"
+        ]
+      },
+      "ro": {
+        "singular": "fortăreață",
+        "plural": "fortărețe",
+        "gender": "f",
+        "stems": [
+          "fortăre"
+        ]
+      },
+      "ru": {
+        "singular": "крепость",
+        "plural": "крепости",
+        "gender": "f",
+        "stems": [
+          "крепост"
+        ]
+      },
+      "sk": {
+        "singular": "pevnosť",
+        "plural": "pevnosti",
+        "gender": "f",
+        "stems": [
+          "pevnosť"
+        ]
+      },
+      "sl": {
+        "singular": "trdnjava",
+        "plural": "trdnjave",
+        "gender": "f",
+        "stems": [
+          "trdnjav"
+        ]
+      },
+      "sr": {
+        "singular": "тврђава",
+        "plural": "тврђаве",
+        "gender": "f",
+        "stems": [
+          "тврђав"
+        ]
+      },
+      "sv": {
+        "singular": "fästning",
+        "plural": "fästningar",
+        "gender": "c",
+        "stems": [
+          "fästning"
+        ]
+      },
+      "th": {
+        "singular": "ป้อมปราการ",
+        "plural": "ป้อมปราการ",
+        "stems": [
+          "ป้อม"
+        ]
+      },
+      "tr": {
+        "singular": "kale",
+        "plural": "kaleler",
+        "stems": [
+          "kale"
+        ]
+      },
+      "uk": {
+        "singular": "фортеця",
+        "plural": "фортеці",
+        "gender": "f",
+        "stems": [
+          "фортец"
+        ]
+      },
+      "vi": {
+        "singular": "pháo đài",
+        "plural": "pháo đài",
+        "stems": [
+          "pháo đài"
+        ]
+      },
+      "zh": {
+        "singular": "堡垒",
+        "plural": "堡垒",
+        "stems": [
+          "堡垒"
+        ]
+      }
+    },
+    "instance": {
+      "definition": "One running copy of an app on one device.",
+      "en": {
+        "singular": "instance",
+        "plural": "instances",
+        "stems": [
+          "instance",
+          "instances"
+        ]
+      },
+      "de": {
+        "singular": "Instanz",
+        "plural": "Instanzen",
+        "gender": "f",
+        "stems": [
+          "instanz"
+        ]
+      },
+      "ar": {
+        "singular": "مثيل",
+        "plural": "مثيلات",
+        "gender": "m",
+        "stems": [
+          "مثيل"
+        ]
+      },
+      "bg": {
+        "singular": "инстанция",
+        "plural": "инстанции",
+        "gender": "f",
+        "stems": [
+          "инстанци"
+        ]
+      },
+      "ca": {
+        "singular": "instància",
+        "plural": "instàncies",
+        "gender": "f",
+        "stems": [
+          "instànci"
+        ]
+      },
+      "cs": {
+        "singular": "instance",
+        "plural": "instance",
+        "gender": "f",
+        "stems": [
+          "instanc"
+        ]
+      },
+      "da": {
+        "singular": "instans",
+        "plural": "instanser",
+        "gender": "c",
+        "stems": [
+          "instans"
+        ]
+      },
+      "el": {
+        "singular": "εγκατάσταση",
+        "plural": "εγκαταστάσεις",
+        "gender": "f",
+        "stems": [
+          "εγκατάστασ",
+          "εγκαταστάσε"
+        ]
+      },
+      "es": {
+        "singular": "instancia",
+        "plural": "instancias",
+        "gender": "f",
+        "stems": [
+          "instanci"
+        ]
+      },
+      "et": {
+        "singular": "eksemplar",
+        "plural": "eksemplarid",
+        "stems": [
+          "eksemplar"
+        ]
+      },
+      "eu": {
+        "singular": "instantzia",
+        "plural": "instantziak",
+        "stems": [
+          "instantzi"
+        ]
+      },
+      "fa": {
+        "singular": "نمونه",
+        "plural": "نمونه‌ها",
+        "stems": [
+          "نمونه"
+        ]
+      },
+      "fi": {
+        "singular": "instanssi",
+        "plural": "instanssit",
+        "stems": [
+          "instanssi"
+        ],
+        "forbidden": [
+          "ilmentym*"
+        ]
+      },
+      "fr": {
+        "singular": "instance",
+        "plural": "instances",
+        "gender": "f",
+        "stems": [
+          "instance"
+        ]
+      },
+      "gl": {
+        "singular": "instancia",
+        "plural": "instancias",
+        "gender": "f",
+        "stems": [
+          "instanci"
+        ]
+      },
+      "he": {
+        "singular": "מופע",
+        "plural": "מופעים",
+        "gender": "m",
+        "stems": [
+          "מופע"
+        ]
+      },
+      "hi": {
+        "singular": "इंस्टेंस",
+        "plural": "इंस्टेंस",
+        "gender": "m",
+        "stems": [
+          "इंस्टेंस"
+        ]
+      },
+      "hr": {
+        "singular": "instanca",
+        "plural": "instance",
+        "gender": "f",
+        "stems": [
+          "instanc"
+        ]
+      },
+      "hu": {
+        "singular": "példány",
+        "plural": "példányok",
+        "stems": [
+          "példány"
+        ]
+      },
+      "id": {
+        "singular": "instance",
+        "plural": "instance",
+        "stems": [
+          "instance"
+        ],
+        "forbidden": [
+          "instans*"
+        ]
+      },
+      "is": {
+        "singular": "tilvik",
+        "plural": "tilvik",
+        "gender": "n",
+        "stems": [
+          "tilvik"
+        ]
+      },
+      "it": {
+        "singular": "istanza",
+        "plural": "istanze",
+        "gender": "f",
+        "stems": [
+          "istanz"
+        ]
+      },
+      "ja": {
+        "singular": "インスタンス",
+        "plural": "インスタンス",
+        "stems": [
+          "インスタンス"
+        ]
+      },
+      "ko": {
+        "singular": "인스턴스",
+        "plural": "인스턴스",
+        "stems": [
+          "인스턴스"
+        ]
+      },
+      "lt": {
+        "singular": "egzempliorius",
+        "plural": "egzemplioriai",
+        "gender": "m",
+        "stems": [
+          "egzempliori"
+        ]
+      },
+      "lv": {
+        "singular": "instance",
+        "plural": "instances",
+        "gender": "f",
+        "stems": [
+          "instanc"
+        ]
+      },
+      "ms": {
+        "singular": "instans",
+        "plural": "instans",
+        "stems": [
+          "instans"
+        ],
+        "forbidden": [
+          "instance*"
+        ]
+      },
+      "nl": {
+        "singular": "instantie",
+        "plural": "instanties",
+        "gender": "c",
+        "stems": [
+          "instantie"
+        ]
+      },
+      "no": {
+        "singular": "instans",
+        "plural": "instanser",
+        "gender": "m",
+        "stems": [
+          "instans"
+        ]
+      },
+      "pl": {
+        "singular": "instancja",
+        "plural": "instancje",
+        "gender": "f",
+        "stems": [
+          "instancj"
+        ]
+      },
+      "pt": {
+        "singular": "instância",
+        "plural": "instâncias",
+        "gender": "f",
+        "stems": [
+          "instânci"
+        ]
+      },
+      "ro": {
+        "singular": "instanță",
+        "plural": "instanțe",
+        "gender": "f",
+        "stems": [
+          "instanț"
+        ]
+      },
+      "ru": {
+        "singular": "экземпляр",
+        "plural": "экземпляры",
+        "gender": "m",
+        "stems": [
+          "экземпляр"
+        ]
+      },
+      "sk": {
+        "singular": "inštancia",
+        "plural": "inštancie",
+        "gender": "f",
+        "stems": [
+          "inštanci"
+        ]
+      },
+      "sl": {
+        "singular": "instanca",
+        "plural": "instance",
+        "gender": "f",
+        "stems": [
+          "instanc"
+        ],
+        "forbidden": [
+          "primerek*",
+          "primerk*"
+        ]
+      },
+      "sr": {
+        "singular": "инстанца",
+        "plural": "инстанце",
+        "gender": "f",
+        "stems": [
+          "инстанц"
+        ],
+        "forbidden": [
+          "примерак*",
+          "примерк*"
+        ]
+      },
+      "sv": {
+        "singular": "instans",
+        "plural": "instanser",
+        "gender": "c",
+        "stems": [
+          "instans"
+        ]
+      },
+      "th": {
+        "singular": "อินสแตนซ์",
+        "plural": "อินสแตนซ์",
+        "stems": [
+          "อินสแตนซ์"
+        ]
+      },
+      "tr": {
+        "singular": "örnek",
+        "plural": "örnekler",
+        "stems": [
+          "örnek",
+          "örneğ"
+        ]
+      },
+      "uk": {
+        "singular": "екземпляр",
+        "plural": "екземпляри",
+        "gender": "m",
+        "stems": [
+          "екземпляр"
+        ],
+        "forbidden": [
+          "примірник*"
+        ]
+      },
+      "vi": {
+        "singular": "phiên bản",
+        "plural": "phiên bản",
+        "stems": [
+          "phiên bản"
+        ]
+      },
+      "zh": {
+        "singular": "实例",
+        "plural": "实例",
+        "stems": [
+          "实例"
+        ]
+      }
+    },
+    "member": {
+      "definition": "An instance inside a fortress or group. Removing it puts that one instance out.",
+      "en": {
+        "singular": "member",
+        "plural": "members",
+        "stems": [
+          "member",
+          "members"
+        ]
+      },
+      "de": {
+        "singular": "Mitglied",
+        "plural": "Mitglieder",
+        "gender": "n",
+        "stems": [
+          "mitglied"
+        ]
+      },
+      "ar": {
+        "singular": "عضو",
+        "plural": "أعضاء",
+        "gender": "m",
+        "stems": [
+          "عضو",
+          "أعضاء"
+        ]
+      },
+      "bg": {
+        "singular": "член",
+        "plural": "членове",
+        "gender": "m",
+        "stems": [
+          "член"
+        ]
+      },
+      "ca": {
+        "singular": "membre",
+        "plural": "membres",
+        "gender": "m",
+        "stems": [
+          "membre"
+        ]
+      },
+      "cs": {
+        "singular": "člen",
+        "plural": "členové",
+        "gender": "m",
+        "stems": [
+          "člen"
+        ]
+      },
+      "da": {
+        "singular": "medlem",
+        "plural": "medlemmer",
+        "gender": "n",
+        "stems": [
+          "medlem"
+        ]
+      },
+      "el": {
+        "singular": "μέλος",
+        "plural": "μέλη",
+        "gender": "n",
+        "stems": [
+          "μέλ"
+        ]
+      },
+      "es": {
+        "singular": "miembro",
+        "plural": "miembros",
+        "gender": "m",
+        "stems": [
+          "miembro"
+        ]
+      },
+      "et": {
+        "singular": "liige",
+        "plural": "liikmed",
+        "stems": [
+          "liige",
+          "liikme",
+          "liikmed"
+        ]
+      },
+      "eu": {
+        "singular": "kidea",
+        "plural": "kideak",
+        "stems": [
+          "kide"
+        ]
+      },
+      "fa": {
+        "singular": "عضو",
+        "plural": "اعضا",
+        "stems": [
+          "عضو",
+          "اعضا"
+        ]
+      },
+      "fi": {
+        "singular": "jäsen",
+        "plural": "jäsenet",
+        "stems": [
+          "jäsen"
+        ]
+      },
+      "fr": {
+        "singular": "membre",
+        "plural": "membres",
+        "gender": "m",
+        "stems": [
+          "membre"
+        ]
+      },
+      "gl": {
+        "singular": "membro",
+        "plural": "membros",
+        "gender": "m",
+        "stems": [
+          "membro"
+        ]
+      },
+      "he": {
+        "singular": "חבר",
+        "plural": "חברים",
+        "gender": "m",
+        "stems": [
+          "חבר"
+        ]
+      },
+      "hi": {
+        "singular": "सदस्य",
+        "plural": "सदस्य",
+        "gender": "m",
+        "stems": [
+          "सदस्य"
+        ]
+      },
+      "hr": {
+        "singular": "član",
+        "plural": "članovi",
+        "gender": "m",
+        "stems": [
+          "član"
+        ]
+      },
+      "hu": {
+        "singular": "tag",
+        "plural": "tagok",
+        "stems": [
+          "tag"
+        ]
+      },
+      "id": {
+        "singular": "anggota",
+        "plural": "anggota",
+        "stems": [
+          "anggota"
+        ]
+      },
+      "is": {
+        "singular": "meðlimur",
+        "plural": "meðlimir",
+        "gender": "m",
+        "stems": [
+          "meðlim"
+        ]
+      },
+      "it": {
+        "singular": "membro",
+        "plural": "membri",
+        "gender": "m",
+        "stems": [
+          "membr"
+        ]
+      },
+      "ja": {
+        "singular": "メンバー",
+        "plural": "メンバー",
+        "stems": [
+          "メンバー"
+        ]
+      },
+      "ko": {
+        "singular": "구성원",
+        "plural": "구성원",
+        "stems": [
+          "구성원"
+        ]
+      },
+      "lt": {
+        "singular": "narys",
+        "plural": "nariai",
+        "gender": "m",
+        "stems": [
+          "narys",
+          "nari"
+        ]
+      },
+      "lv": {
+        "singular": "dalībnieks",
+        "plural": "dalībnieki",
+        "gender": "m",
+        "stems": [
+          "dalībniek"
+        ]
+      },
+      "ms": {
+        "singular": "ahli",
+        "plural": "ahli",
+        "stems": [
+          "ahli"
+        ]
+      },
+      "nl": {
+        "singular": "lid",
+        "plural": "leden",
+        "gender": "n",
+        "stems": [
+          "lid",
+          "leden"
+        ]
+      },
+      "no": {
+        "singular": "medlem",
+        "plural": "medlemmer",
+        "gender": "n",
+        "stems": [
+          "medlem"
+        ]
+      },
+      "pl": {
+        "singular": "członek",
+        "plural": "członkowie",
+        "gender": "m",
+        "stems": [
+          "członek",
+          "członk"
+        ]
+      },
+      "pt": {
+        "singular": "membro",
+        "plural": "membros",
+        "gender": "m",
+        "stems": [
+          "membro"
+        ]
+      },
+      "ro": {
+        "singular": "membru",
+        "plural": "membri",
+        "gender": "m",
+        "stems": [
+          "membr"
+        ]
+      },
+      "ru": {
+        "singular": "участник",
+        "plural": "участники",
+        "gender": "m",
+        "stems": [
+          "участник"
+        ]
+      },
+      "sk": {
+        "singular": "člen",
+        "plural": "členovia",
+        "gender": "m",
+        "stems": [
+          "člen"
+        ]
+      },
+      "sl": {
+        "singular": "član",
+        "plural": "člani",
+        "gender": "m",
+        "stems": [
+          "član"
+        ]
+      },
+      "sr": {
+        "singular": "члан",
+        "plural": "чланови",
+        "gender": "m",
+        "stems": [
+          "члан"
+        ]
+      },
+      "sv": {
+        "singular": "medlem",
+        "plural": "medlemmar",
+        "gender": "c",
+        "stems": [
+          "medlem"
+        ]
+      },
+      "th": {
+        "singular": "สมาชิก",
+        "plural": "สมาชิก",
+        "stems": [
+          "สมาชิก"
+        ]
+      },
+      "tr": {
+        "singular": "üye",
+        "plural": "üyeler",
+        "stems": [
+          "üye"
+        ]
+      },
+      "uk": {
+        "singular": "учасник",
+        "plural": "учасники",
+        "gender": "m",
+        "stems": [
+          "учасник"
+        ]
+      },
+      "vi": {
+        "singular": "thành viên",
+        "plural": "thành viên",
+        "stems": [
+          "thành viên"
+        ]
+      },
+      "zh": {
+        "singular": "成员",
+        "plural": "成员",
+        "stems": [
+          "成员"
+        ]
+      }
+    },
+    "permission": {
+      "definition": "An action one app may start in another, such as asking for a backup or running a job. On by default and switched off one by one. Seeing needs none. The English word also names file and system permissions, so translations are held to the forbidden variants alone.",
+      "enforce": false,
+      "en": {
+        "singular": "permission",
+        "plural": "permissions",
+        "stems": [
+          "permission",
+          "permissions"
+        ]
+      },
+      "de": {
+        "singular": "Erlaubnis",
+        "plural": "Erlaubnisse",
+        "gender": "f",
+        "stems": [
+          "erlaubnis"
+        ]
+      },
+      "ar": {
+        "singular": "إذن",
+        "plural": "أذونات",
+        "gender": "m",
+        "stems": [
+          "إذن",
+          "أذون",
+          "الإذن"
+        ]
+      },
+      "bg": {
+        "singular": "разрешение",
+        "plural": "разрешения",
+        "gender": "n",
+        "stems": [
+          "разрешени"
+        ]
+      },
+      "ca": {
+        "singular": "permís",
+        "plural": "permisos",
+        "gender": "m",
+        "stems": [
+          "permís",
+          "permis"
+        ]
+      },
+      "cs": {
+        "singular": "oprávnění",
+        "plural": "oprávnění",
+        "gender": "n",
+        "stems": [
+          "oprávněn"
+        ]
+      },
+      "da": {
+        "singular": "tilladelse",
+        "plural": "tilladelser",
+        "gender": "c",
+        "stems": [
+          "tilladelse"
+        ]
+      },
+      "el": {
+        "singular": "άδεια",
+        "plural": "άδειες",
+        "gender": "f",
+        "stems": [
+          "άδει"
+        ]
+      },
+      "es": {
+        "singular": "permiso",
+        "plural": "permisos",
+        "gender": "m",
+        "stems": [
+          "permiso"
+        ]
+      },
+      "et": {
+        "singular": "luba",
+        "plural": "load",
+        "stems": [
+          "luba",
+          "loa",
+          "load"
+        ]
+      },
+      "eu": {
+        "singular": "baimena",
+        "plural": "baimenak",
+        "stems": [
+          "baimen"
+        ]
+      },
+      "fa": {
+        "singular": "اجازه",
+        "plural": "اجازه‌ها",
+        "stems": [
+          "اجازه"
+        ]
+      },
+      "fi": {
+        "singular": "lupa",
+        "plural": "luvat",
+        "stems": [
+          "lupa",
+          "luva",
+          "luvi"
+        ]
+      },
+      "fr": {
+        "singular": "autorisation",
+        "plural": "autorisations",
+        "gender": "f",
+        "stems": [
+          "autorisation"
+        ]
+      },
+      "gl": {
+        "singular": "permiso",
+        "plural": "permisos",
+        "gender": "m",
+        "stems": [
+          "permiso"
+        ]
+      },
+      "he": {
+        "singular": "הרשאה",
+        "plural": "הרשאות",
+        "gender": "f",
+        "stems": [
+          "הרשא"
+        ]
+      },
+      "hi": {
+        "singular": "अनुमति",
+        "plural": "अनुमतियाँ",
+        "gender": "f",
+        "stems": [
+          "अनुमति"
+        ]
+      },
+      "hr": {
+        "singular": "dopuštenje",
+        "plural": "dopuštenja",
+        "gender": "n",
+        "stems": [
+          "dopušten"
+        ]
+      },
+      "hu": {
+        "singular": "engedély",
+        "plural": "engedélyek",
+        "stems": [
+          "engedély"
+        ]
+      },
+      "id": {
+        "singular": "izin",
+        "plural": "izin",
+        "stems": [
+          "izin"
+        ]
+      },
+      "is": {
+        "singular": "heimild",
+        "plural": "heimildir",
+        "gender": "f",
+        "stems": [
+          "heimild"
+        ]
+      },
+      "it": {
+        "singular": "permesso",
+        "plural": "permessi",
+        "gender": "m",
+        "stems": [
+          "permess"
+        ]
+      },
+      "ja": {
+        "singular": "許可",
+        "plural": "許可",
+        "stems": [
+          "許可"
+        ]
+      },
+      "ko": {
+        "singular": "권한",
+        "plural": "권한",
+        "stems": [
+          "권한"
+        ]
+      },
+      "lt": {
+        "singular": "leidimas",
+        "plural": "leidimai",
+        "gender": "m",
+        "stems": [
+          "leidim"
+        ]
+      },
+      "lv": {
+        "singular": "atļauja",
+        "plural": "atļaujas",
+        "gender": "f",
+        "stems": [
+          "atļauj"
+        ]
+      },
+      "ms": {
+        "singular": "kebenaran",
+        "plural": "kebenaran",
+        "stems": [
+          "kebenaran"
+        ]
+      },
+      "nl": {
+        "singular": "toestemming",
+        "plural": "toestemmingen",
+        "gender": "c",
+        "stems": [
+          "toestemming"
+        ]
+      },
+      "no": {
+        "singular": "tillatelse",
+        "plural": "tillatelser",
+        "gender": "m",
+        "stems": [
+          "tillatelse"
+        ]
+      },
+      "pl": {
+        "singular": "uprawnienie",
+        "plural": "uprawnienia",
+        "gender": "n",
+        "stems": [
+          "uprawnieni",
+          "uprawnień"
+        ]
+      },
+      "pt": {
+        "singular": "permissão",
+        "plural": "permissões",
+        "gender": "f",
+        "stems": [
+          "permiss"
+        ]
+      },
+      "ro": {
+        "singular": "permisiune",
+        "plural": "permisiuni",
+        "gender": "f",
+        "stems": [
+          "permisiun"
+        ]
+      },
+      "ru": {
+        "singular": "разрешение",
+        "plural": "разрешения",
+        "gender": "n",
+        "stems": [
+          "разрешени"
+        ]
+      },
+      "sk": {
+        "singular": "povolenie",
+        "plural": "povolenia",
+        "gender": "n",
+        "stems": [
+          "povoleni"
+        ]
+      },
+      "sl": {
+        "singular": "dovoljenje",
+        "plural": "dovoljenja",
+        "gender": "n",
+        "stems": [
+          "dovoljenj"
+        ]
+      },
+      "sr": {
+        "singular": "дозвола",
+        "plural": "дозволе",
+        "gender": "f",
+        "stems": [
+          "дозвол"
+        ]
+      },
+      "sv": {
+        "singular": "behörighet",
+        "plural": "behörigheter",
+        "gender": "c",
+        "stems": [
+          "behörighet"
+        ]
+      },
+      "th": {
+        "singular": "สิทธิ์",
+        "plural": "สิทธิ์",
+        "stems": [
+          "สิทธิ์"
+        ]
+      },
+      "tr": {
+        "singular": "izin",
+        "plural": "izinler",
+        "stems": [
+          "izin",
+          "izn"
+        ]
+      },
+      "uk": {
+        "singular": "дозвіл",
+        "plural": "дозволи",
+        "gender": "m",
+        "stems": [
+          "дозвіл",
+          "дозвол"
+        ]
+      },
+      "vi": {
+        "singular": "quyền",
+        "plural": "quyền",
+        "stems": [
+          "quyền"
+        ]
+      },
+      "zh": {
+        "singular": "许可",
+        "plural": "许可",
+        "stems": [
+          "许可"
+        ]
+      }
+    },
+    "relay": {
+      "definition": "The server members talk through when they cannot reach each other directly.",
+      "en": {
+        "singular": "relay",
+        "plural": "relays",
+        "stems": [
+          "relay",
+          "relays"
+        ]
+      },
+      "de": {
+        "singular": "Relay",
+        "plural": "Relays",
+        "gender": "n",
+        "stems": [
+          "relay"
+        ],
+        "forbidden": [
+          "*relais*"
+        ]
+      },
+      "ar": {
+        "singular": "مُرحِّل",
+        "plural": "مُرحِّلات",
+        "gender": "m",
+        "stems": [
+          "مرحل"
+        ]
+      },
+      "bg": {
+        "singular": "препредавател",
+        "plural": "препредаватели",
+        "gender": "m",
+        "stems": [
+          "препредавател"
+        ],
+        "forbidden": [
+          "реле",
+          "релето",
+          "релета"
+        ]
+      },
+      "ca": {
+        "singular": "repetidor",
+        "plural": "repetidors",
+        "gender": "m",
+        "stems": [
+          "repetidor"
+        ],
+        "forbidden": [
+          "relé",
+          "relés"
+        ]
+      },
+      "cs": {
+        "singular": "přeposílač",
+        "plural": "přeposílače",
+        "gender": "m",
+        "stems": [
+          "přeposílač"
+        ],
+        "forbidden": [
+          "relé"
+        ]
+      },
+      "da": {
+        "singular": "videresender",
+        "plural": "videresendere",
+        "gender": "c",
+        "stems": [
+          "videresender"
+        ],
+        "forbidden": [
+          "relæ*"
+        ]
+      },
+      "el": {
+        "singular": "αναμεταδότης",
+        "plural": "αναμεταδότες",
+        "gender": "m",
+        "stems": [
+          "αναμεταδότ"
+        ]
+      },
+      "es": {
+        "singular": "repetidor",
+        "plural": "repetidores",
+        "gender": "m",
+        "stems": [
+          "repetidor"
+        ],
+        "forbidden": [
+          "relé",
+          "relés"
+        ]
+      },
+      "et": {
+        "singular": "edastaja",
+        "plural": "edastajad",
+        "stems": [
+          "edastaja"
+        ],
+        "forbidden": [
+          "relee*"
+        ]
+      },
+      "eu": {
+        "singular": "bitartekaria",
+        "plural": "bitartekariak",
+        "stems": [
+          "bitartekari"
+        ],
+        "forbidden": [
+          "erlai*"
+        ]
+      },
+      "fa": {
+        "singular": "رله",
+        "plural": "رله‌ها",
+        "stems": [
+          "رله"
+        ]
+      },
+      "fi": {
+        "singular": "rele",
+        "plural": "releet",
+        "stems": [
+          "rele"
+        ]
+      },
+      "fr": {
+        "singular": "relais",
+        "plural": "relais",
+        "gender": "m",
+        "stems": [
+          "relais"
+        ]
+      },
+      "gl": {
+        "singular": "relé",
+        "plural": "relés",
+        "gender": "m",
+        "stems": [
+          "relé"
+        ]
+      },
+      "he": {
+        "singular": "ממסר",
+        "plural": "ממסרים",
+        "gender": "m",
+        "stems": [
+          "ממסר"
+        ]
+      },
+      "hi": {
+        "singular": "रिले",
+        "plural": "रिले",
+        "gender": "m",
+        "stems": [
+          "रिले"
+        ]
+      },
+      "hr": {
+        "singular": "relej",
+        "plural": "releji",
+        "gender": "m",
+        "stems": [
+          "relej"
+        ]
+      },
+      "hu": {
+        "singular": "relay",
+        "plural": "relayek",
+        "stems": [
+          "relay"
+        ]
+      },
+      "id": {
+        "singular": "relay",
+        "plural": "relay",
+        "stems": [
+          "relay"
+        ],
+        "forbidden": [
+          "relai*"
+        ]
+      },
+      "is": {
+        "singular": "relay",
+        "plural": "relay",
+        "gender": "n",
+        "stems": [
+          "relay"
+        ],
+        "forbidden": [
+          "endurvarp*"
+        ]
+      },
+      "it": {
+        "singular": "relay",
+        "plural": "relay",
+        "gender": "m",
+        "stems": [
+          "relay"
+        ]
+      },
+      "ja": {
+        "singular": "リレー",
+        "plural": "リレー",
+        "stems": [
+          "リレー"
+        ]
+      },
+      "ko": {
+        "singular": "릴레이",
+        "plural": "릴레이",
+        "stems": [
+          "릴레이"
+        ]
+      },
+      "lt": {
+        "singular": "relay",
+        "plural": "relay",
+        "gender": "m",
+        "stems": [
+          "relay"
+        ],
+        "forbidden": [
+          "relė",
+          "relės",
+          "relę",
+          "relėje",
+          "relei",
+          "relių"
+        ]
+      },
+      "lv": {
+        "singular": "relay",
+        "plural": "relay",
+        "gender": "m",
+        "stems": [
+          "relay"
+        ],
+        "forbidden": [
+          "relej*"
+        ]
+      },
+      "ms": {
+        "singular": "relay",
+        "plural": "relay",
+        "stems": [
+          "relay"
+        ],
+        "forbidden": [
+          "geganti*"
+        ]
+      },
+      "nl": {
+        "singular": "relay",
+        "plural": "relays",
+        "gender": "c",
+        "stems": [
+          "relay"
+        ]
+      },
+      "no": {
+        "singular": "relay",
+        "plural": "relayer",
+        "gender": "n",
+        "stems": [
+          "relay"
+        ],
+        "forbidden": [
+          "relé",
+          "reléet",
+          "reléer",
+          "reléene"
+        ]
+      },
+      "pl": {
+        "singular": "relay",
+        "plural": "relaye",
+        "gender": "m",
+        "stems": [
+          "relay"
+        ],
+        "forbidden": [
+          "przekaźnik*"
+        ]
+      },
+      "pt": {
+        "singular": "relay",
+        "plural": "relays",
+        "gender": "m",
+        "stems": [
+          "relay"
+        ],
+        "forbidden": [
+          "relé",
+          "relés"
+        ]
+      },
+      "ro": {
+        "singular": "relay",
+        "plural": "relay-uri",
+        "gender": "n",
+        "stems": [
+          "relay"
+        ],
+        "forbidden": [
+          "releu*",
+          "releele",
+          "relee"
+        ]
+      },
+      "ru": {
+        "singular": "relay",
+        "plural": "relay",
+        "gender": "m",
+        "stems": [
+          "relay"
+        ],
+        "forbidden": [
+          "ретранслятор*"
+        ]
+      },
+      "sk": {
+        "singular": "relay",
+        "plural": "relaye",
+        "gender": "m",
+        "stems": [
+          "relay"
+        ],
+        "forbidden": [
+          "relé"
+        ]
+      },
+      "sl": {
+        "singular": "relay",
+        "plural": "relayi",
+        "gender": "m",
+        "stems": [
+          "relay"
+        ],
+        "forbidden": [
+          "rele",
+          "relej*"
+        ]
+      },
+      "sr": {
+        "singular": "релеј",
+        "plural": "релеји",
+        "gender": "m",
+        "stems": [
+          "релеј"
+        ]
+      },
+      "sv": {
+        "singular": "relä",
+        "plural": "reläer",
+        "gender": "n",
+        "stems": [
+          "relä"
+        ]
+      },
+      "th": {
+        "singular": "รีเลย์",
+        "plural": "รีเลย์",
+        "stems": [
+          "รีเลย์"
+        ]
+      },
+      "tr": {
+        "singular": "röle",
+        "plural": "röleler",
+        "stems": [
+          "röle"
+        ]
+      },
+      "uk": {
+        "singular": "реле",
+        "plural": "реле",
+        "gender": "n",
+        "stems": [
+          "реле"
+        ]
+      },
+      "vi": {
+        "singular": "relay",
+        "plural": "relay",
+        "stems": [
+          "relay"
+        ]
+      },
+      "zh": {
+        "singular": "中继",
+        "plural": "中继",
+        "stems": [
+          "中继"
+        ]
+      }
+    },
+    "backup": {
+      "definition": "A saved copy that can be restored.",
+      "en": {
+        "singular": "backup",
+        "plural": "backups",
+        "stems": [
+          "backup",
+          "backups"
+        ]
+      },
+      "de": {
+        "singular": "Sicherung",
+        "plural": "Sicherungen",
+        "gender": "f",
+        "stems": [
+          "sicherung"
+        ],
+        "forbidden": [
+          "*backup*"
+        ]
+      },
+      "ar": {
+        "singular": "نسخة احتياطية",
+        "plural": "نسخ احتياطية",
+        "gender": "f",
+        "stems": [
+          "احتياط",
+          "نسخ"
+        ]
+      },
+      "bg": {
+        "singular": "архив",
+        "plural": "архиви",
+        "gender": "m",
+        "stems": [
+          "архив",
+          "резервн",
+          "копи"
+        ],
+        "forbidden": [
+          "*бекъп*"
+        ]
+      },
+      "ca": {
+        "singular": "còpia de seguretat",
+        "plural": "còpies de seguretat",
+        "gender": "f",
+        "stems": [
+          "còpi"
+        ]
+      },
+      "cs": {
+        "singular": "záloha",
+        "plural": "zálohy",
+        "gender": "f",
+        "stems": [
+          "záloh",
+          "záloz"
+        ]
+      },
+      "da": {
+        "singular": "sikkerhedskopi",
+        "plural": "sikkerhedskopier",
+        "gender": "c",
+        "stems": [
+          "sikkerhedskopi"
+        ]
+      },
+      "el": {
+        "singular": "αντίγραφο ασφαλείας",
+        "plural": "αντίγραφα ασφαλείας",
+        "gender": "n",
+        "stems": [
+          "αντίγραφ",
+          "αντιγράφ"
+        ]
+      },
+      "es": {
+        "singular": "copia de seguridad",
+        "plural": "copias de seguridad",
+        "gender": "f",
+        "stems": [
+          "copia"
+        ]
+      },
+      "et": {
+        "singular": "varundus",
+        "plural": "varundused",
+        "stems": [
+          "varund",
+          "varukoopi"
+        ]
+      },
+      "eu": {
+        "singular": "babeskopia",
+        "plural": "babeskopiak",
+        "stems": [
+          "babeskopi"
+        ]
+      },
+      "fa": {
+        "singular": "نسخهٔ پشتیبان",
+        "plural": "نسخه‌های پشتیبان",
+        "stems": [
+          "پشتیبان"
+        ]
+      },
+      "fi": {
+        "singular": "varmuuskopio",
+        "plural": "varmuuskopiot",
+        "stems": [
+          "varmuuskopi"
+        ]
+      },
+      "fr": {
+        "singular": "sauvegarde",
+        "plural": "sauvegardes",
+        "gender": "f",
+        "stems": [
+          "sauvegard"
+        ]
+      },
+      "gl": {
+        "singular": "copia de seguridade",
+        "plural": "copias de seguridade",
+        "gender": "f",
+        "stems": [
+          "copia"
+        ]
+      },
+      "he": {
+        "singular": "גיבוי",
+        "plural": "גיבויים",
+        "gender": "m",
+        "stems": [
+          "גיבוי"
+        ]
+      },
+      "hi": {
+        "singular": "बैकअप",
+        "plural": "बैकअप",
+        "gender": "m",
+        "stems": [
+          "बैकअप"
+        ]
+      },
+      "hr": {
+        "singular": "sigurnosna kopija",
+        "plural": "sigurnosne kopije",
+        "gender": "f",
+        "stems": [
+          "kopij",
+          "kopir"
+        ]
+      },
+      "hu": {
+        "singular": "biztonsági mentés",
+        "plural": "biztonsági mentések",
+        "stems": [
+          "mentés",
+          "mentet"
+        ],
+        "stemsAt": "inside"
+      },
+      "id": {
+        "singular": "cadangan",
+        "plural": "cadangan",
+        "stems": [
+          "cadang",
+          "pencadang"
+        ],
+        "forbidden": [
+          "backup*"
+        ]
+      },
+      "is": {
+        "singular": "afrit",
+        "plural": "afrit",
+        "gender": "n",
+        "stems": [
+          "afrit"
+        ]
+      },
+      "it": {
+        "singular": "backup",
+        "plural": "backup",
+        "gender": "m",
+        "stems": [
+          "backup"
+        ]
+      },
+      "ja": {
+        "singular": "バックアップ",
+        "plural": "バックアップ",
+        "stems": [
+          "バックアップ"
+        ]
+      },
+      "ko": {
+        "singular": "백업",
+        "plural": "백업",
+        "stems": [
+          "백업"
+        ]
+      },
+      "lt": {
+        "singular": "atsarginė kopija",
+        "plural": "atsarginės kopijos",
+        "gender": "f",
+        "stems": [
+          "kopij"
+        ]
+      },
+      "lv": {
+        "singular": "rezerves kopija",
+        "plural": "rezerves kopijas",
+        "gender": "f",
+        "stems": [
+          "kopij",
+          "rezerv",
+          "dublēj",
+          "dublēš"
+        ],
+        "stemsAt": "inside"
+      },
+      "ms": {
+        "singular": "sandaran",
+        "plural": "sandaran",
+        "stems": [
+          "sandaran"
+        ]
+      },
+      "nl": {
+        "singular": "back-up",
+        "plural": "back-ups",
+        "gender": "c",
+        "stems": [
+          "back-up"
+        ],
+        "forbidden": [
+          "*backup*"
+        ]
+      },
+      "no": {
+        "singular": "sikkerhetskopi",
+        "plural": "sikkerhetskopier",
+        "gender": "m",
+        "stems": [
+          "sikkerhetskopi"
+        ]
+      },
+      "pl": {
+        "singular": "kopia zapasowa",
+        "plural": "kopie zapasowe",
+        "gender": "f",
+        "stems": [
+          "kopi"
+        ]
+      },
+      "pt": {
+        "singular": "backup",
+        "plural": "backups",
+        "gender": "m",
+        "stems": [
+          "backup"
+        ],
+        "forbidden": [
+          "cópia de segurança",
+          "cópias de segurança"
+        ]
+      },
+      "ro": {
+        "singular": "copie de rezervă",
+        "plural": "copii de rezervă",
+        "gender": "f",
+        "stems": [
+          "copi",
+          "rezerv"
+        ],
+        "forbidden": [
+          "backup*"
+        ]
+      },
+      "ru": {
+        "singular": "резервная копия",
+        "plural": "резервные копии",
+        "gender": "f",
+        "stems": [
+          "копи",
+          "резервн"
+        ],
+        "forbidden": [
+          "*бэкап*"
+        ]
+      },
+      "sk": {
+        "singular": "záloha",
+        "plural": "zálohy",
+        "gender": "f",
+        "stems": [
+          "záloh"
+        ]
+      },
+      "sl": {
+        "singular": "varnostna kopija",
+        "plural": "varnostne kopije",
+        "gender": "f",
+        "stems": [
+          "kopij",
+          "kopir"
+        ]
+      },
+      "sr": {
+        "singular": "резервна копија",
+        "plural": "резервне копије",
+        "gender": "f",
+        "stems": [
+          "копиј",
+          "копир"
+        ]
+      },
+      "sv": {
+        "singular": "säkerhetskopia",
+        "plural": "säkerhetskopior",
+        "gender": "c",
+        "stems": [
+          "säkerhetskopi"
+        ]
+      },
+      "th": {
+        "singular": "ข้อมูลสำรอง",
+        "plural": "ข้อมูลสำรอง",
+        "stems": [
+          "สำรอง"
+        ]
+      },
+      "tr": {
+        "singular": "yedek",
+        "plural": "yedekler",
+        "stems": [
+          "yedek",
+          "yedeğ"
+        ]
+      },
+      "uk": {
+        "singular": "резервна копія",
+        "plural": "резервні копії",
+        "gender": "f",
+        "stems": [
+          "копі",
+          "резервн"
+        ],
+        "forbidden": [
+          "*бекап*"
+        ]
+      },
+      "vi": {
+        "singular": "bản sao lưu",
+        "plural": "bản sao lưu",
+        "stems": [
+          "sao lưu"
+        ]
+      },
+      "zh": {
+        "singular": "备份",
+        "plural": "备份",
+        "stems": [
+          "备份"
+        ]
+      }
+    },
+    "pairing": {
+      "definition": "Linking instances through the phrase so they trust each other.",
+      "en": {
+        "singular": "pairing",
+        "plural": "pairings",
+        "stems": [
+          "pairing",
+          "pairings",
+          "paired"
+        ]
+      },
+      "de": {
+        "singular": "Kopplung",
+        "plural": "Kopplungen",
+        "gender": "f",
+        "stems": [
+          "koppel",
+          "koppl"
+        ]
+      },
+      "ar": {
+        "singular": "اقتران",
+        "plural": "اقترانات",
+        "gender": "m",
+        "stems": [
+          "اقتران",
+          "مقترن",
+          "اقران",
+          "اقترن"
+        ]
+      },
+      "bg": {
+        "singular": "сдвояване",
+        "plural": "сдвоявания",
+        "gender": "n",
+        "stems": [
+          "сдво"
+        ]
+      },
+      "ca": {
+        "singular": "aparellament",
+        "plural": "aparellaments",
+        "gender": "m",
+        "stems": [
+          "aparell"
+        ]
+      },
+      "cs": {
+        "singular": "párování",
+        "plural": "párování",
+        "gender": "n",
+        "stems": [
+          "párov",
+          "spárov",
+          "spáruj"
+        ]
+      },
+      "da": {
+        "singular": "parring",
+        "plural": "parringer",
+        "gender": "c",
+        "stems": [
+          "par"
+        ],
+        "stemsAt": "start"
+      },
+      "el": {
+        "singular": "σύζευξη",
+        "plural": "συζεύξεις",
+        "gender": "f",
+        "stems": [
+          "σύζευ",
+          "συζεύ"
+        ]
+      },
+      "es": {
+        "singular": "emparejamiento",
+        "plural": "emparejamientos",
+        "gender": "m",
+        "stems": [
+          "empare"
+        ]
+      },
+      "et": {
+        "singular": "sidumine",
+        "plural": "sidumised",
+        "stems": [
+          "sidu",
+          "seot",
+          "seos"
+        ]
+      },
+      "eu": {
+        "singular": "parekatzea",
+        "plural": "parekatzeak",
+        "stems": [
+          "pareka"
+        ]
+      },
+      "fa": {
+        "singular": "جفت‌سازی",
+        "plural": "جفت‌سازی‌ها",
+        "stems": [
+          "جفت"
+        ]
+      },
+      "fi": {
+        "singular": "pariliitos",
+        "plural": "pariliitokset",
+        "stems": [
+          "pariliito",
+          "pariut",
+          "parilii"
+        ]
+      },
+      "fr": {
+        "singular": "appairage",
+        "plural": "appairages",
+        "gender": "m",
+        "stems": [
+          "appair"
+        ]
+      },
+      "gl": {
+        "singular": "emparellamento",
+        "plural": "emparellamentos",
+        "gender": "m",
+        "stems": [
+          "emparell"
+        ]
+      },
+      "he": {
+        "singular": "צימוד",
+        "plural": "צימודים",
+        "gender": "m",
+        "stems": [
+          "צימוד",
+          "צמד",
+          "צומד"
+        ]
+      },
+      "hi": {
+        "singular": "पेयरिंग",
+        "plural": "पेयरिंग",
+        "gender": "f",
+        "stems": [
+          "पेयर"
+        ]
+      },
+      "hr": {
+        "singular": "uparivanje",
+        "plural": "uparivanja",
+        "gender": "n",
+        "stems": [
+          "upar"
+        ]
+      },
+      "hu": {
+        "singular": "párosítás",
+        "plural": "párosítások",
+        "stems": [
+          "párosít"
+        ]
+      },
+      "id": {
+        "singular": "pemasangan",
+        "plural": "pemasangan",
+        "stems": [
+          "pasang",
+          "masang"
+        ],
+        "stemsAt": "inside"
+      },
+      "is": {
+        "singular": "pörun",
+        "plural": "paranir",
+        "gender": "f",
+        "stems": [
+          "pör",
+          "par"
+        ],
+        "stemsAt": "start"
+      },
+      "it": {
+        "singular": "associazione",
+        "plural": "associazioni",
+        "gender": "f",
+        "stems": [
+          "associ"
+        ]
+      },
+      "ja": {
+        "singular": "ペアリング",
+        "plural": "ペアリング",
+        "stems": [
+          "ペア"
+        ]
+      },
+      "ko": {
+        "singular": "페어링",
+        "plural": "페어링",
+        "stems": [
+          "페어링"
+        ]
+      },
+      "lt": {
+        "singular": "susiejimas",
+        "plural": "susiejimai",
+        "gender": "m",
+        "stems": [
+          "susie"
+        ]
+      },
+      "lv": {
+        "singular": "pārošana",
+        "plural": "pārošanas",
+        "gender": "f",
+        "stems": [
+          "pāro",
+          "sapāro"
+        ]
+      },
+      "ms": {
+        "singular": "gandingan",
+        "plural": "gandingan",
+        "stems": [
+          "ganding"
+        ],
+        "stemsAt": "inside"
+      },
+      "nl": {
+        "singular": "koppeling",
+        "plural": "koppelingen",
+        "gender": "c",
+        "stems": [
+          "koppel"
+        ]
+      },
+      "no": {
+        "singular": "paring",
+        "plural": "paringer",
+        "gender": "m",
+        "stems": [
+          "par"
+        ],
+        "stemsAt": "start"
+      },
+      "pl": {
+        "singular": "parowanie",
+        "plural": "parowania",
+        "gender": "n",
+        "stems": [
+          "parow",
+          "sparow",
+          "sparuj"
+        ]
+      },
+      "pt": {
+        "singular": "emparelhamento",
+        "plural": "emparelhamentos",
+        "gender": "m",
+        "stems": [
+          "emparelh"
+        ]
+      },
+      "ro": {
+        "singular": "împerechere",
+        "plural": "împerecheri",
+        "gender": "f",
+        "stems": [
+          "împerech"
+        ]
+      },
+      "ru": {
+        "singular": "сопряжение",
+        "plural": "сопряжения",
+        "gender": "n",
+        "stems": [
+          "сопря"
+        ]
+      },
+      "sk": {
+        "singular": "párovanie",
+        "plural": "párovania",
+        "gender": "n",
+        "stems": [
+          "párov",
+          "spárov",
+          "spáruj"
+        ]
+      },
+      "sl": {
+        "singular": "seznanjanje",
+        "plural": "seznanjanja",
+        "gender": "n",
+        "stems": [
+          "seznan"
+        ]
+      },
+      "sr": {
+        "singular": "упаривање",
+        "plural": "упаривања",
+        "gender": "n",
+        "stems": [
+          "упар"
+        ]
+      },
+      "sv": {
+        "singular": "parkoppling",
+        "plural": "parkopplingar",
+        "gender": "c",
+        "stems": [
+          "parkoppl"
+        ]
+      },
+      "th": {
+        "singular": "การจับคู่",
+        "plural": "การจับคู่",
+        "stems": [
+          "จับคู่"
+        ]
+      },
+      "tr": {
+        "singular": "eşleştirme",
+        "plural": "eşleştirmeler",
+        "stems": [
+          "eşleş"
+        ]
+      },
+      "uk": {
+        "singular": "спарювання",
+        "plural": "спарювання",
+        "gender": "n",
+        "stems": [
+          "спар"
+        ]
+      },
+      "vi": {
+        "singular": "ghép nối",
+        "plural": "ghép nối",
+        "stems": [
+          "ghép"
+        ]
+      },
+      "zh": {
+        "singular": "配对",
+        "plural": "配对",
+        "stems": [
+          "配对"
+        ]
+      }
+    },
+    "phrase": {
+      "definition": "The twelve words an instance joins a fortress or group with, and the only way in. There is one phrase, never a phrase per fortress, so it carries no other name.",
+      "en": {
+        "singular": "phrase",
+        "plural": "phrases",
+        "stems": [
+          "phrase",
+          "phrases"
+        ],
+        "forbidden": [
+          "fortress phrase",
+          "fortress phrases"
+        ]
+      },
+      "de": {
+        "singular": "Phrase",
+        "plural": "Phrasen",
+        "gender": "f",
+        "stems": [
+          "phrase"
+        ],
+        "forbidden": [
+          "festungs-phrase*",
+          "festungsphrase*"
+        ]
+      },
+      "ar": {
+        "singular": "عبارة",
+        "plural": "عبارات",
+        "gender": "f",
+        "stems": [
+          "عبار"
+        ],
+        "forbidden": [
+          "عبارة الحصن",
+          "عبارات الحصن"
+        ]
+      },
+      "bg": {
+        "singular": "фраза",
+        "plural": "фрази",
+        "gender": "f",
+        "stems": [
+          "фраз"
+        ],
+        "forbidden": [
+          "фраза на крепостта",
+          "фрази на крепостта"
+        ]
+      },
+      "ca": {
+        "singular": "frase",
+        "plural": "frases",
+        "gender": "f",
+        "stems": [
+          "frase"
+        ],
+        "forbidden": [
+          "frase de la fortalesa",
+          "frases de la fortalesa"
+        ]
+      },
+      "cs": {
+        "singular": "fráze",
+        "plural": "fráze",
+        "gender": "f",
+        "stems": [
+          "fráz"
+        ],
+        "forbidden": [
+          "fráze pevnosti"
+        ]
+      },
+      "da": {
+        "singular": "sætning",
+        "plural": "sætninger",
+        "gender": "c",
+        "stems": [
+          "sætning"
+        ],
+        "forbidden": [
+          "fæstningssætning",
+          "fæstningssætninger"
+        ]
+      },
+      "el": {
+        "singular": "φράση",
+        "plural": "φράσεις",
+        "gender": "f",
+        "stems": [
+          "φράσ"
+        ],
+        "forbidden": [
+          "φράση φρουρίου",
+          "φράσεις φρουρίου"
+        ]
+      },
+      "es": {
+        "singular": "frase",
+        "plural": "frases",
+        "gender": "f",
+        "stems": [
+          "frase"
+        ],
+        "forbidden": [
+          "frase de la fortaleza",
+          "frases de la fortaleza"
+        ]
+      },
+      "et": {
+        "singular": "fraas",
+        "plural": "fraasid",
+        "stems": [
+          "fraas"
+        ],
+        "forbidden": [
+          "kindluse fraas",
+          "kindluse fraasid"
+        ]
+      },
+      "eu": {
+        "singular": "esaldia",
+        "plural": "esaldiak",
+        "stems": [
+          "esaldi"
+        ],
+        "forbidden": [
+          "gotorlekuaren esaldia",
+          "gotorlekuaren esaldiak"
+        ]
+      },
+      "fa": {
+        "singular": "عبارت",
+        "plural": "عبارت‌ها",
+        "stems": [
+          "عبارت"
+        ],
+        "forbidden": [
+          "عبارت دژ",
+          "عبارت‌های دژ"
+        ]
+      },
+      "fi": {
+        "singular": "lause",
+        "plural": "lauseet",
+        "stems": [
+          "lause"
+        ],
+        "forbidden": [
+          "linnoituksen lause",
+          "linnoituksen lauseet"
+        ]
+      },
+      "fr": {
+        "singular": "phrase",
+        "plural": "phrases",
+        "gender": "f",
+        "stems": [
+          "phrase"
+        ],
+        "forbidden": [
+          "phrase de la forteresse",
+          "phrases de la forteresse"
+        ]
+      },
+      "gl": {
+        "singular": "frase",
+        "plural": "frases",
+        "gender": "f",
+        "stems": [
+          "frase"
+        ],
+        "forbidden": [
+          "frase da fortaleza",
+          "frases da fortaleza"
+        ]
+      },
+      "he": {
+        "singular": "ביטוי",
+        "plural": "ביטויים",
+        "gender": "m",
+        "stems": [
+          "ביטוי"
+        ],
+        "forbidden": [
+          "ביטוי המבצר",
+          "ביטויי המבצר"
+        ]
+      },
+      "hi": {
+        "singular": "वाक्यांश",
+        "plural": "वाक्यांश",
+        "gender": "m",
+        "stems": [
+          "वाक्यांश"
+        ],
+        "forbidden": [
+          "किले का वाक्यांश",
+          "किले के वाक्यांश"
+        ]
+      },
+      "hr": {
+        "singular": "fraza",
+        "plural": "fraze",
+        "gender": "f",
+        "stems": [
+          "fraz"
+        ],
+        "forbidden": [
+          "fraza utvrde",
+          "fraze utvrde"
+        ]
+      },
+      "hu": {
+        "singular": "jelmondat",
+        "plural": "jelmondatok",
+        "stems": [
+          "jelmondat"
+        ],
+        "forbidden": [
+          "erőd jelmondata",
+          "erőd jelmondatai"
+        ]
+      },
+      "id": {
+        "singular": "frasa",
+        "plural": "frasa",
+        "stems": [
+          "frasa"
+        ],
+        "forbidden": [
+          "frasa benteng"
+        ]
+      },
+      "is": {
+        "singular": "setning",
+        "plural": "setningar",
+        "gender": "f",
+        "stems": [
+          "setning"
+        ],
+        "forbidden": [
+          "setning vígisins",
+          "setningar vígisins"
+        ]
+      },
+      "it": {
+        "singular": "frase",
+        "plural": "frasi",
+        "gender": "f",
+        "stems": [
+          "fras"
+        ],
+        "forbidden": [
+          "frase della fortezza",
+          "frasi della fortezza"
+        ]
+      },
+      "ja": {
+        "singular": "フレーズ",
+        "plural": "フレーズ",
+        "stems": [
+          "フレーズ"
+        ],
+        "forbidden": [
+          "要塞フレーズ"
+        ]
+      },
+      "ko": {
+        "singular": "문구",
+        "plural": "문구",
+        "stems": [
+          "문구"
+        ],
+        "forbidden": [
+          "요새 문구"
+        ]
+      },
+      "lt": {
+        "singular": "frazė",
+        "plural": "frazės",
+        "gender": "f",
+        "stems": [
+          "fraz"
+        ],
+        "forbidden": [
+          "tvirtovės frazė",
+          "tvirtovės frazės"
+        ]
+      },
+      "lv": {
+        "singular": "frāze",
+        "plural": "frāzes",
+        "gender": "f",
+        "stems": [
+          "frāz"
+        ],
+        "forbidden": [
+          "cietokšņa frāze",
+          "cietokšņa frāzes"
+        ]
+      },
+      "ms": {
+        "singular": "frasa",
+        "plural": "frasa",
+        "stems": [
+          "frasa"
+        ],
+        "forbidden": [
+          "frasa kubu"
+        ]
+      },
+      "nl": {
+        "singular": "frase",
+        "plural": "frases",
+        "gender": "c",
+        "stems": [
+          "frase"
+        ],
+        "forbidden": [
+          "vestingfrase",
+          "vestingfrases"
+        ]
+      },
+      "no": {
+        "singular": "frase",
+        "plural": "fraser",
+        "gender": "m",
+        "stems": [
+          "frase"
+        ],
+        "forbidden": [
+          "festningsfrase",
+          "festningsfraser"
+        ]
+      },
+      "pl": {
+        "singular": "fraza",
+        "plural": "frazy",
+        "gender": "f",
+        "stems": [
+          "fraz"
+        ],
+        "forbidden": [
+          "fraza twierdzy",
+          "frazy twierdzy"
+        ]
+      },
+      "pt": {
+        "singular": "frase",
+        "plural": "frases",
+        "gender": "f",
+        "stems": [
+          "frase"
+        ],
+        "forbidden": [
+          "frase da fortaleza",
+          "frases da fortaleza"
+        ]
+      },
+      "ro": {
+        "singular": "frază",
+        "plural": "fraze",
+        "gender": "f",
+        "stems": [
+          "fraz"
+        ],
+        "forbidden": [
+          "fraza fortăreței",
+          "frazele fortăreței"
+        ]
+      },
+      "ru": {
+        "singular": "фраза",
+        "plural": "фразы",
+        "gender": "f",
+        "stems": [
+          "фраз"
+        ],
+        "forbidden": [
+          "фраза крепости",
+          "фразы крепости"
+        ]
+      },
+      "sk": {
+        "singular": "fráza",
+        "plural": "frázy",
+        "gender": "f",
+        "stems": [
+          "fráz"
+        ],
+        "forbidden": [
+          "fráza pevnosti",
+          "frázy pevnosti"
+        ]
+      },
+      "sl": {
+        "singular": "fraza",
+        "plural": "fraze",
+        "gender": "f",
+        "stems": [
+          "fraz"
+        ],
+        "forbidden": [
+          "fraza trdnjave",
+          "fraze trdnjave"
+        ]
+      },
+      "sr": {
+        "singular": "фраза",
+        "plural": "фразе",
+        "gender": "f",
+        "stems": [
+          "фраз"
+        ],
+        "forbidden": [
+          "фраза тврђаве",
+          "фразе тврђаве"
+        ]
+      },
+      "sv": {
+        "singular": "fras",
+        "plural": "fraser",
+        "gender": "c",
+        "stems": [
+          "fras"
+        ],
+        "forbidden": [
+          "fästningsfras",
+          "fästningsfraser"
+        ]
+      },
+      "th": {
+        "singular": "วลี",
+        "plural": "วลี",
+        "stems": [
+          "วลี"
+        ],
+        "forbidden": [
+          "วลีป้อมปราการ"
+        ]
+      },
+      "tr": {
+        "singular": "ifade",
+        "plural": "ifadeler",
+        "stems": [
+          "ifade"
+        ],
+        "forbidden": [
+          "kale ifadesi",
+          "kale ifadeleri"
+        ]
+      },
+      "uk": {
+        "singular": "фраза",
+        "plural": "фрази",
+        "gender": "f",
+        "stems": [
+          "фраз"
+        ],
+        "forbidden": [
+          "фраза фортеці",
+          "фрази фортеці"
+        ]
+      },
+      "vi": {
+        "singular": "cụm từ",
+        "plural": "cụm từ",
+        "stems": [
+          "cụm từ"
+        ],
+        "forbidden": [
+          "cụm từ pháo đài"
+        ]
+      },
+      "zh": {
+        "singular": "口令",
+        "plural": "口令",
+        "stems": [
+          "口令"
+        ],
+        "forbidden": [
+          "堡垒口令"
+        ]
+      }
+    },
+    "job": {
+      "definition": "Work set up once that an app then runs by itself, on a schedule or on demand.",
+      "en": {
+        "singular": "job",
+        "plural": "jobs",
+        "stems": [
+          "job",
+          "jobs"
+        ]
+      },
+      "de": {
+        "singular": "Auftrag",
+        "plural": "Aufträge",
+        "gender": "m",
+        "stems": [
+          "auftrag",
+          "aufträg"
+        ]
+      },
+      "ar": {
+        "singular": "مهمة",
+        "plural": "مهام",
+        "gender": "f",
+        "stems": [
+          "مهمة",
+          "مهام",
+          "مهمت"
+        ]
+      },
+      "bg": {
+        "singular": "задача",
+        "plural": "задачи",
+        "gender": "f",
+        "stems": [
+          "задач"
+        ]
+      },
+      "ca": {
+        "singular": "tasca",
+        "plural": "tasques",
+        "gender": "f",
+        "stems": [
+          "tasca",
+          "tasque"
+        ]
+      },
+      "cs": {
+        "singular": "úloha",
+        "plural": "úlohy",
+        "gender": "f",
+        "stems": [
+          "úloh"
+        ]
+      },
+      "da": {
+        "singular": "job",
+        "plural": "jobs",
+        "gender": "n",
+        "stems": [
+          "job"
+        ]
+      },
+      "el": {
+        "singular": "εργασία",
+        "plural": "εργασίες",
+        "gender": "f",
+        "stems": [
+          "εργασί"
+        ]
+      },
+      "es": {
+        "singular": "tarea",
+        "plural": "tareas",
+        "gender": "f",
+        "stems": [
+          "tarea"
+        ]
+      },
+      "et": {
+        "singular": "töö",
+        "plural": "tööd",
+        "stems": [
+          "töö",
+          "töid"
+        ]
+      },
+      "eu": {
+        "singular": "lana",
+        "plural": "lanak",
+        "stems": [
+          "lan"
+        ],
+        "stemsAt": "start"
+      },
+      "fa": {
+        "singular": "کار",
+        "plural": "کارها",
+        "stems": [
+          "کار"
+        ]
+      },
+      "fi": {
+        "singular": "työ",
+        "plural": "työt",
+        "stems": [
+          "työ",
+          "töi"
+        ]
+      },
+      "fr": {
+        "singular": "tâche",
+        "plural": "tâches",
+        "gender": "f",
+        "stems": [
+          "tâche"
+        ]
+      },
+      "gl": {
+        "singular": "tarefa",
+        "plural": "tarefas",
+        "gender": "f",
+        "stems": [
+          "tarefa"
+        ]
+      },
+      "he": {
+        "singular": "משימה",
+        "plural": "משימות",
+        "gender": "f",
+        "stems": [
+          "משימ"
+        ]
+      },
+      "hi": {
+        "singular": "काम",
+        "plural": "काम",
+        "gender": "m",
+        "stems": [
+          "काम"
+        ]
+      },
+      "hr": {
+        "singular": "zadatak",
+        "plural": "zadaci",
+        "gender": "m",
+        "stems": [
+          "zadat",
+          "zadac",
+          "zadatk"
+        ]
+      },
+      "hu": {
+        "singular": "feladat",
+        "plural": "feladatok",
+        "stems": [
+          "feladat"
+        ]
+      },
+      "id": {
+        "singular": "tugas",
+        "plural": "tugas",
+        "stems": [
+          "tugas"
+        ]
+      },
+      "is": {
+        "singular": "verk",
+        "plural": "verk",
+        "gender": "n",
+        "stems": [
+          "verk"
+        ]
+      },
+      "it": {
+        "singular": "lavoro",
+        "plural": "lavori",
+        "gender": "m",
+        "stems": [
+          "lavor"
+        ]
+      },
+      "ja": {
+        "singular": "ジョブ",
+        "plural": "ジョブ",
+        "stems": [
+          "ジョブ"
+        ]
+      },
+      "ko": {
+        "singular": "작업",
+        "plural": "작업",
+        "stems": [
+          "작업"
+        ]
+      },
+      "lt": {
+        "singular": "užduotis",
+        "plural": "užduotys",
+        "gender": "f",
+        "stems": [
+          "užduot",
+          "užduoč"
+        ]
+      },
+      "lv": {
+        "singular": "uzdevums",
+        "plural": "uzdevumi",
+        "gender": "m",
+        "stems": [
+          "uzdevum"
+        ]
+      },
+      "ms": {
+        "singular": "tugas",
+        "plural": "tugas",
+        "stems": [
+          "tugas"
+        ]
+      },
+      "nl": {
+        "singular": "taak",
+        "plural": "taken",
+        "gender": "c",
+        "stems": [
+          "taak",
+          "taken"
+        ]
+      },
+      "no": {
+        "singular": "jobb",
+        "plural": "jobber",
+        "gender": "m",
+        "stems": [
+          "jobb"
+        ]
+      },
+      "pl": {
+        "singular": "zadanie",
+        "plural": "zadania",
+        "gender": "n",
+        "stems": [
+          "zadani",
+          "zadań"
+        ]
+      },
+      "pt": {
+        "singular": "tarefa",
+        "plural": "tarefas",
+        "gender": "f",
+        "stems": [
+          "tarefa"
+        ]
+      },
+      "ro": {
+        "singular": "sarcină",
+        "plural": "sarcini",
+        "gender": "f",
+        "stems": [
+          "sarcin"
+        ]
+      },
+      "ru": {
+        "singular": "задание",
+        "plural": "задания",
+        "gender": "n",
+        "stems": [
+          "задани",
+          "заданий"
+        ]
+      },
+      "sk": {
+        "singular": "úloha",
+        "plural": "úlohy",
+        "gender": "f",
+        "stems": [
+          "úloh"
+        ]
+      },
+      "sl": {
+        "singular": "opravilo",
+        "plural": "opravila",
+        "gender": "n",
+        "stems": [
+          "opravil"
+        ]
+      },
+      "sr": {
+        "singular": "посао",
+        "plural": "послови",
+        "gender": "m",
+        "stems": [
+          "посао",
+          "посл"
+        ]
+      },
+      "sv": {
+        "singular": "jobb",
+        "plural": "jobb",
+        "gender": "n",
+        "stems": [
+          "jobb"
+        ]
+      },
+      "th": {
+        "singular": "งาน",
+        "plural": "งาน",
+        "stems": [
+          "งาน"
+        ]
+      },
+      "tr": {
+        "singular": "iş",
+        "plural": "işler",
+        "stems": [
+          "iş"
+        ]
+      },
+      "uk": {
+        "singular": "завдання",
+        "plural": "завдання",
+        "gender": "n",
+        "stems": [
+          "завдан"
+        ]
+      },
+      "vi": {
+        "singular": "công việc",
+        "plural": "công việc",
+        "stems": [
+          "công việc"
+        ]
+      },
+      "zh": {
+        "singular": "任务",
+        "plural": "任务",
+        "stems": [
+          "任务"
+        ]
+      }
+    }
+  }
+}
