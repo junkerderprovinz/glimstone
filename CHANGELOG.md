@@ -2,6 +2,21 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 4.3.3 - 2026-11-10
+
+The Info cards in Vue keep `openUrl` as a function, so mounting one no longer opens an empty tab.
+
+**Adopting apps:**
+
+- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.3.3, all at the same number. Nothing is renamed or removed.
+- **Vue Info cards:** an app that passes `:open-url` to `InfoVersionCard` or `InfoHelpCard` only to keep the default from running on mount can drop it. The cards open links with `openInBrowser` by themselves.
+- **Flutter:** move the git dependency to `ref: v4.3.3`. Nothing changed for Flutter.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.3.3.
+
+## 🐛 Fixed
+
+- **`InfoVersionCard` and `InfoHelpCard` in Vue** declared `openUrl` through a type from `@glimstone/core`, which the library build cannot read. The built prop had no runtime type, so Vue took the default opener for a factory and called it once on mount, which opened an empty tab. The type is spelled out in the Vue package, and a test compiles every component the way the build does and checks that a prop defaulting to a function keeps its function type.
+
 ## 4.3.2 - 2026-11-09
 
 A README button's segment names only what differs, in one line, and can carry the whole name as its accessible name. Flatpak joins the brands with its mark and its blue tile.
