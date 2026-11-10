@@ -2,6 +2,26 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 4.3.5 - 2026-11-11
+
+The sign-in card shows each field's label inside the field until the first key.
+
+**Adopting apps:**
+
+- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.3.5, all at the same number. Nothing is renamed or removed.
+- **Your own fields:** a field in the `fields` slot inside `SignInField` takes its label as its placeholder by itself. A field that brings its own placeholder keeps the label above it.
+- **Stay signed in:** take the switch off the card. How long a sign-in lasts belongs in the account's settings.
+- **Flutter:** move the git dependency to `ref: v4.3.5`. Nothing changes there.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.3.5.
+
+## 🎨 Design
+
+- **A sign-in field's label stands inside it** as its placeholder, until the first key. It stays the field's accessible name, only hidden. A field with a placeholder of its own or with a hint keeps its label above it.
+
+## ✨ Added
+
+- **`labelInside`** in the core decides it for both frameworks, and the React `SignInField` takes `hidden`.
+
 ## 4.3.4 - 2026-11-10
 
 MOS, ZimaOS and Umbrel join the README buttons, each with the mark and the tile colour of the README's own button.

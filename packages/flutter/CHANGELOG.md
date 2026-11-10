@@ -1,3 +1,7 @@
+## 4.3.5
+
+- No changes for Flutter. The sign-in card this release changes lives in the web packages.
+
 ## 4.3.4
 
 - `GlimTheme` gains `brandMos` and `brandUmbrel`, the MOS and Umbrel marks' colours, written from the tokens.
