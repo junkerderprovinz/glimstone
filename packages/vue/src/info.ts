@@ -1,5 +1,9 @@
 import type { Component } from "vue";
-import type { OpenUrl, UpdateCheck, VersionRow } from "@glimstone/core";
+import type { UpdateCheck, VersionRow } from "@glimstone/core";
+
+// Spelled out rather than core's OpenUrl: the library build cannot read types from
+// another package, and without a runtime type Vue calls the default opener on mount.
+type OpenUrl = (url: string) => void;
 
 export interface InfoVersionCardProps {
   text: {
