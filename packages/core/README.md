@@ -32,6 +32,12 @@ npm install @glimstone/core
   form shows while the app answers each step, `signInTextEn` holds the English
   words, and `showRefusal` shakes the button of a refused try and selects the
   refused field.
+- The fortress in the Instances tab: `createFortressFlow` runs the windows to
+  join with the phrase, leave, remove an instance and show or change the
+  phrase, `enterWords` spreads a pasted phrase over its twelve fields,
+  `appCardView` says what another app's card shows, and `fortressText(lang)`
+  hands out the words in every language of the glossary, each also a module of
+  its own under `fortressLocales/`.
 - What windows and menus share: `windowFoot` adds the way out, `stackWindow`
   gives Escape and Tab to the window in front, and `menu.ts` holds the menu
   model with `tidyMenu`, `menuRowView`, `placeMenu`, `menuMove`,

@@ -4,7 +4,7 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
-A glossary joins the packages: `@glimstone/terms` holds the words an interface uses for the same thing in all 42 languages, and checks an app's translations against them.
+A glossary joins the packages: `@glimstone/terms` holds the words an interface uses for the same thing in all 42 languages, and checks an app's translations against them. The fortress gets its place in the Instances tab, with the other apps behind one switch, the permissions and the phrase as the only way in, in all 42 languages.
 
 **Adopting apps:**
 
@@ -12,6 +12,7 @@ A glossary joins the packages: `@glimstone/terms` holds the words an interface u
 - **In CI:** `npx glimstone-terms <locale files or folders>` prints every break with file, line, language and key and exits with 1. `--terms=relay,backup` takes the terms on one at a time, and `--ignore=<file>` leaves out keys that name something else, such as a fixed product name.
 - **In a test:** `checkLocales(paths, { ignore, terms })` returns the same breaks as a list, so a Vitest file can expect it to be empty.
 - **Two rules:** a translation whose English carries a term carries that term's word, and no translation uses a forbidden variant. In German that means "Relay", never "Relais", "Sicherung" and not "Backup" in running text, "Phrase", never "Festungs-Phrase", and "Erlaubnis" for what one app may start in another, since "Freigabe" already names network and device shares.
+- **The fortress:** `Fortress` in `@glimstone/react` and `@glimstone/vue` is an app's Instances tab below its own cards. Hand it `text={fortressText(lang)}`, `lang`, the app, `joined`, the other apps with their instances, the permissions and the callbacks `onJoin`, `onLeave`, `onRemove`, `onShowPhrase`, `onChangePhrase` and `onPermission`. The app's own cards go in as children, drawn with `InstanceCard`, and `hueStart` tells the fortress how many came first. Device glyphs and the buttons' glyphs come from the glyph resolver under `deviceServer`, `devicePc`, `deviceLaptop`, `devicePhone`, `fortressJoin`, `fortressLeave`, `fortressShowPhrase` and `fortressChangePhrase`.
 - **Flutter:** nothing changed there.
 
 ## ✨ Added
@@ -19,6 +20,13 @@ A glossary joins the packages: `@glimstone/terms` holds the words an interface u
 - **Nine terms:** fortress, instance, member, permission, relay, backup, pairing, phrase and job, each with a definition, singular, plural, gender and stems in every language. Where the existing translations disagree, the word most of them use is the one the glossary keeps, and the others are listed as forbidden variants.
 - **Stems, not fixed words:** a stem finds every inflection of a word, and in languages that build compounds it finds the word inside one.
 - **Placeholders, paths and addresses** such as `{backup}`, `/relay/connect` and `wss://host` do not count as words.
+- **The fortress in the Instances tab:** `Fortress`, `InstanceCard`, `FortressAppCard` and `FortressPermissions` in React and Vue, with the switch for the other apps, a card per app with a row per instance, the permissions with a switch each, and the windows to join with the phrase, leave, remove an instance, and show or change the phrase.
+- **`createFortressFlow`, `appCardView` and the phrase helpers** in `@glimstone/core`, so both frameworks run the same steps, and `storedShowOthers` for the switch kept on the device.
+- **The fortress's words in all 42 languages** of the glossary: `fortressText(lang)`, `fortressTextEn` and one module per language under `@glimstone/core/fortressLocales/`, with `fill`, `plural` and `listOf` to put names and counts in.
+
+## 🎨 Design
+
+- **"The fortress"**, a new section of the design language: the app's own instances first, the other apps behind one switch kept per device, the phrase as the only way in, the page's actions in the corner, and a rainbow position for every card.
 
 ## 4.3.4 - 2026-11-10
 
