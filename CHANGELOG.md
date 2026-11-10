@@ -2,14 +2,16 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 4.3.4 - 2026-11-10
 
 MOS, ZimaOS and Umbrel join the README buttons, each with the mark and the tile colour of the README's own button.
 
 **Adopting apps:**
 
+- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.3.4, all at the same number. Nothing is renamed or removed.
 - **MOS, ZimaOS and Umbrel:** give the button `brand="mos"`, `brand="zimaos"` or `brand="umbrel"` with `mark={<BrandMark svg={MOS_SVG} />}`, `ZIMAOS_SVG` or `UMBREL_SVG`. MOS takes `markClass="glim-mos-mark"` and Umbrel `markClass="glim-umbrel-mark"`. ZimaOS needs no `markClass`: its mark takes the button's ink. An app that keeps its own copy of the tokens takes `--brand-mos` and `--brand-umbrel` in all three theme blocks, their lines in the lit tile's block, `.glim-mos-mark`, `.glim-umbrel-mark`, `.glim-tile-mos`, `.glim-tile-zimaos` and `.glim-tile-umbrel` from `tokens.css`.
-- **Flutter:** `GlimTheme` gains `brandMos` and `brandUmbrel`.
+- **Flutter:** move the git dependency to `ref: v4.3.4`. `GlimTheme` gains `brandMos` and `brandUmbrel`.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.3.4.
 
 ## 🎨 Design
 

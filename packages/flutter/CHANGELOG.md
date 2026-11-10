@@ -1,3 +1,7 @@
+## 4.3.4
+
+- `GlimTheme` gains `brandMos` and `brandUmbrel`, the MOS and Umbrel marks' colours, written from the tokens.
+
 ## 4.3.3
 
 - The same number as the other packages. Nothing changed for Flutter.
