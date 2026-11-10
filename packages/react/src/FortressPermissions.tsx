@@ -46,6 +46,7 @@ export function FortressPermissions({ text, app, apps, permissions, onPermission
           <Selector
             label={text.permissions}
             inline
+            activation="manual"
             value={filter}
             onChange={setFilter}
             items={[

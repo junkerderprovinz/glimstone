@@ -635,6 +635,72 @@ export function EmptyStatePage() {
   );
 }
 
+export function FortressPage() {
+  return (
+    <>
+      <p className="lead">
+        The fortress in an app's Instances tab: its own instances first, a switch that shows the other apps of the
+        fortress with their permissions, and the windows to join with the phrase, leave, remove an instance and show or
+        change the phrase.
+      </p>
+      <Head file="react/Fortress.tsx" />
+      <Demo name="FortressBasic" />
+      <Usage
+        code={`import { Fortress, InstanceCard } from "@glimstone/react";
+import { fortressText } from "@glimstone/core";
+
+<Fortress
+  text={fortressText(lang)}
+  lang={lang}
+  app={{ id: "alpha", name: "Alpha", logo }}
+  joined={status.joined}
+  apps={status.otherApps}
+  permissions={status.permissions}
+  pairedWith={status.pairedDevices}
+  phrasePassword
+  hueStart={ownCards.length}
+  onJoin={(words) => api.join(words)}
+  onLeave={() => api.leave()}
+  onRemove={(id) => api.remove(id)}
+  onShowPhrase={(password) => api.phrase(password)}
+  onChangePhrase={() => api.changePhrase()}
+  onPermission={(id, on) => api.permission(id, on)}
+>
+  {(remove) => ownCards.map((c, i) => <InstanceCard key={c.id} {...c} hueIndex={i} />)}
+</Fortress>`}
+      />
+      <H2>Outside a fortress</H2>
+      <p>
+        An app in no fortress keeps its own cards and shows an empty place beside them, with the one way in in the
+        corner: the phrase. Paste it into the first field and it spreads over all twelve.
+      </p>
+      <Demo name="FortressOut" />
+      <H2>Words</H2>
+      <p>
+        <code>fortressText(lang)</code> hands out the words in every language of the glossary, and each language is its
+        own module under <code>@glimstone/core/fortressLocales/</code> for an app that knows its language at build time.
+        The sentences that are the app's own, such as what a permission allows, come in with the data.
+      </p>
+      <H2>Rules</H2>
+      <ul>
+        <li>The fortress has no tab of its own. It lives in the Instances tab, which shows this app's instances first.</li>
+        <li>The other apps and the permissions show only once the switch is on, and the switch is kept per device.</li>
+        <li>An app joins with the phrase and nothing else. There is no field for an address anywhere.</li>
+        <li>Show phrase, Change phrase and Leave fortress stand in the corner, Show phrase as the one filled button.</li>
+        <li>Every card owns a rainbow position, so its buttons and switches take its hue.</li>
+        <li>Permissions are on until switched off, one switch per pair. A refused switch shakes and stays as it was.</li>
+        <li>The phrase shows only after the app's password where the app has one.</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="Fortress" />
+      <H2>API</H2>
+      <PropsTable of="Fortress" />
+      <H2>InstanceCard</H2>
+      <PropsTable of="InstanceCard" />
+    </>
+  );
+}
+
 export function SignInCardPage() {
   return (
     <>

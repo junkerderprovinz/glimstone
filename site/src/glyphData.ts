@@ -34,6 +34,14 @@ const KEYS: Record<string, string> = {
   look: "IconTabLook",
   reset: "IconRefresh",
   open: "IconExternalLink",
+  fortressJoin: "IconSignIn",
+  fortressLeave: "IconSignOut",
+  fortressShowPhrase: "IconKey",
+  fortressChangePhrase: "IconRefresh",
+  deviceServer: "IconLocal",
+  devicePc: "IconTabApp",
+  deviceLaptop: "IconVM",
+  devicePhone: "IconPhone",
 };
 
 /** The glyph a label key stands for, or undefined where the set has none. */
