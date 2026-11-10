@@ -25,6 +25,8 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     required this.brandDocker,
     required this.brandUnraidFrom,
     required this.brandUnraidTo,
+    required this.brandMos,
+    required this.brandUmbrel,
     required this.brandWindows,
     required this.brandFlatpak,
     required this.brandGithub,
@@ -75,6 +77,8 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
   final Color brandDocker;
   final Color brandUnraidFrom;
   final Color brandUnraidTo;
+  final Color brandMos;
+  final Color brandUmbrel;
   final Color brandWindows;
   final Color brandFlatpak;
   final Color brandGithub;
@@ -129,6 +133,8 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     brandDocker: Color(0xFF2396ED),
     brandUnraidFrom: Color(0xFFE32929),
     brandUnraidTo: Color(0xFFFF8D30),
+    brandMos: Color(0xFF26A269),
+    brandUmbrel: Color(0xFF7D7BF6),
     brandWindows: Color(0xFF2B88D8),
     brandFlatpak: Color(0xFF4A90D9),
     brandGithub: Color(0xFFFFFFFF),
@@ -180,6 +186,8 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     brandDocker: Color(0xFF2396ED),
     brandUnraidFrom: Color(0xFFE32929),
     brandUnraidTo: Color(0xFFFF8D30),
+    brandMos: Color(0xFF26A269),
+    brandUmbrel: Color(0xFF7D7BF6),
     brandWindows: Color(0xFF2B88D8),
     brandFlatpak: Color(0xFF4A90D9),
     brandGithub: Color(0xFFFFFFFF),
@@ -230,6 +238,8 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     brandDocker: Color(0xFF2396ED),
     brandUnraidFrom: Color(0xFFE32929),
     brandUnraidTo: Color(0xFFFF8D30),
+    brandMos: Color(0xFF26A269),
+    brandUmbrel: Color(0xFF5351F3),
     brandWindows: Color(0xFF0078D4),
     brandFlatpak: Color(0xFF4A90D9),
     brandGithub: Color(0xFF181717),
@@ -281,6 +291,8 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     Color? brandDocker,
     Color? brandUnraidFrom,
     Color? brandUnraidTo,
+    Color? brandMos,
+    Color? brandUmbrel,
     Color? brandWindows,
     Color? brandFlatpak,
     Color? brandGithub,
@@ -331,6 +343,8 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
         brandDocker: brandDocker ?? this.brandDocker,
         brandUnraidFrom: brandUnraidFrom ?? this.brandUnraidFrom,
         brandUnraidTo: brandUnraidTo ?? this.brandUnraidTo,
+        brandMos: brandMos ?? this.brandMos,
+        brandUmbrel: brandUmbrel ?? this.brandUmbrel,
         brandWindows: brandWindows ?? this.brandWindows,
         brandFlatpak: brandFlatpak ?? this.brandFlatpak,
         brandGithub: brandGithub ?? this.brandGithub,
@@ -385,6 +399,8 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
       brandDocker: Color.lerp(brandDocker, other.brandDocker, t)!,
       brandUnraidFrom: Color.lerp(brandUnraidFrom, other.brandUnraidFrom, t)!,
       brandUnraidTo: Color.lerp(brandUnraidTo, other.brandUnraidTo, t)!,
+      brandMos: Color.lerp(brandMos, other.brandMos, t)!,
+      brandUmbrel: Color.lerp(brandUmbrel, other.brandUmbrel, t)!,
       brandWindows: Color.lerp(brandWindows, other.brandWindows, t)!,
       brandFlatpak: Color.lerp(brandFlatpak, other.brandFlatpak, t)!,
       brandGithub: Color.lerp(brandGithub, other.brandGithub, t)!,
