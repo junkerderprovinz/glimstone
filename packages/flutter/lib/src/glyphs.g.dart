@@ -232,6 +232,10 @@ abstract final class GlimGlyphs {
   static const network = GlimGlyphData('IconNetwork', '0.012 0.294 13.984 13.984', r'''<g> <path fill="currentColor" fill-rule="evenodd" d="M3.916 3.381a8.056 8.056 0 0 1 8.782 1.747 0.75 0.75 0 1 0 1.06 -1.06 9.556 9.556 0 0 0 -13.517 0 0.75 0.75 0 1 0 1.061 1.06 8.056 8.056 0 0 1 2.614 -1.747ZM7 5.61a5.526 5.526 0 0 0 -3.919 1.63 0.75 0.75 0 0 1 -1.064 -1.058 7.027 7.027 0 0 1 9.966 0 0.75 0.75 0 1 1 -1.064 1.058A5.526 5.526 0 0 0 7 5.61Zm-0.98 2.939a2.594 2.594 0 0 1 2.867 0.58 0.75 0.75 0 1 0 1.075 -1.047 4.094 4.094 0 0 0 -5.866 0A0.75 0.75 0 1 0 5.17 9.13c0.242 -0.248 0.531 -0.446 0.85 -0.58Zm-0.612 3.164a1.592 1.592 0 1 1 3.184 0 1.592 1.592 0 0 1 -3.184 0Z" clip-rule="evenodd" stroke-width="1"></path> </g>''');
   /// Phone
   static const phone = GlimGlyphData('IconPhone', '0 0 14 14', r'''<g> <path fill="currentColor" fill-rule="evenodd" d="M3.5 1.75c0 -0.13807 0.11193 -0.25 0.25 -0.25h6.5c0.1381 0 0.25 0.11193 0.25 0.25v10.5c0 0.1381 -0.1119 0.25 -0.25 0.25H3.80187c-0.00499 -0.0021 -0.01076 -0.0046 -0.01724 -0.0076 -0.04612 -0.0217 -0.10526 -0.0581 -0.16134 -0.106 -0.0566 -0.0482 -0.09333 -0.0937 -0.11253 -0.1264 -0.0059 -0.0101 -0.00911 -0.0171 -0.01076 -0.0212V1.75ZM3.75 0C2.7835 0 2 0.783502 2 1.75v10.5c0 0.5919 0.36126 1.0316 0.65 1.2778 0.15613 0.1331 0.32809 0.2431 0.49782 0.3227 0.15436 0.0724 0.36996 0.1495 0.60218 0.1495h6.5c0.9665 0 1.75 -0.7835 1.75 -1.75V1.75C12 0.783502 11.2165 0 10.25 0h-6.5ZM6.5 9.75c-0.41421 0 -0.75 0.3358 -0.75 0.75s0.33579 0.75 0.75 0.75h1c0.41421 0 0.75 -0.3358 0.75 -0.75s-0.33579 -0.75 -0.75 -0.75h-1Z" clip-rule="evenodd" stroke-width="1"></path> </g>''');
+  /// A server, the box an app runs on
+  static const server = GlimGlyphData('IconServer', '0 0 14 14', r'''<path fill="currentColor" fill-rule="evenodd" d="M1.5 0.5h11A1.5 1.5 0 0 1 14 2v2.75A1.5 1.5 0 0 1 12.5 6.25h-11A1.5 1.5 0 0 1 0 4.75V2A1.5 1.5 0 0 1 1.5 0.5ZM2 3.375a1 1 0 1 0 2 0a1 1 0 1 0 -2 0ZM6 2.625h5.5v1.5H6ZM1.5 7.75h11A1.5 1.5 0 0 1 14 9.25V12A1.5 1.5 0 0 1 12.5 13.5h-11A1.5 1.5 0 0 1 0 12V9.25A1.5 1.5 0 0 1 1.5 7.75ZM2 10.625a1 1 0 1 0 2 0a1 1 0 1 0 -2 0ZM6 9.875h5.5v1.5H6Z"></path>''');
+  /// A laptop
+  static const laptop = GlimGlyphData('IconLaptop', '0 0.25 14 14', r'''<path fill="currentColor" fill-rule="evenodd" d="M2.5 1.5h9A1.5 1.5 0 0 1 13 3v6.25H1V3A1.5 1.5 0 0 1 2.5 1.5ZM2.5 3v4.75h9V3ZM0 10.75h14v0.75A1.5 1.5 0 0 1 12.5 13h-11A1.5 1.5 0 0 1 0 11.5Z"></path>''');
   /// Browser
   static const browser = GlimGlyphData('IconBrowser', '0.046 0.047 13.908 13.908', r'''<g> <path fill="currentColor" fill-rule="evenodd" d="M1.546 12.25V3.314h10.908v8.934a0.204 0.204 0 0 1 -0.205 0.205H1.751a0.204 0.204 0 0 1 -0.205 -0.205Zm-1.5 -10.5C0.046 0.81 0.81 0.047 1.751 0.047h10.498c0.942 0 1.705 0.763 1.705 1.705V12.25c0 0.942 -0.763 1.705 -1.705 1.705H1.751A1.704 1.704 0 0 1 0.046 12.25V1.751Z" clip-rule="evenodd" stroke-width="1"></path> </g>''');
   /// Open or show the app
@@ -504,6 +508,8 @@ abstract final class GlimGlyphs {
     'IconAccounts': accounts,
     'IconNetwork': network,
     'IconPhone': phone,
+    'IconServer': server,
+    'IconLaptop': laptop,
     'IconBrowser': browser,
     'IconApp': app,
     'IconModules': modules,

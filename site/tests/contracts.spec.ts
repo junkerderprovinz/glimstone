@@ -1,4 +1,5 @@
 import { expect, test, type Locator, type Page } from "@playwright/test";
+import GLYPHS from "../../packages/core/glyphs.json" with { type: "json" };
 
 // Each test is named after its contract row, "[id] ...", which is how the site
 // finds its result.
@@ -4138,6 +4139,15 @@ test.describe("Fortress", () => {
     expect(await top('[data-fortress-app="charlie"]')).toBe(await top('[data-fortress-app="bravo"]'));
     const gap = await charlie.evaluate((c) => c.querySelector(".glim-instance-rows")!.getBoundingClientRect().top - c.querySelector(".glim-instance-facts")!.getBoundingClientRect().bottom);
     expect(gap).toBeLessThan(40);
+  });
+
+  test("[fortress-app-card] each row wears its device's glyph", async ({ page }) => {
+    await open(page, "/components/fortress");
+    await showOthers(page);
+    const drawn = (id: string) => inside(page).locator(`[data-instance="${id}"] .glim-instance-device path`).first().getAttribute("d");
+    const path = (name: string) => GLYPHS.find((g) => g.name === name)!.svg.match(/ d="([^"]+)"/)![1];
+    expect(await drawn("b1")).toBe(path("IconServer"));
+    expect(await drawn("b3")).toBe(path("IconPhone"));
   });
 
   test("[fortress-open-only] an app without a page here says where it opens", async ({ page }) => {

@@ -147,6 +147,8 @@
 | Accounts | `IconAccounts` |
 | Network, connections | `IconNetwork` |
 | Phone | `IconPhone` |
+| A server, the box an app runs on | `IconServer` |
+| A laptop | `IconLaptop` |
 | Browser | `IconBrowser` |
 | Open or show the app | `IconApp` |
 | Modules | `IconModules` |

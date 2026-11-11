@@ -38,9 +38,9 @@ const KEYS: Record<string, string> = {
   fortressLeave: "IconSignOut",
   fortressShowPhrase: "IconKey",
   fortressChangePhrase: "IconRefresh",
-  deviceServer: "IconLocal",
+  deviceServer: "IconServer",
   devicePc: "IconTabApp",
-  deviceLaptop: "IconVM",
+  deviceLaptop: "IconLaptop",
   devicePhone: "IconPhone",
 };
 
