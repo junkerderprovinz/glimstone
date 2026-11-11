@@ -702,8 +702,8 @@ export const GLOSSARY: GlossarySection[] = [
         components: ["ConfirmDialog"],
         rules: [15],
         text: {
-          en: "Asks only before something that cannot be undone, and names what will be gone. A switch may stand under the question, as extra.",
-          de: "Fragt nur vor etwas, das sich nicht rückgängig machen lässt, und nennt, was dann weg ist. Unter der Frage darf ein Schalter stehen, extra.",
+          en: "Asks only before something that cannot be undone, and names what will be gone. Its confirm button stays neutral, since the sentence is the warning and neither button is recommended. A switch may stand under the question, as extra.",
+          de: "Fragt nur vor etwas, das sich nicht rückgängig machen lässt, und nennt, was dann weg ist. Der Bestätigungsknopf bleibt neutral, denn der Satz ist die Warnung und keiner der beiden Knöpfe wird empfohlen. Unter der Frage darf ein Schalter stehen, extra.",
         },
       },
       {
