@@ -1,3 +1,7 @@
+## 4.3.7
+
+- Checked on Flutter 3.47.9. On Flutter 3.50 the analyzer shows deprecation hints for `package:flutter/material.dart`, the move to `package:material_ui` comes later.
+
 ## 4.3.6
 
 - No changes for Flutter. The stricter index checks this release brings live in the web packages.

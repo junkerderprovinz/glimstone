@@ -2,6 +2,20 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 4.3.7 - 2026-11-11
+
+The Flutter package's checks run on Flutter 3.47.9 again. Flutter 3.50 deprecates `package:flutter/material.dart`, which the package still imports, so `flutter analyze` stopped on five deprecation hints.
+
+**Adopting apps:**
+
+- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.3.7, all at the same number. Nothing in the web packages changes.
+- **Flutter:** move the git dependency to `ref: v4.3.7`. The package still works on Flutter 3.50, the analyzer just shows deprecation hints there. The move to `package:material_ui` comes in a later release.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.3.7.
+
+## 🐛 Fixed
+
+- **The site builds again.** Its workflow pins Flutter 3.47.9 instead of taking whatever stable is.
+
 ## 4.3.6 - 2026-11-11
 
 The core compiles under strict index checks, so an app that turns on `noUncheckedIndexedAccess` can take its files over unchanged.
