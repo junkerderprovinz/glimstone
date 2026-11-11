@@ -4236,11 +4236,15 @@ body {
     color: var(--carbon-text-muted);
   }
 
-  /* The sub-card (rule 1): a flat, filled group inside a card under a small
-     uppercase title, in place of a card inside a card or a fold-out. The
-     title takes the sub text rather than the eyebrow's muted one, which falls
-     short of AA on surface2. */
+  /* The sub-card (rule 1): a flat, filled group inside a card or a window, in
+     place of a card inside a card or a fold-out. Its title is a section badge
+     in the notch on its top edge (rule 11), so a titled one is `relative` for
+     the notch, keeps the badge's lower half clear of its first row, and
+     stands a little further from what comes before it, which the badge's
+     upper half reaches into. What belongs to the whole group stands at the
+     end of the heading's row. */
   .glim-subcard {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
@@ -4248,17 +4252,14 @@ body {
     border-radius: var(--radius-card);
     background-color: var(--carbon-surface2);
   }
-  .glim-subcard-title {
+  .glim-subcard--titled { padding-top: 1.25rem; }
+  * + .glim-subcard--titled { margin-top: 0.5rem; }
+  .glim-subcard-end {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 0.375rem;
-    margin: 0;
-    font-size: var(--text-meta);
-    font-weight: 600;
-    line-height: 1rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--carbon-text-sub);
+    justify-content: flex-end;
+    gap: 0.75rem;
   }
   /* What carries surface2 at rest would vanish into the sub-card, so fields,
      quiet buttons and bare selector segments step up one surface. */

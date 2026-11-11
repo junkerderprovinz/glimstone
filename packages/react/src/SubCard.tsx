@@ -1,35 +1,44 @@
 import { useId, type ReactNode } from "react";
+import { Badge } from "./Badge.tsx";
 import { InfoBubble } from "./InfoBubble.tsx";
 
 /**
- * A flat, filled group inside a card under a small uppercase title. It groups
- * what belongs together without a second raised surface, and it takes the
- * place of a fold-out: what used to hide behind a click stays in view. Fields
- * and quiet buttons inside it step up one surface, so they do not vanish into
- * its fill.
+ * A flat, filled group inside a card or a window. It groups what belongs
+ * together without a second raised surface, and it takes the place of a
+ * fold-out: what used to hide behind a click stays in view. Its title is a
+ * section badge in the notch on its top edge, like a card's, and `end` stands
+ * at the end of that row. Fields and quiet buttons inside it step up one
+ * surface, so they do not vanish into its fill.
  */
 export function SubCard({
   title,
   hint,
+  end,
   children,
 }: {
-  /** The group's name, set small and uppercase above it. */
+  /** The group's name, drawn as a section badge on its top edge. */
   title?: string;
-  /** One line on what the group does, drawn as an "(i)" beside the title. */
+  /** One line on what the group does, drawn as an "(i)" inside the badge. */
   hint?: string;
+  /** What belongs to the whole group, such as a switch, at the end of the
+   *  heading's row. */
+  end?: ReactNode;
   children: ReactNode;
 }) {
   const titleId = useId();
   return (
-    <section className="glim-subcard" aria-labelledby={title ? titleId : undefined}>
+    <section className={`glim-subcard${title ? " glim-subcard--titled" : ""}`} aria-labelledby={title ? titleId : undefined}>
       {/* The id is on the words alone, or the bubble's text would join the
           group's name. */}
       {title && (
-        <h3 className="glim-subcard-title">
-          <span id={titleId}>{title}</span>
-          {hint && <InfoBubble tip={hint} />}
+        <h3 className="glim-panel-heading">
+          <Badge tone="heading" size="heading" wrap>
+            <span id={titleId}>{title}</span>
+            {hint && <InfoBubble tip={hint} onAccent />}
+          </Badge>
         </h3>
       )}
+      {end && <div className="glim-subcard-end">{end}</div>}
       {children}
     </section>
   );

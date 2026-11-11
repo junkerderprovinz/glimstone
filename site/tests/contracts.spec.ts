@@ -1989,6 +1989,27 @@ test.describe("SubCard", () => {
     await expect(stage(page, "SubCardBasic").getByRole("region", { name: "Commands", exact: true })).toHaveCount(1);
   });
 
+  test("[subcard-notch] the title is a section badge on the top edge", async ({ page }) => {
+    await open(page, "/components/sub-card");
+    const sub = stage(page, "SubCardBasic").getByRole("region", { name: "Retention", exact: true });
+    const badge = sub.locator(".glim-badge--notch");
+    await expect(badge).toHaveText("Retention");
+    const [box, notch] = [await sub.boundingBox(), await badge.boundingBox()];
+    expect(Math.abs(notch!.y + notch!.height / 2 - box!.y)).toBeLessThan(1.5);
+  });
+
+  test("[subcard-end] the end of the heading's row holds the switch", async ({ page }) => {
+    await open(page, "/components/sub-card");
+    const sub = stage(page, "SubCardBasic").getByRole("region", { name: "Retention", exact: true });
+    const [box, end, content] = [
+      await sub.boundingBox(),
+      await sub.getByRole("switch", { name: "Prune" }).boundingBox(),
+      await sub.locator(".glim-num-field").boundingBox(),
+    ];
+    expect(Math.abs(box!.x + box!.width - 16 - (end!.x + end!.width))).toBeLessThan(1.5);
+    expect(end!.y + end!.height).toBeLessThanOrEqual(content!.y);
+  });
+
   test("[subcard-step] what sits inside takes the next surface", async ({ page }) => {
     await open(page, "/components/sub-card");
     const bg = (sel: string) =>

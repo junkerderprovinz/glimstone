@@ -1,8 +1,8 @@
 import { useState, type ReactNode } from "react";
-import { Badge, Button, Selector, Table, Toggle } from "@glimstone/react";
+import { Badge, Button, Selector, SubCard, Table, Toggle } from "@glimstone/react";
 import { GLIMSTONE_VERSION } from "@glimstone/core";
 import { GLOSSARY, type GlossaryEntry } from "./glossary.data";
-import { DEMOS, LangContext, NotchedSubCard, PAGE_RANGES, WindowInPlace, useT, type Lang } from "./glossaryDemos";
+import { DEMOS, LangContext, PAGE_RANGES, WindowInPlace, useT, type Lang } from "./glossaryDemos";
 import "./glossary.css";
 
 const ENTRIES = GLOSSARY.flatMap((s) => s.entries);
@@ -151,9 +151,7 @@ function Figure({ lang }: { lang: Lang }) {
             }
           >
             <div className="gl-spot gl-spot--block" data-spot={2}>
-              <Mark n={2} at="bottom" />
-              <Mark n={3} at="notch" />
-              <NotchedSubCard
+              <SubCard
                 title="Format"
                 end={
                   <>
@@ -190,7 +188,9 @@ function Figure({ lang }: { lang: Lang }) {
                     onChange={setPages}
                   />
                 </Spot>
-              </NotchedSubCard>
+              </SubCard>
+              <Mark n={2} at="bottom" />
+              <Mark n={3} at="notch" />
             </div>
           </WindowInPlace>
         </div>

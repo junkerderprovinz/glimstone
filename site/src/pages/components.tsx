@@ -695,7 +695,7 @@ export function SignInCardPage() {
 export function SubCardPage() {
   return (
     <>
-      <p className="lead">A flat, filled group inside a card, under a small uppercase title.</p>
+      <p className="lead">A flat, filled group inside a card, with its section badge in the notch on its top edge.</p>
       <Head file="react/SubCard.tsx" />
       <Demo name="SubCardBasic" />
       <Usage
@@ -712,7 +712,11 @@ export function SubCardPage() {
           Fields, quiet buttons and bare selector segments inside it step up one surface, or they would vanish into its
           fill.
         </li>
-        <li>Its title is not a badge: only a card's outermost heading is. A group that needs no name goes without one.</li>
+        <li>
+          Its title is a section badge in the notch, as a card's is (rule 11), and <code>end</code>, a slot in Vue, holds
+          what belongs to the whole group, such as its switch, at the end of that row. A group that needs no name goes
+          without one.
+        </li>
       </ul>
       <H2>Behaviour</H2>
       <ContractTable of="SubCard" />

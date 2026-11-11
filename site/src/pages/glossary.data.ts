@@ -53,12 +53,12 @@ export const GLOSSARY: GlossarySection[] = [
         en: "Sub-card",
         de: "Sub-Card",
         abbr: "SC",
-        code: ["SubCard", ".glim-subcard"],
+        code: ["SubCard", "SubCard title end", ".glim-subcard"],
         components: ["SubCard"],
         rules: [1, 11],
         text: {
-          en: "A group inside a card or a window, filled one surface higher, with no border and no shadow. Its heading is a section badge in the notch.",
-          de: "Eine Gruppe in einer Karte oder einem Fenster, eine Fläche höher gefüllt, ohne Rand und ohne Schatten. Ihre Überschrift ist ein AB in der Kerbe.",
+          en: "A group inside a card or a window, filled one surface higher, with no border and no shadow. Its title is a section badge in the notch, and end holds what belongs to the whole group, such as a switch, at the end of that row.",
+          de: "Eine Gruppe in einer Karte oder einem Fenster, eine Fläche höher gefüllt, ohne Rand und ohne Schatten. Ihr Titel ist ein AB in der Kerbe, und end hält, was zur ganzen Gruppe gehört, etwa einen Schalter, am Ende dieser Zeile.",
         },
       },
       {

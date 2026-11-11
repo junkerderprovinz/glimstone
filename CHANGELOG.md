@@ -9,7 +9,12 @@ The site gains a bilingual glossary of every element. The ink on an accent fill 
 **Adopting apps:**
 
 - **Your own reset:** a rule such as `a, button { color: inherit }` outside any cascade layer no longer reaches the colour of a GlimStone button, badge, selector segment or tile, rail row or donation choice. An app that keeps its own copy of the tokens takes the `revert-layer` rule beside the button and the switch's knob rule from `tokens.css`.
+- **Sub-card titles:** a `SubCard` with a `title` draws it as a section badge in the notch on its top edge, as a `Card` does, and the small uppercase title is gone. Put what belongs to the whole group, such as its switch, into `end` (in Vue the `end` slot) rather than into its first row. An app that keeps its own copy of the tokens takes the sub-card block from `tokens.css` and drops `.glim-subcard-title`.
 - **Flutter:** nothing changes there.
+
+## 🎨 Design
+
+- **A sub-card's title is a section badge in the notch** (rules 1 and 11), and `end` stands at the end of that row.
 
 ## ✨ Added
 

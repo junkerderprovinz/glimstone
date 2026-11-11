@@ -491,6 +491,8 @@ export const CONTRACTS: Record<string, Contract> = {
   SubCard: {
     rows: [
       { id: "subcard-region", when: "Always", then: "A region named by its title alone." },
+      { id: "subcard-notch", when: "It has a title", then: "The title is a section badge in the notch on its top edge, as a card's is." },
+      { id: "subcard-end", when: "It has something at its end, such as a switch", then: "That stands at the end of the heading's row, above the group's content." },
       { id: "subcard-no-title", when: "It has no title", then: "It draws no heading and keeps its ground, and what stands inside still steps up." },
       { id: "subcard-step", when: "A field or a quiet button stands inside it", then: "It takes a surface of its own, one step up from the sub-card's." },
     ],

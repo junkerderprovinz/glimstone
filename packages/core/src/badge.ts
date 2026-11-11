@@ -16,9 +16,9 @@
 // `tone: "heading"` with `size: "heading"` is the card heading notch: a solid
 // accent fill with the computed contrast ink, straddling the card's top edge.
 // It takes none of the four state hues, which would claim a status the heading
-// does not have, and its 22px stage keeps it apart from status chips. Only the
-// outermost heading of a card or dialog is a badge; nested sub-labels, a page's
-// <h1> and a heading on a filled status callout stay plain text.
+// does not have, and its 22px stage keeps it apart from status chips. The
+// heading of a card, a sub-card or a window is a badge. A page's <h1> and a
+// heading on a filled status callout stay plain text.
 
 export type BadgeTone = "ok" | "fail" | "warn" | "active" | "neutral" | "heading" | "muted";
 export type BadgeSize = "small" | "medium" | "large" | "heading" | "icon";

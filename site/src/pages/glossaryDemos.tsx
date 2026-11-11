@@ -105,26 +105,6 @@ export function WindowInPlace({
   );
 }
 
-/**
- * A sub-card with its section badge in the notch on its top edge, as a card
- * draws it. SubCard's own `title` is a small uppercase label.
- */
-export function NotchedSubCard({ title, end, children }: { title: string; end?: ReactNode; children: ReactNode }) {
-  return (
-    <div className="gl-sub-notched">
-      <SubCard>
-        <h3 className="glim-panel-heading">
-          <Badge tone="heading" size="heading" wrap>
-            {title}
-          </Badge>
-        </h3>
-        {end && <div className="gl-sub-end">{end}</div>}
-        {children}
-      </SubCard>
-    </div>
-  );
-}
-
 function CardDemo() {
   const t = useT();
   const [nightly, setNightly] = useState(true);
@@ -148,11 +128,11 @@ function SubCardDemo() {
   return (
     <div style={{ width: "100%", maxWidth: 440 }}>
       <Card title={t("Snapshots", "Schnappschüsse")}>
-        <NotchedSubCard title={t("Retention", "Aufbewahrung")}>
+        <SubCard title={t("Retention", "Aufbewahrung")}>
           <FieldRow label={t("Days to keep", "Tage behalten")}>
             <NumberField min={1} max={365} value={days} onChange={(e) => setDays(e.target.value === "" ? "" : e.target.valueAsNumber)} />
           </FieldRow>
-        </NotchedSubCard>
+        </SubCard>
         <SubCard>
           <TextField label={t("Note", "Notiz")} placeholder={t("A sub-card may stand without a heading", "Eine Sub-Card darf ohne Überschrift stehen")} />
         </SubCard>
@@ -203,9 +183,9 @@ function SectionBadgeDemo() {
   return (
     <div style={{ ...column, gap: 40, maxWidth: 440 }}>
       <Card title={t("Destinations", "Speicherorte")} hint={t("Where the exports are written.", "Wohin die Exporte geschrieben werden.")}>
-        <NotchedSubCard title={t("Target", "Ziel")}>
-          <Toggle label={t("Keep a second copy", "Zweite Kopie behalten")} checked={on} onChange={setOn} />
-        </NotchedSubCard>
+        <SubCard title={t("Target", "Ziel")} end={<Toggle label={t("Keep a second copy", "Zweite Kopie behalten")} checked={on} onChange={setOn} />}>
+          <p style={{ margin: 0, ...quiet }}>/srv/exports</p>
+        </SubCard>
       </Card>
       <WindowInPlace
         title={t("Choose a folder", "Ordner wählen")}
