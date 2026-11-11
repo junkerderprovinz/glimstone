@@ -4,12 +4,16 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
-The ink on an accent fill stays the computed contrast ink in every case: a switch that is on draws its knob in it, and an app's own reset of links and buttons no longer takes it off a filled button, segment, tile or rail row.
+The site gains a bilingual glossary of every element. The ink on an accent fill stays the computed contrast ink in every case: a switch that is on draws its knob in it, and an app's own reset of links and buttons no longer takes it off a filled button, segment, tile or rail row.
 
 **Adopting apps:**
 
 - **Your own reset:** a rule such as `a, button { color: inherit }` outside any cascade layer no longer reaches the colour of a GlimStone button, badge, selector segment or tile, rail row or donation choice. An app that keeps its own copy of the tokens takes the `revert-layer` rule beside the button and the switch's knob rule from `tokens.css`.
 - **Flutter:** nothing changes there.
+
+## ✨ Added
+
+- **A glossary on the site** (Guide, Glossary): every element under its English and German name, its short form and how the code spells it, rendered live, with the GlimStone rule that governs it. A picture of an Export window with numbered parts opens the page and an index from A to Z closes it. German names the style guide does not settle yet carry a Proposal badge. The entries live in `site/src/pages/glossary.data.ts`, and `site/test/glossary.test.ts` fails when a component the React or Vue package exports has no entry or an entry names one that is gone.
 
 ## 🐛 Fixed
 

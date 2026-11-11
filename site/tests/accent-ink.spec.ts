@@ -65,6 +65,7 @@ const PAGES: Record<string, Show | null> = {
   "/components/window": null,
   "/components/window-bar": null,
   "/engines/colour": null,
+  "/guide/glossary": null,
 };
 
 interface Miss {
