@@ -118,8 +118,9 @@ export function roveSelector(track: HTMLElement, key: string, orientation: Selec
   const rtl = getComputedStyle(track).direction === "rtl";
   const next = nextFocusIndex(key as SelectorNavKey, nodes.indexOf(track.ownerDocument.activeElement as HTMLElement), nodes.length, rtl);
   if (next < 0) return null;
-  nodes[next].focus();
-  return nodes[next];
+  const node = nodes[next]!;
+  node.focus();
+  return node;
 }
 
 export interface SelectorInput {
@@ -360,7 +361,7 @@ export function measureSegments(segs: HTMLElement[]): number[] {
   const own = segs.map((s) => s.style.cssText);
   for (const s of segs) Object.assign(s.style, { flex: "none", width: "max-content", minWidth: "0", maxWidth: "none" });
   const oneLine = segs.map((s) => parseFloat(getComputedStyle(s).width));
-  segs.forEach((s, i) => (s.style.cssText = own[i]));
+  segs.forEach((s, i) => (s.style.cssText = own[i]!));
   return oneLine;
 }
 

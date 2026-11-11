@@ -167,7 +167,7 @@ export function mountSelect(
         s.classList.toggle('glim-select-ghost', !on);
         s.toggleAttribute('aria-hidden', !on);
       }
-    } else spans[0].textContent = text;
+    } else spans[0]!.textContent = text;
     spreadProps(positioner, api.getPositionerProps());
     spreadProps(list, api.getContentProps());
     for (const g of groupParts) {
@@ -200,10 +200,10 @@ export function mountSelect(
         const candidate = stepIndex(all.length, next, delta);
         if (candidate === next) return;
         next = candidate;
-        if (!all[next].disabled) break;
+        if (!all[next]!.disabled) break;
       }
     }
-    if (next >= 0 && next !== at) api.selectValue(all[next].value);
+    if (next >= 0 && next !== at) api.selectValue(all[next]!.value);
   });
 
   return {

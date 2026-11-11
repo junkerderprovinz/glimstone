@@ -39,7 +39,7 @@ export interface ReadmePart {
 
 /** A unit whose first part goes nowhere is still to come. */
 export function readmeSoon(parts: ReadmePart[]): boolean {
-  return !parts[0].href && !parts[0].onClick;
+  return !parts[0]?.href && !parts[0]?.onClick;
 }
 
 /** The part's accessible name, with `sub` the second line it shows. */

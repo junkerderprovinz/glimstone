@@ -30,10 +30,13 @@ type Lab = readonly [number, number, number];
 /** A `#rrggbb` colour in OKLab, as lightness and the two opponent axes. */
 export function oklab(hex: string): Lab {
   const n = parseInt(hex.replace(/^#/, ""), 16);
-  const [r, g, b] = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((v) => {
+  const linear = (v: number) => {
     const c = v / 255;
     return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
-  });
+  };
+  const r = linear((n >> 16) & 255);
+  const g = linear((n >> 8) & 255);
+  const b = linear(n & 255);
   const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
   const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
   const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
@@ -65,5 +68,5 @@ export function nearestColorName(hex: string, names: readonly ColorName[] = COLO
       best = i;
     }
   });
-  return names[best][0];
+  return names[best]![0];
 }

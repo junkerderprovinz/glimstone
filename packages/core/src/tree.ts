@@ -47,7 +47,7 @@ export type TreeStep = { focus: string } | { open: string } | { close: string };
  * starting with it, wrapping at the end.
  */
 export function treeStep<G>(rows: readonly TreeRow<G>[], at: number, key: string, rtl = false): TreeStep | null {
-  const row = rows[at];
+  const row = rows[at]!;
   const focus = (target: TreeRow<G> | undefined) => (target ? { focus: target.node.id } : null);
   switch (key) {
     case "ArrowDown":
