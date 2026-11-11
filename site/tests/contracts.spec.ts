@@ -4086,7 +4086,7 @@ test.describe("Fortress", () => {
     el.evaluate((e) => {
       e.dataset.shakes = "0";
       e.addEventListener("animationstart", (a) => {
-        if (a.animationName.startsWith("glim-shake")) e.dataset.shakes = String(Number(e.dataset.shakes) + 1);
+        if ((a as AnimationEvent).animationName.startsWith("glim-shake")) e.dataset.shakes = String(Number(e.dataset.shakes) + 1);
       });
     });
   const showOthers = async (page: Page) => {
