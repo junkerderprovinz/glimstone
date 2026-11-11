@@ -15,6 +15,7 @@ The site gains a bilingual glossary of every element. The ink on an accent fill 
 ## 🎨 Design
 
 - **A sub-card's title is a section badge in the notch** (rules 1 and 11), and `end` stands at the end of that row.
+- **Row tiles on a sub-card or in a well step up one surface** at rest and hover one more (rule 21). Their resting fill was the sub-card's own, so the tiles vanished into it.
 
 ## ✨ Added
 

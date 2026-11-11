@@ -2010,6 +2010,19 @@ test.describe("SubCard", () => {
     expect(end!.y + end!.height).toBeLessThanOrEqual(content!.y);
   });
 
+  test("[subcard-tiles] resting row tiles stand out from the sub-card", async ({ page }) => {
+    await open(page, "/components/sub-card");
+    const bg = (el: Locator) => el.evaluate((e) => getComputedStyle(e).backgroundColor);
+    const sub = stage(page, "SubCardTiles").locator(".glim-subcard");
+    const resting = sub.locator(".glim-sel-tile:not(.glim-active)").first();
+    const ground = await bg(sub);
+    const rest = await bg(resting);
+    expect(rest).not.toBe(ground);
+    await resting.hover();
+    await expect.poll(() => bg(resting)).not.toBe(rest);
+    expect(await bg(resting)).not.toBe(ground);
+  });
+
   test("[subcard-step] what sits inside takes the next surface", async ({ page }) => {
     await open(page, "/components/sub-card");
     const bg = (sel: string) =>

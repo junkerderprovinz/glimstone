@@ -4262,14 +4262,17 @@ body {
     gap: 0.75rem;
   }
   /* What carries surface2 at rest would vanish into the sub-card, so fields,
-     quiet buttons and bare selector segments step up one surface. */
+     quiet buttons, bare selector segments and resting tiles step up one
+     surface, and hover one more (rule 21). A tile does so in a well too. */
   .glim-subcard .glim-btn--subtle,
   .glim-subcard .glim-num-field,
-  .glim-subcard .glim-sel--chip .glim-sel-seg:not(.glim-active) {
+  .glim-subcard .glim-sel--chip .glim-sel-seg:not(.glim-active),
+  :is(.glim-subcard, .glim-well) .glim-sel-tile:not(.glim-active) {
     background-color: var(--carbon-surface3);
   }
   .glim-subcard .glim-num-field:focus,
-  .glim-subcard .glim-sel--chip .glim-sel-seg:not(.glim-active):not(:disabled):hover {
+  .glim-subcard .glim-sel--chip .glim-sel-seg:not(.glim-active):not(:disabled):hover,
+  :is(.glim-subcard, .glim-well) .glim-sel-tile:not(.glim-active):hover {
     background-color: var(--carbon-hover-raised);
   }
 

@@ -698,6 +698,11 @@ export function SubCardPage() {
       <p className="lead">A flat, filled group inside a card, with its section badge in the notch on its top edge.</p>
       <Head file="react/SubCard.tsx" />
       <Demo name="SubCardBasic" />
+      <p>
+        A column of row tiles inside a sub-card lifts its resting tiles one surface and hovers them one more (rule 21),
+        so none of them vanishes into the sub-card's own fill.
+      </p>
+      <Demo name="SubCardTiles" />
       <Usage
         code={`import { SubCard } from "@glimstone/react";\n\n<Card title="Snapshots">\n  <SubCard title="Retention">...</SubCard>\n</Card>`}
       />
