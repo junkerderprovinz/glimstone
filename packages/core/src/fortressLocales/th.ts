@@ -75,6 +75,8 @@ export const th: FortressText = {
   changedTitle: "วลีใหม่",
   changedLeft: "ยังใช้วลีเดิมอยู่: {devices} ป้อนวลีใหม่ที่นั่นหนึ่งครั้ง",
   permissions: "สิทธิ์",
+  permissionOn: "เปิดแล้ว: {permission}",
+  permissionOff: "ปิดแล้ว: {permission}",
   permissionsAbout: "สิ่งที่แอปหนึ่งทำได้ในอีกแอปหนึ่ง ทุกอย่างเปิดไว้ และคุณปิดสิทธิ์แต่ละรายการแยกกันได้",
   all: "ทั้งหมด",
   withApp: "กับ {app}",

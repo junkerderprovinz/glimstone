@@ -75,6 +75,8 @@ export const vi: FortressText = {
   changedTitle: "Cụm từ mới",
   changedLeft: "Vẫn dùng cụm từ cũ: {devices}. Hãy nhập cụm từ mới ở đó một lần.",
   permissions: "Quyền",
+  permissionOn: "Đã bật: {permission}",
+  permissionOff: "Đã tắt: {permission}",
   permissionsAbout: "Những gì một ứng dụng được làm ở ứng dụng khác. Mọi thứ đều đang bật, và bạn có thể tắt riêng từng quyền.",
   all: "Tất cả",
   withApp: "Với {app}",

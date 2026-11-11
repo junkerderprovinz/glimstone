@@ -87,6 +87,8 @@ export const hr: FortressText = {
   changedTitle: "Nova fraza",
   changedLeft: "Još na staroj frazi: {devices}. Ondje jednom unesi novu.",
   permissions: "Dopuštenja",
+  permissionOn: "Uključeno: {permission}",
+  permissionOff: "Isključeno: {permission}",
   permissionsAbout: "Što jedna aplikacija smije raditi u drugoj. Sve je uključeno, a svako dopuštenje možeš isključiti zasebno.",
   all: "Sve",
   withApp: "S aplikacijom {app}",

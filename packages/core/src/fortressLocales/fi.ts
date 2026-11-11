@@ -75,6 +75,8 @@ export const fi: FortressText = {
   changedTitle: "Uusi lause",
   changedLeft: "Vielä vanhalla lauseella: {devices}. Syötä niissä kerran uusi lause.",
   permissions: "Luvat",
+  permissionOn: "Otettu käyttöön: {permission}",
+  permissionOff: "Poistettu käytöstä: {permission}",
   permissionsAbout: "Mitä sovellus saa tehdä toisessa. Kaikki on päällä, ja voit poistaa jokaisen luvan käytöstä erikseen.",
   all: "Kaikki",
   withApp: "Sovelluksen {app} kanssa",

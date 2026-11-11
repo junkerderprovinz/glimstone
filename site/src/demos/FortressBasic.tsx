@@ -23,6 +23,7 @@ export default function FortressBasic() {
         phrasePassword
         pairedWith={["Pocket"]}
         hueStart={2}
+        notify={(message, severity) => setSaid(`${severity}: ${message}`)}
         {...instancesTab(household(setSaid, () => current.current, setPermissions))}
       >
         {(remove) => (

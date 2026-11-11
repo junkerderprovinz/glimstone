@@ -75,6 +75,8 @@ export const es: FortressText = {
   changedTitle: "Frase nueva",
   changedLeft: "Aún con la frase antigua: {devices}. Introduce allí la nueva una vez.",
   permissions: "Permisos",
+  permissionOn: "Activado: {permission}",
+  permissionOff: "Desactivado: {permission}",
   permissionsAbout: "Lo que una app puede hacer en otra. Todo está activado y puedes desactivar cada permiso por separado.",
   all: "Todas",
   withApp: "Con {app}",

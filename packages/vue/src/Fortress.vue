@@ -14,6 +14,7 @@ import {
   type FortressPermission,
   type FortressText,
   type PhraseAnswer,
+  type ToastSeverity,
 } from "@glimstone/core";
 import Button from "./Button.vue";
 import FortressAppCard from "./FortressAppCard.vue";
@@ -42,6 +43,8 @@ const props = withDefaults(
     apps: FortressApp[];
     permissions: FortressPermission[];
     onPermission: (id: string, on: boolean) => Promise<FortressAnswer>;
+    /** Puts the small confirmation of a saved permission, or the reason it failed, into the app's toasts. */
+    notify?: (message: string, severity: ToastSeverity) => void;
     onJoin: (words: string[]) => Promise<FortressAnswer>;
     onRemove: (id: string) => Promise<FortressAnswer>;
     /** `password` is set where `phrasePassword` asks for it first. Without it there is no Show phrase. */
@@ -130,6 +133,7 @@ const othersLine = computed(() => {
         :apps="[app, ...apps]"
         :permissions="permissions"
         :on-permission="onPermission"
+        :notify="notify"
         :hue-index="hueStart + 1 + apps.length"
       >
         <template #extra="{ permission }"><slot name="permission-extra" :permission="permission" /></template>

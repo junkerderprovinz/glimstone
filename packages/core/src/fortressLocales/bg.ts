@@ -75,6 +75,8 @@ export const bg: FortressText = {
   changedTitle: "Нова фраза",
   changedLeft: "Още със старата фраза: {devices}. Въведете там новата веднъж.",
   permissions: "Разрешения",
+  permissionOn: "Включено: {permission}",
+  permissionOff: "Изключено: {permission}",
   permissionsAbout: "Какво може едно приложение да прави в друго. Всичко е включено и можете да изключите всяко разрешение поотделно.",
   all: "Всички",
   withApp: "С {app}",

@@ -75,6 +75,8 @@ export const fa: FortressText = {
   changedTitle: "عبارت تازه",
   changedLeft: "هنوز روی عبارت قبلی: {devices}. یک بار عبارت تازه را آنجا وارد کنید.",
   permissions: "اجازه‌ها",
+  permissionOn: "روشن شد: {permission}",
+  permissionOff: "خاموش شد: {permission}",
   permissionsAbout: "اینکه هر برنامه در برنامهٔ دیگر اجازهٔ چه کاری دارد. همه روشن است و می‌توانید هر اجازه را جداگانه خاموش کنید.",
   all: "همه",
   withApp: "با {app}",

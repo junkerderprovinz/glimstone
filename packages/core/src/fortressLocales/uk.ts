@@ -90,6 +90,8 @@ export const uk: FortressText = {
   changedTitle: "Нова фраза",
   changedLeft: "Ще на старій фразі: {devices}. Введіть там нову один раз.",
   permissions: "Дозволи",
+  permissionOn: "Увімкнено: {permission}",
+  permissionOff: "Вимкнено: {permission}",
   permissionsAbout: "Що один застосунок може робити в іншому. Усе ввімкнено, і кожен дозвіл можна вимкнути окремо.",
   all: "Усі",
   withApp: "Із застосунком {app}",

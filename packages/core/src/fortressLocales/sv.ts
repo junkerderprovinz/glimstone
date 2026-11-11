@@ -75,6 +75,8 @@ export const sv: FortressText = {
   changedTitle: "Ny fras",
   changedLeft: "Fortfarande på den gamla frasen: {devices}. Ange den nya där en gång.",
   permissions: "Behörigheter",
+  permissionOn: "Påslaget: {permission}",
+  permissionOff: "Avstängt: {permission}",
   permissionsAbout: "Vad en app får göra hos en annan. Allt är på, och du kan stänga av varje behörighet för sig.",
   all: "Alla",
   withApp: "Med {app}",

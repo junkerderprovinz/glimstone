@@ -75,6 +75,8 @@ export const nl: FortressText = {
   changedTitle: "Nieuwe frase",
   changedLeft: "Nog op de oude frase: {devices}. Voer daar één keer de nieuwe in.",
   permissions: "Toestemmingen",
+  permissionOn: "Aangezet: {permission}",
+  permissionOff: "Uitgezet: {permission}",
   permissionsAbout: "Wat de ene app bij de andere mag doen. Alles staat aan, en je kunt elke toestemming apart uitzetten.",
   all: "Alle",
   withApp: "Met {app}",

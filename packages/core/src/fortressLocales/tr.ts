@@ -75,6 +75,8 @@ export const tr: FortressText = {
   changedTitle: "Yeni ifade",
   changedLeft: "Hâlâ eski ifadede: {devices}. Yenisini oraya bir kez gir.",
   permissions: "İzinler",
+  permissionOn: "Açıldı: {permission}",
+  permissionOff: "Kapatıldı: {permission}",
   permissionsAbout: "Bir uygulamanın başka bir uygulamada neler yapabileceği. Hepsi açık, her izni ayrı ayrı kapatabilirsin.",
   all: "Tümü",
   withApp: "{app} ile",

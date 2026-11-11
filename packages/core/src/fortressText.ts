@@ -96,6 +96,9 @@ export interface FortressText {
   changedTitle: string;
   changedLeft: string;
   permissions: string;
+  /** The small confirmation once a permission is saved on, and off. */
+  permissionOn: string;
+  permissionOff: string;
   permissionsAbout: string;
   all: string;
   withApp: string;

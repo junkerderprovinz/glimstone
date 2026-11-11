@@ -87,7 +87,6 @@ export function household(said: (what: string) => void, permissions: () => Fortr
       await wait();
       if (id === "echo-charlie") return { error: "Echo is away" };
       setPermissions(permissions().map((p) => (p.id === id ? { ...p, on } : p)));
-      said(`${id} ${on ? "on" : "off"}`);
       return { ok: true };
     },
   };

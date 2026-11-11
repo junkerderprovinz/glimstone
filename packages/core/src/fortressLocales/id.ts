@@ -75,6 +75,8 @@ export const id: FortressText = {
   changedTitle: "Frasa baru",
   changedLeft: "Masih memakai frasa lama: {devices}. Masukkan frasa baru di sana sekali.",
   permissions: "Izin",
+  permissionOn: "Diaktifkan: {permission}",
+  permissionOff: "Dinonaktifkan: {permission}",
   permissionsAbout: "Apa yang boleh dilakukan satu aplikasi di aplikasi lain. Semuanya aktif, dan kamu bisa mematikan setiap izin satu per satu.",
   all: "Semua",
   withApp: "Dengan {app}",

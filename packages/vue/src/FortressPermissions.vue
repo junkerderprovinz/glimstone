@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { fill, MARKS, permissionsWith, shake, type FortressAnswer, type FortressApp, type FortressPermission, type FortressText } from "@glimstone/core";
+import { fill, MARKS, permissionsWith, shake, type FortressAnswer, type FortressApp, type FortressPermission, type FortressText, type ToastSeverity } from "@glimstone/core";
 import Card from "./Card.vue";
 import Selector from "./Selector.vue";
 import Toggle from "./Toggle.vue";
@@ -16,8 +16,10 @@ const props = defineProps<{
   /** Every app of the fortress, this one included, for the marks. */
   apps: Pick<FortressApp, "id" | "name" | "logo">[];
   permissions: FortressPermission[];
-  /** Flips one switch. A refusal shakes it back, and the app says why in a toast. */
+  /** Saves one switch the moment it flips. A refusal leaves it as it was and shakes it. */
   onPermission: (id: string, on: boolean) => Promise<FortressAnswer>;
+  /** Puts the small confirmation of a save, or the reason it failed, into the app's toasts. */
+  notify?: (message: string, severity: ToastSeverity) => void;
   hueIndex?: number;
 }>();
 
@@ -32,8 +34,13 @@ const logo = (id: string) => props.apps.find((a) => a.id === id)?.logo;
 
 async function flip(p: FortressPermission) {
   const answer = await props.onPermission(p.id, !p.on).catch((): FortressAnswer => ({}));
+  if (answer.ok) {
+    props.notify?.(fill(p.on ? props.text.permissionOff : props.text.permissionOn, { permission: p.title }), "success");
+    return;
+  }
+  props.notify?.(answer.error ?? props.text.failed, "fail");
   const toggle = document.querySelector<HTMLElement>(`[data-permission="${CSS.escape(p.id)}"] .glim-toggle`);
-  if (!answer.ok && toggle) shake(toggle);
+  if (toggle) shake(toggle);
 }
 </script>
 

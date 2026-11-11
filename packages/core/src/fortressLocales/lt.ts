@@ -90,6 +90,8 @@ export const lt: FortressText = {
   changedTitle: "Nauja frazė",
   changedLeft: "Dar su senąja fraze: {devices}. Ten vieną kartą įveskite naująją.",
   permissions: "Leidimai",
+  permissionOn: "Įjungta: {permission}",
+  permissionOff: "Išjungta: {permission}",
   permissionsAbout: "Ką viena programėlė gali daryti kitoje. Viskas įjungta, o kiekvieną leidimą galite išjungti atskirai.",
   all: "Visos",
   withApp: "Su programėle {app}",

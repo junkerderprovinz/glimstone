@@ -90,6 +90,8 @@ export const cs: FortressText = {
   changedTitle: "Nová fráze",
   changedLeft: "Pořád na staré frázi: {devices}. Zadej tam jednou tu novou.",
   permissions: "Oprávnění",
+  permissionOn: "Zapnuto: {permission}",
+  permissionOff: "Vypnuto: {permission}",
   permissionsAbout: "Co smí jedna aplikace dělat u jiné. Vše je zapnuté a každé oprávnění můžeš vypnout zvlášť.",
   all: "Všechny",
   withApp: "S aplikací {app}",

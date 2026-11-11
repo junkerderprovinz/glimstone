@@ -96,6 +96,8 @@ export const ar: FortressText = {
   changedTitle: "عبارة جديدة",
   changedLeft: "ما زالت على العبارة القديمة: {devices}. أدخل الجديدة هناك مرة واحدة.",
   permissions: "الأذونات",
+  permissionOn: "تم التفعيل: {permission}",
+  permissionOff: "تم الإيقاف: {permission}",
   permissionsAbout: "ما يمكن لتطبيق أن يفعله لدى تطبيق آخر. كل شيء مفعّل، ويمكنك إيقاف كل إذن على حدة.",
   all: "الكل",
   withApp: "مع {app}",

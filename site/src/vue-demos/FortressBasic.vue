@@ -27,6 +27,7 @@ const answers = instancesTab(household(
       phrase-password
       :paired-with="['Pocket']"
       :hue-start="2"
+      :notify="(message: string, severity: string) => (said = `${severity}: ${message}`)"
       v-bind="answers"
     >
       <template #default="{ remove }">

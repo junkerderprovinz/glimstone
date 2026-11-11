@@ -75,6 +75,8 @@ export const hu: FortressText = {
   changedTitle: "Új jelmondat",
   changedLeft: "Még a régi jelmondaton van: {devices}. Ott egyszer add meg az újat.",
   permissions: "Engedélyek",
+  permissionOn: "Bekapcsolva: {permission}",
+  permissionOff: "Kikapcsolva: {permission}",
   permissionsAbout: "Mit tehet egy alkalmazás egy másiknál. Minden be van kapcsolva, és bármelyik engedélyt külön is kikapcsolhatod.",
   all: "Mind",
   withApp: "{app}-engedélyek",

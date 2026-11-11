@@ -75,6 +75,8 @@ export const el: FortressText = {
   changedTitle: "Νέα φράση",
   changedLeft: "Ακόμη στην παλιά φράση: {devices}. Πληκτρολογήστε εκεί μία φορά τη νέα.",
   permissions: "Άδειες",
+  permissionOn: "Ενεργοποιήθηκε: {permission}",
+  permissionOff: "Απενεργοποιήθηκε: {permission}",
   permissionsAbout: "Τι επιτρέπεται να κάνει μια εφαρμογή σε μια άλλη. Όλα είναι ενεργά, και μπορείτε να απενεργοποιήσετε κάθε άδεια ξεχωριστά.",
   all: "Όλες",
   withApp: "Με την εφαρμογή {app}",

@@ -75,6 +75,8 @@ export const da: FortressText = {
   changedTitle: "Ny sætning",
   changedLeft: "Stadig på den gamle sætning: {devices}. Indtast den nye der én gang.",
   permissions: "Tilladelser",
+  permissionOn: "Slået til: {permission}",
+  permissionOff: "Slået fra: {permission}",
   permissionsAbout: "Hvad en app må gøre hos en anden. Alt er slået til, og du kan slå hver tilladelse fra for sig.",
   all: "Alle",
   withApp: "Med {app}",

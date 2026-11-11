@@ -75,6 +75,8 @@ export const zh: FortressText = {
   changedTitle: "新口令",
   changedLeft: "仍在使用旧口令：{devices}。请在那里输入一次新口令。",
   permissions: "许可",
+  permissionOn: "已开启：{permission}",
+  permissionOff: "已关闭：{permission}",
   permissionsAbout: "一个应用可以在另一个应用中做什么。默认全部开启，你可以单独关闭每项许可。",
   all: "全部",
   withApp: "与 {app}",

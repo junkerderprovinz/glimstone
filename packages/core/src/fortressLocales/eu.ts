@@ -75,6 +75,8 @@ export const eu: FortressText = {
   changedTitle: "Esaldi berria",
   changedLeft: "Oraindik esaldi zaharrarekin: {devices}. Idatzi han berria behin.",
   permissions: "Baimenak",
+  permissionOn: "Aktibatuta: {permission}",
+  permissionOff: "Desaktibatuta: {permission}",
   permissionsAbout: "Aplikazio batek beste batean zer egin dezakeen. Dena aktibatuta dago, eta baimen bakoitza bere aldetik desaktiba dezakezu.",
   all: "Guztiak",
   withApp: "{app} aplikazioarekin",

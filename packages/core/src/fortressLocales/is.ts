@@ -75,6 +75,8 @@ export const is: FortressText = {
   changedTitle: "Ný setning",
   changedLeft: "Enn með gömlu setninguna: {devices}. Sláðu þá nýju inn þar einu sinni.",
   permissions: "Heimildir",
+  permissionOn: "Kveikt: {permission}",
+  permissionOff: "Slökkt: {permission}",
   permissionsAbout: "Hvað eitt forrit má gera hjá öðru. Allt er virkt og þú getur slökkt á hverri heimild fyrir sig.",
   all: "Öll",
   withApp: "Með {app}",

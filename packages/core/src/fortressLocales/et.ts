@@ -75,6 +75,8 @@ export const et: FortressText = {
   changedTitle: "Uus fraas",
   changedLeft: "Veel vana fraasiga: {devices}. Sisesta seal üks kord uus fraas.",
   permissions: "Load",
+  permissionOn: "Sisse lülitatud: {permission}",
+  permissionOff: "Välja lülitatud: {permission}",
   permissionsAbout: "Mida üks rakendus tohib teises teha. Kõik on sisse lülitatud ja iga loa saad eraldi välja lülitada.",
   all: "Kõik",
   withApp: "Rakendusega {app}",

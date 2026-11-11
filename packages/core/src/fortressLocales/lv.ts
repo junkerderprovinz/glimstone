@@ -75,6 +75,8 @@ export const lv: FortressText = {
   changedTitle: "Jaunā frāze",
   changedLeft: "Vēl ar veco frāzi: {devices}. Ievadi tur vienreiz jauno frāzi.",
   permissions: "Atļaujas",
+  permissionOn: "Ieslēgts: {permission}",
+  permissionOff: "Izslēgts: {permission}",
   permissionsAbout: "Ko viena lietotne drīkst darīt citā. Viss ir ieslēgts, un katru atļauju vari izslēgt atsevišķi.",
   all: "Visas",
   withApp: "Ar lietotni {app}",

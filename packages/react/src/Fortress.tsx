@@ -23,6 +23,7 @@ import {
   type FortressState,
   type FortressText,
   type PhraseAnswer,
+  type ToastSeverity,
 } from "@glimstone/core";
 import { Button } from "./Button.tsx";
 import { Card } from "./Card.tsx";
@@ -71,6 +72,8 @@ export interface FortressProps {
   apps: FortressApp[];
   permissions: FortressPermission[];
   onPermission: (id: string, on: boolean) => Promise<FortressAnswer>;
+  /** Puts the small confirmation of a saved permission, or the reason it failed, into the app's toasts. */
+  notify?: (message: string, severity: ToastSeverity) => void;
   onJoin: (words: string[]) => Promise<FortressAnswer>;
   onRemove: (id: string) => Promise<FortressAnswer>;
   /** `password` is set where `phrasePassword` asks for it first. Without it there is no Show phrase. */
@@ -168,6 +171,7 @@ export function Fortress(props: FortressProps) {
             apps={[app, ...apps]}
             permissions={permissions}
             onPermission={onPermission}
+            notify={props.notify}
             hueIndex={hueStart + 1 + apps.length}
             extra={props.permissionExtra}
           />

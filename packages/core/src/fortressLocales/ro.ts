@@ -75,6 +75,8 @@ export const ro: FortressText = {
   changedTitle: "Frază nouă",
   changedLeft: "Încă pe fraza veche: {devices}. Introdu acolo o dată fraza nouă.",
   permissions: "Permisiuni",
+  permissionOn: "Pornit: {permission}",
+  permissionOff: "Oprit: {permission}",
   permissionsAbout: "Ce poate face o aplicație la alta. Totul este pornit și poți opri fiecare permisiune separat.",
   all: "Toate",
   withApp: "Cu {app}",

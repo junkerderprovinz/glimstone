@@ -75,6 +75,8 @@ export const he: FortressText = {
   changedTitle: "ביטוי חדש",
   changedLeft: "עדיין על הביטוי הישן: {devices}. צריך להזין שם את החדש פעם אחת.",
   permissions: "הרשאות",
+  permissionOn: "הופעל: {permission}",
+  permissionOff: "כובה: {permission}",
   permissionsAbout: "מה אפליקציה אחת רשאית לעשות באפליקציה אחרת. הכול מופעל, ואפשר לכבות כל הרשאה בנפרד.",
   all: "הכול",
   withApp: "עם {app}",

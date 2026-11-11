@@ -4329,12 +4329,15 @@ test.describe("Fortress", () => {
     await jobs.focus();
     await page.keyboard.press("Space");
     await expect(jobs).toHaveAttribute("aria-checked", "true");
+    await expect(said(inside(page))).toHaveText("success: Switched on: Bravo may start Charlie's jobs");
+    await expect(inside(page).getByRole("button", { name: /Save|Apply|Done/ })).toHaveCount(0);
     const folder = inside(page).getByRole("switch", { name: "Echo may put files into a Charlie folder" });
     const frame = inside(page).locator('[data-permission="echo-charlie"] .glim-toggle');
     await countShakes(frame);
     await folder.click();
     await expect(frame).toHaveAttribute("data-shakes", "1");
     await expect(folder).toHaveAttribute("aria-checked", "true");
+    await expect(said(inside(page))).toHaveText("fail: Echo is away");
   });
 
   test("[fortress-filter] With Alpha keeps the permissions Alpha gives or takes", async ({ page }) => {

@@ -75,6 +75,8 @@ export const ja: FortressText = {
   changedTitle: "新しいフレーズ",
   changedLeft: "{devices}はまだ古いフレーズのままです。そちらで新しいフレーズを一度入力してください。",
   permissions: "許可",
+  permissionOn: "オンにしました：{permission}",
+  permissionOff: "オフにしました：{permission}",
   permissionsAbout: "あるアプリがほかのアプリで何をしてよいかを決めます。最初はすべてオンで、許可ごとに個別にオフにできます。",
   all: "すべて",
   withApp: "{app}との間",

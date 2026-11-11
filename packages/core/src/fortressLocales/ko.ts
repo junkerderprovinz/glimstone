@@ -75,6 +75,8 @@ export const ko: FortressText = {
   changedTitle: "새 문구",
   changedLeft: "아직 이전 문구를 쓰는 기기: {devices}. 그 기기에서 새 문구를 한 번 입력해 주세요.",
   permissions: "권한",
+  permissionOn: "켰어요: {permission}",
+  permissionOff: "껐어요: {permission}",
   permissionsAbout: "한 앱이 다른 앱에서 할 수 있는 일이에요. 처음에는 모두 켜져 있고, 권한마다 따로 끌 수 있어요.",
   all: "전체",
   withApp: "{app} 관련",

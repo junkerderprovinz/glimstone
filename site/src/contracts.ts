@@ -515,7 +515,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "fortress-change", when: "Change is pressed in the pairing settings", then: "The window first says what changing does, then shows the new words and names the devices still on the old ones." },
       { id: "fortress-remove", when: "Remove is pressed on an instance", then: "A window names the device and asks first. The instance goes only after the second press." },
       { id: "fortress-leave", when: "Leave is pressed in the pairing settings", then: "A window says what ends, the pairing included, and the app leaves only after Leave." },
-      { id: "fortress-permission", keys: ["Space"], when: "A permission's switch is flipped", then: "The app is asked, and a refusal shakes the switch and leaves it as it was." },
+      { id: "fortress-permission", keys: ["Space"], when: "A permission's switch is flipped", then: "It saves at once, with no button to apply, and a small confirmation names the permission. A refusal leaves it as it was, shakes it and says why." },
       { id: "fortress-filter", when: "With the app is chosen above the permissions", then: "Only the permissions this app gives or takes stay." },
       { id: "fortress-hue", when: "Rainbow is on", then: "Every card takes its own position, and the switches and buttons inside it take the card's hue. In reactive mode a card rests grey until the pointer is in it." },
       { id: "fortress-modes", when: "The theme is light, dark or OLED", then: "The cards, rows, fields and tiles take that theme's surfaces." },

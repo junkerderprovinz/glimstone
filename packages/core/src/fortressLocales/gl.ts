@@ -75,6 +75,8 @@ export const gl: FortressText = {
   changedTitle: "Frase nova",
   changedLeft: "Aínda coa frase antiga: {devices}. Introduce alí a nova unha vez.",
   permissions: "Permisos",
+  permissionOn: "Activado: {permission}",
+  permissionOff: "Desactivado: {permission}",
   permissionsAbout: "O que unha app pode facer noutra. Todo está activado, e podes desactivar cada permiso por separado.",
   all: "Todas",
   withApp: "Con {app}",

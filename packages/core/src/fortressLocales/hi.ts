@@ -75,6 +75,8 @@ export const hi: FortressText = {
   changedTitle: "नया वाक्यांश",
   changedLeft: "अब भी पुराने वाक्यांश पर: {devices}। वहाँ एक बार नया वाक्यांश डालें।",
   permissions: "अनुमतियाँ",
+  permissionOn: "चालू किया गया: {permission}",
+  permissionOff: "बंद किया गया: {permission}",
   permissionsAbout: "एक ऐप दूसरे ऐप में क्या कर सकता है। सब कुछ चालू है, और आप हर अनुमति अलग से बंद कर सकते हैं।",
   all: "सभी",
   withApp: "{app} के साथ",
