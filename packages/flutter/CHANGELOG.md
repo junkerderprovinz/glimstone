@@ -1,3 +1,7 @@
+## 4.3.6
+
+- No changes for Flutter. The stricter index checks this release brings live in the web packages.
+
 ## 4.3.5
 
 - No changes for Flutter. The sign-in card this release changes lives in the web packages.
