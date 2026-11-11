@@ -17,6 +17,8 @@ The site gains a bilingual glossary of every element. The ink on an accent fill 
 - **A sub-card's title is a section badge in the notch** (rules 1 and 11), and `end` stands at the end of that row.
 - **Row tiles on a sub-card or in a well step up one surface** at rest and hover one more (rule 21). Their resting fill was the sub-card's own, so the tiles vanished into it.
 
+- **Rule 4 names the state colours GlimStone uses:** the accent for running, green for done, orange for partial or a warning, red for an error and neutral for waiting or unknown. Its number stays, since other notes cite it.
+
 ## ✨ Added
 
 - **A glossary on the site** (Guide, Glossary): every element under its English and German name, its short form and how the code spells it, rendered live, with the GlimStone rule that governs it. A picture of an Export window with numbered parts opens the page and an index from A to Z closes it. German names the style guide does not settle yet carry a Proposal badge. The entries live in `site/src/pages/glossary.data.ts`, and `site/test/glossary.test.ts` fails when a component the React or Vue package exports has no entry or an entry names one that is gone.
