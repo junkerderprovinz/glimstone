@@ -5112,8 +5112,10 @@ body {
   .glim-instance-top {
     display: flex;
     align-items: flex-start;
-    flex: 1;
   }
+  /* A card in a taller row grows below its body, so the rows stay under the
+     head and only the foot moves down. */
+  .glim-instance-top:last-child { flex: 1; }
   .glim-instance-mark {
     flex: none;
     width: var(--instance-mark);

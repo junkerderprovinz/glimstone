@@ -4081,7 +4081,14 @@ test.describe("Fortress", () => {
   const dialog = (page: Page) => page.getByRole("dialog");
   const word = (page: Page, n: number) => dialog(page).getByRole("textbox", { name: `Word ${n}`, exact: true });
   const said = (el: Locator) => el.locator('[data-hook="said"]');
-  const shaking = (el: Locator) => expect.poll(() => el.evaluate((e) => e.classList.contains("glim-shake")));
+  // A shake is over in a fifth of a second, so it is counted as it starts.
+  const countShakes = (el: Locator) =>
+    el.evaluate((e) => {
+      e.dataset.shakes = "0";
+      e.addEventListener("animationstart", (a) => {
+        if (a.animationName.startsWith("glim-shake")) e.dataset.shakes = String(Number(e.dataset.shakes) + 1);
+      });
+    });
   const showOthers = async (page: Page) => {
     await others(page).click();
     await expect(inside(page).locator("[data-fortress-app]")).toHaveCount(4);
@@ -4119,6 +4126,18 @@ test.describe("Fortress", () => {
     await expect(away).toContainText("Inactive");
     await expect(inside(page).locator('[data-fortress-app="bravo"] .glim-instance-badges')).toContainText("A captcha waits");
     await expect(inside(page).locator('[data-fortress-app="delta"]').getByRole("button", { name: "Open in Unraid" })).toBeVisible();
+  });
+
+  test("[fortress-app-card] the rows stay under the head when a taller card stretches the row", async ({ page }) => {
+    await open(page, "/components/fortress");
+    await showOthers(page);
+    // The demo's column is narrower than two cards, so the grid is held to two.
+    await inside(page).locator(".glim-fortress-grid").nth(1).evaluate((g) => (g.style.gridTemplateColumns = "1fr 1fr"));
+    const charlie = inside(page).locator('[data-fortress-app="charlie"]');
+    const top = (sel: string) => inside(page).locator(sel).evaluate((e) => e.getBoundingClientRect().top);
+    expect(await top('[data-fortress-app="charlie"]')).toBe(await top('[data-fortress-app="bravo"]'));
+    const gap = await charlie.evaluate((c) => c.querySelector(".glim-instance-rows")!.getBoundingClientRect().top - c.querySelector(".glim-instance-facts")!.getBoundingClientRect().bottom);
+    expect(gap).toBeLessThan(40);
   });
 
   test("[fortress-open-only] an app without a page here says where it opens", async ({ page }) => {
@@ -4180,9 +4199,11 @@ test.describe("Fortress", () => {
     await open(page, "/components/fortress");
     await outside(page).getByRole("button", { name: "Enter phrase" }).click();
     await word(page, 1).fill(TWELVE.replace("oak", "elm"));
-    await dialog(page).getByRole("button", { name: "Join" }).click();
+    const join = dialog(page).getByRole("button", { name: "Join" });
+    await countShakes(join);
+    await join.click();
     await expect(dialog(page).getByRole("alert")).toHaveText("These words open no fortress. Check them and try again.");
-    await shaking(dialog(page).getByRole("button", { name: "Join" })).toBe(true);
+    await expect(join).toHaveAttribute("data-shakes", "1");
     await expect(word(page, 1)).toHaveValue("elm");
   });
 
@@ -4212,9 +4233,11 @@ test.describe("Fortress", () => {
     const password = dialog(page).getByLabel("Password of Alpha");
     await expect(password).toBeFocused();
     await password.fill("nope");
+    const unlock = dialog(page).locator('[data-fortress="unlock"]');
+    await countShakes(unlock);
     await page.keyboard.press("Enter");
     await expect(dialog(page).getByRole("alert")).toHaveText("That password is not right.");
-    await shaking(dialog(page).locator('[data-fortress="unlock"]')).toBe(true);
+    await expect(unlock).toHaveAttribute("data-shakes", "1");
     await password.fill("letmein");
     await page.keyboard.press("Enter");
     await expect(dialog(page).locator('[data-fortress="words"] li')).toHaveText(TWELVE.split(" ").map((w, i) => `${i + 1}${w}`));
@@ -4261,8 +4284,10 @@ test.describe("Fortress", () => {
     await page.keyboard.press("Space");
     await expect(jobs).toHaveAttribute("aria-checked", "true");
     const folder = inside(page).getByRole("switch", { name: "Echo may put files into a Charlie folder" });
+    const frame = inside(page).locator('[data-permission="echo-charlie"] .glim-toggle');
+    await countShakes(frame);
     await folder.click();
-    await expect.poll(() => folder.evaluate((e) => e.closest(".glim-toggle")!.classList.contains("glim-shake"))).toBe(true);
+    await expect(frame).toHaveAttribute("data-shakes", "1");
     await expect(folder).toHaveAttribute("aria-checked", "true");
   });
 
