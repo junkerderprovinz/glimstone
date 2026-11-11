@@ -39,6 +39,8 @@ jobs:
       - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
           channel: stable
+          # 3.50 deprecates package:flutter/material.dart, which the package still imports.
+          flutter-version: 3.47.9
           cache: true
       - run: flutter pub get && flutter analyze && flutter test --machine > ../../site/flutter-results.jsonl
         working-directory: packages/flutter
