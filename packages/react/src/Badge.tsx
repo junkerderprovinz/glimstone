@@ -8,10 +8,10 @@
 // its <h2> and lays the badges out side by side.
 
 import type { CSSProperties, ReactNode } from "react";
-import { badgeClassName, hueVars, type BadgeShape, type BadgeSize, type BadgeTone, type NotchInset } from "@glimstone/core";
+import { badgeClassName, hueVars, type BadgeForm, type BadgeShape, type BadgeSize, type BadgeTone, type NotchInset } from "@glimstone/core";
 import { IconTipButton } from "./IconTipButton.tsx";
 
-export type { BadgeShape, BadgeSize, BadgeTone, NotchInset } from "@glimstone/core";
+export type { BadgeForm, BadgeShape, BadgeSize, BadgeTone, NotchInset } from "@glimstone/core";
 
 export interface BadgeProps {
   children: ReactNode;
@@ -20,6 +20,11 @@ export interface BadgeProps {
   /** Size stage; see badgeClassName in the core. A square icon-only badge is always
    *  `"icon"`. */
   size?: BadgeSize;
+  /** The corners: rounded, square, pill or circle. Without it they follow the
+   *  shape setting. */
+  form?: BadgeForm;
+  /** @deprecated Use `form`. Only "circle" has an effect: it makes the badge
+   *  icon-only. */
   shape?: BadgeShape;
   /** Render as a <button> or a real <a href>, with the same box as a span. */
   as?: "span" | "button" | "a";
@@ -61,7 +66,8 @@ export function Badge({
   children,
   tone = "neutral",
   size = "medium",
-  shape = "rounded",
+  form,
+  shape,
   as = "span",
   onClick,
   disabled,
@@ -91,7 +97,7 @@ export function Badge({
   const classes = [
     hueOn && "glim-hue",
     isNotchHue && "glim-notch-hue",
-    badgeClassName({ tone, size, shape, wrap, iconOnly: tip !== undefined, inFlow, insetStart, action: as !== "span" }),
+    badgeClassName({ tone, size, form, shape, wrap, iconOnly: tip !== undefined, inFlow, insetStart, action: as !== "span" }),
     className,
   ]
     .filter(Boolean)

@@ -10,6 +10,7 @@ The site gains a bilingual glossary of every element. The ink on an accent fill 
 
 - **Your own reset:** a rule such as `a, button { color: inherit }` outside any cascade layer no longer reaches the colour of a GlimStone button, badge, selector segment or tile, rail row or donation choice. An app that keeps its own copy of the tokens takes the `revert-layer` rule beside the button and the switch's knob rule from `tokens.css`.
 - **Sub-card titles:** a `SubCard` with a `title` draws it as a section badge in the notch on its top edge, as a `Card` does, and the small uppercase title is gone. Put what belongs to the whole group, such as its switch, into `end` (in Vue the `end` slot) rather than into its first row. An app that keeps its own copy of the tokens takes the sub-card block from `tokens.css` and drops `.glim-subcard-title`.
+- **Badge forms:** `form="rounded" | "square" | "pill" | "circle"` on `Badge` gives a badge exactly that form under every shape setting. `shape` is deprecated and keeps doing what it did: `shape="circle"` makes the badge icon-only, the other values change nothing. Move `shape="circle"` to `form="circle"` for a real circle. An app that keeps its own copy of the tokens takes `.glim-badge--rounded`, `--square`, `--pill` and `--circle` from `tokens.css`.
 - **Flutter:** nothing changes there.
 
 ## 🎨 Design
@@ -21,6 +22,7 @@ The site gains a bilingual glossary of every element. The ink on an accent fill 
 
 ## ✨ Added
 
+- **`form` on `Badge`**, in React and Vue, with the type `BadgeForm`: the four forms the style guide names, rounded, square, pill and circle.
 - **A glossary on the site** (Guide, Glossary): every element under its English and German name, its short form and how the code spells it, rendered live, with the GlimStone rule that governs it. A picture of an Export window with numbered parts opens the page and an index from A to Z closes it. German names the style guide does not settle yet carry a Proposal badge. The entries live in `site/src/pages/glossary.data.ts`, and `site/test/glossary.test.ts` fails when a component the React or Vue package exports has no entry or an entry names one that is gone.
 
 ## 🐛 Fixed

@@ -17,6 +17,12 @@ export interface Contract {
 const APG = "https://www.w3.org/WAI/ARIA/apg/patterns/";
 
 export const CONTRACTS: Record<string, Contract> = {
+  Badge: {
+    rows: [
+      { id: "badge-form", when: "form is rounded, square, pill or circle", then: "Its corners take that form whatever the shape setting: a small radius, none, half its height, or a circle as wide as it is high." },
+      { id: "badge-shape-engine", when: "It has no form", then: "Its corners follow the shape setting, as before." },
+    ],
+  },
   Button: {
     pattern: { name: "Button", url: `${APG}button/` },
     rows: [

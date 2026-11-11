@@ -262,24 +262,24 @@ function StateBadgeDemo() {
 }
 
 const FORMS = [
-  { en: "Rounded", de: "Abgerundet", radius: "0.3125rem", note: { en: "the shape engine's soft", de: "Formengine Abgerundet" } },
-  { en: "Square", de: "Eckig", radius: "0", note: { en: "the shape engine's square", de: "Formengine Eckig" } },
-  { en: "Pill", de: "Pille", radius: "9999px", note: { en: "badges only, never a control", de: "nur Badges, nie ein Bedienelement" } },
-  { en: "Circle", de: "Kreis", radius: "9999px", circle: true, note: { en: "a glyph alone", de: "nur Glyphe" } },
-];
+  { form: "rounded", en: "Rounded", de: "Abgerundet", note: { en: "buttons and controls", de: "Knöpfe und Bedienelemente" } },
+  { form: "square", en: "Square", de: "Eckig", note: { en: "no radius at all", de: "ganz ohne Radius" } },
+  { form: "pill", en: "Pill", de: "Pille", note: { en: "badges only, never a control", de: "nur Badges, nie ein Bedienelement" } },
+  { form: "circle", en: "Circle", de: "Kreis", note: { en: "a glyph alone", de: "nur Glyphe" } },
+] as const;
 
 function FormsDemo() {
   const t = useT();
   return (
     <div className="gl-forms">
       {FORMS.map((f) => (
-        <figure key={f.en} className="gl-form" style={{ "--radius-pill": f.radius } as CSSProperties}>
-          {f.circle ? (
-            <Badge size="icon" shape="circle" tone="active" ariaLabel={t("Running", "Läuft")}>
+        <figure key={f.form} className="gl-form">
+          {f.form === "circle" ? (
+            <Badge size="icon" form="circle" tone="active" ariaLabel={t("Running", "Läuft")}>
               <Glyph name="IconPlay" />
             </Badge>
           ) : (
-            <Badge tone="heading" size="heading" inFlow>
+            <Badge size="large" form={f.form} tone="active">
               Badge
             </Badge>
           )}

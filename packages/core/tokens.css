@@ -3222,6 +3222,13 @@ body {
     padding-inline: 0;
     aspect-ratio: 1;
   }
+  /* The four forms (badgeClassName). A pill's radius is half its height, so a
+     short badge stays a pill rather than a lozenge, and in the leaf shape the
+     two sharp corners stay sharp. */
+  .glim-badge--rounded { border-radius: 0.3125rem; }
+  .glim-badge--square { border-radius: 0; }
+  .glim-badge--pill { border-radius: calc(var(--badge-h) / 2); }
+  .glim-badge--circle { border-radius: 50%; }
 
   /* warn uses the strong wash, which is meant for small chips; the plain one is
      for panels that hold paragraphs. active is the accent-soft wash, not a solid

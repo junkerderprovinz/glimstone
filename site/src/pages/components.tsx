@@ -147,8 +147,11 @@ export function BadgePage() {
       <Demo name="BadgeSizes" />
       <p>
         Sizes are named stages, each fixing font size, padding and height together. A button and a span at the same
-        stage render pixel-identical. All four shapes read <code>--radius-pill</code>; the name says what the caller
-        means.
+        stage render pixel-identical. Without a <code>form</code> a badge's corners follow the shape setting. With one
+        they keep that form under every setting: <code>rounded</code> a small radius, <code>square</code> none,{" "}
+        <code>pill</code> half its height and <code>circle</code> a circle around one glyph. Buttons and controls stay
+        rounded, never pills. <code>shape</code> is the older prop and is on its way out: its <code>circle</code> still
+        makes an icon-only badge, and its other values change nothing.
       </p>
       <H2>Rules</H2>
       <ul>
@@ -159,6 +162,8 @@ export function BadgePage() {
           Only <code>heading</code> and <code>active</code> take a rainbow position; the other tones are state signals.
         </li>
       </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="Badge" />
       <H2>API</H2>
       <PropsTable of="Badge" />
     </>

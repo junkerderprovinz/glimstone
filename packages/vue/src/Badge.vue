@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { badgeClassName, hueVars, type BadgeShape, type BadgeSize, type BadgeTone, type NotchInset } from "@glimstone/core";
+import { badgeClassName, hueVars, type BadgeForm, type BadgeShape, type BadgeSize, type BadgeTone, type NotchInset } from "@glimstone/core";
 import IconTipButton from "./IconTipButton.vue";
 
 // The shared status chip; sizes, tones and the heading notch are described in
@@ -11,6 +11,11 @@ const props = withDefaults(
   defineProps<{
     tone?: BadgeTone;
     size?: BadgeSize;
+    /** The corners: rounded, square, pill or circle. Without it they follow
+     *  the shape setting. */
+    form?: BadgeForm;
+    /** @deprecated Use `form`. Only "circle" has an effect: it makes the
+     *  badge icon-only. */
     shape?: BadgeShape;
     as?: "span" | "button" | "a";
     disabled?: boolean;
@@ -27,7 +32,7 @@ const props = withDefaults(
     /** Heading notch only: keep its look without positioning it. */
     inFlow?: boolean;
   }>(),
-  { tone: "neutral", size: "medium", shape: "rounded", as: "span", disabled: false, wrap: false, inFlow: false },
+  { tone: "neutral", size: "medium", as: "span", disabled: false, wrap: false, inFlow: false },
 );
 
 // Rainbow never colours text: --accent-ink is not redefined under .glim-hue,
@@ -41,6 +46,7 @@ const classes = computed(() =>
     badgeClassName({
       tone: props.tone,
       size: props.size,
+      form: props.form,
       shape: props.shape,
       wrap: props.wrap,
       iconOnly: props.tip !== undefined,

@@ -41,6 +41,47 @@ const listHasFocus = (page: Page) => page.evaluate(() => !!document.activeElemen
 
 const focusedText = (page: Page) => page.evaluate(() => document.activeElement?.textContent?.trim());
 
+test.describe("Badge", () => {
+  const corner = (page: Page, text: string) =>
+    stage(page, "BadgeSizes")
+      .locator(".glim-badge", { hasText: text })
+      .first()
+      .evaluate((b) => ({ r: parseFloat(getComputedStyle(b).borderTopLeftRadius), w: b.getBoundingClientRect().width, h: b.getBoundingClientRect().height }));
+
+  const shaped = async (page: Page, shape: string) => {
+    await page.evaluate((s) => localStorage.setItem("gs-docs-look", JSON.stringify({ shape: s })), shape);
+    await page.reload();
+    await page.locator("main h1").first().waitFor();
+  };
+
+  test("[badge-form] each form keeps its corners under every shape setting", async ({ page }) => {
+    await open(page, "/components/badge");
+    for (const shape of ["soft", "square", "round"]) {
+      await shaped(page, shape);
+      const rounded = await corner(page, "rounded");
+      expect(rounded.r).toBeCloseTo(5, 0);
+      expect((await corner(page, "square")).r).toBe(0);
+      const pill = await corner(page, "pill");
+      expect(pill.r).toBeCloseTo(pill.h / 2, 0);
+      const circle = await stage(page, "BadgeSizes").getByLabel("Done").evaluate((b) => {
+        const r = b.getBoundingClientRect();
+        return { w: r.width, h: r.height, round: getComputedStyle(b).borderTopLeftRadius };
+      });
+      expect(circle.w).toBeCloseTo(circle.h, 0);
+      expect(circle.round).toBe("50%");
+    }
+  });
+
+  test("[badge-shape-engine] without a form the corners follow the shape setting", async ({ page }) => {
+    await open(page, "/components/badge");
+    await shaped(page, "square");
+    expect((await corner(page, "shape setting")).r).toBe(0);
+    await shaped(page, "round");
+    const round = await corner(page, "shape setting");
+    expect(round.r).toBeGreaterThan(5);
+  });
+});
+
 test.describe("Button", () => {
   const rowDemo = (page: Page) => stage(page, "ButtonRow");
   const sizes = (page: Page) => stage(page, "ButtonCompact");
