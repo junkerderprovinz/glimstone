@@ -1,6 +1,7 @@
 import { createContext, useContext, useRef, useState, type CSSProperties, type ComponentType, type ReactNode } from "react";
 import {
   Badge,
+  BrandMark,
   Button,
   Card,
   Checkbox,
@@ -51,7 +52,7 @@ import {
 import { Combobox } from "@glimstone/react/Combobox";
 import { Select } from "@glimstone/react/Select";
 import { Slider } from "@glimstone/react/Slider";
-import { COFFEE_BUTTON_SVG, GLIMSTONE_VERSION, MAIL_SVG, MANUAL_SVG, type SignInText } from "@glimstone/core";
+import { COFFEE_BUTTON_SVG, GLIMSTONE_VERSION, LINUX_SVG, MAIL_SVG, MANUAL_SVG, type SignInText } from "@glimstone/core";
 import logo from "../../../.github/assets/logo.svg?url";
 import { Glyph } from "../glyph";
 
@@ -520,28 +521,6 @@ function TabsDemo() {
   );
 }
 
-function TilesDemo() {
-  const t = useT();
-  const [v, setV] = useState("general");
-  return (
-    <div style={{ display: "flex", gap: 16, height: 260, width: "100%" }}>
-      <Selector
-        label={t("Settings pages", "Einstellungsseiten")}
-        orientation="vertical"
-        items={[
-          { id: "general", label: t("General", "Allgemein"), glyph: <Glyph name="IconTabGeneral" />, href: "#/guide/glossary?s=gl-tiles" },
-          { id: "look", label: t("Look", "Aussehen"), glyph: <Glyph name="IconTabLook" />, href: "#/guide/glossary?s=gl-tiles" },
-          { id: "storage", label: t("Destinations", "Speicherorte"), glyph: <Glyph name="IconTabStorage" />, href: "#/guide/glossary?s=gl-tiles" },
-          { id: "security", label: t("Security", "Sicherheit"), glyph: <Glyph name="IconTabSecurity" />, href: "#/guide/glossary?s=gl-tiles" },
-          { id: "app", label: "App", glyph: <Glyph name="IconTabApp" />, href: "#/guide/glossary?s=gl-tiles", dim: true },
-        ]}
-        value={v}
-        onChange={setV}
-      />
-    </div>
-  );
-}
-
 export const PAGE_RANGES = [
   { id: "all", en: "All pages", de: "Alle Seiten" },
   { id: "current", en: "This page", de: "Diese Seite" },
@@ -550,17 +529,41 @@ export const PAGE_RANGES = [
 
 function RowTilesDemo() {
   const t = useT();
-  const [v, setV] = useState("all");
+  const [page, setPage] = useState("general");
+  const [range, setRange] = useState("all");
+  const href = "#/guide/glossary?s=gl-row-tiles";
   return (
-    <div style={{ width: "100%", maxWidth: 320 }}>
-      <Selector
-        label={t("Pages", "Seiten")}
-        orientation="vertical"
-        className="gl-row-tiles"
-        items={PAGE_RANGES.map((r) => ({ id: r.id, label: t(r.en, r.de) }))}
-        value={v}
-        onChange={setV}
-      />
+    <div style={{ display: "flex", flexWrap: "wrap", gap: 24, width: "100%" }}>
+      <div style={{ height: 260 }}>
+        <Selector
+          label={t("Settings pages", "Einstellungsseiten")}
+          orientation="vertical"
+          items={[
+            { id: "general", label: t("General", "Allgemein"), glyph: <Glyph name="IconTabGeneral" />, href },
+            { id: "look", label: t("Look", "Aussehen"), glyph: <Glyph name="IconTabLook" />, href },
+            { id: "storage", label: t("Destinations", "Speicherorte"), glyph: <Glyph name="IconTabStorage" />, href },
+            { id: "security", label: t("Security", "Sicherheit"), glyph: <Glyph name="IconTabSecurity" />, href },
+            { id: "app", label: "App", glyph: <Glyph name="IconTabApp" />, href, dim: true },
+          ]}
+          value={page}
+          onChange={setPage}
+        />
+      </div>
+      <div style={{ flex: "1 1 14rem", maxWidth: 320 }}>
+        <Selector label={t("Pages", "Seiten")} orientation="vertical" className="gl-row-tiles" items={PAGE_RANGES.map((r) => ({ id: r.id, label: t(r.en, r.de) }))} value={range} onChange={setRange} />
+      </div>
+    </div>
+  );
+}
+
+function BrandTileDemo() {
+  const t = useT();
+  const href = "#/guide/glossary?s=gl-brand-tile";
+  return (
+    <div style={row}>
+      <ReadmeButton brand="linux" mark={<BrandMark svg={LINUX_SVG} />} parts={[{ name: "Linux", sub: "AppImage", href }]} />
+      <ReadmeButton brand="github" mark={<Glyph name="IconGithub" size={20} />} markClass="glim-github-mark" parts={[{ name: "GitHub", sub: t("Source", "Quellcode"), href }]} />
+      <span style={{ ...quiet, fontSize: 12 }}>{t("Point at one to light its tile.", "Zeig auf einen, dann leuchtet seine Kachel.")}</span>
     </div>
   );
 }
@@ -1544,12 +1547,12 @@ export const DEMOS: Record<string, ComponentType> = {
   "icon-button": IconButtonDemo,
   "tip-button": TipButtonDemo,
   "readme-button": ReadmeDemo,
+  "brand-tile": BrandTileDemo,
   "selector-well": WellSelectorDemo,
   "selector-chips": ChipSelectorDemo,
   "selector-small": SmallSelectorDemo,
   "selector-many": ManySelectorDemo,
   tabs: TabsDemo,
-  tiles: TilesDemo,
   "row-tiles": RowTilesDemo,
   select: SelectDemo,
   "select-menu-rows": MenuRowsSelectDemo,

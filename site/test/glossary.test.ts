@@ -50,3 +50,8 @@ test("every glossary entry has an id of its own", () => {
   const ids = entries.map((e) => e.id);
   assert.deepEqual(ids.filter((id, i) => ids.indexOf(id) !== i), []);
 });
+
+test("a tile is one of four, each with a name of its own", () => {
+  const tiles = entries.filter((e) => /kachel/i.test(e.de)).map((e) => e.de);
+  assert.deepEqual(tiles.sort(), ["Glyphenkachel", "Infokachel", "Markenkachel", "Zeilenkacheln"]);
+});

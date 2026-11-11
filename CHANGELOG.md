@@ -17,8 +17,8 @@ The site gains a bilingual glossary of every element. The ink on an accent fill 
 
 - **A sub-card's title is a section badge in the notch** (rules 1 and 11), and `end` stands at the end of that row.
 - **Row tiles on a sub-card or in a well step up one surface** at rest and hover one more (rule 21). Their resting fill was the sub-card's own, so the tiles vanished into it.
-
 - **Rule 4 names the state colours GlimStone uses:** the accent for running, green for done, orange for partial or a warning, red for an error and neutral for waiting or unknown. Its number stays, since other notes cite it.
+- **A tile has four names, one for each kind:** row tile (Zeilenkachel), glyph tile (Glyphenkachel), brand tile (Markenkachel) and Info tile (Infokachel), in the glossary and under "Vertical tiles".
 
 ## ✨ Added
 

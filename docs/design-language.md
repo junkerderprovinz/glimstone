@@ -287,7 +287,7 @@ The small scale followed the same rule with less machinery. **REVERSED** with th
 
 ## Vertical tiles (the selector's second form)
 
-The tiles are `Selector` with `orientation="vertical"`, following the "sidebar" label axis.
+The tiles are `Selector` with `orientation="vertical"`, following the "sidebar" label axis. Four things are called a tile, and each keeps a name of its own: a **row tile** is one row of this selector, a **glyph tile** (`GlyphTile`) holds the glyph at the start of a list row, a **brand tile** (`.glim-tile-<brand>`) is the fill a README button or a coin takes under the pointer, and the **Info tile** (`InfoTile`) is the stack of cards on the Info tab.
 
 **A settings area with many pages turns the tab selector on its side: a column of tiles beside the content instead of a strip above it.** The horizontal strip stays the default. Once a strip has so many pages that their names do not fit its one row, it shows them as glyphs or cuts them short, and because it stands above every page and scrolls away with it, going to another page starts with scrolling back up. A column holds any number of pages at one height, stays where it is while only the content beside it scrolls, and gives a long name a second line instead of a wider segment. The column can be drawn with the same tabs component as every strip in the app, set to `orientation="vertical"`.
 

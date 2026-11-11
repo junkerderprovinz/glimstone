@@ -275,6 +275,17 @@ export const GLOSSARY: GlossarySection[] = [
           de: "Logo links, Text rechts, und beim Überfahren füllt er sich in der Farbe seiner Marke. Jede Auswahl nach Logo nimmt diese Form.",
         },
       },
+      {
+        id: "brand-tile",
+        en: "Brand tile",
+        de: "Markenkachel",
+        code: [".glim-tile-<brand>", "--tile", "--tile-ink"],
+        components: [],
+        text: {
+          en: "The fill a README button or a coin takes under the pointer: the brand's own colour with an ink measured against it. An app's own brand tile takes the accent and its computed ink.",
+          de: "Die Füllung, die ein README-Knopf oder eine Münze beim Überfahren annimmt: die Farbe der Marke mit einer daran gemessenen Tinte. Die eigene Markenkachel einer App nimmt den Akzent und seine berechnete Tinte.",
+        },
+      },
     ],
   },
   {
@@ -342,28 +353,18 @@ export const GLOSSARY: GlossarySection[] = [
         },
       },
       {
-        id: "tiles",
-        en: "Tiles",
-        de: "Kacheln",
-        code: ['Selector orientation="vertical"', ".glim-sel-tile"],
-        components: [],
-        text: {
-          en: "The column beside the pages of a settings area, each tile with a glyph and a name. A page with nothing on it yet is dimmed, not hidden.",
-          de: "Die Spalte neben den Seiten eines Einstellungsbereichs, jede Kachel mit Glyphe und Namen. Eine Seite ohne Inhalt ist gedimmt, nicht versteckt.",
-        },
-      },
-      {
         id: "row-tiles",
         en: "Row tiles",
         de: "Zeilenkacheln",
         abbr: "ZK",
         code: ['Selector orientation="vertical"', ".glim-sel-tile"],
         components: [],
-        rules: [5],
+        rules: [5, 21],
         text: {
-          en: "A list one below the other with no dot and no box. Picked means filled, in multiple choice too. Shown here is the tile column without glyphs at full width.",
-          de: "Eine Liste untereinander ohne Punkt und Kästchen, gewählt heißt gefüllt, auch bei Mehrfachauswahl. Gezeigt ist die Kachelspalte ohne Glyphen auf voller Breite.",
+          en: "The vertical selector: rows one below the other with no dot and no box, picked means filled, in multiple choice too. With glyphs it is the column beside the pages of a settings area, where a page with nothing on it yet is dimmed, not hidden. On a sub-card or in a well the resting tiles step up one surface.",
+          de: "Der senkrechte Selektor: Zeilen untereinander ohne Punkt und Kästchen, gewählt heißt gefüllt, auch bei Mehrfachauswahl. Mit Glyphen ist er die Spalte neben den Seiten eines Einstellungsbereichs, dort ist eine Seite ohne Inhalt gedimmt, nicht versteckt. Auf einer Sub-Card oder in einer Mulde steigen die ruhenden Kacheln eine Fläche auf.",
         },
+        also: [{ en: "Row tile", de: "Zeilenkachel", abbr: "ZK", code: ".glim-sel-tile" }],
       },
       {
         id: "select",
@@ -621,12 +622,11 @@ export const GLOSSARY: GlossarySection[] = [
         id: "glyph-tile",
         en: "Glyph tile",
         de: "Glyphenkachel",
-        proposal: true,
         code: ["GlyphTile", ".glim-tile"],
         components: ["GlyphTile"],
         text: {
-          en: "Holds the glyph at the start of a row and fills with the accent while the row is reached. Also quiet, ground and active.",
-          de: "Hält die Glyphe am Anfang einer Zeile und füllt sich mit dem Akzent, solange die Zeile erreicht ist. Dazu quiet, ground und active.",
+          en: "Holds the glyph at the start of a row and fills with the accent while the row is reached. Also quiet, ground and active. Not a row tile, a brand tile or the info tile.",
+          de: "Hält die Glyphe am Anfang einer Zeile und füllt sich mit dem Akzent, solange die Zeile erreicht ist. Dazu quiet, ground und active. Weder Zeilenkachel noch Markenkachel noch Infokachel.",
         },
       },
       {
@@ -928,7 +928,7 @@ export const GLOSSARY: GlossarySection[] = [
       {
         id: "info-tile",
         en: "Info tile",
-        de: "Info-Kachel",
+        de: "Infokachel",
         code: ["InfoTile", "AboutCard"],
         components: ["InfoTile", "AboutCard", "InfoVersionCard", "InfoHelpCard", "InfoAboutCard"],
         text: {
