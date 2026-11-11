@@ -71,8 +71,8 @@ const apps: FortressApp[] = [
   { id: 'charlie', name: 'Charlie', instances: [{ id: 'c1', device: 'Studio', presence: 'checking' }] },
 ];
 
-test('the other apps are counted by their instances, on the devices they run on', () => {
-  assert.deepEqual(othersSummary(apps), { instances: 4, devices: 3 });
+test('the other apps are counted once each, however many places they run in', () => {
+  assert.deepEqual(othersSummary(apps), { apps: 3, devices: 3 });
 });
 
 test('the instance a card names is the one that opens in the browser, else the first', () => {

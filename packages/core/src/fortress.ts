@@ -58,9 +58,9 @@ export interface FortressPermission {
 }
 
 /** How many other apps the switch would show, and on how many devices. */
-export function othersSummary(apps: FortressApp[]): { instances: number; devices: number } {
-  const all = apps.flatMap((a) => a.instances);
-  return { instances: all.length, devices: new Set(all.map((i) => i.device)).size };
+export function othersSummary(apps: FortressApp[]): { apps: number; devices: number } {
+  const devices = new Set(apps.flatMap((a) => a.instances.map((i) => i.device)));
+  return { apps: apps.length, devices: devices.size };
 }
 
 /** The instance an app's card names in its facts: the one that opens in the browser, else the first. */

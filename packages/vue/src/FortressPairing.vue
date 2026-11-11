@@ -19,7 +19,7 @@ const props = defineProps<{
   pairedWith?: string[];
   /** A sentence of the app's own for the leave window, such as what stays as it is. */
   leaveNote?: string;
-  labelKeys?: Partial<Record<"leave" | "changePhrase" | "copy" | "done", string>>;
+  labelKeys?: Partial<Record<"leave" | "changePhrase" | "copy", string>>;
   hueIndex?: number;
 }>();
 
@@ -35,7 +35,6 @@ const keys = computed(() => ({
   remove: "delete",
   unlock: "unlock",
   copy: "copy",
-  done: "confirm",
   ...props.labelKeys,
 }));
 </script>

@@ -30,6 +30,8 @@ A glossary joins the packages: `@glimstone/terms` holds the words an interface u
 
 - **Saving says so:** no Apply, Save or Done beside a setting anywhere, a small confirmation once it is saved and a toast with the reason when it fails, except for the twelve words and a password, which only make sense once they are whole. Written into "Saving".
 - **"The fortress"**, a new section of the design language: the app's own instances first, the other apps behind one switch kept per device, the phrase as the only way in, Show phrase in the corner, changing the phrase and leaving only in the pairing settings, the words beside a QR code, and a rainbow position for every card.
+- **No Done in a window either:** one that only shows something, such as the phrase, closes with Close and its glyph like every other window.
+- **A member is Connected or Not reachable**, in every language, so no app has to put its own word over the state.
 
 ## 4.3.4 - 2026-11-10
 

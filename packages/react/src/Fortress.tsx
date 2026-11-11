@@ -34,7 +34,7 @@ import { InfoBubble } from "./InfoBubble.tsx";
 import { PasswordField } from "./PasswordField.tsx";
 import { Toggle } from "./Toggle.tsx";
 import { Window, type WindowAction } from "./Window.tsx";
-import { glyphFor, MarkSvg } from "./glyphs.tsx";
+import { glyphFor, IconClose, MarkSvg } from "./glyphs.tsx";
 
 export type { ChangeAnswer, FortressAnswer, FortressText, PhraseAnswer } from "@glimstone/core";
 
@@ -47,7 +47,6 @@ export interface FortressLabelKeys {
   remove: string;
   unlock: string;
   copy: string;
-  done: string;
 }
 
 const LABEL_KEYS: FortressLabelKeys = {
@@ -58,7 +57,6 @@ const LABEL_KEYS: FortressLabelKeys = {
   remove: "delete",
   unlock: "unlock",
   copy: "copy",
-  done: "confirm",
 };
 
 export interface FortressProps {
@@ -123,7 +121,7 @@ export function Fortress(props: FortressProps) {
   };
   const summary = othersSummary(apps);
   const othersLine = fill(text.othersLine, {
-    apps: plural(lang, text.othersApps, summary.instances),
+    apps: plural(lang, text.othersApps, summary.apps),
     devices: plural(lang, text.othersDevices, summary.devices),
   });
 
@@ -285,7 +283,8 @@ function FortressWindow({ flow, state, props, keys }: { flow: FortressFlow; stat
       return false;
     },
   });
-  const done: WindowAction = { label: text.done, labelKey: keys.done, primary: true, wayOut: true };
+  // Window adds Close only to a foot with something in it, so a window that only says something brings its own.
+  const close: WindowAction = { label: text.close, labelKey: "common.close", glyph: <IconClose />, wayOut: true };
   const common = { ref: card, text: way, onClose: flow.close };
 
   switch (w.kind) {
@@ -337,7 +336,7 @@ function FortressWindow({ flow, state, props, keys }: { flow: FortressFlow; stat
       );
     case "joined":
       return (
-        <Window {...common} title={text.joinTitle} actions={[done]}>
+        <Window {...common} title={text.joinTitle} actions={[close]}>
           <div className="glim-fortress-result">
             <span className="glim-fortress-result-mark" aria-hidden="true">
               <MarkSvg mark={MARKS.check} />
@@ -401,7 +400,7 @@ function FortressWindow({ flow, state, props, keys }: { flow: FortressFlow; stat
         );
       }
       return (
-        <Window {...common} title={text.phraseTitle} size="wide" start={copied ? text.copied : undefined} actions={[copy(w.words), done]}>
+        <Window {...common} title={text.phraseTitle} size="wide" start={copied ? text.copied : undefined} actions={[copy(w.words)]}>
           <div className="glim-fortress-text">
             <p>{text.phraseBody}</p>
             {words(w.words)}
@@ -420,7 +419,7 @@ function FortressWindow({ flow, state, props, keys }: { flow: FortressFlow; stat
       );
     case "changed":
       return (
-        <Window {...common} title={text.changedTitle} size="wide" start={copied ? text.copied : undefined} actions={[copy(w.words), done]}>
+        <Window {...common} title={text.changedTitle} size="wide" start={copied ? text.copied : undefined} actions={[copy(w.words)]}>
           <div className="glim-fortress-text">
             <p>{text.phraseBody}</p>
             {words(w.words)}

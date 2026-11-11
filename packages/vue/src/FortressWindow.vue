@@ -3,7 +3,7 @@ import { computed, nextTick, onScopeDispose, ref, shallowRef, watch } from "vue"
 import { COPIED_MS, copyText, fill, listOf, MARKS, phraseReady, qrCode, shake, type FortressFlow, type FortressState, type FortressText } from "@glimstone/core";
 import PasswordField from "./PasswordField.vue";
 import Window from "./Window.vue";
-import { glyphFor, MarkSvg } from "./glyphs";
+import { glyphFor, IconClose, MarkSvg } from "./glyphs";
 import type { WindowAction } from "./windowParts";
 
 // The window in front of the fortress, drawn from the flow's state: join,
@@ -16,7 +16,7 @@ const props = defineProps<{
   app: { id: string; name: string };
   pairedWith?: string[];
   leaveNote?: string;
-  keys: Record<"join" | "leave" | "changePhrase" | "remove" | "unlock" | "copy" | "done", string>;
+  keys: Record<"join" | "leave" | "changePhrase" | "remove" | "unlock" | "copy", string>;
 }>();
 
 const win = shallowRef<{ card: HTMLElement | null } | null>(null);
@@ -80,7 +80,8 @@ const qr = computed(() => {
   const code = qrCode(s.words.join(" "));
   return { ...code, side: code.size + 8 };
 });
-const done = computed<WindowAction>(() => ({ label: props.text.done, labelKey: props.keys.done, primary: true, wayOut: true }));
+// Window adds Close only to a foot with something in it, so a window that only says something brings its own.
+const close = computed<WindowAction>(() => ({ label: props.text.close, labelKey: "common.close", glyph: IconClose, wayOut: true }));
 
 const view = computed(() => {
   const t = props.text;
@@ -91,7 +92,7 @@ const view = computed(() => {
     case "join":
       return { title: t.joinTitle, size: "wide" as const, actions: [send("join", f.join, t.join, k.join, !phraseReady(s.words))] };
     case "joined":
-      return { title: t.joinTitle, actions: [done.value] };
+      return { title: t.joinTitle, actions: [close.value] };
     case "leave":
       return { title: t.leaveTitle, actions: [send("leave", f.leave, t.leaveConfirm, k.leave)] };
     case "remove":
@@ -99,11 +100,11 @@ const view = computed(() => {
     case "phrase":
       return s.step === "password"
         ? { title: t.phraseTitle, actions: [send("unlock", f.unlock, t.unlock, k.unlock, s.password === "")] }
-        : { title: t.phraseTitle, size: "wide" as const, actions: [copy(s.words), done.value] };
+        : { title: t.phraseTitle, size: "wide" as const, actions: [copy(s.words)] };
     case "change":
       return { title: t.changeTitle, actions: [send("change", f.change, t.changeConfirm, k.changePhrase)] };
     case "changed":
-      return { title: t.changedTitle, size: "wide" as const, actions: [copy(s.words), done.value] };
+      return { title: t.changedTitle, size: "wide" as const, actions: [copy(s.words)] };
   }
   return { title: "", actions: [] };
 });

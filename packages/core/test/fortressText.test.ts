@@ -92,6 +92,11 @@ test('the tables keep to the glossary', () => {
   assert.deepEqual(checkLocales([dir]), []);
 });
 
+test('a member is connected or not reachable', () => {
+  assert.equal(en.connected, 'Connected');
+  assert.equal(en.away, 'Not reachable');
+});
+
 test('a regional language takes its base table, and an unknown one English', () => {
   assert.equal(fortressText('de-AT').leave, 'Festung verlassen');
   assert.equal(fortressText('xx').leave, en.leave);

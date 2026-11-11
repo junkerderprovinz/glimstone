@@ -58,7 +58,7 @@ const props = withDefaults(
     /** Asks for the app's password before the phrase shows. */
     phrasePassword?: boolean;
     onOpen?: (app: FortressApp, instance: FortressInstance) => void;
-    labelKeys?: Partial<Record<"join" | "leave" | "showPhrase" | "changePhrase" | "remove" | "unlock" | "copy" | "done", string>>;
+    labelKeys?: Partial<Record<"join" | "leave" | "showPhrase" | "changePhrase" | "remove" | "unlock" | "copy", string>>;
     /** The rainbow position the fortress's first card takes, after the app's own cards. */
     hueStart?: number;
   }>(),
@@ -79,7 +79,6 @@ const keys = computed(() => ({
   remove: "delete",
   unlock: "unlock",
   copy: "copy",
-  done: "confirm",
   ...props.labelKeys,
 }));
 
@@ -95,7 +94,7 @@ function setOthers(on: boolean) {
 const othersLine = computed(() => {
   const n = othersSummary(props.apps);
   return fill(props.text.othersLine, {
-    apps: plural(props.lang, props.text.othersApps, n.instances),
+    apps: plural(props.lang, props.text.othersApps, n.apps),
     devices: plural(props.lang, props.text.othersDevices, n.devices),
   });
 });

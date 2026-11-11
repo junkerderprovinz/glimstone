@@ -4114,7 +4114,7 @@ test.describe("Fortress", () => {
 
   test("[fortress-others-line] the switch counts the apps and devices and explains the fortress", async ({ page }) => {
     await open(page, "/components/fortress");
-    await expect(inside(page).locator(".glim-fortress-switch")).toContainText("7 more apps on 4 devices. Applies to this device only.");
+    await expect(inside(page).locator(".glim-fortress-switch")).toContainText("4 more apps on 4 devices. Applies to this device only.");
     await expect(inside(page).locator(".glim-fortress-switch .glim-info-icon")).toHaveAttribute("aria-label", /In a fortress your apps see each other/);
   });
 
@@ -4126,7 +4126,7 @@ test.describe("Fortress", () => {
     const away = charlie.locator('[data-instance="c2"]');
     await expect(away).toContainText("Pocket");
     await expect(away).toContainText("Android app · v2.6.2 · Last seen 07:40");
-    await expect(away).toContainText("Inactive");
+    await expect(away).toContainText("Not reachable");
     await expect(inside(page).locator('[data-fortress-app="bravo"] .glim-instance-badges')).toContainText("A captcha waits");
     await expect(inside(page).locator('[data-fortress-app="delta"]').getByRole("button", { name: "Open in Unraid" })).toBeVisible();
   });
@@ -4228,7 +4228,8 @@ test.describe("Fortress", () => {
     await page.keyboard.press("Enter");
     await expect(dialog(page)).toContainText("Alpha is in the fortress now");
     await expect(dialog(page)).toContainText("The pairing with Pocket and Studio came along.");
-    await dialog(page).getByRole("button", { name: "Done" }).click();
+    await expect(dialog(page).locator(".glim-modal-foot .glim-btn")).toHaveText(["Close"]);
+    await dialog(page).getByRole("button", { name: "Close" }).click();
     await expect(dialog(page)).toHaveCount(0);
     await expect(said(outside(page))).toHaveText("Joined");
   });
@@ -4255,6 +4256,7 @@ test.describe("Fortress", () => {
     await password.fill("letmein");
     await page.keyboard.press("Enter");
     await expect(dialog(page).locator('[data-fortress="words"] li')).toHaveText(TWELVE.split(" ").map((w, i) => `${i + 1}${w}`));
+    await expect(dialog(page).locator(".glim-modal-foot .glim-btn")).toHaveText(["Close", "Copy"]);
     await page.keyboard.press("Escape");
     await expect(dialog(page)).toHaveCount(0);
   });
@@ -4298,6 +4300,9 @@ test.describe("Fortress", () => {
     await dialog(page).getByRole("button", { name: "Change phrase" }).click();
     await expect(dialog(page).locator('[data-fortress="words"] li').first()).toHaveText("1lance");
     await expect(dialog(page)).toContainText("Still on the old phrase: Wanderer. Enter the new one there once.");
+    await expect(dialog(page).locator(".glim-modal-foot .glim-btn")).toHaveText(["Close", "Copy"]);
+    await dialog(page).getByRole("button", { name: "Close" }).click();
+    await expect(dialog(page)).toHaveCount(0);
   });
 
   test("[fortress-remove] an instance goes only after the window asks", async ({ page }) => {
