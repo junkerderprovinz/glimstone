@@ -12,6 +12,7 @@ export { default as FieldRow } from "./FieldRow.vue";
 export { default as FieldRowGroup } from "./FieldRowGroup.vue";
 export { default as Fortress } from "./Fortress.vue";
 export { default as FortressAppCard } from "./FortressAppCard.vue";
+export { default as FortressPairing } from "./FortressPairing.vue";
 export { default as FortressPermissions } from "./FortressPermissions.vue";
 export { default as GlyphField } from "./GlyphField.vue";
 export { default as GlyphTile } from "./GlyphTile.vue";

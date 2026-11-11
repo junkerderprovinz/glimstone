@@ -186,10 +186,11 @@ export interface ChangeAnswer {
   error?: string;
 }
 
+/** Each step's answer. A step whose callback is missing does nothing, so the Instances tab and the pairing settings each pass their own. */
 export interface FortressHandlers {
-  onJoin: (words: string[]) => Promise<FortressAnswer>;
-  onLeave: () => Promise<FortressAnswer>;
-  onRemove: (id: string) => Promise<FortressAnswer>;
+  onJoin?: (words: string[]) => Promise<FortressAnswer>;
+  onLeave?: () => Promise<FortressAnswer>;
+  onRemove?: (id: string) => Promise<FortressAnswer>;
   /** `password` is set where `phrasePassword` asks for it first. */
   onShowPhrase?: (password?: string) => Promise<PhraseAnswer>;
   onChangePhrase?: () => Promise<ChangeAnswer>;
@@ -290,20 +291,25 @@ export function createFortressFlow(options: () => FortressFlowOptions): Fortress
     },
     async join() {
       const w = state.window;
-      if (w?.kind !== "join" || !phraseReady(w.words)) return;
+      const ask = options().onJoin;
+      if (w?.kind !== "join" || !phraseReady(w.words) || !ask) return;
       const words = w.words.map((x) => x.trim().toLowerCase());
-      await run("join", () => options().onJoin(words), (a) => {
+      await run("join", () => ask(words), (a) => {
         if (a.ok) open({ kind: "joined" });
         return !!a.ok;
       });
     },
     openLeave: () => open({ kind: "leave" }),
-    leave: () => run("leave", () => options().onLeave(), shut),
+    async leave() {
+      const ask = options().onLeave;
+      if (state.window?.kind === "leave" && ask) await run("leave", () => ask(), shut);
+    },
     openRemove: (id, device) => open({ kind: "remove", id, device }),
     async remove() {
       const w = state.window;
-      if (w?.kind !== "remove") return;
-      await run("remove", () => options().onRemove(w.id), shut);
+      const ask = options().onRemove;
+      if (w?.kind !== "remove" || !ask) return;
+      await run("remove", () => ask(w.id), shut);
     },
     async openPhrase() {
       const { phrasePassword, onShowPhrase } = options();

@@ -5402,6 +5402,31 @@ body {
     background-color: var(--carbon-surface2);
     font-weight: 500;
   }
+  /* The words beside their QR code, the rows stretched to the code's height
+     ("Pairing a phone"). The code keeps a light ground and dark modules in
+     every theme, since that is what a camera reads. */
+  .glim-phrase-show {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 8rem;
+    gap: 0.4rem 1rem;
+  }
+  .glim-phrase-show > .glim-phrase-words { grid-auto-rows: 1fr; }
+  .glim-phrase-qr {
+    width: 8rem;
+    height: 8rem;
+    border-radius: var(--radius-control);
+  }
+  .glim-phrase-scan {
+    grid-column: 1 / -1;
+    margin: 0;
+    color: var(--carbon-text-sub);
+    font-size: var(--text-meta);
+    text-align: end;
+  }
+  @media (max-width: 640px) {
+    .glim-phrase-show { grid-template-columns: minmax(0, 1fr); }
+    .glim-phrase-qr { justify-self: end; }
+  }
   .glim-fortress-text {
     display: flex;
     flex-direction: column;

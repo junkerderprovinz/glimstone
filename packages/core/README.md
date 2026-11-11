@@ -34,7 +34,8 @@ npm install @glimstone/core
   refused field.
 - The fortress in the Instances tab: `createFortressFlow` runs the windows to
   join with the phrase, leave, remove an instance and show or change the
-  phrase, `enterWords` spreads a pasted phrase over its twelve fields,
+  phrase, `enterWords` spreads a pasted phrase over its twelve fields, `qrCode`
+  draws the phrase as a QR code in one SVG path,
   `appCardView` says what another app's card shows, and `fortressText(lang)`
   hands out the words in every language of the glossary, each also a module of
   its own under `fortressLocales/`.

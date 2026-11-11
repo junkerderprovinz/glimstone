@@ -1,5 +1,6 @@
 import { expect, test, type Locator, type Page } from "@playwright/test";
 import GLYPHS from "../../packages/core/glyphs.json" with { type: "json" };
+import jsQR from "jsqr";
 
 // Each test is named after its contract row, "[id] ...", which is how the site
 // finds its result.
@@ -4078,6 +4079,7 @@ test.describe("Fortress", () => {
   const TWELVE = "oak lamp tower harbour maple lantern bridge kettle cloud saddle feather lance";
   const inside = (page: Page) => stage(page, "FortressBasic");
   const outside = (page: Page) => stage(page, "FortressOut");
+  const pairing = (page: Page) => stage(page, "FortressPairing");
   const others = (page: Page) => inside(page).getByRole("switch", { name: "Show the other apps of the fortress" });
   const dialog = (page: Page) => page.getByRole("dialog");
   const word = (page: Page, n: number) => dialog(page).getByRole("textbox", { name: `Word ${n}`, exact: true });
@@ -4161,9 +4163,11 @@ test.describe("Fortress", () => {
   test("[fortress-actions] the corner holds the phrase's actions inside, and Enter phrase outside", async ({ page }) => {
     await open(page, "/components/fortress");
     const corner = inside(page).locator(".glim-fortress-actions .glim-btn");
-    await expect(corner).toHaveText(["Leave fortress", "Change phrase", "Show phrase"]);
+    await expect(corner).toHaveText(["Show phrase"]);
     await expect(corner.last()).toHaveClass(/glim-btn--accent/);
     await expect(outside(page).locator(".glim-fortress-actions .glim-btn")).toHaveText(["Enter phrase"]);
+    await showOthers(page);
+    await expect(inside(page).getByRole("button", { name: /Change|Leave/ })).toHaveCount(0);
   });
 
   test("[fortress-no-address] no field asks for an address", async ({ page }) => {
@@ -4255,9 +4259,41 @@ test.describe("Fortress", () => {
     await expect(dialog(page)).toHaveCount(0);
   });
 
+  test("[fortress-pairing] a row for the phrase and one for leaving", async ({ page }) => {
+    await open(page, "/components/fortress");
+    const rows = pairing(page).locator(".glim-field-row");
+    await expect(rows).toHaveCount(2);
+    await expect(rows.nth(0)).toContainText("Phrase");
+    await expect(rows.nth(0).getByRole("button")).toHaveText("Change");
+    await expect(rows.nth(1)).toContainText("This app in the fortress");
+    await expect(rows.nth(1).getByRole("button")).toHaveText("Leave");
+    await expect(rows.nth(1).locator(".glim-info-icon")).toHaveAttribute("aria-label", "Takes Alpha out of the fortress. The phrase brings it back any time.");
+  });
+
+  test("[fortress-qr] a camera reads the twelve words from the code", async ({ page }) => {
+    await open(page, "/components/fortress");
+    await inside(page).getByRole("button", { name: "Show phrase" }).click();
+    await dialog(page).getByLabel("Password of Alpha").fill("letmein");
+    await page.keyboard.press("Enter");
+    const qr = dialog(page).getByRole("img", { name: "The phrase as a QR code" });
+    expect(await qr.evaluate((e) => Math.round(e.getBoundingClientRect().width))).toBe(128);
+    const shot = await qr.evaluate(async (svg) => {
+      const img = new Image();
+      img.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(new XMLSerializer().serializeToString(svg))}`;
+      await img.decode();
+      const canvas = document.createElement("canvas");
+      canvas.width = canvas.height = 256;
+      const ctx = canvas.getContext("2d")!;
+      ctx.drawImage(img, 0, 0, 256, 256);
+      return [...ctx.getImageData(0, 0, 256, 256).data];
+    });
+    expect(jsQR(Uint8ClampedArray.from(shot), 256, 256)?.data).toBe(TWELVE);
+    await expect(dialog(page)).toContainText("Scan it in the app that should join.");
+  });
+
   test("[fortress-change] what changing does, then the new words and who is left", async ({ page }) => {
     await open(page, "/components/fortress");
-    await inside(page).getByRole("button", { name: "Change phrase" }).click();
+    await pairing(page).getByRole("button", { name: "Change" }).click();
     await expect(dialog(page)).toContainText("Every app you can reach right now moves to a new phrase.");
     await dialog(page).getByRole("button", { name: "Change phrase" }).click();
     await expect(dialog(page).locator('[data-fortress="words"] li').first()).toHaveText("1lance");
@@ -4276,13 +4312,13 @@ test.describe("Fortress", () => {
 
   test("[fortress-leave] leaving says what ends and waits for Leave", async ({ page }) => {
     await open(page, "/components/fortress");
-    await inside(page).getByRole("button", { name: "Leave fortress" }).click();
+    await pairing(page).getByRole("button", { name: "Leave" }).click();
     await expect(dialog(page)).toContainText("The other apps won't see Alpha anymore, and every permission with Alpha ends. The pairing with Pocket ends too.");
     await dialog(page).getByRole("button", { name: "Cancel" }).click();
-    await expect(said(inside(page))).toHaveText("Nothing yet");
-    await inside(page).getByRole("button", { name: "Leave fortress" }).click();
+    await expect(said(pairing(page))).toHaveText("Nothing yet");
+    await pairing(page).getByRole("button", { name: "Leave" }).click();
     await dialog(page).getByRole("button", { name: "Leave", exact: true }).click();
-    await expect(said(inside(page))).toHaveText("Left");
+    await expect(said(pairing(page))).toHaveText("Left");
   });
 
   test("[fortress-permission] a switch asks the app, and a refusal shakes it back", async ({ page }) => {

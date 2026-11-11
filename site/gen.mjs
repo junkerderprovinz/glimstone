@@ -51,6 +51,7 @@ const COMPONENTS = {
   Table: "react/Table.tsx",
   SignInCard: "react/SignInCard.tsx",
   Fortress: "react/Fortress.tsx",
+  FortressPairing: "react/Fortress.tsx",
   InstanceCard: "react/InstanceCard.tsx",
 };
 

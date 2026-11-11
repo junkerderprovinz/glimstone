@@ -29,6 +29,7 @@ export * from "./numberField.ts";
 export * from "./paypal.ts";
 export * from "./pill.ts";
 export * from "./portalHue.ts";
+export * from "./qr.ts";
 export * from "./readmeButton.ts";
 export * from "./segmentLayout.ts";
 export * from "./select.ts";

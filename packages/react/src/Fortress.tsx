@@ -13,16 +13,20 @@ import {
   shake,
   storedShowOthers,
   storeShowOthers,
+  qrCode,
+  type ChangeAnswer,
   type FortressAnswer,
   type FortressApp,
   type FortressFlow,
-  type FortressHandlers,
   type FortressInstance,
   type FortressPermission,
   type FortressState,
   type FortressText,
+  type PhraseAnswer,
 } from "@glimstone/core";
 import { Button } from "./Button.tsx";
+import { Card } from "./Card.tsx";
+import { FieldRow } from "./FieldRow.tsx";
 import { FortressAppCard } from "./FortressAppCard.tsx";
 import { FortressPermissions } from "./FortressPermissions.tsx";
 import { InfoBubble } from "./InfoBubble.tsx";
@@ -31,7 +35,7 @@ import { Toggle } from "./Toggle.tsx";
 import { Window, type WindowAction } from "./Window.tsx";
 import { glyphFor, MarkSvg } from "./glyphs.tsx";
 
-export type { FortressAnswer, FortressHandlers, FortressText } from "@glimstone/core";
+export type { ChangeAnswer, FortressAnswer, FortressText, PhraseAnswer } from "@glimstone/core";
 
 /** The label keys behind the fortress's buttons, which pick their glyphs (see Button). */
 export interface FortressLabelKeys {
@@ -56,7 +60,7 @@ const LABEL_KEYS: FortressLabelKeys = {
   done: "confirm",
 };
 
-export interface FortressProps extends FortressHandlers {
+export interface FortressProps {
   text: FortressText;
   /** The interface language, for counts and lists. */
   lang: string;
@@ -67,6 +71,10 @@ export interface FortressProps extends FortressHandlers {
   apps: FortressApp[];
   permissions: FortressPermission[];
   onPermission: (id: string, on: boolean) => Promise<FortressAnswer>;
+  onJoin: (words: string[]) => Promise<FortressAnswer>;
+  onRemove: (id: string) => Promise<FortressAnswer>;
+  /** `password` is set where `phrasePassword` asks for it first. Without it there is no Show phrase. */
+  onShowPhrase?: (password?: string) => Promise<PhraseAnswer>;
   /** Whether the other apps show. Without it the switch keeps its state on this device. */
   showOthers?: boolean;
   onShowOthers?: (on: boolean) => void;
@@ -76,8 +84,6 @@ export interface FortressProps extends FortressHandlers {
   found?: { app: string; device: string; logo?: string };
   /** Asks for the app's password before the phrase shows. */
   phrasePassword?: boolean;
-  /** A sentence of the app's own for the leave window, such as what stays as it is. */
-  leaveNote?: string;
   onOpen?: (app: FortressApp, instance: FortressInstance) => void;
   /** Something of the app's own under a permission's words. */
   permissionExtra?: (permission: FortressPermission) => ReactNode;
@@ -91,7 +97,9 @@ export interface FortressProps extends FortressHandlers {
 /**
  * The fortress in the Instances tab ("The fortress" in the design language):
  * the app's own instances first, the switch for the other apps and, once it is
- * on, their cards and the permissions, with the page's actions in the corner.
+ * on, their cards and the permissions, with Show phrase or Enter phrase in the
+ * corner. Changing the phrase and leaving live in the pairing settings
+ * (FortressPairing).
  */
 export function Fortress(props: FortressProps) {
   const { text, lang, app, joined, apps, permissions, onPermission, found, hueStart = 0, children } = props;
@@ -168,23 +176,17 @@ export function Fortress(props: FortressProps) {
 
       <div className="glim-fortress-actions">
         {joined ? (
-          <>
-            <Button label={text.leave} labelKey={keys.leave} size="key" onClick={flow.openLeave} data-fortress="open-leave" />
-            {props.onChangePhrase && (
-              <Button label={text.changePhrase} labelKey={keys.changePhrase} size="key" onClick={flow.openChange} data-fortress="open-change" />
-            )}
-            {props.onShowPhrase && (
-              <Button
-                label={text.showPhrase}
-                labelKey={keys.showPhrase}
-                tone="accent"
-                size="key"
-                busy={s.busy === "show"}
-                onClick={() => void flow.openPhrase()}
-                data-fortress="show"
-              />
-            )}
-          </>
+          props.onShowPhrase && (
+            <Button
+              label={text.showPhrase}
+              labelKey={keys.showPhrase}
+              tone="accent"
+              size="key"
+              busy={s.busy === "show"}
+              onClick={() => void flow.openPhrase()}
+              data-fortress="show"
+            />
+          )
         ) : (
           <Button label={text.enterPhrase} labelKey={keys.join} tone="accent" size="key" onClick={flow.openJoin} data-fortress="open-join" />
         )}
@@ -195,7 +197,27 @@ export function Fortress(props: FortressProps) {
   );
 }
 
-function FortressWindow({ flow, state, props, keys }: { flow: FortressFlow; state: FortressState; props: FortressProps; keys: FortressLabelKeys }) {
+interface WindowContext {
+  text: FortressText;
+  lang: string;
+  app: { id: string; name: string };
+  pairedWith?: string[];
+  leaveNote?: string;
+}
+
+function PhraseQr({ words, name }: { words: string[]; name: string }) {
+  const code = useMemo(() => qrCode(words.join(" ")), [words]);
+  const side = code.size + 8;
+  // A camera reads dark modules on a light ground, so these two colours stay put in every theme.
+  return (
+    <svg className="glim-phrase-qr" data-fortress="qr" role="img" aria-label={name} viewBox={`-4 -4 ${side} ${side}`} shapeRendering="crispEdges">
+      <rect x={-4} y={-4} width={side} height={side} fill="#ffffff" />
+      <path d={code.path} fill="#161616" />
+    </svg>
+  );
+}
+
+function FortressWindow({ flow, state, props, keys }: { flow: FortressFlow; state: FortressState; props: WindowContext; keys: FortressLabelKeys }) {
   const { text, lang, app } = props;
   const w = state.window!;
   const card = useRef<HTMLDivElement>(null);
@@ -237,14 +259,18 @@ function FortressWindow({ flow, state, props, keys }: { flow: FortressFlow; stat
     },
   });
   const words = (list: string[]) => (
-    <ol className="glim-phrase-words" data-fortress="words">
-      {list.map((word, i) => (
-        <li key={i}>
-          <span className="glim-phrase-number glim-num">{i + 1}</span>
-          {word}
-        </li>
-      ))}
-    </ol>
+    <div className="glim-phrase-show">
+      <ol className="glim-phrase-words" data-fortress="words">
+        {list.map((word, i) => (
+          <li key={i}>
+            <span className="glim-phrase-number glim-num">{i + 1}</span>
+            {word}
+          </li>
+        ))}
+      </ol>
+      <PhraseQr words={list} name={text.qrName} />
+      <p className="glim-phrase-scan">{text.scanHint}</p>
+    </div>
   );
   const copy = (list: string[]): WindowAction => ({
     label: text.copy,
@@ -371,7 +397,7 @@ function FortressWindow({ flow, state, props, keys }: { flow: FortressFlow; stat
         );
       }
       return (
-        <Window {...common} title={text.phraseTitle} start={copied ? text.copied : undefined} actions={[copy(w.words), done]}>
+        <Window {...common} title={text.phraseTitle} size="wide" start={copied ? text.copied : undefined} actions={[copy(w.words), done]}>
           <div className="glim-fortress-text">
             <p>{text.phraseBody}</p>
             {words(w.words)}
@@ -390,7 +416,7 @@ function FortressWindow({ flow, state, props, keys }: { flow: FortressFlow; stat
       );
     case "changed":
       return (
-        <Window {...common} title={text.changedTitle} start={copied ? text.copied : undefined} actions={[copy(w.words), done]}>
+        <Window {...common} title={text.changedTitle} size="wide" start={copied ? text.copied : undefined} actions={[copy(w.words), done]}>
           <div className="glim-fortress-text">
             <p>{text.phraseBody}</p>
             {words(w.words)}
@@ -399,4 +425,45 @@ function FortressWindow({ flow, state, props, keys }: { flow: FortressFlow; stat
         </Window>
       );
   }
+}
+
+export interface FortressPairingProps {
+  text: FortressText;
+  lang: string;
+  app: { id: string; name: string };
+  onLeave: () => Promise<FortressAnswer>;
+  /** Without it there is no way to change the phrase here, for an app that cannot keep a new one. */
+  onChangePhrase?: () => Promise<ChangeAnswer>;
+  /** The devices whose pairing ends with leaving. */
+  pairedWith?: string[];
+  /** A sentence of the app's own for the leave window, such as what stays as it is. */
+  leaveNote?: string;
+  labelKeys?: Partial<FortressLabelKeys>;
+  hueIndex?: number;
+}
+
+/**
+ * The fortress in the app's pairing settings: the one place where the phrase
+ * changes and the app leaves, each behind a window that says what it does.
+ */
+export function FortressPairing(props: FortressPairingProps) {
+  const { text, app, hueIndex } = props;
+  const latest = useRef(props);
+  latest.current = props;
+  const flow = useMemo(() => createFortressFlow(() => ({ ...latest.current, failed: latest.current.text.failed })), []);
+  const s = useSyncExternalStore(flow.subscribe, flow.state, flow.state);
+  const keys = { ...LABEL_KEYS, ...props.labelKeys };
+  return (
+    <Card title={text.pairing} hueIndex={hueIndex}>
+      {props.onChangePhrase && (
+        <FieldRow label={text.phraseTitle} hint={text.changePhraseAbout}>
+          <Button label={text.change} labelKey={keys.changePhrase} onClick={flow.openChange} data-fortress="open-change" />
+        </FieldRow>
+      )}
+      <FieldRow label={text.leaveRow} hint={fill(text.leaveAbout, { app: app.name })}>
+        <Button label={text.leaveConfirm} labelKey={keys.leave} onClick={flow.openLeave} data-fortress="open-leave" />
+      </FieldRow>
+      {s.window && <FortressWindow flow={flow} state={s} props={props} keys={keys} />}
+    </Card>
+  );
 }

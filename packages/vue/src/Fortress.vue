@@ -8,7 +8,6 @@ import {
   plural,
   storedShowOthers,
   storeShowOthers,
-  type ChangeAnswer,
   type FortressAnswer,
   type FortressApp,
   type FortressInstance,
@@ -26,10 +25,11 @@ import Toggle from "./Toggle.vue";
 // The fortress in the Instances tab ("The fortress" in the design language):
 // the app's own instances first, in the default slot, which gets `remove` to
 // ask before an instance goes; then the switch for the other apps and, once it
-// is on, their cards and the permissions, with the page's actions in the
-// corner. The callbacks are props, since an emitted event cannot answer. The
-// scoped slot `permission-extra` puts something of the app's own under a
-// permission's words.
+// is on, their cards and the permissions, with Show phrase or Enter phrase in
+// the corner. Changing the phrase and leaving live in the pairing settings
+// (FortressPairing). The callbacks are props, since an emitted event cannot
+// answer. The scoped slot `permission-extra` puts something of the app's own
+// under a permission's words.
 const props = withDefaults(
   defineProps<{
     text: FortressText;
@@ -43,11 +43,9 @@ const props = withDefaults(
     permissions: FortressPermission[];
     onPermission: (id: string, on: boolean) => Promise<FortressAnswer>;
     onJoin: (words: string[]) => Promise<FortressAnswer>;
-    onLeave: () => Promise<FortressAnswer>;
     onRemove: (id: string) => Promise<FortressAnswer>;
-    /** `password` is set where `phrasePassword` asks for it first. */
+    /** `password` is set where `phrasePassword` asks for it first. Without it there is no Show phrase. */
     onShowPhrase?: (password?: string) => Promise<PhraseAnswer>;
-    onChangePhrase?: () => Promise<ChangeAnswer>;
     /** Whether the other apps show. Without it the switch keeps its state on this device. */
     showOthers?: boolean;
     /** The devices this app is paired with today, whose pairing moves into the fortress on joining. */
@@ -56,8 +54,6 @@ const props = withDefaults(
     found?: { app: string; device: string; logo?: string };
     /** Asks for the app's password before the phrase shows. */
     phrasePassword?: boolean;
-    /** A sentence of the app's own for the leave window, such as what stays as it is. */
-    leaveNote?: string;
     onOpen?: (app: FortressApp, instance: FortressInstance) => void;
     labelKeys?: Partial<Record<"join" | "leave" | "showPhrase" | "changePhrase" | "remove" | "unlock" | "copy" | "done", string>>;
     /** The rainbow position the fortress's first card takes, after the app's own cards. */
@@ -142,15 +138,6 @@ const othersLine = computed(() => {
 
     <div class="glim-fortress-actions">
       <template v-if="joined">
-        <Button :label="text.leave" :label-key="keys.leave" size="key" data-fortress="open-leave" @click="flow.openLeave()" />
-        <Button
-          v-if="onChangePhrase"
-          :label="text.changePhrase"
-          :label-key="keys.changePhrase"
-          size="key"
-          data-fortress="open-change"
-          @click="flow.openChange()"
-        />
         <Button
           v-if="onShowPhrase"
           :label="text.showPhrase"
@@ -173,7 +160,6 @@ const othersLine = computed(() => {
       :lang="lang"
       :app="app"
       :paired-with="pairedWith"
-      :leave-note="leaveNote"
       :keys="keys"
     />
   </div>

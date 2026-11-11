@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onScopeDispose, ref, shallowRef, watch } from "vue";
-import { COPIED_MS, copyText, fill, listOf, MARKS, phraseReady, shake, type FortressFlow, type FortressState, type FortressText } from "@glimstone/core";
+import { COPIED_MS, copyText, fill, listOf, MARKS, phraseReady, qrCode, shake, type FortressFlow, type FortressState, type FortressText } from "@glimstone/core";
 import PasswordField from "./PasswordField.vue";
 import Window from "./Window.vue";
 import { glyphFor, MarkSvg } from "./glyphs";
@@ -74,6 +74,12 @@ function copy(words: string[]): WindowAction {
     },
   };
 }
+const qr = computed(() => {
+  const s = w.value;
+  if (s.kind !== "phrase" && s.kind !== "changed") return null;
+  const code = qrCode(s.words.join(" "));
+  return { ...code, side: code.size + 8 };
+});
 const done = computed<WindowAction>(() => ({ label: props.text.done, labelKey: props.keys.done, primary: true, wayOut: true }));
 
 const view = computed(() => {
@@ -93,11 +99,11 @@ const view = computed(() => {
     case "phrase":
       return s.step === "password"
         ? { title: t.phraseTitle, actions: [send("unlock", f.unlock, t.unlock, k.unlock, s.password === "")] }
-        : { title: t.phraseTitle, actions: [copy(s.words), done.value] };
+        : { title: t.phraseTitle, size: "wide" as const, actions: [copy(s.words), done.value] };
     case "change":
       return { title: t.changeTitle, actions: [send("change", f.change, t.changeConfirm, k.changePhrase)] };
     case "changed":
-      return { title: t.changedTitle, actions: [copy(s.words), done.value] };
+      return { title: t.changedTitle, size: "wide" as const, actions: [copy(s.words), done.value] };
   }
   return { title: "", actions: [] };
 });
@@ -183,9 +189,25 @@ const view = computed(() => {
 
     <div v-else-if="w.kind === 'phrase' || w.kind === 'changed'" class="glim-fortress-text">
       <p>{{ text.phraseBody }}</p>
-      <ol class="glim-phrase-words" data-fortress="words">
-        <li v-for="(word, i) in w.words" :key="i"><span class="glim-phrase-number glim-num">{{ i + 1 }}</span>{{ word }}</li>
-      </ol>
+      <div class="glim-phrase-show">
+        <ol class="glim-phrase-words" data-fortress="words">
+          <li v-for="(word, i) in w.words" :key="i"><span class="glim-phrase-number glim-num">{{ i + 1 }}</span>{{ word }}</li>
+        </ol>
+        <!-- A camera reads dark modules on a light ground, so these two colours stay put in every theme. -->
+        <svg
+          v-if="qr"
+          class="glim-phrase-qr"
+          data-fortress="qr"
+          role="img"
+          :aria-label="text.qrName"
+          :viewBox="`-4 -4 ${qr.side} ${qr.side}`"
+          shape-rendering="crispEdges"
+        >
+          <rect x="-4" y="-4" :width="qr.side" :height="qr.side" fill="#ffffff" />
+          <path :d="qr.path" fill="#161616" />
+        </svg>
+        <p class="glim-phrase-scan">{{ text.scanHint }}</p>
+      </div>
       <p v-if="w.kind === 'changed' && w.left.length" class="glim-fortress-sub">{{ fill(text.changedLeft, { devices: listOf(lang, w.left) }) }}</p>
     </div>
   </Window>

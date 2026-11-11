@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { Badge, Button, Fortress, InstanceCard } from "@glimstone/react";
 import { fortressTextEn } from "@glimstone/core";
-import { APPS, HOME, household, PERMISSIONS } from "../fortressData";
+import { APPS, HOME, household, instancesTab, PERMISSIONS } from "../fortressData";
 
 // Inside a fortress: the phrase shows after "letmein", Echo's permission
 // refuses to switch, and changing the phrase leaves Wanderer behind.
@@ -23,7 +23,7 @@ export default function FortressBasic() {
         phrasePassword
         pairedWith={["Pocket"]}
         hueStart={2}
-        {...household(setSaid, () => current.current, setPermissions)}
+        {...instancesTab(household(setSaid, () => current.current, setPermissions))}
       >
         {(remove) => (
           <>

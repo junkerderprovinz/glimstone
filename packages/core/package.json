@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@zag-js/select": "^1.46.0",
-    "@zag-js/vanilla": "^1.46.0"
+    "@zag-js/vanilla": "^1.46.0",
+    "uqr": "^0.1.3"
   }
 }

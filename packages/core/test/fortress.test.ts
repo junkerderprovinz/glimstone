@@ -281,3 +281,13 @@ test('an app with one instance names its device, and one that opens elsewhere sa
   assert.equal(phone.note, 'Opens only on Pocket');
   assert.equal(phone.eyebrow, 'Watch app');
 });
+
+test('a step whose callback is missing does nothing', async () => {
+  const flow = createFortressFlow(() => ({ failed }));
+  flow.openLeave();
+  await flow.leave();
+  flow.openJoin();
+  flow.enter(0, TWELVE);
+  await flow.join();
+  assert.deepEqual(flow.state(), { window: { kind: 'join', words: TWELVE.split(' '), focus: 11 }, busy: null, error: null, refusal: null });
+});

@@ -2,17 +2,17 @@
 import { ref } from "vue";
 import { Badge, Button, Fortress, InstanceCard } from "@glimstone/vue";
 import { fortressTextEn as text } from "@glimstone/core";
-import { APPS, HOME, household, PERMISSIONS } from "../fortressData";
+import { APPS, HOME, household, instancesTab, PERMISSIONS } from "../fortressData";
 
 // Inside a fortress: the phrase shows after "letmein", Echo's permission
 // refuses to switch, and changing the phrase leaves Wanderer behind.
 const said = ref("Nothing yet");
 const permissions = ref(PERMISSIONS);
-const answers = household(
+const answers = instancesTab(household(
   (what) => (said.value = what),
   () => permissions.value,
   (next) => (permissions.value = next),
-);
+));
 </script>
 
 <template>

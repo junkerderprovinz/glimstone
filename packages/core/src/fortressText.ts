@@ -75,8 +75,20 @@ export interface FortressText {
   showPassword: string;
   hidePassword: string;
   phraseBody: string;
+  /** The name of the QR code beside the words. */
+  qrName: string;
+  /** The line under the QR code: which app scans it. */
+  scanHint: string;
   copy: string;
   copied: string;
+  /** The heading of the pairing settings, where the phrase changes and the app leaves. */
+  pairing: string;
+  /** The verb beside the phrase in the pairing settings. */
+  change: string;
+  changePhraseAbout: string;
+  /** The row in the pairing settings that leaves the fortress. */
+  leaveRow: string;
+  leaveAbout: string;
   changeTitle: string;
   changeBody: string;
   changeAway: string;

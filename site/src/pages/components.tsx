@@ -660,14 +660,30 @@ import { fortressText } from "@glimstone/core";
   phrasePassword
   hueStart={ownCards.length}
   onJoin={(words) => api.join(words)}
-  onLeave={() => api.leave()}
   onRemove={(id) => api.remove(id)}
   onShowPhrase={(password) => api.phrase(password)}
-  onChangePhrase={() => api.changePhrase()}
   onPermission={(id, on) => api.permission(id, on)}
 >
   {(remove) => ownCards.map((c, i) => <InstanceCard key={c.id} {...c} hueIndex={i} />)}
 </Fortress>`}
+      />
+      <H2>In the pairing settings</H2>
+      <p>
+        Changing the phrase and leaving the fortress are rare, so they stand in one card of the app's pairing settings
+        and nowhere else. <code>FortressPairing</code> is that card, each button behind a window that says what it does.
+      </p>
+      <Demo name="FortressPairing" />
+      <Usage
+        code={`import { FortressPairing } from "@glimstone/react";
+
+<FortressPairing
+  text={fortressText(lang)}
+  lang={lang}
+  app={{ id: "alpha", name: "Alpha" }}
+  pairedWith={status.pairedDevices}
+  onLeave={() => api.leave()}
+  onChangePhrase={() => api.changePhrase()}
+/>`}
       />
       <H2>Outside a fortress</H2>
       <p>
@@ -686,7 +702,8 @@ import { fortressText } from "@glimstone/core";
         <li>The fortress has no tab of its own. It lives in the Instances tab, which shows this app's instances first.</li>
         <li>The other apps and the permissions show only once the switch is on, and the switch is kept per device.</li>
         <li>An app joins with the phrase and nothing else. There is no field for an address anywhere.</li>
-        <li>Show phrase, Change phrase and Leave fortress stand in the corner, Show phrase as the one filled button.</li>
+        <li>Show phrase stands in the corner as the one filled button. Changing the phrase and leaving the fortress live in the pairing settings and nowhere else.</li>
+        <li>The phrase shows beside a QR code of its words, so a phone takes it by camera.</li>
         <li>Every card owns a rainbow position, so its buttons and switches take its hue.</li>
         <li>Permissions are on until switched off, one switch per pair. A refused switch shakes and stays as it was.</li>
         <li>The phrase shows only after the app's password where the app has one.</li>
@@ -695,6 +712,8 @@ import { fortressText } from "@glimstone/core";
       <ContractTable of="Fortress" />
       <H2>API</H2>
       <PropsTable of="Fortress" />
+      <H2>FortressPairing</H2>
+      <PropsTable of="FortressPairing" />
       <H2>InstanceCard</H2>
       <PropsTable of="InstanceCard" />
     </>

@@ -92,3 +92,8 @@ export function household(said: (what: string) => void, permissions: () => Fortr
     },
   };
 }
+
+/** The answers the Instances tab takes; leaving and changing the phrase belong to the pairing settings. */
+export function instancesTab({ onLeave, onChangePhrase, ...rest }: ReturnType<typeof household>) {
+  return rest;
+}

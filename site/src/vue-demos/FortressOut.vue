@@ -2,15 +2,15 @@
 import { ref } from "vue";
 import { Fortress, InstanceCard } from "@glimstone/vue";
 import { fortressTextEn as text } from "@glimstone/core";
-import { APPS, HOME, household, PERMISSIONS } from "../fortressData";
+import { APPS, HOME, household, instancesTab, PERMISSIONS } from "../fortressData";
 
 // Not in a fortress yet. The words in TWELVE join it, others are refused.
 const said = ref("Nothing yet");
-const answers = household(
+const answers = instancesTab(household(
   (what) => (said.value = what),
   () => PERMISSIONS,
   () => {},
-);
+));
 </script>
 
 <template>
