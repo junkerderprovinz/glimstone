@@ -105,6 +105,7 @@ defineExpose({ el });
   <TipWrap :on="disabled && !!view.tip" :show="bubble.show" :hide="bubble.hide">
     <component
       :is="link ? 'a' : 'button'"
+      data-glim="Button"
       v-bind="$attrs"
       :ref="attach"
       :href="link ? href : undefined"

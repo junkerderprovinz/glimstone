@@ -24,6 +24,7 @@ const view = computed(() => progressView(props.value, { paused: props.paused, fa
 
 <template>
   <span
+    data-glim="ProgressBar"
     role="progressbar"
     :aria-label="label"
     :aria-valuemin="view.percent === null ? undefined : 0"

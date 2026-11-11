@@ -15,7 +15,7 @@ defineProps<{
 </script>
 
 <template>
-  <span :class="['glim-tile', { 'glim-tile--quiet': quiet, 'glim-tile--ground': ground, 'glim-tile--active': active }]" aria-hidden="true">
+  <span data-glim="GlyphTile" :class="['glim-tile', { 'glim-tile--quiet': quiet, 'glim-tile--ground': ground, 'glim-tile--active': active }]" aria-hidden="true">
     <component :is="glyph" />
   </span>
 </template>

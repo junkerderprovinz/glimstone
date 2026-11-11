@@ -17,5 +17,5 @@ const classes = computed(() => pillClassName(props.tone));
 </script>
 
 <template>
-  <span :class="classes"><slot /></span>
+  <span data-glim="Pill" :class="classes"><slot /></span>
 </template>

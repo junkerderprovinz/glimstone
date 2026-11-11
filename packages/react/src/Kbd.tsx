@@ -4,5 +4,5 @@ import type { ReactNode } from "react";
 // The words are the app's, so a German app writes "Strg".
 
 export function Kbd({ children, className }: { children: ReactNode; className?: string }) {
-  return <kbd className={className ? `glim-kbd ${className}` : "glim-kbd"}>{children}</kbd>;
+  return <kbd data-glim="Kbd" className={className ? `glim-kbd ${className}` : "glim-kbd"}>{children}</kbd>;
 }

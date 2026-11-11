@@ -8,7 +8,7 @@ defineProps<{ title: string }>();
 </script>
 
 <template>
-  <div class="glim-notice">
+  <div data-glim="UnavailableNotice" :data-glim-title="title" class="glim-notice">
     <p class="glim-notice-title">{{ title }}</p>
     <p class="glim-notice-reason"><slot /></p>
     <div v-if="$slots.action" class="glim-notice-action"><slot name="action" /></div>

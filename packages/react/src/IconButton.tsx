@@ -25,9 +25,10 @@ export interface IconButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonEle
 const reach = (e: SyntheticEvent<HTMLElement>) => takePageHue(e.currentTarget);
 
 export function IconButton({ tip, glyph, pressed, absent, className, ...rest }: IconButtonProps) {
-  if (absent) return <span className="glim-icon-btn-gap" aria-hidden="true" />;
+  if (absent) return <span data-glim="IconButton" className="glim-icon-btn-gap" aria-hidden="true" />;
   return (
     <IconTipButton
+      data-glim="IconButton"
       {...rest}
       tip={tip}
       ariaPressed={pressed}

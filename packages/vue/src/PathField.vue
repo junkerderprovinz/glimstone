@@ -53,7 +53,7 @@ async function ask() {
 </script>
 
 <template>
-  <span ref="box" :class="['glim-path', fieldWidthClass(width), $attrs.class]" :style="$attrs.style as StyleValue">
+  <span ref="box" data-glim="PathField" :class="['glim-path', fieldWidthClass(width), $attrs.class]" :style="$attrs.style as StyleValue">
     <input
       ref="input"
       v-model="value"

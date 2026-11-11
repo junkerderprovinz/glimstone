@@ -69,7 +69,7 @@ export function PathField({
   }
 
   return (
-    <span ref={box} className={["glim-path", fieldWidthClass(width), className].filter(Boolean).join(" ")} style={style}>
+    <span data-glim="PathField" ref={box} className={["glim-path", fieldWidthClass(width), className].filter(Boolean).join(" ")} style={style}>
       <input
         spellCheck={false}
         autoComplete="off"

@@ -17,7 +17,7 @@ export interface GlyphTileProps {
 export function GlyphTile({ glyph, quiet, ground, active, className }: GlyphTileProps) {
   const classes = ["glim-tile", quiet && "glim-tile--quiet", ground && "glim-tile--ground", active && "glim-tile--active", className].filter(Boolean).join(" ");
   return (
-    <span className={classes} aria-hidden="true">
+    <span data-glim="GlyphTile" className={classes} aria-hidden="true">
       {glyph}
     </span>
   );

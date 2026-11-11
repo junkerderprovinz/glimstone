@@ -68,7 +68,7 @@ const api = computed(() => combobox.connect(service, normalizeProps));
 </script>
 
 <template>
-  <div v-bind="api.getRootProps()" class="glim-combobox">
+  <div data-glim="Combobox" v-bind="api.getRootProps()" class="glim-combobox">
     <label v-bind="api.getLabelProps()" :class="hideLabel || label === undefined ? 'glim-sr-only' : 'glim-field-label'">{{ name }}</label>
     <div v-bind="api.getControlProps()" class="glim-combobox-control">
       <input v-bind="api.getInputProps()" class="glim-combobox-input" />

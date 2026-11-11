@@ -29,6 +29,7 @@ export function Meter({ value, label, size = "medium", threshold, quiet, valueTe
   return (
     <>
       <span
+        data-glim="Meter"
         ref={tip.ref}
         {...tip.handlers}
         role={busy ? "progressbar" : "meter"}

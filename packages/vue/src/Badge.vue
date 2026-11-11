@@ -60,12 +60,12 @@ const style = computed(() => (hueOn.value ? hueVars(props.hueIndex!) : undefined
 </script>
 
 <template>
-  <IconTipButton v-if="as === 'button' && tip !== undefined" :tip="tip" :disabled="disabled" :class="classes" :style="style">
+  <IconTipButton v-if="as === 'button' && tip !== undefined" data-glim="Badge" :tip="tip" :disabled="disabled" :class="classes" :style="style">
     <slot />
   </IconTipButton>
-  <button v-else-if="as === 'button'" type="button" :disabled="disabled" :class="classes" :style="style">
+  <button v-else-if="as === 'button'" data-glim="Badge" type="button" :disabled="disabled" :class="classes" :style="style">
     <slot />
   </button>
-  <a v-else-if="as === 'a'" :class="classes" :style="style"><slot /></a>
-  <span v-else :class="classes" :style="style"><slot /></span>
+  <a v-else-if="as === 'a'" data-glim="Badge" :class="classes" :style="style"><slot /></a>
+  <span v-else data-glim="Badge" :class="classes" :style="style"><slot /></span>
 </template>

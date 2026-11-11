@@ -250,6 +250,7 @@ export function ContextMenu({ x, y, items, above = false, label, id, opener, onC
     <>
       {createPortal(
         <div
+          data-glim="ContextMenu"
           ref={menu}
           role="menu"
           id={id}

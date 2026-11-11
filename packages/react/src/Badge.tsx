@@ -107,13 +107,14 @@ export function Badge({
   if (as === "button") {
     if (tip !== undefined) {
       return (
-        <IconTipButton tip={tip} onClick={onClick} disabled={disabled} style={hueStyle} className={classes}>
+        <IconTipButton data-glim="Badge" tip={tip} onClick={onClick} disabled={disabled} style={hueStyle} className={classes}>
           {children}
         </IconTipButton>
       );
     }
     return (
       <button
+        data-glim="Badge"
         type="button"
         onClick={onClick}
         disabled={disabled}
@@ -129,14 +130,14 @@ export function Badge({
 
   if (as === "a") {
     return (
-      <a href={href} target={target} rel={rel} title={title} aria-label={ariaLabel} style={hueStyle} className={classes}>
+      <a data-glim="Badge" href={href} target={target} rel={rel} title={title} aria-label={ariaLabel} style={hueStyle} className={classes}>
         {children}
       </a>
     );
   }
 
   return (
-    <span title={title} aria-label={ariaLabel} style={hueStyle} className={classes}>
+    <span data-glim="Badge" title={title} aria-label={ariaLabel} style={hueStyle} className={classes}>
       {children}
     </span>
   );

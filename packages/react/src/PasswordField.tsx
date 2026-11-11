@@ -24,7 +24,7 @@ export function PasswordField({ width, eyeAttrs, text = { show: "Show", hide: "H
   const [shown, setShown] = useState(false);
   const name = useFieldName(ariaLabel);
   return (
-    <span className={["glim-secret", fieldWidthClass(width), className].filter(Boolean).join(" ")}>
+    <span data-glim="PasswordField" className={["glim-secret", fieldWidthClass(width), className].filter(Boolean).join(" ")}>
       <input
         autoComplete="current-password"
         spellCheck={false}

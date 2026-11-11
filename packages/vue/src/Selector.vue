@@ -200,6 +200,7 @@ function onKeydown(e: KeyboardEvent) {
        the attribute, and with it the colour countSelector set on the track. -->
   <div
     ref="track"
+    data-glim="Selector"
     :role="listed ? undefined : strip.role"
     :aria-label="listed ? undefined : name"
     :aria-orientation="listed || strip.role === 'group' ? undefined : orientation"

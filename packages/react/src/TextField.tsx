@@ -20,7 +20,7 @@ export interface TextFieldProps extends Omit<InputHTMLAttributes<HTMLInputElemen
 
 export function TextField({ label, mono, width, className, type = "text", ...rest }: TextFieldProps) {
   const name = useFieldName(label);
-  return <input aria-label={name} {...rest} type={type} className={`${textFieldClass({ width, mono })} ${className ?? ""}`.trim()} />;
+  return <input data-glim="TextField" aria-label={name} {...rest} type={type} className={`${textFieldClass({ width, mono })} ${className ?? ""}`.trim()} />;
 }
 
 export interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -35,5 +35,5 @@ export interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
 
 export function TextArea({ label, mono, width, className, ...rest }: TextAreaProps) {
   const name = useFieldName(label);
-  return <textarea aria-label={name} {...rest} className={`${textFieldClass({ width, mono, area: true })} ${className ?? ""}`.trim()} />;
+  return <textarea data-glim="TextArea" aria-label={name} {...rest} className={`${textFieldClass({ width, mono, area: true })} ${className ?? ""}`.trim()} />;
 }

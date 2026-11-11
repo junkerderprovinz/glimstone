@@ -24,6 +24,7 @@ const checked = defineModel<boolean>({ required: true });
 
 <template>
   <button
+    data-glim="Checkbox"
     type="button"
     role="checkbox"
     :aria-checked="checked"

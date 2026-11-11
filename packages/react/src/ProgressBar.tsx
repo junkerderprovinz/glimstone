@@ -21,6 +21,7 @@ export function ProgressBar({ value, label, paused, failed, valueText, className
   const view = progressView(value, { paused, failed });
   return (
     <span
+      data-glim="ProgressBar"
       role="progressbar"
       aria-label={label}
       aria-valuemin={view.percent === null ? undefined : 0}

@@ -28,7 +28,7 @@ const row = shallowRef<HTMLElement | null>(null);
 </script>
 
 <template>
-  <div ref="row" :class="['glim-field-row', { 'glim-field-row--wide': wide }]">
+  <div ref="row" data-glim="FieldRow" :class="['glim-field-row', { 'glim-field-row--wide': wide }]">
     <span class="glim-field-row-name">
       <span class="glim-field-row-label" @click="pressRowControl(row!)"><slot name="label">{{ label }}</slot></span>
       <InfoBubble v-if="hint" :tip="hint" />

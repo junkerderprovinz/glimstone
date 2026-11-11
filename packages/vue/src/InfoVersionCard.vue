@@ -29,7 +29,7 @@ function open(e: MouseEvent, href: string) {
 </script>
 
 <template>
-  <Card :title="text.title" :hint="text.hint" :hue-index="hueIndex">
+  <Card data-glim="InfoVersionCard" :title="text.title" :hint="text.hint" :hue-index="hueIndex">
     <ul class="glim-version-rows">
       <li v-for="row in rows" :key="row.name" class="glim-version-row">
         <span class="glim-version-name">

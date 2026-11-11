@@ -25,7 +25,7 @@ export function EmptyState({
   nested?: boolean;
 }) {
   return (
-    <div className={nested ? "glim-empty" : "glim-card glim-empty"}>
+    <div data-glim="EmptyState" data-glim-title={title} className={nested ? "glim-empty" : "glim-card glim-empty"}>
       {glyph && (
         <span className="glim-empty-glyph" aria-hidden="true">
           {glyph}

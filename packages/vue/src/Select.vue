@@ -71,6 +71,6 @@ const shared = computed(() => ({
 </script>
 
 <template>
-  <MenuSelect v-if="hasSubmenu(runs)" v-bind="shared" @change="model = $event" />
-  <ListSelect v-else v-bind="shared" @change="model = $event" />
+  <MenuSelect v-if="hasSubmenu(runs)" data-glim="Select" v-bind="shared" @change="model = $event" />
+  <ListSelect v-else data-glim="Select" v-bind="shared" @change="model = $event" />
 </template>

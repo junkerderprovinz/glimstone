@@ -27,7 +27,7 @@ export function SubCard({
 }) {
   const titleId = useId();
   return (
-    <section className={`glim-subcard${title ? " glim-subcard--titled" : ""}`} aria-labelledby={title ? titleId : undefined}>
+    <section data-glim="SubCard" data-glim-title={title} className={`glim-subcard${title ? " glim-subcard--titled" : ""}`} aria-labelledby={title ? titleId : undefined}>
       {/* The id is on the words alone, or the bubble's text would join the
           group's name. */}
       {title && (

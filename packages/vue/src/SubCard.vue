@@ -18,7 +18,7 @@ const titleId = useId();
 </script>
 
 <template>
-  <section :class="['glim-subcard', { 'glim-subcard--titled': title }]" :aria-labelledby="title ? titleId : undefined">
+  <section data-glim="SubCard" :data-glim-title="title" :class="['glim-subcard', { 'glim-subcard--titled': title }]" :aria-labelledby="title ? titleId : undefined">
     <!-- The id is on the words alone, or the bubble's text would join the
          group's name. -->
     <h3 v-if="title" class="glim-panel-heading">

@@ -72,7 +72,7 @@ export function Tree({ label, load, value, onChange, onActivate, open, onOpenCha
   }
 
   return (
-    <div ref={tree} role="tree" aria-label={label} className="glim-tree">
+    <div data-glim="Tree" ref={tree} role="tree" aria-label={label} className="glim-tree">
       {rows.map((r, i) => (
         <div
           {...r.node.attrs}

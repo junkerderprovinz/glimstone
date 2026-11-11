@@ -55,7 +55,7 @@ const attrs = (p: ReadmePart) =>
 </script>
 
 <template>
-  <div ref="root" :class="readmeUnitClass(brand, parts.length, note, soon)">
+  <div ref="root" data-glim="ReadmeButton" :class="readmeUnitClass(brand, parts.length, note, soon)">
     <component :is="tag(p)" v-for="(p, i) in parts" :key="i" v-bind="attrs(p)" :aria-label="label(p)" :class="readmePartClass(i, soon)">
       <span v-if="i === 0 && $slots.art" class="glim-readme-btn-art" aria-hidden="true"><slot name="art" /></span>
       <template v-else>

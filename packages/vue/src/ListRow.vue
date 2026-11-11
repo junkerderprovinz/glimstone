@@ -24,6 +24,7 @@ function press(e: KeyboardEvent) {
 
 <template>
   <div
+    data-glim="ListRow"
     role="group"
     :aria-label="name"
     :tabindex="opens ? 0 : undefined"

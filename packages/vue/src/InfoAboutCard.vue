@@ -11,7 +11,7 @@ defineProps<InfoAboutCardProps>();
 </script>
 
 <template>
-  <Card :title="text.title" :hue-index="hueIndex">
+  <Card data-glim="InfoAboutCard" :title="text.title" :hue-index="hueIndex">
     <p class="glim-info-text">{{ text.body }}</p>
     <p class="glim-info-text">{{ text.coffee }}</p>
     <div class="glim-readme-btn-rows glim-about-give">

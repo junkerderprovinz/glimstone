@@ -146,6 +146,7 @@ export function Button({
           <button> emits no mouse events. */}
       {tooltip.wrap(
         <Element
+          data-glim="Button"
           {...rest}
           {...own}
           ref={mergeRefs(ref, tooltip.ref)}

@@ -21,7 +21,7 @@ withDefaults(
 </script>
 
 <template>
-  <div :class="nested ? 'glim-empty' : 'glim-card glim-empty'">
+  <div data-glim="EmptyState" :data-glim-title="title" :class="nested ? 'glim-empty' : 'glim-card glim-empty'">
     <span v-if="glyph" class="glim-empty-glyph" aria-hidden="true">
       <component :is="glyph" />
     </span>

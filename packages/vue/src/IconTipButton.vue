@@ -26,6 +26,7 @@ const bubble = useTipBubble(() => props.tip, () => props.disabled);
   <TipWrap :on="disabled" :show="bubble.show" :hide="bubble.hide">
     <component
       :is="href && !disabled ? 'a' : 'button'"
+      data-glim="IconTipButton"
       v-bind="$attrs"
       :ref="(el: unknown) => (bubble.trigger.value = el as HTMLElement | null)"
       :href="disabled ? undefined : href"

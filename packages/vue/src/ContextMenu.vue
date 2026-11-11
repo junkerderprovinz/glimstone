@@ -161,6 +161,7 @@ function hover(e: MouseEvent) {
     <div
       :id="id"
       ref="menu"
+      data-glim="ContextMenu"
       role="menu"
       :aria-label="label"
       class="glim-menu"

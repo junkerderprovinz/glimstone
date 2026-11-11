@@ -20,5 +20,5 @@ defineExpose({ input });
 </script>
 
 <template>
-  <input ref="input" v-model="value" type="text" :aria-label="name" :class="classes" />
+  <input data-glim="TextField" ref="input" v-model="value" type="text" :aria-label="name" :class="classes" />
 </template>

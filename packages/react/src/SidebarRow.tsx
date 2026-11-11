@@ -47,6 +47,7 @@ export function SidebarRow({ label, glyph, href, active = false, hueIndex, count
   const viewStyle = { ...view.style, ...style } as CSSProperties;
   const link = (
     <Element
+      data-glim={framed ? undefined : "SidebarRow"}
       {...rest}
       {...own}
       ref={tooltip.ref}
@@ -71,7 +72,7 @@ export function SidebarRow({ label, glyph, href, active = false, hueIndex, count
   return (
     <>
       {framed ? (
-        <div className={`${view.className} glim-nav-row--slots ${className}`.trim()} style={viewStyle}>
+        <div data-glim="SidebarRow" className={`${view.className} glim-nav-row--slots ${className}`.trim()} style={viewStyle}>
           {before && <span className="glim-nav-row-slot">{before}</span>}
           {link}
           {after && <span className="glim-nav-row-slot">{after}</span>}

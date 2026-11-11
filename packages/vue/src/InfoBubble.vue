@@ -16,6 +16,7 @@ const bubble = useTipBubble(() => props.tip);
        which takes focus and closes the bubble at once; preventing the default
        keeps the focus the span took on mousedown. -->
   <span
+    data-glim="InfoBubble"
     :ref="(el) => (bubble.trigger.value = el as HTMLElement | null)"
     :aria-label="tip"
     :aria-describedby="bubble.describedBy.value"

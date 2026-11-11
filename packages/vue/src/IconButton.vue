@@ -25,8 +25,8 @@ function reach(e: Event) {
 </script>
 
 <template>
-  <span v-if="absent" class="glim-icon-btn-gap" aria-hidden="true" />
-  <IconTipButton v-else :tip="tip" :href="href" :aria-pressed="pressed" :disabled="disabled" class="glim-btn-bare glim-icon-btn" @pointerenter="reach" @focusin="reach">
+  <span v-if="absent" data-glim="IconButton" class="glim-icon-btn-gap" aria-hidden="true" />
+  <IconTipButton v-else data-glim="IconButton" :tip="tip" :href="href" :aria-pressed="pressed" :disabled="disabled" class="glim-btn-bare glim-icon-btn" @pointerenter="reach" @focusin="reach">
     <component :is="glyph" />
   </IconTipButton>
 </template>

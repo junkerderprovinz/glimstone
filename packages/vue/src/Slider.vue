@@ -41,7 +41,7 @@ const api = computed(() => slider.connect(service, normalizeProps));
 </script>
 
 <template>
-  <div v-bind="api.getRootProps()" class="glim-slider">
+  <div data-glim="Slider" v-bind="api.getRootProps()" class="glim-slider">
     <div class="glim-slider-head">
       <label v-bind="api.getLabelProps()" :class="label === undefined ? 'glim-sr-only' : 'glim-field-label'">{{ name }}</label>
       <output v-bind="api.getValueTextProps()" class="glim-slider-value">{{ format(api.value[0]!) }}</output>

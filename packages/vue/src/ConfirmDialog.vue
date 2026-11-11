@@ -31,6 +31,8 @@ defineExpose({ card });
 <template>
   <div class="glim-modal-backdrop" @click.self="emit('cancel')">
     <div
+      data-glim="ConfirmDialog"
+      :data-glim-title="title"
       ref="card"
       role="dialog"
       aria-modal="true"

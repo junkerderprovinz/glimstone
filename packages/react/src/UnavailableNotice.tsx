@@ -27,7 +27,7 @@ export function UnavailableNotice({
   action?: ReactNode;
 }) {
   return (
-    <div className="glim-notice">
+    <div data-glim="UnavailableNotice" data-glim-title={title} className="glim-notice">
       <p className="glim-notice-title">{title}</p>
       <p className="glim-notice-reason">{reason}</p>
       {action ? <div className="glim-notice-action">{action}</div> : null}
