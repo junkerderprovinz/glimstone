@@ -2,6 +2,20 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+The ink on an accent fill stays the computed contrast ink in every case: a switch that is on draws its knob in it, and an app's own reset of links and buttons no longer takes it off a filled button, segment, tile or rail row.
+
+**Adopting apps:**
+
+- **Your own reset:** a rule such as `a, button { color: inherit }` outside any cascade layer no longer reaches the colour of a GlimStone button, badge, selector segment or tile, rail row or donation choice. An app that keeps its own copy of the tokens takes the `revert-layer` rule beside the button and the switch's knob rule from `tokens.css`.
+- **Flutter:** nothing changes there.
+
+## 🐛 Fixed
+
+- **A switch that is on draws its knob in `--accent-contrast`.** On the light theme the knob was the pale ground, 1.46:1 on Sunflower and at most 2.77:1 on the presets. It now measures 5.95:1 to 11.24:1.
+- **The ink on a filled link or button survives an app's reset.** The component rules sit in a cascade layer, so an unlayered `a, button { color: inherit }` put the page's text colour on a picked segment, a picked tile, an active rail row and an accent button, as low as 1.12:1. They take their colour back from the layer.
+
 ## 4.3.6 - 2026-11-11
 
 The core compiles under strict index checks, so an app that turns on `noUncheckedIndexedAccess` can take its files over unchanged.

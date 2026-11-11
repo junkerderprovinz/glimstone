@@ -3171,7 +3171,12 @@ body {
     translate: 3px 0;
     transition: translate 150ms cubic-bezier(0.4, 0, 0.2, 1);
   }
-  .glim-toggle-track[aria-checked="true"] .glim-toggle-thumb { translate: 18px 0; }
+  /* On the accent the thumb takes the fill's ink, or the light ramp's pale
+     ground would vanish into a yellow or a green. */
+  .glim-toggle-track[aria-checked="true"] .glim-toggle-thumb {
+    background-color: var(--accent-contrast);
+    translate: 18px 0;
+  }
   /* The flex track already mirrors the thumb's rest position under RTL, so the
      shift turns round with it. */
   .glim-toggle-thumb:dir(rtl) { translate: -3px 0; }
@@ -5103,12 +5108,14 @@ body {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
-/* An app's own rule for links outranks the layer, so a link with a button's look
-   takes its colour back from there. */
-a:is(.glim-btn, .glim-icon-btn) {
+/* An app's own rule for links or buttons, such as a reset's
+   `a, button { color: inherit }`, stands outside any layer and so outranks every
+   rule in one. These take their colour back from the layer, where the ink on a
+   filled one is the computed contrast (rule 45). */
+:is(a, button):is(.glim-btn, .glim-icon-btn, .glim-badge, .glim-sel-seg, .glim-sel-tile, .glim-nav-row, .glim-give-network, .glim-give-coin) {
   color: revert-layer;
-  text-decoration: none;
 }
+a:is(.glim-btn, .glim-icon-btn) { text-decoration: none; }
 /* Under the message, at its end. The stage's floor is for a row of buttons. */
 .glim-toast-action {
   align-self: flex-end;
