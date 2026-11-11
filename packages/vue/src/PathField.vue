@@ -39,7 +39,7 @@ defineExpose({ input });
 
 const box = shallowRef<HTMLElement | null>(null);
 const tight = ref(false);
-const watcher = new ResizeObserver(([entry]) => (tight.value = entry.contentRect.width < PATH_ROOM_PX));
+const watcher = new ResizeObserver(([entry]) => (tight.value = entry!.contentRect.width < PATH_ROOM_PX));
 onMounted(() => watcher.observe(box.value!));
 onBeforeUnmount(() => watcher.disconnect());
 

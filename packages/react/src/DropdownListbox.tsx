@@ -162,7 +162,7 @@ export function DropdownListbox({
     if (!open || !pos || focusedOnOpen.current) return;
     const opts = options();
     if (opts.length === 0) return;
-    const active = opts.find((o) => o.getAttribute("aria-selected") === "true") ?? opts[0];
+    const active = opts.find((o) => o.getAttribute("aria-selected") === "true") ?? opts[0]!;
     focusedOnOpen.current = true;
     active.scrollIntoView?.({ block: "nearest" });
     active.focus();
@@ -196,8 +196,9 @@ export function DropdownListbox({
       const dir = e.key === "ArrowDown" ? 1 : -1;
       next = at < 0 ? (dir === 1 ? 0 : opts.length - 1) : (at + dir + opts.length) % opts.length;
     }
-    opts[next].scrollIntoView?.({ block: "nearest" });
-    opts[next].focus();
+    const option = opts[next]!;
+    option.scrollIntoView?.({ block: "nearest" });
+    option.focus();
   }
 
   if (!open) return null;

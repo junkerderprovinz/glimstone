@@ -55,7 +55,7 @@ export function PathField({
   const box = useRef<HTMLSpanElement>(null);
   const [tight, setTight] = useState(false);
   useEffect(() => {
-    const watcher = new ResizeObserver(([entry]) => setTight(entry.contentRect.width < PATH_ROOM_PX));
+    const watcher = new ResizeObserver(([entry]) => setTight(entry!.contentRect.width < PATH_ROOM_PX));
     watcher.observe(box.current!);
     return () => watcher.disconnect();
   }, []);

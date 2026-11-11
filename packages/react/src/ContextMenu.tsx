@@ -197,7 +197,7 @@ export function ContextMenu({ x, y, items, above = false, label, id, opener, onC
   }, [sub]);
 
   function pick(list: MenuEntry[], at: number) {
-    const entry = list[at];
+    const entry = list[at]!;
     if (entry === "-") return;
     if (isMenuHead(entry)) {
       finish(true);
@@ -240,7 +240,7 @@ export function ContextMenu({ x, y, items, above = false, label, id, opener, onC
     const row = (e.target as Element).closest<HTMLElement>("[data-row]");
     if (!row) return;
     const at = Number(row.dataset.row);
-    const entry = rows[at];
+    const entry = rows[at]!;
     const opens = entry !== "-" && !isMenuHead(entry) && !!entry.sub && !entry.disabled;
     if (opens && sub?.at !== at) setSub({ at, focus: false });
     else if (!opens && sub) setSub(null);

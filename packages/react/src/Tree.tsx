@@ -55,7 +55,7 @@ export function Tree({ label, load, value, onChange, onActivate, open, onOpenCha
 
   function keys(e: KeyboardEvent, at: number) {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
-    const id = rows[at].node.id;
+    const id = rows[at]!.node.id;
     if (e.key === " " || e.key === "Enter") {
       e.preventDefault();
       onChange(id);

@@ -214,7 +214,7 @@ function onKeydown(e: KeyboardEvent) {
       :index="i"
       :strip="strip"
       :on="isOn(item.id)"
-      :disabled="disabledFlags[i]"
+      :disabled="disabledFlags[i]!"
       :roved="i === roved"
       :listed="listed"
       :share="orientation === 'vertical' ? {} : flex.segment"

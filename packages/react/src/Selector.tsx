@@ -237,7 +237,7 @@ export function Selector<M extends SelectMode = "one", V extends string | number
           index={i}
           strip={strip}
           on={isOn(item.id)}
-          disabled={disabledFlags[i]}
+          disabled={disabledFlags[i]!}
           roved={i === roved}
           listed={listed}
           share={vertical ? undefined : (flex.segment as CSSProperties)}

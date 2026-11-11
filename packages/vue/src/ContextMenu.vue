@@ -105,7 +105,7 @@ watch(
 );
 
 function pick(list: MenuEntry[], at: number) {
-  const entry = list[at];
+  const entry = list[at]!;
   if (entry === "-") return;
   if (isMenuHead(entry)) {
     finish(true);
@@ -149,7 +149,7 @@ function hover(e: MouseEvent) {
   const row = (e.target as Element).closest<HTMLElement>("[data-row]");
   if (!row) return;
   const at = Number(row.dataset.row);
-  const entry = rows.value[at];
+  const entry = rows.value[at]!;
   const opens = entry !== "-" && !isMenuHead(entry) && !!entry.sub && !entry.disabled;
   if (opens && sub.value?.at !== at) sub.value = { at, focus: false };
   else if (!opens && sub.value) sub.value = null;

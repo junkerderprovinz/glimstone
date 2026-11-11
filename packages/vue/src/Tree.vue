@@ -41,7 +41,7 @@ function toggle(id: string) {
 
 function keys(e: KeyboardEvent, at: number) {
   if (e.ctrlKey || e.metaKey || e.altKey) return;
-  const id = rows.value[at].node.id;
+  const id = rows.value[at]!.node.id;
   if (e.key === " " || e.key === "Enter") {
     e.preventDefault();
     chosen.value = id;

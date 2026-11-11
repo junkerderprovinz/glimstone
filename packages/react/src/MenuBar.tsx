@@ -83,9 +83,9 @@ export function MenuBar({ label, menus, ref, className }: MenuBarProps) {
           key={open.at}
           x={open.x}
           y={open.y}
-          items={menus[open.at].items}
-          label={menus[open.at].label}
-          id={menus[open.at].id}
+          items={menus[open.at]!.items}
+          label={menus[open.at]!.label}
+          id={menus[open.at]!.id}
           opener={buttons.current[open.at]}
           onClose={() => setOpen(null)}
           onStep={(d) => show((open.at + d + count) % count)}

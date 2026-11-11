@@ -29,7 +29,7 @@ export function Slider({ label, value, onChange, min, max, step = 1, format, dis
     max,
     step,
     disabled,
-    onValueChange: (d) => onChange(d.value[0]),
+    onValueChange: (d) => onChange(d.value[0]!),
     getAriaValueText: (d) => format(d.value),
   });
   const api = slider.connect(service, normalizeProps);
@@ -41,7 +41,7 @@ export function Slider({ label, value, onChange, min, max, step = 1, format, dis
           {name}
         </label>
         <output {...api.getValueTextProps()} className="glim-slider-value">
-          {format(api.value[0])}
+          {format(api.value[0]!)}
         </output>
       </div>
       <div {...api.getControlProps()} className="glim-slider-control">
