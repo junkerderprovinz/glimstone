@@ -14,6 +14,7 @@ All notable changes to the GlimStone design language are documented here. Versio
 - **`Popover`, a small panel beside its trigger** in the browser's top layer, through the `popover` attribute. CSS anchor positioning places it under the trigger, or above where there is no room, and `computeBubblePosition` does the same in a browser without it. Escape and a press beside it close it.
 - **`Sheet`, a panel at the end edge** for the details of a row. It is a `<dialog>` shown modal, a card inset by the page gutter, and it rises from the bottom on a phone. Its foot works as a window's, and it slides in by `--motion-sheet-shift` over `--motion-sheet-dur`.
 - **`portalTarget()`** says where a bubble, a menu or a list renders: into an open sheet, since `<body>` lies under the top layer. Every component that portals asks it.
+- **`ListTable`, the list of a list page with its tools inside it.** A click on a heading sorts and sets `aria-sort`, a ▾ beside a column filters by its values in a `Popover`, typing floats a search inside the list, and rows are picked as in a file manager, with Ctrl, Shift, the arrows, Space and Ctrl+A. Enter or a double click opens a row. The rules are plain functions in `listModel.ts` in the core: `nextSort`, `sortRows`, `filterRows`, `searchRows`, `selectByClick`, `selectByKey` and `listKey`.
 
 ## ⚡ Improved
 

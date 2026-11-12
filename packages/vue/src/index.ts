@@ -22,6 +22,7 @@ export { default as InfoTile } from "./InfoTile.vue";
 export { default as InfoVersionCard } from "./InfoVersionCard.vue";
 export { default as Kbd } from "./Kbd.vue";
 export { default as ListRow } from "./ListRow.vue";
+export { default as ListTable } from "./ListTable.vue";
 export { default as MenuBar } from "./MenuBar.vue";
 export { default as Meter } from "./Meter.vue";
 export { default as NumberField } from "./NumberField.vue";
@@ -57,7 +58,7 @@ export type { SelectEntry, SelectGroup, SelectOption, SelectSubmenu } from "./se
 export type { SelectorItem } from "./selectorItem";
 export type { MenuBarMenu, MenuEntry, MenuHead, MenuItem, TreeNode, WindowAction } from "./windowParts";
 export type { ResetAnswer, SignInAnswer, SignInText } from "@glimstone/core";
-export type { BusyRingSize, ButtonSize, ColorName, ColorPickerPanelText, FieldWidth, MeterSize, PillTone, SelectRows, TableColumn, ToastAction, WindowSize } from "@glimstone/core";
+export type { BusyRingSize, ButtonSize, ColorName, ColorPickerPanelText, FieldWidth, ListColumn, ListTableText, MeterSize, PillTone, SelectRows, TableColumn, ToastAction, WindowSize } from "@glimstone/core";
 export { selectorTabId } from "@glimstone/core";
 export { useTipBubble, type TipBubble } from "./tipBubble";
 export { GLIMSTONE_VERSION } from "@glimstone/core";

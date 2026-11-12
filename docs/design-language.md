@@ -830,6 +830,8 @@ Two components show that the app is still working on something: `BusyRing` and `
 
 One form serves every list page (backups, restore, anomalies), so a person who has learned one has learned all of them. The tools live in the list itself, not on the page.
 
+It ships as `ListTable`, with its rules in `listModel.ts` in the core. It is an APG grid whose rows can be picked: each row has one stop for the keyboard, so Tab enters the list once and leaves it again, and rows are picked as in a file manager. A click picks one, Ctrl adds or drops one, Shift takes the range from the last click. The arrows, Home and End move, Shift with them extends, Space picks, Ctrl+A takes all, and Enter or a double click opens the row's object. The sorted heading alone carries `aria-sort`, and words sort as a person reads them, so 2 comes before 10.
+
 **A list page has exactly two areas: the cards on top and the list below.** The cards include a totals card that counts what the list holds. Nothing else stands between them: no tool button above the list, on a card or on a card's edge. Sorting, filtering, searching and the actions on many rows all live in the list, in its header and in its menus. This replaced a row of Filter, Sort and Search buttons over the lists.
 
 - **Sorting is a click on the column header.** There is no Sort button.

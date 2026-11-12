@@ -11,6 +11,7 @@ import { BehaviourGuide, ComboboxPage, SelectPage, SliderPage } from "./pages/za
 import { ColourEngine, LabelEngine, MotionEngine, ShapeEngine } from "./pages/engines";
 import { BusyRingPage, SkeletonRowPage } from "./pages/loading";
 import { PopoverPage, SheetPage } from "./pages/overlay";
+import { ListTablePage } from "./pages/lists";
 import {
   BadgePage,
   ButtonPage,
@@ -91,6 +92,7 @@ const PAGES: Page[] = [
   { path: "/components/info-bubble", title: "InfoBubble", group: "Components", Comp: InfoBubblePage },
   { path: "/components/kbd", title: "Kbd", group: "Components", Comp: KbdPage },
   { path: "/components/list-row", title: "ListRow", group: "Components", Comp: ListRowPage },
+  { path: "/components/list-table", title: "ListTable", group: "Components", Comp: ListTablePage },
   { path: "/components/menu-bar", title: "MenuBar", group: "Components", Comp: MenuBarPage },
   { path: "/components/meter", title: "Meter", group: "Components", Comp: MeterPage },
   { path: "/components/number-field", title: "NumberField", group: "Components", Comp: NumberFieldPage },

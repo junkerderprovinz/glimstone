@@ -5393,3 +5393,116 @@ a:is(.glim-btn, .glim-icon-btn) {
     }
   }
 }
+
+/* The list of a list page (ListTable; listModel.ts). A row reads as a ListRow:
+   the same height, a hover a step up the ramp, and a picked row filled with the
+   accent wash (rule 5). The header's words are buttons that sort, with a ▾
+   beside a column that filters, and a line under the header explains both
+   while the pointer is on it. */
+@layer components {
+  .glim-list {
+    position: relative;
+    min-width: 0;
+  }
+  .glim-list-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: var(--text-body);
+  }
+  .glim-list-th {
+    height: 2.25rem;
+    padding: 0 0.25rem;
+    font-size: var(--text-meta);
+    font-weight: 500;
+    text-align: start;
+    color: var(--carbon-text-muted);
+  }
+  .glim-list-th-box {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.1rem;
+  }
+  .glim-list-th.glim-table-end .glim-list-th-box { flex-direction: row-reverse; }
+  .glim-list-sort,
+  .glim-list-filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    min-height: 1.75rem;
+    padding: 0 0.4rem;
+    border: 0;
+    border-radius: var(--radius-control);
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+  }
+  .glim-list-filter { padding: 0 0.3rem; }
+  .glim-list-sort > svg,
+  .glim-list-filter > svg {
+    width: 0.625rem;
+    height: 0.625rem;
+  }
+  .glim-list-sort-mark { flex: none; }
+  .glim-list-sort-mark--asc { rotate: 180deg; }
+  .glim-list-th[aria-sort] .glim-list-sort { color: var(--carbon-text); }
+  .glim-list-filter[aria-pressed="true"] {
+    background-color: var(--accent-soft);
+    color: var(--accent-ink);
+  }
+  @media (hover: hover) {
+    :is(.glim-list-sort, .glim-list-filter):hover { background-color: var(--carbon-hover); color: var(--carbon-text); }
+  }
+  .glim-list-tr { cursor: default; }
+  .glim-list-tr > td {
+    height: 2.6rem;
+    padding: 0 0.65rem;
+    white-space: nowrap;
+  }
+  .glim-list-tr > td:first-child { border-start-start-radius: var(--radius-control); border-end-start-radius: var(--radius-control); }
+  .glim-list-tr > td:last-child { border-start-end-radius: var(--radius-control); border-end-end-radius: var(--radius-control); }
+  .glim-list-tr:hover > td { background-color: var(--carbon-hover); }
+  .glim-list-tr[aria-selected="true"] > td {
+    background-color: var(--accent-soft);
+    color: var(--accent-ink);
+  }
+  .glim-list-tr > td:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: -2px;
+  }
+  .glim-list-tr > td.glim-table-end { text-align: end; }
+  .glim-list-hint {
+    position: absolute;
+    top: 2.25rem;
+    inset-inline: 0.25rem;
+    z-index: 1;
+    margin: 0;
+    padding: 0.3rem 0.65rem;
+    border-radius: var(--radius-control);
+    background-color: var(--carbon-surface2);
+    color: var(--carbon-text-sub);
+    font-size: var(--text-subline);
+    visibility: hidden;
+  }
+  .glim-list:has(thead:hover) .glim-list-hint { visibility: visible; }
+  .glim-list-search {
+    position: absolute;
+    top: 0.25rem;
+    inset-inline-end: 0;
+    z-index: 2;
+    width: min(16rem, 60%);
+    box-shadow: var(--elevation);
+  }
+  .glim-list-empty {
+    margin: 0;
+    padding: 1.5rem 0.65rem;
+    color: var(--carbon-text-muted);
+    text-align: center;
+  }
+  .glim-list-filter-values {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+}

@@ -79,6 +79,7 @@ needs none of them.
 | `SignInCard`, `SignInField` | The sign-in page: the app's logo and name, the password, a code when the app asks for one, a passkey and the reset form in the same card. The app's own fields, buttons and steps go into `fields`, `actions` and `step`, and `SignInField` gives a field of the app's own the label above it |
 | `PathField`, `Tree` | A path with a button that asks the app for one, and a hierarchy loaded as it opens, for the picker behind that button |
 | `ListRow`, `RowMark`, `GlyphTile` | One row of a list with a tile, badges and buttons that come in on hover, the round mark on a row picked for an action on many, and a small holder for a glyph |
+| `ListTable` | The list of a list page: sorting by a click on a heading, a filter per column, a search that floats inside it, and rows picked as in a file manager |
 | `IconButton` | A glyph in a square in every label mode, for a row that keeps its text, as a link with `href`, on or off with `pressed`, and `absent` to hold a missing button's place |
 | `Meter`, `ProgressBar` | A level such as a disk's, red from a threshold and `quiet` for a footer line, and work toward its end with a sheen while it runs. Only the bar moves |
 | `BusyRing`, `SkeletonRow` | The ring that turns while the app works on something, and a row that holds a list row's place while the list loads. Both show only after 400 ms |

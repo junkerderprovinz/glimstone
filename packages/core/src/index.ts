@@ -19,6 +19,7 @@ export * from "./field.ts";
 export * from "./flagEmoji.ts";
 export * from "./infoTile.ts";
 export * from "./inputModality.ts";
+export * from "./listModel.ts";
 export * from "./marks.ts";
 export * from "./media.ts";
 export * from "./menu.ts";

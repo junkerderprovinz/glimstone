@@ -580,4 +580,18 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "sheet-foot", when: "Always", then: "Its foot works as a Window's, with Cancel or Close added, and its head has no close mark." },
     ],
   },
+  ListTable: {
+    pattern: { name: "Grid", url: `${APG}grid/` },
+    rows: [
+      { id: "list-grid", when: "Always", then: "A grid named by its label that lets several rows be picked, with a heading per column and rows a ListRow's height." },
+      { id: "list-sort", when: "A heading is pressed, then pressed again", then: "The rows sort by that column, then the other way round, and only that heading carries aria-sort." },
+      { id: "list-filter", when: "The ▾ of a column is pressed and a value is picked", then: "Only the rows with that value stay, and the ▾ stays filled while the filter is on." },
+      { id: "list-search", keys: ["a-z", "Ctrl+F", "Escape"], when: "The list has focus and a letter is typed", then: "A search floats inside the list with the letter and the rows follow it; Escape takes it away and the focus goes back to the list." },
+      { id: "list-empty", when: "Search or filter leave no row", then: "The list says so in its own words." },
+      { id: "list-select-click", when: "A row is clicked, with Ctrl, with Shift", then: "It is picked alone, added or dropped, or the range from the last click is picked, as in a file manager." },
+      { id: "list-keys", keys: ["ArrowDown", "Shift+ArrowDown", "Space", "Ctrl+A"], when: "A row has focus", then: "The arrows move the focus, Shift extends the pick, Space picks or drops the row and Ctrl+A picks all." },
+      { id: "list-open", keys: ["Enter"], when: "A row has focus, or is double-clicked", then: "Its object opens." },
+      { id: "list-hint", when: "The pointer rests on the header", then: "A line under it says what a click, the ▾ and typing do, and it is the grid's description." },
+    ],
+  },
 };
