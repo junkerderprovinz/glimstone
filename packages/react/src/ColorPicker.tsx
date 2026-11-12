@@ -10,6 +10,7 @@ import {
   type ColorName,
   type ColorPicker as Widget,
   type ColorPickerPanelText,
+  portalTarget,
 } from "@glimstone/core";
 import { Button } from "./Button.tsx";
 import { IconCheck } from "./glyphs.tsx";
@@ -132,5 +133,5 @@ export function ColorPicker({ value, onApply, onInput, anchor, onClose, names = 
       </div>
     </div>
   );
-  return anchor ? createPortal(body, document.body) : body;
+  return anchor ? createPortal(body, portalTarget()) : body;
 }

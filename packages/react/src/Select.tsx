@@ -26,6 +26,7 @@ import {
   type SelectSize,
   type SelectSubmenu as Submenu,
   type SelectWidth,
+  portalTarget,
 } from "@glimstone/core";
 import { useFieldName } from "./fieldName.ts";
 import { IconCheck, IconExpand } from "./glyphs.tsx";
@@ -192,7 +193,7 @@ function ListSelect<T extends string>({
         )}
       </div>
       {trigger.tip.bubble}
-      <Portal>
+      <Portal container={{ current: portalTarget() }}>
         <div {...positioner} style={{ ...positioner.style, ...hue.style }} className={`glim-select-positioner ${hue.className}`.trim()}>
           <div {...api.getContentProps()} className={parts.content}>
             {groups.map((g, gi) => {
@@ -321,7 +322,7 @@ function MenuSelect<T extends string>({
         )}
       </div>
       {trigger.tip.bubble}
-      <Portal>
+      <Portal container={{ current: portalTarget() }}>
         <div {...positioner} style={{ ...positioner.style, ...hue.style }} className={`glim-select-positioner ${hue.className}`.trim()}>
           <div {...api.getContentProps()} className={parts.content}>
             {groups.map((g, gi) => {
@@ -402,7 +403,7 @@ function SubmenuList<T extends string>({
           <IconExpand />
         </span>
       </div>
-      <Portal>
+      <Portal container={{ current: portalTarget() }}>
         <div {...positioner} style={{ ...positioner.style, ...hue.style }} className={`glim-select-positioner ${hue.className}`.trim()}>
           <div {...api.getContentProps()} className={parts.content}>
             {entry.options.map((o) => (

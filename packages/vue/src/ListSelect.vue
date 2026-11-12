@@ -11,6 +11,7 @@ import {
   selectRowParts,
   type SelectRows,
   type SelectWidth,
+  portalTarget,
 } from "@glimstone/core";
 import { IconCheck, IconExpand } from "./glyphs";
 import SelectFace from "./SelectFace.vue";
@@ -116,7 +117,7 @@ defineExpose({ trigger });
       </TipWrap>
     </div>
     <TipBubble :state="bubble" />
-    <Teleport to="body">
+    <Teleport :to="portalTarget()">
       <div
         v-bind="api.getPositionerProps()"
         :style="hue.style.value"

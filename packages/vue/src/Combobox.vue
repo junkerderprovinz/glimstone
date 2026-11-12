@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { portalTarget } from "@glimstone/core";
 import { computed, shallowRef, useId, watch } from "vue";
 import * as combobox from "@zag-js/combobox";
 import { normalizeProps, useMachine } from "@zag-js/vue";
@@ -76,7 +77,7 @@ const api = computed(() => combobox.connect(service, normalizeProps));
         <span class="glim-select-indicator" :data-state="api.open ? 'open' : 'closed'"><IconExpand /></span>
       </button>
     </div>
-    <Teleport to="body">
+    <Teleport :to="portalTarget()">
       <div v-bind="api.getPositionerProps()" class="glim-select-positioner">
         <ul v-bind="api.getContentProps()" class="glim-select-content">
           <li v-if="shown.length === 0" class="glim-select-empty">{{ empty }}</li>

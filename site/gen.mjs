@@ -52,6 +52,8 @@ const COMPONENTS = {
   SignInCard: "react/SignInCard.tsx",
   BusyRing: "react/BusyRing.tsx",
   SkeletonRow: "react/SkeletonRow.tsx",
+  Popover: "react/Popover.tsx",
+  Sheet: "react/Sheet.tsx",
 };
 
 const clean = (s) => s.replace(/\s+/g, " ").trim();

@@ -25,7 +25,8 @@ const SETTLE_MS = 100;
 /** Has the screen reader say `text`. "assertive" interrupts it and belongs to
  *  failures; everything else is "polite". */
 export function announce(text: string, politeness: Politeness = "polite"): void {
-  let region = document.querySelector<HTMLElement>(`[data-glim-announce="${politeness}"]`);
+  // A region behind an open window is inert and out of a screen reader's reach.
+  let region = [...document.querySelectorAll<HTMLElement>(`[data-glim-announce="${politeness}"]`)].find((r) => !r.closest("[inert]"));
   if (!region) {
     region = document.createElement("div");
     region.className = "glim-sr-only";

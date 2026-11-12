@@ -14,6 +14,7 @@ import {
   selectRowParts,
   type SelectRows,
   type SelectWidth,
+  portalTarget,
 } from "@glimstone/core";
 import { IconExpand } from "./glyphs";
 import MenuChoice from "./MenuChoice.vue";
@@ -137,7 +138,7 @@ defineExpose({ trigger });
       </TipWrap>
     </div>
     <TipBubble :state="bubble" />
-    <Teleport to="body">
+    <Teleport :to="portalTarget()">
       <div v-bind="api.getPositionerProps()" :style="hue.style.value" :class="['glim-select-positioner', hue.className.value]">
         <div v-bind="api.getContentProps()" :class="parts.content">
           <template v-for="(g, gi) in groups" :key="gi">

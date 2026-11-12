@@ -24,6 +24,7 @@ import {
   type MenuEntry as CoreMenuEntry,
   type MenuHead as CoreMenuHead,
   type MenuItem as CoreMenuItem,
+  portalTarget,
 } from "@glimstone/core";
 import { IconCheck, IconExpand, IconPencil } from "./glyphs.tsx";
 import { Kbd } from "./Kbd.tsx";
@@ -262,7 +263,7 @@ export function ContextMenu({ x, y, items, above = false, label, id, opener, onC
         >
           <Rows entries={rows} openAt={sub?.at} onPick={(i) => pick(rows, i)} />
         </div>,
-        document.body,
+        portalTarget(),
       )}
       {subRows &&
         createPortal(
@@ -278,7 +279,7 @@ export function ContextMenu({ x, y, items, above = false, label, id, opener, onC
           >
             <Rows entries={subRows} onPick={(i) => pick(subRows, i)} />
           </div>,
-          document.body,
+          portalTarget(),
         )}
     </>
   );

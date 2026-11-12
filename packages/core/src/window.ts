@@ -4,6 +4,7 @@
 
 import { keepTabInside } from "./dialog.ts";
 import { menuIsOpen } from "./menu.ts";
+import { popoverIsOpen } from "./overlay.ts";
 
 export type WindowSize = "normal" | "wide" | "full";
 
@@ -36,30 +37,53 @@ interface Stacked {
 
 const stack: Stacked[] = [];
 
-// A key that an open menu or a Select inside the window already handled is
-// left alone, so Escape closes one thing at a time from the front.
+// The elements this stack made inert, so closing a window gives back only what
+// it took and leaves an app's own inert parts alone.
+const madeInert = new Set<Element>();
+
+// Everything beside the front window becomes inert: the page, and any window
+// behind it. Tab could be kept inside by hand, but the pointer and a screen
+// reader's own cursor could not.
+function inertOutsideFront() {
+  for (const el of madeInert) el.removeAttribute("inert");
+  madeInert.clear();
+  const card = stack[stack.length - 1]?.card();
+  for (let el: Element | null = card ?? null; el && el !== document.body; el = el.parentElement) {
+    for (const sibling of el.parentElement?.children ?? []) {
+      if (sibling === el || sibling.hasAttribute("inert") || sibling.matches("[data-glim-announce], script, style")) continue;
+      sibling.setAttribute("inert", "");
+      madeInert.add(sibling);
+    }
+  }
+}
+
+// A key that an open menu, a popover or a Select inside the window already
+// handled is left alone, so Escape closes one thing at a time from the front.
 function onKey(e: KeyboardEvent) {
   const top = stack[stack.length - 1];
   if (!top || e.defaultPrevented) return;
   if (e.key === "Escape") {
-    if (menuIsOpen()) return;
+    if (menuIsOpen() || popoverIsOpen()) return;
     e.preventDefault();
     top.close();
   } else if (e.key === "Tab") keepTabInside(top.card(), e);
 }
 
 /**
- * Puts a window on the stack. Escape closes the one in front and Tab stays
- * inside it. Returns the removal, to call however the window closes.
+ * Puts a window on the stack. Escape closes the one in front, Tab stays inside
+ * it and everything beside it is inert. Returns the removal, to call however
+ * the window closes.
  */
 export function stackWindow(card: () => HTMLElement | null, close: () => void): () => void {
   const entry = { card, close };
   stack.push(entry);
   if (stack.length === 1) document.addEventListener("keydown", onKey);
+  inertOutsideFront();
   return () => {
     const at = stack.indexOf(entry);
     if (at >= 0) stack.splice(at, 1);
     if (stack.length === 0) document.removeEventListener("keydown", onKey);
+    inertOutsideFront();
   };
 }
 

@@ -10,6 +10,7 @@ import { Calibration } from "./pages/calibration";
 import { BehaviourGuide, ComboboxPage, SelectPage, SliderPage } from "./pages/zag";
 import { ColourEngine, LabelEngine, MotionEngine, ShapeEngine } from "./pages/engines";
 import { BusyRingPage, SkeletonRowPage } from "./pages/loading";
+import { PopoverPage, SheetPage } from "./pages/overlay";
 import {
   BadgePage,
   ButtonPage,
@@ -96,10 +97,12 @@ const PAGES: Page[] = [
   { path: "/components/password-field", title: "PasswordField", group: "Components", Comp: PasswordFieldPage },
   { path: "/components/path-field", title: "PathField", group: "Components", Comp: PathFieldPage },
   { path: "/components/pill", title: "Pill", group: "Components", Comp: PillPage },
+  { path: "/components/popover", title: "Popover", group: "Components", Comp: PopoverPage },
   { path: "/components/progress-bar", title: "ProgressBar", group: "Components", Comp: ProgressBarPage },
   { path: "/components/row-mark", title: "RowMark", group: "Components", Comp: RowMarkPage },
   { path: "/components/select", title: "Select", group: "Components", Comp: SelectPage, tag: "Zag" },
   { path: "/components/selector", title: "Selector", group: "Components", Comp: SelectorPage },
+  { path: "/components/sheet", title: "Sheet", group: "Components", Comp: SheetPage },
   { path: "/components/sidebar-row", title: "SidebarRow", group: "Components", Comp: SidebarRowPage },
   { path: "/components/sign-in-card", title: "SignInCard", group: "Components", Comp: SignInCardPage },
   { path: "/components/skeleton-row", title: "SkeletonRow", group: "Components", Comp: SkeletonRowPage },

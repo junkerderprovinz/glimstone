@@ -6,13 +6,12 @@ import {
   returnFocus,
   stackWindow,
   windowFocusTarget,
-  windowFoot,
   type WindowSize,
+  portalTarget,
 } from "@glimstone/core";
 import Badge from "./Badge.vue";
-import Button from "./Button.vue";
-import { IconCancel, IconClose } from "./glyphs";
 import type { WindowAction } from "./windowParts";
+import WindowFootRow from "./WindowFootRow.vue";
 
 // The general window: a notch with the title, a body for anything and a foot
 // whose actions stand at the end. It owns the teleport, its place on the
@@ -46,19 +45,16 @@ const titleId = useId();
 // Read before the window takes the focus.
 const asker = focusedAsker();
 const hasStart = computed(() => props.start !== undefined || !!slots.start);
-const foot = computed(() =>
-  windowFoot<WindowAction>(props.actions, hasStart.value, {
-    cancel: { label: props.text.cancel, labelKey: "common.cancel", glyph: IconCancel, wayOut: true },
-    close: { label: props.text.close, labelKey: "common.close", glyph: IconClose, wayOut: true },
-  }),
-);
 
+// Leaving takes the window off the stack at once, so the page is no longer
+// inert when the caller hands the focus back to a field in it.
 let unstack: (() => void) | undefined;
+function leave() {
+  unstack?.();
+  emit("close");
+}
 onMounted(() => {
-  unstack = stackWindow(
-    () => card.value,
-    () => emit("close"),
-  );
+  unstack = stackWindow(() => card.value, leave);
   if (card.value) windowFocusTarget(card.value)?.focus();
 });
 onUnmounted(() => {
@@ -68,17 +64,14 @@ onUnmounted(() => {
 
 defineExpose({ card });
 
-function press(action: WindowAction) {
-  if (action.onClick?.() !== false) emit("close");
-}
 // A press beside an open menu only closes the menu, not the window under it.
 function pressBeside() {
-  if (!menuIsOpen()) emit("close");
+  if (!menuIsOpen()) leave();
 }
 </script>
 
 <template>
-  <Teleport to="body">
+  <Teleport :to="portalTarget()">
     <div class="glim-modal-backdrop" @mousedown.self="pressBeside">
       <div
         v-bind="$attrs"
@@ -93,20 +86,9 @@ function pressBeside() {
           <Badge tone="heading" size="heading" wrap :inset-start="5"><slot name="title">{{ title }}</slot></Badge>
         </h2>
         <div class="glim-modal-body glim-window-body"><slot /></div>
-        <div v-if="foot.length" class="glim-modal-foot">
-          <span v-if="hasStart" class="glim-window-start"><slot name="start">{{ start }}</slot></span>
-          <Button
-            v-for="(a, i) in foot"
-            v-bind="a.attrs"
-            :key="i"
-            :label="a.label"
-            :label-key="a.labelKey"
-            :glyph="a.glyph"
-            :tone="a.primary ? 'accent' : 'neutral'"
-            :disabled="a.disabled"
-            @click="press(a)"
-          />
-        </div>
+        <WindowFootRow :actions="actions" :start="start" :has-start="hasStart" :text="text" @close="leave">
+          <template v-if="$slots.start" #start><slot name="start" /></template>
+        </WindowFootRow>
       </div>
     </div>
   </Teleport>

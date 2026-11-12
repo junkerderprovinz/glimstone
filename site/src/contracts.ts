@@ -371,6 +371,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "window-trap", keys: ["Tab", "Shift+Tab"], when: "Focus is on the last or first control", then: "Focus wraps inside the window in front." },
       { id: "window-return", when: "The window closes", then: "Focus goes back to the control that opened it." },
       { id: "window-backdrop", when: "A press lands beside the window", then: "It closes." },
+      { id: "window-inert", when: "A window is open", then: "Everything behind it is inert, the page and any window under it, so neither the pointer nor a screen reader reaches them. Closing it gives them back." },
       { id: "window-action-attrs", when: "An action names attributes", then: "Its foot button carries them." },
       { id: "window-card", when: "The caller asks for the card", then: "The window hands over its card element." },
       { id: "window-title-slot", when: "The notch holds markup, such as a count", then: "It is drawn, and the title alone stays the window's name." },
@@ -554,6 +555,29 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "announce-assertive", when: "announce(text, \"assertive\") is called", then: "The words go into the alert region, which interrupts. It is for failures." },
       { id: "announce-repeat", when: "The same words are announced twice", then: "The region empties and fills again, so they are read twice." },
       { id: "announce-own", when: "No ToastViewport is on the page", then: "announce() adds the region to the page itself." },
+    ],
+  },
+  Popover: {
+    rows: [
+      { id: "popover-top", when: "It opens", then: "It stands in the top layer, a dialog named by its label." },
+      { id: "popover-anchor", when: "It opens with room below its trigger", then: "It stands under the trigger, tied to it by a CSS anchor." },
+      { id: "popover-flip", when: "There is no room below the trigger", then: "It opens above it." },
+      { id: "popover-fallback", when: "The browser has no anchor positioning", then: "It is placed the same way, under the trigger and centred on it." },
+      { id: "popover-focus", keys: ["Escape"], when: "It opens, and Escape is pressed", then: "Focus goes to its first control; Escape closes it and focus goes back to the trigger." },
+      { id: "popover-outside", when: "A press lands beside it", then: "It closes." },
+    ],
+  },
+  Sheet: {
+    pattern: { name: "Dialog (modal)", url: `${APG}dialog-modal/` },
+    rows: [
+      { id: "sheet-modal", when: "It opens", then: "It is a <dialog> shown modal, in the top layer, and the page behind it is inert." },
+      { id: "sheet-heading", when: "Always", then: "Its title is the heading badge in the notch, and the sheet's name." },
+      { id: "sheet-edge", when: "The window is wide, or a phone's", then: "A card inset by the page gutter at the end edge; on a phone it rises from the bottom at the full width." },
+      { id: "sheet-escape", keys: ["Escape"], when: "It is open", then: "It closes and focus goes back to the control that opened it." },
+      { id: "sheet-backdrop", when: "A press lands on the scrim", then: "It closes." },
+      { id: "sheet-still", when: "Motion is off, or the system asks for reduced motion", then: "It appears in place without sliding." },
+      { id: "sheet-portal", when: "A bubble, a menu or a list opens from inside it", then: "It renders into the sheet and shows above it." },
+      { id: "sheet-foot", when: "Always", then: "Its foot works as a Window's, with Cancel or Close added, and its head has no close mark." },
     ],
   },
 };
