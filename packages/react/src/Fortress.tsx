@@ -501,6 +501,8 @@ export interface FortressPairingProps {
   hueIndex?: number;
   /** Rows of the app's own above the phrase, such as the name the instance goes by. */
   children?: ReactNode;
+  /** Rows of the app's own below leaving, such as the switch for the other apps. */
+  after?: ReactNode;
 }
 
 /**
@@ -536,6 +538,7 @@ export function FortressPairing(props: FortressPairingProps) {
       <FieldRow label={text.leaveRow} hint={fill(text.leaveAbout, { app: app.name })}>
         <Button label={text.leaveConfirm} labelKey={keys.leave} onClick={flow.openLeave} data-fortress="open-leave" />
       </FieldRow>
+      {props.after}
       {s.window && <FortressWindow flow={flow} state={s} props={props} keys={keys} />}
     </Card>
   );

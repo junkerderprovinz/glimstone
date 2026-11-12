@@ -67,6 +67,8 @@ const keys = computed(() => ({
     <FieldRow :label="text.leaveRow" :hint="fill(text.leaveAbout, { app: app.name })">
       <Button :label="text.leaveConfirm" :label-key="keys.leave" data-fortress="open-leave" @click="flow.openLeave()" />
     </FieldRow>
+    <!-- Rows of the app's own below leaving, such as the switch for the other apps. -->
+    <slot name="after" />
     <FortressWindow
       v-if="s.window"
       :flow="flow"
