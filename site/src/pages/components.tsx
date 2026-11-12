@@ -706,6 +706,15 @@ import { fortressText } from "@glimstone/core";
   onChangePhrase={() => api.changePhrase()}
 />`}
       />
+      <H2>A pairing page of its own</H2>
+      <p>
+        An app whose pairing page carries the fortress shows the phrase once, in <code>FortressPairing</code> at the top,
+        with its change and Leave beside it. It hands <code>onShowPhrase</code> to that card and not to{" "}
+        <code>Fortress</code>, so the corner stays empty, and it can draw the other apps with the cards of its own
+        Instances tab through <code>renderApp</code>. <code>phraseQr</code> puts what a phone needs besides the words
+        into the code, such as the address of an own relay.
+      </p>
+      <Demo name="FortressSettings" />
       <H2>Outside a fortress</H2>
       <p>
         An app in no fortress keeps its own cards and shows an empty place beside them, with the one way in in the
@@ -724,6 +733,7 @@ import { fortressText } from "@glimstone/core";
         <li>The other apps and the permissions show only once the switch is on, and the switch is kept per device.</li>
         <li>An app joins with the phrase and nothing else. There is no field for an address anywhere.</li>
         <li>Show phrase stands in the corner as the one filled button. Changing the phrase and leaving the fortress live in the pairing settings and nowhere else.</li>
+        <li>The phrase shows in one place on a page. Where the pairing settings show it, the corner of the fortress holds nothing.</li>
         <li>The phrase shows beside a QR code of its words, so a phone takes it by camera.</li>
         <li>Every card owns a rainbow position, so its buttons and switches take its hue.</li>
         <li>Permissions are on until switched off, one switch per pair. A refused switch shakes and stays as it was.</li>

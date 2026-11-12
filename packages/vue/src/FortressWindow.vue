@@ -16,6 +16,8 @@ const props = defineProps<{
   app: { id: string; name: string };
   pairedWith?: string[];
   leaveNote?: string;
+  /** What the QR code beside the words carries, the words alone without it. */
+  phraseQr?: (words: string[]) => string;
   keys: Record<"join" | "leave" | "changePhrase" | "remove" | "unlock" | "copy", string>;
 }>();
 
@@ -77,7 +79,7 @@ function copy(words: string[]): WindowAction {
 const qr = computed(() => {
   const s = w.value;
   if (s.kind !== "phrase" && s.kind !== "changed") return null;
-  const code = qrCode(s.words.join(" "));
+  const code = qrCode(props.phraseQr ? props.phraseQr(s.words) : s.words.join(" "));
   return { ...code, side: code.size + 8 };
 });
 // Window adds Close only to a foot with something in it, so a window that only says something brings its own.

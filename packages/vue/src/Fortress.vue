@@ -30,7 +30,8 @@ import Toggle from "./Toggle.vue";
 // the corner. Changing the phrase and leaving live in the pairing settings
 // (FortressPairing). The callbacks are props, since an emitted event cannot
 // answer. The scoped slot `permission-extra` puts something of the app's own
-// under a permission's words.
+// under a permission's words, and the scoped slot `app` draws another app with
+// the app's own card, such as the one its Instances tab draws.
 const props = withDefaults(
   defineProps<{
     text: FortressText;
@@ -58,6 +59,8 @@ const props = withDefaults(
     /** Asks for the app's password before the phrase shows. */
     phrasePassword?: boolean;
     onOpen?: (app: FortressApp, instance: FortressInstance) => void;
+    /** What the QR code beside the words carries, the words alone without it. */
+    phraseQr?: (words: string[]) => string;
     labelKeys?: Partial<Record<"join" | "leave" | "showPhrase" | "changePhrase" | "remove" | "unlock" | "copy", string>>;
     /** The rainbow position the fortress's first card takes, after the app's own cards. */
     hueStart?: number;
@@ -124,7 +127,10 @@ const othersLine = computed(() => {
 
     <template v-if="joined && others">
       <div class="glim-fortress-grid">
-        <FortressAppCard v-for="(a, i) in apps" :key="a.id" :app="a" :text="text" :lang="lang" :hue-index="hueStart + 1 + i" :on-open="onOpen" />
+        <template v-for="(a, i) in apps" :key="a.id">
+          <slot v-if="$slots.app" name="app" :app="a" :hue-index="hueStart + 1 + i" />
+          <FortressAppCard v-else :app="a" :text="text" :lang="lang" :hue-index="hueStart + 1 + i" :on-open="onOpen" />
+        </template>
       </div>
       <FortressPermissions
         :text="text"
@@ -139,19 +145,17 @@ const othersLine = computed(() => {
       </FortressPermissions>
     </template>
 
-    <div class="glim-fortress-actions">
-      <template v-if="joined">
-        <Button
-          v-if="onShowPhrase"
-          :label="text.showPhrase"
-          :label-key="keys.showPhrase"
-          tone="accent"
-          size="key"
-          :busy="s.busy === 'show'"
-          data-fortress="show"
-          @click="flow.openPhrase()"
-        />
-      </template>
+    <div v-if="!joined || onShowPhrase" class="glim-fortress-actions">
+      <Button
+        v-if="joined"
+        :label="text.showPhrase"
+        :label-key="keys.showPhrase"
+        tone="accent"
+        size="key"
+        :busy="s.busy === 'show'"
+        data-fortress="show"
+        @click="flow.openPhrase()"
+      />
       <Button v-else :label="text.enterPhrase" :label-key="keys.join" tone="accent" size="key" data-fortress="open-join" @click="flow.openJoin()" />
     </div>
 
@@ -163,6 +167,7 @@ const othersLine = computed(() => {
       :lang="lang"
       :app="app"
       :paired-with="pairedWith"
+      :phrase-qr="phraseQr"
       :keys="keys"
     />
   </div>

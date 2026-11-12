@@ -4171,6 +4171,7 @@ test.describe("Fortress", () => {
   const inside = (page: Page) => stage(page, "FortressBasic");
   const outside = (page: Page) => stage(page, "FortressOut");
   const pairing = (page: Page) => stage(page, "FortressPairing");
+  const settings = (page: Page) => stage(page, "FortressSettings");
   const others = (page: Page) => inside(page).getByRole("switch", { name: "Show the other apps of the fortress" });
   const dialog = (page: Page) => page.getByRole("dialog");
   const word = (page: Page, n: number) => dialog(page).getByRole("textbox", { name: `Word ${n}`, exact: true });
@@ -4382,6 +4383,43 @@ test.describe("Fortress", () => {
     });
     expect(jsQR(Uint8ClampedArray.from(shot), 256, 256)?.data).toBe(TWELVE);
     await expect(dialog(page)).toContainText("Scan it in the app that should join.");
+  });
+
+  test("[fortress-pairing-phrase] Show phrase beside Change, behind the password, and an empty corner below", async ({ page }) => {
+    await open(page, "/components/fortress");
+    const row = settings(page).locator(".glim-field-row").first();
+    await expect(row.getByRole("button")).toHaveText(["Show phrase", "Change"]);
+    await expect(settings(page).locator(".glim-fortress-actions")).toHaveCount(0);
+    await row.getByRole("button", { name: "Show phrase" }).click();
+    await dialog(page).getByLabel("Password of Alpha").fill("letmein");
+    await page.keyboard.press("Enter");
+    await expect(dialog(page).locator('[data-fortress="words"] li')).toHaveCount(12);
+  });
+
+  test("[fortress-qr-own] the code carries what the app gives it", async ({ page }) => {
+    await open(page, "/components/fortress");
+    await settings(page).getByRole("button", { name: "Show phrase" }).click();
+    await dialog(page).getByLabel("Password of Alpha").fill("letmein");
+    await page.keyboard.press("Enter");
+    const qr = dialog(page).getByRole("img", { name: "The phrase as a QR code" });
+    const shot = await qr.evaluate(async (svg) => {
+      const img = new Image();
+      img.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(new XMLSerializer().serializeToString(svg))}`;
+      await img.decode();
+      const canvas = document.createElement("canvas");
+      canvas.width = canvas.height = 256;
+      const ctx = canvas.getContext("2d")!;
+      ctx.drawImage(img, 0, 0, 256, 256);
+      return [...ctx.getImageData(0, 0, 256, 256).data];
+    });
+    expect(jsQR(Uint8ClampedArray.from(shot), 256, 256)?.data).toBe(`${TWELVE}\nhttps://relay.example`);
+  });
+
+  test("[fortress-own-cards] the other apps stand in the app's own cards", async ({ page }) => {
+    await open(page, "/components/fortress");
+    await expect(settings(page).locator("[data-own-card]")).toHaveCount(4);
+    await expect(settings(page).locator("[data-fortress-app]")).toHaveCount(0);
+    await expect(settings(page).locator('[data-own-card="bravo"]')).toContainText("Bravo");
   });
 
   test("[fortress-change] what changing does, then the new words and who is left", async ({ page }) => {
