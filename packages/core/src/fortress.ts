@@ -5,7 +5,8 @@
 // callback and hands in its data; nothing here talks to a server.
 
 import type { BadgeTone } from "./badge.ts";
-import { fill, plural, type FortressText } from "./fortressText.ts";
+import { fill, plural, type FortressMemberState, type FortressOpenRefusal, type FortressText } from "./fortressText.ts";
+import { openInBrowser } from "./infoTile.ts";
 import { storageKey } from "./storage.ts";
 
 export const PHRASE_LENGTH = 12;
@@ -35,8 +36,17 @@ export interface FortressInstance {
   lastSeen?: string;
   /** What needs the person there, in a few words, such as "2 updates waiting". */
   needs?: string;
-  /** Where its own interface opens. `host` names a page it lives in, such as Unraid. Without it, it opens only on its device. */
-  open?: { href: string; host?: string };
+  /**
+   * Set when the instance can be opened from here. The app's `onOpen` opens it,
+   * through the fortress where it runs elsewhere, and without `onOpen` the card
+   * opens `href` in a new tab. `host` names a page it lives in, such as Unraid.
+   * Without `open` the card offers no Open.
+   */
+  open?: { href?: string; host?: string };
+  /** Another member claims the same app on the same device, so the card warns and Open asks first. */
+  doubt?: boolean;
+  /** The end of the member's id, which the question before Open names. Without it the question takes the end of `id`. */
+  print?: string;
   /** The instance showing the page, which leaves the fortress rather than being removed. */
   self?: boolean;
 }
@@ -71,7 +81,7 @@ export function othersLine(text: FortressText, lang: string, apps: FortressApp[]
   return fill(text.othersLine, { apps: plural(lang, text.othersApps, n.apps), devices: plural(lang, text.othersDevices, n.devices) });
 }
 
-/** The instance an app's card names in its facts: the one that opens in the browser, else the first. */
+/** The instance an app's card names in its facts: the first that opens, else the first. */
 export function shownInstance(app: FortressApp): FortressInstance {
   return app.instances.find((i) => i.open) ?? app.instances[0]!;
 }
@@ -84,11 +94,12 @@ export interface AppCardView {
   needs: string | undefined;
   eyebrow: string;
   facts: string[];
-  /** A row per instance, or none when the app runs in one place. */
-  rows: { instance: FortressInstance; sub: string }[];
-  open: { label: string; href: string } | null;
-  /** Where it opens instead, when it has no page to open from here. */
-  note: string | undefined;
+  /** The warning while some instance claims the same app on the same device as another member, with its (i). */
+  doubt: { label: string; tip: string } | null;
+  /** A row per instance, or none when the app runs in one place. `open` says whether the row has its own Open. */
+  rows: { instance: FortressInstance; sub: string; open: boolean }[];
+  /** The card's Open, for the instance it names. */
+  open: { label: string; href?: string } | null;
 }
 
 const formName = (text: FortressText, form: string | undefined) =>
@@ -97,6 +108,7 @@ const formName = (text: FortressText, form: string | undefined) =>
 export function appCardView(app: FortressApp, text: FortressText, lang: string): AppCardView {
   const main = shownInstance(app);
   const many = app.instances.length > 1;
+  const doubted = app.instances.find((i) => i.doubt);
   const version = (i: FortressInstance) => (i.version ? `v${i.version}` : undefined);
   const rowSub = (i: FortressInstance) =>
     [formName(text, i.form), version(i), i.presence === "away" && i.lastSeen ? fill(text.lastSeen, { time: i.lastSeen }) : undefined]
@@ -111,9 +123,122 @@ export function appCardView(app: FortressApp, text: FortressText, lang: string):
     facts: [many ? plural(lang, text.instanceCount, app.instances.length) : main.device, main.address, version(main)].filter(
       (f): f is string => !!f,
     ),
-    rows: many ? app.instances.map((instance) => ({ instance, sub: rowSub(instance) })) : [],
+    doubt: doubted ? { label: text.doubtBadge, tip: fill(text.doubtHint, { app: app.name, device: doubted.device }) } : null,
+    rows: many ? app.instances.map((instance) => ({ instance, sub: rowSub(instance), open: !!instance.open })) : [],
     open: main.open ? { label: main.open.host ? fill(text.openIn, { host: main.open.host }) : text.open, href: main.open.href } : null,
-    note: main.open ? undefined : fill(text.openOnlyOn, { device: main.device }),
+  };
+}
+
+/** Opens an instance: through the app's `onOpen` where it has one, else at `open.href` in a new tab. */
+export function openInstance(app: FortressApp, instance: FortressInstance, onOpen?: (app: FortressApp, instance: FortressInstance) => void): void {
+  if (onOpen) onOpen(app, instance);
+  else if (instance.open?.href) openInBrowser(instance.open.href);
+}
+
+/** How much of an id the question before Open names when the instance has no `print`. */
+const PRINT_LENGTH = 6;
+
+/**
+ * The question before an instance with `doubt` opens. Two members that claim
+ * the same app on the same device may be one honest app and one that copies
+ * its sign-in page, so the person opens only the one whose id they know.
+ */
+export function doubtView(text: FortressText, app: FortressApp, instance: FortressInstance): { title: string; body: string; open: string } {
+  return {
+    title: fill(text.doubtTitle, { app: app.name, device: instance.device }),
+    body: fill(text.doubtBody, { id: instance.print ?? instance.id.slice(-PRINT_LENGTH) }),
+    open: text.openAnyway,
+  };
+}
+
+/** The sentence for why an instance did not open, by the code the fortress refused it with. An unknown code gets `failed`. */
+export function openRefusalText(text: FortressText, code: string): string {
+  return Object.hasOwn(text.openRefused, code) ? text.openRefused[code as FortressOpenRefusal] : text.openRefused.failed;
+}
+
+/** What a member's status report says, its words already in the person's language and its times already formatted. */
+export interface FortressStatusReport {
+  /** off, ok, starting, warning, overdue or failed. Any other string shows as it is. */
+  state: string;
+  /** `severity` is info, warn or error. */
+  needsYou: { severity: string; text: string }[];
+  /** `progress` runs from 0 to 1 and is left out where the app cannot tell. */
+  work: { title: string; progress?: number }[];
+  next: { title: string; at: string }[];
+}
+
+/** A line of a member's log. `level` is info, warn or error. */
+export interface FortressLogLine {
+  at: string;
+  level: string;
+  text: string;
+}
+
+export interface StatusViewInput {
+  app: FortressApp;
+  instance: FortressInstance;
+  report?: FortressStatusReport;
+  /** Newest first. */
+  log?: FortressLogLine[];
+  loading?: boolean;
+  error?: string;
+  text: FortressText;
+}
+
+type Tagged = { label: string; tone: BadgeTone } | null;
+
+/** What the status window of a member without pages of its own shows, worked out once for every framework. */
+export interface StatusView {
+  title: string;
+  /** While the report is on its way, the line that says so, in place of everything but `where`. */
+  loading: string | undefined;
+  /** Why the report did not come, in place of its sections. */
+  error: string | undefined;
+  state: Tagged;
+  needsYou: { text: string; level: Tagged }[];
+  work: { title: string; progress?: number }[];
+  next: { title: string; at: string }[];
+  log: { at: string; text: string; level: Tagged }[];
+  /** Said when nothing needs the person, runs or comes next. */
+  quiet: string | undefined;
+  /** Where an Unraid plugin keeps its settings. Other members leave it out. */
+  where: string | undefined;
+}
+
+/** The most log lines the window shows. */
+export const STATUS_LOG_LINES = 10;
+
+const STATE_TONES: Record<FortressMemberState, BadgeTone> = { off: "neutral", ok: "ok", starting: "active", warning: "warn", overdue: "warn", failed: "fail" };
+
+// Info is the usual case, so only a warning or an error is marked.
+function level(text: FortressText, severity: string): Tagged {
+  if (severity === "warn") return { label: text.levels.warn, tone: "warn" };
+  if (severity === "error") return { label: text.levels.error, tone: "fail" };
+  return null;
+}
+
+export function statusView({ app, instance, report, log = [], loading, error, text }: StatusViewInput): StatusView {
+  const title = memberName(text, app, instance);
+  const where = instance.form === "plugin" ? fill(text.statusWhere, { app: app.name, device: instance.device }) : undefined;
+  const none = { state: null, needsYou: [], work: [], next: [], log: [], quiet: undefined };
+  if (loading) return { ...none, title, where, loading: fill(text.statusLoading, { app: app.name }), error: undefined };
+  const lines = log.slice(0, STATUS_LOG_LINES).map((l) => ({ at: l.at, text: l.text, level: level(text, l.level) }));
+  if (error !== undefined || !report) return { ...none, title, where, loading: undefined, error, log: lines };
+  const known = Object.hasOwn(STATE_TONES, report.state);
+  const something = report.needsYou.length + report.work.length + report.next.length > 0;
+  return {
+    title,
+    where,
+    loading: undefined,
+    error: undefined,
+    state: known
+      ? { label: text.states[report.state as FortressMemberState], tone: STATE_TONES[report.state as FortressMemberState] }
+      : { label: report.state, tone: "neutral" },
+    needsYou: report.needsYou.map((n) => ({ text: n.text, level: level(text, n.severity) })),
+    work: report.work,
+    next: report.next,
+    log: lines,
+    quiet: something ? undefined : text.statusQuiet,
   };
 }
 

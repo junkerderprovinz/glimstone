@@ -1,22 +1,27 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import { appCardView, memberName, openInBrowser, presenceTone, type FortressApp, type FortressInstance, type FortressText } from "@glimstone/core";
+import { computed, shallowRef } from "vue";
+import { appCardView, memberName, openInstance, presenceTone, type FortressApp, type FortressInstance, type FortressText } from "@glimstone/core";
 import Badge from "./Badge.vue";
 import Button from "./Button.vue";
+import FortressDoubtWindow from "./FortressDoubtWindow.vue";
+import InfoBubble from "./InfoBubble.vue";
 import InstanceCard from "./InstanceCard.vue";
 import { glyphFor } from "./glyphs";
 
 // Another app of the fortress: its state, where it runs, and the way to open
 // it. A device's glyph is asked for by its kind through the app's resolver
-// (`deviceServer`, `devicePc`, `deviceLaptop`, `devicePhone`). Remove stays
-// quiet at the end of a row, or after Open on a card with one instance.
+// (`deviceServer`, `devicePc`, `deviceLaptop`, `devicePhone`). Open and Remove
+// stay quiet at the end of a row, and after the card's own Open on a card with
+// one instance. Attributes go to the card, since the question beside it is a
+// second root.
+defineOptions({ inheritAttrs: false });
 const props = withDefaults(defineProps<{
   app: FortressApp;
   text: FortressText;
   /** The interface language, for the counts. */
   lang: string;
   hueIndex?: number;
-  /** Opens an instance's own page. Without it the page opens in a new tab. */
+  /** Opens an instance, through the fortress where it runs elsewhere. Without it the instance's `open.href` opens in a new tab. */
   onOpen?: (app: FortressApp, instance: FortressInstance) => void;
   /** Asks before an instance is removed, with its name. Without it nothing here removes. */
   onRemove?: (id: string, name: string) => void;
@@ -25,29 +30,32 @@ const props = withDefaults(defineProps<{
 }>(), { removeKey: "delete" });
 
 const view = computed(() => appCardView(props.app, props.text, props.lang));
+const single = computed(() => view.value.rows.length === 0);
 const presence = (i: FortressInstance) => ({ connected: props.text.connected, checking: props.text.checking, away: props.text.away })[i.presence];
 const device = (i: FortressInstance) => (i.deviceKind ? glyphFor(`device${i.deviceKind.charAt(0).toUpperCase()}${i.deviceKind.slice(1)}`) : undefined);
 
 const name = (i: FortressInstance) => memberName(props.text, props.app, i);
 const removes = (i: FortressInstance) => !!props.onRemove && !i.self;
+const acts = computed(() => !!view.value.open || (single.value && removes(view.value.main)));
 
-function open() {
-  const { main, open } = view.value;
-  if (props.onOpen) props.onOpen(props.app, main);
-  else if (open) openInBrowser(open.href);
+const asking = shallowRef<FortressInstance | null>(null);
+function open(instance: FortressInstance) {
+  if (instance.doubt) asking.value = instance;
+  else openInstance(props.app, instance, props.onOpen);
 }
 </script>
 
 <template>
-  <InstanceCard data-glim="FortressAppCard" :data-fortress-app="app.id" :logo="app.logo" :name="app.name" :eyebrow="view.eyebrow" :facts="view.facts" :hue-index="hueIndex">
+  <InstanceCard v-bind="$attrs" data-glim="FortressAppCard" :data-fortress-app="app.id" :logo="app.logo" :name="app.name" :eyebrow="view.eyebrow" :facts="view.facts" :hue-index="hueIndex">
     <template #badges>
+      <Badge v-if="view.doubt" tone="warn">{{ view.doubt.label }}<InfoBubble :tip="view.doubt.tip" on-accent /></Badge>
       <Badge v-if="view.needs" tone="warn">{{ view.needs }}</Badge>
       <Badge v-if="view.main.relay">{{ text.viaRelay }}</Badge>
       <Badge :tone="presenceTone(view.main.presence)">{{ presence(view.main) }}</Badge>
     </template>
-    <template v-if="view.rows.length" #default>
+    <template v-if="!single" #default>
       <ul class="glim-instance-rows">
-        <li v-for="{ instance, sub } in view.rows" :key="instance.id" class="glim-instance-row" :data-instance="instance.id">
+        <li v-for="{ instance, sub, open: opens } in view.rows" :key="instance.id" class="glim-instance-row" :data-instance="instance.id">
           <span class="glim-instance-device" aria-hidden="true"><component :is="device(instance)" v-if="device(instance)" /></span>
           <span class="glim-instance-row-text">
             <span class="glim-instance-row-name">{{ instance.device }}</span>
@@ -55,6 +63,17 @@ function open() {
           </span>
           <span class="glim-instance-row-end">
             <Badge :tone="presenceTone(instance.presence)">{{ presence(instance) }}</Badge>
+            <Button
+              v-if="opens"
+              :label="text.open"
+              label-key="open"
+              tone="subtle"
+              variant="icon"
+              compact
+              :title="name(instance)"
+              data-fortress="open"
+              @click="open(instance)"
+            />
             <Button
               v-if="removes(instance)"
               :label="text.remove"
@@ -70,11 +89,10 @@ function open() {
         </li>
       </ul>
     </template>
-    <template #actions>
-      <Button v-if="view.open" :label="view.open.label" label-key="open" @click="open" />
-      <span v-else class="glim-instance-note">{{ view.note }}</span>
+    <template v-if="acts" #actions>
+      <Button v-if="view.open" :label="view.open.label" label-key="open" data-fortress="open" @click="open(view.main)" />
       <Button
-        v-if="!view.rows.length && removes(view.main)"
+        v-if="single && removes(view.main)"
         :label="text.remove"
         :label-key="removeKey"
         tone="subtle"
@@ -84,4 +102,12 @@ function open() {
       />
     </template>
   </InstanceCard>
+  <FortressDoubtWindow
+    v-if="asking"
+    :app="app"
+    :instance="asking"
+    :text="text"
+    :on-open="() => openInstance(app, asking!, onOpen)"
+    :on-close="() => (asking = null)"
+  />
 </template>

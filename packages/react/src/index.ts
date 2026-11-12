@@ -18,6 +18,7 @@ export * from "./FieldRowGroup.tsx";
 export * from "./Fortress.tsx";
 export * from "./FortressAppCard.tsx";
 export * from "./FortressPermissions.tsx";
+export * from "./FortressStatusWindow.tsx";
 export * from "./GlyphField.tsx";
 export * from "./GlyphTile.tsx";
 export { useFieldName } from "./fieldName.ts";

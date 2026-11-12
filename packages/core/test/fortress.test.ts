@@ -3,8 +3,11 @@ import assert from 'node:assert/strict';
 import {
   appCardView,
   createFortressFlow,
+  doubtView,
   enterWords,
   memberName,
+  openRefusalText,
+  statusView,
   othersLine,
   othersSummary,
   PHRASE_LENGTH,
@@ -17,6 +20,7 @@ import {
   type FortressHandlers,
 } from '../src/fortress.ts';
 import { en as fortressTextEn } from '../src/fortressLocales/en.ts';
+import { FORTRESS_OPEN_REFUSALS } from '../src/fortressText.ts';
 
 const blank = () => Array<string>(PHRASE_LENGTH).fill('');
 const TWELVE = 'oak lamp tower harbour maple lantern bridge kettle cloud saddle feather lance';
@@ -313,10 +317,11 @@ test('an app card names its forms, its instance count and the instance that open
   assert.equal(view.needs, 'A captcha waits');
   assert.equal(view.presence, 'connected');
   assert.deepEqual(view.rows.map((r) => r.sub), ['Container · v2.1.0', 'Android app · v2.1.0 · Last seen 07:40']);
+  assert.deepEqual(view.rows.map((r) => r.open), [true, false]);
   assert.deepEqual(view.open, { label: 'Open', href: 'https://atlas:8080' });
 });
 
-test('an app with one instance names its device, and one that opens elsewhere says where', async () => {
+test('an app with one instance names its device, and one with nothing to open offers nothing', async () => {
   const { en } = await import('../src/fortressLocales/en.ts');
   const plugin = appCardView({ id: 'p', name: 'P', instances: [{ id: 'p1', device: 'Atlas', form: 'plugin', presence: 'connected', open: { href: 'https://atlas/P', host: 'Unraid' } }] }, en, 'en');
   assert.deepEqual(plugin.facts, ['Atlas']);
@@ -324,8 +329,100 @@ test('an app with one instance names its device, and one that opens elsewhere sa
   assert.equal(plugin.open?.label, 'Open in Unraid');
   const phone = appCardView({ id: 'q', name: 'Q', instances: [{ id: 'q1', device: 'Pocket', form: 'Watch app', presence: 'away' }] }, en, 'en');
   assert.equal(phone.open, null);
-  assert.equal(phone.note, 'Opens only on Pocket');
   assert.equal(phone.eyebrow, 'Watch app');
+});
+
+test('an instance opens through the fortress without an address of its own', async () => {
+  const { en } = await import('../src/fortressLocales/en.ts');
+  const view = appCardView({ id: 'r', name: 'R', instances: [{ id: 'r1', device: 'Atlas', presence: 'connected', open: {} }] }, en, 'en');
+  assert.deepEqual(view.open, { label: 'Open', href: undefined });
+});
+
+test('two members claiming one app on one device warn on the card and ask by the id', async () => {
+  const { en } = await import('../src/fortressLocales/en.ts');
+  const app: FortressApp = {
+    id: 'bravo',
+    name: 'Bravo',
+    instances: [
+      { id: 'b1', device: 'Atlas', presence: 'connected', open: {}, doubt: true, print: '91c0' },
+      { id: 'b2', device: 'Atlas', presence: 'connected', open: {}, doubt: true, print: '0b13' },
+    ],
+  };
+  const view = appCardView(app, en, 'en');
+  assert.deepEqual(view.doubt, { label: 'Named twice', tip: 'Two members call themselves Bravo on Atlas. Open only the one you know.' });
+  assert.deepEqual(view.rows.map((r) => r.sub), ['', '']);
+  assert.equal(appCardView({ ...app, instances: [{ ...app.instances[0]!, doubt: false }] }, en, 'en').doubt, null);
+  assert.deepEqual(doubtView(en, app, app.instances[1]!), {
+    title: 'Two members call themselves Bravo on Atlas',
+    body: 'Open only if you know this is yours. Its id ends in 0b13.',
+    open: 'Open anyway',
+  });
+  assert.equal(doubtView(en, app, { ...app.instances[1]!, print: undefined, id: 'member-7a41c9' }).body, 'Open only if you know this is yours. Its id ends in 7a41c9.');
+});
+
+test('a refusal code gets its sentence, and an unknown one the general sentence', async () => {
+  const { en } = await import('../src/fortressLocales/en.ts');
+  assert.equal(openRefusalText(en, 'ui_no_login'), 'This app opens from elsewhere only once it has a password.');
+  assert.equal(openRefusalText(en, 'failed'), "The app sent something that can't be shown here.");
+  assert.equal(openRefusalText(en, 'teapot'), en.openRefused.failed);
+  assert.equal(openRefusalText(en, 'toString'), en.openRefused.failed);
+});
+
+test('the refusal sentences cover the kit codes', async () => {
+  const { en } = await import('../src/fortressLocales/en.ts');
+  assert.deepEqual(Object.keys(en.openRefused).sort(), [...FORTRESS_OPEN_REFUSALS].sort());
+});
+
+const plugin: FortressApp = { id: 'delta', name: 'Delta', instances: [{ id: 'd1', device: 'Atlas', form: 'plugin', presence: 'connected' }] };
+
+test('the status window shows the report, the newest ten log lines and where the settings are', async () => {
+  const { en } = await import('../src/fortressLocales/en.ts');
+  const log = Array.from({ length: 12 }, (_, i) => ({ at: `07:${String(59 - i)}`, level: i === 0 ? 'error' : 'info', text: `Line ${i}` }));
+  const view = statusView({
+    app: plugin,
+    instance: plugin.instances[0]!,
+    report: {
+      state: 'warning',
+      needsYou: [{ severity: 'warn', text: '2 updates wait' }],
+      work: [{ title: 'Checking disk 3', progress: 0.4 }],
+      next: [{ title: 'Parity check', at: 'Sunday 03:00' }],
+    },
+    log,
+    text: en,
+  });
+  assert.equal(view.title, 'Delta on Atlas');
+  assert.deepEqual(view.state, { label: 'Needs a look', tone: 'warn' });
+  assert.deepEqual(view.needsYou, [{ text: '2 updates wait', level: { label: 'Warning', tone: 'warn' } }]);
+  assert.equal(view.log.length, 10);
+  assert.deepEqual(view.log[0], { at: '07:59', text: 'Line 0', level: { label: 'Error', tone: 'fail' } });
+  assert.equal(view.log[1]!.level, null);
+  assert.equal(view.quiet, undefined);
+  assert.equal(view.where, 'Delta keeps its settings in Unraid on Atlas.');
+});
+
+test('only a plugin says its settings are in Unraid', async () => {
+  const { en } = await import('../src/fortressLocales/en.ts');
+  const app: FortressApp = { id: 'f', name: 'Foxtrot', instances: [{ id: 'f1', device: 'Atlas', form: 'container', presence: 'connected' }] };
+  assert.equal(statusView({ app, instance: app.instances[0]!, report: { state: 'ok', needsYou: [], work: [], next: [] }, text: en }).where, undefined);
+});
+
+test('a report with nothing in it says so, and an unknown state shows as it is', async () => {
+  const { en } = await import('../src/fortressLocales/en.ts');
+  const view = statusView({ app: plugin, instance: plugin.instances[0]!, report: { state: 'resting', needsYou: [], work: [], next: [] }, text: en });
+  assert.deepEqual(view.state, { label: 'resting', tone: 'neutral' });
+  assert.equal(view.quiet, 'Nothing needs you right now, and nothing is running.');
+});
+
+test('while loading or after an error the window holds only that line and where the settings are', async () => {
+  const { en } = await import('../src/fortressLocales/en.ts');
+  const base = { app: plugin, instance: plugin.instances[0]!, text: en };
+  const loading = statusView({ ...base, loading: true, log: [{ at: '07:00', level: 'info', text: 'x' }] });
+  assert.equal(loading.loading, "Asking Delta how it's doing.");
+  assert.deepEqual([loading.state, loading.log, loading.error], [null, [], undefined]);
+  const failed = statusView({ ...base, error: en.openRefused.unreachable });
+  assert.equal(failed.error, en.openRefused.unreachable);
+  assert.equal(failed.state, null);
+  assert.equal(failed.where, 'Delta keeps its settings in Unraid on Atlas.');
 });
 
 test('a step whose callback is missing does nothing', async () => {

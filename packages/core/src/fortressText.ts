@@ -7,6 +7,13 @@ export { en as fortressTextEn } from "./fortressLocales/en.ts";
 /** A sentence with a count, by the plural categories of the language (Intl.PluralRules). `other` is always there. */
 export type Plural = Partial<Record<Intl.LDMLPluralRule, string>> & { other: string };
 
+/** Why the fortress did not open a member, as the kit's refusal codes name it. `failed` stands for every other reason. */
+export const FORTRESS_OPEN_REFUSALS = ["unreachable", "no_ui", "permission_off", "ui_no_login", "busy", "removed", "closed", "too_large", "failed"] as const;
+export type FortressOpenRefusal = (typeof FORTRESS_OPEN_REFUSALS)[number];
+
+/** The states of a member's status report, from best to worst. */
+export type FortressMemberState = "off" | "ok" | "starting" | "warning" | "overdue" | "failed";
+
 export interface FortressText {
   /** The switch that shows the other apps of the fortress. */
   showOthers: string;
@@ -31,8 +38,15 @@ export interface FortressText {
   open: string;
   /** "Open in {host}", for an app that lives inside another page, such as Unraid's. */
   openIn: string;
-  /** For an app with no page to open from here, such as a phone app. */
-  openOnlyOn: string;
+  /** Why a member did not open, by refusal code, word for word what the kit's page says. `openRefusalText` picks one. */
+  openRefused: Record<FortressOpenRefusal, string>;
+  /** The warning badge on a card where two members claim the same app on the same device, and its (i). */
+  doubtBadge: string;
+  doubtHint: string;
+  /** The question before such a member opens, which names it by the end of its id. */
+  doubtTitle: string;
+  doubtBody: string;
+  openAnyway: string;
   remove: string;
   /** An instance of another app by name, "{app} on {device}", in the remove window and the reminder. */
   memberOn: string;
@@ -114,6 +128,18 @@ export interface FortressText {
   withApp: string;
   noPermissions: string;
   failed: string;
+  /** The status window of a member without pages of its own. Where an Unraid plugin keeps its settings. */
+  statusWhere: string;
+  statusLoading: string;
+  /** Said when nothing needs the person, runs or comes next. */
+  statusQuiet: string;
+  statusNeedsYou: string;
+  statusWork: string;
+  statusNext: string;
+  statusLog: string;
+  states: Record<FortressMemberState, string>;
+  /** The mark on a need or a log line that is more than information. */
+  levels: Record<"warn" | "error", string>;
 }
 
 /** Puts each `{name}` of `template` in place. A name without a value stays as it is. */
