@@ -23,7 +23,7 @@ export interface WindowAction {
   glyph?: Component;
   /** The forward action, filled with the accent and placed last. */
   primary?: boolean;
-  /** This action already leaves the window, such as Done, so no Cancel or Close is added. */
+  /** This action already leaves the window, so no Cancel or Close is added. */
   wayOut?: boolean;
   disabled?: boolean;
   /** Attributes for the action's button, such as a data hook. */

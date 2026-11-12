@@ -185,6 +185,8 @@ Two meanings never share a drawing. `IconCloud` and `IconTabOffsite` are the one
 | `IconAccounts` | Accounts | Drawn on a 20-unit grid |
 | `IconNetwork` | Network, connections | Streamline `computer-devices/wifi.svg` |
 | `IconPhone` | Phone | Streamline `phone/phone-mobile-phone.svg` |
+| `IconServer` | A server, the box an app runs on | Drawn for GlimStone |
+| `IconLaptop` | A laptop | Drawn for GlimStone |
 | `IconBrowser` | Browser | Streamline `programming/browser-website-1.svg` |
 | `IconApp` | Open or show the app | Streamline `programming/application-add.svg` |
 | `IconModules` | Modules | Streamline `programming/module-puzzle-1.svg` |

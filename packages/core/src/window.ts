@@ -10,7 +10,7 @@ export type WindowSize = "normal" | "wide" | "full";
 export interface WindowActionBase {
   /** The forward action, filled with the accent. Its presence makes the way out Cancel rather than Close. */
   primary?: boolean;
-  /** This action already leaves the window, such as Done, so no Cancel or Close is added. */
+  /** This action already leaves the window, so no Cancel or Close is added. */
   wayOut?: boolean;
 }
 

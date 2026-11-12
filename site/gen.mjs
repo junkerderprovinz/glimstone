@@ -50,6 +50,9 @@ const COMPONENTS = {
   GlyphTile: "react/GlyphTile.tsx",
   Table: "react/Table.tsx",
   SignInCard: "react/SignInCard.tsx",
+  Fortress: "react/Fortress.tsx",
+  FortressPairing: "react/Fortress.tsx",
+  InstanceCard: "react/InstanceCard.tsx",
 };
 
 const clean = (s) => s.replace(/\s+/g, " ").trim();

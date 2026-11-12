@@ -4,6 +4,35 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
+A glossary joins the packages: `@glimstone/terms` holds the words an interface uses for the same thing in all 42 languages, and checks an app's translations against them. The fortress gets its place in the Instances tab, with the other apps behind one switch, the permissions and the phrase as the only way in, in all 42 languages.
+
+**Adopting apps:**
+
+- **Installing:** `npm install --save-dev @glimstone/terms`. It ships at the same number as the other packages and depends on nothing.
+- **In CI:** `npx glimstone-terms <locale files or folders>` prints every break with file, line, language and key and exits with 1. `--terms=relay,backup` takes the terms on one at a time, and `--ignore=<file>` leaves out keys that name something else, such as a fixed product name.
+- **In a test:** `checkLocales(paths, { ignore, terms })` returns the same breaks as a list, so a Vitest file can expect it to be empty.
+- **Two rules:** a translation whose English carries a term carries that term's word, and no translation uses a forbidden variant. In German that means "Relay", never "Relais", "Sicherung" and not "Backup" in running text, "Phrase", never "Festungs-Phrase", and "Erlaubnis" for what one app may start in another, since "Freigabe" already names network and device shares.
+- **The fortress:** `Fortress` in `@glimstone/react` and `@glimstone/vue` is an app's Instances tab below its own cards. Hand it `text={fortressText(lang)}`, `lang`, the app, `joined`, the other apps with their instances, the permissions and the callbacks `onJoin`, `onRemove`, `onShowPhrase` and `onPermission`. Pass `notify` to put the confirmation of a saved permission, or the reason it failed, into the app's toasts. `FortressPairing` goes into the app's pairing settings with `onLeave` and `onChangePhrase`, since that is the one place to change the phrase or leave. The app's own cards go in as children, drawn with `InstanceCard`, and `hueStart` tells the fortress how many came first. Device glyphs and the buttons' glyphs come from the glyph resolver under `deviceServer`, `devicePc`, `deviceLaptop`, `devicePhone`, `fortressJoin`, `fortressLeave`, `fortressShowPhrase` and `fortressChangePhrase`. Map `deviceServer` to the new `IconServer` and `deviceLaptop` to `IconLaptop`. `@glimstone/core` now depends on `uqr` for the QR code.
+- **Flutter:** nothing changed there.
+
+## ✨ Added
+
+- **Nine terms:** fortress, instance, member, permission, relay, backup, pairing, phrase and job, each with a definition, singular, plural, gender and stems in every language. Where the existing translations disagree, the word most of them use is the one the glossary keeps, and the others are listed as forbidden variants.
+- **Stems, not fixed words:** a stem finds every inflection of a word, and in languages that build compounds it finds the word inside one.
+- **Placeholders, paths and addresses** such as `{backup}`, `/relay/connect` and `wss://host` do not count as words.
+- **`IconServer` and `IconLaptop`** in the glyph assortment, drawn flat from the front on the 14-unit grid, with a test that holds every glyph's viewBox to its measured ink.
+- **`qrCode()`** in `@glimstone/core`: a text as a QR code in one SVG path, and the phrase window shows the words beside one.
+- **The fortress in the Instances tab:** `Fortress`, `FortressPairing`, `InstanceCard`, `FortressAppCard` and `FortressPermissions` in React and Vue, with the switch for the other apps, a card per app with a row per instance, the permissions with a switch each, and the windows to join with the phrase, leave, remove an instance, and show or change the phrase.
+- **`createFortressFlow`, `appCardView` and the phrase helpers** in `@glimstone/core`, so both frameworks run the same steps, and `storedShowOthers` for the switch kept on the device.
+- **The fortress's words in all 42 languages** of the glossary: `fortressText(lang)`, `fortressTextEn` and one module per language under `@glimstone/core/fortressLocales/`, with `fill`, `plural` and `listOf` to put names and counts in.
+
+## 🎨 Design
+
+- **Saving says so:** no Apply, Save or Done beside a setting anywhere, a small confirmation once it is saved and a toast with the reason when it fails, except for the twelve words and a password, which only make sense once they are whole. Written into "Saving".
+- **"The fortress"**, a new section of the design language: the app's own instances first, the other apps behind one switch kept per device, the phrase as the only way in, Show phrase in the corner, changing the phrase and leaving only in the pairing settings, the words beside a QR code, and a rainbow position for every card.
+- **No Done in a window either:** one that only shows something, such as the phrase, closes with Close and its glyph like every other window.
+- **A member is Connected or Not reachable**, in every language, so no app has to put its own word over the state.
+
 The site gains a bilingual glossary of every element. The ink on an accent fill stays the computed contrast ink in every case: a switch that is on draws its knob in it, and an app's own reset of links and buttons no longer takes it off a filled button, segment, tile or rail row.
 
 **Adopting apps:**
