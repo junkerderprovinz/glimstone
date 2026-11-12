@@ -4,8 +4,8 @@ import { busyRingView, type BusyRingSize } from "@glimstone/core";
 export type { BusyRingSize } from "@glimstone/core";
 
 // The ring that turns while the app works on something: two arcs turning
-// against each other, from TowerTorch. It shows only after BUSY_DELAY, so a
-// quick answer never flashes it.
+// against each other. It shows only after BUSY_DELAY, so a quick answer never
+// flashes it.
 
 export interface BusyRingProps {
   /** `small` fits a button's glyph slot, `large` a card that waits. */

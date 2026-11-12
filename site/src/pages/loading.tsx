@@ -13,9 +13,8 @@ export function BusyRingPage() {
       <H2>Rules</H2>
       <ul>
         <li>
-          Two flat arcs turn against each other in one period and meet at the top and the bottom. The ring came from
-          TowerTorch and keeps its proportions: the arcs are a tenth of the ring thick, each 155° long, with a cap at
-          either end that follows the shape.
+          Two flat arcs turn against each other in one period and meet at the top and the bottom. The arcs are a tenth
+          of the ring thick, each 155° long, with a cap at either end that follows the shape.
         </li>
         <li>
           It shows only after 400 ms (<code>BUSY_DELAY</code>), so an answer that comes quickly never flashes a loader.{" "}

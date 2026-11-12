@@ -1,30 +1,8 @@
-## 4.3.7
+## 4.4.0
 
-- Checked on Flutter 3.47.9. On Flutter 3.50 the analyzer shows deprecation hints for `package:flutter/material.dart`, the move to `package:material_ui` comes later.
-
-## 4.3.6
-
-- No changes for Flutter. The stricter index checks this release brings live in the web packages.
-
-## 4.3.5
-
-- No changes for Flutter. The sign-in card this release changes lives in the web packages.
-
-## 4.3.4
-
-- `GlimTheme` gains `brandMos` and `brandUmbrel`, the MOS and Umbrel marks' colours, written from the tokens.
-
-## 4.3.3
-
-- The same number as the other packages. Nothing changed for Flutter.
-
-## 4.3.2
-
-- `GlimTheme` gains `brandFlatpak`, the Flatpak mark's blue, written from the tokens.
-
-## 4.3.1
-
-- The same number as the other packages. Nothing changed for Flutter.
+- `GlimTheme` gains `brandFlatpak`, `brandMos` and `brandUmbrel`, the Flatpak, MOS and Umbrel marks' colours, written from the tokens.
+- `GlimGlyphs` gains `server` and `laptop`.
+- Checked on Flutter 3.47.9. On Flutter 3.50 the analyzer shows deprecation hints for `package:flutter/material.dart`, and the move to `package:material_ui` comes later.
 
 ## 4.3.0
 

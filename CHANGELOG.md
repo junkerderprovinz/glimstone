@@ -2,212 +2,101 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 4.4.0 - 2026-11-12
 
-A glossary joins the packages: `@glimstone/terms` holds the words an interface uses for the same thing in all 42 languages, and checks an app's translations against them. The fortress gets its place in the Instances tab, with the other apps behind one switch, the permissions and the phrase as the only way in, in all 42 languages.
+The fortress moves in. An app's Instances tab shows its own instances first and the other apps of the fortress behind one switch, with the permissions and the phrase as the only way in, in all 42 languages. `@glimstone/terms` keeps the shared words of an interface and checks an app's translations against them. Around them come a list with its tools inside it, popovers and sheets in the top layer, loaders that wait before they show, errors under fields, toasts read out through live regions, a bilingual glossary of every element, four more README brands and labels inside the sign-in fields.
 
 **Adopting apps:**
 
-- **Installing:** `npm install --save-dev @glimstone/terms`. It ships at the same number as the other packages and depends on nothing.
+- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.4.0, all at the same number. Nothing is removed, and `Badge`'s `shape` is deprecated but still works.
+- **Installing the terms:** `npm install --save-dev @glimstone/terms`. It ships at the same number as the other packages and depends on nothing.
 - **In CI:** `npx glimstone-terms <locale files or folders>` prints every break with file, line, language and key and exits with 1. `--terms=relay,backup` takes the terms on one at a time, and `--ignore=<file>` leaves out keys that name something else, such as a fixed product name.
 - **In a test:** `checkLocales(paths, { ignore, terms })` returns the same breaks as a list, so a Vitest file can expect it to be empty.
 - **Two rules:** a translation whose English carries a term carries that term's word, and no translation uses a forbidden variant. In German that means "Relay", never "Relais", "Sicherung" and not "Backup" in running text, "Phrase", never "Festungs-Phrase", and "Erlaubnis" for what one app may start in another, since "Freigabe" already names network and device shares.
-- **The fortress:** `Fortress` in `@glimstone/react` and `@glimstone/vue` is an app's Instances tab below its own cards. Hand it `text={fortressText(lang)}`, `lang`, the app, `joined`, the other apps with their instances, the permissions and the callbacks `onJoin`, `onRemove`, `onShowPhrase` and `onPermission`. Pass `notify` to put the confirmation of a saved permission, or the reason it failed, into the app's toasts. `FortressPairing` goes into the app's pairing settings with `onLeave` and `onChangePhrase`, since that is the one place to change the phrase or leave. The app's own cards go in as children, drawn with `InstanceCard`, and `hueStart` tells the fortress how many came first. Device glyphs and the buttons' glyphs come from the glyph resolver under `deviceServer`, `devicePc`, `deviceLaptop`, `devicePhone`, `fortressJoin`, `fortressLeave`, `fortressShowPhrase` and `fortressChangePhrase`. Map `deviceServer` to the new `IconServer` and `deviceLaptop` to `IconLaptop`. `@glimstone/core` now depends on `uqr` for the QR code.
-- **Flutter:** nothing changed there.
+- **The fortress:** `Fortress` in `@glimstone/react` and `@glimstone/vue` is an app's Instances tab below its own cards. Hand it `text={fortressText(lang)}`, `lang`, the app, `joined`, the other apps with their instances, the permissions and the callbacks `onJoin`, `onRemove`, `onShowPhrase` and `onPermission`. Pass `notify` to put the confirmation of a saved permission, or the reason it failed, into the app's toasts. `FortressPairing` goes into the app's pairing settings with `onLeave` and `onChangePhrase`, since that is the one place to change the phrase or leave. The app's own cards go in as children, drawn with `InstanceCard`, and `hueStart` tells the fortress how many came first. Device glyphs and the buttons' glyphs come from the glyph resolver under `deviceServer`, `devicePc`, `deviceLaptop`, `devicePhone`, `fortressJoin`, `fortressLeave`, `fortressShowPhrase` and `fortressChangePhrase`. Map `deviceServer` to the new `IconServer` and `deviceLaptop` to `IconLaptop`. `@glimstone/core` depends on `uqr` for the QR code.
+- **Your own reset:** a rule such as `a, button { color: inherit }` outside any cascade layer no longer reaches the colour of a GlimStone button, badge, selector segment or tile, rail row or donation choice. An app that keeps its own copy of the tokens takes the `revert-layer` rule beside the button and the switch's knob rule from `tokens.css`.
+- **Sub-card titles:** a `SubCard` with a `title` draws it as a section badge in the notch on its top edge, as a `Card` does, and the small uppercase title is gone. Put what belongs to the whole group, such as its switch, into `end` (in Vue the `end` slot) rather than into its first row. An app that keeps its own copy of the tokens takes the sub-card block from `tokens.css` and drops `.glim-subcard-title`.
+- **Badge forms:** `form="rounded" | "square" | "pill" | "circle"` on `Badge` gives a badge exactly that form under every shape setting. `shape` keeps doing what it did: `shape="circle"` makes the badge icon-only, the other values change nothing. Move `shape="circle"` to `form="circle"` for a real circle. An app that keeps its own copy of the tokens takes `.glim-badge--rounded`, `--square`, `--pill` and `--circle` from `tokens.css`.
+- **Names in the markup:** every component's outermost element carries `data-glim` with its name and, where it has a title, `data-glim-title`. A stylesheet or a test of yours that counts attributes on these elements sees two more. `Card` and `InfoTile` in React take `data-*` attributes and put them on their root, and `InfoTile` stands in a wrapper with `display: contents`.
+- **Field errors:** pass `error` to `TextField`, `TextArea`, `PasswordField` or `NumberField` for a value the field cannot take, and put `FieldError` under a field of the app's own. A local error line under a field can go.
+- **Busy buttons:** a busy `Button` draws the `BusyRing` where the spinner was, so a screenshot test of one sees the ring. An app that draws `.glim-spinner` itself keeps it, the class stays in `tokens.css`.
+- **Toasts:** a toast card carries no live role of its own. `ToastViewport` reads each new toast out through two live regions it keeps in the page, so a test that looked for `role="alert"` on a card looks for the message in the regions instead. A toast with an action gets no countdown from `addToast` and stays until it is dismissed or its action is pressed.
+- **Windows:** an open `Window` makes the page and every window behind it inert. A test that clicked the page behind an open window closes the window first.
+- **Portals of your own:** a menu, a bubble or a list the app portals itself renders into `portalTarget()` rather than `document.body`, so it shows above an open sheet.
+- **Plugin pages:** a plugin page that gates its GlimStone look on `html.cc-popups-on` moves to `html.tt-popups-on`, the class the companion plugin stamps onto `<html>`.
+- **Segments:** a part after the first one gets one word and no second line, such as `{ name: "ARM", label: "Windows ARM", href }` beside `{ name: "Windows", sub: "x64", href }`. A segment that repeats the system's name with the variant as its second line reads "Windows | Windows" at rest.
+- **`label` on `ReadmePart`:** optional. Where it is set it is the part's `aria-label`. Without it the accessible name stays the name and the second line. An app with its own copy of `ReadmeButton` takes `readmePartLabel(part, sub)` from `@glimstone/core` for the label.
+- **Flatpak, MOS, ZimaOS and Umbrel:** give the button `brand="flatpak"`, `"mos"`, `"zimaos"` or `"umbrel"` with `mark={<BrandMark svg={FLATPAK_SVG} />}`, `MOS_SVG`, `ZIMAOS_SVG` or `UMBREL_SVG`. Flatpak takes `markClass="glim-flatpak-mark"`, MOS `markClass="glim-mos-mark"` and Umbrel `markClass="glim-umbrel-mark"`. ZimaOS needs no `markClass`: its mark takes the button's ink. An app that keeps its own copy of the tokens takes `--brand-flatpak`, `--brand-mos` and `--brand-umbrel` in all three theme blocks, their lines in the lit tile's block, the three mark classes and `.glim-tile-flatpak`, `.glim-tile-mos`, `.glim-tile-zimaos` and `.glim-tile-umbrel` from `tokens.css`.
+- **Vue Info cards:** an app that passes `:open-url` to `InfoVersionCard` or `InfoHelpCard` only to keep the default from running on mount can drop it. The cards open links with `openInBrowser` by themselves.
+- **Sign-in fields:** a field in the `fields` slot inside `SignInField` takes its label as its placeholder by itself. A field that brings its own placeholder keeps the label above it. Take a "Stay signed in" switch off the card, since how long a sign-in lasts belongs in the account's settings.
+- **Strict index checks:** with `noUncheckedIndexedAccess` on, the core's files compile as they are, so a patched copy can go.
+- **Glyph map and data:** `glyph-map.md` is one table of meanings and glyphs per section, without columns and sections per app, and the `source` values in `glyphs.json` read "Drawn for GlimStone" or "Drawn on a 20-unit grid". An app that copied its own column keeps that copy, and no code reads `source`.
+- **Flutter:** move the git dependency to `ref: v4.4.0`. `GlimTheme` gains `brandFlatpak`, `brandMos` and `brandUmbrel`, and `GlimGlyphs` gains `server` and `laptop`. The package is checked on Flutter 3.47.9. On Flutter 3.50 the analyzer shows deprecation hints for `package:flutter/material.dart`, and the move to `package:material_ui` comes in a later release.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.4.0.
 
 ## ✨ Added
 
-- **Nine terms:** fortress, instance, member, permission, relay, backup, pairing, phrase and job, each with a definition, singular, plural, gender and stems in every language. Where the existing translations disagree, the word most of them use is the one the glossary keeps, and the others are listed as forbidden variants.
-- **Stems, not fixed words:** a stem finds every inflection of a word, and in languages that build compounds it finds the word inside one.
-- **Placeholders, paths and addresses** such as `{backup}`, `/relay/connect` and `wss://host` do not count as words.
-- **`IconServer` and `IconLaptop`** in the glyph assortment, drawn flat from the front on the 14-unit grid, with a test that holds every glyph's viewBox to its measured ink.
-- **`qrCode()`** in `@glimstone/core`: a text as a QR code in one SVG path, and the phrase window shows the words beside one.
 - **The fortress in the Instances tab:** `Fortress`, `FortressPairing`, `InstanceCard`, `FortressAppCard` and `FortressPermissions` in React and Vue, with the switch for the other apps, a card per app with a row per instance, the permissions with a switch each, and the windows to join with the phrase, leave, remove an instance, and show or change the phrase.
 - **`createFortressFlow`, `appCardView` and the phrase helpers** in `@glimstone/core`, so both frameworks run the same steps, and `storedShowOthers` for the switch kept on the device.
-- **The fortress's words in all 42 languages** of the glossary: `fortressText(lang)`, `fortressTextEn` and one module per language under `@glimstone/core/fortressLocales/`, with `fill`, `plural` and `listOf` to put names and counts in.
+- **`qrCode()`** in `@glimstone/core`: a text as a QR code in one SVG path, and the phrase window shows the words beside one.
+- **`IconServer` and `IconLaptop`** in the glyph assortment, drawn flat from the front on the 14-unit grid, with a test that holds every glyph's viewBox to its measured ink.
+- **`@glimstone/terms` with nine terms:** fortress, instance, member, permission, relay, backup, pairing, phrase and job, each with a definition, singular, plural, gender and stems in every language. Where the existing translations disagree, the word most of them use is the one the glossary keeps, and the others are listed as forbidden variants.
+- **Stems, not fixed words:** a stem finds every inflection of a word, and in languages that build compounds it finds the word inside one. Placeholders, paths and addresses such as `{backup}`, `/relay/connect` and `wss://host` do not count as words.
+- **`ListTable`, the list of a list page with its tools inside it.** A click on a heading sorts and sets `aria-sort`, a ▾ beside a column filters by its values in a `Popover`, typing floats a search inside the list, and rows are picked as in a file manager, with Ctrl, Shift, the arrows, Space and Ctrl+A. Enter or a double click opens a row. The rules are plain functions in `listModel.ts` in the core: `nextSort`, `sortRows`, `filterRows`, `searchRows`, `selectByClick`, `selectByKey` and `listKey`.
+- **`Popover`, a small panel beside its trigger** in the browser's top layer, through the `popover` attribute. CSS anchor positioning places it under the trigger, or above where there is no room, and `computeBubblePosition` does the same in a browser without it. Escape and a press beside it close it.
+- **`Sheet`, a panel at the end edge** for the details of a row. It is a `<dialog>` shown modal, a card inset by the page gutter, and it rises from the bottom on a phone. Its foot works as a window's, and it slides in by `--motion-sheet-shift` over `--motion-sheet-dur`.
+- **`portalTarget()`** says where a bubble, a menu or a list renders: into an open sheet, since `<body>` lies under the top layer. Every component that portals asks it.
+- **`BusyRing`, the ring that turns while the app works on something:** two arcs that turn against each other and meet at the top and the bottom. It comes in three sizes, takes the accent, and with a `label` it is a status that says what is loading.
+- **`SkeletonRow`, a row that holds a list row's place while the list loads.** It has a tile, a name and a badge in a `ListRow`'s box, so nothing jumps when the rows arrive. One band of light crosses every row at once, and in the light theme that band is white.
+- **Neither loader shows for the first 400 ms** (`BUSY_DELAY`), so a quick answer never flashes one. `delay={0}` shows them at once. Three motion dials come with them, `--motion-spin-dur`, `--motion-skeleton-dur` and `--motion-skeleton-glow`, and at "off" and under reduced motion nothing turns and no light crosses.
+- **`announce(text, "polite" | "assertive")` in the core** has a screen reader say words that have no element of their own, such as "3 rows selected". It writes into the page's live regions and adds them in an app without a toast viewport.
+- **`error` on `TextField`, `TextArea`, `PasswordField` and `NumberField`** for a value the field cannot take. The field turns `aria-invalid` and takes the fault wash, and a line under it says why until the value is fixed. `FieldError` draws the same line for an app's own field, and `fieldErrorView` in the core says what the field carries.
+- **`form` on `Badge`**, in React and Vue, with the type `BadgeForm`: the four forms the style guide names, rounded, square, pill and circle.
+- **A glossary on the site** (Guide, Glossary): every element under its English and German name, its short form and how the code spells it, rendered live, with the GlimStone rule that governs it. A picture of an Export window with numbered parts opens the page and an index from A to Z closes it. German names the style guide does not settle yet carry a Proposal badge. The entries live in `site/src/pages/glossary.data.ts`, and `site/test/glossary.test.ts` fails when a component the React or Vue package exports has no entry or an entry names one that is gone.
+- **`data-glim` and `data-glim-title`** on every component in React and Vue, so a review tool can name each element by its GlimStone name. A test fails when an exported component does not name itself.
+- **`label` on `ReadmePart`**, in React and Vue: the accessible name of a segment whose word reads right only beside the first part. `readmePartLabel` in the core builds it from `label`, or from the name and the second line.
+- **Four README brands:** `FLATPAK_SVG` (Simple Icons, CC BY 3.0), `MOS_SVG` from the `mos.svg` in mos-nas/mos-releases, `ZIMAOS_SVG` from the logo of its web interface and `UMBREL_SVG` from Dashboard Icons (Apache 2.0) in `appMarks.ts`, with their `--brand-*` tokens, mark and tile classes and `ReadmeBrand`s.
+- **`labelInside`** in the core decides whether a sign-in field shows its label inside, for both frameworks, and the React `SignInField` takes `hidden`.
 
 ## 🎨 Design
 
-- **Saving says so:** no Apply, Save or Done beside a setting anywhere, a small confirmation once it is saved and a toast with the reason when it fails, except for the twelve words and a password, which only make sense once they are whole. Written into "Saving".
 - **"The fortress"**, a new section of the design language: the app's own instances first, the other apps behind one switch kept per device, the phrase as the only way in, Show phrase in the corner, changing the phrase and leaving only in the pairing settings, the words beside a QR code, and a rainbow position for every card.
+- **Saving says so:** no Apply, Save or Done beside a setting anywhere, a small confirmation once it is saved and a toast with the reason when it fails, except for the twelve words and a password, which only make sense once they are whole. Written into "Saving".
 - **No Done in a window either:** one that only shows something, such as the phrase, closes with Close and its glyph like every other window.
 - **A member is Connected or Not reachable**, in every language, so no app has to put its own word over the state.
-
-The site gains a bilingual glossary of every element. The ink on an accent fill stays the computed contrast ink in every case: a switch that is on draws its knob in it, and an app's own reset of links and buttons no longer takes it off a filled button, segment, tile or rail row.
-
-**Adopting apps:**
-
-- **Your own reset:** a rule such as `a, button { color: inherit }` outside any cascade layer no longer reaches the colour of a GlimStone button, badge, selector segment or tile, rail row or donation choice. An app that keeps its own copy of the tokens takes the `revert-layer` rule beside the button and the switch's knob rule from `tokens.css`.
-- **Sub-card titles:** a `SubCard` with a `title` draws it as a section badge in the notch on its top edge, as a `Card` does, and the small uppercase title is gone. Put what belongs to the whole group, such as its switch, into `end` (in Vue the `end` slot) rather than into its first row. An app that keeps its own copy of the tokens takes the sub-card block from `tokens.css` and drops `.glim-subcard-title`.
-- **Badge forms:** `form="rounded" | "square" | "pill" | "circle"` on `Badge` gives a badge exactly that form under every shape setting. `shape` is deprecated and keeps doing what it did: `shape="circle"` makes the badge icon-only, the other values change nothing. Move `shape="circle"` to `form="circle"` for a real circle. An app that keeps its own copy of the tokens takes `.glim-badge--rounded`, `--square`, `--pill` and `--circle` from `tokens.css`.
-- **Names in the markup:** every component's outermost element now carries `data-glim` with its name and, where it has a title, `data-glim-title`. A stylesheet or a test of yours that counts attributes on these elements sees two more. `Card` and `InfoTile` in React take `data-*` attributes and put them on their root, and `InfoTile` stands in a wrapper with `display: contents`.
-- **Flutter:** nothing changes there.
-
-## 🎨 Design
-
+- **"Popovers and sheets"**, a new section: both stand in the browser's top layer, a popover beside its trigger and a sheet at the end edge, and whatever opens inside a sheet renders into it.
+- **"Waiting"**, a new section: the ring takes the accent, placeholder rows hold the list's place, nothing shows for the first 400 ms, and the words belong to the container that waits.
+- **A value a field cannot take is not a failed action.** It gets a line under its field and no toast and no shake, since nothing was sent.
 - **A sub-card's title is a section badge in the notch** (rules 1 and 11), and `end` stands at the end of that row.
 - **Row tiles on a sub-card or in a well step up one surface** at rest and hover one more (rule 21). Their resting fill was the sub-card's own, so the tiles vanished into it.
 - **Rule 4 names the state colours GlimStone uses:** the accent for running, green for done, orange for partial or a warning, red for an error and neutral for waiting or unknown. Its number stays, since other notes cite it.
 - **A tile has four names, one for each kind:** row tile (Zeilenkachel), glyph tile (Glyphenkachel), brand tile (Markenkachel) and Info tile (Infokachel), in the glossary and under "Vertical tiles".
-
-## ✨ Added
-
-- **`form` on `Badge`**, in React and Vue, with the type `BadgeForm`: the four forms the style guide names, rounded, square, pill and circle.
-- **A glossary on the site** (Guide, Glossary): every element under its English and German name, its short form and how the code spells it, rendered live, with the GlimStone rule that governs it. A picture of an Export window with numbered parts opens the page and an index from A to Z closes it. German names the style guide does not settle yet carry a Proposal badge. The entries live in `site/src/pages/glossary.data.ts`, and `site/test/glossary.test.ts` fails when a component the React or Vue package exports has no entry or an entry names one that is gone.
-- **`data-glim` and `data-glim-title`** on every component in React and Vue, so a review tool can name each element by its GlimStone name.
-
-## 🐛 Fixed
-
-- **A switch that is on draws its knob in `--accent-contrast`.** On the light theme the knob was the pale ground, 1.46:1 on Sunflower and at most 2.77:1 on the presets. It now measures 5.95:1 to 11.24:1.
-- **The ink on a filled link or button survives an app's reset.** The component rules sit in a cascade layer, so an unlayered `a, button { color: inherit }` put the page's text colour on a picked segment, a picked tile, an active rail row and an accent button, as low as 1.12:1. They take their colour back from the layer.
-## ✨ Added
-
-- **`BusyRing`, the ring that turns while the app works on something.** It is TowerTorch's loader: two arcs that turn against each other and meet at the top and the bottom. It comes in three sizes, takes the accent, and with a `label` it is a status that says what is loading.
-- **`SkeletonRow`, a row that holds a list row's place while the list loads.** It has a tile, a name and a badge in a `ListRow`'s box, so nothing jumps when the rows arrive. One band of light crosses every row at once, and in the light theme that band is white.
-- **Neither shows for the first 400 ms** (`BUSY_DELAY`), so a quick answer never flashes a loader. `delay={0}` shows them at once.
-- **Three motion dials:** `--motion-spin-dur`, `--motion-skeleton-dur` and `--motion-skeleton-glow`. At "off" and under reduced motion nothing turns and no light crosses.
-- **`announce(text, "polite" | "assertive")` in the core** has a screen reader say words that have no element of their own, such as "3 rows selected". It writes into the page's live regions and adds them in an app without a toast viewport.
-- **`Popover`, a small panel beside its trigger** in the browser's top layer, through the `popover` attribute. CSS anchor positioning places it under the trigger, or above where there is no room, and `computeBubblePosition` does the same in a browser without it. Escape and a press beside it close it.
-- **`Sheet`, a panel at the end edge** for the details of a row. It is a `<dialog>` shown modal, a card inset by the page gutter, and it rises from the bottom on a phone. Its foot works as a window's, and it slides in by `--motion-sheet-shift` over `--motion-sheet-dur`.
-- **`portalTarget()`** says where a bubble, a menu or a list renders: into an open sheet, since `<body>` lies under the top layer. Every component that portals asks it.
-- **`ListTable`, the list of a list page with its tools inside it.** A click on a heading sorts and sets `aria-sort`, a ▾ beside a column filters by its values in a `Popover`, typing floats a search inside the list, and rows are picked as in a file manager, with Ctrl, Shift, the arrows, Space and Ctrl+A. Enter or a double click opens a row. The rules are plain functions in `listModel.ts` in the core: `nextSort`, `sortRows`, `filterRows`, `searchRows`, `selectByClick`, `selectByKey` and `listKey`.
-- **`error` on `TextField`, `TextArea`, `PasswordField` and `NumberField`** for a value the field cannot take. The field turns `aria-invalid` and takes the fault wash, and a line under it says why until the value is fixed. `FieldError` draws the same line for an app's own field, and `fieldErrorView` in the core says what the field carries.
-
-## ⚡ Improved
-
-- **A busy `Button` shows the `BusyRing`** in its glyph slot. The old spinner turned at a fixed second whatever the motion level was. The ring follows the level and stands still at "off". `.glim-spinner` stays in `tokens.css` for apps that use it directly.
-- **`ToastViewport` keeps two live regions in the page for good** and reads each new toast out through them. Only a failure interrupts. A warning used to be an alert as well, and a card that carried the role itself was skipped by some screen readers.
-- **A toast with an action stays until it is dismissed** or its action is pressed, so nobody loses an Undo while still reading. `addToast` gives it no countdown, and `toastPoliteness(severity)` says how a toast is read out.
-- **A window makes everything behind it inert,** the page and any window under it, so neither the pointer nor a screen reader reaches them. The Tab trap alone kept only the keyboard inside.
-
-## 4.3.7 - 2026-11-11
-
-The Flutter package's checks run on Flutter 3.47.9 again. Flutter 3.50 deprecates `package:flutter/material.dart`, which the package still imports, so `flutter analyze` stopped on five deprecation hints.
-
-**Adopting apps:**
-
-- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.3.7, all at the same number. Nothing in the web packages changes.
-- **Flutter:** move the git dependency to `ref: v4.3.7`. The package still works on Flutter 3.50, the analyzer just shows deprecation hints there. The move to `package:material_ui` comes in a later release.
-- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.3.7.
-
-## 🐛 Fixed
-
-- **The site builds again.** Its workflow pins Flutter 3.47.9 instead of taking whatever stable is.
-
-## 4.3.6 - 2026-11-11
-
-The core compiles under strict index checks, so an app that turns on `noUncheckedIndexedAccess` can take its files over unchanged.
-
-**Adopting apps:**
-
-- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.3.6, all at the same number. Nothing is renamed or removed.
-- **Strict index checks:** with `noUncheckedIndexedAccess` on, the core's files compile as they are. You no longer need to patch a copy.
-- **Flutter:** move the git dependency to `ref: v4.3.6`. Nothing changes there.
-- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.3.6.
-
-## ⚡ Improved
-
-- **The core compiles under `noUncheckedIndexedAccess`.** Each list read the compiler could not prove safe is either checked or marked where the index cannot leave the list, and the components behave as before.
-- **The React and Vue packages build with the same check**, so their components hold to it too.
-
-## 🐛 Fixed
-
-- **`readmeSoon` takes an empty list.** It used to throw there and now calls the button still to come.
-
-## 4.3.5 - 2026-11-11
-
-The sign-in card shows each field's label inside the field until the first key.
-
-**Adopting apps:**
-
-- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.3.5, all at the same number. Nothing is renamed or removed.
-- **Your own fields:** a field in the `fields` slot inside `SignInField` takes its label as its placeholder by itself. A field that brings its own placeholder keeps the label above it.
-- **Stay signed in:** take the switch off the card. How long a sign-in lasts belongs in the account's settings.
-- **Flutter:** move the git dependency to `ref: v4.3.5`. Nothing changes there.
-- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.3.5.
-
-## 🎨 Design
-
 - **A sign-in field's label stands inside it** as its placeholder, until the first key. It stays the field's accessible name, only hidden. A field with a placeholder of its own or with a hint keeps its label above it.
+- **The first part of a README button names the product, a segment names only what differs**, a new line under "The App tab": the mark and the full name with its second line on the first part, one word on a segment, "ARM" or "Portable", and the whole name as the segment's `label`.
+- **Four brand tiles:** Flatpak's is the mark's blue, `#4a90d9`, with white ink at 3.3:1. MOS's is its green, `#26a269`, with white ink at 3.3:1. Umbrel's is its violet, `#5351f3`, with white ink at 5.5:1, and its mark rests in `#7d7bf6` on the dark theme, where the violet reads only 2.1:1. ZimaOS's is its light grey, `#f4f4f4`, with `#161616` ink and a `#a8a8a8` ring through `--tile-edge`, since that grey is the light theme's own ground.
+- **The design language names no app.** Every case a rule was found in is told on its own, and each rule keeps its reason and its examples. The changelogs, the release notes, the site and the glyph data name no app either.
 
-## ✨ Added
+## ⚡ Improved
 
-- **`labelInside`** in the core decides it for both frameworks, and the React `SignInField` takes `hidden`.
-
-## 4.3.4 - 2026-11-10
-
-MOS, ZimaOS and Umbrel join the README buttons, each with the mark and the tile colour of the README's own button.
-
-**Adopting apps:**
-
-- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.3.4, all at the same number. Nothing is renamed or removed.
-- **MOS, ZimaOS and Umbrel:** give the button `brand="mos"`, `brand="zimaos"` or `brand="umbrel"` with `mark={<BrandMark svg={MOS_SVG} />}`, `ZIMAOS_SVG` or `UMBREL_SVG`. MOS takes `markClass="glim-mos-mark"` and Umbrel `markClass="glim-umbrel-mark"`. ZimaOS needs no `markClass`: its mark takes the button's ink. An app that keeps its own copy of the tokens takes `--brand-mos` and `--brand-umbrel` in all three theme blocks, their lines in the lit tile's block, `.glim-mos-mark`, `.glim-umbrel-mark`, `.glim-tile-mos`, `.glim-tile-zimaos` and `.glim-tile-umbrel` from `tokens.css`.
-- **Flutter:** move the git dependency to `ref: v4.3.4`. `GlimTheme` gains `brandMos` and `brandUmbrel`.
-- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.3.4.
-
-## 🎨 Design
-
-- **MOS's tile** is its green, `#26a269`, with white ink at 3.3:1. **Umbrel's** is its violet, `#5351f3`, with white ink at 5.5:1, and its mark rests in `#7d7bf6` on the dark theme, where the violet reads only 2.1:1. **ZimaOS's** is its light grey, `#f4f4f4`, with `#161616` ink, and a `#a8a8a8` ring through `--tile-edge`, since that grey is the light theme's own ground.
-
-## ✨ Added
-
-- **`MOS_SVG`, `ZIMAOS_SVG` and `UMBREL_SVG`** in `appMarks.ts`: MOS from the `mos.svg` in mos-nas/mos-releases, ZimaOS from the logo of its web interface, Umbrel from Dashboard Icons (Apache 2.0). With them come `--brand-mos`, `--brand-umbrel`, `.glim-mos-mark`, `.glim-umbrel-mark`, `.glim-tile-mos`, `.glim-tile-zimaos`, `.glim-tile-umbrel` and `"mos"`, `"zimaos"` and `"umbrel"` among the `ReadmeBrand`s.
-
-## 4.3.3 - 2026-11-10
-
-The Info cards in Vue keep `openUrl` as a function, so mounting one no longer opens an empty tab.
-
-**Adopting apps:**
-
-- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.3.3, all at the same number. Nothing is renamed or removed.
-- **Vue Info cards:** an app that passes `:open-url` to `InfoVersionCard` or `InfoHelpCard` only to keep the default from running on mount can drop it. The cards open links with `openInBrowser` by themselves.
-- **Flutter:** move the git dependency to `ref: v4.3.3`. Nothing changed for Flutter.
-- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.3.3.
+- **A busy `Button` shows the `BusyRing`** in its glyph slot. The old spinner turned at a fixed second whatever the motion level was. The ring follows the level and stands still at "off".
+- **`ToastViewport` keeps two live regions in the page for good** and reads each new toast out through them. Only a failure interrupts. A warning used to be an alert as well, and a card that carried the role itself was skipped by some screen readers.
+- **A toast with an action stays until it is dismissed** or its action is pressed, so nobody loses an Undo while still reading. `toastPoliteness(severity)` says how a toast is read out.
+- **A window makes everything behind it inert,** the page and any window under it, so neither the pointer nor a screen reader reaches them. The Tab trap alone kept only the keyboard inside.
+- **The core compiles under `noUncheckedIndexedAccess`.** Each list read the compiler could not prove safe is either checked or marked where the index cannot leave the list, and the React and Vue packages build with the same check.
 
 ## 🐛 Fixed
 
-- **`InfoVersionCard` and `InfoHelpCard` in Vue** declared `openUrl` through a type from `@glimstone/core`, which the library build cannot read. The built prop had no runtime type, so Vue took the default opener for a factory and called it once on mount, which opened an empty tab. The type is spelled out in the Vue package, and a test compiles every component the way the build does and checks that a prop defaulting to a function keeps its function type.
+- **A switch that is on draws its knob in `--accent-contrast`.** On the light theme the knob was the pale ground, 1.46:1 on Sunflower and at most 2.77:1 on the presets. It measures 5.95:1 to 11.24:1 now.
+- **The ink on a filled link or button survives an app's reset.** The component rules sit in a cascade layer, so an unlayered `a, button { color: inherit }` put the page's text colour on a picked segment, a picked tile, an active rail row and an accent button, as low as 1.12:1. They take their colour back from the layer.
+- **`InfoVersionCard` and `InfoHelpCard` in Vue** opened an empty tab on mount. Their `openUrl` prop had no runtime type in the build, so Vue took the default opener for a factory and called it. The type is spelled out in the Vue package, and a test compiles every component the way the build does.
+- **`readmeSoon` takes an empty list.** It used to throw there and calls the button still to come instead.
+- **Plugin pages name the companion plugin's real class,** `html.tt-popups-on`. The design language named `html.cc-popups-on`, which nothing sets.
+- **The site builds again on a pinned Flutter 3.47.9** instead of whatever stable is.
 
-## 4.3.2 - 2026-11-09
+## 🌐 Translations
 
-A README button's segment names only what differs, in one line, and can carry the whole name as its accessible name. Flatpak joins the brands with its mark and its blue tile.
-
-**Adopting apps:**
-
-- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.3.2, all at the same number. Nothing is renamed or removed.
-- **Segments:** a part after the first one gets one word and no second line, such as `{ name: "ARM", label: "Windows ARM", href }` beside `{ name: "Windows", sub: "x64", href }`. A segment that repeats the system's name with the variant as its second line reads "Windows | Windows" at rest.
-- **`label` on `ReadmePart`:** optional. Where it is set it is the part's `aria-label`. Without it the accessible name stays the name and the second line. An app with its own copy of `ReadmeButton` takes `readmePartLabel(part, sub)` from `@glimstone/core` for the label.
-- **Flatpak:** give the button `brand="flatpak"`, `mark={<BrandMark svg={FLATPAK_SVG} />}` and `markClass="glim-flatpak-mark"`. An app that keeps its own copy of the tokens takes `--brand-flatpak` in all three theme blocks, its line in the lit tile's block, `.glim-flatpak-mark` and `.glim-tile-flatpak` from `tokens.css`.
-- **Flutter:** move the git dependency to `ref: v4.3.2`. `GlimTheme` gains `brandFlatpak`.
-- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.3.2.
-
-## 🎨 Design
-
-- **The first part names the product, a segment names only what differs**, a new line under "The App tab": the mark and the full name with its second line on the first part, one word on a segment, "ARM" or "Portable", and the whole name as the segment's `label`.
-- **Flatpak's tile** is the mark's blue, `#4a90d9`, with white ink at 3.3:1. "The App tab" lists its mark beside the others.
-
-## ✨ Added
-
-- **`label` on `ReadmePart`**, in React and Vue: the accessible name of a segment whose word reads right only beside the first part.
-- **`readmePartLabel`** in `@glimstone/core`: a part's accessible name from its `label`, or from its name and second line.
-- **`FLATPAK_SVG`** in `appMarks.ts`, Simple Icons' path of the Flatpak mark (CC BY 3.0), with `--brand-flatpak`, `.glim-flatpak-mark`, `.glim-tile-flatpak` and `"flatpak"` among the `ReadmeBrand`s.
-
-## 4.3.1 - 2026-11-09
-
-The design language, the changelogs, the site and the glyph data describe each rule on its own, without naming the apps that use GlimStone. No rule, token or component changed.
-
-**Adopting apps:**
-
-- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.3.1, all at the same number. Nothing is renamed or removed.
-- **Glyph map:** `glyph-map.md` is one table of meanings and glyphs per section, without the columns and sections per app. An app that copied its own column keeps that copy.
-- **Glyph data:** the `source` values in `glyphs.json` read "Drawn for GlimStone" or "Drawn on a 20-unit grid" instead of naming an app. No code reads `source`.
-- **Flutter:** move the git dependency to `ref: v4.3.1`. Nothing changed there.
-- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.3.1.
-
-## 🎨 Design
-
-- **The design language names no app.** Every case a rule was found in is told on its own, and the round markers of past redesigns are gone. Each rule keeps its reason and its examples.
-- **The changelogs and every release note name no app** either, and the GitHub release texts match them.
+- **The fortress speaks all 42 languages of the glossary:** `fortressText(lang)`, `fortressTextEn` and one module per language under `@glimstone/core/fortressLocales/`, with `fill`, `plural` and `listOf` to put names and counts in. A test holds every language to its keys, placeholders and plural forms.
+- **German calls what one app may start in another "Erlaubnis"**, since "Freigabe" already names network and device shares.
 
 ## 4.3.0 - 2026-11-08
 
