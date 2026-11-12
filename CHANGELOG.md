@@ -10,10 +10,13 @@ All notable changes to the GlimStone design language are documented here. Versio
 - **`SkeletonRow`, a row that holds a list row's place while the list loads.** It has a tile, a name and a badge in a `ListRow`'s box, so nothing jumps when the rows arrive. One band of light crosses every row at once, and in the light theme that band is white.
 - **Neither shows for the first 400 ms** (`BUSY_DELAY`), so a quick answer never flashes a loader. `delay={0}` shows them at once.
 - **Three motion dials:** `--motion-spin-dur`, `--motion-skeleton-dur` and `--motion-skeleton-glow`. At "off" and under reduced motion nothing turns and no light crosses.
+- **`announce(text, "polite" | "assertive")` in the core** has a screen reader say words that have no element of their own, such as "3 rows selected". It writes into the page's live regions and adds them in an app without a toast viewport.
 
 ## ⚡ Improved
 
 - **A busy `Button` shows the `BusyRing`** in its glyph slot. The old spinner turned at a fixed second whatever the motion level was. The ring follows the level and stands still at "off". `.glim-spinner` stays in `tokens.css` for apps that use it directly.
+- **`ToastViewport` keeps two live regions in the page for good** and reads each new toast out through them. Only a failure interrupts. A warning used to be an alert as well, and a card that carried the role itself was skipped by some screen readers.
+- **A toast with an action stays until it is dismissed** or its action is pressed, so nobody loses an Undo while still reading. `addToast` gives it no countdown, and `toastPoliteness(severity)` says how a toast is read out.
 
 ## 4.3.7 - 2026-11-11
 

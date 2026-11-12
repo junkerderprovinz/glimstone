@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { MARKS, softBreaks, TOAST_MARKS, type ToastAction, type ToastSeverity } from "@glimstone/core";
+import { watch } from "vue";
+import { announce, liveRegionAttrs, MARKS, softBreaks, TOAST_MARKS, toastPoliteness, type ToastAction, type ToastSeverity } from "@glimstone/core";
 import Button from "./Button.vue";
 import { MarkSvg } from "./glyphs";
 
@@ -10,7 +11,12 @@ import { MarkSvg } from "./glyphs";
 //
 // Four events rather than pause and resume, because the caller resumes only
 // once hover and focus have both ended (applyEngagement).
-defineProps<{
+//
+// The viewport holds the page's two live regions for good, and a new toast's
+// message is read out through them. A card that carried a live role itself
+// would be announced on arrival by some screen readers and not by others.
+defineOptions({ inheritAttrs: false });
+const props = defineProps<{
   toasts: { id: string; message: string; severity: ToastSeverity; action?: ToastAction }[];
   /** Accessible name for each dismiss button. */
   dismissLabel: string;
@@ -23,9 +29,20 @@ const emit = defineEmits<{
   focusout: [id: string];
 }>();
 
-// "alert" is assertive, so a failure interrupts the screen reader; "status" is
-// polite. Each toast is a new element, which both roles announce on insertion.
-const roleFor = (s: ToastSeverity) => (s === "success" ? "status" : "alert");
+const heard = new Set<string>();
+watch(
+  () => props.toasts,
+  (toasts) => {
+    const ids = new Set(toasts.map((t) => t.id));
+    for (const id of heard) if (!ids.has(id)) heard.delete(id);
+    for (const t of toasts) {
+      if (heard.has(t.id)) continue;
+      heard.add(t.id);
+      announce(t.message, toastPoliteness(t.severity));
+    }
+  },
+  { immediate: true, deep: 1, flush: "post" },
+);
 
 function act(id: string, action: ToastAction) {
   action.onClick();
@@ -34,11 +51,12 @@ function act(id: string, action: ToastAction) {
 </script>
 
 <template>
-  <div class="glim-toast-stack">
+  <div class="glim-sr-only" v-bind="liveRegionAttrs('polite')" />
+  <div class="glim-sr-only" v-bind="liveRegionAttrs('assertive')" />
+  <div class="glim-toast-stack" v-bind="$attrs">
     <div
       v-for="t in toasts"
       :key="t.id"
-      :role="roleFor(t.severity)"
       class="glim-toast glim-toast-card"
       @mouseenter="emit('enter', t.id)"
       @mouseleave="emit('leave', t.id)"

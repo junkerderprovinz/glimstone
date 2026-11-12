@@ -149,8 +149,9 @@ export const CONTRACTS: Record<string, Contract> = {
   },
   Toast: {
     rows: [
-      { id: "toast-roles", when: "A toast appears", then: "A failure is role=\"alert\", a success role=\"status\"." },
-      { id: "toast-expire", when: "Nobody touches it", then: "It leaves after four seconds." },
+      { id: "toast-announce", when: "A toast appears", then: "Its message is read out through the viewport's live regions, which stay in the page: a failure through the alert, every other toast through the status. The card itself has no role." },
+      { id: "toast-expire", when: "Nobody touches it and it has no action", then: "It leaves after four seconds." },
+      { id: "toast-sticky", when: "It has an action", then: "It stays until it is dismissed or its action is pressed." },
       { id: "toast-pause", when: "The pointer rests on it", then: "It stays, and the time left is kept." },
       { id: "toast-dismiss", when: "The dismiss button is pressed", then: "Only that toast leaves." },
       { id: "toast-action", when: "A toast has an action", then: "Its button keeps its words beside a long message, and a press runs it and dismisses the toast." },
@@ -545,6 +546,14 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "skeleton-light-theme", when: "The light theme shows", then: "The band is a white glow, not a darker stripe." },
       { id: "skeleton-still", when: "Motion is off, or the system asks for reduced motion", then: "No light crosses." },
       { id: "skeleton-delay", when: "It appears", then: "It stays hidden for 400 ms and then shows." },
+    ],
+  },
+  announce: {
+    rows: [
+      { id: "announce-polite", when: "announce(text) is called", then: "The words go into the polite status region, which stays in the page." },
+      { id: "announce-assertive", when: "announce(text, \"assertive\") is called", then: "The words go into the alert region, which interrupts. It is for failures." },
+      { id: "announce-repeat", when: "The same words are announced twice", then: "The region empties and fills again, so they are read twice." },
+      { id: "announce-own", when: "No ToastViewport is on the page", then: "announce() adds the region to the page itself." },
     ],
   },
 };

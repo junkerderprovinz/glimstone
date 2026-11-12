@@ -346,6 +346,10 @@ setToasts((list) => addToast(list, { id, message: "Settings saved.", severity: "
       <H2>Rules</H2>
       <ul>
         <li>Four seconds, then gone. A toast is a notice, not a to-do list.</li>
+        <li>
+          A toast with an <code>action</code> stays until it is dismissed or the action is pressed, so somebody who reads
+          slowly does not lose the Undo.
+        </li>
         <li>Toasts stack instead of replacing each other, and each can be dismissed on its own.</li>
         <li>Hover or focus pauses the countdown and keeps the time that was left.</li>
         <li>Quiet mode hides routine successes, never warnings or failures.</li>
@@ -358,13 +362,25 @@ setToasts((list) => addToast(list, { id, message: "Settings saved.", severity: "
       <H2>Accessibility</H2>
       <ul>
         <li>
-          A failure is <code>role="alert"</code> and interrupts the screen reader; a success is <code>role="status"</code>
-          .
+          The viewport keeps two live regions in the page for good, and a new toast's message is read out through them.
+          A failure goes through the alert and interrupts the screen reader. Every other toast goes through the status
+          and waits for a pause. The card itself has no role.
         </li>
         <li>The stack sits in the bottom corner on the end side, so it follows the writing direction.</li>
       </ul>
+      <H2>Announcing without a toast</H2>
+      <p>
+        <code>announce(text)</code> in the core has the screen reader say something that has no element of its own, such
+        as "3 rows selected". It writes into the same live regions, and adds them to the page in an app without a
+        viewport. <code>announce(text, "assertive")</code> interrupts and is for failures alone.
+      </p>
+      <Demo name="AnnounceDemo" />
+      <Code code={`import { announce } from "@glimstone/core";
+
+announce(t("rowsSelected", { count }));`} />
       <H2>Behaviour</H2>
       <ContractTable of="Toast" />
+      <ContractTable of="announce" />
       <H2>API</H2>
       <PropsTable of="ToastViewport" />
     </>
