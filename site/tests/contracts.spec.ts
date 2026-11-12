@@ -4600,6 +4600,15 @@ test.describe("Fortress", () => {
     await expect(said(inside(page))).toHaveText("Changed");
   });
 
+  test("[fortress-removed-offer] the offer takes the focus on Change phrase, so Enter goes on from the keyboard", async ({ page }) => {
+    await open(page, "/components/fortress");
+    await showOthers(page);
+    await inside(page).locator('[data-fortress-app="echo"]').getByRole("button", { name: "Remove" }).click();
+    await page.keyboard.press("Enter");
+    await expect(dialog(page)).toHaveAccessibleName("Change the phrase now?");
+    await expect(dialog(page).getByRole("button", { name: "Change phrase" })).toBeFocused();
+  });
+
   test("[fortress-removed-note] a removed instance stays named under the switch until the phrase changes", async ({ page }) => {
     await open(page, "/components/fortress");
     const note = inside(page).locator('[data-fortress="removed"]');

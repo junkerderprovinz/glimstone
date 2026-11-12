@@ -23,6 +23,7 @@ import {
   type FortressText,
   type PhraseAnswer,
   type ToastSeverity,
+  windowFocusTarget,
 } from "@glimstone/core";
 import { Button } from "./Button.tsx";
 import { Card } from "./Card.tsx";
@@ -271,6 +272,18 @@ function FortressWindow({ flow, state, props, keys }: { flow: FortressFlow; stat
   useEffect(() => {
     if (focus >= 0) card.current?.querySelector<HTMLInputElement>(`[data-word="${focus}"]`)?.focus();
   }, [focus]);
+
+  // The window stays mounted from one step to the next, so the focus it takes
+  // on opening does not come again, and the button that was pressed may be gone.
+  const kind = w.kind;
+  const opened = useRef(false);
+  useEffect(() => {
+    if (!opened.current) {
+      opened.current = true;
+      return;
+    }
+    if (card.current) windowFocusTarget(card.current)?.focus();
+  }, [kind]);
 
   useEffect(() => {
     if (!copied) return;

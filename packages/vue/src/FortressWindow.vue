@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onScopeDispose, ref, shallowRef, watch } from "vue";
-import { COPIED_MS, copyText, fill, listOf, MARKS, phraseReady, qrCode, shake, type FortressFlow, type FortressState, type FortressText } from "@glimstone/core";
+import { COPIED_MS, copyText, fill, listOf, MARKS, phraseReady, qrCode, shake, windowFocusTarget, type FortressFlow, type FortressState, type FortressText } from "@glimstone/core";
 import PasswordField from "./PasswordField.vue";
 import Window from "./Window.vue";
 import { glyphFor, IconClose, MarkSvg } from "./glyphs";
@@ -45,6 +45,16 @@ watch(
   async (focus) => {
     await nextTick();
     if (focus >= 0) win.value?.card?.querySelector<HTMLInputElement>(`[data-word="${focus}"]`)?.focus();
+  },
+);
+// The window stays mounted from one step to the next, so the focus it takes
+// on opening does not come again, and the button that was pressed may be gone.
+watch(
+  () => w.value.kind,
+  async () => {
+    await nextTick();
+    const card = win.value?.card;
+    if (card) windowFocusTarget(card)?.focus();
   },
 );
 
