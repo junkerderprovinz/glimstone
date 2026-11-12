@@ -4387,10 +4387,10 @@ test.describe("Fortress", () => {
   test("[fortress-change] what changing does, then the new words and who is left", async ({ page }) => {
     await open(page, "/components/fortress");
     await pairing(page).getByRole("button", { name: "Change" }).click();
-    await expect(dialog(page)).toContainText("Every app you can reach right now moves to a new phrase.");
+    await expect(dialog(page)).toContainText("Apps that are away follow on their own over the next 30 days.");
     await dialog(page).getByRole("button", { name: "Change phrase" }).click();
     await expect(dialog(page).locator('[data-fortress="words"] li').first()).toHaveText("1lance");
-    await expect(dialog(page)).toContainText("Still on the old phrase: Wanderer. Enter the new one there once.");
+    await expect(dialog(page)).toContainText("Still on the old phrase: Wanderer. They follow on their own once they're back.");
     await expect(dialog(page).locator(".glim-modal-foot .glim-btn")).toHaveText(["Close", "Copy"]);
     await dialog(page).getByRole("button", { name: "Close" }).click();
     await expect(dialog(page)).toHaveCount(0);
