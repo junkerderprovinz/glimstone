@@ -543,6 +543,9 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "fortress-filter", when: "With the app is chosen above the permissions", then: "Only the permissions this app gives or takes stay." },
       { id: "fortress-hue", when: "Rainbow is on", then: "Every card takes its own position, and the switches and buttons inside it take the card's hue. In reactive mode a card rests grey until the pointer is in it." },
       { id: "fortress-modes", when: "The theme is light, dark or OLED", then: "The cards, rows, fields and tiles take that theme's surfaces." },
+      { id: "fortress-vanilla-join", when: "The card without a framework is out of a fortress and Enter phrase is pressed", then: "The twelve fields take a pasted phrase, Join stays off until all are filled, and words that open no fortress say so in the window." },
+      { id: "fortress-vanilla-members", when: "The card without a framework is in a fortress and the switch is on", then: "Every other app has a card with its form, device and state, Remove for each instance, and Open for a plugin, which shows its status." },
+      { id: "fortress-vanilla-remove", when: "Remove is confirmed on the card without a framework", then: "The member is gone, the window names the apps where the phrase changes, and a line under the card names who was removed." },
     ],
   },
   SignInCard: {

@@ -4740,3 +4740,56 @@ test.describe("Fortress", () => {
     expect(await hue(bravo.locator('[data-instance="b1"] [data-fortress="open"]'))).toBe(await hue(bravo));
   });
 });
+
+test.describe("The fortress without a framework", () => {
+  reactOnly();
+  const card = (page: Page) => stage(page, "FortressVanilla");
+  const PHRASE = "one two three four five six seven eight nine ten eleven twelve";
+
+  async function join(page: Page) {
+    await card(page).getByRole("button", { name: "Enter phrase" }).click();
+    const win = page.getByRole("dialog", { name: "Join a fortress" });
+    await win.getByRole("textbox", { name: "Word 1", exact: true }).fill(PHRASE);
+    await win.getByRole("button", { name: "Join" }).click();
+    await page.getByRole("dialog").getByRole("button", { name: "Close" }).click();
+  }
+
+  test("[fortress-vanilla-join] a pasted phrase fills the fields and a wrong one is refused", async ({ page }) => {
+    await open(page, "/components/fortress");
+    await card(page).getByRole("button", { name: "Enter phrase" }).click();
+    const win = page.getByRole("dialog", { name: "Join a fortress" });
+    const go = win.getByRole("button", { name: "Join" });
+    await expect(go).toBeDisabled();
+    await win.getByRole("textbox", { name: "Word 1", exact: true }).fill(PHRASE.replace("one", "wrong"));
+    await expect(win.getByRole("textbox", { name: "Word 12" })).toHaveValue("twelve");
+    await go.click();
+    await expect(win.getByRole("alert")).toHaveText("These words open no fortress. Check them and try again.");
+  });
+
+  test("[fortress-vanilla-members] the other apps show as cards once the switch is on", async ({ page }) => {
+    await open(page, "/components/fortress");
+    await join(page);
+    await expect(card(page).locator("[data-fortress-app]")).toHaveCount(0);
+    await card(page).getByRole("switch").check();
+    await expect(card(page).locator("[data-fortress-app]")).toHaveCount(2);
+    const delta = card(page).locator('[data-fortress-app="delta"]');
+    await expect(delta).toContainText("Unraid plugin");
+    await expect(delta).toContainText("Via relay");
+    await expect(card(page).locator('[data-fortress-app="bravo"] [data-fortress="open"]')).toHaveCount(0);
+    await delta.getByRole("button", { name: "Open: Delta on Atlas" }).click();
+    await expect(page.getByRole("dialog", { name: "Delta on Atlas" })).toContainText("Checking images");
+  });
+
+  test("[fortress-vanilla-remove] a removed member is named until the phrase changes", async ({ page }) => {
+    await open(page, "/components/fortress");
+    await join(page);
+    await card(page).getByRole("switch").check();
+    await card(page).getByRole("button", { name: "Remove: Delta on Atlas" }).click();
+    await page.getByRole("dialog", { name: "Remove Delta on Atlas?" }).getByRole("button", { name: "Remove" }).click();
+    const done = page.getByRole("dialog", { name: "Change the phrase now?" });
+    await expect(done).toContainText("You change the phrase in Bravo on Atlas.");
+    await done.getByRole("button", { name: "Close" }).click();
+    await expect(card(page).locator('[data-fortress="removed"]')).toContainText("Removed: Delta on Atlas.");
+    await expect(card(page).locator('[data-fortress-app="delta"]')).toHaveCount(0);
+  });
+});

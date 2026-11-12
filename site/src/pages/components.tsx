@@ -764,6 +764,17 @@ import { openRefusalText } from "@glimstone/core";
         it does not, the window says so calmly.
       </p>
       <Demo name="FortressStatus" />
+      <H2>Without a framework</H2>
+      <p>
+        A page without React or Vue, such as an Unraid plugin's settings, draws the fortress with{" "}
+        <code>packages/core/vanilla/fortress-card.js</code> and its stylesheet, which the plugins copy unchanged. One call,{" "}
+        <code>GlimFortressCard.mount(element, adapter, {"{ lang, app }"})</code>, draws the card with joining by the phrase,
+        leaving and the switch for the other apps, then a card per other app with Remove, and Open as the status window for
+        a plugin. The adapter answers each step from the app's server and the card does the rest: the windows, the texts in
+        every language of the glossary, and a fresh state every 20 seconds. An app that cannot keep the phrase names the
+        apps where it changes.
+      </p>
+      <Demo name="FortressVanilla" />
       <H2>Words</H2>
       <p>
         <code>fortressText(lang)</code> hands out the words in every language of the glossary, and each language is its

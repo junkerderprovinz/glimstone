@@ -6,7 +6,7 @@
   "repository": { "type": "git", "url": "git+https://github.com/junkerderprovinz/glimstone.git", "directory": "packages/core" },
   "homepage": "https://junkerderprovinz.github.io/glimstone/",
   "type": "module",
-  "sideEffects": ["*.css"],
+  "sideEffects": ["*.css", "./vanilla/*.js"],
   "exports": {
     ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" },
     "./tokens.css": "./tokens.css",
@@ -14,7 +14,7 @@
     "./glyphs.json": "./glyphs.json",
     "./*": { "types": "./dist/*.d.ts", "default": "./dist/*.js" }
   },
-  "files": ["dist", "tokens.css", "tailwind-theme.css", "glyphs.json", "glyphs.md", "glyph-map.md", "check-bare-buttons.mjs"],
+  "files": ["dist", "vanilla", "tokens.css", "tailwind-theme.css", "glyphs.json", "glyphs.md", "glyph-map.md", "check-bare-buttons.mjs"],
   "scripts": {
     "build": "tsc -p tsconfig.build.json"
   },
