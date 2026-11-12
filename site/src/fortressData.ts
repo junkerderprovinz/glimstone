@@ -1,7 +1,7 @@
 // A made-up household for the fortress demos: five placeholder apps on four
 // devices. The words that open its fortress are TWELVE, and the password that
 // shows them is "letmein".
-import type { ChangeAnswer, FortressAnswer, FortressApp, FortressPermission, PhraseAnswer } from "@glimstone/core";
+import { fortressTextEn, memberName, type ChangeAnswer, type FortressAnswer, type FortressApp, type FortressPermission, type PhraseAnswer } from "@glimstone/core";
 
 function mark(letter: string, fill: string) {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="${fill}"/><text x="32" y="43" font-family="sans-serif" font-size="30" font-weight="700" text-anchor="middle" fill="#161616">${letter}</text></svg>`;
@@ -92,7 +92,33 @@ export function household(said: (what: string) => void, permissions: () => Fortr
   };
 }
 
-/** The answers the Instances tab takes; leaving and changing the phrase belong to the pairing settings. */
-export function instancesTab({ onLeave, onChangePhrase, ...rest }: ReturnType<typeof household>) {
+/** The answers the Instances tab takes. Leaving belongs to the pairing settings; the phrase changes here only right after a removal. */
+export function instancesTab({ onLeave, ...rest }: ReturnType<typeof household>) {
   return rest;
+}
+
+// Pocket is one of Alpha's own instances, the others are instances of other apps.
+function nameOf(id: string): string {
+  for (const app of APPS) {
+    const instance = app.instances.find((i) => i.id === id);
+    if (instance) return memberName(fortressTextEn, app, instance);
+  }
+  return id === "pocket" ? "Pocket" : id;
+}
+
+/** Keeps who was removed since the phrase last changed, as an app would, for the line under the switch. */
+export function remembering(answers: ReturnType<typeof instancesTab>, removed: () => string[], setRemoved: (names: string[]) => void) {
+  return {
+    ...answers,
+    async onRemove(id: string): Promise<FortressAnswer> {
+      const answer = await answers.onRemove(id);
+      if (answer.ok) setRemoved([...removed(), nameOf(id)]);
+      return answer;
+    },
+    async onChangePhrase(): Promise<ChangeAnswer> {
+      const answer = await answers.onChangePhrase();
+      if (answer.words) setRemoved([]);
+      return answer;
+    },
+  };
 }

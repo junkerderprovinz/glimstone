@@ -2,17 +2,23 @@
 import { ref } from "vue";
 import { Badge, Button, Fortress, InstanceCard } from "@glimstone/vue";
 import { fortressTextEn as text } from "@glimstone/core";
-import { APPS, HOME, household, instancesTab, PERMISSIONS } from "../fortressData";
+import { APPS, HOME, household, instancesTab, PERMISSIONS, remembering } from "../fortressData";
 
 // Inside a fortress: the phrase shows after "letmein", Echo's permission
-// refuses to switch, and changing the phrase leaves Wanderer behind.
+// refuses to switch, changing the phrase leaves Wanderer behind, and a removed
+// instance stays named under the switch until the phrase changes.
 const said = ref("Nothing yet");
 const permissions = ref(PERMISSIONS);
-const answers = instancesTab(household(
-  (what) => (said.value = what),
-  () => permissions.value,
-  (next) => (permissions.value = next),
-));
+const removed = ref<string[]>([]);
+const answers = remembering(
+  instancesTab(household(
+    (what) => (said.value = what),
+    () => permissions.value,
+    (next) => (permissions.value = next),
+  )),
+  () => removed.value,
+  (next) => (removed.value = next),
+);
 </script>
 
 <template>
@@ -27,6 +33,7 @@ const answers = instancesTab(household(
       phrase-password
       :paired-with="['Pocket']"
       :hue-start="2"
+      :removed="removed"
       :notify="(message: string, severity: string) => (said = `${severity}: ${message}`)"
       v-bind="answers"
     >
