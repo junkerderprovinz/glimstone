@@ -2,6 +2,20 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+Removing a member of the fortress. Every row of another app ends in a quiet Remove, and the window that asks first moves on to the phrase once the instance is out, since the old phrase still lets it back in.
+
+**Adopting apps:**
+
+- **Remove:** pass `onRemove` to `Fortress` and every instance of another app offers Remove, at the end of its row or beside Open on a card with one instance. `onRemove` is optional now, and without it nothing outside the app's own cards removes. Mark the instance showing the page with `self: true` if it is among `apps`, so it offers no Remove.
+- **The phrase after a removal:** pass `onChangePhrase` to `Fortress` as well, and a removal asks next whether to change the phrase, with Change phrase and Later. Without it the window closes as before.
+- **Who was removed:** pass `removed` with the names of the instances removed since the phrase last changed, built with `memberName(text, app, instance)` ("Bravo on Atlas"). While it holds any, a quiet line under the switch names them, with Change phrase at its end. Empty it once the phrase changes.
+- **Removed by another member:** pass `removedHere` while the app is out of the fortress because another member removed it, and the empty place says so.
+- **Words:** the tables carry `memberOn`, `removedHereTitle`, `removedHereHint`, `removedTitle`, `removedBody`, `later` and `removedNote`, in English and German. The other languages show the English words for now. `removeBody` says the removal cannot be undone, and German says "Herausnehmen" for Remove.
+- **Glyphs:** Later asks the resolver for `fortressLater`, and `labelKeys.later` maps it to a key of the app's own.
+- **Your own copy of the tokens:** take `.glim-instance-row-end` and `.glim-fortress-removed` from `tokens.css`.
+
 ## 4.4.0 - 2026-11-12
 
 The fortress moves in. An app's Instances tab shows its own instances first and the other apps of the fortress behind one switch, with the permissions and the phrase as the only way in, in all 42 languages. `@glimstone/terms` keeps the shared words of an interface and checks an app's translations against them. Around them come a list with its tools inside it, popovers and sheets in the top layer, loaders that wait before they show, errors under fields, toasts read out through live regions, a bilingual glossary of every element, four more README brands and labels inside the sign-in fields.
