@@ -2,6 +2,19 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+## ✨ Added
+
+- **`BusyRing`, the ring that turns while the app works on something.** It is TowerTorch's loader: two arcs that turn against each other and meet at the top and the bottom. It comes in three sizes, takes the accent, and with a `label` it is a status that says what is loading.
+- **`SkeletonRow`, a row that holds a list row's place while the list loads.** It has a tile, a name and a badge in a `ListRow`'s box, so nothing jumps when the rows arrive. One band of light crosses every row at once, and in the light theme that band is white.
+- **Neither shows for the first 400 ms** (`BUSY_DELAY`), so a quick answer never flashes a loader. `delay={0}` shows them at once.
+- **Three motion dials:** `--motion-spin-dur`, `--motion-skeleton-dur` and `--motion-skeleton-glow`. At "off" and under reduced motion nothing turns and no light crosses.
+
+## ⚡ Improved
+
+- **A busy `Button` shows the `BusyRing`** in its glyph slot. The old spinner turned at a fixed second whatever the motion level was. The ring follows the level and stands still at "off". `.glim-spinner` stays in `tokens.css` for apps that use it directly.
+
 ## 4.3.7 - 2026-11-11
 
 The Flutter package's checks run on Flutter 3.47.9 again. Flutter 3.50 deprecates `package:flutter/material.dart`, which the package still imports, so `flutter analyze` stopped on five deprecation hints.

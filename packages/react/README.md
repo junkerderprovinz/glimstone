@@ -81,6 +81,7 @@ needs none of them.
 | `ListRow`, `RowMark`, `GlyphTile` | One row of a list with a tile, badges and buttons that come in on hover, the round mark on a row picked for an action on many, and a small holder for a glyph |
 | `IconButton` | A glyph in a square in every label mode, for a row that keeps its text, as a link with `href`, on or off with `pressed`, and `absent` to hold a missing button's place |
 | `Meter`, `ProgressBar` | A level such as a disk's, red from a threshold and `quiet` for a footer line, and work toward its end with a sheen while it runs. Only the bar moves |
+| `BusyRing`, `SkeletonRow` | The ring that turns while the app works on something, and a row that holds a list row's place while the list loads. Both show only after 400 ms |
 | `ColorPicker` | The square, the hue bar, a preview with the name the colour proposes, the hex field and Apply, in the page or floating beside its swatch |
 | `useLabelMode`, `useTipBubble`, `usePortalHue` | The small hooks the components need |
 | `glyphs` | The marks the components draw themselves, and `setGlyphResolver`, the seam an app registers its own icon set through |

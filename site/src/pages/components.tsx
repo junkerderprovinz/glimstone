@@ -1,6 +1,6 @@
 import { Callout, Code, ContractTable, Demo, H2, PropsTable, SourceLink } from "../ui";
 
-function Head({ file }: { file: string }) {
+export function Head({ file }: { file: string }) {
   return (
     <p style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
       <SourceLink file={file} />
@@ -8,7 +8,7 @@ function Head({ file }: { file: string }) {
   );
 }
 
-function Usage({ code }: { code: string }) {
+export function Usage({ code }: { code: string }) {
   return (
     <>
       <H2>Usage</H2>

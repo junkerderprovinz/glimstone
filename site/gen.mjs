@@ -50,6 +50,8 @@ const COMPONENTS = {
   GlyphTile: "react/GlyphTile.tsx",
   Table: "react/Table.tsx",
   SignInCard: "react/SignInCard.tsx",
+  BusyRing: "react/BusyRing.tsx",
+  SkeletonRow: "react/SkeletonRow.tsx",
 };
 
 const clean = (s) => s.replace(/\s+/g, " ").trim();

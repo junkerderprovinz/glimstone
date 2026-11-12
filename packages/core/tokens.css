@@ -5121,3 +5121,168 @@ a:is(.glim-btn, .glim-icon-btn) {
   .glim-list-row-actions { transition: opacity var(--motion-control-dur) ease; }
   .glim-tree-toggle > svg { transition: rotate var(--motion-control-dur) ease; }
 }
+
+/* Waiting (BusyRing, SkeletonRow; busy.ts). Both stay hidden for
+   --busy-delay, so an answer that comes quickly never flashes a loader, and
+   both read the motion engine: at "off" and under reduced motion nothing
+   turns and no light crosses. */
+@layer components {
+  @media (prefers-reduced-motion: no-preference) {
+    :root {
+      --motion-spin-dur: 1.5s;
+      --motion-skeleton-dur: 1.6s;
+      --motion-skeleton-glow: 100%;
+    }
+    :root[data-motion='subtle'] {
+      --motion-spin-dur: 2.4s;
+      --motion-skeleton-dur: 2.8s;
+      --motion-skeleton-glow: 60%;
+    }
+    /* Long rather than 0; both stop outright at this level, below. */
+    :root[data-motion='off'] {
+      --motion-spin-dur: 60s;
+      --motion-skeleton-dur: 60s;
+      --motion-skeleton-glow: 0%;
+    }
+  }
+  :root[data-motion='storm'] {
+    --motion-spin-dur: 0.9s;
+    --motion-skeleton-dur: 1s;
+    --motion-skeleton-glow: 100%;
+  }
+
+  /* The light that crosses a placeholder: a faint white on the dark ramps, a
+     strong one on the light ramp, where a darker band would read as a shadow. */
+  :root,
+  [data-theme="dark"] { --skeleton-glow: rgb(255 255 255 / 0.1); }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) { --skeleton-glow: rgb(255 255 255 / 0.9); }
+  }
+  [data-theme="light"] { --skeleton-glow: rgb(255 255 255 / 0.9); }
+
+  @keyframes glim-busy-show {
+    from { visibility: hidden; }
+  }
+
+  /* Two flat arcs that turn against each other in one period, so they meet at
+     the top and the bottom. Each arc is a hard conic stop masked to a ring,
+     with a cap at either end that follows the shape. The ring takes the
+     accent, since waiting on the app is activity (rule 3), and a button's ink
+     inside its glyph slot. Standing still, the inner arc stays turned off the
+     outer one, so the two never read as one broken circle. */
+  .glim-busy-ring {
+    --ring-size: 1.375rem;
+    --ring-th: calc(var(--ring-size) / 10);
+    --ring-arc: 155deg;
+    position: relative;
+    display: inline-block;
+    flex: none;
+    width: var(--ring-size);
+    height: var(--ring-size);
+    vertical-align: -0.15em;
+    color: var(--accent-glyph);
+    animation: glim-busy-show 0s var(--busy-delay, 400ms) both;
+  }
+  .glim-busy-ring--small { --ring-size: 0.875rem; }
+  .glim-busy-ring--large { --ring-size: 2rem; }
+  .glim-btn-glyph > .glim-busy-ring { color: currentColor; }
+  .glim-busy-ring-arc {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+  }
+  .glim-busy-ring-arc--inner {
+    inset: calc(var(--ring-th) * 2.6);
+    transform: rotate(-0.4turn);
+  }
+  .glim-busy-ring-arc::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(currentColor 0deg var(--ring-arc), transparent var(--ring-arc) 360deg);
+    mask: radial-gradient(farthest-side, #0000 calc(100% - var(--ring-th)), #000 0);
+  }
+  .glim-busy-ring-tail {
+    position: absolute;
+    inset: 0;
+    transform: rotate(var(--ring-arc));
+  }
+  .glim-busy-ring-arc::after,
+  .glim-busy-ring-tail::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: var(--ring-th);
+    height: var(--ring-th);
+    margin-left: calc(var(--ring-th) / -2);
+    border-radius: var(--radius-pill);
+    background: currentColor;
+  }
+
+  /* A placeholder in the box of a ListRow, so the list does not jump when the
+     rows arrive. Its blocks stand on surface2, one step up from the card (rule
+     21). The light is fixed to the viewport, so one band passes over every row
+     at once instead of each block running its own. */
+  .glim-skeleton-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-width: 0;
+    min-height: 2.6rem;
+    padding-inline: 0.5rem;
+    animation: glim-busy-show 0s var(--busy-delay, 400ms) both;
+  }
+  .glim-skeleton-block {
+    flex: none;
+    background-color: var(--carbon-surface2);
+    background-image: linear-gradient(
+      100deg,
+      transparent 20%,
+      color-mix(in srgb, var(--skeleton-glow) var(--motion-skeleton-glow, 0%), transparent) 50%,
+      transparent 80%
+    );
+    background-attachment: fixed;
+    background-position: -24rem 0;
+    background-size: 24rem 100%;
+    background-repeat: no-repeat;
+  }
+  .glim-skeleton-tile {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: var(--radius-control);
+  }
+  .glim-skeleton-name {
+    flex: 0 1 var(--skeleton-width, 55%);
+    height: 0.75rem;
+    border-radius: min(var(--radius-control), 0.375rem);
+  }
+  .glim-skeleton-badge {
+    width: 3.5rem;
+    height: 1.25rem;
+    margin-inline-start: auto;
+    border-radius: var(--radius-pill);
+  }
+  /* Three lengths in turn, so a column of rows reads as names, not a grid. */
+  .glim-skeleton-row:nth-child(3n + 2) { --skeleton-width: 40%; }
+  .glim-skeleton-row:nth-child(3n + 3) { --skeleton-width: 48%; }
+
+  @keyframes glim-busy-cw { to { transform: rotate(1turn); } }
+  @keyframes glim-busy-ccw { to { transform: rotate(-1turn); } }
+  @keyframes glim-skeleton-sweep {
+    from { background-position: -24rem 0; }
+    to   { background-position: 100vw 0; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    :root:not([data-motion='off']) .glim-busy-ring-arc { animation: glim-busy-cw var(--motion-spin-dur) linear infinite; }
+    :root:not([data-motion='off']) .glim-busy-ring-arc--inner { animation-name: glim-busy-ccw; }
+    :root:not([data-motion='off']) .glim-skeleton-block { animation: glim-skeleton-sweep var(--motion-skeleton-dur) ease-in-out infinite; }
+  }
+  /* Storm moves under reduced motion too, with its own numbers. */
+  @media (prefers-reduced-motion: reduce) {
+    :root[data-motion='storm'] .glim-busy-ring-arc { animation: glim-busy-cw var(--motion-spin-dur) linear infinite; }
+    :root[data-motion='storm'] .glim-busy-ring-arc--inner { animation-name: glim-busy-ccw; }
+    :root[data-motion='storm'] .glim-skeleton-block { animation: glim-skeleton-sweep var(--motion-skeleton-dur) ease-in-out infinite; }
+  }
+}

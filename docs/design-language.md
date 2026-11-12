@@ -813,6 +813,16 @@ It ships as `EmptyState`, with `nested` for one inside a card.
 
 A list, table or panel with nothing in it gets a **deliberate empty state**, not blank space: a `.glim-card`, a muted icon at reduced opacity, a muted title, an optional one-line hint, an optional action button (e.g. "Add one"). The same shape serves two related but distinct situations (genuinely nothing exists yet, versus a filter/search matched nothing) with different copy for each; conflating them ("No results" when the real answer is "you haven't added anything yet") sends the user looking for a filter to clear that was never set. A spot where the shared empty-state shape genuinely doesn't fit is fine as a one-off exception: document *why* inline where it happens, so it reads as a deliberate call and not an overlooked gap.
 
+## Waiting
+
+Two components show that the app is still working on something: `BusyRing` and `SkeletonRow`.
+
+- **The ring is TowerTorch's.** Two flat arcs, each 155° and a tenth of the ring thick, turn against each other in one period and meet at the top and the bottom. Each end has a cap that follows the shape. It takes the accent, since waiting on the app is activity (rule 3), and a button's ink inside the button's glyph slot.
+- **A placeholder row holds a ListRow's place**, with a tile, a name and a badge, so the list does not jump when the rows arrive. Three are enough. Its blocks stand on surface2, and one band of light crosses every row at once: a faint white on the dark ramps, a strong white on the light ramp. A darker band there would read as a shadow.
+- **Nothing shows for the first 400 ms** (`BUSY_DELAY`). An answer that comes quickly then never flashes a loader. The delay is a CSS custom property, `--busy-delay`, read by a reveal in `tokens.css`, so the wait costs no timer. A caller can ask for `delay={0}`, and a busy `Button` does, since it answers a press.
+- **Both read the motion engine.** The ring turns in `--motion-spin-dur` and the light crosses in `--motion-skeleton-dur` at the strength of `--motion-skeleton-glow`. At "off" and under reduced motion nothing turns and no light crosses. The still ring keeps its inner arc turned off the outer one, so it never reads as one broken circle.
+- **The words belong to the container.** A list that loads carries `aria-busy` and its name, and its placeholder rows are hidden from assistive technology. A ring with a `label` is a status that says what is loading. Without one it is hidden and its surroundings speak.
+
 ## Lists
 
 One form serves every list page (backups, restore, anomalies), so a person who has learned one has learned all of them. The tools live in the list itself, not on the page.

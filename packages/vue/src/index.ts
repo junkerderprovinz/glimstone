@@ -1,6 +1,7 @@
 export { default as Badge } from "./Badge.vue";
 export { default as BrandMark } from "./BrandMark.vue";
 export { default as Button } from "./Button.vue";
+export { default as BusyRing } from "./BusyRing.vue";
 export { default as Card } from "./Card.vue";
 export { default as Checkbox } from "./Checkbox.vue";
 export { default as ColorPicker } from "./ColorPicker.vue";
@@ -33,6 +34,7 @@ export { default as RowMark } from "./RowMark.vue";
 export { default as Selector } from "./Selector.vue";
 export { default as SidebarRow } from "./SidebarRow.vue";
 export { default as SignInCard } from "./SignInCard.vue";
+export { default as SkeletonRow } from "./SkeletonRow.vue";
 export { default as SignInField } from "./SignInField.vue";
 export { default as SubCard } from "./SubCard.vue";
 export { default as Table } from "./Table.vue";
@@ -53,7 +55,7 @@ export type { SelectEntry, SelectGroup, SelectOption, SelectSubmenu } from "./se
 export type { SelectorItem } from "./selectorItem";
 export type { MenuBarMenu, MenuEntry, MenuHead, MenuItem, TreeNode, WindowAction } from "./windowParts";
 export type { ResetAnswer, SignInAnswer, SignInText } from "@glimstone/core";
-export type { ButtonSize, ColorName, ColorPickerPanelText, FieldWidth, MeterSize, PillTone, SelectRows, TableColumn, ToastAction, WindowSize } from "@glimstone/core";
+export type { BusyRingSize, ButtonSize, ColorName, ColorPickerPanelText, FieldWidth, MeterSize, PillTone, SelectRows, TableColumn, ToastAction, WindowSize } from "@glimstone/core";
 export { selectorTabId } from "@glimstone/core";
 export { useTipBubble, type TipBubble } from "./tipBubble";
 export { GLIMSTONE_VERSION } from "@glimstone/core";

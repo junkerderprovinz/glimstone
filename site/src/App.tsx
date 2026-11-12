@@ -9,6 +9,7 @@ import { Adopting, Glyphs, Introduction, Palette, TypeScale } from "./pages/guid
 import { Calibration } from "./pages/calibration";
 import { BehaviourGuide, ComboboxPage, SelectPage, SliderPage } from "./pages/zag";
 import { ColourEngine, LabelEngine, MotionEngine, ShapeEngine } from "./pages/engines";
+import { BusyRingPage, SkeletonRowPage } from "./pages/loading";
 import {
   BadgePage,
   ButtonPage,
@@ -71,6 +72,7 @@ const PAGES: Page[] = [
   { path: "/engines/label", title: "Label", group: "Engines", Comp: LabelEngine },
   { path: "/components/badge", title: "Badge", group: "Components", Comp: BadgePage },
   { path: "/components/button", title: "Button", group: "Components", Comp: ButtonPage },
+  { path: "/components/busy-ring", title: "BusyRing", group: "Components", Comp: BusyRingPage },
   { path: "/components/card", title: "Card", group: "Components", Comp: CardPage },
   { path: "/components/checkbox", title: "Checkbox", group: "Components", Comp: CheckboxPage },
   { path: "/components/color-picker", title: "ColorPicker", group: "Components", Comp: ColorPickerPage },
@@ -100,6 +102,7 @@ const PAGES: Page[] = [
   { path: "/components/selector", title: "Selector", group: "Components", Comp: SelectorPage },
   { path: "/components/sidebar-row", title: "SidebarRow", group: "Components", Comp: SidebarRowPage },
   { path: "/components/sign-in-card", title: "SignInCard", group: "Components", Comp: SignInCardPage },
+  { path: "/components/skeleton-row", title: "SkeletonRow", group: "Components", Comp: SkeletonRowPage },
   { path: "/components/slider", title: "Slider", group: "Components", Comp: SliderPage, tag: "Zag" },
   { path: "/components/sub-card", title: "SubCard", group: "Components", Comp: SubCardPage },
   { path: "/components/toast", title: "Toast", group: "Components", Comp: ToastPage },

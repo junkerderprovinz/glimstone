@@ -528,4 +528,23 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "drag-drop-edge", when: "A tile or a row is dropped with its leading edge just short of the next one's middle, then just past it", then: "Short of it the item goes back to its place; past it the item lands after that neighbour." },
     ],
   },
+  BusyRing: {
+    rows: [
+      { id: "busy-ring-arcs", when: "Motion is wild or subtle", then: "Two arcs turn against each other in one period, slower at subtle." },
+      { id: "busy-ring-still", when: "Motion is off, or the system asks for reduced motion", then: "Nothing turns, and the inner arc stands turned off the outer one." },
+      { id: "busy-ring-delay", when: "It appears", then: "It stays hidden for 400 ms and then shows; with delay 0 it shows at once." },
+      { id: "busy-ring-label", when: "It has a label", then: "It is a status that says the label; without one it is hidden from assistive technology." },
+      { id: "busy-ring-ink", when: "It stands on a card, or in a button's glyph slot", then: "It takes the accent on the card and the button's ink in the button." },
+      { id: "button-busy-ring", when: "A button turns busy", then: "The turning ring takes the glyph's place at once." },
+    ],
+  },
+  SkeletonRow: {
+    rows: [
+      { id: "skeleton-box", when: "Always", then: "It has a ListRow's height and is hidden from assistive technology, while the list around it is aria-busy." },
+      { id: "skeleton-light", when: "Motion is wild or subtle", then: "One band of light crosses the rows." },
+      { id: "skeleton-light-theme", when: "The light theme shows", then: "The band is a white glow, not a darker stripe." },
+      { id: "skeleton-still", when: "Motion is off, or the system asks for reduced motion", then: "No light crosses." },
+      { id: "skeleton-delay", when: "It appears", then: "It stays hidden for 400 ms and then shows." },
+    ],
+  },
 };
