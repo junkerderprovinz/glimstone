@@ -1,0 +1,32 @@
+name: Announce release
+
+# Tells junkerderprovinz/junkerderprovinz about each published release. Its
+# GlimStone fanout passes the news on to every repository that follows
+# GlimStone. A repository_dispatch to another repository takes a token with
+# Contents read and write there, which GITHUB_TOKEN never has.
+
+on:
+  release:
+    types: [published]
+
+permissions: {}
+
+jobs:
+  announce:
+    if: ${{ !github.event.release.prerelease }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Send glimstone-release
+        env:
+          GH_TOKEN: ${{ secrets.GLIMSTONE_FANOUT_TOKEN }}
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          set -euo pipefail
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::error::Announcing $TAG needs the secret GLIMSTONE_FANOUT_TOKEN, and it is not set yet. Please create a fine-grained personal access token for junkerderprovinz with access to all repositories and Contents: read and write, then save it as GLIMSTONE_FANOUT_TOKEN in this repository and in junkerderprovinz/junkerderprovinz (Settings, Secrets and variables, Actions)."
+            exit 1
+          fi
+          gh api repos/junkerderprovinz/junkerderprovinz/dispatches \
+            -f event_type=glimstone-release -f "client_payload[tag]=$TAG" --silent
+          echo "Announced $TAG."
