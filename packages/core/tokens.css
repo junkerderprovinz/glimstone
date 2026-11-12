@@ -5326,6 +5326,7 @@ body {
      back in with the phrase, with the way to change it at its end. */
   .glim-fortress-removed {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 0.625rem;
     padding: 0.625rem 0.75rem 0.625rem 1.125rem;
@@ -5334,7 +5335,9 @@ body {
     color: var(--carbon-text-sub);
     font-size: var(--text-subline);
   }
-  .glim-fortress-removed > span { flex: 1; min-width: 0; }
+  /* On a phone the words keep their width and the button moves under them. */
+  .glim-fortress-removed > span { flex: 1 1 16rem; min-width: 0; }
+  .glim-fortress-removed > .glim-btn { margin-inline-start: auto; }
   .glim-fortress-removed > svg {
     flex: none;
     width: 0.9rem;
@@ -5522,10 +5525,7 @@ body {
     }
     .glim-instance-main { padding: 0.875rem 0.875rem 0.75rem; }
     .glim-fortress-switch { padding: 0.75rem 0.875rem; }
-    .glim-fortress-removed {
-      flex-wrap: wrap;
-      padding-inline-start: 0.875rem;
-    }
+    .glim-fortress-removed { padding-inline-start: 0.875rem; }
     .glim-permission {
       grid-template-columns: minmax(0, 1fr) auto;
       gap: 0.5rem 0.75rem;
