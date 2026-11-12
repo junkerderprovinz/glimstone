@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { Badge, Fortress, FortressPairing, InstanceCard } from "@glimstone/vue";
-import { fortressTextEn as text } from "@glimstone/core";
+import { Badge, Button, Fortress, FortressPairing, InstanceCard } from "@glimstone/vue";
+import { fortressTextEn as text, memberName } from "@glimstone/core";
 import { APPS, HOME, household, PERMISSIONS } from "../fortressData";
 
 // The fortress on a pairing page of its own: the card with the phrase, its
 // change and Leave at the top, then the other apps drawn with the app's own
 // card, and no second Show phrase in the corner. The code carries the
-// address of an own relay after the words.
+// address of an own relay after the words. The app's card removes through
+// the fortress's own window.
 const said = ref("Nothing yet");
 const permissions = ref(PERMISSIONS);
 const answers = household(
@@ -45,9 +46,12 @@ const qr = (words: string[]) => `${words.join(" ")}\nhttps://relay.example`;
       :on-permission="answers.onPermission"
       :on-remove="answers.onRemove"
     >
-      <template #app="{ app, hueIndex }">
+      <template #app="{ app, hueIndex, remove }">
         <InstanceCard :data-own-card="app.id" :logo="app.logo" :name="app.name" :facts="app.instances.map((i) => i.device)" :hue-index="hueIndex">
           <template #badges><Badge tone="ok">{{ text.connected }}</Badge></template>
+          <template v-if="remove" #actions>
+            <Button :label="text.remove" label-key="delete" tone="subtle" @click="remove(app.instances[0].id, memberName(text, app, app.instances[0]))" />
+          </template>
         </InstanceCard>
       </template>
     </Fortress>

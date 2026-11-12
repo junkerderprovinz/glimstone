@@ -43,6 +43,7 @@ const keys = computed(() => ({
   showPhrase: "fortressShowPhrase",
   changePhrase: "fortressChangePhrase",
   remove: "delete",
+  later: "fortressLater",
   unlock: "unlock",
   copy: "copy",
   ...props.labelKeys,

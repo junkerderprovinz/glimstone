@@ -683,6 +683,8 @@ import { fortressText } from "@glimstone/core";
   onJoin={(words) => api.join(words)}
   onRemove={(id) => api.remove(id)}
   onShowPhrase={(password) => api.phrase(password)}
+  onChangePhrase={() => api.changePhrase()}
+  removed={status.removedSinceChange}
   onPermission={(id, on) => api.permission(id, on)}
 >
   {(remove) => ownCards.map((c, i) => <InstanceCard key={c.id} {...c} hueIndex={i} />)}
@@ -721,6 +723,12 @@ import { fortressText } from "@glimstone/core";
         corner: the phrase. Paste it into the first field and it spreads over all twelve.
       </p>
       <Demo name="FortressOut" />
+      <H2>Removed by another app</H2>
+      <p>
+        Any member can remove an instance of another app, from the end of its row. Once that happens to this app, the
+        empty place says so, and the current phrase brings it back.
+      </p>
+      <Demo name="FortressRemovedHere" />
       <H2>Words</H2>
       <p>
         <code>fortressText(lang)</code> hands out the words in every language of the glossary, and each language is its

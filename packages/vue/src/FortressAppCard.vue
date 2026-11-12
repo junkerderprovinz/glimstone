@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { appCardView, openInBrowser, presenceTone, type FortressApp, type FortressInstance, type FortressText } from "@glimstone/core";
+import { appCardView, memberName, openInBrowser, presenceTone, type FortressApp, type FortressInstance, type FortressText } from "@glimstone/core";
 import Badge from "./Badge.vue";
 import Button from "./Button.vue";
 import InstanceCard from "./InstanceCard.vue";
@@ -8,8 +8,9 @@ import { glyphFor } from "./glyphs";
 
 // Another app of the fortress: its state, where it runs, and the way to open
 // it. A device's glyph is asked for by its kind through the app's resolver
-// (`deviceServer`, `devicePc`, `deviceLaptop`, `devicePhone`).
-const props = defineProps<{
+// (`deviceServer`, `devicePc`, `deviceLaptop`, `devicePhone`). Remove stays
+// quiet at the end of a row, or after Open on a card with one instance.
+const props = withDefaults(defineProps<{
   app: FortressApp;
   text: FortressText;
   /** The interface language, for the counts. */
@@ -17,11 +18,18 @@ const props = defineProps<{
   hueIndex?: number;
   /** Opens an instance's own page. Without it the page opens in a new tab. */
   onOpen?: (app: FortressApp, instance: FortressInstance) => void;
-}>();
+  /** Asks before an instance is removed, with its name. Without it nothing here removes. */
+  onRemove?: (id: string, name: string) => void;
+  /** The label key behind Remove, which picks its glyph. */
+  removeKey?: string;
+}>(), { removeKey: "delete" });
 
 const view = computed(() => appCardView(props.app, props.text, props.lang));
 const presence = (i: FortressInstance) => ({ connected: props.text.connected, checking: props.text.checking, away: props.text.away })[i.presence];
 const device = (i: FortressInstance) => (i.deviceKind ? glyphFor(`device${i.deviceKind.charAt(0).toUpperCase()}${i.deviceKind.slice(1)}`) : undefined);
+
+const name = (i: FortressInstance) => memberName(props.text, props.app, i);
+const removes = (i: FortressInstance) => !!props.onRemove && !i.self;
 
 function open() {
   const { main, open } = view.value;
@@ -45,13 +53,35 @@ function open() {
             <span class="glim-instance-row-name">{{ instance.device }}</span>
             <span class="glim-instance-row-sub glim-num">{{ sub }}</span>
           </span>
-          <Badge :tone="presenceTone(instance.presence)">{{ presence(instance) }}</Badge>
+          <span class="glim-instance-row-end">
+            <Badge :tone="presenceTone(instance.presence)">{{ presence(instance) }}</Badge>
+            <Button
+              v-if="removes(instance)"
+              :label="text.remove"
+              :label-key="removeKey"
+              tone="subtle"
+              variant="icon"
+              compact
+              :title="name(instance)"
+              data-fortress="open-remove"
+              @click="onRemove!(instance.id, name(instance))"
+            />
+          </span>
         </li>
       </ul>
     </template>
     <template #actions>
       <Button v-if="view.open" :label="view.open.label" label-key="open" @click="open" />
       <span v-else class="glim-instance-note">{{ view.note }}</span>
+      <Button
+        v-if="!view.rows.length && removes(view.main)"
+        :label="text.remove"
+        :label-key="removeKey"
+        tone="subtle"
+        :title="name(view.main)"
+        data-fortress="open-remove"
+        @click="onRemove!(view.main.id, name(view.main))"
+      />
     </template>
   </InstanceCard>
 </template>

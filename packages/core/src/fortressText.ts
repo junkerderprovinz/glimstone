@@ -34,8 +34,13 @@ export interface FortressText {
   /** For an app with no page to open from here, such as a phone app. */
   openOnlyOn: string;
   remove: string;
+  /** An instance of another app by name, "{app} on {device}", in the remove window and the reminder. */
+  memberOn: string;
   outTitle: string;
   outHint: string;
+  /** The empty place, once another member removed this app, until it joins again. */
+  removedHereTitle: string;
+  removedHereHint: string;
   /** A member of a fortress seen on the network while this app is in none. */
   found: string;
   enterPhrase: string;
@@ -65,6 +70,12 @@ export interface FortressText {
   removeTitle: string;
   removeBody: string;
   removeBack: string;
+  /** The step after a removal that offers the new phrase, since the old one still lets the instance back in. */
+  removedTitle: string;
+  removedBody: string;
+  later: string;
+  /** The line that stays while instances removed since the last change could get back in, with `{devices}` as a list. */
+  removedNote: string;
   phraseTitle: string;
   phrasePassword: string;
   password: string;

@@ -18,7 +18,7 @@ const props = defineProps<{
   leaveNote?: string;
   /** What the QR code beside the words carries, the words alone without it. */
   phraseQr?: (words: string[]) => string;
-  keys: Record<"join" | "leave" | "changePhrase" | "remove" | "unlock" | "copy", string>;
+  keys: Record<"join" | "leave" | "changePhrase" | "remove" | "later" | "unlock" | "copy", string>;
 }>();
 
 const win = shallowRef<{ card: HTMLElement | null } | null>(null);
@@ -99,6 +99,14 @@ const view = computed(() => {
       return { title: t.leaveTitle, actions: [send("leave", f.leave, t.leaveConfirm, k.leave)] };
     case "remove":
       return { title: fill(t.removeTitle, { device: s.device }), actions: [send("remove", f.remove, t.remove, k.remove)] };
+    case "removed":
+      return {
+        title: t.removedTitle,
+        actions: [
+          { label: t.later, labelKey: k.later, wayOut: true, attrs: { "data-fortress": "later" } },
+          send("change", f.change, t.changeConfirm, k.changePhrase),
+        ],
+      };
     case "phrase":
       return s.step === "password"
         ? { title: t.phraseTitle, actions: [send("unlock", f.unlock, t.unlock, k.unlock, s.password === "")] }
@@ -169,6 +177,11 @@ const view = computed(() => {
     <div v-else-if="w.kind === 'remove'" class="glim-fortress-text">
       <p>{{ fill(text.removeBody, { device: w.device }) }}</p>
       <p class="glim-fortress-sub">{{ text.removeBack }}</p>
+      <p v-if="state.error" class="glim-fortress-error" role="alert">{{ state.error }}</p>
+    </div>
+
+    <div v-else-if="w.kind === 'removed'" class="glim-fortress-text">
+      <p>{{ fill(text.removedBody, { device: w.device }) }}</p>
       <p v-if="state.error" class="glim-fortress-error" role="alert">{{ state.error }}</p>
     </div>
 

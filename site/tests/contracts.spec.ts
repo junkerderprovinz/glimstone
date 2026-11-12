@@ -4249,7 +4249,7 @@ test.describe("Fortress", () => {
     await showOthers(page);
     const echo = inside(page).locator('[data-fortress-app="echo"]');
     await expect(echo).toContainText("Opens only on Wanderer");
-    await expect(echo.getByRole("button")).toHaveCount(0);
+    await expect(echo.getByRole("button", { name: /^Open/ })).toHaveCount(0);
   });
 
   test("[fortress-actions] the corner holds the phrase's actions inside, and Enter phrase outside", async ({ page }) => {
@@ -4438,10 +4438,79 @@ test.describe("Fortress", () => {
     await open(page, "/components/fortress");
     await inside(page).locator('[data-instance="pocket"]').getByRole("button", { name: "Remove" }).click();
     await expect(dialog(page)).toHaveAccessibleName("Remove Pocket?");
+    await expect(dialog(page)).toContainText("Pocket loses its access right away. This can't be undone.");
     await expect(said(inside(page))).toHaveText("Nothing yet");
     await dialog(page).getByRole("button", { name: "Remove" }).click();
-    await expect(dialog(page)).toHaveCount(0);
+    await expect(dialog(page)).toHaveAccessibleName("Change the phrase now?");
     await expect(said(inside(page))).toHaveText("Removed pocket");
+  });
+
+  test("[fortress-remove-other] an app's own card removes through the fortress's window", async ({ page }) => {
+    await open(page, "/components/fortress");
+    await settings(page).locator('[data-own-card="delta"]').getByRole("button", { name: "Remove" }).click();
+    await expect(dialog(page)).toHaveAccessibleName("Remove Delta on Atlas?");
+    await dialog(page).getByRole("button", { name: "Remove" }).click();
+    await expect(said(settings(page))).toHaveText("Removed d1");
+  });
+
+  test("[fortress-remove-other] another app's instance is removed from its row, named by app and device", async ({ page }) => {
+    await open(page, "/components/fortress");
+    await showOthers(page);
+    const bravo = inside(page).locator('[data-fortress-app="bravo"]');
+    await expect(bravo.locator('.glim-instance-row [data-fortress="open-remove"]')).toHaveCount(3);
+    await expect(inside(page).locator('[data-fortress-app="delta"] .glim-instance-acts .glim-btn')).toHaveText(["Open in Unraid", "Remove"]);
+    await bravo.locator('[data-instance="b2"]').getByRole("button", { name: "Remove" }).click();
+    await expect(dialog(page)).toHaveAccessibleName("Remove Bravo on Studio?");
+    await dialog(page).getByRole("button", { name: "Remove" }).click();
+    await expect(said(inside(page))).toHaveText("Removed b2");
+  });
+
+  test("[fortress-removed-offer] after a removal the window offers the new phrase, and Later keeps the old one", async ({ page }) => {
+    await open(page, "/components/fortress");
+    await showOthers(page);
+    await inside(page).locator('[data-fortress-app="echo"]').getByRole("button", { name: "Remove" }).click();
+    await dialog(page).getByRole("button", { name: "Remove" }).click();
+    await expect(dialog(page)).toHaveAccessibleName("Change the phrase now?");
+    await expect(dialog(page)).toContainText("Echo on Wanderer is out. As long as the phrase stays the same, the way back in is still open.");
+    await expect(dialog(page).locator(".glim-modal-foot .glim-btn")).toHaveText(["Later", "Change phrase"]);
+    await dialog(page).getByRole("button", { name: "Later" }).click();
+    await expect(dialog(page)).toHaveCount(0);
+    await expect(said(inside(page))).toHaveText("Removed e1");
+
+    await inside(page).locator('[data-instance="c2"]').getByRole("button", { name: "Remove" }).click();
+    await dialog(page).getByRole("button", { name: "Remove" }).click();
+    await dialog(page).getByRole("button", { name: "Change phrase" }).click();
+    await expect(dialog(page)).toHaveAccessibleName("New phrase");
+    await expect(dialog(page).locator('[data-fortress="words"] li').first()).toHaveText("1lance");
+    await expect(said(inside(page))).toHaveText("Changed");
+  });
+
+  test("[fortress-removed-note] a removed instance stays named under the switch until the phrase changes", async ({ page }) => {
+    await open(page, "/components/fortress");
+    const note = inside(page).locator('[data-fortress="removed"]');
+    await expect(note).toHaveCount(0);
+    await showOthers(page);
+    for (const app of ["echo", "delta"]) {
+      await inside(page).locator(`[data-fortress-app="${app}"]`).getByRole("button", { name: "Remove" }).click();
+      await dialog(page).getByRole("button", { name: "Remove" }).click();
+      await dialog(page).getByRole("button", { name: "Later" }).click();
+    }
+    await expect(note).toContainText("Removed: Echo on Wanderer and Delta on Atlas. Change the phrase to close the way back in.");
+    await others(page).click();
+    await expect(note).toBeVisible();
+    await note.getByRole("button", { name: "Change phrase" }).click();
+    await expect(dialog(page)).toHaveAccessibleName("Change the phrase?");
+    await dialog(page).getByRole("button", { name: "Change phrase" }).click();
+    await dialog(page).getByRole("button", { name: "Close" }).click();
+    await expect(note).toHaveCount(0);
+  });
+
+  test("[fortress-removed-here] an app another member removed says so in its empty place", async ({ page }) => {
+    await open(page, "/components/fortress");
+    const out = stage(page, "FortressRemovedHere").locator('[data-fortress="out"]');
+    await expect(out).toContainText("Removed from the fortress");
+    await expect(out).toContainText("Another app in the fortress removed Alpha. Enter the current phrase to come back in.");
+    await expect(stage(page, "FortressRemovedHere").locator(".glim-fortress-actions .glim-btn")).toHaveText(["Enter phrase"]);
   });
 
   test("[fortress-leave] leaving says what ends and waits for Leave", async ({ page }) => {

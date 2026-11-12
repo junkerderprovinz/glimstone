@@ -45,6 +45,7 @@ export interface FortressLabelKeys {
   showPhrase: string;
   changePhrase: string;
   remove: string;
+  later: string;
   unlock: string;
   copy: string;
 }
@@ -55,6 +56,7 @@ const LABEL_KEYS: FortressLabelKeys = {
   showPhrase: "fortressShowPhrase",
   changePhrase: "fortressChangePhrase",
   remove: "delete",
+  later: "fortressLater",
   unlock: "unlock",
   copy: "copy",
 };
@@ -73,9 +75,16 @@ export interface FortressProps {
   /** Puts the small confirmation of a saved permission, or the reason it failed, into the app's toasts. */
   notify?: (message: string, severity: ToastSeverity) => void;
   onJoin: (words: string[]) => Promise<FortressAnswer>;
-  onRemove: (id: string) => Promise<FortressAnswer>;
+  /** Removes an instance, of this app or another. Without it no other app offers Remove. */
+  onRemove?: (id: string) => Promise<FortressAnswer>;
   /** `password` is set where `phrasePassword` asks for it first. Without it there is no Show phrase. */
   onShowPhrase?: (password?: string) => Promise<PhraseAnswer>;
+  /** Offered right after a removal and beside `removed`, since the old phrase still lets a removed instance back in. */
+  onChangePhrase?: () => Promise<ChangeAnswer>;
+  /** The instances removed since the phrase last changed, by name ("Bravo on Atlas"). While there are any, a line says the way back is still open. */
+  removed?: string[];
+  /** Another member removed this app, so the empty place says so until it joins again. */
+  removedHere?: boolean;
   /** Whether the other apps show. Without it the switch keeps its state on this device. */
   showOthers?: boolean;
   onShowOthers?: (on: boolean) => void;
@@ -86,8 +95,8 @@ export interface FortressProps {
   /** Asks for the app's password before the phrase shows. */
   phrasePassword?: boolean;
   onOpen?: (app: FortressApp, instance: FortressInstance) => void;
-  /** The app's own card for another app, such as the one its Instances tab draws, in place of FortressAppCard. */
-  renderApp?: (app: FortressApp, hueIndex: number) => ReactNode;
+  /** The app's own card for another app, such as the one its Instances tab draws, in place of FortressAppCard. With `onRemove` it gets `remove`, which asks before an instance goes, as the app's own cards do. */
+  renderApp?: (app: FortressApp, hueIndex: number, remove?: (id: string, name: string) => void) => ReactNode;
   /** What the QR code beside the words carries, the words alone without it. */
   phraseQr?: (words: string[]) => string;
   /** Something of the app's own under a permission's words. */
@@ -107,7 +116,7 @@ export interface FortressProps {
  * (FortressPairing).
  */
 export function Fortress(props: FortressProps) {
-  const { text, lang, app, joined, apps, permissions, onPermission, found, hueStart = 0, children } = props;
+  const { text, lang, app, joined, apps, permissions, onPermission, found, removed = [], hueStart = 0, children } = props;
   const latest = useRef(props);
   latest.current = props;
   const flow = useMemo(() => createFortressFlow(() => ({ ...latest.current, failed: latest.current.text.failed })), []);
@@ -151,8 +160,8 @@ export function Fortress(props: FortressProps) {
         {typeof children === "function" ? children(flow.openRemove) : children}
         {!joined && (
           <div className="glim-card glim-instance glim-instance--out" data-fortress="out">
-            <h3 className="glim-instance-title">{text.outTitle}</h3>
-            <p className="glim-instance-hint">{fill(text.outHint, { app: app.name })}</p>
+            <h3 className="glim-instance-title">{props.removedHere ? text.removedHereTitle : text.outTitle}</h3>
+            <p className="glim-instance-hint">{fill(props.removedHere ? text.removedHereHint : text.outHint, { app: app.name })}</p>
             {found && (
               <p className="glim-instance-found">
                 {found.logo && <img src={found.logo} alt="" />}
@@ -176,14 +185,33 @@ export function Fortress(props: FortressProps) {
         </div>
       )}
 
+      {joined && removed.length > 0 && (
+        <div className="glim-fortress-removed" data-fortress="removed" role="status">
+          {glyphFor("info")}
+          <span>{fill(text.removedNote, { devices: listOf(lang, removed) })}</span>
+          {props.onChangePhrase && (
+            <Button label={text.changePhrase} labelKey={keys.changePhrase} tone="subtle" onClick={flow.openChange} data-fortress="open-change" />
+          )}
+        </div>
+      )}
+
       {joined && showOthers && (
         <>
           <div className="glim-fortress-grid">
             {apps.map((a, i) =>
               props.renderApp ? (
-                <Fragment key={a.id}>{props.renderApp(a, hueStart + 1 + i)}</Fragment>
+                <Fragment key={a.id}>{props.renderApp(a, hueStart + 1 + i, props.onRemove && flow.openRemove)}</Fragment>
               ) : (
-                <FortressAppCard key={a.id} app={a} text={text} lang={lang} hueIndex={hueStart + 1 + i} onOpen={props.onOpen} />
+                <FortressAppCard
+                  key={a.id}
+                  app={a}
+                  text={text}
+                  lang={lang}
+                  hueIndex={hueStart + 1 + i}
+                  onOpen={props.onOpen}
+                  onRemove={props.onRemove && flow.openRemove}
+                  removeKey={keys.remove}
+                />
               ),
             )}
           </div>
@@ -380,6 +408,22 @@ function FortressWindow({ flow, state, props, keys }: { flow: FortressFlow; stat
           <div className="glim-fortress-text">
             <p>{fill(text.removeBody, { device: w.device })}</p>
             <p className="glim-fortress-sub">{text.removeBack}</p>
+            {error}
+          </div>
+        </Window>
+      );
+    case "removed":
+      return (
+        <Window
+          {...common}
+          title={text.removedTitle}
+          actions={[
+            { label: text.later, labelKey: keys.later, wayOut: true, attrs: { "data-fortress": "later" } },
+            send("change", flow.change, text.changeConfirm, keys.changePhrase),
+          ]}
+        >
+          <div className="glim-fortress-text">
+            <p>{fill(text.removedBody, { device: w.device })}</p>
             {error}
           </div>
         </Window>
