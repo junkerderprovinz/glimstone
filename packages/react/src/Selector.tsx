@@ -222,6 +222,7 @@ export function Selector<M extends SelectMode = "one", V extends string | number
 
   return (
     <div
+      data-glim="Selector"
       ref={track}
       role={listed ? undefined : strip.role}
       aria-label={listed ? undefined : name}

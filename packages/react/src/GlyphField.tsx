@@ -25,7 +25,7 @@ export function GlyphField({ glyph, label, after, mono, width, className, style,
   const name = useFieldName(label);
   const classes = ["glim-input", "glim-glyph-field", fieldWidthClass(width), mono && "glim-input--mono", className].filter(Boolean).join(" ");
   return (
-    <label className={classes} style={style}>
+    <label data-glim="GlyphField" className={classes} style={style}>
       <span className="glim-glyph-field-glyph" aria-hidden="true">
         {glyph}
       </span>

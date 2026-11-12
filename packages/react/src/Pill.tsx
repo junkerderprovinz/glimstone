@@ -16,5 +16,5 @@ export interface PillProps {
 }
 
 export function Pill({ children, tone = "neutral", className }: PillProps) {
-  return <span className={className ? `${pillClassName(tone)} ${className}` : pillClassName(tone)}>{children}</span>;
+  return <span data-glim="Pill" className={className ? `${pillClassName(tone)} ${className}` : pillClassName(tone)}>{children}</span>;
 }

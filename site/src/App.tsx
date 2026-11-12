@@ -7,6 +7,7 @@ import { resetLook } from "./look";
 import { AccentControl, LabelControl, MotionControl, RainbowControl, ShapeControl, ThemeControl } from "./lookControls";
 import { Adopting, Glyphs, Introduction, Palette, TypeScale } from "./pages/guide";
 import { Calibration } from "./pages/calibration";
+import { GlossaryPage } from "./pages/glossary";
 import { BehaviourGuide, ComboboxPage, SelectPage, SliderPage } from "./pages/zag";
 import { ColourEngine, LabelEngine, MotionEngine, ShapeEngine } from "./pages/engines";
 import {
@@ -65,6 +66,7 @@ const PAGES: Page[] = [
   { path: "/guide/type", title: "Type scale", group: "Guide", Comp: TypeScale },
   { path: "/guide/glyphs", title: "Glyphs", group: "Guide", Comp: Glyphs },
   { path: "/guide/calibration", title: "Calibration", group: "Guide", Comp: Calibration },
+  { path: "/guide/glossary", title: "Glossary", group: "Guide", Comp: GlossaryPage },
   { path: "/engines/colour", title: "Colour", group: "Engines", Comp: ColourEngine },
   { path: "/engines/shape", title: "Shape", group: "Engines", Comp: ShapeEngine },
   { path: "/engines/motion", title: "Motion", group: "Engines", Comp: MotionEngine },

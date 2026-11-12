@@ -49,7 +49,7 @@ export function ReadmeButton({ brand, parts, mark, markClass, art, hint, note, s
   useLayoutEffect(() => (ref.current ? keepReadmeFit(ref.current) : undefined), [words]);
 
   return (
-    <div ref={ref} className={readmeUnitClass(brand, parts.length, !!note, soon)}>
+    <div data-glim="ReadmeButton" ref={ref} className={readmeUnitClass(brand, parts.length, !!note, soon)}>
       {parts.map((part, i) => {
         const sub = soon ? soonLabel : part.sub;
         const label = readmePartLabel(part, sub);
@@ -112,5 +112,5 @@ export function ReadmeButton({ brand, parts, mark, markClass, art, hint, note, s
 
 /** A vendor mark kept as its own markup, from appMarks.ts. */
 export function BrandMark({ svg }: { svg: string }) {
-  return <span className="glim-brand-svg" aria-hidden dangerouslySetInnerHTML={{ __html: svg }} />;
+  return <span data-glim="BrandMark" className="glim-brand-svg" aria-hidden dangerouslySetInnerHTML={{ __html: svg }} />;
 }

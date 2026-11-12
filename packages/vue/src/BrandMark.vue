@@ -4,5 +4,5 @@ defineProps<{ svg: string }>();
 </script>
 
 <template>
-  <span class="glim-brand-svg" aria-hidden="true" v-html="svg" />
+  <span data-glim="BrandMark" class="glim-brand-svg" aria-hidden="true" v-html="svg" />
 </template>

@@ -35,7 +35,7 @@ export function Slider({ label, value, onChange, min, max, step = 1, format, dis
   const api = slider.connect(service, normalizeProps);
 
   return (
-    <div {...api.getRootProps()} className="glim-slider">
+    <div data-glim="Slider" {...api.getRootProps()} className="glim-slider">
       <div className="glim-slider-head">
         <label {...api.getLabelProps()} className={label === undefined ? "glim-sr-only" : "glim-field-label"}>
           {name}

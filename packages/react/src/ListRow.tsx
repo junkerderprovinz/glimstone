@@ -31,7 +31,7 @@ export function ListRow({ name, tip, mono, tile, badges, actions, className, onC
   }
   const classes = ["glim-list-row", onClick && "glim-list-row--opens", className].filter(Boolean).join(" ");
   return (
-    <div role="group" aria-label={name} tabIndex={onClick ? 0 : undefined} {...rest} onClick={onClick} onKeyDown={keys} className={classes}>
+    <div data-glim="ListRow" role="group" aria-label={name} tabIndex={onClick ? 0 : undefined} {...rest} onClick={onClick} onKeyDown={keys} className={classes}>
       {tile && <span className="glim-list-row-tile">{tile}</span>}
       <span className={mono ? "glim-list-row-name glim-list-row-name--mono" : "glim-list-row-name"}>
         <span className="glim-list-row-title">{name}</span>

@@ -23,7 +23,8 @@ views="packages/core/src/button.ts packages/core/src/badge.ts packages/core/src/
 #    The match has to end the name, or `.glim-btn-chip` would answer for a
 #    deleted `.glim-btn`.
 #    A name counts as defined as a selector, a keyframes name or a custom property.
-for c in $(grep -ohE "\bglim-[a-z0-9-]+" $components $views | sort -u); do
+#    `data-glim-title` is an attribute, not a class.
+for c in $(grep -ohP "(?<!data-)\bglim-[a-z0-9-]+" $components $views | sort -u); do
   case "$c" in *-|glim-convention-exception) continue ;; esac
   grep -qE "(\.|@keyframes |--)${c}([^a-zA-Z0-9-]|$)" $tokens || note "class $c (not in $tokens)"
 done

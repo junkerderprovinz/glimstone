@@ -53,7 +53,7 @@ export function Combobox({ label, hideLabel, options, value, onChange, placehold
   const api = combobox.connect(service, normalizeProps);
 
   return (
-    <div {...api.getRootProps()} className="glim-combobox">
+    <div data-glim="Combobox" {...api.getRootProps()} className="glim-combobox">
       <label {...api.getLabelProps()} className={hideLabel || label === undefined ? "glim-sr-only" : "glim-field-label"}>
         {name}
       </label>

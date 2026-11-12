@@ -95,6 +95,8 @@ export function Window({ title, drawn, children, actions = [], start, size = "no
       }}
     >
       <div
+        data-glim="Window"
+        data-glim-title={title}
         {...rest}
         ref={card}
         role="dialog"

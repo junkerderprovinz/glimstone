@@ -3171,7 +3171,12 @@ body {
     translate: 3px 0;
     transition: translate 150ms cubic-bezier(0.4, 0, 0.2, 1);
   }
-  .glim-toggle-track[aria-checked="true"] .glim-toggle-thumb { translate: 18px 0; }
+  /* On the accent the thumb takes the fill's ink, or the light ramp's pale
+     ground would vanish into a yellow or a green. */
+  .glim-toggle-track[aria-checked="true"] .glim-toggle-thumb {
+    background-color: var(--accent-contrast);
+    translate: 18px 0;
+  }
   /* The flex track already mirrors the thumb's rest position under RTL, so the
      shift turns round with it. */
   .glim-toggle-thumb:dir(rtl) { translate: -3px 0; }
@@ -3217,6 +3222,13 @@ body {
     padding-inline: 0;
     aspect-ratio: 1;
   }
+  /* The four forms (badgeClassName). A pill's radius is half its height, so a
+     short badge stays a pill rather than a lozenge, and in the leaf shape the
+     two sharp corners stay sharp. */
+  .glim-badge--rounded { border-radius: 0.3125rem; }
+  .glim-badge--square { border-radius: 0; }
+  .glim-badge--pill { border-radius: calc(var(--badge-h) / 2); }
+  .glim-badge--circle { border-radius: 50%; }
 
   /* warn uses the strong wash, which is meant for small chips; the plain one is
      for panels that hold paragraphs. active is the accent-soft wash, not a solid
@@ -4231,11 +4243,15 @@ body {
     color: var(--carbon-text-muted);
   }
 
-  /* The sub-card (rule 1): a flat, filled group inside a card under a small
-     uppercase title, in place of a card inside a card or a fold-out. The
-     title takes the sub text rather than the eyebrow's muted one, which falls
-     short of AA on surface2. */
+  /* The sub-card (rule 1): a flat, filled group inside a card or a window, in
+     place of a card inside a card or a fold-out. Its title is a section badge
+     in the notch on its top edge (rule 11), so a titled one is `relative` for
+     the notch, keeps the badge's lower half clear of its first row, and
+     stands a little further from what comes before it, which the badge's
+     upper half reaches into. What belongs to the whole group stands at the
+     end of the heading's row. */
   .glim-subcard {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
@@ -4243,27 +4259,27 @@ body {
     border-radius: var(--radius-card);
     background-color: var(--carbon-surface2);
   }
-  .glim-subcard-title {
+  .glim-subcard--titled { padding-top: 1.25rem; }
+  * + .glim-subcard--titled { margin-top: 0.5rem; }
+  .glim-subcard-end {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 0.375rem;
-    margin: 0;
-    font-size: var(--text-meta);
-    font-weight: 600;
-    line-height: 1rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--carbon-text-sub);
+    justify-content: flex-end;
+    gap: 0.75rem;
   }
   /* What carries surface2 at rest would vanish into the sub-card, so fields,
-     quiet buttons and bare selector segments step up one surface. */
+     quiet buttons, bare selector segments and resting tiles step up one
+     surface, and hover one more (rule 21). A tile does so in a well too. */
   .glim-subcard .glim-btn--subtle,
   .glim-subcard .glim-num-field,
-  .glim-subcard .glim-sel--chip .glim-sel-seg:not(.glim-active) {
+  .glim-subcard .glim-sel--chip .glim-sel-seg:not(.glim-active),
+  :is(.glim-subcard, .glim-well) .glim-sel-tile:not(.glim-active) {
     background-color: var(--carbon-surface3);
   }
   .glim-subcard .glim-num-field:focus,
-  .glim-subcard .glim-sel--chip .glim-sel-seg:not(.glim-active):not(:disabled):hover {
+  .glim-subcard .glim-sel--chip .glim-sel-seg:not(.glim-active):not(:disabled):hover,
+  :is(.glim-subcard, .glim-well) .glim-sel-tile:not(.glim-active):hover {
     background-color: var(--carbon-hover-raised);
   }
 
@@ -5103,12 +5119,14 @@ body {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
-/* An app's own rule for links outranks the layer, so a link with a button's look
-   takes its colour back from there. */
-a:is(.glim-btn, .glim-icon-btn) {
+/* An app's own rule for links or buttons, such as a reset's
+   `a, button { color: inherit }`, stands outside any layer and so outranks every
+   rule in one. These take their colour back from the layer, where the ink on a
+   filled one is the computed contrast (rule 45). */
+:is(a, button):is(.glim-btn, .glim-icon-btn, .glim-badge, .glim-sel-seg, .glim-sel-tile, .glim-nav-row, .glim-give-network, .glim-give-coin) {
   color: revert-layer;
-  text-decoration: none;
 }
+a:is(.glim-btn, .glim-icon-btn) { text-decoration: none; }
 /* Under the message, at its end. The stage's floor is for a row of buttons. */
 .glim-toast-action {
   align-self: flex-end;

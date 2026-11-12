@@ -50,7 +50,7 @@ function keys(e: KeyboardEvent, at: number) {
 </script>
 
 <template>
-  <div role="menubar" :aria-label="label" class="glim-menubar">
+  <div data-glim="MenuBar" role="menubar" :aria-label="label" class="glim-menubar">
     <button
       v-for="(m, i) in menus"
       :key="i"

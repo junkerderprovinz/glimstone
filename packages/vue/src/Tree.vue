@@ -59,7 +59,7 @@ function keys(e: KeyboardEvent, at: number) {
 </script>
 
 <template>
-  <div ref="tree" role="tree" :aria-label="label" class="glim-tree">
+  <div ref="tree" data-glim="Tree" role="tree" :aria-label="label" class="glim-tree">
     <div
       v-for="(r, i) in rows"
       v-bind="r.node.attrs"

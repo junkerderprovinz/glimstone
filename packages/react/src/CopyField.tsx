@@ -43,7 +43,7 @@ export function CopyField({ value, label, width, text = { copy: "Copy", copied: 
   }
 
   return (
-    <span className={["glim-copy", fieldWidthClass(width), className].filter(Boolean).join(" ")}>
+    <span data-glim="CopyField" className={["glim-copy", fieldWidthClass(width), className].filter(Boolean).join(" ")}>
       <input ref={field} readOnly value={value} aria-label={name} spellCheck={false} className="glim-input glim-input--mono" />
       <Button
         label={copied ? text.copied : text.copy}

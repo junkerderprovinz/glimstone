@@ -147,8 +147,11 @@ export function BadgePage() {
       <Demo name="BadgeSizes" />
       <p>
         Sizes are named stages, each fixing font size, padding and height together. A button and a span at the same
-        stage render pixel-identical. All four shapes read <code>--radius-pill</code>; the name says what the caller
-        means.
+        stage render pixel-identical. Without a <code>form</code> a badge's corners follow the shape setting. With one
+        they keep that form under every setting: <code>rounded</code> a small radius, <code>square</code> none,{" "}
+        <code>pill</code> half its height and <code>circle</code> a circle around one glyph. Buttons and controls stay
+        rounded, never pills. <code>shape</code> is the older prop and is on its way out: its <code>circle</code> still
+        makes an icon-only badge, and its other values change nothing.
       </p>
       <H2>Rules</H2>
       <ul>
@@ -159,6 +162,8 @@ export function BadgePage() {
           Only <code>heading</code> and <code>active</code> take a rainbow position; the other tones are state signals.
         </li>
       </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="Badge" />
       <H2>API</H2>
       <PropsTable of="Badge" />
     </>
@@ -695,9 +700,14 @@ export function SignInCardPage() {
 export function SubCardPage() {
   return (
     <>
-      <p className="lead">A flat, filled group inside a card, under a small uppercase title.</p>
+      <p className="lead">A flat, filled group inside a card, with its section badge in the notch on its top edge.</p>
       <Head file="react/SubCard.tsx" />
       <Demo name="SubCardBasic" />
+      <p>
+        A column of row tiles inside a sub-card lifts its resting tiles one surface and hovers them one more (rule 21),
+        so none of them vanishes into the sub-card's own fill.
+      </p>
+      <Demo name="SubCardTiles" />
       <Usage
         code={`import { SubCard } from "@glimstone/react";\n\n<Card title="Snapshots">\n  <SubCard title="Retention">...</SubCard>\n</Card>`}
       />
@@ -712,7 +722,11 @@ export function SubCardPage() {
           Fields, quiet buttons and bare selector segments inside it step up one surface, or they would vanish into its
           fill.
         </li>
-        <li>Its title is not a badge: only a card's outermost heading is. A group that needs no name goes without one.</li>
+        <li>
+          Its title is a section badge in the notch, as a card's is (rule 11), and <code>end</code>, a slot in Vue, holds
+          what belongs to the whole group, such as its switch, at the end of that row. A group that needs no name goes
+          without one.
+        </li>
       </ul>
       <H2>Behaviour</H2>
       <ContractTable of="SubCard" />

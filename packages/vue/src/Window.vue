@@ -81,6 +81,8 @@ function pressBeside() {
   <Teleport to="body">
     <div class="glim-modal-backdrop" @mousedown.self="pressBeside">
       <div
+        data-glim="Window"
+        :data-glim-title="title"
         v-bind="$attrs"
         ref="card"
         role="dialog"

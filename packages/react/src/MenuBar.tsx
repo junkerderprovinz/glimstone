@@ -57,7 +57,7 @@ export function MenuBar({ label, menus, ref, className }: MenuBarProps) {
   }
 
   return (
-    <div role="menubar" aria-label={label} className={className ? `glim-menubar ${className}` : "glim-menubar"}>
+    <div data-glim="MenuBar" role="menubar" aria-label={label} className={className ? `glim-menubar ${className}` : "glim-menubar"}>
       {menus.map((m, i) => (
         <button
           key={i}

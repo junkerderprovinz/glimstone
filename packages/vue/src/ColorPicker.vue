@@ -105,6 +105,7 @@ function onKeyDown(e: KeyboardEvent) {
 <template>
   <Teleport to="body" :disabled="!anchor">
     <div
+      data-glim="ColorPicker"
       ref="panel"
       :class="['glim-picker-panel', anchor && 'glim-picker-panel--float']"
       :style="{ '--glim-picker-colour': draft }"

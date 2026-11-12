@@ -51,6 +51,7 @@ const link = computed(() => ({ view: view.value, label: props.label, glyph: prop
 <template>
   <div
     v-if="$slots.before || $slots.after"
+    data-glim="SidebarRow"
     :class="[view.className, 'glim-nav-row--slots', $attrs.class]"
     :style="[view.style, $attrs.style as StyleValue]"
   >
@@ -58,5 +59,5 @@ const link = computed(() => ({ view: view.value, label: props.label, glyph: prop
     <SidebarRowLink v-bind="{ ...$attrs, ...link, class: undefined, style: undefined }" class-name="glim-nav-row-main" />
     <span v-if="$slots.after" class="glim-nav-row-slot"><slot name="after" /></span>
   </div>
-  <SidebarRowLink v-else v-bind="{ ...$attrs, ...link, class: undefined }" :class-name="view.className" :class="$attrs.class" :style="view.style" />
+  <SidebarRowLink v-else data-glim="SidebarRow" v-bind="{ ...$attrs, ...link, class: undefined }" :class-name="view.className" :class="$attrs.class" :style="view.style" />
 </template>

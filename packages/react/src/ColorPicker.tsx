@@ -102,6 +102,7 @@ export function ColorPicker({ value, onApply, onInput, anchor, onClose, names = 
 
   const body = (
     <div
+      data-glim="ColorPicker"
       ref={panel}
       className={["glim-picker-panel", anchor && "glim-picker-panel--float", className].filter(Boolean).join(" ")}
       style={{ "--glim-picker-colour": draft } as CSSProperties}

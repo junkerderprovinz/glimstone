@@ -32,7 +32,7 @@ defineExpose({ input });
 </script>
 
 <template>
-  <span :class="['glim-secret', widthClass, $attrs.class]" :style="$attrs.style as StyleValue">
+  <span data-glim="PasswordField" :class="['glim-secret', widthClass, $attrs.class]" :style="$attrs.style as StyleValue">
     <input
       ref="input"
       v-model="value"

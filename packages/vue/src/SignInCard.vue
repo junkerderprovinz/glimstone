@@ -78,7 +78,7 @@ watch(
 </script>
 
 <template>
-  <div class="glim-signin">
+  <div data-glim="SignInCard" class="glim-signin">
     <div ref="card" class="glim-card glim-signin-card">
       <div class="glim-signin-head">
         <span v-if="logo || $slots.logo" class="glim-signin-logo" aria-hidden="true">

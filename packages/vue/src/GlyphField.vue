@@ -26,7 +26,7 @@ defineExpose({ input });
 </script>
 
 <template>
-  <label :class="['glim-input', 'glim-glyph-field', widthClass, { 'glim-input--mono': mono }, $attrs.class]" :style="$attrs.style as StyleValue">
+  <label data-glim="GlyphField" :class="['glim-input', 'glim-glyph-field', widthClass, { 'glim-input--mono': mono }, $attrs.class]" :style="$attrs.style as StyleValue">
     <span class="glim-glyph-field-glyph" aria-hidden="true"><component :is="glyph" /></span>
     <input
       ref="input"

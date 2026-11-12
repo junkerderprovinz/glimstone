@@ -47,7 +47,7 @@ function onInput(e: Event) {
 </script>
 
 <template>
-  <span class="glim-num-wrap">
+  <span data-glim="NumberField" class="glim-num-wrap">
     <input v-bind="$attrs" ref="input" :aria-label="name" type="number" class="glim-num-input glim-num-field glim-num" @input="onInput" />
   </span>
 </template>

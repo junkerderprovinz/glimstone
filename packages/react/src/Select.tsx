@@ -170,7 +170,7 @@ function ListSelect<T extends string>({
   const positioner = api.getPositionerProps();
 
   return (
-    <div {...api.getRootProps()} className={selectRootClass(width)}>
+    <div data-glim="Select" {...api.getRootProps()} className={selectRootClass(width)}>
       <label {...api.getLabelProps()} className={hideLabel ? "glim-sr-only" : "glim-field-label"}>
         {label}
       </label>
@@ -290,7 +290,7 @@ function MenuSelect<T extends string>({
   const positioner = api.getPositionerProps();
 
   return (
-    <div className={selectRootClass(width)}>
+    <div data-glim="Select" className={selectRootClass(width)}>
       {!hideLabel && (
         <span aria-hidden="true" className="glim-field-label">
           {label}

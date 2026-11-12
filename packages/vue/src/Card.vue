@@ -26,6 +26,8 @@ const style = computed(() => (props.hueIndex !== undefined ? hueVars(props.hueIn
 
 <template>
   <div
+    data-glim="Card"
+    :data-glim-title="title"
     :class="['glim-panel', 'glim-notch-card', { 'glim-panel--nested': nested, 'glim-hue': hueIndex !== undefined }]"
     :style="style"
   >

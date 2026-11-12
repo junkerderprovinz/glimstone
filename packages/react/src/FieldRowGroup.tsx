@@ -15,7 +15,7 @@ export interface FieldRowGroupProps extends HTMLAttributes<HTMLDivElement> {
 export function FieldRowGroup({ children, columns, className, style, ...rest }: FieldRowGroupProps) {
   return (
     <FieldRowGroupContext.Provider value={true}>
-      <div {...rest} style={columns ? ({ ...style, "--field-columns": columns } as CSSProperties) : style} className={className ? `glim-field-row-group ${className}` : "glim-field-row-group"}>
+      <div data-glim="FieldRowGroup" {...rest} style={columns ? ({ ...style, "--field-columns": columns } as CSSProperties) : style} className={className ? `glim-field-row-group ${className}` : "glim-field-row-group"}>
         {children}
       </div>
     </FieldRowGroupContext.Provider>

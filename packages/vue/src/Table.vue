@@ -17,7 +17,7 @@ const valueOf = (row: T, column: TableColumn) => (row as Record<string, unknown>
 </script>
 
 <template>
-  <table class="glim-table" :aria-label="label">
+  <table data-glim="Table" class="glim-table" :aria-label="label">
     <thead v-if="head">
       <tr>
         <th v-for="c in columns" :key="c.key" scope="col" :class="{ 'glim-table-end': c.end }">{{ c.label }}</th>

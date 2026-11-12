@@ -12,5 +12,5 @@ provide(FIELD_ROW_GROUP, true);
 </script>
 
 <template>
-  <div class="glim-field-row-group" :style="columns ? { '--field-columns': columns } : undefined"><slot /></div>
+  <div data-glim="FieldRowGroup" class="glim-field-row-group" :style="columns ? { '--field-columns': columns } : undefined"><slot /></div>
 </template>

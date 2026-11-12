@@ -4,5 +4,5 @@
 </script>
 
 <template>
-  <kbd class="glim-kbd"><slot /></kbd>
+  <kbd data-glim="Kbd" class="glim-kbd"><slot /></kbd>
 </template>

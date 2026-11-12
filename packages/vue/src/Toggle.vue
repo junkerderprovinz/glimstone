@@ -49,7 +49,7 @@ function press() {
 </script>
 
 <template>
-  <span ref="frame" :class="['glim-toggle', $attrs.class]" :style="$attrs.style as StyleValue">
+  <span ref="frame" data-glim="Toggle" :class="['glim-toggle', $attrs.class]" :style="$attrs.style as StyleValue">
     <span v-if="caption" class="glim-toggle-label">{{ label }}</span>
     <button
       v-bind="{ ...$attrs, class: undefined, style: undefined }"

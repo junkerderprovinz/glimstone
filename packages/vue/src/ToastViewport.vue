@@ -34,10 +34,11 @@ function act(id: string, action: ToastAction) {
 </script>
 
 <template>
-  <div class="glim-toast-stack">
+  <div data-glim="ToastViewport" class="glim-toast-stack">
     <div
       v-for="t in toasts"
       :key="t.id"
+      data-glim="ToastCard"
       :role="roleFor(t.severity)"
       class="glim-toast glim-toast-card"
       @mouseenter="emit('enter', t.id)"

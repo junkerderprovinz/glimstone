@@ -205,6 +205,7 @@ export function DropdownListbox({
 
   return createPortal(
     <div
+      data-glim="DropdownListbox"
       ref={panelRef}
       role="listbox"
       onKeyDown={onPanelKeyDown}

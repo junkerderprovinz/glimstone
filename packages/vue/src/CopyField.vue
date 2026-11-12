@@ -44,7 +44,7 @@ async function copy() {
 </script>
 
 <template>
-  <span :class="['glim-copy', fieldWidthClass(width)]">
+  <span data-glim="CopyField" :class="['glim-copy', fieldWidthClass(width)]">
     <input ref="field" readonly :value="value" :aria-label="name" spellcheck="false" class="glim-input glim-input--mono" />
     <Button
       :label="copied ? text.copied : text.copy"

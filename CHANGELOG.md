@@ -2,6 +2,36 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+The site gains a bilingual glossary of every element. The ink on an accent fill stays the computed contrast ink in every case: a switch that is on draws its knob in it, and an app's own reset of links and buttons no longer takes it off a filled button, segment, tile or rail row.
+
+**Adopting apps:**
+
+- **Your own reset:** a rule such as `a, button { color: inherit }` outside any cascade layer no longer reaches the colour of a GlimStone button, badge, selector segment or tile, rail row or donation choice. An app that keeps its own copy of the tokens takes the `revert-layer` rule beside the button and the switch's knob rule from `tokens.css`.
+- **Sub-card titles:** a `SubCard` with a `title` draws it as a section badge in the notch on its top edge, as a `Card` does, and the small uppercase title is gone. Put what belongs to the whole group, such as its switch, into `end` (in Vue the `end` slot) rather than into its first row. An app that keeps its own copy of the tokens takes the sub-card block from `tokens.css` and drops `.glim-subcard-title`.
+- **Badge forms:** `form="rounded" | "square" | "pill" | "circle"` on `Badge` gives a badge exactly that form under every shape setting. `shape` is deprecated and keeps doing what it did: `shape="circle"` makes the badge icon-only, the other values change nothing. Move `shape="circle"` to `form="circle"` for a real circle. An app that keeps its own copy of the tokens takes `.glim-badge--rounded`, `--square`, `--pill` and `--circle` from `tokens.css`.
+- **Names in the markup:** every component's outermost element now carries `data-glim` with its name and, where it has a title, `data-glim-title`. A stylesheet or a test of yours that counts attributes on these elements sees two more. `Card` and `InfoTile` in React take `data-*` attributes and put them on their root, and `InfoTile` stands in a wrapper with `display: contents`.
+- **Flutter:** nothing changes there.
+
+## 🎨 Design
+
+- **A sub-card's title is a section badge in the notch** (rules 1 and 11), and `end` stands at the end of that row.
+- **Row tiles on a sub-card or in a well step up one surface** at rest and hover one more (rule 21). Their resting fill was the sub-card's own, so the tiles vanished into it.
+- **Rule 4 names the state colours GlimStone uses:** the accent for running, green for done, orange for partial or a warning, red for an error and neutral for waiting or unknown. Its number stays, since other notes cite it.
+- **A tile has four names, one for each kind:** row tile (Zeilenkachel), glyph tile (Glyphenkachel), brand tile (Markenkachel) and Info tile (Infokachel), in the glossary and under "Vertical tiles".
+
+## ✨ Added
+
+- **`form` on `Badge`**, in React and Vue, with the type `BadgeForm`: the four forms the style guide names, rounded, square, pill and circle.
+- **A glossary on the site** (Guide, Glossary): every element under its English and German name, its short form and how the code spells it, rendered live, with the GlimStone rule that governs it. A picture of an Export window with numbered parts opens the page and an index from A to Z closes it. German names the style guide does not settle yet carry a Proposal badge. The entries live in `site/src/pages/glossary.data.ts`, and `site/test/glossary.test.ts` fails when a component the React or Vue package exports has no entry or an entry names one that is gone.
+- **`data-glim` and `data-glim-title`** on every component in React and Vue, so a review tool can name each element by its GlimStone name.
+
+## 🐛 Fixed
+
+- **A switch that is on draws its knob in `--accent-contrast`.** On the light theme the knob was the pale ground, 1.46:1 on Sunflower and at most 2.77:1 on the presets. It now measures 5.95:1 to 11.24:1.
+- **The ink on a filled link or button survives an app's reset.** The component rules sit in a cascade layer, so an unlayered `a, button { color: inherit }` put the page's text colour on a picked segment, a picked tile, an active rail row and an accent button, as low as 1.12:1. They take their colour back from the layer.
+
 ## 4.3.7 - 2026-11-11
 
 The Flutter package's checks run on Flutter 3.47.9 again. Flutter 3.50 deprecates `package:flutter/material.dart`, which the package still imports, so `flutter analyze` stopped on five deprecation hints.

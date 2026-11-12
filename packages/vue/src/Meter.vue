@@ -32,6 +32,7 @@ const bubble = useTipBubble(() => props.valueText);
 
 <template>
   <span
+    data-glim="Meter"
     v-bind="$attrs"
     :ref="(el) => (bubble.trigger.value = el as HTMLElement | null)"
     :role="busy ? 'progressbar' : 'meter'"

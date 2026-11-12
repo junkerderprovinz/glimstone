@@ -53,7 +53,7 @@ export type { SelectEntry, SelectGroup, SelectOption, SelectSubmenu } from "./se
 export type { SelectorItem } from "./selectorItem";
 export type { MenuBarMenu, MenuEntry, MenuHead, MenuItem, TreeNode, WindowAction } from "./windowParts";
 export type { ResetAnswer, SignInAnswer, SignInText } from "@glimstone/core";
-export type { ButtonSize, ColorName, ColorPickerPanelText, FieldWidth, MeterSize, PillTone, SelectRows, TableColumn, ToastAction, WindowSize } from "@glimstone/core";
+export type { BadgeForm, ButtonSize, ColorName, ColorPickerPanelText, FieldWidth, MeterSize, PillTone, SelectRows, TableColumn, ToastAction, WindowSize } from "@glimstone/core";
 export { selectorTabId } from "@glimstone/core";
 export { useTipBubble, type TipBubble } from "./tipBubble";
 export { GLIMSTONE_VERSION } from "@glimstone/core";

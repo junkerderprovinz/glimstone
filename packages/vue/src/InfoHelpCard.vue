@@ -13,7 +13,7 @@ const wantsMail = computed(() => offersMail(props.text.report, props.mailAddress
 </script>
 
 <template>
-  <Card :title="text.title" :hint="text.hint" :hue-index="hueIndex">
+  <Card data-glim="InfoHelpCard" :title="text.title" :hint="text.hint" :hue-index="hueIndex">
     <p class="glim-info-text">{{ text.report }}</p>
     <div class="glim-readme-btn-rows">
       <ReadmeButton brand="github" :parts="[{ name: text.repoButton, onClick: () => openUrl(repoUrl) }]" mark-class="glim-github-mark">

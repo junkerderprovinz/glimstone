@@ -47,6 +47,7 @@ export function ToastCard({
 }: ToastCardProps) {
   return (
     <div
+      data-glim="ToastCard"
       role={roleFor(severity)}
       // React's onFocus and onBlur bubble, so tabbing onto the dismiss button
       // pauses the countdown like a hover does.
@@ -119,7 +120,7 @@ export interface ToastViewportProps {
 // Toasts render in array order, so the newest sits nearest the bottom edge.
 export function ToastViewport({ toasts, dismissLabel, onDismiss, onMouseEnter, onMouseLeave, onFocus, onBlur }: ToastViewportProps) {
   return (
-    <div className="glim-toast-stack">
+    <div data-glim="ToastViewport" className="glim-toast-stack">
       {toasts.map((t) => (
         <ToastCard
           key={t.id}

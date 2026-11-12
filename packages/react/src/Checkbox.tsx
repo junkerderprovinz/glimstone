@@ -23,6 +23,7 @@ export function Checkbox({ checked, onChange, label, hideLabel = false, slim = f
   const classes = ["glim-checkbox", slim && "glim-checkbox--slim", className].filter(Boolean).join(" ");
   return (
     <button
+      data-glim="Checkbox"
       type="button"
       role="checkbox"
       aria-checked={checked}

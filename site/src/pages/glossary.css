@@ -1,0 +1,374 @@
+/* The glossary page. Each group is a card with its section badge in the notch,
+   and each element stands on a sunken stage inside it, so no line is drawn
+   anywhere inside a card. */
+.gl-page {
+  --gl-dot: color-mix(in srgb, var(--carbon-text) 11%, transparent);
+  --gl-mark-ground: var(--carbon-text);
+  --gl-mark-ink: var(--carbon-bg);
+}
+.gl-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  margin: 1.25rem 0 0;
+}
+.gl-meta-line {
+  color: var(--carbon-text-muted);
+  font-size: var(--text-subline, 13px);
+  line-height: 1.9;
+}
+.gl-meta-line .glim-badge { vertical-align: middle; }
+
+.gl-sections {
+  display: grid;
+  gap: 2.5rem;
+  margin-top: 3rem;
+}
+.gl-section { min-width: 0; }
+.gl-count { margin-inline-start: 0.5rem; opacity: 0.7; }
+
+.gl-jump { display: flex; flex-wrap: wrap; gap: 8px; }
+.gl-jump a { text-decoration: none; }
+
+/* One entry: what it is called, beside the thing itself. */
+.gl-entries { display: grid; gap: 2.75rem; padding-top: 0.75rem; }
+.gl-entry {
+  display: grid;
+  grid-template-columns: minmax(13rem, 19rem) minmax(0, 1fr);
+  gap: 1rem 2rem;
+  align-items: start;
+  scroll-margin-top: 5rem;
+}
+@media (max-width: 64rem) {
+  .gl-entry { grid-template-columns: minmax(0, 1fr); }
+}
+.gl-entry-name {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.625rem;
+  margin: 0 0 0.625rem;
+  font-size: var(--text-title, 20px);
+  line-height: 1.4;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.gl-names {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.375rem 0.75rem;
+  align-items: center;
+  margin: 0 0 0.75rem;
+  font-size: var(--text-subline, 13px);
+}
+.gl-names dt {
+  color: var(--carbon-text-muted);
+  font-size: var(--text-meta);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.gl-names dd {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  color: var(--carbon-text);
+  font-weight: 600;
+}
+.gl-code code,
+.gl-legend-code,
+.gl-index code {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 12px;
+  font-weight: 400;
+  overflow-wrap: anywhere;
+}
+.gl-code code {
+  padding: 1px 6px;
+  border-radius: var(--radius-control);
+  background: var(--carbon-surface2);
+  color: var(--carbon-text-sub);
+  line-height: 18px;
+}
+.gl-abbr {
+  display: inline-flex;
+  align-items: center;
+  min-height: 18px;
+  padding: 0 0.4rem;
+  border-radius: var(--radius-control);
+  background: var(--carbon-surface3);
+  color: var(--carbon-text);
+  font-size: var(--text-meta);
+  font-weight: 650;
+  letter-spacing: 0.04em;
+}
+.gl-desc { margin: 0; color: var(--carbon-text-sub); line-height: 1.6; max-width: 62ch; }
+.gl-rule { margin: 0.5rem 0 0; color: var(--carbon-text-muted); font-size: var(--text-meta); }
+
+/* The sunken stage an element stands on: the page's own ground, dotted, so a
+   card or a window shown there sits as it would on a page. */
+.gl-stage,
+.gl-figure-stage {
+  position: relative;
+  min-width: 0;
+  border-radius: var(--radius-control);
+  background-color: var(--carbon-bg);
+  background-image: radial-gradient(var(--gl-dot) 1px, transparent 1.3px);
+  background-size: 16px 16px;
+}
+.gl-stage {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  min-height: 7rem;
+  padding: 2rem 1.5rem;
+}
+@media (max-width: 30rem) {
+  .gl-stage { padding: 1.75rem 0.875rem; }
+}
+.gl-stage--listed { min-height: 0; padding-block: 1.25rem; background-image: none; }
+.gl-listed { margin: 0; color: var(--carbon-text-muted); }
+
+/* Fixed parts of a component stay inside their stage instead of the window. */
+.gl-contained {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  transform: translateZ(0);
+  border-radius: var(--radius-control);
+}
+.gl-contained .glim-modal-backdrop { border-radius: inherit; }
+:root:has(.gl-bar-stage .glim-window-bar) { --window-bar: 0px; }
+.gl-bar-stage {
+  --window-bar: 2.5rem;
+  max-width: 32rem;
+  padding-top: var(--window-bar);
+  background: var(--carbon-surface);
+  box-shadow: var(--elevation), var(--hairline);
+}
+
+.gl-in-place { animation: none; box-shadow: var(--elevation), var(--hairline); }
+.gl-in-place--wide { max-width: 34rem; }
+
+/* The column of row tiles at full width, in place of a settings column. */
+.gl-row-tiles { width: 100%; height: auto; padding-inline: 0; }
+.gl-row-tiles .glim-sel-tile { flex: 0 0 auto; }
+
+/* The composed window and its legend. */
+.gl-figure {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 2rem;
+  align-items: start;
+  padding-top: 0.75rem;
+}
+@media (max-width: 72rem) {
+  .gl-figure { grid-template-columns: minmax(0, 1fr); }
+}
+.gl-figure-stage {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 1.75rem 2.25rem;
+}
+@media (max-width: 30rem) {
+  .gl-figure-stage { padding: 2.5rem 0.75rem 1.5rem; }
+}
+.gl-figure-window { position: relative; width: min(100%, 32rem); }
+.gl-figure-window .glim-modal-card { max-width: none; }
+.gl-figure-window .glim-window-body { padding-top: 2.25rem; }
+
+.gl-spot { position: relative; display: inline-flex; border-radius: var(--radius-control); }
+.gl-spot--block { display: flex; flex-direction: column; }
+.gl-mark,
+.gl-legend-n {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--gl-mark-ground);
+  color: var(--gl-mark-ink);
+  font-size: 11.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.gl-mark {
+  position: absolute;
+  z-index: 12;
+  box-shadow: 0 0 0 2px var(--carbon-bg), 0 2px 6px rgb(0 0 0 / 0.25);
+  pointer-events: none;
+  transition: transform 160ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.gl-mark--start { top: -15px; inset-inline-start: -15px; }
+.gl-mark--end { top: -15px; inset-inline-end: -15px; }
+.gl-mark--bottom { bottom: -11px; inset-inline-end: -11px; }
+.gl-mark--corner { top: -11px; inset-inline-end: -11px; }
+.gl-mark--notch { top: -11px; inset-inline-start: -11px; }
+.gl-mark--foot { bottom: 1.15rem; inset-inline-start: -11px; }
+
+.gl-figure-stage[data-hot="1"] .glim-window,
+.gl-figure-stage[data-hot="2"] .gl-spot[data-spot="2"],
+.gl-figure-stage[data-hot="3"] :is(.glim-window-title, .glim-panel-heading) .glim-badge,
+.gl-figure-stage[data-hot="4"] .gl-spot[data-spot="4"],
+.gl-figure-stage[data-hot="5"] .gl-spot[data-spot="5"],
+.gl-figure-stage[data-hot="6"] .gl-spot[data-spot="6"],
+.gl-figure-stage[data-hot="7"] .gl-spot[data-spot="7"],
+.gl-figure-stage[data-hot="8"] .glim-modal-foot,
+.gl-figure-stage[data-hot="9"] .gl-spot[data-spot="9"] {
+  outline: 2px dashed var(--carbon-text);
+  outline-offset: 4px;
+}
+.gl-figure-stage[data-hot="8"] .glim-modal-foot { outline-offset: -2px; border-radius: var(--radius-control); }
+.gl-figure-stage[data-hot="1"] [data-mark="1"],
+.gl-figure-stage[data-hot="2"] [data-mark="2"],
+.gl-figure-stage[data-hot="3"] [data-mark="3"],
+.gl-figure-stage[data-hot="4"] [data-mark="4"],
+.gl-figure-stage[data-hot="5"] [data-mark="5"],
+.gl-figure-stage[data-hot="6"] [data-mark="6"],
+.gl-figure-stage[data-hot="7"] [data-mark="7"],
+.gl-figure-stage[data-hot="8"] [data-mark="8"],
+.gl-figure-stage[data-hot="9"] [data-mark="9"] {
+  transform: scale(1.25);
+}
+
+.gl-legend-lead { margin: 0 0 0.75rem; color: var(--carbon-text-muted); font-size: var(--text-subline, 13px); max-width: 52ch; }
+.gl-legend { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.gl-legend-item {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-control);
+  color: var(--carbon-text);
+  text-decoration: none;
+}
+.gl-legend-item:hover,
+.gl-legend-item.is-hot { background: var(--carbon-hover); }
+.gl-legend-text { display: grid; gap: 1px; min-width: 0; }
+.gl-legend-name { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem; }
+.gl-legend-name strong { font-size: var(--text-body); font-weight: 650; }
+.gl-legend-other { color: var(--carbon-text-sub); font-size: var(--text-subline, 13px); }
+.gl-legend-code { justify-self: start; color: var(--carbon-text-muted); }
+
+.gl-index { overflow-x: auto; padding-top: 0.75rem; }
+.gl-index .glim-table { width: 100%; }
+.gl-index .glim-table :is(th, td) { white-space: normal; }
+.gl-index-name { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+.gl-index-name a { font-weight: 600; color: var(--carbon-text); text-decoration: none; }
+.gl-index-name a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.gl-index code { color: var(--carbon-text-sub); }
+
+/* The four badge forms, each with the radius its form gives. */
+.gl-forms { display: flex; flex-wrap: wrap; gap: 12px; }
+.gl-form {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  min-width: 7.5rem;
+  margin: 0;
+  padding: 16px 12px 12px;
+  border-radius: var(--radius-control);
+  background: var(--carbon-surface);
+}
+.gl-form figcaption { display: grid; justify-items: center; gap: 1px; font-size: 12px; }
+.gl-form figcaption span { color: var(--carbon-text-muted); font-size: var(--text-meta); }
+
+.gl-own-row-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--carbon-text-sub);
+  cursor: pointer;
+}
+.gl-own-row-btn:hover { background: var(--carbon-hover); color: var(--carbon-text); }
+
+.gl-dense-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 32px;
+  padding: 0 10px;
+  border-radius: var(--radius-control);
+  font-size: 13px;
+  cursor: pointer;
+}
+.gl-dense-row:hover { background: var(--carbon-hover); }
+
+.gl-listbox-trigger { width: 14rem; max-width: 100%; text-align: start; cursor: pointer; }
+.gl-listbox-option {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 0;
+  background: transparent;
+  color: var(--carbon-text);
+  font: inherit;
+  font-size: var(--text-body);
+  text-align: start;
+  cursor: pointer;
+}
+.gl-listbox-option:hover { background: var(--carbon-hover); }
+.gl-listbox-option[aria-selected="true"] { font-weight: 650; }
+
+.gl-rail {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+  width: 14rem;
+  height: 260px;
+  padding: 12px;
+  border-radius: var(--radius-card);
+  background: var(--carbon-sidebar);
+}
+
+.gl-signin-in-place { min-height: 0; width: 100%; padding: 0; background: transparent; }
+
+.gl-move-rows { display: grid; gap: 6px; width: 100%; max-width: 360px; }
+.gl-move-row { display: flex; align-items: center; gap: 10px; padding: 8px 12px; color: var(--carbon-text); }
+.gl-move-row svg { flex: none; color: var(--carbon-text-muted); }
+
+.gl-live-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.gl-num-compare {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-items: end;
+  gap: 4px 2.5rem;
+  font-size: 18px;
+}
+.gl-num-compare > :nth-child(-n + 2) { color: var(--carbon-text-muted); font-size: var(--text-meta); letter-spacing: 0.08em; text-transform: uppercase; }
+
+.gl-glyph-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr));
+  gap: 8px;
+  width: 100%;
+}
+.gl-glyph-cell {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: 12px 4px 8px;
+  border-radius: var(--radius-control);
+  background: var(--carbon-surface);
+}
+.gl-glyph-cell code { color: var(--carbon-text-muted); font-size: 10.5px; }

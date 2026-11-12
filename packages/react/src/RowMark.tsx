@@ -11,7 +11,7 @@ export interface RowMarkProps {
 export function RowMark({ on, className }: RowMarkProps) {
   const classes = ["glim-rowmark", on && "glim-rowmark--on", className].filter(Boolean).join(" ");
   return (
-    <span className={classes} aria-hidden="true">
+    <span data-glim="RowMark" className={classes} aria-hidden="true">
       <IconCheck />
     </span>
   );

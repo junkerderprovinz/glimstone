@@ -17,6 +17,12 @@ export interface Contract {
 const APG = "https://www.w3.org/WAI/ARIA/apg/patterns/";
 
 export const CONTRACTS: Record<string, Contract> = {
+  Badge: {
+    rows: [
+      { id: "badge-form", when: "form is rounded, square, pill or circle", then: "Its corners take that form whatever the shape setting: a small radius, none, half its height, or a circle as wide as it is high." },
+      { id: "badge-shape-engine", when: "It has no form", then: "Its corners follow the shape setting, as before." },
+    ],
+  },
   Button: {
     pattern: { name: "Button", url: `${APG}button/` },
     rows: [
@@ -491,7 +497,10 @@ export const CONTRACTS: Record<string, Contract> = {
   SubCard: {
     rows: [
       { id: "subcard-region", when: "Always", then: "A region named by its title alone." },
+      { id: "subcard-notch", when: "It has a title", then: "The title is a section badge in the notch on its top edge, as a card's is." },
+      { id: "subcard-end", when: "It has something at its end, such as a switch", then: "That stands at the end of the heading's row, above the group's content." },
       { id: "subcard-no-title", when: "It has no title", then: "It draws no heading and keeps its ground, and what stands inside still steps up." },
+      { id: "subcard-tiles", when: "A column of row tiles stands inside it", then: "Its resting tiles step up one surface and hover one more, so none vanishes into the sub-card." },
       { id: "subcard-step", when: "A field or a quiet button stands inside it", then: "It takes a surface of its own, one step up from the sub-card's." },
     ],
   },

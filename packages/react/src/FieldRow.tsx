@@ -37,7 +37,7 @@ export function FieldRow({ label, drawn, hint, value, tone, wide, children, clas
     ));
   return (
     <FieldRowContext.Provider value={label}>
-      <div {...rest} ref={row} className={["glim-field-row", wide && "glim-field-row--wide", className].filter(Boolean).join(" ")}>
+      <div data-glim="FieldRow" {...rest} ref={row} className={["glim-field-row", wide && "glim-field-row--wide", className].filter(Boolean).join(" ")}>
         <span className="glim-field-row-name">
           <span className="glim-field-row-label" onClick={() => pressRowControl(row.current!)}>
             {drawn ?? label}

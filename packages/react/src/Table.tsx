@@ -19,7 +19,7 @@ export interface TableProps<T extends object> {
 export function Table<T extends object>({ label, columns, rows, more, cell }: TableProps<T>) {
   const value = (row: T, column: TableColumn) => (row as Record<string, ReactNode>)[column.key];
   return (
-    <table className="glim-table" aria-label={label}>
+    <table data-glim="Table" className="glim-table" aria-label={label}>
       {columns.some((c) => c.label) && (
         <thead>
           <tr>

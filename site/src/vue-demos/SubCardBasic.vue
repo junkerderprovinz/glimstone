@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { Button, Card, NumberField, SubCard, TextField } from "@glimstone/vue";
+import { Button, Card, NumberField, SubCard, TextField, Toggle } from "@glimstone/vue";
 
 const days = ref<number | null>(14);
+const prune = ref(true);
 </script>
 
 <template>
   <div style="width: 100%; max-width: 440px; padding-top: 12px">
     <Card title="Snapshots">
       <SubCard title="Retention" hint="Older snapshots are removed after each run.">
+        <template #end><Toggle v-model="prune" label="Prune" /></template>
         <label class="row">
           <span>Days to keep</span>
           <NumberField v-model="days" :min="1" :max="365" />

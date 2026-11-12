@@ -1,14 +1,19 @@
 import { useState } from "react";
-import { Button, Card, NumberField, SubCard, TextField } from "@glimstone/react";
+import { Button, Card, NumberField, SubCard, TextField, Toggle } from "@glimstone/react";
 
 const row = { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 };
 
 export default function SubCardBasic() {
   const [days, setDays] = useState<number | "">(14);
+  const [prune, setPrune] = useState(true);
   return (
     <div style={{ width: "100%", maxWidth: 440, paddingTop: 12 }}>
       <Card title="Snapshots">
-        <SubCard title="Retention" hint="Older snapshots are removed after each run.">
+        <SubCard
+          title="Retention"
+          hint="Older snapshots are removed after each run."
+          end={<Toggle label="Prune" checked={prune} onChange={setPrune} />}
+        >
           <label style={row}>
             <span>Days to keep</span>
             <NumberField

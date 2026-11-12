@@ -23,7 +23,7 @@ watch(() => [props.label, props.hint], (_, [was]) => place(was as string));
 </script>
 
 <template>
-  <div class="glim-signin-field">
+  <div data-glim="SignInField" class="glim-signin-field">
     <label :for="$props.for" :class="inside ? 'glim-sr-only' : 'glim-signin-label'">{{ label }}<InfoBubble v-if="hint" :tip="hint" /></label>
     <slot />
   </div>

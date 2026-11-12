@@ -7,5 +7,5 @@ defineProps<{ on?: boolean }>();
 </script>
 
 <template>
-  <span :class="['glim-rowmark', { 'glim-rowmark--on': on }]" aria-hidden="true"><IconCheck /></span>
+  <span data-glim="RowMark" :class="['glim-rowmark', { 'glim-rowmark--on': on }]" aria-hidden="true"><IconCheck /></span>
 </template>

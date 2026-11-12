@@ -38,7 +38,7 @@ export function NumberField({ className = "", ref, "aria-label": ariaLabel, ...r
   }, [rest.value, rest.min, rest.max, rest.step, rest.disabled, rest.readOnly]);
 
   return (
-    <span className="glim-num-wrap">
+    <span data-glim="NumberField" className="glim-num-wrap">
       <input
         {...rest}
         aria-label={name}
