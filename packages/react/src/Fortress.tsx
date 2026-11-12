@@ -480,18 +480,16 @@ export function FortressPairing(props: FortressPairingProps) {
       {children}
       {(props.onShowPhrase || props.onChangePhrase) && (
         <FieldRow label={text.phraseTitle} hint={props.onChangePhrase && text.changePhraseAbout}>
-          <span className="glim-field-row-controls">
-            {props.onShowPhrase && (
-              <Button
-                label={text.showPhrase}
-                labelKey={keys.showPhrase}
-                busy={s.busy === "show"}
-                onClick={() => void flow.openPhrase()}
-                data-fortress="show"
-              />
-            )}
-            {props.onChangePhrase && <Button label={text.change} labelKey={keys.changePhrase} onClick={flow.openChange} data-fortress="open-change" />}
-          </span>
+          {props.onShowPhrase && (
+            <Button
+              label={text.showPhrase}
+              labelKey={keys.showPhrase}
+              busy={s.busy === "show"}
+              onClick={() => void flow.openPhrase()}
+              data-fortress="show"
+            />
+          )}
+          {props.onChangePhrase && <Button label={text.change} labelKey={keys.changePhrase} onClick={flow.openChange} data-fortress="open-change" />}
         </FieldRow>
       )}
       <FieldRow label={text.leaveRow} hint={fill(text.leaveAbout, { app: app.name })}>

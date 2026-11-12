@@ -53,17 +53,15 @@ const keys = computed(() => ({
   <Card data-glim="FortressPairing" :title="text.pairing" :hue-index="hueIndex">
     <slot />
     <FieldRow v-if="onShowPhrase || onChangePhrase" :label="text.phraseTitle" :hint="onChangePhrase ? text.changePhraseAbout : undefined">
-      <span class="glim-field-row-controls">
-        <Button
-          v-if="onShowPhrase"
-          :label="text.showPhrase"
-          :label-key="keys.showPhrase"
-          :busy="s.busy === 'show'"
-          data-fortress="show"
-          @click="flow.openPhrase()"
-        />
-        <Button v-if="onChangePhrase" :label="text.change" :label-key="keys.changePhrase" data-fortress="open-change" @click="flow.openChange()" />
-      </span>
+      <Button
+        v-if="onShowPhrase"
+        :label="text.showPhrase"
+        :label-key="keys.showPhrase"
+        :busy="s.busy === 'show'"
+        data-fortress="show"
+        @click="flow.openPhrase()"
+      />
+      <Button v-if="onChangePhrase" :label="text.change" :label-key="keys.changePhrase" data-fortress="open-change" @click="flow.openChange()" />
     </FieldRow>
     <FieldRow :label="text.leaveRow" :hint="fill(text.leaveAbout, { app: app.name })">
       <Button :label="text.leaveConfirm" :label-key="keys.leave" data-fortress="open-leave" @click="flow.openLeave()" />
