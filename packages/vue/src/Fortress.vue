@@ -5,8 +5,7 @@ import {
   fill,
   hueVars,
   listOf,
-  othersSummary,
-  plural,
+  othersLine,
   storedShowOthers,
   storeShowOthers,
   type ChangeAnswer,
@@ -62,6 +61,8 @@ const props = withDefaults(
     removedHere?: boolean;
     /** Whether the other apps show. Without it the switch keeps its state on this device. */
     showOthers?: boolean;
+    /** The app draws the switch for the other apps itself, such as at the top of its pairing card, with `showOthers` and `othersLine`. */
+    hideSwitch?: boolean;
     /** The devices this app is paired with today, whose pairing moves into the fortress on joining. */
     pairedWith?: string[];
     /** A member of a fortress this app saw on the network while it is in none. */
@@ -106,13 +107,7 @@ function setOthers(on: boolean) {
   }
 }
 const removedNote = computed(() => fill(props.text.removedNote, { devices: listOf(props.lang, props.removed) }));
-const othersLine = computed(() => {
-  const n = othersSummary(props.apps);
-  return fill(props.text.othersLine, {
-    apps: plural(props.lang, props.text.othersApps, n.apps),
-    devices: plural(props.lang, props.text.othersDevices, n.devices),
-  });
-});
+const line = computed(() => othersLine(props.text, props.lang, props.apps));
 </script>
 
 <template>
@@ -129,10 +124,10 @@ const othersLine = computed(() => {
       </div>
     </div>
 
-    <div v-if="joined" class="glim-card glim-fortress-switch glim-hue" :style="hueVars(hueStart)">
+    <div v-if="joined && !hideSwitch" class="glim-card glim-fortress-switch glim-hue" :style="hueVars(hueStart)">
       <span class="glim-fortress-switch-text">
         <span class="glim-fortress-switch-name">{{ text.showOthers }}<InfoBubble :tip="text.about" /></span>
-        <span class="glim-fortress-sub">{{ othersLine }}</span>
+        <span class="glim-fortress-sub">{{ line }}</span>
       </span>
       <Toggle :model-value="others" :label="text.showOthers" hide-label data-fortress="others" @update:model-value="setOthers" />
     </div>

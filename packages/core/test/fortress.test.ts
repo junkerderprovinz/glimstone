@@ -5,6 +5,7 @@ import {
   createFortressFlow,
   enterWords,
   memberName,
+  othersLine,
   othersSummary,
   PHRASE_LENGTH,
   phraseFromText,
@@ -75,6 +76,10 @@ const apps: FortressApp[] = [
 
 test('the other apps are counted once each, however many places they run in', () => {
   assert.deepEqual(othersSummary(apps), { apps: 3, devices: 3 });
+});
+
+test('the line under the switch counts the other apps and their devices', () => {
+  assert.equal(othersLine(fortressTextEn, 'en', apps), '3 more apps on 3 devices. Applies to this device only.');
 });
 
 test('the instance a card names is the one that opens in the browser, else the first', () => {

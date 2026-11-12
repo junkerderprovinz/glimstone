@@ -7,9 +7,8 @@ import {
   hueVars,
   listOf,
   MARKS,
-  othersSummary,
+  othersLine,
   phraseReady,
-  plural,
   shake,
   storedShowOthers,
   storeShowOthers,
@@ -88,6 +87,8 @@ export interface FortressProps {
   /** Whether the other apps show. Without it the switch keeps its state on this device. */
   showOthers?: boolean;
   onShowOthers?: (on: boolean) => void;
+  /** The app draws the switch for the other apps itself, such as at the top of its pairing card, with `showOthers` and `othersLine`. */
+  hideSwitch?: boolean;
   /** The devices this app is paired with today, whose pairing moves into the fortress on joining. */
   pairedWith?: string[];
   /** A member of a fortress this app saw on the network while it is in none. */
@@ -132,11 +133,7 @@ export function Fortress(props: FortressProps) {
       setOwnShow(on);
     }
   };
-  const summary = othersSummary(apps);
-  const othersLine = fill(text.othersLine, {
-    apps: plural(lang, text.othersApps, summary.apps),
-    devices: plural(lang, text.othersDevices, summary.devices),
-  });
+  const line = othersLine(text, lang, apps);
   // An app that shows the phrase in its pairing settings leaves the corner out.
   const corner = !joined ? (
     <Button label={text.enterPhrase} labelKey={keys.join} tone="accent" size="key" onClick={flow.openJoin} data-fortress="open-join" />
@@ -172,14 +169,14 @@ export function Fortress(props: FortressProps) {
         )}
       </div>
 
-      {joined && (
+      {joined && !props.hideSwitch && (
         <div className="glim-card glim-fortress-switch glim-hue" style={hueVars(hueStart) as CSSProperties}>
           <span className="glim-fortress-switch-text">
             <span className="glim-fortress-switch-name">
               {text.showOthers}
               <InfoBubble tip={text.about} />
             </span>
-            <span className="glim-fortress-sub">{othersLine}</span>
+            <span className="glim-fortress-sub">{line}</span>
           </span>
           <Toggle label={text.showOthers} hideLabel checked={showOthers} onChange={setShowOthers} data-fortress="others" />
         </div>

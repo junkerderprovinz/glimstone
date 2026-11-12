@@ -65,6 +65,12 @@ export function othersSummary(apps: FortressApp[]): { apps: number; devices: num
   return { apps: apps.length, devices: devices.size };
 }
 
+/** The line under the switch: how many other apps it shows, on how many devices. */
+export function othersLine(text: FortressText, lang: string, apps: FortressApp[]): string {
+  const n = othersSummary(apps);
+  return fill(text.othersLine, { apps: plural(lang, text.othersApps, n.apps), devices: plural(lang, text.othersDevices, n.devices) });
+}
+
 /** The instance an app's card names in its facts: the one that opens in the browser, else the first. */
 export function shownInstance(app: FortressApp): FortressInstance {
   return app.instances.find((i) => i.open) ?? app.instances[0]!;
