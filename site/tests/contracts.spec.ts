@@ -4312,12 +4312,31 @@ test.describe("Fortress", () => {
     await expect(win).toHaveAccessibleName("Delta on Atlas");
     await expect(win.locator(".glim-window-title img")).toHaveCount(1);
     await expect(win.locator('[data-fortress="state"]')).toHaveText("Needs a look");
-    await expect(win.locator('[data-fortress="needs"] li')).toHaveText(["Warning2 updates wait", "A new disk was found"]);
+    // The parts of a line are words apart for a screen reader and a copy, not only on screen.
+    const words = (items: Locator) => items.evaluateAll((lis) => lis.map((li) => li.textContent!.replace(/\s+/g, " ").trim()));
+    expect(await words(win.locator('[data-fortress="needs"] li'))).toEqual(["Warning 2 updates wait", "A new disk was found"]);
     await expect(win.locator('[data-fortress="work"] li')).toHaveCount(2);
-    await expect(win.locator('[data-fortress="work"] [role="progressbar"]').first()).toHaveAttribute("aria-valuenow", "40");
-    await expect(win.locator('[data-fortress="next"] li')).toHaveText(["Parity checkSunday 03:00"]);
+    const bar = win.locator('[data-fortress="work"] [role="progressbar"]').first();
+    await expect(bar).toHaveAttribute("aria-valuenow", "40");
+    const share = await bar.evaluate((b) => {
+      const fill = b.querySelector(".glim-progress-fill")!.getBoundingClientRect();
+      const track = b.getBoundingClientRect();
+      return { height: track.height, part: fill.width / track.width };
+    });
+    expect(share.height).toBeGreaterThan(4);
+    expect(share.part).toBeCloseTo(0.4, 1);
+    expect(await words(win.locator('[data-fortress="next"] li'))).toEqual(["Parity check Sunday 03:00"]);
     await expect(win.locator('[data-fortress="log"] li')).toHaveCount(10);
-    await expect(win.locator('[data-fortress="log"] li').first()).toContainText("07:59");
+    expect((await words(win.locator('[data-fortress="log"] li')).then((l) => l[0]))).toBe("07:59 Checked the shares, round 12");
+    // Every part of a line keeps a visible gap to the next, with a level badge and without one.
+    const gaps = await win.locator(".glim-status-line").evaluateAll((lines) =>
+      lines.flatMap((line) => {
+        const parts = [...line.children].map((c) => c.getBoundingClientRect());
+        return parts.slice(1).map((r, i) => r.left - parts[i]!.right);
+      }),
+    );
+    expect(gaps.length).toBeGreaterThan(10);
+    for (const gap of gaps) expect(gap).toBeGreaterThanOrEqual(4);
     await expect(win.locator('[data-fortress="where"]')).toHaveText("Delta keeps its settings in Unraid on Atlas.");
     await win.getByRole("button", { name: "Close" }).click();
     await expect(dialog(page)).toHaveCount(0);

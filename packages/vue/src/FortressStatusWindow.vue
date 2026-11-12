@@ -64,8 +64,7 @@ const info = glyphFor("info");
         <h3 class="glim-status-heading">{{ text.statusNeedsYou }}</h3>
         <ul class="glim-status-list">
           <li v-for="(n, i) in view.needsYou" :key="i" class="glim-status-line">
-            <Badge v-if="n.level" :tone="n.level.tone">{{ n.level.label }}</Badge>
-            <span>{{ n.text }}</span>
+            <Badge v-if="n.level" :tone="n.level.tone">{{ n.level.label }}</Badge> <span>{{ n.text }}</span>
           </li>
         </ul>
       </section>
@@ -82,8 +81,7 @@ const info = glyphFor("info");
         <h3 class="glim-status-heading">{{ text.statusNext }}</h3>
         <ul class="glim-status-list">
           <li v-for="(n, i) in view.next" :key="i" class="glim-status-line">
-            <span>{{ n.title }}</span>
-            <span class="glim-status-at glim-num">{{ n.at }}</span>
+            <span>{{ n.title }}</span> <span class="glim-status-at glim-num">{{ n.at }}</span>
           </li>
         </ul>
       </section>
@@ -91,9 +89,7 @@ const info = glyphFor("info");
         <h3 class="glim-status-heading">{{ text.statusLog }}</h3>
         <ul class="glim-status-list">
           <li v-for="(l, i) in view.log" :key="i" class="glim-status-line">
-            <span class="glim-status-at glim-num">{{ l.at }}</span>
-            <Badge v-if="l.level" :tone="l.level.tone">{{ l.level.label }}</Badge>
-            <span>{{ l.text }}</span>
+            <span class="glim-status-at glim-num">{{ l.at }}</span> <Badge v-if="l.level" :tone="l.level.tone">{{ l.level.label }}</Badge> <span>{{ l.text }}</span>
           </li>
         </ul>
       </section>

@@ -78,7 +78,7 @@ export function FortressStatusWindow({ app, instance, report, log, loading, erro
           text.statusNeedsYou,
           view.needsYou.map((n, i) => (
             <li key={i} className="glim-status-line">
-              {n.level && <Badge tone={n.level.tone}>{n.level.label}</Badge>}
+              {n.level && <Badge tone={n.level.tone}>{n.level.label}</Badge>}{" "}
               <span>{n.text}</span>
             </li>
           )),
@@ -98,7 +98,7 @@ export function FortressStatusWindow({ app, instance, report, log, loading, erro
           text.statusNext,
           view.next.map((n, i) => (
             <li key={i} className="glim-status-line">
-              <span>{n.title}</span>
+              <span>{n.title}</span>{" "}
               <span className="glim-status-at glim-num">{n.at}</span>
             </li>
           )),
@@ -108,8 +108,8 @@ export function FortressStatusWindow({ app, instance, report, log, loading, erro
           text.statusLog,
           view.log.map((l, i) => (
             <li key={i} className="glim-status-line">
-              <span className="glim-status-at glim-num">{l.at}</span>
-              {l.level && <Badge tone={l.level.tone}>{l.level.label}</Badge>}
+              <span className="glim-status-at glim-num">{l.at}</span>{" "}
+              {l.level && <Badge tone={l.level.tone}>{l.level.label}</Badge>}{" "}
               <span>{l.text}</span>
             </li>
           )),
