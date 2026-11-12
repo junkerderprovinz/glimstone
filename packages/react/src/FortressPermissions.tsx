@@ -45,7 +45,7 @@ export function FortressPermissions({ text, app, apps, permissions, onPermission
   }
 
   return (
-    <Card title={text.permissions} hint={text.permissionsAbout} hueIndex={hueIndex}>
+    <Card data-glim="FortressPermissions" title={text.permissions} hint={text.permissionsAbout} hueIndex={hueIndex}>
       {permissions.length === 0 ? (
         <p className="glim-fortress-sub">{text.noPermissions}</p>
       ) : (

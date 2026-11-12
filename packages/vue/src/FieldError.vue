@@ -9,5 +9,5 @@ defineProps<{ id: string }>();
 </script>
 
 <template>
-  <span :id="id" class="glim-field-error"><MarkSvg :mark="TOAST_MARKS.fail" /><slot /></span>
+  <span data-glim="FieldError" :id="id" class="glim-field-error"><MarkSvg :mark="TOAST_MARKS.fail" /><slot /></span>
 </template>

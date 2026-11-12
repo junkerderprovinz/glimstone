@@ -31,7 +31,7 @@ function open() {
 </script>
 
 <template>
-  <InstanceCard :data-fortress-app="app.id" :logo="app.logo" :name="app.name" :eyebrow="view.eyebrow" :facts="view.facts" :hue-index="hueIndex">
+  <InstanceCard data-glim="FortressAppCard" :data-fortress-app="app.id" :logo="app.logo" :name="app.name" :eyebrow="view.eyebrow" :facts="view.facts" :hue-index="hueIndex">
     <template #badges>
       <Badge v-if="view.needs" tone="warn">{{ view.needs }}</Badge>
       <Badge v-if="view.main.relay">{{ text.viaRelay }}</Badge>

@@ -108,7 +108,7 @@ export function ListTable<T extends object>({ label, columns, rows, rowKey, sear
     });
 
   return (
-    <div className="glim-list">
+    <div data-glim="ListTable" className="glim-list">
       {query !== null && (
         <input
           ref={searchField}

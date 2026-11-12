@@ -2,6 +2,7 @@ import { createContext, useContext, useRef, useState, type CSSProperties, type C
 import {
   Badge,
   BrandMark,
+  BusyRing,
   Button,
   Card,
   Checkbox,
@@ -13,6 +14,10 @@ import {
   EmptyState,
   FieldRow,
   FieldRowGroup,
+  Fortress,
+  FortressAppCard,
+  FortressPairing,
+  FortressPermissions,
   GlyphField,
   GlyphTile,
   IconButton,
@@ -21,20 +26,25 @@ import {
   IconTipButton,
   InfoBubble,
   InfoTile,
+  InstanceCard,
   Kbd,
   ListRow,
+  ListTable,
   MenuBar,
   Meter,
   NumberField,
   PasswordField,
   PathField,
   Pill,
+  Popover,
   ProgressBar,
   ReadmeButton,
   RowMark,
   Selector,
+  Sheet,
   SidebarRow,
   SignInCard,
+  SkeletonRow,
   SubCard,
   Table,
   TextArea,
@@ -52,9 +62,10 @@ import {
 import { Combobox } from "@glimstone/react/Combobox";
 import { Select } from "@glimstone/react/Select";
 import { Slider } from "@glimstone/react/Slider";
-import { COFFEE_BUTTON_SVG, GLIMSTONE_VERSION, LINUX_SVG, MAIL_SVG, MANUAL_SVG, type SignInText } from "@glimstone/core";
+import { COFFEE_BUTTON_SVG, fortressText, GLIMSTONE_VERSION, LINUX_SVG, MAIL_SVG, MANUAL_SVG, type FortressPermission, type SignInText } from "@glimstone/core";
 import logo from "../../../.github/assets/logo.svg?url";
 import { Glyph } from "../glyph";
+import { APPS, HOME, household, instancesTab, PERMISSIONS } from "../fortressData";
 
 export type Lang = "en" | "de";
 export const LangContext = createContext<Lang>("en");
@@ -1321,6 +1332,141 @@ function SignInDemo() {
   );
 }
 
+function FieldErrorDemo() {
+  const t = useT();
+  const [port, setPort] = useState("80800");
+  const error = /^\d{1,5}$/.test(port) && Number(port) <= 65535 ? undefined : t("A port is a number up to 65535", "Ein Port ist eine Zahl bis 65535");
+  return (
+    <div style={{ display: "grid", gap: 4, justifyItems: "start" }}>
+      <TextField label="Port" width="short" value={port} onChange={(e) => setPort(e.target.value)} error={error} />
+    </div>
+  );
+}
+function ListTableDemo() {
+  const t = useT();
+  const folder = t("Folder", "Ordner");
+  const rows = [
+    { name: "nightly-export", kind: folder, size: "2.4 GB" },
+    { name: "archive-copy", kind: "Cloud", size: "880 MB" },
+    { name: "photos", kind: folder, size: "12 GB" },
+  ];
+  return (
+    <div style={{ width: "100%", maxWidth: 560 }}>
+      <ListTable
+        label={t("Backups", "Sicherungen")}
+        columns={[
+          { key: "name", label: "Name" },
+          { key: "kind", label: t("Kind", "Art"), filter: true, tone: "muted" },
+          { key: "size", label: t("Size", "Größe"), end: true },
+        ]}
+        rows={rows}
+        rowKey={(r) => r.name}
+        text={{
+          search: t("Search backups", "Sicherungen durchsuchen"),
+          hint: t("Click a heading to sort, ▾ to filter, type to search", "Klick auf eine Überschrift sortiert, ▾ filtert, Tippen sucht"),
+          noMatch: t("No backup matches", "Keine Sicherung passt"),
+          filterOf: (c) => t(`Filter ${c}`, `${c} filtern`),
+        }}
+      />
+    </div>
+  );
+}
+function PopoverDemo() {
+  const t = useT();
+  const [anchor, setAnchor] = useState<HTMLElement | null>(null);
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Button ref={setAnchor} label={t("Filter", "Filtern")} labelKey="filter" onClick={() => setOpen((o) => !o)} aria-expanded={open} />
+      <Popover open={open} anchor={anchor} label={t("Filter the list", "Die Liste filtern")} onClose={() => setOpen(false)}>
+        <TextField label={t("Name contains", "Name enthält")} width="medium" />
+      </Popover>
+    </>
+  );
+}
+function SheetDemo() {
+  const t = useT();
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Button label="Details" labelKey={null} onClick={() => setOpen(true)} />
+      <Sheet
+        open={open}
+        title={t("Nightly backup", "Nächtliche Sicherung")}
+        text={{ cancel: t("Cancel", "Abbrechen"), close: t("Close", "Schließen") }}
+        actions={[{ label: t("Run now", "Jetzt starten"), labelKey: null, primary: true }]}
+        onClose={() => setOpen(false)}
+      >
+        <p style={{ margin: 0 }}>{t("Runs at three in the morning and keeps the last fourteen copies.", "Läuft um drei Uhr früh und behält die letzten vierzehn Kopien.")}</p>
+      </Sheet>
+    </>
+  );
+}
+function useFortressText() {
+  const lang = useContext(LangContext);
+  return { lang, text: fortressText(lang) };
+}
+function useFortress() {
+  const { lang, text } = useFortressText();
+  const [permissions, setPermissions] = useState<FortressPermission[]>(PERMISSIONS);
+  const current = useRef(permissions);
+  current.current = permissions;
+  return { lang, text, permissions, answers: household(nothing, () => current.current, setPermissions) };
+}
+function FortressDemo() {
+  const { lang, text, permissions, answers } = useFortress();
+  return (
+    <div style={{ width: "100%" }}>
+      <Fortress text={text} lang={lang} app={HOME} joined apps={APPS} permissions={permissions} hueStart={1} {...instancesTab(answers)}>
+        <InstanceCard logo={HOME.logo} name="Atlas" eyebrow={text.thisInstance} facts={["192.168.1.61:3443", "v10.5.3"]} hueIndex={0} />
+      </Fortress>
+    </div>
+  );
+}
+function InstanceCardDemo() {
+  const t = useT();
+  const { text } = useFortressText();
+  return (
+    <div style={{ width: "100%", maxWidth: 420 }}>
+      <InstanceCard
+        logo={HOME.logo}
+        name="Atlas"
+        eyebrow={text.thisInstance}
+        facts={["192.168.1.61:3443", "v10.5.3"]}
+        figures={[
+          { value: "14 / 15", label: t("Protected", "Geschützt") },
+          { value: t("3 min ago", "vor 3 Min."), label: t("Last backup", "Letzte Sicherung") },
+        ]}
+        hueIndex={0}
+        actions={<Button label={text.open} labelKey="open" />}
+      />
+    </div>
+  );
+}
+function FortressAppCardDemo() {
+  const { lang, text } = useFortressText();
+  return (
+    <div style={{ width: "100%", maxWidth: 420 }}>
+      <FortressAppCard app={APPS[0]!} text={text} lang={lang} hueIndex={1} />
+    </div>
+  );
+}
+function FortressPermissionsDemo() {
+  const { text, permissions, answers } = useFortress();
+  return (
+    <div style={{ width: "100%", maxWidth: 560 }}>
+      <FortressPermissions text={text} app={HOME} apps={[HOME, ...APPS]} permissions={permissions} onPermission={answers.onPermission} hueIndex={2} />
+    </div>
+  );
+}
+function FortressPairingDemo() {
+  const { lang, text, answers } = useFortress();
+  return (
+    <div style={{ width: "100%", maxWidth: 560 }}>
+      <FortressPairing text={text} lang={lang} app={HOME} pairedWith={["Pocket"]} onLeave={answers.onLeave} onChangePhrase={answers.onChangePhrase} />
+    </div>
+  );
+}
 function ToastDemo() {
   const t = useT();
   const handlers = { dismissLabel: t("Close", "Schließen"), onDismiss: nothing, onMouseEnter: nothing, onMouseLeave: nothing, onFocus: nothing, onBlur: nothing };
@@ -1427,12 +1573,23 @@ function LiveDotDemo() {
   );
 }
 
-function SpinnerDemo() {
+function BusyRingDemo() {
   const t = useT();
   return (
     <div style={row}>
-      <Button label={t("Checking", "Prüft")} labelKey={null} glyph={<Glyph name="IconSearch" />} busy />
+      <BusyRing size="small" delay={0} />
+      <BusyRing label={t("Loading backups", "Sicherungen werden geladen")} delay={0} />
+      <BusyRing size="large" delay={0} />
       <Button label={t("Saving", "Speichert")} labelKey="save" tone="accent" busy />
+    </div>
+  );
+}
+function SkeletonRowDemo() {
+  const t = useT();
+  return (
+    <div role="group" aria-label={t("Backups", "Sicherungen")} aria-busy="true" style={{ width: "100%", maxWidth: 560 }}>
+      <SkeletonRow delay={0} />
+      <SkeletonRow delay={0} />
     </div>
   );
 }
@@ -1564,6 +1721,7 @@ export const DEMOS: Record<string, ComponentType> = {
   "text-area": TextAreaDemo,
   "password-field": PasswordDemo,
   "number-field": NumberDemo,
+  "field-error": FieldErrorDemo,
   "copy-field": CopyDemo,
   "path-field": PathDemo,
   "glyph-field": GlyphFieldDemo,
@@ -1576,10 +1734,13 @@ export const DEMOS: Record<string, ComponentType> = {
   "glyph-tile": GlyphTileDemo,
   tree: TreeDemo,
   table: TableDemo,
+  "list-table": ListTableDemo,
   "move-mode": MoveModeDemo,
   window: WindowDemo,
   "window-foot": FootDemo,
   "confirm-dialog": ConfirmDemo,
+  popover: PopoverDemo,
+  sheet: SheetDemo,
   "window-bar": WindowBarDemo,
   "context-menu": MenuDemo,
   "menu-bar": MenuBarDemo,
@@ -1593,7 +1754,13 @@ export const DEMOS: Record<string, ComponentType> = {
   bubble: BubbleDemo,
   notice: NoticeDemo,
   "live-dot": LiveDotDemo,
-  spinner: SpinnerDemo,
+  "busy-ring": BusyRingDemo,
+  "skeleton-row": SkeletonRowDemo,
+  fortress: FortressDemo,
+  "instance-card": InstanceCardDemo,
+  "fortress-app-card": FortressAppCardDemo,
+  "fortress-permissions": FortressPermissionsDemo,
+  "fortress-pairing": FortressPairingDemo,
   glyph: GlyphDemo,
   "tabular-figures": NumDemo,
   kbd: KbdDemo,

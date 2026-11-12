@@ -21,7 +21,7 @@ const view = computed(() => skeletonRowView({ delay: props.delay, tile: props.ti
 </script>
 
 <template>
-  <div aria-hidden="true" :class="view.className" :style="view.style">
+  <div data-glim="SkeletonRow" aria-hidden="true" :class="view.className" :style="view.style">
     <span v-if="view.tile" class="glim-skeleton-block glim-skeleton-tile" />
     <span class="glim-skeleton-block glim-skeleton-name" />
     <span v-if="view.badge" class="glim-skeleton-block glim-skeleton-badge" />

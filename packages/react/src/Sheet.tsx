@@ -38,7 +38,7 @@ export function Sheet({ open, title, children, actions = [], start, text, onClos
   }, [open]);
   if (!open) return null;
   return (
-    <dialog ref={ref} aria-labelledby={titleId} className={className ? `glim-sheet ${className}` : "glim-sheet"}>
+    <dialog data-glim="Sheet" data-glim-title={title} ref={ref} aria-labelledby={titleId} className={className ? `glim-sheet ${className}` : "glim-sheet"}>
       <div className="glim-sheet-panel">
         <h2 id={titleId} className="glim-sheet-title">
           <Badge tone="heading" size="heading" wrap insetStart={5}>

@@ -40,7 +40,7 @@ const keys = computed(() => ({
 </script>
 
 <template>
-  <Card :title="text.pairing" :hue-index="hueIndex">
+  <Card data-glim="FortressPairing" :title="text.pairing" :hue-index="hueIndex">
     <FieldRow v-if="onChangePhrase" :label="text.phraseTitle" :hint="text.changePhraseAbout">
       <Button :label="text.change" :label-key="keys.changePhrase" data-fortress="open-change" @click="flow.openChange()" />
     </FieldRow>

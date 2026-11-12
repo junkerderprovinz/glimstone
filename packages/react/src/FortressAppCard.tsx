@@ -21,10 +21,10 @@ const presenceText = (text: FortressText, i: FortressInstance) => ({ connected: 
 /** The state of one instance: reached through the relay, and connected, checking or away. */
 export function PresenceBadges({ instance, text }: { instance: FortressInstance; text: FortressText }) {
   return (
-    <>
+    <span data-glim="PresenceBadges" style={{ display: "contents" }}>
       {instance.relay && <Badge>{text.viaRelay}</Badge>}
       <Badge tone={presenceTone(instance.presence)}>{presenceText(text, instance)}</Badge>
-    </>
+    </span>
   );
 }
 
@@ -38,6 +38,7 @@ export function FortressAppCard({ app, text, lang, hueIndex, onOpen }: FortressA
   const view = appCardView(app, text, lang);
   return (
     <InstanceCard
+      data-glim="FortressAppCard"
       data-fortress-app={app.id}
       logo={app.logo}
       name={app.name}

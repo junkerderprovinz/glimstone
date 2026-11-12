@@ -7,7 +7,7 @@ import { MarkSvg } from "./glyphs.tsx";
  *  the id its aria-describedby names. */
 export function FieldError({ id, children }: { id: string; children: ReactNode }) {
   return (
-    <span id={id} className="glim-field-error">
+    <span data-glim="FieldError" id={id} className="glim-field-error">
       <MarkSvg mark={TOAST_MARKS.fail} />
       {children}
     </span>

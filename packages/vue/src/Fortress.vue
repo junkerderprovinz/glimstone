@@ -101,7 +101,7 @@ const othersLine = computed(() => {
 </script>
 
 <template>
-  <div class="glim-fortress">
+  <div data-glim="Fortress" class="glim-fortress">
     <div class="glim-fortress-grid">
       <slot :remove="flow.openRemove" />
       <div v-if="!joined" class="glim-card glim-instance glim-instance--out" data-fortress="out">

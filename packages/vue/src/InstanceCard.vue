@@ -26,7 +26,7 @@ const style = computed(() => (props.hueIndex !== undefined ? hueVars(props.hueIn
 </script>
 
 <template>
-  <div :class="['glim-card glim-instance', hueIndex !== undefined && 'glim-hue']" :style="style">
+  <div data-glim="InstanceCard" :data-glim-title="name" :class="['glim-card glim-instance', hueIndex !== undefined && 'glim-hue']" :style="style">
     <div class="glim-instance-top">
       <span v-if="$slots.logo" class="glim-instance-mark" aria-hidden="true"><slot name="logo" /></span>
       <img v-else-if="logo" class="glim-instance-mark" :src="logo" alt="" draggable="false" />

@@ -22,6 +22,7 @@ export function BusyRing({ size, label, delay, className }: BusyRingProps) {
   const view = busyRingView({ size, delay });
   return (
     <span
+      data-glim="BusyRing"
       role={label ? "status" : undefined}
       aria-hidden={label ? undefined : true}
       className={className ? `${view.className} ${className}` : view.className}

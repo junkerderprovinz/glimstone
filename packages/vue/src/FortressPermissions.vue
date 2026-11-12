@@ -45,7 +45,7 @@ async function flip(p: FortressPermission) {
 </script>
 
 <template>
-  <Card :title="text.permissions" :hint="text.permissionsAbout" :hue-index="hueIndex">
+  <Card data-glim="FortressPermissions" :title="text.permissions" :hint="text.permissionsAbout" :hue-index="hueIndex">
     <p v-if="permissions.length === 0" class="glim-fortress-sub">{{ text.noPermissions }}</p>
     <template v-else>
       <Selector v-model="filter" :label="text.permissions" inline activation="manual" :items="items" />

@@ -44,7 +44,7 @@ onBeforeUnmount(() => stop?.());
 </script>
 
 <template>
-  <dialog v-if="open" ref="el" :aria-labelledby="titleId" class="glim-sheet">
+  <dialog v-if="open" data-glim="Sheet" :data-glim-title="title" ref="el" :aria-labelledby="titleId" class="glim-sheet">
     <div class="glim-sheet-panel">
       <h2 :id="titleId" class="glim-sheet-title">
         <Badge tone="heading" size="heading" wrap :inset-start="5">{{ title }}</Badge>

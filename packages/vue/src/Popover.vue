@@ -32,5 +32,5 @@ onBeforeUnmount(() => stop?.());
 </script>
 
 <template>
-  <div v-if="open" ref="el" popover="auto" role="dialog" :aria-label="label" class="glim-popover"><slot /></div>
+  <div v-if="open" data-glim="Popover" ref="el" popover="auto" role="dialog" :aria-label="label" class="glim-popover"><slot /></div>
 </template>

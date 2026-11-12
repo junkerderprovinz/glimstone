@@ -103,7 +103,7 @@ const value = (row: T, key: string) => String((row as Record<string, unknown>)[k
 </script>
 
 <template>
-  <div class="glim-list">
+  <div data-glim="ListTable" class="glim-list">
     <input
       v-if="query !== null"
       ref="searchField"

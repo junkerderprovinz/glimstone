@@ -126,7 +126,7 @@ export function Fortress(props: FortressProps) {
   });
 
   return (
-    <div className="glim-fortress">
+    <div data-glim="Fortress" className="glim-fortress">
       <div className="glim-fortress-grid">
         {typeof children === "function" ? children(flow.openRemove) : children}
         {!joined && (
@@ -457,7 +457,7 @@ export function FortressPairing(props: FortressPairingProps) {
   const s = useSyncExternalStore(flow.subscribe, flow.state, flow.state);
   const keys = { ...LABEL_KEYS, ...props.labelKeys };
   return (
-    <Card title={text.pairing} hueIndex={hueIndex}>
+    <Card data-glim="FortressPairing" title={text.pairing} hueIndex={hueIndex}>
       {props.onChangePhrase && (
         <FieldRow label={text.phraseTitle} hint={text.changePhraseAbout}>
           <Button label={text.change} labelKey={keys.changePhrase} onClick={flow.openChange} data-fortress="open-change" />

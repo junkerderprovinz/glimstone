@@ -18,7 +18,7 @@ const view = computed(() => busyRingView({ size: props.size, delay: props.delay 
 </script>
 
 <template>
-  <span :role="label ? 'status' : undefined" :aria-hidden="label ? undefined : 'true'" :class="view.className" :style="view.style">
+  <span data-glim="BusyRing" :role="label ? 'status' : undefined" :aria-hidden="label ? undefined : 'true'" :class="view.className" :style="view.style">
     <span class="glim-busy-ring-arc"><span class="glim-busy-ring-tail" /></span>
     <span class="glim-busy-ring-arc glim-busy-ring-arc--inner"><span class="glim-busy-ring-tail" /></span>
     <span v-if="label" class="glim-sr-only">{{ label }}</span>

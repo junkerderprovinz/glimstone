@@ -36,6 +36,8 @@ export function InstanceCard({ logo, name, eyebrow, badges, facts, figures, chil
   const acts = actions && <div className="glim-instance-acts">{actions}</div>;
   return (
     <div
+      data-glim="InstanceCard"
+      data-glim-title={name}
       {...rest}
       className={["glim-card glim-instance", hueIndex !== undefined && "glim-hue", className].filter(Boolean).join(" ")}
       style={hueIndex !== undefined ? ({ ...hueVars(hueIndex), ...style } as CSSProperties) : style}

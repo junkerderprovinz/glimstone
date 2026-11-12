@@ -32,7 +32,7 @@ export function Popover({ open, anchor, label, onClose, children, className }: P
   }, [open, anchor, id]);
   if (!open) return null;
   return (
-    <div ref={ref} popover="auto" role="dialog" aria-label={label} className={className ? `glim-popover ${className}` : "glim-popover"}>
+    <div data-glim="Popover" ref={ref} popover="auto" role="dialog" aria-label={label} className={className ? `glim-popover ${className}` : "glim-popover"}>
       {children}
     </div>
   );
