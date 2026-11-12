@@ -12,6 +12,7 @@ export * from "./CopyField.tsx";
 export * from "./CryptoDonateDialog.tsx";
 export * from "./DropdownListbox.tsx";
 export * from "./EmptyState.tsx";
+export * from "./FieldError.tsx";
 export * from "./FieldRow.tsx";
 export * from "./FieldRowGroup.tsx";
 export * from "./GlyphField.tsx";

@@ -9,6 +9,7 @@ export { default as ConfirmDialog } from "./ConfirmDialog.vue";
 export { default as ContextMenu } from "./ContextMenu.vue";
 export { default as CopyField } from "./CopyField.vue";
 export { default as EmptyState } from "./EmptyState.vue";
+export { default as FieldError } from "./FieldError.vue";
 export { default as FieldRow } from "./FieldRow.vue";
 export { default as FieldRowGroup } from "./FieldRowGroup.vue";
 export { default as GlyphField } from "./GlyphField.vue";

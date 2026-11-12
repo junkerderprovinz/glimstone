@@ -71,7 +71,8 @@ needs none of them.
 | `ContextMenu`, `MenuBar` | A menu at a point and the row of menus in a head bar, with submenus, rows that tick a box, choices, key caps and counts. Opened with the pointer, the first row shows its ring only once a key is pressed |
 | `Checkbox` | The drawn box for "Don't show again" and for choices applied together, `slim` for the box alone in a dense row. Every setting is a `Toggle` |
 | `Kbd`, `Pill` | A key cap, and the quiet data pill of a list row |
-| `TextField`, `TextArea` | A line of text and a few lines of text, borderless and filled, in the widths a row needs |
+| `TextField`, `TextArea` | A line of text and a few lines of text, borderless and filled, in the widths a row needs, with `error` for a value they cannot take |
+| `FieldError` | The line under a field whose value it cannot take, for an app's own field |
 | `FieldRow`, `FieldRowGroup` | One labelled row: the name at its start with an "(i)", the control at its end, named by the row, or a lone value as a pill, and rows that share one column for their names. `useFieldName` gives an app's own control the same name |
 | `GlyphField` | A field with a glyph inside it, such as a filter, and controls after it in the box |
 | `Table` | A short list of facts in columns |

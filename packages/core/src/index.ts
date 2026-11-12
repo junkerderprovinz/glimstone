@@ -16,6 +16,7 @@ export * from "./disco.ts";
 export * from "./discoLoop.ts";
 export * from "./dropIndex.ts";
 export * from "./field.ts";
+export * from "./fieldError.ts";
 export * from "./flagEmoji.ts";
 export * from "./infoTile.ts";
 export * from "./inputModality.ts";

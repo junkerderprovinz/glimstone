@@ -54,8 +54,8 @@ export function Window({ title, drawn, children, actions = [], start, size = "no
     close.current = onClose;
   });
 
-  // Leaving takes the window off the stack at once, so the page is no longer
-  // inert when the caller hands the focus back to a field in it.
+  // Leaving takes the window off the stack at once, so the page is live again
+  // by the time the caller hands the focus back to a field in it.
   const unstack = useRef<() => void>(undefined);
   const leave = () => {
     unstack.current?.();

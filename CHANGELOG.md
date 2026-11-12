@@ -15,6 +15,7 @@ All notable changes to the GlimStone design language are documented here. Versio
 - **`Sheet`, a panel at the end edge** for the details of a row. It is a `<dialog>` shown modal, a card inset by the page gutter, and it rises from the bottom on a phone. Its foot works as a window's, and it slides in by `--motion-sheet-shift` over `--motion-sheet-dur`.
 - **`portalTarget()`** says where a bubble, a menu or a list renders: into an open sheet, since `<body>` lies under the top layer. Every component that portals asks it.
 - **`ListTable`, the list of a list page with its tools inside it.** A click on a heading sorts and sets `aria-sort`, a ▾ beside a column filters by its values in a `Popover`, typing floats a search inside the list, and rows are picked as in a file manager, with Ctrl, Shift, the arrows, Space and Ctrl+A. Enter or a double click opens a row. The rules are plain functions in `listModel.ts` in the core: `nextSort`, `sortRows`, `filterRows`, `searchRows`, `selectByClick`, `selectByKey` and `listKey`.
+- **`error` on `TextField`, `TextArea`, `PasswordField` and `NumberField`** for a value the field cannot take. The field turns `aria-invalid` and takes the fault wash, and a line under it says why until the value is fixed. `FieldError` draws the same line for an app's own field, and `fieldErrorView` in the core says what the field carries.
 
 ## ⚡ Improved
 

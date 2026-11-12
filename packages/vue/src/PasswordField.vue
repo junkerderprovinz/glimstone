@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed, ref, shallowRef, useAttrs, type StyleValue } from "vue";
-import { fieldWidthClass, type FieldWidth } from "@glimstone/core";
+import { computed, ref, shallowRef, useAttrs, useId, type StyleValue } from "vue";
+import { fieldErrorView, fieldWidthClass, type FieldWidth } from "@glimstone/core";
+import FieldError from "./FieldError.vue";
 import { useFieldName } from "./fieldName";
 import { IconEye, IconEyeOff } from "./glyphs";
 import IconTipButton from "./IconTipButton.vue";
@@ -19,6 +20,8 @@ const props = withDefaults(
     /** The eye's name and bubble while the secret is hidden, and once it shows. */
     text?: { show: string; hide: string };
     disabled?: boolean;
+    /** Why the value cannot stand, as a line under the field until it is fixed. */
+    error?: string;
   }>(),
   { text: () => ({ show: "Show", hide: "Hide" }), disabled: false },
 );
@@ -27,6 +30,8 @@ const shown = ref(false);
 const attrs = useAttrs();
 const name = useFieldName(() => attrs["aria-label"] as string | undefined);
 const widthClass = computed(() => fieldWidthClass(props.width));
+const own = useId();
+const err = computed(() => fieldErrorView(props.error, (attrs.id as string | undefined) ?? own, attrs["aria-describedby"] as string | undefined));
 const input = shallowRef<HTMLInputElement | null>(null);
 defineExpose({ input });
 </script>
@@ -40,6 +45,8 @@ defineExpose({ input });
       spellcheck="false"
       v-bind="{ ...$attrs, class: undefined, style: undefined }"
       :aria-label="name"
+      :aria-invalid="err.invalid"
+      :aria-describedby="err.describedBy"
       :disabled="disabled"
       :type="shown ? 'text' : 'password'"
       class="glim-input"
@@ -48,4 +55,5 @@ defineExpose({ input });
       <component :is="shown ? IconEyeOff : IconEye" />
     </IconTipButton>
   </span>
+  <FieldError v-if="err.errorId" :id="err.errorId">{{ error }}</FieldError>
 </template>

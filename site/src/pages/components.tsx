@@ -1106,8 +1106,22 @@ export function TextFieldPage() {
           <code>mono</code> sets a path or a token in monospace.
         </li>
       </ul>
+      <H2>A value the field cannot take</H2>
+      <p>
+        <code>error</code> on a <code>TextField</code>, a <code>TextArea</code>, a <code>PasswordField</code> or a{" "}
+        <code>NumberField</code> says why its value cannot stand, such as a port above 65535 or an empty name. The field
+        takes the fault wash and <code>aria-invalid</code>, and a line under it says why, as the last of its descriptions.
+        It stays until the value is fixed, and the focus stays in the field meanwhile. An app's own field draws the same
+        line with <code>FieldError</code>.
+      </p>
+      <p>
+        It answers a value, not an action. An action that fails, a save the server refused or a target that is gone,
+        answers with a toast and a shake of the control that sent it ("Failure feedback" in the design language).
+      </p>
+      <Demo name="FieldErrors" />
       <H2>Behaviour</H2>
       <ContractTable of="TextField" />
+      <ContractTable of="fieldError" />
       <H2>API</H2>
       <PropsTable of="TextField" />
       <H2>TextArea</H2>

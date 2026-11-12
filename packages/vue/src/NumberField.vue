@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, shallowRef, useAttrs, watch } from "vue";
-import { attachNumberSteppers, syncNumberSteppers } from "@glimstone/core";
+import { computed, onBeforeUnmount, onMounted, shallowRef, useAttrs, useId, watch } from "vue";
+import { attachNumberSteppers, fieldErrorView, syncNumberSteppers } from "@glimstone/core";
+import FieldError from "./FieldError.vue";
 import { useFieldName } from "./fieldName";
 
 // A number input with its two steppers inside the field, bound with v-model:
@@ -9,9 +10,15 @@ import { useFieldName } from "./fieldName";
 // and every other attribute go to the <input>, where the range lives alone.
 // Inside a FieldRow the row names it.
 defineOptions({ inheritAttrs: false });
+const props = defineProps<{
+  /** Why the value cannot stand, as a line under the field until it is fixed. */
+  error?: string;
+}>();
 const model = defineModel<number | null>({ default: null });
 const attrs = useAttrs();
 const name = useFieldName(() => attrs["aria-label"] as string | undefined);
+const own = useId();
+const err = computed(() => fieldErrorView(props.error, (attrs.id as string | undefined) ?? own, attrs["aria-describedby"] as string | undefined));
 const input = shallowRef<HTMLInputElement | null>(null);
 
 let detach: (() => void) | undefined;
@@ -48,6 +55,16 @@ function onInput(e: Event) {
 
 <template>
   <span class="glim-num-wrap">
-    <input v-bind="$attrs" ref="input" :aria-label="name" type="number" class="glim-num-input glim-num-field glim-num" @input="onInput" />
+    <input
+      v-bind="$attrs"
+      ref="input"
+      :aria-label="name"
+      :aria-invalid="err.invalid"
+      :aria-describedby="err.describedBy"
+      type="number"
+      class="glim-num-input glim-num-field glim-num"
+      @input="onInput"
+    />
   </span>
+  <FieldError v-if="err.errorId" :id="err.errorId">{{ error }}</FieldError>
 </template>

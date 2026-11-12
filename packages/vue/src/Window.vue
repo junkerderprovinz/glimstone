@@ -46,8 +46,8 @@ const titleId = useId();
 const asker = focusedAsker();
 const hasStart = computed(() => props.start !== undefined || !!slots.start);
 
-// Leaving takes the window off the stack at once, so the page is no longer
-// inert when the caller hands the focus back to a field in it.
+// Leaving takes the window off the stack at once, so the page is live again
+// by the time the caller hands the focus back to a field in it.
 let unstack: (() => void) | undefined;
 function leave() {
   unstack?.();

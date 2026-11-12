@@ -5506,3 +5506,28 @@ a:is(.glim-btn, .glim-icon-btn) {
     gap: 0.15rem;
   }
 }
+
+/* A value a field cannot take (fieldError.ts): the field keeps its fill in the
+   fault wash and a line under it says why, until the value is fixed. In a
+   field row the line takes the whole width, under the control at the end. */
+@layer components {
+  :is(.glim-input, .glim-num-field)[aria-invalid="true"] { background-color: var(--status-fail-bg); }
+  .glim-field-error {
+    display: flex;
+    flex-basis: 100%;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.3rem;
+    color: var(--status-fail-text);
+    font-size: var(--text-subline);
+  }
+  .glim-field-error > svg {
+    flex: none;
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+  .glim-field-row > .glim-field-error {
+    justify-content: flex-end;
+    margin-top: 0;
+  }
+}

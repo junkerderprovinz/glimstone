@@ -594,4 +594,13 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "list-hint", when: "The pointer rests on the header", then: "A line under it says what a click, the ▾ and typing do, and it is the grid's description." },
     ],
   },
+  fieldError: {
+    rows: [
+      { id: "field-error-invalid", when: "A field has an error", then: "It is aria-invalid, and the error is its description." },
+      { id: "field-error-line", when: "A field has an error", then: "A line in the fault colour stands under the field and says why." },
+      { id: "field-error-row", when: "The field stands in a FieldRow", then: "The line stands under the field across the row, and the row's name keeps its place." },
+      { id: "field-error-clear", when: "The value is fixed while the field has focus", then: "The error and the line go, and the focus stays in the field." },
+      { id: "field-error-kinds", when: "A PasswordField or a NumberField has an error", then: "It carries it the same way." },
+    ],
+  },
 };
