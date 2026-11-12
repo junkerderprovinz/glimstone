@@ -8,7 +8,7 @@ Removing a member of the fortress. Every row of another app ends in a quiet Remo
 
 **Adopting apps:**
 
-- **Remove:** pass `onRemove` to `Fortress` and every instance of another app offers Remove, at the end of its row or beside Open on a card with one instance. `onRemove` is optional now, and without it nothing outside the app's own cards removes. Mark the instance showing the page with `self: true` if it is among `apps`, so it offers no Remove.
+- **Remove:** pass `onRemove` to `Fortress` and every instance of another app offers Remove, at the end of its row or after Open on a card with one instance. `onRemove` is optional now, and without it nothing outside the app's own cards removes. Mark the instance showing the page with `self: true` if it is among `apps`, so it offers no Remove.
 - **The phrase after a removal:** pass `onChangePhrase` to `Fortress` as well, and a removal asks next whether to change the phrase, with Change phrase and Later. Without it the window closes as before.
 - **Who was removed:** pass `removed` with the names of the instances removed since the phrase last changed, built with `memberName(text, app, instance)` ("Bravo on Atlas"). While it holds any, a quiet line under the switch names them, with Change phrase at its end. Empty it once the phrase changes.
 - **Removed by another member:** pass `removedHere` while the app is out of the fortress because another member removed it, and the empty place says so.

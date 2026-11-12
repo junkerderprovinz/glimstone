@@ -9,7 +9,7 @@ import { glyphFor } from "./glyphs";
 // Another app of the fortress: its state, where it runs, and the way to open
 // it. A device's glyph is asked for by its kind through the app's resolver
 // (`deviceServer`, `devicePc`, `deviceLaptop`, `devicePhone`). Remove stays
-// quiet at the end of a row, or beside Open on a card with one instance.
+// quiet at the end of a row, or after Open on a card with one instance.
 const props = withDefaults(defineProps<{
   app: FortressApp;
   text: FortressText;
@@ -71,6 +71,8 @@ function open() {
       </ul>
     </template>
     <template #actions>
+      <Button v-if="view.open" :label="view.open.label" label-key="open" @click="open" />
+      <span v-else class="glim-instance-note">{{ view.note }}</span>
       <Button
         v-if="!view.rows.length && removes(view.main)"
         :label="text.remove"
@@ -80,8 +82,6 @@ function open() {
         data-fortress="open-remove"
         @click="onRemove!(view.main.id, name(view.main))"
       />
-      <Button v-if="view.open" :label="view.open.label" label-key="open" @click="open" />
-      <span v-else class="glim-instance-note">{{ view.note }}</span>
     </template>
   </InstanceCard>
 </template>

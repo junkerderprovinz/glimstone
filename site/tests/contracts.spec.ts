@@ -4412,7 +4412,7 @@ test.describe("Fortress", () => {
     await showOthers(page);
     const bravo = inside(page).locator('[data-fortress-app="bravo"]');
     await expect(bravo.locator('.glim-instance-row [data-fortress="open-remove"]')).toHaveCount(3);
-    await expect(inside(page).locator('[data-fortress-app="delta"] .glim-instance-acts .glim-btn')).toHaveText(["Remove", "Open in Unraid"]);
+    await expect(inside(page).locator('[data-fortress-app="delta"] .glim-instance-acts .glim-btn')).toHaveText(["Open in Unraid", "Remove"]);
     await bravo.locator('[data-instance="b2"]').getByRole("button", { name: "Remove" }).click();
     await expect(dialog(page)).toHaveAccessibleName("Remove Bravo on Studio?");
     await dialog(page).getByRole("button", { name: "Remove" }).click();

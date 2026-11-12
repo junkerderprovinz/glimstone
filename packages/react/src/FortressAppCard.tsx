@@ -40,7 +40,7 @@ export function deviceGlyph(kind: FortressInstance["deviceKind"]) {
 /** Another app of the fortress: its state, where it runs, and the way to open it. */
 export function FortressAppCard({ app, text, lang, hueIndex, onOpen, onRemove, removeKey = "delete" }: FortressAppCardProps) {
   const view = appCardView(app, text, lang);
-  // Remove stays quiet at the end of a row, or beside Open on a card with one instance.
+  // Remove stays quiet at the end of a row, or after Open on a card with one instance.
   const remove = (instance: FortressInstance, inRow: boolean) =>
     onRemove &&
     !instance.self && (
@@ -72,7 +72,6 @@ export function FortressAppCard({ app, text, lang, hueIndex, onOpen, onRemove, r
       facts={view.facts}
       actions={
         <>
-          {view.rows.length === 0 && remove(view.main, false)}
           {view.open ? (
             <Button
               label={view.open.label}
@@ -82,6 +81,7 @@ export function FortressAppCard({ app, text, lang, hueIndex, onOpen, onRemove, r
           ) : (
             <span className="glim-instance-note">{view.note}</span>
           )}
+          {view.rows.length === 0 && remove(view.main, false)}
         </>
       }
     >
