@@ -4361,7 +4361,7 @@ test.describe("Fortress", () => {
     await expect(rows.nth(0).getByRole("button")).toHaveText("Change");
     await expect(rows.nth(1)).toContainText("This app in the fortress");
     await expect(rows.nth(1).getByRole("button")).toHaveText("Leave");
-    await expect(rows.nth(1).locator(".glim-info-icon")).toHaveAttribute("aria-label", "Takes Alpha out of the fortress. The phrase brings it back any time.");
+    await expect(rows.nth(1).locator(".glim-info-icon")).toHaveAttribute("aria-label", "Takes Alpha out of the fortress. The current phrase brings it back.");
   });
 
   test("[fortress-qr] a camera reads the twelve words from the code", async ({ page }) => {
