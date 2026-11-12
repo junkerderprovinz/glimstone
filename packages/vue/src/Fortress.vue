@@ -4,10 +4,12 @@ import {
   createFortressFlow,
   fill,
   hueVars,
+  listOf,
   othersSummary,
   plural,
   storedShowOthers,
   storeShowOthers,
+  type ChangeAnswer,
   type FortressAnswer,
   type FortressApp,
   type FortressInstance,
@@ -20,6 +22,7 @@ import Button from "./Button.vue";
 import FortressAppCard from "./FortressAppCard.vue";
 import FortressPermissions from "./FortressPermissions.vue";
 import FortressWindow from "./FortressWindow.vue";
+import { glyphFor } from "./glyphs";
 import InfoBubble from "./InfoBubble.vue";
 import Toggle from "./Toggle.vue";
 
@@ -46,9 +49,16 @@ const props = withDefaults(
     /** Puts the small confirmation of a saved permission, or the reason it failed, into the app's toasts. */
     notify?: (message: string, severity: ToastSeverity) => void;
     onJoin: (words: string[]) => Promise<FortressAnswer>;
-    onRemove: (id: string) => Promise<FortressAnswer>;
+    /** Removes an instance, of this app or another. Without it no other app offers Remove. */
+    onRemove?: (id: string) => Promise<FortressAnswer>;
     /** `password` is set where `phrasePassword` asks for it first. Without it there is no Show phrase. */
     onShowPhrase?: (password?: string) => Promise<PhraseAnswer>;
+    /** Offered right after a removal and beside `removed`, since the old phrase still lets a removed instance back in. */
+    onChangePhrase?: () => Promise<ChangeAnswer>;
+    /** The instances removed since the phrase last changed, by name ("Bravo on Atlas"). While there are any, a line says the way back is still open. */
+    removed?: string[];
+    /** Another member removed this app, so the empty place says so until it joins again. */
+    removedHere?: boolean;
     /** Whether the other apps show. Without it the switch keeps its state on this device. */
     showOthers?: boolean;
     /** The devices this app is paired with today, whose pairing moves into the fortress on joining. */
@@ -58,11 +68,11 @@ const props = withDefaults(
     /** Asks for the app's password before the phrase shows. */
     phrasePassword?: boolean;
     onOpen?: (app: FortressApp, instance: FortressInstance) => void;
-    labelKeys?: Partial<Record<"join" | "leave" | "showPhrase" | "changePhrase" | "remove" | "unlock" | "copy", string>>;
+    labelKeys?: Partial<Record<"join" | "leave" | "showPhrase" | "changePhrase" | "remove" | "later" | "unlock" | "copy", string>>;
     /** The rainbow position the fortress's first card takes, after the app's own cards. */
     hueStart?: number;
   }>(),
-  { showOthers: undefined, phrasePassword: false, hueStart: 0 },
+  { showOthers: undefined, phrasePassword: false, removed: () => [], removedHere: false, hueStart: 0 },
 );
 const emit = defineEmits<{ "update:showOthers": [on: boolean] }>();
 
@@ -77,6 +87,7 @@ const keys = computed(() => ({
   showPhrase: "fortressShowPhrase",
   changePhrase: "fortressChangePhrase",
   remove: "delete",
+  later: "fortressLater",
   unlock: "unlock",
   copy: "copy",
   ...props.labelKeys,
@@ -91,6 +102,7 @@ function setOthers(on: boolean) {
     ownShow.value = on;
   }
 }
+const removedNote = computed(() => fill(props.text.removedNote, { devices: listOf(props.lang, props.removed) }));
 const othersLine = computed(() => {
   const n = othersSummary(props.apps);
   return fill(props.text.othersLine, {
@@ -105,8 +117,8 @@ const othersLine = computed(() => {
     <div class="glim-fortress-grid">
       <slot :remove="flow.openRemove" />
       <div v-if="!joined" class="glim-card glim-instance glim-instance--out" data-fortress="out">
-        <h3 class="glim-instance-title">{{ text.outTitle }}</h3>
-        <p class="glim-instance-hint">{{ fill(text.outHint, { app: app.name }) }}</p>
+        <h3 class="glim-instance-title">{{ removedHere ? text.removedHereTitle : text.outTitle }}</h3>
+        <p class="glim-instance-hint">{{ fill(removedHere ? text.removedHereHint : text.outHint, { app: app.name }) }}</p>
         <p v-if="found" class="glim-instance-found">
           <img v-if="found.logo" :src="found.logo" alt="" />
           <span>{{ fill(text.found, { app: found.app, device: found.device }) }}</span>
@@ -122,9 +134,32 @@ const othersLine = computed(() => {
       <Toggle :model-value="others" :label="text.showOthers" hide-label data-fortress="others" @update:model-value="setOthers" />
     </div>
 
+    <div v-if="joined && removed.length" class="glim-fortress-removed" data-fortress="removed" role="status">
+      <component :is="glyphFor('info')" v-if="glyphFor('info')" />
+      <span>{{ removedNote }}</span>
+      <Button
+        v-if="onChangePhrase"
+        :label="text.changePhrase"
+        :label-key="keys.changePhrase"
+        tone="subtle"
+        data-fortress="open-change"
+        @click="flow.openChange()"
+      />
+    </div>
+
     <template v-if="joined && others">
       <div class="glim-fortress-grid">
-        <FortressAppCard v-for="(a, i) in apps" :key="a.id" :app="a" :text="text" :lang="lang" :hue-index="hueStart + 1 + i" :on-open="onOpen" />
+        <FortressAppCard
+          v-for="(a, i) in apps"
+          :key="a.id"
+          :app="a"
+          :text="text"
+          :lang="lang"
+          :hue-index="hueStart + 1 + i"
+          :on-open="onOpen"
+          :on-remove="onRemove && flow.openRemove"
+          :remove-key="keys.remove"
+        />
       </div>
       <FortressPermissions
         :text="text"
