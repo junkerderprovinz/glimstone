@@ -30,7 +30,7 @@ export function PresenceBadges({ instance, text }: { instance: FortressInstance;
 
 /** A device's glyph, asked for by its kind through the app's resolver (`deviceServer`, `devicePc`, `deviceLaptop`, `devicePhone`). */
 export function deviceGlyph(kind: FortressInstance["deviceKind"]) {
-  return kind ? glyphFor(`device${kind[0].toUpperCase()}${kind.slice(1)}`) : undefined;
+  return kind ? glyphFor(`device${kind.charAt(0).toUpperCase()}${kind.slice(1)}`) : undefined;
 }
 
 /** Another app of the fortress: its state, where it runs, and the way to open it. */

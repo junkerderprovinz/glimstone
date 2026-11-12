@@ -21,7 +21,7 @@ const props = defineProps<{
 
 const view = computed(() => appCardView(props.app, props.text, props.lang));
 const presence = (i: FortressInstance) => ({ connected: props.text.connected, checking: props.text.checking, away: props.text.away })[i.presence];
-const device = (i: FortressInstance) => (i.deviceKind ? glyphFor(`device${i.deviceKind[0].toUpperCase()}${i.deviceKind.slice(1)}`) : undefined);
+const device = (i: FortressInstance) => (i.deviceKind ? glyphFor(`device${i.deviceKind.charAt(0).toUpperCase()}${i.deviceKind.slice(1)}`) : undefined);
 
 function open() {
   const { main, open } = view.value;
