@@ -65,7 +65,7 @@ export function othersSummary(apps: FortressApp[]): { apps: number; devices: num
 
 /** The instance an app's card names in its facts: the one that opens in the browser, else the first. */
 export function shownInstance(app: FortressApp): FortressInstance {
-  return app.instances.find((i) => i.open) ?? app.instances[0];
+  return app.instances.find((i) => i.open) ?? app.instances[0]!;
 }
 
 /** What an app's card shows, worked out once for every framework. */
