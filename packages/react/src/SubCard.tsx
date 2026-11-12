@@ -3,12 +3,10 @@ import { Badge } from "./Badge.tsx";
 import { InfoBubble } from "./InfoBubble.tsx";
 
 /**
- * A flat, filled group inside a card or a window. It groups what belongs
- * together without a second raised surface, and it takes the place of a
- * fold-out: what used to hide behind a click stays in view. Its title is a
- * section badge in the notch on its top edge, like a card's, and `end` stands
- * at the end of that row. Fields and quiet buttons inside it step up one
- * surface, so they do not vanish into its fill.
+ * A flat, filled group inside a card or a window. It groups without a second
+ * raised surface and takes the place of a fold-out, so nothing hides behind a
+ * click. Fields and quiet buttons inside it step up one surface, so they do
+ * not vanish into its fill.
  */
 export function SubCard({
   title,
