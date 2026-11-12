@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { Badge, Button, Fortress, InstanceCard } from "@glimstone/vue";
-import { fortressTextEn as text } from "@glimstone/core";
+import { fortressTextEn as text, memberName, type FortressApp, type FortressInstance } from "@glimstone/core";
 import { APPS, HOME, household, instancesTab, PERMISSIONS, remembering } from "../fortressData";
 
 // Inside a fortress: the phrase shows after "letmein", Echo's permission
 // refuses to switch, changing the phrase leaves Wanderer behind, and a removed
-// instance stays named under the switch until the phrase changes.
+// instance stays named under the switch until the phrase changes. Open says
+// what it would open.
 const said = ref("Nothing yet");
 const permissions = ref(PERMISSIONS);
 const removed = ref<string[]>([]);
@@ -34,6 +35,7 @@ const answers = remembering(
       :paired-with="['Pocket']"
       :hue-start="2"
       :removed="removed"
+      :on-open="(a: FortressApp, i: FortressInstance) => (said = `Opened ${memberName(text, a, i)}`)"
       :notify="(message: string, severity: string) => (said = `${severity}: ${message}`)"
       v-bind="answers"
     >

@@ -140,6 +140,8 @@ body {
   min-height: 9rem;
 }
 .demo-stage.left { justify-content: flex-start; align-items: stretch; }
+/* A few buttons side by side that each open a state of the window under test. */
+.demo-buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 /* A sign-in page fills the screen; on the site it takes the stage instead. */
 .fortress-demo { width: 100%; display: grid; gap: 0.75rem; }
 .signin-demo { width: 100%; display: grid; gap: 0.75rem; justify-items: center; }

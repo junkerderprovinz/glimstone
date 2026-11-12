@@ -1,7 +1,17 @@
 // A made-up household for the fortress demos: five placeholder apps on four
 // devices. The words that open its fortress are TWELVE, and the password that
 // shows them is "letmein".
-import { fortressTextEn, memberName, type ChangeAnswer, type FortressAnswer, type FortressApp, type FortressPermission, type PhraseAnswer } from "@glimstone/core";
+import {
+  fortressTextEn,
+  memberName,
+  type ChangeAnswer,
+  type FortressAnswer,
+  type FortressApp,
+  type FortressLogLine,
+  type FortressPermission,
+  type FortressStatusReport,
+  type PhraseAnswer,
+} from "@glimstone/core";
 
 function mark(letter: string, fill: string) {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="${fill}"/><text x="32" y="43" font-family="sans-serif" font-size="30" font-weight="700" text-anchor="middle" fill="#161616">${letter}</text></svg>`;
@@ -28,7 +38,7 @@ export const APPS: FortressApp[] = [
     name: "Charlie",
     logo: mark("C", "#6FDC8C"),
     instances: [
-      { id: "c1", device: "Studio", deviceKind: "pc", form: "desktop", version: "2.6.2", presence: "connected", open: { href: "#charlie" } },
+      { id: "c1", device: "Studio", deviceKind: "pc", form: "desktop", version: "2.6.2", presence: "connected", open: {} },
       { id: "c2", device: "Pocket", deviceKind: "phone", form: "android", version: "2.6.2", presence: "away", lastSeen: "07:40" },
     ],
   },
@@ -122,3 +132,51 @@ export function remembering(answers: ReturnType<typeof instancesTab>, removed: (
     },
   };
 }
+
+// Opening from anywhere: two members that both claim to be Bravo on Atlas,
+// a plugin that opens its status, an app that refuses until it has a password,
+// and a phone that has nothing to open.
+export const OPEN_APPS: FortressApp[] = [
+  {
+    id: "bravo",
+    name: "Bravo",
+    logo: mark("B", "#1D99F3"),
+    instances: [
+      { id: "b1", device: "Atlas", deviceKind: "server", form: "container", version: "2.7.5", presence: "connected", open: {}, doubt: true, print: "91c0" },
+      { id: "b9", device: "Atlas", deviceKind: "server", form: "container", version: "2.7.5", presence: "connected", relay: true, open: {}, doubt: true, print: "0b13" },
+      { id: "b3", device: "Pocket", deviceKind: "phone", form: "android", version: "2.7.5", presence: "connected", relay: true },
+    ],
+  },
+  {
+    id: "delta",
+    name: "Delta",
+    logo: mark("D", "#BE95FF"),
+    instances: [{ id: "d1", device: "Atlas", deviceKind: "server", form: "plugin", version: "3.7.5", presence: "connected", open: {} }],
+  },
+  {
+    id: "echo",
+    name: "Echo",
+    logo: mark("E", "#3DDBD9"),
+    instances: [{ id: "e1", device: "Wanderer", deviceKind: "laptop", form: "container", version: "1.4.1", presence: "connected", relay: true, open: {} }],
+  },
+];
+
+export const STATUS_REPORT: FortressStatusReport = {
+  state: "warning",
+  needsYou: [
+    { severity: "warn", text: "2 updates wait" },
+    { severity: "info", text: "A new disk was found" },
+  ],
+  work: [
+    { title: "Checking disk 3", progress: 0.4 },
+    { title: "Reading the share list" },
+  ],
+  next: [{ title: "Parity check", at: "Sunday 03:00" }],
+};
+
+/** Twelve lines, newest first, of which the window shows ten. */
+export const STATUS_LOG: FortressLogLine[] = Array.from({ length: 12 }, (_, i) => ({
+  at: `07:${String(59 - i * 4).padStart(2, "0")}`,
+  level: i === 1 ? "error" : i === 4 ? "warn" : "info",
+  text: i === 1 ? "Disk 3 answered slowly" : i === 4 ? "Update check took long" : `Checked the shares, round ${12 - i}`,
+}));

@@ -1,11 +1,12 @@
 import { useRef, useState } from "react";
 import { Badge, Button, Fortress, InstanceCard } from "@glimstone/react";
-import { fortressTextEn } from "@glimstone/core";
+import { fortressTextEn, memberName } from "@glimstone/core";
 import { APPS, HOME, household, instancesTab, PERMISSIONS, remembering } from "../fortressData";
 
 // Inside a fortress: the phrase shows after "letmein", Echo's permission
 // refuses to switch, changing the phrase leaves Wanderer behind, and a removed
-// instance stays named under the switch until the phrase changes.
+// instance stays named under the switch until the phrase changes. Open says
+// what it would open.
 export default function FortressBasic() {
   const [said, setSaid] = useState("Nothing yet");
   const [permissions, setPermissions] = useState(PERMISSIONS);
@@ -29,6 +30,7 @@ export default function FortressBasic() {
         hueStart={2}
         notify={(message, severity) => setSaid(`${severity}: ${message}`)}
         removed={removed}
+        onOpen={(a, i) => setSaid(`Opened ${memberName(text, a, i)}`)}
         {...remembering(instancesTab(household(setSaid, () => current.current, setPermissions)), () => gone.current, setRemoved)}
       >
         {(remove) => (

@@ -18,6 +18,7 @@ import {
   FortressAppCard,
   FortressPairing,
   FortressPermissions,
+  FortressStatusWindow,
   GlyphField,
   GlyphTile,
   IconButton,
@@ -65,7 +66,7 @@ import { Slider } from "@glimstone/react/Slider";
 import { COFFEE_BUTTON_SVG, fortressText, GLIMSTONE_VERSION, LINUX_SVG, MAIL_SVG, MANUAL_SVG, type FortressPermission, type SignInText } from "@glimstone/core";
 import logo from "../../../.github/assets/logo.svg?url";
 import { Glyph } from "../glyph";
-import { APPS, HOME, household, instancesTab, PERMISSIONS } from "../fortressData";
+import { APPS, HOME, household, instancesTab, OPEN_APPS, PERMISSIONS, STATUS_LOG, STATUS_REPORT } from "../fortressData";
 
 export type Lang = "en" | "de";
 export const LangContext = createContext<Lang>("en");
@@ -1451,6 +1452,27 @@ function FortressAppCardDemo() {
     </div>
   );
 }
+function FortressDoubtWindowDemo() {
+  const { lang, text } = useFortressText();
+  return (
+    <div style={{ width: "100%", maxWidth: 420 }}>
+      <FortressAppCard app={OPEN_APPS[0]!} text={text} lang={lang} hueIndex={1} onOpen={() => {}} />
+    </div>
+  );
+}
+function FortressStatusWindowDemo() {
+  const { lang, text } = useFortressText();
+  const [open, setOpen] = useState(false);
+  const delta = OPEN_APPS[1]!;
+  return (
+    <div style={{ width: "100%", maxWidth: 420 }}>
+      <FortressAppCard app={delta} text={text} lang={lang} hueIndex={1} onOpen={() => setOpen(true)} />
+      {open && (
+        <FortressStatusWindow app={delta} instance={delta.instances[0]!} report={STATUS_REPORT} log={STATUS_LOG} text={text} lang={lang} onClose={() => setOpen(false)} />
+      )}
+    </div>
+  );
+}
 function FortressPermissionsDemo() {
   const { text, permissions, answers } = useFortress();
   return (
@@ -1759,6 +1781,8 @@ export const DEMOS: Record<string, ComponentType> = {
   fortress: FortressDemo,
   "instance-card": InstanceCardDemo,
   "fortress-app-card": FortressAppCardDemo,
+  "fortress-doubt-window": FortressDoubtWindowDemo,
+  "fortress-status-window": FortressStatusWindowDemo,
   "fortress-permissions": FortressPermissionsDemo,
   "fortress-pairing": FortressPairingDemo,
   glyph: GlyphDemo,

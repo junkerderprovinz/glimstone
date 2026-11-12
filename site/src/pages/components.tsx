@@ -729,6 +729,41 @@ import { fortressText } from "@glimstone/core";
         empty place says so, and the current phrase brings it back.
       </p>
       <Demo name="FortressRemovedHere" />
+      <H2>Opening a member from anywhere</H2>
+      <p>
+        Open works for every member that has <code>open</code>, wherever it runs. The app passes <code>onOpen</code>,
+        which gets the app and the instance and opens it through the fortress, and a card with several instances gives
+        every row that opens its own quiet Open. A member that has no <code>open</code> offers nothing and says nothing
+        in its place. When the fortress refuses, the app's toast says why with <code>openRefusalText(text, code)</code>,
+        in the same words as the kit's page. Two members that claim the same app on the same device carry{" "}
+        <code>doubt</code> and the end of their id as <code>print</code>: the card warns with Named twice, and Open
+        asks first, naming that end of the id. An app that draws the other apps in cards of its own shows{" "}
+        <code>FortressDoubtWindow</code> before it opens one of them.
+      </p>
+      <Demo name="FortressOpen" />
+      <Usage
+        code={`import { Fortress, FortressStatusWindow } from "@glimstone/react";
+import { openRefusalText } from "@glimstone/core";
+
+<Fortress
+  {...props}
+  onOpen={async (app, instance) => {
+    if (instance.form === "plugin") return showStatus(app, instance);
+    const answer = await api.open(instance.id);
+    if (answer.refused) notify(openRefusalText(text, answer.refused), "error");
+    else window.open(answer.path, "_blank", "noopener");
+  }}
+/>`}
+      />
+      <H2>The status of a plugin</H2>
+      <p>
+        An Unraid plugin has no pages of its own outside Unraid, and those need Unraid's own sign-in, so they never go
+        through the fortress. Open shows <code>FortressStatusWindow</code> instead: its state, what needs the person,
+        running work, what comes next, the newest ten log lines and, for a plugin, where its settings are. The app hands in the report
+        and the log with their times already formatted. Empty sections are left out, and while the report comes or when
+        it does not, the window says so calmly.
+      </p>
+      <Demo name="FortressStatus" />
       <H2>Words</H2>
       <p>
         <code>fortressText(lang)</code> hands out the words in every language of the glossary, and each language is its
@@ -746,6 +781,9 @@ import { fortressText } from "@glimstone/core";
         <li>Every card owns a rainbow position, so its buttons and switches take its hue.</li>
         <li>Permissions are on until switched off, one switch per pair. A refused switch shakes and stays as it was.</li>
         <li>The phrase shows only after the app's password where the app has one.</li>
+        <li>Open is there for every member that can be opened, from any device. One that cannot shows no button and no note.</li>
+        <li>A plugin opens as its status, never as Unraid's page through the fortress.</li>
+        <li>Two members with the same name on the same device get a warning, and Open asks by the end of the id before it opens.</li>
       </ul>
       <H2>Behaviour</H2>
       <ContractTable of="Fortress" />
@@ -755,6 +793,12 @@ import { fortressText } from "@glimstone/core";
       <PropsTable of="FortressPairing" />
       <H2>InstanceCard</H2>
       <PropsTable of="InstanceCard" />
+      <H2>FortressAppCard</H2>
+      <PropsTable of="FortressAppCard" />
+      <H2>FortressDoubtWindow</H2>
+      <PropsTable of="FortressDoubtWindow" />
+      <H2>FortressStatusWindow</H2>
+      <PropsTable of="FortressStatusWindow" />
     </>
   );
 }

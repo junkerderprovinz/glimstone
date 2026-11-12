@@ -4244,12 +4244,108 @@ test.describe("Fortress", () => {
     expect(await drawn("b3")).toBe(path("IconPhone"));
   });
 
-  test("[fortress-open-only] an app without a page here says where it opens", async ({ page }) => {
+  test("[fortress-open-none] an instance with nothing to open offers nothing and says nothing", async ({ page }) => {
     await open(page, "/components/fortress");
     await showOthers(page);
     const echo = inside(page).locator('[data-fortress-app="echo"]');
-    await expect(echo).toContainText("Opens only on Wanderer");
     await expect(echo.getByRole("button", { name: /^Open/ })).toHaveCount(0);
+    await expect(echo.locator(".glim-instance-note")).toHaveCount(0);
+    await expect(echo.locator(".glim-instance-acts .glim-btn")).toHaveText(["Remove"]);
+  });
+
+  test("[fortress-open-row] every row that opens has its own quiet Open", async ({ page }) => {
+    await open(page, "/components/fortress");
+    await showOthers(page);
+    const bravo = inside(page).locator('[data-fortress-app="bravo"]');
+    const rowOpen = bravo.locator('.glim-instance-row [data-fortress="open"]');
+    await expect(rowOpen).toHaveCount(1);
+    await expect(rowOpen).toHaveAccessibleName("Open");
+    await expect(rowOpen).toHaveClass(/glim-btn--subtle/);
+    await expect(rowOpen.locator("svg")).toHaveCount(1);
+    await expect(bravo.locator('[data-instance="b2"] [data-fortress="open"]')).toHaveCount(0);
+  });
+
+  test("[fortress-open-call] Open hands the app and the instance to onOpen", async ({ page }) => {
+    await open(page, "/components/fortress");
+    await showOthers(page);
+    await inside(page).locator('[data-instance="c1"] [data-fortress="open"]').click();
+    await expect(said(inside(page))).toHaveText("Opened Charlie on Studio");
+    await inside(page).locator('[data-fortress-app="delta"]').getByRole("button", { name: "Open in Unraid" }).click();
+    await expect(said(inside(page))).toHaveText("Opened Delta on Atlas");
+  });
+
+  const opening = (page: Page) => stage(page, "FortressOpen");
+  const statusDemo = (page: Page) => stage(page, "FortressStatus");
+
+  test("[fortress-open-refused] a refused Open goes to the app's toast and leaves the card as it was", async ({ page }) => {
+    await open(page, "/components/fortress");
+    const echo = opening(page).locator('[data-fortress-app="echo"]');
+    await echo.getByRole("button", { name: "Open", exact: true }).click();
+    await expect(said(opening(page))).toHaveText("Toast: This app opens from elsewhere only once it has a password.");
+    await expect(echo.locator(".glim-instance-note")).toHaveCount(0);
+    await expect(echo.getByRole("button", { name: "Open", exact: true })).toBeVisible();
+  });
+
+  test("[fortress-same-claim] two members with one name warn and ask by the end of the id", async ({ page }) => {
+    await open(page, "/components/fortress");
+    const bravo = opening(page).locator('[data-fortress-app="bravo"]');
+    const badge = bravo.locator(".glim-instance-badges .glim-badge", { hasText: "Named twice" });
+    await expect(badge).toHaveClass(/warn/);
+    await expect(badge.locator('[data-glim="InfoBubble"]')).toHaveAttribute("aria-label", "Two members call themselves Bravo on Atlas. Open only the one you know.");
+    await bravo.locator('[data-instance="b9"] [data-fortress="open"]').click();
+    await expect(dialog(page)).toHaveAccessibleName("Two members call themselves Bravo on Atlas");
+    await expect(dialog(page)).toContainText("Open only if you know this is yours. Its id ends in 0b13.");
+    await expect(dialog(page).getByRole("button", { name: "Open anyway" })).toBeVisible();
+    await dialog(page).getByRole("button", { name: "Cancel" }).click();
+    await expect(dialog(page)).toHaveCount(0);
+    await expect(said(opening(page))).toHaveText("Nothing yet");
+    await bravo.locator('[data-instance="b9"] [data-fortress="open"]').click();
+    await dialog(page).locator('[data-fortress="open-anyway"]').click();
+    await expect(dialog(page)).toHaveCount(0);
+    await expect(said(opening(page))).toHaveText("Opened Bravo on Atlas (b9)");
+  });
+
+  test("[fortress-status] a plugin opens as its status window", async ({ page }) => {
+    await open(page, "/components/fortress");
+    await opening(page).locator('[data-fortress-app="delta"]').getByRole("button", { name: "Open", exact: true }).click();
+    const win = dialog(page);
+    await expect(win).toHaveAccessibleName("Delta on Atlas");
+    await expect(win.locator(".glim-window-title img")).toHaveCount(1);
+    await expect(win.locator('[data-fortress="state"]')).toHaveText("Needs a look");
+    await expect(win.locator('[data-fortress="needs"] li')).toHaveText(["Warning2 updates wait", "A new disk was found"]);
+    await expect(win.locator('[data-fortress="work"] li')).toHaveCount(2);
+    await expect(win.locator('[data-fortress="work"] [role="progressbar"]').first()).toHaveAttribute("aria-valuenow", "40");
+    await expect(win.locator('[data-fortress="next"] li')).toHaveText(["Parity checkSunday 03:00"]);
+    await expect(win.locator('[data-fortress="log"] li')).toHaveCount(10);
+    await expect(win.locator('[data-fortress="log"] li').first()).toContainText("07:59");
+    await expect(win.locator('[data-fortress="where"]')).toHaveText("Delta keeps its settings in Unraid on Atlas.");
+    await win.getByRole("button", { name: "Close" }).click();
+    await expect(dialog(page)).toHaveCount(0);
+  });
+
+  test("[fortress-status-wait] loading and a missing report read calmly and leave the rest out", async ({ page }) => {
+    await open(page, "/components/fortress");
+    await statusDemo(page).locator('[data-hook="loading"]').click();
+    await expect(dialog(page).locator('[data-fortress="loading"]')).toHaveText("Asking Delta how it's doing.");
+    await expect(dialog(page).locator(".glim-status-section, [data-fortress='state']")).toHaveCount(0);
+    await expect(dialog(page).locator('[data-fortress="where"]')).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(dialog(page)).toHaveCount(0);
+    await statusDemo(page).locator('[data-hook="error"]').click();
+    const error = dialog(page).locator('[data-fortress="error"]');
+    await expect(error).toHaveText("The app can't be reached right now. Try again in a moment.");
+    const ink = await error.evaluate((e) => getComputedStyle(e).color);
+    const fail = await error.evaluate((e) => {
+      const probe = document.createElement("span");
+      probe.style.color = "var(--status-fail-text)";
+      e.append(probe);
+      const c = getComputedStyle(probe).color;
+      probe.remove();
+      return c;
+    });
+    expect(ink).not.toBe(fail);
+    await expect(dialog(page).locator(".glim-status-section")).toHaveCount(0);
+    await expect(dialog(page).locator('[data-fortress="where"]')).toBeVisible();
   });
 
   test("[fortress-actions] the corner holds the phrase's actions inside, and Enter phrase outside", async ({ page }) => {
@@ -4597,5 +4693,22 @@ test.describe("Fortress", () => {
       expect(await ground('[data-fortress-app="charlie"]')).toBe(card);
       expect(await ground('[data-instance="c1"]')).toBe(row);
     });
+
+    test(`[fortress-modes] the status window takes the ${name} surface`, async ({ page }) => {
+      await open(page, "/components/fortress", look);
+      await stage(page, "FortressStatus").locator('[data-hook="report"]').click();
+      const win = page.getByRole("dialog");
+      const surface = await win.evaluate((w) => getComputedStyle(w).backgroundColor);
+      expect(surface).toBe(card);
+    });
   }
+
+  test("[fortress-hue] an Open in a row takes its card's hue", async ({ page }) => {
+    await open(page, "/components/fortress", { rainbow: "on" });
+    const bravo = stage(page, "FortressOpen").locator('[data-fortress-app="bravo"]');
+    const echo = stage(page, "FortressOpen").locator('[data-fortress-app="echo"]');
+    const hue = (el: Locator) => el.evaluate((e) => getComputedStyle(e).getPropertyValue("--item-hue").trim());
+    expect(await hue(bravo)).not.toBe(await hue(echo));
+    expect(await hue(bravo.locator('[data-instance="b1"] [data-fortress="open"]'))).toBe(await hue(bravo));
+  });
 });

@@ -984,10 +984,34 @@ export const GLOSSARY: GlossarySection[] = [
         code: ["FortressAppCard", "PresenceBadges"],
         components: ["FortressAppCard", "PresenceBadges"],
         text: {
-          en: "Another app of the fortress, with a row per instance: where it runs, its form and version, whether it is connected, and Open where there is a page to open from here.",
-          de: "Eine andere App der Festung, mit einer Zeile je Instanz: wo sie läuft, Form und Version, ob sie verbunden ist, und Öffnen, wo es von hier eine Seite zu öffnen gibt.",
+          en: "Another app of the fortress, with a row per instance: where it runs, its form and version, whether it is connected, and Open for every instance that opens from here.",
+          de: "Eine andere App der Festung, mit einer Zeile je Instanz: wo sie läuft, Form und Version, ob sie verbunden ist, und Öffnen für jede Instanz, die sich von hier öffnen lässt.",
         },
         also: [{ en: "Presence badges", de: "Zustandsplaketten", code: "PresenceBadges", proposal: true }],
+      },
+      {
+        id: "fortress-doubt-window",
+        en: "Same-name question",
+        de: "Rückfrage bei gleichem Namen",
+        proposal: true,
+        code: ["FortressDoubtWindow"],
+        components: ["FortressDoubtWindow"],
+        text: {
+          en: "Asked before a member opens when two members claim the same app on the same device. It names the end of the id, and only Open anyway opens.",
+          de: "Kommt, bevor sich ein Mitglied öffnet, wenn zwei Mitglieder dieselbe App auf demselben Gerät nennen. Sie nennt das Ende der ID, und nur Trotzdem öffnen öffnet.",
+        },
+      },
+      {
+        id: "fortress-status-window",
+        en: "Status window",
+        de: "Zustandsfenster",
+        proposal: true,
+        code: ["FortressStatusWindow"],
+        components: ["FortressStatusWindow"],
+        text: {
+          en: "What Open shows for a member without pages of its own, such as an Unraid plugin: its state, what needs you, running work, what comes next, the last log lines and, for a plugin, where its settings are.",
+          de: "Was Öffnen bei einem Mitglied ohne eigene Seiten zeigt, etwa einem Unraid-Plugin: den Zustand, was dich braucht, laufende Arbeit, was als Nächstes kommt, die letzten Log-Zeilen und bei einem Plugin, wo die Einstellungen liegen.",
+        },
       },
       {
         id: "fortress-permissions",
