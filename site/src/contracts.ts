@@ -155,8 +155,9 @@ export const CONTRACTS: Record<string, Contract> = {
   },
   Toast: {
     rows: [
-      { id: "toast-roles", when: "A toast appears", then: "A failure is role=\"alert\", a success role=\"status\"." },
-      { id: "toast-expire", when: "Nobody touches it", then: "It leaves after four seconds." },
+      { id: "toast-announce", when: "A toast appears", then: "Its message is read out through the viewport's live regions, which stay in the page: a failure through the alert, every other toast through the status. The card itself has no role." },
+      { id: "toast-expire", when: "Nobody touches it and it has no action", then: "It leaves after four seconds." },
+      { id: "toast-sticky", when: "It has an action", then: "It stays until it is dismissed or its action is pressed." },
       { id: "toast-pause", when: "The pointer rests on it", then: "It stays, and the time left is kept." },
       { id: "toast-dismiss", when: "The dismiss button is pressed", then: "Only that toast leaves." },
       { id: "toast-action", when: "A toast has an action", then: "Its button keeps its words beside a long message, and a press runs it and dismisses the toast." },
@@ -376,6 +377,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "window-trap", keys: ["Tab", "Shift+Tab"], when: "Focus is on the last or first control", then: "Focus wraps inside the window in front." },
       { id: "window-return", when: "The window closes", then: "Focus goes back to the control that opened it." },
       { id: "window-backdrop", when: "A press lands beside the window", then: "It closes." },
+      { id: "window-inert", when: "A window is open", then: "Everything behind it is inert, the page and any window under it, so neither the pointer nor a screen reader reaches them. Closing it gives them back." },
       { id: "window-action-attrs", when: "An action names attributes", then: "Its foot button carries them." },
       { id: "window-card", when: "The caller asks for the card", then: "The window hands over its card element." },
       { id: "window-title-slot", when: "The notch holds markup, such as a count", then: "It is drawn, and the title alone stays the window's name." },
@@ -561,6 +563,79 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "drag-wiggle-held", when: "An item is marked held with aria-grabbed=\"true\" or data-held=\"true\" instead of glim-drag-lift", then: "It stays still, in a list of tiles and in a list of rows." },
       { id: "drag-wiggle-still", when: "Motion is off, or the system asks for reduced motion", then: "Nothing trembles; the held item still lifts." },
       { id: "drag-drop-edge", when: "A tile or a row is dropped with its leading edge just short of the next one's middle, then just past it", then: "Short of it the item goes back to its place; past it the item lands after that neighbour." },
+    ],
+  },
+  BusyRing: {
+    rows: [
+      { id: "busy-ring-arcs", when: "Motion is wild or subtle", then: "Two arcs turn against each other in one period, slower at subtle." },
+      { id: "busy-ring-still", when: "Motion is off, or the system asks for reduced motion", then: "Nothing turns, and the inner arc stands turned off the outer one." },
+      { id: "busy-ring-delay", when: "It appears", then: "It stays hidden for 400 ms and then shows; with delay 0 it shows at once." },
+      { id: "busy-ring-label", when: "It has a label", then: "It is a status that says the label; without one it is hidden from assistive technology." },
+      { id: "busy-ring-ink", when: "It stands on a card, or in a button's glyph slot", then: "It takes the accent on the card and the button's ink in the button." },
+      { id: "button-busy-ring", when: "A button turns busy", then: "The turning ring takes the glyph's place at once." },
+    ],
+  },
+  SkeletonRow: {
+    rows: [
+      { id: "skeleton-box", when: "Always", then: "It has a ListRow's height and is hidden from assistive technology, while the list around it is aria-busy." },
+      { id: "skeleton-light", when: "Motion is wild or subtle", then: "One band of light crosses the rows." },
+      { id: "skeleton-light-theme", when: "The light theme shows", then: "The band is a white glow, not a darker stripe." },
+      { id: "skeleton-still", when: "Motion is off, or the system asks for reduced motion", then: "No light crosses." },
+      { id: "skeleton-delay", when: "It appears", then: "It stays hidden for 400 ms and then shows." },
+    ],
+  },
+  announce: {
+    rows: [
+      { id: "announce-polite", when: "announce(text) is called", then: "The words go into the polite status region, which stays in the page." },
+      { id: "announce-assertive", when: "announce(text, \"assertive\") is called", then: "The words go into the alert region, which interrupts. It is for failures." },
+      { id: "announce-repeat", when: "The same words are announced twice", then: "The region empties and fills again, so they are read twice." },
+      { id: "announce-own", when: "No ToastViewport is on the page", then: "announce() adds the region to the page itself." },
+    ],
+  },
+  Popover: {
+    rows: [
+      { id: "popover-top", when: "It opens", then: "It stands in the top layer, a dialog named by its label." },
+      { id: "popover-anchor", when: "It opens with room below its trigger", then: "It stands under the trigger, tied to it by a CSS anchor." },
+      { id: "popover-flip", when: "There is no room below the trigger", then: "It opens above it." },
+      { id: "popover-fallback", when: "The browser has no anchor positioning", then: "It is placed the same way, under the trigger and centred on it." },
+      { id: "popover-focus", keys: ["Escape"], when: "It opens, and Escape is pressed", then: "Focus goes to its first control; Escape closes it and focus goes back to the trigger." },
+      { id: "popover-outside", when: "A press lands beside it", then: "It closes." },
+    ],
+  },
+  Sheet: {
+    pattern: { name: "Dialog (modal)", url: `${APG}dialog-modal/` },
+    rows: [
+      { id: "sheet-modal", when: "It opens", then: "It is a <dialog> shown modal, in the top layer, and the page behind it is inert." },
+      { id: "sheet-heading", when: "Always", then: "Its title is the heading badge in the notch, and the sheet's name." },
+      { id: "sheet-edge", when: "The window is wide, or a phone's", then: "A card inset by the page gutter at the end edge; on a phone it rises from the bottom at the full width." },
+      { id: "sheet-escape", keys: ["Escape"], when: "It is open", then: "It closes and focus goes back to the control that opened it." },
+      { id: "sheet-backdrop", when: "A press lands on the scrim", then: "It closes." },
+      { id: "sheet-still", when: "Motion is off, or the system asks for reduced motion", then: "It appears in place without sliding." },
+      { id: "sheet-portal", when: "A bubble, a menu or a list opens from inside it", then: "It renders into the sheet and shows above it." },
+      { id: "sheet-foot", when: "Always", then: "Its foot works as a Window's, with Cancel or Close added, and its head has no close mark." },
+    ],
+  },
+  ListTable: {
+    pattern: { name: "Grid", url: `${APG}grid/` },
+    rows: [
+      { id: "list-grid", when: "Always", then: "A grid named by its label that lets several rows be picked, with a heading per column and rows a ListRow's height." },
+      { id: "list-sort", when: "A heading is pressed, then pressed again", then: "The rows sort by that column, then the other way round, and only that heading carries aria-sort." },
+      { id: "list-filter", when: "The ▾ of a column is pressed and a value is picked", then: "Only the rows with that value stay, and the ▾ stays filled while the filter is on." },
+      { id: "list-search", keys: ["a-z", "Ctrl+F", "Escape"], when: "The list has focus and a letter is typed", then: "A search floats inside the list with the letter and the rows follow it; Escape takes it away and the focus goes back to the list." },
+      { id: "list-empty", when: "Search or filter leave no row", then: "The list says so in its own words." },
+      { id: "list-select-click", when: "A row is clicked, with Ctrl, with Shift", then: "It is picked alone, added or dropped, or the range from the last click is picked, as in a file manager." },
+      { id: "list-keys", keys: ["ArrowDown", "Shift+ArrowDown", "Space", "Ctrl+A"], when: "A row has focus", then: "The arrows move the focus, Shift extends the pick, Space picks or drops the row and Ctrl+A picks all." },
+      { id: "list-open", keys: ["Enter"], when: "A row has focus, or is double-clicked", then: "Its object opens." },
+      { id: "list-hint", when: "The pointer rests on the header", then: "A line under it says what a click, the ▾ and typing do, and it is the grid's description." },
+    ],
+  },
+  fieldError: {
+    rows: [
+      { id: "field-error-invalid", when: "A field has an error", then: "It is aria-invalid, and the error is its description." },
+      { id: "field-error-line", when: "A field has an error", then: "A line in the fault colour stands under the field and says why." },
+      { id: "field-error-row", when: "The field stands in a FieldRow", then: "The line stands under the field across the row, and the row's name keeps its place." },
+      { id: "field-error-clear", when: "The value is fixed while the field has focus", then: "The error and the line go, and the focus stays in the field." },
+      { id: "field-error-kinds", when: "A PasswordField or a NumberField has an error", then: "It carries it the same way." },
     ],
   },
 };

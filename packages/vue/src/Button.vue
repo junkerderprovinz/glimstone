@@ -2,6 +2,7 @@
 import { computed, shallowRef, watchEffect, type Component } from "vue";
 import { buttonView, mediaMatches, narrowerThan, subscribeMedia, takePageHue, type ButtonSize, type ButtonTone, type ButtonVariant, type WidthStage } from "@glimstone/core";
 import { useLabelMode } from "./engines";
+import BusyRing from "./BusyRing.vue";
 import { glyphFor, IconClose } from "./glyphs";
 import { useTipBubble } from "./tipBubble";
 import TipBubble from "./TipBubble.vue";
@@ -37,7 +38,7 @@ const props = withDefaults(
     title?: string;
     /** This button's own rainbow position, for a colour different from its card's. */
     hueIndex?: number;
-    /** Shows a spinner in place of the glyph. Separate from `disabled`. */
+    /** Shows the busy ring in place of the glyph, at once. Separate from `disabled`. */
     busy?: boolean;
     /** Forces a width stage, for two buttons in different components that should match. */
     stage?: WidthStage;
@@ -122,7 +123,7 @@ defineExpose({ el });
     >
       <slot name="before" />
       <span v-if="view.showGlyph" class="glim-btn-glyph">
-        <span v-if="busy" class="glim-spinner" />
+        <BusyRing v-if="busy" size="small" :delay="0" />
         <component :is="resolved" v-else />
       </span>
       <span :class="view.labelClass">{{ label }}</span>

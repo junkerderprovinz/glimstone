@@ -71,7 +71,8 @@ needs none of them.
 | `ContextMenu`, `MenuBar` | A menu at a point and the row of menus in a head bar, with submenus, rows that tick a box, choices, key caps and counts. Opened with the pointer, the first row shows its ring only once a key is pressed |
 | `Checkbox` | The drawn box for "Don't show again" and for choices applied together, `slim` for the box alone in a dense row. Every setting is a `Toggle` |
 | `Kbd`, `Pill` | A key cap, and the quiet data pill of a list row |
-| `TextField`, `TextArea` | A line of text and a few lines of text, borderless and filled, in the widths a row needs |
+| `TextField`, `TextArea` | A line of text and a few lines of text, borderless and filled, in the widths a row needs, with `error` for a value they cannot take |
+| `FieldError` | The line under a field whose value it cannot take, for an app's own field |
 | `FieldRow`, `FieldRowGroup` | One labelled row: the name at its start with an "(i)", the control at its end, named by the row, or a lone value as a pill, and rows that share one column for their names. `useFieldName` gives an app's own control the same name |
 | `GlyphField` | A field with a glyph inside it, such as a filter, and controls after it in the box |
 | `Table` | A short list of facts in columns |
@@ -80,8 +81,11 @@ needs none of them.
 | `SignInCard`, `SignInField` | The sign-in page: the app's logo and name, the password, a code when the app asks for one, a passkey and the reset form in the same card. The app's own fields, buttons and steps go into `fields`, `actions` and `step`, and `SignInField` gives a field of the app's own the label above it |
 | `PathField`, `Tree` | A path with a button that asks the app for one, and a hierarchy loaded as it opens, for the picker behind that button |
 | `ListRow`, `RowMark`, `GlyphTile` | One row of a list with a tile, badges and buttons that come in on hover, the round mark on a row picked for an action on many, and a small holder for a glyph |
+| `ListTable` | The list of a list page: sorting by a click on a heading, a filter per column, a search that floats inside it, and rows picked as in a file manager |
 | `IconButton` | A glyph in a square in every label mode, for a row that keeps its text, as a link with `href`, on or off with `pressed`, and `absent` to hold a missing button's place |
 | `Meter`, `ProgressBar` | A level such as a disk's, red from a threshold and `quiet` for a footer line, and work toward its end with a sheen while it runs. Only the bar moves |
+| `BusyRing`, `SkeletonRow` | The ring that turns while the app works on something, and a row that holds a list row's place while the list loads. Both show only after 400 ms |
+| `Popover`, `Sheet` | A small panel beside its trigger in the top layer, and a panel at the end edge for a row's details, a `<dialog>` shown modal with a window's foot |
 | `ColorPicker` | The square, the hue bar, a preview with the name the colour proposes, the hex field and Apply, in the page or floating beside its swatch |
 | `useLabelMode`, `useTipBubble`, `usePortalHue` | The small hooks the components need |
 | `glyphs` | The marks the components draw themselves, and `setGlyphResolver`, the seam an app registers its own icon set through |

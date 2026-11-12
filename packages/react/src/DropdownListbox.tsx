@@ -9,11 +9,11 @@ import {
   type RefObject,
 } from "react";
 import { createPortal } from "react-dom";
-import { computeBubblePosition } from "@glimstone/core";
+import { computeBubblePosition, portalTarget } from "@glimstone/core";
 import { usePortalHue } from "./portalHue.ts";
 
 // The `role="listbox"` panel a button-opens-a-list picker drops open. It is
-// portalled to document.body, because a card with `overflow: hidden` clips an
+// portalled to <body> (portalTarget), because a card with `overflow: hidden` clips an
 // absolutely positioned panel whatever its z-index, and placed with
 // computeBubblePosition, which clamps it into the viewport and flips it above
 // the trigger when needed.
@@ -230,6 +230,6 @@ export function DropdownListbox({
     >
       {children}
     </div>,
-    document.body
+    portalTarget(),
   );
 }

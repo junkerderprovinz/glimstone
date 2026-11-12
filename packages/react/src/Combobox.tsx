@@ -1,3 +1,4 @@
+import { portalTarget } from "@glimstone/core";
 import { useId, useState } from "react";
 import * as combobox from "@zag-js/combobox";
 import { useFieldName } from "./fieldName.ts";
@@ -65,7 +66,7 @@ export function Combobox({ label, hideLabel, options, value, onChange, placehold
           </span>
         </button>
       </div>
-      <Portal>
+      <Portal container={{ current: portalTarget() }}>
         <div {...api.getPositionerProps()} className="glim-select-positioner">
           <ul {...api.getContentProps()} className="glim-select-content">
             {shown.length === 0 && <li className="glim-select-empty">{empty}</li>}

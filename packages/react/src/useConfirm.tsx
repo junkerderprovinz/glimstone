@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
 import { createPortal } from "react-dom";
-import { focusedAsker, returnFocus, trapDialogKeys } from "@glimstone/core";
+import { focusedAsker, returnFocus, trapDialogKeys, portalTarget } from "@glimstone/core";
 import { ConfirmDialog } from "./ConfirmDialog.tsx";
 
 // useConfirm replaces window.confirm() with ConfirmDialog, keeping the
@@ -83,7 +83,7 @@ export function useConfirm(text: ConfirmText) {
           onConfirm={() => settle(true)}
           onCancel={() => settle(false)}
         />,
-        document.body,
+        portalTarget(),
       )
     : null;
 

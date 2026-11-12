@@ -2,7 +2,7 @@
 import { computed, onMounted, useId } from "vue";
 import * as menu from "@zag-js/menu";
 import { normalizeProps, useMachine } from "@zag-js/vue";
-import { pageDir, type SelectRowParts } from "@glimstone/core";
+import { pageDir, type SelectRowParts, portalTarget } from "@glimstone/core";
 import { IconExpand } from "./glyphs";
 import MenuChoice from "./MenuChoice.vue";
 import type { SelectSubmenu } from "./selectParts";
@@ -39,7 +39,7 @@ onMounted(() => {
     <span :class="parts.label">{{ entry.label }}</span>
     <span aria-hidden="true" :class="parts.caret"><IconExpand /></span>
   </div>
-  <Teleport to="body">
+  <Teleport :to="portalTarget()">
     <div v-bind="api.getPositionerProps()" :style="hueStyle" :class="['glim-select-positioner', hueClass]">
       <div v-bind="api.getContentProps()" :class="parts.content">
         <MenuChoice

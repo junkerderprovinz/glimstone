@@ -10,6 +10,9 @@ import { Calibration } from "./pages/calibration";
 import { GlossaryPage } from "./pages/glossary";
 import { BehaviourGuide, ComboboxPage, SelectPage, SliderPage } from "./pages/zag";
 import { ColourEngine, LabelEngine, MotionEngine, ShapeEngine } from "./pages/engines";
+import { BusyRingPage, SkeletonRowPage } from "./pages/loading";
+import { PopoverPage, SheetPage } from "./pages/overlay";
+import { ListTablePage } from "./pages/lists";
 import {
   BadgePage,
   ButtonPage,
@@ -74,6 +77,7 @@ const PAGES: Page[] = [
   { path: "/engines/label", title: "Label", group: "Engines", Comp: LabelEngine },
   { path: "/components/badge", title: "Badge", group: "Components", Comp: BadgePage },
   { path: "/components/button", title: "Button", group: "Components", Comp: ButtonPage },
+  { path: "/components/busy-ring", title: "BusyRing", group: "Components", Comp: BusyRingPage },
   { path: "/components/card", title: "Card", group: "Components", Comp: CardPage },
   { path: "/components/checkbox", title: "Checkbox", group: "Components", Comp: CheckboxPage },
   { path: "/components/color-picker", title: "ColorPicker", group: "Components", Comp: ColorPickerPage },
@@ -92,18 +96,22 @@ const PAGES: Page[] = [
   { path: "/components/info-bubble", title: "InfoBubble", group: "Components", Comp: InfoBubblePage },
   { path: "/components/kbd", title: "Kbd", group: "Components", Comp: KbdPage },
   { path: "/components/list-row", title: "ListRow", group: "Components", Comp: ListRowPage },
+  { path: "/components/list-table", title: "ListTable", group: "Components", Comp: ListTablePage },
   { path: "/components/menu-bar", title: "MenuBar", group: "Components", Comp: MenuBarPage },
   { path: "/components/meter", title: "Meter", group: "Components", Comp: MeterPage },
   { path: "/components/number-field", title: "NumberField", group: "Components", Comp: NumberFieldPage },
   { path: "/components/password-field", title: "PasswordField", group: "Components", Comp: PasswordFieldPage },
   { path: "/components/path-field", title: "PathField", group: "Components", Comp: PathFieldPage },
   { path: "/components/pill", title: "Pill", group: "Components", Comp: PillPage },
+  { path: "/components/popover", title: "Popover", group: "Components", Comp: PopoverPage },
   { path: "/components/progress-bar", title: "ProgressBar", group: "Components", Comp: ProgressBarPage },
   { path: "/components/row-mark", title: "RowMark", group: "Components", Comp: RowMarkPage },
   { path: "/components/select", title: "Select", group: "Components", Comp: SelectPage, tag: "Zag" },
   { path: "/components/selector", title: "Selector", group: "Components", Comp: SelectorPage },
+  { path: "/components/sheet", title: "Sheet", group: "Components", Comp: SheetPage },
   { path: "/components/sidebar-row", title: "SidebarRow", group: "Components", Comp: SidebarRowPage },
   { path: "/components/sign-in-card", title: "SignInCard", group: "Components", Comp: SignInCardPage },
+  { path: "/components/skeleton-row", title: "SkeletonRow", group: "Components", Comp: SkeletonRowPage },
   { path: "/components/slider", title: "Slider", group: "Components", Comp: SliderPage, tag: "Zag" },
   { path: "/components/sub-card", title: "SubCard", group: "Components", Comp: SubCardPage },
   { path: "/components/toast", title: "Toast", group: "Components", Comp: ToastPage },

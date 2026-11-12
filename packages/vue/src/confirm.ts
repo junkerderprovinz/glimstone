@@ -9,7 +9,7 @@
 // confirm() cannot be triggered while one is open.
 
 import { defineComponent, h, shallowRef, Teleport, watch, type Component } from "vue";
-import { focusedAsker, returnFocus, trapDialogKeys } from "@glimstone/core";
+import { focusedAsker, returnFocus, trapDialogKeys, portalTarget } from "@glimstone/core";
 import ConfirmDialog from "./ConfirmDialog.vue";
 
 export interface ConfirmText {
@@ -62,7 +62,7 @@ export function useConfirm(text: ConfirmText) {
   const ConfirmHost = defineComponent(() => () => {
     const p = pending.value;
     if (!p) return null;
-    return h(Teleport, { to: "body" }, [
+    return h(Teleport, { to: portalTarget() }, [
       h(
         ConfirmDialog,
         {

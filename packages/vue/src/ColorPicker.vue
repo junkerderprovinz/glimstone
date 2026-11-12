@@ -10,6 +10,7 @@ import {
   type ColorName,
   type ColorPicker as Widget,
   type ColorPickerPanelText,
+  portalTarget,
 } from "@glimstone/core";
 import Button from "./Button.vue";
 import { IconCheck } from "./glyphs";
@@ -103,7 +104,7 @@ function onKeyDown(e: KeyboardEvent) {
 </script>
 
 <template>
-  <Teleport to="body" :disabled="!anchor">
+  <Teleport :to="portalTarget()" :disabled="!anchor">
     <div
       data-glim="ColorPicker"
       ref="panel"

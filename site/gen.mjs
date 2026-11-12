@@ -53,6 +53,11 @@ const COMPONENTS = {
   Fortress: "react/Fortress.tsx",
   FortressPairing: "react/Fortress.tsx",
   InstanceCard: "react/InstanceCard.tsx",
+  BusyRing: "react/BusyRing.tsx",
+  SkeletonRow: "react/SkeletonRow.tsx",
+  Popover: "react/Popover.tsx",
+  Sheet: "react/Sheet.tsx",
+  ListTable: "react/ListTable.tsx",
 };
 
 const clean = (s) => s.replace(/\s+/g, " ").trim();

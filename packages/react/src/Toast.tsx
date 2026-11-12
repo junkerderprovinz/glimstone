@@ -1,5 +1,5 @@
-import { Fragment } from "react";
-import { MARKS, softBreaks, TOAST_MARKS, type ToastAction, type ToastSeverity } from "@glimstone/core";
+import { Fragment, useEffect, useRef } from "react";
+import { announce, liveRegionAttrs, MARKS, softBreaks, TOAST_MARKS, toastPoliteness, type ToastAction, type ToastSeverity } from "@glimstone/core";
 import { Button } from "./Button.tsx";
 import { MarkSvg } from "./glyphs.tsx";
 
@@ -10,6 +10,10 @@ import { MarkSvg } from "./glyphs.tsx";
 //
 // A toast never blocks the page: the viewport is `pointer-events: none` and only
 // each card turns them back on, so clicks pass through the empty corner.
+//
+// The viewport holds the page's two live regions for good, and a new toast's
+// message is read out through them. A card that carried a live role itself
+// would be announced on arrival by some screen readers and not by others.
 
 export interface ToastCardProps {
   id: string;
@@ -24,13 +28,6 @@ export interface ToastCardProps {
   onMouseLeave: (id: string) => void;
   onFocus: (id: string) => void;
   onBlur: (id: string) => void;
-}
-
-// "alert" is assertive, so a failure interrupts the screen reader; "status" is
-// polite. Each toast is a new element, which both roles announce on insertion,
-// so no separate aria-live wrapper is needed.
-function roleFor(severity: ToastSeverity): "alert" | "status" {
-  return severity === "success" ? "status" : "alert";
 }
 
 export function ToastCard({
@@ -48,7 +45,6 @@ export function ToastCard({
   return (
     <div
       data-glim="ToastCard"
-      role={roleFor(severity)}
       // React's onFocus and onBlur bubble, so tabbing onto the dismiss button
       // pauses the countdown like a hover does.
       onMouseEnter={() => onMouseEnter(id)}
@@ -119,7 +115,20 @@ export interface ToastViewportProps {
 
 // Toasts render in array order, so the newest sits nearest the bottom edge.
 export function ToastViewport({ toasts, dismissLabel, onDismiss, onMouseEnter, onMouseLeave, onFocus, onBlur }: ToastViewportProps) {
+  const heard = useRef(new Set<string>());
+  useEffect(() => {
+    const ids = new Set(toasts.map((t) => t.id));
+    for (const id of heard.current) if (!ids.has(id)) heard.current.delete(id);
+    for (const t of toasts) {
+      if (heard.current.has(t.id)) continue;
+      heard.current.add(t.id);
+      announce(t.message, toastPoliteness(t.severity));
+    }
+  }, [toasts]);
   return (
+    <>
+    <div className="glim-sr-only" {...liveRegionAttrs("polite")} />
+    <div className="glim-sr-only" {...liveRegionAttrs("assertive")} />
     <div data-glim="ToastViewport" className="glim-toast-stack">
       {toasts.map((t) => (
         <ToastCard
@@ -137,5 +146,6 @@ export function ToastViewport({ toasts, dismissLabel, onDismiss, onMouseEnter, o
         />
       ))}
     </div>
+    </>
   );
 }

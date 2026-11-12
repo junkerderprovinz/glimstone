@@ -60,6 +60,25 @@ The site gains a bilingual glossary of every element. The ink on an accent fill 
 
 - **A switch that is on draws its knob in `--accent-contrast`.** On the light theme the knob was the pale ground, 1.46:1 on Sunflower and at most 2.77:1 on the presets. It now measures 5.95:1 to 11.24:1.
 - **The ink on a filled link or button survives an app's reset.** The component rules sit in a cascade layer, so an unlayered `a, button { color: inherit }` put the page's text colour on a picked segment, a picked tile, an active rail row and an accent button, as low as 1.12:1. They take their colour back from the layer.
+## ✨ Added
+
+- **`BusyRing`, the ring that turns while the app works on something.** It is TowerTorch's loader: two arcs that turn against each other and meet at the top and the bottom. It comes in three sizes, takes the accent, and with a `label` it is a status that says what is loading.
+- **`SkeletonRow`, a row that holds a list row's place while the list loads.** It has a tile, a name and a badge in a `ListRow`'s box, so nothing jumps when the rows arrive. One band of light crosses every row at once, and in the light theme that band is white.
+- **Neither shows for the first 400 ms** (`BUSY_DELAY`), so a quick answer never flashes a loader. `delay={0}` shows them at once.
+- **Three motion dials:** `--motion-spin-dur`, `--motion-skeleton-dur` and `--motion-skeleton-glow`. At "off" and under reduced motion nothing turns and no light crosses.
+- **`announce(text, "polite" | "assertive")` in the core** has a screen reader say words that have no element of their own, such as "3 rows selected". It writes into the page's live regions and adds them in an app without a toast viewport.
+- **`Popover`, a small panel beside its trigger** in the browser's top layer, through the `popover` attribute. CSS anchor positioning places it under the trigger, or above where there is no room, and `computeBubblePosition` does the same in a browser without it. Escape and a press beside it close it.
+- **`Sheet`, a panel at the end edge** for the details of a row. It is a `<dialog>` shown modal, a card inset by the page gutter, and it rises from the bottom on a phone. Its foot works as a window's, and it slides in by `--motion-sheet-shift` over `--motion-sheet-dur`.
+- **`portalTarget()`** says where a bubble, a menu or a list renders: into an open sheet, since `<body>` lies under the top layer. Every component that portals asks it.
+- **`ListTable`, the list of a list page with its tools inside it.** A click on a heading sorts and sets `aria-sort`, a ▾ beside a column filters by its values in a `Popover`, typing floats a search inside the list, and rows are picked as in a file manager, with Ctrl, Shift, the arrows, Space and Ctrl+A. Enter or a double click opens a row. The rules are plain functions in `listModel.ts` in the core: `nextSort`, `sortRows`, `filterRows`, `searchRows`, `selectByClick`, `selectByKey` and `listKey`.
+- **`error` on `TextField`, `TextArea`, `PasswordField` and `NumberField`** for a value the field cannot take. The field turns `aria-invalid` and takes the fault wash, and a line under it says why until the value is fixed. `FieldError` draws the same line for an app's own field, and `fieldErrorView` in the core says what the field carries.
+
+## ⚡ Improved
+
+- **A busy `Button` shows the `BusyRing`** in its glyph slot. The old spinner turned at a fixed second whatever the motion level was. The ring follows the level and stands still at "off". `.glim-spinner` stays in `tokens.css` for apps that use it directly.
+- **`ToastViewport` keeps two live regions in the page for good** and reads each new toast out through them. Only a failure interrupts. A warning used to be an alert as well, and a card that carried the role itself was skipped by some screen readers.
+- **A toast with an action stays until it is dismissed** or its action is pressed, so nobody loses an Undo while still reading. `addToast` gives it no countdown, and `toastPoliteness(severity)` says how a toast is read out.
+- **A window makes everything behind it inert,** the page and any window under it, so neither the pointer nor a screen reader reaches them. The Tab trap alone kept only the keyboard inside.
 
 ## 4.3.7 - 2026-11-11
 

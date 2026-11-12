@@ -11,30 +11,15 @@ import {
   returnFocus,
   stackWindow,
   windowFocusTarget,
-  windowFoot,
   type WindowSize,
+  portalTarget,
 } from "@glimstone/core";
 import { Badge } from "./Badge.tsx";
-import { Button } from "./Button.tsx";
-import { IconCancel, IconClose } from "./glyphs.tsx";
+import { WindowFootRow, type WindowAction } from "./WindowFootRow.tsx";
 
 export type { WindowSize } from "@glimstone/core";
 
-export interface WindowAction {
-  label: string;
-  /** The translation key behind `label`, which picks the glyph, or `null`. */
-  labelKey: string | null;
-  glyph?: ReactNode;
-  /** The forward action, filled with the accent and placed last. */
-  primary?: boolean;
-  /** This action already leaves the window, so no Cancel or Close is added. */
-  wayOut?: boolean;
-  disabled?: boolean;
-  /** Attributes for the action's button, such as a data hook. */
-  attrs?: Record<string, string>;
-  /** Runs on press. The window closes afterwards unless it returns false. */
-  onClick?: () => void | false;
-}
+export type { WindowAction } from "./WindowFootRow.tsx";
 
 export interface WindowProps extends Omit<HTMLAttributes<HTMLDivElement>, "title" | "children"> {
   /** The notch's words, also the window's accessible name. */
@@ -69,29 +54,28 @@ export function Window({ title, drawn, children, actions = [], start, size = "no
     close.current = onClose;
   });
 
+  // Leaving takes the window off the stack at once, so the page is live again
+  // by the time the caller hands the focus back to a field in it.
+  const unstack = useRef<() => void>(undefined);
+  const leave = () => {
+    unstack.current?.();
+    close.current();
+  };
   useLayoutEffect(() => {
-    const unstack = stackWindow(
-      () => card.current,
-      () => close.current(),
-    );
+    unstack.current = stackWindow(() => card.current, leave);
     if (card.current) windowFocusTarget(card.current)?.focus();
     return () => {
-      unstack();
+      unstack.current?.();
       returnFocus(asker);
     };
   }, [asker]);
-
-  const foot = windowFoot<WindowAction>(actions, start !== undefined, {
-    cancel: { label: text.cancel, labelKey: "common.cancel", glyph: <IconCancel />, wayOut: true },
-    close: { label: text.close, labelKey: "common.close", glyph: <IconClose />, wayOut: true },
-  });
 
   return createPortal(
     <div
       className="glim-modal-backdrop"
       // A press beside an open menu only closes the menu, not the window under it.
       onMouseDown={(e) => {
-        if (e.target === e.currentTarget && !menuIsOpen()) close.current();
+        if (e.target === e.currentTarget && !menuIsOpen()) leave();
       }}
     >
       <div
@@ -111,27 +95,9 @@ export function Window({ title, drawn, children, actions = [], start, size = "no
           </Badge>
         </h2>
         <div className="glim-modal-body glim-window-body">{children}</div>
-        {foot.length > 0 && (
-          <div className="glim-modal-foot">
-            {start !== undefined && <span className="glim-window-start">{start}</span>}
-            {foot.map((a, i) => (
-              <Button
-                {...a.attrs}
-                key={i}
-                label={a.label}
-                labelKey={a.labelKey}
-                glyph={a.glyph}
-                tone={a.primary ? "accent" : "neutral"}
-                disabled={a.disabled}
-                onClick={() => {
-                  if (a.onClick?.() !== false) close.current();
-                }}
-              />
-            ))}
-          </div>
-        )}
+        <WindowFootRow actions={actions} start={start} text={text} onClose={leave} />
       </div>
     </div>,
-    document.body,
+    portalTarget(),
   );
 }

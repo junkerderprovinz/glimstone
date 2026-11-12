@@ -1,6 +1,6 @@
 import { Callout, Code, ContractTable, Demo, H2, PropsTable, SourceLink } from "../ui";
 
-function Head({ file }: { file: string }) {
+export function Head({ file }: { file: string }) {
   return (
     <p style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
       <SourceLink file={file} />
@@ -8,7 +8,7 @@ function Head({ file }: { file: string }) {
   );
 }
 
-function Usage({ code }: { code: string }) {
+export function Usage({ code }: { code: string }) {
   return (
     <>
       <H2>Usage</H2>
@@ -351,6 +351,10 @@ setToasts((list) => addToast(list, { id, message: "Settings saved.", severity: "
       <H2>Rules</H2>
       <ul>
         <li>Four seconds, then gone. A toast is a notice, not a to-do list.</li>
+        <li>
+          A toast with an <code>action</code> stays until it is dismissed or the action is pressed, so somebody who reads
+          slowly does not lose the Undo.
+        </li>
         <li>Toasts stack instead of replacing each other, and each can be dismissed on its own.</li>
         <li>Hover or focus pauses the countdown and keeps the time that was left.</li>
         <li>Quiet mode hides routine successes, never warnings or failures.</li>
@@ -363,13 +367,25 @@ setToasts((list) => addToast(list, { id, message: "Settings saved.", severity: "
       <H2>Accessibility</H2>
       <ul>
         <li>
-          A failure is <code>role="alert"</code> and interrupts the screen reader; a success is <code>role="status"</code>
-          .
+          The viewport keeps two live regions in the page for good, and a new toast's message is read out through them.
+          A failure goes through the alert and interrupts the screen reader. Every other toast goes through the status
+          and waits for a pause. The card itself has no role.
         </li>
         <li>The stack sits in the bottom corner on the end side, so it follows the writing direction.</li>
       </ul>
+      <H2>Announcing without a toast</H2>
+      <p>
+        <code>announce(text)</code> in the core has the screen reader say something that has no element of its own, such
+        as "3 rows selected". It writes into the same live regions, and adds them to the page in an app without a
+        viewport. <code>announce(text, "assertive")</code> interrupts and is for failures alone.
+      </p>
+      <Demo name="AnnounceDemo" />
+      <Code code={`import { announce } from "@glimstone/core";
+
+announce(t("rowsSelected", { count }));`} />
       <H2>Behaviour</H2>
       <ContractTable of="Toast" />
+      <ContractTable of="announce" />
       <H2>API</H2>
       <PropsTable of="ToastViewport" />
     </>
@@ -1189,8 +1205,22 @@ export function TextFieldPage() {
           <code>mono</code> sets a path or a token in monospace.
         </li>
       </ul>
+      <H2>A value the field cannot take</H2>
+      <p>
+        <code>error</code> on a <code>TextField</code>, a <code>TextArea</code>, a <code>PasswordField</code> or a{" "}
+        <code>NumberField</code> says why its value cannot stand, such as a port above 65535 or an empty name. The field
+        takes the fault wash and <code>aria-invalid</code>, and a line under it says why, as the last of its descriptions.
+        It stays until the value is fixed, and the focus stays in the field meanwhile. An app's own field draws the same
+        line with <code>FieldError</code>.
+      </p>
+      <p>
+        It answers a value, not an action. An action that fails, a save the server refused or a target that is gone,
+        answers with a toast and a shake of the control that sent it ("Failure feedback" in the design language).
+      </p>
+      <Demo name="FieldErrors" />
       <H2>Behaviour</H2>
       <ContractTable of="TextField" />
+      <ContractTable of="fieldError" />
       <H2>API</H2>
       <PropsTable of="TextField" />
       <H2>TextArea</H2>

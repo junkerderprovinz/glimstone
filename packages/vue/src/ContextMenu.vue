@@ -13,6 +13,7 @@ import {
   placeSubmenu,
   returnFocus,
   tidyMenu,
+  portalTarget,
 } from "@glimstone/core";
 import MenuRows from "./MenuRows.vue";
 import type { MenuEntry } from "./windowParts";
@@ -157,7 +158,7 @@ function hover(e: MouseEvent) {
 </script>
 
 <template>
-  <Teleport to="body">
+  <Teleport :to="portalTarget()">
     <div
       :id="id"
       ref="menu"

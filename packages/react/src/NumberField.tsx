@@ -1,5 +1,6 @@
-import { useEffect, useRef, type ChangeEventHandler, type InputHTMLAttributes, type Ref } from "react";
-import { attachNumberSteppers, syncNumberSteppers } from "@glimstone/core";
+import { useEffect, useId, useRef, type ChangeEventHandler, type InputHTMLAttributes, type Ref } from "react";
+import { attachNumberSteppers, fieldErrorView, syncNumberSteppers } from "@glimstone/core";
+import { FieldError } from "./FieldError.tsx";
 import { useFieldName } from "./fieldName.ts";
 
 // A number input with its two steppers inside the field; the steppers, the
@@ -22,12 +23,16 @@ export interface NumberFieldProps extends Omit<InputHTMLAttributes<HTMLInputElem
   onChange?: ChangeEventHandler<HTMLInputElement>;
   /** Classes for the input. A width set here has to be definite, since the
    *  arrows sit against the input's end. */
+  /** Why the value cannot stand, as a line under the field until it is fixed. */
+  error?: string;
   className?: string;
   ref?: Ref<HTMLInputElement>;
 }
 
-export function NumberField({ className = "", ref, "aria-label": ariaLabel, ...rest }: NumberFieldProps) {
+export function NumberField({ className = "", ref, error, "aria-label": ariaLabel, "aria-describedby": describedBy, ...rest }: NumberFieldProps) {
   const name = useFieldName(ariaLabel);
+  const id = useId();
+  const err = fieldErrorView(error, rest.id ?? id, describedBy);
   const own = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => attachNumberSteppers(own.current!), []);
@@ -38,18 +43,23 @@ export function NumberField({ className = "", ref, "aria-label": ariaLabel, ...r
   }, [rest.value, rest.min, rest.max, rest.step, rest.disabled, rest.readOnly]);
 
   return (
-    <span data-glim="NumberField" className="glim-num-wrap">
-      <input
-        {...rest}
-        aria-label={name}
-        ref={(el) => {
-          own.current = el;
-          if (typeof ref === "function") ref(el);
-          else if (ref) ref.current = el;
-        }}
-        type="number"
-        className={`glim-num-input glim-num-field glim-num ${className}`.trim()}
-      />
-    </span>
+    <>
+      <span data-glim="NumberField" className="glim-num-wrap">
+        <input
+          {...rest}
+          aria-label={name}
+          aria-invalid={err.invalid}
+          aria-describedby={err.describedBy}
+          ref={(el) => {
+            own.current = el;
+            if (typeof ref === "function") ref(el);
+            else if (ref) ref.current = el;
+          }}
+          type="number"
+          className={`glim-num-input glim-num-field glim-num ${className}`.trim()}
+        />
+      </span>
+      {err.errorId && <FieldError id={err.errorId}>{error}</FieldError>}
+    </>
   );
 }

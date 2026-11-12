@@ -1271,11 +1271,13 @@ test.describe("IconTipButton", () => {
 
 test.describe("Toast", () => {
   const press = (page: Page, name: string) => stage(page, "ToastDemo").getByRole("button", { name }).click();
+  const card = (page: Page, text: string) => page.locator(".glim-toast-card").filter({ hasText: text });
+  const region = (page: Page, politeness: string) => page.locator(`[data-glim-announce="${politeness}"]`);
 
   test("[toast-action] the action keeps its words, runs and dismisses", async ({ page }) => {
     await open(page, "/components/toast");
     await press(page, "With an action");
-    const toast = page.getByRole("status").filter({ hasText: "1,204 files moved to the trash" });
+    const toast = card(page, "1,204 files moved to the trash");
     const action = toast.getByRole("button", { name: "Put them back" });
     const whole = await action.locator(".glim-btn-label").evaluate((l) => l.scrollWidth <= l.clientWidth);
     expect(whole).toBe(true);
@@ -1287,7 +1289,7 @@ test.describe("Toast", () => {
   test("[toast-room] the action stands under the message", async ({ page }) => {
     await open(page, "/components/toast");
     await press(page, "With an action");
-    const toast = page.getByRole("status").filter({ hasText: "1,204 files moved to the trash" });
+    const toast = card(page, "1,204 files moved to the trash");
     const look = await toast.evaluate(async (t) => {
       // Mid-slide the card's edges sit at fractions, and their difference picks up rounding.
       await Promise.all(t.getAnimations().map((a) => a.finished));
@@ -1332,18 +1334,32 @@ test.describe("Toast", () => {
     expect(look.width).toBeGreaterThan(360);
   });
 
-  test("[toast-roles] alert for a failure, status for a success", async ({ page }) => {
+  test("[toast-announce] a failure interrupts, every other toast is read out politely", async ({ page }) => {
     await open(page, "/components/toast");
+    await expect(region(page, "polite")).toHaveAttribute("role", "status");
+    await expect(region(page, "assertive")).toHaveAttribute("role", "alert");
     await press(page, "Failure");
-    await expect(page.getByRole("alert").filter({ hasText: "Could not reach the target." })).toBeVisible();
-    await press(page, "Success");
-    await expect(page.getByRole("status").filter({ hasText: "Settings saved." })).toBeVisible();
+    await expect(region(page, "assertive")).toHaveText("Could not reach the target.");
+    await press(page, "Warning");
+    await expect(region(page, "polite")).toHaveText("The target is almost full.");
+    await expect(card(page, "The target is almost full.")).not.toHaveAttribute("role");
+  });
+
+  test("[toast-sticky] a toast with an action stays until it is dismissed", async ({ page }) => {
+    await open(page, "/components/toast");
+    await press(page, "With an action");
+    await page.mouse.move(10, 10);
+    await page.waitForTimeout(5000);
+    const toast = card(page, "1,204 files moved to the trash");
+    await expect(toast).toBeVisible();
+    await toast.getByRole("button", { name: "Dismiss" }).click();
+    await expect(toast).toHaveCount(0);
   });
 
   test("[toast-expire] leaves after four seconds", async ({ page }) => {
     await open(page, "/components/toast");
     await press(page, "Success");
-    const toast = page.getByRole("status").filter({ hasText: "Settings saved." });
+    const toast = card(page, "Settings saved.");
     await expect(toast).toBeVisible();
     await page.waitForTimeout(3000);
     await expect(toast).toBeVisible();
@@ -1353,7 +1369,7 @@ test.describe("Toast", () => {
   test("[toast-pause] hover keeps it", async ({ page }) => {
     await open(page, "/components/toast");
     await press(page, "Warning");
-    const toast = page.getByRole("alert").filter({ hasText: "The target is almost full." });
+    const toast = card(page, "The target is almost full.");
     await toast.hover();
     await page.waitForTimeout(5500);
     await expect(toast).toBeVisible();
@@ -1365,10 +1381,10 @@ test.describe("Toast", () => {
     await open(page, "/components/toast");
     await press(page, "Success");
     await press(page, "Warning");
-    const success = page.getByRole("status").filter({ hasText: "Settings saved." });
+    const success = card(page, "Settings saved.");
     await success.getByRole("button", { name: "Dismiss" }).click();
     await expect(success).toHaveCount(0);
-    await expect(page.getByRole("alert").filter({ hasText: "The target is almost full." })).toBeVisible();
+    await expect(card(page, "The target is almost full.")).toBeVisible();
   });
 
   // A toast on a half pixel puts every toast above it there too, and Chromium
