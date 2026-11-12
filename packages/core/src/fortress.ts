@@ -37,6 +37,8 @@ export interface FortressInstance {
   needs?: string;
   /** Where its own interface opens. `host` names a page it lives in, such as Unraid. Without it, it opens only on its device. */
   open?: { href: string; host?: string };
+  /** The instance showing the page, which leaves the fortress rather than being removed. */
+  self?: boolean;
 }
 
 export interface FortressApp {
@@ -107,6 +109,11 @@ export function appCardView(app: FortressApp, text: FortressText, lang: string):
     open: main.open ? { label: main.open.host ? fill(text.openIn, { host: main.open.host }) : text.open, href: main.open.href } : null,
     note: main.open ? undefined : fill(text.openOnlyOn, { device: main.device }),
   };
+}
+
+/** How the remove window and the reminder name an instance of another app: "Bravo on Atlas". */
+export function memberName(text: FortressText, app: FortressApp, instance: FortressInstance): string {
+  return fill(text.memberOn, { app: app.name, device: instance.device });
 }
 
 export function presenceTone(presence: FortressPresence): BadgeTone {
@@ -208,6 +215,7 @@ export type FortressWindow =
   | { kind: "joined" }
   | { kind: "leave" }
   | { kind: "remove"; id: string; device: string }
+  | { kind: "removed"; device: string }
   | { kind: "phrase"; step: "password" | "words"; password: string; words: string[] }
   | { kind: "change" }
   | { kind: "changed"; words: string[]; left: string[] };
@@ -309,7 +317,13 @@ export function createFortressFlow(options: () => FortressFlowOptions): Fortress
       const w = state.window;
       const ask = options().onRemove;
       if (w?.kind !== "remove" || !ask) return;
-      await run("remove", () => ask(w.id), shut);
+      // The removed instance can still get back in with the phrase, so where
+      // the phrase can change here, that is the next question.
+      await run("remove", () => ask(w.id), (a) => {
+        if (a.ok && options().onChangePhrase) open({ kind: "removed", device: w.device });
+        else if (a.ok) update(START);
+        return !!a.ok;
+      });
     },
     async openPhrase() {
       const { phrasePassword, onShowPhrase } = options();
@@ -336,7 +350,8 @@ export function createFortressFlow(options: () => FortressFlowOptions): Fortress
     openChange: () => open({ kind: "change" }),
     async change() {
       const ask = options().onChangePhrase;
-      if (state.window?.kind !== "change" || !ask) return;
+      const kind = state.window?.kind;
+      if ((kind !== "change" && kind !== "removed") || !ask) return;
       await run("change", () => ask(), (a) => {
         if (a.words) open({ kind: "changed", words: a.words, left: a.left ?? [] });
         return !!a.words;

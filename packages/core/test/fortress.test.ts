@@ -4,6 +4,7 @@ import {
   appCardView,
   createFortressFlow,
   enterWords,
+  memberName,
   othersSummary,
   PHRASE_LENGTH,
   phraseFromText,
@@ -14,6 +15,7 @@ import {
   type FortressApp,
   type FortressHandlers,
 } from '../src/fortress.ts';
+import { en as fortressTextEn } from '../src/fortressLocales/en.ts';
 
 const blank = () => Array<string>(PHRASE_LENGTH).fill('');
 const TWELVE = 'oak lamp tower harbour maple lantern bridge kettle cloud saddle feather lance';
@@ -150,8 +152,8 @@ test("a handler that throws is refused in the flow's own words", async () => {
   assert.equal(flow.state().window?.kind, 'leave');
 });
 
-test('leaving and removing close their window once the app says yes', async () => {
-  const h = handlers();
+test('leaving and removing close their window once the app says yes, where the phrase cannot change here', async () => {
+  const h = handlers({ onChangePhrase: undefined });
   const flow = createFortressFlow(() => ({ ...h, failed }));
   flow.openLeave();
   await flow.leave();
@@ -161,6 +163,45 @@ test('leaving and removing close their window once the app says yes', async () =
   await flow.remove();
   assert.equal(flow.state().window, null);
   assert.deepEqual(h.calls, ['leave', 'remove a2']);
+});
+
+test('a removal asks next whether to change the phrase, and a yes shows the new words', async () => {
+  const h = handlers();
+  const flow = createFortressFlow(() => ({ ...h, failed }));
+  flow.openRemove('b1', 'Bravo on Atlas');
+  await flow.remove();
+  assert.deepEqual(flow.state().window, { kind: 'removed', device: 'Bravo on Atlas' });
+  await flow.change();
+  assert.deepEqual(flow.state().window, { kind: 'changed', words: TWELVE.split(' ').reverse(), left: ['Pocket'] });
+  assert.deepEqual(h.calls, ['remove b1', 'change']);
+});
+
+test('later after a removal keeps the phrase as it is', async () => {
+  const h = handlers();
+  const flow = createFortressFlow(() => ({ ...h, failed }));
+  flow.openRemove('b1', 'Bravo on Atlas');
+  await flow.remove();
+  flow.close();
+  assert.equal(flow.state().window, null);
+  assert.deepEqual(h.calls, ['remove b1']);
+});
+
+test('a refused removal stays in its window with the reason, and asks nothing about the phrase', async () => {
+  const flow = createFortressFlow(() => ({ ...handlers({ onRemove: async () => ({ error: 'Bravo is not reachable.' }) }), failed }));
+  flow.openRemove('b1', 'Bravo on Atlas');
+  await flow.remove();
+  assert.equal(flow.state().window?.kind, 'remove');
+  assert.equal(flow.state().error, 'Bravo is not reachable.');
+  assert.deepEqual(flow.state().refusal, { button: 'remove', count: 1 });
+});
+
+test('a refused change after a removal keeps the question open with the reason', async () => {
+  const flow = createFortressFlow(() => ({ ...handlers({ onChangePhrase: async () => ({ error: 'The phrase stays as it is.' }) }), failed }));
+  flow.openRemove('b1', 'Bravo on Atlas');
+  await flow.remove();
+  await flow.change();
+  assert.equal(flow.state().window?.kind, 'removed');
+  assert.equal(flow.state().error, 'The phrase stays as it is.');
 });
 
 test('the phrase shows at once where no password guards it', async () => {
@@ -290,4 +331,9 @@ test('a step whose callback is missing does nothing', async () => {
   flow.enter(0, TWELVE);
   await flow.join();
   assert.deepEqual(flow.state(), { window: { kind: 'join', words: TWELVE.split(' '), focus: 11 }, busy: null, error: null, refusal: null });
+});
+
+test('an instance of another app is named by its app and its device', () => {
+  const app: FortressApp = { id: 'bravo', name: 'Bravo', instances: [{ id: 'b1', device: 'Atlas', presence: 'connected' }] };
+  assert.equal(memberName(fortressTextEn, app, app.instances[0]!), 'Bravo on Atlas');
 });
