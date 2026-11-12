@@ -5115,6 +5115,11 @@ body {
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 32rem), 1fr));
     gap: 1rem;
   }
+  /* An app without cards of its own above the switch leaves the grid empty,
+     and an empty one would still take a gap. */
+  .glim-fortress-grid:empty {
+    display: none;
+  }
 
   /* One instance, or one app with a row per instance. The mark stands at the
      start, the name with its badges, the facts and the actions beside it. */
