@@ -16,7 +16,7 @@ export interface SkeletonRowProps {
   className?: string;
 }
 
-export function SkeletonRow({ delay, tile, badge, className }: SkeletonRowProps) {
+export function SkeletonRow({ delay, tile = true, badge = true, className }: SkeletonRowProps) {
   const view = skeletonRowView({ delay, tile, badge });
   return (
     <div data-glim="SkeletonRow" aria-hidden="true" className={className ? `${view.className} ${className}` : view.className} style={view.style as CSSProperties}>

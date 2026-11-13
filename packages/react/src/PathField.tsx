@@ -41,7 +41,7 @@ export function PathField({
   label,
   width,
   text = { pick: "Choose" },
-  glyph = <IconFolderOpen />,
+  glyph,
   compact = false,
   buttonAttrs,
   className,
@@ -86,7 +86,7 @@ export function PathField({
         onChange={(e) => onChange(e.target.value)}
         className="glim-input glim-input--mono"
       />
-      <Button {...buttonAttrs} variant="icon" label={text.pick} labelKey={null} glyph={glyph} compact={compact || tight} disabled={disabled} onClick={ask} />
+      <Button {...buttonAttrs} variant="icon" label={text.pick} labelKey={null} glyph={glyph ?? <IconFolderOpen />} compact={compact || tight} disabled={disabled} onClick={ask} />
     </span>
   );
 }

@@ -22,7 +22,7 @@ export interface MeterProps {
   className?: string;
 }
 
-export function Meter({ value, label, size = "medium", threshold, quiet, valueText, className }: MeterProps) {
+export function Meter({ value, label, size = "medium", threshold = 0.9, quiet, valueText, className }: MeterProps) {
   const view = meterView(value, { size, threshold, quiet });
   const tip = useTipBubble(valueText);
   const busy = view.percent === null;
