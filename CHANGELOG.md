@@ -2,7 +2,7 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## 4.4.0 - 2026-11-12
+## 4.4.0 - 2026-11-13
 
 The fortress moves in. An app's Instances tab shows its own instances first and the other apps of the fortress behind one switch, with the permissions and the phrase as the only way in, in all 42 languages. Every member opens from anywhere through the fortress, and any member can take another app's instance out. The window that asks first moves on to the phrase, since the old one still lets it back in. `@glimstone/terms` keeps the shared words of an interface and checks an app's translations against them. Around them come a list with its tools inside it, popovers and sheets in the top layer, loaders that wait before they show, errors under fields, toasts read out through live regions, a bilingual glossary of every element, four more README brands and labels inside the sign-in fields.
 
