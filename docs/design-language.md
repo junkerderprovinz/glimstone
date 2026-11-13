@@ -1735,16 +1735,17 @@ GlimStone ships as one core and one package per framework. All of them carry the
 A component, prop, function, class or token that GlimStone wants gone is deprecated first and removed later, on a fixed schedule, so an app can move up a minor release without changing anything and plan the move to the next major.
 
 - **It lives until the next major release.** A name deprecated in 4.x goes in 5.0.0, and never in a minor or patch release. It stays at least two minor releases after the one that deprecated it, so a name deprecated in x.8 or x.9 waits for the major after next. Until then it keeps working as it did.
-- **It is listed in one place.** `DEPRECATED` in [`packages/core/src/deprecated.ts`](../packages/core/src/deprecated.ts) holds every deprecated name with the release that deprecated it, the release that removes it and what to use instead. The warnings and the drift check read it.
+- **It is listed in one place.** `DEPRECATED` in [`packages/core/src/deprecated.ts`](../packages/core/src/deprecated.ts) holds every deprecated name with the release that deprecated it, the release that removes it and what to use instead. The warnings and the drift check read it, and a test fails when a name in it has no transform in `glimstone-migrate`.
 - **It says so in the editor, on the console and in CI.** Its doc comment carries `@deprecated`, what replaces it and "Removed in 5.0.0", so an editor strikes it through. The first use on a page logs one `console.warn` with the same sentence, through `warnDeprecated()`. `glimstone-drift` reports every use it finds in an app's sources. A deprecated class or token says so in its comment in `tokens.css`.
-- **The release notes announce it twice.** The release that deprecates a name says so under "Adopting apps", with its replacement and the release that removes it. The major release that removes it lists it again.
+- **Every breaking change ships its codemod.** A rename or a prop that maps onto another one gets a transform in `glimstone-migrate` in the release that deprecates it, with a test on fixture files, so `npx glimstone-migrate src` rewrites an app before the removal. A change that a program cannot make, such as moving from one component to another with a different API, is reported by the command with the file and line instead of rewritten.
+- **The release notes announce it twice.** The release that deprecates a name says so under "Adopting apps", with its replacement and the release that removes it. The major release that removes it lists it again, with the command that rewrites it.
 
 Deprecated today, all removed in 5.0.0:
 
 | Name | Since | Use instead |
 |---|---|---|
-| `Badge`'s `shape` | 4.4.0 | `form`. Only `shape="circle"` had an effect, and `form="circle"` draws the same badge. |
-| `BadgeShape` | 4.4.0 | `BadgeForm`. |
+| `Badge`'s `shape` | 4.4.0 | `form`. Only `shape="circle"` had an effect, and `form="circle"` draws the same badge. `glimstone-migrate` rewrites it. |
+| `BadgeShape` | 4.4.0 | `BadgeForm`, which `glimstone-migrate` puts in its place. |
 | `AboutCard` | 3.3.0 | `InfoTile`. |
 | `DropdownListbox` | 3.6.0 | `Select`. |
 

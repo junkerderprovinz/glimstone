@@ -14,6 +14,7 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 - **Copies that drift:** `npx glimstone-drift src` compares an app's copied GlimStone files with the release its `GLIMSTONE_VERSION` names and lists each one that differs, with the release it matches instead. It also lists app classes with the `glim-` prefix and deprecated names still in use. Add `--strict` to fail a CI step on any of them.
 - **Deprecated names warn:** a page that uses `Badge`'s `shape`, `AboutCard` or `DropdownListbox` logs one console warning per name with what to use instead. All three go in 5.0.0, the fixed rule for deprecating and removing in the design language, which also lists `BadgeShape`.
 - **A bundle for plugin pages:** every release carries `glimstone-plugin-x.y.z.zip` for a page without a build step, such as an Unraid plugin's. It holds the core as `glimstone.js`, which puts it on `window.GlimStone`, and as the module `glimstone.mjs`, with `tokens.css`, the fortress card and `glyphs.json`.
+- **Moving off deprecated names:** `npx glimstone-migrate src` rewrites `Badge`'s `shape` to `form` and `BadgeShape` to `BadgeForm` in place, and names the file and line of each `AboutCard` and `DropdownListbox` to move by hand. `--check` writes nothing and fails while there is something left.
 
 ## 🔁 Changed
 
