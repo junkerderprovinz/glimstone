@@ -15,6 +15,9 @@ const members = [
   { id: "m-delta", app: "delta", name: "Delta", device: "Atlas", form: "plugin", version: "1.0.0", online: true, relay: true },
 ];
 
+// A line of the app's own, as a plugin keeps one for what its own work does while it is out.
+const hints = [{ text: "Alpha keeps its own keys only. If the fortress has a new phrase, enter it here.", tone: "quiet", action: { label: "Enter phrase again", join: true } }];
+
 export default function FortressVanilla() {
   const box = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -23,7 +26,7 @@ export default function FortressVanilla() {
     const adapter = {
       load: () => later(state),
       join: (words: string[]) =>
-        words[0] === "wrong" ? Promise.reject({ code: "phrase" }) : later((state = { joined: true, device: "Atlas", members, removed: [] })),
+        words[0] === "wrong" ? Promise.reject({ code: "phrase" }) : later((state = { joined: true, device: "Atlas", members, removed: [], hints })),
       leave: () => later((state = { joined: false })),
       remove: (id: string) => {
         const gone = members.find((m) => m.id === id)!;

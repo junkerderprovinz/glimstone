@@ -772,7 +772,9 @@ import { openRefusalText } from "@glimstone/core";
         leaving and the switch for the other apps, then a card per other app with Remove, and Open as the status window for
         a plugin. The adapter answers each step from the app's server and the card does the rest: the windows, the texts in
         every language of the glossary, and a fresh state every 20 seconds. An app that cannot keep the phrase names the
-        apps where it changes.
+        apps where it changes. What only the app knows, such as what its own work does while it is out, comes in its own
+        words as <code>hints</code> in the state, each line with an optional button that runs something or opens the window
+        for the phrase.
       </p>
       <Demo name="FortressVanilla" />
       <H2>Words</H2>

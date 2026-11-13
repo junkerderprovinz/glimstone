@@ -4780,6 +4780,15 @@ test.describe("The fortress without a framework", () => {
     await expect(page.getByRole("dialog", { name: "Delta on Atlas" })).toContainText("Checking images");
   });
 
+  test("[fortress-vanilla-hint] a line of the app's own opens the window for the phrase", async ({ page }) => {
+    await open(page, "/components/fortress");
+    await join(page);
+    const line = card(page).locator('[data-fortress="hint"]');
+    await expect(line).toContainText("If the fortress has a new phrase, enter it here.");
+    await line.getByRole("button", { name: "Enter phrase again" }).click();
+    await expect(page.getByRole("dialog", { name: "Join a fortress" })).toBeVisible();
+  });
+
   test("[fortress-vanilla-remove] a removed member is named until the phrase changes", async ({ page }) => {
     await open(page, "/components/fortress");
     await join(page);

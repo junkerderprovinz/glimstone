@@ -545,6 +545,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "fortress-modes", when: "The theme is light, dark or OLED", then: "The cards, rows, fields and tiles take that theme's surfaces." },
       { id: "fortress-vanilla-join", when: "The card without a framework is out of a fortress and Enter phrase is pressed", then: "The twelve fields take a pasted phrase, Join stays off until all are filled, and words that open no fortress say so in the window." },
       { id: "fortress-vanilla-members", when: "The card without a framework is in a fortress and the switch is on", then: "Every other app has a card with its form, device and state, Remove for each instance, and Open for a plugin, which shows its status." },
+      { id: "fortress-vanilla-hint", when: "The app hands the card without a framework a line of its own", then: "The line stands under the heading in the app's words, and its button opens the window for the phrase." },
       { id: "fortress-vanilla-remove", when: "Remove is confirmed on the card without a framework", then: "The member is gone, the window names the apps where the phrase changes, and a line under the card names who was removed." },
     ],
   },
