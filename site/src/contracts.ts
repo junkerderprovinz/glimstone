@@ -669,4 +669,9 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "twins-markup", when: "A demo shows the React and the Vue component side by side", then: "Both draw the same elements with the same classes, attributes and inline styles, so an app can change its framework without a difference on screen." },
     ],
   },
+  targetSize: {
+    rows: [
+      { id: "target-size", when: "Any demo page, in either framework", then: "Every button, link, field and row is at least 24 by 24 pixels, or a 24 pixel circle on its centre touches no other target. A link inside a sentence is exempt." },
+    ],
+  },
 };

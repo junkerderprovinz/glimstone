@@ -232,6 +232,13 @@ export function BehaviourGuide() {
         demo draws.
       </p>
       <ContractTable of="twins" />
+      <H2>Target size</H2>
+      <p>
+        Every target meets{" "}
+        <a href="https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html">Target Size (Minimum)</a> of WCAG
+        2.2, measured on every demo page in both frameworks.
+      </p>
+      <ContractTable of="targetSize" />
       <H2>Zag for the hard parts</H2>
       <p>
         Simple controls such as the switch and the button stay hand-written. Components whose behaviour is hard to get

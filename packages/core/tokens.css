@@ -5959,7 +5959,8 @@ a:is(.glim-btn, .glim-icon-btn) { text-decoration: none; }
     font: inherit;
     cursor: pointer;
   }
-  .glim-list-filter { padding: 0 0.3rem; }
+  /* The ▾ alone is narrower than the 24px a target needs (WCAG 2.5.8). */
+  .glim-list-filter { min-width: 1.5rem; justify-content: center; padding: 0 0.3rem; }
   .glim-list-sort > svg,
   .glim-list-filter > svg {
     width: 0.625rem;
