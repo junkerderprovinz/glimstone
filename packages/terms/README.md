@@ -19,7 +19,7 @@ for, and the variants it forbids. Each term opens with a definition.
 | `fortress` | fortress | Festung |
 | `instance` | instance | Instanz |
 | `member` | member | Mitglied |
-| `permission` | permission | Erlaubnis |
+| `permission` | permission | Berechtigung |
 | `relay` | relay | Relay, never Relais |
 | `backup` | backup | Sicherung, never Backup |
 | `pairing` | pairing | Kopplung |

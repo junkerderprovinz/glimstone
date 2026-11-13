@@ -961,7 +961,7 @@ export const GLOSSARY: GlossarySection[] = [
         components: ["Fortress"],
         text: {
           en: "The Instances tab below the app's own cards. One switch, kept per device, shows the other apps of the fortress and the permissions, and the phrase is the only way in. Show phrase stands in the corner.",
-          de: "Der Instanzen-Reiter unter den eigenen Karten der App. Ein Schalter, je Gerät gemerkt, zeigt die anderen Apps der Festung und die Erlaubnisse, und die Phrase ist der einzige Weg hinein. Phrase zeigen steht in der Ecke.",
+          de: "Der Instanzen-Reiter unter den eigenen Karten der App. Ein Schalter, je Gerät gemerkt, zeigt die anderen Apps der Festung und die Berechtigungen, und die Phrase ist der einzige Weg hinein. Phrase zeigen steht in der Ecke.",
         },
       },
       {
@@ -1016,7 +1016,7 @@ export const GLOSSARY: GlossarySection[] = [
       {
         id: "fortress-permissions",
         en: "Permissions",
-        de: "Erlaubnisse",
+        de: "Berechtigungen",
         code: ["FortressPermissions"],
         components: ["FortressPermissions"],
         text: {

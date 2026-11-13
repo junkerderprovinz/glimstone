@@ -1334,11 +1334,11 @@
         ]
       },
       "de": {
-        "singular": "Erlaubnis",
-        "plural": "Erlaubnisse",
+        "singular": "Berechtigung",
+        "plural": "Berechtigungen",
         "gender": "f",
         "stems": [
-          "erlaubnis"
+          "berechtigung"
         ]
       },
       "ar": {
