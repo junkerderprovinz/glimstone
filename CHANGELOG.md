@@ -22,6 +22,8 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 
 - **Elevation steps.** `--elevation-raised`, `--elevation-float` and `--elevation-modal` are the three shadows, and `--z-raised` up to `--z-bubble` the stacking order that goes with them. Menus, select lists, bubbles, popovers and a held row float. Windows and sheets take the modal step. A select's list and a window used to carry shadows of their own. `--elevation` stays as the raised step.
 
+- **A spacing scale.** `--space-1` to `--space-13` run from 2 to 40px, 2px apart up to 16px. Every padding, margin and gap in the components reads a step, and a test fails on one that does not. The 31 distances the stylesheet held moved to the nearest step, none by more than 2px.
+
 ## 🐛 Fixed
 
 - **The focus ring is opaque and reaches 3:1** on the page, the rail, a card, a well and a row's hover, in every theme, for every preset and any picked colour. On the light theme it stood at 1.9 to 2.0:1 (`rgba(142, 106, 0, .5)`), and a picked accent kept the gold ring. A rainbow position's ring is its hue's ink, where it was the hue at 55% (2.9:1 on the dark rail for red).

@@ -69,6 +69,18 @@ Deciding which one a given place wants takes no thought: if the colour is on a
 `background`, it is `--accent`; if it is on `color`, a `fill` or a `stroke` against
 the page, it is `--accent-ink`.
 
+## The spacing scale
+
+Like the type scale, a fixed table rather than an engine. Every padding, margin and gap in `tokens.css` reads one of thirteen steps, `--space-1` to `--space-13`:
+
+| Step | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| px | 2 | 4 | 6 | 8 | 10 | 12 | 14 | 16 | 20 | 24 | 28 | 32 | 40 |
+
+Up to 16px the steps are 2px apart, the smallest difference a person still sees between two gaps side by side. Above it they open up, since nobody tells 34px from 32px. A distance that falls between two steps is the thing to fix, not a reason for a fourteenth step. Sizes stay lengths of their own: a button's height, a field's room for the button inside it, a tree's indent per level, and the pixel or two that nudges a glyph into line. [`packages/core/test/spacing.test.ts`](../packages/core/test/spacing.test.ts) fails on a padding, margin or gap in rem that reads no step.
+
+The stylesheet held 31 different distances before the scale: 0.3, 0.35, 0.4, 0.45 and 0.55rem among them, within a pixel of each other and of the steps beside them. Each moved to the nearest step, so no distance changed by more than 2px.
+
 ## The house font
 
 **Noto Sans, shipped with the app, in every app of this house.** A system font stack draws every app differently on every machine: Segoe UI on Windows, San Francisco on a Mac, Roboto on Android, and on a Linux desktop or inside a NAS's web view whatever the distribution happens to carry, which moves every width this language sets. A shipped font draws the same everywhere. Noto is the one family that has a cut for every script the adopting apps are translated into, drawn to one design, so a Persian or Hindi interface looks like the same product as the German one rather than a patchwork.
@@ -1664,6 +1676,7 @@ Defined under `:root` / `[data-theme="light"]`, with OLED's overrides under `[da
 | `--focus-ring` | focus outline colour: `--accent-ink`, opaque, at least 3:1 on every ground a ring stands on (rule 45) |
 | `--field-placeholder` | a field's placeholder text, 4.5:1 on every field fill (rule 45) |
 | `--radius-card`, `--radius-control`, `--radius-pill` | the shape engine |
+| `--space-1` to `--space-13` | the spacing scale, 2 to 40px ("The spacing scale") |
 | `--btn-h`, `--btn-h-key` | the two button heights for everything (rule 19) |
 | `--btn-h-transport` | the third, for a head bar's transport squares only (rule 19) |
 | `--btn-w-xs`, `--btn-w-sm`, `--btn-w-md`, `--btn-w-lg` | the four width stages the label engine derives from a label |
