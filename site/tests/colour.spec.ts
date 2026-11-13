@@ -95,3 +95,45 @@ test("under OLED a bubble keeps the dark look's shadow, which lifts it off a car
   await page.evaluate(() => document.documentElement.setAttribute("data-oled", ""));
   expect(await shadowOf(page, "glim-bubble")).toBe(dark);
 });
+
+// The colour a fresh element paints when its text colour reads `value`.
+const painted = (page: Page, value: string) =>
+  page.evaluate((v) => {
+    const el = document.createElement("span");
+    el.style.color = v;
+    document.body.append(el);
+    const c = getComputedStyle(el).color;
+    el.remove();
+    return c;
+  }, value);
+
+test("the focus ring is the accent ink, opaque, and follows a picked accent", async ({ page }) => {
+  await open(page, { theme: "light", accent: "#1D99F3" });
+  const ring = await painted(page, "var(--focus-ring)");
+  expect(ring).toBe(await painted(page, "var(--accent-ink)"));
+  // Blue mixed 55% toward black, with no alpha of its own.
+  expect(ring).toBe("color(srgb 0.062549 0.33 0.524118)");
+});
+
+test("a pale accent's focus ring takes the darkened ink on the light theme", async ({ page }) => {
+  await open(page, { theme: "light", accent: "#FFFF00" });
+  const ring = await painted(page, "var(--focus-ring)");
+  expect(ring).toBe(await painted(page, "var(--accent-ink)"));
+  expect(ring).not.toMatch(/rgba|\//);
+});
+
+for (const [theme, grey] of [["dark", "rgb(198, 198, 198)"], ["light", "rgb(82, 82, 82)"]] as const) {
+  test(`a field's placeholder reads the placeholder token on the ${theme} theme`, async ({ page }) => {
+    await open(page, { theme });
+    const placeholder = await page.evaluate(() => {
+      const input = document.createElement("input");
+      input.className = "glim-input";
+      input.placeholder = "Name";
+      document.body.append(input);
+      const c = getComputedStyle(input, "::placeholder").color;
+      input.remove();
+      return c;
+    });
+    expect(placeholder).toBe(grey);
+  });
+}

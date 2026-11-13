@@ -34,6 +34,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     required this.carbonTextSub,
     required this.carbonTextMuted,
     required this.sidebarText,
+    required this.fieldPlaceholder,
     required this.accent,
     required this.accentContrast,
     required this.accentSoft,
@@ -55,7 +56,6 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     required this.statusNeutralBg,
     required this.statusNeutralSolid,
     required this.glimScrim,
-    required this.focusRing,
     required this.inkMix,
     this.shape = GlimShape.soft,
   });
@@ -86,6 +86,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
   final Color carbonTextSub;
   final Color carbonTextMuted;
   final Color sidebarText;
+  final Color fieldPlaceholder;
   final Color accent;
   final Color accentContrast;
   final Color accentSoft;
@@ -107,7 +108,6 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
   final Color statusNeutralBg;
   final Color statusNeutralSolid;
   final Color glimScrim;
-  final Color focusRing;
 
   /// How much of the accent an ink keeps against black, as in tokens.css.
   final double inkMix;
@@ -142,6 +142,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     carbonTextSub: Color(0xFFC6C6C6),
     carbonTextMuted: Color(0xFF8D8D8D),
     sidebarText: Color(0xFFE0E0E0),
+    fieldPlaceholder: Color(0xFFC6C6C6),
     accent: Color(0xFFFCC419),
     accentContrast: Color(0xFF161616),
     accentSoft: Color(0x24FCC419),
@@ -163,7 +164,6 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     statusNeutralBg: Color(0x0DFFFFFF),
     statusNeutralSolid: Color(0xFF8D8D8D),
     glimScrim: Color(0xB8000000),
-    focusRing: Color(0x8CFCC419),
     inkMix: 1,
   );
 
@@ -195,6 +195,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     carbonTextSub: Color(0xFFC6C6C6),
     carbonTextMuted: Color(0xFF8D8D8D),
     sidebarText: Color(0xFFE0E0E0),
+    fieldPlaceholder: Color(0xFFC6C6C6),
     accent: Color(0xFFFCC419),
     accentContrast: Color(0xFF161616),
     accentSoft: Color(0x24FCC419),
@@ -216,7 +217,6 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     statusNeutralBg: Color(0x0DFFFFFF),
     statusNeutralSolid: Color(0xFF8D8D8D),
     glimScrim: Color(0xB8000000),
-    focusRing: Color(0x8CFCC419),
     inkMix: 1,
   );
 
@@ -247,6 +247,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     carbonTextSub: Color(0xFF525252),
     carbonTextMuted: Color(0xFF6F6F6F),
     sidebarText: Color(0xFF393939),
+    fieldPlaceholder: Color(0xFF525252),
     accent: Color(0xFFFCC419),
     accentContrast: Color(0xFF161616),
     accentSoft: Color(0x24FCC419),
@@ -268,7 +269,6 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     statusNeutralBg: Color(0x0B000000),
     statusNeutralSolid: Color(0xFF8D8D8D),
     glimScrim: Color(0x9E000000),
-    focusRing: Color(0x808E6A00),
     inkMix: 0.55,
   );
 
@@ -300,6 +300,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     Color? carbonTextSub,
     Color? carbonTextMuted,
     Color? sidebarText,
+    Color? fieldPlaceholder,
     Color? accent,
     Color? accentContrast,
     Color? accentSoft,
@@ -321,7 +322,6 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     Color? statusNeutralBg,
     Color? statusNeutralSolid,
     Color? glimScrim,
-    Color? focusRing,
     double? inkMix,
     GlimShape? shape,
   }) =>
@@ -352,6 +352,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
         carbonTextSub: carbonTextSub ?? this.carbonTextSub,
         carbonTextMuted: carbonTextMuted ?? this.carbonTextMuted,
         sidebarText: sidebarText ?? this.sidebarText,
+        fieldPlaceholder: fieldPlaceholder ?? this.fieldPlaceholder,
         accent: accent ?? this.accent,
         accentContrast: accentContrast ?? this.accentContrast,
         accentSoft: accentSoft ?? this.accentSoft,
@@ -373,7 +374,6 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
         statusNeutralBg: statusNeutralBg ?? this.statusNeutralBg,
         statusNeutralSolid: statusNeutralSolid ?? this.statusNeutralSolid,
         glimScrim: glimScrim ?? this.glimScrim,
-        focusRing: focusRing ?? this.focusRing,
         inkMix: inkMix ?? this.inkMix,
         shape: shape ?? this.shape,
       );
@@ -408,6 +408,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
       carbonTextSub: Color.lerp(carbonTextSub, other.carbonTextSub, t)!,
       carbonTextMuted: Color.lerp(carbonTextMuted, other.carbonTextMuted, t)!,
       sidebarText: Color.lerp(sidebarText, other.sidebarText, t)!,
+      fieldPlaceholder: Color.lerp(fieldPlaceholder, other.fieldPlaceholder, t)!,
       accent: Color.lerp(accent, other.accent, t)!,
       accentContrast: Color.lerp(accentContrast, other.accentContrast, t)!,
       accentSoft: Color.lerp(accentSoft, other.accentSoft, t)!,
@@ -429,7 +430,6 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
       statusNeutralBg: Color.lerp(statusNeutralBg, other.statusNeutralBg, t)!,
       statusNeutralSolid: Color.lerp(statusNeutralSolid, other.statusNeutralSolid, t)!,
       glimScrim: Color.lerp(glimScrim, other.glimScrim, t)!,
-      focusRing: Color.lerp(focusRing, other.focusRing, t)!,
       inkMix: inkMix + (other.inkMix - inkMix) * t,
       shape: t < 0.5 ? shape : other.shape,
     );

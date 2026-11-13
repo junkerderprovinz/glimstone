@@ -12,6 +12,9 @@ extension GlimDerived on GlimTheme {
 
   /// The accent as text on the page's ground.
   Color get accentInk => Color.lerp(const Color(0xFF000000), accent, inkMix)!;
+
+  /// The focus ring, the accent ink at full strength.
+  Color get focusRing => accentInk;
 }
 
 /// A [ThemeData] that carries GlimStone's colours, for an app that has none

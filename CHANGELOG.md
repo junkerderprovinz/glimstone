@@ -2,6 +2,21 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+The focus ring reads on every ground it stands on, and a field's placeholder can be read on every field fill.
+
+**Adopting apps:**
+
+- **Focus ring:** `--focus-ring` is `--accent-ink`, opaque, so it follows a picked accent. An app that keeps its own copy of the tokens takes the three `--focus-ring` lines from `tokens.css`, and drops any ring colour of its own that it set for a custom accent.
+- **Placeholders:** a field's placeholder reads the new `--field-placeholder` instead of `--carbon-text-muted`. Point your own `::placeholder` rules at it.
+- **Flutter:** `GlimTheme` has `fieldPlaceholder`, and `focusRing` is a getter on `GlimDerived` that returns the accent ink. It is no longer a constructor argument or a `copyWith` parameter.
+
+## 🐛 Fixed
+
+- **The focus ring is opaque and reaches 3:1** on the page, the rail, a card, a well and a row's hover, in every theme, for every preset and any picked colour. On the light theme it stood at 1.9 to 2.0:1 (`rgba(142, 106, 0, .5)`), and a picked accent kept the gold ring. A rainbow position's ring is its hue's ink, where it was the hue at 55% (2.9:1 on the dark rail for red).
+- **Placeholder text reaches 4.5:1** on every field fill. The muted grey it used stood at 3.5:1 on the dark surface2 and 2.4:1 on a sub-card's surface3, 4.1 and 3.3:1 on light.
+
 ## 4.4.1 - 2026-11-13
 
 After a removal the fortress takes no new app until the phrase changes, and its words say so in all 42 languages.

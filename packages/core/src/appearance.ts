@@ -391,8 +391,9 @@ export function hueVars(i: number): Record<string, string> {
     // A small circular badge has no neighbouring rows to repeat its colour and
     // reads as grey at the wash's 16%, so it gets its own tier.
     '--item-hue-badge': `color-mix(in srgb, ${hue} 50%, transparent)`,
-    // Without this a gold focus ring would sit around a teal tab.
-    '--item-hue-ring': `color-mix(in srgb, ${hue} 55%, transparent)`,
+    // Without this a gold focus ring would sit around a teal tab. The hue's
+    // own ink, opaque, as the accent's ring is the accent ink.
+    '--item-hue-ring': `color-mix(in srgb, ${hue} var(--ink-mix), black)`,
   };
 }
 

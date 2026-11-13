@@ -146,6 +146,10 @@
   --carbon-text-sub:   #c6c6c6;
   --carbon-text-muted: #8d8d8d;
   --sidebar-text:      #e0e0e0;
+  /* A field's placeholder. Muted text falls to 2.4:1 on a sub-card's surface3
+     field, so a placeholder takes the sub step, the dimmest that reads at
+     4.5:1 on every field fill. */
+  --field-placeholder: #c6c6c6;
 
   /* Activity, and nothing else. Every sibling app opens with this accent, so
      a fresh install of any of them looks like the same product. */
@@ -204,7 +208,10 @@
   --glim-scrim: rgba(0, 0, 0, .72);
   --glim-scrim-blur: 6px;
   --hairline: inset 0 1px 0 rgba(255, 255, 255, .045);
-  --focus-ring: rgba(252, 196, 25, .55);
+  /* The ring is the accent ink, opaque. The ink reads at 4.5:1 on the ramp's
+     card (rule 45), which leaves at least 3:1 on every ground a ring stands
+     on: the page, the rail, a card, a well and a row's hover. */
+  --focus-ring: var(--accent-ink);
 }
 
 /* The theme follows the system: the light ramp applies when the OS prefers
@@ -243,6 +250,7 @@
     --carbon-text-sub:   #525252;
     --carbon-text-muted: #6f6f6f;
     --sidebar-text:      #393939;
+    --field-placeholder: #525252;
 
     --accent:            #FCC419;
     --accent-contrast:   #161616;
@@ -275,7 +283,7 @@
     --elevation: 0 1px 2px rgba(0, 0, 0, .06), 0 16px 36px -26px rgba(0, 0, 0, .35);
     --glim-scrim: rgba(0, 0, 0, .62);
     --hairline: inset 0 0 0 1px rgba(0, 0, 0, .05);
-    --focus-ring: rgba(142, 106, 0, .5);
+    --focus-ring: var(--accent-ink);
   }
 }
 
@@ -313,6 +321,7 @@
   --carbon-text-sub:   #525252;
   --carbon-text-muted: #6f6f6f;
   --sidebar-text:      #393939;
+  --field-placeholder: #525252;
 
   /* The accent is the same in both themes: a Sunflower fill with computed ink
      reads well on white, while darkening the fill turns it olive-brown. Only
@@ -352,7 +361,7 @@
   --elevation: 0 1px 2px rgba(0, 0, 0, .06), 0 16px 36px -26px rgba(0, 0, 0, .35);
   --glim-scrim: rgba(0, 0, 0, .62);
   --hairline: inset 0 0 0 1px rgba(0, 0, 0, .05);
-  --focus-ring: rgba(142, 106, 0, .5);
+  --focus-ring: var(--accent-ink);
 }
 
 /* OLED, the dark ramp on true black for OLED and AMOLED screens (rule 43).
@@ -2816,7 +2825,7 @@ body {
   font: inherit;
   outline: none;
 }
-.glim-combobox-input::placeholder { color: var(--carbon-text-muted); }
+.glim-combobox-input::placeholder { color: var(--field-placeholder); }
 .glim-combobox-toggle {
   display: inline-flex;
   padding: 0.375rem;
@@ -4570,7 +4579,7 @@ body {
     opacity: 0.5;
     cursor: not-allowed;
   }
-  .glim-input::placeholder { color: var(--carbon-text-muted); }
+  .glim-input::placeholder { color: var(--field-placeholder); }
   .glim-input--mono {
     font-family: ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
     font-size: var(--text-subline);
@@ -4681,7 +4690,7 @@ body {
     height: 100%;
     text-overflow: ellipsis;
   }
-  .glim-glyph-field-input::placeholder { color: var(--carbon-text-muted); }
+  .glim-glyph-field-input::placeholder { color: var(--field-placeholder); }
   .glim-glyph-field > .glim-icon-btn {
     width: 1.6rem;
     height: 1.6rem;
