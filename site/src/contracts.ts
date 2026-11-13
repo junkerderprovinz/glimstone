@@ -664,4 +664,9 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "field-error-kinds", when: "A PasswordField or a NumberField has an error", then: "It carries it the same way." },
     ],
   },
+  twins: {
+    rows: [
+      { id: "twins-markup", when: "A demo shows the React and the Vue component side by side", then: "Both draw the same elements with the same classes, attributes and inline styles, so an app can change its framework without a difference on screen." },
+    ],
+  },
 };

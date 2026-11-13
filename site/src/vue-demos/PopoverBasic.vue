@@ -1,15 +1,14 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { Button, Popover, TextField } from "@glimstone/vue";
 
-const anchor = ref<HTMLElement | null>(null);
+const button = ref<{ el: HTMLElement | null } | null>(null);
+const anchor = computed(() => button.value?.el ?? null);
 const open = ref(false);
 </script>
 
 <template>
-  <span ref="anchor" style="display: inline-flex">
-    <Button label="Filter" label-key="filter" :aria-expanded="open" @click="open = !open" />
-  </span>
+  <Button ref="button" label="Filter" label-key="filter" :aria-expanded="open" @click="open = !open" />
   <Popover :open="open" :anchor="anchor" label="Filter the list" @close="open = false">
     <div style="display: grid; gap: 12px">
       <TextField label="Name contains" width="medium" />

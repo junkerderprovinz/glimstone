@@ -4,6 +4,7 @@ import { Button, Card, NumberField, SubCard, TextField, Toggle } from "@glimston
 
 const days = ref<number | null>(14);
 const prune = ref(true);
+const row = { display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px" };
 </script>
 
 <template>
@@ -11,7 +12,7 @@ const prune = ref(true);
     <Card title="Snapshots">
       <SubCard title="Retention" hint="Older snapshots are removed after each run.">
         <template #end><Toggle v-model="prune" label="Prune" /></template>
-        <label class="row">
+        <label :style="row">
           <span>Days to keep</span>
           <NumberField v-model="days" :min="1" :max="365" />
         </label>
@@ -20,7 +21,7 @@ const prune = ref(true);
         <TextField label="A note" placeholder="A group needs no title" />
       </SubCard>
       <SubCard title="Commands">
-        <div class="row" style="justify-content: flex-end">
+        <div :style="{ ...row, justifyContent: 'flex-end' }">
           <Button label="Copy command" label-key="copy" tone="subtle" />
         </div>
       </SubCard>
@@ -28,11 +29,3 @@ const prune = ref(true);
   </div>
 </template>
 
-<style scoped>
-.row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-</style>

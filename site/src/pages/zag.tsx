@@ -225,6 +225,13 @@ export function BehaviourGuide() {
           ))}
         </tbody>
       </table>
+      <H2>React and Vue</H2>
+      <p>
+        Every component has a twin of the same name in both packages, with the same props, defaults, events and markup.
+        A unit test compares the two packages' exports and props on every run, and the row below compares what each
+        demo draws.
+      </p>
+      <ContractTable of="twins" />
       <H2>Zag for the hard parts</H2>
       <p>
         Simple controls such as the switch and the button stay hand-written. Components whose behaviour is hard to get

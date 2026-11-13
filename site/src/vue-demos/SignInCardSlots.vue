@@ -24,14 +24,14 @@ async function setPassword() {
       :text="signInTextEn"
       reset
       :auto-focus="false"
-      id-prefix="slots"
+      id-prefix="vue-slots"
       :on-sign-in="async () => ({ error: 'That password is not right' })"
       :on-ask-code="async () => ({ ok: true })"
       :on-set-password="setPassword"
     >
       <template #fields>
-        <SignInField label="Name" for="slots-name">
-          <TextField id="slots-name" v-model="name" autocomplete="username" />
+        <SignInField label="Name" for="vue-slots-name">
+          <TextField id="vue-slots-name" v-model="name" autocomplete="username" />
         </SignInField>
         <FieldRow label="Stay signed in"><Toggle v-model="stay" /></FieldRow>
       </template>

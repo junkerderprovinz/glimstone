@@ -16,6 +16,8 @@ const STATES = [
   { id: "failed", label: "Failed", disabled: true, title: "Nothing has failed" },
 ];
 
+const caption = { fontSize: "13px", color: "var(--carbon-text-sub)" };
+
 const theme = ref("dark");
 const shown = ref(["running", "paused"]);
 </script>
@@ -23,19 +25,13 @@ const shown = ref(["running", "paused"]);
 <template>
   <div style="display: grid; gap: 20px; width: 100%">
     <div style="display: grid; gap: 8px">
-      <span class="caption">Theme</span>
+      <span :style="caption">Theme</span>
       <Selector v-model="theme" label="Theme" :items="THEMES" activation="manual" equal-width />
     </div>
     <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap">
-      <span class="caption">Show</span>
+      <span :style="caption">Show</span>
       <Selector v-model="shown" label="Show" select="many" :items="STATES" variant="chip" inline />
     </div>
   </div>
 </template>
 
-<style scoped>
-.caption {
-  font-size: 13px;
-  color: var(--carbon-text-sub);
-}
-</style>

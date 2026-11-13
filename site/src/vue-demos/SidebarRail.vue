@@ -13,12 +13,23 @@ const FOOT = [{ id: "settings", label: "Settings", glyph: glyph("IconGear") }];
 const here = ref("overview");
 // The rail narrows in glyph mode only; reactive keeps its width.
 const mode = useLabelMode("sidebar");
-const width = computed(() => (mode.value === "glyph" ? "var(--rail-narrow)" : "14rem"));
+const rail = computed(() => ({
+  display: "flex",
+  flexDirection: "column" as const,
+  justifyContent: "space-between",
+  gap: "24px",
+  width: mode.value === "glyph" ? "var(--rail-narrow)" : "14rem",
+  height: "300px",
+  padding: "12px",
+  borderRadius: "var(--radius-card)",
+  background: "var(--carbon-sidebar)",
+}));
+const group = { display: "flex", flexDirection: "column" as const, gap: "4px" };
 </script>
 
 <template>
-  <nav aria-label="Main" class="rail" :style="{ width }">
-    <div class="group">
+  <nav aria-label="Main" :style="rail">
+    <div :style="group">
       <SidebarRow
         v-for="(r, i) in MAIN"
         :key="r.id"
@@ -31,7 +42,7 @@ const width = computed(() => (mode.value === "glyph" ? "var(--rail-narrow)" : "1
         @click.prevent="here = r.id"
       />
     </div>
-    <div class="group">
+    <div :style="group">
       <SidebarRow
         v-for="(r, i) in FOOT"
         :key="r.id"
@@ -46,20 +57,3 @@ const width = computed(() => (mode.value === "glyph" ? "var(--rail-narrow)" : "1
   </nav>
 </template>
 
-<style scoped>
-.rail {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 24px;
-  height: 300px;
-  padding: 12px;
-  border-radius: var(--radius-card);
-  background: var(--carbon-sidebar);
-}
-.group {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-</style>
