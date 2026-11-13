@@ -25,7 +25,9 @@ const props = defineProps<{
 
 const filter = ref<"all" | "with">("all");
 const mine = computed(() => permissionsWith(props.permissions, props.app.id));
-const shown = computed(() => (filter.value === "all" ? props.permissions : mine.value));
+// The filter is offered only where it leaves some permissions out.
+const narrows = computed(() => mine.value.length < props.permissions.length);
+const shown = computed(() => (filter.value === "all" || !narrows.value ? props.permissions : mine.value));
 const items = computed(() => [
   { id: "all" as const, label: `${props.text.all} ${props.permissions.length}` },
   { id: "with" as const, label: `${fill(props.text.withApp, { app: props.app.name })} ${mine.value.length}` },
@@ -48,7 +50,7 @@ async function flip(p: FortressPermission) {
   <Card data-glim="FortressPermissions" :title="text.permissions" :hint="text.permissionsAbout" :hue-index="hueIndex">
     <p v-if="permissions.length === 0" class="glim-fortress-sub">{{ text.noPermissions }}</p>
     <template v-else>
-      <Selector v-model="filter" :label="text.permissions" inline activation="manual" :items="items" />
+      <Selector v-if="narrows" v-model="filter" :label="text.permissions" inline activation="manual" :items="items" />
       <ul class="glim-permissions">
         <li v-for="p in shown" :key="p.id" :class="['glim-permission', p.on && 'glim-permission--on']" :data-permission="p.id">
           <span class="glim-permission-pair" aria-hidden="true">

@@ -27,7 +27,9 @@ export interface FortressPermissionsProps {
 export function FortressPermissions({ text, app, apps, permissions, onPermission, notify, hueIndex, extra }: FortressPermissionsProps) {
   const [filter, setFilter] = useState<"all" | "with">("all");
   const mine = permissionsWith(permissions, app.id);
-  const shown = filter === "all" ? permissions : mine;
+  // The filter is offered only where it leaves some permissions out.
+  const narrows = mine.length < permissions.length;
+  const shown = filter === "all" || !narrows ? permissions : mine;
   const logo = (id: string) => {
     const a = apps.find((x) => x.id === id);
     return a?.logo ? <img key={id} src={a.logo} alt="" draggable={false} /> : null;
@@ -50,17 +52,19 @@ export function FortressPermissions({ text, app, apps, permissions, onPermission
         <p className="glim-fortress-sub">{text.noPermissions}</p>
       ) : (
         <>
-          <Selector
-            label={text.permissions}
-            inline
-            activation="manual"
-            value={filter}
-            onChange={setFilter}
-            items={[
-              { id: "all", label: `${text.all} ${permissions.length}` },
-              { id: "with", label: `${fill(text.withApp, { app: app.name })} ${mine.length}` },
-            ]}
-          />
+          {narrows && (
+            <Selector
+              label={text.permissions}
+              inline
+              activation="manual"
+              value={filter}
+              onChange={setFilter}
+              items={[
+                { id: "all", label: `${text.all} ${permissions.length}` },
+                { id: "with", label: `${fill(text.withApp, { app: app.name })} ${mine.length}` },
+              ]}
+            />
+          )}
           <ul className="glim-permissions">
             {shown.map((p) => (
               <li key={p.id} className={`glim-permission${p.on ? " glim-permission--on" : ""}`} data-permission={p.id}>
