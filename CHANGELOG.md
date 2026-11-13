@@ -10,8 +10,8 @@ After a removal the fortress takes no new app until the phrase changes, and its 
 
 - **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.4.1, all at the same number. Nothing is renamed or removed.
 - **The new rule:** once a member is removed, the kit lets no new app join until the phrase changes, and the old phrase gets nobody in. `removeBack`, `removedBody` and `removedNote` say exactly that, and `removedHereHint` points the removed app to the new phrase.
-- **Joining in that window:** when the kit refuses a join for this reason, pass `joinLocked` as the error, the way `joinRefused` stands for words that open no fortress.
-- **Plugins:** copy `packages/core/vanilla/fortress-card.js` again. It carries the new words and `joinLocked` in every language.
+- **Joining in that window:** the kit refuses such a join with the code `closedUntilNewPhrase`. Let `onJoin` answer `{ code }` and `Fortress` shows `joinLocked`, the way `phrase` shows `joinRefused`. An `error` of the app's own still wins. `joinRefusalText(text, code)` gives the same sentence for a window of the app's own.
+- **Plugins:** copy `packages/core/vanilla/fortress-card.js` again. It carries the new words in every language and shows `joinLocked` when the adapter's `join` rejects with `{ code: "closedUntilNewPhrase" }`.
 - **Flutter:** move the git dependency to `ref: v4.4.1`. Nothing changed there.
 - **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.4.1.
 
@@ -21,7 +21,7 @@ After a removal the fortress takes no new app until the phrase changes, and its 
 
 ## ✨ Added
 
-- **`joinLocked`** tells an app that tries to join in that window why the fortress turns it away and that it needs the new phrase.
+- **`joinLocked`** tells an app that tries to join in that window why the fortress turns it away and that it needs the new phrase. React, Vue and the plugin card pick it for the kit's code on their own, so an app only passes the code on.
 
 ## 🌐 Translations
 

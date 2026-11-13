@@ -524,6 +524,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "fortress-space", keys: ["Space"], when: "A word is typed and a space after it", then: "The focus moves to the next field." },
       { id: "fortress-join-wait", when: "A field is still empty", then: "Join is disabled." },
       { id: "fortress-join-refused", when: "The app refuses the words", then: "Its reason stands as an alert, Join shakes once, and the words stay in their fields." },
+      { id: "fortress-join-locked", when: "The kit turns a join away with closedUntilNewPhrase, since a member was removed and the phrase has not changed", then: "The window says the fortress takes no new app right now and that the new phrase gets in. The app only passes the code on, in React, Vue and the card without a framework alike." },
       { id: "fortress-joined", when: "The app takes the words", then: "The window says the app is in the fortress and that its pairing came along, with Close to leave." },
       { id: "fortress-moves", when: "The app is paired with other devices", then: "The join window says that pairing moves into the fortress." },
       { id: "fortress-password", when: "Show phrase is pressed and the app asks for its password", then: "The password comes first. A wrong one is refused with its reason and a shake, the right one shows the twelve words in order, with Close and Copy in the foot." },

@@ -5,6 +5,7 @@ import {
   createFortressFlow,
   fill,
   hueVars,
+  joinRefusalText,
   listOf,
   MARKS,
   othersLine,
@@ -121,7 +122,10 @@ export function Fortress(props: FortressProps) {
   const { text, lang, app, joined, apps, permissions, onPermission, found, removed = [], hueStart = 0, children } = props;
   const latest = useRef(props);
   latest.current = props;
-  const flow = useMemo(() => createFortressFlow(() => ({ ...latest.current, failed: latest.current.text.failed })), []);
+  const flow = useMemo(
+    () => createFortressFlow(() => ({ ...latest.current, failed: latest.current.text.failed, joinRefusal: (code) => joinRefusalText(latest.current.text, code) })),
+    [],
+  );
   const s = useSyncExternalStore(flow.subscribe, flow.state, flow.state);
   const keys = { ...LABEL_KEYS, ...props.labelKeys };
 

@@ -5,6 +5,7 @@ import {
   createFortressFlow,
   doubtView,
   enterWords,
+  joinRefusalText,
   memberName,
   openRefusalText,
   statusView,
@@ -151,6 +152,27 @@ test('refused words stay in their fields, with the reason and a refusal to shake
   assert.equal(s.error, 'Those words open no fortress.');
   assert.deepEqual(s.refusal, { button: 'join', count: 1 });
   assert.deepEqual(s.window?.kind === 'join' && s.window.words, TWELVE.split(' '));
+});
+
+test('a join the kit turns away by its code gets the sentence for that code', async () => {
+  const en = fortressTextEn;
+  for (const [code, said] of [['phrase', en.joinRefused], ['closedUntilNewPhrase', en.joinLocked], ['teapot', en.failed]] as const) {
+    const flow = createFortressFlow(() => ({ ...handlers({ onJoin: async () => ({ code }) }), failed: en.failed, joinRefusal: (c) => joinRefusalText(en, c) }));
+    flow.openJoin();
+    flow.enter(0, TWELVE);
+    await flow.join();
+    assert.equal(flow.state().error, said, code);
+    assert.equal(flow.state().window?.kind, 'join');
+  }
+});
+
+test("an app's own reason wins over the code it came with", async () => {
+  const onJoin = async () => ({ code: 'closedUntilNewPhrase', error: 'Not today.' });
+  const flow = createFortressFlow(() => ({ ...handlers({ onJoin }), failed, joinRefusal: (c) => joinRefusalText(fortressTextEn, c) }));
+  flow.openJoin();
+  flow.enter(0, TWELVE);
+  await flow.join();
+  assert.equal(flow.state().error, 'Not today.');
 });
 
 test("a handler that throws is refused in the flow's own words", async () => {

@@ -22,6 +22,13 @@ test('the card speaks every language of the glossary, in the words of its table'
   assert.equal((card.text('pt-BR' as never) as Record<string, string>).leaveConfirm, fortressText('pt').leaveConfirm);
 });
 
+test('a join the kit turns away says why, by its code', () => {
+  const t = card.text('en' as never) as Record<string, string>;
+  assert.equal(card.joinRefusal(t as never, 'phrase' as never), t.joinRefused);
+  assert.equal(card.joinRefusal(t as never, 'closedUntilNewPhrase' as never), t.joinLocked);
+  assert.equal(card.joinRefusal(t as never, 'offline' as never), t.failed);
+});
+
 test('a pasted phrase spreads over the fields from the one it went into', () => {
   const empty = Array<string>(12).fill('');
   const r = card.enterWords(empty as never, 2 as never, '1. alpha 2. bravo charlie' as never) as { words: string[]; focus: number };

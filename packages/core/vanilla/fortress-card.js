@@ -318,6 +318,12 @@
     return (e && (e.code || e.error)) || "";
   }
 
+  function joinRefusal(t, code) {
+    if (code === "phrase") return t.joinRefused;
+    if (code === "closedUntilNewPhrase") return t.joinLocked;
+    return t.failed;
+  }
+
   /**
    * Draws the fortress into `el`. `adapter` answers each step from the app's
    * server: `load()` the state, `join(words)`, `leave()` and `remove(id)` the
@@ -642,7 +648,7 @@
                 return;
               }
               go.disabled = false;
-              error.textContent = code === "phrase" ? t.joinRefused : t.failed;
+              error.textContent = joinRefusal(t, code);
               error.hidden = false;
               shake(go);
               win.waiting = false;
@@ -828,5 +834,5 @@
     };
   }
 
-  root.GlimFortressCard = { mount, text: textFor, fill, enterWords, keepers, groupApps };
+  root.GlimFortressCard = { mount, text: textFor, fill, enterWords, keepers, groupApps, joinRefusal };
 })(typeof window !== "undefined" ? window : globalThis);

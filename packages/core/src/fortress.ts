@@ -167,6 +167,13 @@ export interface FortressStatusReport {
   next: { title: string; at: string }[];
 }
 
+/** The sentence for a join the kit turned away, by its code: words that open no fortress, or a fortress that takes no new app until its phrase changes. An unknown code gets `failed`. */
+export function joinRefusalText(text: FortressText, code: string): string {
+  if (code === "phrase") return text.joinRefused;
+  if (code === "closedUntilNewPhrase") return text.joinLocked;
+  return text.failed;
+}
+
 /** A line of a member's log. `level` is info, warn or error. */
 export interface FortressLogLine {
   at: string;
@@ -310,6 +317,8 @@ export function phraseReady(words: string[]): boolean {
 export interface FortressAnswer {
   ok?: boolean;
   error?: string;
+  /** The kit's refusal code for a join, which the flow words through `joinRefusal` where `error` is missing. */
+  code?: string;
 }
 
 export interface PhraseAnswer {
@@ -337,6 +346,8 @@ export interface FortressHandlers {
 export interface FortressFlowOptions extends FortressHandlers {
   /** Said when a callback throws or refuses without a reason. */
   failed: string;
+  /** The sentence for a join refused by the kit's code, `joinRefusalText` in the frameworks. */
+  joinRefusal?: (code: string) => string;
   /** The phrase opens the fortress to anyone, so an app with a password asks for it before showing the words. */
   phrasePassword?: boolean;
 }
@@ -433,7 +444,12 @@ export function createFortressFlow(options: () => FortressFlowOptions): Fortress
       const ask = options().onJoin;
       if (w?.kind !== "join" || !phraseReady(w.words) || !ask) return;
       const words = w.words.map((x) => x.trim().toLowerCase());
-      await run("join", () => ask(words), (a) => {
+      const answer = async () => {
+        const a = await ask(words);
+        const say = options().joinRefusal;
+        return a.ok || a.error || !a.code || !say ? a : { ...a, error: say(a.code) };
+      };
+      await run("join", answer, (a) => {
         if (a.ok) open({ kind: "joined" });
         return !!a.ok;
       });

@@ -26,7 +26,11 @@ export default function FortressVanilla() {
     const adapter = {
       load: () => later(state),
       join: (words: string[]) =>
-        words[0] === "wrong" ? Promise.reject({ code: "phrase" }) : later((state = { joined: true, device: "Atlas", members, removed: [], hints })),
+        words[0] === "wrong"
+          ? Promise.reject({ code: "phrase" })
+          : words[0] === "shut"
+            ? Promise.reject({ code: "closedUntilNewPhrase" })
+            : later((state = { joined: true, device: "Atlas", members, removed: [], hints })),
       leave: () => later((state = { joined: false })),
       remove: (id: string) => {
         const gone = members.find((m) => m.id === id)!;

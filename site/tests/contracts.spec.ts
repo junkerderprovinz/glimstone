@@ -4416,6 +4416,14 @@ test.describe("Fortress", () => {
     await expect(join).toBeEnabled();
   });
 
+  test("[fortress-join-locked] a join the kit turns away while the fortress is closed says why", async ({ page }) => {
+    await open(page, "/components/fortress");
+    await outside(page).getByRole("button", { name: "Enter phrase" }).click();
+    await word(page, 1).fill(TWELVE.replace("oak", "shut"));
+    await dialog(page).getByRole("button", { name: "Join" }).click();
+    await expect(dialog(page).getByRole("alert")).toHaveText("The fortress takes no new apps right now because a member was removed. You need the new phrase to get in.");
+  });
+
   test("[fortress-join-refused] refused words stay, with the reason and a shake", async ({ page }) => {
     await open(page, "/components/fortress");
     await outside(page).getByRole("button", { name: "Enter phrase" }).click();
@@ -4764,6 +4772,15 @@ test.describe("The fortress without a framework", () => {
     await expect(win.getByRole("textbox", { name: "Word 12" })).toHaveValue("twelve");
     await go.click();
     await expect(win.getByRole("alert")).toHaveText("These words open no fortress. Check them and try again.");
+  });
+
+  test("[fortress-join-locked] the card without a framework says why a closed fortress turns a join away", async ({ page }) => {
+    await open(page, "/components/fortress");
+    await card(page).getByRole("button", { name: "Enter phrase" }).click();
+    const win = page.getByRole("dialog", { name: "Join a fortress" });
+    await win.getByRole("textbox", { name: "Word 1", exact: true }).fill(PHRASE.replace("one", "shut"));
+    await win.getByRole("button", { name: "Join" }).click();
+    await expect(win.getByRole("alert")).toHaveText("The fortress takes no new apps right now because a member was removed. You need the new phrase to get in.");
   });
 
   test("[fortress-vanilla-members] the other apps show as cards once the switch is on", async ({ page }) => {

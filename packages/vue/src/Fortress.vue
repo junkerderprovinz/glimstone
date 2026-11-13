@@ -4,6 +4,7 @@ import {
   createFortressFlow,
   fill,
   hueVars,
+  joinRefusalText,
   listOf,
   othersLine,
   storedShowOthers,
@@ -80,7 +81,7 @@ const props = withDefaults(
 );
 const emit = defineEmits<{ "update:showOthers": [on: boolean] }>();
 
-const flow = createFortressFlow(() => ({ ...props, failed: props.text.failed }));
+const flow = createFortressFlow(() => ({ ...props, failed: props.text.failed, joinRefusal: (code) => joinRefusalText(props.text, code) }));
 const s = shallowRef(flow.state());
 const stop = flow.subscribe(() => (s.value = flow.state()));
 onBeforeUnmount(stop);

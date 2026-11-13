@@ -70,7 +70,8 @@ export function household(said: (what: string) => void, permissions: () => Fortr
   return {
     async onJoin(words: string[]): Promise<FortressAnswer> {
       await wait();
-      if (words.join(" ") !== TWELVE) return { error: "These words open no fortress. Check them and try again." };
+      if (words[0] === "shut") return { code: "closedUntilNewPhrase" };
+      if (words.join(" ") !== TWELVE) return { code: "phrase" };
       said("Joined");
       return { ok: true };
     },
