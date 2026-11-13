@@ -2,6 +2,24 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+React and Vue now offer the same kit. Every component, hook and type has a twin of the same name in the other package, with the same props, defaults, events and markup, so an app can change its framework by changing its imports. A test compares both packages on every run and fails the moment they drift apart, and a second one checks that each demo draws the same elements in both. The keyboard follows the WAI-ARIA Authoring Practices in a few more places, and every target on the demo pages is at least 24 pixels, as WCAG 2.2 asks.
+
+**Adopting apps:**
+
+- **New in Vue:** `AboutCard`, `CoffeeDialog`, `PaypalDialog`, `CryptoDonateDialog`, `DropdownListbox`, `WindowBar`, `ToastCard` and `PresenceBadges`, with `usePaypalButtons`, `useDialogKeys`, `usePortalHue` and `deviceGlyph`. Where React takes markup in a prop, Vue takes a slot: the QR code and the coin marks of `CryptoDonateDialog` go into `qr` and `mark`, and the app's selector in `PaypalDialog` into `selector`. `PaypalDialog` binds `frequency`, `preset` and `typed` with `v-model`, and `usePaypalButtons` takes a getter for its options and hands back the ref for `buttonsRef`.
+- **New in React:** `useRainbow`, `useHue`, `useShape`, `useMotion` and `useAccent`, the twins of the Vue composables. Each returns the value and its setter, as `useState` does.
+- **Types:** `CryptoCoin`, `CryptoNetwork`, `ToastViewportEntry`, `SidebarCount`, `InstanceFigure`, `SignInLabelKeys`, `FortressLabelKeys` and `MenuBarHandle` live in `@glimstone/core`. React exports them under the same names as before, and Vue exports them too, along with the core's badge, button, selector and select types.
+- **Vue toasts:** `ToastViewport` emits `mouse-enter`, `mouse-leave`, `focus` and `blur`, the names of React's handlers. Rename `@enter`, `@leave`, `@focusin` and `@focusout` where the app listens.
+- **React defaults:** `Meter` names its `threshold` of 0.9 and `SkeletonRow` its `tile` and `badge`, both on, so the props table says what the component did already. Nothing changes on screen.
+- **Select:** Home and End on a closed trigger open the list on its first or last option. Before, they chose that option without opening anything.
+- **Menus:** a letter in an open `ContextMenu` jumps to the next row starting with it. `MenuBar` takes Home and End on its words, and ArrowUp opens a menu on its last row, which `ContextMenu` offers to an app's own bar as `fromEnd`.
+- **Lists:** PageDown and PageUp move the focus ten rows in a `ListTable`, with Shift picking along.
+- **Checkbox:** Enter no longer flips it. Space does, as on a native checkbox.
+- **Sheet:** Tab and Shift+Tab stay inside an open sheet.
+- **Your own copy of the tokens:** take the `.glim-list-filter` rule from `tokens.css`. The ▾ in a list's header is 24 pixels wide.
+
 ## 4.4.1 - 2026-11-13
 
 After a removal the fortress takes no new app until the phrase changes, and its words say so in all 42 languages.
