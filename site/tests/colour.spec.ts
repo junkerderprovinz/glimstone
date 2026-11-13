@@ -52,7 +52,7 @@ test("without OLED the dark ground stays Carbon's near-black", async ({ page }) 
   expect(await ground(page)).toBe("rgb(22, 22, 22)");
 });
 
-test("a pale accent's text is darkened on the light theme until it reads", async ({ page }) => {
+test("a pale accent's text moves onto the light ramp's ink step and keeps its hue", async ({ page }) => {
   await open(page, { theme: "light", accent: "#FFFF00" });
   const ink = await page.evaluate(() => {
     const probe = document.createElement("span");
@@ -60,11 +60,10 @@ test("a pale accent's text is darkened on the light theme until it reads", async
     document.body.append(probe);
     return getComputedStyle(probe).color;
   });
-  const [r, g, b] = ink.match(/\d+/g)!.map(Number);
-  // Yellow keeps its hue: red and green equal, no blue, and dark enough for 4.5:1 on white.
-  expect(r).toBe(g);
-  expect(b).toBe(0);
-  expect(r).toBeLessThan(0x80);
+  const [l, a, b] = ink.match(/^oklab\(([\d.-]+) ([\d.-]+) ([\d.-]+)\)$/)!.slice(1).map(Number);
+  expect(l).toBeCloseTo(0.52, 3);
+  // Yellow sits at about 110 degrees in OKLab.
+  expect((Math.atan2(b, a) * 180) / Math.PI).toBeCloseTo(110, 0);
 });
 
 test("a preset keeps the stylesheet's own ink", async ({ page }) => {
@@ -123,8 +122,8 @@ test("the focus ring is the accent ink, opaque, and follows a picked accent", as
   await open(page, { theme: "light", accent: "#1D99F3" });
   const ring = await painted(page, "var(--focus-ring)");
   expect(ring).toBe(await painted(page, "var(--accent-ink)"));
-  // Blue mixed 55% toward black, with no alpha of its own.
-  expect(ring).toBe("color(srgb 0.062549 0.33 0.524118)");
+  // Blue on the light ramp's ink step, with no alpha of its own.
+  expect(ring).toMatch(/^oklab\(0\.52 -[\d.]+ -[\d.]+\)$/);
 });
 
 test("a pale accent's focus ring takes the darkened ink on the light theme", async ({ page }) => {
@@ -132,6 +131,7 @@ test("a pale accent's focus ring takes the darkened ink on the light theme", asy
   const ring = await painted(page, "var(--focus-ring)");
   expect(ring).toBe(await painted(page, "var(--accent-ink)"));
   expect(ring).not.toMatch(/rgba|\//);
+  expect(ring).toMatch(/^oklab\(0\.52 /);
 });
 
 for (const [theme, grey] of [["dark", "rgb(198, 198, 198)"], ["light", "rgb(82, 82, 82)"]] as const) {

@@ -6,6 +6,7 @@
 // It has no framework dependency; the React and Vue packages wrap it.
 
 import { accentInks, contrastOn, validHex as valid } from './contrast.ts';
+import { inkCss } from './oklab.ts';
 import { storageKey } from './storage.ts';
 import { applyOled, storedOled } from './theme.ts';
 
@@ -222,9 +223,9 @@ const systemListeners = new Set<() => void>();
  * a light accent never gets white text.
  *
  * `--accent-ink`, `--accent-glyph` and `--accent-hover` are derived in
- * tokens.css with color-mix, so they also follow a later light or dark switch.
- * Where that mix would fall short of 4.5:1 on a ramp, the ramp's ink is set
- * here instead, as `--accent-ink-light` or `--accent-ink-dark`.
+ * tokens.css, so they also follow a later light or dark switch. Where the ink's
+ * OKLab step would fall short of 4.5:1 on a ramp, the ramp's ink is set here
+ * instead, as `--accent-ink-light` or `--accent-ink-dark`.
  */
 export function applyAccent(accent: string | undefined): void {
   accentSetting = accent;
@@ -354,7 +355,7 @@ export function takePageHue(el: HTMLElement): void {
   }
   const i = Array.prototype.indexOf.call(document.querySelectorAll(TINTED), el);
   const n = ((i % RAINBOW.length) + RAINBOW.length) % RAINBOW.length;
-  el.style.setProperty('--btn-tint', `light-dark(color-mix(in srgb, var(--rb-${n}) var(--ink-mix-light), black), var(--rb-${n}))`);
+  el.style.setProperty('--btn-tint', inkCss(`var(--rb-${n})`));
 }
 
 /**
@@ -391,9 +392,10 @@ export function hueVars(i: number): Record<string, string> {
     // A small circular badge has no neighbouring rows to repeat its colour and
     // reads as grey at the wash's 16%, so it gets its own tier.
     '--item-hue-badge': `color-mix(in srgb, ${hue} 50%, transparent)`,
-    // Without this a gold focus ring would sit around a teal tab. The hue's
-    // own ink, opaque, as the accent's ring is the accent ink.
-    '--item-hue-ring': `light-dark(color-mix(in srgb, ${hue} var(--ink-mix-light), black), ${hue})`,
+    // The hue on the accent's ink steps, for a line-drawn glyph and for the
+    // focus ring, so a gold ring never sits around a teal tab.
+    '--item-hue-glyph': inkCss(hue),
+    '--item-hue-ring': 'var(--item-hue-glyph)',
   };
 }
 

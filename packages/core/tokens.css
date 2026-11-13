@@ -225,28 +225,33 @@
   --accent-contrast:   #161616;
   --accent-soft:       rgba(252, 196, 25, 0.14);
   /* The accent used as ink: text or a line-drawn glyph on the page's ground,
-     rather than a fill with computed ink on top. On a dark ground the two are
-     the same colour and the light theme is where they part, so use this rather
-     than --accent whenever the colour is read.
+     rather than a fill with computed ink on top, so use this rather than
+     --accent whenever the colour is read. The fill is the same in both themes:
+     Sunflower with computed ink reads well on white, while darkening the fill
+     turns it olive-brown.
 
-     The fill is the same in both themes: Sunflower with computed ink reads
-     well on white, while darkening the fill turns it olive-brown. Only yellow
-     text on white fails, so the light ink mixes the accent --ink-mix-light
-     toward black. Measured against white, the palest ground, Sunflower lands
-     at 4.95:1 and every preset clears 4.5:1. Because it derives from
-     --accent, it follows a picked colour. An accent the mix leaves under 4.5:1
-     on a ramp's card gets that ramp's ink from applyAccent instead, as
-     --accent-ink-dark or --accent-ink-light; no preset needs one. */
-  --ink-mix-light:     55%;
-  --accent-ink:        light-dark(var(--accent-ink-light, color-mix(in srgb, var(--accent) var(--ink-mix-light), black)), var(--accent-ink-dark, var(--accent)));
+     The ink is the accent moved in OKLab onto a lightness step, keeping its
+     hue: down to --ink-l-light on the light ramp, up to --ink-l-dark on the
+     dark ones. OKLab's lightness follows the eye, so every hue on one step
+     reads at nearly the same contrast, 5.2 to 5.9:1 on white for the eight
+     presets. A straight line toward black never leaves sRGB; one toward white
+     can by a hair, and the browser clips it. An accent already past the step,
+     a bright one on dark or a deep one on light, is its own ink. applyAccent
+     sets --accent-ink-light or --accent-ink-dark only where a picked colour
+     would still miss 4.5:1 on a ramp's card, which no colour has been found to
+     do (contrast.ts). */
+  --ink-l-light:       0.52;
+  --ink-l-dark:        0.74;
+  --accent-ink:        light-dark(var(--accent-ink-light, oklab(from var(--accent) min(l, var(--ink-l-light)) calc(a * min(1, var(--ink-l-light) / l)) calc(b * min(1, var(--ink-l-light) / l)))), var(--accent-ink-dark, oklab(from var(--accent) max(l, var(--ink-l-dark)) calc(a * min(1, (1 - var(--ink-l-dark)) / (1 - l))) calc(b * min(1, (1 - var(--ink-l-dark)) / (1 - l))))));
   /* The same ink for a line-drawn glyph. Rainbow never colours text, so a hued
      subtree redefines this one and leaves --accent-ink on the single accent. */
   --accent-glyph:      var(--accent-ink);
 
   /* Four state hues, Carbon's support tones. Paused reuses neutral; its
      label and its resume control carry the difference. */
-  --status-info-text:    light-dark(#8E6A00, #FCC419);
-  --status-info-bg:      light-dark(rgba(142, 106, 0, 0.12), rgba(252, 196, 25, 0.13));
+  /* Info is the default accent, so its light text is Sunflower's ink step. */
+  --status-info-text:    light-dark(oklch(0.52 0.104 86.7), #FCC419);
+  --status-info-bg:      light-dark(oklch(0.52 0.104 86.7 / 0.12), rgba(252, 196, 25, 0.13));
   --status-info-solid:   light-dark(#A87D00, #FCC419);
 
   --status-ok-text:      light-dark(#0e6027, #6fdc8c);
@@ -254,11 +259,11 @@
   --status-ok-solid:     light-dark(#198038, #6fdc8c);
 
   --status-fail-text:    light-dark(#da1e28, #ff8389);
-  --status-fail-bg:      light-dark(rgba(218, 30, 40, 0.10), rgba(255, 131, 137, 0.14));
+  --status-fail-bg:      light-dark(rgba(218, 30, 40, 0.06), rgba(255, 131, 137, 0.14));
   --status-fail-solid:   light-dark(#da1e28, #ff8389);
 
   --status-warn-text:    light-dark(#ba4e00, #FF832B);
-  --status-warn-bg:      light-dark(rgba(186, 78, 0, 0.10), rgba(255, 131, 43, 0.12));
+  --status-warn-bg:      light-dark(rgba(186, 78, 0, 0.06), rgba(255, 131, 43, 0.12));
   /* Opaque, for a chip on a row that already carries a fill the translucent
      wash would take on. */
   --status-warn-bg-strong: light-dark(#fff2e8, #36231a);
@@ -662,7 +667,7 @@ body {
   --accent: var(--item-hue);
   --accent-contrast: var(--item-hue-ink);
   --accent-soft: var(--item-hue-soft);
-  --accent-glyph: light-dark(color-mix(in srgb, var(--item-hue) var(--ink-mix-light), black), var(--item-hue));
+  --accent-glyph: var(--item-hue-glyph);
   --accent-hover: color-mix(in srgb, var(--item-hue) 85%, var(--carbon-text));
   /* Reactive mode leaves this alone: the ring only paints on focus, which
      brings the hue back through :focus-within. */
@@ -743,7 +748,7 @@ body {
   --accent-contrast: var(--item-hue-ink);
   --accent-soft: var(--item-hue-soft);
   /* Restated because the resting rule above muted the glyph too. */
-  --accent-glyph: light-dark(color-mix(in srgb, var(--item-hue) var(--ink-mix-light), black), var(--item-hue));
+  --accent-glyph: var(--item-hue-glyph);
 }
 
 :focus-visible {

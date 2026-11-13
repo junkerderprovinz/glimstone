@@ -18,7 +18,7 @@ A layered, low-noise interface system: a small light in dark masonry.
 | Text, secondary | `#c6c6c6` | `#525252` |
 | Text, muted | `#8d8d8d` | `#6f6f6f` |
 | **Accent (default)** | `#FCC419` | `#FCC419` |
-| **Accent as ink** | `#FCC419` | `#8B6C0E` (derived) |
+| **Accent as ink** | `#FCC419` | `#836407` (derived) |
 | Settled | `#6fdc8c` | `#0e6027` |
 | Fault | `#ff8389` | `#da1e28` |
 | Warning | `#FF832B` | `#ba4e00` |
@@ -42,16 +42,25 @@ adopting app's light theme drew every badge, switch and filled button in
 olive-brown, and it was reported flatly. **A token doing two jobs will be wrong
 for one of them.**
 
-`--accent-ink` is **derived, not a second colour anybody picks**:
-`light-dark(color-mix(in srgb, var(--accent) var(--ink-mix-light), black), var(--accent))`,
-the accent itself on a dark ground and mixed `55%` toward black on a light one.
-The factor is a token rather than a literal so that every ink in the sheet (including
-`--accent-glyph` inside a rainbow subtree) is a single declaration correct in both themes,
-instead of a rule with a light-theme twin beside it. Derived matters
-twice over: it follows a colour the user chose, which the old fixed constant never
-did (it only ever applied to the default), and its twin for line-drawn glyphs,
-`--accent-glyph`, follows `--item-hue` inside a rainbow subtree, so the glyph takes its position's
-colour like every fill around it.
+`--accent-ink` is **derived, not a second colour anybody picks**: the accent
+moved in OKLab onto a fixed lightness step, keeping its hue. On the light ramp
+it goes down to `--ink-l-light` (0.52), on the dark ramps up to `--ink-l-dark`
+(0.74), and an accent already past its step, a deep one on light or a bright
+one on dark, is its own ink. OKLab is built so that its lightness follows what
+the eye sees, so one step gives every hue nearly the same contrast. An sRGB mix
+toward black, which the ink used to be, does not: there blue came out at 8.0:1
+on white and Sunflower at 4.9:1. The steps are tokens rather than literals, so
+every ink in the sheet (including `--accent-glyph` inside a rainbow subtree) is
+one declaration correct in both themes, and a stronger contrast only has to
+move the steps. Derived matters twice over: it follows a colour the user
+chose, which a fixed constant never did, and its twin for line-drawn glyphs,
+`--accent-glyph`, follows `--item-hue` inside a rainbow subtree, so the glyph
+takes its position's colour like every fill around it.
+
+A line toward black in OKLab never leaves sRGB, since it scales linear RGB by a
+cube. A line toward white can, by a hair, and the browser then clips each
+channel; [`packages/core/src/oklab.ts`](../packages/core/src/oklab.ts) does the
+same, and so does the Flutter package's `accentInk`.
 
 **Rainbow never colours text.** It colours glyphs, badges, switches, primary
 buttons and active surfaces; accent-coloured text, a link or a figure, keeps the
@@ -60,10 +69,12 @@ single accent's ink inside a hued subtree as well. A text utility such as
 `.glim-hue`, while the one glyph rule that reads `--accent-text` directly takes the
 position.
 
-Measured against white, the palest ground here: Sunflower lands at
-4.95:1 and all eight presets clear 4.5:1. On Sunflower it also computes to `#8B6C0E`,
-within a shade of the `#8E6A00` the single token used to be, which is the check that this
-generalises the old rule rather than replacing it.
+Measured against white, the palest ground here, the eight presets land
+between 5.2 and 5.9:1, where the sRGB mix spread them from 4.9 to 8.0:1. On
+Sunflower the ink is `#836407`, a shade darker than the `#8E6A00` the info text
+used to be, and that text is now the same step. On the dark ramps only two
+presets move: Blue from `#1D99F3` to `#62B1F8` (4.97 to 6.60:1 on the card) and
+Orange by a hair; the others are already brighter than the step.
 
 Deciding which one a given place wants takes no thought: if the colour is on a
 `background`, it is `--accent`; if it is on `color`, a `fill` or a `stroke` against
@@ -188,7 +199,7 @@ The CSS prefix is `glim-`.
 
     The box is drawn in the house look, never the operating system's: the control radius held small enough to stay a box, and when ticked the accent fill with a tick in its contrast ink. `Checkbox` in React and Vue is this box, and the menus draw the same one. In a row or a grid cell of a dense list, `slim` draws the box alone, without the padding and hover ground of its frame, and the row or the headings around it say what it ticks. Widened for a file manager's menus, its column window and its cleanup list.
 
-40. **Every button takes the accent when it is reached for, through `--btn-tint`.** Rule 21 moves a button's ground up the ramp under the pointer, which on a grey button is a step of a few units and read as nothing happening. So a surface-filled button also mixes 22% of `--btn-tint` into that hovered ground and turns its glyph to `--btn-tint` itself. Its words stay in the text colour, since the accent on a tinted ground would not be legible. A bare glyph button has no ground to tint, so its glyph turns to the accent and its ground stays clear. The accent and status fills keep the step of their own (rule 21). Keyboard focus shows the same as the pointer, with the ring on top, and a disabled button stays as it is. `--btn-tint` is `--accent-glyph`: the accent at full strength on the dark theme, and on the light theme 55 parts accent to 45 parts black (`--ink-mix-light`), so the glyph holds its contrast on the paler ground. Under rainbow every button lights up in a colour of its own: the buttons of a page count through the palette in the order they stand, so two buttons side by side never share a colour, and a button with its own palette position keeps that one. The position is read when the pointer or the keyboard reaches the button, since the order changes with the page; `takePageHue()` in [`packages/core/src/appearance.ts`](../packages/core/src/appearance.ts) does it over every button that carries the tint, `Button` calls it for its surface tones, and an app with buttons of its own can call it from one `pointerover` and `focusin` listener at its root. **REVERSED** from "a button takes the hue of the card or row it sits in", which made every button of a card light up alike. `.glim-btn-neutral`, `.glim-btn-subtle` and `.glim-btn-bare` in [`packages/core/tokens.css`](../packages/core/tokens.css) carry it: `Button` puts the first two on its surface tones, a neutral Badge that is a button or a link wears the second, and a glyph-only button or a muted link wears the third, so that no button looks flat under the pointer.
+40. **Every button takes the accent when it is reached for, through `--btn-tint`.** Rule 21 moves a button's ground up the ramp under the pointer, which on a grey button is a step of a few units and read as nothing happening. So a surface-filled button also mixes 22% of `--btn-tint` into that hovered ground and turns its glyph to `--btn-tint` itself. Its words stay in the text colour, since the accent on a tinted ground would not be legible. A bare glyph button has no ground to tint, so its glyph turns to the accent and its ground stays clear. The accent and status fills keep the step of their own (rule 21). Keyboard focus shows the same as the pointer, with the ring on top, and a disabled button stays as it is. `--btn-tint` is `--accent-glyph`: the accent on its OKLab ink step, lighter where needed on the dark theme and darker on the light one, so the glyph holds its contrast on either ground. Under rainbow every button lights up in a colour of its own: the buttons of a page count through the palette in the order they stand, so two buttons side by side never share a colour, and a button with its own palette position keeps that one. The position is read when the pointer or the keyboard reaches the button, since the order changes with the page; `takePageHue()` in [`packages/core/src/appearance.ts`](../packages/core/src/appearance.ts) does it over every button that carries the tint, `Button` calls it for its surface tones, and an app with buttons of its own can call it from one `pointerover` and `focusin` listener at its root. **REVERSED** from "a button takes the hue of the card or row it sits in", which made every button of a card light up alike. `.glim-btn-neutral`, `.glim-btn-subtle` and `.glim-btn-bare` in [`packages/core/tokens.css`](../packages/core/tokens.css) carry it: `Button` puts the first two on its surface tones, a neutral Badge that is a button or a link wears the second, and a glyph-only button or a muted link wears the third, so that no button looks flat under the pointer.
 
 41. **Only a bar whose work runs carries a sheen, and a meter never moves.** A `ProgressBar` shows work under way, so while it runs a sheen crosses its fill, and it stops when the work is paused, done or failed. A `Meter` shows a level that stands, such as how full a disk is, and a light on it would say something is happening there: it has no sheen at any motion level, and while its value is still being read the track shows still stripes. In a footer line or a dense list a meter is `quiet`: a slim track on the second surface and a grey fill, which takes the accent when the button around it is reached and still turns red from its threshold. An accent bar on every row outshouts the names beside it. Decided on a prototype that had the sheen on every bar.
 
@@ -206,7 +217,7 @@ The CSS prefix is `glim-`.
 
 44. **The system's colour is a source for the accent, and a wand swatch stands first wherever there is one.** Where the platform hands out a colour of its own (Material You on Android, the desktop's accent colour, or the browser), a swatch wearing `IconAccentSystem` stands before the eight presets, filled with that colour. Choosing it stores the word `system` (`SYSTEM_ACCENT`), never the hex, so a synced setting does not carry one device's wallpaper to another and every device paints its own colour. The app feeds the colour with `setSystemAccent()` and calls it again when the source changes. The core repaints and remembers the last colour on the device, so the first frame after a reload is already right. On the plain web, `watchBrowserAccent(setSystemAccent)` in [`packages/core/src/browserAccent.ts`](../packages/core/src/browserAccent.ts) reads CSS `AccentColor`, which carries the system's colour in Firefox and Safari. Chromium resolves it to a fixed colour of its own, so `browserAccentWorks()` counts every Chromium browser as no source, and the file names the other limits. Where there is no source the swatch is not shown, and a `system` setting that arrives from another device paints the default Sunflower.
 
-45. **Every ink the colour engine computes reaches 4.5:1, whatever colour feeds it.** A picked or a system colour can be anything, so the engine measures each one instead of trusting a list of presets. The ink on a fill (`contrastOn()`, `--accent-contrast`) is white or Carbon's `#161616`, whichever reads better, and on the mid-tones where neither reaches 4.5:1 the near-black goes on toward black just far enough. Accent text (`--accent-ink`, and `--accent-glyph` with it) keeps the stylesheet's mix wherever that holds on the ramp's card, white on light and `#262626` on dark. Where it does not, `applyAccent()` sets that ramp's own ink as `--accent-ink-light` or `--accent-ink-dark`, pushed toward black on light and toward white on dark until it reads. OLED's cards are darker than dark's, so the dark ink holds there too. Every preset keeps its text ink to the digit. The fill ink is where they move: Blue, Red, Purple, Orange and Magenta carry `#161616` instead of white, which read at 2.3 to 3.0:1 on them, and the rainbow positions in those colours follow. The arithmetic is in [`packages/core/src/contrast.ts`](../packages/core/src/contrast.ts), tested with near white, near black, mid grey, saturated blue and yellow. The focus ring is that ink, opaque (`--focus-ring` is `--accent-ink`), so it follows a picked colour, and 4.5:1 on the card leaves it at least 3:1 on every ground a ring stands on: the page, the rail, a card, a well and a row's hover. A rainbow position's ring is its hue's ink the same way. A field's placeholder reads `--field-placeholder`, the dimmest grey that holds 4.5:1 on every field fill, surface3 in a sub-card included, where the muted step falls to 2.4:1. [`packages/core/test/tokenContrast.test.ts`](../packages/core/test/tokenContrast.test.ts) reads the values out of `tokens.css` and measures each pair in every theme, for every preset and a handful of picked colours.
+45. **Every ink the colour engine computes reaches 4.5:1, whatever colour feeds it.** A picked or a system colour can be anything, so the engine measures each one instead of trusting a list of presets. The ink on a fill (`contrastOn()`, `--accent-contrast`) is white or Carbon's `#161616`, whichever reads better, and on the mid-tones where neither reaches 4.5:1 the near-black goes on toward black just far enough. Accent text (`--accent-ink`, and `--accent-glyph` with it) is the stylesheet's OKLab step, which holds on the ramp's card, white on light and `#262626` on dark, for every colour a sweep of 5,832 found. Should one ever fall short, `applyAccent()` sets that ramp's own ink as `--accent-ink-light` or `--accent-ink-dark`, pushed toward black on light and toward white on dark until it reads. OLED's cards are darker than dark's, so the dark ink holds there too. The fill ink is computed for every colour: Blue, Red, Purple, Orange and Magenta carry `#161616` instead of white, which read at 2.3 to 3.0:1 on them, and the rainbow positions in those colours follow. The arithmetic is in [`packages/core/src/contrast.ts`](../packages/core/src/contrast.ts), tested with near white, near black, mid grey, saturated blue and yellow. The focus ring is that ink, opaque (`--focus-ring` is `--accent-ink`), so it follows a picked colour, and 4.5:1 on the card leaves it at least 3:1 on every ground a ring stands on: the page, the rail, a card, a well and a row's hover. A rainbow position's ring is its hue's ink the same way. A field's placeholder reads `--field-placeholder`, the dimmest grey that holds 4.5:1 on every field fill, surface3 in a sub-card included, where the muted step falls to 2.4:1. [`packages/core/test/tokenContrast.test.ts`](../packages/core/test/tokenContrast.test.ts) reads the values out of `tokens.css` and measures every text pair the components use, each text colour on the fill a rule gives it and the text ramp, the accent ink and the state texts on the grounds they stand on, in every theme for all eight presets, and the focus ring for a handful of picked colours as well.
 
 46. **In a Windows contrast theme every surface has an edge and every state has the selection colour.** Under `forced-colors: active` the system replaces every colour and drops every shadow, and GlimStone draws its edges with fills and shadows, so a card, a field and a switch would vanish into the page. The stylesheet gives each surface a 1px edge in `CanvasText` (fields, buttons, badges, segments and tiles in `ButtonText`), and a chosen segment, tile or rail row, a switch that is on, a ticked box and a bar's fill take `Highlight` with `HighlightText` on top. The small controls set `forced-color-adjust: none` for that, so their two states stay apart: a switch's track and thumb, a checkbox's box and its mark, which is hidden until the box is ticked. Disabled controls read `GrayText`. [`site/tests/forced.spec.ts`](../site/tests/forced.spec.ts) checks it under Chromium's emulation.
 
@@ -1660,14 +1671,14 @@ Defined once under `:root, [data-theme]`, each colour that differs between the t
 | `--tile-edge` | the ring on a lit brand tile, set by OLED so a near-black tile keeps its edge on a black card (rule 43), and by `.glim-tile-zimaos`, whose light grey is the light theme's ground. Unset elsewhere |
 | `--mark-ink` / `--mark-cut` | set on a lit brand tile. A mark paints each part with `var(--mark-ink, <own colour>)`, or `var(--mark-cut, <own colour>)` where the part is a cut-out. |
 | `--carbon-hover-raised` | hover for anything already filled with surface3 - the neutral button, a raised segment. One step further from the surface in each theme, which is lighter on dark and darker on light (rule 21) |
-| `--btn-tint` | the colour a button takes when it is reached for: 22% of it in a surface-filled button's hovered ground, all of it in the glyph (rule 40). `--accent-glyph`, so the accent on dark and the accent mixed with black by `--ink-mix-light` on light. Set by `.glim-btn-neutral`, `.glim-btn-subtle` and `.glim-btn-bare` |
+| `--btn-tint` | the colour a button takes when it is reached for: 22% of it in a surface-filled button's hovered ground, all of it in the glyph (rule 40). `--accent-glyph`, so the accent on its OKLab ink step in either theme. Set by `.glim-btn-neutral`, `.glim-btn-subtle` and `.glim-btn-bare` |
 | `--carbon-border` | hairline separators |
 | `--carbon-text` / `-sub` / `-muted` | three-step text ramp |
 | `--sidebar-text` | nav label colour |
 | `--accent` / `--accent-contrast` / `--accent-soft` | activity, as a FILL and the computed ink on it |
 | `--accent-ink` | the same activity colour where it is READ: text, a stroke on the page ground. Derived from `--accent`, never set by hand |
 | `--accent-ink-light` / `--accent-ink-dark` | set by `applyAccent()` only where the derived ink falls short of 4.5:1 on that ramp's card, and then `--accent-ink` takes it (rule 45). No preset sets them |
-| `--ink-mix-light` | how much of the accent `--accent-ink` keeps against black on the light ramp, `55%`. On the dark ramps the ink is the accent |
+| `--ink-l-light`, `--ink-l-dark` | the OKLab lightness steps of the accent's ink: at most 0.52 on the light ramp, at least 0.74 on the dark ones ("The palette") |
 | `--status-{ok,fail,warn,info,neutral}-{text,bg,solid}` | states |
 | `--status-warn-bg-strong` / `--status-warn-bg-soft` | the two ends of the warn wash: opaque for a chip that has to hold its own against a row's hover fill, quiet for a paragraph that explains rather than warns |
 | `--elevation-raised`, `--hairline` | the card's shadow and its top light, per theme. OLED keeps both, and on black the shadow cannot be seen, so a card's fill is its edge (rule 43). `--elevation` is the same step under its older name |

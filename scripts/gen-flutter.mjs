@@ -4,6 +4,7 @@
 //
 // Run from the repository root: node scripts/gen-flutter.mjs [--check]
 import { readFileSync, writeFileSync } from "node:fs";
+import { srgbOf } from "../packages/core/src/oklab.ts";
 
 const core = new URL("../packages/core/", import.meta.url);
 const out = new URL("../packages/flutter/lib/src/", import.meta.url);
@@ -47,21 +48,33 @@ const root = { ...block(":root {"), ...block(":root {", "--btn-h") };
 
 const camel = (name) => name.replace(/^--/, "").replace(/-([a-z0-9])/g, (_, c) => c.toUpperCase());
 
+const h = (n) => Number(n).toString(16).padStart(2, "0").toUpperCase();
+
+// Dart needs a concrete colour, so an oklch() token is resolved to sRGB here,
+// clipped per channel as the browser paints it.
 function dartColor(value) {
   const hex = value.match(/^#([0-9a-f]{6})$/i);
   if (hex) return `Color(0xFF${hex[1].toUpperCase()})`;
+  const lch = value.match(/^oklch\(\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s*(?:\/\s*([\d.]+))?\s*\)$/);
+  if (lch) {
+    const [l, c, deg] = lch.slice(1, 4).map(Number);
+    const rad = (deg * Math.PI) / 180;
+    const rgb = srgbOf([l, c * Math.cos(rad), c * Math.sin(rad)]).slice(1);
+    return `Color(0x${h(Math.round(Number(lch[4] ?? 1) * 255))}${rgb})`;
+  }
   const rgba = value.match(/^rgba?\(\s*(\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\s*\)$/);
   if (!rgba) return null;
   const a = Math.round(Number(rgba[4] ?? 1) * 255);
-  const h = (n) => Number(n).toString(16).padStart(2, "0").toUpperCase();
   return `Color(0x${h(a)}${h(rgba[1])}${h(rgba[2])}${h(rgba[3])})`;
 }
 
-// Every literal colour both themes define. A token written with var() or
-// color-mix() is derived, and the Dart side derives it the same way.
+// Every literal colour both themes define. A token written with var(),
+// color-mix() or a relative oklab() is derived, and the Dart side derives it
+// the same way.
 const colours = Object.keys(dark).filter((k) => dartColor(dark[k]) && light[k] && dartColor(light[k]));
-// The light ramp's ink mixes the accent toward black; on the dark ramps it is the accent.
-const inkMix = (theme) => (theme === light ? Number.parseFloat(themed["--ink-mix-light"]) / 100 : 1);
+// The lightness step the accent's ink moves to: down to it on the light ramp,
+// up to it on the dark ones.
+const inkLightness = (theme) => Number(themed[theme === light ? "--ink-l-light" : "--ink-l-dark"]);
 
 const px = (value) => {
   if (value === "0") return 0;
@@ -93,43 +106,44 @@ import 'package:flutter/material.dart';
 class GlimTheme extends ThemeExtension<GlimTheme> {
   const GlimTheme({
 ${fields.map((f) => `    required this.${f},`).join("\n")}
-    required this.inkMix,
+    required this.inkLightness,
     this.shape = GlimShape.${defaultShape},
   });
 
 ${fields.map((f) => `  final Color ${f};`).join("\n")}
 
-  /// How much of the accent an ink keeps against black, as in tokens.css.
-  final double inkMix;
+  /// The OKLab lightness the accent's ink moves to, as in tokens.css: at most
+  /// this on a light ramp, at least this on a dark one.
+  final double inkLightness;
 
   /// The shape the user chose; it sets the radii of cards, controls and pills.
   final GlimShape shape;
 
   static const dark = GlimTheme(
 ${palette(dark)}
-    inkMix: ${inkMix(dark)},
+    inkLightness: ${inkLightness(dark)},
   );
 
   /// The dark ramp on true black, for OLED and AMOLED screens.
   static const oled = GlimTheme(
 ${palette(oled)}
-    inkMix: ${inkMix(oled)},
+    inkLightness: ${inkLightness(oled)},
   );
 
   static const light = GlimTheme(
 ${palette(light)}
-    inkMix: ${inkMix(light)},
+    inkLightness: ${inkLightness(light)},
   );
 
   @override
   GlimTheme copyWith({
 ${fields.map((f) => `    Color? ${f},`).join("\n")}
-    double? inkMix,
+    double? inkLightness,
     GlimShape? shape,
   }) =>
       GlimTheme(
 ${fields.map((f) => `        ${f}: ${f} ?? this.${f},`).join("\n")}
-        inkMix: inkMix ?? this.inkMix,
+        inkLightness: inkLightness ?? this.inkLightness,
         shape: shape ?? this.shape,
       );
 
@@ -138,7 +152,7 @@ ${fields.map((f) => `        ${f}: ${f} ?? this.${f},`).join("\n")}
     if (other == null) return this;
     return GlimTheme(
 ${fields.map((f) => `      ${f}: Color.lerp(${f}, other.${f}, t)!,`).join("\n")}
-      inkMix: inkMix + (other.inkMix - inkMix) * t,
+      inkLightness: inkLightness + (other.inkLightness - inkLightness) * t,
       shape: t < 0.5 ? shape : other.shape,
     );
   }

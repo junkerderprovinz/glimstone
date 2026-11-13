@@ -1,3 +1,8 @@
+## Unreleased
+
+- `GlimTheme.inkMix` is `inkLightness`, the OKLab step the accent's ink moves to, and `accentInk` moves the accent in OKLab as tokens.css does. `GlimTheme` gains `fieldPlaceholder`, and `focusRing` is a getter on `GlimDerived`.
+- Needs Flutter 3.27 or later, for `Color.r` and `Color.from`.
+
 ## 4.4.1
 
 - The same number as the other packages. Nothing changed for Flutter.

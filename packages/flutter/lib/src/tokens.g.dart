@@ -56,7 +56,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     required this.statusNeutralBg,
     required this.statusNeutralSolid,
     required this.glimScrim,
-    required this.inkMix,
+    required this.inkLightness,
     this.shape = GlimShape.soft,
   });
 
@@ -109,8 +109,9 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
   final Color statusNeutralSolid;
   final Color glimScrim;
 
-  /// How much of the accent an ink keeps against black, as in tokens.css.
-  final double inkMix;
+  /// The OKLab lightness the accent's ink moves to, as in tokens.css: at most
+  /// this on a light ramp, at least this on a dark one.
+  final double inkLightness;
 
   /// The shape the user chose; it sets the radii of cards, controls and pills.
   final GlimShape shape;
@@ -164,7 +165,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     statusNeutralBg: Color(0x0DFFFFFF),
     statusNeutralSolid: Color(0xFF8D8D8D),
     glimScrim: Color(0xB8000000),
-    inkMix: 1,
+    inkLightness: 0.74,
   );
 
   /// The dark ramp on true black, for OLED and AMOLED screens.
@@ -217,7 +218,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     statusNeutralBg: Color(0x0DFFFFFF),
     statusNeutralSolid: Color(0xFF8D8D8D),
     glimScrim: Color(0xB8000000),
-    inkMix: 1,
+    inkLightness: 0.74,
   );
 
   static const light = GlimTheme(
@@ -251,17 +252,17 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     accent: Color(0xFFFCC419),
     accentContrast: Color(0xFF161616),
     accentSoft: Color(0x24FCC419),
-    statusInfoText: Color(0xFF8E6A00),
-    statusInfoBg: Color(0x1F8E6A00),
+    statusInfoText: Color(0xFF836407),
+    statusInfoBg: Color(0x1F836407),
     statusInfoSolid: Color(0xFFA87D00),
     statusOkText: Color(0xFF0E6027),
     statusOkBg: Color(0x1C0E6027),
     statusOkSolid: Color(0xFF198038),
     statusFailText: Color(0xFFDA1E28),
-    statusFailBg: Color(0x1ADA1E28),
+    statusFailBg: Color(0x0FDA1E28),
     statusFailSolid: Color(0xFFDA1E28),
     statusWarnText: Color(0xFFBA4E00),
-    statusWarnBg: Color(0x1ABA4E00),
+    statusWarnBg: Color(0x0FBA4E00),
     statusWarnBgStrong: Color(0xFFFFF2E8),
     statusWarnBgSoft: Color(0x0DBA4E00),
     statusWarnSolid: Color(0xFFBA4E00),
@@ -269,7 +270,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     statusNeutralBg: Color(0x0B000000),
     statusNeutralSolid: Color(0xFF8D8D8D),
     glimScrim: Color(0x9E000000),
-    inkMix: 0.55,
+    inkLightness: 0.52,
   );
 
   @override
@@ -322,7 +323,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     Color? statusNeutralBg,
     Color? statusNeutralSolid,
     Color? glimScrim,
-    double? inkMix,
+    double? inkLightness,
     GlimShape? shape,
   }) =>
       GlimTheme(
@@ -374,7 +375,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
         statusNeutralBg: statusNeutralBg ?? this.statusNeutralBg,
         statusNeutralSolid: statusNeutralSolid ?? this.statusNeutralSolid,
         glimScrim: glimScrim ?? this.glimScrim,
-        inkMix: inkMix ?? this.inkMix,
+        inkLightness: inkLightness ?? this.inkLightness,
         shape: shape ?? this.shape,
       );
 
@@ -430,7 +431,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
       statusNeutralBg: Color.lerp(statusNeutralBg, other.statusNeutralBg, t)!,
       statusNeutralSolid: Color.lerp(statusNeutralSolid, other.statusNeutralSolid, t)!,
       glimScrim: Color.lerp(glimScrim, other.glimScrim, t)!,
-      inkMix: inkMix + (other.inkMix - inkMix) * t,
+      inkLightness: inkLightness + (other.inkLightness - inkLightness) * t,
       shape: t < 0.5 ? shape : other.shape,
     );
   }

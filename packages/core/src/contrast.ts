@@ -2,6 +2,8 @@
 // with it. Every ink it hands out reaches 4.5:1, the minimum for body text,
 // whatever colour somebody picked or the system supplied.
 
+import { darkenTo, INK_LIGHTNESS, lightenTo } from './oklab.ts';
+
 /** The ratio body text needs, and the floor of every ink computed here. */
 export const MIN_TEXT_CONTRAST = 4.5;
 
@@ -16,8 +18,6 @@ const BLACK = '#000000';
 const LIGHT_CARD = '#FFFFFF';
 const DARK_CARD = '#262626';
 
-// --ink-mix-light in tokens.css.
-const LIGHT_INK_MIX = 0.55;
 
 type Rgb = [number, number, number];
 
@@ -102,16 +102,17 @@ export function contrastOn(hex: string): string {
  * stylesheet's mix holds and nothing needs setting, which is the case for
  * every preset.
  *
- * The light ink starts from the stylesheet's mix toward black and goes on
- * toward black; the dark ink starts from the accent itself and goes toward
- * white.
+ * Each starts from the stylesheet's own step in OKLab (oklab.ts) and, should
+ * that fall short, goes on in sRGB: the light ink toward black, the dark ink
+ * toward white.
  */
 export function accentInks(hex: string): { light: string | undefined; dark: string | undefined } {
   if (!validHex(hex)) return { light: undefined, dark: undefined };
   const accent = rgb(hex);
-  const light = mix(accent, rgb(BLACK), 1 - LIGHT_INK_MIX);
+  const light = rgb(darkenTo(hex, INK_LIGHTNESS.light));
+  const dark = rgb(lightenTo(hex, INK_LIGHTNESS.dark));
   return {
     light: ratio(light, rgb(LIGHT_CARD)) >= MIN_TEXT_CONTRAST ? undefined : pushed(light, rgb(BLACK), rgb(LIGHT_CARD)),
-    dark: ratio(accent, rgb(DARK_CARD)) >= MIN_TEXT_CONTRAST ? undefined : pushed(accent, rgb(WHITE), rgb(DARK_CARD)),
+    dark: ratio(dark, rgb(DARK_CARD)) >= MIN_TEXT_CONTRAST ? undefined : pushed(dark, rgb(WHITE), rgb(DARK_CARD)),
   };
 }
