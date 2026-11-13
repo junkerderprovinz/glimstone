@@ -10,7 +10,7 @@ const SITE = "/";
 // Each Playwright project runs every row against one framework's demos alone.
 async function open(page: Page, path: string, look?: Record<string, unknown>) {
   if (look) await page.addInitScript((l) => localStorage.setItem("gs-docs-look", JSON.stringify(l)), look);
-  await page.goto(`${SITE}#${path}?fw=${test.info().project.name}`);
+  await page.goto(`${SITE}#${path}?fw=${test.info().project.metadata.fw}`);
   await page.locator("main h1").first().waitFor();
   const motion = look?.motion;
   if (motion) expect(await page.evaluate(() => document.documentElement.dataset.motion)).toBe(motion);
@@ -30,7 +30,7 @@ async function centre(el: Locator) {
 // For a component that has no Vue twin, so the Vue run says so instead of
 // passing over an empty stage.
 function reactOnly() {
-  test.beforeEach(({}, info) => test.skip(info.project.name !== "react", "React only"));
+  test.beforeEach(({}, info) => test.skip(info.project.metadata.fw !== "react", "React only"));
 }
 
 const hexToRgb = (hex: string) => {

@@ -1,9 +1,12 @@
 // Turns Playwright's JSON report into the per-row results the site shows, one
 // result per framework. A row a framework skips, because it has no such
-// component, has no entry for it.
+// component, has no entry for it. A framework runs in Chromium and Firefox, and
+// its row passes only when it passes in both.
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 
 const raw = JSON.parse(readFileSync(new URL("./test-results/raw.json", import.meta.url), "utf8"));
+const frameworkOf = new Map(raw.config.projects.map((p) => [p.name, p.metadata?.fw]));
+const browserOf = (project) => (project.endsWith("-firefox") ? "Firefox" : "Chromium");
 const rows = {};
 const walk = (suite) => {
   for (const spec of suite.specs ?? []) {
@@ -15,7 +18,10 @@ const walk = (suite) => {
       const error = result.error?.message?.replace(/\u001b\[[0-9;]*m/g, "").split("\n")[0];
       // A row marked as an expected failure keeps CI green but still reads as failing here.
       const ok = result.status === "passed";
-      (rows[id] ??= {})[t.projectName] = { ok, ...(ok ? {} : { error }) };
+      const row = (rows[id] ??= {});
+      const fw = frameworkOf.get(t.projectName);
+      if (row[fw] && !row[fw].ok) continue;
+      row[fw] = { ok, ...(ok ? {} : { error: `${browserOf(t.projectName)}: ${error}` }) };
     }
   }
   for (const child of suite.suites ?? []) walk(child);

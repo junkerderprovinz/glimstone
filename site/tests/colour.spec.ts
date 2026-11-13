@@ -2,7 +2,7 @@ import { expect, test, type Page } from "@playwright/test";
 
 // The colour engine's stylesheet side, which the core's unit tests cannot see.
 // It does not depend on a framework, so only one project runs it.
-test.beforeEach(({}, info) => test.skip(info.project.name !== "react", "framework-free"));
+test.beforeEach(({}, info) => test.skip(info.project.metadata.fw !== "react", "framework-free"));
 
 async function open(page: Page, look: object) {
   await page.addInitScript((l) => localStorage.setItem("gs-docs-look", JSON.stringify(l)), look);
