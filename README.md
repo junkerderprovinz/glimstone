@@ -98,7 +98,7 @@ IBM Carbon's neutral greys for the ground and surfaces, one accent that means "t
 
 **Six axes belong to the user**: theme, corner shape, accent colour, rainbow, motion intensity and label mode. Every one of them is applied once at the app root, never by the page that edits it. Four resolve through a named engine, so nothing downstream has to know which setting produced the value it got: the **shape engine** (one radius token, no exception list), the **colour engine** (theme, accent and rainbow together), the **motion engine** (one set of duration and distance tokens feeding the same keyframes at every intensity) and the **label engine** (text, glyph or both, across three independent surfaces). Icons come from one shared assortment so a folder is the same folder in every app.
 
-See [`docs/design-language.md`](docs/design-language.md) for the palette table and all the rules with their reasoning.
+See [`docs/design-language.md`](docs/design-language.md) for the palette table and all the rules with their reasoning. The site's [Rules](https://junkerderprovinz.github.io/glimstone/#/guide/rules) page is built from that list.
 
 <br>
 

@@ -38,6 +38,7 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 - **Row density.** A new axis for lists and tables: `data-density` is `compact`, `normal` or `airy`, set by `applyDensity()` and cached with `cacheAppearance(shape, accent, rainbow, density)`. Rows are 32, 42 or 52px tall, and their gap and padding move with them on the spacing scale. Normal looks as before. Vue has `useDensity()`, and the site has a Density page and a row in the Look panel.
 
 - **Every component rule is in `@layer components`.** Many rules in `tokens.css` stood outside any layer, so an app had to out-specify them to change a component. Now the components and the reset are layered, in the order `base, components`, and a plain rule of the app's own wins. The tokens stay outside. An app that copies `tokens.css` and has unlayered rules of its own that relied on losing to GlimStone should check them.
+- **A Rules page on the site,** built from the numbered list in `docs/design-language.md`, so the two say the same thing. A test fails when a "rule N" in the code, the docs or the site names a rule that does not exist.
 
 ## 🐛 Fixed
 
