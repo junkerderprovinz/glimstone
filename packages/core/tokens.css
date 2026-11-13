@@ -121,6 +121,9 @@
 }
 
 :root {
+  /* The focus ring's width. The contrast step thickens it. */
+  --focus-ring-width: 2px;
+
   /* Stacking, lowest first. Raised and its top sit over neighbours inside the
      same box; docked sticks to an edge of a card or the page; chrome is the
      desktop title bar; window, menu, toast and bubble open over everything
@@ -321,6 +324,30 @@
   --tile-edge: light-dark(transparent, rgba(255, 255, 255, .2));
 }
 
+/* The contrast step, for anyone whose system asks for more contrast. It is
+   GlimStone's own and separate from a Windows contrast theme (forced-colors,
+   at the end of this file), which replaces every colour: here the palette
+   stays and only moves. The accent's ink takes a second lightness step in the
+   same ramps, so every preset reads at 8.9 to 9.7:1 as text on white. The sub
+   and muted text each move a step toward the text colour, borders darken to
+   where they read as lines, a card's hairline becomes a ring in the border
+   colour, and the focus ring thickens. The accent fill stays as it is. */
+@media (prefers-contrast: more) {
+  :root,
+  [data-theme] {
+    --ink-l-light:       0.40;
+    --ink-l-dark:        0.84;
+    --carbon-text-sub:   light-dark(#393939, #e0e0e0);
+    --carbon-text-muted: light-dark(#525252, #c6c6c6);
+    --sidebar-text:      light-dark(#161616, #f4f4f4);
+    --field-placeholder: light-dark(#393939, #e0e0e0);
+    --status-neutral-text: light-dark(#525252, #c6c6c6);
+    --carbon-border:     light-dark(#6f6f6f, #8d8d8d);
+    --hairline:          inset 0 0 0 1px var(--carbon-border);
+    --focus-ring-width:  3px;
+  }
+}
+
 /* The hover step of a filled tone that has no surface ramp of its own (rule
    21): the fill mixed toward the theme's text colour, which is lighter on dark
    and darker on light, the direction the ramp moves. 15% is about one step of
@@ -498,7 +525,7 @@ body {
 }
 .glim-info-icon:focus-visible {
   opacity: 1;
-  outline: 2px solid var(--focus-ring);
+  outline: var(--focus-ring-width) solid var(--focus-ring);
   outline-offset: 2px;
 }
 
@@ -752,7 +779,7 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid var(--focus-ring);
+  outline: var(--focus-ring-width) solid var(--focus-ring);
   outline-offset: 2px;
 }
 
@@ -2575,7 +2602,7 @@ body {
   color: var(--carbon-text);
 }
 .glim-window-button:focus-visible .glim-window-square {
-  outline: 2px solid var(--focus-ring);
+  outline: var(--focus-ring-width) solid var(--focus-ring);
   outline-offset: 2px;
 }
 @media (prefers-reduced-motion: no-preference) {
@@ -2628,7 +2655,7 @@ body {
 .glim-select-trigger:hover { background: var(--carbon-hover); }
 .glim-select-trigger:focus-visible,
 .glim-combobox-control:focus-within {
-  outline: 2px solid var(--focus-ring);
+  outline: var(--focus-ring-width) solid var(--focus-ring);
   outline-offset: 1px;
 }
 /* In a well or a sub-card the trigger stands among fields, so it takes their
@@ -2870,7 +2897,7 @@ body {
   cursor: grab;
 }
 .glim-slider-thumb:focus-visible {
-  outline: 2px solid var(--focus-ring);
+  outline: var(--focus-ring-width) solid var(--focus-ring);
   outline-offset: 3px;
 }
 .glim-slider-thumb[data-dragging] { cursor: grabbing; }
@@ -3053,7 +3080,7 @@ body {
   }
   .glim-toggle-track[aria-checked="true"] { background-color: var(--accent); }
   .glim-toggle-track:focus-visible {
-    outline: 2px solid var(--focus-ring);
+    outline: var(--focus-ring-width) solid var(--focus-ring);
     outline-offset: 2px;
   }
   .glim-toggle-track:disabled { opacity: 0.5; }
@@ -5545,7 +5572,7 @@ body {
 /* The ring of a row with slots goes around the row, not around its link alone. */
 .glim-nav-row-main:focus-visible { outline: none; }
 .glim-nav-row--slots:has(> .glim-nav-row-main:focus-visible) {
-  outline: 2px solid var(--focus-ring);
+  outline: var(--focus-ring-width) solid var(--focus-ring);
   outline-offset: 2px;
 }
 /* An app's own rule for links or buttons, such as a reset's
@@ -5910,7 +5937,7 @@ a:is(.glim-btn, .glim-icon-btn) { text-decoration: none; }
     color: var(--accent-ink);
   }
   .glim-list-tr > td:focus-visible {
-    outline: 2px solid var(--focus-ring);
+    outline: var(--focus-ring-width) solid var(--focus-ring);
     outline-offset: -2px;
   }
   .glim-list-tr > td.glim-table-end { text-align: end; }
@@ -5971,6 +5998,17 @@ a:is(.glim-btn, .glim-icon-btn) { text-decoration: none; }
   .glim-field-row > .glim-field-error {
     justify-content: flex-end;
     margin-top: 0;
+  }
+}
+
+/* Under the contrast step every field and pressable control draws its edge,
+   which the calm look leaves to the fill alone. The ring takes the edge's
+   place while a control has keyboard focus. */
+@media (prefers-contrast: more) {
+  :is(.glim-input, .glim-num-field, .glim-glyph-field, .glim-combobox-control, .glim-select-trigger,
+    .glim-btn, .glim-sel-seg, .glim-sel-tile, .glim-toggle-track, .glim-checkbox-box, .glim-rowmark):not(:focus-visible) {
+    outline: 1px solid var(--carbon-border);
+    outline-offset: -1px;
   }
 }
 

@@ -21,11 +21,17 @@ function block(head: string, has: string): Record<string, string> {
   assert.fail(`no block ${head} with ${has}`);
 }
 
+const props = (body: string) =>
+  Object.fromEntries([...body.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)].map((m) => [m[1]!, m[2]!.trim()])) as Record<string, string>;
+
+// The contrast step's overrides, and the sheet without them for the plain look.
+const MORE_BLOCK = /@media \(prefers-contrast: more\) \{\s*:root,\s*\[data-theme\] \{([^}]*)\}\s*\}/;
+const more = props(bare.match(MORE_BLOCK)![1]!);
+const plain = bare.replace(MORE_BLOCK, '');
+
 // Every block declared wherever a theme is set: the palette, the hover steps and
 // the elevation.
-const themed = Object.assign({}, ...[...bare.matchAll(/:root,\s*\[data-theme\] \{([^}]*)\}/g)].map(([, body]) =>
-  Object.fromEntries([...body!.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)].map((m) => [m[1]!, m[2]!.trim()])),
-)) as Record<string, string>;
+const themed = Object.assign({}, ...[...plain.matchAll(/:root,\s*\[data-theme\] \{([^}]*)\}/g)].map(([, body]) => props(body!))) as Record<string, string>;
 const oledBlock = block('[data-oled]', '--carbon-bg');
 
 // The side of every light-dark() a theme takes, kept in the scope beside the tokens.
@@ -34,7 +40,15 @@ const THEMES: Record<string, Record<string, string>> = {
   dark: { ...themed, [SCHEME]: 'dark' },
   OLED: { ...themed, ...oledBlock, [SCHEME]: 'dark' },
   light: { ...themed, [SCHEME]: 'light' },
+  'dark with more contrast': { ...themed, ...more, [SCHEME]: 'dark' },
+  'OLED with more contrast': { ...themed, ...oledBlock, ...more, [SCHEME]: 'dark' },
+  'light with more contrast': { ...themed, ...more, [SCHEME]: 'light' },
 };
+
+// On the contrast step the text that carries meaning reaches AAA on the page
+// and on a card.
+const AAA = 7;
+const MORE_TEXT = ['--carbon-text', '--carbon-text-sub', '--carbon-text-muted', '--accent-ink', '--field-placeholder'];
 
 // A ring stands on the ground around a control: the page, the rail, a card, a
 // well, or a row's hover fill when the ring is drawn inside the row.
@@ -245,6 +259,22 @@ for (const [themeName, theme] of Object.entries(THEMES)) {
         assert.ok(r >= MIN_GRAPHIC_CONTRAST, `${g} ${hex(ground)}: ${r.toFixed(2)}:1`);
       }
       assert.equal(ring[3], 1, 'the ring is opaque');
+    });
+  }
+
+  if (themeName.endsWith('more contrast')) {
+    for (const { name: accentName, hex: accent } of ACCENTS) {
+      test(`the text ramp and the ink reach 7:1 on the page and a card for ${accentName} on ${themeName}`, () => {
+        const scope = withAccent(theme, accent);
+        const misses = MORE_TEXT.flatMap((ink) => ['--carbon-bg', '--carbon-surface'].map((g) => [ink, g, pairRatio(ink, g, scope)] as const))
+          .filter(([, , r]) => r < AAA)
+          .map(([ink, g, r]) => `${ink} on ${g}: ${r.toFixed(2)}:1`);
+        assert.deepEqual(misses, []);
+      });
+    }
+
+    test(`a border reads at 3:1 on the card and the page on ${themeName}`, () => {
+      for (const g of ['--carbon-bg', '--carbon-surface']) assert.ok(pairRatio('--carbon-border', g, theme) >= MIN_GRAPHIC_CONTRAST, g);
     });
   }
 
