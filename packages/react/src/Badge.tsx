@@ -137,7 +137,7 @@ export function Badge({
   }
 
   return (
-    <span data-glim="Badge" title={title} aria-label={ariaLabel} style={hueStyle} className={classes}>
+    <span data-glim="Badge" title={title} role={ariaLabel ? "img" : undefined} aria-label={ariaLabel} style={hueStyle} className={classes}>
       {children}
     </span>
   );

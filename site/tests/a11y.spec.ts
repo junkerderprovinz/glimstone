@@ -13,7 +13,12 @@ for (const theme of ["dark", "light"]) {
       await page.goto(`/#${path}?fw=react`);
       await page.locator("main h1").first().waitFor();
       await page.evaluate(() => document.fonts.ready);
-      const { violations } = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
+      // The calibration page's left side is an app prototype's own markup, kept
+      // to compare against, not GlimStone's.
+      const { violations } = await new AxeBuilder({ page })
+        .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
+        .exclude('.cal-stage[data-side="prototype"]')
+        .analyze();
       const found = violations.map((v) => `${v.id}: ${v.help} (${v.nodes.map((n) => n.target.join(" ")).join(", ")})`);
       expect(found).toEqual([]);
     });

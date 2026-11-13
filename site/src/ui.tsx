@@ -94,7 +94,7 @@ export function Code({ code, copy = true }: { code: string; copy?: boolean }) {
   const [copied, doCopy] = useCopied();
   return (
     <div className="code-block">
-      <pre className="code">
+      <pre className="code" tabIndex={0}>
         <code dangerouslySetInnerHTML={{ __html: highlight(code.trim()) }} />
       </pre>
       {copy && (
@@ -181,7 +181,7 @@ export function Demo({ name, left }: { name: string; left?: boolean }) {
           {showFlutter && stage("flutter", <FlutterFrame name={name} />)}
         </div>
       ) : (
-        <pre className="code" style={{ maxHeight: "28rem" }}>
+        <pre className="code" tabIndex={0} style={{ maxHeight: "28rem" }}>
           <code dangerouslySetInnerHTML={{ __html: highlight(shown) }} />
         </pre>
       )}

@@ -4591,7 +4591,7 @@
     white-space: nowrap;
   }
   .glim-pill--state { background-color: var(--pill-state, var(--carbon-surface3)); color: var(--carbon-text); }
-  .glim-pill--ok { background-color: color-mix(in srgb, var(--pill-ground, var(--carbon-surface2)), var(--status-ok-solid) 30%); color: var(--carbon-text); }
+  .glim-pill--ok { background-color: color-mix(in srgb, var(--pill-ground, var(--carbon-surface2)), var(--status-ok-solid) 25%); color: var(--carbon-text); }
   .glim-pill--warn { background-color: color-mix(in srgb, var(--pill-ground, var(--carbon-surface2)), var(--status-warn-solid) 35%); color: var(--carbon-text); }
   .glim-pill--fail { background-color: color-mix(in srgb, var(--pill-ground, var(--carbon-surface2)), var(--status-fail-solid) 35%); color: var(--carbon-text); }
 
@@ -5324,7 +5324,7 @@
     font-weight: 600;
   }
   .glim-instance-row-sub {
-    color: var(--carbon-text-muted);
+    color: var(--carbon-text-sub);
     font-size: var(--text-meta);
   }
 
@@ -6013,7 +6013,9 @@
   .glim-list-filter {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: var(--space-2);
+    min-width: 1.5rem;
     min-height: 1.75rem;
     padding: 0 var(--space-3);
     border: 0;

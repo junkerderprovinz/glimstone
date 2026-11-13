@@ -18,6 +18,7 @@ const bubble = useTipBubble(() => props.tip);
   <span
     data-glim="InfoBubble"
     :ref="(el) => (bubble.trigger.value = el as HTMLElement | null)"
+    role="img"
     :aria-label="tip"
     :aria-describedby="bubble.describedBy.value"
     tabindex="0"

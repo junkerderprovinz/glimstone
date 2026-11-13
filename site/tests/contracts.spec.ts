@@ -920,13 +920,12 @@ test.describe("Select under reduced motion", () => {
 test.describe("Select on a touch screen", () => {
   test.use({ hasTouch: true });
 
-  test("[select-touch] a tap opens it and rows fit a finger", async ({ page, browserName }) => {
-    test.skip(browserName === "firefox", "Firefox's touch emulation crashes the page");
+  test("[select-touch] a tap opens it and rows fit a finger", async ({ page }) => {
     await open(page, "/components/select");
     await stage(page, "SelectZag").locator(".glim-select-trigger").tap();
     const box = page.getByRole("listbox", { name: "Time zone", exact: true });
     await expect(box).toBeVisible();
-    const heights = await box.getByRole("option").evaluateAll((els) => els.map((e) => e.getBoundingClientRect().height));
+    const heights = await box.evaluate((b) => [...b.querySelectorAll('[role="option"]')].map((e) => e.getBoundingClientRect().height));
     expect(Math.min(...heights)).toBeGreaterThanOrEqual(44);
 
     await box.getByRole("option", { name: "UTC" }).tap();
@@ -2165,9 +2164,9 @@ test.describe("Window", () => {
     test(`[window-foot-one-line] ${name} stands on one line`, async ({ page }) => {
       await open(page, "/components/window");
       await stage(page, "WindowBusyFoot").getByRole("button", { name }).click();
-      const buttons = page.getByRole("dialog", { name: title }).locator(".glim-modal-foot .glim-btn");
-      await expect(buttons).toHaveCount(count);
-      const tops = await buttons.evaluateAll((els) => [...new Set(els.map((e) => Math.round(e.getBoundingClientRect().top)))]);
+      const dialog = page.getByRole("dialog", { name: title });
+      await expect(dialog.locator(".glim-modal-foot .glim-btn")).toHaveCount(count);
+      const tops = await dialog.evaluate((d) => [...new Set([...d.querySelectorAll(".glim-modal-foot .glim-btn")].map((e) => Math.round(e.getBoundingClientRect().top)))]);
       expect(tops).toHaveLength(1);
     });
   }
@@ -2209,8 +2208,10 @@ test.describe("Window", () => {
     expect(room).toEqual([true, true]);
   });
   const about = (page: Page) => page.getByRole("dialog", { name: "About columns" });
+  // Read from the dialog itself: evaluateAll over a locator chained off a role
+  // crashes Playwright's Firefox page.
   const footNames = (dialog: Locator) =>
-    dialog.locator(".glim-modal-foot").getByRole("button").evaluateAll((els) => els.map((e) => e.getAttribute("aria-label") ?? e.textContent?.trim()));
+    dialog.evaluate((d) => [...d.querySelectorAll(".glim-modal-foot button")].map((e) => e.getAttribute("aria-label") ?? e.textContent?.trim()));
 
   async function openColumns(page: Page) {
     await open(page, "/components/window");
@@ -2793,7 +2794,8 @@ test.describe("FieldRow", () => {
       return {
         first: [left("Name"), left("Size at least")],
         second: [left("Changed"), left("Owner")],
-        wide: [Math.round(wide.querySelector("input")!.getBoundingClientRect().left), Math.round(g.getBoundingClientRect().right - wide.querySelector("input")!.getBoundingClientRect().right)],
+        // Firefox rounds a hair past the edge to -0, which toEqual tells apart from 0.
+        wide: [Math.round(wide.querySelector("input")!.getBoundingClientRect().left), Math.round(g.getBoundingClientRect().right - wide.querySelector("input")!.getBoundingClientRect().right) || 0],
       };
     });
     expect(look.first[0]).toBe(look.first[1]);
@@ -3309,8 +3311,8 @@ test.describe("CopyField", () => {
     await expect(button(page)).toHaveAccessibleName("Copy");
   });
 
-  test("[copy-press] Enter copies and says so", async ({ page, context }) => {
-    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  test("[copy-press] Enter copies and says so", async ({ page, context, browserName }) => {
+    if (browserName === "chromium") await context.grantPermissions(["clipboard-read", "clipboard-write"]);
     await open(page, "/components/copy-field");
     await button(page).focus();
     await page.keyboard.press("Enter");
@@ -3319,8 +3321,8 @@ test.describe("CopyField", () => {
     expect(await page.evaluate(() => navigator.clipboard.readText())).toBe("smb://bottich/media/filme");
   });
 
-  test("[copy-back] the button reads Copy again", async ({ page, context }) => {
-    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  test("[copy-back] the button reads Copy again", async ({ page, context, browserName }) => {
+    if (browserName === "chromium") await context.grantPermissions(["clipboard-read", "clipboard-write"]);
     await open(page, "/components/copy-field");
     await button(page).click();
     await expect(button(page)).toHaveAccessibleName("Copied");

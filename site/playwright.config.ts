@@ -7,10 +7,19 @@ const port = 4318;
 // project name only has to be unique.
 const frameworks = ["react", "vue"];
 // A headless Firefox without a mouse reports no pointer and no hover, which
-// turns on every touch-screen rule. These prefs give it a desktop's mouse.
+// turns on every touch-screen rule, so the pointer prefs give it a desktop's
+// mouse. Firefox has no clipboard permission to grant, so the clipboard prefs
+// let a test read back what was copied.
 const firefox = {
   browserName: "firefox" as const,
-  launchOptions: { firefoxUserPrefs: { "ui.primaryPointerCapabilities": 6, "ui.allPointerCapabilities": 6 } },
+  launchOptions: {
+    firefoxUserPrefs: {
+      "ui.primaryPointerCapabilities": 6,
+      "ui.allPointerCapabilities": 6,
+      "dom.events.asyncClipboard.readText": true,
+      "dom.events.testing.asyncClipboard": true,
+    },
+  },
 };
 const contracts: Project[] = frameworks.flatMap((fw) => [
   { name: fw, metadata: { fw }, use: { browserName: "chromium" }, testIgnore: /(visual|a11y)\.spec/ },
