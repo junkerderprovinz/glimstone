@@ -92,6 +92,7 @@ The fortress moves in. An app's Instances tab shows its own instances first and 
 - **The first part of a README button names the product, a segment names only what differs**, a new line under "The App tab": the mark and the full name with its second line on the first part, one word on a segment, "ARM" or "Portable", and the whole name as the segment's `label`.
 - **Four brand tiles:** Flatpak's is the mark's blue, `#4a90d9`, with white ink at 3.3:1. MOS's is its green, `#26a269`, with white ink at 3.3:1. Umbrel's is its violet, `#5351f3`, with white ink at 5.5:1, and its mark rests in `#7d7bf6` on the dark theme, where the violet reads only 2.1:1. ZimaOS's is its light grey, `#f4f4f4`, with `#161616` ink and a `#a8a8a8` ring through `--tile-edge`, since that grey is the light theme's own ground.
 - **The design language names no app.** Every case a rule was found in is told on its own, and each rule keeps its reason and its examples. The changelogs, the release notes, the site and the glyph data name no app either.
+- **The README shows GlimStone itself.** The real components, the four engines and the glossary appear as pictures, with the project's badges under the banner.
 
 ## ⚡ Improved
 
