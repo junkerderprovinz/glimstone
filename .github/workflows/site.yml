@@ -37,6 +37,8 @@ jobs:
         working-directory: .
       - run: npm run build:packages
         working-directory: .
+      - run: node scripts/size-budget.mjs
+        working-directory: .
       - run: node scripts/gen-flutter.mjs --check
         working-directory: .
       - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
