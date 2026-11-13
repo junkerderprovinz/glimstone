@@ -1,0 +1,45 @@
+name: Plugin bundle
+
+# Builds the bundle for pages without a build step, such as an Unraid
+# plugin's, from the released tag and attaches it to the release as
+# glimstone-plugin-<version>.zip.
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: The release tag to attach the bundle to, such as v4.5.0
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      TAG: ${{ github.event.release.tag_name || inputs.tag }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ env.TAG }}
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+      - run: node scripts/build-plugin-bundle.mjs
+      - name: Attach the bundle
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          name="glimstone-plugin-${TAG#v}"
+          cd dist
+          mv glimstone-plugin "$name"
+          zip -qr "$name.zip" "$name"
+          gh release upload "$TAG" "$name.zip" --clobber --repo "$GITHUB_REPOSITORY"
