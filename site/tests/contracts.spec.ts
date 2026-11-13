@@ -27,10 +27,9 @@ async function centre(el: Locator) {
   await el.page().evaluate(() => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done))));
 }
 
-// For a component that has no Vue twin, so the Vue run says so instead of
-// passing over an empty stage.
-function reactOnly() {
-  test.beforeEach(({}, info) => test.skip(info.project.name !== "react", "React only"));
+// For a demo built without a framework, which one run covers for both.
+function noFramework() {
+  test.beforeEach(({}, info) => test.skip(info.project.name !== "react", "Built without a framework"));
 }
 
 const hexToRgb = (hex: string) => {
@@ -414,7 +413,6 @@ test.describe("ConfirmDialog", () => {
 });
 
 test.describe("DropdownListbox", () => {
-  reactOnly();
   async function openList(page: Page) {
     await open(page, "/components/dropdown-listbox");
     const trigger = stage(page, "DropdownSelect").locator("button.field");
@@ -936,7 +934,7 @@ test.describe("Select on a touch screen", () => {
 });
 
 test.describe("Select without a framework", () => {
-  reactOnly();
+  noFramework();
   test("[select-vanilla] groups and the wheel", async ({ page }) => {
     await open(page, "/components/select");
     const zone = stage(page, "SelectVanilla").locator(".glim-select-trigger");
@@ -1439,7 +1437,6 @@ test.describe("Toast", () => {
 });
 
 test.describe("WindowBar", () => {
-  reactOnly();
   const bar = (page: Page) => stage(page, "WindowBarDemo").locator(".glim-window-bar");
   const button = (page: Page, name: string) => bar(page).getByRole("button", { name, exact: true });
   const log = (page: Page) => stage(page, "WindowBarDemo").getByRole("status");
@@ -4750,7 +4747,7 @@ test.describe("Fortress", () => {
 });
 
 test.describe("The fortress without a framework", () => {
-  reactOnly();
+  noFramework();
   const card = (page: Page) => stage(page, "FortressVanilla");
   const PHRASE = "one two three four five six seven eight nine ten eleven twelve";
 
