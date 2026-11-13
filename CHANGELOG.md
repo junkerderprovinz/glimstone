@@ -25,6 +25,8 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 
 ## ✨ Added
 
+- **A decision log,** `docs/decisions.md`. Each rule in the design language says what holds and why, and the reports and measurements behind it, with what it replaced, moved to the log.
+
 - **Windows contrast themes.** Under `forced-colors: active` every card, well, window, menu, field, button and badge gets an edge in the system's text colour. A chosen segment, tile or rail row, a switched-on switch, a ticked checkbox and a bar's fill take the system's selection colours, and an unticked box shows no mark. Before, the switch looked the same on and off, and cards and fields had no edge at all.
 
 - **Elevation steps.** `--elevation-raised`, `--elevation-float` and `--elevation-modal` are the three shadows, and `--z-raised` up to `--z-bubble` the stacking order that goes with them. Menus, select lists, bubbles, popovers and a held row float. Windows and sheets take the modal step. A select's list and a window used to carry shadows of their own. `--elevation` stays as the raised step.
