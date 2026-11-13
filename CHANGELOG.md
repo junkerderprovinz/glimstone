@@ -2,6 +2,31 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 4.4.1 - 2026-11-13
+
+After a removal the fortress takes no new app until the phrase changes, and its words say so in all 42 languages.
+
+**Adopting apps:**
+
+- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.4.1, all at the same number. Nothing is renamed or removed.
+- **The new rule:** once a member is removed, the kit lets no new app join until the phrase changes, and the old phrase gets nobody in. `removeBack`, `removedBody` and `removedNote` say exactly that.
+- **Joining in that window:** when the kit refuses a join for this reason, pass `joinLocked` as the error, the way `joinRefused` stands for words that open no fortress.
+- **Plugins:** copy `packages/core/vanilla/fortress-card.js` again. It carries the new words and `joinLocked` in every language.
+- **Flutter:** move the git dependency to `ref: v4.4.1`. Nothing changed there.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.4.1.
+
+## 🔁 Changed
+
+- **A removal closes the fortress to new apps until the phrase changes.** The remove window, the question after it and the line under the switch say so plainly, where they used to promise the old phrase a way back in.
+
+## ✨ Added
+
+- **`joinLocked`** tells an app that tries to join in that window why the fortress turns it away and that it needs the new phrase.
+
+## 🌐 Translations
+
+- **All 42 languages** carry the new words, each in its own terms and form of address.
+
 ## 4.4.0 - 2026-11-13
 
 The fortress moves in. An app's Instances tab shows its own instances first and the other apps of the fortress behind one switch, with the permissions and the phrase as the only way in, in all 42 languages. Every member opens from anywhere through the fortress, and any member can take another app's instance out. The window that asks first moves on to the phrase, since the old one still lets it back in. `@glimstone/terms` keeps the shared words of an interface and checks an app's translations against them. Around them come a list with its tools inside it, popovers and sheets in the top layer, loaders that wait before they show, errors under fields, toasts read out through live regions, a bilingual glossary of every element, four more README brands and labels inside the sign-in fields.
