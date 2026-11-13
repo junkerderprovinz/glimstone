@@ -6,6 +6,7 @@ import { Glyph } from "./glyph";
 import { resetLook } from "./look";
 import { AccentControl, LabelControl, MotionControl, RainbowControl, ShapeControl, ThemeControl } from "./lookControls";
 import { Adopting, Glyphs, Introduction, Palette, TypeScale } from "./pages/guide";
+import { Charts } from "./pages/charts";
 import { Calibration } from "./pages/calibration";
 import { GlossaryPage } from "./pages/glossary";
 import { BehaviourGuide, ComboboxPage, SelectPage, SliderPage } from "./pages/zag";
@@ -67,6 +68,7 @@ const PAGES: Page[] = [
   { path: "/guide/adopting", title: "Adopting", group: "Guide", Comp: Adopting },
   { path: "/guide/behaviour", title: "Behaviour", group: "Guide", Comp: BehaviourGuide },
   { path: "/guide/palette", title: "Palette", group: "Guide", Comp: Palette },
+  { path: "/guide/charts", title: "Charts", group: "Guide", Comp: Charts },
   { path: "/guide/type", title: "Type scale", group: "Guide", Comp: TypeScale },
   { path: "/guide/glyphs", title: "Glyphs", group: "Guide", Comp: Glyphs },
   { path: "/guide/calibration", title: "Calibration", group: "Guide", Comp: Calibration },

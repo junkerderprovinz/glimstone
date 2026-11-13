@@ -1,6 +1,7 @@
 ## Unreleased
 
 - `GlimTheme.inkMix` is `inkLightness`, the OKLab step the accent's ink moves to, and `accentInk` moves the accent in OKLab as tokens.css does. `GlimTheme` gains `fieldPlaceholder`, and `focusRing` is a getter on `GlimDerived`.
+- `GlimTheme` gains the chart colours: `chart1` to `chart8`, `chartSeq1` to `chartSeq7` and `chartDiv1` to `chartDiv7`.
 - Needs Flutter 3.27 or later, for `Color.r` and `Color.from`.
 
 ## 4.4.1

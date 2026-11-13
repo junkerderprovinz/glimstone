@@ -40,7 +40,14 @@ function sides(value) {
 }
 const side = (props, i) => Object.fromEntries(Object.entries(props).map(([k, v]) => [k, sides(v)[i]]));
 
-const themed = block("[data-theme] {", "--carbon-bg");
+// Every block declared wherever a theme is set: the palette, the chart colours
+// and the derived steps, which carry no literal colour and drop out below.
+const themed = Object.assign(
+  {},
+  ...[...css.matchAll(/(?:^|\n):root,\n\[data-theme\] \{([^}]*)\}/g)].map(([, body]) =>
+    Object.fromEntries([...body.matchAll(/(--[a-z0-9-]+)\s*:\s*([^;]+);/g)].map((m) => [m[1], m[2].trim()])),
+  ),
+);
 const light = side(themed, 0);
 const dark = side(themed, 1);
 const oled = { ...dark, ...side(block("[data-oled] {"), 1) };

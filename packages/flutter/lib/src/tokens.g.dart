@@ -56,6 +56,28 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     required this.statusNeutralBg,
     required this.statusNeutralSolid,
     required this.glimScrim,
+    required this.chart1,
+    required this.chart2,
+    required this.chart3,
+    required this.chart4,
+    required this.chart5,
+    required this.chart6,
+    required this.chart7,
+    required this.chart8,
+    required this.chartSeq1,
+    required this.chartSeq2,
+    required this.chartSeq3,
+    required this.chartSeq4,
+    required this.chartSeq5,
+    required this.chartSeq6,
+    required this.chartSeq7,
+    required this.chartDiv1,
+    required this.chartDiv2,
+    required this.chartDiv3,
+    required this.chartDiv4,
+    required this.chartDiv5,
+    required this.chartDiv6,
+    required this.chartDiv7,
     required this.inkLightness,
     this.shape = GlimShape.soft,
   });
@@ -108,6 +130,28 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
   final Color statusNeutralBg;
   final Color statusNeutralSolid;
   final Color glimScrim;
+  final Color chart1;
+  final Color chart2;
+  final Color chart3;
+  final Color chart4;
+  final Color chart5;
+  final Color chart6;
+  final Color chart7;
+  final Color chart8;
+  final Color chartSeq1;
+  final Color chartSeq2;
+  final Color chartSeq3;
+  final Color chartSeq4;
+  final Color chartSeq5;
+  final Color chartSeq6;
+  final Color chartSeq7;
+  final Color chartDiv1;
+  final Color chartDiv2;
+  final Color chartDiv3;
+  final Color chartDiv4;
+  final Color chartDiv5;
+  final Color chartDiv6;
+  final Color chartDiv7;
 
   /// The OKLab lightness the accent's ink moves to, as in tokens.css: at most
   /// this on a light ramp, at least this on a dark one.
@@ -165,6 +209,28 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     statusNeutralBg: Color(0x0DFFFFFF),
     statusNeutralSolid: Color(0xFF8D8D8D),
     glimScrim: Color(0xB8000000),
+    chart1: Color(0xFF3E98E3),
+    chart2: Color(0xFFD47638),
+    chart3: Color(0xFF2FEDEC),
+    chart4: Color(0xFFEE83AF),
+    chart5: Color(0xFFDEB13A),
+    chart6: Color(0xFFC6A3FE),
+    chart7: Color(0xFF6FD087),
+    chart8: Color(0xFFFFBEBE),
+    chartSeq1: Color(0xFF303942),
+    chartSeq2: Color(0xFF3F5265),
+    chartSeq3: Color(0xFF4E6C8B),
+    chartSeq4: Color(0xFF5D87B2),
+    chartSeq5: Color(0xFF6DA3DA),
+    chartSeq6: Color(0xFF89C3FE),
+    chartSeq7: Color(0xFFC6E1FE),
+    chartDiv1: Color(0xFF89C3FE),
+    chartDiv2: Color(0xFF5590CC),
+    chartDiv3: Color(0xFF3E6084),
+    chartDiv4: Color(0xFF333638),
+    chartDiv5: Color(0xFF82583B),
+    chartDiv6: Color(0xFFCA7D44),
+    chartDiv7: Color(0xFFFEB079),
     inkLightness: 0.74,
   );
 
@@ -218,6 +284,28 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     statusNeutralBg: Color(0x0DFFFFFF),
     statusNeutralSolid: Color(0xFF8D8D8D),
     glimScrim: Color(0xB8000000),
+    chart1: Color(0xFF3E98E3),
+    chart2: Color(0xFFD47638),
+    chart3: Color(0xFF2FEDEC),
+    chart4: Color(0xFFEE83AF),
+    chart5: Color(0xFFDEB13A),
+    chart6: Color(0xFFC6A3FE),
+    chart7: Color(0xFF6FD087),
+    chart8: Color(0xFFFFBEBE),
+    chartSeq1: Color(0xFF303942),
+    chartSeq2: Color(0xFF3F5265),
+    chartSeq3: Color(0xFF4E6C8B),
+    chartSeq4: Color(0xFF5D87B2),
+    chartSeq5: Color(0xFF6DA3DA),
+    chartSeq6: Color(0xFF89C3FE),
+    chartSeq7: Color(0xFFC6E1FE),
+    chartDiv1: Color(0xFF89C3FE),
+    chartDiv2: Color(0xFF5590CC),
+    chartDiv3: Color(0xFF3E6084),
+    chartDiv4: Color(0xFF333638),
+    chartDiv5: Color(0xFF82583B),
+    chartDiv6: Color(0xFFCA7D44),
+    chartDiv7: Color(0xFFFEB079),
     inkLightness: 0.74,
   );
 
@@ -270,6 +358,28 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     statusNeutralBg: Color(0x0B000000),
     statusNeutralSolid: Color(0xFF8D8D8D),
     glimScrim: Color(0x9E000000),
+    chart1: Color(0xFF035085),
+    chart2: Color(0xFF793802),
+    chart3: Color(0xFF079A99),
+    chart4: Color(0xFFAA4673),
+    chart5: Color(0xFFA78004),
+    chart6: Color(0xFF9570CC),
+    chart7: Color(0xFF027835),
+    chart8: Color(0xFFCC5E66),
+    chartSeq1: Color(0xFFE9F3FF),
+    chartSeq2: Color(0xFFC4DAF2),
+    chartSeq3: Color(0xFF9EBEE0),
+    chartSeq4: Color(0xFF78A3CF),
+    chartSeq5: Color(0xFF4F84BA),
+    chartSeq6: Color(0xFF2266A4),
+    chartSeq7: Color(0xFF024981),
+    chartDiv1: Color(0xFF035798),
+    chartDiv2: Color(0xFF4F8AC6),
+    chartDiv3: Color(0xFF9CC2EA),
+    chartDiv4: Color(0xFFEFF2F5),
+    chartDiv5: Color(0xFFE2B293),
+    chartDiv6: Color(0xFFCA7D44),
+    chartDiv7: Color(0xFF9F5102),
     inkLightness: 0.52,
   );
 
@@ -323,6 +433,28 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     Color? statusNeutralBg,
     Color? statusNeutralSolid,
     Color? glimScrim,
+    Color? chart1,
+    Color? chart2,
+    Color? chart3,
+    Color? chart4,
+    Color? chart5,
+    Color? chart6,
+    Color? chart7,
+    Color? chart8,
+    Color? chartSeq1,
+    Color? chartSeq2,
+    Color? chartSeq3,
+    Color? chartSeq4,
+    Color? chartSeq5,
+    Color? chartSeq6,
+    Color? chartSeq7,
+    Color? chartDiv1,
+    Color? chartDiv2,
+    Color? chartDiv3,
+    Color? chartDiv4,
+    Color? chartDiv5,
+    Color? chartDiv6,
+    Color? chartDiv7,
     double? inkLightness,
     GlimShape? shape,
   }) =>
@@ -375,6 +507,28 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
         statusNeutralBg: statusNeutralBg ?? this.statusNeutralBg,
         statusNeutralSolid: statusNeutralSolid ?? this.statusNeutralSolid,
         glimScrim: glimScrim ?? this.glimScrim,
+        chart1: chart1 ?? this.chart1,
+        chart2: chart2 ?? this.chart2,
+        chart3: chart3 ?? this.chart3,
+        chart4: chart4 ?? this.chart4,
+        chart5: chart5 ?? this.chart5,
+        chart6: chart6 ?? this.chart6,
+        chart7: chart7 ?? this.chart7,
+        chart8: chart8 ?? this.chart8,
+        chartSeq1: chartSeq1 ?? this.chartSeq1,
+        chartSeq2: chartSeq2 ?? this.chartSeq2,
+        chartSeq3: chartSeq3 ?? this.chartSeq3,
+        chartSeq4: chartSeq4 ?? this.chartSeq4,
+        chartSeq5: chartSeq5 ?? this.chartSeq5,
+        chartSeq6: chartSeq6 ?? this.chartSeq6,
+        chartSeq7: chartSeq7 ?? this.chartSeq7,
+        chartDiv1: chartDiv1 ?? this.chartDiv1,
+        chartDiv2: chartDiv2 ?? this.chartDiv2,
+        chartDiv3: chartDiv3 ?? this.chartDiv3,
+        chartDiv4: chartDiv4 ?? this.chartDiv4,
+        chartDiv5: chartDiv5 ?? this.chartDiv5,
+        chartDiv6: chartDiv6 ?? this.chartDiv6,
+        chartDiv7: chartDiv7 ?? this.chartDiv7,
         inkLightness: inkLightness ?? this.inkLightness,
         shape: shape ?? this.shape,
       );
@@ -431,6 +585,28 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
       statusNeutralBg: Color.lerp(statusNeutralBg, other.statusNeutralBg, t)!,
       statusNeutralSolid: Color.lerp(statusNeutralSolid, other.statusNeutralSolid, t)!,
       glimScrim: Color.lerp(glimScrim, other.glimScrim, t)!,
+      chart1: Color.lerp(chart1, other.chart1, t)!,
+      chart2: Color.lerp(chart2, other.chart2, t)!,
+      chart3: Color.lerp(chart3, other.chart3, t)!,
+      chart4: Color.lerp(chart4, other.chart4, t)!,
+      chart5: Color.lerp(chart5, other.chart5, t)!,
+      chart6: Color.lerp(chart6, other.chart6, t)!,
+      chart7: Color.lerp(chart7, other.chart7, t)!,
+      chart8: Color.lerp(chart8, other.chart8, t)!,
+      chartSeq1: Color.lerp(chartSeq1, other.chartSeq1, t)!,
+      chartSeq2: Color.lerp(chartSeq2, other.chartSeq2, t)!,
+      chartSeq3: Color.lerp(chartSeq3, other.chartSeq3, t)!,
+      chartSeq4: Color.lerp(chartSeq4, other.chartSeq4, t)!,
+      chartSeq5: Color.lerp(chartSeq5, other.chartSeq5, t)!,
+      chartSeq6: Color.lerp(chartSeq6, other.chartSeq6, t)!,
+      chartSeq7: Color.lerp(chartSeq7, other.chartSeq7, t)!,
+      chartDiv1: Color.lerp(chartDiv1, other.chartDiv1, t)!,
+      chartDiv2: Color.lerp(chartDiv2, other.chartDiv2, t)!,
+      chartDiv3: Color.lerp(chartDiv3, other.chartDiv3, t)!,
+      chartDiv4: Color.lerp(chartDiv4, other.chartDiv4, t)!,
+      chartDiv5: Color.lerp(chartDiv5, other.chartDiv5, t)!,
+      chartDiv6: Color.lerp(chartDiv6, other.chartDiv6, t)!,
+      chartDiv7: Color.lerp(chartDiv7, other.chartDiv7, t)!,
       inkLightness: inkLightness + (other.inkLightness - inkLightness) * t,
       shape: t < 0.5 ? shape : other.shape,
     );

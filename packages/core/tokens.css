@@ -324,6 +324,44 @@
   --tile-edge: light-dark(transparent, rgba(255, 255, 255, .2));
 }
 
+/* Chart colours (rule 50), every one an OKLCH value written out, so a phone app
+   and a design tool read the same numbers. The series come in a fixed order:
+   the eight accent hues, alternating warm and cool, on lightness steps chosen
+   so any two stay apart for people with protanopia, deuteranopia or
+   tritanopia, and each reaches 3:1 on a card and the page. Their chroma is
+   the most sRGB holds at that lightness, up to 0.14. */
+:root,
+[data-theme] {
+  --chart-1: light-dark(oklch(0.42 0.109 247), oklch(0.66 0.14 247));  /* blue */
+  --chart-2: light-dark(oklch(0.42 0.108 51), oklch(0.66 0.14 51));  /* orange */
+  --chart-3: light-dark(oklch(0.62 0.105 194), oklch(0.86 0.14 194));  /* teal */
+  --chart-4: light-dark(oklch(0.54 0.14 355), oklch(0.74 0.14 355));  /* magenta */
+  --chart-5: light-dark(oklch(0.62 0.126 87), oklch(0.78 0.14 87));  /* sunflower */
+  --chart-6: light-dark(oklch(0.62 0.14 301), oklch(0.78 0.132 301));  /* purple */
+  --chart-7: light-dark(oklch(0.5 0.137 150), oklch(0.78 0.14 150));  /* green */
+  --chart-8: light-dark(oklch(0.62 0.14 18), oklch(0.86 0.075 18));  /* red */
+
+  /* Sequential, for a heatmap or a density: one blue that gains lightness
+     contrast and colour as the value grows, starting next to the ground. */
+  --chart-seq-1: light-dark(oklch(0.96 0.019 250), oklch(0.34 0.02 250));
+  --chart-seq-2: light-dark(oklch(0.88 0.04 250), oklch(0.43 0.04 250));
+  --chart-seq-3: light-dark(oklch(0.79 0.06 250), oklch(0.52 0.06 250));
+  --chart-seq-4: light-dark(oklch(0.7 0.08 250), oklch(0.61 0.08 250));
+  --chart-seq-5: light-dark(oklch(0.6 0.1 250), oklch(0.7 0.1 250));
+  --chart-seq-6: light-dark(oklch(0.5 0.12 250), oklch(0.8 0.104 250));
+  --chart-seq-7: light-dark(oklch(0.4 0.112 250), oklch(0.9 0.049 250));
+
+  /* Diverging, for a value above or below a middle: blue under it, orange
+     over it, a near-grey ground colour at the middle itself. */
+  --chart-div-1: light-dark(oklch(0.45 0.126 250), oklch(0.8 0.104 250));
+  --chart-div-2: light-dark(oklch(0.62 0.11 250), oklch(0.64 0.11 250));
+  --chart-div-3: light-dark(oklch(0.8 0.07 250), oklch(0.48 0.07 250));
+  --chart-div-4: light-dark(oklch(0.96 0.005 250), oklch(0.33 0.005 250));
+  --chart-div-5: light-dark(oklch(0.8 0.07 55), oklch(0.5 0.07 55));
+  --chart-div-6: light-dark(oklch(0.66 0.12 55), oklch(0.66 0.12 55));
+  --chart-div-7: light-dark(oklch(0.52 0.128 55), oklch(0.82 0.116 55));
+}
+
 /* The contrast step, for anyone whose system asks for more contrast. It is
    GlimStone's own and separate from a Windows contrast theme (forced-colors,
    at the end of this file), which replaces every colour: here the palette
