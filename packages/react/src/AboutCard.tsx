@@ -7,6 +7,7 @@ import {
   updateFace,
   updateStage,
   versionLink,
+  warnDeprecated,
   type OpenUrl,
   type UpdateCheck,
   type UpdateVerdict,
@@ -346,7 +347,7 @@ export function InfoTile({ version, help, about, hueIndex, ...data }: InfoTilePr
  * app and GlimStone as its rows, and the Help card.
  *
  * @deprecated Use `InfoTile`, which adds the version rows' sub-lines, the
- * other components, "Check for updates" and the bug report.
+ * other components, "Check for updates" and the bug report. Removed in 5.0.0.
  */
 export function AboutCard({
   text,
@@ -398,6 +399,7 @@ export function AboutCard({
   openUrl?: (url: string) => void;
   hueIndex?: number;
 }) {
+  warnDeprecated("AboutCard");
   const rows: VersionRow[] = [
     ...(version ? [{ name: text.version, version, repoUrl }] : []),
     { name: "GlimStone", version: glimstoneVersion, repoUrl: glimstoneRepoUrl },

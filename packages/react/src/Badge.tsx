@@ -24,7 +24,7 @@ export interface BadgeProps {
    *  shape setting. */
   form?: BadgeForm;
   /** @deprecated Use `form`. Only "circle" has an effect: it makes the badge
-   *  icon-only. */
+   *  icon-only. Removed in 5.0.0. */
   shape?: BadgeShape;
   /** Render as a <button> or a real <a href>, with the same box as a span. */
   as?: "span" | "button" | "a";

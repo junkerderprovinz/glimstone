@@ -15,7 +15,7 @@ const props = withDefaults(
      *  the shape setting. */
     form?: BadgeForm;
     /** @deprecated Use `form`. Only "circle" has an effect: it makes the
-     *  badge icon-only. */
+     *  badge icon-only. Removed in 5.0.0. */
     shape?: BadgeShape;
     as?: "span" | "button" | "a";
     disabled?: boolean;

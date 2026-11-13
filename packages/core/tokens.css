@@ -3796,7 +3796,7 @@
   /* Zag's positioner places the open list; it only has to clear the page. */
   .glim-select-positioner { z-index: var(--z-window); }
 
-  /* The list panel of the deprecated DropdownListbox, portalled to <body>. */
+  /* The list panel of the deprecated DropdownListbox, portalled to <body>. Removed in 5.0.0. */
   .glim-listbox {
     position: fixed;
     z-index: var(--z-window);

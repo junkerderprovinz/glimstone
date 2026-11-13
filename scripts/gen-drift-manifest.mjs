@@ -1,14 +1,16 @@
 // Writes the manifest check-drift.mjs compares an app's copy against: a hash
 // of every shipped file per release, every glim- class GS has defined, and the
-// deprecated names. Releases come from the v* tags from 3.0.0 on, the oldest
-// line an app still copies from; the version in packages/core/package.json is
-// hashed from the working tree, so a build before its tag ships itself.
+// deprecated names from packages/core/src/deprecated.ts. Releases come from
+// the v* tags from 3.0.0 on, the oldest line an app still copies from; the
+// version in packages/core/package.json is hashed from the working tree, so a
+// build before its tag ships itself.
 //
 // Run from anywhere: node scripts/gen-drift-manifest.mjs [out.json]
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { DEPRECATED, deprecationNote } from '../packages/core/src/deprecated.ts';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const out = process.argv[2] ?? fileURLToPath(new URL('../packages/core/drift-manifest.json', import.meta.url));
@@ -65,15 +67,7 @@ for (const files of releases.values()) {
   }
 }
 
-// A `@deprecated` doc comment straight above an exported declaration.
-const DEPRECATED = /\/\*\*(?:(?!\*\/)[\s\S])*?@deprecated\s+((?:(?!\*\/)[\s\S])*)\*\/\s*export\s+(?:default\s+)?(?:async\s+)?(?:function|const|let|class|interface|type)\s+([A-Za-z_$][\w$]*)/g;
-const deprecatedIn = (files) => new Map([...files].flatMap(([, text]) => [...text.matchAll(DEPRECATED)].map((m) => [m[2], m[1]])));
-const firstRelease = (name) => [...releases].find(([, files]) => deprecatedIn(files).has(name))[0];
-const deprecated = [...deprecatedIn(releases.get(current))].map(([name, note]) => ({
-  name,
-  since: firstRelease(name),
-  note: note.split('\n').map((l) => l.replace(/^\s*\*\s?/, '')).join(' ').replace(/\s+/g, ' ').trim(),
-}));
+const deprecated = Object.entries(DEPRECATED).map(([name, d]) => ({ name, note: deprecationNote(name), ...(d.find ? { find: d.find } : {}) }));
 
 writeFileSync(out, JSON.stringify({ generated: current, versions, classes: [...classes].sort(), deprecated }) + '\n');
 console.log(`drift manifest: ${releases.size} releases, ${classes.size} classes, ${deprecated.length} deprecated names`);

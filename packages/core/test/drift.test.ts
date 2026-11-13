@@ -21,7 +21,10 @@ const manifest = {
     '4.3.0': { 'react/src/Selector.tsx': hash(SELECTOR_430), 'core/tokens.css': hash('.glim-btn {}\n') },
   },
   classes: ['glim-btn', 'glim-card'],
-  deprecated: [{ name: 'DropdownListbox', since: '4.1.0', note: 'Use Select, which keeps focus on its trigger.' }],
+  deprecated: [
+    { name: 'DropdownListbox', note: 'DropdownListbox is deprecated since GlimStone 4.1.0 and goes in 5.0.0. Use Select.' },
+    { name: 'Badge shape', note: 'Badge shape is deprecated since GlimStone 4.4.0 and goes in 5.0.0. Use `form`.', find: String.raw`<Badge\b[^>]*?\s:?shape=` },
+  ],
 };
 
 /** An app tree of the given files, with the fixture manifest beside it. */
@@ -81,7 +84,13 @@ test('an app class with the reserved prefix is reported, a GS class is not', () 
 
 test('a deprecated name in use is reported with what replaces it', () => {
   const r = check(app({ 'lib/version.ts': VERSION_430, 'pages/Jobs.tsx': 'import { DropdownListbox } from "../lib";\n' }));
-  assert.match(r.out, /pages[\\/]Jobs\.tsx:1: DropdownListbox is deprecated since GS 4\.1\.0\. Use Select/);
+  assert.match(r.out, /pages[\\/]Jobs\.tsx:1: DropdownListbox is deprecated since GlimStone 4\.1\.0 and goes in 5\.0\.0\. Use Select/);
+});
+
+test('a deprecated prop is found by its pattern rather than its name', () => {
+  const r = check(app({ 'lib/version.ts': VERSION_430, 'pages/Jobs.tsx': '<Badge tone="ok" shape="circle" />\n<Button shape="soft" />\n' }));
+  assert.match(r.out, /pages[\\/]Jobs\.tsx:1: Badge shape is deprecated/);
+  assert.equal(r.out.match(/Badge shape/g)?.length, 1);
 });
 
 test('a copy of the deprecated component itself is not reported as a use', () => {
@@ -118,4 +127,5 @@ test('the generated manifest hashes the working tree as the current version', ()
   assert.ok(built.versions['4.3.0'], 'released versions come from the tags');
   assert.ok(built.classes.includes('glim-btn'));
   assert.ok(built.deprecated.some((d: { name: string }) => d.name === 'DropdownListbox'));
+  assert.ok(built.deprecated.every((d: { note: string }) => /goes in \d+\.0\.0/.test(d.note)));
 });

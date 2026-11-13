@@ -1729,6 +1729,24 @@ GlimStone ships as one core and one package per framework. All of them carry the
 - **Stored choices keep their names.** `setStoragePrefix("myapp")` at boot makes the label modes and the cached appearance read and write `myapp-labels-buttons` and `myapp-appearance`, so an app moving to the packages keeps what its users chose.
 - **Flutter has no second source.** `scripts/gen-flutter.mjs` writes the Dart tokens and glyphs from `tokens.css` and `glyphs.json`, and CI fails when the checked-in files are out of date.
 
+## Deprecating and removing
+
+A component, prop, function, class or token that GlimStone wants gone is deprecated first and removed later, on a fixed schedule, so an app can move up a minor release without changing anything and plan the move to the next major.
+
+- **It lives until the next major release.** A name deprecated in 4.x goes in 5.0.0, and never in a minor or patch release. It stays at least two minor releases after the one that deprecated it, so a name deprecated in x.8 or x.9 waits for the major after next. Until then it keeps working as it did.
+- **It is listed in one place.** `DEPRECATED` in [`packages/core/src/deprecated.ts`](../packages/core/src/deprecated.ts) holds every deprecated name with the release that deprecated it, the release that removes it and what to use instead. The warnings and the drift check read it.
+- **It says so in the editor, on the console and in CI.** Its doc comment carries `@deprecated`, what replaces it and "Removed in 5.0.0", so an editor strikes it through. The first use on a page logs one `console.warn` with the same sentence, through `warnDeprecated()`. `glimstone-drift` reports every use it finds in an app's sources. A deprecated class or token says so in its comment in `tokens.css`.
+- **The release notes announce it twice.** The release that deprecates a name says so under "Adopting apps", with its replacement and the release that removes it. The major release that removes it lists it again.
+
+Deprecated today, all removed in 5.0.0:
+
+| Name | Since | Use instead |
+|---|---|---|
+| `Badge`'s `shape` | 4.4.0 | `form`. Only `shape="circle"` had an effect, and `form="circle"` draws the same badge. |
+| `BadgeShape` | 4.4.0 | `BadgeForm`. |
+| `AboutCard` | 3.3.0 | `InfoTile`. |
+| `DropdownListbox` | 3.6.0 | `Select`. |
+
 ## Adopting GlimStone in another app
 
 1. Install the core and the app's framework package: `npm install @glimstone/core @glimstone/react` (or `@glimstone/vue`). For Select, Combobox or Slider add `@zag-js/react` (or `@zag-js/vue`) and the machine packages `@zag-js/select`, `@zag-js/menu`, `@zag-js/combobox` and `@zag-js/slider`.

@@ -12,6 +12,7 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 - **Placeholders:** a field's placeholder reads the new `--field-placeholder` instead of `--carbon-text-muted`. Point your own `::placeholder` rules at it.
 - **Flutter:** `GlimTheme` has `fieldPlaceholder`, and `focusRing` is a getter on `GlimDerived` that returns the accent ink. It is no longer a constructor argument or a `copyWith` parameter.
 - **Copies that drift:** `npx glimstone-drift src` compares an app's copied GlimStone files with the release its `GLIMSTONE_VERSION` names and lists each one that differs, with the release it matches instead. It also lists app classes with the `glim-` prefix and deprecated names still in use. Add `--strict` to fail a CI step on any of them.
+- **Deprecated names warn:** a page that uses `Badge`'s `shape`, `AboutCard` or `DropdownListbox` logs one console warning per name with what to use instead. All three go in 5.0.0, the fixed rule for deprecating and removing in the design language, which also lists `BadgeShape`.
 
 ## 🔁 Changed
 

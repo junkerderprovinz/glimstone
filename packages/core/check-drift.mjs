@@ -90,11 +90,11 @@ for (const { path, text } of files.filter((f) => f.path.endsWith('.css'))) {
 // and a stylesheet only names them in comments.
 const shipped = new Set(Object.values(manifest.versions).flatMap((entries) => Object.keys(entries).map((p) => basename(p))));
 const users = files.filter((f) => !shipped.has(basename(f.path)) && !f.path.endsWith('.css'));
-for (const { name, since, note } of manifest.deprecated) {
-  const re = new RegExp(`\\b${name}\\b`);
+for (const { name, note, find } of manifest.deprecated) {
+  const re = new RegExp(find ?? `\\b${name}\\b`);
   for (const { path, text } of users) {
     const m = re.exec(text);
-    if (m) findings.push(`${shown(path)}:${lineOf(text, m.index)}: ${name} is deprecated since GS ${since}. ${note}`);
+    if (m) findings.push(`${shown(path)}:${lineOf(text, m.index)}: ${note}`);
   }
 }
 
