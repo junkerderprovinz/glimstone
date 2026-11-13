@@ -5,7 +5,8 @@ import { IconCheck } from "./glyphs";
 // The checkbox, bound with v-model, for the places a box stands instead of a
 // switch (rule 39): "Don't show again" under a notice, and choices that are
 // applied together, such as which columns a list shows. Every setting is a
-// Toggle.
+// Toggle. It is a button for its look, and like a native checkbox only Space
+// flips it.
 const props = withDefaults(
   defineProps<{
     /** Always the accessible name; shown beside the box unless hideLabel. */
@@ -32,6 +33,7 @@ const checked = defineModel<boolean>({ required: true });
     :disabled="disabled"
     :class="['glim-checkbox', { 'glim-checkbox--slim': slim }]"
     @click="checked = !checked"
+    @keydown.enter.prevent
   >
     <span class="glim-checkbox-box" aria-hidden="true"><IconCheck /></span>
     <span v-if="!bare">{{ label }}</span>

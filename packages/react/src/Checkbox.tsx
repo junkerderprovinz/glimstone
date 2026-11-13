@@ -2,7 +2,8 @@ import { IconCheck } from "./glyphs.tsx";
 
 // The checkbox, for the places a box stands instead of a switch (rule 39):
 // "Don't show again" under a notice, and choices that are applied together,
-// such as which columns a list shows. Every setting is a Toggle.
+// such as which columns a list shows. Every setting is a Toggle. It is a
+// button for its look, and like a native checkbox only Space flips it.
 
 export interface CheckboxProps {
   checked: boolean;
@@ -30,6 +31,7 @@ export function Checkbox({ checked, onChange, label, hideLabel = false, slim = f
       aria-label={bare ? label : undefined}
       disabled={disabled}
       onClick={() => onChange(!checked)}
+      onKeyDown={(e) => e.key === "Enter" && e.preventDefault()}
       className={classes}
     >
       <span className="glim-checkbox-box" aria-hidden="true">

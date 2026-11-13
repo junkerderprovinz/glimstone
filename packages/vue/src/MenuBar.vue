@@ -14,19 +14,19 @@ const props = defineProps<{
 }>();
 
 const buttons: (HTMLButtonElement | null)[] = [];
-const open = shallowRef<{ at: number; x: number; y: number } | null>(null);
+const open = shallowRef<{ at: number; x: number; y: number; fromEnd: boolean } | null>(null);
 const stop = shallowRef(0);
 
-/** Opens a menu by its index and puts the focus on its first row. */
-function show(at: number) {
+/** Opens a menu by its index and puts the focus on its first row, or its last. */
+function show(at: number, fromEnd = false) {
   const button = buttons[at];
   if (!button) return;
   button.focus();
   stop.value = at;
   const r = button.getBoundingClientRect();
-  open.value = { at, x: r.left, y: r.bottom + 6 };
+  open.value = { at, x: r.left, y: r.bottom + 6, fromEnd };
 }
-defineExpose({ open: show });
+defineExpose({ open: (at: number) => show(at) });
 
 const wrap = (at: number) => (at + props.menus.length) % props.menus.length;
 
@@ -38,13 +38,14 @@ function toggle(at: number) {
 function keys(e: KeyboardEvent, at: number) {
   const rtl = getComputedStyle(e.currentTarget as HTMLElement).direction === "rtl";
   const step = ({ ArrowRight: rtl ? -1 : 1, ArrowLeft: rtl ? 1 : -1 } as Record<string, number | undefined>)[e.key];
-  if (step !== undefined) {
+  const to = step !== undefined ? wrap(at + step) : ({ Home: 0, End: props.menus.length - 1 } as Record<string, number | undefined>)[e.key];
+  if (to !== undefined) {
     e.preventDefault();
-    stop.value = wrap(at + step);
-    buttons[stop.value]?.focus();
-  } else if (e.key === "ArrowDown") {
+    stop.value = to;
+    buttons[to]?.focus();
+  } else if (e.key === "ArrowDown" || e.key === "ArrowUp") {
     e.preventDefault();
-    show(at);
+    show(at, e.key === "ArrowUp");
   }
 }
 </script>
@@ -77,6 +78,7 @@ function keys(e: KeyboardEvent, at: number) {
       :label="menus[open.at]!.label"
       :id="menus[open.at]!.id"
       :opener="buttons[open.at]"
+      :from-end="open.fromEnd"
       @close="open = null"
       @step="(d) => open && show(wrap(open.at + d))"
     />

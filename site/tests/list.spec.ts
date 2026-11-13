@@ -91,6 +91,15 @@ test.describe("ListTable", () => {
     await expect(out(page)).toHaveText("5 picked");
   });
 
+  test("[list-page] PageDown and PageUp move the focus a page of rows", async ({ page }) => {
+    await open(page, "/components/list-table");
+    await rows(page).nth(0).click();
+    await page.keyboard.press("PageDown");
+    await expect(rows(page).nth(4).locator("td").first()).toBeFocused();
+    await page.keyboard.press("PageUp");
+    await expect(rows(page).nth(0).locator("td").first()).toBeFocused();
+  });
+
   test("[list-open] Enter or a double click opens the row", async ({ page }) => {
     await open(page, "/components/list-table");
     await rows(page).nth(1).click();

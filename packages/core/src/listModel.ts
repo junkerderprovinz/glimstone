@@ -113,9 +113,12 @@ export function selectByClick(s: ListSelection, at: number, mods: SelectMods): L
   return { selected: [at], anchor: at, focus: at };
 }
 
+/** How many rows PageDown and PageUp move the focus. */
+const LIST_PAGE = 10;
+
 /**
- * A key on a focused row. The arrows, Home and End move the focus and, with
- * Shift, pick the range from the anchor; Space picks or drops the focused row;
+ * A key on a focused row. The arrows, Home, End and the page keys move the
+ * focus and, with Shift, pick the range from the anchor; Space picks or drops the focused row;
  * Ctrl+A picks all. Any other key is not the list's, and gives null.
  */
 export function selectByKey(s: ListSelection, key: string, mods: SelectMods, count: number): ListSelection | null {
@@ -134,6 +137,10 @@ export function selectByKey(s: ListSelection, key: string, mods: SelectMods, cou
       return moveTo(0);
     case "End":
       return moveTo(last);
+    case "PageDown":
+      return moveTo(s.focus + LIST_PAGE);
+    case "PageUp":
+      return moveTo(s.focus - LIST_PAGE);
     case " ":
       return { selected: flip(s.selected, s.focus), anchor: s.focus, focus: s.focus };
     case "a":

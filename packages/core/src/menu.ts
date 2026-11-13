@@ -180,6 +180,26 @@ export function focusMenuRow(menu: HTMLElement, move: "next" | "prev" | "first" 
   rows[(next + rows.length) % rows.length]!.focus();
 }
 
+/**
+ * Moves the focus to the next row whose name starts with the typed letter,
+ * after the focused one and wrapping, and says whether a row took it. A
+ * letter no row starts with leaves the focus where it is.
+ */
+export function focusMenuRowByLetter(menu: HTMLElement, letter: string): boolean {
+  const rows = menuRows(menu);
+  const at = rows.indexOf(document.activeElement as HTMLElement);
+  const wanted = letter.toLocaleLowerCase();
+  for (let step = 1; step <= rows.length; step++) {
+    const row = rows[(at + step) % rows.length]!;
+    const name = (row.getAttribute("aria-label") ?? row.textContent ?? "").trim().toLocaleLowerCase();
+    if (name.startsWith(wanted)) {
+      row.focus();
+      return true;
+    }
+  }
+  return false;
+}
+
 // One menu is open at a time in the whole document. Opening one closes the
 // last, and Escape reaches the open one from anywhere, so a window under it
 // keeps its own Escape for later.

@@ -6,6 +6,7 @@ import {
   focusedAsker,
   focusFirstMenuRow,
   focusMenuRow,
+  focusMenuRowByLetter,
   isMenuHead,
   menuMove,
   menuRowView,
@@ -40,8 +41,10 @@ const props = withDefaults(
     /** The control that opened the menu. A click on it is not a click outside,
      *  and focus goes back to it; without one, focus goes back to wherever it was. */
     opener?: HTMLElement | null;
+    /** Opens with the focus on the last row, as ArrowUp on a menu bar's word asks. */
+    fromEnd?: boolean;
   }>(),
-  { above: false, label: undefined, opener: null },
+  { above: false, label: undefined, opener: null, fromEnd: false },
 );
 // `close` on every way out: a choice, Escape, Tab or a click outside. `step`
 // on left or right over a row without a submenu, for a bar that moves on.
@@ -84,7 +87,8 @@ onMounted(() => {
     () => [menu.value, subMenu.value, props.opener],
     () => finish(false),
   );
-  if (menu.value) focusFirstMenuRow(menu.value);
+  if (menu.value && props.fromEnd) focusMenuRow(menu.value, "last");
+  else if (menu.value) focusFirstMenuRow(menu.value);
 });
 onUnmounted(() => {
   release?.();
@@ -125,9 +129,16 @@ function pick(list: MenuEntry[], at: number) {
   entry.onSelect?.();
 }
 
+// A letter typed in the menu, which jumps to a row; Space presses the row.
+const typed = (e: KeyboardEvent) => e.key.length === 1 && e.key !== " " && !e.ctrlKey && !e.metaKey && !e.altKey;
+
 function keys(e: KeyboardEvent, inSub: boolean) {
   if (e.key === "Tab") return finish(false);
   const panel = e.currentTarget as HTMLElement;
+  if (typed(e)) {
+    if (focusMenuRowByLetter(panel, e.key)) e.preventDefault();
+    return;
+  }
   const move = menuMove(e.key, getComputedStyle(panel).direction === "rtl");
   if (!move) return;
   e.preventDefault();

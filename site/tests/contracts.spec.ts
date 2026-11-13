@@ -499,6 +499,18 @@ test.describe("Select", () => {
     expect(await highlighted(page)).toBe("Europe/Vienna");
   });
 
+  test("[select-closed-keys] on the closed trigger the arrows, Home and End open the list", async ({ page }) => {
+    await open(page, "/components/select");
+    for (const [key, option] of [["ArrowDown", "Europe/Vienna"], ["ArrowUp", "Europe/Vienna"], ["Home", "Europe/Vienna"], ["End", "UTC"]]) {
+      await trigger(page).focus();
+      await page.keyboard.press(key!);
+      await expect(list(page)).toBeVisible();
+      await expect.poll(() => highlighted(page), key).toBe(option);
+      await page.keyboard.press("Escape");
+      await expect(list(page)).toBeHidden();
+    }
+  });
+
   test("[select-typeahead] a letter jumps", async ({ page }) => {
     await openSelect(page);
     await page.keyboard.press("a");
@@ -1133,6 +1145,17 @@ test.describe("Combobox", () => {
     await page.keyboard.press("ArrowDown");
     await page.keyboard.press("Enter");
     await expect(input(page)).toHaveValue("plex");
+  });
+
+  test("[combo-alt-down] Alt+ArrowDown opens the list and leaves the field's text alone", async ({ page }) => {
+    await open(page, "/components/combobox");
+    await input(page).fill("so");
+    await page.keyboard.press("Escape");
+    await expect(list(page)).toBeHidden();
+    await page.keyboard.press("Alt+ArrowDown");
+    await expect(list(page)).toBeVisible();
+    await expect(input(page)).toHaveValue("so");
+    await expect(input(page)).toBeFocused();
   });
 
   test("[combo-active] focus stays in the field", async ({ page }) => {
@@ -2359,6 +2382,21 @@ test.describe("ContextMenu", () => {
     await expect(menu(page).getByRole("menuitem", { name: "Open" })).toBeFocused();
   });
 
+  test("[menu-type] a letter moves to the next row that starts with it", async ({ page }) => {
+    await openMenu(page);
+    const row = (name: string) => menu(page).getByRole("menuitem", { name: new RegExp(`^${name}`) });
+    await page.keyboard.press("s");
+    await expect(row("Sort by")).toBeFocused();
+    await page.keyboard.press("s");
+    await expect(menu(page).getByRole("menuitemcheckbox", { name: "Show hidden files" })).toBeFocused();
+    await page.keyboard.press("S");
+    await expect(row("Select the same kind")).toBeFocused();
+    await page.keyboard.press("s");
+    await expect(row("Sort by")).toBeFocused();
+    await page.keyboard.press("p");
+    await expect(row("Sort by")).toBeFocused();
+  });
+
   test("[menu-pick] a choice runs, closes and hands focus back", async ({ page }) => {
     const more = await openMenu(page);
     await page.keyboard.press("ArrowDown");
@@ -2511,6 +2549,22 @@ test.describe("MenuBar", () => {
     await expect(word(page, "Help")).toBeFocused();
   });
 
+  test("[bar-home-end] Home and End reach the first and the last word", async ({ page }) => {
+    await open(page, "/components/menu-bar");
+    await word(page, "Edit").focus();
+    await page.keyboard.press("End");
+    await expect(word(page, "Help")).toBeFocused();
+    await page.keyboard.press("Home");
+    await expect(word(page, "File")).toBeFocused();
+  });
+
+  test("[bar-up] ArrowUp opens the menu on its last row", async ({ page }) => {
+    await open(page, "/components/menu-bar");
+    await word(page, "File").focus();
+    await page.keyboard.press("ArrowUp");
+    await expect(menuOf(page, "File").getByRole("menuitem", { name: "Delete" })).toBeFocused();
+  });
+
   test("[bar-open] ArrowDown and Enter open the menu on its first row", async ({ page }) => {
     await open(page, "/components/menu-bar");
     await word(page, "File").focus();
@@ -2573,6 +2627,13 @@ test.describe("Checkbox", () => {
     await again(page).focus();
     await page.keyboard.press("Space");
     await expect(again(page)).toHaveAttribute("aria-checked", "true");
+  });
+
+  test("[check-enter] Enter leaves it as it is", async ({ page }) => {
+    await open(page, "/components/checkbox");
+    await again(page).focus();
+    await page.keyboard.press("Enter");
+    await expect(again(page)).toHaveAttribute("aria-checked", "false");
   });
 
   test("[check-name] the label is the name, also hidden", async ({ page }) => {

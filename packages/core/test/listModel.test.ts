@@ -79,6 +79,15 @@ test('the arrows move the focus, Shift with them extends from the anchor, Space 
   assert.equal(selectByKey(s, 'x', {}, 4), null);
 });
 
+test('the page keys move the focus ten rows and stop at the ends', () => {
+  const s = { selected: [0], anchor: 0, focus: 2 };
+  assert.equal(selectByKey(s, 'PageDown', {}, 30)!.focus, 12);
+  assert.equal(selectByKey(s, 'PageDown', {}, 5)!.focus, 4);
+  assert.equal(selectByKey({ ...s, focus: 14 }, 'PageUp', {}, 30)!.focus, 4);
+  assert.equal(selectByKey(s, 'PageUp', {}, 30)!.focus, 0);
+  assert.deepEqual(selectByKey(s, 'PageDown', { range: true }, 5)!.selected, [0, 1, 2, 3, 4]);
+});
+
 test('the view filters, searches and sorts in that order', () => {
   const view = listView(rows, { sort: { key: 'size', dir: 'desc' }, filters: { state: ['ok', 'failed'] }, query: 'a', search: ['name'] });
   assert.deepEqual(names(view), ['adguard', 'vaultwarden']);

@@ -136,6 +136,21 @@ test.describe("Sheet", () => {
     await expect(opener(page)).toBeFocused();
   });
 
+  test("[sheet-trap] Tab and Shift+Tab stay inside it", async ({ page }) => {
+    await open(page, "/components/sheet");
+    await openIt(page);
+    const inside = () => sheet(page).evaluate((d) => d.contains(document.activeElement));
+    const stops = await sheet(page).evaluate((d) => d.querySelectorAll("button:not([disabled]), input:not([disabled]), [tabindex='0']").length);
+    for (let i = 0; i <= stops; i++) {
+      await page.keyboard.press("Tab");
+      expect(await inside()).toBe(true);
+    }
+    for (let i = 0; i <= stops; i++) {
+      await page.keyboard.press("Shift+Tab");
+      expect(await inside()).toBe(true);
+    }
+  });
+
   test("[sheet-backdrop] a press on the scrim closes it", async ({ page }) => {
     await open(page, "/components/sheet");
     await openIt(page);

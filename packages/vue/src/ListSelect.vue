@@ -4,6 +4,7 @@ import * as select from "@zag-js/select";
 import { normalizeProps, useMachine } from "@zag-js/vue";
 import {
   closeOnPageMove,
+  endOption,
   flattenRuns,
   pageDir,
   SELECT_POSITIONING,
@@ -88,6 +89,14 @@ watch(
 );
 const hue = usePortalHue(() => api.value.open, trigger);
 
+function keydown(e: KeyboardEvent) {
+  const to = api.value.open ? undefined : endOption(all.value, e.key);
+  if (to === undefined) return (api.value.getTriggerProps() as { onKeydown?: (e: KeyboardEvent) => void }).onKeydown?.(e);
+  e.preventDefault();
+  api.value.setOpen(true);
+  api.value.setHighlightValue(to);
+}
+
 function attach(el: unknown) {
   trigger.value = el as HTMLElement | null;
   bubble.trigger.value = trigger.value;
@@ -101,7 +110,7 @@ defineExpose({ trigger });
     <div v-bind="api.getControlProps()">
       <TipWrap :on="!!disabled && !!tip" :show="bubble.show" :hide="bubble.hide">
         <button
-          v-bind="{ ...triggerAttrs, ...api.getTriggerProps() }"
+          v-bind="{ ...triggerAttrs, ...api.getTriggerProps(), onKeydown: keydown }"
           :ref="attach"
           :aria-busy="busy || undefined"
           :aria-describedby="bubble.describedBy.value"

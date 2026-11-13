@@ -26,31 +26,31 @@ export interface MenuBarProps {
 
 export function MenuBar({ label, menus, ref, className }: MenuBarProps) {
   const buttons = useRef<(HTMLButtonElement | null)[]>([]);
-  const [open, setOpen] = useState<{ at: number; x: number; y: number } | null>(null);
+  const [open, setOpen] = useState<{ at: number; x: number; y: number; fromEnd: boolean } | null>(null);
   const [stop, setStop] = useState(0);
   const count = menus.length;
 
-  function show(at: number) {
+  function show(at: number, fromEnd = false) {
     const button = buttons.current[at];
     if (!button) return;
     button.focus();
     setStop(at);
     const r = button.getBoundingClientRect();
-    setOpen({ at, x: r.left, y: r.bottom + 6 });
+    setOpen({ at, x: r.left, y: r.bottom + 6, fromEnd });
   }
-  useImperativeHandle(ref, () => ({ open: show }));
+  useImperativeHandle(ref, () => ({ open: (at: number) => show(at) }));
 
   function keys(e: KeyboardEvent<HTMLButtonElement>, at: number) {
     const rtl = getComputedStyle(e.currentTarget).direction === "rtl";
     const step = { ArrowRight: rtl ? -1 : 1, ArrowLeft: rtl ? 1 : -1 }[e.key];
-    if (step !== undefined) {
+    const to = step !== undefined ? (at + step + count) % count : ({ Home: 0, End: count - 1 } as Record<string, number | undefined>)[e.key];
+    if (to !== undefined) {
       e.preventDefault();
-      const next = (at + step + count) % count;
-      setStop(next);
-      buttons.current[next]?.focus();
-    } else if (e.key === "ArrowDown") {
+      setStop(to);
+      buttons.current[to]?.focus();
+    } else if (e.key === "ArrowDown" || e.key === "ArrowUp") {
       e.preventDefault();
-      show(at);
+      show(at, e.key === "ArrowUp");
     }
   }
 
@@ -87,6 +87,7 @@ export function MenuBar({ label, menus, ref, className }: MenuBarProps) {
           opener={buttons.current[open.at]}
           onClose={() => setOpen(null)}
           onStep={(d) => show((open.at + d + count) % count)}
+          fromEnd={open.fromEnd}
         />
       )}
     </div>

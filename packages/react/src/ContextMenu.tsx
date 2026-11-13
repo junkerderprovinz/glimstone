@@ -14,6 +14,7 @@ import {
   focusedAsker,
   focusFirstMenuRow,
   focusMenuRow,
+  focusMenuRowByLetter,
   isMenuHead,
   menuMove,
   menuRowView,
@@ -52,6 +53,8 @@ export interface ContextMenuProps {
   onClose: () => void;
   /** Left or right on a row without a submenu, for a bar that steps to the next menu. */
   onStep?: (direction: 1 | -1) => void;
+  /** Opens with the focus on the last row, as ArrowUp on a menu bar's word asks. */
+  fromEnd?: boolean;
 }
 
 const viewport = () => ({ width: innerWidth, height: innerHeight });
@@ -142,7 +145,7 @@ function Rows({
   });
 }
 
-export function ContextMenu({ x, y, items, above = false, label, id, opener, onClose, onStep }: ContextMenuProps) {
+export function ContextMenu({ x, y, items, above = false, label, id, opener, onClose, onStep, fromEnd = false }: ContextMenuProps) {
   const menu = useRef<HTMLDivElement>(null);
   const subMenu = useRef<HTMLDivElement>(null);
   const [asker] = useState(focusedAsker);
@@ -177,7 +180,8 @@ export function ContextMenu({ x, y, items, above = false, label, id, opener, onC
       () => [menu.current, subMenu.current, latest.current.opener],
       () => finish(false),
     );
-    focusFirstMenuRow(menu.current!);
+    if (fromEnd) focusMenuRow(menu.current!, "last");
+    else focusFirstMenuRow(menu.current!);
     return () => {
       release();
       outside();
@@ -217,8 +221,15 @@ export function ContextMenu({ x, y, items, above = false, label, id, opener, onC
     entry.onSelect?.();
   }
 
+  // A letter typed in the menu, which jumps to a row; Space presses the row.
+  const typed = (e: KeyboardEvent) => e.key.length === 1 && e.key !== " " && !e.ctrlKey && !e.metaKey && !e.altKey;
+
   function keys(e: KeyboardEvent<HTMLDivElement>, inSub: boolean) {
     if (e.key === "Tab") return finish(false);
+    if (typed(e)) {
+      if (focusMenuRowByLetter(e.currentTarget, e.key)) e.preventDefault();
+      return;
+    }
     const move = menuMove(e.key, getComputedStyle(e.currentTarget).direction === "rtl");
     if (!move) return;
     e.preventDefault();

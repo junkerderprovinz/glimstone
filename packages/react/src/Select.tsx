@@ -1,9 +1,10 @@
-import { useEffect, useId, useRef, type ReactNode, type Ref, type RefObject } from "react";
+import { useEffect, useId, useRef, type KeyboardEvent, type ReactNode, type Ref, type RefObject } from "react";
 import * as menu from "@zag-js/menu";
 import * as select from "@zag-js/select";
 import { normalizeProps, Portal, useMachine } from "@zag-js/react";
 import {
   closeOnPageMove,
+  endOption,
   defaultWidth,
   enableWheelStep,
   faceLabels,
@@ -169,6 +170,13 @@ function ListSelect<T extends string>({
   const parts = selectRowParts(rows, glyphs);
   const tp = api.getTriggerProps();
   const positioner = api.getPositionerProps();
+  const onKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
+    const to = api.open ? undefined : endOption(all, e.key);
+    if (to === undefined) return tp.onKeyDown?.(e);
+    e.preventDefault();
+    api.setOpen(true);
+    api.setHighlightValue(to);
+  };
 
   return (
     <div data-glim="Select" {...api.getRootProps()} className={selectRootClass(width)}>
@@ -180,6 +188,7 @@ function ListSelect<T extends string>({
           <button
             {...triggerAttrs}
             {...tp}
+            onKeyDown={onKeyDown}
             ref={trigger.attach}
             {...trigger.handlers(tp)}
             aria-busy={busy || undefined}
