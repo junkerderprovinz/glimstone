@@ -5,6 +5,7 @@ import { join } from 'node:path';
 import { checkLocales, glossary } from '../../terms/index.mjs';
 import { fill, listOf, plural, type FortressText } from '../src/fortressText.ts';
 import { FORTRESS_LANGUAGES, fortressText } from '../src/fortressTexts.ts';
+import { de } from '../src/fortressLocales/de.ts';
 import { en } from '../src/fortressLocales/en.ts';
 
 const dir = join(import.meta.dirname, '..', 'src', 'fortressLocales');
@@ -95,6 +96,11 @@ test('the tables keep to the glossary', () => {
 test('a member is connected or not reachable', () => {
   assert.equal(en.connected, 'Connected');
   assert.equal(en.away, 'Not reachable');
+});
+
+test('the join window lets each app show the phrase wherever it keeps it', () => {
+  assert.equal(en.phraseWhere, 'Every app in the fortress can show you the phrase. Paste it into the first field and it fills the rest.');
+  assert.equal(de.phraseWhere, 'Jede App in der Festung kann dir die Phrase zeigen. Füg sie ins erste Feld ein, dann füllt sie die übrigen.');
 });
 
 test('a regional language takes its base table, and an unknown one English', () => {
