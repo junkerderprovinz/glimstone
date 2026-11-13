@@ -6,6 +6,13 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/junkerderprovinz/glimstone/actions/workflows/site.yml"><img src="https://img.shields.io/github/actions/workflow/status/junkerderprovinz/glimstone/site.yml?branch=main&label=Build&style=for-the-badge&logo=githubactions&logoColor=white" alt="Build" height="36"></a>&nbsp;
+  <a href="https://github.com/junkerderprovinz/glimstone/actions/workflows/style.yml"><img src="https://img.shields.io/github/actions/workflow/status/junkerderprovinz/glimstone/style.yml?branch=main&label=Lint&style=for-the-badge&logo=githubactions&logoColor=white" alt="Lint" height="36"></a>&nbsp;
+  <a href="https://github.com/junkerderprovinz/glimstone/releases/latest"><img src="https://img.shields.io/github/v/release/junkerderprovinz/glimstone?style=for-the-badge&logo=github&logoColor=white&label=Release&color=1d99f3" alt="Latest release" height="36"></a>&nbsp;
+  <a href="https://www.npmjs.com/package/@glimstone/core"><img src="https://img.shields.io/npm/v/@glimstone/core?style=for-the-badge&logo=npm&logoColor=white&label=core&color=cb3837" alt="@glimstone/core on npm" height="36"></a>&nbsp;
+  <a href="https://www.npmjs.com/package/@glimstone/react"><img src="https://img.shields.io/npm/v/@glimstone/react?style=for-the-badge&logo=react&logoColor=white&label=react&color=cb3837" alt="@glimstone/react on npm" height="36"></a>&nbsp;
+  <a href="https://www.npmjs.com/package/@glimstone/vue"><img src="https://img.shields.io/npm/v/@glimstone/vue?style=for-the-badge&logo=vuedotjs&logoColor=white&label=vue&color=cb3837" alt="@glimstone/vue on npm" height="36"></a>&nbsp;
+  <a href="https://junkerderprovinz.github.io/glimstone/"><img src="https://img.shields.io/badge/Docs-online-526CFE?style=for-the-badge&logo=githubpages&logoColor=white" alt="Documentation" height="36"></a>&nbsp;
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-AGPL--3.0-blue?style=for-the-badge&logo=gnu&logoColor=white" alt="License: AGPL-3.0" height="36"></a>
 </p>
 
@@ -16,6 +23,13 @@ four engines a user drives from the app root, and a house style for the componen
 One core without a framework and a package each for React, Vue and Flutter, so a plain-CSS<br>
 Unraid plugin, a React app and a Vue app speak the same language. Published for reference<br>
 rather than for outside adoption; <a href="docs/design-language.md">docs/design-language.md</a> carries the reasoning and everything else.
+</p>
+
+<br>
+
+<p align="center">
+  <a href="https://junkerderprovinz.github.io/glimstone/"><picture><source media="(prefers-color-scheme: dark)" srcset=".github/assets/pictures/components-dark.png"><img src=".github/assets/pictures/components.png" alt="Buttons, switches, two horizontal selectors, state badges, two cards, a toast and an open info bubble, drawn by the GlimStone components" width="100%"></picture></a>
+  <br><em>Buttons, switches, the horizontal selector, badges, cards, a toast and an info bubble, all drawn by the real components.</em>
 </p>
 
 <br>
@@ -69,6 +83,11 @@ If it has earned a place on your server or computer, toss a coin to your knight:
 - [`packages/flutter`](packages/flutter) is the Dart package `glimstone`: the tokens as a `ThemeExtension`, the glyphs as a set, and the first widget. Its tokens are written from `tokens.css` by [`scripts/gen-flutter.mjs`](scripts/gen-flutter.mjs).
 - [`CHANGELOG.md`](CHANGELOG.md) records what changed in the language itself, versioned.
 
+<p align="center">
+  <a href="https://junkerderprovinz.github.io/glimstone/#/guide/glossary"><picture><source media="(prefers-color-scheme: dark)" srcset=".github/assets/pictures/glossary-dark.png"><img src=".github/assets/pictures/glossary.png" alt="The glossary page on the documentation site, showing the button and the key button with their German names, their names in code and a live example of each" width="100%"></picture></a>
+  <br><em>The glossary names every element in English and German, each beside a live example of it.</em>
+</p>
+
 The files say what a control must look like; the components say what it **is**. Two apps built from the prose alone produced the same language under different names, one `Toggle` and one `Switch`, one `ConfirmDialog` and one `Confirm`, and a third would have invented a third set. Every string is a prop and no component fetches anything, so the same component serves an app in any language. Install with `npm install @glimstone/core @glimstone/react` (or `@glimstone/vue`) and load `@glimstone/core/tokens.css` first; [the design language](docs/design-language.md#adopting-glimstone-in-another-app) has the rest of the steps.
 
 <br>
@@ -86,6 +105,14 @@ See [`docs/design-language.md`](docs/design-language.md) for the palette table a
 <p><a id="4-the-engines" href="#4-the-engines"><picture><source media="(prefers-color-scheme: dark)" srcset=".github/assets/sections/4-the-engines-dark.svg"><img src=".github/assets/sections/4-the-engines.svg" alt="4. The engines" width="100%"></picture></a></p>
 
 An engine is a single mechanism that turns one setting into every token a component reads, so nothing downstream has to know which setting produced the value it got. All four are applied once at the app root, never by the page that edits them. Otherwise two pages would be free to disagree about how "square" looks.
+
+<p align="center">
+  <a href="https://junkerderprovinz.github.io/glimstone/#/engines/shape"><picture><source media="(prefers-color-scheme: dark)" srcset=".github/assets/pictures/engine-shape-dark.png"><img src=".github/assets/pictures/engine-shape.png" alt="The shape engine: the same cards and buttons with round, soft and square corners" width="24%"></picture></a>
+  <a href="https://junkerderprovinz.github.io/glimstone/#/engines/colour"><picture><source media="(prefers-color-scheme: dark)" srcset=".github/assets/pictures/engine-colour-dark.png"><img src=".github/assets/pictures/engine-colour.png" alt="The colour engine: the same cards in the light theme, in the dark theme with a blue accent, and with rainbow on" width="24%"></picture></a>
+  <a href="https://junkerderprovinz.github.io/glimstone/#/engines/motion"><picture><source media="(prefers-color-scheme: dark)" srcset=".github/assets/pictures/engine-motion-dark.png"><img src=".github/assets/pictures/engine-motion.png" alt="The motion engine: how far and how long a page entrance travels at off, subtle and wild" width="24%"></picture></a>
+  <a href="https://junkerderprovinz.github.io/glimstone/#/engines/label"><picture><source media="(prefers-color-scheme: dark)" srcset=".github/assets/pictures/engine-label-dark.png"><img src=".github/assets/pictures/engine-label.png" alt="The label engine: the same buttons as text, as text with a glyph, and as a glyph alone" width="24%"></picture></a>
+  <br><em>Each tile is drawn by the engine it shows, from the same tokens an app reads.</em>
+</p>
 
 | Engine | Drives | Set on `<html>` | Values | Default | Reference |
 |---|---|---|---|---|---|
@@ -107,6 +134,11 @@ A new control has to point its own CSS at these tokens as it is built. Adopting 
 <p><a id="5-easter-eggs" href="#5-easter-eggs"><picture><source media="(prefers-color-scheme: dark)" srcset=".github/assets/sections/5-easter-eggs-dark.svg"><img src=".github/assets/sections/5-easter-eggs.svg" alt="5. Easter eggs" width="100%"></picture></a></p>
 
 Three settings have a hidden extra that no picker lists. They exist mostly for the rules that come with them, and those rules apply to any egg an adopting app adds.
+
+<p align="center">
+  <picture><source media="(prefers-color-scheme: dark)" srcset=".github/assets/pictures/easter-eggs-dark.png"><img src=".github/assets/pictures/easter-eggs.png" alt="The three easter eggs: cards with leaf corners next to square ones, the rainbow one step apart, and the storm level's longer, springier entrance next to subtle and wild" width="100%"></picture>
+  <br><em>Leaf and disco on the real components, storm from the motion engine's own numbers.</em>
+</p>
 
 | Egg | Setting | How to find it | What it does | Code |
 |---|---|---|---|---|
