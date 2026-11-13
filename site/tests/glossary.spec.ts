@@ -1,7 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 
 // The glossary is React's own page, so only one project runs it.
-test.beforeEach(({}, info) => test.skip(info.project.name !== "react", "React only"));
+test.beforeEach(({}, info) => test.skip(info.project.metadata.fw !== "react", "React only"));
 
 async function open(page: Page, lang?: "en" | "de") {
   if (lang) await page.addInitScript((l) => localStorage.setItem("gs-docs-glossary-lang", l), lang);

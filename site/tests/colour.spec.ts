@@ -71,10 +71,17 @@ test("a preset keeps the stylesheet's own ink", async ({ page }) => {
   expect(await token(page, "--accent-ink-light")).toBe("");
 });
 
-test("Chromium is no source for the system colour, so the wand swatch stays away", async ({ page }) => {
+test("Chromium is no source for the system colour, so the wand swatch stays away", async ({ page, browserName }) => {
+  test.skip(browserName !== "chromium", "Chromium only");
   await open(page, {});
   await expect(page.getByRole("radio", { name: "Blue" }).first()).toBeVisible();
   await expect(page.getByRole("radio", { name: "System colour" })).toHaveCount(0);
+});
+
+test("Firefox hands over the system colour, so the wand swatch shows", async ({ page, browserName }) => {
+  test.skip(browserName !== "firefox", "Firefox only");
+  await open(page, {});
+  await expect(page.getByRole("radio", { name: "System colour" }).first()).toBeVisible();
 });
 
 test("the OLED switch sits under the theme selector and turns OLED on", async ({ page }) => {

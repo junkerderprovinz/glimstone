@@ -3,7 +3,7 @@ import glyphs from "../../packages/core/glyphs.json" with { type: "json" };
 
 // glyphs.md, rule 2: the ink written beside a glyph is what the browser
 // measures, so a redrawn path that changes its size shows up here.
-test.beforeEach(({}, info) => test.skip(info.project.name !== "react", "framework-free"));
+test.beforeEach(({}, info) => test.skip(info.project.metadata.fw !== "react", "framework-free"));
 
 test("the ink recorded for the drawn device glyphs is what the browser measures", async ({ page }) => {
   await page.goto("/");

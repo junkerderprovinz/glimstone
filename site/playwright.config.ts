@@ -6,9 +6,15 @@ const port = 4318;
 // that framework's demos. The tests read the framework from the metadata, so a
 // project name only has to be unique.
 const frameworks = ["react", "vue"];
+// A headless Firefox without a mouse reports no pointer and no hover, which
+// turns on every touch-screen rule. These prefs give it a desktop's mouse.
+const firefox = {
+  browserName: "firefox" as const,
+  launchOptions: { firefoxUserPrefs: { "ui.primaryPointerCapabilities": 6, "ui.allPointerCapabilities": 6 } },
+};
 const contracts: Project[] = frameworks.flatMap((fw) => [
   { name: fw, metadata: { fw }, use: { browserName: "chromium" }, testIgnore: /(visual|a11y)\.spec/ },
-  { name: `${fw}-firefox`, metadata: { fw }, use: { browserName: "firefox" }, testIgnore: /(visual|a11y)\.spec/ },
+  { name: `${fw}-firefox`, metadata: { fw }, use: firefox, testIgnore: /(visual|a11y)\.spec/ },
 ]);
 
 export default defineConfig({

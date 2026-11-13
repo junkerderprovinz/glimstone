@@ -181,7 +181,7 @@ function measure(): Miss[] {
 
 async function walk(page: Page, path: string, show: Show | null, reset?: string) {
   const misses: string[] = [];
-  await page.goto(`/#${path}?fw=${test.info().project.name}`);
+  await page.goto(`/#${path}?fw=${test.info().project.metadata.fw}`);
   for (const theme of THEMES) {
     for (const accent of ACCENTS) {
       await page.evaluate((l) => localStorage.setItem("gs-docs-look", JSON.stringify(l)), { ...theme.look, accent });

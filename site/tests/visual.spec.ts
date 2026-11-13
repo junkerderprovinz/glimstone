@@ -3,8 +3,9 @@ import { readFileSync } from "node:fs";
 
 // The first demo of every component page, pictured in each theme, in the two
 // other shapes and right to left, and compared against the committed baseline.
-// A baseline is a Linux rendering, so elsewhere the run is skipped: regenerate
-// them in the Playwright image (site/tests/README.md).
+// The baselines are rendered in Microsoft's Playwright image, so the run is
+// skipped anywhere else: site/playwright-linux.sh runs it there, in CI too,
+// and --update-snapshots renders them again.
 
 const pages = [...readFileSync(new URL("../src/App.tsx", import.meta.url), "utf8").matchAll(/\{ path: "\/components\/([^"]+)"/g)].map((m) => m[1]);
 
@@ -17,7 +18,7 @@ const looks: Record<string, { look: Record<string, unknown>; dir?: "rtl" }> = {
   rtl: { look: { theme: "dark" }, dir: "rtl" },
 };
 
-test.beforeEach(() => test.skip(process.platform !== "linux", "the baselines are Linux renderings"));
+test.beforeEach(() => test.skip(!process.env.GS_PLAYWRIGHT_IMAGE, "the baselines are renderings of the Playwright image"));
 
 for (const name of pages) {
   test.describe(name, () => {
