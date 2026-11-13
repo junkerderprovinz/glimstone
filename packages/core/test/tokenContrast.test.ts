@@ -8,22 +8,27 @@ import { ACCENTS, hueVars, RAINBOW } from '../src/appearance.ts';
 // measured rather than trusted.
 const css = readFileSync(new URL('../tokens.css', import.meta.url), 'utf8');
 
-/** The custom properties declared in the first block that opens with `head`. */
-function block(head: string): Record<string, string> {
-  const start = css.indexOf(head + ' {');
-  assert.ok(start >= 0, `no block ${head}`);
-  const body = css.slice(start + head.length + 2, css.indexOf('}', start));
-  const props: Record<string, string> = {};
-  for (const m of body.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) props[m[1]!] = m[2]!.trim();
-  return props;
+/** The custom properties of the first block that opens with `head` and declares `has`. */
+function block(head: string, has: string): Record<string, string> {
+  for (let start = css.indexOf(head + ' {'); start >= 0; start = css.indexOf(head + ' {', start + 1)) {
+    const body = css.slice(start + head.length + 2, css.indexOf('\n}', start));
+    const props: Record<string, string> = {};
+    for (const m of body.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) props[m[1]!] = m[2]!.trim();
+    if (has in props) return props;
+  }
+  assert.fail(`no block ${head} with ${has}`);
 }
 
-const dark = block(':root,\n[data-theme="dark"]');
-const oled = { ...dark, ...block('[data-theme="dark"][data-oled]') };
-const lightMedia = block('  :root:not([data-theme="dark"])');
-const lightChosen = block('[data-theme="light"]');
+const themed = block('[data-theme]', '--carbon-bg');
+const oledBlock = block('[data-oled]', '--carbon-bg');
 
-const THEMES = { dark, OLED: oled, 'light (system)': lightMedia, 'light (chosen)': lightChosen };
+// The side of every light-dark() a theme takes, kept in the scope beside the tokens.
+const SCHEME = '@scheme';
+const dark = { ...themed, [SCHEME]: 'dark' };
+const oled = { ...themed, ...oledBlock, [SCHEME]: 'dark' };
+const light = { ...themed, [SCHEME]: 'light' };
+
+const THEMES = { dark, OLED: oled, light };
 
 // A ring stands on the ground around a control: the page, the rail, a card, a
 // well, or a row's hover fill when the ring is drawn inside the row.
@@ -63,12 +68,23 @@ function mix(a: Rgba, amount: number, b: Rgba): Rgba {
   return [ch(0), ch(1), ch(2), alpha];
 }
 
+/** The two arguments of a two-argument function, split at the comma outside any brackets. */
+function halves(args: string): [string, string] {
+  let depth = 0;
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === '(') depth++;
+    else if (args[i] === ')') depth--;
+    else if (args[i] === ',' && depth === 0) return [args.slice(0, i).trim(), args.slice(i + 1).trim()];
+  }
+  assert.fail(`cannot split ${args}`);
+}
+
 const NAMED: Record<string, Rgba> = { black: [0, 0, 0, 1], white: [255, 255, 255, 1], transparent: [0, 0, 0, 0] };
 
 /**
  * Resolves a token value the way the browser would on the root, for the subset
- * of CSS the colour tokens use: hex, rgba(), var() with a fallback, and a
- * two-colour color-mix() in srgb.
+ * of CSS the colour tokens use: hex, rgba(), var() with a fallback,
+ * light-dark() and a two-colour color-mix() in srgb.
  */
 function resolve(value: string, scope: Record<string, string>): Rgba {
   const v = value.trim();
@@ -80,6 +96,8 @@ function resolve(value: string, scope: Record<string, string>): Rgba {
     assert.ok(ref[2], `${ref[1]} is undefined and has no fallback`);
     return resolve(ref[2], scope);
   }
+  const ld = v.match(/^light-dark\(([\s\S]+)\)$/);
+  if (ld) return resolve(halves(ld[1]!)[scope[SCHEME] === 'light' ? 0 : 1], scope);
   const m = v.match(/^color-mix\(in srgb,\s*([\s\S]+?)\s+(var\(--[\w-]+\)|[\d.]+%),\s*([\s\S]+)\)$/);
   if (m) {
     const share = parseFloat(m[2]!.startsWith('var(') ? scope[m[2]!.slice(4, -1)]! : m[2]!) / 100;

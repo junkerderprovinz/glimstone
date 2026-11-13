@@ -354,7 +354,7 @@ export function takePageHue(el: HTMLElement): void {
   }
   const i = Array.prototype.indexOf.call(document.querySelectorAll(TINTED), el);
   const n = ((i % RAINBOW.length) + RAINBOW.length) % RAINBOW.length;
-  el.style.setProperty('--btn-tint', `color-mix(in srgb, var(--rb-${n}) var(--ink-mix), black)`);
+  el.style.setProperty('--btn-tint', `light-dark(color-mix(in srgb, var(--rb-${n}) var(--ink-mix-light), black), var(--rb-${n}))`);
 }
 
 /**
@@ -393,7 +393,7 @@ export function hueVars(i: number): Record<string, string> {
     '--item-hue-badge': `color-mix(in srgb, ${hue} 50%, transparent)`,
     // Without this a gold focus ring would sit around a teal tab. The hue's
     // own ink, opaque, as the accent's ring is the accent ink.
-    '--item-hue-ring': `color-mix(in srgb, ${hue} var(--ink-mix), black)`,
+    '--item-hue-ring': `light-dark(color-mix(in srgb, ${hue} var(--ink-mix-light), black), ${hue})`,
   };
 }
 

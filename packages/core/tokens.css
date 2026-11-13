@@ -154,23 +154,31 @@
   border-bottom-left-radius: 0 !important;
 }
 
-:root,
-[data-theme="dark"] {
-  color-scheme: dark;
+/* The theme is the color-scheme, and every colour that differs between the
+   ramps is one light-dark() with the light value first. The scheme follows the
+   system unless data-theme pins it, and a pinned theme wins over the system in
+   both directions, on <html> or on any subtree. A custom property resolves
+   its light-dark() where it is declared, so the tokens are declared again
+   wherever a theme is set. */
+:root { color-scheme: dark light; }
+[data-theme="dark"] { color-scheme: dark; }
+[data-theme="light"] { color-scheme: light; }
 
+:root,
+[data-theme] {
   /* Ground and surfaces: IBM Carbon's neutral greys. A warm near-black reads
      as brown next to a sibling app on this palette. */
-  --carbon-bg:         #161616;
-  --carbon-sidebar:    #262626;
-  --carbon-surface:    #262626;
-  --carbon-surface2:   #393939;
-  --carbon-surface3:   #525252;
-  --carbon-hover:      #353535;
-  --carbon-hover-raised: #6f6f6f;
+  --carbon-bg:         light-dark(#f4f4f4, #161616);
+  --carbon-sidebar:    light-dark(#ffffff, #262626);
+  --carbon-surface:    light-dark(#ffffff, #262626);
+  --carbon-surface2:   light-dark(#e8e8e8, #393939);
+  --carbon-surface3:   light-dark(#d1d1d1, #525252);
+  --carbon-hover:      light-dark(#e0e0e0, #353535);
+  --carbon-hover-raised: light-dark(#c6c6c6, #6f6f6f);
   /* A switch that is off. On the light ramp surface3 stands too close to a card
      and to the knob to see, so the track goes down to 3:1 against both. */
-  --toggle-off: #525252;
-  --carbon-border:     #393939;
+  --toggle-off: light-dark(#8d8d8d, #525252);
+  --carbon-border:     light-dark(#d1d1d1, #393939);
 
   /* The About card's brand marks at rest, adjusted from the published brand
      colours. A brand colour is designed against white or its own fill, so on
@@ -183,10 +191,10 @@
      The mail button has no brand colour: it reaches the app's own authors and
      follows the user's accent. The manual's book takes the yellow of the
      README's docs button, which is the coffee button's. */
-  --brand-coffee:  #ffdd00;
-  --brand-docs:    #ffdd00;
-  --brand-bitcoin: #f7931a;
-  --brand-paypal:  #4fb5f0;
+  --brand-coffee:  light-dark(#8a6d00, #ffdd00);
+  --brand-docs:    light-dark(#8a6d00, #ffdd00);
+  --brand-bitcoin: light-dark(#a85d00, #f7931a);
+  --brand-paypal:  light-dark(#003087, #4fb5f0);
 
   /* The App tab's marks that are one flat colour or one gradient, at rest.
      The dark theme lifts a colour a dark tile would swallow; the light theme
@@ -196,20 +204,20 @@
   --brand-unraid-from:       #e32929;
   --brand-unraid-to:         #ff8d30;
   --brand-mos:               #26a269;
-  --brand-umbrel:            #7d7bf6;
-  --brand-windows:           #2b88d8;
+  --brand-umbrel:            light-dark(#5351f3, #7d7bf6);
+  --brand-windows:           light-dark(#0078d4, #2b88d8);
   --brand-flatpak:           #4a90d9;
-  --brand-github:  #ffffff;
+  --brand-github:  light-dark(#181717, #ffffff);
 
   /* Text ramp: three steps, the last still legible at 12px. */
-  --carbon-text:       #f4f4f4;
-  --carbon-text-sub:   #c6c6c6;
-  --carbon-text-muted: #8d8d8d;
-  --sidebar-text:      #e0e0e0;
+  --carbon-text:       light-dark(#161616, #f4f4f4);
+  --carbon-text-sub:   light-dark(#525252, #c6c6c6);
+  --carbon-text-muted: light-dark(#6f6f6f, #8d8d8d);
+  --sidebar-text:      light-dark(#393939, #e0e0e0);
   /* A field's placeholder. Muted text falls to 2.4:1 on a sub-card's surface3
      field, so a placeholder takes the sub step, the dimmest that reads at
      4.5:1 on every field fill. */
-  --field-placeholder: #c6c6c6;
+  --field-placeholder: light-dark(#525252, #c6c6c6);
 
   /* Activity, and nothing else. Every sibling app opens with this accent, so
      a fresh install of any of them looks like the same product. */
@@ -221,213 +229,67 @@
      the same colour and the light theme is where they part, so use this rather
      than --accent whenever the colour is read.
 
-     The theme sets --ink-mix, which <html> passes down, so the one-line mix
-     is right in both themes and the rainbow blocks need no light twin. 100% of
-     a colour mixed with black is that colour. An accent the mix leaves under
-     4.5:1 on a ramp's card gets that ramp's ink from applyAccent instead, as
+     The fill is the same in both themes: Sunflower with computed ink reads
+     well on white, while darkening the fill turns it olive-brown. Only yellow
+     text on white fails, so the light ink mixes the accent --ink-mix-light
+     toward black. Measured against white, the palest ground, Sunflower lands
+     at 4.95:1 and every preset clears 4.5:1. Because it derives from
+     --accent, it follows a picked colour. An accent the mix leaves under 4.5:1
+     on a ramp's card gets that ramp's ink from applyAccent instead, as
      --accent-ink-dark or --accent-ink-light; no preset needs one. */
-  --ink-mix:           100%;
-  --accent-ink:        var(--accent-ink-dark, color-mix(in srgb, var(--accent) var(--ink-mix), black));
+  --ink-mix-light:     55%;
+  --accent-ink:        light-dark(var(--accent-ink-light, color-mix(in srgb, var(--accent) var(--ink-mix-light), black)), var(--accent-ink-dark, var(--accent)));
   /* The same ink for a line-drawn glyph. Rainbow never colours text, so a hued
      subtree redefines this one and leaves --accent-ink on the single accent. */
   --accent-glyph:      var(--accent-ink);
 
-  /* Four state hues, Carbon's dark support tones. Paused reuses neutral; its
+  /* Four state hues, Carbon's support tones. Paused reuses neutral; its
      label and its resume control carry the difference. */
-  --status-info-text:    #FCC419;
-  --status-info-bg:      rgba(252, 196, 25, 0.13);
-  --status-info-solid:   #FCC419;
+  --status-info-text:    light-dark(#8E6A00, #FCC419);
+  --status-info-bg:      light-dark(rgba(142, 106, 0, 0.12), rgba(252, 196, 25, 0.13));
+  --status-info-solid:   light-dark(#A87D00, #FCC419);
 
-  --status-ok-text:      #6fdc8c;
-  --status-ok-bg:        rgba(111, 220, 140, 0.13);
-  --status-ok-solid:     #6fdc8c;
+  --status-ok-text:      light-dark(#0e6027, #6fdc8c);
+  --status-ok-bg:        light-dark(rgba(14, 96, 39, 0.11), rgba(111, 220, 140, 0.13));
+  --status-ok-solid:     light-dark(#198038, #6fdc8c);
 
-  --status-fail-text:    #ff8389;
-  --status-fail-bg:      rgba(255, 131, 137, 0.14);
-  --status-fail-solid:   #ff8389;
+  --status-fail-text:    light-dark(#da1e28, #ff8389);
+  --status-fail-bg:      light-dark(rgba(218, 30, 40, 0.10), rgba(255, 131, 137, 0.14));
+  --status-fail-solid:   light-dark(#da1e28, #ff8389);
 
-  --status-warn-text:    #FF832B;
-  --status-warn-bg:      rgba(255, 131, 43, 0.12);
+  --status-warn-text:    light-dark(#ba4e00, #FF832B);
+  --status-warn-bg:      light-dark(rgba(186, 78, 0, 0.10), rgba(255, 131, 43, 0.12));
   /* Opaque, for a chip on a row that already carries a fill the translucent
      wash would take on. */
-  --status-warn-bg-strong: #36231a;
+  --status-warn-bg-strong: light-dark(#fff2e8, #36231a);
   /* Quieter, for a paragraph that explains rather than warns, such as the
      refusal box under "The second way in". */
-  --status-warn-bg-soft: rgba(255, 131, 43, 0.06);
-  --status-warn-solid:   #FF832B;
+  --status-warn-bg-soft: light-dark(rgba(186, 78, 0, 0.05), rgba(255, 131, 43, 0.06));
+  --status-warn-solid:   light-dark(#ba4e00, #FF832B);
 
-  --status-neutral-text: #a8a8a8;
-  --status-neutral-bg:   rgba(255, 255, 255, 0.05);
+  --status-neutral-text: light-dark(#6f6f6f, #a8a8a8);
+  --status-neutral-bg:   light-dark(rgba(0, 0, 0, 0.045), rgba(255, 255, 255, 0.05));
   --status-neutral-solid: #8d8d8d;
 
   /* The raised step's shadow and its hairline. The shadow is neutral black,
      since a brown one under a grey card reads as a colour cast. */
-  --elevation-raised: 0 1px 2px rgba(0, 0, 0, .40), 0 18px 40px -24px rgba(0, 0, 0, .85);
+  --elevation-raised: 0 1px 2px light-dark(rgba(0, 0, 0, .06), rgba(0, 0, 0, .40)), 0 18px 40px -24px light-dark(rgba(0, 0, 0, .35), rgba(0, 0, 0, .85));
   /* The ground behind a floating window, and the blur that takes the page's
      detail away beneath it. */
-  --glim-scrim: rgba(0, 0, 0, .72);
+  --glim-scrim: light-dark(rgba(0, 0, 0, .62), rgba(0, 0, 0, .72));
   --glim-scrim-blur: 6px;
-  --hairline: inset 0 1px 0 rgba(255, 255, 255, .045);
+  /* A top light on the dark ramps, a ring all round on the light one. */
+  --hairline: inset 0 1px 0 light-dark(transparent, rgba(255, 255, 255, .045)), inset 0 0 0 1px light-dark(rgba(0, 0, 0, .05), transparent);
   /* The ring is the accent ink, opaque. The ink reads at 4.5:1 on the ramp's
      card (rule 45), which leaves at least 3:1 on every ground a ring stands
      on: the page, the rail, a card, a well and a row's hover. */
   --focus-ring: var(--accent-ink);
 }
 
-/* The theme follows the system: the light ramp applies when the OS prefers
-   light and no data-theme is set, and is meant to carry the same values as
-   [data-theme="light"] below. */
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) {
-    color-scheme: light;
-
-    --carbon-bg:         #f4f4f4;
-    --carbon-sidebar:    #ffffff;
-    --carbon-surface:    #ffffff;
-    --carbon-surface2:   #e8e8e8;
-    --carbon-surface3:   #d1d1d1;
-    --carbon-hover:      #e0e0e0;
-    --carbon-hover-raised: #c6c6c6;
-    --toggle-off: #8d8d8d;
-    --carbon-border:     #d1d1d1;
-
-    /* Warm brands deepened, dark ones left dark (see the dark block). */
-    --brand-coffee:  #8a6d00;
-    --brand-docs:    #8a6d00;
-    --brand-bitcoin: #a85d00;
-    --brand-paypal:  #003087;
-    --brand-android:           #32de84;
-    --brand-docker:            #2396ed;
-    --brand-unraid-from:       #e32929;
-    --brand-unraid-to:         #ff8d30;
-    --brand-mos:               #26a269;
-    --brand-umbrel:            #5351f3;
-    --brand-windows:           #0078d4;
-    --brand-flatpak:           #4a90d9;
-    --brand-github:  #181717;
-
-    --carbon-text:       #161616;
-    --carbon-text-sub:   #525252;
-    --carbon-text-muted: #6f6f6f;
-    --sidebar-text:      #393939;
-    --field-placeholder: #525252;
-
-    --accent:            #FCC419;
-    --accent-contrast:   #161616;
-    --accent-soft:       rgba(252, 196, 25, 0.14);
-    --ink-mix:           55%;
-    --accent-ink:        var(--accent-ink-light, color-mix(in srgb, var(--accent) var(--ink-mix), black));
-
-    --status-info-text:    #8E6A00;
-    --status-info-bg:      rgba(142, 106, 0, 0.12);
-    --status-info-solid:   #A87D00;
-
-    --status-ok-text:      #0e6027;
-    --status-ok-bg:        rgba(14, 96, 39, 0.11);
-    --status-ok-solid:     #198038;
-
-    --status-fail-text:    #da1e28;
-    --status-fail-bg:      rgba(218, 30, 40, 0.10);
-    --status-fail-solid:   #da1e28;
-
-    --status-warn-text:    #ba4e00;
-    --status-warn-bg:      rgba(186, 78, 0, 0.10);
-    --status-warn-bg-strong: #fff2e8;
-    --status-warn-bg-soft: rgba(186, 78, 0, 0.05);
-    --status-warn-solid:   #ba4e00;
-
-    --status-neutral-text: #6f6f6f;
-    --status-neutral-bg:   rgba(0, 0, 0, 0.045);
-    --status-neutral-solid: #8d8d8d;
-
-    --elevation-raised: 0 1px 2px rgba(0, 0, 0, .06), 0 16px 36px -26px rgba(0, 0, 0, .35);
-    --glim-scrim: rgba(0, 0, 0, .62);
-    --hairline: inset 0 0 0 1px rgba(0, 0, 0, .05);
-    --focus-ring: var(--accent-ink);
-  }
-}
-
-/* An explicit data-theme wins over the OS preference in both directions. */
-[data-theme="light"] {
-  color-scheme: light;
-
-  /* Carbon's light greys, mirroring the dark ramp step for step. */
-  --carbon-bg:         #f4f4f4;
-  --carbon-sidebar:    #ffffff;
-  --carbon-surface:    #ffffff;
-  --carbon-surface2:   #e8e8e8;
-  --carbon-surface3:   #d1d1d1;
-  --carbon-hover:      #e0e0e0;
-  --carbon-hover-raised: #c6c6c6;
-  --toggle-off: #8d8d8d;
-  --carbon-border:     #d1d1d1;
-
-  /* The same brand values as the media block, for an explicit light choice. */
-  --brand-coffee:  #8a6d00;
-  --brand-docs:    #8a6d00;
-  --brand-bitcoin: #a85d00;
-  --brand-paypal:  #003087;
-  --brand-android:           #32de84;
-  --brand-docker:            #2396ed;
-  --brand-unraid-from:       #e32929;
-  --brand-unraid-to:         #ff8d30;
-  --brand-mos:               #26a269;
-  --brand-umbrel:            #5351f3;
-  --brand-windows:           #0078d4;
-  --brand-flatpak:           #4a90d9;
-  --brand-github:  #181717;
-
-  --carbon-text:       #161616;
-  --carbon-text-sub:   #525252;
-  --carbon-text-muted: #6f6f6f;
-  --sidebar-text:      #393939;
-  --field-placeholder: #525252;
-
-  /* The accent is the same in both themes: a Sunflower fill with computed ink
-     reads well on white, while darkening the fill turns it olive-brown. Only
-     yellow text on white fails, so --accent-ink mixes the accent 55% toward
-     black here. Measured against white, the palest ground, Sunflower lands at
-     4.95:1 and every preset clears 4.5:1. Because it derives from --accent, it
-     follows a picked colour, and --accent-glyph follows --item-hue in a
-     rainbow subtree. */
-  --accent:            #FCC419;
-  --accent-contrast:   #161616;
-  --accent-soft:       rgba(252, 196, 25, 0.14);
-  --ink-mix:           55%;
-  --accent-ink:        var(--accent-ink-light, color-mix(in srgb, var(--accent) var(--ink-mix), black));
-
-  --status-info-text:    #8E6A00;
-  --status-info-bg:      rgba(142, 106, 0, 0.12);
-  --status-info-solid:   #A87D00;
-
-  --status-ok-text:      #0e6027;
-  --status-ok-bg:        rgba(14, 96, 39, 0.11);
-  --status-ok-solid:     #198038;
-
-  --status-fail-text:    #da1e28;
-  --status-fail-bg:      rgba(218, 30, 40, 0.10);
-  --status-fail-solid:   #da1e28;
-
-  --status-warn-text:    #ba4e00;
-  --status-warn-bg:      rgba(186, 78, 0, 0.10);
-  --status-warn-bg-strong: #fff2e8;
-  --status-warn-bg-soft: rgba(186, 78, 0, 0.05);
-  --status-warn-solid:   #ba4e00;
-
-  --status-neutral-text: #6f6f6f;
-  --status-neutral-bg:   rgba(0, 0, 0, 0.045);
-  --status-neutral-solid: #8d8d8d;
-
-  --elevation-raised: 0 1px 2px rgba(0, 0, 0, .06), 0 16px 36px -26px rgba(0, 0, 0, .35);
-  --glim-scrim: rgba(0, 0, 0, .62);
-  --hairline: inset 0 0 0 1px rgba(0, 0, 0, .05);
-  --focus-ring: var(--accent-ink);
-}
-
 /* OLED, the dark ramp on true black for OLED and AMOLED screens (rule 43).
    `data-oled` on <html> asks for it and counts only while the dark ramp shows,
-   chosen or from the system, so the two selectors below follow the two ways a
-   page goes dark. The surfaces move one Carbon step down and keep their order,
+   chosen or from the system, so each value keeps the light ramp's own as its
+   first half. The surfaces move one Carbon step down and keep their order,
    so every rule that names a step still lands on the step it meant. The hover
    keeps its place between the card and surface2, and hover-raised is the step
    above surface3, as on the dark ramp. The text ramp, the accent and the state
@@ -442,31 +304,16 @@
    nothing on black, so they stay as well. A lit brand tile in a near-black
    colour, such as GitHub's, would vanish into the card, so --tile-edge rings
    every lit tile. */
-[data-theme="dark"][data-oled] {
-  --carbon-bg:         #000000;
-  --carbon-sidebar:    #161616;
-  --carbon-surface:    #161616;
-  --carbon-surface2:   #262626;
-  --carbon-surface3:   #393939;
-  --carbon-hover:      #232323;
-  --carbon-hover-raised: #525252;
-  --carbon-border:     #262626;
-  --tile-edge: rgba(255, 255, 255, .2);
-}
-
-/* The same values for the system's dark, with no light theme chosen. */
-@media (prefers-color-scheme: dark) {
-  :root[data-oled]:not([data-theme="light"]) {
-    --carbon-bg:         #000000;
-    --carbon-sidebar:    #161616;
-    --carbon-surface:    #161616;
-    --carbon-surface2:   #262626;
-    --carbon-surface3:   #393939;
-    --carbon-hover:      #232323;
-    --carbon-hover-raised: #525252;
-    --carbon-border:     #262626;
-    --tile-edge: rgba(255, 255, 255, .2);
-  }
+[data-oled] {
+  --carbon-bg:         light-dark(#f4f4f4, #000000);
+  --carbon-sidebar:    light-dark(#ffffff, #161616);
+  --carbon-surface:    light-dark(#ffffff, #161616);
+  --carbon-surface2:   light-dark(#e8e8e8, #262626);
+  --carbon-surface3:   light-dark(#d1d1d1, #393939);
+  --carbon-hover:      light-dark(#e0e0e0, #232323);
+  --carbon-hover-raised: light-dark(#c6c6c6, #525252);
+  --carbon-border:     light-dark(#d1d1d1, #262626);
+  --tile-edge: light-dark(transparent, rgba(255, 255, 255, .2));
 }
 
 /* The hover step of a filled tone that has no surface ramp of its own (rule
@@ -815,7 +662,7 @@ body {
   --accent: var(--item-hue);
   --accent-contrast: var(--item-hue-ink);
   --accent-soft: var(--item-hue-soft);
-  --accent-glyph: color-mix(in srgb, var(--item-hue) var(--ink-mix), black);
+  --accent-glyph: light-dark(color-mix(in srgb, var(--item-hue) var(--ink-mix-light), black), var(--item-hue));
   --accent-hover: color-mix(in srgb, var(--item-hue) 85%, var(--carbon-text));
   /* Reactive mode leaves this alone: the ring only paints on focus, which
      brings the hue back through :focus-within. */
@@ -896,7 +743,7 @@ body {
   --accent-contrast: var(--item-hue-ink);
   --accent-soft: var(--item-hue-soft);
   /* Restated because the resting rule above muted the glyph too. */
-  --accent-glyph: color-mix(in srgb, var(--item-hue) var(--ink-mix), black);
+  --accent-glyph: light-dark(color-mix(in srgb, var(--item-hue) var(--ink-mix-light), black), var(--item-hue));
 }
 
 :focus-visible {
@@ -2241,19 +2088,15 @@ body {
    the window's own surface, three across a picker window and two on a phone.
    A brand too numerous for a class of its own hands its colour pair down
    from its list item as --provider-tile and --provider-ink. */
+/* Tiles of 13rem where they fit, and two to a row where two of them do not,
+   decided by the list's own width. */
 .glim-provider-pick {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(13rem, calc((100% - var(--space-6)) / 2)), 1fr));
   gap: var(--space-6);
   list-style: none;
   margin: 0;
   padding: 0;
-}
-@media (max-width: 47.99rem) {
-  .glim-provider-pick {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-4);
-  }
 }
 .glim-provider-pick .glim-readme-btn-unit {
   display: flex;
@@ -4707,12 +4550,19 @@ body {
     gap: var(--space-3) var(--space-6);
     min-width: 0;
   }
-  @media (max-width: 600px) {
-    .glim-field-row-group {
+  /* The group and a lone row are their own containers, so a group in a narrow
+     column wraps its rows as a phone does. A row inside a group stays out of
+     it: containment would end its subgrid. */
+  .glim-field-row-group { container: field-rows / inline-size; }
+  .glim-field-row:not(.glim-field-row-group > *) { container: field-row / inline-size; }
+  @container field-rows (max-width: 26rem) {
+    .glim-field-row-group > .glim-field-row {
       display: flex;
-      flex-direction: column;
+      grid-column: 1 / -1;
     }
-    .glim-field-row-group > .glim-field-row { display: flex; }
+    .glim-field-row-controls { flex: 1 1 13rem; }
+  }
+  @container field-row (max-width: 26rem) {
     .glim-field-row-controls { flex: 1 1 13rem; }
   }
 
@@ -4962,7 +4812,8 @@ body {
   @media (hover: none) {
     .glim-list-row-actions { opacity: 1; }
   }
-  @media (max-width: 600px) {
+  .glim-list-row { container: list-row / inline-size; }
+  @container list-row (max-width: 30rem) {
     .glim-list-row-badges { display: none; }
   }
 
@@ -5188,6 +5039,7 @@ body {
      start, the name with its badges, the facts and the actions beside it. */
   .glim-instance {
     --instance-mark: 5.5rem;
+    container: instance / inline-size;
     display: flex;
     flex-direction: column;
     min-width: 0;
@@ -5642,13 +5494,19 @@ body {
     font-weight: 600;
   }
 
-  @media (max-width: 600px) {
-    .glim-instance { --instance-mark: 3.75rem; }
+  /* A narrow card, on a phone or in a narrow column, takes a smaller mark and
+     tighter padding. The card is its own container, so it answers to its own
+     width rather than the window's. */
+  @container instance (max-width: 30rem) {
     .glim-instance-mark {
+      width: 3.75rem;
+      height: 3.75rem;
       margin-block: var(--space-7) var(--space-6);
       margin-inline-start: var(--space-7);
     }
     .glim-instance-main { padding: var(--space-7) var(--space-7) var(--space-6); }
+  }
+  @media (max-width: 600px) {
     .glim-fortress-switch { padding: var(--space-6) var(--space-7); }
     .glim-fortress-removed { padding-inline-start: var(--space-7); }
     .glim-permission {
@@ -5737,12 +5595,7 @@ a:is(.glim-btn, .glim-icon-btn) { text-decoration: none; }
 
   /* The light that crosses a placeholder: a faint white on the dark ramps, a
      strong one on the light ramp, where a darker band would read as a shadow. */
-  :root,
-  [data-theme="dark"] { --skeleton-glow: rgb(255 255 255 / 0.1); }
-  @media (prefers-color-scheme: light) {
-    :root:not([data-theme="dark"]) { --skeleton-glow: rgb(255 255 255 / 0.9); }
-  }
-  [data-theme="light"] { --skeleton-glow: rgb(255 255 255 / 0.9); }
+  :root, [data-theme] { --skeleton-glow: light-dark(rgb(255 255 255 / 0.9), rgb(255 255 255 / 0.1)); }
 
   @keyframes glim-busy-show {
     from { visibility: hidden; }

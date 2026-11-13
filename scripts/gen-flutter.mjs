@@ -10,19 +10,40 @@ const out = new URL("../packages/flutter/lib/src/", import.meta.url);
 const css = readFileSync(new URL("tokens.css", core), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
 const glyphs = JSON.parse(readFileSync(new URL("glyphs.json", core), "utf8"));
 
-/** The declarations of the first rule whose selector starts with `selector`. */
-function block(selector) {
-  const at = css.indexOf(selector);
-  if (at < 0) throw new Error(`no rule ${selector}`);
-  const open = css.indexOf("{", at);
-  const body = css.slice(open + 1, css.indexOf("}", open));
-  return Object.fromEntries([...body.matchAll(/(--[a-z0-9-]+)\s*:\s*([^;]+);/g)].map((m) => [m[1], m[2].trim()]));
+/**
+ * The declarations of the first rule whose selector starts with `selector`,
+ * or of the first such rule that declares `has`.
+ */
+function block(selector, has) {
+  for (let at = css.indexOf(selector); at >= 0; at = css.indexOf(selector, at + 1)) {
+    const open = css.indexOf("{", at);
+    const body = css.slice(open + 1, css.indexOf("}", open));
+    const props = Object.fromEntries([...body.matchAll(/(--[a-z0-9-]+)\s*:\s*([^;]+);/g)].map((m) => [m[1], m[2].trim()]));
+    if (!has || has in props) return props;
+  }
+  throw new Error(`no rule ${selector}`);
 }
 
-const dark = block(':root,\n[data-theme="dark"]');
-const light = block('[data-theme="light"]');
-const oled = { ...dark, ...block('[data-theme="dark"][data-oled]') };
-const root = { ...block(":root {"), ...block(":root {\n  --btn-h") };
+/** The two halves of a light-dark() value, light first, or the value twice. */
+function sides(value) {
+  const m = value.match(/^light-dark\(([\s\S]+)\)$/);
+  if (!m) return [value, value];
+  let depth = 0;
+  for (let i = 0; i < m[1].length; i++) {
+    const c = m[1][i];
+    if (c === "(") depth++;
+    else if (c === ")") depth--;
+    else if (c === "," && depth === 0) return [m[1].slice(0, i).trim(), m[1].slice(i + 1).trim()];
+  }
+  throw new Error(`cannot split ${value}`);
+}
+const side = (props, i) => Object.fromEntries(Object.entries(props).map(([k, v]) => [k, sides(v)[i]]));
+
+const themed = block("[data-theme] {", "--carbon-bg");
+const light = side(themed, 0);
+const dark = side(themed, 1);
+const oled = { ...dark, ...side(block("[data-oled] {"), 1) };
+const root = { ...block(":root {"), ...block(":root {", "--btn-h") };
 
 const camel = (name) => name.replace(/^--/, "").replace(/-([a-z0-9])/g, (_, c) => c.toUpperCase());
 
@@ -39,7 +60,8 @@ function dartColor(value) {
 // Every literal colour both themes define. A token written with var() or
 // color-mix() is derived, and the Dart side derives it the same way.
 const colours = Object.keys(dark).filter((k) => dartColor(dark[k]) && light[k] && dartColor(light[k]));
-const inkMix = (theme) => Number.parseFloat(theme["--ink-mix"] ?? "100") / 100;
+// The light ramp's ink mixes the accent toward black; on the dark ramps it is the accent.
+const inkMix = (theme) => (theme === light ? Number.parseFloat(themed["--ink-mix-light"]) / 100 : 1);
 
 const px = (value) => {
   if (value === "0") return 0;

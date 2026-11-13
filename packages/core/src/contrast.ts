@@ -16,7 +16,7 @@ const BLACK = '#000000';
 const LIGHT_CARD = '#FFFFFF';
 const DARK_CARD = '#262626';
 
-// --ink-mix of the light ramp in tokens.css.
+// --ink-mix-light in tokens.css.
 const LIGHT_INK_MIX = 0.55;
 
 type Rgb = [number, number, number];

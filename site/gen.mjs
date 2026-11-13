@@ -119,10 +119,11 @@ function propsOf(name, file) {
 const props = Object.fromEntries(Object.entries(COMPONENTS).map(([n, f]) => [n, { file: f, props: propsOf(n, f) }]));
 writeFileSync(new URL("props.json", out), JSON.stringify(props, null, 1));
 
-// The colour tokens of the dark block, in file order, each with the comment that
-// stands above it.
+// The colour tokens of the theme block, in file order, each with the comment
+// that stands above it.
 const css = readFileSync(new URL("tokens.css", core), "utf8");
-const dark = css.slice(css.indexOf('[data-theme="dark"] {'), css.indexOf('[data-theme="light"] {'));
+const themeAt = css.indexOf("[data-theme] {\n  /* Ground and surfaces");
+const dark = css.slice(themeAt, css.indexOf("\n}", themeAt));
 const tokens = [];
 let comment = "";
 let open = false;
@@ -136,8 +137,7 @@ for (const raw of dark.split("\n")) {
   }
   const t = line.match(/^(--[a-z0-9-]+):\s*([^;]+);/);
   if (t) {
-    // The block also carries the system-light ramp, which repeats every name.
-    if (/^--(carbon|accent|status|focus|field)/.test(t[1]) && !tokens.some((x) => x.name === t[1])) {
+    if (/^--(carbon|accent|status|focus|field)/.test(t[1])) {
       tokens.push({ name: t[1], value: t[2], doc: comment });
     }
     comment = "";

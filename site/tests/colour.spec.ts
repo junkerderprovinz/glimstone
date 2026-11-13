@@ -13,13 +13,24 @@ async function open(page: Page, look: object) {
 const token = (page: Page, name: string) =>
   page.evaluate((n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim(), name);
 
+// The colour a token paints as a background on the page, its light-dark() resolved.
+const paint = (page: Page, name: string) =>
+  page.evaluate((n) => {
+    const el = document.createElement("div");
+    el.style.background = `var(${n})`;
+    document.body.append(el);
+    const c = getComputedStyle(el).backgroundColor;
+    el.remove();
+    return c;
+  }, name);
+
 const ground = (page: Page) => page.evaluate(() => getComputedStyle(document.body).backgroundColor);
 
 test("OLED puts a chosen dark theme on black and moves the card one step down", async ({ page }) => {
   await open(page, { theme: "dark", oled: true });
   expect(await ground(page)).toBe("rgb(0, 0, 0)");
-  expect(await token(page, "--carbon-surface")).toBe("#161616");
-  expect(await token(page, "--carbon-text")).toBe("#f4f4f4");
+  expect(await paint(page, "--carbon-surface")).toBe("rgb(22, 22, 22)");
+  expect(await paint(page, "--carbon-text")).toBe("rgb(244, 244, 244)");
 });
 
 test("OLED follows the system's dark when no theme is chosen", async ({ page }) => {
@@ -86,7 +97,8 @@ const shadowOf = (page: Page, cls: string) =>
 
 test("OLED draws no ring round a card", async ({ page }) => {
   await open(page, { theme: "dark", oled: true });
-  expect(await shadowOf(page, "glim-card")).not.toMatch(/0px 0px 0px 1px/);
+  // The light ramp's ring stays in the shadow list, transparent.
+  expect(await shadowOf(page, "glim-card")).not.toMatch(/rgba?\((?!0, 0, 0, 0\))[^)]*\) 0px 0px 0px 1px/);
 });
 
 test("under OLED a bubble keeps the dark look's shadow, which lifts it off a card", async ({ page }) => {
@@ -137,3 +149,28 @@ for (const [theme, grey] of [["dark", "rgb(198, 198, 198)"], ["light", "rgb(82, 
     expect(placeholder).toBe(grey);
   });
 }
+
+for (const [system, chosen, expected] of [
+  ["light", "dark", "rgb(22, 22, 22)"],
+  ["dark", "light", "rgb(244, 244, 244)"],
+] as const) {
+  test(`a chosen ${chosen} theme wins over the system's ${system}`, async ({ page }) => {
+    await page.emulateMedia({ colorScheme: system });
+    await open(page, { theme: chosen });
+    expect(await ground(page)).toBe(expected);
+  });
+}
+
+test("a subtree can pin the other theme", async ({ page }) => {
+  await open(page, { theme: "dark" });
+  const pinned = await page.evaluate(() => {
+    const el = document.createElement("div");
+    el.dataset.theme = "light";
+    el.style.background = "var(--carbon-bg)";
+    document.body.append(el);
+    const c = getComputedStyle(el).backgroundColor;
+    el.remove();
+    return c;
+  });
+  expect(pinned).toBe("rgb(244, 244, 244)");
+});

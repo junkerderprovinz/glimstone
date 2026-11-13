@@ -16,6 +16,9 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 
 - **No setting means soft corners and calm motion.** A page without `data-shape` or `data-motion` used to get round pills and wild motion from the stylesheet, while `appearance.ts` already defaulted to soft and subtle. The bare `:root` now carries soft's radii and subtle's numbers, and `round` and `wild` are values of their own. An app whose own rules keyed off `[data-motion='subtle']` to mean "the quiet one" should test for `wild` instead.
 
+- **Each theme is written once.** The colour tokens are one block of `light-dark(light, dark)` values on `:root, [data-theme]`, and `color-scheme` decides which side shows, so `tokens.css` no longer repeats every value under `prefers-color-scheme` and `data-theme`. A chosen theme still wins over the system in both directions, also on a subtree. OLED is a small `[data-oled]` block. `--ink-mix` is gone: the light ink reads `--ink-mix-light`, and on the dark ramps the ink is the accent. An app with its own copy of the tokens takes the new block whole. The light theme's card shadow takes the dark theme's shape at its own strength, 2px longer than before.
+- **Components answer to their own width.** A field row and a field row group wrap their controls under 26rem of their own width, a list row hides its badges under 30rem, and an instance card takes the smaller mark under 30rem, wherever they stand, not only below a 600px window. The provider tiles go two to a row when two 13rem tiles do not fit.
+
 ## ✨ Added
 
 - **Windows contrast themes.** Under `forced-colors: active` every card, well, window, menu, field, button and badge gets an edge in the system's text colour. A chosen segment, tile or rail row, a switched-on switch, a ticked checkbox and a bar's fill take the system's selection colours, and an unticked box shows no mark. Before, the switch looked the same on and off, and cards and fields had no edge at all.
