@@ -19,6 +19,7 @@ import {
   type FortressApp,
   type FortressFlow,
   type FortressInstance,
+  type FortressLabelKeys,
   type FortressPermission,
   type FortressState,
   type FortressText,
@@ -37,19 +38,7 @@ import { Toggle } from "./Toggle.tsx";
 import { Window, type WindowAction } from "./Window.tsx";
 import { glyphFor, IconClose, MarkSvg } from "./glyphs.tsx";
 
-export type { ChangeAnswer, FortressAnswer, FortressText, PhraseAnswer } from "@glimstone/core";
-
-/** The label keys behind the fortress's buttons, which pick their glyphs (see Button). */
-export interface FortressLabelKeys {
-  join: string;
-  leave: string;
-  showPhrase: string;
-  changePhrase: string;
-  remove: string;
-  later: string;
-  unlock: string;
-  copy: string;
-}
+export type { ChangeAnswer, FortressAnswer, FortressLabelKeys, FortressText, PhraseAnswer } from "@glimstone/core";
 
 const LABEL_KEYS: FortressLabelKeys = {
   join: "fortressJoin",

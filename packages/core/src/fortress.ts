@@ -509,3 +509,8 @@ export function createFortressFlow(options: () => FortressFlowOptions): Fortress
     },
   };
 }
+
+export interface InstanceFigure {
+  value: string;
+  label: string;
+}

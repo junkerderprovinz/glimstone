@@ -78,3 +78,10 @@ export function sidebarRowView(r: SidebarRowInput): SidebarRowView {
       : undefined,
   };
 }
+
+export interface SidebarCount {
+  value: number;
+  /** The figure in words, such as "3 need attention", because a bare number
+   *  names nothing. */
+  label: string;
+}

@@ -227,3 +227,8 @@ export function closeMenuOutside(inside: () => (Element | null | undefined)[], c
   document.addEventListener("click", onClick, true);
   return () => document.removeEventListener("click", onClick, true);
 }
+
+export interface MenuBarHandle {
+  /** Opens a menu by its index and puts the focus on its first row. */
+  open: (index: number) => void;
+}

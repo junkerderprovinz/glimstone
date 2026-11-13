@@ -167,3 +167,15 @@ export function plural(lang: string, forms: Plural, count: number): string {
 export function listOf(lang: string, items: string[]): string {
   return new Intl.ListFormat(lang, { type: "conjunction" }).format(items);
 }
+
+/** The label keys behind the fortress's buttons, which pick their glyphs (see Button). */
+export interface FortressLabelKeys {
+  join: string;
+  leave: string;
+  showPhrase: string;
+  changePhrase: string;
+  remove: string;
+  later: string;
+  unlock: string;
+  copy: string;
+}

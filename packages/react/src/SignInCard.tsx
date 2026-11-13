@@ -1,24 +1,17 @@
 import { useEffect, useId, useRef, useState, useSyncExternalStore, type FormEvent, type ReactNode } from "react";
-import { createSignInFlow, focusFirstField, labelInside, resetBlocked, showRefusal, signInBlocked, signInStage, type SignInHandlers, type SignInText } from "@glimstone/core";
+import { createSignInFlow, focusFirstField, labelInside, resetBlocked, showRefusal, signInBlocked, signInStage, type SignInHandlers, type SignInText, type SignInLabelKeys } from "@glimstone/core";
 import { Button } from "./Button.tsx";
 import { InfoBubble } from "./InfoBubble.tsx";
 import { PasswordField } from "./PasswordField.tsx";
 import { TextField } from "./TextField.tsx";
+
+export type { SignInLabelKeys } from "@glimstone/core";
 
 export type { ResetAnswer, SignInAnswer, SignInText } from "@glimstone/core";
 
 // The way into an app with a login ("The sign-in card" in the design
 // language). The flow lives in the core; the app answers each step through a
 // callback and brings its own words.
-
-/** The label keys behind the card's buttons, which pick their glyphs (see Button). */
-export interface SignInLabelKeys {
-  signIn: string;
-  passkey: string;
-  forgot: string;
-  back: string;
-  setPassword: string;
-}
 
 const LABEL_KEYS: SignInLabelKeys = {
   signIn: "signIn",

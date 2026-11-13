@@ -1,18 +1,13 @@
 import type { AnchorHTMLAttributes, CSSProperties, ReactNode } from "react";
-import { sidebarRowView } from "@glimstone/core";
+import { sidebarRowView, type SidebarCount } from "@glimstone/core";
 import { useLabelMode } from "./useLabelMode.ts";
 import { useTipBubble } from "./useTipBubble.tsx";
+
+export type { SidebarCount } from "@glimstone/core";
 
 // One destination of the navigation rail; what it shows comes from
 // sidebarRowView() in the core. The other props of an <a> go to the link, so a
 // router can take the click.
-
-export interface SidebarCount {
-  value: number;
-  /** The figure in words, such as "3 need attention", because a bare number
-   *  names nothing. */
-  label: string;
-}
 
 export interface SidebarRowProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "children"> {
   /** The destination's name: shown, or hidden but still the link's name. */

@@ -1,15 +1,12 @@
 import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
-import { hueVars } from "@glimstone/core";
+import { hueVars, type InstanceFigure } from "@glimstone/core";
+
+export type { InstanceFigure } from "@glimstone/core";
 
 // One instance as a card in the Instances grid, or one app of the fortress
 // with a row for each place it runs ("The fortress" in the design language).
 // The mark stands at the start, the name with its badges beside it, and the
 // actions at the end of the card's foot.
-
-export interface InstanceFigure {
-  value: string;
-  label: string;
-}
 
 export interface InstanceCardProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
   /** The app's mark, as an address or as an inline `<svg>`. */

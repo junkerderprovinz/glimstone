@@ -4,18 +4,16 @@
 // the ref, since which key does it is the app's keymap.
 
 import { useImperativeHandle, useRef, useState, type KeyboardEvent, type Ref } from "react";
+import type { MenuBarHandle } from "@glimstone/core";
 import { ContextMenu, type MenuEntry } from "./ContextMenu.tsx";
+
+export type { MenuBarHandle } from "@glimstone/core";
 
 export interface MenuBarMenu {
   label: string;
   items: MenuEntry[];
   /** The id of the open menu, for a caller or a script that looks for it. */
   id?: string;
-}
-
-export interface MenuBarHandle {
-  /** Opens a menu by its index and puts the focus on its first row. */
-  open: (index: number) => void;
 }
 
 export interface MenuBarProps {

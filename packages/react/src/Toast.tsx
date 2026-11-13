@@ -1,7 +1,9 @@
 import { Fragment, useEffect, useRef } from "react";
-import { announce, liveRegionAttrs, MARKS, softBreaks, TOAST_MARKS, toastPoliteness, type ToastAction, type ToastSeverity } from "@glimstone/core";
+import { announce, liveRegionAttrs, MARKS, softBreaks, TOAST_MARKS, toastPoliteness, type ToastAction, type ToastSeverity, type ToastViewportEntry } from "@glimstone/core";
 import { Button } from "./Button.tsx";
 import { MarkSvg } from "./glyphs.tsx";
+
+export type { ToastViewportEntry } from "@glimstone/core";
 
 // The toast system's presentational half (design-language.md, "Toasts"). These
 // components hold no state, so a test can call them with props; the companion
@@ -92,13 +94,6 @@ export function ToastCard({
       </button>
     </div>
   );
-}
-
-export interface ToastViewportEntry {
-  id: string;
-  message: string;
-  severity: ToastSeverity;
-  action?: ToastAction;
 }
 
 export interface ToastViewportProps {
