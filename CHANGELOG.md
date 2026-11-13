@@ -15,13 +15,13 @@ After a removal the fortress takes no new app until the phrase changes, and its 
 - **Flutter:** move the git dependency to `ref: v4.4.1`. Nothing changed there.
 - **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.4.1.
 
-## 🔁 Changed
-
-- **A removal closes the fortress to new apps until the phrase changes.** The remove window, the question after it and the line under the switch say so plainly, where they used to promise the old phrase a way back in. An app that was removed learns that the new phrase brings it back once the phrase has changed.
-
 ## ✨ Added
 
 - **`joinLocked`** tells an app that tries to join in that window why the fortress turns it away and that it needs the new phrase. React, Vue and the plugin card pick it for the kit's code on their own, so an app only passes the code on.
+
+## ⚡ Improved
+
+- **A removal closes the fortress to new apps until the phrase changes.** The remove window, the question after it and the line under the switch say so plainly, where they used to promise the old phrase a way back in. An app that was removed learns that the new phrase brings it back once the phrase has changed.
 
 ## 🌐 Translations
 
