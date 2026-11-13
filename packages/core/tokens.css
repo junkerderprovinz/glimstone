@@ -6061,3 +6061,77 @@ a:is(.glim-btn, .glim-icon-btn) { text-decoration: none; }
     margin-top: 0;
   }
 }
+
+/* Windows' contrast themes (forced-colors) swap every author colour for a
+   system one and drop every shadow and gradient. GlimStone draws its edges
+   with fills and shadows, so a card, a field or a switch would melt into the
+   page. Here every surface gets an edge in the text colour, and a chosen or
+   switched-on state takes the system's selection colours, which the theme
+   guarantees to read against each other. The small controls opt out of the
+   forcing so their two states stay apart. */
+@media (forced-colors: active) {
+  :is(.glim-card, .glim-well, .glim-subcard, .glim-panel, .glim-bubble, .glim-menu, .glim-listbox,
+    .glim-select-content, .glim-popover, .glim-sheet-panel, .glim-modal-card, .glim-window,
+    .glim-toast-card, .glim-notice, .glim-tile, .glim-sel--well, .glim-list) {
+    border: 1px solid CanvasText;
+  }
+  :is(.glim-input, .glim-num-field, .glim-glyph-field, .glim-combobox-control, .glim-select-trigger,
+    .glim-btn, .glim-badge, .glim-sel-seg, .glim-sel-tile, .glim-readme-btn, .glim-kbd) {
+    border: 1px solid ButtonText;
+  }
+  .glim-glyph-field .glim-glyph-field-input { border: 0; }
+  :is(.glim-btn, .glim-sel-seg, .glim-sel-tile, .glim-icon-btn, .glim-menu-item, .glim-select-item):disabled,
+  :is(.glim-btn, .glim-sel-seg, .glim-sel-tile)[aria-disabled="true"] {
+    border-color: GrayText;
+    color: GrayText;
+  }
+
+  :is(.glim-sel .glim-sel-seg.glim-active, .glim-sel-tile.glim-active, .glim-nav-row.glim-active,
+    .glim-menu-item--current, .glim-btn--accent, .glim-badge--active) {
+    forced-color-adjust: none;
+    border-color: Highlight;
+    background-color: Highlight;
+    color: HighlightText;
+  }
+  :is(.glim-select-item, .glim-menu-item)[data-highlighted] {
+    forced-color-adjust: none;
+    background-color: Highlight;
+    color: HighlightText;
+  }
+
+  .glim-toggle-track {
+    forced-color-adjust: none;
+    border: 1px solid ButtonText;
+    background-color: ButtonFace;
+  }
+  .glim-toggle-thumb { background-color: ButtonText; }
+  .glim-toggle-track[aria-checked="true"] {
+    border-color: Highlight;
+    background-color: Highlight;
+  }
+  .glim-toggle-track[aria-checked="true"] .glim-toggle-thumb { background-color: HighlightText; }
+  .glim-toggle-track:is(:disabled, [aria-disabled="true"]) { border-color: GrayText; }
+
+  :is(.glim-checkbox-box, .glim-rowmark) {
+    forced-color-adjust: none;
+    border: 1px solid ButtonText;
+    background-color: ButtonFace;
+    color: ButtonText;
+  }
+  :is(.glim-checkbox-box, .glim-rowmark) > svg { visibility: hidden; }
+  :is([aria-checked="true"] > .glim-checkbox-box, .glim-rowmark--on) {
+    border-color: Highlight;
+    background-color: Highlight;
+    color: HighlightText;
+  }
+  :is([aria-checked="true"] > .glim-checkbox-box, .glim-rowmark--on) > svg { visibility: visible; }
+
+  :is(.glim-meter-track, .glim-progress, .glim-slider-track) { border: 1px solid CanvasText; }
+  :is(.glim-meter-fill, .glim-progress-fill, .glim-slider-range, .glim-slider-thumb) {
+    forced-color-adjust: none;
+    background-color: Highlight;
+  }
+
+  /* The ring keeps the system's own focus colour. */
+  :focus-visible { outline-color: Highlight; }
+}
