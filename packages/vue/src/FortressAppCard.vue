@@ -6,14 +6,13 @@ import Button from "./Button.vue";
 import FortressDoubtWindow from "./FortressDoubtWindow.vue";
 import InfoBubble from "./InfoBubble.vue";
 import InstanceCard from "./InstanceCard.vue";
-import { glyphFor } from "./glyphs";
+import PresenceBadges from "./PresenceBadges.vue";
+import { deviceGlyph } from "./fortressParts";
 
 // Another app of the fortress: its state, where it runs, and the way to open
-// it. A device's glyph is asked for by its kind through the app's resolver
-// (`deviceServer`, `devicePc`, `deviceLaptop`, `devicePhone`). Open and Remove
-// stay quiet at the end of a row, and after the card's own Open on a card with
-// one instance. Attributes go to the card, since the question beside it is a
-// second root.
+// it. Open and Remove stay quiet at the end of a row, and after the card's own
+// Open on a card with one instance. Attributes go to the card, since the
+// question beside it is a second root.
 defineOptions({ inheritAttrs: false });
 const props = withDefaults(defineProps<{
   app: FortressApp;
@@ -32,7 +31,7 @@ const props = withDefaults(defineProps<{
 const view = computed(() => appCardView(props.app, props.text, props.lang));
 const single = computed(() => view.value.rows.length === 0);
 const presence = (i: FortressInstance) => ({ connected: props.text.connected, checking: props.text.checking, away: props.text.away })[i.presence];
-const device = (i: FortressInstance) => (i.deviceKind ? glyphFor(`device${i.deviceKind.charAt(0).toUpperCase()}${i.deviceKind.slice(1)}`) : undefined);
+const device = (i: FortressInstance) => deviceGlyph(i.deviceKind);
 
 const name = (i: FortressInstance) => memberName(props.text, props.app, i);
 const removes = (i: FortressInstance) => !!props.onRemove && !i.self;
@@ -50,8 +49,7 @@ function open(instance: FortressInstance) {
     <template #badges>
       <Badge v-if="view.doubt" tone="warn">{{ view.doubt.label }}<InfoBubble :tip="view.doubt.tip" on-accent /></Badge>
       <Badge v-if="view.needs" tone="warn">{{ view.needs }}</Badge>
-      <Badge v-if="view.main.relay">{{ text.viaRelay }}</Badge>
-      <Badge :tone="presenceTone(view.main.presence)">{{ presence(view.main) }}</Badge>
+      <PresenceBadges :instance="view.main" :text="text" />
     </template>
     <template v-if="!single" #default>
       <ul class="glim-instance-rows">

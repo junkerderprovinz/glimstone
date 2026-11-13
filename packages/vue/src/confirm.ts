@@ -8,7 +8,7 @@
 // One pending question per instance is enough: the dialog is modal, so a second
 // confirm() cannot be triggered while one is open.
 
-import { defineComponent, h, shallowRef, Teleport, watch, type Component } from "vue";
+import { defineComponent, h, shallowRef, Teleport, watch, type Component, type Ref } from "vue";
 import { focusedAsker, returnFocus, trapDialogKeys, portalTarget } from "@glimstone/core";
 import ConfirmDialog from "./ConfirmDialog.vue";
 
@@ -53,9 +53,7 @@ export function useConfirm(text: ConfirmText) {
   /** For a caller whose question stopped making sense while it was open. */
   const dismiss = () => settle(false);
 
-  watch(pending, (open, _, onCleanup) => {
-    if (open) onCleanup(trapDialogKeys(() => card.value, dismiss));
-  });
+  useDialogKeys(() => pending.value !== null, card, dismiss);
 
   // An ancestor with a transform would confine a fixed backdrop to its own
   // box, so the dialog goes to <body>.
@@ -82,4 +80,17 @@ export function useConfirm(text: ConfirmText) {
   });
 
   return { confirm, dismiss, ConfirmHost };
+}
+
+/** Escape from anywhere and a Tab trap over the dialog's own controls while
+ *  it is open, so focus never reaches the page it covers. For any other modal
+ *  window too. */
+export function useDialogKeys(open: () => boolean, dialog: Ref<HTMLElement | null>, onCancel: () => void): void {
+  watch(
+    open,
+    (on, _, onCleanup) => {
+      if (on) onCleanup(trapDialogKeys(() => dialog.value, onCancel));
+    },
+    { immediate: true },
+  );
 }

@@ -2,7 +2,7 @@
 // rainbow position copied onto a portalled list, and the trigger's wheel and
 // shake.
 
-import { computed, onScopeDispose, shallowRef, watch, type Component, type Ref } from "vue";
+import { computed, onScopeDispose, shallowRef, watch, type Component, type ComputedRef, type Ref } from "vue";
 import {
   enableWheelStep,
   readPortalHue,
@@ -19,11 +19,19 @@ export type SelectSubmenu<T extends string = string> = Submenu<T, Component>;
 export type SelectEntry<T extends string = string> = Entry<T, Component>;
 export type SelectGroup<T extends string = string> = SelectRun<T, Component>;
 
+/** What a portalled panel needs to stand in its trigger's palette position. */
+export interface PortalHue {
+  /** Inline custom properties to bind to the portalled element. */
+  style: ComputedRef<Record<string, string> | undefined>;
+  /** `"glim-hue"` when there is a hue to apply, otherwise `""`. */
+  className: ComputedRef<string>;
+}
+
 /**
  * The trigger's rainbow position, for a list portalled out of the card that
  * sets it. `.glim-hue` travels with the properties, never alone.
  */
-export function usePortalHue(open: () => boolean, trigger: Ref<HTMLElement | null>) {
+export function usePortalHue(open: () => boolean, trigger: Ref<HTMLElement | null>): PortalHue {
   const hue = shallowRef<Record<string, string> | null>(null);
   watch(open, (on) => (hue.value = on && trigger.value ? readPortalHue(trigger.value) : null), { flush: "sync" });
   return {
