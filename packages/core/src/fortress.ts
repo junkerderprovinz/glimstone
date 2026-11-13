@@ -448,8 +448,8 @@ export function createFortressFlow(options: () => FortressFlowOptions): Fortress
       const w = state.window;
       const ask = options().onRemove;
       if (w?.kind !== "remove" || !ask) return;
-      // The removed instance can still get back in with the phrase, so where
-      // the phrase can change here, that is the next question.
+      // Until the phrase changes the fortress takes no new app, so where the
+      // phrase can change here, that is the next question.
       await run("remove", () => ask(w.id), (a) => {
         if (a.ok && options().onChangePhrase) open({ kind: "removed", device: w.device });
         else if (a.ok) update(START);

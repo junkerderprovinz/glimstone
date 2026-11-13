@@ -79,9 +79,9 @@ export interface FortressProps {
   onRemove?: (id: string) => Promise<FortressAnswer>;
   /** `password` is set where `phrasePassword` asks for it first. Without it there is no Show phrase. */
   onShowPhrase?: (password?: string) => Promise<PhraseAnswer>;
-  /** Offered right after a removal and beside `removed`, since the old phrase still lets a removed instance back in. */
+  /** Offered right after a removal and beside `removed`, since until the phrase changes the fortress takes no new app. */
   onChangePhrase?: () => Promise<ChangeAnswer>;
-  /** The instances removed since the phrase last changed, by name ("Bravo on Atlas"). While there are any, a line says the way back is still open. */
+  /** The instances removed since the phrase last changed, by name ("Bravo on Atlas"). While there are any, a line says that no new app can join. */
   removed?: string[];
   /** Another member removed this app, so the empty place says so until it joins again. */
   removedHere?: boolean;

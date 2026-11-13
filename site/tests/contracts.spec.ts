@@ -4586,7 +4586,7 @@ test.describe("Fortress", () => {
     await inside(page).locator('[data-fortress-app="echo"]').getByRole("button", { name: "Remove" }).click();
     await dialog(page).getByRole("button", { name: "Remove" }).click();
     await expect(dialog(page)).toHaveAccessibleName("Change the phrase now?");
-    await expect(dialog(page)).toContainText("Echo on Wanderer is out. As long as the phrase stays the same, the way back in is still open.");
+    await expect(dialog(page)).toContainText("Echo on Wanderer is out. New apps can join again once you change the phrase.");
     await expect(dialog(page).locator(".glim-modal-foot .glim-btn")).toHaveText(["Later", "Change phrase"]);
     await dialog(page).getByRole("button", { name: "Later" }).click();
     await expect(dialog(page)).toHaveCount(0);
@@ -4619,7 +4619,7 @@ test.describe("Fortress", () => {
       await dialog(page).getByRole("button", { name: "Remove" }).click();
       await dialog(page).getByRole("button", { name: "Later" }).click();
     }
-    await expect(note).toContainText("Removed: Echo on Wanderer and Delta on Atlas. Change the phrase to close the way back in.");
+    await expect(note).toContainText("Removed: Echo on Wanderer and Delta on Atlas. No new app can join until you change the phrase.");
     await others(page).click();
     await expect(note).toBeVisible();
     await note.getByRole("button", { name: "Change phrase" }).click();

@@ -13,7 +13,7 @@ const glyphs = JSON.parse(readFileSync(join(root, "packages/core/glyphs.json"), 
 export const KEYS = [
   "fortress", "showOthers", "about", "othersApps", "othersDevices", "othersLine", "connected", "away", "viaRelay", "lastSeen",
   "instanceCount", "forms", "open", "remove", "memberOn", "outHint", "removedHereTitle", "removedHereHint", "enterPhrase",
-  "joinTitle", "word", "phraseWhere", "join", "joinRefused", "joinedTitle", "cancel", "close", "leaveTitle", "leaveBody",
+  "joinTitle", "word", "phraseWhere", "join", "joinRefused", "joinLocked", "joinedTitle", "cancel", "close", "leaveTitle", "leaveBody",
   "leaveBack", "leaveConfirm", "removeTitle", "removeBody", "removeBack", "removedTitle", "removedBody", "removedNote",
   "phraseTitle", "leaveRow", "leaveAbout", "changedTitle", "changeElsewhere", "changeNowhere", "phraseMoved", "failed",
   "statusWhere", "statusLoading", "statusQuiet", "statusNeedsYou", "statusWork", "statusNext", "statusLog", "states", "levels",
