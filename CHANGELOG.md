@@ -12,6 +12,10 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 - **Placeholders:** a field's placeholder reads the new `--field-placeholder` instead of `--carbon-text-muted`. Point your own `::placeholder` rules at it.
 - **Flutter:** `GlimTheme` has `fieldPlaceholder`, and `focusRing` is a getter on `GlimDerived` that returns the accent ink. It is no longer a constructor argument or a `copyWith` parameter.
 
+## 🔁 Changed
+
+- **No setting means soft corners and calm motion.** A page without `data-shape` or `data-motion` used to get round pills and wild motion from the stylesheet, while `appearance.ts` already defaulted to soft and subtle. The bare `:root` now carries soft's radii and subtle's numbers, and `round` and `wild` are values of their own. An app whose own rules keyed off `[data-motion='subtle']` to mean "the quiet one" should test for `wild` instead.
+
 ## ✨ Added
 
 - **Windows contrast themes.** Under `forced-colors: active` every card, well, window, menu, field, button and badge gets an edge in the system's text colour. A chosen segment, tile or rail row, a switched-on switch, a ticked checkbox and a bar's fill take the system's selection colours, and an unticked box shows no mark. Before, the switch looked the same on and off, and cards and fields had no edge at all.

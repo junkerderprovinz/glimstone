@@ -150,8 +150,8 @@ export function MotionEngine() {
         person who asked the system for less motion gets less motion, whatever the app is set to.
       </p>
       <Code
-        code={`/* Name the quiet levels, so the rule covers wild, storm and anything added above. */
-:root:not([data-motion="subtle"]):not([data-motion="off"]) .thing {
+        code={`/* Name the lively levels: a page without the attribute is subtle. */
+:root:is([data-motion="wild"], [data-motion="storm"]) .thing {
   transition-duration: var(--motion-control-dur);
 }`}
       />

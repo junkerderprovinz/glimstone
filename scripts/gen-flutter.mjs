@@ -51,7 +51,7 @@ const metrics = Object.entries(root)
   .map(([k, v]) => `  static const double ${camel(k)} = ${px(v)};`);
 
 // The shape engine's three offered shapes; leaf stays hidden, as on the web.
-const shapes = { round: root, soft: block(':root[data-shape="soft"]'), square: block(':root[data-shape="square"]') };
+const shapes = { round: block(':root[data-shape="round"]'), soft: block(':root[data-shape="soft"]'), square: block(':root[data-shape="square"]') };
 const shapeEnum = Object.entries(shapes)
   .map(([name, b]) => `  ${name}(card: ${px(b["--radius-card"])}, control: ${px(b["--radius-control"])}, pill: ${px(b["--radius-pill"])})`)
   .join(",\n");
