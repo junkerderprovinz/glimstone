@@ -15,7 +15,7 @@ const out = process.argv[2] ?? fileURLToPath(new URL('../packages/core/drift-man
 const git = (...args) => execFileSync('git', ['-C', root, ...args], { maxBuffer: 1 << 28 });
 
 // What an app copies: sources and stylesheets, not docs, tests or package files.
-const SHIPPED = /^(packages\/(core|react|vue)\/(src\/.+|[^/]+\.css|glyphs\.json)|reference\/.+\.(tsx?|vue|css|json))$/;
+const SHIPPED = /^(packages\/(core|react|vue)\/(src\/.+|vanilla\/.+|[^/]+\.css|glyphs\.json)|reference\/.+\.(tsx?|vue|css|json))$/;
 const key = (path) => path.replace(/^packages\//, '');
 const hash = (text) => createHash('sha256').update(text.replace(/\r\n/g, '\n')).digest('hex').slice(0, 16);
 const semver = (v) => v.split('.').map(Number);
@@ -25,6 +25,8 @@ const current = JSON.parse(readFileSync(new URL('../packages/core/package.json',
 const tags = git('tag', '--list', 'v*').toString().split('\n').map((t) => t.slice(1))
   .filter((v) => /^\d+\.\d+\.\d+$/.test(v) && older(v, '3.0.0') >= 0 && v !== current)
   .sort(older);
+// Without the tags the manifest could not name the release an old copy matches.
+if (!tags.length) throw new Error('no v* release tags in this clone; fetch them with git fetch --tags');
 
 /** Each tag's shipped files as path to blob id. */
 const trees = new Map(tags.map((v) => [v, new Map(

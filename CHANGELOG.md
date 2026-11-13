@@ -11,6 +11,7 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 - **Focus ring:** `--focus-ring` is `--accent-ink`, opaque, so it follows a picked accent. An app that keeps its own copy of the tokens takes the three `--focus-ring` lines from `tokens.css`, and drops any ring colour of its own that it set for a custom accent.
 - **Placeholders:** a field's placeholder reads the new `--field-placeholder` instead of `--carbon-text-muted`. Point your own `::placeholder` rules at it.
 - **Flutter:** `GlimTheme` has `fieldPlaceholder`, and `focusRing` is a getter on `GlimDerived` that returns the accent ink. It is no longer a constructor argument or a `copyWith` parameter.
+- **Copies that drift:** `npx glimstone-drift src` compares an app's copied GlimStone files with the release its `GLIMSTONE_VERSION` names and lists each one that differs, with the release it matches instead. It also lists app classes with the `glim-` prefix and deprecated names still in use. Add `--strict` to fail a CI step on any of them.
 
 ## 🔁 Changed
 

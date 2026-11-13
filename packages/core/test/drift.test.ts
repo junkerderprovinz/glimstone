@@ -114,6 +114,7 @@ test('the generated manifest hashes the working tree as the current version', ()
   const current = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).version;
   const tokens = readFileSync(new URL('../tokens.css', import.meta.url), 'utf8');
   assert.equal(built.versions[current]['core/tokens.css'], hash(tokens));
+  assert.ok(built.versions[current]['core/vanilla/fortress-card.js'], 'the framework-free files count as shipped');
   assert.ok(built.versions['4.3.0'], 'released versions come from the tags');
   assert.ok(built.classes.includes('glim-btn'));
   assert.ok(built.deprecated.some((d: { name: string }) => d.name === 'DropdownListbox'));
