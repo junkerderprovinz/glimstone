@@ -5,7 +5,7 @@
   "scripts": {
     "check": "bash scripts/check-classes.sh",
     "test": "node --test \"packages/core/test/**/*.test.ts\" \"packages/vue/test/**/*.test.ts\" \"packages/terms/test/*.test.mjs\" \"site/test/**/*.test.ts\"",
-    "build:packages": "tsc -p packages/core/tsconfig.build.json && tsc -p packages/react/tsconfig.build.json && npm run build --prefix packages/vue"
+    "build:packages": "npm run build --prefix packages/core && tsc -p packages/react/tsconfig.build.json && npm run build --prefix packages/vue"
   },
   "dependencies": {
     "@fontsource-variable/noto-sans": "^5.3.0",
