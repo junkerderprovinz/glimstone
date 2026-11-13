@@ -1,0 +1,386 @@
+/* The house's store pictures: a warm ground with the mark pressed into it, a
+   serif heading with one golden phrase, and the product in front. The light
+   variant turns the same ground to stone-white for GitHub's light theme.
+   Every class carries rs- so the site's own styles never reach in. */
+
+:root {
+  --ground-hi: #26231d;
+  --ground-lo: #0f0e0c;
+  --vignette: rgba(0, 0, 0, 0.6);
+  --head: #f4f4f4;
+  --gold: #fcc419;
+  --sub: #9d9481;
+  --panel-ring: #3c3c3c;
+  --panel-shadow: 0 2px 4px rgba(0, 0, 0, 0.35), 0 18px 36px rgba(0, 0, 0, 0.45), 0 52px 100px rgba(0, 0, 0, 0.55);
+  --chrome: #1c1c1c;
+  --chrome-tab: #2c2c2c;
+  --chrome-url: #1a1a1a;
+  --chrome-ink: #c9c9c9;
+  --chart-faint: #77715f;
+  --chart-mid: #c2baa9;
+  --chart-hot: #fcc419;
+}
+:root[data-theme="light"] {
+  --ground-hi: #ffffff;
+  --ground-lo: #e8e6e0;
+  --vignette: rgba(70, 60, 40, 0.09);
+  --head: #1f2328;
+  /* The accent's own gold reads as lit on dark only; on stone-white the same
+     hue is darkened until a heading clears 3:1. */
+  --gold: #a17200;
+  --sub: #6b6355;
+  --panel-ring: rgba(31, 35, 40, 0.1);
+  --panel-shadow: 0 1px 2px rgba(40, 32, 16, 0.08), 0 14px 30px rgba(40, 32, 16, 0.1), 0 44px 90px rgba(40, 32, 16, 0.14);
+  --chrome: #e4e2dd;
+  --chrome-tab: #f6f5f2;
+  --chrome-url: #ffffff;
+  --chrome-ink: #4a4740;
+  --chart-faint: #aaa398;
+  --chart-mid: #6b6355;
+  --chart-hot: #a17200;
+}
+
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--ground-lo);
+}
+:root[data-scene="cell"],
+:root[data-scene="cell"] body {
+  background: var(--carbon-bg);
+}
+
+.rs-ground {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  font-family: Lato, sans-serif;
+}
+.rs-wall {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(55% 60% at 62% 35%, var(--ground-hi), var(--ground-lo) 72%);
+}
+.rs-relief {
+  position: absolute;
+  width: 36%;
+  left: -6%;
+  top: -7%;
+  transform: rotate(-10deg);
+  opacity: 0.32;
+  filter: grayscale(1) brightness(0.36) contrast(1.2) drop-shadow(-2px -2px 0 rgba(255, 255, 255, 0.16)) drop-shadow(12px 18px 26px rgba(0, 0, 0, 0.85));
+}
+:root[data-theme="light"] .rs-relief {
+  opacity: 0.3;
+  filter: grayscale(1) brightness(1.06) contrast(0.45) drop-shadow(-2px -2px 0 rgba(255, 255, 255, 0.95)) drop-shadow(8px 12px 16px rgba(70, 56, 30, 0.16));
+}
+.rs-vignette {
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 200px var(--vignette);
+  pointer-events: none;
+}
+
+.rs-copy {
+  position: absolute;
+  left: 96px;
+  top: 0;
+  bottom: 0;
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 28px;
+}
+.rs-copy img {
+  width: 132px;
+}
+.rs-ground h1 {
+  margin: 0;
+  font: 400 64px/1.12 "Bree Serif", serif;
+  color: var(--head);
+  text-wrap: balance;
+}
+.rs-ground h1 em {
+  font-style: normal;
+  color: var(--gold);
+}
+.rs-sub {
+  margin: 0;
+  text-wrap: balance;
+  font-size: 28px;
+  line-height: 1.35;
+  color: var(--sub);
+}
+
+/* The strip: the components on one app surface, a toast landing on top. */
+.rs-board {
+  position: absolute;
+  left: 640px;
+  right: 84px;
+  top: 50%;
+  translate: 0 -50%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: start;
+  padding: 36px;
+  border-radius: 18px;
+  background: var(--carbon-bg);
+  box-shadow: 0 0 0 1px var(--panel-ring), var(--panel-shadow);
+  font-family: var(--font-sans);
+  zoom: 1.25;
+}
+.rs-rows {
+  display: grid;
+  gap: 16px;
+}
+.rs-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--carbon-text);
+}
+.rs-with-tip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.rs-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+.rs-actions.rs-start {
+  justify-content: flex-start;
+}
+.rs-side {
+  display: grid;
+  gap: 22px;
+}
+.rs-badges {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+/* The stack sits in the window's corner in an app; here it lands on the
+   board's corner so it reads as arriving over the page. */
+.rs-board .glim-toast-stack {
+  position: absolute;
+  inset-inline-end: -40px;
+  bottom: -44px;
+}
+
+/* A tile: one engine, its variants stacked. */
+.rs-tile {
+  position: absolute;
+  inset: 0;
+  padding: 46px 40px 40px;
+  display: flex;
+  flex-direction: column;
+}
+.rs-tile h1 {
+  font-size: 70px;
+  line-height: 1;
+}
+.rs-tile .rs-sub {
+  margin-top: 14px;
+  font-size: 30px;
+}
+.rs-frames {
+  margin-top: 34px;
+  display: grid;
+  gap: 24px;
+}
+.rs-ground figure {
+  margin: 0;
+}
+.rs-ground figcaption {
+  font: 400 27px/1 Lato, sans-serif;
+  color: var(--sub);
+  margin: 0 0 12px 2px;
+}
+/* A hairline frame with barely a corner, so the corners inside are the ones
+   that read. */
+.rs-frames iframe {
+  display: block;
+  width: 100%;
+  height: 168px;
+  border: 0;
+  border-radius: 4px;
+  box-shadow: 0 0 0 1px var(--panel-ring), 0 10px 26px rgba(0, 0, 0, 0.24);
+  background: var(--ground-lo);
+}
+.rs-motion {
+  margin-top: 40px;
+}
+.rs-chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.rs-axis {
+  stroke: var(--sub);
+  stroke-width: 2;
+  stroke-dasharray: 2 8;
+  stroke-linecap: round;
+}
+.rs-tick {
+  font: 400 24px Lato, sans-serif;
+  fill: var(--sub);
+}
+.rs-legend {
+  list-style: none;
+  margin: 34px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 18px;
+}
+.rs-legend li {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+.rs-legend i {
+  flex: none;
+  width: 34px;
+  height: 7px;
+  border-radius: 4px;
+  translate: 0 -8px;
+}
+.rs-legend b {
+  font: 400 36px/1 "Bree Serif", serif;
+  color: var(--head);
+  min-width: 112px;
+}
+.rs-legend span {
+  font-size: 26px;
+  color: var(--sub);
+}
+
+/* A cell: the sample enlarged and cropped by its frame. */
+.rs-cell {
+  zoom: 1.6;
+  display: flex;
+  gap: 14px;
+  padding: 22px 0 0 16px;
+  width: max-content;
+}
+.rs-cell-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* The glossary in a browser window, as the store pictures show an app. */
+.rs-window {
+  position: absolute;
+  left: 676px;
+  right: 84px;
+  top: 84px;
+  bottom: 84px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--chrome);
+  box-shadow: 0 0 0 1px var(--panel-ring), var(--panel-shadow);
+}
+.rs-window iframe {
+  flex: 1;
+  border: 0;
+  width: 100%;
+  background: var(--carbon-bg);
+}
+.rs-bar {
+  display: flex;
+  align-items: center;
+  color: var(--chrome-ink);
+  font: 400 17px/1 Lato, sans-serif;
+}
+.rs-tabs {
+  height: 42px;
+  padding: 7px 0 0 12px;
+  background: var(--chrome);
+  align-items: flex-end;
+}
+.rs-tab {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 35px;
+  padding: 0 70px 0 14px;
+  border-radius: 10px 10px 0 0;
+  background: var(--chrome-tab);
+  font-size: 15px;
+}
+.rs-tab img {
+  width: 22px;
+}
+.rs-address {
+  height: 46px;
+  gap: 14px;
+  padding: 0 14px;
+  background: var(--chrome-tab);
+  border-bottom: 1px solid var(--panel-ring);
+}
+.rs-nav {
+  width: 10px;
+  height: 10px;
+  border-left: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  margin: 0 4px;
+  opacity: 0.8;
+}
+.rs-nav.rs-fwd {
+  transform: rotate(-135deg);
+  opacity: 0.4;
+}
+.rs-url {
+  flex: 1;
+  height: 32px;
+  border-radius: 16px;
+  background: var(--chrome-url);
+  padding-left: 18px;
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+}
+
+/* The eggs: three short panels beside the heading. */
+.rs-eggs {
+  position: absolute;
+  left: 676px;
+  right: 84px;
+  top: 0;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 44px;
+  align-content: center;
+}
+.rs-eggs h2 {
+  margin: 0;
+  font: 400 44px/1 "Bree Serif", serif;
+  color: var(--head);
+}
+.rs-eggs p {
+  margin: 10px 0 0;
+  font-size: 24px;
+  color: var(--sub);
+}
+.rs-eggs .rs-frames {
+  margin-top: 26px;
+}
+.rs-eggs .rs-motion {
+  margin-top: 26px;
+}
