@@ -43,7 +43,7 @@ export const lv: FortressText = {
   outTitle: "Vēl nav cietoksnī",
   outHint: "Pievienojies cietoksnim, un šeit parādīsies lietotnes {app} pārējās instances un, ja vēlies, arī citas lietotnes.",
   removedHereTitle: "Noņemts no cietokšņa",
-  removedHereHint: "Cita cietokšņa lietotne noņēma {app}. Ievadi pašreizējo frāzi, lai atgrieztos.",
+  removedHereHint: "Cita cietokšņa lietotne noņēma {app}. Kad frāze būs nomainīta, ar jauno varēsi atgriezties.",
   found: "Atrasts tīklā: lietotne {app} ierīcē {device} pieder cietoksnim.",
   enterPhrase: "Ievadīt frāzi",
   showPhrase: "Rādīt frāzi",

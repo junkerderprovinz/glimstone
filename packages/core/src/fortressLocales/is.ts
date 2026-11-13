@@ -43,7 +43,7 @@ export const is: FortressText = {
   outTitle: "Ekki enn í vígi",
   outHint: "Gakktu í vígi, þá birtast hér önnur tilvik forritsins {app} og hin forritin líka ef þú vilt.",
   removedHereTitle: "Fjarlægt úr víginu",
-  removedHereHint: "Annað forrit í víginu fjarlægði {app}. Sláðu inn núgildandi setningu til að komast aftur inn.",
+  removedHereHint: "Annað forrit í víginu fjarlægði {app}. Þegar setningunni hefur verið breytt kemstu aftur inn með þeirri nýju.",
   found: "Fannst á netkerfinu: forritið {app} á tækinu {device} tilheyrir vígi.",
   enterPhrase: "Slá inn setningu",
   showPhrase: "Sýna setningu",

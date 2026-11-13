@@ -43,7 +43,7 @@ export const no: FortressText = {
   outTitle: "Ikke i en festning ennå",
   outHint: "Bli med i en festning, så vises de andre instansene dine av {app} her, og de andre appene også hvis du vil.",
   removedHereTitle: "Fjernet fra festningen",
-  removedHereHint: "En annen app i festningen har fjernet {app}. Skriv inn den gjeldende frasen for å komme inn igjen.",
+  removedHereHint: "En annen app i festningen har fjernet {app}. Når frasen er byttet, kommer du inn igjen med den nye.",
   found: "Funnet på nettverket: {app} på {device} hører til en festning.",
   enterPhrase: "Skriv inn frase",
   showPhrase: "Vis frase",

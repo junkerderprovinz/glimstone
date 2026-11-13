@@ -43,7 +43,7 @@ export const vi: FortressText = {
   outTitle: "Chưa ở trong pháo đài nào",
   outHint: "Tham gia một pháo đài để các phiên bản khác của {app} hiện ở đây, kèm các ứng dụng khác nếu bạn muốn.",
   removedHereTitle: "Đã bị xóa khỏi pháo đài",
-  removedHereHint: "Một ứng dụng khác trong pháo đài đã xóa {app}. Nhập cụm từ hiện tại để vào lại.",
+  removedHereHint: "Một ứng dụng khác trong pháo đài đã xóa {app}. Khi cụm từ đã được đổi, bạn vào lại bằng cụm từ mới.",
   found: "Tìm thấy trong mạng: {app} trên {device} thuộc một pháo đài.",
   enterPhrase: "Nhập cụm từ",
   showPhrase: "Hiện cụm từ",

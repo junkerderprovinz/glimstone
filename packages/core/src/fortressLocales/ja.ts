@@ -43,7 +43,7 @@ export const ja: FortressText = {
   outTitle: "まだ要塞に参加していません",
   outHint: "要塞に参加すると、{app}のほかのインスタンスがここに表示されます。必要ならほかのアプリも一緒に表示できます。",
   removedHereTitle: "要塞から削除されました",
-  removedHereHint: "要塞の別のアプリが{app}を削除しました。現在のフレーズを入力すると戻れます。",
+  removedHereHint: "要塞の別のアプリが{app}を削除しました。フレーズが変更されたら、新しいフレーズで戻れます。",
   found: "ネットワーク上で見つかりました。{device}の{app}は要塞に参加しています。",
   enterPhrase: "フレーズを入力",
   showPhrase: "フレーズを表示",

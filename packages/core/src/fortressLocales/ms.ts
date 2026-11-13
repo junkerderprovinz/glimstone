@@ -43,7 +43,7 @@ export const ms: FortressText = {
   outTitle: "Belum berada dalam kubu",
   outHint: "Sertai kubu dan instans {app} anda yang lain akan dipaparkan di sini, bersama apl lain jika anda mahu.",
   removedHereTitle: "Dialih keluar daripada kubu",
-  removedHereHint: "Apl lain dalam kubu telah mengalih keluar {app}. Masukkan frasa semasa untuk masuk semula.",
+  removedHereHint: "Apl lain dalam kubu telah mengalih keluar {app}. Selepas frasa ditukar, frasa baharu membolehkan anda masuk semula.",
   found: "Ditemui pada rangkaian: {app} pada {device} ialah sebahagian daripada kubu.",
   enterPhrase: "Masukkan frasa",
   showPhrase: "Tunjukkan frasa",

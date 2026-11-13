@@ -55,7 +55,7 @@ export const hr: FortressText = {
   outTitle: "Još izvan utvrde",
   outHint: "Pridruži se utvrdi i ovdje će se prikazati tvoje ostale instance aplikacije {app}, a po želji i ostale aplikacije.",
   removedHereTitle: "Uklonjeno iz utvrde",
-  removedHereHint: "Druga aplikacija u utvrdi uklonila je {app}. Unesi trenutačnu frazu da se vratiš.",
+  removedHereHint: "Druga aplikacija u utvrdi uklonila je {app}. Kad se fraza promijeni, vratit ćeš se s novom.",
   found: "Pronađeno na mreži: aplikacija {app} na uređaju {device} pripada utvrdi.",
   enterPhrase: "Unesi frazu",
   showPhrase: "Prikaži frazu",

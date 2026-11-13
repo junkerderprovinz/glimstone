@@ -58,7 +58,7 @@ export const pl: FortressText = {
   outTitle: "Jeszcze poza twierdzą",
   outHint: "Dołącz do twierdzy, a zobaczysz tu swoje pozostałe instancje aplikacji {app}, a jeśli chcesz, także inne aplikacje.",
   removedHereTitle: "Usunięto z twierdzy",
-  removedHereHint: "Inna aplikacja w twierdzy usunęła {app}. Wpisz aktualną frazę, aby wrócić.",
+  removedHereHint: "Inna aplikacja w twierdzy usunęła {app}. Gdy fraza się zmieni, wrócisz dzięki nowej.",
   found: "Znaleziono w sieci: aplikacja {app} na urządzeniu {device} należy do twierdzy.",
   enterPhrase: "Wpisz frazę",
   showPhrase: "Pokaż frazę",

@@ -537,7 +537,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "fortress-remove-other", when: "The other apps show", then: "Every row of another app ends in a quiet Remove, and a card with one instance has it after Open. The window names the instance by app and device." },
       { id: "fortress-removed-offer", when: "An instance is removed where the phrase can change", then: "The same window asks next whether to change the phrase, since until it changes the fortress takes no new app. Change phrase shows the new words, Later closes it." },
       { id: "fortress-removed-note", when: "An instance was removed and the phrase has not changed since", then: "A quiet line under the switch names it, with Change phrase at its end. It goes once the phrase changes." },
-      { id: "fortress-removed-here", when: "Another member removed this app", then: "The empty place says it was removed and that the current phrase brings it back." },
+      { id: "fortress-removed-here", when: "Another member removed this app", then: "The empty place says it was removed and that the new phrase brings it back once the phrase has changed." },
       { id: "fortress-leave", when: "Leave is pressed in the pairing settings", then: "A window says what ends, the pairing included, and the app leaves only after Leave." },
       { id: "fortress-permission", keys: ["Space"], when: "A permission's switch is flipped", then: "It saves at once, with no button to apply, and a small confirmation names the permission. A refusal leaves it as it was, shakes it and says why." },
       { id: "fortress-filter", when: "With the app is chosen above the permissions", then: "Only the permissions this app gives or takes stay." },

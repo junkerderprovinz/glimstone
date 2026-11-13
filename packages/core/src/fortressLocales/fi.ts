@@ -43,7 +43,7 @@ export const fi: FortressText = {
   outTitle: "Ei vielä linnoituksessa",
   outHint: "Liity linnoitukseen, niin sovelluksen {app} muut instanssit näkyvät tässä, ja halutessasi myös muut sovellukset.",
   removedHereTitle: "Poistettu linnoituksesta",
-  removedHereHint: "Toinen linnoituksen sovellus poisti sovelluksen {app}. Anna nykyinen lause, niin pääset takaisin.",
+  removedHereHint: "Toinen linnoituksen sovellus poisti sovelluksen {app}. Kun lause on vaihdettu, pääset takaisin uudella lauseella.",
   found: "Löytyi verkosta: sovellus {app} laitteella {device} kuuluu linnoitukseen.",
   enterPhrase: "Syötä lause",
   showPhrase: "Näytä lause",

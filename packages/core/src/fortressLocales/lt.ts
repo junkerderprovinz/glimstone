@@ -58,7 +58,7 @@ export const lt: FortressText = {
   outTitle: "Dar nesate tvirtovėje",
   outHint: "Prisijunkite prie tvirtovės ir čia matysite kitus programėlės {app} egzempliorius, o jei norite, ir kitas programėles.",
   removedHereTitle: "Pašalinta iš tvirtovės",
-  removedHereHint: "Kita tvirtovės programa pašalino {app}. Įveskite dabartinę frazę ir grįšite.",
+  removedHereHint: "Kita tvirtovės programa pašalino {app}. Kai frazė bus pakeista, grįšite su naująja.",
   found: "Rasta tinkle: programėlė {app} įrenginyje {device} priklauso tvirtovei.",
   enterPhrase: "Įvesti frazę",
   showPhrase: "Rodyti frazę",

@@ -43,7 +43,7 @@ export const et: FortressText = {
   outTitle: "Pole veel üheski kindluses",
   outHint: "Liitu kindlusega ja siin on näha rakenduse {app} teised eksemplarid ning soovi korral ka teised rakendused.",
   removedHereTitle: "Kindlusest eemaldatud",
-  removedHereHint: "Mõni teine kindluse rakendus eemaldas {app}. Sisesta praegune fraas, et tagasi pääseda.",
+  removedHereHint: "Mõni teine kindluse rakendus eemaldas {app}. Kui fraas on muudetud, pääsed uuega tagasi.",
   found: "Võrgust leitud: rakendus {app} seadmes {device} kuulub kindlusesse.",
   enterPhrase: "Sisesta fraas",
   showPhrase: "Näita fraasi",

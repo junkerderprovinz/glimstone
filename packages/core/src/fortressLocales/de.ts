@@ -43,7 +43,7 @@ export const de: FortressText = {
   outTitle: "Noch in keiner Festung",
   outHint: "Tritt einer Festung bei, dann stehen hier deine anderen Instanzen von {app} und auf Wunsch die übrigen Apps.",
   removedHereTitle: "Aus der Festung herausgenommen",
-  removedHereHint: "Eine andere App der Festung hat {app} herausgenommen. Mit der aktuellen Phrase kommst du wieder hinein.",
+  removedHereHint: "Eine andere App der Festung hat {app} herausgenommen. Sobald die Phrase geändert ist, kommst du mit der neuen wieder hinein.",
   found: "Im Netz gefunden: {app} auf {device} gehört zu einer Festung.",
   enterPhrase: "Phrase eingeben",
   showPhrase: "Phrase zeigen",

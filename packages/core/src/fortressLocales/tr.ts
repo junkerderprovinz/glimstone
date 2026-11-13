@@ -43,7 +43,7 @@ export const tr: FortressText = {
   outTitle: "Henüz bir kalede değil",
   outHint: "Bir kaleye katıldığında {app} uygulamasının diğer örnekleri burada görünür. İstersen diğer uygulamalar da.",
   removedHereTitle: "Kaleden kaldırıldı",
-  removedHereHint: "Kaledeki başka bir uygulama {app} uygulamasını kaldırdı. Geri girmek için güncel ifadeyi gir.",
+  removedHereHint: "Kaledeki başka bir uygulama {app} uygulamasını kaldırdı. Yeni ifade oluşturulduğunda onunla geri girersin.",
   found: "Ağda bulundu: {device} cihazındaki {app} uygulaması bir kaleye ait.",
   enterPhrase: "İfadeyi gir",
   showPhrase: "İfadeyi göster",

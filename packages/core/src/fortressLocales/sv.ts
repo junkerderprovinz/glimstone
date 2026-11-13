@@ -43,7 +43,7 @@ export const sv: FortressText = {
   outTitle: "Inte med i någon fästning än",
   outHint: "Gå med i en fästning så visas dina andra instanser av {app} här, och de andra apparna också om du vill.",
   removedHereTitle: "Borttagen från fästningen",
-  removedHereHint: "En annan app i fästningen har tagit bort {app}. Ange den aktuella frasen för att komma in igen.",
+  removedHereHint: "En annan app i fästningen har tagit bort {app}. När frasen har bytts kommer du in igen med den nya.",
   found: "Hittad i nätverket: {app} på {device} hör till en fästning.",
   enterPhrase: "Ange fras",
   showPhrase: "Visa fras",

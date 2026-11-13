@@ -43,7 +43,7 @@ export const da: FortressText = {
   outTitle: "Ikke i en fæstning endnu",
   outHint: "Tilslut dig en fæstning, så vises dine andre instanser af {app} her og, hvis du vil, også de andre apps.",
   removedHereTitle: "Fjernet fra fæstningen",
-  removedHereHint: "En anden app i fæstningen har fjernet {app}. Indtast den aktuelle sætning for at komme ind igen.",
+  removedHereHint: "En anden app i fæstningen har fjernet {app}. Når sætningen er skiftet, kommer du ind igen med den nye.",
   found: "Fundet på netværket: {app} på {device} hører til en fæstning.",
   enterPhrase: "Indtast sætning",
   showPhrase: "Vis sætning",

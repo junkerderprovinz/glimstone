@@ -58,7 +58,7 @@ export const sk: FortressText = {
   outTitle: "Zatiaľ v žiadnej pevnosti",
   outHint: "Pripoj sa k pevnosti a uvidíš tu svoje ďalšie inštancie aplikácie {app}, a ak chceš, aj ostatné aplikácie.",
   removedHereTitle: "Odstránené z pevnosti",
-  removedHereHint: "Iná aplikácia v pevnosti odstránila {app}. Zadaj aktuálnu frázu a vrátiš sa späť.",
+  removedHereHint: "Iná aplikácia v pevnosti odstránila {app}. Keď sa fráza zmení, vrátiš sa späť s tou novou.",
   found: "Nájdené v sieti: aplikácia {app} na zariadení {device} patrí do pevnosti.",
   enterPhrase: "Zadať frázu",
   showPhrase: "Zobraziť frázu",

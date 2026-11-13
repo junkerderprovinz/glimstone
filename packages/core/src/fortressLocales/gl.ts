@@ -43,7 +43,7 @@ export const gl: FortressText = {
   outTitle: "Aínda non estás en ningunha fortaleza",
   outHint: "Únete a unha fortaleza e aquí verás as túas outras instancias de {app}, e tamén as demais apps se queres.",
   removedHereTitle: "Fóra da fortaleza",
-  removedHereHint: "Outra app da fortaleza quitou {app}. Introduce a frase actual para volver entrar.",
+  removedHereHint: "Outra app da fortaleza quitou {app}. Cando se cambie a frase, volverás entrar coa nova.",
   found: "Atopado na rede: {app} en {device} pertence a unha fortaleza.",
   enterPhrase: "Introducir a frase",
   showPhrase: "Amosar a frase",

@@ -43,7 +43,7 @@ export const nl: FortressText = {
   outTitle: "Nog niet in een vesting",
   outHint: "Sluit je aan bij een vesting, dan zie je hier je andere instanties van {app} en, als je wilt, ook de andere apps.",
   removedHereTitle: "Uit de vesting verwijderd",
-  removedHereHint: "Een andere app in de vesting heeft {app} verwijderd. Voer de huidige frase in om weer binnen te komen.",
+  removedHereHint: "Een andere app in de vesting heeft {app} verwijderd. Zodra de frase is gewijzigd, kom je met de nieuwe weer binnen.",
   found: "Gevonden op het netwerk: {app} op {device} hoort bij een vesting.",
   enterPhrase: "Frase invoeren",
   showPhrase: "Frase tonen",

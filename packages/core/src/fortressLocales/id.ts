@@ -43,7 +43,7 @@ export const id: FortressText = {
   outTitle: "Belum ada di benteng",
   outHint: "Gabung ke benteng, lalu instance {app} lainnya akan muncul di sini, juga aplikasi lain kalau kamu mau.",
   removedHereTitle: "Dihapus dari benteng",
-  removedHereHint: "Aplikasi lain di benteng menghapus {app}. Masukkan frasa yang berlaku sekarang untuk masuk lagi.",
+  removedHereHint: "Aplikasi lain di benteng menghapus {app}. Setelah frasa diubah, kamu bisa masuk lagi dengan frasa yang baru.",
   found: "Ditemukan di jaringan: {app} di {device} termasuk dalam sebuah benteng.",
   enterPhrase: "Masukkan frasa",
   showPhrase: "Tampilkan frasa",

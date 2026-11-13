@@ -726,7 +726,7 @@ import { fortressText } from "@glimstone/core";
       <H2>Removed by another app</H2>
       <p>
         Any member can remove an instance of another app, from the end of its row. Once that happens to this app, the
-        empty place says so, and the current phrase brings it back.
+        empty place says so, and once the phrase has changed, the new one brings it back.
       </p>
       <Demo name="FortressRemovedHere" />
       <H2>Opening a member from anywhere</H2>

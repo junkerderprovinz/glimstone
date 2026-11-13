@@ -58,7 +58,7 @@ export const sl: FortressText = {
   outTitle: "Še ni v nobeni trdnjavi",
   outHint: "Pridruži se trdnjavi in tukaj se bodo prikazale tvoje druge instance aplikacije {app}, če želiš, pa tudi ostale aplikacije.",
   removedHereTitle: "Odstranjeno iz trdnjave",
-  removedHereHint: "Druga aplikacija v trdnjavi je odstranila {app}. Vnesi trenutno frazo, da se vrneš.",
+  removedHereHint: "Druga aplikacija v trdnjavi je odstranila {app}. Ko se fraza spremeni, se vrneš z novo.",
   found: "Najdeno v omrežju: aplikacija {app} na napravi {device} pripada trdnjavi.",
   enterPhrase: "Vnesi frazo",
   showPhrase: "Pokaži frazo",

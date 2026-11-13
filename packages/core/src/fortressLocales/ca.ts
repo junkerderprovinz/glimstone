@@ -43,7 +43,7 @@ export const ca: FortressText = {
   outTitle: "Encara no ets en cap fortalesa",
   outHint: "Uneix-te a una fortalesa i aquí veuràs les altres instàncies de {app}, i també les altres apps si vols.",
   removedHereTitle: "Tret de la fortalesa",
-  removedHereHint: "Una altra app de la fortalesa ha tret {app}. Introdueix la frase actual per tornar a entrar.",
+  removedHereHint: "Una altra app de la fortalesa ha tret {app}. Quan s'hagi canviat la frase, hi tornaràs a entrar amb la nova.",
   found: "Trobat a la xarxa: {app} a {device} forma part d'una fortalesa.",
   enterPhrase: "Introdueix la frase",
   showPhrase: "Mostra la frase",

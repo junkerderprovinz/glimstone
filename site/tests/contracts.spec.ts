@@ -4633,7 +4633,7 @@ test.describe("Fortress", () => {
     await open(page, "/components/fortress");
     const out = stage(page, "FortressRemovedHere").locator('[data-fortress="out"]');
     await expect(out).toContainText("Removed from the fortress");
-    await expect(out).toContainText("Another app in the fortress removed Alpha. Enter the current phrase to come back in.");
+    await expect(out).toContainText("Another app in the fortress removed Alpha. Once the phrase has changed, the new one gets you back in.");
     await expect(stage(page, "FortressRemovedHere").locator(".glim-fortress-actions .glim-btn")).toHaveText(["Enter phrase"]);
   });
 

@@ -43,7 +43,7 @@ export const zh: FortressText = {
   outTitle: "尚未加入堡垒",
   outHint: "加入堡垒后，{app} 的其他实例会显示在这里，你也可以选择同时显示其他应用。",
   removedHereTitle: "已被移出堡垒",
-  removedHereHint: "堡垒中的另一个应用移除了 {app}。输入当前口令即可重新加入。",
+  removedHereHint: "堡垒中的另一个应用移除了 {app}。口令更改后，用新口令即可重新加入。",
   found: "在网络中发现：{device} 上的 {app} 属于一个堡垒。",
   enterPhrase: "输入口令",
   showPhrase: "显示口令",

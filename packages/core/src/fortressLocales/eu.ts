@@ -43,7 +43,7 @@ export const eu: FortressText = {
   outTitle: "Oraindik ez dago gotorleku batean",
   outHint: "Sartu gotorleku batean, eta {app} aplikazioaren beste instantziak hemen agertuko dira, nahi baduzu beste aplikazioekin batera.",
   removedHereTitle: "Gotorlekutik kendua",
-  removedHereHint: "Gotorlekuko beste aplikazio batek {app} kendu du. Idatzi uneko esaldia berriro sartzeko.",
+  removedHereHint: "Gotorlekuko beste aplikazio batek {app} kendu du. Esaldia aldatzen denean, berriarekin sartuko zara berriro.",
   found: "Sarean aurkitua: {app} aplikazioa ({device}) gotorleku batekoa da.",
   enterPhrase: "Idatzi esaldia",
   showPhrase: "Erakutsi esaldia",

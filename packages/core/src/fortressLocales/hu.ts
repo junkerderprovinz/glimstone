@@ -43,7 +43,7 @@ export const hu: FortressText = {
   outTitle: "Még nincs erődben",
   outHint: "Lépj be egy erődbe, és itt megjelenik a többi {app}-példányod, ha szeretnéd, a többi alkalmazással együtt.",
   removedHereTitle: "Eltávolítva az erődből",
-  removedHereHint: "Az erőd egy másik appja eltávolította ezt: {app}. Add meg az aktuális jelmondatot, és visszajutsz.",
+  removedHereHint: "Az erőd egy másik appja eltávolította ezt: {app}. Amint a jelmondat megváltozik, az újjal visszajutsz.",
   found: "Találat a hálózaton: {app} ({device}) egy erődhöz tartozik.",
   enterPhrase: "Jelmondat megadása",
   showPhrase: "Jelmondat megjelenítése",

@@ -43,7 +43,7 @@ export const es: FortressText = {
   outTitle: "Aún no estás en ninguna fortaleza",
   outHint: "Únete a una fortaleza y aquí verás tus otras instancias de {app}, y también las demás apps si quieres.",
   removedHereTitle: "Fuera de la fortaleza",
-  removedHereHint: "Otra app de la fortaleza ha quitado {app}. Introduce la frase actual para volver a entrar.",
+  removedHereHint: "Otra app de la fortaleza ha quitado {app}. Cuando se haya cambiado la frase, volverás a entrar con la nueva.",
   found: "Encontrado en la red: {app} en {device} pertenece a una fortaleza.",
   enterPhrase: "Introducir frase",
   showPhrase: "Mostrar frase",

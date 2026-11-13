@@ -43,7 +43,7 @@ export const ko: FortressText = {
   outTitle: "아직 요새에 참여하지 않았어요",
   outHint: "요새에 참여하면 {app}의 다른 인스턴스가 여기에 나타나요. 원하면 다른 앱도 함께 볼 수 있어요.",
   removedHereTitle: "요새에서 제거됨",
-  removedHereHint: "요새의 다른 앱이 {app}을(를) 제거했어요. 현재 문구를 입력하면 다시 들어올 수 있어요.",
+  removedHereHint: "요새의 다른 앱이 {app}을(를) 제거했어요. 문구가 바뀌면 새 문구로 다시 들어올 수 있어요.",
   found: "네트워크에서 찾았어요. {device}의 {app} 앱이 요새에 속해 있어요.",
   enterPhrase: "문구 입력",
   showPhrase: "문구 보기",

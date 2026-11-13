@@ -43,7 +43,7 @@ export const ro: FortressText = {
   outTitle: "Încă nu ești într-o fortăreață",
   outHint: "Intră într-o fortăreață și aici apar celelalte instanțe ale tale de {app} și, dacă vrei, celelalte aplicații.",
   removedHereTitle: "Eliminat din fortăreață",
-  removedHereHint: "O altă aplicație din fortăreață a eliminat {app}. Introdu fraza actuală ca să intri din nou.",
+  removedHereHint: "O altă aplicație din fortăreață a eliminat {app}. După ce fraza se schimbă, intri din nou cu cea nouă.",
   found: "Găsit în rețea: {app} pe {device} face parte dintr-o fortăreață.",
   enterPhrase: "Introdu fraza",
   showPhrase: "Arată fraza",
