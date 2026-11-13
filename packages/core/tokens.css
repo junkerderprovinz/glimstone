@@ -83,6 +83,38 @@
   --text-caption: var(--text-meta);
 }
 
+/* Elevation in fixed steps. Every surface stands on one of them, and a step is
+   a shadow and a stacking order together, so something that floats over a
+   card also paints over it. The ground and a well are flat. Raised is a card
+   and what sticks to one; float is what opens over a card, such as a menu, a
+   list or a bubble, and what the pointer holds; modal is a window or a sheet
+   over the scrim. The raised shadow is the theme's, below; the higher steps
+   add a longer, softer one beneath it, and are declared wherever a theme is
+   set, so they build on that theme's raised shadow. */
+:root,
+[data-theme] {
+  --elevation-float: 0 10px 22px -8px rgba(0, 0, 0, .45), var(--elevation-raised);
+  --elevation-modal: 0 24px 48px -12px rgba(0, 0, 0, .5), var(--elevation-raised);
+  /* The one shadow every app already reads, the raised step. */
+  --elevation: var(--elevation-raised);
+}
+
+:root {
+  /* Stacking, lowest first. Raised and its top sit over neighbours inside the
+     same box; docked sticks to an edge of a card or the page; chrome is the
+     desktop title bar; window, menu, toast and bubble open over everything
+     below them in that order. The bubble is the highest a browser allows, so
+     no app's own layer can cover a tip. */
+  --z-raised: 1;
+  --z-raised-top: 2;
+  --z-docked: 10;
+  --z-chrome: 45;
+  --z-window: 50;
+  --z-menu: 60;
+  --z-toast: 70;
+  --z-bubble: 2147483647;
+}
+
 /* The hidden shape (leafTap in appearance.ts): two opposite corners rounded,
    the other two sharp. The tokens stay single lengths, so a calc() on them and
    a phone app's numbers keep working, and one rule takes the other diagonal
@@ -207,9 +239,9 @@
   --status-neutral-bg:   rgba(255, 255, 255, 0.05);
   --status-neutral-solid: #8d8d8d;
 
-  /* One elevation, one hairline. The shadow is neutral black, since a brown
-     one under a grey card reads as a colour cast. */
-  --elevation: 0 1px 2px rgba(0, 0, 0, .40), 0 18px 40px -24px rgba(0, 0, 0, .85);
+  /* The raised step's shadow and its hairline. The shadow is neutral black,
+     since a brown one under a grey card reads as a colour cast. */
+  --elevation-raised: 0 1px 2px rgba(0, 0, 0, .40), 0 18px 40px -24px rgba(0, 0, 0, .85);
   /* The ground behind a floating window, and the blur that takes the page's
      detail away beneath it. */
   --glim-scrim: rgba(0, 0, 0, .72);
@@ -287,7 +319,7 @@
     --status-neutral-bg:   rgba(0, 0, 0, 0.045);
     --status-neutral-solid: #8d8d8d;
 
-    --elevation: 0 1px 2px rgba(0, 0, 0, .06), 0 16px 36px -26px rgba(0, 0, 0, .35);
+    --elevation-raised: 0 1px 2px rgba(0, 0, 0, .06), 0 16px 36px -26px rgba(0, 0, 0, .35);
     --glim-scrim: rgba(0, 0, 0, .62);
     --hairline: inset 0 0 0 1px rgba(0, 0, 0, .05);
     --focus-ring: var(--accent-ink);
@@ -365,7 +397,7 @@
   --status-neutral-bg:   rgba(0, 0, 0, 0.045);
   --status-neutral-solid: #8d8d8d;
 
-  --elevation: 0 1px 2px rgba(0, 0, 0, .06), 0 16px 36px -26px rgba(0, 0, 0, .35);
+  --elevation-raised: 0 1px 2px rgba(0, 0, 0, .06), 0 16px 36px -26px rgba(0, 0, 0, .35);
   --glim-scrim: rgba(0, 0, 0, .62);
   --hairline: inset 0 0 0 1px rgba(0, 0, 0, .05);
   --focus-ring: var(--accent-ink);
@@ -489,7 +521,7 @@ body {
 .glim-card {
   background-color: var(--carbon-surface);
   border-radius: var(--radius-card);
-  box-shadow: var(--elevation), var(--hairline);
+  box-shadow: var(--elevation-raised), var(--hairline);
 }
 
 /* An inset well for tracks, drop zones and quiet groupings. */
@@ -528,7 +560,7 @@ body {
    separate `.glim-fade` class. */
 .glim-bubble {
   position: fixed;
-  z-index: 2147483647;
+  z-index: var(--z-bubble);
   transform: translateX(-50%);
   width: max-content;
   max-width: 280px;
@@ -537,7 +569,7 @@ body {
   color: var(--carbon-text);
   border: none;
   border-radius: var(--radius-control);
-  box-shadow: var(--elevation), var(--hairline);
+  box-shadow: var(--elevation-float), var(--hairline);
   padding: 7px 10px;
   font-size: var(--text-meta);
   line-height: 1.45;
@@ -645,14 +677,14 @@ body {
    sized to the picker, with the hex field below it. */
 .glim-picker-popover {
   position: fixed;
-  z-index: 2147483647;
+  z-index: var(--z-bubble);
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   padding: 0.75rem;
   background-color: var(--carbon-surface);
   border-radius: var(--radius-card);
-  box-shadow: var(--elevation);
+  box-shadow: var(--elevation-float);
 }
 .glim-picker-popover .glim-picker {
   width: 13.75rem;
@@ -705,11 +737,11 @@ body {
 }
 .glim-picker-panel--float {
   position: fixed;
-  z-index: 60;
+  z-index: var(--z-menu);
   padding: 0.8rem;
   border-radius: var(--radius-card);
   background-color: var(--carbon-surface);
-  box-shadow: var(--elevation), var(--hairline);
+  box-shadow: var(--elevation-float), var(--hairline);
 }
 .glim-picker-foot {
   display: flex;
@@ -1306,9 +1338,9 @@ body {
    take the level's duration, none where the level has none. */
 :root {
   --drag-lift-scale: 1.015;
-  /* The card elevation alone barely shows under something one row tall. */
-  --drag-lift-shadow: 0 10px 22px -8px rgba(0, 0, 0, .45), var(--elevation);
-  --drag-lift-z: 1;
+  /* The raised step alone barely shows under something one row tall. */
+  --drag-lift-shadow: var(--elevation-float);
+  --drag-lift-z: var(--z-raised);
   --drag-settle-dur: 0ms;
   --drag-settle-ease: var(--motion-page-ease, ease);
 }
@@ -2378,7 +2410,7 @@ body {
   position: absolute;
   top: 50%;
   inset-inline-end: 0.625rem;
-  z-index: 2;
+  z-index: var(--z-raised-top);
   translate: 0 -50%;
 }
 
@@ -2387,7 +2419,7 @@ body {
 .glim-readme-btn-sheen {
   position: absolute;
   inset: 0;
-  z-index: 1;
+  z-index: var(--z-raised);
   overflow: hidden;
   pointer-events: none;
 }
@@ -2635,7 +2667,7 @@ body {
   position: fixed;
   inset-inline: 0;
   top: 0;
-  z-index: 45;
+  z-index: var(--z-chrome);
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -2856,7 +2888,7 @@ body {
   overflow-y: auto;
   border-radius: var(--radius-card);
   background: var(--carbon-surface);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+  box-shadow: var(--elevation-float), var(--hairline);
   outline: none;
 }
 .glim-select-content[hidden] { display: none; }
@@ -2915,7 +2947,7 @@ body {
 .glim-select-content--menu {
   min-width: max(var(--reference-width, 0px), 16rem);
   padding: 0.35rem;
-  box-shadow: var(--elevation), var(--hairline);
+  box-shadow: var(--elevation-float), var(--hairline);
 }
 .glim-select-content--menu .glim-menu-item[data-state="checked"] { background-color: var(--accent-soft); }
 .glim-select-content--menu .glim-menu-item[data-highlighted] { background-color: var(--carbon-hover); }
@@ -3022,7 +3054,7 @@ body {
   .glim-modal-backdrop {
     position: fixed;
     inset: 0;
-    z-index: 50;
+    z-index: var(--z-window);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -3042,7 +3074,7 @@ body {
     max-height: 85vh;
     border-radius: var(--radius-card);
     background-color: var(--carbon-surface);
-    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    box-shadow: var(--elevation-modal), var(--hairline);
   }
   .glim-modal-card--wide { max-width: 32rem; }
   /* A window around an embedded page keeps one height while the page loads. */
@@ -3260,11 +3292,11 @@ body {
      offset it sits at its static position, which is direction-aware. It takes
      the elevation without the hairline, which belongs to a surface's own edge,
      and z-index only has to clear its own card's content. */
-  .glim-badge--notch { box-shadow: var(--elevation); }
+  .glim-badge--notch { box-shadow: var(--elevation-raised); }
   .glim-badge--notch-placed {
     position: absolute;
     top: 0;
-    z-index: 10;
+    z-index: var(--z-docked);
     translate: 0 -50%;
   }
   .glim-badge--inset-4 { inset-inline-start: 1rem; }
@@ -3629,7 +3661,7 @@ body {
     position: fixed;
     bottom: 0;
     inset-inline-end: 0;
-    z-index: 70;
+    z-index: var(--z-toast);
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -3754,17 +3786,17 @@ body {
     min-width: 0;
   }
   /* Zag's positioner places the open list; it only has to clear the page. */
-  .glim-select-positioner { z-index: 50; }
+  .glim-select-positioner { z-index: var(--z-window); }
 
   /* The list panel of the deprecated DropdownListbox, portalled to <body>. */
   .glim-listbox {
     position: fixed;
-    z-index: 50;
+    z-index: var(--z-window);
     max-height: 15rem;
     overflow-y: auto;
     border-radius: var(--radius-card);
     background-color: var(--carbon-surface);
-    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    box-shadow: var(--elevation-float), var(--hairline);
     scrollbar-color: var(--carbon-border) transparent;
   }
 
@@ -4152,7 +4184,7 @@ body {
   }
   .glim-nav-row-slot {
     position: relative;
-    z-index: 1;
+    z-index: var(--z-raised);
     display: inline-flex;
     flex: none;
     align-items: center;
@@ -4327,7 +4359,7 @@ body {
      would cut it off. Above windows, below toasts and bubbles. */
   .glim-menu {
     position: fixed;
-    z-index: 60;
+    z-index: var(--z-menu);
     display: flex;
     flex-direction: column;
     min-width: 16rem;
@@ -4336,7 +4368,7 @@ body {
     padding: 0.35rem;
     border-radius: var(--radius-card);
     background-color: var(--carbon-surface);
-    box-shadow: var(--elevation), var(--hairline);
+    box-shadow: var(--elevation-float), var(--hairline);
   }
   .glim-menu-item {
     display: flex;
@@ -5412,7 +5444,7 @@ body {
   .glim-fortress-actions {
     position: sticky;
     bottom: 0;
-    z-index: 5;
+    z-index: var(--z-docked);
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
@@ -5423,7 +5455,7 @@ body {
   }
   .glim-fortress-actions > * {
     pointer-events: auto;
-    box-shadow: var(--elevation);
+    box-shadow: var(--elevation-raised);
   }
 
   /* The twelve words: numbered fields to type into, and numbered tiles to read. */
@@ -5853,7 +5885,7 @@ a:is(.glim-btn, .glim-icon-btn) { text-decoration: none; }
     border-radius: var(--radius-card);
     background-color: var(--carbon-surface);
     color: var(--carbon-text);
-    box-shadow: var(--elevation), var(--hairline);
+    box-shadow: var(--elevation-float), var(--hairline);
   }
   /* Under the trigger and centred on it, above where there is no room below. */
   @supports (anchor-name: --a) {
@@ -5881,7 +5913,7 @@ a:is(.glim-btn, .glim-icon-btn) { text-decoration: none; }
     border-radius: var(--radius-card);
     background-color: var(--carbon-surface);
     color: var(--carbon-text);
-    box-shadow: var(--elevation), var(--hairline);
+    box-shadow: var(--elevation-modal), var(--hairline);
     transition: translate var(--motion-sheet-dur, 0s) cubic-bezier(.2, .6, .2, 1);
   }
   .glim-sheet::backdrop {
@@ -6007,7 +6039,7 @@ a:is(.glim-btn, .glim-icon-btn) { text-decoration: none; }
     position: absolute;
     top: 2.25rem;
     inset-inline: 0.25rem;
-    z-index: 1;
+    z-index: var(--z-raised);
     margin: 0;
     padding: 0.3rem 0.65rem;
     border-radius: var(--radius-control);
@@ -6021,9 +6053,9 @@ a:is(.glim-btn, .glim-icon-btn) { text-decoration: none; }
     position: absolute;
     top: 0.25rem;
     inset-inline-end: 0;
-    z-index: 2;
+    z-index: var(--z-raised-top);
     width: min(16rem, 60%);
-    box-shadow: var(--elevation);
+    box-shadow: var(--elevation-float);
   }
   .glim-list-empty {
     margin: 0;

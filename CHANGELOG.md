@@ -20,6 +20,8 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 
 - **Windows contrast themes.** Under `forced-colors: active` every card, well, window, menu, field, button and badge gets an edge in the system's text colour. A chosen segment, tile or rail row, a switched-on switch, a ticked checkbox and a bar's fill take the system's selection colours, and an unticked box shows no mark. Before, the switch looked the same on and off, and cards and fields had no edge at all.
 
+- **Elevation steps.** `--elevation-raised`, `--elevation-float` and `--elevation-modal` are the three shadows, and `--z-raised` up to `--z-bubble` the stacking order that goes with them. Menus, select lists, bubbles, popovers and a held row float. Windows and sheets take the modal step. A select's list and a window used to carry shadows of their own. `--elevation` stays as the raised step.
+
 ## 🐛 Fixed
 
 - **The focus ring is opaque and reaches 3:1** on the page, the rail, a card, a well and a row's hover, in every theme, for every preset and any picked colour. On the light theme it stood at 1.9 to 2.0:1 (`rgba(142, 106, 0, .5)`), and a picked accent kept the gold ring. A rainbow position's ring is its hue's ink, where it was the hue at 55% (2.9:1 on the dark rail for red).
