@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { watch } from "vue";
-import { announce, liveRegionAttrs, MARKS, softBreaks, TOAST_MARKS, toastPoliteness, type ToastAction, type ToastSeverity } from "@glimstone/core";
-import Button from "./Button.vue";
-import { MarkSvg } from "./glyphs";
+import { announce, liveRegionAttrs, toastPoliteness, type ToastAction, type ToastSeverity } from "@glimstone/core";
+import ToastCard from "./ToastCard.vue";
 
 // The toast stack's presentational half (design-language.md, "Toasts"). It
 // holds no state: the app keeps the queue with the core's toastEngine and its
@@ -23,10 +22,10 @@ const props = defineProps<{
 }>();
 const emit = defineEmits<{
   dismiss: [id: string];
-  enter: [id: string];
-  leave: [id: string];
-  focusin: [id: string];
-  focusout: [id: string];
+  mouseEnter: [id: string];
+  mouseLeave: [id: string];
+  focus: [id: string];
+  blur: [id: string];
 }>();
 
 const heard = new Set<string>();
@@ -43,38 +42,25 @@ watch(
   },
   { immediate: true, deep: 1, flush: "post" },
 );
-
-function act(id: string, action: ToastAction) {
-  action.onClick();
-  emit("dismiss", id);
-}
 </script>
 
 <template>
   <div class="glim-sr-only" v-bind="liveRegionAttrs('polite')" />
   <div class="glim-sr-only" v-bind="liveRegionAttrs('assertive')" />
   <div data-glim="ToastViewport" class="glim-toast-stack" v-bind="$attrs">
-    <div
+    <ToastCard
       v-for="t in toasts"
+      :id="t.id"
       :key="t.id"
-      data-glim="ToastCard"
-      class="glim-toast glim-toast-card"
-      @mouseenter="emit('enter', t.id)"
-      @mouseleave="emit('leave', t.id)"
-      @focusin="emit('focusin', t.id)"
-      @focusout="emit('focusout', t.id)"
-      @keydown.esc.stop="emit('dismiss', t.id)"
-    >
-      <MarkSvg :mark="TOAST_MARKS[t.severity]" :class="`glim-toast-glyph glim-toast-glyph--${t.severity}`" />
-      <div class="glim-toast-body">
-        <p class="glim-toast-message">
-          <template v-for="(part, i) in softBreaks(t.message)" :key="i"><wbr v-if="i > 0" />{{ part }}</template>
-        </p>
-        <Button v-if="t.action" class="glim-toast-action" tone="subtle" :label="t.action.label" :label-key="null" @click="act(t.id, t.action)" />
-      </div>
-      <button type="button" :aria-label="dismissLabel" class="glim-btn-bare glim-toast-dismiss" @click="emit('dismiss', t.id)">
-        <MarkSvg :mark="MARKS.dismiss" />
-      </button>
-    </div>
+      :message="t.message"
+      :severity="t.severity"
+      :action="t.action"
+      :dismiss-label="dismissLabel"
+      @dismiss="emit('dismiss', $event)"
+      @mouse-enter="emit('mouseEnter', $event)"
+      @mouse-leave="emit('mouseLeave', $event)"
+      @focus="emit('focus', $event)"
+      @blur="emit('blur', $event)"
+    />
   </div>
 </template>

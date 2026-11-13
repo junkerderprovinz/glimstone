@@ -51,6 +51,7 @@ export { default as SubCard } from "./SubCard.vue";
 export { default as Table } from "./Table.vue";
 export { default as TextArea } from "./TextArea.vue";
 export { default as TextField } from "./TextField.vue";
+export { default as ToastCard } from "./ToastCard.vue";
 export { default as ToastViewport } from "./ToastViewport.vue";
 export { default as Toggle } from "./Toggle.vue";
 export { default as Tree } from "./Tree.vue";

@@ -58,9 +58,9 @@ const resume = (id: string) => (toasts.value = resumeToast(toasts.value, id, Dat
     :toasts="toasts"
     dismiss-label="Dismiss"
     @dismiss="dismiss"
-    @enter="pause"
-    @leave="resume"
-    @focusin="pause"
-    @focusout="resume"
+    @mouse-enter="pause"
+    @mouse-leave="resume"
+    @focus="pause"
+    @blur="resume"
   />
 </template>
