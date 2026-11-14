@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useRef, useState, type ComponentType } from "react";
+import { useEffect, useMemo, useState, type ComponentType } from "react";
 import { GLIMSTONE_VERSION, Badge, Button } from "@glimstone/react";
 import logoForLight from "../../.github/assets/glimstone-dunkel.svg?raw";
 import logoForDark from "../../.github/assets/glimstone-hell.svg?raw";
 import { Glyph } from "./glyph";
-import { resetLook } from "./look";
-import { AccentControl, DensityControl, LabelControl, MotionControl, RainbowControl, ShapeControl, ThemeControl } from "./lookControls";
+import { LookPanel, setLookPanel, useLookPanel } from "./lookPanel";
+import { Hero } from "./showcase";
+import { BlocksPage } from "./pages/blocks";
 import { Adopting, Glyphs, Introduction, Palette, TypeScale } from "./pages/guide";
 import { Charts } from "./pages/charts";
 import { Calibration } from "./pages/calibration";
@@ -65,6 +66,7 @@ interface Page {
 
 const PAGES: Page[] = [
   { path: "/", title: "Introduction", group: "Guide", Comp: Introduction },
+  { path: "/blocks", title: "Blocks", group: "Guide", Comp: BlocksPage },
   { path: "/guide/adopting", title: "Adopting", group: "Guide", Comp: Adopting },
   { path: "/guide/behaviour", title: "Behaviour", group: "Guide", Comp: BehaviourGuide },
   { path: "/guide/palette", title: "Palette", group: "Guide", Comp: Palette },
@@ -212,53 +214,15 @@ function Search({ onClose }: { onClose: () => void }) {
   );
 }
 
-function LookPanel({ onClose }: { onClose: () => void }) {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const away = (e: PointerEvent) => {
-      const t = e.target as HTMLElement;
-      if (!ref.current?.contains(t) && !t.closest("[data-look-trigger]")) onClose();
-    };
-    const esc = (e: KeyboardEvent) => e.key === "Escape" && onClose();
-    addEventListener("pointerdown", away);
-    addEventListener("keydown", esc);
-    return () => {
-      removeEventListener("pointerdown", away);
-      removeEventListener("keydown", esc);
-    };
-  }, [onClose]);
-  const rows: [string, ComponentType][] = [
-    ["Theme", ThemeControl],
-    ["Accent", AccentControl],
-    ["Rainbow", RainbowControl],
-    ["Corners", ShapeControl],
-    ["Motion", MotionControl],
-    ["Density", DensityControl],
-    ["Labels", LabelControl],
-  ];
-  return (
-    <div ref={ref} className="look-panel" role="dialog" aria-label="Look">
-      {rows.map(([label, Control]) => (
-        <div className="look-row" key={label}>
-          <span className="look-label">{label}</span>
-          <Control />
-        </div>
-      ))}
-      <div className="look-row" style={{ display: "flex", justifyContent: "flex-end" }}>
-        <Button label="Reset" labelKey="reset" tone="subtle" onClick={resetLook} />
-      </div>
-    </div>
-  );
-}
-
 export function App() {
   const { path, section } = useRoute();
   const page = PAGES.find((p) => p.path === path) ?? PAGES[0];
   const [search, setSearch] = useState(false);
-  const [look, setLook] = useState(false);
+  const look = useLookPanel();
   const [nav, setNav] = useState(false);
   const toc = useToc(page.path);
   const index = PAGES.indexOf(page);
+  const home = page.path === "/";
   const prev = PAGES[index - 1];
   const next = PAGES[index + 1];
 
@@ -275,7 +239,7 @@ export function App() {
 
   useEffect(() => {
     setNav(false);
-    document.title = `${page.title} · GlimStone`;
+    document.title = home ? "GlimStone" : `${page.title} · GlimStone`;
     if (section) document.getElementById(section)?.scrollIntoView({ block: "start" });
     else scrollTo({ top: 0 });
   }, [page, section]);
@@ -308,9 +272,7 @@ export function App() {
           <span className="search-word">Search</span>
           <span className="kbd">Ctrl K</span>
         </button>
-        <span data-look-trigger>
-          <Button label="Look" labelKey="look" tone={look ? "accent" : "neutral"} onClick={() => setLook((l) => !l)} />
-        </span>
+        <Button label="Look" labelKey="look" tone={look ? "accent" : "neutral"} onClick={() => setLookPanel(!look)} aria-expanded={look} />
         <a
           href="https://github.com/junkerderprovinz/glimstone"
           target="_blank"
@@ -323,7 +285,7 @@ export function App() {
           <Glyph name="IconGithub" size={20} />
         </a>
       </header>
-      <div className="site-frame">
+      <div className={`site-frame${home ? " is-home" : ""}`}>
         <nav className={`site-nav${nav ? " open" : ""}`} aria-label="Docs">
           {GROUPS.map((g) => (
             <div className="nav-group" key={g}>
@@ -344,8 +306,14 @@ export function App() {
           ))}
         </nav>
         <main className="prose" key={page.path}>
-          <span className="look-label">{page.group}</span>
-          <h1>{page.title}</h1>
+          {home ? (
+            <Hero />
+          ) : (
+            <>
+              <span className="look-label">{page.group}</span>
+              <h1>{page.title}</h1>
+            </>
+          )}
           <page.Comp />
           <div style={{ display: "flex", justifyContent: "space-between", gap: 12, marginTop: 64 }}>
             {prev ? (
@@ -383,7 +351,7 @@ export function App() {
         </aside>
       </div>
       {search && <Search onClose={() => setSearch(false)} />}
-      {look && <LookPanel onClose={() => setLook(false)} />}
+      <LookPanel />
     </>
   );
 }
