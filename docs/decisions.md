@@ -70,6 +70,10 @@ Found in a relay card whose four choices differ by up to two settings rows.
 
 Found in an export, reported as "Export to where? Not clear."
 
+## Rule 26: nothing expands in place
+
+The rule first kept every fold out of the whole app. What started it was a drift: in "Two pages that do the same job" one page's expander was the shared selector chip and the other's a hand-rolled button with its own chevron. When `Accordion` and `Collapsible` came, the rule narrowed to the pages that set or list something, and help pages, release notes and lists of questions became the one place a row opens its text, since they are read rather than set.
+
 ## Rule 35: a dropdown or a one-line field stands beside its label
 
 Found where a card that named some controls above and some beside read as two designs. The app keeps a source check that fails on a new field standing under its name.
@@ -109,6 +113,18 @@ Before the steps, each overlay carried a shadow someone had picked for it, so a 
 ## Rule 48: a theme is written once
 
 The stylesheet used to write every colour twice, once under `prefers-color-scheme` and once under `data-theme`, and the two copies had to be kept equal by hand.
+
+## Rule 49: the contrast step on request
+
+The step first answered only the system's `prefers-contrast: more`. An app that offers more contrast as a setting of its own had no way to ask for it, so `data-contrast="more"` on the root came with the site's Make it yours panel, which shows the setting beside the others. The values are written once in the token source and declared under both selectors.
+
+## Rule 51: one row density
+
+Lists and tables had one row height, 42px, before the axis. Normal keeps it, with the gap and padding the rows had, so an app that never sets `data-density` looks as it did, and compact and airy sit 10px to either side.
+
+## Rule 52: deprecating on a fixed schedule
+
+Before the schedule a deprecated name stayed until somebody removed it. `AboutCard` had been deprecated since 3.3.0 and `DropdownListbox` since 3.6.0 with no release named for their removal. The schedule set 5.0.0 as the removal for both and for `Badge`'s `shape`, and every name deprecated since gets its removal release and its transform in the release that deprecates it.
 
 ## The tooltip and info bubble: one engine, the clamp and the fade
 
