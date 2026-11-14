@@ -1,5 +1,5 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": { "jsx": "preserve", "types": ["vite/client"] },
-  "include": ["src/vue-demos", "src/vue"]
+  "include": ["src/vue-demos", "src/vue", "src/blocks/vue"]
 }
