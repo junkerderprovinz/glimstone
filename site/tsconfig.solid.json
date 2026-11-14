@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "types": ["vite/client"],
+    "paths": {
+      "@glimstone/core/glyphs.json": ["../packages/core/glyphs.json"],
+      "@glimstone/core": ["../packages/core/src/index.ts"],
+      "@glimstone/solid": ["../packages/solid/src/index.ts"],
+      "@glimstone/solid/*": ["../packages/solid/src/*"]
+    }
+  },
+  "include": ["src/solid", "src/solid-demos"],
+  "exclude": []
+}

@@ -1,0 +1,54 @@
+{
+  "name": "@glimstone/svelte",
+  "version": "4.4.1",
+  "description": "GlimStone's components for Svelte",
+  "license": "AGPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/junkerderprovinz/glimstone.git",
+    "directory": "packages/svelte"
+  },
+  "homepage": "https://junkerderprovinz.github.io/glimstone/",
+  "type": "module",
+  "sideEffects": false,
+  "svelte": "./dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "svelte": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./Select": {
+      "types": "./dist/entries/select.d.ts",
+      "svelte": "./dist/entries/select.js",
+      "default": "./dist/entries/select.js"
+    },
+    "./Combobox": {
+      "types": "./dist/entries/combobox.d.ts",
+      "svelte": "./dist/entries/combobox.js",
+      "default": "./dist/entries/combobox.js"
+    },
+    "./Slider": {
+      "types": "./dist/entries/slider.d.ts",
+      "svelte": "./dist/entries/slider.js",
+      "default": "./dist/entries/slider.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "svelte-package -i src -o dist"
+  },
+  "dependencies": {
+    "@glimstone/core": "4.4.1"
+  },
+  "peerDependencies": {
+    "@zag-js/combobox": "^1.46.0",
+    "@zag-js/menu": "^1.46.0",
+    "@zag-js/select": "^1.46.0",
+    "@zag-js/slider": "^1.46.0",
+    "@zag-js/svelte": "^1.47.0",
+    "svelte": "^5.29.0"
+  }
+}
