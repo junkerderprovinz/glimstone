@@ -1114,6 +1114,15 @@ Help pages, release notes and a list of frequent questions are read, not set, an
 - **Clear stands in the foot, at the end** ("Page actions"), follows the label mode and is disabled while nothing is drawn.
 - **A signature cannot be given with the keys.** Where one is asked for, the app offers a second way to agree that the keyboard reaches, such as a checkbox under the notice (rule 39), and never makes the signature the only one.
 
+## Hover cards
+
+`HoverCard` previews what a link in running text leads to: a server named in a sentence, a person, a backup.
+
+- **It is for links in prose.** A control that needs explaining carries its (i) and the bubble ("The tooltip and info bubble"), and a list row opens its object (rule 6). The link wears the accent's ink and an underline, the one place a text link stands, since a sentence has no room for a badge (rule 13).
+- **It opens when the pointer rests or the keyboard arrives**, after `openDelay` (600ms), and closes `closeDelay` after both have left, or on Escape with the focus left on the link.
+- **It only previews.** Everything in it is also behind the link, so a touch screen, which has no hover, loses nothing, and it never holds a control of its own.
+- **It stands on the popover's surface** at the float step, on the body so no card clips it, fades in on the bubble's short fade and keeps the link's rainbow position.
+
 ## Narrow windows
 
 The web interface at phone width, beside "The bottom bar" that replaces the rail there.

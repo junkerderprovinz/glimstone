@@ -961,6 +961,19 @@ export const GLOSSARY: GlossarySection[] = [
           de: "Der erste Weg hinein: Logo, Name, Passwort und auf Wunsch Passkey und Zurücksetzen über einen Code aus dem Log.",
         },
       },
+      {
+        id: "hover-card",
+        en: "Hover card",
+        de: "Vorschaukarte",
+        proposal: true,
+        code: ["HoverCard", ".glim-hovercard"],
+        components: ["HoverCard"],
+        rules: [8],
+        text: {
+          en: "A card that previews what a link in running text leads to, while the pointer rests on it or the keyboard reaches it.",
+          de: "Eine Karte, die zeigt, wohin ein Link im Fließtext führt, solange der Zeiger darauf ruht oder die Tastatur ihn erreicht.",
+        },
+      },
     ],
   },
   {

@@ -58,3 +58,29 @@ export function TimerPage() {
     </>
   );
 }
+
+export function HoverCardPage() {
+  return (
+    <>
+      <p className="lead">A card that shows what a link leads to while the pointer rests on it, such as a server named in a sentence.</p>
+      <MachineNote file="react/HoverCard.tsx" machine="hover-card" />
+      <Demo name="HoverCardServer" />
+      <Code
+        code={`import { HoverCard } from "@glimstone/react/HoverCard";
+
+<HoverCard label="the server in the cellar" href="/servers/cellar" content={() => <ServerSummary />} />`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>It is for a link in running text. A control that needs explaining has its (i) and the bubble ("The tooltip and info bubble").</li>
+        <li>It opens after the pointer rests for a moment, or when the keyboard reaches the link, and closes on Escape or when both leave.</li>
+        <li>It only previews. Everything in it is also behind the link, so a touch screen, which has no hover, loses nothing.</li>
+        <li>It stands on the popover's surface at the float step, on the body, so no card clips it.</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="HoverCard" />
+      <H2>API</H2>
+      <PropsTable of="HoverCard" />
+    </>
+  );
+}

@@ -86,3 +86,33 @@ test.describe("Timer", () => {
     expect(await ink()).not.toBe(rest);
   });
 });
+
+test.describe("HoverCard", () => {
+  const link = (page: Page) => stage(page, "HoverCardServer").getByRole("link", { name: "the server in the cellar" });
+  const card = (page: Page) => page.locator(".glim-hovercard");
+
+  test("[hovercard-link] the trigger is a link to the page the card previews", async ({ page }) => {
+    await open(page, "/components/hover-card");
+    await expect(link(page)).toHaveAttribute("href", "#/components/hover-card");
+  });
+
+  test("[hovercard-hover] the card opens once the pointer rests on the link and closes after it leaves", async ({ page }) => {
+    await open(page, "/components/hover-card");
+    await link(page).hover();
+    await expect(card(page)).toBeVisible();
+    await expect(card(page)).toContainText("2.1 TB free");
+    await page.mouse.move(0, 0);
+    await expect(card(page)).toHaveCount(0);
+  });
+
+  test("[hovercard-focus] the keyboard reaching the link opens it, and Escape closes it", async ({ page }) => {
+    await open(page, "/components/hover-card");
+    await link(page).focus();
+    await page.keyboard.press("Shift+Tab");
+    await page.keyboard.press("Tab");
+    await expect(card(page)).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(card(page)).toHaveCount(0);
+    await expect(link(page)).toBeFocused();
+  });
+});

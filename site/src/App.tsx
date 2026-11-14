@@ -17,7 +17,7 @@ import { ListTablePage } from "./pages/lists";
 import { ScrollAreaPage, SplitterPage } from "./pages/layout";
 import { AngleSliderPage, DatePickerPage, FileUploadPage, PinInputPage, RatingPage, SignaturePadPage, TagsInputPage } from "./pages/inputs";
 import { PaginationPage, StepsPage } from "./pages/navigation";
-import { AvatarPage, TimerPage } from "./pages/display";
+import { AvatarPage, HoverCardPage, TimerPage } from "./pages/display";
 import { AccordionPage, CollapsiblePage } from "./pages/reading";
 import {
   BadgePage,
@@ -105,6 +105,7 @@ const PAGES: Page[] = [
   { path: "/components/fortress", title: "Fortress", group: "Components", Comp: FortressPage },
   { path: "/components/glyph-field", title: "GlyphField", group: "Components", Comp: GlyphFieldPage },
   { path: "/components/glyph-tile", title: "GlyphTile", group: "Components", Comp: GlyphTilePage },
+  { path: "/components/hover-card", title: "HoverCard", group: "Components", Comp: HoverCardPage, tag: "Zag" },
   { path: "/components/icon-button", title: "IconButton", group: "Components", Comp: IconButtonPage },
   { path: "/components/icon-tip-button", title: "IconTipButton", group: "Components", Comp: IconTipPage },
   { path: "/components/info-bubble", title: "InfoBubble", group: "Components", Comp: InfoBubblePage },

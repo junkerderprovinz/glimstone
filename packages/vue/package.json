@@ -87,6 +87,10 @@
     "./SignaturePad": {
       "types": "./dist/entries/signaturepad.d.ts",
       "default": "./dist/SignaturePad.js"
+    },
+    "./HoverCard": {
+      "types": "./dist/entries/hovercard.d.ts",
+      "default": "./dist/HoverCard.js"
     }
   },
   "files": [
@@ -107,6 +111,7 @@
     "@zag-js/combobox": "^1.46.0",
     "@zag-js/date-picker": "^1.47.0",
     "@zag-js/file-upload": "^1.47.0",
+    "@zag-js/hover-card": "^1.47.0",
     "@zag-js/menu": "^1.46.0",
     "@zag-js/pagination": "^1.47.0",
     "@zag-js/pin-input": "^1.47.0",

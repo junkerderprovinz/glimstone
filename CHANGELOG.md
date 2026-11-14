@@ -37,6 +37,7 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 - **`Timer`**, a clock that counts up or down, on Zag's timer machine. The figure is tabular and left to right in every language, takes the accent's ink while it runs, and reads to a screen reader in words.
 - **`AngleSlider`**, an angle set on a round dial, on Zag's angle-slider machine. Its knob takes the accent, the value stands beside it in degrees, and the arrows, Home, End and the pointer set it.
 - **`SignaturePad`**, a signature drawn with a mouse, a pen or a finger, on Zag's signature-pad machine. The strokes are SVG path data, drawn in the text colour over a hairline to sign on, with Clear in the foot.
+- **`HoverCard`**, a card that previews what a link in running text leads to, on Zag's hover-card machine. It opens when the pointer rests or the keyboard arrives, closes on Escape, and holds nothing the link does not.
 - **`fromEnd` on `ContextMenu`** opens a menu with the focus on its last row, for an app's own menu bar.
 
 - **Windows contrast themes.** Under `forced-colors: active` every card, well, window, menu, field, button and badge gets an edge in the system's text colour. A chosen segment, tile or rail row, a switched-on switch, a ticked checkbox and a bar's fill take the system's selection colours, and an unticked box shows no mark. Before, the switch looked the same on and off, and cards and fields had no edge at all.

@@ -76,6 +76,7 @@ const COMPONENTS = {
   Timer: "react/Timer.tsx",
   AngleSlider: "react/AngleSlider.tsx",
   SignaturePad: "react/SignaturePad.tsx",
+  HoverCard: "react/HoverCard.tsx",
 };
 
 const clean = (s) => s.replace(/\s+/g, " ").trim();

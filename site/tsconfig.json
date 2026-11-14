@@ -34,7 +34,8 @@
       "@glimstone/vue/Rating": ["../packages/vue/src/entries/rating.ts"],
       "@glimstone/vue/Timer": ["../packages/vue/src/entries/timer.ts"],
       "@glimstone/vue/AngleSlider": ["../packages/vue/src/entries/angleslider.ts"],
-      "@glimstone/vue/SignaturePad": ["../packages/vue/src/entries/signaturepad.ts"]
+      "@glimstone/vue/SignaturePad": ["../packages/vue/src/entries/signaturepad.ts"],
+      "@glimstone/vue/HoverCard": ["../packages/vue/src/entries/hovercard.ts"]
     }
   },
   "include": ["src", "tests", "test", "vite.config.ts", "playwright.config.ts"]

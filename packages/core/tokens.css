@@ -7105,6 +7105,38 @@
   }
 }
 
+/* HoverCard: the link is the accent's ink in running text, and the card it
+   opens is the popover's surface at the float step, on the body so no card
+   clips it. It fades in on the bubble's short fade. */
+@layer components {
+  .glim-hovercard-link {
+    color: var(--accent-ink);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    border-radius: var(--radius-control);
+  }
+  .glim-hovercard-link:hover { text-decoration-thickness: 2px; }
+  .glim-hovercard-link:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+  .glim-hovercard-positioner { z-index: var(--z-menu); }
+  .glim-hovercard {
+    width: max-content;
+    max-width: min(20rem, calc(100vw - 16px));
+    padding: var(--space-8);
+    border-radius: var(--radius-card);
+    background-color: var(--carbon-surface);
+    color: var(--carbon-text);
+    font-size: var(--text-body);
+    box-shadow: var(--elevation-float), var(--hairline);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .glim-hovercard[data-state="open"] { animation: glim-fade-in var(--motion-fade-dur, 0s) ease-out; }
+}
+
 /* The contrast step and the Windows contrast themes for the components on the
    Zag machines, written like the rules for the older ones above: an edge on
    every field and pressable part, and the selection colours on what is chosen

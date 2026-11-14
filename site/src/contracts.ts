@@ -817,4 +817,11 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "signature-clear", when: "Clear is pressed", then: "Every stroke goes, and the value is empty." },
     ],
   },
+  HoverCard: {
+    rows: [
+      { id: "hovercard-link", when: "Always", then: "The trigger is a link to the page the card previews." },
+      { id: "hovercard-hover", when: "The pointer rests on the link, and later leaves it", then: "The card opens after openDelay and closes after closeDelay." },
+      { id: "hovercard-focus", keys: ["Tab", "Escape"], when: "The keyboard reaches the link", then: "The card opens, Escape closes it and the focus stays on the link." },
+    ],
+  },
 };
