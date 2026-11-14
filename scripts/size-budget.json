@@ -1,7 +1,7 @@
 {
   "tokens.css": {
-    "gzip": 53248,
-    "brotli": 44288
+    "gzip": 56832,
+    "brotli": 46848
   },
   "tailwind-theme.css": {
     "gzip": 1536,
