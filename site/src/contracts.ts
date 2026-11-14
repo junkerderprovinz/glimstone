@@ -824,4 +824,13 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "hovercard-focus", keys: ["Tab", "Escape"], when: "The keyboard reaches the link", then: "The card opens, Escape closes it and the focus stays on the link." },
     ],
   },
+  Carousel: {
+    pattern: { name: "Carousel", url: `${APG}carousel/` },
+    rows: [
+      { id: "carousel-region", when: "Always", then: "A region named by its label with the role description carousel, each slide a group named by its place, such as \"1 of 3\"." },
+      { id: "carousel-steps", when: "Next or Previous is pressed", then: "The slides move a page, and the step that would go past an end is disabled." },
+      { id: "carousel-dots", when: "A dot is pressed", then: "The slides go to its page, and its dot takes the accent." },
+      { id: "carousel-still", when: "Motion is off, or the system asks for reduced motion", then: "A move lands at once instead of gliding." },
+    ],
+  },
 };

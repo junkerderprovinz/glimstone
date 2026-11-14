@@ -84,3 +84,30 @@ export function HoverCardPage() {
     </>
   );
 }
+
+export function CarouselPage() {
+  return (
+    <>
+      <p className="lead">A row of slides seen one page at a time, such as the pictures of what is new in a release.</p>
+      <MachineNote file="react/Carousel.tsx" machine="carousel" />
+      <Demo name="CarouselRelease" />
+      <Code
+        code={`import { Carousel } from "@glimstone/react/Carousel";
+
+<Carousel label="What is new" items={shots} slide={(s) => <Shot of={s} />} />`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>It never moves by itself. A settled page does not idle-animate, so there is no autoplay.</li>
+        <li>The two steps and one dot a page stand under the slides. The dot of the page in force is filled with the accent.</li>
+        <li>A move glides on the motion level and lands at once at off or under reduced motion.</li>
+        <li>A finger or a trackpad scrolls it as it would any row, and every slide snaps into place.</li>
+        <li>It is for pictures that are looked at in turn. Content somebody needs to compare stands side by side instead.</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="Carousel" />
+      <H2>API</H2>
+      <PropsTable of="Carousel" />
+    </>
+  );
+}

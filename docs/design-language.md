@@ -1123,6 +1123,15 @@ Help pages, release notes and a list of frequent questions are read, not set, an
 - **It only previews.** Everything in it is also behind the link, so a touch screen, which has no hover, loses nothing, and it never holds a control of its own.
 - **It stands on the popover's surface** at the float step, on the body so no card clips it, fades in on the bubble's short fade and keeps the link's rainbow position.
 
+## Carousels
+
+`Carousel` shows a row of slides one page at a time: the pictures of what is new in a release, the steps of a short tour of a screen.
+
+- **It never moves by itself.** A settled page does not idle-animate ("The motion engine"), so there is no autoplay, and nothing changes while somebody reads.
+- **The two steps and one dot a page stand under the slides.** The steps follow the label mode and the one that would go past an end is disabled. A dot is a 24px target with a small mark in it, and the mark of the page in force grows and takes the accent (rule 3).
+- **A move glides on the motion level** and lands at once at off and under reduced motion. A finger or a trackpad scrolls it as it would any row, and each slide snaps into place.
+- **It is for things looked at in turn.** What somebody needs to compare stands side by side instead, since a carousel hides all but one.
+
 ## Narrow windows
 
 The web interface at phone width, beside "The bottom bar" that replaces the rail there.

@@ -91,6 +91,10 @@
     "./HoverCard": {
       "types": "./dist/entries/hovercard.d.ts",
       "default": "./dist/HoverCard.js"
+    },
+    "./Carousel": {
+      "types": "./dist/entries/carousel.d.ts",
+      "default": "./dist/Carousel.js"
     }
   },
   "files": [
@@ -107,6 +111,7 @@
     "@zag-js/accordion": "^1.47.0",
     "@zag-js/angle-slider": "^1.47.0",
     "@zag-js/avatar": "^1.47.0",
+    "@zag-js/carousel": "^1.47.0",
     "@zag-js/collapsible": "^1.47.0",
     "@zag-js/combobox": "^1.46.0",
     "@zag-js/date-picker": "^1.47.0",

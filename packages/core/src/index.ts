@@ -8,6 +8,7 @@ export * from "./browserAccent.ts";
 export * from "./bubblePosition.ts";
 export * from "./button.ts";
 export * from "./busy.ts";
+export * from "./carousel.ts";
 export * from "./clipboard.ts";
 export * from "./colorNames.ts";
 export * from "./colorPicker.ts";

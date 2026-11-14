@@ -17,7 +17,7 @@ import { ListTablePage } from "./pages/lists";
 import { ScrollAreaPage, SplitterPage } from "./pages/layout";
 import { AngleSliderPage, DatePickerPage, FileUploadPage, PinInputPage, RatingPage, SignaturePadPage, TagsInputPage } from "./pages/inputs";
 import { PaginationPage, StepsPage } from "./pages/navigation";
-import { AvatarPage, HoverCardPage, TimerPage } from "./pages/display";
+import { AvatarPage, CarouselPage, HoverCardPage, TimerPage } from "./pages/display";
 import { AccordionPage, CollapsiblePage } from "./pages/reading";
 import {
   BadgePage,
@@ -90,6 +90,7 @@ const PAGES: Page[] = [
   { path: "/components/button", title: "Button", group: "Components", Comp: ButtonPage },
   { path: "/components/busy-ring", title: "BusyRing", group: "Components", Comp: BusyRingPage },
   { path: "/components/card", title: "Card", group: "Components", Comp: CardPage },
+  { path: "/components/carousel", title: "Carousel", group: "Components", Comp: CarouselPage, tag: "Zag" },
   { path: "/components/checkbox", title: "Checkbox", group: "Components", Comp: CheckboxPage },
   { path: "/components/collapsible", title: "Collapsible", group: "Components", Comp: CollapsiblePage, tag: "Zag" },
   { path: "/components/color-picker", title: "ColorPicker", group: "Components", Comp: ColorPickerPage },

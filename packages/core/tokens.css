@@ -7137,6 +7137,67 @@
   .glim-hovercard[data-state="open"] { animation: glim-fade-in var(--motion-fade-dur, 0s) ease-out; }
 }
 
+/* Carousel: the slides scroll inside a box at the card radius, and under
+   them the two steps and one dot a page. A dot is a 24px target with a small
+   mark in it, filled with the accent for the page in force. */
+@layer components {
+  .glim-carousel {
+    display: grid;
+    gap: var(--space-6);
+    min-width: 0;
+  }
+  .glim-carousel-slides {
+    border-radius: var(--radius-card);
+    scrollbar-width: none;
+  }
+  .glim-carousel-slides::-webkit-scrollbar { display: none; }
+  .glim-carousel-slide {
+    overflow: hidden;
+    border-radius: var(--radius-card);
+  }
+  .glim-carousel-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+  }
+  .glim-carousel-control > .glim-btn svg:dir(rtl) { scale: -1 1; }
+  .glim-carousel-dots {
+    display: flex;
+    gap: var(--space-1);
+  }
+  .glim-carousel-dot {
+    display: inline-grid;
+    place-items: center;
+    width: var(--space-10);
+    height: var(--space-10);
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background-color: transparent;
+    cursor: pointer;
+  }
+  .glim-carousel-dot::before {
+    content: "";
+    width: var(--space-4);
+    height: var(--space-4);
+    border-radius: var(--radius-pill);
+    background-color: var(--carbon-text-muted);
+  }
+  .glim-carousel-dot:hover::before { background-color: var(--carbon-text-sub); }
+  .glim-carousel-dot[data-current]::before {
+    width: var(--space-9);
+    background-color: var(--accent);
+  }
+  .glim-carousel-dot:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring);
+    outline-offset: 0;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .glim-carousel-dot::before { transition: width var(--motion-control-dur, 0s) ease, background-color var(--motion-control-dur, 0s) ease; }
+}
+
 /* The contrast step and the Windows contrast themes for the components on the
    Zag machines, written like the rules for the older ones above: an edge on
    every field and pressable part, and the selection colours on what is chosen

@@ -116,3 +116,40 @@ test.describe("HoverCard", () => {
     await expect(link(page)).toBeFocused();
   });
 });
+
+test.describe("Carousel", () => {
+  const region = (page: Page) => stage(page, "CarouselRelease").getByRole("region", { name: "What is new" });
+  const dot = (page: Page, n: number) => region(page).getByRole("button", { name: `Slide ${n}`, exact: true });
+  const shown = (page: Page) =>
+    region(page).locator(".glim-carousel-slides").evaluate((el) => Math.round(el.scrollLeft / el.clientWidth));
+
+  test("[carousel-region] a region named by its label, each slide named by its place", async ({ page }) => {
+    await open(page, "/components/carousel");
+    await expect(region(page)).toHaveAttribute("aria-roledescription", "carousel");
+    await expect(region(page).getByRole("group", { name: "1 of 3" })).toHaveCount(1);
+  });
+
+  test("[carousel-steps] Next and Previous move a page, and stop at the ends", async ({ page }) => {
+    await open(page, "/components/carousel");
+    await expect(region(page).getByRole("button", { name: "Previous slide" })).toBeDisabled();
+    await region(page).getByRole("button", { name: "Next slide" }).click();
+    await expect(dot(page, 2)).toHaveAttribute("data-current", "");
+    await expect.poll(() => shown(page)).toBe(1);
+    await region(page).getByRole("button", { name: "Next slide" }).click();
+    await expect(region(page).getByRole("button", { name: "Next slide" })).toBeDisabled();
+  });
+
+  test("[carousel-dots] a dot goes to its page and the one in force takes the accent", async ({ page }) => {
+    await open(page, "/components/carousel");
+    await dot(page, 3).click();
+    await expect(dot(page, 3)).toHaveAttribute("data-current", "");
+    await expect.poll(() => shown(page)).toBe(2);
+  });
+
+  test("[carousel-still] without motion a move lands at once", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await open(page, "/components/carousel");
+    await region(page).getByRole("button", { name: "Next slide" }).click();
+    expect(await shown(page)).toBe(1);
+  });
+});

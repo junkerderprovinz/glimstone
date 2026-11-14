@@ -1315,6 +1315,19 @@ export const GLOSSARY: GlossarySection[] = [
           de: "Das Bild einer Person, oder ihre Initialen, solange es lädt oder wenn es keines gibt. Ein Screenreader hört den Namen.",
         },
       },
+      {
+        id: "carousel",
+        en: "Carousel",
+        de: "Bildlauf",
+        proposal: true,
+        code: ["Carousel", ".glim-carousel", ".glim-carousel-dot"],
+        components: ["Carousel"],
+        rules: [3],
+        text: {
+          en: "Slides seen one page at a time, with two steps and a dot a page under them. It never moves by itself.",
+          de: "Folien, Seite für Seite, darunter zwei Schritte und ein Punkt je Seite. Er bewegt sich nie von selbst.",
+        },
+      },
     ],
   },
 ];
