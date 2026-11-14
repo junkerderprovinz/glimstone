@@ -49,3 +49,6 @@ export function glyphNameFor(key: string): string | undefined {
   const name = KEYS[key] ?? `Icon${key.charAt(0).toUpperCase()}${key.slice(1)}`;
   return glyphByName.has(name) ? name : undefined;
 }
+
+/** The glyph on each density segment, wherever a density selector stands. */
+export const DENSITY_GLYPHS = { compact: "IconRowCompact", normal: "IconRowMedium", airy: "IconRowComfortable" } as const;

@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { DENSITIES, type Density } from "@glimstone/core";
 import { ListRow, Pill, Selector, useDensity } from "@glimstone/vue";
-import { Glyph } from "../vue/glyph";
+import { DENSITY_GLYPHS } from "../glyphData";
+import { Glyph, glyph } from "../vue/glyph";
 
 const NAMES: Record<Density, string> = { compact: "Compact", normal: "Normal", airy: "Airy" };
 const density = useDensity();
-const items = DENSITIES.map((d) => ({ id: d, label: NAMES[d] }));
+const items = DENSITIES.map((d) => ({ id: d, label: NAMES[d], glyph: glyph(DENSITY_GLYPHS[d]) }));
 </script>
 
 <template>
