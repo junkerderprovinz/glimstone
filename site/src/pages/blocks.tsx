@@ -81,7 +81,7 @@ function BlockDemo({ name }: { name: string }) {
             { value: "code", label: "Code" },
           ]}
         />
-        <Button label={copied ? "Copied" : "Copy code"} labelKey={copied ? "copied" : "copy"} tone="subtle" onClick={() => copy(source)} />
+        <Button label={copied ? "Copied" : "Copy code"} labelKey={copied ? "copied" : "copy"} tone="subtle" compactBelow={640} onClick={() => copy(source)} />
       </div>
       {view === "preview" ? (
         <div className="demo-stage block-stage" data-demo={name} data-framework={framework} key={framework}>

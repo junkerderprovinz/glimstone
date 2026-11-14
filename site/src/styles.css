@@ -614,7 +614,7 @@ pre.code {
   user-select: none;
   mask-image:
     linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent),
-    linear-gradient(to right, transparent, #000 10%);
+    linear-gradient(to right, transparent, #000 10%, #000 94%, transparent);
   mask-composite: intersect;
 }
 .wall-plane {
@@ -735,7 +735,7 @@ pre.code {
 .look-snippet { padding-top: 1.25rem; border-top: 1px solid var(--carbon-border); }
 .look-snippet .code-block { margin: 0.5rem 0 0; }
 .look-snippet-copy { display: flex; justify-content: flex-end; margin-top: 0.75rem; }
-.look-snippet pre.code { padding: 0.75rem 0.875rem; font-size: 0.75rem; background: var(--carbon-bg); }
+.look-snippet pre.code { padding: 0.75rem 0.875rem; font-size: 0.75rem; background: var(--carbon-bg); white-space: pre-wrap; overflow-wrap: anywhere; }
 .look-panel-foot {
   display: flex;
   align-items: center;
