@@ -328,3 +328,7 @@ test('every placeholder colour in the stylesheet is the placeholder token', () =
   assert.ok(colours.length > 0);
   for (const [decl, value] of colours) assert.equal(value, 'var(--field-placeholder)', decl);
 });
+
+test('data-contrast="more" asks for the same step as the system setting', () => {
+  assert.deepEqual(block(':root[data-contrast="more"],\n:root[data-contrast="more"] [data-theme]', '--ink-l-light'), more);
+});
