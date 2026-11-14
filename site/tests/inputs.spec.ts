@@ -364,3 +364,38 @@ test.describe("AngleSlider", () => {
     expect(await stage(page, "AngleSliderTurn").locator(".glim-angle-dial").evaluate((el) => getComputedStyle(el).borderTopLeftRadius)).toBe("50%");
   });
 });
+
+test.describe("SignaturePad", () => {
+  const pad = (page: Page) => stage(page, "SignaturePadHandover").locator(".glim-signature-pad");
+  const clear = (page: Page) => stage(page, "SignaturePadHandover").getByRole("button", { name: "Clear" });
+
+  async function sign(page: Page) {
+    const box = (await pad(page).boundingBox())!;
+    await page.mouse.move(box.x + 40, box.y + 100);
+    await page.mouse.down();
+    for (let i = 1; i <= 10; i++) await page.mouse.move(box.x + 40 + i * 20, box.y + 100 - (i % 2) * 30);
+    await page.mouse.up();
+  }
+
+  test("[signature-name] the drawing area is named, and Clear waits until something is drawn", async ({ page }) => {
+    await open(page, "/components/signature-pad");
+    await expect(pad(page)).toHaveAttribute("aria-label", "Signature");
+    await expect(clear(page)).toBeDisabled();
+  });
+
+  test("[signature-draw] a stroke with the pointer is drawn and handed over as a path", async ({ page }) => {
+    await open(page, "/components/signature-pad");
+    await sign(page);
+    await expect(pad(page).locator("path")).toHaveCount(1);
+    await expect(stage(page, "SignaturePadHandover").getByText("Signed in 1 stroke")).toBeVisible();
+    await expect(clear(page)).toBeEnabled();
+  });
+
+  test("[signature-clear] Clear takes every stroke away", async ({ page }) => {
+    await open(page, "/components/signature-pad");
+    await sign(page);
+    await clear(page).click();
+    await expect(pad(page).locator("path")).toHaveCount(0);
+    await expect(stage(page, "SignaturePadHandover").getByText("Not signed yet")).toBeVisible();
+  });
+});

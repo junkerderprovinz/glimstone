@@ -7057,19 +7057,67 @@
   }
 }
 
+/* SignaturePad: a filled area on the second surface with a hairline to sign
+   on, the strokes in the text colour. Clear stands in the foot at the end, as
+   a card's own button does. */
+@layer components {
+  .glim-signature {
+    display: grid;
+    gap: var(--space-3);
+    min-width: 0;
+  }
+  .glim-signature-pad {
+    position: relative;
+    height: 10rem;
+    border-radius: var(--radius-card);
+    background-color: var(--carbon-surface2);
+    color: var(--carbon-text);
+    cursor: crosshair;
+    touch-action: none;
+  }
+  :is(.glim-well, .glim-subcard) .glim-signature-pad { background-color: var(--carbon-surface3); }
+  .glim-signature-pad:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+  .glim-signature-pad[data-disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .glim-signature-ink {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  .glim-signature-guide {
+    position: absolute;
+    inset-inline: var(--space-10);
+    bottom: 28%;
+    height: 1px;
+    background-color: color-mix(in srgb, var(--carbon-border) 60%, var(--carbon-text-muted));
+    pointer-events: none;
+  }
+  .glim-signature-foot {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
 /* The contrast step and the Windows contrast themes for the components on the
    Zag machines, written like the rules for the older ones above: an edge on
    every field and pressable part, and the selection colours on what is chosen
    or picked. */
 @layer components {
   @media (prefers-contrast: more) {
-    :is(.glim-page, .glim-tags-control, .glim-steps-indicator, .glim-upload-drop):not(:focus-visible) {
+    :is(.glim-page, .glim-tags-control, .glim-steps-indicator, .glim-upload-drop, .glim-signature-pad):not(:focus-visible) {
       outline: 1px solid var(--carbon-border);
       outline-offset: -1px;
     }
   }
   @media (forced-colors: active) {
-    :is(.glim-page, .glim-tags-control, .glim-tag, .glim-avatar, .glim-steps-indicator, .glim-upload-drop, .glim-date-panel, .glim-angle-dial) { border: 1px solid ButtonText; }
+    :is(.glim-page, .glim-tags-control, .glim-tag, .glim-avatar, .glim-steps-indicator, .glim-upload-drop, .glim-date-panel, .glim-angle-dial, .glim-signature-pad) { border: 1px solid ButtonText; }
     :is(.glim-page[data-selected], .glim-tag[data-highlighted], .glim-steps-indicator[data-current], .glim-upload-drop[data-dragging], .glim-date-cell[data-selected]) {
       forced-color-adjust: none;
       border-color: Highlight;
@@ -7092,6 +7140,10 @@
       background-color: ButtonText;
     }
     .glim-splitter-grip:is([data-focus], [data-dragging]) { background-color: Highlight; }
+    .glim-signature-guide {
+      forced-color-adjust: none;
+      background-color: CanvasText;
+    }
     :is(.glim-angle-thumb, .glim-angle-mark)::before {
       forced-color-adjust: none;
       background-color: Highlight;

@@ -15,7 +15,7 @@ import { BusyRingPage, SkeletonRowPage } from "./pages/loading";
 import { PopoverPage, SheetPage } from "./pages/overlay";
 import { ListTablePage } from "./pages/lists";
 import { ScrollAreaPage, SplitterPage } from "./pages/layout";
-import { AngleSliderPage, DatePickerPage, FileUploadPage, PinInputPage, RatingPage, TagsInputPage } from "./pages/inputs";
+import { AngleSliderPage, DatePickerPage, FileUploadPage, PinInputPage, RatingPage, SignaturePadPage, TagsInputPage } from "./pages/inputs";
 import { PaginationPage, StepsPage } from "./pages/navigation";
 import { AvatarPage, TimerPage } from "./pages/display";
 import { AccordionPage, CollapsiblePage } from "./pages/reading";
@@ -128,6 +128,7 @@ const PAGES: Page[] = [
   { path: "/components/selector", title: "Selector", group: "Components", Comp: SelectorPage },
   { path: "/components/sheet", title: "Sheet", group: "Components", Comp: SheetPage },
   { path: "/components/sidebar-row", title: "SidebarRow", group: "Components", Comp: SidebarRowPage },
+  { path: "/components/signature-pad", title: "SignaturePad", group: "Components", Comp: SignaturePadPage, tag: "Zag" },
   { path: "/components/sign-in-card", title: "SignInCard", group: "Components", Comp: SignInCardPage },
   { path: "/components/skeleton-row", title: "SkeletonRow", group: "Components", Comp: SkeletonRowPage },
   { path: "/components/slider", title: "Slider", group: "Components", Comp: SliderPage, tag: "Zag" },

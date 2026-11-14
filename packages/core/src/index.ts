@@ -50,6 +50,7 @@ export * from "./selector.ts";
 export * from "./selectModel.ts";
 export * from "./selectScroll.ts";
 export * from "./sidebarRow.ts";
+export * from "./signaturePad.ts";
 export * from "./signIn.ts";
 export * from "./splitter.ts";
 export * from "./steps.ts";

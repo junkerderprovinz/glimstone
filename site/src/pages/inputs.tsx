@@ -162,3 +162,32 @@ export function AngleSliderPage() {
     </>
   );
 }
+
+export function SignaturePadPage() {
+  return (
+    <>
+      <p className="lead">A signature drawn with a mouse, a pen or a finger, such as the approval of a handover.</p>
+      <MachineNote file="react/SignaturePad.tsx" machine="signature-pad" />
+      <Demo name="SignaturePadHandover" />
+      <Code
+        code={`import { SignaturePad } from "@glimstone/react/SignaturePad";
+
+<SignaturePad label="Signed for the handover" value={strokes} onChange={setStrokes} />`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>The strokes are drawn in the text colour on the second surface, over a hairline to sign on.</li>
+        <li>The value is the strokes as SVG path data, which an app stores as text and draws again as it was.</li>
+        <li>Clear stands in the foot at the end and is disabled while nothing is drawn.</li>
+        <li>
+          A signature cannot be given with the keys. Where one is asked for, the app offers another way to agree, such as
+          a checkbox under the notice.
+        </li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="SignaturePad" />
+      <H2>API</H2>
+      <PropsTable of="SignaturePad" />
+    </>
+  );
+}

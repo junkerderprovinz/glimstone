@@ -810,4 +810,11 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "angle-round", when: "The shape setting is square", then: "The dial stays round." },
     ],
   },
+  SignaturePad: {
+    rows: [
+      { id: "signature-name", when: "Always", then: "The drawing area is named by text.area, and Clear is disabled while nothing is drawn." },
+      { id: "signature-draw", when: "A stroke is drawn with a mouse, a pen or a finger", then: "It shows in the text colour and reaches onChange as SVG path data." },
+      { id: "signature-clear", when: "Clear is pressed", then: "Every stroke goes, and the value is empty." },
+    ],
+  },
 };

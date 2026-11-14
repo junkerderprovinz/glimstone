@@ -726,6 +726,18 @@ export const GLOSSARY: GlossarySection[] = [
           de: "Ein Winkel auf einer runden Scheibe, der Wert in Grad daneben.",
         },
       },
+      {
+        id: "signature-pad",
+        en: "Signature pad",
+        de: "Unterschriftfeld",
+        proposal: true,
+        code: ["SignaturePad", ".glim-signature", ".glim-signature-pad"],
+        components: ["SignaturePad"],
+        text: {
+          en: "A signature drawn with a mouse, a pen or a finger, kept as SVG paths.",
+          de: "Eine Unterschrift mit Maus, Stift oder Finger, gespeichert als SVG-Pfade.",
+        },
+      },
     ],
   },
   {

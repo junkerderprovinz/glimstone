@@ -83,6 +83,10 @@
     "./AngleSlider": {
       "types": "./dist/entries/angleslider.d.ts",
       "default": "./dist/AngleSlider.js"
+    },
+    "./SignaturePad": {
+      "types": "./dist/entries/signaturepad.d.ts",
+      "default": "./dist/SignaturePad.js"
     }
   },
   "files": [
@@ -109,6 +113,7 @@
     "@zag-js/rating-group": "^1.47.0",
     "@zag-js/scroll-area": "^1.47.0",
     "@zag-js/select": "^1.46.0",
+    "@zag-js/signature-pad": "^1.47.0",
     "@zag-js/slider": "^1.46.0",
     "@zag-js/splitter": "^1.47.0",
     "@zag-js/steps": "^1.47.0",

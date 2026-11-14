@@ -1105,6 +1105,15 @@ Help pages, release notes and a list of frequent questions are read, not set, an
 - **It is a slider** from 0 to 360, read with its degrees. The arrows turn it a step, Home and End go to 0° and to the last step before a full turn, and a press or a drag on the dial sets the angle under the pointer.
 - **Where a few angles are usual**, the steps are a selector and the dial stands beside it as the free value ("The one horizontal selector", "Fixed steps keep the width").
 
+## Signatures
+
+`SignaturePad` takes a signature drawn with a mouse, a pen or a finger: the approval of a handover, a receipt.
+
+- **The strokes are drawn in the text colour** on the second surface at the card radius, over a hairline to sign on. In a well or on a sub-card the area steps up to the third surface.
+- **The value is the strokes as SVG path data**, one entry a stroke, which an app stores as text and draws again exactly as it was.
+- **Clear stands in the foot, at the end** ("Page actions"), follows the label mode and is disabled while nothing is drawn.
+- **A signature cannot be given with the keys.** Where one is asked for, the app offers a second way to agree that the keyboard reaches, such as a checkbox under the notice (rule 39), and never makes the signature the only one.
+
 ## Narrow windows
 
 The web interface at phone width, beside "The bottom bar" that replaces the rail there.
