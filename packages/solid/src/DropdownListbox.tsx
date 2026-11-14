@@ -1,4 +1,4 @@
-import { children, createComputed, createEffect, createSignal, on, onCleanup, onMount, Show, type JSX } from "solid-js";
+import { children, createEffect, createSignal, on, onCleanup, onMount, Show, type JSX } from "solid-js";
 import { computeBubblePosition, focusByLetter, isTypeahead } from "@glimstone/core";
 import { Lift } from "./Lift.tsx";
 import { usePortalHue, type PortalHue } from "./portalHue.ts";
@@ -43,20 +43,10 @@ export function DropdownListbox(props: DropdownListboxProps) {
   // The portal leaves the trigger's rainbow subtree, so the panel copies the
   // trigger's hue.
   const hue = usePortalHue(() => props.open, () => props.triggerRef);
-  let panel: HTMLDivElement | undefined;
-  // Whether focus was in the list as it closed. It is read the moment `open`
-  // turns false, before the list leaves the page: a browser that blurs a
-  // removed element reports the focus gone before the list is.
+  // Whether focus was in the list as it closed. The panel reads it while it
+  // still stands in the page: a browser that blurs a removed element reports
+  // the focus gone before the list is.
   let focusWasInside = false;
-  createComputed(
-    on(
-      () => props.open,
-      (open) => {
-        if (!open) focusWasInside = !!panel?.contains(document.activeElement);
-      },
-      { defer: true },
-    ),
-  );
 
   // Focus returns to the trigger on close only if it was inside the panel; a
   // click elsewhere has already put it where the user wants.
@@ -77,7 +67,7 @@ export function DropdownListbox(props: DropdownListboxProps) {
       <Panel
         {...props}
         hue={hue}
-        panel={(el) => (panel = el)}
+        leaving={(inside) => (focusWasInside = inside)}
       />
     </Show>
   );
@@ -86,7 +76,7 @@ export function DropdownListbox(props: DropdownListboxProps) {
 function Panel(
   props: DropdownListboxProps & {
     hue: PortalHue;
-    panel: (el: HTMLDivElement) => void;
+    leaving: (focusInside: boolean) => void;
   },
 ) {
   let panel!: HTMLDivElement;
@@ -189,13 +179,10 @@ function Panel(
   };
 
   return (
-    <Lift>
+    <Lift onLeave={() => props.leaving(panel.contains(document.activeElement))}>
       <div
         data-glim="DropdownListbox"
-        ref={(el) => {
-          panel = el;
-          props.panel(el);
-        }}
+        ref={panel}
         role="listbox"
         onKeyDown={onPanelKeyDown}
         aria-multiselectable={props.multiselectable ? "true" : undefined}
