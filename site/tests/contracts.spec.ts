@@ -306,6 +306,21 @@ test.describe("Toggle", () => {
   const REASON = "Only with Dark or System. Light is chosen above.";
   // aria-disabled counts as disabled for Playwright's own checks, so a press goes in with force.
   const shakes = (sw: Locator) => expect.poll(() => sw.evaluate((e) => !!e.closest(".glim-toggle")?.classList.contains("glim-shake")));
+  // A shake lasts a few hundred milliseconds, which a poll under load can miss
+  // between two looks, so an observer set up first counts every time the frame
+  // takes the class, also when it drops and takes it again in one go.
+  const countShakes = (sw: Locator) =>
+    sw.evaluate((e) => {
+      const frame = e.closest<HTMLElement>(".glim-toggle")!;
+      frame.dataset.shook = "0";
+      new MutationObserver((records) => {
+        records.forEach((r, i) => {
+          const after = records[i + 1]?.oldValue ?? frame.className;
+          if (!(r.oldValue ?? "").includes("glim-shake") && after.includes("glim-shake")) frame.dataset.shook = String(Number(frame.dataset.shook) + 1);
+        });
+      }).observe(frame, { attributes: true, attributeFilter: ["class"], attributeOldValue: true });
+    });
+  const shook = (sw: Locator) => expect.poll(() => sw.evaluate((e) => Number(e.closest<HTMLElement>(".glim-toggle")!.dataset.shook)));
 
   test("[toggle-refused] a refused switch keeps its state and its focus, dims its track and shakes", async ({ page }) => {
     await open(page, "/components/toggle");
@@ -313,13 +328,14 @@ test.describe("Toggle", () => {
     await expect(sw).toHaveAttribute("aria-disabled", "true");
     await expect(sw).not.toHaveAttribute("disabled");
     expect(await sw.evaluate((e) => getComputedStyle(e).backgroundColor)).toMatch(/\/ 0\.5\)$/);
+    await countShakes(sw);
     await sw.click({ force: true });
     await expect(sw).toHaveAttribute("aria-checked", "true");
-    await shakes(sw).toBe(true);
+    await shook(sw).toBe(1);
     await shakes(sw).toBe(false);
     await sw.focus();
     await page.keyboard.press("Space");
-    await shakes(sw).toBe(true);
+    await shook(sw).toBe(2);
     await expect(sw).toHaveAttribute("aria-checked", "true");
     await expect(sw).toBeFocused();
   });
@@ -444,7 +460,6 @@ test.describe("DropdownListbox", () => {
   });
 
   test("[list-typeahead] a letter jumps", async ({ page }) => {
-    test.fail(true, "DropdownListbox is deprecated; Select carries this row");
     await openList(page);
     await page.keyboard.press("a");
     expect(await focusedText(page)).toBe("America/New_York");

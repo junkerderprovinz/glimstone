@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { nextTick, onScopeDispose, shallowRef, toRef, watch } from "vue";
-import { computeBubblePosition, portalTarget } from "@glimstone/core";
+import { computeBubblePosition, focusByLetter, isTypeahead, portalTarget } from "@glimstone/core";
 import { usePortalHue } from "./selectParts";
 
 // The `role="listbox"` panel a button-opens-a-list picker drops open, the twin
@@ -120,9 +120,14 @@ watch(
 );
 onScopeDispose(() => stopListening());
 
-// Arrows, Home and End move between the options so every listbox behaves
-// alike. Enter and Space need nothing: the options are real buttons.
+// Arrows, Home, End and a typed letter move between the options so every
+// listbox behaves alike. Enter and Space need nothing: the options are real
+// buttons.
 function onPanelKey(e: KeyboardEvent) {
+  if (isTypeahead(e)) {
+    if (focusByLetter(options(), e.key)) e.preventDefault();
+    return;
+  }
   if (!["ArrowDown", "ArrowUp", "Home", "End"].includes(e.key)) return;
   const opts = options();
   if (opts.length === 0) return;

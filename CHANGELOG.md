@@ -60,6 +60,7 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 
 - **Menus:** a letter in an open `ContextMenu` jumps to the next row that starts with it, and `MenuBar` takes Home and End on its words, with ArrowUp opening a menu on its last row.
 - **Lists:** PageDown and PageUp move the focus ten rows in a `ListTable`, and Shift picks along.
+- **DropdownListbox:** a letter jumps to the next option that starts with it, in React and in Vue.
 - **Sheets:** Tab and Shift+Tab stay inside an open `Sheet`.
 - **Target size:** the ▾ in a list's column header is 24 pixels wide. Every other target on the demo pages already was, or has the room around it that WCAG 2.2 allows instead.
 
