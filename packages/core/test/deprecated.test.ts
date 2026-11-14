@@ -1,5 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { badgeClassName } from '../src/badge.ts';
 import { DEPRECATED, warnDeprecated } from '../src/deprecated.ts';
 
@@ -34,4 +35,14 @@ test('every deprecated name goes in a major release after the one that deprecate
 test('a badge given the old shape warns, one given a form does not', () => {
   assert.deepEqual(warnings(() => badgeClassName({ form: 'circle' })), []);
   assert.match(warnings(() => badgeClassName({ shape: 'circle' }))[0] ?? '', /Badge shape is deprecated/);
+});
+
+test('a deprecated component warns in every framework package', () => {
+  const files = { react: 'tsx', solid: 'tsx', vue: 'vue', svelte: 'svelte' };
+  for (const name of ['AboutCard', 'DropdownListbox']) {
+    for (const [pkg, ext] of Object.entries(files)) {
+      const source = readFileSync(new URL(`../../${pkg}/src/${name}.${ext}`, import.meta.url), 'utf8');
+      assert.ok(source.includes(`warnDeprecated("${name}")`), `${pkg} ${name}`);
+    }
+  }
 });

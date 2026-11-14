@@ -37,7 +37,7 @@
 </script>
 
 <script lang="ts">
-  import { openInBrowser, type VersionRow } from "@glimstone/core";
+  import { openInBrowser, warnDeprecated, type VersionRow } from "@glimstone/core";
   import InfoTile from "./InfoTile.svelte";
 
   // The 3.2.0 props of the single About card, laid out as the Info tile: the
@@ -63,6 +63,7 @@
     openUrl = openInBrowser,
     hueIndex,
   }: AboutCardProps = $props();
+  warnDeprecated("AboutCard");
 
   const rows: VersionRow[] = $derived([
     ...(version ? [{ name: text.version, version, repoUrl }] : []),

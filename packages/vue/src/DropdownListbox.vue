@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { nextTick, onScopeDispose, shallowRef, toRef, watch } from "vue";
-import { computeBubblePosition, focusByLetter, isTypeahead, portalTarget } from "@glimstone/core";
+import { computeBubblePosition, focusByLetter, isTypeahead, portalTarget, warnDeprecated } from "@glimstone/core";
 import { usePortalHue } from "./selectParts";
 
 // The `role="listbox"` panel a button-opens-a-list picker drops open, the twin
@@ -27,6 +27,7 @@ const props = defineProps<{
   /** `aria-multiselectable`, for a checkbox multi-select list. */
   multiselectable?: boolean;
 }>();
+warnDeprecated("DropdownListbox");
 /** An outside press, Escape, a scroll or a resize. Picking an option does not
  *  emit it: a single-select list closes itself where it is used. */
 const emit = defineEmits<{ close: [] }>();

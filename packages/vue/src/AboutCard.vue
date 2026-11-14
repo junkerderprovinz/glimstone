@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, type Component } from "vue";
-import { openInBrowser, type VersionRow } from "@glimstone/core";
+import { openInBrowser, warnDeprecated, type VersionRow } from "@glimstone/core";
 import InfoTile from "./InfoTile.vue";
 
 // The props of the single About card from before the Info tile, laid out as
@@ -48,6 +48,7 @@ const props = withDefaults(
   }>(),
   { openUrl: openInBrowser },
 );
+warnDeprecated("AboutCard");
 
 const rows = computed<VersionRow[]>(() => [
   ...(props.version ? [{ name: props.text.version, version: props.version, repoUrl: props.repoUrl }] : []),

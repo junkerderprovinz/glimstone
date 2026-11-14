@@ -24,7 +24,7 @@
 
 <script lang="ts">
   import { tick } from "svelte";
-  import { computeBubblePosition, focusByLetter, isTypeahead } from "@glimstone/core";
+  import { computeBubblePosition, focusByLetter, isTypeahead, warnDeprecated } from "@glimstone/core";
   import { lift } from "./lift.js";
   import { usePortalHue } from "./portalHue.svelte.js";
   import { css } from "./style.js";
@@ -40,6 +40,7 @@
   // Kept for the apps that already use it; Select keeps focus on its trigger
   // and adds typeahead.
   let { open, onClose, triggerRef, label, multiselectable, children }: DropdownListboxProps = $props();
+  warnDeprecated("DropdownListbox");
 
   /** The gap to the trigger and the least distance from the viewport's edge, 4px to match `mt-1`. */
   const GAP = 4;

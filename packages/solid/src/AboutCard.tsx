@@ -7,6 +7,7 @@ import {
   updateFace,
   updateStage,
   versionLink,
+  warnDeprecated,
   type OpenUrl,
   type UpdateCheck,
   type UpdateVerdict,
@@ -376,6 +377,7 @@ export function AboutCard(props: {
   openUrl?: (url: string) => void;
   hueIndex?: number;
 }) {
+  warnDeprecated("AboutCard");
   const merged = mergeProps({ openUrl: openInBrowser }, props);
   const rows = (): VersionRow[] => [
     ...(merged.version ? [{ name: merged.text.version, version: merged.version, repoUrl: merged.repoUrl }] : []),

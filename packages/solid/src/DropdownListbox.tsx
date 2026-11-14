@@ -1,5 +1,5 @@
 import { children, createEffect, createSignal, on, onCleanup, onMount, Show, type JSX } from "solid-js";
-import { computeBubblePosition, focusByLetter, isTypeahead } from "@glimstone/core";
+import { computeBubblePosition, focusByLetter, isTypeahead, warnDeprecated } from "@glimstone/core";
 import { Lift } from "./Lift.tsx";
 import { usePortalHue, type PortalHue } from "./portalHue.ts";
 import { css } from "./style.ts";
@@ -40,6 +40,7 @@ export interface DropdownListboxProps {
 
 /** @deprecated Use Select, which keeps focus on its trigger and adds typeahead. */
 export function DropdownListbox(props: DropdownListboxProps) {
+  warnDeprecated("DropdownListbox");
   // The portal leaves the trigger's rainbow subtree, so the panel copies the
   // trigger's hue.
   const hue = usePortalHue(() => props.open, () => props.triggerRef);
