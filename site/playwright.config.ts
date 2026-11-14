@@ -1,6 +1,13 @@
+import { createHash } from "node:crypto";
+import { fileURLToPath } from "node:url";
 import { defineConfig, type Project } from "@playwright/test";
 
-const port = 4318;
+// Every checkout previews on a port of its own, so a run in one worktree never
+// tests the site another worktree is serving. GS_PREVIEW_PORT picks one by
+// hand, and a server already on a port picked by hand is never reused.
+const checkout = fileURLToPath(new URL(".", import.meta.url));
+const ownPort = 4400 + (createHash("sha256").update(checkout).digest().readUInt16BE(0) % 1000);
+const port = Number(process.env.GS_PREVIEW_PORT) || ownPort;
 
 // One project per framework and browser: each runs every contract row against
 // that framework's demos. The tests read the framework from the metadata, so a
@@ -41,5 +48,5 @@ export default defineConfig({
     { name: "visual", metadata: { fw: "react" }, use: { browserName: "chromium" }, testMatch: /visual\.spec/ },
     { name: "a11y", metadata: { fw: "react" }, use: { browserName: "chromium" }, testMatch: /a11y\.spec/ },
   ],
-  webServer: { command: `npx vite preview --port ${port} --strictPort`, port, reuseExistingServer: !process.env.CI },
+  webServer: { command: `npx vite preview --port ${port} --strictPort`, port, reuseExistingServer: !process.env.CI && port === ownPort },
 });
