@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { accentInks, contrastOn, contrastRatio, MIN_TEXT_CONTRAST } from '../src/contrast.ts';
+import { accentHovers, accentInks, contrastOn, contrastRatio, MIN_TEXT_CONTRAST } from '../src/contrast.ts';
 import { ACCENTS } from '../src/appearance.ts';
 import { darkenTo, INK_LIGHTNESS, lightenTo } from '../src/oklab.ts';
 
@@ -65,18 +65,32 @@ test('an accent that already reads keeps the stylesheet ink', () => {
   assert.deepEqual(accentInks('#FCC419'), { light: undefined, dark: undefined });
 });
 
-test('the OKLab steps alone carry every colour to 4.5:1, so applyAccent sets no ink', () => {
-  const need: string[] = [];
+test('every colour gets an ink that reads at 4.5:1 on the card and on its own wash', () => {
+  const misses: string[] = [];
   for (let r = 0; r < 256; r += 15) {
     for (let g = 0; g < 256; g += 15) {
       for (let b = 0; b < 256; b += 15) {
         const hex = '#' + [r, g, b].map((v) => v.toString(16).padStart(2, '0')).join('');
-        const { light, dark } = accentInks(hex);
-        if (light || dark) need.push(hex);
+        const wash = (card: number) => '#' + [r, g, b].map((v) => Math.round(card + (v - card) * 0.14).toString(16).padStart(2, '0')).join('');
+        const [light, dark] = [lightInk(hex), darkInk(hex)];
+        for (const [ink, grounds] of [[light, ['#FFFFFF', wash(255)]], [dark, ['#262626', wash(38)]]] as const) {
+          for (const g of grounds) if (contrastRatio(ink, g) < MIN_TEXT_CONTRAST) misses.push(`${hex} on ${g}`);
+        }
       }
     }
   }
-  assert.deepEqual(need, []);
+  assert.deepEqual(misses, []);
+});
+
+test('a hover the ink would not read on steps away from the ink instead', () => {
+  const { light, dark } = accentHovers('#777777');
+  assert.ok(light);
+  assert.ok(contrastRatio(contrastOn('#777777'), light) >= MIN_TEXT_CONTRAST);
+  assert.equal(dark, undefined);
+});
+
+test('every preset keeps the stylesheet hover on both ramps', () => {
+  for (const a of ACCENTS) assert.deepEqual(accentHovers(a.hex), { light: undefined, dark: undefined }, a.name);
 });
 
 test('every preset keeps its stylesheet ink on both ramps', () => {

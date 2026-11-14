@@ -40,6 +40,7 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 
 ## 🐛 Fixed
 
+- **A picked mid-tone accent keeps its ink readable under the pointer.** On the light theme the hover of `#777777` darkened toward its black ink, down to 3.64:1. Where the hover would take the ink under 4.5:1, `applyAccent()` now steps it away from the ink instead (`--accent-hover-light`, `--accent-hover-dark`), and a saturated green or teal whose ink missed 4.5:1 on its own 14% wash (4.35:1) gets a darker ink. The contrast test sweeps 153 picked colours as well as the presets. An app with its own copy of the tokens takes the new `--accent-hover` line.
 - **The focus ring is opaque and reaches 3:1** on the page, the rail, a card, a well and a row's hover, in every theme, for every preset and any picked colour. On the light theme it stood at 1.9 to 2.0:1 (`rgba(142, 106, 0, .5)`), and a picked accent kept the gold ring. A rainbow position's ring is its hue's ink, where it was the hue at 55% (2.9:1 on the dark rail for red).
 - **Placeholder text reaches 4.5:1** on every field fill. The muted grey it used stood at 3.5:1 on the dark surface2 and 2.4:1 on a sub-card's surface3, 4.1 and 3.3:1 on light.
 
