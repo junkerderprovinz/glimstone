@@ -70,7 +70,7 @@ export { usePaypalButtons, type PaypalButtonsOptions } from "./paypalButtons";
 export { usePortalHue, type PortalHue } from "./selectParts";
 export { useDragArmed } from "./dragArmed";
 export { useFieldName } from "./fieldName";
-export { useAccent, useHue, useLabelMode, useMotion, useRainbow, useShape } from "./engines";
+export { useAccent, useDensity, useHue, useLabelMode, useMotion, useRainbow, useShape } from "./engines";
 export * from "./glyphs";
 export type { InfoAboutCardProps, InfoHelpCardProps, InfoVersionCardProps } from "./info";
 export type { SelectEntry, SelectGroup, SelectOption, SelectSubmenu } from "./selectParts";

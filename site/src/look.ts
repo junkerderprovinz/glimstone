@@ -1,11 +1,13 @@
 import { useSyncExternalStore } from "react";
 import {
   applyAccent,
+  applyDensity,
   applyMotion,
   applyOled,
   applyRainbow,
   applyShape,
   DEFAULT_ACCENT,
+  DEFAULT_DENSITY,
   DEFAULT_MOTION,
   DEFAULT_SHAPE,
   CONTROL_AXES,
@@ -14,6 +16,7 @@ import {
   setLabelMode,
   setSystemAccent,
   watchBrowserAccent,
+  type Density,
   type LabelMode,
   type Motion,
   type Shape,
@@ -29,6 +32,7 @@ export interface Look {
   accent: string;
   rainbow: Rainbow;
   motion: Motion;
+  density: Density;
   labels: LabelMode;
 }
 
@@ -40,6 +44,7 @@ const DEFAULT: Look = {
   accent: DEFAULT_ACCENT,
   rainbow: "off",
   motion: DEFAULT_MOTION,
+  density: DEFAULT_DENSITY,
   labels: DEFAULT_LABEL_MODE,
 };
 
@@ -60,6 +65,7 @@ function apply(l: Look) {
   applyShape(l.shape);
   applyAccent(l.accent);
   applyMotion(l.motion);
+  applyDensity(l.density);
   applyRainbow({ on: l.rainbow !== "off", reactive: l.rainbow === "reactive" });
   for (const axis of CONTROL_AXES) setLabelMode(axis, l.labels);
   labelModeChanged();

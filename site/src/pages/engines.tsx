@@ -1,5 +1,5 @@
 import { Button } from "@glimstone/react";
-import { AccentControl, LabelControl, MotionControl, RainbowControl, ShapeControl, ThemeControl } from "../lookControls";
+import { AccentControl, DensityControl, LabelControl, MotionControl, RainbowControl, ShapeControl, ThemeControl } from "../lookControls";
 import { SampleSurface } from "../sample";
 import { Callout, Code, ContractTable, Demo, H2, SourceLink } from "../ui";
 import { useLook } from "../look";
@@ -127,6 +127,29 @@ export function ShapeEngine() {
   );
 }
 
+export function DensityEngine() {
+  return (
+    <>
+      <p className="lead">
+        How much room a row of a list or a table takes: Compact, Normal or Airy. One attribute moves every row, and
+        Normal is the look without a setting.
+      </p>
+      <Live>
+        <DensityControl />
+        <Attr name="data-density" />
+      </Live>
+      <Demo name="DensityRows" />
+      <H2>Four dials on the spacing scale</H2>
+      <p>
+        <code>--row-h</code> is a row's height, <code>--row-gap</code> the room between its tile, name and badges,{" "}
+        <code>--row-pad</code> its inline padding and <code>--cell-pad-block</code> a table cell's padding above and
+        below. A list row, a placeholder row, a list table and a plain table read them, so they change together.
+      </p>
+      <Code code={`applyDensity("compact"); // or useDensity() in Vue`} />
+    </>
+  );
+}
+
 export function MotionEngine() {
   return (
     <>
@@ -150,8 +173,8 @@ export function MotionEngine() {
         person who asked the system for less motion gets less motion, whatever the app is set to.
       </p>
       <Code
-        code={`/* Name the quiet levels, so the rule covers wild, storm and anything added above. */
-:root:not([data-motion="subtle"]):not([data-motion="off"]) .thing {
+        code={`/* Name the lively levels: a page without the attribute is subtle. */
+:root:is([data-motion="wild"], [data-motion="storm"]) .thing {
   transition-duration: var(--motion-control-dur);
 }`}
       />

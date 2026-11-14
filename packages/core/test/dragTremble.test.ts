@@ -14,7 +14,7 @@ function dial(selector: string, name: string): number {
 }
 
 test('the other items of a held list tremble hard enough to see at once', () => {
-  for (const level of [':root', ":root[data-motion='subtle']", ":root[data-motion='storm']"]) {
+  for (const level of [':root', ":root[data-motion='wild']", ":root[data-motion='storm']"]) {
     assert.ok(dial(level, '--motion-wiggle-angle') >= 1.2, `${level} turns too little`);
     assert.ok(dial(level, '--motion-wiggle-dur') <= 160, `${level} beats too slowly`);
   }
@@ -30,7 +30,7 @@ test('neighbours tremble out of step', () => {
 });
 
 test('rows lift enough to see at every level but off, and stay put at off', () => {
-  for (const level of [':root', ":root[data-motion='subtle']", ":root[data-motion='storm']"]) {
+  for (const level of [':root', ":root[data-motion='wild']", ":root[data-motion='storm']"]) {
     assert.ok(dial(level, '--motion-row-tremble-lift') >= 1, `${level} lifts too little`);
     assert.ok(dial(level, '--motion-row-tremble-tilt') <= .25, `${level} swings a wide row's ends too far`);
   }

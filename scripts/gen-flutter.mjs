@@ -4,42 +4,84 @@
 //
 // Run from the repository root: node scripts/gen-flutter.mjs [--check]
 import { readFileSync, writeFileSync } from "node:fs";
+import { srgbOf } from "../packages/core/src/oklab.ts";
 
 const core = new URL("../packages/core/", import.meta.url);
 const out = new URL("../packages/flutter/lib/src/", import.meta.url);
 const css = readFileSync(new URL("tokens.css", core), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
 const glyphs = JSON.parse(readFileSync(new URL("glyphs.json", core), "utf8"));
 
-/** The declarations of the first rule whose selector starts with `selector`. */
-function block(selector) {
-  const at = css.indexOf(selector);
-  if (at < 0) throw new Error(`no rule ${selector}`);
-  const open = css.indexOf("{", at);
-  const body = css.slice(open + 1, css.indexOf("}", open));
-  return Object.fromEntries([...body.matchAll(/(--[a-z0-9-]+)\s*:\s*([^;]+);/g)].map((m) => [m[1], m[2].trim()]));
+/**
+ * The declarations of the first rule whose selector starts with `selector`,
+ * or of the first such rule that declares `has`.
+ */
+function block(selector, has) {
+  for (let at = css.indexOf(selector); at >= 0; at = css.indexOf(selector, at + 1)) {
+    const open = css.indexOf("{", at);
+    const body = css.slice(open + 1, css.indexOf("}", open));
+    const props = Object.fromEntries([...body.matchAll(/(--[a-z0-9-]+)\s*:\s*([^;]+);/g)].map((m) => [m[1], m[2].trim()]));
+    if (!has || has in props) return props;
+  }
+  throw new Error(`no rule ${selector}`);
 }
 
-const dark = block(':root,\n[data-theme="dark"]');
-const light = block('[data-theme="light"]');
-const oled = { ...dark, ...block('[data-theme="dark"][data-oled]') };
-const root = { ...block(":root {"), ...block(":root {\n  --btn-h") };
+/** The two halves of a light-dark() value, light first, or the value twice. */
+function sides(value) {
+  const m = value.match(/^light-dark\(([\s\S]+)\)$/);
+  if (!m) return [value, value];
+  let depth = 0;
+  for (let i = 0; i < m[1].length; i++) {
+    const c = m[1][i];
+    if (c === "(") depth++;
+    else if (c === ")") depth--;
+    else if (c === "," && depth === 0) return [m[1].slice(0, i).trim(), m[1].slice(i + 1).trim()];
+  }
+  throw new Error(`cannot split ${value}`);
+}
+const side = (props, i) => Object.fromEntries(Object.entries(props).map(([k, v]) => [k, sides(v)[i]]));
+
+// Every block declared wherever a theme is set: the palette, the chart colours
+// and the derived steps, which carry no literal colour and drop out below.
+const themed = Object.assign(
+  {},
+  ...[...css.matchAll(/(?:^|\n):root,\n\[data-theme\] \{([^}]*)\}/g)].map(([, body]) =>
+    Object.fromEntries([...body.matchAll(/(--[a-z0-9-]+)\s*:\s*([^;]+);/g)].map((m) => [m[1], m[2].trim()])),
+  ),
+);
+const light = side(themed, 0);
+const dark = side(themed, 1);
+const oled = { ...dark, ...side(block("[data-oled] {"), 1) };
+const root = { ...block(":root {"), ...block(":root {", "--btn-h") };
 
 const camel = (name) => name.replace(/^--/, "").replace(/-([a-z0-9])/g, (_, c) => c.toUpperCase());
 
+const h = (n) => Number(n).toString(16).padStart(2, "0").toUpperCase();
+
+// Dart needs a concrete colour, so an oklch() token is resolved to sRGB here,
+// clipped per channel as the browser paints it.
 function dartColor(value) {
   const hex = value.match(/^#([0-9a-f]{6})$/i);
   if (hex) return `Color(0xFF${hex[1].toUpperCase()})`;
+  const lch = value.match(/^oklch\(\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s*(?:\/\s*([\d.]+))?\s*\)$/);
+  if (lch) {
+    const [l, c, deg] = lch.slice(1, 4).map(Number);
+    const rad = (deg * Math.PI) / 180;
+    const rgb = srgbOf([l, c * Math.cos(rad), c * Math.sin(rad)]).slice(1);
+    return `Color(0x${h(Math.round(Number(lch[4] ?? 1) * 255))}${rgb})`;
+  }
   const rgba = value.match(/^rgba?\(\s*(\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\s*\)$/);
   if (!rgba) return null;
   const a = Math.round(Number(rgba[4] ?? 1) * 255);
-  const h = (n) => Number(n).toString(16).padStart(2, "0").toUpperCase();
   return `Color(0x${h(a)}${h(rgba[1])}${h(rgba[2])}${h(rgba[3])})`;
 }
 
-// Every literal colour both themes define. A token written with var() or
-// color-mix() is derived, and the Dart side derives it the same way.
+// Every literal colour both themes define. A token written with var(),
+// color-mix() or a relative oklab() is derived, and the Dart side derives it
+// the same way.
 const colours = Object.keys(dark).filter((k) => dartColor(dark[k]) && light[k] && dartColor(light[k]));
-const inkMix = (theme) => Number.parseFloat(theme["--ink-mix"] ?? "100") / 100;
+// The lightness step the accent's ink moves to: down to it on the light ramp,
+// up to it on the dark ones.
+const inkLightness = (theme) => Number(themed[theme === light ? "--ink-l-light" : "--ink-l-dark"]);
 
 const px = (value) => {
   if (value === "0") return 0;
@@ -51,7 +93,7 @@ const metrics = Object.entries(root)
   .map(([k, v]) => `  static const double ${camel(k)} = ${px(v)};`);
 
 // The shape engine's three offered shapes; leaf stays hidden, as on the web.
-const shapes = { round: root, soft: block(':root[data-shape="soft"]'), square: block(':root[data-shape="square"]') };
+const shapes = { round: block(':root[data-shape="round"]'), soft: block(':root[data-shape="soft"]'), square: block(':root[data-shape="square"]') };
 const shapeEnum = Object.entries(shapes)
   .map(([name, b]) => `  ${name}(card: ${px(b["--radius-card"])}, control: ${px(b["--radius-control"])}, pill: ${px(b["--radius-pill"])})`)
   .join(",\n");
@@ -71,43 +113,44 @@ import 'package:flutter/material.dart';
 class GlimTheme extends ThemeExtension<GlimTheme> {
   const GlimTheme({
 ${fields.map((f) => `    required this.${f},`).join("\n")}
-    required this.inkMix,
+    required this.inkLightness,
     this.shape = GlimShape.${defaultShape},
   });
 
 ${fields.map((f) => `  final Color ${f};`).join("\n")}
 
-  /// How much of the accent an ink keeps against black, as in tokens.css.
-  final double inkMix;
+  /// The OKLab lightness the accent's ink moves to, as in tokens.css: at most
+  /// this on a light ramp, at least this on a dark one.
+  final double inkLightness;
 
   /// The shape the user chose; it sets the radii of cards, controls and pills.
   final GlimShape shape;
 
   static const dark = GlimTheme(
 ${palette(dark)}
-    inkMix: ${inkMix(dark)},
+    inkLightness: ${inkLightness(dark)},
   );
 
   /// The dark ramp on true black, for OLED and AMOLED screens.
   static const oled = GlimTheme(
 ${palette(oled)}
-    inkMix: ${inkMix(oled)},
+    inkLightness: ${inkLightness(oled)},
   );
 
   static const light = GlimTheme(
 ${palette(light)}
-    inkMix: ${inkMix(light)},
+    inkLightness: ${inkLightness(light)},
   );
 
   @override
   GlimTheme copyWith({
 ${fields.map((f) => `    Color? ${f},`).join("\n")}
-    double? inkMix,
+    double? inkLightness,
     GlimShape? shape,
   }) =>
       GlimTheme(
 ${fields.map((f) => `        ${f}: ${f} ?? this.${f},`).join("\n")}
-        inkMix: inkMix ?? this.inkMix,
+        inkLightness: inkLightness ?? this.inkLightness,
         shape: shape ?? this.shape,
       );
 
@@ -116,7 +159,7 @@ ${fields.map((f) => `        ${f}: ${f} ?? this.${f},`).join("\n")}
     if (other == null) return this;
     return GlimTheme(
 ${fields.map((f) => `      ${f}: Color.lerp(${f}, other.${f}, t)!,`).join("\n")}
-      inkMix: inkMix + (other.inkMix - inkMix) * t,
+      inkLightness: inkLightness + (other.inkLightness - inkLightness) * t,
       shape: t < 0.5 ? shape : other.shape,
     );
   }

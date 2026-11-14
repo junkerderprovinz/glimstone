@@ -1,6 +1,7 @@
 import { useSyncExternalStore } from "react";
 import {
   ACCENTS,
+  DENSITIES,
   MOTION_LEVELS,
   SHAPES,
   LABEL_MODES,
@@ -61,6 +62,18 @@ export function MotionControl() {
       value={motion}
       onChange={(motion) => setLook({ motion })}
       options={MOTION_LEVELS.map((m) => ({ value: m, label: cap(m), glyph: <Glyph name={`IconMotion${cap(m)}`} /> }))}
+    />
+  );
+}
+
+export function DensityControl() {
+  const { density } = useLook();
+  return (
+    <Selector
+      label="Density"
+      value={density}
+      onChange={(density) => setLook({ density })}
+      options={DENSITIES.map((d) => ({ value: d, label: cap(d) }))}
     />
   );
 }
