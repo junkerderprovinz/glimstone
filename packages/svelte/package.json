@@ -53,6 +53,11 @@
       "svelte": "./dist/entries/pagination.js",
       "default": "./dist/entries/pagination.js"
     },
+    "./PinInput": {
+      "types": "./dist/entries/pininput.d.ts",
+      "svelte": "./dist/entries/pininput.js",
+      "default": "./dist/entries/pininput.js"
+    },
     "./TagsInput": {
       "types": "./dist/entries/tagsinput.d.ts",
       "svelte": "./dist/entries/tagsinput.js",
@@ -108,6 +113,7 @@
     "@zag-js/marquee": "^1.47.0",
     "@zag-js/menu": "^1.46.0",
     "@zag-js/pagination": "^1.47.0",
+    "@zag-js/pin-input": "^1.47.0",
     "@zag-js/select": "^1.46.0",
     "@zag-js/slider": "^1.46.0",
     "@zag-js/steps": "^1.47.0",
