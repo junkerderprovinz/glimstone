@@ -34,9 +34,17 @@ const emit = defineEmits<{ close: [] }>();
 const panel = shallowRef<HTMLElement | null>(null);
 const pos = shallowRef<{ left: number; top: number; width: number } | null>(null);
 const hue = usePortalHue(() => props.open, toRef(props, "triggerRef"));
-// Whether focus is inside the panel, tracked as it moves because it cannot be
-// read once the panel is gone.
-let focusInside = false;
+// Whether focus was in the list as it closed. It is read the moment `open`
+// turns false, while the list still stands in the page: a browser that blurs
+// a removed element reports the focus gone before the list is.
+let focusWasInside = false;
+watch(
+  () => props.open,
+  (open) => {
+    if (!open) focusWasInside = !!panel.value?.contains(document.activeElement);
+  },
+  { flush: "sync" },
+);
 
 const options = () => [...(panel.value?.querySelectorAll<HTMLElement>('[role="option"]') ?? [])];
 
@@ -93,8 +101,8 @@ watch(
       pos.value = null;
       // Focus goes back to the trigger only if it was in the list; a press
       // elsewhere has already put it where somebody wants it.
-      if (focusInside) props.triggerRef?.focus();
-      focusInside = false;
+      if (focusWasInside) props.triggerRef?.focus();
+      focusWasInside = false;
       return;
     }
     listen();
@@ -131,12 +139,6 @@ function onPanelKey(e: KeyboardEvent) {
   opts[next]!.focus();
 }
 
-function onFocusIn() {
-  focusInside = true;
-}
-function onFocusOut(e: FocusEvent) {
-  if (!panel.value?.contains(e.relatedTarget as Node | null)) focusInside = false;
-}
 </script>
 
 <template>
@@ -156,8 +158,6 @@ function onFocusOut(e: FocusEvent) {
         ...hue.style.value,
       }"
       @keydown="onPanelKey"
-      @focusin="onFocusIn"
-      @focusout="onFocusOut"
     >
       <slot />
     </div>
