@@ -28,6 +28,10 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 
 ## ✨ Added
 
+- **Tests in Firefox.** Every contract row runs in Firefox as well as in Chromium, for each of the four frameworks, eight Playwright projects in CI. Firefox gets a desktop mouse and clipboard access through its preferences, since a headless Firefox reports neither.
+- **Visual comparison.** The first demo of every component page is pictured in the dark, light and OLED looks, in the soft and square shapes and right to left, and compared with 408 committed baselines. They are rendered in Microsoft's Playwright image on Linux, where CI runs `site/playwright-linux.sh --project=visual`, and a failing run uploads its diffs. `--update-snapshots` renders them again.
+- **An accessibility check.** axe checks every page of the site in the dark and the light theme against WCAG 2.2 AA and fails on any violation.
+- **A size budget.** `node scripts/size-budget.mjs` measures `tokens.css`, `tailwind-theme.css`, every package and the plugin bundle as gzip and brotli and fails when one grows past its limit in `scripts/size-budget.json`. CI puts the table into the job summary.
 - **`@glimstone/solid`**, the components for Solid: controlled values with `onChange` as in React, `JSX.Element` for markup, `@zag-js/solid` under `Select`, `Combobox` and `Slider`, which come from entries of their own.
 - **`@glimstone/svelte`**, the components for Svelte 5 with runes: `bind:value` and `bind:checked` beside React's callbacks, snippets for markup and glyphs, `@zag-js/svelte` under the select, combobox and slider.
 - **Four test runs.** Every contract row runs in a Playwright project per web framework, the twins test compares each demo's markup across all four, and `npm test` fails when a Solid or Svelte component names a prop or default React does not.
