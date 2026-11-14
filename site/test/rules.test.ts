@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
-import { citedRules, readRules } from "../../scripts/rules.mjs";
+import { citedRules, citedTopics, readRules } from "../../scripts/rules.mjs";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
 const rules = readRules();
@@ -39,6 +39,20 @@ test("every rule cited anywhere exists", () => {
       .map((c) => `${relative(root, path)}:${c.line}: rule ${c.number}`),
   );
   assert.deepEqual(missing, []);
+});
+
+// A topic several rules mention, and the one rule that owns it.
+const OWNERS: Record<string, number> = { notch: 11 };
+
+test("a rule cited for a topic is the rule about that topic", () => {
+  const text = new Map(rules.map((r) => [r.number, [r.title, ...r.blocks].join(" ").toLowerCase()]));
+  const stray = SOURCES.flatMap((s) => [...files(join(root, s))]).flatMap((path) =>
+    citedTopics(readFileSync(path, "utf8"))
+      .filter((c) => text.has(c.number))
+      .filter((c) => !c.words.some((w) => text.get(c.number)!.includes(w.slice(0, 5))) || c.words.some((w) => w in OWNERS && OWNERS[w] !== c.number))
+      .map((c) => `${relative(root, path)}:${c.line}: ${c.cited}`),
+  );
+  assert.deepEqual(stray, []);
 });
 
 test("citations name every number they span", () => {

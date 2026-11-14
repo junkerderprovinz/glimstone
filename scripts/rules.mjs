@@ -36,3 +36,23 @@ export function citedRules(text) {
   }
   return cited;
 }
+
+// Words after "rule N's" that say how the rule is cited rather than what it is about.
+const FILLER = new Set(["own", "territory", "applied", "addendum", "bullet", "sits", "places", "half-overlap", "failure", "mode"]);
+
+/**
+ * Every "rule N's topic" a text names, with the words of the topic, so a test
+ * can check that the rule is about it: "rule 11's notch", "Rule 14's mouse-wheel addendum".
+ */
+export function citedTopics(text) {
+  const out = [];
+  for (const m of text.matchAll(/\brule (\d+)'s ((?:"|&quot;)?[^\s,.;:)"]+(?: [^\s,.;:)"]+)?)/gi)) {
+    const words = m[2]
+      .replace(/&quot;|"/g, "")
+      .split(/[\s/-]+/)
+      .map((w) => w.toLowerCase())
+      .filter((w) => w.length > 3 && !FILLER.has(w));
+    if (words.length) out.push({ number: Number(m[1]), words, line: text.slice(0, m.index).split("\n").length, cited: m[0] });
+  }
+  return out;
+}
