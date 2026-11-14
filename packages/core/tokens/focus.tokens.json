@@ -1,0 +1,62 @@
+{
+  "focus": {
+    "$extensions": {
+      "org.glimstone": {
+        "selector": ":root",
+        "modes": [
+          {
+            "name": "contrast",
+            "media": "(prefers-contrast: more)",
+            "selector": ":root,\n[data-theme]",
+            "shared": true
+          }
+        ]
+      }
+    },
+    "focus-ring-width": {
+      "$value": "2px",
+      "$type": "dimension",
+      "$description": "The focus ring's width. The contrast step thickens it.",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "contrast": "3px"
+          }
+        }
+      }
+    },
+    "z-raised": {
+      "$value": 1,
+      "$type": "number",
+      "$description": "Stacking, lowest first. Raised and its top sit over neighbours inside the same box; docked sticks to an edge of a card or the page; chrome is the desktop title bar; window, menu, toast and bubble open over everything below them in that order. The bubble is the highest a browser allows, so no app's own layer can cover a tip."
+    },
+    "z-raised-top": {
+      "$value": 2,
+      "$type": "number"
+    },
+    "z-docked": {
+      "$value": 10,
+      "$type": "number"
+    },
+    "z-chrome": {
+      "$value": 45,
+      "$type": "number"
+    },
+    "z-window": {
+      "$value": 50,
+      "$type": "number"
+    },
+    "z-menu": {
+      "$value": 60,
+      "$type": "number"
+    },
+    "z-toast": {
+      "$value": 70,
+      "$type": "number"
+    },
+    "z-bubble": {
+      "$value": 2147483647,
+      "$type": "number"
+    }
+  }
+}

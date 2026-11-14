@@ -1,0 +1,45 @@
+{
+  "hover": {
+    "$description": "The hover step of a filled tone that has no surface ramp of its own (rule 21): the fill mixed toward the theme's text colour, which is lighter on dark and darker on light, the direction the ramp moves. 15% is about one step of the dark ramp, surface3 to hover-raised. Declared wherever a theme is set, so --carbon-text is the one that theme defines. On a mid-tone picked accent that step would take the ink under 4.5:1, and applyAccent sets the ramp's hover as --accent-hover-light or --accent-hover-dark, a step away from the ink instead (accentHovers in contrast.ts).",
+    "$extensions": {
+      "org.glimstone": {
+        "selector": ":root,\n[data-theme]",
+        "theme": true
+      }
+    },
+    "accent-hover": {
+      "$value": "var(--accent-hover-light, color-mix(in srgb, {colour.accent} 85%, {colour.carbon-text}))",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "var(--accent-hover-dark, color-mix(in srgb, {colour.accent} 85%, {colour.carbon-text}))",
+          "tailwind": "color-accentHover",
+          "tailwindNote": "The accent-filled button's hover step (rule 21)."
+        }
+      }
+    },
+    "status-ok-hover": {
+      "$value": "color-mix(in srgb, {colour.status-ok-solid} 85%, {colour.carbon-text})",
+      "$extensions": {
+        "org.glimstone": {
+          "tailwind": "color-statusOkHover"
+        }
+      }
+    },
+    "status-fail-hover": {
+      "$value": "color-mix(in srgb, {colour.status-fail-solid} 85%, {colour.carbon-text})",
+      "$extensions": {
+        "org.glimstone": {
+          "tailwind": "color-statusFailHover"
+        }
+      }
+    },
+    "status-warn-hover": {
+      "$value": "color-mix(in srgb, {colour.status-warn-solid} 85%, {colour.carbon-text})",
+      "$extensions": {
+        "org.glimstone": {
+          "tailwind": "color-statusWarnHover"
+        }
+      }
+    }
+  }
+}

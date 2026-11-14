@@ -13,9 +13,11 @@
     "./tokens.css": "./tokens.css",
     "./tailwind-theme.css": "./tailwind-theme.css",
     "./glyphs.json": "./glyphs.json",
+    "./figma-variables.json": "./figma-variables.json",
+    "./tokens/*.json": "./tokens/*.json",
     "./*": { "types": "./dist/*.d.ts", "default": "./dist/*.js" }
   },
-  "files": ["dist", "vanilla", "tokens.css", "tailwind-theme.css", "glyphs.json", "glyphs.md", "glyph-map.md", "check-bare-buttons.mjs", "check-drift.mjs", "drift-manifest.json", "migrate.mjs"],
+  "files": ["dist", "vanilla", "tokens", "tokens.css", "tailwind-theme.css", "figma-variables.json", "glyphs.json", "glyphs.md", "glyph-map.md", "check-bare-buttons.mjs", "check-drift.mjs", "drift-manifest.json", "migrate.mjs"],
   "scripts": {
     "build": "tsc -p tsconfig.build.json && node ../../scripts/gen-drift-manifest.mjs"
   },

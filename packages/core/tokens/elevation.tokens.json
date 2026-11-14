@@ -1,0 +1,20 @@
+{
+  "elevation": {
+    "$description": "Elevation in fixed steps. Every surface stands on one of them, and a step is a shadow and a stacking order together, so something that floats over a card also paints over it. The ground and a well are flat. Raised is a card and what sticks to one; float is what opens over a card, such as a menu, a list or a bubble, and what the pointer holds; modal is a window or a sheet over the scrim. The raised shadow is the theme's, below; the higher steps add a longer, softer one beneath it, and are declared wherever a theme is set, so they build on that theme's raised shadow.",
+    "$extensions": {
+      "org.glimstone": {
+        "selector": ":root,\n[data-theme]"
+      }
+    },
+    "elevation-float": {
+      "$value": "0 10px 22px -8px rgba(0, 0, 0, .45), {colour.elevation-raised}"
+    },
+    "elevation-modal": {
+      "$value": "0 24px 48px -12px rgba(0, 0, 0, .5), {colour.elevation-raised}"
+    },
+    "elevation": {
+      "$value": "{colour.elevation-raised}",
+      "$description": "The one shadow every app already reads, the raised step."
+    }
+  }
+}

@@ -1,0 +1,621 @@
+{
+  "colour": {
+    "$extensions": {
+      "org.glimstone": {
+        "selector": ":root,\n[data-theme]",
+        "theme": true,
+        "modes": [
+          {
+            "name": "oled",
+            "selector": "[data-oled]",
+            "$description": "OLED, the dark ramp on true black for OLED and AMOLED screens (rule 43). `data-oled` on <html> asks for it and counts only while the dark ramp shows, chosen or from the system, so each value keeps the light ramp's own as its first half. The surfaces move one Carbon step down and keep their order, so every rule that names a step still lands on the step it meant. The hover keeps its place between the card and surface2, and hover-raised is the step above surface3, as on the dark ramp. The text ramp, the accent and the state hues stay: they were measured on darker grounds than they get here.\n\nThe elevation stays dark's shadow. It vanishes on black, and a ring in its place would read as a frame round every card, so a card's #161616 is its edge. Over a card the shadow still lifts a bubble or a menu off it. The switch track stays at #525252 rather than following surface3 down, where it would fall to 1.6:1 on the card. The opaque warning chip stands further from a #161616 card than from a #262626 one, and the hairline and the scrim lose nothing on black, so they stay as well. A lit brand tile in a near-black colour, such as GitHub's, would vanish into the card, so --tile-edge rings every lit tile."
+          },
+          {
+            "name": "contrast",
+            "media": "(prefers-contrast: more)",
+            "selector": ":root,\n[data-theme]",
+            "$description": "The contrast step, for anyone whose system asks for more contrast. It is GlimStone's own and separate from a Windows contrast theme (forced-colors, at the end of this file), which replaces every colour: here the palette stays and only moves. The accent's ink takes a second lightness step in the same ramps, so every preset reads at 8.9 to 9.7:1 as text on white. The sub and muted text each move a step toward the text colour, borders darken to where they read as lines, a card's hairline becomes a ring in the border colour, and the focus ring thickens. The accent fill stays as it is.",
+            "shared": true
+          }
+        ]
+      }
+    },
+    "carbon-bg": {
+      "$value": "#f4f4f4",
+      "$type": "color",
+      "$description": "Ground and surfaces: IBM Carbon's neutral greys. A warm near-black reads as brown next to a sibling app on this palette.",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#161616",
+          "modes": {
+            "oled": {
+              "dark": "#000000"
+            }
+          },
+          "tailwind": "color-carbon-background"
+        }
+      }
+    },
+    "carbon-sidebar": {
+      "$value": "#ffffff",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#262626",
+          "modes": {
+            "oled": {
+              "dark": "#161616"
+            }
+          },
+          "tailwind": "color-carbon-sidebar"
+        }
+      }
+    },
+    "carbon-surface": {
+      "$value": "#ffffff",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#262626",
+          "modes": {
+            "oled": {
+              "dark": "#161616"
+            }
+          },
+          "tailwind": "color-carbon-surface"
+        }
+      }
+    },
+    "carbon-surface2": {
+      "$value": "#e8e8e8",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#393939",
+          "modes": {
+            "oled": {
+              "dark": "#262626"
+            }
+          },
+          "tailwind": "color-carbon-surface2"
+        }
+      }
+    },
+    "carbon-surface3": {
+      "$value": "#d1d1d1",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#525252",
+          "modes": {
+            "oled": {
+              "dark": "#393939"
+            }
+          },
+          "tailwind": "color-carbon-surface3"
+        }
+      }
+    },
+    "carbon-hover": {
+      "$value": "#e0e0e0",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#353535",
+          "modes": {
+            "oled": {
+              "dark": "#232323"
+            }
+          },
+          "tailwind": "color-carbon-hover"
+        }
+      }
+    },
+    "carbon-hover-raised": {
+      "$value": "#c6c6c6",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#6f6f6f",
+          "modes": {
+            "oled": {
+              "dark": "#525252"
+            }
+          },
+          "tailwind": "color-carbon-hoverRaised"
+        }
+      }
+    },
+    "toggle-off": {
+      "$value": "#8d8d8d",
+      "$type": "color",
+      "$description": "A switch that is off. On the light ramp surface3 stands too close to a card and to the knob to see, so the track goes down to 3:1 against both.",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#525252"
+        }
+      }
+    },
+    "carbon-border": {
+      "$value": "#d1d1d1",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#393939",
+          "modes": {
+            "oled": {
+              "dark": "#262626"
+            },
+            "contrast": {
+              "light": "#6f6f6f",
+              "dark": "#8d8d8d"
+            }
+          },
+          "tailwind": "color-carbon-border"
+        }
+      }
+    },
+    "brand-coffee": {
+      "$value": "#8a6d00",
+      "$type": "color",
+      "$description": "The About card's brand marks at rest, adjusted from the published brand colours. A brand colour is designed against white or its own fill, so on the neutral button ground it fails 3:1 in one theme: #FFDD00 reads 1.14:1 on the light #d1d1d1, and PayPal's navy fails on the dark #525252. Warm brands are deepened for the light theme and dark ones lightened for the dark theme. Contrast: 5.7, 3.3, 3.1 and 7.7 to one on the dark ground, 3.2, 3.2, 8.7 and 11.9 on the light one.\n\nThe mail button has no brand colour: it reaches the app's own authors and follows the user's accent. The manual's book takes the yellow of the README's docs button, which is the coffee button's.",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#ffdd00"
+        }
+      }
+    },
+    "brand-docs": {
+      "$value": "#8a6d00",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#ffdd00"
+        }
+      }
+    },
+    "brand-bitcoin": {
+      "$value": "#a85d00",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#f7931a"
+        }
+      }
+    },
+    "brand-paypal": {
+      "$value": "#003087",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#4fb5f0"
+        }
+      }
+    },
+    "brand-android": {
+      "$value": "#32de84",
+      "$type": "color",
+      "$description": "The App tab's marks that are one flat colour or one gradient, at rest. The dark theme lifts a colour a dark tile would swallow; the light theme keeps the brand's own (\"Brand tiles\")."
+    },
+    "brand-docker": {
+      "$value": "#2396ed",
+      "$type": "color"
+    },
+    "brand-unraid-from": {
+      "$value": "#e32929",
+      "$type": "color"
+    },
+    "brand-unraid-to": {
+      "$value": "#ff8d30",
+      "$type": "color"
+    },
+    "brand-mos": {
+      "$value": "#26a269",
+      "$type": "color"
+    },
+    "brand-umbrel": {
+      "$value": "#5351f3",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#7d7bf6"
+        }
+      }
+    },
+    "brand-windows": {
+      "$value": "#0078d4",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#2b88d8"
+        }
+      }
+    },
+    "brand-flatpak": {
+      "$value": "#4a90d9",
+      "$type": "color"
+    },
+    "brand-github": {
+      "$value": "#181717",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#ffffff"
+        }
+      }
+    },
+    "carbon-text": {
+      "$value": "#161616",
+      "$type": "color",
+      "$description": "Text ramp: three steps, the last still legible at 12px.",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#f4f4f4",
+          "tailwind": "color-carbon-text"
+        }
+      }
+    },
+    "carbon-text-sub": {
+      "$value": "#525252",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#c6c6c6",
+          "modes": {
+            "contrast": {
+              "light": "#393939",
+              "dark": "#e0e0e0"
+            }
+          },
+          "tailwind": "color-carbon-textSub"
+        }
+      }
+    },
+    "carbon-text-muted": {
+      "$value": "#6f6f6f",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#8d8d8d",
+          "modes": {
+            "contrast": {
+              "light": "#525252",
+              "dark": "#c6c6c6"
+            }
+          },
+          "tailwind": "color-carbon-textMuted"
+        }
+      }
+    },
+    "sidebar-text": {
+      "$value": "#393939",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#e0e0e0",
+          "modes": {
+            "contrast": {
+              "light": "#161616",
+              "dark": "#f4f4f4"
+            }
+          }
+        }
+      }
+    },
+    "field-placeholder": {
+      "$value": "#525252",
+      "$type": "color",
+      "$description": "A field's placeholder. Muted text falls to 2.4:1 on a sub-card's surface3 field, so a placeholder takes the sub step, the dimmest that reads at 4.5:1 on every field fill.",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#c6c6c6",
+          "modes": {
+            "contrast": {
+              "light": "#393939",
+              "dark": "#e0e0e0"
+            }
+          }
+        }
+      }
+    },
+    "accent": {
+      "$value": "#FCC419",
+      "$type": "color",
+      "$description": "Activity, and nothing else. Every sibling app opens with this accent, so a fresh install of any of them looks like the same product.",
+      "$extensions": {
+        "org.glimstone": {
+          "tailwind": "color-accent"
+        }
+      }
+    },
+    "accent-contrast": {
+      "$value": "#161616",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "tailwind": "color-accentContrast"
+        }
+      }
+    },
+    "accent-soft": {
+      "$value": "rgba(252, 196, 25, 0.14)",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "tailwind": "color-accentSoft"
+        }
+      }
+    },
+    "ink-l-light": {
+      "$value": 0.52,
+      "$type": "number",
+      "$description": "The accent used as ink: text or a line-drawn glyph on the page's ground, rather than a fill with computed ink on top, so use this rather than --accent whenever the colour is read. The fill is the same in both themes: Sunflower with computed ink reads well on white, while darkening the fill turns it olive-brown.\n\nThe ink is the accent moved in OKLab onto a lightness step, keeping its hue: down to --ink-l-light on the light ramp, up to --ink-l-dark on the dark ones. OKLab's lightness follows the eye, so every hue on one step reads at nearly the same contrast, 5.2 to 5.9:1 on white for the eight presets. A straight line toward black never leaves sRGB; one toward white can by a hair, and the browser clips it. An accent already past the step, a bright one on dark or a deep one on light, is its own ink. applyAccent sets --accent-ink-light or --accent-ink-dark only where a picked colour would still miss 4.5:1 on a ramp's card, which no colour has been found to do (contrast.ts).",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "contrast": "0.40"
+          }
+        }
+      }
+    },
+    "ink-l-dark": {
+      "$value": 0.74,
+      "$type": "number",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "contrast": "0.84"
+          }
+        }
+      }
+    },
+    "accent-ink": {
+      "$value": "var(--accent-ink-light, oklab(from {colour.accent} min(l, {colour.ink-l-light}) calc(a * min(1, {colour.ink-l-light} / l)) calc(b * min(1, {colour.ink-l-light} / l))))",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "var(--accent-ink-dark, oklab(from {colour.accent} max(l, {colour.ink-l-dark}) calc(a * min(1, (1 - {colour.ink-l-dark}) / (1 - l))) calc(b * min(1, (1 - {colour.ink-l-dark}) / (1 - l)))))",
+          "tailwind": "color-accentInk",
+          "tailwindNote": "The accent where the colour is read rather than filled (see --accent-ink in tokens.css): text-* and strokes on the page's ground use ink, bg-* keeps text-accent with --accent-contrast on top."
+        }
+      }
+    },
+    "accent-glyph": {
+      "$value": "{colour.accent-ink}",
+      "$description": "The same ink for a line-drawn glyph. Rainbow never colours text, so a hued subtree redefines this one and leaves --accent-ink on the single accent.",
+      "$extensions": {
+        "org.glimstone": {
+          "tailwind": "color-accentGlyph",
+          "tailwindNote": "The ink for a line-drawn glyph, which takes a rainbow position where text does not."
+        }
+      }
+    },
+    "status-info-text": {
+      "$value": "oklch(0.52 0.104 86.7)",
+      "$type": "color",
+      "$description": "Four state hues, Carbon's support tones. Paused reuses neutral; its label and its resume control carry the difference.\n\nInfo is the default accent, so its light text is Sunflower's ink step.",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#FCC419",
+          "tailwind": "color-statusInfo"
+        }
+      }
+    },
+    "status-info-bg": {
+      "$value": "oklch(0.52 0.104 86.7 / 0.12)",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "rgba(252, 196, 25, 0.13)",
+          "tailwind": "color-statusInfoBg"
+        }
+      }
+    },
+    "status-info-solid": {
+      "$value": "#A87D00",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#FCC419",
+          "tailwind": "color-statusInfoSolid"
+        }
+      }
+    },
+    "status-ok-text": {
+      "$value": "#0e6027",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#6fdc8c",
+          "tailwind": "color-statusOk"
+        }
+      }
+    },
+    "status-ok-bg": {
+      "$value": "rgba(14, 96, 39, 0.11)",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "rgba(111, 220, 140, 0.13)",
+          "tailwind": "color-statusOkBg"
+        }
+      }
+    },
+    "status-ok-solid": {
+      "$value": "#198038",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#6fdc8c",
+          "tailwind": "color-statusOkSolid"
+        }
+      }
+    },
+    "status-fail-text": {
+      "$value": "#da1e28",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#ff8389",
+          "tailwind": "color-statusFail"
+        }
+      }
+    },
+    "status-fail-bg": {
+      "$value": "rgba(218, 30, 40, 0.06)",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "rgba(255, 131, 137, 0.14)",
+          "tailwind": "color-statusFailBg"
+        }
+      }
+    },
+    "status-fail-solid": {
+      "$value": "#da1e28",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#ff8389",
+          "tailwind": "color-statusFailSolid"
+        }
+      }
+    },
+    "status-warn-text": {
+      "$value": "#ba4e00",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#FF832B",
+          "tailwind": "color-statusWarn"
+        }
+      }
+    },
+    "status-warn-bg": {
+      "$value": "rgba(186, 78, 0, 0.06)",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "rgba(255, 131, 43, 0.12)",
+          "tailwind": "color-statusWarnBg"
+        }
+      }
+    },
+    "status-warn-bg-strong": {
+      "$value": "#fff2e8",
+      "$type": "color",
+      "$description": "Opaque, for a chip on a row that already carries a fill the translucent wash would take on.",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#36231a",
+          "tailwind": "color-statusWarnBgStrong",
+          "tailwindNote": "Opaque, for a chip on a row that already has a fill the translucent wash would show through."
+        }
+      }
+    },
+    "status-warn-bg-soft": {
+      "$value": "rgba(186, 78, 0, 0.05)",
+      "$type": "color",
+      "$description": "Quieter, for a paragraph that explains rather than warns, such as the refusal box under \"The second way in\".",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "rgba(255, 131, 43, 0.06)",
+          "tailwind": "color-statusWarnBgSoft",
+          "tailwindNote": "The quiet end, for a paragraph that explains rather than warns."
+        }
+      }
+    },
+    "status-warn-solid": {
+      "$value": "#ba4e00",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#FF832B",
+          "tailwind": "color-statusWarnSolid"
+        }
+      }
+    },
+    "status-neutral-text": {
+      "$value": "#6f6f6f",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#a8a8a8",
+          "modes": {
+            "contrast": {
+              "light": "#525252",
+              "dark": "#c6c6c6"
+            }
+          },
+          "tailwind": "color-statusNeutral"
+        }
+      }
+    },
+    "status-neutral-bg": {
+      "$value": "rgba(0, 0, 0, 0.045)",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "rgba(255, 255, 255, 0.05)",
+          "tailwind": "color-statusNeutralBg"
+        }
+      }
+    },
+    "status-neutral-solid": {
+      "$value": "#8d8d8d",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "tailwind": "color-statusNeutralSolid"
+        }
+      }
+    },
+    "elevation-raised": {
+      "$value": "0 1px 2px light-dark(rgba(0, 0, 0, .06), rgba(0, 0, 0, .40)), 0 18px 40px -24px light-dark(rgba(0, 0, 0, .35), rgba(0, 0, 0, .85))",
+      "$description": "The raised step's shadow and its hairline. The shadow is neutral black, since a brown one under a grey card reads as a colour cast."
+    },
+    "glim-scrim": {
+      "$value": "rgba(0, 0, 0, .62)",
+      "$type": "color",
+      "$description": "The ground behind a floating window, and the blur that takes the page's detail away beneath it.",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "rgba(0, 0, 0, .72)"
+        }
+      }
+    },
+    "glim-scrim-blur": {
+      "$value": "6px",
+      "$type": "dimension"
+    },
+    "hairline": {
+      "$value": "inset 0 1px 0 light-dark(transparent, rgba(255, 255, 255, .045)), inset 0 0 0 1px light-dark(rgba(0, 0, 0, .05), transparent)",
+      "$description": "A top light on the dark ramps, a ring all round on the light one.",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "contrast": "inset 0 0 0 1px {colour.carbon-border}"
+          }
+        }
+      }
+    },
+    "focus-ring": {
+      "$value": "{colour.accent-ink}",
+      "$description": "The ring is the accent ink, opaque. The ink reads at 4.5:1 on the ramp's card (rule 45), which leaves at least 3:1 on every ground a ring stands on: the page, the rail, a card, a well and a row's hover."
+    },
+    "tile-edge": {
+      "$value": "transparent",
+      "$extensions": {
+        "org.glimstone": {
+          "base": false,
+          "modes": {
+            "oled": {
+              "light": "transparent",
+              "dark": "rgba(255, 255, 255, .2)"
+            }
+          }
+        }
+      },
+      "$type": "color"
+    }
+  }
+}

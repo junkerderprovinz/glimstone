@@ -16,24 +16,24 @@
    its specificity. This line fixes the order before either layer opens. */
 @layer base, components;
 
+/* tokens:main begin: written by scripts/build-tokens.mjs from packages/core/tokens */
 /* Every rounded corner reads one of these three tokens, so switching the shape
    changes cards, buttons, tabs, inputs, pills, badges and toggles together.
 
    --radius-card is for cards, windows and menus, --radius-control for fields,
    panels and tiles, and --radius-pill for everything somebody presses: buttons,
    tabs, badges, selector segments and switches. Only round tells the last two
-   apart, and there the pressable things are true pills while a text field
-   keeps a corner a paragraph can sit in.
+   apart, and there the pressable things are true pills while a text field keeps
+   a corner a paragraph can sit in.
 
    Use the raw token even on a short or non-square element. The browser scales
    an oversized radius down with one factor for all four corners, so 9999px
    gives a circle on a square and a stadium on a rectangle. A cap such as
-   min(var(--radius-pill), 50%) resolves per axis first and renders an
-   ellipse.
+   min(var(--radius-pill), 50%) resolves per axis first and renders an ellipse.
 
-   A page that sets no shape gets soft, the default appearance.ts hands out,
-   so an app that only loads this sheet looks like one that called
-   applyShape(). The motion levels below follow the same rule with subtle. */
+   A page that sets no shape gets soft, the default appearance.ts hands out, so
+   an app that only loads this sheet looks like one that called applyShape().
+   The motion levels below follow the same rule with subtle. */
 :root,
 :root[data-shape="soft"] {
   --radius-card: 0.5rem;
@@ -53,11 +53,22 @@
   --radius-pill: 0;
 }
 
+/* The hidden shape (leafTap in appearance.ts): two opposite corners rounded,
+   the other two sharp. The tokens stay single lengths, so a calc() on them and
+   a phone app's numbers keep working, and one rule takes the other diagonal
+   away from every element. It is physical rather than logical so the leaf leans
+   the same way in every language. */
+:root[data-shape="leaf"] {
+  --radius-card: 1.25rem;
+  --radius-control: 0.75rem;
+  --radius-pill: 1.125rem;
+}
+
 :root {
-  /* The distance from the window edge to everything on it, and between the
-     rail and the content, set on the frame that holds both (see "The rail is
-     a CARD, not a wall" in docs/design-language.md). The content's own padding
-     is a separate distance. */
+  /* The distance from the window edge to everything on it, and between the rail
+     and the content, set on the frame that holds both (see "The rail is a CARD,
+     not a wall" in docs/design-language.md). The content's own padding is a
+     separate distance. */
   --page-gutter: var(--space-8);
 
   /* The rail's width in glyph mode. A fixed number so every app's rail is the
@@ -77,11 +88,11 @@
      distinction. A page's hero figure, a brand wordmark and text drawn inside
      an illustration are outside the scale (docs/design-language.md, "The type
      scale"). */
-  --text-status: 1.375rem;  /* 22px, the status head and a tile's one figure */
-  --text-title: 1rem;       /* 16px, an emphasised row title, a window's title */
-  --text-body: 0.875rem;    /* 14px */
+  --text-status: 1.375rem; /* 22px, the status head and a tile's one figure */
+  --text-title: 1rem; /* 16px, an emphasised row title, a window's title */
+  --text-body: 0.875rem; /* 14px */
   --text-subline: 0.8125rem; /* 13px, the text beside or under a name, a hint, a time */
-  --text-meta: 0.75rem;     /* 12px */
+  --text-meta: 0.75rem; /* 12px */
 
   /* Aliases for apps that read the four-step names. */
   --text-heading: var(--text-status);
@@ -90,30 +101,29 @@
 }
 
 /* The spacing scale. Every padding, margin and gap in the components reads one
-   of these steps: 2px apart up to 16px, where a step still shows, then wider.
-   A distance between two steps is the bug, not a reason for a fourteenth.
-   Optical nudges of a pixel or two, and the sizes of things, stay lengths of
-   their own. */
+   of these steps: 2px apart up to 16px, where a step still shows, then wider. A
+   distance between two steps is the bug, not a reason for a fourteenth. Optical
+   nudges of a pixel or two, and the sizes of things, stay lengths of their own. */
 :root {
-  --space-1: 0.125rem;  /* 2px */
-  --space-2: 0.25rem;   /* 4px */
-  --space-3: 0.375rem;  /* 6px */
-  --space-4: 0.5rem;    /* 8px */
-  --space-5: 0.625rem;  /* 10px */
-  --space-6: 0.75rem;   /* 12px */
-  --space-7: 0.875rem;  /* 14px */
-  --space-8: 1rem;      /* 16px */
-  --space-9: 1.25rem;   /* 20px */
-  --space-10: 1.5rem;   /* 24px */
-  --space-11: 1.75rem;  /* 28px */
-  --space-12: 2rem;     /* 32px */
-  --space-13: 2.5rem;   /* 40px */
+  --space-1: 0.125rem; /* 2px */
+  --space-2: 0.25rem; /* 4px */
+  --space-3: 0.375rem; /* 6px */
+  --space-4: 0.5rem; /* 8px */
+  --space-5: 0.625rem; /* 10px */
+  --space-6: 0.75rem; /* 12px */
+  --space-7: 0.875rem; /* 14px */
+  --space-8: 1rem; /* 16px */
+  --space-9: 1.25rem; /* 20px */
+  --space-10: 1.5rem; /* 24px */
+  --space-11: 1.75rem; /* 28px */
+  --space-12: 2rem; /* 32px */
+  --space-13: 2.5rem; /* 40px */
 }
 
 /* Row density, the axis of lists and tables (data-density, applyDensity in
-   appearance.ts). A row's height, the gap between its parts, its inline
-   padding and a table cell's block padding move together, each on the spacing
-   scale. Normal is the look without a setting. */
+   appearance.ts). A row's height, the gap between its parts, its inline padding
+   and a table cell's block padding move together, each on the spacing scale.
+   Normal is the look without a setting. */
 :root,
 :root[data-density="normal"] {
   --row-h: 2.6rem;
@@ -137,17 +147,18 @@
 }
 
 /* Elevation in fixed steps. Every surface stands on one of them, and a step is
-   a shadow and a stacking order together, so something that floats over a
-   card also paints over it. The ground and a well are flat. Raised is a card
-   and what sticks to one; float is what opens over a card, such as a menu, a
-   list or a bubble, and what the pointer holds; modal is a window or a sheet
-   over the scrim. The raised shadow is the theme's, below; the higher steps
-   add a longer, softer one beneath it, and are declared wherever a theme is
-   set, so they build on that theme's raised shadow. */
+   a shadow and a stacking order together, so something that floats over a card
+   also paints over it. The ground and a well are flat. Raised is a card and
+   what sticks to one; float is what opens over a card, such as a menu, a list
+   or a bubble, and what the pointer holds; modal is a window or a sheet over
+   the scrim. The raised shadow is the theme's, below; the higher steps add a
+   longer, softer one beneath it, and are declared wherever a theme is set, so
+   they build on that theme's raised shadow. */
 :root,
 [data-theme] {
   --elevation-float: 0 10px 22px -8px rgba(0, 0, 0, .45), var(--elevation-raised);
   --elevation-modal: 0 24px 48px -12px rgba(0, 0, 0, .5), var(--elevation-raised);
+
   /* The one shadow every app already reads, the raised step. */
   --elevation: var(--elevation-raised);
 }
@@ -159,8 +170,8 @@
   /* Stacking, lowest first. Raised and its top sit over neighbours inside the
      same box; docked sticks to an edge of a card or the page; chrome is the
      desktop title bar; window, menu, toast and bubble open over everything
-     below them in that order. The bubble is the highest a browser allows, so
-     no app's own layer can cover a tip. */
+     below them in that order. The bubble is the highest a browser allows, so no
+     app's own layer can cover a tip. */
   --z-raised: 1;
   --z-raised-top: 2;
   --z-docked: 10;
@@ -171,51 +182,22 @@
   --z-bubble: 2147483647;
 }
 
-/* The hidden shape (leafTap in appearance.ts): two opposite corners rounded,
-   the other two sharp. The tokens stay single lengths, so a calc() on them and
-   a phone app's numbers keep working, and one rule takes the other diagonal
-   away from every element. It is physical rather than logical so the leaf
-   leans the same way in every language. */
-:root[data-shape="leaf"] {
-  --radius-card: 1.25rem;
-  --radius-control: 0.75rem;
-  --radius-pill: 1.125rem;
-}
-
-@layer components {
-  :root[data-shape="leaf"] *,
-  :root[data-shape="leaf"] *::before,
-  :root[data-shape="leaf"] *::after {
-    border-top-right-radius: 0 !important;
-    border-bottom-left-radius: 0 !important;
-  }
-}
-
-/* The theme is the color-scheme, and every colour that differs between the
-   ramps is one light-dark() with the light value first. The scheme follows the
-   system unless data-theme pins it, and a pinned theme wins over the system in
-   both directions, on <html> or on any subtree. A custom property resolves
-   its light-dark() where it is declared, so the tokens are declared again
-   wherever a theme is set. */
-:root { color-scheme: dark light; }
-[data-theme="dark"] { color-scheme: dark; }
-[data-theme="light"] { color-scheme: light; }
-
 :root,
 [data-theme] {
-  /* Ground and surfaces: IBM Carbon's neutral greys. A warm near-black reads
-     as brown next to a sibling app on this palette. */
-  --carbon-bg:         light-dark(#f4f4f4, #161616);
-  --carbon-sidebar:    light-dark(#ffffff, #262626);
-  --carbon-surface:    light-dark(#ffffff, #262626);
-  --carbon-surface2:   light-dark(#e8e8e8, #393939);
-  --carbon-surface3:   light-dark(#d1d1d1, #525252);
-  --carbon-hover:      light-dark(#e0e0e0, #353535);
+  /* Ground and surfaces: IBM Carbon's neutral greys. A warm near-black reads as
+     brown next to a sibling app on this palette. */
+  --carbon-bg: light-dark(#f4f4f4, #161616);
+  --carbon-sidebar: light-dark(#ffffff, #262626);
+  --carbon-surface: light-dark(#ffffff, #262626);
+  --carbon-surface2: light-dark(#e8e8e8, #393939);
+  --carbon-surface3: light-dark(#d1d1d1, #525252);
+  --carbon-hover: light-dark(#e0e0e0, #353535);
   --carbon-hover-raised: light-dark(#c6c6c6, #6f6f6f);
+
   /* A switch that is off. On the light ramp surface3 stands too close to a card
      and to the knob to see, so the track goes down to 3:1 against both. */
   --toggle-off: light-dark(#8d8d8d, #525252);
-  --carbon-border:     light-dark(#d1d1d1, #393939);
+  --carbon-border: light-dark(#d1d1d1, #393939);
 
   /* The About card's brand marks at rest, adjusted from the published brand
      colours. A brand colour is designed against white or its own fill, so on
@@ -228,39 +210,41 @@
      The mail button has no brand colour: it reaches the app's own authors and
      follows the user's accent. The manual's book takes the yellow of the
      README's docs button, which is the coffee button's. */
-  --brand-coffee:  light-dark(#8a6d00, #ffdd00);
-  --brand-docs:    light-dark(#8a6d00, #ffdd00);
+  --brand-coffee: light-dark(#8a6d00, #ffdd00);
+  --brand-docs: light-dark(#8a6d00, #ffdd00);
   --brand-bitcoin: light-dark(#a85d00, #f7931a);
-  --brand-paypal:  light-dark(#003087, #4fb5f0);
+  --brand-paypal: light-dark(#003087, #4fb5f0);
 
-  /* The App tab's marks that are one flat colour or one gradient, at rest.
-     The dark theme lifts a colour a dark tile would swallow; the light theme
-     keeps the brand's own ("Brand tiles"). */
-  --brand-android:           #32de84;
-  --brand-docker:            #2396ed;
-  --brand-unraid-from:       #e32929;
-  --brand-unraid-to:         #ff8d30;
-  --brand-mos:               #26a269;
-  --brand-umbrel:            light-dark(#5351f3, #7d7bf6);
-  --brand-windows:           light-dark(#0078d4, #2b88d8);
-  --brand-flatpak:           #4a90d9;
-  --brand-github:  light-dark(#181717, #ffffff);
+  /* The App tab's marks that are one flat colour or one gradient, at rest. The
+     dark theme lifts a colour a dark tile would swallow; the light theme keeps
+     the brand's own ("Brand tiles"). */
+  --brand-android: #32de84;
+  --brand-docker: #2396ed;
+  --brand-unraid-from: #e32929;
+  --brand-unraid-to: #ff8d30;
+  --brand-mos: #26a269;
+  --brand-umbrel: light-dark(#5351f3, #7d7bf6);
+  --brand-windows: light-dark(#0078d4, #2b88d8);
+  --brand-flatpak: #4a90d9;
+  --brand-github: light-dark(#181717, #ffffff);
 
   /* Text ramp: three steps, the last still legible at 12px. */
-  --carbon-text:       light-dark(#161616, #f4f4f4);
-  --carbon-text-sub:   light-dark(#525252, #c6c6c6);
+  --carbon-text: light-dark(#161616, #f4f4f4);
+  --carbon-text-sub: light-dark(#525252, #c6c6c6);
   --carbon-text-muted: light-dark(#6f6f6f, #8d8d8d);
-  --sidebar-text:      light-dark(#393939, #e0e0e0);
+  --sidebar-text: light-dark(#393939, #e0e0e0);
+
   /* A field's placeholder. Muted text falls to 2.4:1 on a sub-card's surface3
-     field, so a placeholder takes the sub step, the dimmest that reads at
-     4.5:1 on every field fill. */
+     field, so a placeholder takes the sub step, the dimmest that reads at 4.5:1
+     on every field fill. */
   --field-placeholder: light-dark(#525252, #c6c6c6);
 
-  /* Activity, and nothing else. Every sibling app opens with this accent, so
-     a fresh install of any of them looks like the same product. */
-  --accent:            #FCC419;
-  --accent-contrast:   #161616;
-  --accent-soft:       rgba(252, 196, 25, 0.14);
+  /* Activity, and nothing else. Every sibling app opens with this accent, so a
+     fresh install of any of them looks like the same product. */
+  --accent: #FCC419;
+  --accent-contrast: #161616;
+  --accent-soft: rgba(252, 196, 25, 0.14);
+
   /* The accent used as ink: text or a line-drawn glyph on the page's ground,
      rather than a fill with computed ink on top, so use this rather than
      --accent whenever the colour is read. The fill is the same in both themes:
@@ -272,67 +256,70 @@
      dark ones. OKLab's lightness follows the eye, so every hue on one step
      reads at nearly the same contrast, 5.2 to 5.9:1 on white for the eight
      presets. A straight line toward black never leaves sRGB; one toward white
-     can by a hair, and the browser clips it. An accent already past the step,
-     a bright one on dark or a deep one on light, is its own ink. applyAccent
-     sets --accent-ink-light or --accent-ink-dark only where a picked colour
-     would still miss 4.5:1 on a ramp's card, which no colour has been found to
-     do (contrast.ts). */
-  --ink-l-light:       0.52;
-  --ink-l-dark:        0.74;
-  --accent-ink:        light-dark(var(--accent-ink-light, oklab(from var(--accent) min(l, var(--ink-l-light)) calc(a * min(1, var(--ink-l-light) / l)) calc(b * min(1, var(--ink-l-light) / l)))), var(--accent-ink-dark, oklab(from var(--accent) max(l, var(--ink-l-dark)) calc(a * min(1, (1 - var(--ink-l-dark)) / (1 - l))) calc(b * min(1, (1 - var(--ink-l-dark)) / (1 - l))))));
+     can by a hair, and the browser clips it. An accent already past the step, a
+     bright one on dark or a deep one on light, is its own ink. applyAccent sets
+     --accent-ink-light or --accent-ink-dark only where a picked colour would
+     still miss 4.5:1 on a ramp's card, which no colour has been found to do
+     (contrast.ts). */
+  --ink-l-light: 0.52;
+  --ink-l-dark: 0.74;
+  --accent-ink: light-dark(var(--accent-ink-light, oklab(from var(--accent) min(l, var(--ink-l-light)) calc(a * min(1, var(--ink-l-light) / l)) calc(b * min(1, var(--ink-l-light) / l)))), var(--accent-ink-dark, oklab(from var(--accent) max(l, var(--ink-l-dark)) calc(a * min(1, (1 - var(--ink-l-dark)) / (1 - l))) calc(b * min(1, (1 - var(--ink-l-dark)) / (1 - l))))));
+
   /* The same ink for a line-drawn glyph. Rainbow never colours text, so a hued
      subtree redefines this one and leaves --accent-ink on the single accent. */
-  --accent-glyph:      var(--accent-ink);
+  --accent-glyph: var(--accent-ink);
 
-  /* Four state hues, Carbon's support tones. Paused reuses neutral; its
-     label and its resume control carry the difference. */
-  /* Info is the default accent, so its light text is Sunflower's ink step. */
-  --status-info-text:    light-dark(oklch(0.52 0.104 86.7), #FCC419);
-  --status-info-bg:      light-dark(oklch(0.52 0.104 86.7 / 0.12), rgba(252, 196, 25, 0.13));
-  --status-info-solid:   light-dark(#A87D00, #FCC419);
+  /* Four state hues, Carbon's support tones. Paused reuses neutral; its label
+     and its resume control carry the difference.
 
-  --status-ok-text:      light-dark(#0e6027, #6fdc8c);
-  --status-ok-bg:        light-dark(rgba(14, 96, 39, 0.11), rgba(111, 220, 140, 0.13));
-  --status-ok-solid:     light-dark(#198038, #6fdc8c);
+     Info is the default accent, so its light text is Sunflower's ink step. */
+  --status-info-text: light-dark(oklch(0.52 0.104 86.7), #FCC419);
+  --status-info-bg: light-dark(oklch(0.52 0.104 86.7 / 0.12), rgba(252, 196, 25, 0.13));
+  --status-info-solid: light-dark(#A87D00, #FCC419);
+  --status-ok-text: light-dark(#0e6027, #6fdc8c);
+  --status-ok-bg: light-dark(rgba(14, 96, 39, 0.11), rgba(111, 220, 140, 0.13));
+  --status-ok-solid: light-dark(#198038, #6fdc8c);
+  --status-fail-text: light-dark(#da1e28, #ff8389);
+  --status-fail-bg: light-dark(rgba(218, 30, 40, 0.06), rgba(255, 131, 137, 0.14));
+  --status-fail-solid: light-dark(#da1e28, #ff8389);
+  --status-warn-text: light-dark(#ba4e00, #FF832B);
+  --status-warn-bg: light-dark(rgba(186, 78, 0, 0.06), rgba(255, 131, 43, 0.12));
 
-  --status-fail-text:    light-dark(#da1e28, #ff8389);
-  --status-fail-bg:      light-dark(rgba(218, 30, 40, 0.06), rgba(255, 131, 137, 0.14));
-  --status-fail-solid:   light-dark(#da1e28, #ff8389);
-
-  --status-warn-text:    light-dark(#ba4e00, #FF832B);
-  --status-warn-bg:      light-dark(rgba(186, 78, 0, 0.06), rgba(255, 131, 43, 0.12));
   /* Opaque, for a chip on a row that already carries a fill the translucent
      wash would take on. */
   --status-warn-bg-strong: light-dark(#fff2e8, #36231a);
+
   /* Quieter, for a paragraph that explains rather than warns, such as the
      refusal box under "The second way in". */
   --status-warn-bg-soft: light-dark(rgba(186, 78, 0, 0.05), rgba(255, 131, 43, 0.06));
-  --status-warn-solid:   light-dark(#ba4e00, #FF832B);
-
+  --status-warn-solid: light-dark(#ba4e00, #FF832B);
   --status-neutral-text: light-dark(#6f6f6f, #a8a8a8);
-  --status-neutral-bg:   light-dark(rgba(0, 0, 0, 0.045), rgba(255, 255, 255, 0.05));
+  --status-neutral-bg: light-dark(rgba(0, 0, 0, 0.045), rgba(255, 255, 255, 0.05));
   --status-neutral-solid: #8d8d8d;
 
   /* The raised step's shadow and its hairline. The shadow is neutral black,
      since a brown one under a grey card reads as a colour cast. */
   --elevation-raised: 0 1px 2px light-dark(rgba(0, 0, 0, .06), rgba(0, 0, 0, .40)), 0 18px 40px -24px light-dark(rgba(0, 0, 0, .35), rgba(0, 0, 0, .85));
+
   /* The ground behind a floating window, and the blur that takes the page's
      detail away beneath it. */
   --glim-scrim: light-dark(rgba(0, 0, 0, .62), rgba(0, 0, 0, .72));
   --glim-scrim-blur: 6px;
+
   /* A top light on the dark ramps, a ring all round on the light one. */
   --hairline: inset 0 1px 0 light-dark(transparent, rgba(255, 255, 255, .045)), inset 0 0 0 1px light-dark(rgba(0, 0, 0, .05), transparent);
+
   /* The ring is the accent ink, opaque. The ink reads at 4.5:1 on the ramp's
-     card (rule 45), which leaves at least 3:1 on every ground a ring stands
-     on: the page, the rail, a card, a well and a row's hover. */
+     card (rule 45), which leaves at least 3:1 on every ground a ring stands on:
+     the page, the rail, a card, a well and a row's hover. */
   --focus-ring: var(--accent-ink);
 }
 
 /* OLED, the dark ramp on true black for OLED and AMOLED screens (rule 43).
    `data-oled` on <html> asks for it and counts only while the dark ramp shows,
    chosen or from the system, so each value keeps the light ramp's own as its
-   first half. The surfaces move one Carbon step down and keep their order,
-   so every rule that names a step still lands on the step it meant. The hover
+   first half. The surfaces move one Carbon step down and keep their order, so
+   every rule that names a step still lands on the step it meant. The hover
    keeps its place between the card and surface2, and hover-raised is the step
    above surface3, as on the dark ramp. The text ramp, the accent and the state
    hues stay: they were measured on darker grounds than they get here.
@@ -347,33 +334,33 @@
    colour, such as GitHub's, would vanish into the card, so --tile-edge rings
    every lit tile. */
 [data-oled] {
-  --carbon-bg:         light-dark(#f4f4f4, #000000);
-  --carbon-sidebar:    light-dark(#ffffff, #161616);
-  --carbon-surface:    light-dark(#ffffff, #161616);
-  --carbon-surface2:   light-dark(#e8e8e8, #262626);
-  --carbon-surface3:   light-dark(#d1d1d1, #393939);
-  --carbon-hover:      light-dark(#e0e0e0, #232323);
+  --carbon-bg: light-dark(#f4f4f4, #000000);
+  --carbon-sidebar: light-dark(#ffffff, #161616);
+  --carbon-surface: light-dark(#ffffff, #161616);
+  --carbon-surface2: light-dark(#e8e8e8, #262626);
+  --carbon-surface3: light-dark(#d1d1d1, #393939);
+  --carbon-hover: light-dark(#e0e0e0, #232323);
   --carbon-hover-raised: light-dark(#c6c6c6, #525252);
-  --carbon-border:     light-dark(#d1d1d1, #262626);
+  --carbon-border: light-dark(#d1d1d1, #262626);
   --tile-edge: light-dark(transparent, rgba(255, 255, 255, .2));
 }
 
 /* Chart colours (rule 50), every one an OKLCH value written out, so a phone app
    and a design tool read the same numbers. The series come in a fixed order:
    the eight accent hues, alternating warm and cool, on lightness steps chosen
-   so any two stay apart for people with protanopia, deuteranopia or
-   tritanopia, and each reaches 3:1 on a card and the page. Their chroma is
-   the most sRGB holds at that lightness, up to 0.14. */
+   so any two stay apart for people with protanopia, deuteranopia or tritanopia,
+   and each reaches 3:1 on a card and the page. Their chroma is the most sRGB
+   holds at that lightness, up to 0.14. */
 :root,
 [data-theme] {
-  --chart-1: light-dark(oklch(0.42 0.109 247), oklch(0.66 0.14 247));  /* blue */
-  --chart-2: light-dark(oklch(0.42 0.108 51), oklch(0.66 0.14 51));  /* orange */
-  --chart-3: light-dark(oklch(0.62 0.105 194), oklch(0.86 0.14 194));  /* teal */
-  --chart-4: light-dark(oklch(0.54 0.14 355), oklch(0.74 0.14 355));  /* magenta */
-  --chart-5: light-dark(oklch(0.62 0.126 87), oklch(0.78 0.14 87));  /* sunflower */
-  --chart-6: light-dark(oklch(0.62 0.14 301), oklch(0.78 0.132 301));  /* purple */
-  --chart-7: light-dark(oklch(0.5 0.137 150), oklch(0.78 0.14 150));  /* green */
-  --chart-8: light-dark(oklch(0.62 0.14 18), oklch(0.86 0.075 18));  /* red */
+  --chart-1: light-dark(oklch(0.42 0.109 247), oklch(0.66 0.14 247)); /* blue */
+  --chart-2: light-dark(oklch(0.42 0.108 51), oklch(0.66 0.14 51)); /* orange */
+  --chart-3: light-dark(oklch(0.62 0.105 194), oklch(0.86 0.14 194)); /* teal */
+  --chart-4: light-dark(oklch(0.54 0.14 355), oklch(0.74 0.14 355)); /* magenta */
+  --chart-5: light-dark(oklch(0.62 0.126 87), oklch(0.78 0.14 87)); /* sunflower */
+  --chart-6: light-dark(oklch(0.62 0.14 301), oklch(0.78 0.132 301)); /* purple */
+  --chart-7: light-dark(oklch(0.5 0.137 150), oklch(0.78 0.14 150)); /* green */
+  --chart-8: light-dark(oklch(0.62 0.14 18), oklch(0.86 0.075 18)); /* red */
 
   /* Sequential, for a heatmap or a density: one blue that gains lightness
      contrast and colour as the value grows, starting next to the ground. */
@@ -385,8 +372,8 @@
   --chart-seq-6: light-dark(oklch(0.5 0.12 250), oklch(0.8 0.104 250));
   --chart-seq-7: light-dark(oklch(0.4 0.112 250), oklch(0.9 0.049 250));
 
-  /* Diverging, for a value above or below a middle: blue under it, orange
-     over it, a near-grey ground colour at the middle itself. */
+  /* Diverging, for a value above or below a middle: blue under it, orange over
+     it, a near-grey ground colour at the middle itself. */
   --chart-div-1: light-dark(oklch(0.45 0.126 250), oklch(0.8 0.104 250));
   --chart-div-2: light-dark(oklch(0.62 0.11 250), oklch(0.64 0.11 250));
   --chart-div-3: light-dark(oklch(0.8 0.07 250), oklch(0.48 0.07 250));
@@ -397,61 +384,88 @@
 }
 
 /* The contrast step, for anyone whose system asks for more contrast. It is
-   GlimStone's own and separate from a Windows contrast theme (forced-colors,
-   at the end of this file), which replaces every colour: here the palette
-   stays and only moves. The accent's ink takes a second lightness step in the
-   same ramps, so every preset reads at 8.9 to 9.7:1 as text on white. The sub
-   and muted text each move a step toward the text colour, borders darken to
-   where they read as lines, a card's hairline becomes a ring in the border
-   colour, and the focus ring thickens. The accent fill stays as it is. */
+   GlimStone's own and separate from a Windows contrast theme (forced-colors, at
+   the end of this file), which replaces every colour: here the palette stays
+   and only moves. The accent's ink takes a second lightness step in the same
+   ramps, so every preset reads at 8.9 to 9.7:1 as text on white. The sub and
+   muted text each move a step toward the text colour, borders darken to where
+   they read as lines, a card's hairline becomes a ring in the border colour,
+   and the focus ring thickens. The accent fill stays as it is. */
 @media (prefers-contrast: more) {
   :root,
   [data-theme] {
-    --ink-l-light:       0.40;
-    --ink-l-dark:        0.84;
-    --carbon-text-sub:   light-dark(#393939, #e0e0e0);
+    --focus-ring-width: 3px;
+    --carbon-border: light-dark(#6f6f6f, #8d8d8d);
+    --carbon-text-sub: light-dark(#393939, #e0e0e0);
     --carbon-text-muted: light-dark(#525252, #c6c6c6);
-    --sidebar-text:      light-dark(#161616, #f4f4f4);
+    --sidebar-text: light-dark(#161616, #f4f4f4);
     --field-placeholder: light-dark(#393939, #e0e0e0);
+    --ink-l-light: 0.40;
+    --ink-l-dark: 0.84;
     --status-neutral-text: light-dark(#525252, #c6c6c6);
-    --carbon-border:     light-dark(#6f6f6f, #8d8d8d);
-    --hairline:          inset 0 0 0 1px var(--carbon-border);
-    --focus-ring-width:  3px;
+    --hairline: inset 0 0 0 1px var(--carbon-border);
   }
 }
 
 /* The hover step of a filled tone that has no surface ramp of its own (rule
    21): the fill mixed toward the theme's text colour, which is lighter on dark
    and darker on light, the direction the ramp moves. 15% is about one step of
-   the dark ramp, surface3 to hover-raised. Declared wherever a theme is set,
-   so --carbon-text is the one that theme defines. On a mid-tone picked accent
-   that step would take the ink under 4.5:1, and applyAccent sets the ramp's
-   hover as --accent-hover-light or --accent-hover-dark, a step away from the
-   ink instead (accentHovers in contrast.ts). */
+   the dark ramp, surface3 to hover-raised. Declared wherever a theme is set, so
+   --carbon-text is the one that theme defines. On a mid-tone picked accent that
+   step would take the ink under 4.5:1, and applyAccent sets the ramp's hover as
+   --accent-hover-light or --accent-hover-dark, a step away from the ink instead
+   (accentHovers in contrast.ts). */
 :root,
 [data-theme] {
-  --accent-hover:      light-dark(var(--accent-hover-light, color-mix(in srgb, var(--accent) 85%, var(--carbon-text))), var(--accent-hover-dark, color-mix(in srgb, var(--accent) 85%, var(--carbon-text))));
-  --status-ok-hover:   color-mix(in srgb, var(--status-ok-solid) 85%, var(--carbon-text));
+  --accent-hover: light-dark(var(--accent-hover-light, color-mix(in srgb, var(--accent) 85%, var(--carbon-text))), var(--accent-hover-dark, color-mix(in srgb, var(--accent) 85%, var(--carbon-text))));
+  --status-ok-hover: color-mix(in srgb, var(--status-ok-solid) 85%, var(--carbon-text));
   --status-fail-hover: color-mix(in srgb, var(--status-fail-solid) 85%, var(--carbon-text));
   --status-warn-hover: color-mix(in srgb, var(--status-warn-solid) 85%, var(--carbon-text));
 }
 
-/* The house font is Noto Sans, shipped with the app for Latin, Cyrillic,
-   Greek, Vietnamese and Devanagari, with Noto's own cuts for Arabic, Hebrew and
-   Thai. The "Variable" names are the shipped files, the plain ones an install
-   on the machine. Chinese, Japanese and Korean are too heavy to ship, so their
-   Noto cut is used where the system has it, and the system font where it does
-   not; Han characters are drawn differently per language, so the lang of the
-   page picks the cut (docs/design-language.md, "The house font"). */
+/* The house font is Noto Sans, shipped with the app for Latin, Cyrillic, Greek,
+   Vietnamese and Devanagari, with Noto's own cuts for Arabic, Hebrew and Thai.
+   The "Variable" names are the shipped files, the plain ones an install on the
+   machine. Chinese, Japanese and Korean are too heavy to ship, so their Noto
+   cut is used where the system has it, and the system font where it does not;
+   Han characters are drawn differently per language, so the lang of the page
+   picks the cut (docs/design-language.md, "The house font"). */
 :root {
   --font-cjk: "Noto Sans CJK SC", "Noto Sans SC";
-  --font-sans: "Noto Sans Variable", "Noto Sans", "Noto Sans Arabic Variable", "Noto Sans Arabic",
-    "Noto Sans Hebrew Variable", "Noto Sans Hebrew", "Noto Sans Thai Variable", "Noto Sans Thai",
-    var(--font-cjk), system-ui, -apple-system, sans-serif;
+  --font-sans: "Noto Sans Variable", "Noto Sans", "Noto Sans Arabic Variable", "Noto Sans Arabic", "Noto Sans Hebrew Variable", "Noto Sans Hebrew", "Noto Sans Thai Variable", "Noto Sans Thai", var(--font-cjk), system-ui, -apple-system, sans-serif;
 }
-:lang(ja) { --font-cjk: "Noto Sans CJK JP", "Noto Sans JP"; }
-:lang(ko) { --font-cjk: "Noto Sans CJK KR", "Noto Sans KR"; }
-:lang(zh-TW), :lang(zh-Hant) { --font-cjk: "Noto Sans CJK TC", "Noto Sans TC"; }
+
+:lang(ja) {
+  --font-cjk: "Noto Sans CJK JP", "Noto Sans JP";
+}
+
+:lang(ko) {
+  --font-cjk: "Noto Sans CJK KR", "Noto Sans KR";
+}
+
+:lang(zh-TW), :lang(zh-Hant) {
+  --font-cjk: "Noto Sans CJK TC", "Noto Sans TC";
+}
+/* tokens:main end */
+
+/* The hidden leaf shape takes the other diagonal away from every element. */
+@layer components {
+  :root[data-shape="leaf"] *,
+  :root[data-shape="leaf"] *::before,
+  :root[data-shape="leaf"] *::after {
+    border-top-right-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+  }
+}
+/* The theme is the color-scheme, and every colour that differs between the
+   ramps is one light-dark() with the light value first. The scheme follows the
+   system unless data-theme pins it, and a pinned theme wins over the system in
+   both directions, on <html> or on any subtree. A custom property resolves
+   its light-dark() where it is declared, so the tokens are declared again
+   wherever a theme is set. */
+:root { color-scheme: dark light; }
+[data-theme="dark"] { color-scheme: dark; }
+[data-theme="light"] { color-scheme: light; }
 
 @layer base {
   /* The negative letter-spacing suits Latin and crowds CJK, which is set in
@@ -2007,28 +2021,31 @@
   }
 }
 
+/* tokens:buttons begin: written by scripts/build-tokens.mjs from packages/core/tokens */
 /* The button box and the reactive label. The components in packages/react/src/
    carry no dimensions of their own, so changing the box here changes every
    button.
 
    The four width stages are a floor (`min-width`), so a longer translation is
-   never clipped. The height is what an ordinary text field measures
-   (`px-3 py-1.5 text-sm`: a 20px line box plus 12px of padding), so a button
-   beside a field matches it. */
+   never clipped. The height is what an ordinary text field measures (`px-3
+   py-1.5 text-sm`: a 20px line box plus 12px of padding), so a button beside a
+   field matches it. */
 :root {
   --btn-h: 2rem;
+
   /* The second height; see `.glim-btn-key`. */
   --btn-h-key: 2.5rem;
+
   /* Only for the transport squares of a head bar; see `.glim-btn-transport`. */
   --btn-h-transport: 3rem;
   --btn-pad-x: 0.875rem;
   --btn-gap: 0.5rem;
-
   --btn-w-xs: 5.5rem;
   --btn-w-sm: 8rem;
   --btn-w-md: 11.5rem;
   --btn-w-lg: 15rem;
 }
+/* tokens:buttons end */
 
 @layer components {
   .glim-btn {

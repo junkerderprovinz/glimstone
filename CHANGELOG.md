@@ -15,6 +15,7 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 - **Deprecated names warn:** a page that uses `Badge`'s `shape`, `AboutCard` or `DropdownListbox` logs one console warning per name with what to use instead. All three go in 5.0.0, the fixed rule for deprecating and removing in the design language, which also lists `BadgeShape`.
 - **A bundle for plugin pages:** every release carries `glimstone-plugin-x.y.z.zip` for a page without a build step, such as an Unraid plugin's. It holds the core as `glimstone.js`, which puts it on `window.GlimStone`, and as the module `glimstone.mjs`, with `tokens.css`, the fortress card and `glyphs.json`.
 - **Moving off deprecated names:** `npx glimstone-migrate src` rewrites `Badge`'s `shape` to `form` and `BadgeShape` to `BadgeForm` in place, and names the file and line of each `AboutCard` and `DropdownListbox` to move by hand. `--check` writes nothing and fails while there is something left.
+- **Tokens from one source:** the values in `tokens.css`, `tailwind-theme.css` and the Flutter `tokens.g.dart` are written from the DTCG files in `packages/core/tokens`, and nothing about the custom properties changes. A tool that reads W3C design tokens can take those files from the package (`@glimstone/core/tokens/*.json`), and `@glimstone/core/figma-variables.json` creates the colours, shapes, densities and lengths as Figma variables through Figma's variables API.
 
 ## 🔁 Changed
 
@@ -27,6 +28,8 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 - **Flutter:** `GlimTheme.inkMix` is `inkLightness`, and `accentInk` moves the accent in OKLab as the web does. The generator resolves `oklch()` tokens to sRGB. The package needs Flutter 3.27 or later.
 
 ## ✨ Added
+
+- **One token source in the DTCG format.** `scripts/build-tokens.mjs` runs Style Dictionary over `packages/core/tokens` and writes the token blocks of `tokens.css`, the `@theme` block of `tailwind-theme.css`, `tokens.g.dart` and `figma-variables.json`. CI fails when one of them differs from the source.
 
 - **A decision log,** `docs/decisions.md`. Each rule in the design language says what holds and why, and the reports and measurements behind it, with what it replaced, moved to the log.
 

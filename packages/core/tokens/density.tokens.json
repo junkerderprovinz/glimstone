@@ -1,0 +1,65 @@
+{
+  "density": {
+    "$description": "Row density, the axis of lists and tables (data-density, applyDensity in appearance.ts). A row's height, the gap between its parts, its inline padding and a table cell's block padding move together, each on the spacing scale. Normal is the look without a setting.",
+    "$extensions": {
+      "org.glimstone": {
+        "selector": ":root,\n:root[data-density=\"normal\"]",
+        "modes": [
+          {
+            "name": "compact",
+            "selector": ":root[data-density=\"compact\"]"
+          },
+          {
+            "name": "airy",
+            "selector": ":root[data-density=\"airy\"]"
+          }
+        ]
+      }
+    },
+    "row-h": {
+      "$value": "2.6rem",
+      "$type": "dimension",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "compact": "{space.space-12}",
+            "airy": "calc({space.space-13} + {space.space-6})"
+          }
+        }
+      }
+    },
+    "row-gap": {
+      "$value": "{space.space-5}",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "compact": "{space.space-4}",
+            "airy": "{space.space-6}"
+          }
+        }
+      }
+    },
+    "row-pad": {
+      "$value": "{space.space-4}",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "compact": "{space.space-3}",
+            "airy": "{space.space-6}"
+          }
+        }
+      }
+    },
+    "cell-pad-block": {
+      "$value": "{space.space-3}",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "compact": "{space.space-1}",
+            "airy": "{space.space-5}"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1668,6 +1668,8 @@ What a component does when somebody presses a key, clicks outside it or listens 
 
 Defined once under `:root, [data-theme]`, each colour that differs between the themes as `light-dark(light, dark)`, with OLED's overrides under `[data-oled]` (rules 43 and 48).
 
+**The values have one source: the DTCG files in [`packages/core/tokens`](../packages/core/tokens).** Each file is one group and one CSS block, in the W3C Design Tokens format: a token's `$value` (the light ramp's in a colour group), its `$description`, and under `$extensions.org.glimstone` its dark value, its values per mode (a shape, a density, OLED, the contrast step) and its Tailwind name. A reference such as `{space.space-5}` becomes `var(--space-5)` in the stylesheet and an alias in Figma. [`scripts/build-tokens.mjs`](../scripts/build-tokens.mjs) runs Style Dictionary over them and writes the marked token blocks of `tokens.css`, the `@theme` block of `tailwind-theme.css`, the Flutter `tokens.g.dart` and `figma-variables.json`, the body of a `POST /v1/files/:key/variables` call that creates the colours in a light, a dark and an OLED mode, the shapes, the densities and the lengths. Change a value in the source and run the script; CI runs it with `--check` and fails while any of those files differs from the source. The motion levels, the button's reactive label and the rules around them stay written by hand in `tokens.css`.
+
 | Token | Role |
 |---|---|
 | `--carbon-bg` | page ground |
@@ -1729,7 +1731,7 @@ GlimStone ships as one core and one package per framework. All of them carry the
 - **Select, Combobox and Slider are entries of their own** (`@glimstone/react/Select`, `@glimstone/vue/Select` and so on), so an app that uses none of them installs no Zag package.
 - **Stored choices keep their names.** `setStoragePrefix("myapp")` at boot makes the label modes and the cached appearance read and write `myapp-labels-buttons` and `myapp-appearance`, so an app moving to the packages keeps what its users chose.
 - **Every file has a size budget.** `scripts/size-budget.mjs` measures `tokens.css`, `tailwind-theme.css`, every package with a `src/index.ts` (the core and each framework package) bundled and minified without its dependencies, and the plugin bundle's scripts, packed with gzip and brotli, and CI fails when one is past its limit in `scripts/size-budget.json`. The job summary shows the table. A limit sits a little above the file's size, and raising one is a choice made on purpose: edit `size-budget.json` in the commit that grows the file and say in its message why the bytes are worth it. A new package is measured from its first commit and fails the check until it has a limit, so it gets one in the same commit, and a framework whose sources need a Vite plugin names it in `PLUGINS` in the script.
-- **Flutter has no second source.** `scripts/gen-flutter.mjs` writes the Dart tokens and glyphs from `tokens.css` and `glyphs.json`, and CI fails when the checked-in files are out of date.
+- **Flutter has no second source.** `scripts/build-tokens.mjs` writes the Dart tokens from the DTCG source and `scripts/gen-flutter.mjs` the glyphs from `glyphs.json`, and CI fails when a checked-in file is out of date. The Dart logic around the tokens, such as `GlimTheme.withAccent()`, stays in `theme.dart` and is written by hand.
 
 ## Deprecating and removing
 

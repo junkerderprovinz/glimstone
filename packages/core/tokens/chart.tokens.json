@@ -1,0 +1,219 @@
+{
+  "chart": {
+    "$description": "Chart colours (rule 50), every one an OKLCH value written out, so a phone app and a design tool read the same numbers. The series come in a fixed order: the eight accent hues, alternating warm and cool, on lightness steps chosen so any two stay apart for people with protanopia, deuteranopia or tritanopia, and each reaches 3:1 on a card and the page. Their chroma is the most sRGB holds at that lightness, up to 0.14.",
+    "$extensions": {
+      "org.glimstone": {
+        "selector": ":root,\n[data-theme]",
+        "theme": true
+      }
+    },
+    "chart-1": {
+      "$value": "oklch(0.42 0.109 247)",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "oklch(0.66 0.14 247)",
+          "note": "blue"
+        }
+      }
+    },
+    "chart-2": {
+      "$value": "oklch(0.42 0.108 51)",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "oklch(0.66 0.14 51)",
+          "note": "orange"
+        }
+      }
+    },
+    "chart-3": {
+      "$value": "oklch(0.62 0.105 194)",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "oklch(0.86 0.14 194)",
+          "note": "teal"
+        }
+      }
+    },
+    "chart-4": {
+      "$value": "oklch(0.54 0.14 355)",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "oklch(0.74 0.14 355)",
+          "note": "magenta"
+        }
+      }
+    },
+    "chart-5": {
+      "$value": "oklch(0.62 0.126 87)",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "oklch(0.78 0.14 87)",
+          "note": "sunflower"
+        }
+      }
+    },
+    "chart-6": {
+      "$value": "oklch(0.62 0.14 301)",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "oklch(0.78 0.132 301)",
+          "note": "purple"
+        }
+      }
+    },
+    "chart-7": {
+      "$value": "oklch(0.5 0.137 150)",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "oklch(0.78 0.14 150)",
+          "note": "green"
+        }
+      }
+    },
+    "chart-8": {
+      "$value": "oklch(0.62 0.14 18)",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "oklch(0.86 0.075 18)",
+          "note": "red"
+        }
+      }
+    },
+    "chart-seq-1": {
+      "$value": "oklch(0.96 0.019 250)",
+      "$type": "color",
+      "$description": "Sequential, for a heatmap or a density: one blue that gains lightness contrast and colour as the value grows, starting next to the ground.",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "oklch(0.34 0.02 250)"
+        }
+      }
+    },
+    "chart-seq-2": {
+      "$value": "oklch(0.88 0.04 250)",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "oklch(0.43 0.04 250)"
+        }
+      }
+    },
+    "chart-seq-3": {
+      "$value": "oklch(0.79 0.06 250)",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "oklch(0.52 0.06 250)"
+        }
+      }
+    },
+    "chart-seq-4": {
+      "$value": "oklch(0.7 0.08 250)",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "oklch(0.61 0.08 250)"
+        }
+      }
+    },
+    "chart-seq-5": {
+      "$value": "oklch(0.6 0.1 250)",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "oklch(0.7 0.1 250)"
+        }
+      }
+    },
+    "chart-seq-6": {
+      "$value": "oklch(0.5 0.12 250)",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "oklch(0.8 0.104 250)"
+        }
+      }
+    },
+    "chart-seq-7": {
+      "$value": "oklch(0.4 0.112 250)",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "oklch(0.9 0.049 250)"
+        }
+      }
+    },
+    "chart-div-1": {
+      "$value": "oklch(0.45 0.126 250)",
+      "$type": "color",
+      "$description": "Diverging, for a value above or below a middle: blue under it, orange over it, a near-grey ground colour at the middle itself.",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "oklch(0.8 0.104 250)"
+        }
+      }
+    },
+    "chart-div-2": {
+      "$value": "oklch(0.62 0.11 250)",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "oklch(0.64 0.11 250)"
+        }
+      }
+    },
+    "chart-div-3": {
+      "$value": "oklch(0.8 0.07 250)",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "oklch(0.48 0.07 250)"
+        }
+      }
+    },
+    "chart-div-4": {
+      "$value": "oklch(0.96 0.005 250)",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "oklch(0.33 0.005 250)"
+        }
+      }
+    },
+    "chart-div-5": {
+      "$value": "oklch(0.8 0.07 55)",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "oklch(0.5 0.07 55)"
+        }
+      }
+    },
+    "chart-div-6": {
+      "$value": "oklch(0.66 0.12 55)",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "oklch(0.66 0.12 55)"
+        }
+      }
+    },
+    "chart-div-7": {
+      "$value": "oklch(0.52 0.128 55)",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "oklch(0.82 0.116 55)"
+        }
+      }
+    }
+  }
+}
