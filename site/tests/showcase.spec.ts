@@ -20,8 +20,8 @@ async function openPanel(page: Page) {
 const style = (page: Page, selector: string, property: string) =>
   wall(page).locator(selector).first().evaluate((el, p) => getComputedStyle(el).getPropertyValue(p), property);
 
-test("the wall, the panel and its snippet work while the site shows this framework", async ({ page, context }) => {
-  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+test("the wall, the panel and its snippet work while the site shows this framework", async ({ page, context, browserName }) => {
+  if (browserName === "chromium") await context.grantPermissions(["clipboard-read", "clipboard-write"]);
   await open(page, "/", { theme: "dark" });
   await expect(wall(page).locator('[data-glim="SignInCard"]').first()).toBeAttached();
   await openPanel(page);
@@ -91,9 +91,9 @@ test("the panel lists every axis of the look", async ({ page }) => {
   await expect(panel(page)).toBeHidden();
 });
 
-test("the copy button hands over the root attributes and the settings for the chosen look", async ({ page, context }) => {
+test("the copy button hands over the root attributes and the settings for the chosen look", async ({ page, context, browserName }) => {
   inDepth();
-  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  if (browserName === "chromium") await context.grantPermissions(["clipboard-read", "clipboard-write"]);
   await open(page, "/", { theme: "dark", oled: true, shape: "round", accent: "#1D99F3", rainbow: "reactive", motion: "wild", density: "compact", contrast: "more", labels: "glyph" });
   await openPanel(page);
   await panel(page).locator('[data-look="copy"]').click();
@@ -130,9 +130,9 @@ export const lookDefaults = {
 `);
 });
 
-test("the default look copies without a theme, an accent or a rainbow", async ({ page, context }) => {
+test("the default look copies without a theme, an accent or a rainbow", async ({ page, context, browserName }) => {
   inDepth();
-  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  if (browserName === "chromium") await context.grantPermissions(["clipboard-read", "clipboard-write"]);
   await open(page, "/");
   await openPanel(page);
   await panel(page).locator('[data-look="copy"]').click();

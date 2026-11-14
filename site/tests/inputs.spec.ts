@@ -56,14 +56,14 @@ test.describe("PinInput", () => {
     await expect(box(page, 3)).toBeFocused();
   });
 
-  test("[pin-paste] a pasted code fills every box", async ({ page }) => {
+  // A paste from the clipboard, since Firefox hands a script-made paste event
+  // no data.
+  test("[pin-paste] a pasted code fills every box", async ({ page, browserName }) => {
     await open(page, "/components/pin-input");
+    if (browserName === "chromium") await page.context().grantPermissions(["clipboard-read", "clipboard-write"]);
+    await page.evaluate(() => navigator.clipboard.writeText("905173"));
     await box(page, 1).focus();
-    await box(page, 1).evaluate((el) => {
-      const data = new DataTransfer();
-      data.setData("text/plain", "905173");
-      el.dispatchEvent(new ClipboardEvent("paste", { clipboardData: data, bubbles: true, cancelable: true }));
-    });
+    await page.keyboard.press("ControlOrMeta+V");
     await expect(box(page, 6)).toHaveValue("3");
     await expect(status(page)).toHaveText("Checking 905173");
   });
@@ -119,9 +119,9 @@ test.describe("TagsInput", () => {
     await expect(tags(page)).toHaveText(["weekly"]);
   });
 
-  test("[tags-paste] a pasted list becomes one tag per entry", async ({ page }) => {
+  test("[tags-paste] a pasted list becomes one tag per entry", async ({ page, browserName }) => {
     await open(page, "/components/tags-input");
-    await page.context().grantPermissions(["clipboard-read", "clipboard-write"]);
+    if (browserName === "chromium") await page.context().grantPermissions(["clipboard-read", "clipboard-write"]);
     await page.evaluate(() => navigator.clipboard.writeText("music,videos"));
     await field(page).focus();
     await page.keyboard.press("ControlOrMeta+V");
