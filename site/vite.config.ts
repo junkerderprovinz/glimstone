@@ -7,7 +7,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { fileURLToPath } from "node:url";
 
 const packages = fileURLToPath(new URL("../packages", import.meta.url));
-const solidFiles = /\/(packages\/solid\/src|site\/src\/(solid|solid-demos))\/.*\.tsx$/;
+const solidFiles = /\/(packages\/solid\/src|site\/src\/(solid|solid-demos|blocks\/solid))\/.*\.tsx$/;
 
 // The site runs on the packages' sources, so a change shows without building
 // them first. The assets sit beside the core's sources, not in them.

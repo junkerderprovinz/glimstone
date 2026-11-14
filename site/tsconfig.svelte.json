@@ -12,6 +12,6 @@
       "@glimstone/svelte/Slider": ["../packages/svelte/src/entries/slider.ts"]
     }
   },
-  "include": ["src/svelte", "src/svelte-demos"],
+  "include": ["src/svelte", "src/svelte-demos", "src/blocks/svelte"],
   "exclude": []
 }

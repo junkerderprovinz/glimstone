@@ -23,5 +23,5 @@
     }
   },
   "include": ["src", "tests", "test", "vite.config.ts", "playwright.config.ts"],
-  "exclude": ["src/solid", "src/solid-demos", "src/svelte", "src/svelte-demos"]
+  "exclude": ["src/solid", "src/solid-demos", "src/blocks/solid", "src/svelte", "src/svelte-demos", "src/blocks/svelte"]
 }

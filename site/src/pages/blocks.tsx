@@ -1,8 +1,11 @@
 import { Fragment, useState, type ComponentType, type ReactNode } from "react";
+import type { Component as SvelteComponent } from "svelte";
 import type { Component as VueComponent } from "vue";
 import { highlight } from "sugar-high";
 import { Button } from "@glimstone/react";
 import { H2, Selector, useCopied } from "../ui";
+import { SolidIsland } from "../solidIsland";
+import { SvelteIsland } from "../svelteIsland";
 import { VueIsland } from "../vueIsland";
 
 /**
@@ -22,6 +25,8 @@ const byName = <T,>(modules: Record<string, T>) =>
 
 const react = byName(import.meta.glob<{ default: ComponentType }>("../blocks/react/*.tsx", { eager: true }));
 const vue = byName(import.meta.glob<{ default: VueComponent }>("../blocks/vue/*.vue", { eager: true }));
+const solid = byName(import.meta.glob<{ default: () => unknown }>("../blocks/solid/*.tsx", { eager: true }));
+const svelte = byName(import.meta.glob<{ default: SvelteComponent }>("../blocks/svelte/*.svelte", { eager: true }));
 
 export const BLOCK_FRAMEWORKS: BlockFramework[] = [
   {
@@ -38,6 +43,18 @@ export const BLOCK_FRAMEWORKS: BlockFramework[] = [
     name: "Vue",
     sources: byName(import.meta.glob<string>("../blocks/vue/*.vue", { eager: true, query: "?raw", import: "default" })),
     render: (name) => vue[name] && <VueIsland component={vue[name].default} />,
+  },
+  {
+    id: "solid",
+    name: "Solid",
+    sources: byName(import.meta.glob<string>("../blocks/solid/*.tsx", { eager: true, query: "?raw", import: "default" })),
+    render: (name) => solid[name] && <SolidIsland component={solid[name].default} />,
+  },
+  {
+    id: "svelte",
+    name: "Svelte",
+    sources: byName(import.meta.glob<string>("../blocks/svelte/*.svelte", { eager: true, query: "?raw", import: "default" })),
+    render: (name) => svelte[name] && <SvelteIsland component={svelte[name].default} />,
   },
 ];
 
@@ -101,7 +118,7 @@ export function BlocksPage() {
     <>
       <p className="lead">
         Page parts built from the components the way an app builds them. Each one runs here as it would in an app, in
-        React and in Vue, and its code copies with one click.
+        React, Vue, Solid and Svelte, and its code copies with one click.
       </p>
       {BLOCKS.map((b) => (
         <Fragment key={b.name}>
