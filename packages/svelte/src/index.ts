@@ -45,7 +45,7 @@ export { default as Tree, type TreeNode, type TreeProps } from "./Tree.svelte";
 export { default as UnavailableNotice, type UnavailableNoticeProps } from "./UnavailableNotice.svelte";
 export { default as Window, type WindowAction, type WindowProps, type WindowSize } from "./Window.svelte";
 export { default as WindowBar, type WindowBarProps } from "./WindowBar.svelte";
-export * from "./engines.svelte.js";
+export { useAccent, useDensity, useHue, useLabelMode, useMotion, useRainbow, useShape } from "./engines.svelte.js";
 export { useConfirm, useDialogKeys, type ConfirmOptions, type ConfirmText } from "./confirm.svelte.js";
 export { useFieldName } from "./fieldName.js";
 export { glyphFor, IconCancel, IconCheck, IconClose, IconCopy, IconExpand, IconEye, IconEyeOff, IconFolderOpen, IconPencil, IconWindowMaximise, IconWindowMinimise, IconWindowRestore, setGlyphResolver } from "./glyphs.js";

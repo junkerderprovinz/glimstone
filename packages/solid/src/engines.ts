@@ -1,9 +1,11 @@
 import { createSignal, onCleanup, type Accessor } from "solid-js";
 import {
   applyAccent,
+  applyDensity,
   applyMotion,
   applyRainbow,
   applyShape,
+  DEFAULT_DENSITY,
   DEFAULT_MOTION,
   DEFAULT_SHAPE,
   getLabelMode,
@@ -11,6 +13,7 @@ import {
   rainbowState,
   subscribeLabelMode,
   subscribeRainbow,
+  type Density,
   type LabelAxis,
   type LabelMode,
   type Motion,
@@ -18,7 +21,7 @@ import {
   type Shape,
 } from "@glimstone/core";
 
-// The label, colour, shape and motion engines as primitives. Each value
+// The label, colour, shape, motion and density engines as primitives. Each value
 // belongs to the document, not a component, so every primitive follows the
 // document and writes back through the core, in the [value, set] shape of
 // createSignal.
@@ -48,7 +51,7 @@ export function useHue(index: () => number | undefined): Accessor<Record<string,
   };
 }
 
-// Shape, motion and accent live on the root element only, so a reader watches
+// Shape, motion, density and accent live on the root element only, so a reader watches
 // the attribute rather than waiting for a call that told it.
 function rootValue<T>(attribute: string, read: () => T): Accessor<T> {
   const [value, setValue] = createSignal(read());
@@ -64,6 +67,11 @@ export function useShape(): [Accessor<Shape>, (next: Shape) => void] {
 
 export function useMotion(): [Accessor<Motion>, (next: Motion) => void] {
   return [rootValue("data-motion", () => (document.documentElement.getAttribute("data-motion") as Motion | null) ?? DEFAULT_MOTION), applyMotion];
+}
+
+/** The row density of lists and tables. */
+export function useDensity(): [Accessor<Density>, (next: Density) => void] {
+  return [rootValue("data-density", () => (document.documentElement.getAttribute("data-density") as Density | null) ?? DEFAULT_DENSITY), applyDensity];
 }
 
 /** The accent the user chose, or "" for the default. */

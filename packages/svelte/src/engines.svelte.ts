@@ -1,8 +1,10 @@
 import {
   applyAccent,
+  applyDensity,
   applyMotion,
   applyRainbow,
   applyShape,
+  DEFAULT_DENSITY,
   DEFAULT_MOTION,
   DEFAULT_SHAPE,
   getLabelMode,
@@ -12,6 +14,7 @@ import {
   setLabelMode,
   subscribeLabelMode,
   subscribeRainbow,
+  type Density,
   type LabelAxis,
   type LabelMode,
   type Motion,
@@ -19,7 +22,7 @@ import {
   type Shape,
 } from "@glimstone/core";
 
-// The label, colour, shape and motion engines as reactive boxes. Each value
+// The label, colour, shape, motion and density engines as reactive boxes. Each value
 // belongs to the document, not a component, so every box follows the document
 // and writes back through the core through its `current`.
 
@@ -66,7 +69,7 @@ export function useHue(index: () => number | undefined): { readonly current: Rec
   };
 }
 
-// Shape, motion and accent live on the root element only, so a reader watches
+// Shape, motion, density and accent live on the root element only, so a reader watches
 // the attribute rather than waiting for a call that told it.
 const watchRoot = (attribute: string) => (changed: () => void) => {
   const observer = new MutationObserver(changed);
@@ -80,6 +83,11 @@ export function useShape(): Box<Shape> {
 
 export function useMotion(): Box<Motion> {
   return follow(() => (document.documentElement.getAttribute("data-motion") as Motion | null) ?? DEFAULT_MOTION, watchRoot("data-motion"), applyMotion);
+}
+
+/** The row density of lists and tables. */
+export function useDensity(): Box<Density> {
+  return follow(() => (document.documentElement.getAttribute("data-density") as Density | null) ?? DEFAULT_DENSITY, watchRoot("data-density"), applyDensity);
 }
 
 /** The accent the user chose, or "" for the default. */
