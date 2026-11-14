@@ -350,6 +350,10 @@ Both findings under "where the explanation lives" came from measuring rather tha
 
 The accent picker and rainbow mode were merged into one card on a report. The two enrolment buttons had grown two different verbs, *Enable* on the second factor and *Add passkey* on the passkey card, before both were given the app's one word for starting a setup.
 
+## The second way in (second factor and passkey): eight recovery codes everywhere
+
+The section once counted the number of recovery codes among the things local to the app it was built for. It became part of the language, eight in every app, so the recovery flow is the same everywhere: somebody who has kept the codes of one app meets the same number, the same screen and the same wording in the next. One pattern across all apps outweighs whatever a single app might gain from a count of its own.
+
 ## The sign-in card: one page instead of four
 
 Before `SignInCard`, four apps had built their login page four ways: a logo in one and none in another, a pill over one card, a version number under another, labels in capitals, a narrow button. The component, with the flow in the core's `createSignInFlow`, became the one page for all of them.
