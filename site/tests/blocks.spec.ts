@@ -2,7 +2,7 @@ import { expect, test, type Page } from "@playwright/test";
 import { open } from "./page";
 
 // Every block in the framework the project runs, which ?fw= picks.
-const framework = () => test.info().project.name;
+const framework = () => test.info().project.metadata.fw;
 const block = (page: Page, name: string) => page.locator(`[data-demo="${name}"][data-framework="${framework()}"]`);
 
 const PARTS: Record<string, string[]> = {

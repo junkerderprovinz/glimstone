@@ -4,7 +4,7 @@ import { expect, test, type Page } from "@playwright/test";
 // so a borderless filled control would vanish. The stylesheet draws edges and
 // selected states in system colours there. It does not depend on a framework,
 // so only one project runs it.
-test.beforeEach(({}, info) => test.skip(info.project.name !== "react", "framework-free"));
+test.beforeEach(({}, info) => test.skip(info.project.metadata.fw !== "react", "framework-free"));
 
 const MARKUP = `
   <div class="glim-card" data-probe="card">card</div>

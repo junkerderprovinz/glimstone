@@ -1,9 +1,12 @@
 import { useMemo, useState } from "react";
 import { GLIMSTONE_VERSION } from "@glimstone/react";
 import tokens from "../gen/tokens.json";
+import rules from "../gen/rules.json";
 import { Glyph, GLYPHS } from "../glyph";
 import { Callout, Code, H2, slugify, SourceLink } from "../ui";
 import { BLOCKS } from "./blocks";
+
+const BLOB = "https://github.com/junkerderprovinz/glimstone/blob/main/";
 
 export function Introduction() {
   return (
@@ -223,3 +226,31 @@ export function Glyphs() {
   );
 }
 
+
+type Rule = { number: number; title: string; blocks: ({ p: string } | { item: string; check: boolean })[] };
+
+export function Rules() {
+  return (
+    <>
+      <p className="lead">
+        The numbered rules, as <a href={`${BLOB}docs/design-language.md#the-rules-that-keep-it-calm`}>the design language</a>{" "}
+        states them. This page is built from that file, so the two cannot disagree. Elsewhere a rule is cited by its
+        number, and a link such as <code>#/guide/rules?s=rule-14</code> opens it here.
+      </p>
+      {(rules as Rule[]).map((r) => (
+        <section key={r.number} id={`rule-${r.number}`} className="rule">
+          <p>
+            <span className="rule-number glim-num">{r.number}</span> <strong dangerouslySetInnerHTML={{ __html: r.title }} />
+          </p>
+          {r.blocks.map((b, i) =>
+            "p" in b ? (
+              <p key={i} dangerouslySetInnerHTML={{ __html: b.p }} />
+            ) : (
+              <p key={i} className={b.check ? "rule-check" : "rule-item"} dangerouslySetInnerHTML={{ __html: b.item }} />
+            ),
+          )}
+        </section>
+      ))}
+    </>
+  );
+}

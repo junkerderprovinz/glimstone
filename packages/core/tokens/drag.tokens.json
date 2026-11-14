@@ -1,0 +1,75 @@
+{
+  "drag": {
+    "$description": "The drag lift (\"Reordering by dragging\" in the design language). The held item floats under the pointer (.glim-drag-lift), the others slide aside while it passes (.glim-drag-shift), and on release it slides into the gap they left (.glim-drag-settle). A script sets only each item's `translate`; the separate `translate` and `scale` properties compose with a wiggle's `transform` instead of replacing it.\n\nThe lift is a state rather than motion, so the shadow and the gap stay at every level. Reduced motion and \"off\" drop only the scale, and the slides take the level's duration, none where the level has none.",
+    "$extensions": {
+      "org.glimstone": {
+        "selector": ":root",
+        "modes": [
+          {
+            "name": "gate",
+            "selector": ":root",
+            "media": "(prefers-reduced-motion: no-preference)"
+          },
+          {
+            "name": "wild",
+            "selector": ":root[data-motion='wild']",
+            "media": "(prefers-reduced-motion: no-preference)"
+          },
+          {
+            "name": "off",
+            "selector": ":root[data-motion='off']",
+            "media": "(prefers-reduced-motion: no-preference)"
+          },
+          {
+            "name": "storm",
+            "selector": ":root[data-motion='storm']",
+            "$description": "Outside the gate for the same reason as storm's other numbers."
+          },
+          {
+            "name": "reduce",
+            "selector": ":root:not([data-motion='storm'])",
+            "media": "(prefers-reduced-motion: reduce)"
+          }
+        ]
+      }
+    },
+    "drag-lift-scale": {
+      "$value": 1.015,
+      "$type": "number",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": 1.03,
+            "off": 1,
+            "storm": 1.06,
+            "reduce": 1
+          }
+        }
+      }
+    },
+    "drag-lift-shadow": {
+      "$value": "var(--elevation-float)",
+      "$description": "The raised step alone barely shows under something one row tall."
+    },
+    "drag-lift-z": {
+      "$value": "var(--z-raised)"
+    },
+    "drag-settle-dur": {
+      "$value": "0ms",
+      "$type": "duration",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "gate": "130ms",
+            "wild": "220ms",
+            "off": "0ms",
+            "storm": "400ms"
+          }
+        }
+      }
+    },
+    "drag-settle-ease": {
+      "$value": "var(--motion-page-ease, ease)"
+    }
+  }
+}

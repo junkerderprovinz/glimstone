@@ -2,7 +2,7 @@ import { expect, test, type Page } from "@playwright/test";
 
 // The colour engine's stylesheet side, which the core's unit tests cannot see.
 // It does not depend on a framework, so only one project runs it.
-test.beforeEach(({}, info) => test.skip(info.project.name !== "react", "framework-free"));
+test.beforeEach(({}, info) => test.skip(info.project.metadata.fw !== "react", "framework-free"));
 
 async function open(page: Page, look: object) {
   await page.addInitScript((l) => localStorage.setItem("gs-docs-look", JSON.stringify(l)), look);
@@ -71,10 +71,17 @@ test("a preset keeps the stylesheet's own ink", async ({ page }) => {
   expect(await token(page, "--accent-ink-light")).toBe("");
 });
 
-test("Chromium is no source for the system colour, so the wand swatch stays away", async ({ page }) => {
+test("Chromium is no source for the system colour, so the wand swatch stays away", async ({ page, browserName }) => {
+  test.skip(browserName !== "chromium", "Chromium only");
   await open(page, {});
   await expect(page.getByRole("radio", { name: "Blue" }).first()).toBeVisible();
   await expect(page.getByRole("radio", { name: "System colour" })).toHaveCount(0);
+});
+
+test("Firefox hands over the system colour, so the wand swatch shows", async ({ page, browserName }) => {
+  test.skip(browserName !== "firefox", "Firefox only");
+  await open(page, {});
+  await expect(page.getByRole("radio", { name: "System colour" }).first()).toBeVisible();
 });
 
 test("the OLED switch sits under the theme selector and turns OLED on", async ({ page }) => {

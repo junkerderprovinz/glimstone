@@ -1,7 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 
 async function open(page: Page, path: string) {
-  await page.goto(`/#${path}?fw=${test.info().project.name}`);
+  await page.goto(`/#${path}?fw=${test.info().project.metadata.fw}`);
   await page.locator("main h1").first().waitFor();
 }
 

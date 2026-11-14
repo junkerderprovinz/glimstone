@@ -1,17 +1,52 @@
-import { defineConfig } from "@playwright/test";
+import { createHash } from "node:crypto";
+import { fileURLToPath } from "node:url";
+import { defineConfig, type Project } from "@playwright/test";
 
-// GS_PORT lets two checkouts test side by side, since an existing server on
-// the port is reused.
-const port = Number(process.env.GS_PORT ?? 4318);
+// Every checkout previews on a port of its own, so a run in one worktree never
+// tests the site another worktree is serving. GS_PREVIEW_PORT picks one by
+// hand, and a server already on a port picked by hand is never reused.
+const checkout = fileURLToPath(new URL(".", import.meta.url));
+const ownPort = 4400 + (createHash("sha256").update(checkout).digest().readUInt16BE(0) % 1000);
+const port = Number(process.env.GS_PREVIEW_PORT) || ownPort;
 
-// One project per framework: each runs every contract row against that
-// framework's demos.
+// One project per framework and browser: each runs every contract row against
+// that framework's demos. The tests read the framework from the metadata, so a
+// project name only has to be unique.
+const frameworks = ["react", "vue", "solid", "svelte"];
+// A headless Firefox without a mouse reports no pointer and no hover, which
+// turns on every touch-screen rule, so the pointer prefs give it a desktop's
+// mouse. Firefox has no clipboard permission to grant, so the clipboard prefs
+// let a test read back what was copied.
+const firefox = {
+  browserName: "firefox" as const,
+  launchOptions: {
+    firefoxUserPrefs: {
+      "ui.primaryPointerCapabilities": 6,
+      "ui.allPointerCapabilities": 6,
+      "dom.events.asyncClipboard.readText": true,
+      "dom.events.testing.asyncClipboard": true,
+    },
+  },
+};
+const contracts: Project[] = frameworks.flatMap((fw) => [
+  { name: fw, metadata: { fw }, use: { browserName: "chromium" }, testIgnore: /(visual|a11y)\.spec/ },
+  { name: `${fw}-firefox`, metadata: { fw }, use: firefox, testIgnore: /(visual|a11y)\.spec/ },
+]);
+
 export default defineConfig({
   testDir: "tests",
   workers: process.env.CI ? 2 : 4,
   timeout: 30_000,
   reporter: [["list"], ["json", { outputFile: "test-results/raw.json" }]],
-  use: { browserName: "chromium", baseURL: `http://localhost:${port}/`, viewport: { width: 1280, height: 860 } },
-  projects: [{ name: "react" }, { name: "vue" }, { name: "solid" }, { name: "svelte" }],
-  webServer: { command: `npx vite preview --port ${port} --strictPort`, port, reuseExistingServer: !process.env.CI },
+  use: { baseURL: `http://localhost:${port}/`, viewport: { width: 1280, height: 860 } },
+  // Baselines are rendered on Linux, where CI runs, so a run elsewhere compares
+  // against nothing and writes its own copy beside them instead of failing.
+  snapshotPathTemplate: "{testDir}/__screenshots__/{platform}/{arg}{ext}",
+  expect: { toHaveScreenshot: { maxDiffPixelRatio: 0.002, animations: "disabled", caret: "hide" } },
+  projects: [
+    ...contracts,
+    { name: "visual", metadata: { fw: "react" }, use: { browserName: "chromium" }, testMatch: /visual\.spec/ },
+    { name: "a11y", metadata: { fw: "react" }, use: { browserName: "chromium" }, testMatch: /a11y\.spec/ },
+  ],
+  webServer: { command: `npx vite preview --port ${port} --strictPort`, port, reuseExistingServer: !process.env.CI && port === ownPort },
 });

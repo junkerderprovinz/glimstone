@@ -9,7 +9,7 @@ import {
   type RefObject,
 } from "react";
 import { createPortal } from "react-dom";
-import { computeBubblePosition, focusByLetter, isTypeahead, portalTarget } from "@glimstone/core";
+import { computeBubblePosition, focusByLetter, isTypeahead, portalTarget, warnDeprecated } from "@glimstone/core";
 import { usePortalHue } from "./portalHue.ts";
 
 // The `role="listbox"` panel a button-opens-a-list picker drops open. It is
@@ -46,7 +46,7 @@ export interface DropdownListboxProps {
   children: ReactNode;
 }
 
-/** @deprecated Use Select, which keeps focus on its trigger and adds typeahead. */
+/** @deprecated Use Select, which keeps focus on its trigger and adds typeahead. Removed in 5.0.0. */
 export function DropdownListbox({
   open,
   onClose,
@@ -55,6 +55,7 @@ export function DropdownListbox({
   multiselectable,
   children,
 }: DropdownListboxProps) {
+  warnDeprecated("DropdownListbox");
   const panelRef = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState<{ left: number; top: number; width: number } | null>(null);
   // One focus move per opening, once the panel sits at its real coordinates.

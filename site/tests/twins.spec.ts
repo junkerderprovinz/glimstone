@@ -13,7 +13,7 @@ import { expect, test } from "@playwright/test";
 const pages = [...readFileSync(new URL("../src/App.tsx", import.meta.url), "utf8").matchAll(/path: "(\/components\/[^"]+)"/g)].map((m) => m[1]!);
 
 test("[twins-markup] every demo draws the same markup in React, Vue, Solid and Svelte", async ({ page }, info) => {
-  test.skip(info.project.name !== "react", "One run compares both");
+  test.skip(info.project.metadata.fw !== "react", "The React runs compare all four");
   test.setTimeout(pages.length * 6_000);
   const differ: string[] = [];
   for (const path of pages) {

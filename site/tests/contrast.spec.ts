@@ -3,7 +3,7 @@ import { expect, test, type Page } from "@playwright/test";
 // The contrast step (prefers-contrast: more), GlimStone's own, apart from a
 // Windows contrast theme. It does not depend on a framework, so only one
 // project runs it.
-test.beforeEach(({}, info) => test.skip(info.project.name !== "react", "framework-free"));
+test.beforeEach(({}, info) => test.skip(info.project.metadata.fw !== "react", "framework-free"));
 
 async function look(page: Page, contrast: "more" | "no-preference", theme: "dark" | "light") {
   await page.emulateMedia({ contrast });
@@ -29,9 +29,11 @@ async function look(page: Page, contrast: "more" | "no-preference", theme: "dark
 }
 
 for (const theme of ["dark", "light"] as const) {
-  test(`more contrast darkens muted text, draws edges and thickens the ring on ${theme}`, async ({ page }) => {
-    const calm = await look(page, "no-preference", theme);
-    const strong = await look(page, "more", theme);
+  // A page each: Firefox keeps the first page's styles when the media changes
+  // under a navigation to the same address.
+  test(`more contrast darkens muted text, draws edges and thickens the ring on ${theme}`, async ({ context }) => {
+    const calm = await look(await context.newPage(), "no-preference", theme);
+    const strong = await look(await context.newPage(), "more", theme);
     expect(strong.muted).not.toBe(calm.muted);
     expect(calm.inputEdge).toBe("none");
     expect(strong.inputEdge).toBe("1px");

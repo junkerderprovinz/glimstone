@@ -10,7 +10,7 @@ const SITE = "/";
 // Each Playwright project runs every row against one framework's demos alone.
 async function open(page: Page, path: string, look?: Record<string, unknown>) {
   if (look) await page.addInitScript((l) => localStorage.setItem("gs-docs-look", JSON.stringify(l)), look);
-  await page.goto(`${SITE}#${path}?fw=${test.info().project.name}`);
+  await page.goto(`${SITE}#${path}?fw=${test.info().project.metadata.fw}`);
   await page.locator("main h1").first().waitFor();
   const motion = look?.motion;
   if (motion) expect(await page.evaluate(() => document.documentElement.dataset.motion)).toBe(motion);
@@ -27,9 +27,9 @@ async function centre(el: Locator) {
   await el.page().evaluate(() => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done))));
 }
 
-// For a demo built without a framework, which one run covers for both.
+// For a demo built without a framework, which the React runs cover for all four.
 function noFramework() {
-  test.beforeEach(({}, info) => test.skip(info.project.name !== "react", "Built without a framework"));
+  test.beforeEach(({}, info) => test.skip(info.project.metadata.fw !== "react", "Built without a framework"));
 }
 
 const hexToRgb = (hex: string) => {
@@ -883,13 +883,15 @@ test.describe("Select with submenus", () => {
 
 test.describe("Select right to left", () => {
   test.beforeEach(async ({ page }) => {
-    // The script runs before <html> exists, so it waits for it.
+    // Chromium runs the script before <html> exists and Firefox after, so it
+    // sets the direction at once where it can and waits for <html> otherwise.
     await page.addInitScript(() => {
-      new MutationObserver((_, watch) => {
-        if (!document.documentElement) return;
+      const rtl = () => {
+        if (!document.documentElement) return false;
         document.documentElement.dir = "rtl";
-        watch.disconnect();
-      }).observe(document, { childList: true });
+        return true;
+      };
+      if (!rtl()) new MutationObserver((_, watch) => rtl() && watch.disconnect()).observe(document, { childList: true });
     });
   });
 
@@ -948,7 +950,7 @@ test.describe("Select on a touch screen", () => {
     await stage(page, "SelectZag").locator(".glim-select-trigger").tap();
     const box = page.getByRole("listbox", { name: "Time zone", exact: true });
     await expect(box).toBeVisible();
-    const heights = await box.getByRole("option").evaluateAll((els) => els.map((e) => e.getBoundingClientRect().height));
+    const heights = await box.evaluate((b) => [...b.querySelectorAll('[role="option"]')].map((e) => e.getBoundingClientRect().height));
     expect(Math.min(...heights)).toBeGreaterThanOrEqual(44);
 
     await box.getByRole("option", { name: "UTC" }).tap();
@@ -1596,7 +1598,8 @@ test.describe("Selector", () => {
         rows: new Set(segs.map((e) => Math.round(e.getBoundingClientRect().top))).size,
         wrap: getComputedStyle(s).flexWrap,
         inside: s.getBoundingClientRect().right <= box.right + 0.5 && s.scrollWidth <= s.clientWidth,
-        oneLine: labels.map((l) => l.getClientRects().length === 1 && l.scrollHeight <= l.clientHeight),
+        // Firefox counts the house font's descent past the 16px line as a pixel of overflow.
+        oneLine: labels.map((l) => l.getClientRects().length === 1 && l.scrollHeight <= l.clientHeight + 1),
         cut: labels.map((l) => l.scrollWidth > l.clientWidth),
         shown: labels.length,
       };
@@ -2196,9 +2199,9 @@ test.describe("Window", () => {
     test(`[window-foot-one-line] ${name} stands on one line`, async ({ page }) => {
       await open(page, "/components/window");
       await stage(page, "WindowBusyFoot").getByRole("button", { name }).click();
-      const buttons = page.getByRole("dialog", { name: title }).locator(".glim-modal-foot .glim-btn");
-      await expect(buttons).toHaveCount(count);
-      const tops = await buttons.evaluateAll((els) => [...new Set(els.map((e) => Math.round(e.getBoundingClientRect().top)))]);
+      const dialog = page.getByRole("dialog", { name: title });
+      await expect(dialog.locator(".glim-modal-foot .glim-btn")).toHaveCount(count);
+      const tops = await dialog.evaluate((d) => [...new Set([...d.querySelectorAll(".glim-modal-foot .glim-btn")].map((e) => Math.round(e.getBoundingClientRect().top)))]);
       expect(tops).toHaveLength(1);
     });
   }
@@ -2240,8 +2243,10 @@ test.describe("Window", () => {
     expect(room).toEqual([true, true]);
   });
   const about = (page: Page) => page.getByRole("dialog", { name: "About columns" });
+  // Read from the dialog itself: evaluateAll over a locator chained off a role
+  // crashes Playwright's Firefox page.
   const footNames = (dialog: Locator) =>
-    dialog.locator(".glim-modal-foot").getByRole("button").evaluateAll((els) => els.map((e) => e.getAttribute("aria-label") ?? e.textContent?.trim()));
+    dialog.evaluate((d) => [...d.querySelectorAll(".glim-modal-foot button")].map((e) => e.getAttribute("aria-label") ?? e.textContent?.trim()));
 
   async function openColumns(page: Page) {
     await open(page, "/components/window");
@@ -2862,7 +2867,8 @@ test.describe("FieldRow", () => {
       return {
         first: [left("Name"), left("Size at least")],
         second: [left("Changed"), left("Owner")],
-        wide: [Math.round(wide.querySelector("input")!.getBoundingClientRect().left), Math.round(g.getBoundingClientRect().right - wide.querySelector("input")!.getBoundingClientRect().right)],
+        // Firefox rounds a hair past the edge to -0, which toEqual tells apart from 0.
+        wide: [Math.round(wide.querySelector("input")!.getBoundingClientRect().left), Math.round(g.getBoundingClientRect().right - wide.querySelector("input")!.getBoundingClientRect().right) || 0],
       };
     });
     expect(look.first[0]).toBe(look.first[1]);
@@ -3378,8 +3384,8 @@ test.describe("CopyField", () => {
     await expect(button(page)).toHaveAccessibleName("Copy");
   });
 
-  test("[copy-press] Enter copies and says so", async ({ page, context }) => {
-    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  test("[copy-press] Enter copies and says so", async ({ page, context, browserName }) => {
+    if (browserName === "chromium") await context.grantPermissions(["clipboard-read", "clipboard-write"]);
     await open(page, "/components/copy-field");
     await button(page).focus();
     await page.keyboard.press("Enter");
@@ -3388,8 +3394,8 @@ test.describe("CopyField", () => {
     expect(await page.evaluate(() => navigator.clipboard.readText())).toBe("smb://bottich/media/filme");
   });
 
-  test("[copy-back] the button reads Copy again", async ({ page, context }) => {
-    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  test("[copy-back] the button reads Copy again", async ({ page, context, browserName }) => {
+    if (browserName === "chromium") await context.grantPermissions(["clipboard-read", "clipboard-write"]);
     await open(page, "/components/copy-field");
     await button(page).click();
     await expect(button(page)).toHaveAccessibleName("Copied");
@@ -4795,13 +4801,12 @@ test.describe("Fortress", () => {
   });
 
   test("[fortress-hue] reactive rests grey until the pointer is in the card", async ({ page }) => {
-    await open(page, "/components/fortress", { rainbow: "reactive" });
+    // Motion off, so the colour is read where it rests rather than mid-fade,
+    // and the focus leaves the card, which would light it as the pointer does.
+    await open(page, "/components/fortress", { rainbow: "reactive", motion: "off" });
     await others(page).click();
     await page.mouse.move(0, 0);
     const track = () => others(page).evaluate((t) => getComputedStyle(t).backgroundColor);
-    // The click leaves the switch with focus, which shows the colour as the
-    // pointer does, and the track then fades back to grey; the resting colour
-    // is the one it settles on with neither.
     await others(page).evaluate((t) => {
       (t as HTMLElement).blur();
       getComputedStyle(t).backgroundColor;

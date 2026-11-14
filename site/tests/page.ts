@@ -4,7 +4,7 @@ import { expect, test, type Page } from "@playwright/test";
 
 export async function open(page: Page, path: string, look?: Record<string, unknown>) {
   if (look) await page.addInitScript((l) => localStorage.setItem("gs-docs-look", JSON.stringify(l)), look);
-  await page.goto(`/#${path}?fw=${test.info().project.name}`);
+  await page.goto(`/#${path}?fw=${test.info().project.metadata.fw}`);
   await page.locator("main h1").first().waitFor();
   if (look?.motion) expect(await page.evaluate(() => document.documentElement.dataset.motion)).toBe(look.motion);
   await page.evaluate(() => document.fonts.ready);

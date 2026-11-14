@@ -36,5 +36,7 @@ MaterialApp(
   act, the label stays the accessible name when the mode shows only the glyph,
   busy keeps the width, and a surface button takes the accent under the pointer.
 
-The tokens and glyphs are written from the core by `scripts/gen-flutter.mjs`;
-edit `tokens.css` or `glyphs.json` and run it, never the generated files.
+The tokens are written from the DTCG source in `packages/core/tokens` by
+`scripts/build-tokens.mjs`, and the glyphs from `glyphs.json` by
+`scripts/gen-flutter.mjs`; edit the source and run the script, never the
+generated files.

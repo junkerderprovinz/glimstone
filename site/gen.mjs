@@ -2,6 +2,7 @@
 // site documents what the components accept rather than what somebody wrote down.
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import ts from "typescript";
+import { readRules } from "../scripts/rules.mjs";
 
 const core = new URL("../packages/core/", import.meta.url);
 const reactSrc = new URL("../packages/react/src/", import.meta.url);
@@ -169,8 +170,33 @@ writeFileSync(new URL("tokens.json", out), JSON.stringify(tokens, null, 1));
 writeFileSync(new URL("tailwind-theme.css", out), readFileSync(new URL("tailwind-theme.css", core)));
 writeFileSync(new URL("tokens.css", out), css);
 
+// The rules page renders them from docs/design-language.md, so the site cannot
+// state a rule differently from the document.
+const BLOB = "https://github.com/junkerderprovinz/glimstone/blob/main/";
+const escape = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+const target = (href) => (href.startsWith("#") ? `${BLOB}docs/design-language.md${href}` : href.startsWith("../") ? BLOB + href.slice(3) : href);
+// Code spans are set aside first, so an asterisk inside one stays an asterisk.
+const inline = (md) => {
+  const codes = [];
+  const marked = md.replace(/`([^`]+)`/g, (_, code) => `\u0000${codes.push(code) - 1}\u0000`);
+  return escape(marked)
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    .replace(/\*(.+?)\*/g, "<em>$1</em>")
+    .replace(/\[(.+?)\]\(([^)\s]+)\)/g, (_, text, href) => `<a href="${target(href)}" target="_blank" rel="noreferrer">${text}</a>`)
+    .replace(/\u0000(\d+)\u0000/g, (_, i) => `<code>${escape(codes[i])}</code>`);
+};
+const rules = readRules().map(({ number, title, blocks }) => ({
+  number,
+  title: inline(title),
+  blocks: blocks.map((b) => {
+    const item = /^- (\[ \] )?(.*)$/.exec(b);
+    return item ? { item: inline(item[2]), check: Boolean(item[1]) } : { p: inline(b) };
+  }),
+}));
+writeFileSync(new URL("rules.json", out), JSON.stringify(rules, null, 1));
+
 // Filled by the test run; the site shows "not tested yet" until then.
 const results = new URL("test-results.json", out);
 if (!existsSync(results)) writeFileSync(results, JSON.stringify({ ranAt: null, rows: {} }));
 
-console.log(`props for ${Object.keys(props).length} components, ${tokens.length} colour tokens`);
+console.log(`props for ${Object.keys(props).length} components, ${tokens.length} colour tokens, ${rules.length} rules`);

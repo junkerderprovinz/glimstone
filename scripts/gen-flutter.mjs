@@ -1,186 +1,13 @@
-// Writes the Flutter package's tokens and glyphs from the core, so tokens.css
-// and glyphs.json stay the one source. `--check` fails when the checked-in
-// Dart files are out of date instead of writing them.
+// Writes the Flutter package's glyphs from the core, so glyphs.json stays the
+// one source. The tokens come from scripts/build-tokens.mjs. `--check` fails
+// when the checked-in Dart file is out of date instead of writing it.
 //
 // Run from the repository root: node scripts/gen-flutter.mjs [--check]
 import { readFileSync, writeFileSync } from "node:fs";
-import { srgbOf } from "../packages/core/src/oklab.ts";
 
 const core = new URL("../packages/core/", import.meta.url);
 const out = new URL("../packages/flutter/lib/src/", import.meta.url);
-const css = readFileSync(new URL("tokens.css", core), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
 const glyphs = JSON.parse(readFileSync(new URL("glyphs.json", core), "utf8"));
-
-/**
- * The declarations of the first rule whose selector starts with `selector`,
- * or of the first such rule that declares `has`.
- */
-function block(selector, has) {
-  for (let at = css.indexOf(selector); at >= 0; at = css.indexOf(selector, at + 1)) {
-    const open = css.indexOf("{", at);
-    const body = css.slice(open + 1, css.indexOf("}", open));
-    const props = Object.fromEntries([...body.matchAll(/(--[a-z0-9-]+)\s*:\s*([^;]+);/g)].map((m) => [m[1], m[2].trim()]));
-    if (!has || has in props) return props;
-  }
-  throw new Error(`no rule ${selector}`);
-}
-
-/** The two halves of a light-dark() value, light first, or the value twice. */
-function sides(value) {
-  const m = value.match(/^light-dark\(([\s\S]+)\)$/);
-  if (!m) return [value, value];
-  let depth = 0;
-  for (let i = 0; i < m[1].length; i++) {
-    const c = m[1][i];
-    if (c === "(") depth++;
-    else if (c === ")") depth--;
-    else if (c === "," && depth === 0) return [m[1].slice(0, i).trim(), m[1].slice(i + 1).trim()];
-  }
-  throw new Error(`cannot split ${value}`);
-}
-const side = (props, i) => Object.fromEntries(Object.entries(props).map(([k, v]) => [k, sides(v)[i]]));
-
-// Every block declared wherever a theme is set: the palette, the chart colours
-// and the derived steps, which carry no literal colour and drop out below.
-const themed = Object.assign(
-  {},
-  ...[...css.matchAll(/(?:^|\n):root,\n\[data-theme\] \{([^}]*)\}/g)].map(([, body]) =>
-    Object.fromEntries([...body.matchAll(/(--[a-z0-9-]+)\s*:\s*([^;]+);/g)].map((m) => [m[1], m[2].trim()])),
-  ),
-);
-const light = side(themed, 0);
-const dark = side(themed, 1);
-const oled = { ...dark, ...side(block("[data-oled] {"), 1) };
-const root = { ...block(":root {"), ...block(":root {", "--btn-h") };
-
-const camel = (name) => name.replace(/^--/, "").replace(/-([a-z0-9])/g, (_, c) => c.toUpperCase());
-
-const h = (n) => Number(n).toString(16).padStart(2, "0").toUpperCase();
-
-// Dart needs a concrete colour, so an oklch() token is resolved to sRGB here,
-// clipped per channel as the browser paints it.
-function dartColor(value) {
-  const hex = value.match(/^#([0-9a-f]{6})$/i);
-  if (hex) return `Color(0xFF${hex[1].toUpperCase()})`;
-  const lch = value.match(/^oklch\(\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s*(?:\/\s*([\d.]+))?\s*\)$/);
-  if (lch) {
-    const [l, c, deg] = lch.slice(1, 4).map(Number);
-    const rad = (deg * Math.PI) / 180;
-    const rgb = srgbOf([l, c * Math.cos(rad), c * Math.sin(rad)]).slice(1);
-    return `Color(0x${h(Math.round(Number(lch[4] ?? 1) * 255))}${rgb})`;
-  }
-  const rgba = value.match(/^rgba?\(\s*(\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\s*\)$/);
-  if (!rgba) return null;
-  const a = Math.round(Number(rgba[4] ?? 1) * 255);
-  return `Color(0x${h(a)}${h(rgba[1])}${h(rgba[2])}${h(rgba[3])})`;
-}
-
-// Every literal colour both themes define. A token written with var(),
-// color-mix() or a relative oklab() is derived, and the Dart side derives it
-// the same way.
-const colours = Object.keys(dark).filter((k) => dartColor(dark[k]) && light[k] && dartColor(light[k]));
-// The lightness step the accent's ink moves to: down to it on the light ramp,
-// up to it on the dark ones.
-const inkLightness = (theme) => Number(themed[theme === light ? "--ink-l-light" : "--ink-l-dark"]);
-
-const px = (value) => {
-  if (value === "0") return 0;
-  const m = value.match(/^([\d.]+)(rem|px)$/);
-  return m ? (m[2] === "rem" ? Number(m[1]) * 16 : Number(m[1])) : null;
-};
-const metrics = Object.entries(root)
-  .filter(([k, v]) => /^--(text|btn)-/.test(k) && px(v) !== null)
-  .map(([k, v]) => `  static const double ${camel(k)} = ${px(v)};`);
-
-// The shape engine's three offered shapes; leaf stays hidden, as on the web.
-const shapes = { round: block(':root[data-shape="round"]'), soft: block(':root[data-shape="soft"]'), square: block(':root[data-shape="square"]') };
-const shapeEnum = Object.entries(shapes)
-  .map(([name, b]) => `  ${name}(card: ${px(b["--radius-card"])}, control: ${px(b["--radius-control"])}, pill: ${px(b["--radius-pill"])})`)
-  .join(",\n");
-const defaultShape = readFileSync(new URL("src/appearance.ts", core), "utf8").match(/DEFAULT_SHAPE: Shape = '(\w+)'/)[1];
-
-const fields = colours.map((k) => camel(k));
-const palette = (theme) => colours.map((k) => `    ${camel(k)}: ${dartColor(theme[k])},`).join("\n");
-
-const tokens = `// Generated by scripts/gen-flutter.mjs from packages/core/tokens.css. Edit the
-// stylesheet and run the script; a change here is overwritten.
-
-import 'package:flutter/material.dart';
-
-/// The colours of one theme, as a [ThemeExtension] an app adds to its
-/// [ThemeData] and reads with \`Theme.of(context).extension<GlimTheme>()\`.
-@immutable
-class GlimTheme extends ThemeExtension<GlimTheme> {
-  const GlimTheme({
-${fields.map((f) => `    required this.${f},`).join("\n")}
-    required this.inkLightness,
-    this.shape = GlimShape.${defaultShape},
-  });
-
-${fields.map((f) => `  final Color ${f};`).join("\n")}
-
-  /// The OKLab lightness the accent's ink moves to, as in tokens.css: at most
-  /// this on a light ramp, at least this on a dark one.
-  final double inkLightness;
-
-  /// The shape the user chose; it sets the radii of cards, controls and pills.
-  final GlimShape shape;
-
-  static const dark = GlimTheme(
-${palette(dark)}
-    inkLightness: ${inkLightness(dark)},
-  );
-
-  /// The dark ramp on true black, for OLED and AMOLED screens.
-  static const oled = GlimTheme(
-${palette(oled)}
-    inkLightness: ${inkLightness(oled)},
-  );
-
-  static const light = GlimTheme(
-${palette(light)}
-    inkLightness: ${inkLightness(light)},
-  );
-
-  @override
-  GlimTheme copyWith({
-${fields.map((f) => `    Color? ${f},`).join("\n")}
-    double? inkLightness,
-    GlimShape? shape,
-  }) =>
-      GlimTheme(
-${fields.map((f) => `        ${f}: ${f} ?? this.${f},`).join("\n")}
-        inkLightness: inkLightness ?? this.inkLightness,
-        shape: shape ?? this.shape,
-      );
-
-  @override
-  GlimTheme lerp(GlimTheme? other, double t) {
-    if (other == null) return this;
-    return GlimTheme(
-${fields.map((f) => `      ${f}: Color.lerp(${f}, other.${f}, t)!,`).join("\n")}
-      inkLightness: inkLightness + (other.inkLightness - inkLightness) * t,
-      shape: t < 0.5 ? shape : other.shape,
-    );
-  }
-}
-
-/// The shape engine: how round cards, controls and pills are, in logical pixels.
-enum GlimShape {
-${shapeEnum};
-
-  const GlimShape({required this.card, required this.control, required this.pill});
-
-  final double card;
-  final double control;
-  final double pill;
-}
-
-/// The lengths of tokens.css in logical pixels, one rem being 16.
-abstract final class GlimMetrics {
-${metrics.join("\n")}
-}
-`;
 
 const RESERVED = new Set(["new", "switch", "default", "in", "is", "return", "continue", "class", "import", "export", "case", "do", "else", "for", "if", "null", "true", "false", "this", "var", "void", "with", "try", "throw", "super", "enum", "const", "final", "break", "assert", "catch", "extends", "finally", "rethrow", "while"]);
 const glyphName = (name) => {
@@ -207,10 +34,7 @@ ${glyphs.map((g) => `    '${g.name}': ${glyphName(g.name)},`).join("\n")}
 }
 `;
 
-const files = [
-  ["tokens.g.dart", tokens],
-  ["glyphs.g.dart", glyphDart],
-];
+const files = [["glyphs.g.dart", glyphDart]];
 if (process.argv.includes("--check")) {
   const stale = files.filter(([name, text]) => {
     try {
@@ -226,4 +50,4 @@ if (process.argv.includes("--check")) {
 } else {
   for (const [name, text] of files) writeFileSync(new URL(name, out), text);
 }
-console.log(`${colours.length} colours, ${Object.keys(shapes).length} shapes, ${metrics.length} lengths, ${glyphs.length} glyphs`);
+console.log(`${glyphs.length} glyphs`);

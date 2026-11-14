@@ -1,0 +1,104 @@
+{
+  "layout": {
+    "$extensions": {
+      "org.glimstone": {
+        "selector": ":root"
+      }
+    },
+    "page-gutter": {
+      "$value": "{space.space-8}",
+      "$description": "The distance from the window edge to everything on it, and between the rail and the content, set on the frame that holds both (see \"The rail is a CARD, not a wall\" in docs/design-language.md). The content's own padding is a separate distance."
+    },
+    "rail-narrow": {
+      "$value": "85px",
+      "$type": "dimension",
+      "$description": "The rail's width in glyph mode. A fixed number so every app's rail is the same width; the brand mark fits the rail. The wide rail is 14rem, on Tailwind's own scale."
+    },
+    "nav-row-h": {
+      "$value": "2.6875rem",
+      "$type": "dimension",
+      "$description": "A rail row and a page-level tab are one height, so a Settings tab and the nav row beside it line up. A pinned well, the big page-level picker, is a step lower."
+    },
+    "seg-pinned-h": {
+      "$value": "2.35rem",
+      "$type": "dimension"
+    },
+    "text-status": {
+      "$value": "1.375rem",
+      "$type": "dimension",
+      "$description": "The type scale, a fixed table of five sizes, one per role. --text-meta serves a card's notch badge, .glim-eyebrow's uppercase label, the info bubble, a muted meta line and a count; the treatment carries the distinction. A page's hero figure, a brand wordmark and text drawn inside an illustration are outside the scale (docs/design-language.md, \"The type scale\").",
+      "$extensions": {
+        "org.glimstone": {
+          "tailwind": "text-status",
+          "tailwindNote": "The type scale as text-status, text-title, text-body, text-subline and text-meta. Each key names its own runtime property, which works because @theme compiles into a cascade layer that the unlayered :root in tokens.css outranks.",
+          "note": "22px, the status head and a tile's one figure"
+        }
+      }
+    },
+    "text-title": {
+      "$value": "1rem",
+      "$type": "dimension",
+      "$extensions": {
+        "org.glimstone": {
+          "tailwind": "text-title",
+          "note": "16px, an emphasised row title, a window's title"
+        }
+      }
+    },
+    "text-body": {
+      "$value": "0.875rem",
+      "$type": "dimension",
+      "$extensions": {
+        "org.glimstone": {
+          "tailwind": "text-body",
+          "note": "14px"
+        }
+      }
+    },
+    "text-subline": {
+      "$value": "0.8125rem",
+      "$type": "dimension",
+      "$extensions": {
+        "org.glimstone": {
+          "tailwind": "text-subline",
+          "note": "13px, the text beside or under a name, a hint, a time"
+        }
+      }
+    },
+    "text-meta": {
+      "$value": "0.75rem",
+      "$type": "dimension",
+      "$extensions": {
+        "org.glimstone": {
+          "tailwind": "text-meta",
+          "note": "12px"
+        }
+      }
+    },
+    "text-heading": {
+      "$value": "{layout.text-status}",
+      "$description": "Aliases for apps that read the four-step names.",
+      "$extensions": {
+        "org.glimstone": {
+          "tailwind": "text-heading"
+        }
+      }
+    },
+    "text-dense": {
+      "$value": "{layout.text-meta}",
+      "$extensions": {
+        "org.glimstone": {
+          "tailwind": "text-dense"
+        }
+      }
+    },
+    "text-caption": {
+      "$value": "{layout.text-meta}",
+      "$extensions": {
+        "org.glimstone": {
+          "tailwind": "text-caption"
+        }
+      }
+    }
+  }
+}

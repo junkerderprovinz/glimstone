@@ -15,7 +15,7 @@ const props = withDefaults(
      *  the shape setting. */
     form?: BadgeForm;
     /** @deprecated Use `form`. Only "circle" has an effect: it makes the
-     *  badge icon-only. */
+     *  badge icon-only. Removed in 5.0.0. */
     shape?: BadgeShape;
     as?: "span" | "button" | "a";
     disabled?: boolean;
@@ -67,5 +67,5 @@ const style = computed(() => (hueOn.value ? hueVars(props.hueIndex!) : undefined
     <slot />
   </button>
   <a v-else-if="as === 'a'" data-glim="Badge" :class="classes" :style="style"><slot /></a>
-  <span v-else data-glim="Badge" :class="classes" :style="style"><slot /></span>
+  <span v-else data-glim="Badge" :role="$attrs['aria-label'] ? 'img' : undefined" :class="classes" :style="style"><slot /></span>
 </template>

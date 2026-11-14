@@ -16,24 +16,24 @@
    its specificity. This line fixes the order before either layer opens. */
 @layer base, components;
 
+/* tokens:main begin: written by scripts/build-tokens.mjs from packages/core/tokens */
 /* Every rounded corner reads one of these three tokens, so switching the shape
    changes cards, buttons, tabs, inputs, pills, badges and toggles together.
 
    --radius-card is for cards, windows and menus, --radius-control for fields,
    panels and tiles, and --radius-pill for everything somebody presses: buttons,
    tabs, badges, selector segments and switches. Only round tells the last two
-   apart, and there the pressable things are true pills while a text field
-   keeps a corner a paragraph can sit in.
+   apart, and there the pressable things are true pills while a text field keeps
+   a corner a paragraph can sit in.
 
    Use the raw token even on a short or non-square element. The browser scales
    an oversized radius down with one factor for all four corners, so 9999px
    gives a circle on a square and a stadium on a rectangle. A cap such as
-   min(var(--radius-pill), 50%) resolves per axis first and renders an
-   ellipse.
+   min(var(--radius-pill), 50%) resolves per axis first and renders an ellipse.
 
-   A page that sets no shape gets soft, the default appearance.ts hands out,
-   so an app that only loads this sheet looks like one that called
-   applyShape(). The motion levels below follow the same rule with subtle. */
+   A page that sets no shape gets soft, the default appearance.ts hands out, so
+   an app that only loads this sheet looks like one that called applyShape().
+   The motion levels below follow the same rule with subtle. */
 :root,
 :root[data-shape="soft"] {
   --radius-card: 0.5rem;
@@ -53,11 +53,22 @@
   --radius-pill: 0;
 }
 
+/* The hidden shape (leafTap in appearance.ts): two opposite corners rounded,
+   the other two sharp. The tokens stay single lengths, so a calc() on them and
+   a phone app's numbers keep working, and one rule takes the other diagonal
+   away from every element. It is physical rather than logical so the leaf leans
+   the same way in every language. */
+:root[data-shape="leaf"] {
+  --radius-card: 1.25rem;
+  --radius-control: 0.75rem;
+  --radius-pill: 1.125rem;
+}
+
 :root {
-  /* The distance from the window edge to everything on it, and between the
-     rail and the content, set on the frame that holds both (see "The rail is
-     a CARD, not a wall" in docs/design-language.md). The content's own padding
-     is a separate distance. */
+  /* The distance from the window edge to everything on it, and between the rail
+     and the content, set on the frame that holds both (see "The rail is a CARD,
+     not a wall" in docs/design-language.md). The content's own padding is a
+     separate distance. */
   --page-gutter: var(--space-8);
 
   /* The rail's width in glyph mode. A fixed number so every app's rail is the
@@ -77,11 +88,11 @@
      distinction. A page's hero figure, a brand wordmark and text drawn inside
      an illustration are outside the scale (docs/design-language.md, "The type
      scale"). */
-  --text-status: 1.375rem;  /* 22px, the status head and a tile's one figure */
-  --text-title: 1rem;       /* 16px, an emphasised row title, a window's title */
-  --text-body: 0.875rem;    /* 14px */
+  --text-status: 1.375rem; /* 22px, the status head and a tile's one figure */
+  --text-title: 1rem; /* 16px, an emphasised row title, a window's title */
+  --text-body: 0.875rem; /* 14px */
   --text-subline: 0.8125rem; /* 13px, the text beside or under a name, a hint, a time */
-  --text-meta: 0.75rem;     /* 12px */
+  --text-meta: 0.75rem; /* 12px */
 
   /* Aliases for apps that read the four-step names. */
   --text-heading: var(--text-status);
@@ -90,30 +101,29 @@
 }
 
 /* The spacing scale. Every padding, margin and gap in the components reads one
-   of these steps: 2px apart up to 16px, where a step still shows, then wider.
-   A distance between two steps is the bug, not a reason for a fourteenth.
-   Optical nudges of a pixel or two, and the sizes of things, stay lengths of
-   their own. */
+   of these steps: 2px apart up to 16px, where a step still shows, then wider. A
+   distance between two steps is the bug, not a reason for a fourteenth. Optical
+   nudges of a pixel or two, and the sizes of things, stay lengths of their own. */
 :root {
-  --space-1: 0.125rem;  /* 2px */
-  --space-2: 0.25rem;   /* 4px */
-  --space-3: 0.375rem;  /* 6px */
-  --space-4: 0.5rem;    /* 8px */
-  --space-5: 0.625rem;  /* 10px */
-  --space-6: 0.75rem;   /* 12px */
-  --space-7: 0.875rem;  /* 14px */
-  --space-8: 1rem;      /* 16px */
-  --space-9: 1.25rem;   /* 20px */
-  --space-10: 1.5rem;   /* 24px */
-  --space-11: 1.75rem;  /* 28px */
-  --space-12: 2rem;     /* 32px */
-  --space-13: 2.5rem;   /* 40px */
+  --space-1: 0.125rem; /* 2px */
+  --space-2: 0.25rem; /* 4px */
+  --space-3: 0.375rem; /* 6px */
+  --space-4: 0.5rem; /* 8px */
+  --space-5: 0.625rem; /* 10px */
+  --space-6: 0.75rem; /* 12px */
+  --space-7: 0.875rem; /* 14px */
+  --space-8: 1rem; /* 16px */
+  --space-9: 1.25rem; /* 20px */
+  --space-10: 1.5rem; /* 24px */
+  --space-11: 1.75rem; /* 28px */
+  --space-12: 2rem; /* 32px */
+  --space-13: 2.5rem; /* 40px */
 }
 
 /* Row density, the axis of lists and tables (data-density, applyDensity in
-   appearance.ts). A row's height, the gap between its parts, its inline
-   padding and a table cell's block padding move together, each on the spacing
-   scale. Normal is the look without a setting. */
+   appearance.ts). A row's height, the gap between its parts, its inline padding
+   and a table cell's block padding move together, each on the spacing scale.
+   Normal is the look without a setting. */
 :root,
 :root[data-density="normal"] {
   --row-h: 2.6rem;
@@ -137,17 +147,18 @@
 }
 
 /* Elevation in fixed steps. Every surface stands on one of them, and a step is
-   a shadow and a stacking order together, so something that floats over a
-   card also paints over it. The ground and a well are flat. Raised is a card
-   and what sticks to one; float is what opens over a card, such as a menu, a
-   list or a bubble, and what the pointer holds; modal is a window or a sheet
-   over the scrim. The raised shadow is the theme's, below; the higher steps
-   add a longer, softer one beneath it, and are declared wherever a theme is
-   set, so they build on that theme's raised shadow. */
+   a shadow and a stacking order together, so something that floats over a card
+   also paints over it. The ground and a well are flat. Raised is a card and
+   what sticks to one; float is what opens over a card, such as a menu, a list
+   or a bubble, and what the pointer holds; modal is a window or a sheet over
+   the scrim. The raised shadow is the theme's, below; the higher steps add a
+   longer, softer one beneath it, and are declared wherever a theme is set, so
+   they build on that theme's raised shadow. */
 :root,
 [data-theme] {
   --elevation-float: 0 10px 22px -8px rgba(0, 0, 0, .45), var(--elevation-raised);
   --elevation-modal: 0 24px 48px -12px rgba(0, 0, 0, .5), var(--elevation-raised);
+
   /* The one shadow every app already reads, the raised step. */
   --elevation: var(--elevation-raised);
 }
@@ -159,8 +170,8 @@
   /* Stacking, lowest first. Raised and its top sit over neighbours inside the
      same box; docked sticks to an edge of a card or the page; chrome is the
      desktop title bar; window, menu, toast and bubble open over everything
-     below them in that order. The bubble is the highest a browser allows, so
-     no app's own layer can cover a tip. */
+     below them in that order. The bubble is the highest a browser allows, so no
+     app's own layer can cover a tip. */
   --z-raised: 1;
   --z-raised-top: 2;
   --z-docked: 10;
@@ -171,51 +182,22 @@
   --z-bubble: 2147483647;
 }
 
-/* The hidden shape (leafTap in appearance.ts): two opposite corners rounded,
-   the other two sharp. The tokens stay single lengths, so a calc() on them and
-   a phone app's numbers keep working, and one rule takes the other diagonal
-   away from every element. It is physical rather than logical so the leaf
-   leans the same way in every language. */
-:root[data-shape="leaf"] {
-  --radius-card: 1.25rem;
-  --radius-control: 0.75rem;
-  --radius-pill: 1.125rem;
-}
-
-@layer components {
-  :root[data-shape="leaf"] *,
-  :root[data-shape="leaf"] *::before,
-  :root[data-shape="leaf"] *::after {
-    border-top-right-radius: 0 !important;
-    border-bottom-left-radius: 0 !important;
-  }
-}
-
-/* The theme is the color-scheme, and every colour that differs between the
-   ramps is one light-dark() with the light value first. The scheme follows the
-   system unless data-theme pins it, and a pinned theme wins over the system in
-   both directions, on <html> or on any subtree. A custom property resolves
-   its light-dark() where it is declared, so the tokens are declared again
-   wherever a theme is set. */
-:root { color-scheme: dark light; }
-[data-theme="dark"] { color-scheme: dark; }
-[data-theme="light"] { color-scheme: light; }
-
 :root,
 [data-theme] {
-  /* Ground and surfaces: IBM Carbon's neutral greys. A warm near-black reads
-     as brown next to a sibling app on this palette. */
-  --carbon-bg:         light-dark(#f4f4f4, #161616);
-  --carbon-sidebar:    light-dark(#ffffff, #262626);
-  --carbon-surface:    light-dark(#ffffff, #262626);
-  --carbon-surface2:   light-dark(#e8e8e8, #393939);
-  --carbon-surface3:   light-dark(#d1d1d1, #525252);
-  --carbon-hover:      light-dark(#e0e0e0, #353535);
+  /* Ground and surfaces: IBM Carbon's neutral greys. A warm near-black reads as
+     brown next to a sibling app on this palette. */
+  --carbon-bg: light-dark(#f4f4f4, #161616);
+  --carbon-sidebar: light-dark(#ffffff, #262626);
+  --carbon-surface: light-dark(#ffffff, #262626);
+  --carbon-surface2: light-dark(#e8e8e8, #393939);
+  --carbon-surface3: light-dark(#d1d1d1, #525252);
+  --carbon-hover: light-dark(#e0e0e0, #353535);
   --carbon-hover-raised: light-dark(#c6c6c6, #6f6f6f);
+
   /* A switch that is off. On the light ramp surface3 stands too close to a card
      and to the knob to see, so the track goes down to 3:1 against both. */
   --toggle-off: light-dark(#8d8d8d, #525252);
-  --carbon-border:     light-dark(#d1d1d1, #393939);
+  --carbon-border: light-dark(#d1d1d1, #393939);
 
   /* The About card's brand marks at rest, adjusted from the published brand
      colours. A brand colour is designed against white or its own fill, so on
@@ -228,39 +210,41 @@
      The mail button has no brand colour: it reaches the app's own authors and
      follows the user's accent. The manual's book takes the yellow of the
      README's docs button, which is the coffee button's. */
-  --brand-coffee:  light-dark(#8a6d00, #ffdd00);
-  --brand-docs:    light-dark(#8a6d00, #ffdd00);
+  --brand-coffee: light-dark(#8a6d00, #ffdd00);
+  --brand-docs: light-dark(#8a6d00, #ffdd00);
   --brand-bitcoin: light-dark(#a85d00, #f7931a);
-  --brand-paypal:  light-dark(#003087, #4fb5f0);
+  --brand-paypal: light-dark(#003087, #4fb5f0);
 
-  /* The App tab's marks that are one flat colour or one gradient, at rest.
-     The dark theme lifts a colour a dark tile would swallow; the light theme
-     keeps the brand's own ("Brand tiles"). */
-  --brand-android:           #32de84;
-  --brand-docker:            #2396ed;
-  --brand-unraid-from:       #e32929;
-  --brand-unraid-to:         #ff8d30;
-  --brand-mos:               #26a269;
-  --brand-umbrel:            light-dark(#5351f3, #7d7bf6);
-  --brand-windows:           light-dark(#0078d4, #2b88d8);
-  --brand-flatpak:           #4a90d9;
-  --brand-github:  light-dark(#181717, #ffffff);
+  /* The App tab's marks that are one flat colour or one gradient, at rest. The
+     dark theme lifts a colour a dark tile would swallow; the light theme keeps
+     the brand's own ("Brand tiles"). */
+  --brand-android: #32de84;
+  --brand-docker: #2396ed;
+  --brand-unraid-from: #e32929;
+  --brand-unraid-to: #ff8d30;
+  --brand-mos: #26a269;
+  --brand-umbrel: light-dark(#5351f3, #7d7bf6);
+  --brand-windows: light-dark(#0078d4, #2b88d8);
+  --brand-flatpak: #4a90d9;
+  --brand-github: light-dark(#181717, #ffffff);
 
   /* Text ramp: three steps, the last still legible at 12px. */
-  --carbon-text:       light-dark(#161616, #f4f4f4);
-  --carbon-text-sub:   light-dark(#525252, #c6c6c6);
+  --carbon-text: light-dark(#161616, #f4f4f4);
+  --carbon-text-sub: light-dark(#525252, #c6c6c6);
   --carbon-text-muted: light-dark(#6f6f6f, #8d8d8d);
-  --sidebar-text:      light-dark(#393939, #e0e0e0);
+  --sidebar-text: light-dark(#393939, #e0e0e0);
+
   /* A field's placeholder. Muted text falls to 2.4:1 on a sub-card's surface3
-     field, so a placeholder takes the sub step, the dimmest that reads at
-     4.5:1 on every field fill. */
+     field, so a placeholder takes the sub step, the dimmest that reads at 4.5:1
+     on every field fill. */
   --field-placeholder: light-dark(#525252, #c6c6c6);
 
-  /* Activity, and nothing else. Every sibling app opens with this accent, so
-     a fresh install of any of them looks like the same product. */
-  --accent:            #FCC419;
-  --accent-contrast:   #161616;
-  --accent-soft:       rgba(252, 196, 25, 0.14);
+  /* Activity, and nothing else. Every sibling app opens with this accent, so a
+     fresh install of any of them looks like the same product. */
+  --accent: #FCC419;
+  --accent-contrast: #161616;
+  --accent-soft: rgba(252, 196, 25, 0.14);
+
   /* The accent used as ink: text or a line-drawn glyph on the page's ground,
      rather than a fill with computed ink on top, so use this rather than
      --accent whenever the colour is read. The fill is the same in both themes:
@@ -272,67 +256,70 @@
      dark ones. OKLab's lightness follows the eye, so every hue on one step
      reads at nearly the same contrast, 5.2 to 5.9:1 on white for the eight
      presets. A straight line toward black never leaves sRGB; one toward white
-     can by a hair, and the browser clips it. An accent already past the step,
-     a bright one on dark or a deep one on light, is its own ink. applyAccent
-     sets --accent-ink-light or --accent-ink-dark only where a picked colour
-     would still miss 4.5:1 on a ramp's card, which no colour has been found to
-     do (contrast.ts). */
-  --ink-l-light:       0.52;
-  --ink-l-dark:        0.74;
-  --accent-ink:        light-dark(var(--accent-ink-light, oklab(from var(--accent) min(l, var(--ink-l-light)) calc(a * min(1, var(--ink-l-light) / l)) calc(b * min(1, var(--ink-l-light) / l)))), var(--accent-ink-dark, oklab(from var(--accent) max(l, var(--ink-l-dark)) calc(a * min(1, (1 - var(--ink-l-dark)) / (1 - l))) calc(b * min(1, (1 - var(--ink-l-dark)) / (1 - l))))));
+     can by a hair, and the browser clips it. An accent already past the step, a
+     bright one on dark or a deep one on light, is its own ink. applyAccent sets
+     --accent-ink-light or --accent-ink-dark only where a picked colour would
+     still miss 4.5:1 on a ramp's card, which no colour has been found to do
+     (contrast.ts). */
+  --ink-l-light: 0.52;
+  --ink-l-dark: 0.74;
+  --accent-ink: light-dark(var(--accent-ink-light, oklab(from var(--accent) min(l, var(--ink-l-light)) calc(a * min(1, var(--ink-l-light) / l)) calc(b * min(1, var(--ink-l-light) / l)))), var(--accent-ink-dark, oklab(from var(--accent) max(l, var(--ink-l-dark)) calc(a * min(1, (1 - var(--ink-l-dark)) / (1 - l))) calc(b * min(1, (1 - var(--ink-l-dark)) / (1 - l))))));
+
   /* The same ink for a line-drawn glyph. Rainbow never colours text, so a hued
      subtree redefines this one and leaves --accent-ink on the single accent. */
-  --accent-glyph:      var(--accent-ink);
+  --accent-glyph: var(--accent-ink);
 
-  /* Four state hues, Carbon's support tones. Paused reuses neutral; its
-     label and its resume control carry the difference. */
-  /* Info is the default accent, so its light text is Sunflower's ink step. */
-  --status-info-text:    light-dark(oklch(0.52 0.104 86.7), #FCC419);
-  --status-info-bg:      light-dark(oklch(0.52 0.104 86.7 / 0.12), rgba(252, 196, 25, 0.13));
-  --status-info-solid:   light-dark(#A87D00, #FCC419);
+  /* Four state hues, Carbon's support tones. Paused reuses neutral; its label
+     and its resume control carry the difference.
 
-  --status-ok-text:      light-dark(#0e6027, #6fdc8c);
-  --status-ok-bg:        light-dark(rgba(14, 96, 39, 0.11), rgba(111, 220, 140, 0.13));
-  --status-ok-solid:     light-dark(#198038, #6fdc8c);
+     Info is the default accent, so its light text is Sunflower's ink step. */
+  --status-info-text: light-dark(oklch(0.52 0.104 86.7), #FCC419);
+  --status-info-bg: light-dark(oklch(0.52 0.104 86.7 / 0.12), rgba(252, 196, 25, 0.13));
+  --status-info-solid: light-dark(#A87D00, #FCC419);
+  --status-ok-text: light-dark(#0e6027, #6fdc8c);
+  --status-ok-bg: light-dark(rgba(14, 96, 39, 0.11), rgba(111, 220, 140, 0.13));
+  --status-ok-solid: light-dark(#198038, #6fdc8c);
+  --status-fail-text: light-dark(#da1e28, #ff8389);
+  --status-fail-bg: light-dark(rgba(218, 30, 40, 0.06), rgba(255, 131, 137, 0.14));
+  --status-fail-solid: light-dark(#da1e28, #ff8389);
+  --status-warn-text: light-dark(#ba4e00, #FF832B);
+  --status-warn-bg: light-dark(rgba(186, 78, 0, 0.06), rgba(255, 131, 43, 0.12));
 
-  --status-fail-text:    light-dark(#da1e28, #ff8389);
-  --status-fail-bg:      light-dark(rgba(218, 30, 40, 0.06), rgba(255, 131, 137, 0.14));
-  --status-fail-solid:   light-dark(#da1e28, #ff8389);
-
-  --status-warn-text:    light-dark(#ba4e00, #FF832B);
-  --status-warn-bg:      light-dark(rgba(186, 78, 0, 0.06), rgba(255, 131, 43, 0.12));
   /* Opaque, for a chip on a row that already carries a fill the translucent
      wash would take on. */
   --status-warn-bg-strong: light-dark(#fff2e8, #36231a);
+
   /* Quieter, for a paragraph that explains rather than warns, such as the
      refusal box under "The second way in". */
   --status-warn-bg-soft: light-dark(rgba(186, 78, 0, 0.05), rgba(255, 131, 43, 0.06));
-  --status-warn-solid:   light-dark(#ba4e00, #FF832B);
-
+  --status-warn-solid: light-dark(#ba4e00, #FF832B);
   --status-neutral-text: light-dark(#6f6f6f, #a8a8a8);
-  --status-neutral-bg:   light-dark(rgba(0, 0, 0, 0.045), rgba(255, 255, 255, 0.05));
+  --status-neutral-bg: light-dark(rgba(0, 0, 0, 0.045), rgba(255, 255, 255, 0.05));
   --status-neutral-solid: #8d8d8d;
 
   /* The raised step's shadow and its hairline. The shadow is neutral black,
      since a brown one under a grey card reads as a colour cast. */
   --elevation-raised: 0 1px 2px light-dark(rgba(0, 0, 0, .06), rgba(0, 0, 0, .40)), 0 18px 40px -24px light-dark(rgba(0, 0, 0, .35), rgba(0, 0, 0, .85));
+
   /* The ground behind a floating window, and the blur that takes the page's
      detail away beneath it. */
   --glim-scrim: light-dark(rgba(0, 0, 0, .62), rgba(0, 0, 0, .72));
   --glim-scrim-blur: 6px;
+
   /* A top light on the dark ramps, a ring all round on the light one. */
   --hairline: inset 0 1px 0 light-dark(transparent, rgba(255, 255, 255, .045)), inset 0 0 0 1px light-dark(rgba(0, 0, 0, .05), transparent);
+
   /* The ring is the accent ink, opaque. The ink reads at 4.5:1 on the ramp's
-     card (rule 45), which leaves at least 3:1 on every ground a ring stands
-     on: the page, the rail, a card, a well and a row's hover. */
+     card (rule 45), which leaves at least 3:1 on every ground a ring stands on:
+     the page, the rail, a card, a well and a row's hover. */
   --focus-ring: var(--accent-ink);
 }
 
 /* OLED, the dark ramp on true black for OLED and AMOLED screens (rule 43).
    `data-oled` on <html> asks for it and counts only while the dark ramp shows,
    chosen or from the system, so each value keeps the light ramp's own as its
-   first half. The surfaces move one Carbon step down and keep their order,
-   so every rule that names a step still lands on the step it meant. The hover
+   first half. The surfaces move one Carbon step down and keep their order, so
+   every rule that names a step still lands on the step it meant. The hover
    keeps its place between the card and surface2, and hover-raised is the step
    above surface3, as on the dark ramp. The text ramp, the accent and the state
    hues stay: they were measured on darker grounds than they get here.
@@ -347,33 +334,39 @@
    colour, such as GitHub's, would vanish into the card, so --tile-edge rings
    every lit tile. */
 [data-oled] {
-  --carbon-bg:         light-dark(#f4f4f4, #000000);
-  --carbon-sidebar:    light-dark(#ffffff, #161616);
-  --carbon-surface:    light-dark(#ffffff, #161616);
-  --carbon-surface2:   light-dark(#e8e8e8, #262626);
-  --carbon-surface3:   light-dark(#d1d1d1, #393939);
-  --carbon-hover:      light-dark(#e0e0e0, #232323);
+  --carbon-bg: light-dark(#f4f4f4, #000000);
+  --carbon-sidebar: light-dark(#ffffff, #161616);
+  --carbon-surface: light-dark(#ffffff, #161616);
+  --carbon-surface2: light-dark(#e8e8e8, #262626);
+  --carbon-surface3: light-dark(#d1d1d1, #393939);
+  --carbon-hover: light-dark(#e0e0e0, #232323);
   --carbon-hover-raised: light-dark(#c6c6c6, #525252);
-  --carbon-border:     light-dark(#d1d1d1, #262626);
+  --carbon-border: light-dark(#d1d1d1, #262626);
   --tile-edge: light-dark(transparent, rgba(255, 255, 255, .2));
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --glim-scrim-blur: 0px;
+  }
 }
 
 /* Chart colours (rule 50), every one an OKLCH value written out, so a phone app
    and a design tool read the same numbers. The series come in a fixed order:
    the eight accent hues, alternating warm and cool, on lightness steps chosen
-   so any two stay apart for people with protanopia, deuteranopia or
-   tritanopia, and each reaches 3:1 on a card and the page. Their chroma is
-   the most sRGB holds at that lightness, up to 0.14. */
+   so any two stay apart for people with protanopia, deuteranopia or tritanopia,
+   and each reaches 3:1 on a card and the page. Their chroma is the most sRGB
+   holds at that lightness, up to 0.14. */
 :root,
 [data-theme] {
-  --chart-1: light-dark(oklch(0.42 0.109 247), oklch(0.66 0.14 247));  /* blue */
-  --chart-2: light-dark(oklch(0.42 0.108 51), oklch(0.66 0.14 51));  /* orange */
-  --chart-3: light-dark(oklch(0.62 0.105 194), oklch(0.86 0.14 194));  /* teal */
-  --chart-4: light-dark(oklch(0.54 0.14 355), oklch(0.74 0.14 355));  /* magenta */
-  --chart-5: light-dark(oklch(0.62 0.126 87), oklch(0.78 0.14 87));  /* sunflower */
-  --chart-6: light-dark(oklch(0.62 0.14 301), oklch(0.78 0.132 301));  /* purple */
-  --chart-7: light-dark(oklch(0.5 0.137 150), oklch(0.78 0.14 150));  /* green */
-  --chart-8: light-dark(oklch(0.62 0.14 18), oklch(0.86 0.075 18));  /* red */
+  --chart-1: light-dark(oklch(0.42 0.109 247), oklch(0.66 0.14 247)); /* blue */
+  --chart-2: light-dark(oklch(0.42 0.108 51), oklch(0.66 0.14 51)); /* orange */
+  --chart-3: light-dark(oklch(0.62 0.105 194), oklch(0.86 0.14 194)); /* teal */
+  --chart-4: light-dark(oklch(0.54 0.14 355), oklch(0.74 0.14 355)); /* magenta */
+  --chart-5: light-dark(oklch(0.62 0.126 87), oklch(0.78 0.14 87)); /* sunflower */
+  --chart-6: light-dark(oklch(0.62 0.14 301), oklch(0.78 0.132 301)); /* purple */
+  --chart-7: light-dark(oklch(0.5 0.137 150), oklch(0.78 0.14 150)); /* green */
+  --chart-8: light-dark(oklch(0.62 0.14 18), oklch(0.86 0.075 18)); /* red */
 
   /* Sequential, for a heatmap or a density: one blue that gains lightness
      contrast and colour as the value grows, starting next to the ground. */
@@ -385,8 +378,8 @@
   --chart-seq-6: light-dark(oklch(0.5 0.12 250), oklch(0.8 0.104 250));
   --chart-seq-7: light-dark(oklch(0.4 0.112 250), oklch(0.9 0.049 250));
 
-  /* Diverging, for a value above or below a middle: blue under it, orange
-     over it, a near-grey ground colour at the middle itself. */
+  /* Diverging, for a value above or below a middle: blue under it, orange over
+     it, a near-grey ground colour at the middle itself. */
   --chart-div-1: light-dark(oklch(0.45 0.126 250), oklch(0.8 0.104 250));
   --chart-div-2: light-dark(oklch(0.62 0.11 250), oklch(0.64 0.11 250));
   --chart-div-3: light-dark(oklch(0.8 0.07 250), oklch(0.48 0.07 250));
@@ -397,26 +390,26 @@
 }
 
 /* The contrast step, for anyone whose system asks for more contrast. It is
-   GlimStone's own and separate from a Windows contrast theme (forced-colors,
-   at the end of this file), which replaces every colour: here the palette
-   stays and only moves. The accent's ink takes a second lightness step in the
-   same ramps, so every preset reads at 8.9 to 9.7:1 as text on white. The sub
-   and muted text each move a step toward the text colour, borders darken to
-   where they read as lines, a card's hairline becomes a ring in the border
-   colour, and the focus ring thickens. The accent fill stays as it is. */
+   GlimStone's own and separate from a Windows contrast theme (forced-colors, at
+   the end of this file), which replaces every colour: here the palette stays
+   and only moves. The accent's ink takes a second lightness step in the same
+   ramps, so every preset reads at 8.9 to 9.7:1 as text on white. The sub and
+   muted text each move a step toward the text colour, borders darken to where
+   they read as lines, a card's hairline becomes a ring in the border colour,
+   and the focus ring thickens. The accent fill stays as it is. */
 @media (prefers-contrast: more) {
   :root,
   [data-theme] {
-    --ink-l-light:       0.40;
-    --ink-l-dark:        0.84;
-    --carbon-text-sub:   light-dark(#393939, #e0e0e0);
+    --focus-ring-width: 3px;
+    --carbon-border: light-dark(#6f6f6f, #8d8d8d);
+    --carbon-text-sub: light-dark(#393939, #e0e0e0);
     --carbon-text-muted: light-dark(#525252, #c6c6c6);
-    --sidebar-text:      light-dark(#161616, #f4f4f4);
+    --sidebar-text: light-dark(#161616, #f4f4f4);
     --field-placeholder: light-dark(#393939, #e0e0e0);
+    --ink-l-light: 0.40;
+    --ink-l-dark: 0.84;
     --status-neutral-text: light-dark(#525252, #c6c6c6);
-    --carbon-border:     light-dark(#6f6f6f, #8d8d8d);
-    --hairline:          inset 0 0 0 1px var(--carbon-border);
-    --focus-ring-width:  3px;
+    --hairline: inset 0 0 0 1px var(--carbon-border);
   }
 }
 
@@ -439,35 +432,62 @@
 /* The hover step of a filled tone that has no surface ramp of its own (rule
    21): the fill mixed toward the theme's text colour, which is lighter on dark
    and darker on light, the direction the ramp moves. 15% is about one step of
-   the dark ramp, surface3 to hover-raised. Declared wherever a theme is set,
-   so --carbon-text is the one that theme defines. On a mid-tone picked accent
-   that step would take the ink under 4.5:1, and applyAccent sets the ramp's
-   hover as --accent-hover-light or --accent-hover-dark, a step away from the
-   ink instead (accentHovers in contrast.ts). */
+   the dark ramp, surface3 to hover-raised. Declared wherever a theme is set, so
+   --carbon-text is the one that theme defines. On a mid-tone picked accent that
+   step would take the ink under 4.5:1, and applyAccent sets the ramp's hover as
+   --accent-hover-light or --accent-hover-dark, a step away from the ink instead
+   (accentHovers in contrast.ts). */
 :root,
 [data-theme] {
-  --accent-hover:      light-dark(var(--accent-hover-light, color-mix(in srgb, var(--accent) 85%, var(--carbon-text))), var(--accent-hover-dark, color-mix(in srgb, var(--accent) 85%, var(--carbon-text))));
-  --status-ok-hover:   color-mix(in srgb, var(--status-ok-solid) 85%, var(--carbon-text));
+  --accent-hover: light-dark(var(--accent-hover-light, color-mix(in srgb, var(--accent) 85%, var(--carbon-text))), var(--accent-hover-dark, color-mix(in srgb, var(--accent) 85%, var(--carbon-text))));
+  --status-ok-hover: color-mix(in srgb, var(--status-ok-solid) 85%, var(--carbon-text));
   --status-fail-hover: color-mix(in srgb, var(--status-fail-solid) 85%, var(--carbon-text));
   --status-warn-hover: color-mix(in srgb, var(--status-warn-solid) 85%, var(--carbon-text));
 }
 
-/* The house font is Noto Sans, shipped with the app for Latin, Cyrillic,
-   Greek, Vietnamese and Devanagari, with Noto's own cuts for Arabic, Hebrew and
-   Thai. The "Variable" names are the shipped files, the plain ones an install
-   on the machine. Chinese, Japanese and Korean are too heavy to ship, so their
-   Noto cut is used where the system has it, and the system font where it does
-   not; Han characters are drawn differently per language, so the lang of the
-   page picks the cut (docs/design-language.md, "The house font"). */
+/* The house font is Noto Sans, shipped with the app for Latin, Cyrillic, Greek,
+   Vietnamese and Devanagari, with Noto's own cuts for Arabic, Hebrew and Thai.
+   The "Variable" names are the shipped files, the plain ones an install on the
+   machine. Chinese, Japanese and Korean are too heavy to ship, so their Noto
+   cut is used where the system has it, and the system font where it does not;
+   Han characters are drawn differently per language, so the lang of the page
+   picks the cut (docs/design-language.md, "The house font"). */
 :root {
   --font-cjk: "Noto Sans CJK SC", "Noto Sans SC";
-  --font-sans: "Noto Sans Variable", "Noto Sans", "Noto Sans Arabic Variable", "Noto Sans Arabic",
-    "Noto Sans Hebrew Variable", "Noto Sans Hebrew", "Noto Sans Thai Variable", "Noto Sans Thai",
-    var(--font-cjk), system-ui, -apple-system, sans-serif;
+  --font-sans: "Noto Sans Variable", "Noto Sans", "Noto Sans Arabic Variable", "Noto Sans Arabic", "Noto Sans Hebrew Variable", "Noto Sans Hebrew", "Noto Sans Thai Variable", "Noto Sans Thai", var(--font-cjk), system-ui, -apple-system, sans-serif;
 }
-:lang(ja) { --font-cjk: "Noto Sans CJK JP", "Noto Sans JP"; }
-:lang(ko) { --font-cjk: "Noto Sans CJK KR", "Noto Sans KR"; }
-:lang(zh-TW), :lang(zh-Hant) { --font-cjk: "Noto Sans CJK TC", "Noto Sans TC"; }
+
+:lang(ja) {
+  --font-cjk: "Noto Sans CJK JP", "Noto Sans JP";
+}
+
+:lang(ko) {
+  --font-cjk: "Noto Sans CJK KR", "Noto Sans KR";
+}
+
+:lang(zh-TW), :lang(zh-Hant) {
+  --font-cjk: "Noto Sans CJK TC", "Noto Sans TC";
+}
+/* tokens:main end */
+
+/* The hidden leaf shape takes the other diagonal away from every element. */
+@layer components {
+  :root[data-shape="leaf"] *,
+  :root[data-shape="leaf"] *::before,
+  :root[data-shape="leaf"] *::after {
+    border-top-right-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+  }
+}
+/* The theme is the color-scheme, and every colour that differs between the
+   ramps is one light-dark() with the light value first. The scheme follows the
+   system unless data-theme pins it, and a pinned theme wins over the system in
+   both directions, on <html> or on any subtree. A custom property resolves
+   its light-dark() where it is declared, so the tokens are declared again
+   wherever a theme is set. */
+:root { color-scheme: dark light; }
+[data-theme="dark"] { color-scheme: dark; }
+[data-theme="light"] { color-scheme: light; }
 
 @layer base {
   /* The negative letter-spacing suits Latin and crowds CJK, which is set in
@@ -927,96 +947,57 @@
     to   { opacity: 1; }
   }
 }
+/* tokens:motion begin: written by scripts/build-tokens.mjs from packages/core/tokens */
 /* The toast's travel is a token so it can flip with the writing direction; a
    keyframe does not mirror on its own. */
-:root { --glim-toast-slide: 12px; }
-@layer components {
-  [dir="rtl"] { --glim-toast-slide: -12px; }
+:root {
+  --glim-toast-slide: 12px;
 
-  @keyframes glim-toast-in {
-    from { transform: translateX(var(--glim-toast-slide, 12px)); }
-    to   { transform: none; }
-  }
-  @keyframes glim-pulse {
-    0%, 100% { opacity: 1; }
-    50%      { opacity: .45; }
-  }
-  /* A control refusing an action it showed optimistically, because a backend
-     precondition failed. The decay reads as "pushed back" rather than a glitch.
-     Put .glim-shake on the control at the moment it reverts. */
-  @keyframes glim-shake {
-    0%, 100% { transform: translateX(0); }
-    20%      { transform: translateX(-4px); }
-    40%      { transform: translateX(4px); }
-    60%      { transform: translateX(-2px); }
-    80%      { transform: translateX(2px); }
-  }
-  /* The reduced-motion stand-in: a brief opacity pulse. */
-  @keyframes glim-shake-reduced {
-    0%, 100% { opacity: 1; }
-    50%      { opacity: .5; }
+  /* A tab change. The strip sets --tab-dir to 1 toward a later tab and -1
+     toward an earlier one; --tab-dir-sign flips the side under a right-to-left
+     script. */
+  --tab-dir-sign: 1;
+}
+
+@layer components {
+  [dir="rtl"] {
+    --glim-toast-slide: -12px;
+    --tab-dir-sign: -1;
   }
 }
 
+/* The motion engine's numbers. Each intensity is a token set read by the same
+   keyframes, so a level is a different number, never a different animation. The
+   offered levels live inside no-preference, so a system that asked for less
+   motion never evaluates their selectors and keeps the reduce block's values.
+   Storm's numbers are the exception, below the gate. */
 @media (prefers-reduced-motion: no-preference) {
-  /* The motion engine's numbers. Each intensity is a token set read by the
-     same keyframes, so a level is a different number, never a different
-     animation. The offered levels live inside no-preference, so a system that
-     asked for less motion never evaluates their selectors and keeps the reduce
-     block's values. Storm's numbers are the exception, below the gate. */
   :root {
     --motion-page-dur: 140ms;
     --motion-toast-dur: 120ms;
     --motion-pulse-dur: 3.2s;
     --motion-fade-dur: 70ms;
     --motion-shake-dur: 220ms;
-    /* Distance and curve set the levels apart along with duration: 6px
-       against wild's 18px, and an ease where wild springs. There is no scale
-       (see the keyframe above). */
+
+    /* Distance and curve set the levels apart along with duration: 6px against
+       wild's 18px, and an ease where wild springs. There is no scale (see the
+       keyframe above). */
     --motion-page-travel: 6px;
     --motion-page-ease: cubic-bezier(.2, .6, .2, 1);
-    /* The toast slides in from the screen edge, and a spring would carry it
-       back past that edge, which reads as a glitch, so it keeps this ease at
-       every level but storm. */
+
+    /* The toast slides in from the screen edge, and a spring would carry it back
+       past that edge, which reads as a glitch, so it keeps this ease at every
+       level but storm. */
     --motion-toast-ease: cubic-bezier(.2, .6, .2, 1);
+
     /* Every toast distance needs its RTL twin, since the keyframe cannot be
        mirrored by a class. */
     --glim-toast-slide: 12px;
-  }
-  :root[dir="rtl"] { --glim-toast-slide: -12px; }
-  /* The fourth control point past 1 makes the curve spring, the same shape
-     React Native's spring gives the phone. */
-  :root[data-motion='wild'] {
-    --motion-page-dur: 420ms;
-    --motion-toast-dur: 300ms;
-    --motion-pulse-dur: 2s;
-    --motion-fade-dur: 140ms;
-    --motion-shake-dur: 360ms;
-    --motion-page-travel: 18px;
-    --motion-page-ease: cubic-bezier(.34, 1.56, .64, 1);
-    --glim-toast-slide: 24px;
-  }
-  :root[data-motion='wild'][dir="rtl"] { --glim-toast-slide: -24px; }
-  :root[data-motion='off'] {
-    --motion-page-dur: 0s;
-    --motion-toast-dur: 0s;
-    --motion-fade-dur: 0s;
-    --motion-shake-dur: 0s;
-    --motion-page-travel: 0px;
-    --motion-page-ease: linear;
-    --motion-toast-ease: ease;
-    --glim-toast-slide: 0px;
-    /* Declared so this level does not inherit the lively number, but never
-       read: `.glim-live` means "this is happening now", so here it stops
-       fully opaque instead (below). */
-    --motion-pulse-dur: 3.2s;
-  }
 
-  /* Every transition reads one number, so the setting reaches all of them.
-     The other dials here: a window's entrance, the reactive label's reveal,
-     the sheen that crosses a README-shaped button once under the pointer, and
-     the round-two animations described where their keyframes are. */
-  :root {
+    /* Every transition reads one number, so the setting reaches all of them. The
+       other dials here: a window's entrance, the reactive label's reveal, the
+       sheen that crosses a README-shaped button once under the pointer, and the
+       round-two animations described where their keyframes are. */
     --motion-control-dur: 80ms;
     --motion-modal-dur: 150ms;
     --motion-modal-travel: 0px;
@@ -1039,23 +1020,26 @@
     --motion-tab-travel: 10px;
     --motion-wiggle-dur: 140ms;
     --motion-wiggle-angle: 1.4deg;
+
     /* A full-width row of a held list: how far it tilts and lifts at the
-       tremble's beat. Its ends swing far for a small angle, so the lift
-       carries most of it. */
+       tremble's beat. Its ends swing far for a small angle, so the lift carries
+       most of it. */
     --motion-row-tremble-tilt: .1deg;
     --motion-row-tremble-lift: 1px;
-    /* A row in move mode: one beat of its wiggle, how far it tilts and how far
-       it lifts. A wide row turns far at its ends, so the tilt is a fraction of
-       the long-press wiggle's. */
+
+    /* A row in move mode: one beat of its wiggle, how far it tilts and how far it
+       lifts. A wide row turns far at its ends, so the tilt is a fraction of the
+       long-press wiggle's. */
     --motion-row-wiggle-dur: 440ms;
     --motion-row-wiggle-tilt: .08deg;
     --motion-row-wiggle-lift: .5px;
-    /* A fill level's slosh: one swing to each wall and back, how far the
-       liquid tilts, how high a crest runs up the wall and the hump rises as
-       multiples of their drawn height, how far a bar's end surges and leans,
-       the time a bubble takes per unit of depth and how strongly it shows,
-       and how far a popping bubble lifts above the surface, swells, rings,
-       sprays its droplets and runs past a bar's end. */
+
+    /* A fill level's slosh: one swing to each wall and back, how far the liquid
+       tilts, how high a crest runs up the wall and the hump rises as multiples of
+       their drawn height, how far a bar's end surges and leans, the time a bubble
+       takes per unit of depth and how strongly it shows, and how far a popping
+       bubble lifts above the surface, swells, rings, sprays its droplets and runs
+       past a bar's end. */
     --motion-slosh-dur: 5s;
     --motion-slosh-tilt: 3deg;
     --motion-slosh-run: 2.2;
@@ -1069,19 +1053,40 @@
     --motion-slosh-pop-ring: 3;
     --motion-slosh-pop-spray: 1.1;
     --motion-slosh-pop-reach: 4px;
-    /* A packet landing in a vessel: how long the splash takes to settle, how
-       far it rocks the liquid, and how high its crest and ripple rise as
-       multiples of their drawn height. */
+
+    /* A packet landing in a vessel: how long the splash takes to settle, how far
+       it rocks the liquid, and how high its crest and ripple rise as multiples of
+       their drawn height. */
     --motion-slosh-splash-dur: 1.1s;
     --motion-slosh-splash-tilt: 4deg;
     --motion-slosh-splash-run: 2.2;
     --motion-slosh-splash-ripple: 1;
-    /* A progress bar without a value: one sweep of its light across the
-       track. Its sheen: one pass over the filled part. */
+
+    /* A progress bar without a value: one sweep of its light across the track.
+       Its sheen: one pass over the filled part. */
     --motion-indeterminate-dur: 2.2s;
     --motion-progress-sheen-dur: 2.6s;
   }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :root[dir="rtl"] {
+    --glim-toast-slide: -12px;
+  }
+}
+
+/* The fourth control point past 1 makes the curve spring, the same shape React
+   Native's spring gives the phone. */
+@media (prefers-reduced-motion: no-preference) {
   :root[data-motion='wild'] {
+    --motion-page-dur: 420ms;
+    --motion-toast-dur: 300ms;
+    --motion-pulse-dur: 2s;
+    --motion-fade-dur: 140ms;
+    --motion-shake-dur: 360ms;
+    --motion-page-travel: 18px;
+    --motion-page-ease: cubic-bezier(.34, 1.56, .64, 1);
+    --glim-toast-slide: 24px;
     --motion-control-dur: 150ms;
     --motion-modal-dur: 260ms;
     --motion-modal-travel: 10px;
@@ -1128,7 +1133,29 @@
     --motion-indeterminate-dur: 1.4s;
     --motion-progress-sheen-dur: 1.6s;
   }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :root[data-motion='wild'][dir="rtl"] {
+    --glim-toast-slide: -24px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
   :root[data-motion='off'] {
+    --motion-page-dur: 0s;
+    --motion-toast-dur: 0s;
+
+    /* Declared so this level does not inherit the lively number, but never
+       read: `.glim-live` means "this is happening now", so here it stops fully
+       opaque instead (below). */
+    --motion-pulse-dur: 3.2s;
+    --motion-fade-dur: 0s;
+    --motion-shake-dur: 0s;
+    --motion-page-travel: 0px;
+    --motion-page-ease: linear;
+    --motion-toast-ease: ease;
+    --glim-toast-slide: 0px;
     --motion-control-dur: 0s;
     --motion-modal-dur: 0s;
     --motion-modal-travel: 0px;
@@ -1149,16 +1176,19 @@
     --motion-content-dur: 0s;
     --motion-tab-dur: 0s;
     --motion-tab-travel: 0px;
+
     /* A long period rather than none, with no angle, so nothing moves. */
     --motion-wiggle-dur: 400ms;
     --motion-wiggle-angle: 0deg;
     --motion-row-tremble-tilt: 0deg;
     --motion-row-tremble-lift: 0px;
+
     /* Declared so this level does not inherit the lively numbers; the row
        wiggle leaves this level out altogether. */
     --motion-row-wiggle-dur: 0s;
     --motion-row-wiggle-tilt: 0deg;
     --motion-row-wiggle-lift: 0px;
+
     /* Long rather than 0, and stopped outright after the slosh's rules. */
     --motion-slosh-dur: 60s;
     --motion-slosh-tilt: 0deg;
@@ -1177,9 +1207,113 @@
     --motion-slosh-splash-tilt: 0deg;
     --motion-slosh-splash-run: 0;
     --motion-slosh-splash-ripple: 0;
+
     /* Long rather than 0; both stop outright at this level, below. */
     --motion-indeterminate-dur: 60s;
     --motion-progress-sheen-dur: 60s;
+  }
+}
+
+/* Storm, the hidden fourth level: the same keyframes with a spring that swings
+   further and settles later. No picker offers it; see "A hidden fourth level"
+   in the design language. The phone matches it with `springDamping: 0.34`
+   against wild's 0.68.
+
+   Its numbers sit outside the no-preference gate. Storm is the one level that
+   still animates under reduced motion, and the reduce block below restores its
+   animations from these tokens, which it could not read inside the gate. */
+:root[data-motion='storm'] {
+  --motion-page-dur: 760ms;
+  --motion-toast-dur: 420ms;
+  --motion-pulse-dur: 1.4s;
+  --motion-fade-dur: 200ms;
+  --motion-shake-dur: 520ms;
+  --motion-page-travel: 34px;
+
+  /* Further past 1 than wild's curve and slower to settle. It carries the
+     level with distance and curve, never a scale. */
+  --motion-page-ease: cubic-bezier(.22, 1.94, .45, 1);
+
+  /* The only level where the toast springs past the screen edge. */
+  --motion-toast-ease: cubic-bezier(.22, 1.94, .45, 1);
+  --glim-toast-slide: 44px;
+  --motion-control-dur: 300ms;
+  --motion-modal-dur: 420ms;
+  --motion-modal-travel: 18px;
+  --motion-label-dur: 480ms;
+  --motion-label-ease: cubic-bezier(.22, 1.94, .45, 1);
+  --motion-label-shift: -0.6rem;
+  --motion-label-squash: 0.7;
+  --motion-button-sheen-dur: 550ms;
+  --motion-shape-dur: 460ms;
+  --motion-shape-ease: cubic-bezier(.22, 1.94, .45, 1);
+  --motion-confirm-dur: 700ms;
+  --motion-confirm-scale: 1.9;
+  --motion-stagger-step: 55ms;
+
+  /* At 55ms a step a long list would stagger for seconds without the cap. */
+  --motion-stagger-cap: 700ms;
+  --motion-stagger-dur: 420ms;
+  --motion-wipe-dur: 560ms;
+  --motion-check-dur: 620ms;
+  --motion-content-dur: 380ms;
+  --motion-tab-dur: 380ms;
+  --motion-tab-travel: 34px;
+  --motion-wiggle-dur: 100ms;
+  --motion-wiggle-angle: 2.8deg;
+  --motion-row-tremble-tilt: .2deg;
+  --motion-row-tremble-lift: 2px;
+  --motion-row-wiggle-dur: 260ms;
+  --motion-row-wiggle-tilt: .26deg;
+  --motion-row-wiggle-lift: 1.5px;
+  --motion-slosh-dur: 2.6s;
+  --motion-slosh-tilt: 7.5deg;
+  --motion-slosh-run: 4.5;
+  --motion-slosh-hump: 1.3;
+  --motion-slosh-surge: 7px;
+  --motion-slosh-lean: 18deg;
+  --motion-slosh-bubble-pace: .25s;
+  --motion-slosh-bubble-opacity: .85;
+  --motion-slosh-pop-lift: 4.4;
+  --motion-slosh-pop-swell: 1.6;
+  --motion-slosh-pop-ring: 3.8;
+  --motion-slosh-pop-spray: 1.5;
+  --motion-slosh-pop-reach: 7px;
+  --motion-slosh-splash-dur: .75s;
+  --motion-slosh-splash-tilt: 10deg;
+  --motion-slosh-splash-run: 4.8;
+  --motion-slosh-splash-ripple: 2;
+  --motion-indeterminate-dur: 0.9s;
+  --motion-progress-sheen-dur: 1.1s;
+}
+
+:root[data-motion='storm'][dir="rtl"] {
+  --glim-toast-slide: -44px;
+}
+/* tokens:motion end */
+@layer components {
+  @keyframes glim-toast-in {
+    from { transform: translateX(var(--glim-toast-slide, 12px)); }
+    to   { transform: none; }
+  }
+  @keyframes glim-pulse {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: .45; }
+  }
+  /* A control refusing an action it showed optimistically, because a backend
+     precondition failed. The decay reads as "pushed back" rather than a glitch.
+     Put .glim-shake on the control at the moment it reverts. */
+  @keyframes glim-shake {
+    0%, 100% { transform: translateX(0); }
+    20%      { transform: translateX(-4px); }
+    40%      { transform: translateX(4px); }
+    60%      { transform: translateX(-2px); }
+    80%      { transform: translateX(2px); }
+  }
+  /* The reduced-motion stand-in: a brief opacity pulse. */
+  @keyframes glim-shake-reduced {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: .5; }
   }
 }
 
@@ -1233,77 +1367,6 @@
     }
   }
 }
-/* Storm, the hidden fourth level: the same keyframes with a spring that swings
-   further and settles later. No picker offers it; see "A hidden fourth level"
-   in the design language. The phone matches it with `springDamping: 0.34`
-   against wild's 0.68.
-
-   Its numbers sit outside the no-preference gate. Storm is the one level that
-   still animates under reduced motion, and the reduce block below restores its
-   animations from these tokens, which it could not read inside the gate. */
-:root[data-motion='storm'] {
-  --motion-page-dur: 760ms;
-  --motion-toast-dur: 420ms;
-  --motion-pulse-dur: 1.4s;
-  --motion-fade-dur: 200ms;
-  --motion-shake-dur: 520ms;
-  --motion-page-travel: 34px;
-  /* Further past 1 than wild's curve and slower to settle. It carries the
-     level with distance and curve, never a scale. */
-  --motion-page-ease: cubic-bezier(.22, 1.94, .45, 1);
-  /* The only level where the toast springs past the screen edge. */
-  --motion-toast-ease: cubic-bezier(.22, 1.94, .45, 1);
-  --glim-toast-slide: 44px;
-  --motion-control-dur: 300ms;
-  --motion-modal-dur: 420ms;
-  --motion-modal-travel: 18px;
-  --motion-label-dur: 480ms;
-  --motion-label-ease: cubic-bezier(.22, 1.94, .45, 1);
-  --motion-label-shift: -0.6rem;
-  --motion-label-squash: 0.7;
-  --motion-button-sheen-dur: 550ms;
-  --motion-shape-dur: 460ms;
-  --motion-shape-ease: cubic-bezier(.22, 1.94, .45, 1);
-  --motion-confirm-dur: 700ms;
-  --motion-confirm-scale: 1.9;
-  --motion-stagger-step: 55ms;
-  /* At 55ms a step a long list would stagger for seconds without the cap. */
-  --motion-stagger-cap: 700ms;
-  --motion-stagger-dur: 420ms;
-  --motion-wipe-dur: 560ms;
-  --motion-check-dur: 620ms;
-  --motion-content-dur: 380ms;
-  --motion-tab-dur: 380ms;
-  --motion-tab-travel: 34px;
-  --motion-wiggle-dur: 100ms;
-  --motion-wiggle-angle: 2.8deg;
-  --motion-row-tremble-tilt: .2deg;
-  --motion-row-tremble-lift: 2px;
-  --motion-row-wiggle-dur: 260ms;
-  --motion-row-wiggle-tilt: .26deg;
-  --motion-row-wiggle-lift: 1.5px;
-  --motion-slosh-dur: 2.6s;
-  --motion-slosh-tilt: 7.5deg;
-  --motion-slosh-run: 4.5;
-  --motion-slosh-hump: 1.3;
-  --motion-slosh-surge: 7px;
-  --motion-slosh-lean: 18deg;
-  --motion-slosh-bubble-pace: .25s;
-  --motion-slosh-bubble-opacity: .85;
-  --motion-slosh-pop-lift: 4.4;
-  --motion-slosh-pop-swell: 1.6;
-  --motion-slosh-pop-ring: 3.8;
-  --motion-slosh-pop-spray: 1.5;
-  --motion-slosh-pop-reach: 7px;
-  --motion-slosh-splash-dur: .75s;
-  --motion-slosh-splash-tilt: 10deg;
-  --motion-slosh-splash-run: 4.8;
-  --motion-slosh-splash-ripple: 2;
-  --motion-indeterminate-dur: 0.9s;
-  --motion-progress-sheen-dur: 1.1s;
-}
-:root[data-motion='storm'][dir="rtl"] { --glim-toast-slide: -44px; }
-
 @layer components {
   /* Storm is exempt from reduced motion. The offered levels obey the OS because
      somebody who set reduced motion never chose them; five taps on a chosen
@@ -1338,6 +1401,7 @@
    animation, so a repeated failure needs a fresh DOM node: key the element on
    a per-instance failure counter. */
 
+/* tokens:drag begin: written by scripts/build-tokens.mjs from packages/core/tokens */
 /* The drag lift ("Reordering by dragging" in the design language). The held
    item floats under the pointer (.glim-drag-lift), the others slide aside while
    it passes (.glim-drag-shift), and on release it slides into the gap they left
@@ -1350,22 +1414,46 @@
    take the level's duration, none where the level has none. */
 :root {
   --drag-lift-scale: 1.015;
+
   /* The raised step alone barely shows under something one row tall. */
   --drag-lift-shadow: var(--elevation-float);
   --drag-lift-z: var(--z-raised);
   --drag-settle-dur: 0ms;
   --drag-settle-ease: var(--motion-page-ease, ease);
 }
+
 @media (prefers-reduced-motion: no-preference) {
-  :root { --drag-settle-dur: 130ms; }
-  :root[data-motion='wild'] { --drag-settle-dur: 220ms; --drag-lift-scale: 1.03; }
-  :root[data-motion='off'] { --drag-settle-dur: 0ms; --drag-lift-scale: 1; }
+  :root {
+    --drag-settle-dur: 130ms;
+  }
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  :root[data-motion='wild'] {
+    --drag-lift-scale: 1.03;
+    --drag-settle-dur: 220ms;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :root[data-motion='off'] {
+    --drag-lift-scale: 1;
+    --drag-settle-dur: 0ms;
+  }
+}
+
 /* Outside the gate for the same reason as storm's other numbers. */
-:root[data-motion='storm'] { --drag-settle-dur: 400ms; --drag-lift-scale: 1.06; }
-@media (prefers-reduced-motion: reduce) {
-  :root:not([data-motion='storm']) { --drag-lift-scale: 1; }
+:root[data-motion='storm'] {
+  --drag-lift-scale: 1.06;
+  --drag-settle-dur: 400ms;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion='storm']) {
+    --drag-lift-scale: 1;
+  }
+}
+/* tokens:drag end */
 @layer components {
   .glim-drag-lift {
     position: relative;
@@ -1433,9 +1521,7 @@
 
 /* A tab change. The strip sets --tab-dir to 1 toward a later tab and -1 toward
    an earlier one; --tab-dir-sign flips the side under a right-to-left script. */
-:root { --tab-dir-sign: 1; }
 @layer components {
-  [dir="rtl"] { --tab-dir-sign: -1; }
   @keyframes glim-tab-slide {
     from { transform: translateX(calc(var(--tab-dir, 1) * var(--tab-dir-sign, 1) * var(--motion-tab-travel, 18px))); }
     to   { transform: none; }
@@ -2023,28 +2109,31 @@
   }
 }
 
+/* tokens:buttons begin: written by scripts/build-tokens.mjs from packages/core/tokens */
 /* The button box and the reactive label. The components in packages/react/src/
    carry no dimensions of their own, so changing the box here changes every
    button.
 
    The four width stages are a floor (`min-width`), so a longer translation is
-   never clipped. The height is what an ordinary text field measures
-   (`px-3 py-1.5 text-sm`: a 20px line box plus 12px of padding), so a button
-   beside a field matches it. */
+   never clipped. The height is what an ordinary text field measures (`px-3
+   py-1.5 text-sm`: a 20px line box plus 12px of padding), so a button beside a
+   field matches it. */
 :root {
   --btn-h: 2rem;
+
   /* The second height; see `.glim-btn-key`. */
   --btn-h-key: 2.5rem;
+
   /* Only for the transport squares of a head bar; see `.glim-btn-transport`. */
   --btn-h-transport: 3rem;
   --btn-pad-x: 0.875rem;
   --btn-gap: 0.5rem;
-
   --btn-w-xs: 5.5rem;
   --btn-w-sm: 8rem;
   --btn-w-md: 11.5rem;
   --btn-w-lg: 15rem;
 }
+/* tokens:buttons end */
 
 @layer components {
   .glim-btn {
@@ -2644,10 +2733,6 @@
   }
 }
 
-@media (prefers-reduced-transparency: reduce) {
-  :root { --glim-scrim-blur: 0px; }
-}
-
 @layer components {
   @media (prefers-reduced-motion: no-preference) {
     .glim-modal-backdrop { animation: glim-fade-in var(--motion-modal-dur) ease both; }
@@ -2655,19 +2740,22 @@
   }
 }
 
+/* tokens:window begin: written by scripts/build-tokens.mjs from packages/core/tokens */
 /* The desktop window frame (packages/react/src/WindowBar.tsx): the title bar an
-   app draws where its window has no native one. It is fixed over the top of
-   the window. The page starts under it and a scrim leaves it clear, so the
-   window can still be moved and closed while a dialog is open. Without the bar
+   app draws where its window has no native one. It is fixed over the top of the
+   window. The page starts under it and a scrim leaves it clear, so the window
+   can still be moved and closed while a dialog is open. Without the bar
    --window-bar is 0 and none of this moves anything. */
 :root {
   --window-bar: 0px;
 }
+
 @layer components {
   :root:has(.glim-window-bar) {
     --window-bar: 2.5rem;
   }
 }
+/* tokens:window end */
 @layer base {
   body {
     padding-top: var(--window-bar);
@@ -3812,7 +3900,7 @@
   /* Zag's positioner places the open list; it only has to clear the page. */
   .glim-select-positioner { z-index: var(--z-window); }
 
-  /* The list panel of the deprecated DropdownListbox, portalled to <body>. */
+  /* The list panel of the deprecated DropdownListbox, portalled to <body>. Removed in 5.0.0. */
   .glim-listbox {
     position: fixed;
     z-index: var(--z-window);
@@ -4607,7 +4695,7 @@
     white-space: nowrap;
   }
   .glim-pill--state { background-color: var(--pill-state, var(--carbon-surface3)); color: var(--carbon-text); }
-  .glim-pill--ok { background-color: color-mix(in srgb, var(--pill-ground, var(--carbon-surface2)), var(--status-ok-solid) 30%); color: var(--carbon-text); }
+  .glim-pill--ok { background-color: color-mix(in srgb, var(--pill-ground, var(--carbon-surface2)), var(--status-ok-solid) 25%); color: var(--carbon-text); }
   .glim-pill--warn { background-color: color-mix(in srgb, var(--pill-ground, var(--carbon-surface2)), var(--status-warn-solid) 35%); color: var(--carbon-text); }
   .glim-pill--fail { background-color: color-mix(in srgb, var(--pill-ground, var(--carbon-surface2)), var(--status-fail-solid) 35%); color: var(--carbon-text); }
 
@@ -5340,7 +5428,7 @@
     font-weight: 600;
   }
   .glim-instance-row-sub {
-    color: var(--carbon-text-muted);
+    color: var(--carbon-text-sub);
     font-size: var(--text-meta);
   }
 
@@ -5732,35 +5820,64 @@
    --busy-delay, so an answer that comes quickly never flashes a loader, and
    both read the motion engine: at "off" and under reduced motion nothing
    turns and no light crosses. */
+/* tokens:waiting begin: written by scripts/build-tokens.mjs from packages/core/tokens */
 @layer components {
   @media (prefers-reduced-motion: no-preference) {
     :root {
       --motion-spin-dur: 2.4s;
       --motion-skeleton-dur: 2.8s;
       --motion-skeleton-glow: 60%;
+      --motion-sheet-dur: 160ms;
+      --motion-sheet-shift: 0.25;
     }
+  }
+}
+
+@layer components {
+  @media (prefers-reduced-motion: no-preference) {
     :root[data-motion='wild'] {
       --motion-spin-dur: 1.5s;
       --motion-skeleton-dur: 1.6s;
       --motion-skeleton-glow: 100%;
+      --motion-sheet-dur: 300ms;
+      --motion-sheet-shift: 1;
     }
-    /* Long rather than 0; both stop outright at this level, below. */
+  }
+}
+
+/* Long rather than 0; both stop outright at this level, below. */
+@layer components {
+  @media (prefers-reduced-motion: no-preference) {
     :root[data-motion='off'] {
       --motion-spin-dur: 60s;
       --motion-skeleton-dur: 60s;
       --motion-skeleton-glow: 0%;
+      --motion-sheet-dur: 0s;
+      --motion-sheet-shift: 0;
     }
   }
+}
+
+@layer components {
   :root[data-motion='storm'] {
     --motion-spin-dur: 0.9s;
     --motion-skeleton-dur: 1s;
     --motion-skeleton-glow: 100%;
+    --motion-sheet-dur: 460ms;
+    --motion-sheet-shift: 1;
   }
+}
 
-  /* The light that crosses a placeholder: a faint white on the dark ramps, a
-     strong one on the light ramp, where a darker band would read as a shadow. */
-  :root, [data-theme] { --skeleton-glow: light-dark(rgb(255 255 255 / 0.9), rgb(255 255 255 / 0.1)); }
-
+/* The light that crosses a placeholder: a faint white on the dark ramps, a
+   strong one on the light ramp, where a darker band would read as a shadow. */
+@layer components {
+  :root,
+  [data-theme] {
+    --skeleton-glow: light-dark(rgb(255 255 255 / 0.9), rgb(255 255 255 / 0.1));
+  }
+}
+/* tokens:waiting end */
+@layer components {
   @keyframes glim-busy-show {
     from { visibility: hidden; }
   }
@@ -5893,25 +6010,6 @@
    positioning, or placed by bubblePosition.ts where the browser has none. A
    sheet is a <dialog> shown modal, so the page behind it is inert by itself. */
 @layer components {
-  @media (prefers-reduced-motion: no-preference) {
-    :root {
-      --motion-sheet-dur: 160ms;
-      --motion-sheet-shift: 0.25;
-    }
-    :root[data-motion='wild'] {
-      --motion-sheet-dur: 300ms;
-      --motion-sheet-shift: 1;
-    }
-    :root[data-motion='off'] {
-      --motion-sheet-dur: 0s;
-      --motion-sheet-shift: 0;
-    }
-  }
-  :root[data-motion='storm'] {
-    --motion-sheet-dur: 460ms;
-    --motion-sheet-shift: 1;
-  }
-
   .glim-popover {
     position: fixed;
     inset: auto;
@@ -6029,7 +6127,9 @@
   .glim-list-filter {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: var(--space-2);
+    min-width: 1.5rem;
     min-height: 1.75rem;
     padding: 0 var(--space-3);
     border: 0;

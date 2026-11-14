@@ -1,0 +1,783 @@
+{
+  "motion": {
+    "$description": "The motion engine's numbers. Each intensity is a token set read by the same keyframes, so a level is a different number, never a different animation. The offered levels live inside no-preference, so a system that asked for less motion never evaluates their selectors and keeps the reduce block's values. Storm's numbers are the exception, below the gate.",
+    "$extensions": {
+      "org.glimstone": {
+        "selector": ":root",
+        "media": "(prefers-reduced-motion: no-preference)",
+        "modes": [
+          {
+            "name": "rtl",
+            "selector": ":root[dir=\"rtl\"]",
+            "media": "(prefers-reduced-motion: no-preference)"
+          },
+          {
+            "name": "wild",
+            "selector": ":root[data-motion='wild']",
+            "media": "(prefers-reduced-motion: no-preference)",
+            "$description": "The fourth control point past 1 makes the curve spring, the same shape React Native's spring gives the phone."
+          },
+          {
+            "name": "wild-rtl",
+            "selector": ":root[data-motion='wild'][dir=\"rtl\"]",
+            "media": "(prefers-reduced-motion: no-preference)"
+          },
+          {
+            "name": "off",
+            "selector": ":root[data-motion='off']",
+            "media": "(prefers-reduced-motion: no-preference)"
+          },
+          {
+            "name": "storm",
+            "selector": ":root[data-motion='storm']",
+            "$description": "Storm, the hidden fourth level: the same keyframes with a spring that swings further and settles later. No picker offers it; see \"A hidden fourth level\" in the design language. The phone matches it with `springDamping: 0.34` against wild's 0.68.\n\nIts numbers sit outside the no-preference gate. Storm is the one level that still animates under reduced motion, and the reduce block below restores its animations from these tokens, which it could not read inside the gate."
+          },
+          {
+            "name": "storm-rtl",
+            "selector": ":root[data-motion='storm'][dir=\"rtl\"]"
+          }
+        ]
+      }
+    },
+    "motion-page-dur": {
+      "$value": "140ms",
+      "$type": "duration",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "420ms",
+            "off": "0s",
+            "storm": "760ms"
+          }
+        }
+      }
+    },
+    "motion-toast-dur": {
+      "$value": "120ms",
+      "$type": "duration",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "300ms",
+            "off": "0s",
+            "storm": "420ms"
+          }
+        }
+      }
+    },
+    "motion-pulse-dur": {
+      "$value": "3.2s",
+      "$type": "duration",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "2s",
+            "off": "3.2s",
+            "storm": "1.4s"
+          },
+          "modeNotes": {
+            "off": "Declared so this level does not inherit the lively number, but never read: `.glim-live` means \"this is happening now\", so here it stops fully opaque instead (below)."
+          }
+        }
+      }
+    },
+    "motion-fade-dur": {
+      "$value": "70ms",
+      "$type": "duration",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "140ms",
+            "off": "0s",
+            "storm": "200ms"
+          }
+        }
+      }
+    },
+    "motion-shake-dur": {
+      "$value": "220ms",
+      "$type": "duration",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "360ms",
+            "off": "0s",
+            "storm": "520ms"
+          }
+        }
+      }
+    },
+    "motion-page-travel": {
+      "$value": "6px",
+      "$type": "dimension",
+      "$description": "Distance and curve set the levels apart along with duration: 6px against wild's 18px, and an ease where wild springs. There is no scale (see the keyframe above).",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "18px",
+            "off": "0px",
+            "storm": "34px"
+          }
+        }
+      }
+    },
+    "motion-page-ease": {
+      "$value": "cubic-bezier(.2, .6, .2, 1)",
+      "$type": "cubicBezier",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "cubic-bezier(.34, 1.56, .64, 1)",
+            "off": "linear",
+            "storm": "cubic-bezier(.22, 1.94, .45, 1)"
+          },
+          "modeNotes": {
+            "storm": "Further past 1 than wild's curve and slower to settle. It carries the level with distance and curve, never a scale."
+          }
+        }
+      }
+    },
+    "motion-toast-ease": {
+      "$value": "cubic-bezier(.2, .6, .2, 1)",
+      "$type": "cubicBezier",
+      "$description": "The toast slides in from the screen edge, and a spring would carry it back past that edge, which reads as a glitch, so it keeps this ease at every level but storm.",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "off": "ease",
+            "storm": "cubic-bezier(.22, 1.94, .45, 1)"
+          },
+          "modeNotes": {
+            "storm": "The only level where the toast springs past the screen edge."
+          }
+        }
+      }
+    },
+    "glim-toast-slide": {
+      "$value": "12px",
+      "$type": "dimension",
+      "$description": "Every toast distance needs its RTL twin, since the keyframe cannot be mirrored by a class.",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "rtl": "-12px",
+            "wild": "24px",
+            "wild-rtl": "-24px",
+            "off": "0px",
+            "storm": "44px",
+            "storm-rtl": "-44px"
+          }
+        }
+      }
+    },
+    "motion-control-dur": {
+      "$value": "80ms",
+      "$type": "duration",
+      "$description": "Every transition reads one number, so the setting reaches all of them. The other dials here: a window's entrance, the reactive label's reveal, the sheen that crosses a README-shaped button once under the pointer, and the round-two animations described where their keyframes are.",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "150ms",
+            "off": "0s",
+            "storm": "300ms"
+          }
+        }
+      }
+    },
+    "motion-modal-dur": {
+      "$value": "150ms",
+      "$type": "duration",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "260ms",
+            "off": "0s",
+            "storm": "420ms"
+          }
+        }
+      }
+    },
+    "motion-modal-travel": {
+      "$value": "0px",
+      "$type": "dimension",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "10px",
+            "off": "0px",
+            "storm": "18px"
+          }
+        }
+      }
+    },
+    "motion-label-dur": {
+      "$value": "160ms",
+      "$type": "duration",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "320ms",
+            "off": "0s",
+            "storm": "480ms"
+          }
+        }
+      }
+    },
+    "motion-label-ease": {
+      "$value": "cubic-bezier(0.22, 0.61, 0.36, 1)",
+      "$type": "cubicBezier",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "cubic-bezier(0.34, 1.56, 0.64, 1)",
+            "off": "linear",
+            "storm": "cubic-bezier(.22, 1.94, .45, 1)"
+          }
+        }
+      }
+    },
+    "motion-label-shift": {
+      "$value": "0rem",
+      "$type": "dimension",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "-0.4rem",
+            "off": "0rem",
+            "storm": "-0.6rem"
+          }
+        }
+      }
+    },
+    "motion-label-squash": {
+      "$value": 1,
+      "$type": "number",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": 0.82,
+            "off": 1,
+            "storm": 0.7
+          }
+        }
+      }
+    },
+    "motion-button-sheen-dur": {
+      "$value": "1100ms",
+      "$type": "duration",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "800ms",
+            "off": "0s",
+            "storm": "550ms"
+          }
+        }
+      }
+    },
+    "motion-shape-dur": {
+      "$value": "140ms",
+      "$type": "duration",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "260ms",
+            "off": "0s",
+            "storm": "460ms"
+          }
+        }
+      }
+    },
+    "motion-shape-ease": {
+      "$value": "cubic-bezier(.2, .6, .2, 1)",
+      "$type": "cubicBezier",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "off": "linear",
+            "storm": "cubic-bezier(.22, 1.94, .45, 1)"
+          }
+        }
+      }
+    },
+    "motion-confirm-dur": {
+      "$value": "260ms",
+      "$type": "duration",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "420ms",
+            "off": "0s",
+            "storm": "700ms"
+          }
+        }
+      }
+    },
+    "motion-confirm-scale": {
+      "$value": ".5",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "1",
+            "off": "0",
+            "storm": "1.9"
+          }
+        }
+      }
+    },
+    "motion-stagger-step": {
+      "$value": "15ms",
+      "$type": "duration",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "30ms",
+            "off": "0s",
+            "storm": "55ms"
+          }
+        }
+      }
+    },
+    "motion-stagger-cap": {
+      "$value": "200ms",
+      "$type": "duration",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "480ms",
+            "off": "0s",
+            "storm": "700ms"
+          },
+          "modeNotes": {
+            "storm": "At 55ms a step a long list would stagger for seconds without the cap."
+          }
+        }
+      }
+    },
+    "motion-stagger-dur": {
+      "$value": "140ms",
+      "$type": "duration",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "240ms",
+            "off": "0s",
+            "storm": "420ms"
+          }
+        }
+      }
+    },
+    "motion-wipe-dur": {
+      "$value": "160ms",
+      "$type": "duration",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "320ms",
+            "off": "0s",
+            "storm": "560ms"
+          }
+        }
+      }
+    },
+    "motion-check-dur": {
+      "$value": "200ms",
+      "$type": "duration",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "360ms",
+            "off": "0s",
+            "storm": "620ms"
+          }
+        }
+      }
+    },
+    "motion-content-dur": {
+      "$value": "120ms",
+      "$type": "duration",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "220ms",
+            "off": "0s",
+            "storm": "380ms"
+          }
+        }
+      }
+    },
+    "motion-tab-dur": {
+      "$value": "130ms",
+      "$type": "duration",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "220ms",
+            "off": "0s",
+            "storm": "380ms"
+          }
+        }
+      }
+    },
+    "motion-tab-travel": {
+      "$value": "10px",
+      "$type": "dimension",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "18px",
+            "off": "0px",
+            "storm": "34px"
+          }
+        }
+      }
+    },
+    "motion-wiggle-dur": {
+      "$value": "140ms",
+      "$type": "duration",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "120ms",
+            "off": "400ms",
+            "storm": "100ms"
+          },
+          "modeNotes": {
+            "off": "A long period rather than none, with no angle, so nothing moves."
+          }
+        }
+      }
+    },
+    "motion-wiggle-angle": {
+      "$value": "1.4deg",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "2deg",
+            "off": "0deg",
+            "storm": "2.8deg"
+          }
+        }
+      }
+    },
+    "motion-row-tremble-tilt": {
+      "$value": ".1deg",
+      "$description": "A full-width row of a held list: how far it tilts and lifts at the tremble's beat. Its ends swing far for a small angle, so the lift carries most of it.",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": ".15deg",
+            "off": "0deg",
+            "storm": ".2deg"
+          }
+        }
+      }
+    },
+    "motion-row-tremble-lift": {
+      "$value": "1px",
+      "$type": "dimension",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "1.5px",
+            "off": "0px",
+            "storm": "2px"
+          }
+        }
+      }
+    },
+    "motion-row-wiggle-dur": {
+      "$value": "440ms",
+      "$type": "duration",
+      "$description": "A row in move mode: one beat of its wiggle, how far it tilts and how far it lifts. A wide row turns far at its ends, so the tilt is a fraction of the long-press wiggle's.",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "320ms",
+            "off": "0s",
+            "storm": "260ms"
+          },
+          "modeNotes": {
+            "off": "Declared so this level does not inherit the lively numbers; the row wiggle leaves this level out altogether."
+          }
+        }
+      }
+    },
+    "motion-row-wiggle-tilt": {
+      "$value": ".08deg",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": ".16deg",
+            "off": "0deg",
+            "storm": ".26deg"
+          }
+        }
+      }
+    },
+    "motion-row-wiggle-lift": {
+      "$value": ".5px",
+      "$type": "dimension",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "1px",
+            "off": "0px",
+            "storm": "1.5px"
+          }
+        }
+      }
+    },
+    "motion-slosh-dur": {
+      "$value": "5s",
+      "$type": "duration",
+      "$description": "A fill level's slosh: one swing to each wall and back, how far the liquid tilts, how high a crest runs up the wall and the hump rises as multiples of their drawn height, how far a bar's end surges and leans, the time a bubble takes per unit of depth and how strongly it shows, and how far a popping bubble lifts above the surface, swells, rings, sprays its droplets and runs past a bar's end.",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "3.6s",
+            "off": "60s",
+            "storm": "2.6s"
+          },
+          "modeNotes": {
+            "off": "Long rather than 0, and stopped outright after the slosh's rules."
+          }
+        }
+      }
+    },
+    "motion-slosh-tilt": {
+      "$value": "3deg",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "5deg",
+            "off": "0deg",
+            "storm": "7.5deg"
+          }
+        }
+      }
+    },
+    "motion-slosh-run": {
+      "$value": 2.2,
+      "$type": "number",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": 3.2,
+            "off": 0,
+            "storm": 4.5
+          }
+        }
+      }
+    },
+    "motion-slosh-hump": {
+      "$value": ".6",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": ".9",
+            "off": "0",
+            "storm": "1.3"
+          }
+        }
+      }
+    },
+    "motion-slosh-surge": {
+      "$value": "3.5px",
+      "$type": "dimension",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "5px",
+            "off": "0px",
+            "storm": "7px"
+          }
+        }
+      }
+    },
+    "motion-slosh-lean": {
+      "$value": "8deg",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "12deg",
+            "off": "0deg",
+            "storm": "18deg"
+          }
+        }
+      }
+    },
+    "motion-slosh-bubble-pace": {
+      "$value": ".5s",
+      "$type": "duration",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": ".35s",
+            "off": "6s",
+            "storm": ".25s"
+          }
+        }
+      }
+    },
+    "motion-slosh-bubble-opacity": {
+      "$value": ".55",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": ".7",
+            "off": "0",
+            "storm": ".85"
+          }
+        }
+      }
+    },
+    "motion-slosh-pop-lift": {
+      "$value": 3,
+      "$type": "number",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": 3.6,
+            "off": 0,
+            "storm": 4.4
+          }
+        }
+      }
+    },
+    "motion-slosh-pop-swell": {
+      "$value": 1.4,
+      "$type": "number",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": 1.5,
+            "off": 1,
+            "storm": 1.6
+          }
+        }
+      }
+    },
+    "motion-slosh-pop-ring": {
+      "$value": 3,
+      "$type": "number",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": 3.4,
+            "off": 1,
+            "storm": 3.8
+          }
+        }
+      }
+    },
+    "motion-slosh-pop-spray": {
+      "$value": 1.1,
+      "$type": "number",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": 1.3,
+            "off": 0,
+            "storm": 1.5
+          }
+        }
+      }
+    },
+    "motion-slosh-pop-reach": {
+      "$value": "4px",
+      "$type": "dimension",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "5px",
+            "off": "0px",
+            "storm": "7px"
+          }
+        }
+      }
+    },
+    "motion-slosh-splash-dur": {
+      "$value": "1.1s",
+      "$type": "duration",
+      "$description": "A packet landing in a vessel: how long the splash takes to settle, how far it rocks the liquid, and how high its crest and ripple rise as multiples of their drawn height.",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": ".9s",
+            "off": "60s",
+            "storm": ".75s"
+          }
+        }
+      }
+    },
+    "motion-slosh-splash-tilt": {
+      "$value": "4deg",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "7deg",
+            "off": "0deg",
+            "storm": "10deg"
+          }
+        }
+      }
+    },
+    "motion-slosh-splash-run": {
+      "$value": 2.2,
+      "$type": "number",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": 3.4,
+            "off": 0,
+            "storm": 4.8
+          }
+        }
+      }
+    },
+    "motion-slosh-splash-ripple": {
+      "$value": 1,
+      "$type": "number",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": 1.5,
+            "off": 0,
+            "storm": 2
+          }
+        }
+      }
+    },
+    "motion-indeterminate-dur": {
+      "$value": "2.2s",
+      "$type": "duration",
+      "$description": "A progress bar without a value: one sweep of its light across the track. Its sheen: one pass over the filled part.",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "1.4s",
+            "off": "60s",
+            "storm": "0.9s"
+          },
+          "modeNotes": {
+            "off": "Long rather than 0; both stop outright at this level, below."
+          }
+        }
+      }
+    },
+    "motion-progress-sheen-dur": {
+      "$value": "2.6s",
+      "$type": "duration",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "1.6s",
+            "off": "60s",
+            "storm": "1.1s"
+          }
+        }
+      }
+    }
+  }
+}

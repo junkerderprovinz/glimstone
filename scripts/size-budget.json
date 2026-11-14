@@ -1,0 +1,30 @@
+{
+  "tokens.css": {
+    "gzip": 56832,
+    "brotli": 46848
+  },
+  "tailwind-theme.css": {
+    "gzip": 1536,
+    "brotli": 1280
+  },
+  "@glimstone/core": {
+    "gzip": 155136,
+    "brotli": 127744
+  },
+  "@glimstone/react": {
+    "gzip": 33280,
+    "brotli": 28416
+  },
+  "@glimstone/vue": {
+    "gzip": 39424,
+    "brotli": 33024
+  },
+  "plugin glimstone.js": {
+    "gzip": 186624,
+    "brotli": 155904
+  },
+  "plugin fortress-card.js": {
+    "gzip": 65024,
+    "brotli": 53248
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "shape": {
+    "$description": "Every rounded corner reads one of these three tokens, so switching the shape changes cards, buttons, tabs, inputs, pills, badges and toggles together.\n\n--radius-card is for cards, windows and menus, --radius-control for fields, panels and tiles, and --radius-pill for everything somebody presses: buttons, tabs, badges, selector segments and switches. Only round tells the last two apart, and there the pressable things are true pills while a text field keeps a corner a paragraph can sit in.\n\nUse the raw token even on a short or non-square element. The browser scales an oversized radius down with one factor for all four corners, so 9999px gives a circle on a square and a stadium on a rectangle. A cap such as min(var(--radius-pill), 50%) resolves per axis first and renders an ellipse.\n\nA page that sets no shape gets soft, the default appearance.ts hands out, so an app that only loads this sheet looks like one that called applyShape(). The motion levels below follow the same rule with subtle.",
+    "$extensions": {
+      "org.glimstone": {
+        "selector": ":root,\n:root[data-shape=\"soft\"]",
+        "modes": [
+          {
+            "name": "round",
+            "selector": ":root[data-shape=\"round\"]"
+          },
+          {
+            "name": "square",
+            "selector": ":root[data-shape=\"square\"]"
+          },
+          {
+            "name": "leaf",
+            "selector": ":root[data-shape=\"leaf\"]",
+            "$description": "The hidden shape (leafTap in appearance.ts): two opposite corners rounded, the other two sharp. The tokens stay single lengths, so a calc() on them and a phone app's numbers keep working, and one rule takes the other diagonal away from every element. It is physical rather than logical so the leaf leans the same way in every language."
+          }
+        ]
+      }
+    },
+    "radius-card": {
+      "$value": "0.5rem",
+      "$type": "dimension",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "round": "1.25rem",
+            "square": "0",
+            "leaf": "1.25rem"
+          },
+          "tailwind": "radius-card"
+        }
+      }
+    },
+    "radius-control": {
+      "$value": "0.3125rem",
+      "$type": "dimension",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "round": "0.75rem",
+            "square": "0",
+            "leaf": "0.75rem"
+          },
+          "tailwind": "radius-control"
+        }
+      }
+    },
+    "radius-pill": {
+      "$value": "0.3125rem",
+      "$type": "dimension",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "round": "9999px",
+            "square": "0",
+            "leaf": "1.125rem"
+          },
+          "tailwind": "radius-pill"
+        }
+      }
+    }
+  }
+}

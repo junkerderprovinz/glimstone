@@ -2,7 +2,7 @@ import { expect, test, type Page } from "@playwright/test";
 
 async function rowHeight(page: Page, density?: string) {
   await page.addInitScript((d) => localStorage.setItem("gs-docs-look", JSON.stringify(d ? { density: d } : {})), density);
-  await page.goto(`/#/engines/density?fw=${test.info().project.name}`);
+  await page.goto(`/#/engines/density?fw=${test.info().project.metadata.fw}`);
   await page.locator("main h1").waitFor();
   return page.locator("[data-demo] .glim-list-row").first().evaluate((r) => Math.round(r.getBoundingClientRect().height));
 }

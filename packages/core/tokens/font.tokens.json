@@ -1,0 +1,39 @@
+{
+  "font": {
+    "$description": "The house font is Noto Sans, shipped with the app for Latin, Cyrillic, Greek, Vietnamese and Devanagari, with Noto's own cuts for Arabic, Hebrew and Thai. The \"Variable\" names are the shipped files, the plain ones an install on the machine. Chinese, Japanese and Korean are too heavy to ship, so their Noto cut is used where the system has it, and the system font where it does not; Han characters are drawn differently per language, so the lang of the page picks the cut (docs/design-language.md, \"The house font\").",
+    "$extensions": {
+      "org.glimstone": {
+        "selector": ":root",
+        "modes": [
+          {
+            "name": "ja",
+            "selector": ":lang(ja)"
+          },
+          {
+            "name": "ko",
+            "selector": ":lang(ko)"
+          },
+          {
+            "name": "zh-hant",
+            "selector": ":lang(zh-TW), :lang(zh-Hant)"
+          }
+        ]
+      }
+    },
+    "font-cjk": {
+      "$value": "\"Noto Sans CJK SC\", \"Noto Sans SC\"",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "ja": "\"Noto Sans CJK JP\", \"Noto Sans JP\"",
+            "ko": "\"Noto Sans CJK KR\", \"Noto Sans KR\"",
+            "zh-hant": "\"Noto Sans CJK TC\", \"Noto Sans TC\""
+          }
+        }
+      }
+    },
+    "font-sans": {
+      "$value": "\"Noto Sans Variable\", \"Noto Sans\", \"Noto Sans Arabic Variable\", \"Noto Sans Arabic\", \"Noto Sans Hebrew Variable\", \"Noto Sans Hebrew\", \"Noto Sans Thai Variable\", \"Noto Sans Thai\", {font.font-cjk}, system-ui, -apple-system, sans-serif"
+    }
+  }
+}

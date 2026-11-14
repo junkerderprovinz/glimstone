@@ -4,7 +4,7 @@ import { open } from "./page";
 // The start page's wall and the Make it yours panel. Neither depends on a
 // framework, so one project runs them in depth and every project checks that
 // they work while its framework is the one the site shows.
-const inDepth = () => test.skip(test.info().project.name !== "react", "framework-free");
+const inDepth = () => test.skip(test.info().project.metadata.fw !== "react", "framework-free");
 
 const wall = (page: Page) => page.locator('[data-showcase="wall"]');
 const panel = (page: Page) => page.getByRole("dialog", { name: "Make it yours" });

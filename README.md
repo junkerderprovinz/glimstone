@@ -83,7 +83,7 @@ If it has earned a place on your server or computer, toss a coin to your knight:
 - [`packages/vue`](packages/vue) is `@glimstone/vue`, the same components for Vue 3 under the same names, with the same props and the same markup, and the engines as composables where React has hooks. A test fails the build when the two packages drift apart.
 - [`packages/solid`](packages/solid) is `@glimstone/solid` and [`packages/svelte`](packages/svelte) is `@glimstone/svelte`: the same components again for Solid and for Svelte 5, with React's names, props and defaults, the same markup, and `@zag-js/solid` and `@zag-js/svelte` under the select, combobox and slider. Every contract row runs against all four web packages.
 - [`packages/terms`](packages/terms) is `@glimstone/terms`: the words an interface uses for the same thing, such as relay, backup and instance, in all 42 languages with plural and gender, the variants each language avoids, and a check that runs in an app's CI and names every translation that strays, with file and key.
-- [`packages/flutter`](packages/flutter) is the Dart package `glimstone`: the tokens as a `ThemeExtension`, the glyphs as a set, and the first widget. Its tokens are written from `tokens.css` by [`scripts/gen-flutter.mjs`](scripts/gen-flutter.mjs).
+- [`packages/flutter`](packages/flutter) is the Dart package `glimstone`: the tokens as a `ThemeExtension`, the glyphs as a set, and the first widget. Its tokens are written from the DTCG source in [`packages/core/tokens`](packages/core/tokens) by [`scripts/build-tokens.mjs`](scripts/build-tokens.mjs), its glyphs by [`scripts/gen-flutter.mjs`](scripts/gen-flutter.mjs).
 - [`CHANGELOG.md`](CHANGELOG.md) records what changed in the language itself, versioned.
 
 <p align="center">
@@ -101,7 +101,7 @@ IBM Carbon's neutral greys for the ground and surfaces, one accent that means "t
 
 **Six axes belong to the user**: theme, corner shape, accent colour, rainbow, motion intensity and label mode. Every one of them is applied once at the app root, never by the page that edits it. Four resolve through a named engine, so nothing downstream has to know which setting produced the value it got: the **shape engine** (one radius token, no exception list), the **colour engine** (theme, accent and rainbow together), the **motion engine** (one set of duration and distance tokens feeding the same keyframes at every intensity) and the **label engine** (text, glyph or both, across three independent surfaces). Icons come from one shared assortment so a folder is the same folder in every app.
 
-See [`docs/design-language.md`](docs/design-language.md) for the palette table and all the rules with their reasoning.
+See [`docs/design-language.md`](docs/design-language.md) for the palette table and all the rules with their reasoning. The site's [Rules](https://junkerderprovinz.github.io/glimstone/#/guide/rules) page is built from that list.
 
 <br>
 

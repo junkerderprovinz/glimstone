@@ -6,7 +6,7 @@ import { Glyph } from "./glyph";
 import { LookPanel, setLookPanel, useLookPanel } from "./lookPanel";
 import { Hero } from "./showcase";
 import { BlocksPage } from "./pages/blocks";
-import { Adopting, Glyphs, Introduction, Palette, TypeScale } from "./pages/guide";
+import { Adopting, Glyphs, Introduction, Palette, Rules, TypeScale } from "./pages/guide";
 import { Charts } from "./pages/charts";
 import { Calibration } from "./pages/calibration";
 import { GlossaryPage } from "./pages/glossary";
@@ -73,6 +73,7 @@ const PAGES: Page[] = [
   { path: "/", title: "Introduction", group: "Guide", Comp: Introduction },
   { path: "/blocks", title: "Blocks", group: "Guide", Comp: BlocksPage },
   { path: "/guide/adopting", title: "Adopting", group: "Guide", Comp: Adopting },
+  { path: "/guide/rules", title: "Rules", group: "Guide", Comp: Rules },
   { path: "/guide/behaviour", title: "Behaviour", group: "Guide", Comp: BehaviourGuide },
   { path: "/guide/palette", title: "Palette", group: "Guide", Comp: Palette },
   { path: "/guide/charts", title: "Charts", group: "Guide", Comp: Charts },

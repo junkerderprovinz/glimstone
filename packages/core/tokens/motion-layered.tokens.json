@@ -1,0 +1,95 @@
+{
+  "motion-layered": {
+    "$extensions": {
+      "org.glimstone": {
+        "selector": ":root",
+        "media": "(prefers-reduced-motion: no-preference)",
+        "layer": "components",
+        "modes": [
+          {
+            "name": "wild",
+            "selector": ":root[data-motion='wild']",
+            "media": "(prefers-reduced-motion: no-preference)",
+            "layer": "components"
+          },
+          {
+            "name": "off",
+            "selector": ":root[data-motion='off']",
+            "media": "(prefers-reduced-motion: no-preference)",
+            "layer": "components",
+            "$description": "Long rather than 0; both stop outright at this level, below."
+          },
+          {
+            "name": "storm",
+            "selector": ":root[data-motion='storm']",
+            "layer": "components"
+          }
+        ]
+      }
+    },
+    "motion-spin-dur": {
+      "$value": "2.4s",
+      "$type": "duration",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "1.5s",
+            "off": "60s",
+            "storm": "0.9s"
+          }
+        }
+      }
+    },
+    "motion-skeleton-dur": {
+      "$value": "2.8s",
+      "$type": "duration",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "1.6s",
+            "off": "60s",
+            "storm": "1s"
+          }
+        }
+      }
+    },
+    "motion-skeleton-glow": {
+      "$value": "60%",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "100%",
+            "off": "0%",
+            "storm": "100%"
+          }
+        }
+      }
+    },
+    "motion-sheet-dur": {
+      "$value": "160ms",
+      "$type": "duration",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "300ms",
+            "off": "0s",
+            "storm": "460ms"
+          }
+        }
+      }
+    },
+    "motion-sheet-shift": {
+      "$value": 0.25,
+      "$type": "number",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": 1,
+            "off": 0,
+            "storm": 1
+          }
+        }
+      }
+    }
+  }
+}
