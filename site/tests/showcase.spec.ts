@@ -62,7 +62,7 @@ test("the wall follows the accent, the corners and the theme chosen in the panel
   await expect.poll(() => style(page, ".glim-panel", "background-color")).toBe("rgb(255, 255, 255)");
 
   expect(await style(page, ".glim-btn", "outline-style")).toBe("none");
-  await panel(page).locator('[data-axis="contrast"]').getByRole("radio", { name: "More" }).click();
+  await panel(page).locator('[data-axis="contrast"]').getByRole("switch").click();
   expect(await style(page, ".glim-btn", "outline-style")).toBe("solid");
 });
 
@@ -84,7 +84,7 @@ test("the panel lists every axis of the look", async ({ page }) => {
   inDepth();
   await open(page, "/");
   await openPanel(page);
-  for (const axis of ["theme", "oled", "accent", "rainbow", "shape", "motion", "density", "contrast", "labels"]) {
+  for (const axis of ["theme", "oled", "accent", "rainbow", "reactive", "contrast", "shape", "motion", "density", "labels"]) {
     await expect(panel(page).locator(`[data-axis="${axis}"]`), axis).toBeVisible();
   }
   await page.keyboard.press("Escape");
@@ -102,10 +102,10 @@ test("the copy button hands over the root attributes and the settings for the ch
   data-theme="dark"
   data-oled
   data-rainbow="reactive"
+  data-contrast="more"
   data-shape="round"
   data-motion="wild"
   data-density="compact"
-  data-contrast="more"
   data-labels-buttons="glyph"
   data-labels-sidebar="glyph"
   data-labels-tabs="glyph"
@@ -117,10 +117,10 @@ export const lookDefaults = {
   accent: "#1D99F3",
   rainbow: true,
   rainbowReactive: true,
+  contrast: "more",
   shape: "round",
   motion: "wild",
   density: "compact",
-  contrast: "more",
   labels: {
     buttons: "glyph",
     sidebar: "glyph",
@@ -128,6 +128,45 @@ export const lookDefaults = {
   }
 };
 `);
+});
+
+test("the panel is a settings page: sub-cards of field rows, a glyph on every segment, switches at the row's end", async ({ page }) => {
+  inDepth();
+  await open(page, "/", { theme: "dark" });
+  await openPanel(page);
+  await expect(panel(page).locator('[data-glim="SubCard"]')).toHaveCount(3);
+  for (const axis of ["theme", "shape", "motion", "density", "labels"]) {
+    const row = panel(page).locator(`[data-axis="${axis}"]`);
+    await expect(row.locator('[data-glim="Selector"]'), axis).toHaveCount(1);
+    const segments = row.locator('[role="radio"]');
+    expect(await segments.count(), axis).toBeGreaterThan(1);
+    for (const segment of await segments.all()) await expect(segment.locator("svg"), axis).toHaveCount(1);
+  }
+  for (const axis of ["oled", "rainbow", "reactive", "contrast"]) {
+    const row = panel(page).locator(`[data-axis="${axis}"]`);
+    await expect(row.locator('[data-glim="InfoBubble"]'), axis).toHaveCount(1);
+    const rowBox = (await row.boundingBox())!;
+    const switchBox = (await row.getByRole("switch").boundingBox())!;
+    expect(Math.abs(rowBox.x + rowBox.width - (switchBox.x + switchBox.width)), axis).toBeLessThan(2);
+  }
+});
+
+test("a click on the chosen swatch opens the picker, and the colour picked lands on the page and in the snippet", async ({ page, context, browserName }) => {
+  inDepth();
+  if (browserName === "chromium") await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await open(page, "/", { theme: "dark" });
+  await openPanel(page);
+  const chosen = panel(page).locator('[data-axis="accent"] [aria-checked="true"]');
+  await chosen.click();
+  const hex = page.getByRole("textbox", { name: "Hex" });
+  await hex.fill("#2E8B57");
+  await page.getByRole("button", { name: "Apply" }).click();
+  await expect.poll(() => style(page, ".glim-btn--accent", "background-color")).toBe("rgb(46, 139, 87)");
+  await expect(chosen).toHaveAttribute("aria-label", /#2E8B57/);
+  await panel(page).locator('[data-look="copy"]').click();
+  const snippet = await clipboard(page);
+  expect(snippet).toContain("--accent: #2e8b57");
+  expect(snippet).toContain('accent: "#2e8b57"');
 });
 
 test("the default look copies without a theme, an accent or a rainbow", async ({ page, context, browserName }) => {
