@@ -52,6 +52,11 @@
       "types": "./dist/entries/timer.d.ts",
       "svelte": "./dist/entries/timer.js",
       "default": "./dist/entries/timer.js"
+    },
+    "./HoverCard": {
+      "types": "./dist/entries/hovercard.d.ts",
+      "svelte": "./dist/entries/hovercard.js",
+      "default": "./dist/entries/hovercard.js"
     }
   },
   "files": [
@@ -68,6 +73,7 @@
     "@zag-js/avatar": "^1.47.0",
     "@zag-js/collapsible": "^1.47.0",
     "@zag-js/combobox": "^1.46.0",
+    "@zag-js/hover-card": "^1.47.0",
     "@zag-js/menu": "^1.46.0",
     "@zag-js/select": "^1.46.0",
     "@zag-js/slider": "^1.46.0",

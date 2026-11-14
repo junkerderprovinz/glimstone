@@ -43,6 +43,10 @@
     "./Timer": {
       "types": "./dist/Timer.d.ts",
       "default": "./dist/Timer.js"
+    },
+    "./HoverCard": {
+      "types": "./dist/HoverCard.d.ts",
+      "default": "./dist/HoverCard.js"
     }
   },
   "files": [
@@ -59,6 +63,7 @@
     "@zag-js/avatar": "^1.47.0",
     "@zag-js/collapsible": "^1.47.0",
     "@zag-js/combobox": "^1.46.0",
+    "@zag-js/hover-card": "^1.47.0",
     "@zag-js/menu": "^1.46.0",
     "@zag-js/select": "^1.46.0",
     "@zag-js/slider": "^1.46.0",
