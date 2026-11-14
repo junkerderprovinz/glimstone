@@ -4714,8 +4714,11 @@ test.describe("Fortress", () => {
   });
 
   test("[fortress-hue] reactive rests grey until the pointer is in the card", async ({ page }) => {
-    await open(page, "/components/fortress", { rainbow: "reactive" });
+    // Motion off, so the colour is read where it rests rather than mid-fade,
+    // and the focus leaves the card, which would light it as the pointer does.
+    await open(page, "/components/fortress", { rainbow: "reactive", motion: "off" });
     await others(page).click();
+    await others(page).blur();
     await page.mouse.move(0, 0);
     const track = () => others(page).evaluate((t) => getComputedStyle(t).backgroundColor);
     const resting = await track();

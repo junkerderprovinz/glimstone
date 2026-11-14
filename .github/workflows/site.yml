@@ -15,7 +15,7 @@ concurrency:
 jobs:
   contracts:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 40
     defaults:
       run:
         working-directory: site
@@ -54,9 +54,9 @@ jobs:
       - run: node scripts/place-flutter-demos.mjs
         working-directory: .
       - run: npm run typecheck
-      - run: npx playwright install --with-deps chromium firefox
+      - run: npx playwright install --with-deps chromium
       - run: npm run build
-      - run: npx playwright test
+      - run: npx playwright test --project=react --project=vue --project=a11y
       # The site shows each contract row's result, so it is built again once
       # the results exist.
       - run: node collect.mjs && npm run build
@@ -64,6 +64,27 @@ jobs:
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: site/dist
+
+  # The same rows in Firefox, beside the Chromium run so neither takes the
+  # other's time. The site is only deployed when both pass.
+  firefox:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    defaults:
+      run:
+        working-directory: site
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+        working-directory: .
+      - run: npx playwright install --with-deps firefox
+      - run: npm run build
+      - run: npx playwright test --project=react-firefox --project=vue-firefox
 
   # The screenshots are compared in the image they were rendered in, so fonts
   # and antialiasing match the baselines.
@@ -81,7 +102,7 @@ jobs:
           retention-days: 7
 
   deploy:
-    needs: [contracts, visual]
+    needs: [contracts, firefox, visual]
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 10

@@ -1,7 +1,8 @@
 // Turns Playwright's JSON report into the per-row results the site shows, one
 // result per framework. A row a framework skips, because it has no such
 // component, has no entry for it. A framework runs in Chromium and Firefox, and
-// its row passes only when it passes in both.
+// where one report holds both, its row passes only when it passes in both. CI
+// runs Firefox in a job of its own and deploys the site only when it passes.
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 
 const raw = JSON.parse(readFileSync(new URL("./test-results/raw.json", import.meta.url), "utf8"));
