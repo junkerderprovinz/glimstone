@@ -22,5 +22,6 @@
       "@glimstone/vue/Slider": ["../packages/vue/src/entries/slider.ts"]
     }
   },
-  "include": ["src", "tests", "test", "vite.config.ts", "playwright.config.ts"]
+  "include": ["src", "tests", "test", "vite.config.ts", "playwright.config.ts"],
+  "exclude": ["src/solid", "src/solid-demos", "src/svelte", "src/svelte-demos"]
 }

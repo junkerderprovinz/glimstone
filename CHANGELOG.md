@@ -4,13 +4,15 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
+Solid and Svelte join React and Vue. `@glimstone/solid` and `@glimstone/svelte` carry every component under React's names, props and defaults and draw the same markup, so an app keeps its look in any of the four.
+
 React and Vue offer the same kit. Every component, hook and type has a twin of the same name in the other package, with the same props, defaults, events and markup, so an app can change its framework by changing its imports. A test compares both packages on every run and fails as soon as they drift apart, and a second one checks that each demo draws the same elements in both. The keyboard follows the WAI-ARIA Authoring Practices in a few more places, and every target on the demo pages is at least 24 pixels, as WCAG 2.2 asks.
 
 The focus ring reads on every ground it stands on, and a field's placeholder can be read on every field fill.
 
 **Adopting apps:**
 
-- **Vue toasts:** `ToastViewport` emits `mouse-enter`, `mouse-leave`, `focus` and `blur`, the names of React's handlers. Rename `@enter`, `@leave`, `@focusin` and `@focusout` where the app listens.
+- **Vue toasts:** `ToastViewport` emits `mouse-enter`, `mouse-leave`, `focus` and `blur`, the names of React's handlers. The old `enter`, `leave`, `focusin` and `focusout` are deprecated and go in 5.0.0: until then they keep firing beside the new names, and the first one a page listens to says so once on the console. Rename `@enter`, `@leave`, `@focusin` and `@focusout` where the app listens.
 - **Vue giving windows:** the QR code and the coin marks of `CryptoDonateDialog` go into its `qr` and `mark` slots, and the app's selector in `PaypalDialog` into `selector`. `PaypalDialog` binds `frequency`, `preset` and `typed` with `v-model`, and `usePaypalButtons` takes a getter for its options and hands back the ref for `buttonsRef`.
 - **Types:** `CryptoCoin`, `CryptoNetwork`, `ToastViewportEntry`, `SidebarCount`, `InstanceFigure`, `SignInLabelKeys`, `FortressLabelKeys` and `MenuBarHandle` live in `@glimstone/core`. React exports them under the same names as before, so an import from `@glimstone/react` keeps working.
 - **Your own copy of the tokens:** take the `.glim-list-filter` rule from `tokens.css`.
@@ -20,6 +22,10 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 
 ## ✨ Added
 
+- **`@glimstone/solid`**, the components for Solid: controlled values with `onChange` as in React, `JSX.Element` for markup, `@zag-js/solid` under `Select`, `Combobox` and `Slider`, which come from entries of their own.
+- **`@glimstone/svelte`**, the components for Svelte 5 with runes: `bind:value` and `bind:checked` beside React's callbacks, snippets for markup and glyphs, `@zag-js/svelte` under the select, combobox and slider.
+- **Four test runs.** Every contract row runs in a Playwright project per web framework, the twins test compares each demo's markup across all four, and `npm test` fails when a Solid or Svelte component names a prop or default React does not.
+- **`useDensity`** in React, Solid and Svelte, the twin of the Vue composable.
 - **Vue twins** of `AboutCard`, `CoffeeDialog`, `PaypalDialog`, `CryptoDonateDialog`, `DropdownListbox`, `WindowBar`, `ToastCard` and `PresenceBadges`, with `usePaypalButtons`, `useDialogKeys`, `usePortalHue` and `deviceGlyph`. Vue also exports the core's badge, button, selector and select types that React re-exports.
 - **React twins** of the Vue composables: `useRainbow`, `useHue`, `useShape`, `useMotion` and `useAccent`. Each returns the value and its setter, as `useState` does.
 - **`fromEnd` on `ContextMenu`** opens a menu with the focus on its last row, for an app's own menu bar.
@@ -28,7 +34,7 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 - **A spacing scale.** `--space-1` to `--space-13` run from 2 to 40px, 2px apart up to 16px. Every padding, margin and gap in the components reads a step, and a test fails on one that does not. The 31 distances the stylesheet held moved to the nearest step, none by more than 2px.
 - **A contrast step.** When the system asks for more contrast (`prefers-contrast: more`), the accent's ink takes a second OKLab step, 0.40 on light and 0.84 on dark, so the presets read at 8.9 to 9.7:1 as text. Sub and muted text move a step toward the text colour, borders darken to `#6f6f6f` on light and `#8d8d8d` on dark, cards get a ring in that colour, fields and buttons a 1px edge, and the focus ring is 3px. The accent fill stays. `--focus-ring-width` is new, and an app that draws its own rings should read it. `data-contrast="more"` on the root asks for the same step, for an app that offers it as a setting of its own.
 - **Chart colours.** Eight series in a fixed order (`--chart-1` to `--chart-8`), a sequential blue for heatmaps (`--chart-seq-1` to `--chart-seq-7`) and a diverging blue to orange (`--chart-div-1` to `--chart-div-7`), all OKLCH, in every theme. Any two series stay apart under protanopia, deuteranopia and tritanopia, and each reaches 3:1 on the card and the page. The site shows them under Guide, Charts. Flutter gets them on `GlimTheme`.
-- **Row density.** A new axis for lists and tables: `data-density` is `compact`, `normal` or `airy`, set by `applyDensity()` and cached with `cacheAppearance(shape, accent, rainbow, density)`. Rows are 32, 42 or 52px tall, and their gap and padding move with them on the spacing scale. Normal looks as before. React and Vue have `useDensity()`, and the site has a Density page and a row in the Look panel.
+- **Row density.** A new axis for lists and tables: `data-density` is `compact`, `normal` or `airy`, set by `applyDensity()` and cached with `cacheAppearance(shape, accent, rainbow, density)`. Rows are 32, 42 or 52px tall, and their gap and padding move with them on the spacing scale. Normal looks as before. every package has `useDensity()`, and the site has a Density page and a row in the Look panel.
 - **Every component rule is in `@layer components`.** Many rules in `tokens.css` stood outside any layer, so an app had to out-specify them to change a component. Now the components and the reset are layered, in the order `base, components`, and a plain rule of the app's own wins. The tokens stay outside. An app that copies `tokens.css` and has unlayered rules of its own that relied on losing to GlimStone should check them.
 - **Site, start page:** beside the heading leans a wall of screens built from the real components, drifting slowly. It follows the accent, the corners, the motion and the theme as they change, and stands still with motion off or when the device asks for less motion.
 - **Site, Make it yours:** the look controls open in a panel beside the page, from the start page and from Look in the header, with every axis in one list. Its copy button hands over the look as attributes for an app's root element and as the starting values of its settings.
@@ -58,7 +64,6 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 - **A picked mid-tone accent keeps its ink readable under the pointer.** On the light theme the hover of `#777777` darkened toward its black ink, down to 3.64:1. Where the hover would take the ink under 4.5:1, `applyAccent()` now steps it away from the ink instead (`--accent-hover-light`, `--accent-hover-dark`), and a saturated green or teal whose ink missed 4.5:1 on its own 14% wash (4.35:1) gets a darker ink. The contrast test sweeps 153 picked colours as well as the presets. An app with its own copy of the tokens takes the new `--accent-hover` line. In Flutter, `GlimTheme.withAccent()` takes a picked accent, and `accentInk` and `accentHover` follow the same rules, colour for colour.
 - **The focus ring is opaque and reaches 3:1** on the page, the rail, a card, a well and a row's hover, in every theme, for every preset and any picked colour. On the light theme it stood at 1.9 to 2.0:1 (`rgba(142, 106, 0, .5)`), and a picked accent kept the gold ring. A rainbow position's ring is its hue's ink, where it was the hue at 55% (2.9:1 on the dark rail for red).
 - **Placeholder text reaches 4.5:1** on every field fill. The muted grey it used stood at 3.5:1 on the dark surface2 and 2.4:1 on a sub-card's surface3, 4.1 and 3.3:1 on light.
-
 
 ## 4.4.1 - 2026-11-13
 

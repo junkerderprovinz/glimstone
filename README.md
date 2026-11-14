@@ -12,6 +12,8 @@
   <a href="https://www.npmjs.com/package/@glimstone/core"><img src="https://img.shields.io/npm/v/@glimstone/core?style=for-the-badge&logo=npm&logoColor=white&label=core&color=cb3837" alt="@glimstone/core on npm" height="36"></a>&nbsp;
   <a href="https://www.npmjs.com/package/@glimstone/react"><img src="https://img.shields.io/npm/v/@glimstone/react?style=for-the-badge&logo=react&logoColor=white&label=react&color=cb3837" alt="@glimstone/react on npm" height="36"></a>&nbsp;
   <a href="https://www.npmjs.com/package/@glimstone/vue"><img src="https://img.shields.io/npm/v/@glimstone/vue?style=for-the-badge&logo=vuedotjs&logoColor=white&label=vue&color=cb3837" alt="@glimstone/vue on npm" height="36"></a>&nbsp;
+  <a href="https://www.npmjs.com/package/@glimstone/solid"><img src="https://img.shields.io/npm/v/@glimstone/solid?style=for-the-badge&logo=solid&logoColor=white&label=solid&color=cb3837" alt="@glimstone/solid on npm" height="36"></a>&nbsp;
+  <a href="https://www.npmjs.com/package/@glimstone/svelte"><img src="https://img.shields.io/npm/v/@glimstone/svelte?style=for-the-badge&logo=svelte&logoColor=white&label=svelte&color=cb3837" alt="@glimstone/svelte on npm" height="36"></a>&nbsp;
   <a href="https://junkerderprovinz.github.io/glimstone/"><img src="https://img.shields.io/badge/Docs-online-526CFE?style=for-the-badge&logo=githubpages&logoColor=white" alt="Documentation" height="36"></a>&nbsp;
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-AGPL--3.0-blue?style=for-the-badge&logo=gnu&logoColor=white" alt="License: AGPL-3.0" height="36"></a>
 </p>
@@ -20,8 +22,8 @@
 The shared design language behind a family of apps by the same author: one low-noise palette,<br>
 four engines a user drives from the app root, and a house style for the componentry.<br>
 <br>
-One core without a framework and a package each for React, Vue and Flutter, so a plain-CSS<br>
-Unraid plugin, a React app and a Vue app speak the same language. Published for reference<br>
+One core without a framework and a package each for React, Vue, Solid, Svelte and Flutter,<br>
+so a plain-CSS Unraid plugin and an app in any of them speak the same language. Published for reference<br>
 rather than for outside adoption; <a href="docs/design-language.md">docs/design-language.md</a> carries the reasoning and everything else.
 </p>
 
@@ -79,6 +81,7 @@ If it has earned a place on your server or computer, toss a coin to your knight:
 - [`packages/core`](packages/core) is `@glimstone/core`: [`tokens.css`](packages/core/tokens.css), the palette and every component class as plain CSS custom properties, where the shape, colour and motion engines resolve to actual values; the optional [`tailwind-theme.css`](packages/core/tailwind-theme.css), which maps the tokens onto Tailwind v4 utilities; the glyph assortment in [`glyphs.json`](packages/core/glyphs.json) and [`glyphs.md`](packages/core/glyphs.md); and the logic of every engine and component in plain TypeScript. Its parts that run without a framework (the select, the tooltips, the colour picker, the number field's steppers) serve a page such as an Unraid plugin as they are.
 - [`packages/react`](packages/react) is `@glimstone/react`, the components for React: `Button`, `Toggle`, `Card`, `Badge`, `ConfirmDialog` with `useConfirm`, `ToastViewport`, `InfoBubble`, `IconTipButton`, `UnavailableNotice`, `ListTable`, `Popover` and `Sheet`, `BusyRing` and `SkeletonRow`, the sign-in card, the fortress's Instances tab and pairing card, the Info tile, the README buttons, the three windows to give, `WindowBar`, and `Select`, `Combobox` and `Slider` on [Zag](https://zagjs.com) state machines from entries of their own.
 - [`packages/vue`](packages/vue) is `@glimstone/vue`, the same components for Vue 3 under the same names, with the same props and the same markup, and the engines as composables where React has hooks. A test fails the build when the two packages drift apart.
+- [`packages/solid`](packages/solid) is `@glimstone/solid` and [`packages/svelte`](packages/svelte) is `@glimstone/svelte`: the same components again for Solid and for Svelte 5, with React's names, props and defaults, the same markup, and `@zag-js/solid` and `@zag-js/svelte` under the select, combobox and slider. Every contract row runs against all four web packages.
 - [`packages/terms`](packages/terms) is `@glimstone/terms`: the words an interface uses for the same thing, such as relay, backup and instance, in all 42 languages with plural and gender, the variants each language avoids, and a check that runs in an app's CI and names every translation that strays, with file and key.
 - [`packages/flutter`](packages/flutter) is the Dart package `glimstone`: the tokens as a `ThemeExtension`, the glyphs as a set, and the first widget. Its tokens are written from `tokens.css` by [`scripts/gen-flutter.mjs`](scripts/gen-flutter.mjs).
 - [`CHANGELOG.md`](CHANGELOG.md) records what changed in the language itself, versioned.
@@ -88,7 +91,7 @@ If it has earned a place on your server or computer, toss a coin to your knight:
   <br><em>The glossary names every element in English and German, each beside a live example of it.</em>
 </p>
 
-The files say what a control must look like; the components say what it **is**. Two apps built from the prose alone produced the same language under different names, one `Toggle` and one `Switch`, one `ConfirmDialog` and one `Confirm`, and a third would have invented a third set. Every string is a prop and no component fetches anything, so the same component serves an app in any language. Install with `npm install @glimstone/core @glimstone/react` (or `@glimstone/vue`) and load `@glimstone/core/tokens.css` first; [the design language](docs/design-language.md#adopting-glimstone-in-another-app) has the rest of the steps.
+The files say what a control must look like; the components say what it **is**. Two apps built from the prose alone produced the same language under different names, one `Toggle` and one `Switch`, one `ConfirmDialog` and one `Confirm`, and a third would have invented a third set. Every string is a prop and no component fetches anything, so the same component serves an app in any language. Install with `npm install @glimstone/core @glimstone/react` (or `@glimstone/vue`, `@glimstone/solid`, `@glimstone/svelte`) and load `@glimstone/core/tokens.css` first; [the design language](docs/design-language.md#adopting-glimstone-in-another-app) has the rest of the steps.
 
 <br>
 
@@ -174,7 +177,7 @@ An adopting app may add eggs of its own. They belong in that app's own notes, an
 
 <p><a id="6-adopting-glimstone-in-an-app" href="#6-adopting-glimstone-in-an-app"><picture><source media="(prefers-color-scheme: dark)" srcset=".github/assets/sections/6-adopting-glimstone-in-an-app-dark.svg"><img src=".github/assets/sections/6-adopting-glimstone-in-an-app.svg" alt="6. Adopting GlimStone in an app" width="100%"></picture></a></p>
 
-1. Install the core and the framework package: `npm install @glimstone/core @glimstone/react`, or `@glimstone/vue`. Select, Combobox and Slider come from their own entries (`@glimstone/react/Select`) and need the Zag packages beside them.
+1. Install the core and the framework package: `npm install @glimstone/core @glimstone/react`, or `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte`. Select, Combobox and Slider come from their own entries (`@glimstone/react/Select`) and need the Zag packages beside them.
 2. Load `@glimstone/core/tokens.css` before the app's own stylesheet, and under Tailwind v4 `@glimstone/core/tailwind-theme.css` after it.
 3. At the app root, before the first render, call `applyCachedAppearance()` and `applyStoredLabelModes()`, or the app opens in the default look and snaps over on load. `setStoragePrefix()` first keeps choices an app already stored under its own name.
 4. Register the app's own icons once through the package's `setGlyphResolver`, and take the glyph sizing rules in [`glyphs.md`](packages/core/glyphs.md) with them: artwork from different sets fills its own viewBox by wildly different amounts.

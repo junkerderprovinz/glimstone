@@ -59,6 +59,7 @@ export function useMotion(): [Motion, (next: Motion) => void] {
   return [useRoot("data-motion", readMotion), applyMotion];
 }
 
+/** The row density of lists and tables. */
 export function useDensity(): [Density, (next: Density) => void] {
   return [useRoot("data-density", readDensity), applyDensity];
 }
