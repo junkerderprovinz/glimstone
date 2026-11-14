@@ -59,7 +59,7 @@ takes its position's colour like every fill around it.
 
 A line toward black in OKLab never leaves sRGB, since it scales linear RGB by a
 cube. A line toward white can, by a hair, and the browser then clips each
-channel; [`packages/core/src/oklab.ts`](../packages/core/src/oklab.ts) does the
+channel. [`packages/core/src/oklab.ts`](../packages/core/src/oklab.ts) does the
 same, and so does the Flutter package's `accentInk`.
 
 **Rainbow never colours text.** It colours glyphs, badges, switches, primary
@@ -74,7 +74,7 @@ between 5.2 and 5.9:1, where the sRGB mix spread them from 4.9 to 8.0:1. On
 Sunflower the ink is `#836407`, a shade darker than the `#8E6A00` the info text
 used to be, and that text is now the same step. On the dark ramps only two
 presets move: Blue from `#1D99F3` to `#62B1F8` (4.97 to 6.60:1 on the card) and
-Orange by a hair; the others are already brighter than the step.
+Orange by a hair. The others are already brighter than the step.
 
 Deciding which one a given place wants takes no thought: if the colour is on a
 `background`, it is `--accent`; if it is on `color`, a `fill` or a `stroke` against
@@ -1722,7 +1722,7 @@ GlimStone ships as one core and one package per framework. All of them carry the
 
 - **The logic lives in the core.** A component decides nothing a framework could decide differently: `buttonView()` says what a button shows and how wide it is, `badgeClassName()` what a badge wears, `selectModel` how a list steps and what its trigger says. A fix there reaches every framework at once.
 - **Every component names itself.** Its outermost element carries `data-glim` with the component's name, such as `SubCard` or `Selector`, and `data-glim-title` with its title where it has one, so a review of a running app can name each part the way this document and the glossary do. A component built on another passes its own name on, so an `IconButton` reads as `IconButton`, not as the `IconTipButton` under it.
-- **The components draw only with `glim-` classes from `tokens.css`.** No Tailwind utility appears in a component, and `scripts/check-classes.sh` fails on one, so an app without Tailwind gets the same pixels as one with it. The component rules sit in `@layer components` and the reset that stands in for a preflight in `@layer base`, so an app's own utilities on the same element, such as a wider `max-w-*` on a window, still win. An app's rule outside any layer outranks every layered one, and a reset such as `a, button { color: inherit }` would take the ink off a filled button, segment, tile or rail row. So the links and buttons that set their own colour take it back with `color: revert-layer`, outside the layers.
+- **The components draw only with `glim-` classes from `tokens.css`.** No Tailwind utility appears in a component, and `scripts/check-classes.sh` fails on one, so an app without Tailwind gets the same pixels as one with it. Every component rule sits in `@layer components` and the reset that stands in for a preflight in `@layer base`, declared in that order on the first line of `tokens.css`, so an app's own utilities on the same element, such as a wider `max-w-*` on a window, still win, and so does any rule of the app's own outside a layer, whatever its specificity. The tokens stay outside the layers, since Tailwind's `@theme` compiles into a layer they have to outrank. An app's rule outside any layer outranks every layered one, and a reset such as `a, button { color: inherit }` would take the ink off a filled button, segment, tile or rail row. So the links and buttons that set their own colour take it back with `color: revert-layer`, outside the layers.
 - **Select, Combobox and Slider are entries of their own** (`@glimstone/react/Select`, `@glimstone/vue/Select` and so on), so an app that uses none of them installs no Zag package.
 - **Stored choices keep their names.** `setStoragePrefix("myapp")` at boot makes the label modes and the cached appearance read and write `myapp-labels-buttons` and `myapp-appearance`, so an app moving to the packages keeps what its users chose.
 - **Flutter has no second source.** `scripts/gen-flutter.mjs` writes the Dart tokens and glyphs from `tokens.css` and `glyphs.json`, and CI fails when the checked-in files are out of date.

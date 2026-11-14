@@ -30,11 +30,13 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 
 - **A spacing scale.** `--space-1` to `--space-13` run from 2 to 40px, 2px apart up to 16px. Every padding, margin and gap in the components reads a step, and a test fails on one that does not. The 31 distances the stylesheet held moved to the nearest step, none by more than 2px.
 
-- **A contrast step.** When the system asks for more contrast (`prefers-contrast: more`), the accent's ink takes a second OKLab step, 0.40 on light and 0.84 on dark, so the presets read at 8.9 to 9.7:1 as text. Sub and muted text move a step toward the text colour, borders darken to `#6f6f6f` on light and `#8d8d8d` on dark, cards get a ring in that colour, fields and buttons a 1px edge, and the focus ring is 3px. The accent fill stays. `--focus-ring-width` is new; an app that draws its own rings should read it.
+- **A contrast step.** When the system asks for more contrast (`prefers-contrast: more`), the accent's ink takes a second OKLab step, 0.40 on light and 0.84 on dark, so the presets read at 8.9 to 9.7:1 as text. Sub and muted text move a step toward the text colour, borders darken to `#6f6f6f` on light and `#8d8d8d` on dark, cards get a ring in that colour, fields and buttons a 1px edge, and the focus ring is 3px. The accent fill stays. `--focus-ring-width` is new, and an app that draws its own rings should read it.
 
 - **Chart colours.** Eight series in a fixed order (`--chart-1` to `--chart-8`), a sequential blue for heatmaps (`--chart-seq-1` to `--chart-seq-7`) and a diverging blue to orange (`--chart-div-1` to `--chart-div-7`), all OKLCH, in every theme. Any two series stay apart under protanopia, deuteranopia and tritanopia, and each reaches 3:1 on the card and the page. The site shows them under Guide, Charts. Flutter gets them on `GlimTheme`.
 
 - **Row density.** A new axis for lists and tables: `data-density` is `compact`, `normal` or `airy`, set by `applyDensity()` and cached with `cacheAppearance(shape, accent, rainbow, density)`. Rows are 32, 42 or 52px tall, and their gap and padding move with them on the spacing scale. Normal looks as before. Vue has `useDensity()`, and the site has a Density page and a row in the Look panel.
+
+- **Every component rule is in `@layer components`.** Many rules in `tokens.css` stood outside any layer, so an app had to out-specify them to change a component. Now the components and the reset are layered, in the order `base, components`, and a plain rule of the app's own wins. The tokens stay outside. An app that copies `tokens.css` and has unlayered rules of its own that relied on losing to GlimStone should check them.
 
 ## 🐛 Fixed
 
