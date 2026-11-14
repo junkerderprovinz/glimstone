@@ -48,6 +48,11 @@
       "svelte": "./dist/entries/avatar.js",
       "default": "./dist/entries/avatar.js"
     },
+    "./Pagination": {
+      "types": "./dist/entries/pagination.d.ts",
+      "svelte": "./dist/entries/pagination.js",
+      "default": "./dist/entries/pagination.js"
+    },
     "./Timer": {
       "types": "./dist/entries/timer.d.ts",
       "svelte": "./dist/entries/timer.js",
@@ -87,6 +92,7 @@
     "@zag-js/hover-card": "^1.47.0",
     "@zag-js/marquee": "^1.47.0",
     "@zag-js/menu": "^1.46.0",
+    "@zag-js/pagination": "^1.47.0",
     "@zag-js/select": "^1.46.0",
     "@zag-js/slider": "^1.46.0",
     "@zag-js/svelte": "^1.47.0",

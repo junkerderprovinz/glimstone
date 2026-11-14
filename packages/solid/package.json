@@ -40,6 +40,10 @@
       "types": "./dist/Avatar.d.ts",
       "default": "./dist/Avatar.js"
     },
+    "./Pagination": {
+      "types": "./dist/Pagination.d.ts",
+      "default": "./dist/Pagination.js"
+    },
     "./Timer": {
       "types": "./dist/Timer.d.ts",
       "default": "./dist/Timer.js"
@@ -75,6 +79,7 @@
     "@zag-js/hover-card": "^1.47.0",
     "@zag-js/marquee": "^1.47.0",
     "@zag-js/menu": "^1.46.0",
+    "@zag-js/pagination": "^1.47.0",
     "@zag-js/select": "^1.46.0",
     "@zag-js/slider": "^1.46.0",
     "@zag-js/solid": "^1.47.0",
