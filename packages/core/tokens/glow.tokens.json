@@ -1,0 +1,20 @@
+{
+  "glow": {
+    "$description": "The light that crosses a placeholder: a faint white on the dark ramps, a strong one on the light ramp, where a darker band would read as a shadow.",
+    "$extensions": {
+      "org.glimstone": {
+        "selector": ":root,\n[data-theme]",
+        "layer": "components",
+        "theme": true
+      }
+    },
+    "skeleton-glow": {
+      "$value": "rgb(255 255 255 / 0.9)",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "rgb(255 255 255 / 0.1)"
+        }
+      }
+    }
+  }
+}

@@ -345,6 +345,12 @@
   --tile-edge: light-dark(transparent, rgba(255, 255, 255, .2));
 }
 
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --glim-scrim-blur: 0px;
+  }
+}
+
 /* Chart colours (rule 50), every one an OKLCH value written out, so a phone app
    and a design tool read the same numbers. The series come in a fixed order:
    the eight accent hues, alternating warm and cool, on lightness steps chosen
@@ -925,96 +931,57 @@
     to   { opacity: 1; }
   }
 }
+/* tokens:motion begin: written by scripts/build-tokens.mjs from packages/core/tokens */
 /* The toast's travel is a token so it can flip with the writing direction; a
    keyframe does not mirror on its own. */
-:root { --glim-toast-slide: 12px; }
-@layer components {
-  [dir="rtl"] { --glim-toast-slide: -12px; }
+:root {
+  --glim-toast-slide: 12px;
 
-  @keyframes glim-toast-in {
-    from { transform: translateX(var(--glim-toast-slide, 12px)); }
-    to   { transform: none; }
-  }
-  @keyframes glim-pulse {
-    0%, 100% { opacity: 1; }
-    50%      { opacity: .45; }
-  }
-  /* A control refusing an action it showed optimistically, because a backend
-     precondition failed. The decay reads as "pushed back" rather than a glitch.
-     Put .glim-shake on the control at the moment it reverts. */
-  @keyframes glim-shake {
-    0%, 100% { transform: translateX(0); }
-    20%      { transform: translateX(-4px); }
-    40%      { transform: translateX(4px); }
-    60%      { transform: translateX(-2px); }
-    80%      { transform: translateX(2px); }
-  }
-  /* The reduced-motion stand-in: a brief opacity pulse. */
-  @keyframes glim-shake-reduced {
-    0%, 100% { opacity: 1; }
-    50%      { opacity: .5; }
+  /* A tab change. The strip sets --tab-dir to 1 toward a later tab and -1
+     toward an earlier one; --tab-dir-sign flips the side under a right-to-left
+     script. */
+  --tab-dir-sign: 1;
+}
+
+@layer components {
+  [dir="rtl"] {
+    --glim-toast-slide: -12px;
+    --tab-dir-sign: -1;
   }
 }
 
+/* The motion engine's numbers. Each intensity is a token set read by the same
+   keyframes, so a level is a different number, never a different animation. The
+   offered levels live inside no-preference, so a system that asked for less
+   motion never evaluates their selectors and keeps the reduce block's values.
+   Storm's numbers are the exception, below the gate. */
 @media (prefers-reduced-motion: no-preference) {
-  /* The motion engine's numbers. Each intensity is a token set read by the
-     same keyframes, so a level is a different number, never a different
-     animation. The offered levels live inside no-preference, so a system that
-     asked for less motion never evaluates their selectors and keeps the reduce
-     block's values. Storm's numbers are the exception, below the gate. */
   :root {
     --motion-page-dur: 140ms;
     --motion-toast-dur: 120ms;
     --motion-pulse-dur: 3.2s;
     --motion-fade-dur: 70ms;
     --motion-shake-dur: 220ms;
-    /* Distance and curve set the levels apart along with duration: 6px
-       against wild's 18px, and an ease where wild springs. There is no scale
-       (see the keyframe above). */
+
+    /* Distance and curve set the levels apart along with duration: 6px against
+       wild's 18px, and an ease where wild springs. There is no scale (see the
+       keyframe above). */
     --motion-page-travel: 6px;
     --motion-page-ease: cubic-bezier(.2, .6, .2, 1);
-    /* The toast slides in from the screen edge, and a spring would carry it
-       back past that edge, which reads as a glitch, so it keeps this ease at
-       every level but storm. */
+
+    /* The toast slides in from the screen edge, and a spring would carry it back
+       past that edge, which reads as a glitch, so it keeps this ease at every
+       level but storm. */
     --motion-toast-ease: cubic-bezier(.2, .6, .2, 1);
+
     /* Every toast distance needs its RTL twin, since the keyframe cannot be
        mirrored by a class. */
     --glim-toast-slide: 12px;
-  }
-  :root[dir="rtl"] { --glim-toast-slide: -12px; }
-  /* The fourth control point past 1 makes the curve spring, the same shape
-     React Native's spring gives the phone. */
-  :root[data-motion='wild'] {
-    --motion-page-dur: 420ms;
-    --motion-toast-dur: 300ms;
-    --motion-pulse-dur: 2s;
-    --motion-fade-dur: 140ms;
-    --motion-shake-dur: 360ms;
-    --motion-page-travel: 18px;
-    --motion-page-ease: cubic-bezier(.34, 1.56, .64, 1);
-    --glim-toast-slide: 24px;
-  }
-  :root[data-motion='wild'][dir="rtl"] { --glim-toast-slide: -24px; }
-  :root[data-motion='off'] {
-    --motion-page-dur: 0s;
-    --motion-toast-dur: 0s;
-    --motion-fade-dur: 0s;
-    --motion-shake-dur: 0s;
-    --motion-page-travel: 0px;
-    --motion-page-ease: linear;
-    --motion-toast-ease: ease;
-    --glim-toast-slide: 0px;
-    /* Declared so this level does not inherit the lively number, but never
-       read: `.glim-live` means "this is happening now", so here it stops
-       fully opaque instead (below). */
-    --motion-pulse-dur: 3.2s;
-  }
 
-  /* Every transition reads one number, so the setting reaches all of them.
-     The other dials here: a window's entrance, the reactive label's reveal,
-     the sheen that crosses a README-shaped button once under the pointer, and
-     the round-two animations described where their keyframes are. */
-  :root {
+    /* Every transition reads one number, so the setting reaches all of them. The
+       other dials here: a window's entrance, the reactive label's reveal, the
+       sheen that crosses a README-shaped button once under the pointer, and the
+       round-two animations described where their keyframes are. */
     --motion-control-dur: 80ms;
     --motion-modal-dur: 150ms;
     --motion-modal-travel: 0px;
@@ -1037,23 +1004,26 @@
     --motion-tab-travel: 10px;
     --motion-wiggle-dur: 140ms;
     --motion-wiggle-angle: 1.4deg;
+
     /* A full-width row of a held list: how far it tilts and lifts at the
-       tremble's beat. Its ends swing far for a small angle, so the lift
-       carries most of it. */
+       tremble's beat. Its ends swing far for a small angle, so the lift carries
+       most of it. */
     --motion-row-tremble-tilt: .1deg;
     --motion-row-tremble-lift: 1px;
-    /* A row in move mode: one beat of its wiggle, how far it tilts and how far
-       it lifts. A wide row turns far at its ends, so the tilt is a fraction of
-       the long-press wiggle's. */
+
+    /* A row in move mode: one beat of its wiggle, how far it tilts and how far it
+       lifts. A wide row turns far at its ends, so the tilt is a fraction of the
+       long-press wiggle's. */
     --motion-row-wiggle-dur: 440ms;
     --motion-row-wiggle-tilt: .08deg;
     --motion-row-wiggle-lift: .5px;
-    /* A fill level's slosh: one swing to each wall and back, how far the
-       liquid tilts, how high a crest runs up the wall and the hump rises as
-       multiples of their drawn height, how far a bar's end surges and leans,
-       the time a bubble takes per unit of depth and how strongly it shows,
-       and how far a popping bubble lifts above the surface, swells, rings,
-       sprays its droplets and runs past a bar's end. */
+
+    /* A fill level's slosh: one swing to each wall and back, how far the liquid
+       tilts, how high a crest runs up the wall and the hump rises as multiples of
+       their drawn height, how far a bar's end surges and leans, the time a bubble
+       takes per unit of depth and how strongly it shows, and how far a popping
+       bubble lifts above the surface, swells, rings, sprays its droplets and runs
+       past a bar's end. */
     --motion-slosh-dur: 5s;
     --motion-slosh-tilt: 3deg;
     --motion-slosh-run: 2.2;
@@ -1067,19 +1037,40 @@
     --motion-slosh-pop-ring: 3;
     --motion-slosh-pop-spray: 1.1;
     --motion-slosh-pop-reach: 4px;
-    /* A packet landing in a vessel: how long the splash takes to settle, how
-       far it rocks the liquid, and how high its crest and ripple rise as
-       multiples of their drawn height. */
+
+    /* A packet landing in a vessel: how long the splash takes to settle, how far
+       it rocks the liquid, and how high its crest and ripple rise as multiples of
+       their drawn height. */
     --motion-slosh-splash-dur: 1.1s;
     --motion-slosh-splash-tilt: 4deg;
     --motion-slosh-splash-run: 2.2;
     --motion-slosh-splash-ripple: 1;
-    /* A progress bar without a value: one sweep of its light across the
-       track. Its sheen: one pass over the filled part. */
+
+    /* A progress bar without a value: one sweep of its light across the track.
+       Its sheen: one pass over the filled part. */
     --motion-indeterminate-dur: 2.2s;
     --motion-progress-sheen-dur: 2.6s;
   }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :root[dir="rtl"] {
+    --glim-toast-slide: -12px;
+  }
+}
+
+/* The fourth control point past 1 makes the curve spring, the same shape React
+   Native's spring gives the phone. */
+@media (prefers-reduced-motion: no-preference) {
   :root[data-motion='wild'] {
+    --motion-page-dur: 420ms;
+    --motion-toast-dur: 300ms;
+    --motion-pulse-dur: 2s;
+    --motion-fade-dur: 140ms;
+    --motion-shake-dur: 360ms;
+    --motion-page-travel: 18px;
+    --motion-page-ease: cubic-bezier(.34, 1.56, .64, 1);
+    --glim-toast-slide: 24px;
     --motion-control-dur: 150ms;
     --motion-modal-dur: 260ms;
     --motion-modal-travel: 10px;
@@ -1126,7 +1117,29 @@
     --motion-indeterminate-dur: 1.4s;
     --motion-progress-sheen-dur: 1.6s;
   }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :root[data-motion='wild'][dir="rtl"] {
+    --glim-toast-slide: -24px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
   :root[data-motion='off'] {
+    --motion-page-dur: 0s;
+    --motion-toast-dur: 0s;
+
+    /* Declared so this level does not inherit the lively number, but never
+       read: `.glim-live` means "this is happening now", so here it stops fully
+       opaque instead (below). */
+    --motion-pulse-dur: 3.2s;
+    --motion-fade-dur: 0s;
+    --motion-shake-dur: 0s;
+    --motion-page-travel: 0px;
+    --motion-page-ease: linear;
+    --motion-toast-ease: ease;
+    --glim-toast-slide: 0px;
     --motion-control-dur: 0s;
     --motion-modal-dur: 0s;
     --motion-modal-travel: 0px;
@@ -1147,16 +1160,19 @@
     --motion-content-dur: 0s;
     --motion-tab-dur: 0s;
     --motion-tab-travel: 0px;
+
     /* A long period rather than none, with no angle, so nothing moves. */
     --motion-wiggle-dur: 400ms;
     --motion-wiggle-angle: 0deg;
     --motion-row-tremble-tilt: 0deg;
     --motion-row-tremble-lift: 0px;
+
     /* Declared so this level does not inherit the lively numbers; the row
        wiggle leaves this level out altogether. */
     --motion-row-wiggle-dur: 0s;
     --motion-row-wiggle-tilt: 0deg;
     --motion-row-wiggle-lift: 0px;
+
     /* Long rather than 0, and stopped outright after the slosh's rules. */
     --motion-slosh-dur: 60s;
     --motion-slosh-tilt: 0deg;
@@ -1175,9 +1191,113 @@
     --motion-slosh-splash-tilt: 0deg;
     --motion-slosh-splash-run: 0;
     --motion-slosh-splash-ripple: 0;
+
     /* Long rather than 0; both stop outright at this level, below. */
     --motion-indeterminate-dur: 60s;
     --motion-progress-sheen-dur: 60s;
+  }
+}
+
+/* Storm, the hidden fourth level: the same keyframes with a spring that swings
+   further and settles later. No picker offers it; see "A hidden fourth level"
+   in the design language. The phone matches it with `springDamping: 0.34`
+   against wild's 0.68.
+
+   Its numbers sit outside the no-preference gate. Storm is the one level that
+   still animates under reduced motion, and the reduce block below restores its
+   animations from these tokens, which it could not read inside the gate. */
+:root[data-motion='storm'] {
+  --motion-page-dur: 760ms;
+  --motion-toast-dur: 420ms;
+  --motion-pulse-dur: 1.4s;
+  --motion-fade-dur: 200ms;
+  --motion-shake-dur: 520ms;
+  --motion-page-travel: 34px;
+
+  /* Further past 1 than wild's curve and slower to settle. It carries the
+     level with distance and curve, never a scale. */
+  --motion-page-ease: cubic-bezier(.22, 1.94, .45, 1);
+
+  /* The only level where the toast springs past the screen edge. */
+  --motion-toast-ease: cubic-bezier(.22, 1.94, .45, 1);
+  --glim-toast-slide: 44px;
+  --motion-control-dur: 300ms;
+  --motion-modal-dur: 420ms;
+  --motion-modal-travel: 18px;
+  --motion-label-dur: 480ms;
+  --motion-label-ease: cubic-bezier(.22, 1.94, .45, 1);
+  --motion-label-shift: -0.6rem;
+  --motion-label-squash: 0.7;
+  --motion-button-sheen-dur: 550ms;
+  --motion-shape-dur: 460ms;
+  --motion-shape-ease: cubic-bezier(.22, 1.94, .45, 1);
+  --motion-confirm-dur: 700ms;
+  --motion-confirm-scale: 1.9;
+  --motion-stagger-step: 55ms;
+
+  /* At 55ms a step a long list would stagger for seconds without the cap. */
+  --motion-stagger-cap: 700ms;
+  --motion-stagger-dur: 420ms;
+  --motion-wipe-dur: 560ms;
+  --motion-check-dur: 620ms;
+  --motion-content-dur: 380ms;
+  --motion-tab-dur: 380ms;
+  --motion-tab-travel: 34px;
+  --motion-wiggle-dur: 100ms;
+  --motion-wiggle-angle: 2.8deg;
+  --motion-row-tremble-tilt: .2deg;
+  --motion-row-tremble-lift: 2px;
+  --motion-row-wiggle-dur: 260ms;
+  --motion-row-wiggle-tilt: .26deg;
+  --motion-row-wiggle-lift: 1.5px;
+  --motion-slosh-dur: 2.6s;
+  --motion-slosh-tilt: 7.5deg;
+  --motion-slosh-run: 4.5;
+  --motion-slosh-hump: 1.3;
+  --motion-slosh-surge: 7px;
+  --motion-slosh-lean: 18deg;
+  --motion-slosh-bubble-pace: .25s;
+  --motion-slosh-bubble-opacity: .85;
+  --motion-slosh-pop-lift: 4.4;
+  --motion-slosh-pop-swell: 1.6;
+  --motion-slosh-pop-ring: 3.8;
+  --motion-slosh-pop-spray: 1.5;
+  --motion-slosh-pop-reach: 7px;
+  --motion-slosh-splash-dur: .75s;
+  --motion-slosh-splash-tilt: 10deg;
+  --motion-slosh-splash-run: 4.8;
+  --motion-slosh-splash-ripple: 2;
+  --motion-indeterminate-dur: 0.9s;
+  --motion-progress-sheen-dur: 1.1s;
+}
+
+:root[data-motion='storm'][dir="rtl"] {
+  --glim-toast-slide: -44px;
+}
+/* tokens:motion end */
+@layer components {
+  @keyframes glim-toast-in {
+    from { transform: translateX(var(--glim-toast-slide, 12px)); }
+    to   { transform: none; }
+  }
+  @keyframes glim-pulse {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: .45; }
+  }
+  /* A control refusing an action it showed optimistically, because a backend
+     precondition failed. The decay reads as "pushed back" rather than a glitch.
+     Put .glim-shake on the control at the moment it reverts. */
+  @keyframes glim-shake {
+    0%, 100% { transform: translateX(0); }
+    20%      { transform: translateX(-4px); }
+    40%      { transform: translateX(4px); }
+    60%      { transform: translateX(-2px); }
+    80%      { transform: translateX(2px); }
+  }
+  /* The reduced-motion stand-in: a brief opacity pulse. */
+  @keyframes glim-shake-reduced {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: .5; }
   }
 }
 
@@ -1231,77 +1351,6 @@
     }
   }
 }
-/* Storm, the hidden fourth level: the same keyframes with a spring that swings
-   further and settles later. No picker offers it; see "A hidden fourth level"
-   in the design language. The phone matches it with `springDamping: 0.34`
-   against wild's 0.68.
-
-   Its numbers sit outside the no-preference gate. Storm is the one level that
-   still animates under reduced motion, and the reduce block below restores its
-   animations from these tokens, which it could not read inside the gate. */
-:root[data-motion='storm'] {
-  --motion-page-dur: 760ms;
-  --motion-toast-dur: 420ms;
-  --motion-pulse-dur: 1.4s;
-  --motion-fade-dur: 200ms;
-  --motion-shake-dur: 520ms;
-  --motion-page-travel: 34px;
-  /* Further past 1 than wild's curve and slower to settle. It carries the
-     level with distance and curve, never a scale. */
-  --motion-page-ease: cubic-bezier(.22, 1.94, .45, 1);
-  /* The only level where the toast springs past the screen edge. */
-  --motion-toast-ease: cubic-bezier(.22, 1.94, .45, 1);
-  --glim-toast-slide: 44px;
-  --motion-control-dur: 300ms;
-  --motion-modal-dur: 420ms;
-  --motion-modal-travel: 18px;
-  --motion-label-dur: 480ms;
-  --motion-label-ease: cubic-bezier(.22, 1.94, .45, 1);
-  --motion-label-shift: -0.6rem;
-  --motion-label-squash: 0.7;
-  --motion-button-sheen-dur: 550ms;
-  --motion-shape-dur: 460ms;
-  --motion-shape-ease: cubic-bezier(.22, 1.94, .45, 1);
-  --motion-confirm-dur: 700ms;
-  --motion-confirm-scale: 1.9;
-  --motion-stagger-step: 55ms;
-  /* At 55ms a step a long list would stagger for seconds without the cap. */
-  --motion-stagger-cap: 700ms;
-  --motion-stagger-dur: 420ms;
-  --motion-wipe-dur: 560ms;
-  --motion-check-dur: 620ms;
-  --motion-content-dur: 380ms;
-  --motion-tab-dur: 380ms;
-  --motion-tab-travel: 34px;
-  --motion-wiggle-dur: 100ms;
-  --motion-wiggle-angle: 2.8deg;
-  --motion-row-tremble-tilt: .2deg;
-  --motion-row-tremble-lift: 2px;
-  --motion-row-wiggle-dur: 260ms;
-  --motion-row-wiggle-tilt: .26deg;
-  --motion-row-wiggle-lift: 1.5px;
-  --motion-slosh-dur: 2.6s;
-  --motion-slosh-tilt: 7.5deg;
-  --motion-slosh-run: 4.5;
-  --motion-slosh-hump: 1.3;
-  --motion-slosh-surge: 7px;
-  --motion-slosh-lean: 18deg;
-  --motion-slosh-bubble-pace: .25s;
-  --motion-slosh-bubble-opacity: .85;
-  --motion-slosh-pop-lift: 4.4;
-  --motion-slosh-pop-swell: 1.6;
-  --motion-slosh-pop-ring: 3.8;
-  --motion-slosh-pop-spray: 1.5;
-  --motion-slosh-pop-reach: 7px;
-  --motion-slosh-splash-dur: .75s;
-  --motion-slosh-splash-tilt: 10deg;
-  --motion-slosh-splash-run: 4.8;
-  --motion-slosh-splash-ripple: 2;
-  --motion-indeterminate-dur: 0.9s;
-  --motion-progress-sheen-dur: 1.1s;
-}
-:root[data-motion='storm'][dir="rtl"] { --glim-toast-slide: -44px; }
-
 @layer components {
   /* Storm is exempt from reduced motion. The offered levels obey the OS because
      somebody who set reduced motion never chose them; five taps on a chosen
@@ -1336,6 +1385,7 @@
    animation, so a repeated failure needs a fresh DOM node: key the element on
    a per-instance failure counter. */
 
+/* tokens:drag begin: written by scripts/build-tokens.mjs from packages/core/tokens */
 /* The drag lift ("Reordering by dragging" in the design language). The held
    item floats under the pointer (.glim-drag-lift), the others slide aside while
    it passes (.glim-drag-shift), and on release it slides into the gap they left
@@ -1348,22 +1398,46 @@
    take the level's duration, none where the level has none. */
 :root {
   --drag-lift-scale: 1.015;
+
   /* The raised step alone barely shows under something one row tall. */
   --drag-lift-shadow: var(--elevation-float);
   --drag-lift-z: var(--z-raised);
   --drag-settle-dur: 0ms;
   --drag-settle-ease: var(--motion-page-ease, ease);
 }
+
 @media (prefers-reduced-motion: no-preference) {
-  :root { --drag-settle-dur: 130ms; }
-  :root[data-motion='wild'] { --drag-settle-dur: 220ms; --drag-lift-scale: 1.03; }
-  :root[data-motion='off'] { --drag-settle-dur: 0ms; --drag-lift-scale: 1; }
+  :root {
+    --drag-settle-dur: 130ms;
+  }
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  :root[data-motion='wild'] {
+    --drag-lift-scale: 1.03;
+    --drag-settle-dur: 220ms;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :root[data-motion='off'] {
+    --drag-lift-scale: 1;
+    --drag-settle-dur: 0ms;
+  }
+}
+
 /* Outside the gate for the same reason as storm's other numbers. */
-:root[data-motion='storm'] { --drag-settle-dur: 400ms; --drag-lift-scale: 1.06; }
-@media (prefers-reduced-motion: reduce) {
-  :root:not([data-motion='storm']) { --drag-lift-scale: 1; }
+:root[data-motion='storm'] {
+  --drag-lift-scale: 1.06;
+  --drag-settle-dur: 400ms;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion='storm']) {
+    --drag-lift-scale: 1;
+  }
+}
+/* tokens:drag end */
 @layer components {
   .glim-drag-lift {
     position: relative;
@@ -1431,9 +1505,7 @@
 
 /* A tab change. The strip sets --tab-dir to 1 toward a later tab and -1 toward
    an earlier one; --tab-dir-sign flips the side under a right-to-left script. */
-:root { --tab-dir-sign: 1; }
 @layer components {
-  [dir="rtl"] { --tab-dir-sign: -1; }
   @keyframes glim-tab-slide {
     from { transform: translateX(calc(var(--tab-dir, 1) * var(--tab-dir-sign, 1) * var(--motion-tab-travel, 18px))); }
     to   { transform: none; }
@@ -2645,10 +2717,6 @@
   }
 }
 
-@media (prefers-reduced-transparency: reduce) {
-  :root { --glim-scrim-blur: 0px; }
-}
-
 @layer components {
   @media (prefers-reduced-motion: no-preference) {
     .glim-modal-backdrop { animation: glim-fade-in var(--motion-modal-dur) ease both; }
@@ -2656,19 +2724,22 @@
   }
 }
 
+/* tokens:window begin: written by scripts/build-tokens.mjs from packages/core/tokens */
 /* The desktop window frame (packages/react/src/WindowBar.tsx): the title bar an
-   app draws where its window has no native one. It is fixed over the top of
-   the window. The page starts under it and a scrim leaves it clear, so the
-   window can still be moved and closed while a dialog is open. Without the bar
+   app draws where its window has no native one. It is fixed over the top of the
+   window. The page starts under it and a scrim leaves it clear, so the window
+   can still be moved and closed while a dialog is open. Without the bar
    --window-bar is 0 and none of this moves anything. */
 :root {
   --window-bar: 0px;
 }
+
 @layer components {
   :root:has(.glim-window-bar) {
     --window-bar: 2.5rem;
   }
 }
+/* tokens:window end */
 @layer base {
   body {
     padding-top: var(--window-bar);
@@ -5733,35 +5804,64 @@
    --busy-delay, so an answer that comes quickly never flashes a loader, and
    both read the motion engine: at "off" and under reduced motion nothing
    turns and no light crosses. */
+/* tokens:waiting begin: written by scripts/build-tokens.mjs from packages/core/tokens */
 @layer components {
   @media (prefers-reduced-motion: no-preference) {
     :root {
       --motion-spin-dur: 2.4s;
       --motion-skeleton-dur: 2.8s;
       --motion-skeleton-glow: 60%;
+      --motion-sheet-dur: 160ms;
+      --motion-sheet-shift: 0.25;
     }
+  }
+}
+
+@layer components {
+  @media (prefers-reduced-motion: no-preference) {
     :root[data-motion='wild'] {
       --motion-spin-dur: 1.5s;
       --motion-skeleton-dur: 1.6s;
       --motion-skeleton-glow: 100%;
+      --motion-sheet-dur: 300ms;
+      --motion-sheet-shift: 1;
     }
-    /* Long rather than 0; both stop outright at this level, below. */
+  }
+}
+
+/* Long rather than 0; both stop outright at this level, below. */
+@layer components {
+  @media (prefers-reduced-motion: no-preference) {
     :root[data-motion='off'] {
       --motion-spin-dur: 60s;
       --motion-skeleton-dur: 60s;
       --motion-skeleton-glow: 0%;
+      --motion-sheet-dur: 0s;
+      --motion-sheet-shift: 0;
     }
   }
+}
+
+@layer components {
   :root[data-motion='storm'] {
     --motion-spin-dur: 0.9s;
     --motion-skeleton-dur: 1s;
     --motion-skeleton-glow: 100%;
+    --motion-sheet-dur: 460ms;
+    --motion-sheet-shift: 1;
   }
+}
 
-  /* The light that crosses a placeholder: a faint white on the dark ramps, a
-     strong one on the light ramp, where a darker band would read as a shadow. */
-  :root, [data-theme] { --skeleton-glow: light-dark(rgb(255 255 255 / 0.9), rgb(255 255 255 / 0.1)); }
-
+/* The light that crosses a placeholder: a faint white on the dark ramps, a
+   strong one on the light ramp, where a darker band would read as a shadow. */
+@layer components {
+  :root,
+  [data-theme] {
+    --skeleton-glow: light-dark(rgb(255 255 255 / 0.9), rgb(255 255 255 / 0.1));
+  }
+}
+/* tokens:waiting end */
+@layer components {
   @keyframes glim-busy-show {
     from { visibility: hidden; }
   }
@@ -5894,25 +5994,6 @@
    positioning, or placed by bubblePosition.ts where the browser has none. A
    sheet is a <dialog> shown modal, so the page behind it is inert by itself. */
 @layer components {
-  @media (prefers-reduced-motion: no-preference) {
-    :root {
-      --motion-sheet-dur: 160ms;
-      --motion-sheet-shift: 0.25;
-    }
-    :root[data-motion='wild'] {
-      --motion-sheet-dur: 300ms;
-      --motion-sheet-shift: 1;
-    }
-    :root[data-motion='off'] {
-      --motion-sheet-dur: 0s;
-      --motion-sheet-shift: 0;
-    }
-  }
-  :root[data-motion='storm'] {
-    --motion-sheet-dur: 460ms;
-    --motion-sheet-shift: 1;
-  }
-
   .glim-popover {
     position: fixed;
     inset: auto;

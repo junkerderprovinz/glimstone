@@ -1,0 +1,40 @@
+{
+  "direction": {
+    "$description": "The toast's travel is a token so it can flip with the writing direction; a keyframe does not mirror on its own.",
+    "$extensions": {
+      "org.glimstone": {
+        "selector": ":root",
+        "modes": [
+          {
+            "name": "rtl",
+            "selector": "[dir=\"rtl\"]",
+            "layer": "components"
+          }
+        ]
+      }
+    },
+    "glim-toast-slide": {
+      "$value": "12px",
+      "$type": "dimension",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "rtl": "-12px"
+          }
+        }
+      }
+    },
+    "tab-dir-sign": {
+      "$value": 1,
+      "$type": "number",
+      "$description": "A tab change. The strip sets --tab-dir to 1 toward a later tab and -1 toward an earlier one; --tab-dir-sign flips the side under a right-to-left script.",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "rtl": -1
+          }
+        }
+      }
+    }
+  }
+}

@@ -24,7 +24,11 @@ const X = "org.glimstone";
 // stands, as one block.
 const REGIONS = {
   main: ["shape", "layout", "space", "density", "elevation", "focus", "colour", "chart", "@contrast", "hover", "font"],
+  motion: ["direction", "motion"],
+  drag: ["drag"],
   buttons: ["button"],
+  window: ["window"],
+  waiting: ["motion-layered", "glow"],
 };
 const ORDER = Object.values(REGIONS).flat().filter((id) => !id.startsWith("@"));
 
@@ -74,9 +78,12 @@ function comment(text, width) {
 
 const indent = (text, by) => text.split("\n").map((l) => (l ? by + l : l)).join("\n");
 
-function rule(selector, body, media) {
-  if (!media) return `${selector} {\n${indent(body, "  ")}\n}`;
-  return `@media ${media} {\n${indent(`${selector} {\n${indent(body, "  ")}\n}`, "  ")}\n}`;
+/** A rule, inside its media query and its cascade layer where it has them. */
+function rule(selector, body, media, layer) {
+  let out = `${selector} {\n${indent(body, "  ")}\n}`;
+  if (media) out = `@media ${media} {\n${indent(out, "  ")}\n}`;
+  if (layer) out = `@layer ${layer} {\n${indent(out, "  ")}\n}`;
+  return out;
 }
 
 function declarations(entries, width) {
@@ -100,10 +107,10 @@ function groupCss(id) {
       trailing: ext(t).note,
     }));
   const head = groups[id].$description ? `${comment(groups[id].$description, 80)}\n` : "";
-  parts.push(head + rule(m.selector, declarations(base, 78)));
+  parts.push(head + rule(m.selector, declarations(base, 78), m.media, m.layer));
   for (const mode of (m.modes ?? []).filter((mode) => !mode.shared)) {
     const note = mode.$description ? `${comment(mode.$description, 80)}\n` : "";
-    parts.push(note + rule(mode.selector, declarations(modeEntries(id, mode.name), 76), mode.media));
+    parts.push(note + rule(mode.selector, declarations(modeEntries(id, mode.name), 76), mode.media, mode.layer));
   }
   return parts.join("\n\n");
 }
@@ -111,7 +118,7 @@ function groupCss(id) {
 const modeEntries = (id, name) =>
   tokensOf(id)
     .filter(([, t]) => ext(t).modes && name in ext(t).modes)
-    .map(([token, t]) => ({ name: token, value: modeValue(meta(id).theme, t, ext(t).modes[name]) }));
+    .map(([token, t]) => ({ name: token, value: modeValue(meta(id).theme, t, ext(t).modes[name]), note: ext(t).modeNotes?.[name] }));
 
 /** One block for a mode several groups share, such as the contrast step. */
 function sharedCss(name) {
@@ -121,7 +128,7 @@ function sharedCss(name) {
   if (differ) throw new Error(`the shared mode ${name} has another selector in ${differ.id}`);
   const entries = users.flatMap((u) => modeEntries(u.id, name));
   const note = mode.$description ? `${comment(mode.$description, 80)}\n` : "";
-  return note + rule(mode.selector, declarations(entries, 76), mode.media);
+  return note + rule(mode.selector, declarations(entries, 76), mode.media, mode.layer);
 }
 
 // The @theme block: every token with a Tailwind name, in source order.

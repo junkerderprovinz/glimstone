@@ -1,0 +1,28 @@
+{
+  "window": {
+    "$description": "The desktop window frame (packages/react/src/WindowBar.tsx): the title bar an app draws where its window has no native one. It is fixed over the top of the window. The page starts under it and a scrim leaves it clear, so the window can still be moved and closed while a dialog is open. Without the bar --window-bar is 0 and none of this moves anything.",
+    "$extensions": {
+      "org.glimstone": {
+        "selector": ":root",
+        "modes": [
+          {
+            "name": "bar",
+            "selector": ":root:has(.glim-window-bar)",
+            "layer": "components"
+          }
+        ]
+      }
+    },
+    "window-bar": {
+      "$value": "0px",
+      "$type": "dimension",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "bar": "2.5rem"
+          }
+        }
+      }
+    }
+  }
+}
