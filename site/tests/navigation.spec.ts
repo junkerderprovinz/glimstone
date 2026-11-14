@@ -72,6 +72,22 @@ test.describe("Pagination", () => {
     const rest = await pageButton(page, 2).evaluate((el) => getComputedStyle(el).backgroundColor);
     expect(rest).toBe(await resolved(nav(page), "--carbon-surface2"));
   });
+
+  test("[pagination-forced] in a contrast theme every page has an edge and the one in force the selection colours", async ({ page }) => {
+    await page.emulateMedia({ forcedColors: "active" });
+    await open(page, "/components/pagination");
+    const look = (n: number) => pageButton(page, n).evaluate((el) => ({ border: getComputedStyle(el).borderTopStyle, background: getComputedStyle(el).backgroundColor }));
+    const highlight = await nav(page).evaluate((el) => {
+      const probe = document.createElement("span");
+      probe.style.cssText = "forced-color-adjust: none; background-color: Highlight";
+      el.append(probe);
+      const colour = getComputedStyle(probe).backgroundColor;
+      probe.remove();
+      return colour;
+    });
+    expect((await look(2)).border).toBe("solid");
+    expect((await look(1)).background).toBe(highlight);
+  });
 });
 
 test.describe("Steps", () => {

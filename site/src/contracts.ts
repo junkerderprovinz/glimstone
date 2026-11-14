@@ -708,6 +708,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "pagination-ends", when: "The first or the last page is in force", then: "The step that would go past it is disabled." },
       { id: "pagination-gaps", when: "There are more pages than fit", then: "The first and the last page stay, the pages beside the one in force stand around it, and a gap marks the rest." },
       { id: "pagination-accent", when: "Always", then: "The page in force is filled with the accent, the others with a quiet fill." },
+      { id: "pagination-forced", when: "A Windows contrast theme is on", then: "Every page has an edge, and the page in force takes the system's selection colours." },
     ],
   },
   PinInput: {

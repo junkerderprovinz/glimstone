@@ -6117,7 +6117,8 @@
 
 /* Collapsible and Accordion: a row that opens the text under it. The row has
    no fill of its own, so it hovers to --carbon-hover, and on the second
-   surface one step up (rule 21). Open is no activity and takes no accent. */
+   surface one step up (rule 21). Open is no activity and takes no accent. Its
+   height and inline room follow the row density, like a list row. */
 @layer components {
   .glim-accordion {
     display: flex;
@@ -6133,10 +6134,10 @@
   .glim-disclosure-trigger {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: var(--space-6);
     width: 100%;
-    min-height: var(--btn-h-key);
-    padding: 0.5rem 0.75rem;
+    min-height: var(--row-h);
+    padding: var(--space-2) var(--row-pad);
     border: 0;
     border-radius: var(--radius-control);
     background-color: transparent;
@@ -6151,7 +6152,7 @@
   .glim-disclosure-trigger:hover { background-color: var(--carbon-hover); }
   :is(.glim-well, .glim-subcard) .glim-disclosure-trigger:hover { background-color: var(--carbon-surface3); }
   .glim-disclosure-trigger:focus-visible {
-    outline: 2px solid var(--focus-ring);
+    outline: var(--focus-ring-width) solid var(--focus-ring);
     outline-offset: 2px;
   }
   .glim-disclosure-trigger[data-disabled] {
@@ -6171,7 +6172,7 @@
   .glim-disclosure-indicator[data-state="open"] { rotate: 180deg; }
   .glim-disclosure-content { overflow: hidden; }
   .glim-disclosure-body {
-    padding: 0.25rem 0.75rem 0.75rem;
+    padding: var(--space-2) var(--row-pad) var(--space-6);
     color: var(--carbon-text-sub);
     font-size: var(--text-body);
     line-height: 1.5;
@@ -6245,12 +6246,12 @@
   .glim-pagination {
     display: flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: var(--space-2);
   }
   .glim-page {
     min-width: var(--btn-h);
     height: var(--btn-h);
-    padding-inline: 0.5rem;
+    padding-inline: var(--space-4);
     border: 0;
     border-radius: var(--radius-control);
     background-color: var(--carbon-surface2);
@@ -6269,7 +6270,7 @@
   }
   .glim-page[data-selected]:hover { background-color: var(--accent-hover); }
   .glim-page:focus-visible {
-    outline: 2px solid var(--focus-ring);
+    outline: var(--focus-ring-width) solid var(--focus-ring);
     outline-offset: 2px;
   }
   .glim-page-gap {
@@ -6286,12 +6287,12 @@
 @layer components {
   .glim-pin {
     display: grid;
-    gap: 0.375rem;
+    gap: var(--space-3);
     justify-items: start;
   }
   .glim-pin-control {
     display: flex;
-    gap: 0.375rem;
+    gap: var(--space-3);
   }
   .glim-input.glim-pin-cell {
     width: var(--btn-h-key);
@@ -6310,33 +6311,23 @@
 @layer components {
   .glim-tags {
     display: grid;
-    gap: 0.375rem;
+    gap: var(--space-3);
     min-width: 0;
   }
   .glim-tags-control {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.25rem;
+    gap: var(--space-2);
     min-height: var(--btn-h);
-    padding: 0.25rem;
+    padding: var(--space-2);
     border-radius: var(--radius-control);
     background-color: var(--carbon-surface2);
     cursor: text;
-    --tag-ground: var(--carbon-surface3);
   }
-  .glim-tags-control:focus-within {
-    background-color: var(--carbon-surface3);
-    --tag-ground: var(--carbon-hover-raised);
-  }
-  :is(.glim-well, .glim-subcard) .glim-tags-control {
-    background-color: var(--carbon-surface3);
-    --tag-ground: var(--carbon-hover-raised);
-  }
-  :is(.glim-well, .glim-subcard) .glim-tags-control:focus-within {
-    background-color: var(--carbon-hover-raised);
-    --tag-ground: var(--carbon-surface3);
-  }
+  .glim-tags-control:focus-within,
+  :is(.glim-well, .glim-subcard) .glim-tags-control { background-color: var(--carbon-surface3); }
+  :is(.glim-well, .glim-subcard) .glim-tags-control:focus-within { background-color: var(--carbon-hover-raised); }
   .glim-tags-control[data-disabled] {
     opacity: 0.5;
     cursor: not-allowed;
@@ -6348,15 +6339,18 @@
   .glim-tag {
     display: inline-flex;
     align-items: center;
-    gap: 0.125rem;
+    gap: var(--space-1);
     max-width: 100%;
     height: 1.5rem;
-    padding-inline: 0.55rem 0.125rem;
+    padding-inline: var(--space-4) var(--space-1);
     border-radius: var(--radius-pill);
-    background-color: var(--tag-ground);
+    background-color: var(--carbon-surface3);
     color: var(--carbon-text);
     font-size: var(--text-subline);
   }
+  .glim-tags-control:focus-within .glim-tag,
+  :is(.glim-well, .glim-subcard) .glim-tags-control .glim-tag { background-color: var(--carbon-hover-raised); }
+  :is(.glim-well, .glim-subcard) .glim-tags-control:focus-within .glim-tag { background-color: var(--carbon-surface3); }
   .glim-tag[data-highlighted] {
     background-color: var(--accent);
     color: var(--accent-contrast);
@@ -6385,7 +6379,7 @@
   }
   .glim-tag:not([data-highlighted]) .glim-tag-remove:hover { color: var(--accent-glyph); }
   .glim-tag-remove:focus-visible {
-    outline: 2px solid var(--focus-ring);
+    outline: var(--focus-ring-width) solid var(--focus-ring);
     outline-offset: 1px;
   }
   .glim-tag-edit[hidden] { display: none; }
@@ -6393,7 +6387,7 @@
     flex: 1;
     min-width: 6rem;
     height: 1.5rem;
-    padding-inline: 0.375rem;
+    padding-inline: var(--space-3);
     border: 0;
     background: transparent;
     color: inherit;
@@ -6401,7 +6395,7 @@
     font-size: var(--text-body);
     outline: none;
   }
-  .glim-tags-input::placeholder { color: var(--carbon-text-muted); }
+  .glim-tags-input::placeholder { color: var(--field-placeholder); }
 }
 
 /* Steps: the row of named steps, the step in force and its foot. The step in
@@ -6412,29 +6406,29 @@
   .glim-steps {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: var(--space-9);
     min-width: 0;
   }
   .glim-steps-list {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--space-4);
   }
   .glim-steps-item {
     display: flex;
     flex: 1;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--space-4);
     min-width: 0;
   }
   .glim-steps-item:last-child { flex: none; }
   .glim-steps-trigger {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--space-4);
     min-width: 0;
     min-height: var(--btn-h);
-    padding: 0.25rem 0.5rem 0.25rem 0.25rem;
+    padding: var(--space-2) var(--space-4) var(--space-2) var(--space-2);
     border: 0;
     border-radius: var(--radius-pill);
     background-color: transparent;
@@ -6447,7 +6441,7 @@
   :is(.glim-well, .glim-subcard) .glim-steps-trigger:hover { background-color: var(--carbon-surface3); }
   .glim-steps-trigger[data-current] { cursor: default; }
   .glim-steps-trigger:focus-visible {
-    outline: 2px solid var(--focus-ring);
+    outline: var(--focus-ring-width) solid var(--focus-ring);
     outline-offset: 2px;
   }
   .glim-steps-trigger[data-current] {
@@ -6462,7 +6456,7 @@
     height: 1.5rem;
     border-radius: var(--radius-pill);
     background-color: var(--carbon-surface2);
-    color: var(--carbon-text-muted);
+    color: var(--carbon-text-sub);
     font-size: var(--text-meta);
     font-weight: 600;
   }
@@ -6490,7 +6484,7 @@
     background-color: color-mix(in srgb, var(--carbon-border) 60%, transparent);
   }
   .glim-steps-content:focus-visible {
-    outline: 2px solid var(--focus-ring);
+    outline: var(--focus-ring-width) solid var(--focus-ring);
     outline-offset: 4px;
     border-radius: var(--radius-control);
   }
@@ -6498,7 +6492,7 @@
   .glim-steps-foot {
     display: flex;
     justify-content: flex-end;
-    gap: 0.5rem;
+    gap: var(--space-4);
   }
 }
 
@@ -6586,5 +6580,32 @@
 
     /* The ring keeps the system's own focus colour. */
     :focus-visible { outline-color: Highlight; }
+  }
+}
+
+/* The contrast step and the Windows contrast themes for the components on the
+   Zag machines, written like the rules for the older ones above: an edge on
+   every field and pressable part, and the selection colours on what is chosen
+   or picked. */
+@layer components {
+  @media (prefers-contrast: more) {
+    :is(.glim-page, .glim-tags-control, .glim-steps-indicator):not(:focus-visible) {
+      outline: 1px solid var(--carbon-border);
+      outline-offset: -1px;
+    }
+  }
+  @media (forced-colors: active) {
+    :is(.glim-page, .glim-tags-control, .glim-tag, .glim-avatar, .glim-steps-indicator) { border: 1px solid ButtonText; }
+    :is(.glim-page[data-selected], .glim-tag[data-highlighted], .glim-steps-indicator[data-current]) {
+      forced-color-adjust: none;
+      border-color: Highlight;
+      background-color: Highlight;
+      color: HighlightText;
+    }
+    .glim-steps-separator {
+      forced-color-adjust: none;
+      background-color: CanvasText;
+    }
+    .glim-tags-control[data-disabled] { border-color: GrayText; }
   }
 }

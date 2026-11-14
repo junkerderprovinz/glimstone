@@ -989,7 +989,7 @@ Two more surfaces stand over the page, both in the browser's top layer, so no ca
 Help pages, release notes and a list of frequent questions are read, not set, and the one place a row may open the text under it. Rule 26 still holds everywhere else: on a page that sets something, a fold hides what the page holds.
 
 - **`Accordion` is the list of questions, `Collapsible` the single passage.** Each row is a heading with a button in it, so a screen reader can walk from question to question, and `headingLevel` fits it into the page. One item opens at a time unless `multiple` is set, and an open item closes again on its own row.
-- **The row is bare.** It has no fill of its own, so it hovers to `--carbon-hover`, and on a sub-card or in a well to `--carbon-surface3` (rule 21). Rows are parted by hairlines. Open is no activity, so nothing takes the accent. The chevron at the end turns over.
+- **The row is bare.** It has no fill of its own, so it hovers to `--carbon-hover`, and on a sub-card or in a well to `--carbon-surface3` (rule 21). Rows are parted by hairlines, and a row takes the height and inline room of the row density ("Row density"), like a list row. Open is no activity, so nothing takes the accent. The chevron at the end turns over.
 - **The keys are the APG accordion's**: Enter and Space open and close, the arrows move between rows, Home and End go to the first and the last.
 - **It moves on the control duration.** A collapsible's text grows open over `--motion-control-dur` and the chevron turns with it. At off and under reduced motion the text comes and goes at once.
 
@@ -1011,6 +1011,7 @@ Help pages, release notes and a list of frequent questions are read, not set, an
 - **The first and the last page always stand in the row.** The pages beside the one in force stand around it, `siblingCount` on each side, and a muted gap marks the rest, so the row keeps its width while the page changes.
 - **The two steps are ordinary buttons** (`variant="icon"`) and follow the label mode: "Previous page" and "Next page" with their arrows, or the arrows alone. At either end the step that would go past it is disabled. Under a right-to-left language the arrows turn round.
 - **A screen reader hears a navigation** named by `text.label`, each page as "Page 3 of 20", and the page in force as the current one. All four words come from `text`, so an app passes its own translation.
+- **Under the contrast step and in a Windows contrast theme** every page draws its edge (rules 46 and 49), and the page in force takes the system's selection colours, as does the step in force of a `Steps` and a picked tag. The pages keep the field height in every row density, so they stay level with the two steps beside them (rule 19).
 
 ## Codes typed a character at a time
 
