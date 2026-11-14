@@ -1,6 +1,7 @@
 import { useState, useSyncExternalStore } from "react";
 import {
   ACCENTS,
+  RAINBOW,
   DENSITIES,
   MOTION_LEVELS,
   SHAPES,
@@ -12,8 +13,9 @@ import {
   systemAccent,
   type Density,
   type LabelMode,
+  type SelectorSize,
 } from "@glimstone/core";
-import { ColorPicker, Selector, Toggle } from "@glimstone/react";
+import { Button, ColorPicker, Selector, Toggle } from "@glimstone/react";
 import { Glyph } from "./glyph";
 import { DENSITY_GLYPHS } from "./glyphData";
 import { setLook, useLook, type Theme } from "./look";
@@ -21,7 +23,7 @@ import { setLook, useLook, type Theme } from "./look";
 // Each control draws the control alone. In the look panel a FieldRow around it
 // gives it its name; on an engine page it stands in a bar and names itself.
 // The selectors save a setting, so they choose as a radio group does.
-type Named = { label?: string };
+type Named = { label?: string; size?: SelectorSize };
 
 const LABEL_NAMES: Record<LabelMode, string> = { text: "Text", textGlyph: "Both", glyph: "Glyph", reactive: "Reactive" };
 const LABEL_GLYPHS: Record<LabelMode, string> = {
@@ -33,11 +35,12 @@ const LABEL_GLYPHS: Record<LabelMode, string> = {
 const DENSITY_NAMES: Record<Density, string> = { compact: "Compact", normal: "Normal", airy: "Airy" };
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
-export function ThemePicker({ label }: Named) {
+export function ThemePicker({ label, size }: Named) {
   const { theme } = useLook();
   return (
     <Selector<"one", Theme>
       label={label}
+      size={size}
       activation="manual"
       value={theme}
       onChange={(theme) => setLook({ theme })}
@@ -64,11 +67,12 @@ export function ThemeControl() {
   );
 }
 
-export function ShapeControl({ label }: Named) {
+export function ShapeControl({ label, size }: Named) {
   const { shape } = useLook();
   return (
     <Selector
       label={label}
+      size={size}
       activation="manual"
       value={shape}
       onChange={(shape) => setLook({ shape })}
@@ -77,11 +81,12 @@ export function ShapeControl({ label }: Named) {
   );
 }
 
-export function MotionControl({ label }: Named) {
+export function MotionControl({ label, size }: Named) {
   const { motion } = useLook();
   return (
     <Selector
       label={label}
+      size={size}
       activation="manual"
       value={motion}
       onChange={(motion) => setLook({ motion })}
@@ -90,11 +95,12 @@ export function MotionControl({ label }: Named) {
   );
 }
 
-export function DensityControl({ label }: Named) {
+export function DensityControl({ label, size }: Named) {
   const { density } = useLook();
   return (
     <Selector
       label={label}
+      size={size}
       activation="manual"
       value={density}
       onChange={(density) => setLook({ density })}
@@ -103,11 +109,12 @@ export function DensityControl({ label }: Named) {
   );
 }
 
-export function LabelControl({ label }: Named) {
+export function LabelControl({ label, size }: Named) {
   const { labels } = useLook();
   return (
     <Selector
       label={label}
+      size={size}
       activation="manual"
       value={labels}
       onChange={(labels) => setLook({ labels })}
@@ -135,6 +142,63 @@ export function ReactiveControl({ label }: Named) {
       onChange={(reactive) => setLook({ rainbow: reactive ? "reactive" : "on" })}
       refused={rainbow === "off" ? "Only with the rainbow on." : undefined}
     />
+  );
+}
+
+export function RotateControl({ label }: Named) {
+  const { rotate } = useLook();
+  // Turning rotation on draws a fresh offset, so the switch does something
+  // visible instead of putting back the offset the palette already had.
+  return (
+    <Toggle
+      label={label}
+      checked={rotate}
+      onChange={(on) => setLook({ rotate: on, seed: on ? 1 + Math.floor(Math.random() * (RAINBOW.length - 1)) : 0 })}
+    />
+  );
+}
+
+/** The rainbow's eight colours by position. Every swatch opens the picker, since all eight are in force at once. */
+export function PaletteControl() {
+  const { palette } = useLook();
+  const [editing, setEditing] = useState<{ index: number; anchor: HTMLElement } | null>(null);
+  const isDefault = palette.every((hex, i) => hex.toLowerCase() === RAINBOW[i].toLowerCase());
+  const set = (index: number, hex: string) => setLook({ palette: palette.map((h, i) => (i === index ? hex : h)) });
+  return (
+    <div className="look-swatches" role="group" aria-label="Palette">
+      {palette.map((hex, i) => (
+        <button
+          key={i}
+          type="button"
+          className="swatch"
+          data-position={i}
+          aria-label={`Palette colour ${i + 1}, ${hex.toUpperCase()}`}
+          title={`Palette colour ${i + 1}, ${hex.toUpperCase()}`}
+          aria-haspopup="dialog"
+          style={{ background: hex }}
+          onClick={(e) => setEditing(editing?.index === i ? null : { index: i, anchor: e.currentTarget })}
+        />
+      ))}
+      <Button
+        label="Reset the palette"
+        labelKey="reset"
+        tone="subtle"
+        variant="icon"
+        compact
+        disabled={isDefault}
+        onClick={() => setLook({ palette: RAINBOW })}
+      />
+      {editing && (
+        <ColorPicker
+          value={palette[editing.index]}
+          anchor={editing.anchor}
+          names={false}
+          onInput={(hex) => set(editing.index, hex)}
+          onApply={(hex) => set(editing.index, hex)}
+          onClose={() => setEditing(null)}
+        />
+      )}
+    </div>
   );
 }
 

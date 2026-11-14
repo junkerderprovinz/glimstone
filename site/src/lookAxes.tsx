@@ -1,5 +1,5 @@
 import type { ComponentType } from "react";
-import { accentInks, CONTROL_AXES, contrastOn, DEFAULT_ACCENT, SYSTEM_ACCENT } from "@glimstone/core";
+import { accentInks, CONTROL_AXES, contrastOn, DEFAULT_ACCENT, SYSTEM_ACCENT, type SelectorSize } from "@glimstone/core";
 import type { Look } from "./look";
 import {
   AccentControl,
@@ -8,8 +8,10 @@ import {
   LabelControl,
   MotionControl,
   OledControl,
+  PaletteControl,
   RainbowControl,
   ReactiveControl,
+  RotateControl,
   ShapeControl,
   ThemePicker,
 } from "./lookControls";
@@ -23,11 +25,17 @@ export interface LookAxis {
   id: string;
   /** The row's name, which names the control in it. */
   label: string;
-  /** The bubble beside the row's name. */
-  hint: string;
+  /** The bubble beside the row's name, which may depend on the rest of the look. */
+  hint: string | ((look: Look) => string);
   /** The sub-card the row stands in. */
   group: LookGroup;
-  Control: ComponentType;
+  /** A choice is a selector and takes the row's whole width under its name, so its words fit beside its glyphs. */
+  kind: "choice" | "switch" | "swatches";
+  /** A row that only means something under another setting is shown only then. */
+  shown?: (look: Look) => boolean;
+  /** The row's own rainbow position, for a set of rows that belong together. */
+  hue?: number;
+  Control: ComponentType<{ label?: string; size?: SelectorSize }>;
   /** Attributes for the root element; `true` is one without a value, and a name starting with `--` goes into its style. */
   root: (look: Look) => [string, string | true][];
   /** The axis's starting values in the settings store. An axis the device keeps for itself has none. */
@@ -37,11 +45,20 @@ export interface LookAxis {
 export const LOOK_GROUPS = ["Colour", "Layout"] as const;
 export type LookGroup = (typeof LOOK_GROUPS)[number];
 
+const rainbowOn = (l: Look) => l.rainbow !== "off";
+
+/** The colour at each rainbow position, rotation applied, as applyRainbow() sets it on the root. */
+export function rainbowColours(l: Look): string[] {
+  const off = l.rotate ? l.seed : 0;
+  return l.palette.map((_, i) => l.palette[(i + off) % l.palette.length]);
+}
+
 const hex = (accent: string) => (accent === SYSTEM_ACCENT || accent.toUpperCase() === DEFAULT_ACCENT ? undefined : accent);
 
 export const LOOK_AXES: LookAxis[] = [
   {
     id: "theme",
+    kind: "choice",
     label: "Theme",
     hint: "System follows the device. Dark and Light stay as chosen.",
     group: "Colour",
@@ -51,6 +68,7 @@ export const LOOK_AXES: LookAxis[] = [
   },
   {
     id: "oled",
+    kind: "switch",
     label: "OLED",
     hint: "True black for OLED and AMOLED screens, whenever the dark look is showing.",
     group: "Colour",
@@ -59,8 +77,12 @@ export const LOOK_AXES: LookAxis[] = [
   },
   {
     id: "accent",
+    kind: "swatches",
     label: "Accent",
-    hint: "The colour of what is active or chosen. Click the chosen swatch again to pick any colour.",
+    hint: (l) =>
+      rainbowOn(l)
+        ? "The rainbow owns the colours while it is on. The accent still paints what the rainbow does not reach, and comes back when the rainbow is off."
+        : "The colour of what is active or chosen. Click the chosen swatch again to pick any colour.",
     group: "Colour",
     Control: AccentControl,
     root: (l) => {
@@ -80,23 +102,63 @@ export const LOOK_AXES: LookAxis[] = [
   },
   {
     id: "rainbow",
+    kind: "switch",
     label: "Rainbow",
     hint: "Gives every card and selector a colour of its own in place of the accent.",
     group: "Colour",
+    hue: 0,
     Control: RainbowControl,
-    root: (l) => (l.rainbow === "off" ? [] : [["data-rainbow", l.rainbow]]),
-    store: (l) => ({ rainbow: l.rainbow !== "off", rainbowReactive: l.rainbow === "reactive" }),
+    root: (l) =>
+      rainbowOn(l)
+        ? [
+            ["data-rainbow", l.rainbow],
+            ...rainbowColours(l).flatMap((c, i): [string, string][] => [
+              [`--rb-${i}`, c],
+              [`--rb-ink-${i}`, contrastOn(c)],
+            ]),
+          ]
+        : [],
+    store: (l) => ({
+      rainbow: rainbowOn(l),
+      rainbowReactive: l.rainbow === "reactive",
+      ...(rainbowOn(l) ? { rainbowRotate: l.rotate, rainbowSeed: l.seed, rainbowPalette: l.palette } : {}),
+    }),
   },
   {
     id: "reactive",
+    kind: "switch",
     label: "Reactive",
     hint: "Keeps the rainbow grey until the pointer reaches something.",
     group: "Colour",
+    shown: rainbowOn,
+    hue: 1,
     Control: ReactiveControl,
     root: () => [],
   },
   {
+    id: "rotate",
+    kind: "switch",
+    label: "Rotate",
+    hint: "Starts the colours at another place in the palette, so the first card is not always the same colour.",
+    group: "Colour",
+    shown: rainbowOn,
+    hue: 2,
+    Control: RotateControl,
+    root: () => [],
+  },
+  {
+    id: "palette",
+    kind: "swatches",
+    label: "Palette",
+    hint: "The eight colours, handed out by position. Click one to change it.",
+    group: "Colour",
+    shown: rainbowOn,
+    Control: PaletteControl,
+    root: () => [],
+  },
+  {
     id: "contrast",
+    kind: "switch",
     label: "Contrast",
     hint: "On gives darker quiet text, an edge round fields and buttons and a thicker focus ring. Off still gives that when the device asks for it.",
     group: "Colour",
@@ -106,6 +168,7 @@ export const LOOK_AXES: LookAxis[] = [
   },
   {
     id: "shape",
+    kind: "choice",
     label: "Corners",
     hint: "One setting rounds or squares every card, field and button.",
     group: "Layout",
@@ -115,6 +178,7 @@ export const LOOK_AXES: LookAxis[] = [
   },
   {
     id: "motion",
+    kind: "choice",
     label: "Motion",
     hint: "How far and how long things move. A device that asks for less motion gets less.",
     group: "Layout",
@@ -124,6 +188,7 @@ export const LOOK_AXES: LookAxis[] = [
   },
   {
     id: "density",
+    kind: "choice",
     label: "Density",
     hint: "How tall the rows of a list or a table stand.",
     group: "Layout",
@@ -133,6 +198,7 @@ export const LOOK_AXES: LookAxis[] = [
   },
   {
     id: "labels",
+    kind: "choice",
     label: "Labels",
     hint: "Words, glyphs or both on buttons, the sidebar and tabs.",
     group: "Layout",

@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { COPIED_MS, copyText } from "@glimstone/core";
+import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
+import { COPIED_MS, copyText, hueVars } from "@glimstone/core";
 import { Button, FieldRow, FieldRowGroup, SubCard } from "@glimstone/react";
 import { resetLook, useLook } from "./look";
 import { LOOK_AXES, LOOK_GROUPS, lookSnippet, rootSnippet, storeSnippet } from "./lookAxes";
@@ -64,9 +64,19 @@ export function LookPanel() {
         {LOOK_GROUPS.map((group) => (
           <SubCard key={group} title={group}>
             <FieldRowGroup>
-              {LOOK_AXES.filter((a) => a.group === group).map(({ id, label, hint, Control }) => (
-                <FieldRow key={id} label={label} hint={hint} data-axis={id}>
-                  <Control />
+              {LOOK_AXES.filter((a) => a.group === group && (a.shown?.(look) ?? true)).map(({ id, label, hint, kind, hue, Control }) => (
+                <FieldRow
+                  key={id}
+                  label={label}
+                  hint={typeof hint === "function" ? hint(look) : hint}
+                  data-axis={id}
+                  data-kind={kind}
+                  className={hue === undefined ? undefined : "glim-hue"}
+                  style={hue === undefined ? undefined : (hueVars(hue) as CSSProperties)}
+                >
+                  {/* A choice names its own strip, which then spans the row instead of
+                      hugging its end, at the small scale a settings row gives it. */}
+                  {kind === "choice" ? <Control label={label} size="sm" /> : <Control />}
                 </FieldRow>
               ))}
             </FieldRowGroup>

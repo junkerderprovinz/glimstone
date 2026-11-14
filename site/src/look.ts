@@ -10,6 +10,7 @@ import {
   DEFAULT_DENSITY,
   DEFAULT_MOTION,
   DEFAULT_SHAPE,
+  RAINBOW,
   CONTROL_AXES,
   DEFAULT_LABEL_MODE,
   labelModeChanged,
@@ -32,6 +33,11 @@ export interface Look {
   shape: Shape;
   accent: string;
   rainbow: Rainbow;
+  /** Offsets the palette by `seed`, so the colours do not always start at the same one. */
+  rotate: boolean;
+  seed: number;
+  /** The eight rainbow colours, by position. */
+  palette: string[];
   motion: Motion;
   density: Density;
   contrast: Contrast;
@@ -45,6 +51,9 @@ const DEFAULT: Look = {
   shape: DEFAULT_SHAPE,
   accent: DEFAULT_ACCENT,
   rainbow: "off",
+  rotate: false,
+  seed: 0,
+  palette: RAINBOW,
   motion: DEFAULT_MOTION,
   density: DEFAULT_DENSITY,
   contrast: "system",
@@ -71,7 +80,7 @@ function apply(l: Look) {
   applyAccent(l.accent);
   applyMotion(l.motion);
   applyDensity(l.density);
-  applyRainbow({ on: l.rainbow !== "off", reactive: l.rainbow === "reactive" });
+  applyRainbow({ on: l.rainbow !== "off", reactive: l.rainbow === "reactive", rotate: l.rotate, seed: l.seed, palette: l.palette });
   for (const axis of CONTROL_AXES) setLabelMode(axis, l.labels);
   labelModeChanged();
 }
