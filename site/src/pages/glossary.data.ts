@@ -1276,8 +1276,8 @@ export const GLOSSARY: GlossarySection[] = [
         code: ["InfoTile", "AboutCard"],
         components: ["InfoTile", "AboutCard", "InfoVersionCard", "InfoHelpCard", "InfoAboutCard"],
         text: {
-          en: "The three cards of the Info tab in this order: the version card with each version as a row, the help card with GitHub, mail and manual, and the about card with its sentence on money and the donation buttons under it.",
-          de: "Die drei Karten des Info-Reiters in dieser Reihenfolge: die Versionskarte mit jeder Version als Zeile, die Hilfe-Karte mit GitHub, E-Mail und Handbuch, und die Über-Karte mit dem Satz zum Geld und den Spendenknöpfen darunter.",
+          en: "The three cards of the Info tab in this order: the version card with each version as a row, the help card with GitHub, Discord, mail and manual, and the about card with its sentence on money and the donation buttons under it.",
+          de: "Die drei Karten des Info-Reiters in dieser Reihenfolge: die Versionskarte mit jeder Version als Zeile, die Hilfe-Karte mit GitHub, Discord, E-Mail und Handbuch, und die Über-Karte mit dem Satz zum Geld und den Spendenknöpfen darunter.",
         },
         also: [
           { en: "Version card", de: "Versionskarte", code: "InfoVersionCard" },

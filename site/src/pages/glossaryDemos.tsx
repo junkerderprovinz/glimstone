@@ -1676,8 +1676,9 @@ function InfoTileDemo() {
         help={{
           text: {
             title: t("Help", "Hilfe"),
-            report: t("Something broken, or an idea? An issue or a mail is welcome.", "Etwas kaputt oder eine Idee? Schreib gern ein Issue oder eine E-Mail."),
+            report: t("Something broken, or an idea? An issue, an email or a word on Discord is welcome.", "Etwas kaputt oder eine Idee? Schreib gern ein Issue, eine E-Mail oder auf Discord."),
             repoButton: "GitHub",
+            discordButton: "Discord",
             mailButton: t("Mail", "E-Mail"),
             mailSubject: t("Example app", "Beispiel-App"),
             manual: t("Manual", "Handbuch"),
@@ -1685,6 +1686,8 @@ function InfoTileDemo() {
           },
           repoUrl,
           repoGlyph: <Glyph name="IconGithub" size={20} />,
+          discordUrl: "https://discord.gg/example",
+          discordGlyph: <Glyph name="IconDiscord" size={20} />,
           mailAddress: "post@example.com",
           mailGlyph: <Markup svg={MAIL_SVG} />,
           manualUrl: "#/guide/glossary?s=gl-info-tile",
