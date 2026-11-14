@@ -1,9 +1,9 @@
 import { readFileSync } from "node:fs";
 import { expect, test } from "@playwright/test";
 
-// An app that moves from React to Vue keeps its look only if every component
-// draws the same elements with the same classes, attributes and inline
-// styles. Each demo page shows both twins side by side, so their trees are
+// An app that moves from one framework to another keeps its look only if every
+// component draws the same elements with the same classes, attributes and
+// inline styles. Each demo page shows the twins side by side, so their trees are
 // compared there, with what each framework writes its own way taken out: the
 // generated ids, the value React mirrors into a controlled field's attribute,
 // an empty class, and where text nodes split. A selector strip takes its
@@ -12,7 +12,7 @@ import { expect, test } from "@playwright/test";
 
 const pages = [...readFileSync(new URL("../src/App.tsx", import.meta.url), "utf8").matchAll(/path: "(\/components\/[^"]+)"/g)].map((m) => m[1]!);
 
-test("[twins-markup] every demo draws the same markup in React and Vue", async ({ page }, info) => {
+test("[twins-markup] every demo draws the same markup in React, Vue, Solid and Svelte", async ({ page }, info) => {
   test.skip(info.project.name !== "react", "One run compares both");
   test.setTimeout(pages.length * 6_000);
   const differ: string[] = [];
@@ -46,15 +46,17 @@ test("[twins-markup] every demo draws the same markup in React and Vue", async (
         const out: string[] = [];
         for (const react of document.querySelectorAll('[data-framework="react"]')) {
           const demo = react.getAttribute("data-demo")!;
-          // The Vue demo is mounted inside an island of its own.
-          const island = document.querySelector(`[data-framework="vue"][data-demo="${demo}"]`)?.firstElementChild;
-          if (!island) continue;
           const a = [...react.children].flatMap((c) => shape(c, 0));
-          const b = [...island.children].flatMap((c) => shape(c, 0));
-          const at = a.findIndex((line, i) => line !== b[i]);
-          if (at >= 0 || a.length !== b.length) {
-            const i = at >= 0 ? at : Math.min(a.length, b.length);
-            out.push(`${path} ${demo}:\n  React ${a[i]?.trim() ?? "nothing"}\n  Vue   ${b[i]?.trim() ?? "nothing"}`);
+          for (const [framework, name] of [["vue", "Vue"], ["solid", "Solid"], ["svelte", "Svelte"]]) {
+            // The other demos are mounted inside an island of their own.
+            const island = document.querySelector(`[data-framework="${framework}"][data-demo="${demo}"]`)?.firstElementChild;
+            if (!island) continue;
+            const b = [...island.children].flatMap((c) => shape(c, 0));
+            const at = a.findIndex((line, i) => line !== b[i]);
+            if (at >= 0 || a.length !== b.length) {
+              const i = at >= 0 ? at : Math.min(a.length, b.length);
+              out.push(`${path} ${demo}:\n  React  ${a[i]?.trim() ?? "nothing"}\n  ${name!.padEnd(6)} ${b[i]?.trim() ?? "nothing"}`);
+            }
           }
         }
         return out;
