@@ -389,12 +389,14 @@ function Glossary() {
   );
 }
 
-const SCENES: Record<string, () => ReactNode> = {
-  strip: () => <Strip />,
-  cell: () => <Cell />,
-  tile: () => <Tile engine={q.get("engine") ?? "shape"} />,
-  glossary: () => <Glossary />,
-  eggs: () => <Eggs />,
-};
+const SCENES = new Map<string, () => ReactNode>([
+  ["strip", () => <Strip />],
+  ["cell", () => <Cell />],
+  ["tile", () => <Tile engine={q.get("engine") ?? "shape"} />],
+  ["glossary", () => <Glossary />],
+  ["eggs", () => <Eggs />],
+]);
 
-createRoot(document.getElementById("root")!).render(SCENES[scene]());
+const stage = SCENES.get(scene);
+if (!stage) throw new Error(`no scene named ${scene}`);
+createRoot(document.getElementById("root")!).render(stage());
