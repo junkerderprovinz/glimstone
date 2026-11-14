@@ -1087,6 +1087,15 @@ Help pages, release notes and a list of frequent questions are read, not set, an
 - **`allowHalf` takes half stars**, the last one filled to half its width, from the start of the reading direction. `readOnly` shows a value, such as an average, and takes no input.
 - **Each star is 24px**, the smallest target WCAG 2.2 allows.
 
+## Timers
+
+`Timer` counts up from a start or down to zero: the time a test may run, how long a pairing code stays valid.
+
+- **The figure stands at the status size** (22px) in tabular digits (rule 7), so it never jitters while it counts, and left to right in every language, since a time is data ("Right-to-left languages").
+- **It takes the accent's ink while it runs**, the one moment it is activity (rule 3), and the text colour at rest and while paused.
+- **Its buttons stand under it** and follow the label mode: Start turns into Pause while it runs and into Resume once paused, and Reset puts it back to where it started. The words come from `text`.
+- **A screen reader hears the time in words**, such as "1 hour, 4 minutes, 30 seconds", as a `timer`, which it reads when asked rather than on every tick.
+
 ## Narrow windows
 
 The web interface at phone width, beside "The bottom bar" that replaces the rail there.

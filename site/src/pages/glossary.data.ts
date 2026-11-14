@@ -1063,6 +1063,19 @@ export const GLOSSARY: GlossarySection[] = [
           de: "Hält den Platz einer Listenzeile, solange die Liste lädt, mit Kachel, Name und Plakette in der Box der Zeile, damit nichts springt, wenn die Zeilen kommen. Ein Lichtstreifen läuft über alle Zeilen zugleich.",
         },
       },
+      {
+        id: "timer",
+        en: "Timer",
+        de: "Zeitgeber",
+        proposal: true,
+        code: ["Timer", ".glim-timer", ".glim-timer-figure"],
+        components: ["Timer"],
+        rules: [3, 7],
+        text: {
+          en: "A clock that counts up or down. It takes the accent's ink while it runs.",
+          de: "Eine Uhr, die vor- oder rückwärts zählt. Solange sie läuft, trägt sie die Akzentfarbe.",
+        },
+      },
     ],
   },
   {

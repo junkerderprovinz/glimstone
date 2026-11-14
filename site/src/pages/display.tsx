@@ -32,3 +32,29 @@ export function AvatarPage() {
     </>
   );
 }
+
+export function TimerPage() {
+  return (
+    <>
+      <p className="lead">A clock that counts up from a start or down to zero, such as the time a test may run.</p>
+      <MachineNote file="react/Timer.tsx" machine="timer" />
+      <Demo name="TimerTest" />
+      <Code
+        code={`import { Timer } from "@glimstone/react/Timer";
+
+<Timer countdown startMs={5 * 60_000} onComplete={stop} />`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>The figure stands at the status size in tabular digits, so it never jitters, and left to right in every language.</li>
+        <li>It takes the accent's ink while it runs, the one moment it is activity, and the text colour at rest and when paused.</li>
+        <li>Start turns into Pause while it runs and into Resume once paused. Reset puts it back to where it started.</li>
+        <li>A screen reader hears the time in words as a timer, which it reads when asked rather than every second.</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="Timer" />
+      <H2>API</H2>
+      <PropsTable of="Timer" />
+    </>
+  );
+}

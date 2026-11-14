@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import { open, relook, stage } from "./page";
 
 // The rows of Avatar, Timer, Marquee, HoverCard and Carousel, each named after its contract row.
@@ -6,7 +6,7 @@ import { open, relook, stage } from "./page";
 test.beforeEach(({}, info) => test.skip(!["react", "vue"].includes(info.project.name), "React and Vue only so far"));
 
 test.describe("Avatar", () => {
-  const person = (page: import("@playwright/test").Page, name: string) => stage(page, "AvatarPeople").getByRole("img", { name, exact: true });
+  const person = (page: Page, name: string) => stage(page, "AvatarPeople").getByRole("img", { name, exact: true });
 
   test("[avatar-name] the name is what a screen reader hears", async ({ page }) => {
     await open(page, "/components/avatar");
@@ -34,5 +34,55 @@ test.describe("Avatar", () => {
     expect(await corner()).toBeGreaterThanOrEqual(20);
     await relook(page, { shape: "square" });
     expect(await corner()).toBe(0);
+  });
+});
+
+test.describe("Timer", () => {
+  const figure = (page: Page) => stage(page, "TimerTest").getByRole("timer");
+  const button = (page: Page, name: string) => stage(page, "TimerTest").getByRole("button", { name, exact: true });
+
+  test("[timer-figure] a timer named by the time in words, its digits left to right", async ({ page }) => {
+    await open(page, "/components/timer");
+    await expect(figure(page)).toHaveText("00:00:03");
+    await expect(figure(page)).toHaveAttribute("aria-label", "3 seconds");
+    expect(await figure(page).evaluate((el) => getComputedStyle(el).direction)).toBe("ltr");
+  });
+
+  test("[timer-run] Start runs it, Pause holds it and Resume goes on", async ({ page }) => {
+    await open(page, "/components/timer");
+    await button(page, "Start").click();
+    await expect(figure(page)).toHaveAttribute("data-running", "");
+    await button(page, "Pause").click();
+    await expect(button(page, "Resume")).toBeVisible();
+    const held = await figure(page).textContent();
+    await page.waitForTimeout(1_200);
+    await expect(figure(page)).toHaveText(held!);
+    await button(page, "Resume").click();
+    await expect(button(page, "Pause")).toBeVisible();
+  });
+
+  test("[timer-complete] a countdown that reaches zero says so", async ({ page }) => {
+    await open(page, "/components/timer");
+    await button(page, "Start").click();
+    await expect(stage(page, "TimerTest").getByText("Time is up")).toBeVisible({ timeout: 6_000 });
+    await expect(figure(page)).toHaveText("00:00:00");
+  });
+
+  test("[timer-reset] Reset puts it back to where it started", async ({ page }) => {
+    await open(page, "/components/timer");
+    await button(page, "Start").click();
+    await expect(figure(page)).not.toHaveText("00:00:03", { timeout: 3_000 });
+    await button(page, "Reset").click();
+    await expect(figure(page)).toHaveText("00:00:03");
+    await expect(button(page, "Start")).toBeVisible();
+  });
+
+  test("[timer-accent] while it runs the figure takes the accent's ink", async ({ page }) => {
+    await open(page, "/components/timer");
+    const ink = () => figure(page).evaluate((el) => getComputedStyle(el).color);
+    const rest = await ink();
+    await button(page, "Start").click();
+    await expect(figure(page)).toHaveAttribute("data-running", "");
+    expect(await ink()).not.toBe(rest);
   });
 });

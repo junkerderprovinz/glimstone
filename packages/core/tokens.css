@@ -6959,6 +6959,30 @@
   }
 }
 
+/* Timer: the figure at the status size in tabular digits, left to right in
+   every language. While it runs it takes the accent's ink; at rest and when
+   paused it is the text colour. Its buttons stand under it. */
+@layer components {
+  .glim-timer {
+    display: grid;
+    gap: var(--space-6);
+    justify-items: start;
+  }
+  .glim-timer-figure {
+    display: flex;
+    direction: ltr;
+    color: var(--carbon-text);
+    font-size: var(--text-status);
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  .glim-timer-figure[data-running] { color: var(--accent-ink); }
+  .glim-timer-control {
+    display: flex;
+    gap: var(--space-4);
+  }
+}
+
 /* The contrast step and the Windows contrast themes for the components on the
    Zag machines, written like the rules for the older ones above: an edge on
    every field and pressable part, and the selection colours on what is chosen

@@ -54,3 +54,6 @@ export const IconForward = () => <MarkSvg mark={MARKS.forward} className="glim-m
 export const IconUpload = () => <MarkSvg mark={MARKS.upload} className="glim-mark" />;
 export const IconCalendar = () => <MarkSvg mark={MARKS.calendar} className="glim-mark" />;
 export const IconStar = () => <MarkSvg mark={MARKS.star} className="glim-mark" />;
+export const IconPlay = () => <MarkSvg mark={MARKS.play} className="glim-mark" />;
+export const IconPause = () => <MarkSvg mark={MARKS.pause} className="glim-mark" />;
+export const IconResetArrow = () => <MarkSvg mark={MARKS.resetArrow} className="glim-mark" />;

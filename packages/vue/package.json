@@ -75,6 +75,10 @@
     "./Rating": {
       "types": "./dist/entries/rating.d.ts",
       "default": "./dist/Rating.js"
+    },
+    "./Timer": {
+      "types": "./dist/entries/timer.d.ts",
+      "default": "./dist/Timer.js"
     }
   },
   "files": [
@@ -104,6 +108,7 @@
     "@zag-js/splitter": "^1.47.0",
     "@zag-js/steps": "^1.47.0",
     "@zag-js/tags-input": "^1.47.0",
+    "@zag-js/timer": "^1.47.0",
     "@zag-js/vue": "^1.46.0",
     "vue": "^3.5.0"
   }

@@ -54,6 +54,7 @@ export * from "./signIn.ts";
 export * from "./splitter.ts";
 export * from "./steps.ts";
 export * from "./storage.ts";
+export * from "./timer.ts";
 export * from "./tipBubble.ts";
 export * from "./table.ts";
 export * from "./tagsInput.ts";

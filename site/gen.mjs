@@ -73,6 +73,7 @@ const COMPONENTS = {
   FileUpload: "react/FileUpload.tsx",
   DatePicker: "react/DatePicker.tsx",
   Rating: "react/Rating.tsx",
+  Timer: "react/Timer.tsx",
 };
 
 const clean = (s) => s.replace(/\s+/g, " ").trim();

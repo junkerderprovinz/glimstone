@@ -17,7 +17,7 @@ import { ListTablePage } from "./pages/lists";
 import { ScrollAreaPage, SplitterPage } from "./pages/layout";
 import { DatePickerPage, FileUploadPage, PinInputPage, RatingPage, TagsInputPage } from "./pages/inputs";
 import { PaginationPage, StepsPage } from "./pages/navigation";
-import { AvatarPage } from "./pages/display";
+import { AvatarPage, TimerPage } from "./pages/display";
 import { AccordionPage, CollapsiblePage } from "./pages/reading";
 import {
   BadgePage,
@@ -134,6 +134,7 @@ const PAGES: Page[] = [
   { path: "/components/steps", title: "Steps", group: "Components", Comp: StepsPage, tag: "Zag" },
   { path: "/components/sub-card", title: "SubCard", group: "Components", Comp: SubCardPage },
   { path: "/components/tags-input", title: "TagsInput", group: "Components", Comp: TagsInputPage, tag: "Zag" },
+  { path: "/components/timer", title: "Timer", group: "Components", Comp: TimerPage, tag: "Zag" },
   { path: "/components/toast", title: "Toast", group: "Components", Comp: ToastPage },
   { path: "/components/table", title: "Table", group: "Components", Comp: TablePage },
   { path: "/components/text-field", title: "TextField", group: "Components", Comp: TextFieldPage },

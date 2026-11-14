@@ -791,4 +791,13 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "rating-half", when: "allowHalf is on and the value has a half", then: "The last star is half filled." },
     ],
   },
+  Timer: {
+    rows: [
+      { id: "timer-figure", when: "Always", then: "A timer named by the time in words, such as \"3 seconds\", with its digits left to right in every language." },
+      { id: "timer-run", when: "Start, Pause or Resume is pressed", then: "It runs, holds its time, or goes on from it, and the button turns into the next one." },
+      { id: "timer-complete", when: "A countdown reaches zero, or a count up its target", then: "It stops at the end and calls onComplete." },
+      { id: "timer-reset", when: "Reset is pressed", then: "It goes back to where it started and waits for Start." },
+      { id: "timer-accent", when: "It runs", then: "The figure takes the accent's ink, and the text colour again when it stops." },
+    ],
+  },
 };
