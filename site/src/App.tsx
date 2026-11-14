@@ -13,6 +13,7 @@ import { ColourEngine, LabelEngine, MotionEngine, ShapeEngine } from "./pages/en
 import { BusyRingPage, SkeletonRowPage } from "./pages/loading";
 import { PopoverPage, SheetPage } from "./pages/overlay";
 import { ListTablePage } from "./pages/lists";
+import { PinInputPage } from "./pages/inputs";
 import { PaginationPage } from "./pages/navigation";
 import { AvatarPage } from "./pages/display";
 import { AccordionPage, CollapsiblePage } from "./pages/reading";
@@ -110,6 +111,7 @@ const PAGES: Page[] = [
   { path: "/components/password-field", title: "PasswordField", group: "Components", Comp: PasswordFieldPage },
   { path: "/components/path-field", title: "PathField", group: "Components", Comp: PathFieldPage },
   { path: "/components/pill", title: "Pill", group: "Components", Comp: PillPage },
+  { path: "/components/pin-input", title: "PinInput", group: "Components", Comp: PinInputPage, tag: "Zag" },
   { path: "/components/popover", title: "Popover", group: "Components", Comp: PopoverPage },
   { path: "/components/progress-bar", title: "ProgressBar", group: "Components", Comp: ProgressBarPage },
   { path: "/components/row-mark", title: "RowMark", group: "Components", Comp: RowMarkPage },

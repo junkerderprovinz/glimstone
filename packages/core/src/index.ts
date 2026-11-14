@@ -37,6 +37,7 @@ export * from "./overlay.ts";
 export * from "./pagination.ts";
 export * from "./paypal.ts";
 export * from "./pill.ts";
+export * from "./pinInput.ts";
 export * from "./portalHue.ts";
 export * from "./qr.ts";
 export * from "./readmeButton.ts";

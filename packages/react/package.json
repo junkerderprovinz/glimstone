@@ -25,6 +25,7 @@
     "@zag-js/combobox": "^1.46.0",
     "@zag-js/menu": "^1.46.0",
     "@zag-js/pagination": "^1.47.0",
+    "@zag-js/pin-input": "^1.47.0",
     "@zag-js/react": "^1.46.0",
     "@zag-js/select": "^1.46.0",
     "@zag-js/slider": "^1.46.0",

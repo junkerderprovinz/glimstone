@@ -610,6 +610,19 @@ export const GLOSSARY: GlossarySection[] = [
           de: "Gibt ihren Zeilen eine gemeinsame Namensspalte, so breit wie der längste Name. Unter 600 px bricht jede Zeile wieder für sich um.",
         },
       },
+      {
+        id: "pin-input",
+        en: "PIN input",
+        de: "Codefeld",
+        proposal: true,
+        code: ["PinInput", ".glim-pin", ".glim-pin-cell"],
+        components: ["PinInput"],
+        rules: [14],
+        text: {
+          en: "A short code typed one character to a box. A pasted code fills every box, and the boxes run left to right in every language.",
+          de: "Ein kurzer Code, ein Zeichen je Kästchen. Ein eingefügter Code füllt alle Kästchen, und sie laufen in jeder Sprache von links nach rechts.",
+        },
+      },
     ],
   },
   {

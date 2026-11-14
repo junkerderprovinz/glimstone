@@ -710,4 +710,15 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "pagination-accent", when: "Always", then: "The page in force is filled with the accent, the others with a quiet fill." },
     ],
   },
+  PinInput: {
+    rows: [
+      { id: "pin-names", when: "Always", then: "One text field a character, each named by its place, such as \"Character 2 of 6\", under the label of the whole." },
+      { id: "pin-type", when: "A character is typed", then: "It fills the box and the focus moves to the next one. Once every box is full, onComplete hands over the code." },
+      { id: "pin-digits", when: "A box set to digits gets a letter", then: "It stays empty and keeps the focus." },
+      { id: "pin-backspace", keys: ["Backspace"], when: "A box has focus", then: "It empties the box, and in an empty box steps back to the one before." },
+      { id: "pin-arrows", keys: ["ArrowLeft", "ArrowRight"], when: "A box has focus", then: "The focus moves to the box before or after it." },
+      { id: "pin-paste", when: "A code is pasted into a box", then: "It fills every box from the start." },
+      { id: "pin-ltr", when: "The page runs right to left", then: "The boxes still run left to right, since a code is data." },
+    ],
+  },
 };

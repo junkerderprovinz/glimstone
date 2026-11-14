@@ -979,6 +979,15 @@ Help pages, release notes and a list of frequent questions are read, not set, an
 - **The two steps are ordinary buttons** (`variant="icon"`) and follow the label mode: "Previous page" and "Next page" with their arrows, or the arrows alone. At either end the step that would go past it is disabled. Under a right-to-left language the arrows turn round.
 - **A screen reader hears a navigation** named by `text.label`, each page as "Page 3 of 20", and the page in force as the current one. All four words come from `text`, so an app passes its own translation.
 
+## Codes typed a character at a time
+
+`PinInput` takes a short code one character to a box: the six digits of a second factor ("The second way in"), a pairing code, a PIN.
+
+- **Every box is a text field** (rule 14), borderless and filled, at the key height `--btn-h-key` and in the title size, so a digit reads at a glance. A refused code takes `invalid` and the field's fault wash.
+- **Typing moves on, Backspace steps back, a paste fills every box.** The arrows move between the boxes, and a box set to digits stays empty for a letter. `onComplete` hands over the code once every box holds a character, which is when an app checks it.
+- **A code is data**, so the boxes run left to right under a right-to-left language too ("Right-to-left languages").
+- **Each box has a name of its own**, "Character 2 of 6" by default, under the label of the whole. `text.cell` takes the app's words. `mask` draws dots for a secret, and `otp` lets a phone offer the code it just received.
+
 ## Narrow windows
 
 The web interface at phone width, beside "The bottom bar" that replaces the rail there.

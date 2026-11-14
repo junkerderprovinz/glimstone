@@ -65,6 +65,7 @@ const COMPONENTS = {
   Accordion: "react/Accordion.tsx",
   Avatar: "react/Avatar.tsx",
   Pagination: "react/Pagination.tsx",
+  PinInput: "react/PinInput.tsx",
 };
 
 const clean = (s) => s.replace(/\s+/g, " ").trim();

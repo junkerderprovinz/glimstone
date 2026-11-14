@@ -20,6 +20,7 @@ React and Vue offer the same kit. Every component, hook and type has a twin of t
 - **`Accordion` and `Collapsible`** for reading matter, such as the questions of a help page, on Zag's accordion and collapsible machines. Each row is a heading with a button in it. Rule 26 still keeps them off pages that set something ("Reading matter").
 - **`Avatar`**, a person's picture with their initials while it loads or when there is none, on Zag's avatar machine. The name is its accessible name, its corners follow the shape setting, and `hueIndex` gives it a palette position under rainbow.
 - **`Pagination`**, the pages of a list too long to show at once, on Zag's pagination machine. The page in force takes the accent, the steps follow the label mode, and the words come in through `text`.
+- **`PinInput`**, a short code typed one character to a box, such as the six digits of a second factor, on Zag's pin-input machine. A pasted code fills every box, the boxes run left to right in every language, and `onComplete` hands over the whole code.
 - **`fromEnd` on `ContextMenu`** opens a menu with the focus on its last row, for an app's own menu bar.
 
 ## 🔁 Changed
