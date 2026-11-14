@@ -833,4 +833,13 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "carousel-still", when: "Motion is off, or the system asks for reduced motion", then: "A move lands at once instead of gliding." },
     ],
   },
+  Marquee: {
+    rows: [
+      { id: "marquee-region", when: "Always", then: "A region named by its label with the role description marquee. The copies that fill the row are hidden from a screen reader." },
+      { id: "marquee-runs", when: "The motion level moves", then: "It runs past on its own." },
+      { id: "marquee-hover", when: "The pointer or the focus is on it", then: "It halts, and runs on when they leave." },
+      { id: "marquee-hold", when: "Its button is pressed", then: "It holds until the button is pressed again, as WCAG 2.2.2 asks of moving content." },
+      { id: "marquee-still", when: "Motion is off, or the system asks for reduced motion", then: "It does not move at all." },
+    ],
+  },
 };

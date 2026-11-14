@@ -78,6 +78,7 @@ const COMPONENTS = {
   SignaturePad: "react/SignaturePad.tsx",
   HoverCard: "react/HoverCard.tsx",
   Carousel: "react/Carousel.tsx",
+  Marquee: "react/Marquee.tsx",
 };
 
 const clean = (s) => s.replace(/\s+/g, " ").trim();

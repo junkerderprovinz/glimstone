@@ -7198,6 +7198,38 @@
   .glim-carousel-dot::before { transition: width var(--motion-control-dur, 0s) ease, background-color var(--motion-control-dur, 0s) ease; }
 }
 
+/* Marquee: the row runs on the machine's own numbers, and only inside the
+   motion gate, so the system's request for less motion stops it by never
+   reading it; at off it stops the same way. It halts while the pointer or the
+   focus is on it. Its button stands at the row's end. */
+@layer components {
+  .glim-marquee-frame {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    min-width: 0;
+  }
+  .glim-marquee {
+    flex: 1;
+    min-width: 0;
+    color: var(--carbon-text-sub);
+  }
+  .glim-marquee-viewport { min-width: 0; }
+  .glim-marquee-item { white-space: nowrap; }
+}
+@keyframes glim-marquee-run {
+  from { transform: translateX(0); }
+  to   { transform: translateX(var(--marquee-translate)); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .glim-marquee-content {
+    animation: glim-marquee-run var(--marquee-duration) linear var(--marquee-delay) var(--marquee-loop-count);
+  }
+  .glim-marquee-content[data-reverse] { animation-direction: reverse; }
+  :is(.glim-marquee[data-paused], .glim-marquee:hover, .glim-marquee:focus-within) .glim-marquee-content { animation-play-state: paused; }
+  :root[data-motion="off"] .glim-marquee-content { animation: none; }
+}
+
 /* The contrast step and the Windows contrast themes for the components on the
    Zag machines, written like the rules for the older ones above: an edge on
    every field and pressable part, and the selection colours on what is chosen

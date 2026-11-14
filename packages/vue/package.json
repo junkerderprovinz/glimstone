@@ -95,6 +95,10 @@
     "./Carousel": {
       "types": "./dist/entries/carousel.d.ts",
       "default": "./dist/Carousel.js"
+    },
+    "./Marquee": {
+      "types": "./dist/entries/marquee.d.ts",
+      "default": "./dist/Marquee.js"
     }
   },
   "files": [
@@ -117,6 +121,7 @@
     "@zag-js/date-picker": "^1.47.0",
     "@zag-js/file-upload": "^1.47.0",
     "@zag-js/hover-card": "^1.47.0",
+    "@zag-js/marquee": "^1.47.0",
     "@zag-js/menu": "^1.46.0",
     "@zag-js/pagination": "^1.47.0",
     "@zag-js/pin-input": "^1.47.0",

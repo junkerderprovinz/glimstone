@@ -111,3 +111,29 @@ export function CarouselPage() {
     </>
   );
 }
+
+export function MarqueePage() {
+  return (
+    <>
+      <p className="lead">A row that runs past on its own, such as the names of the people a release thanks.</p>
+      <MachineNote file="react/Marquee.tsx" machine="marquee" />
+      <Demo name="MarqueeThanks" />
+      <Code
+        code={`import { Marquee } from "@glimstone/react/Marquee";
+
+<Marquee label="Thanks to" items={people} item={(name) => name} />`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>It is a continuous animation, so it stops outright at the motion level off and under reduced motion.</li>
+        <li>It halts while the pointer or the focus is on it, and its button at the end holds it until it is pressed again.</li>
+        <li>A screen reader hears the row once: the copies that fill the row are hidden from it.</li>
+        <li>It is decoration around content that is also somewhere else. Nothing only a marquee shows is ever needed.</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="Marquee" />
+      <H2>API</H2>
+      <PropsTable of="Marquee" />
+    </>
+  );
+}

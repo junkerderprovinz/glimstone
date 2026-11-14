@@ -1328,6 +1328,18 @@ export const GLOSSARY: GlossarySection[] = [
           de: "Folien, Seite für Seite, darunter zwei Schritte und ein Punkt je Seite. Er bewegt sich nie von selbst.",
         },
       },
+      {
+        id: "marquee",
+        en: "Marquee",
+        de: "Laufband",
+        proposal: true,
+        code: ["Marquee", ".glim-marquee"],
+        components: ["Marquee"],
+        text: {
+          en: "A row that runs past on its own. It stops at the motion level off and under reduced motion, and its button holds it.",
+          de: "Eine Zeile, die von selbst vorbeiläuft. Sie steht bei Bewegung aus und bei reduzierter Bewegung still, und ihr Knopf hält sie an.",
+        },
+      },
     ],
   },
 ];

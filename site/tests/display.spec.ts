@@ -153,3 +153,48 @@ test.describe("Carousel", () => {
     expect(await shown(page)).toBe(1);
   });
 });
+
+test.describe("Marquee", () => {
+  const row = (page: Page) => stage(page, "MarqueeThanks").getByRole("region", { name: "Thanks to" });
+  const playing = (page: Page) =>
+    row(page).locator(".glim-marquee-content").first().evaluate((el) => {
+      const s = getComputedStyle(el);
+      return s.animationName !== "none" && s.animationPlayState === "running";
+    });
+
+  test("[marquee-region] a region named by its label, read once", async ({ page }) => {
+    await open(page, "/components/marquee", { motion: "subtle" });
+    await expect(row(page)).toHaveAttribute("aria-roledescription", "marquee");
+    await expect(row(page).locator('.glim-marquee-content:not([aria-hidden="true"])')).toHaveCount(1);
+  });
+
+  test("[marquee-runs] it runs at a motion level that moves", async ({ page }) => {
+    await open(page, "/components/marquee", { motion: "subtle" });
+    expect(await playing(page)).toBe(true);
+  });
+
+  test("[marquee-hover] it halts while the pointer is on it", async ({ page }) => {
+    await open(page, "/components/marquee", { motion: "subtle" });
+    await row(page).hover();
+    expect(await playing(page)).toBe(false);
+  });
+
+  test("[marquee-hold] its button holds it until pressed again", async ({ page }) => {
+    await open(page, "/components/marquee", { motion: "subtle" });
+    await stage(page, "MarqueeThanks").getByRole("button", { name: "Pause" }).click();
+    await page.mouse.move(0, 0);
+    expect(await playing(page)).toBe(false);
+    await stage(page, "MarqueeThanks").getByRole("button", { name: "Resume" }).click();
+    await page.mouse.move(0, 0);
+    expect(await playing(page)).toBe(true);
+  });
+
+  test("[marquee-still] at off and under reduced motion it does not move", async ({ page }) => {
+    await open(page, "/components/marquee");
+    await relook(page, { motion: "off" });
+    expect(await playing(page)).toBe(false);
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await relook(page, { motion: "subtle" });
+    expect(await playing(page)).toBe(false);
+  });
+});

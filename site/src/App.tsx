@@ -17,7 +17,7 @@ import { ListTablePage } from "./pages/lists";
 import { ScrollAreaPage, SplitterPage } from "./pages/layout";
 import { AngleSliderPage, DatePickerPage, FileUploadPage, PinInputPage, RatingPage, SignaturePadPage, TagsInputPage } from "./pages/inputs";
 import { PaginationPage, StepsPage } from "./pages/navigation";
-import { AvatarPage, CarouselPage, HoverCardPage, TimerPage } from "./pages/display";
+import { AvatarPage, CarouselPage, HoverCardPage, MarqueePage, TimerPage } from "./pages/display";
 import { AccordionPage, CollapsiblePage } from "./pages/reading";
 import {
   BadgePage,
@@ -113,6 +113,7 @@ const PAGES: Page[] = [
   { path: "/components/kbd", title: "Kbd", group: "Components", Comp: KbdPage },
   { path: "/components/list-row", title: "ListRow", group: "Components", Comp: ListRowPage },
   { path: "/components/list-table", title: "ListTable", group: "Components", Comp: ListTablePage },
+  { path: "/components/marquee", title: "Marquee", group: "Components", Comp: MarqueePage, tag: "Zag" },
   { path: "/components/menu-bar", title: "MenuBar", group: "Components", Comp: MenuBarPage },
   { path: "/components/meter", title: "Meter", group: "Components", Comp: MeterPage },
   { path: "/components/number-field", title: "NumberField", group: "Components", Comp: NumberFieldPage },

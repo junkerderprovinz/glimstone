@@ -1132,6 +1132,15 @@ Help pages, release notes and a list of frequent questions are read, not set, an
 - **A move glides on the motion level** and lands at once at off and under reduced motion. A finger or a trackpad scrolls it as it would any row, and each slide snaps into place.
 - **It is for things looked at in turn.** What somebody needs to compare stands side by side instead, since a carousel hides all but one.
 
+## Marquees
+
+`Marquee` runs a row past on its own: the names of the people a release thanks, the logos of the places a backup can go.
+
+- **It is a continuous animation**, so it follows the rule for one ("The motion engine"): it stops outright, not slower, at the motion level off and under reduced motion. The animation lives inside `prefers-reduced-motion: no-preference`, so the system's request stops it by never reading it, and storm is not restored for it, since it never ends.
+- **It halts while the pointer or the focus is on it**, and its button at the row's end (`IconButton`, Pause and Resume) holds it until it is pressed again, the way to stop moving content that WCAG 2.2.2 asks for.
+- **A screen reader hears the row once.** The copies that fill the row are hidden from it.
+- **It is decoration around content that is also somewhere else.** Nothing only a marquee shows is ever needed, since half of it is always out of sight.
+
 ## Narrow windows
 
 The web interface at phone width, beside "The bottom bar" that replaces the rail there.
