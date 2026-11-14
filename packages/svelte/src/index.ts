@@ -7,6 +7,7 @@ export { default as ColorPicker, type ColorName, type ColorPickerPanelText, type
 export { default as ConfirmDialog, type ConfirmDialogProps } from "./ConfirmDialog.svelte";
 export { default as ContextMenu, type ContextMenuProps, type MenuEntry, type MenuHead, type MenuItem } from "./ContextMenu.svelte";
 export { default as CopyField, type CopyFieldProps } from "./CopyField.svelte";
+export { default as DropdownListbox, type DropdownListboxProps } from "./DropdownListbox.svelte";
 export { default as EmptyState, type EmptyStateProps } from "./EmptyState.svelte";
 export { default as FieldError, type FieldErrorProps } from "./FieldError.svelte";
 export { default as FieldRow, type FieldRowProps } from "./FieldRow.svelte";

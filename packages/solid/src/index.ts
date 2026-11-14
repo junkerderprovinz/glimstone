@@ -7,6 +7,7 @@ export * from "./ColorPicker.tsx";
 export * from "./ConfirmDialog.tsx";
 export * from "./ContextMenu.tsx";
 export * from "./CopyField.tsx";
+export * from "./DropdownListbox.tsx";
 export * from "./EmptyState.tsx";
 export * from "./engines.ts";
 export * from "./FieldError.tsx";
