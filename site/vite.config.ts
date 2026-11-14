@@ -8,7 +8,7 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 const packages = fileURLToPath(new URL("../packages", import.meta.url));
-const solidFiles = /\/(packages\/solid\/src|site\/src\/(solid|solid-demos))\/.*\.tsx$/;
+const solidFiles = /\/(packages\/solid\/src|site\/src\/(solid|solid-demos|blocks\/solid))\/.*\.tsx$/;
 
 // A package's entries besides the index, as its package.json names them, each
 // with the source file its types come from.

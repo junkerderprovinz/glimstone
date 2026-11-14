@@ -78,7 +78,7 @@ export function Selector<T extends string>({
   );
 }
 
-function useCopied(): [boolean, (text: string) => void] {
+export function useCopied(): [boolean, (text: string) => void] {
   const [copied, setCopied] = useState(false);
   const timer = useRef<number>(undefined);
   useEffect(() => () => clearTimeout(timer.current), []);

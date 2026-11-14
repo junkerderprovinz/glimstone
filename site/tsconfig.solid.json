@@ -11,6 +11,6 @@
       "@glimstone/solid/*": ["../packages/solid/src/*"]
     }
   },
-  "include": ["src/solid", "src/solid-demos"],
+  "include": ["src/solid", "src/solid-demos", "src/blocks/solid"],
   "exclude": []
 }

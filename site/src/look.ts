@@ -24,6 +24,7 @@ import {
 
 export type Theme = "system" | "dark" | "light";
 export type Rainbow = "off" | "on" | "reactive";
+export type Contrast = "system" | "more";
 
 export interface Look {
   theme: Theme;
@@ -33,6 +34,7 @@ export interface Look {
   rainbow: Rainbow;
   motion: Motion;
   density: Density;
+  contrast: Contrast;
   labels: LabelMode;
 }
 
@@ -45,6 +47,7 @@ const DEFAULT: Look = {
   rainbow: "off",
   motion: DEFAULT_MOTION,
   density: DEFAULT_DENSITY,
+  contrast: "system",
   labels: DEFAULT_LABEL_MODE,
 };
 
@@ -61,6 +64,8 @@ function apply(l: Look) {
   const root = document.documentElement;
   if (l.theme === "system") root.removeAttribute("data-theme");
   else root.setAttribute("data-theme", l.theme);
+  if (l.contrast === "more") root.setAttribute("data-contrast", "more");
+  else root.removeAttribute("data-contrast");
   applyOled(l.oled);
   applyShape(l.shape);
   applyAccent(l.accent);

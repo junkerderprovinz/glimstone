@@ -2,26 +2,12 @@ import { useMemo, useState } from "react";
 import { GLIMSTONE_VERSION } from "@glimstone/react";
 import tokens from "../gen/tokens.json";
 import { Glyph, GLYPHS } from "../glyph";
-import { Callout, Code, H2, SourceLink } from "../ui";
-import { SampleSurface } from "../sample";
+import { Callout, Code, H2, slugify, SourceLink } from "../ui";
+import { BLOCKS } from "./blocks";
 
 export function Introduction() {
   return (
     <>
-      <p className="lead">
-        GlimStone is the design language shared by a family of apps: one quiet palette, four engines the user drives
-        from the app root, and a set of React components an app copies instead of rebuilding.
-      </p>
-      <div className="demo">
-        <div className="demo-stage">
-          <SampleSurface />
-        </div>
-      </div>
-      <p>
-        Open <strong>Look</strong> in the header and change the theme, the corners, the accent, the motion or the label
-        mode. Every component on every page follows, because each one reads the same tokens instead of carrying its own
-        values.
-      </p>
       <H2>What is in it</H2>
       <div className="tile-grid">
         <a className="tile" href="#/guide/palette">
@@ -40,6 +26,16 @@ export function Introduction() {
           <strong>{GLYPHS.length} glyphs</strong>
           <p>One assortment, so a folder is the same folder in every app.</p>
         </a>
+      </div>
+      <H2>Blocks</H2>
+      <p>Whole page parts to start from, each running live in React, Vue, Solid and Svelte with its code a click away.</p>
+      <div className="tile-grid">
+        {BLOCKS.map((b) => (
+          <a className="tile" key={b.name} href={`#/blocks?s=${slugify(b.title)}`}>
+            <strong>{b.title}</strong>
+            <p>{b.lead}</p>
+          </a>
+        ))}
       </div>
       <H2>How it differs from a component library</H2>
       <p>

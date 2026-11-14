@@ -53,7 +53,8 @@ test('every preset and rainbow ink on the light ramp lands within a point of the
 
 test('the lightness steps are the ones tokens.css declares, the contrast step second', () => {
   const css = readFileSync(new URL('../tokens.css', import.meta.url), 'utf8');
-  const values = (name: string) => [...css.matchAll(new RegExp(`${name}:\\s*([\\d.]+);`, 'g'))].map((m) => Number(m[1]));
+  // The contrast step is declared for the system and for data-contrast, with one value.
+  const values = (name: string) => [...new Set([...css.matchAll(new RegExp(`${name}:\\s*([\\d.]+);`, 'g'))].map((m) => Number(m[1])))];
   assert.deepEqual(values('--ink-l-light'), [INK_LIGHTNESS.light, INK_LIGHTNESS.lightMore]);
   assert.deepEqual(values('--ink-l-dark'), [INK_LIGHTNESS.dark, INK_LIGHTNESS.darkMore]);
 });

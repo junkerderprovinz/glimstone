@@ -221,6 +221,6 @@
       "@glimstone/svelte/Accordion": ["../packages/svelte/src/entries/accordion.ts"]
     }
   },
-  "include": ["src/svelte", "src/svelte-demos"],
+  "include": ["src/svelte", "src/svelte-demos", "src/blocks/svelte"],
   "exclude": []
 }

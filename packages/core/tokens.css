@@ -420,6 +420,22 @@
   }
 }
 
+/* The same step on request, for an app that offers more contrast as a setting
+   of its own beside the system's: data-contrast="more" on the root. */
+:root[data-contrast="more"],
+:root[data-contrast="more"] [data-theme] {
+  --ink-l-light:       0.40;
+  --ink-l-dark:        0.84;
+  --carbon-text-sub:   light-dark(#393939, #e0e0e0);
+  --carbon-text-muted: light-dark(#525252, #c6c6c6);
+  --sidebar-text:      light-dark(#161616, #f4f4f4);
+  --field-placeholder: light-dark(#393939, #e0e0e0);
+  --status-neutral-text: light-dark(#525252, #c6c6c6);
+  --carbon-border:     light-dark(#6f6f6f, #8d8d8d);
+  --hairline:          inset 0 0 0 1px var(--carbon-border);
+  --focus-ring-width:  3px;
+}
+
 /* The hover step of a filled tone that has no surface ramp of its own (rule
    21): the fill mixed toward the theme's text colour, which is lighter on dark
    and darker on light, the direction the ramp moves. 15% is about one step of
@@ -6509,6 +6525,11 @@
       outline: 1px solid var(--carbon-border);
       outline-offset: -1px;
     }
+  }
+  :root[data-contrast="more"] :is(.glim-input, .glim-num-field, .glim-glyph-field, .glim-combobox-control, .glim-select-trigger,
+      .glim-btn, .glim-sel-seg, .glim-sel-tile, .glim-toggle-track, .glim-checkbox-box, .glim-rowmark):not(:focus-visible) {
+    outline: 1px solid var(--carbon-border);
+    outline-offset: -1px;
   }
 
   /* Windows' contrast themes (forced-colors) swap every author colour for a

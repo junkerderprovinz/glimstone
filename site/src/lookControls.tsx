@@ -14,30 +14,43 @@ import {
 } from "@glimstone/core";
 import { InfoBubble, Toggle } from "@glimstone/react";
 import { Glyph } from "./glyph";
-import { setLook, useLook, type Rainbow, type Theme } from "./look";
+import { setLook, useLook, type Contrast, type Rainbow, type Theme } from "./look";
 import { Selector } from "./ui";
 
 const LABEL_NAMES: Record<LabelMode, string> = { text: "Text", textGlyph: "Both", glyph: "Glyph", reactive: "Reactive" };
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
-export function ThemeControl() {
+export function ThemePicker() {
+  const { theme } = useLook();
+  return (
+    <Selector<Theme>
+      label="Theme"
+      value={theme}
+      onChange={(theme) => setLook({ theme })}
+      options={[
+        { value: "dark", label: "Dark", glyph: <Glyph name="IconMoon" /> },
+        { value: "light", label: "Light", glyph: <Glyph name="IconSun" /> },
+        { value: "system", label: "System", glyph: <Glyph name="IconThemeSystem" /> },
+      ]}
+    />
+  );
+}
+
+export function OledControl() {
   const { theme, oled } = useLook();
   return (
+    <span style={{ display: "inline-flex", flexWrap: "wrap", alignItems: "center", gap: 6 }}>
+      <Toggle label="OLED" checked={oled} onChange={(oled) => setLook({ oled })} refused={oledRefusal(theme)} />
+      <InfoBubble tip="True black for OLED and AMOLED screens, whenever the dark look is showing." />
+    </span>
+  );
+}
+
+export function ThemeControl() {
+  return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 8 }}>
-      <Selector<Theme>
-        label="Theme"
-        value={theme}
-        onChange={(theme) => setLook({ theme })}
-        options={[
-          { value: "dark", label: "Dark", glyph: <Glyph name="IconMoon" /> },
-          { value: "light", label: "Light", glyph: <Glyph name="IconSun" /> },
-          { value: "system", label: "System", glyph: <Glyph name="IconThemeSystem" /> },
-        ]}
-      />
-      <span style={{ display: "inline-flex", flexWrap: "wrap", alignItems: "center", gap: 6 }}>
-        <Toggle label="OLED" checked={oled} onChange={(oled) => setLook({ oled })} refused={oledRefusal(theme)} />
-        <InfoBubble tip="True black for OLED and AMOLED screens, whenever the dark look is showing." />
-      </span>
+      <ThemePicker />
+      <OledControl />
     </div>
   );
 }
@@ -74,6 +87,21 @@ export function DensityControl() {
       value={density}
       onChange={(density) => setLook({ density })}
       options={DENSITIES.map((d) => ({ value: d, label: cap(d) }))}
+    />
+  );
+}
+
+export function ContrastControl() {
+  const { contrast } = useLook();
+  return (
+    <Selector<Contrast>
+      label="Contrast"
+      value={contrast}
+      onChange={(contrast) => setLook({ contrast })}
+      options={[
+        { value: "system", label: "System" },
+        { value: "more", label: "More" },
+      ]}
     />
   );
 }
