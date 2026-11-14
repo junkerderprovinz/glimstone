@@ -15,7 +15,7 @@ import { BusyRingPage, SkeletonRowPage } from "./pages/loading";
 import { PopoverPage, SheetPage } from "./pages/overlay";
 import { ListTablePage } from "./pages/lists";
 import { ScrollAreaPage, SplitterPage } from "./pages/layout";
-import { DatePickerPage, FileUploadPage, PinInputPage, TagsInputPage } from "./pages/inputs";
+import { DatePickerPage, FileUploadPage, PinInputPage, RatingPage, TagsInputPage } from "./pages/inputs";
 import { PaginationPage, StepsPage } from "./pages/navigation";
 import { AvatarPage } from "./pages/display";
 import { AccordionPage, CollapsiblePage } from "./pages/reading";
@@ -120,6 +120,7 @@ const PAGES: Page[] = [
   { path: "/components/pin-input", title: "PinInput", group: "Components", Comp: PinInputPage, tag: "Zag" },
   { path: "/components/popover", title: "Popover", group: "Components", Comp: PopoverPage },
   { path: "/components/progress-bar", title: "ProgressBar", group: "Components", Comp: ProgressBarPage },
+  { path: "/components/rating", title: "Rating", group: "Components", Comp: RatingPage, tag: "Zag" },
   { path: "/components/row-mark", title: "RowMark", group: "Components", Comp: RowMarkPage },
   { path: "/components/scroll-area", title: "ScrollArea", group: "Components", Comp: ScrollAreaPage, tag: "Zag" },
   { path: "/components/select", title: "Select", group: "Components", Comp: SelectPage, tag: "Zag" },

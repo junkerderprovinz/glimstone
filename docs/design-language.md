@@ -1077,6 +1077,16 @@ Help pages, release notes and a list of frequent questions are read, not set, an
 - **The keys are the APG date picker dialog's**: the arrows move a day or a week, Page Up and Page Down a month, Enter chooses and Escape closes, and both give the focus back to the trigger. The month in the head steps out to the months of the year and the year to a span of years, so a date far away is three presses.
 - **A day travels as an ISO day**, "2026-11-14", so an app stores and sends it as it is and never handles the machine's date objects. The calendar speaks the page's language unless `locale` names another, and `text` takes the words of its buttons.
 
+## Ratings
+
+`Rating` gives a value in stars: how well an update went, an average of answers.
+
+- **The stars up to the value are filled with the accent** (rule 3). The rest stand in the muted text colour, which holds the 3:1 a graphic needs on a card. Each star is drawn as `IconStar` from the assortment, a filled shape like every glyph.
+- **It is a radio group** named by its label, one radio a star, each read with its value, such as "3 of 5 stars" in the words `text.star` passes. The arrows move the value and Home and End go to the ends.
+- **A pointer over a star shows what a press would give**, and the stars go back to the value when it leaves.
+- **`allowHalf` takes half stars**, the last one filled to half its width, from the start of the reading direction. `readOnly` shows a value, such as an average, and takes no input.
+- **Each star is 24px**, the smallest target WCAG 2.2 allows.
+
 ## Narrow windows
 
 The web interface at phone width, beside "The bottom bar" that replaces the rail there.

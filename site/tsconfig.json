@@ -30,7 +30,8 @@
       "@glimstone/vue/Splitter": ["../packages/vue/src/entries/splitter.ts"],
       "@glimstone/vue/ScrollArea": ["../packages/vue/src/entries/scrollarea.ts"],
       "@glimstone/vue/FileUpload": ["../packages/vue/src/entries/fileupload.ts"],
-      "@glimstone/vue/DatePicker": ["../packages/vue/src/entries/datepicker.ts"]
+      "@glimstone/vue/DatePicker": ["../packages/vue/src/entries/datepicker.ts"],
+      "@glimstone/vue/Rating": ["../packages/vue/src/entries/rating.ts"]
     }
   },
   "include": ["src", "tests", "test", "vite.config.ts", "playwright.config.ts"]

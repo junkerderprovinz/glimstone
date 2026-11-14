@@ -782,4 +782,13 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "date-accent", when: "The calendar is open", then: "The chosen day is filled with the accent." },
     ],
   },
+  Rating: {
+    pattern: { name: "Radio Group", url: `${APG}radio/` },
+    rows: [
+      { id: "rating-radios", when: "Always", then: "A radio group named by its label, of one radio a star, each named by its value, such as \"3 of 5 stars\". The stars up to the value are filled with the accent." },
+      { id: "rating-arrows", keys: ["ArrowRight", "ArrowLeft", "Home", "End"], when: "A star has focus", then: "The arrows move the value a star, Home and End go to the first and the last." },
+      { id: "rating-hover", when: "The pointer rests on a star", then: "The stars up to it light, and go back to the value when the pointer leaves. A press gives that value." },
+      { id: "rating-half", when: "allowHalf is on and the value has a half", then: "The last star is half filled." },
+    ],
+  },
 };

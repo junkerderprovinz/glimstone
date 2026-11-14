@@ -71,6 +71,10 @@
     "./DatePicker": {
       "types": "./dist/entries/datepicker.d.ts",
       "default": "./dist/DatePicker.js"
+    },
+    "./Rating": {
+      "types": "./dist/entries/rating.d.ts",
+      "default": "./dist/Rating.js"
     }
   },
   "files": [
@@ -93,6 +97,7 @@
     "@zag-js/menu": "^1.46.0",
     "@zag-js/pagination": "^1.47.0",
     "@zag-js/pin-input": "^1.47.0",
+    "@zag-js/rating-group": "^1.47.0",
     "@zag-js/scroll-area": "^1.47.0",
     "@zag-js/select": "^1.46.0",
     "@zag-js/slider": "^1.46.0",

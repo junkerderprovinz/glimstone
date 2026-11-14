@@ -118,6 +118,12 @@ export const MARKS = {
     size: 14,
     body: '<path fill-rule="evenodd" d="M2.25 2H11.75A1.5 1.5 0 0 1 13.25 3.5V11.75A1.5 1.5 0 0 1 11.75 13.25H2.25A1.5 1.5 0 0 1 0.75 11.75V3.5A1.5 1.5 0 0 1 2.25 2ZM3.25 0.5H4.5V2H3.25ZM9.5 0.5H10.75V2H9.5ZM2.25 6H4.75V8.25H2.25ZM5.75 6H8.25V8.25H5.75ZM9.25 6H11.75V8.25H9.25ZM2.25 9.5H4.75V11.75H2.25ZM5.75 9.5H8.25V11.75H5.75Z"></path>',
   },
+  /** `IconStar` from the assortment: one star of a rating. */
+  star: {
+    viewBox: "1.007 0.513 21.972 21.972",
+    size: 20,
+    body: '<path d="M8.243 7.34l-6.38 .925l-.113 .023a1 1 0 0 0 -.44 1.684l4.622 4.499l-1.09 6.355l-.013 .11a1 1 0 0 0 1.464 .944l5.706 -3l5.693 3l.1 .046a1 1 0 0 0 1.352 -1.1l-1.091 -6.355l4.624 -4.5l.078 -.085a1 1 0 0 0 -.633 -1.62l-6.38 -.926l-2.852 -5.78a1 1 0 0 0 -1.794 0l-2.853 5.78z"/>',
+  },
 } satisfies Record<string, Mark>;
 
 // The toast's severity as filled shapes (design-language.md, "Icon glyphs"). The

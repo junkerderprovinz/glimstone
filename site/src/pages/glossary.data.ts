@@ -701,6 +701,19 @@ export const GLOSSARY: GlossarySection[] = [
           de: "Dateien, die man ablegt oder im Dateidialog wählt. Die Ablagefläche ist selbst der Knopf, und eine abgelehnte Datei wird mit dem Grund genannt.",
         },
       },
+      {
+        id: "rating",
+        en: "Rating",
+        de: "Bewertung",
+        proposal: true,
+        code: ["Rating", ".glim-rating", ".glim-rating-star"],
+        components: ["Rating"],
+        rules: [3],
+        text: {
+          en: "A value given in stars. The stars up to the value take the accent, and the arrow keys move it.",
+          de: "Ein Wert in Sternen. Die Sterne bis zum Wert tragen den Akzent, und die Pfeiltasten verschieben ihn.",
+        },
+      },
     ],
   },
   {

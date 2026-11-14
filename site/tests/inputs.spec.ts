@@ -276,3 +276,47 @@ test.describe("DatePicker", () => {
     expect(fill).toBe(accent);
   });
 });
+
+test.describe("Rating", () => {
+  const group = (page: Page) => stage(page, "RatingRelease").getByRole("radiogroup", { name: "How well did the update go?" });
+  const star = (page: Page, n: number) => group(page).getByRole("radio", { name: `${n} of 5 stars`, exact: true });
+  const lit = (page: Page) => group(page).locator(".glim-rating-star[data-highlighted]");
+  const caption = (page: Page) => stage(page, "RatingRelease").locator("span.glim-num");
+
+  test("[rating-radios] a radio group of stars, each named by its value", async ({ page }) => {
+    await open(page, "/components/rating");
+    await expect(group(page).getByRole("radio")).toHaveCount(5);
+    await expect(star(page, 3)).toHaveAttribute("aria-checked", "true");
+    await expect(lit(page)).toHaveCount(3);
+  });
+
+  test("[rating-arrows] the arrows move the value, Home and End go to the ends", async ({ page }) => {
+    await open(page, "/components/rating");
+    await star(page, 3).focus();
+    await page.keyboard.press("ArrowRight");
+    await expect(caption(page)).toHaveText("4 of 5");
+    await page.keyboard.press("Home");
+    await expect(caption(page)).toHaveText("1 of 5");
+    await page.keyboard.press("End");
+    await expect(caption(page)).toHaveText("5 of 5");
+  });
+
+  test("[rating-hover] a pointer over a star shows what a press would give", async ({ page }) => {
+    await open(page, "/components/rating");
+    const box = (await star(page, 5).boundingBox())!;
+    await page.mouse.move(box.x + 2, box.y + box.height / 2);
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2, { steps: 4 });
+    await expect(lit(page)).toHaveCount(5);
+    await page.mouse.move(0, 0);
+    await expect(lit(page)).toHaveCount(3);
+    await star(page, 2).click();
+    await expect(caption(page)).toHaveText("2 of 5");
+  });
+
+  test("[rating-half] a half star is half filled", async ({ page }) => {
+    await open(page, "/components/rating");
+    const average = stage(page, "RatingRelease").getByRole("radiogroup", { name: "Average of all answers" });
+    await expect(average.locator(".glim-rating-star[data-half]")).toHaveCount(1);
+    expect(await average.locator(".glim-rating-star[data-half] .glim-rating-fill").evaluate((el) => getComputedStyle(el).clipPath)).toContain("50%");
+  });
+});

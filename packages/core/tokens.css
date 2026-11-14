@@ -6908,6 +6908,57 @@
   .glim-date-panel[data-state="open"] { animation: glim-fade-in var(--motion-fade-dur, 0s) ease-out; }
 }
 
+/* Rating: each star is drawn twice, a ground in the muted text colour, which
+   holds 3:1 on a card as a graphic must, and the accent's fill over it, cut
+   to half its width for a half star. A pointer over the stars shows the value
+   a press would give. Each star is 24px, the smallest target WCAG 2.2 allows. */
+@layer components {
+  .glim-rating {
+    display: grid;
+    gap: var(--space-3);
+    justify-items: start;
+  }
+  .glim-rating-control {
+    display: flex;
+    gap: var(--space-1);
+  }
+  .glim-rating-star {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    width: var(--space-10);
+    height: var(--space-10);
+    border-radius: var(--radius-control);
+    color: var(--carbon-text-muted);
+    cursor: pointer;
+    outline: none;
+  }
+  .glim-rating-star svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  .glim-rating-fill {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: var(--accent);
+    visibility: hidden;
+  }
+  .glim-rating-star[data-highlighted] .glim-rating-fill { visibility: visible; }
+  .glim-rating-star[data-half] .glim-rating-fill { clip-path: inset(0 50% 0 0); }
+  .glim-rating-star[data-half]:dir(rtl) .glim-rating-fill { clip-path: inset(0 0 0 50%); }
+  .glim-rating-star:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring);
+    outline-offset: 0;
+  }
+  .glim-rating-star[data-readonly] { cursor: default; }
+  .glim-rating-star[data-disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
 /* The contrast step and the Windows contrast themes for the components on the
    Zag machines, written like the rules for the older ones above: an edge on
    every field and pressable part, and the selection colours on what is chosen
@@ -6933,6 +6984,11 @@
     }
     .glim-tags-control[data-disabled] { border-color: GrayText; }
     .glim-date-cell[data-disabled] { color: GrayText; }
+    .glim-rating-star {
+      forced-color-adjust: none;
+      color: GrayText;
+    }
+    .glim-rating-fill { color: Highlight; }
     :is(.glim-splitter-grip, .glim-splitter-handle::before) {
       forced-color-adjust: none;
       background-color: ButtonText;

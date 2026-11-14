@@ -110,3 +110,29 @@ export function DatePickerPage() {
     </>
   );
 }
+
+export function RatingPage() {
+  return (
+    <>
+      <p className="lead">A value given in stars, such as how well something went.</p>
+      <MachineNote file="react/Rating.tsx" machine="rating-group" />
+      <Demo name="RatingRelease" />
+      <Code
+        code={`import { Rating } from "@glimstone/react/Rating";
+
+<Rating label="How well did the update go?" value={stars} onChange={setStars} />`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>The stars up to the value are filled with the accent, the rest stand in the muted text colour.</li>
+        <li>It is a radio group of stars: the arrows move the value, Home and End go to the ends.</li>
+        <li>A pointer over a star shows what a press would give, and the stars go back when it leaves.</li>
+        <li><code>allowHalf</code> takes half stars, and <code>readOnly</code> shows a value such as an average.</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="Rating" />
+      <H2>API</H2>
+      <PropsTable of="Rating" />
+    </>
+  );
+}

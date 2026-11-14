@@ -33,6 +33,7 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 - **`ScrollArea`**, a box that scrolls its content behind thin bars of the house's own, on Zag's scroll-area machine. The box is a region a keyboard reaches and scrolls, and a bar shows only for the direction that has more to show.
 - **`FileUpload`**, files handed over by dropping them or from the picker, on Zag's file-upload machine. The drop zone is itself the button that opens the picker, chosen files stand under it as rows with their size, and a refused file is named with its reason.
 - **`DatePicker`**, a day picked from a calendar, on Zag's date-picker machine. The trigger is a field that shows the day and takes no typing, the calendar floats on the body with the keys of the APG date picker dialog, and a day travels as "2026-11-14".
+- **`Rating`**, a value given in stars, on Zag's rating-group machine. The stars up to the value take the accent, the arrows move it, a pointer shows what a press would give, and `allowHalf` and `readOnly` cover an average.
 - **`fromEnd` on `ContextMenu`** opens a menu with the focus on its last row, for an app's own menu bar.
 
 - **Windows contrast themes.** Under `forced-colors: active` every card, well, window, menu, field, button and badge gets an edge in the system's text colour. A chosen segment, tile or rail row, a switched-on switch, a ticked checkbox and a bar's fill take the system's selection colours, and an unticked box shows no mark. Before, the switch looked the same on and off, and cards and fields had no edge at all.
