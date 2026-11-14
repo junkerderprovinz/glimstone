@@ -6983,6 +6983,80 @@
   }
 }
 
+/* AngleSlider: a round dial on the third surface, round in every shape
+   setting since the circle is its geometry. The thumb is the whole dial
+   turned by the machine's --angle, and its knob, on the rim, takes the
+   accent. The marks are short hairlines on the rim. */
+@layer components {
+  .glim-angle {
+    display: grid;
+    gap: var(--space-3);
+    justify-items: start;
+  }
+  .glim-angle-body {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+  }
+  .glim-angle-dial {
+    position: relative;
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    background-color: var(--carbon-surface3);
+    cursor: pointer;
+  }
+  .glim-angle-dial[data-disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .glim-angle-marks,
+  .glim-angle-mark,
+  .glim-angle-thumb {
+    position: absolute;
+    inset: 0;
+  }
+  .glim-angle-mark::before {
+    content: "";
+    position: absolute;
+    top: var(--space-2);
+    left: calc(50% - 1px);
+    width: 2px;
+    height: var(--space-3);
+    border-radius: 1px;
+    background-color: var(--carbon-text-muted);
+  }
+  /* The thumb covers the dial only to turn with it; a press goes through to
+     the dial, which sets the angle under the pointer. */
+  .glim-angle-thumb {
+    rotate: var(--angle);
+    border-radius: 50%;
+    outline: none;
+    pointer-events: none;
+  }
+  .glim-angle-thumb::before {
+    content: "";
+    position: absolute;
+    top: var(--space-1);
+    left: calc(50% - 0.5rem);
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    background-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--carbon-surface3);
+  }
+  .glim-angle-thumb:focus-visible::before {
+    outline: var(--focus-ring-width) solid var(--focus-ring);
+    outline-offset: 3px;
+  }
+  .glim-angle-value {
+    min-width: 3.5rem;
+    direction: ltr;
+    color: var(--carbon-text);
+    font-size: var(--text-title);
+  }
+}
+
 /* The contrast step and the Windows contrast themes for the components on the
    Zag machines, written like the rules for the older ones above: an edge on
    every field and pressable part, and the selection colours on what is chosen
@@ -6995,7 +7069,7 @@
     }
   }
   @media (forced-colors: active) {
-    :is(.glim-page, .glim-tags-control, .glim-tag, .glim-avatar, .glim-steps-indicator, .glim-upload-drop, .glim-date-panel) { border: 1px solid ButtonText; }
+    :is(.glim-page, .glim-tags-control, .glim-tag, .glim-avatar, .glim-steps-indicator, .glim-upload-drop, .glim-date-panel, .glim-angle-dial) { border: 1px solid ButtonText; }
     :is(.glim-page[data-selected], .glim-tag[data-highlighted], .glim-steps-indicator[data-current], .glim-upload-drop[data-dragging], .glim-date-cell[data-selected]) {
       forced-color-adjust: none;
       border-color: Highlight;
@@ -7018,6 +7092,10 @@
       background-color: ButtonText;
     }
     .glim-splitter-grip:is([data-focus], [data-dragging]) { background-color: Highlight; }
+    :is(.glim-angle-thumb, .glim-angle-mark)::before {
+      forced-color-adjust: none;
+      background-color: Highlight;
+    }
     .glim-scroll-thumb {
       forced-color-adjust: none;
       background-color: ButtonText;

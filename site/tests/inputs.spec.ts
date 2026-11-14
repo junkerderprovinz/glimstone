@@ -320,3 +320,47 @@ test.describe("Rating", () => {
     expect(await average.locator(".glim-rating-star[data-half] .glim-rating-fill").evaluate((el) => getComputedStyle(el).clipPath)).toContain("50%");
   });
 });
+
+test.describe("AngleSlider", () => {
+  const thumb = (page: Page) => stage(page, "AngleSliderTurn").getByRole("slider", { name: "Turn the picture" });
+
+  test("[angle-role] a slider named by its label, from 0 to 360, read in degrees", async ({ page }) => {
+    await open(page, "/components/angle-slider");
+    await expect(thumb(page)).toHaveAttribute("aria-valuenow", "90");
+    await expect(thumb(page)).toHaveAttribute("aria-valuemax", "360");
+    await expect(thumb(page)).toHaveAttribute("aria-valuetext", "90°");
+    await expect(stage(page, "AngleSliderTurn").locator(".glim-angle-value")).toHaveText("90°");
+  });
+
+  test("[angle-arrows] the arrows turn it a step", async ({ page }) => {
+    await open(page, "/components/angle-slider");
+    await thumb(page).focus();
+    await page.keyboard.press("ArrowRight");
+    await expect(thumb(page)).toHaveAttribute("aria-valuenow", "91");
+    await page.keyboard.press("ArrowLeft");
+    await page.keyboard.press("ArrowLeft");
+    await expect(thumb(page)).toHaveAttribute("aria-valuenow", "89");
+  });
+
+  test("[angle-ends] Home and End go to 0° and the last step before a full turn", async ({ page }) => {
+    await open(page, "/components/angle-slider");
+    await thumb(page).focus();
+    await page.keyboard.press("Home");
+    await expect(thumb(page)).toHaveAttribute("aria-valuenow", "0");
+    await page.keyboard.press("End");
+    await expect(thumb(page)).toHaveAttribute("aria-valuenow", "359");
+  });
+
+  test("[angle-press] a press on the dial sets the angle there", async ({ page }) => {
+    await open(page, "/components/angle-slider");
+    const box = (await stage(page, "AngleSliderTurn").locator(".glim-angle-dial").boundingBox())!;
+    await page.mouse.click(box.x + box.width / 2, box.y + box.height - 4);
+    await expect.poll(async () => Number(await thumb(page).getAttribute("aria-valuenow"))).toBeGreaterThan(170);
+    expect(Number(await thumb(page).getAttribute("aria-valuenow"))).toBeLessThan(190);
+  });
+
+  test("[angle-round] the dial stays round in the square shape setting", async ({ page }) => {
+    await open(page, "/components/angle-slider", { shape: "square" });
+    expect(await stage(page, "AngleSliderTurn").locator(".glim-angle-dial").evaluate((el) => getComputedStyle(el).borderTopLeftRadius)).toBe("50%");
+  });
+});

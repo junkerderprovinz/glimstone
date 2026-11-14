@@ -1096,6 +1096,15 @@ Help pages, release notes and a list of frequent questions are read, not set, an
 - **Its buttons stand under it** and follow the label mode: Start turns into Pause while it runs and into Resume once paused, and Reset puts it back to where it started. The words come from `text`.
 - **A screen reader hears the time in words**, such as "1 hour, 4 minutes, 30 seconds", as a `timer`, which it reads when asked rather than on every tick.
 
+## Angles
+
+`AngleSlider` sets an angle on a dial: how far a picture turns, the direction of a light.
+
+- **The dial is round in every shape setting.** The circle is its geometry, not a corner, the same reason a switch's knob follows the shape and a dial does not ("Switches"). It stands on the third surface with short marks on its rim at the usual angles, `marks`.
+- **The knob on the rim takes the accent** (rule 3), and the value stands beside the dial in degrees at the title size, left to right in every language.
+- **It is a slider** from 0 to 360, read with its degrees. The arrows turn it a step, Home and End go to 0° and to the last step before a full turn, and a press or a drag on the dial sets the angle under the pointer.
+- **Where a few angles are usual**, the steps are a selector and the dial stands beside it as the free value ("The one horizontal selector", "Fixed steps keep the width").
+
 ## Narrow windows
 
 The web interface at phone width, beside "The bottom bar" that replaces the rail there.

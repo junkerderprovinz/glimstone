@@ -800,4 +800,14 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "timer-accent", when: "It runs", then: "The figure takes the accent's ink, and the text colour again when it stops." },
     ],
   },
+  AngleSlider: {
+    pattern: { name: "Slider", url: `${APG}slider/` },
+    rows: [
+      { id: "angle-role", when: "Always", then: "role=\"slider\" named by its label, from 0 to 360, with the value in degrees as aria-valuetext and beside the dial." },
+      { id: "angle-arrows", keys: ["ArrowRight", "ArrowLeft"], when: "The dial has focus", then: "It turns a step." },
+      { id: "angle-ends", keys: ["Home", "End"], when: "The dial has focus", then: "It goes to 0°, or to the last step before a full turn." },
+      { id: "angle-press", when: "The dial is pressed or dragged", then: "The angle follows the pointer." },
+      { id: "angle-round", when: "The shape setting is square", then: "The dial stays round." },
+    ],
+  },
 };

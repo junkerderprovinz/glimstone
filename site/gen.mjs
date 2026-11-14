@@ -74,6 +74,7 @@ const COMPONENTS = {
   DatePicker: "react/DatePicker.tsx",
   Rating: "react/Rating.tsx",
   Timer: "react/Timer.tsx",
+  AngleSlider: "react/AngleSlider.tsx",
 };
 
 const clean = (s) => s.replace(/\s+/g, " ").trim();

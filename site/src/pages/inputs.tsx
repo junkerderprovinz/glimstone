@@ -136,3 +136,29 @@ export function RatingPage() {
     </>
   );
 }
+
+export function AngleSliderPage() {
+  return (
+    <>
+      <p className="lead">An angle set on a dial, such as how far a picture turns.</p>
+      <MachineNote file="react/AngleSlider.tsx" machine="angle-slider" />
+      <Demo name="AngleSliderTurn" />
+      <Code
+        code={`import { AngleSlider } from "@glimstone/react/AngleSlider";
+
+<AngleSlider label="Turn the picture" value={angle} onChange={setAngle} />`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>The dial is round in every shape setting: the circle is its geometry, not a corner.</li>
+        <li>The knob on its rim takes the accent, and the value stands beside it in degrees, left to right in every language.</li>
+        <li>The arrows turn it a step, Home and End go to 0° and to the last step before a full turn, and a press or a drag on the dial sets the angle there.</li>
+        <li>Where a few angles are usual, a selector of steps stands beside it ("The one horizontal selector").</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="AngleSlider" />
+      <H2>API</H2>
+      <PropsTable of="AngleSlider" />
+    </>
+  );
+}

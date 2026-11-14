@@ -79,6 +79,10 @@
     "./Timer": {
       "types": "./dist/entries/timer.d.ts",
       "default": "./dist/Timer.js"
+    },
+    "./AngleSlider": {
+      "types": "./dist/entries/angleslider.d.ts",
+      "default": "./dist/AngleSlider.js"
     }
   },
   "files": [
@@ -93,6 +97,7 @@
   "peerDependencies": {
     "@internationalized/date": "^3.12.4",
     "@zag-js/accordion": "^1.47.0",
+    "@zag-js/angle-slider": "^1.47.0",
     "@zag-js/avatar": "^1.47.0",
     "@zag-js/collapsible": "^1.47.0",
     "@zag-js/combobox": "^1.46.0",

@@ -15,7 +15,7 @@ import { BusyRingPage, SkeletonRowPage } from "./pages/loading";
 import { PopoverPage, SheetPage } from "./pages/overlay";
 import { ListTablePage } from "./pages/lists";
 import { ScrollAreaPage, SplitterPage } from "./pages/layout";
-import { DatePickerPage, FileUploadPage, PinInputPage, RatingPage, TagsInputPage } from "./pages/inputs";
+import { AngleSliderPage, DatePickerPage, FileUploadPage, PinInputPage, RatingPage, TagsInputPage } from "./pages/inputs";
 import { PaginationPage, StepsPage } from "./pages/navigation";
 import { AvatarPage, TimerPage } from "./pages/display";
 import { AccordionPage, CollapsiblePage } from "./pages/reading";
@@ -84,6 +84,7 @@ const PAGES: Page[] = [
   { path: "/engines/label", title: "Label", group: "Engines", Comp: LabelEngine },
   { path: "/engines/density", title: "Density", group: "Engines", Comp: DensityEngine },
   { path: "/components/accordion", title: "Accordion", group: "Components", Comp: AccordionPage, tag: "Zag" },
+  { path: "/components/angle-slider", title: "AngleSlider", group: "Components", Comp: AngleSliderPage, tag: "Zag" },
   { path: "/components/avatar", title: "Avatar", group: "Components", Comp: AvatarPage, tag: "Zag" },
   { path: "/components/badge", title: "Badge", group: "Components", Comp: BadgePage },
   { path: "/components/button", title: "Button", group: "Components", Comp: ButtonPage },

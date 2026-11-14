@@ -714,6 +714,18 @@ export const GLOSSARY: GlossarySection[] = [
           de: "Ein Wert in Sternen. Die Sterne bis zum Wert tragen den Akzent, und die Pfeiltasten verschieben ihn.",
         },
       },
+      {
+        id: "angle-slider",
+        en: "Angle slider",
+        de: "Winkelregler",
+        proposal: true,
+        code: ["AngleSlider", ".glim-angle", ".glim-angle-dial"],
+        components: ["AngleSlider"],
+        text: {
+          en: "An angle set on a round dial, with the value in degrees beside it.",
+          de: "Ein Winkel auf einer runden Scheibe, der Wert in Grad daneben.",
+        },
+      },
     ],
   },
   {
