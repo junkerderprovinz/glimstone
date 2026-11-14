@@ -56,6 +56,10 @@
       "types": "./dist/Steps.d.ts",
       "default": "./dist/Steps.js"
     },
+    "./FileUpload": {
+      "types": "./dist/FileUpload.d.ts",
+      "default": "./dist/FileUpload.js"
+    },
     "./Timer": {
       "types": "./dist/Timer.d.ts",
       "default": "./dist/Timer.js"
@@ -92,6 +96,7 @@
     "@zag-js/carousel": "^1.47.0",
     "@zag-js/collapsible": "^1.47.0",
     "@zag-js/combobox": "^1.46.0",
+    "@zag-js/file-upload": "^1.47.0",
     "@zag-js/hover-card": "^1.47.0",
     "@zag-js/marquee": "^1.47.0",
     "@zag-js/menu": "^1.46.0",
