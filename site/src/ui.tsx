@@ -5,6 +5,7 @@ import { highlight } from "sugar-high";
 import { Button, Badge } from "@glimstone/react";
 import propsData from "./gen/props.json";
 import { CONTRACTS } from "./contracts";
+import { FrameworkMark } from "./frameworks";
 import { Glyph } from "./glyph";
 import { useLook } from "./look";
 import { SolidIsland } from "./solidIsland";
@@ -29,9 +30,14 @@ export function H2({ children, id }: { children: string; id?: string }) {
   );
 }
 
-export function H3({ children, id }: { children: string; id?: string }) {
+export function H3({ children, id, glyph }: { children: string; id?: string; glyph?: ReactNode }) {
   const slug = id ?? slugify(children);
-  return <h3 id={slug}>{children}</h3>;
+  return (
+    <h3 id={slug} className={glyph ? "with-glyph" : undefined}>
+      {glyph}
+      {children}
+    </h3>
+  );
 }
 
 /** The badge-strip selector: one of a few fixed values, arrow keys move. */
@@ -184,7 +190,12 @@ export function Demo({ name, left }: { name: string; left?: boolean }) {
   const shown = (view === "preview" ? sources.react : sources[view])?.trim() ?? "";
   const stage = (framework: Framework, body: ReactNode) => (
     <div className="demo-cell">
-      {several && <span className="demo-fw">{FRAMEWORKS.find((f) => f.id === framework)!.name}</span>}
+      {several && (
+        <span className="demo-fw">
+          <FrameworkMark id={framework} />
+          {FRAMEWORKS.find((f) => f.id === framework)!.name}
+        </span>
+      )}
       <div className={`demo-stage${left ? " left" : ""}`} data-demo={name} data-framework={framework}>
         {body}
       </div>
@@ -211,12 +222,14 @@ export function Demo({ name, left }: { name: string; left?: boolean }) {
           value={view}
           onChange={setView}
           options={[
-            { value: "preview", label: "Preview" },
-            { value: "react", label: vue || solid || svelte || flutter ? "React" : "Code" },
-            ...(vue ? [{ value: "vue" as const, label: "Vue" }] : []),
-            ...(solid ? [{ value: "solid" as const, label: "Solid" }] : []),
-            ...(svelte ? [{ value: "svelte" as const, label: "Svelte" }] : []),
-            ...(flutter ? [{ value: "flutter" as const, label: "Flutter" }] : []),
+            { value: "preview", label: "Preview", glyph: <Glyph name="IconEye" /> },
+            vue || solid || svelte || flutter
+              ? { value: "react", label: "React", glyph: <FrameworkMark id="react" /> }
+              : { value: "react", label: "Code", glyph: <Glyph name="IconCode" /> },
+            ...(vue ? [{ value: "vue" as const, label: "Vue", glyph: <FrameworkMark id="vue" /> }] : []),
+            ...(solid ? [{ value: "solid" as const, label: "Solid", glyph: <FrameworkMark id="solid" /> }] : []),
+            ...(svelte ? [{ value: "svelte" as const, label: "Svelte", glyph: <FrameworkMark id="svelte" /> }] : []),
+            ...(flutter ? [{ value: "flutter" as const, label: "Flutter", glyph: <FrameworkMark id="flutter" /> }] : []),
           ]}
         />
         <span style={{ flex: 1 }} />
@@ -367,7 +380,12 @@ export function ContractTable({ of }: { of: keyof typeof CONTRACTS }) {
             <th>When</th>
             <th>Then</th>
             {(shown.length > 0 ? shown : FRAMEWORKS.slice(0, 1)).map((f) => (
-              <th key={f.id}>{f.name}</th>
+              <th key={f.id}>
+                <span className="th-framework">
+                  <FrameworkMark id={f.id} />
+                  {f.name}
+                </span>
+              </th>
             ))}
           </tr>
         </thead>

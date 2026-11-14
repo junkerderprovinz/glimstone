@@ -22,6 +22,7 @@ import {
 import { fortressTextEn, signInTextEn, SHAPES, type ToastSeverity } from "@glimstone/core";
 import logo from "../../.github/assets/logo.svg?url";
 import { APPS } from "./fortressData";
+import { FrameworkMark, WEB_FRAMEWORKS } from "./frameworks";
 import { Glyph } from "./glyph";
 import { useLook, type Theme } from "./look";
 import { setLookPanel, useLookPanel } from "./lookPanel";
@@ -245,6 +246,16 @@ export function Hero() {
           <Button label="Make it yours" labelKey="look" tone="accent" size="key" onClick={() => setLookPanel(!panel)} aria-expanded={panel} />
           <Button label="Browse blocks" labelKey={null} glyph={<Glyph name="IconForward" />} size="key" href="#/blocks" />
         </div>
+        <ul className="hero-frameworks" aria-label="Frameworks">
+          {WEB_FRAMEWORKS.map((f) => (
+            <li key={f.id}>
+              <a className="hero-framework" href={`#/guide/adopting?s=${f.id}`} data-framework={f.id}>
+                <FrameworkMark id={f.id} />
+                {f.name}
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
       <Wall />
     </section>

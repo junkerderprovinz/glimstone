@@ -1,9 +1,10 @@
-import { useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { GLIMSTONE_VERSION } from "@glimstone/react";
 import tokens from "../gen/tokens.json";
 import rules from "../gen/rules.json";
 import { Glyph, GLYPHS } from "../glyph";
-import { Callout, Code, H2, slugify, SourceLink } from "../ui";
+import { FrameworkMark, WEB_FRAMEWORKS } from "../frameworks";
+import { Callout, Code, H2, H3, slugify, SourceLink } from "../ui";
 import { BLOCKS } from "./blocks";
 
 const BLOB = "https://github.com/junkerderprovinz/glimstone/blob/main/";
@@ -102,9 +103,36 @@ setGlyphResolver((key) => ICONS[key]);`}
         Run <code>bash reference/react/check.sh</code> after copying. It fails when a component uses a class or token the
         copied stylesheet does not define.
       </Callout>
+      <H2>Per framework</H2>
+      <p>
+        Each framework has a package of its own with the same components under the same names. An app installs it beside
+        the core and hands it its glyphs once at boot.
+      </p>
+      {WEB_FRAMEWORKS.map((f) => (
+        <Fragment key={f.id}>
+          <H3 id={f.id} glyph={<FrameworkMark id={f.id} />}>
+            {f.name}
+          </H3>
+          <p>{ADOPT_NOTES[f.id]}</p>
+          <Code
+            code={`npm install @glimstone/core @glimstone/${f.id}
+
+import { setGlyphResolver } from "@glimstone/${f.id}";
+
+setGlyphResolver((key) => appGlyph(key));`}
+          />
+        </Fragment>
+      ))}
     </>
   );
 }
+
+const ADOPT_NOTES: Record<(typeof WEB_FRAMEWORKS)[number]["id"], string> = {
+  react: "A glyph is an element, and every value comes in through a prop with its callback beside it.",
+  vue: "A glyph is a component, and values bind with v-model where React passes a callback.",
+  solid: "Values are controlled with onChange as in React, and markup props take JSX elements.",
+  svelte: "Built on runes: values bind with bind:value and bind:checked, and glyphs and markup are snippets.",
+};
 
 type Token = { name: string; value: string; doc: string };
 

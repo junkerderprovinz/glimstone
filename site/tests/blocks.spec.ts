@@ -24,6 +24,14 @@ for (const [name, parts] of Object.entries(PARTS)) {
   });
 }
 
+test("every block's framework selector carries each framework's mark", async ({ page }) => {
+  for (const name of Object.keys(PARTS)) {
+    const segments = page.locator(`[data-block="${name}"]`).getByRole("radiogroup", { name: "Framework" }).getByRole("radio");
+    await expect(segments).toHaveCount(4);
+    for (const segment of await segments.all()) await expect(segment.locator(".fw-mark svg")).toHaveCount(1);
+  }
+});
+
 test("every block shows its own source for copying", async ({ page }) => {
   for (const name of Object.keys(PARTS)) {
     const demo = page.locator(`[data-block="${name}"]`);

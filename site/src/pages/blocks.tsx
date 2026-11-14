@@ -2,8 +2,10 @@ import { Fragment, useState, type ComponentType, type ReactNode } from "react";
 import type { Component as SvelteComponent } from "svelte";
 import type { Component as VueComponent } from "vue";
 import { highlight } from "sugar-high";
-import { Button } from "@glimstone/react";
-import { H2, Selector, useCopied } from "../ui";
+import { Button, Selector } from "@glimstone/react";
+import { FrameworkMark } from "../frameworks";
+import { Glyph } from "../glyph";
+import { H2, useCopied } from "../ui";
 import { SolidIsland } from "../solidIsland";
 import { SvelteIsland } from "../svelteIsland";
 import { VueIsland } from "../vueIsland";
@@ -84,18 +86,22 @@ function BlockDemo({ name }: { name: string }) {
       <div className="demo-bar block-bar">
         <Selector
           label="Framework"
+          inline
+          activation="manual"
           value={framework}
           onChange={setFramework}
-          options={BLOCK_FRAMEWORKS.filter((f) => f.sources[name]).map((f) => ({ value: f.id, label: f.name }))}
+          items={BLOCK_FRAMEWORKS.filter((f) => f.sources[name]).map((f) => ({ id: f.id, label: f.name, glyph: <FrameworkMark id={f.id} /> }))}
         />
         <span style={{ flex: 1 }} />
-        <Selector
+        <Selector<"one", "preview" | "code">
           label="View"
+          inline
+          activation="manual"
           value={view}
           onChange={setView}
-          options={[
-            { value: "preview", label: "Preview" },
-            { value: "code", label: "Code" },
+          items={[
+            { id: "preview", label: "Preview", glyph: <Glyph name="IconEye" /> },
+            { id: "code", label: "Code", glyph: <Glyph name="IconCode" /> },
           ]}
         />
         <Button label={copied ? "Copied" : "Copy code"} labelKey={copied ? "copied" : "copy"} tone="subtle" compactBelow={640} onClick={() => copy(source)} />
