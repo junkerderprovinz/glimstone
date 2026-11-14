@@ -15,6 +15,12 @@
             "media": "(prefers-contrast: more)",
             "selector": ":root,\n[data-theme]",
             "$description": "The contrast step, for anyone whose system asks for more contrast. It is GlimStone's own and separate from a Windows contrast theme (forced-colors, at the end of this file), which replaces every colour: here the palette stays and only moves. The accent's ink takes a second lightness step in the same ramps, so every preset reads at 8.9 to 9.7:1 as text on white. The sub and muted text each move a step toward the text colour, borders darken to where they read as lines, a card's hairline becomes a ring in the border colour, and the focus ring thickens. The accent fill stays as it is.",
+            "also": [
+              {
+                "selector": ":root[data-contrast=\"more\"],\n:root[data-contrast=\"more\"] [data-theme]",
+                "$description": "The same step on request, for an app that offers more contrast as a setting of its own beside the system's: data-contrast=\"more\" on the root."
+              }
+            ],
             "shared": true
           },
           {

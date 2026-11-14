@@ -5,9 +5,11 @@
 //
 // A source file is one group of tokens and one CSS block. Its extensions name
 // the selector, and the modes that write the same tokens again under another
-// selector or media query: a shape, a density, OLED, the contrast step. In a
-// group marked theme, a token's $value is the light ramp's and its dark value
-// sits beside it, written out as one light-dark().
+// selector or media query: a shape, a density, OLED, the contrast step. A
+// mode's `also` lists further selectors that ask for the same values, each a
+// block of its own right after the mode's. In a group marked theme, a token's
+// $value is the light ramp's and its dark value sits beside it, written out as
+// one light-dark().
 //
 // Run from the repository root: node scripts/build-tokens.mjs [--check]
 import { readdirSync, readFileSync, writeFileSync } from "node:fs";
@@ -108,11 +110,18 @@ function groupCss(id) {
     }));
   const head = groups[id].$description ? `${comment(groups[id].$description, 80)}\n` : "";
   parts.push(head + rule(m.selector, declarations(base, 78), m.media, m.layer));
-  for (const mode of (m.modes ?? []).filter((mode) => !mode.shared)) {
-    const note = mode.$description ? `${comment(mode.$description, 80)}\n` : "";
-    parts.push(note + rule(mode.selector, declarations(modeEntries(id, mode.name), 76), mode.media, mode.layer));
-  }
+  for (const mode of (m.modes ?? []).filter((mode) => !mode.shared)) parts.push(modeCss(mode, modeEntries(id, mode.name)));
   return parts.join("\n\n");
+}
+
+/** A mode's block, then one block for each selector in its `also`. */
+function modeCss(mode, entries) {
+  return [mode, ...(mode.also ?? [])]
+    .map((at) => {
+      const note = at.$description ? `${comment(at.$description, 80)}\n` : "";
+      return note + rule(at.selector, declarations(entries, 76), at.media, at.layer);
+    })
+    .join("\n\n");
 }
 
 const modeEntries = (id, name) =>
@@ -126,9 +135,7 @@ function sharedCss(name) {
   const { mode } = users.find((u) => u.mode.$description) ?? users[0];
   const differ = users.find((u) => u.mode.selector !== mode.selector || u.mode.media !== mode.media);
   if (differ) throw new Error(`the shared mode ${name} has another selector in ${differ.id}`);
-  const entries = users.flatMap((u) => modeEntries(u.id, name));
-  const note = mode.$description ? `${comment(mode.$description, 80)}\n` : "";
-  return note + rule(mode.selector, declarations(entries, 76), mode.media, mode.layer);
+  return modeCss(mode, users.flatMap((u) => modeEntries(u.id, name)));
 }
 
 // The @theme block: every token with a Tailwind name, in source order.
