@@ -1,0 +1,49 @@
+{
+  "name": "@glimstone/solid",
+  "version": "4.4.1",
+  "description": "GlimStone's components for Solid",
+  "license": "AGPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/junkerderprovinz/glimstone.git",
+    "directory": "packages/solid"
+  },
+  "homepage": "https://junkerderprovinz.github.io/glimstone/",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./Select": {
+      "types": "./dist/Select.d.ts",
+      "default": "./dist/Select.js"
+    },
+    "./Combobox": {
+      "types": "./dist/Combobox.d.ts",
+      "default": "./dist/Combobox.js"
+    },
+    "./Slider": {
+      "types": "./dist/Slider.d.ts",
+      "default": "./dist/Slider.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build && tsc -p tsconfig.build.json"
+  },
+  "dependencies": {
+    "@glimstone/core": "4.4.1"
+  },
+  "peerDependencies": {
+    "@zag-js/combobox": "^1.46.0",
+    "@zag-js/menu": "^1.46.0",
+    "@zag-js/select": "^1.46.0",
+    "@zag-js/slider": "^1.46.0",
+    "@zag-js/solid": "^1.47.0",
+    "solid-js": "^1.9.0"
+  }
+}

@@ -1,0 +1,85 @@
+import { Show, type JSX } from "solid-js";
+import { IconClose, IconWindowMaximise, IconWindowMinimise, IconWindowRestore } from "./glyphs.tsx";
+import { IconTipButton } from "./IconTipButton.tsx";
+
+// The title bar a desktop app draws where its window has no native one
+// (design-language.md, "The desktop window frame"): a strip to drag and the
+// three window buttons, nothing else. The rail already shows the mark and the
+// name. It knows nothing of the shell that hosts the page; the app hands it
+// the window calls and whether the window is maximised.
+//
+// Render it only where the app draws its own frame. tokens.css moves the page
+// and every scrim below it as soon as it is in the document.
+
+export interface WindowBarProps {
+  /** The app's name. The bar shows none, so this is what a screen reader
+   *  announces for it. */
+  appName: string;
+  /** Whether the window fills the screen. The middle button then restores it,
+   *  and the app turns its edge resizing off. */
+  maximised: boolean;
+  /** The buttons' accessible names, which also show in their bubbles. */
+  text: { minimise: string; maximise: string; restore: string; close: string };
+  onMinimise: () => void;
+  onToggleMaximise: () => void;
+  /** Asks the way the native close button does, so an app that hides to the
+   *  tray on close still does. */
+  onClose: () => void;
+  /** Called once a press on the bar starts to move. The app hands the press to
+   *  the system, which moves the window from there. */
+  onDragStart: () => void;
+}
+
+const onButton = (e: MouseEvent) => (e.target as Element).closest("button") !== null;
+
+export function WindowBar(props: WindowBarProps) {
+  // The drag starts on the first move, not on the press, so a click and a
+  // double click on the bar stay clicks. An edge the app's resize has taken
+  // arrives with its default prevented and is left to it.
+  let pressed = false;
+  const down = (e: MouseEvent) => {
+    pressed = e.button === 0 && !e.defaultPrevented && !onButton(e);
+  };
+  const move = (e: MouseEvent) => {
+    if (!pressed) return;
+    pressed = false;
+    if (e.buttons === 1) props.onDragStart();
+  };
+  const toggle = (e: MouseEvent) => {
+    if (!onButton(e)) props.onToggleMaximise();
+  };
+
+  return (
+    <header
+      data-glim="WindowBar"
+      aria-label={props.appName}
+      class="glim-window-bar"
+      onMouseDown={down}
+      onMouseMove={move}
+      onMouseUp={() => (pressed = false)}
+      onDblClick={toggle}
+    >
+      <WindowButton label={props.text.minimise} onPress={() => props.onMinimise()}>
+        <IconWindowMinimise />
+      </WindowButton>
+      <WindowButton label={props.maximised ? props.text.restore : props.text.maximise} onPress={() => props.onToggleMaximise()}>
+        <Show when={props.maximised} fallback={<IconWindowMaximise />}>
+          <IconWindowRestore />
+        </Show>
+      </WindowButton>
+      <WindowButton label={props.text.close} onPress={() => props.onClose()}>
+        <IconClose />
+      </WindowButton>
+    </header>
+  );
+}
+
+// The button takes the bar's full height and shows the house square inside, so
+// a pointer thrown into the corner of a maximised window still lands on close.
+function WindowButton(props: { label: string; onPress: () => void; children: JSX.Element }) {
+  return (
+    <IconTipButton tip={props.label} onClick={() => props.onPress()} class="glim-window-button">
+      <span class="glim-window-square">{props.children}</span>
+    </IconTipButton>
+  );
+}

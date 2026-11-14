@@ -42,5 +42,6 @@
       "@glimstone/vue/FloatingPanel": ["../packages/vue/src/entries/floatingpanel.ts"]
     }
   },
-  "include": ["src", "tests", "test", "vite.config.ts", "playwright.config.ts"]
+  "include": ["src", "tests", "test", "vite.config.ts", "playwright.config.ts"],
+  "exclude": ["src/solid", "src/solid-demos", "src/svelte", "src/svelte-demos"]
 }

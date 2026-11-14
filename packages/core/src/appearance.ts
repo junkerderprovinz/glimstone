@@ -6,7 +6,7 @@
 //
 // It has no framework dependency; the React and Vue packages wrap it.
 
-import { accentInks, contrastOn, validHex as valid } from './contrast.ts';
+import { accentHovers, accentInks, contrastOn, validHex as valid } from './contrast.ts';
 import { inkCss } from './oklab.ts';
 import { storageKey } from './storage.ts';
 import { applyOled, storedOled } from './theme.ts';
@@ -244,7 +244,8 @@ const systemListeners = new Set<() => void>();
  * `--accent-ink`, `--accent-glyph` and `--accent-hover` are derived in
  * tokens.css, so they also follow a later light or dark switch. Where the ink's
  * OKLab step would fall short of 4.5:1 on a ramp, the ramp's ink is set here
- * instead, as `--accent-ink-light` or `--accent-ink-dark`.
+ * instead, as `--accent-ink-light` or `--accent-ink-dark`, and the same goes for
+ * a hover the ink would not read on (`--accent-hover-light`, `-dark`).
  */
 export function applyAccent(accent: string | undefined): void {
   accentSetting = accent;
@@ -257,6 +258,11 @@ function paintAccent(hex: string | undefined): void {
   for (const [ramp, ink] of Object.entries(inks)) {
     if (ink) root.setProperty(`--accent-ink-${ramp}`, ink);
     else root.removeProperty(`--accent-ink-${ramp}`);
+  }
+  const hovers = valid(hex) ? accentHovers(hex) : { light: undefined, dark: undefined };
+  for (const [ramp, hover] of Object.entries(hovers)) {
+    if (hover) root.setProperty(`--accent-hover-${ramp}`, hover);
+    else root.removeProperty(`--accent-hover-${ramp}`);
   }
   if (!valid(hex)) {
     root.removeProperty('--accent');

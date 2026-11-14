@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { accentInks, contrastOn, contrastRatio, MIN_TEXT_CONTRAST } from '../src/contrast.ts';
+import { accentHovers, accentInks, contrastOn, contrastRatio, MIN_TEXT_CONTRAST } from '../src/contrast.ts';
 import { ACCENTS, hueVars, RAINBOW } from '../src/appearance.ts';
 import { srgbOf, type Oklab } from '../src/oklab.ts';
 
@@ -178,6 +178,7 @@ function oklabOfRgb(c: Rgba): Oklab {
 /** The theme as it stands after applyAccent(hex) wrote its overrides on the root. */
 function withAccent(theme: Record<string, string>, accent: string): Record<string, string> {
   const { light, dark: darkInk } = accentInks(accent);
+  const hovers = accentHovers(accent);
   return {
     ...theme,
     '--accent': accent,
@@ -185,10 +186,21 @@ function withAccent(theme: Record<string, string>, accent: string): Record<strin
     '--accent-soft': `rgba(${parse(accent).slice(0, 3).join(', ')}, 0.14)`,
     ...(light ? { '--accent-ink-light': light } : {}),
     ...(darkInk ? { '--accent-ink-dark': darkInk } : {}),
+    ...(hovers.light ? { '--accent-hover-light': hovers.light } : {}),
+    ...(hovers.dark ? { '--accent-hover-dark': hovers.dark } : {}),
   };
 }
 
 const CUSTOM_ACCENTS = ['#FFFF00', '#0000FF', '#777777', '#FAFAFA', '#050505'];
+// What the colour picker can hand in: twelve hues at low, mid and high chroma
+// on four lightness steps, and a run of greys, mid-grey included.
+const SWEEP = [
+  ...[0.45, 0.6, 0.75, 0.9].flatMap((l) =>
+    [0.02, 0.08, 0.2].flatMap((c) => Array.from({ length: 12 }, (_, i) => srgbOf([l, c * Math.cos((i * Math.PI) / 6), c * Math.sin((i * Math.PI) / 6)]))),
+  ),
+  ...['#222222', '#555555', '#6B6B6B', '#777777', '#7B7B7B', '#888888', '#999999', '#BBBBBB', '#DDDDDD'],
+];
+
 const ALL_ACCENTS = [...ACCENTS.map((a) => [a.name, a.hex] as const), ...CUSTOM_ACCENTS.map((h) => [`custom ${h}`, h] as const)];
 
 // Each colour pair a rule in tokens.css sets on one element: its text colour on
@@ -238,6 +250,17 @@ function pairRatio(ink: string, fill: string, scope: Record<string, string>): nu
 }
 
 for (const [themeName, theme] of Object.entries(THEMES)) {
+  test(`every text pair the components use reaches 4.5:1 for ${SWEEP.length} picked accents on ${themeName}`, () => {
+    const misses = SWEEP.flatMap((accent) => {
+      const scope = withAccent(theme, accent);
+      return [...RULE_PAIRS, ...GROUND_PAIRS]
+        .map(([ink, fill]) => [ink, fill, pairRatio(ink, fill, scope)] as const)
+        .filter(([, , r]) => r < MIN_TEXT_CONTRAST)
+        .map(([ink, fill, r]) => `${accent} ${ink} on ${fill}: ${r.toFixed(2)}:1`);
+    });
+    assert.deepEqual([...new Set(misses)], []);
+  });
+
   for (const { name: accentName, hex: accent } of ACCENTS) {
     test(`every text pair the components use reaches 4.5:1 for ${accentName} on ${themeName}`, () => {
       const scope = withAccent(theme, accent);

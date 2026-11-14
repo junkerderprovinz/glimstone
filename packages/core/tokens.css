@@ -424,10 +424,13 @@
    21): the fill mixed toward the theme's text colour, which is lighter on dark
    and darker on light, the direction the ramp moves. 15% is about one step of
    the dark ramp, surface3 to hover-raised. Declared wherever a theme is set,
-   so --carbon-text is the one that theme defines. */
+   so --carbon-text is the one that theme defines. On a mid-tone picked accent
+   that step would take the ink under 4.5:1, and applyAccent sets the ramp's
+   hover as --accent-hover-light or --accent-hover-dark, a step away from the
+   ink instead (accentHovers in contrast.ts). */
 :root,
 [data-theme] {
-  --accent-hover:      color-mix(in srgb, var(--accent) 85%, var(--carbon-text));
+  --accent-hover:      light-dark(var(--accent-hover-light, color-mix(in srgb, var(--accent) 85%, var(--carbon-text))), var(--accent-hover-dark, color-mix(in srgb, var(--accent) 85%, var(--carbon-text))));
   --status-ok-hover:   color-mix(in srgb, var(--status-ok-solid) 85%, var(--carbon-text));
   --status-fail-hover: color-mix(in srgb, var(--status-fail-solid) 85%, var(--carbon-text));
   --status-warn-hover: color-mix(in srgb, var(--status-warn-solid) 85%, var(--carbon-text));
