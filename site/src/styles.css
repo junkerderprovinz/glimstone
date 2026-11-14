@@ -661,8 +661,8 @@ pre.code {
   to { transform: translateY(calc(-50% - 0.875rem)); }
 }
 @media (prefers-reduced-motion: no-preference) {
-  :root { --motion-wall-dur: 90s; }
-  :root[data-motion="subtle"] { --motion-wall-dur: 160s; }
+  :root { --motion-wall-dur: 160s; }
+  :root[data-motion="wild"] { --motion-wall-dur: 90s; }
   :root[data-motion="off"] { --motion-wall-dur: 160s; }
   :root[data-motion="storm"] { --motion-wall-dur: 36s; }
   .wall-track { animation: wall-drift var(--motion-wall-dur, 160s) linear infinite; }
