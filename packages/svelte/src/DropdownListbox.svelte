@@ -24,7 +24,7 @@
 
 <script lang="ts">
   import { tick } from "svelte";
-  import { computeBubblePosition } from "@glimstone/core";
+  import { computeBubblePosition, focusByLetter, isTypeahead } from "@glimstone/core";
   import { lift } from "./lift.js";
   import { usePortalHue } from "./portalHue.svelte.js";
   import { css } from "./style.js";
@@ -129,9 +129,14 @@
     });
   });
 
-  // Arrows, Home and End move between the options so every listbox behaves
-  // alike. Enter and Space need nothing: the options are real buttons.
+  // Arrows, Home, End and a typed letter move between the options so every
+  // listbox behaves alike. Enter and Space need nothing: the options are real
+  // buttons.
   function onPanelKey(e: KeyboardEvent) {
+    if (isTypeahead(e)) {
+      if (focusByLetter(options(), e.key)) e.preventDefault();
+      return;
+    }
     if (!["ArrowDown", "ArrowUp", "Home", "End"].includes(e.key)) return;
     const opts = options();
     if (opts.length === 0) return;

@@ -1,5 +1,5 @@
 import { children, createComputed, createEffect, createSignal, on, onCleanup, onMount, Show, type JSX } from "solid-js";
-import { computeBubblePosition } from "@glimstone/core";
+import { computeBubblePosition, focusByLetter, isTypeahead } from "@glimstone/core";
 import { Lift } from "./Lift.tsx";
 import { usePortalHue, type PortalHue } from "./portalHue.ts";
 import { css } from "./style.ts";
@@ -163,9 +163,14 @@ function Panel(
     });
   });
 
-  // Arrows, Home and End move between options here so every listbox behaves
-  // alike. Enter and Space need nothing: the options are real buttons.
+  // Arrows, Home, End and a typed letter move between options here so every
+  // listbox behaves alike. Enter and Space need nothing: the options are real
+  // buttons.
   const onPanelKeyDown = (e: KeyboardEvent) => {
+    if (isTypeahead(e)) {
+      if (focusByLetter(options(), e.key)) e.preventDefault();
+      return;
+    }
     if (e.key !== "ArrowDown" && e.key !== "ArrowUp" && e.key !== "Home" && e.key !== "End") return;
     const opts = options();
     if (opts.length === 0) return;
