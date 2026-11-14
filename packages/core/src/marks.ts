@@ -106,6 +106,12 @@ export const MARKS = {
     size: 14,
     body: '<path d="M13.4 10 7 16.4l-1.7-1.7L10 10 5.3 5.3 7 3.6 13.4 10Z"/>',
   },
+  /** `IconUpload` from the assortment: files handed to the app, in a drop zone. */
+  upload: {
+    viewBox: "0 0 14 14",
+    size: 16,
+    body: '<path fill-rule="evenodd" d="M7 14A7 7 0 1 0 7 0a7 7 0 0 0 0 14Zm3.146 -8.31L7.353 2.895a0.5 0.5 0 0 0 -0.707 0L3.854 5.69a0.5 0.5 0 0 0 0.353 0.854H6l0 3.707a1 1 0 0 0 2 0l0 -3.707h1.793a0.5 0.5 0 0 0 0.353 -0.854Z" clip-rule="evenodd" stroke-width="1"></path>',
+  },
 } satisfies Record<string, Mark>;
 
 // The toast's severity as filled shapes (design-language.md, "Icon glyphs"). The

@@ -138,3 +138,52 @@ test.describe("TagsInput", () => {
     expect(await ground(".glim-tag")).not.toBe(await ground(".glim-tags-control"));
   });
 });
+
+test.describe("FileUpload", () => {
+  const zone = (page: Page) => stage(page, "FileUploadImport").getByRole("button", { name: "Drop files here or choose them" });
+  const picker = (page: Page) => stage(page, "FileUploadImport").locator('input[type="file"]');
+  const settings = { name: "settings.json", mimeType: "application/json", buffer: Buffer.from('{"theme":"dark"}') };
+
+  test("[upload-button] the drop zone is one button that opens the picker", async ({ page }) => {
+    await open(page, "/components/file-upload");
+    await zone(page).focus();
+    const chooser = page.waitForEvent("filechooser");
+    await page.keyboard.press("Enter");
+    await (await chooser).setFiles(settings);
+    await expect(stage(page, "FileUploadImport").getByText("Ready to import settings.json")).toBeVisible();
+  });
+
+  test("[upload-list] a chosen file stands under the zone with its size and a remove button", async ({ page }) => {
+    await open(page, "/components/file-upload");
+    await picker(page).setInputFiles(settings);
+    const row = stage(page, "FileUploadImport").locator(".glim-upload-file");
+    await expect(row.locator(".glim-upload-name")).toHaveText("settings.json");
+    await expect(row.locator(".glim-upload-size")).toHaveText("16 byte");
+    await stage(page, "FileUploadImport").getByRole("button", { name: "Remove settings.json" }).click();
+    await expect(row).toHaveCount(0);
+    await expect(stage(page, "FileUploadImport").getByText("Nothing chosen yet")).toBeVisible();
+  });
+
+  test("[upload-refused] a file of another kind is refused and named with the reason", async ({ page }) => {
+    await open(page, "/components/file-upload");
+    await picker(page).setInputFiles({ name: "photo.png", mimeType: "image/png", buffer: Buffer.from("png") });
+    await expect(stage(page, "FileUploadImport").locator(".glim-field-error")).toHaveText("photo.png is not a kind of file this takes");
+    await expect(stage(page, "FileUploadImport").locator(".glim-upload-file")).toHaveCount(0);
+  });
+
+  test("[upload-drag] while files are held over the zone it takes the accent's wash", async ({ page }) => {
+    await open(page, "/components/file-upload");
+    const data = await page.evaluateHandle(() => {
+      const dt = new DataTransfer();
+      dt.items.add(new File(['{"theme":"light"}'], "dropped.json", { type: "application/json" }));
+      return dt;
+    });
+    const rest = await zone(page).evaluate((el) => getComputedStyle(el).backgroundColor);
+    await zone(page).dispatchEvent("dragenter", { dataTransfer: data });
+    await zone(page).dispatchEvent("dragover", { dataTransfer: data });
+    await expect(zone(page)).toHaveAttribute("data-dragging", "");
+    expect(await zone(page).evaluate((el) => getComputedStyle(el).backgroundColor)).not.toBe(rest);
+    await zone(page).dispatchEvent("dragleave", { dataTransfer: data });
+    await expect(zone(page)).not.toHaveAttribute("data-dragging", "");
+  });
+});

@@ -70,6 +70,7 @@ const COMPONENTS = {
   Steps: "react/Steps.tsx",
   Splitter: "react/Splitter.tsx",
   ScrollArea: "react/ScrollArea.tsx",
+  FileUpload: "react/FileUpload.tsx",
 };
 
 const clean = (s) => s.replace(/\s+/g, " ").trim();

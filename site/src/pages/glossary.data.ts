@@ -675,6 +675,19 @@ export const GLOSSARY: GlossarySection[] = [
           de: "Ein Feld, das Getipptes zu Schlagwörtern macht. Enter oder ein Komma fügt eines hinzu, und jedes trägt sein eigenes Entfernen-Zeichen.",
         },
       },
+      {
+        id: "file-upload",
+        en: "File upload",
+        de: "Dateiablage",
+        proposal: true,
+        code: ["FileUpload", ".glim-upload", ".glim-upload-drop"],
+        components: ["FileUpload"],
+        rules: [25, 38],
+        text: {
+          en: "Files handed over by dropping them or from the picker. The drop zone is itself the button, and a refused file is named with its reason.",
+          de: "Dateien, die man ablegt oder im Dateidialog wählt. Die Ablagefläche ist selbst der Knopf, und eine abgelehnte Datei wird mit dem Grund genannt.",
+        },
+      },
     ],
   },
   {

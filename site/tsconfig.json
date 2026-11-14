@@ -28,7 +28,8 @@
       "@glimstone/vue/TagsInput": ["../packages/vue/src/entries/tagsinput.ts"],
       "@glimstone/vue/Steps": ["../packages/vue/src/entries/steps.ts"],
       "@glimstone/vue/Splitter": ["../packages/vue/src/entries/splitter.ts"],
-      "@glimstone/vue/ScrollArea": ["../packages/vue/src/entries/scrollarea.ts"]
+      "@glimstone/vue/ScrollArea": ["../packages/vue/src/entries/scrollarea.ts"],
+      "@glimstone/vue/FileUpload": ["../packages/vue/src/entries/fileupload.ts"]
     }
   },
   "include": ["src", "tests", "test", "vite.config.ts", "playwright.config.ts"]

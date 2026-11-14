@@ -63,6 +63,10 @@
     "./ScrollArea": {
       "types": "./dist/entries/scrollarea.d.ts",
       "default": "./dist/ScrollArea.js"
+    },
+    "./FileUpload": {
+      "types": "./dist/entries/fileupload.d.ts",
+      "default": "./dist/FileUpload.js"
     }
   },
   "files": [
@@ -79,6 +83,7 @@
     "@zag-js/avatar": "^1.47.0",
     "@zag-js/collapsible": "^1.47.0",
     "@zag-js/combobox": "^1.46.0",
+    "@zag-js/file-upload": "^1.47.0",
     "@zag-js/menu": "^1.46.0",
     "@zag-js/pagination": "^1.47.0",
     "@zag-js/pin-input": "^1.47.0",

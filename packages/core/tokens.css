@@ -6687,20 +6687,98 @@
   .glim-scroll-thumb { transition: margin var(--motion-control-dur, 0s) ease, background-color var(--motion-control-dur, 0s) ease; }
 }
 
+/* FileUpload: the drop zone is one filled button on the second surface, with
+   its glyph and its words (rule 38). While files are held over it, it takes
+   the accent's wash and its glyph the accent, since that is the moment the
+   app is about to act. The files stand under it as rows. */
+@layer components {
+  .glim-upload {
+    display: grid;
+    gap: var(--space-3);
+    min-width: 0;
+  }
+  .glim-upload-drop {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    min-height: calc(var(--btn-h-key) * 2.5);
+    padding: var(--space-8);
+    border-radius: var(--radius-card);
+    background-color: var(--carbon-surface2);
+    color: var(--carbon-text-sub);
+    font-size: var(--text-body);
+    text-align: center;
+    cursor: pointer;
+  }
+  .glim-upload-drop > svg {
+    width: var(--space-10);
+    height: var(--space-10);
+    color: var(--carbon-text-sub);
+  }
+  .glim-upload-words { max-width: 22rem; }
+  .glim-upload-drop:hover { background-color: var(--carbon-surface3); }
+  :is(.glim-well, .glim-subcard) .glim-upload-drop { background-color: var(--carbon-surface3); }
+  :is(.glim-well, .glim-subcard) .glim-upload-drop:hover { background-color: var(--carbon-hover-raised); }
+  .glim-upload-drop:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+  .glim-upload-drop[data-dragging] {
+    background-color: var(--accent-soft);
+    color: var(--carbon-text);
+  }
+  .glim-upload-drop[data-dragging] > svg { color: var(--accent-glyph); }
+  .glim-upload-drop[data-disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .glim-upload-files {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .glim-upload-file {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+    min-height: var(--row-h);
+    padding-inline: var(--row-pad) var(--space-2);
+    border-radius: var(--radius-control);
+  }
+  .glim-upload-file:hover { background-color: var(--carbon-hover); }
+  .glim-upload-file + .glim-upload-file { border-top: 1px solid color-mix(in srgb, var(--carbon-border) 60%, transparent); }
+  .glim-upload-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    color: var(--carbon-text);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .glim-upload-size {
+    color: var(--carbon-text-sub);
+    font-size: var(--text-subline);
+  }
+}
+
 /* The contrast step and the Windows contrast themes for the components on the
    Zag machines, written like the rules for the older ones above: an edge on
    every field and pressable part, and the selection colours on what is chosen
    or picked. */
 @layer components {
   @media (prefers-contrast: more) {
-    :is(.glim-page, .glim-tags-control, .glim-steps-indicator):not(:focus-visible) {
+    :is(.glim-page, .glim-tags-control, .glim-steps-indicator, .glim-upload-drop):not(:focus-visible) {
       outline: 1px solid var(--carbon-border);
       outline-offset: -1px;
     }
   }
   @media (forced-colors: active) {
-    :is(.glim-page, .glim-tags-control, .glim-tag, .glim-avatar, .glim-steps-indicator) { border: 1px solid ButtonText; }
-    :is(.glim-page[data-selected], .glim-tag[data-highlighted], .glim-steps-indicator[data-current]) {
+    :is(.glim-page, .glim-tags-control, .glim-tag, .glim-avatar, .glim-steps-indicator, .glim-upload-drop) { border: 1px solid ButtonText; }
+    :is(.glim-page[data-selected], .glim-tag[data-highlighted], .glim-steps-indicator[data-current], .glim-upload-drop[data-dragging]) {
       forced-color-adjust: none;
       border-color: Highlight;
       background-color: Highlight;

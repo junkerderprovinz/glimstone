@@ -1057,6 +1057,16 @@ Help pages, release notes and a list of frequent questions are read, not set, an
 - **Its thumb sits on the third surface** and steps up the ramp under the pointer or while it is dragged (rule 21), growing a little then so it is easy to catch. It never takes the accent, since scrolling is no activity of the app's.
 - **The box is a region** named by its label, which Tab reaches and the arrow keys, the Page keys, Home and End scroll. The wheel and a finger scroll it as they would any box.
 
+## Handing over files
+
+`FileUpload` takes files dropped on it or chosen in the system's picker: a settings file to import, a key, a picture for an entry.
+
+- **The drop zone is itself the button that opens the picker.** One control with one stop for Tab, filled on the second surface with its glyph and its words (rule 38), never a dashed frame with a second button inside it. Enter and Space open the picker.
+- **While files are held over it, it takes the accent's wash** and its glyph the accent, the moment the app is about to act (rule 3). At rest it is quiet.
+- **A chosen file stands under the zone as a row**, at the row density's height, with its name, its size in the page's language (`formatFileSize()` in the core) and a remove button for the row (`IconButton`).
+- **A refused file is named with its reason**, a line in the fault colour under the list, such as "photo.png is not a kind of file this takes". `accept`, `maxFiles` and `maxFileSize` decide, and `text.refused` takes the app's words for each reason.
+- **It hands the files over and nothing else.** Where the app then writes them, its window says first (rule 25).
+
 ## Narrow windows
 
 The web interface at phone width, beside "The bottom bar" that replaces the rail there.

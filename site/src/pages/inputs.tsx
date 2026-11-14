@@ -56,3 +56,30 @@ export function TagsInputPage() {
     </>
   );
 }
+
+export function FileUploadPage() {
+  return (
+    <>
+      <p className="lead">Files handed to the app by dropping them or from the picker, such as a settings file to import.</p>
+      <MachineNote file="react/FileUpload.tsx" machine="file-upload" />
+      <Demo name="FileUploadImport" />
+      <Code
+        code={`import { FileUpload } from "@glimstone/react/FileUpload";
+
+<FileUpload label="Settings to import" value={files} onChange={setFiles} accept={["application/json"]} />`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>The drop zone is itself the button that opens the picker: one control, filled, with its glyph and its words.</li>
+        <li>While files are held over it, it takes the accent's wash, since the app is about to act.</li>
+        <li>A chosen file stands under the zone as a row, with its size in the page's language and a button to remove it.</li>
+        <li>A file it does not take is named under the list with the reason, in the words <code>text.refused</code> passes.</li>
+        <li>It only hands the files over. Where the app writes them, its window says first (rule 25).</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="FileUpload" />
+      <H2>API</H2>
+      <PropsTable of="FileUpload" />
+    </>
+  );
+}

@@ -761,4 +761,12 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "scroll-own-bar", when: "The content is taller than the box", then: "The platform's bar is hidden and the house's thin bar shows for that direction alone." },
     ],
   },
+  FileUpload: {
+    rows: [
+      { id: "upload-button", keys: ["Enter", "Space"], when: "The drop zone has focus", then: "It is one button, named by its words, and it opens the system's file picker." },
+      { id: "upload-list", when: "A file is chosen", then: "It stands under the zone as a row with its name, its size in the page's language and a button to remove it." },
+      { id: "upload-refused", when: "A file is of a kind it does not take, too large or one too many", then: "The file is left out and a line in the fault colour names it with the reason." },
+      { id: "upload-drag", when: "Files are held over the zone", then: "It takes the accent's wash, and lets it go when they leave." },
+    ],
+  },
 };
