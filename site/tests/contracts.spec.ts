@@ -460,7 +460,6 @@ test.describe("DropdownListbox", () => {
   });
 
   test("[list-typeahead] a letter jumps", async ({ page }) => {
-    test.fail(true, "DropdownListbox is deprecated; Select carries this row");
     await openList(page);
     await page.keyboard.press("a");
     expect(await focusedText(page)).toBe("America/New_York");

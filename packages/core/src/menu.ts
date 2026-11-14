@@ -181,23 +181,32 @@ export function focusMenuRow(menu: HTMLElement, move: "next" | "prev" | "first" 
 }
 
 /**
- * Moves the focus to the next row whose name starts with the typed letter,
- * after the focused one and wrapping, and says whether a row took it. A
- * letter no row starts with leaves the focus where it is.
+ * Moves the focus to the next element whose name starts with the typed
+ * letter, after the focused one and wrapping, and says whether one took it. A
+ * letter none starts with leaves the focus where it is.
  */
-export function focusMenuRowByLetter(menu: HTMLElement, letter: string): boolean {
-  const rows = menuRows(menu);
-  const at = rows.indexOf(document.activeElement as HTMLElement);
+export function focusByLetter(items: HTMLElement[], letter: string): boolean {
+  const at = items.indexOf(document.activeElement as HTMLElement);
   const wanted = letter.toLocaleLowerCase();
-  for (let step = 1; step <= rows.length; step++) {
-    const row = rows[(at + step) % rows.length]!;
-    const name = (row.getAttribute("aria-label") ?? row.textContent ?? "").trim().toLocaleLowerCase();
+  for (let step = 1; step <= items.length; step++) {
+    const item = items[(at + step) % items.length]!;
+    const name = (item.getAttribute("aria-label") ?? item.textContent ?? "").trim().toLocaleLowerCase();
     if (name.startsWith(wanted)) {
-      row.focus();
+      item.focus();
       return true;
     }
   }
   return false;
+}
+
+/** focusMenuRowByLetter is focusByLetter over a menu's rows. */
+export function focusMenuRowByLetter(menu: HTMLElement, letter: string): boolean {
+  return focusByLetter(menuRows(menu), letter);
+}
+
+/** Whether a key is a letter typed to jump, rather than Space or a shortcut. */
+export function isTypeahead(e: KeyboardEvent): boolean {
+  return e.key.length === 1 && e.key !== " " && !e.ctrlKey && !e.metaKey && !e.altKey;
 }
 
 // One menu is open at a time in the whole document. Opening one closes the
