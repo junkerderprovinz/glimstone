@@ -15,6 +15,7 @@ import {
   focusFirstMenuRow,
   focusMenuRow,
   focusMenuRowByLetter,
+  isTypeahead,
   isMenuHead,
   menuMove,
   menuRowView,
@@ -221,12 +222,9 @@ export function ContextMenu({ x, y, items, above = false, label, id, opener, onC
     entry.onSelect?.();
   }
 
-  // A letter typed in the menu, which jumps to a row; Space presses the row.
-  const typed = (e: KeyboardEvent) => e.key.length === 1 && e.key !== " " && !e.ctrlKey && !e.metaKey && !e.altKey;
-
   function keys(e: KeyboardEvent<HTMLDivElement>, inSub: boolean) {
     if (e.key === "Tab") return finish(false);
-    if (typed(e)) {
+    if (isTypeahead(e.nativeEvent)) {
       if (focusMenuRowByLetter(e.currentTarget, e.key)) e.preventDefault();
       return;
     }

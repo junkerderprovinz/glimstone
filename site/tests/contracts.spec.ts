@@ -306,6 +306,21 @@ test.describe("Toggle", () => {
   const REASON = "Only with Dark or System. Light is chosen above.";
   // aria-disabled counts as disabled for Playwright's own checks, so a press goes in with force.
   const shakes = (sw: Locator) => expect.poll(() => sw.evaluate((e) => !!e.closest(".glim-toggle")?.classList.contains("glim-shake")));
+  // A shake lasts a few hundred milliseconds, which a poll under load can miss
+  // between two looks, so an observer set up first counts every time the frame
+  // takes the class, also when it drops and takes it again in one go.
+  const countShakes = (sw: Locator) =>
+    sw.evaluate((e) => {
+      const frame = e.closest<HTMLElement>(".glim-toggle")!;
+      frame.dataset.shook = "0";
+      new MutationObserver((records) => {
+        records.forEach((r, i) => {
+          const after = records[i + 1]?.oldValue ?? frame.className;
+          if (!(r.oldValue ?? "").includes("glim-shake") && after.includes("glim-shake")) frame.dataset.shook = String(Number(frame.dataset.shook) + 1);
+        });
+      }).observe(frame, { attributes: true, attributeFilter: ["class"], attributeOldValue: true });
+    });
+  const shook = (sw: Locator) => expect.poll(() => sw.evaluate((e) => Number(e.closest<HTMLElement>(".glim-toggle")!.dataset.shook)));
 
   test("[toggle-refused] a refused switch keeps its state and its focus, dims its track and shakes", async ({ page }) => {
     await open(page, "/components/toggle");
@@ -313,13 +328,14 @@ test.describe("Toggle", () => {
     await expect(sw).toHaveAttribute("aria-disabled", "true");
     await expect(sw).not.toHaveAttribute("disabled");
     expect(await sw.evaluate((e) => getComputedStyle(e).backgroundColor)).toMatch(/\/ 0\.5\)$/);
+    await countShakes(sw);
     await sw.click({ force: true });
     await expect(sw).toHaveAttribute("aria-checked", "true");
-    await shakes(sw).toBe(true);
+    await shook(sw).toBe(1);
     await shakes(sw).toBe(false);
     await sw.focus();
     await page.keyboard.press("Space");
-    await shakes(sw).toBe(true);
+    await shook(sw).toBe(2);
     await expect(sw).toHaveAttribute("aria-checked", "true");
     await expect(sw).toBeFocused();
   });
@@ -444,7 +460,6 @@ test.describe("DropdownListbox", () => {
   });
 
   test("[list-typeahead] a letter jumps", async ({ page }) => {
-    test.fail(true, "DropdownListbox is deprecated; Select carries this row");
     await openList(page);
     await page.keyboard.press("a");
     expect(await focusedText(page)).toBe("America/New_York");
@@ -3942,7 +3957,18 @@ test.describe("SignInCard refusals and engines", () => {
   const card = (page: Page) => stage(page, "SignInCardBasic").locator(".glim-signin-card");
   const field = (page: Page, name: string) => card(page).getByLabel(name, { exact: true });
   const button = (page: Page, name: string) => card(page).getByRole("button", { name, exact: true });
-  const shaking = (el: Locator) => expect.poll(() => el.evaluate((e) => e.classList.contains("glim-shake")));
+  // A shake lasts a few hundred milliseconds, which a poll under load can miss
+  // between two looks, so an observer set up before the key press keeps the
+  // name of every element that took the class.
+  const watchShakes = (page: Page) =>
+    page.evaluate(() => {
+      const seen: string[] = [];
+      (window as unknown as { shook: string[] }).shook = seen;
+      new MutationObserver(() => {
+        for (const el of document.querySelectorAll(".glim-shake")) seen.push((el.getAttribute("aria-label") ?? el.textContent ?? "").trim());
+      }).observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ["class"] });
+    });
+  const shook = (page: Page) => expect.poll(() => page.evaluate(() => (window as unknown as { shook: string[] }).shook));
   const selected = (el: Locator) => el.evaluate((e: HTMLInputElement) => e.selectionStart === 0 && e.selectionEnd === e.value.length && e.value.length > 0);
   // Every transform the button wears while a refused password comes back.
   const movesOnRefusal = (page: Page) =>
@@ -3976,8 +4002,9 @@ test.describe("SignInCard refusals and engines", () => {
   test("[signin-shake] a refused password shakes Sign in and selects the password", async ({ page }) => {
     await open(page, "/components/sign-in-card");
     await field(page, "Password").fill("wrong");
+    await watchShakes(page);
     await page.keyboard.press("Enter");
-    await shaking(button(page, "Sign in")).toBe(true);
+    await shook(page).toContain("Sign in");
     await expect(card(page).getByRole("alert")).toHaveText("That password is not right");
     await expect(field(page, "Password")).toBeFocused();
     expect(await selected(field(page, "Password"))).toBe(true);
@@ -3990,8 +4017,9 @@ test.describe("SignInCard refusals and engines", () => {
     await expect(field(page, "Code")).toBeFocused();
     expect(await button(page, "Sign in").evaluate((e) => e.classList.contains("glim-shake"))).toBe(false);
     await field(page, "Code").fill("000000");
+    await watchShakes(page);
     await page.keyboard.press("Enter");
-    await shaking(button(page, "Sign in")).toBe(true);
+    await shook(page).toContain("Sign in");
     await expect(field(page, "Code")).toBeFocused();
   });
 
@@ -4001,8 +4029,9 @@ test.describe("SignInCard refusals and engines", () => {
     await field(page, "Code from the container log").fill("ABCD-EFGH-JKLM");
     await field(page, "New password").fill("correct horse battery");
     await field(page, "Confirm password").fill("correct horse batterx");
+    await watchShakes(page);
     await page.keyboard.press("Enter");
-    await shaking(button(page, "Set password")).toBe(true);
+    await shook(page).toContain("Set password");
     await expect(field(page, "Confirm password")).toBeFocused();
     expect(await selected(field(page, "Confirm password"))).toBe(true);
   });
@@ -4770,6 +4799,14 @@ test.describe("Fortress", () => {
     await others(page).click();
     await page.mouse.move(0, 0);
     const track = () => others(page).evaluate((t) => getComputedStyle(t).backgroundColor);
+    // The click leaves the switch with focus, which shows the colour as the
+    // pointer does, and the track then fades back to grey; the resting colour
+    // is the one it settles on with neither.
+    await others(page).evaluate((t) => {
+      (t as HTMLElement).blur();
+      getComputedStyle(t).backgroundColor;
+      return Promise.all(t.getAnimations({ subtree: true }).map((a) => a.finished));
+    });
     const resting = await track();
     await inside(page).locator(".glim-fortress-switch .glim-fortress-sub").hover();
     await expect.poll(track).not.toBe(resting);

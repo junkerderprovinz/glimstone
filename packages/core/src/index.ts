@@ -10,6 +10,7 @@ export * from "./button.ts";
 export * from "./busy.ts";
 export * from "./carousel.ts";
 export * from "./clipboard.ts";
+export * from "./deprecated.ts";
 export * from "./colorNames.ts";
 export * from "./colorPicker.ts";
 export * from "./contrast.ts";

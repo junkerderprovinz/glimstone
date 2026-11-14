@@ -1833,7 +1833,7 @@ What a component does when somebody presses a key, clicks outside it or listens 
 - **Zag runs without a framework too.** [`packages/core/src/select.ts`](../packages/core/src/select.ts) mounts the same select machine into an empty element, so an Unraid plugin page gets the keys, the focus handling and the look of the apps. This is why Zag and not one of the React-only libraries: React Aria and Radix would leave the plugins on hand-written behaviour.
 - **The contracts hold for every package.** Each row runs once per framework: the Playwright projects `react` and `vue` drive the same demo in both, and a Flutter row is a widget test named after the row in `packages/flutter/test`. The table on the site shows a result per framework, and a dash where a framework has no such component yet.
 - **Zag is a dependency of the framework packages.** A component built on Zag needs the adapter (`@zag-js/react` or `@zag-js/vue`) and its machine packages (`@zag-js/select` and `@zag-js/menu` for Select, `@zag-js/combobox`, `@zag-js/slider`) installed in the app, and comes from its own entry so the rest of the package needs none of them. Selector needs Select's packages as well, since a strip of one that runs out of room turns into Select.
-- **Select is the one dropdown** ("The dropdown"). DropdownListbox is deprecated: it left the trigger to the caller, so it could not keep focus on it or offer typeahead. It stays in the React package until every app has moved, and the Vue package never had it. A list longer than a screen is a Combobox, which filters as somebody types and says so when nothing matches instead of closing.
+- **Select is the one dropdown** ("The dropdown"). DropdownListbox is deprecated: it leaves the trigger to the caller, so it cannot keep focus on it, and a letter jumps only once the list is open. It stays in both packages until every app has moved. A list longer than a screen is a Combobox, which filters as somebody types and says so when nothing matches instead of closing.
 - **ConfirmDialog comes with useConfirm.** The dialog stays a plain component that never touches the document; [`packages/react/src/useConfirm.tsx`](../packages/react/src/useConfirm.tsx) owns the portal, Escape from anywhere, the Tab trap and the return of focus on every way out, and gives an app `await confirm(question)` in place of `window.confirm()`.
 - **A new interactive component arrives with its contract and its tests,** in the same commit. Until its rows are written, nobody can say what the keyboard should do with it, and every app answers differently.
 
@@ -1902,6 +1902,29 @@ GlimStone ships as one core and one package per framework. All of them carry the
 - **Every component on a Zag machine is an entry of its own** (`@glimstone/react/Select`, `@glimstone/vue/DatePicker` and so on), so an app installs only the machines it uses, and one that uses none installs no Zag package. The Vue package names its entries in its `exports`, and the build and the site read them from there.
 - **Stored choices keep their names.** `setStoragePrefix("myapp")` at boot makes the label modes and the cached appearance read and write `myapp-labels-buttons` and `myapp-appearance`, so an app moving to the packages keeps what its users chose.
 - **Flutter has no second source.** `scripts/gen-flutter.mjs` writes the Dart tokens and glyphs from `tokens.css` and `glyphs.json`, and CI fails when the checked-in files are out of date.
+
+## Deprecating and removing
+
+A component, prop, function, class or token that GlimStone wants gone is deprecated first and removed later, on a fixed schedule, so an app can move up a minor release without changing anything and plan the move to the next major.
+
+- **It lives until the next major release.** A name deprecated in 4.x goes in 5.0.0, and never in a minor or patch release. It stays at least two minor releases after the one that deprecated it, so a name deprecated in x.8 or x.9 waits for the major after next. Until then it keeps working as it did.
+- **It is listed in one place.** `DEPRECATED` in [`packages/core/src/deprecated.ts`](../packages/core/src/deprecated.ts) holds every deprecated name with the release that deprecated it, the release that removes it and what to use instead. The warnings and the drift check read it, and a test fails when a name in it has no transform in `glimstone-migrate`.
+- **It says so in the editor, on the console and in CI.** Its doc comment carries `@deprecated`, what replaces it and "Removed in 5.0.0", so an editor strikes it through. The first use on a page logs one `console.warn` with the same sentence, through `warnDeprecated()`. `glimstone-drift` reports every use it finds in an app's sources. A deprecated class or token says so in its comment in `tokens.css`.
+- **Every breaking change ships its codemod.** A rename or a prop that maps onto another one gets a transform in `glimstone-migrate` in the release that deprecates it, with a test on fixture files, so `npx glimstone-migrate src` rewrites an app before the removal. A change that a program cannot make, such as moving from one component to another with a different API, is reported by the command with the file and line instead of rewritten.
+- **The release notes announce it twice.** The release that deprecates a name says so under "Adopting apps", with its replacement and the release that removes it. The major release that removes it lists it again, with the command that rewrites it.
+
+Deprecated today, all removed in 5.0.0:
+
+| Name | Since | Use instead |
+|---|---|---|
+| `Badge`'s `shape` | 4.4.0 | `form`. Only `shape="circle"` had an effect, and `form="circle"` draws the same badge. `glimstone-migrate` rewrites it. |
+| `BadgeShape` | 4.4.0 | `BadgeForm`, which `glimstone-migrate` puts in its place. |
+| `AboutCard` | 3.3.0 | `InfoTile`. |
+| `DropdownListbox` | 3.6.0 | `Select`. |
+| `ToastViewport`'s `enter` in Vue | 4.5.0 | `mouse-enter`, the name of React's handler. |
+| `ToastViewport`'s `leave` in Vue | 4.5.0 | `mouse-leave`, the name of React's handler. |
+| `ToastViewport`'s `focusin` in Vue | 4.5.0 | `focus`, the name of React's handler. |
+| `ToastViewport`'s `focusout` in Vue | 4.5.0 | `blur`, the name of React's handler. |
 
 ## Adopting GlimStone in another app
 

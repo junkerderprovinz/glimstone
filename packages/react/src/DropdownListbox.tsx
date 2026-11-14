@@ -9,7 +9,7 @@ import {
   type RefObject,
 } from "react";
 import { createPortal } from "react-dom";
-import { computeBubblePosition, portalTarget } from "@glimstone/core";
+import { computeBubblePosition, focusByLetter, isTypeahead, portalTarget } from "@glimstone/core";
 import { usePortalHue } from "./portalHue.ts";
 
 // The `role="listbox"` panel a button-opens-a-list picker drops open. It is
@@ -181,9 +181,14 @@ export function DropdownListbox({
     };
   }, [open, triggerRef]);
 
-  // Arrows, Home and End move between options here so every listbox behaves
-  // alike. Enter and Space need nothing: the options are real buttons.
+  // Arrows, Home, End and a typed letter move between options here so every
+  // listbox behaves alike. Enter and Space need nothing: the options are real
+  // buttons.
   function onPanelKeyDown(e: ReactKeyboardEvent<HTMLDivElement>) {
+    if (isTypeahead(e.nativeEvent)) {
+      if (focusByLetter(options(), e.key)) e.preventDefault();
+      return;
+    }
     if (e.key !== "ArrowDown" && e.key !== "ArrowUp" && e.key !== "Home" && e.key !== "End") return;
     const opts = options();
     if (opts.length === 0) return;

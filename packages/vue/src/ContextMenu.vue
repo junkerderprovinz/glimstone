@@ -7,6 +7,7 @@ import {
   focusFirstMenuRow,
   focusMenuRow,
   focusMenuRowByLetter,
+  isTypeahead,
   isMenuHead,
   menuMove,
   menuRowView,
@@ -129,13 +130,10 @@ function pick(list: MenuEntry[], at: number) {
   entry.onSelect?.();
 }
 
-// A letter typed in the menu, which jumps to a row; Space presses the row.
-const typed = (e: KeyboardEvent) => e.key.length === 1 && e.key !== " " && !e.ctrlKey && !e.metaKey && !e.altKey;
-
 function keys(e: KeyboardEvent, inSub: boolean) {
   if (e.key === "Tab") return finish(false);
   const panel = e.currentTarget as HTMLElement;
-  if (typed(e)) {
+  if (isTypeahead(e)) {
     if (focusMenuRowByLetter(panel, e.key)) e.preventDefault();
     return;
   }
