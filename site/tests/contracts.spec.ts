@@ -1,6 +1,7 @@
 import { expect, test, type Locator, type Page } from "@playwright/test";
 import GLYPHS from "../../packages/core/glyphs.json" with { type: "json" };
 import jsQR from "jsqr";
+import { relook } from "./page";
 
 // Each test is named after its contract row, "[id] ...", which is how the site
 // finds its result.
@@ -1312,6 +1313,7 @@ test.describe("Toast", () => {
   const card = (page: Page, text: string) => page.locator(".glim-toast-card").filter({ hasText: text });
   const region = (page: Page, politeness: string) => page.locator(`[data-glim-announce="${politeness}"]`);
 
+
   test("[toast-action] the action keeps its words, runs and dismisses", async ({ page }) => {
     await open(page, "/components/toast");
     await press(page, "With an action");
@@ -1427,14 +1429,14 @@ test.describe("Toast", () => {
 
   // A toast on a half pixel puts every toast above it there too, and Chromium
   // rounds those edges a pixel up or down from one paint to the next.
-  test("[toast-pixels] every toast stands on whole pixels", async ({ context }) => {
+  test("[toast-pixels] every toast stands on whole pixels", async ({ page }) => {
     test.setTimeout(120_000);
+    await open(page, "/components/toast");
     for (const width of [1280, 390]) {
       for (const dir of ["ltr", "rtl"]) {
         for (const labels of ["text", "textGlyph", "glyph", "reactive"]) {
-          const page = await context.newPage();
           await page.setViewportSize({ width, height: 860 });
-          await open(page, "/components/toast", { labels });
+          await relook(page, { labels });
           await page.evaluate((d) => (document.documentElement.dir = d), dir);
           for (const name of ["Success", "Warning", "Failure", "With an action", "A long path"]) await press(page, name);
           const halves = await page.locator(".glim-toast-stack").evaluate(async (s) => {
@@ -1447,18 +1449,17 @@ test.describe("Toast", () => {
               });
           });
           expect(halves, `${width}px, ${dir}, ${labels}`).toEqual([]);
-          await page.close();
         }
       }
     }
   });
 
-  test("[toast-settled] a toast that has come in holds no transform", async ({ context }) => {
+  test("[toast-settled] a toast that has come in holds no transform", async ({ page }) => {
+    await open(page, "/components/toast");
     const levels: [string, boolean][] = [["off", false], ["subtle", false], ["wild", false], ["storm", false], ["subtle", true], ["storm", true]];
     for (const [motion, reduce] of levels) {
-      const page = await context.newPage();
-      if (reduce) await page.emulateMedia({ reducedMotion: "reduce" });
-      await open(page, "/components/toast", { motion });
+      await page.emulateMedia({ reducedMotion: reduce ? "reduce" : "no-preference" });
+      await relook(page, { motion });
       await press(page, "Success");
       const settled = await page.locator(".glim-toast-card").first().evaluate(async (card) => {
         await Promise.all(card.getAnimations().map((a) => a.finished));
@@ -1471,7 +1472,6 @@ test.describe("Toast", () => {
         return { transform: getComputedStyle(card).transform, pinnedToWindow: r.width === view.clientWidth && r.height === view.clientHeight };
       });
       expect(settled, `${motion}${reduce ? ", reduced" : ""}`).toEqual({ transform: "none", pinnedToWindow: true });
-      await page.close();
     }
   });
 });
@@ -4069,12 +4069,11 @@ test.describe("SignInCard refusals and engines", () => {
     expect(await button(page, "Sign in").evaluate((e) => getComputedStyle(e).backgroundColor)).toBe("rgb(77, 171, 247)");
   });
 
-  test("[signin-engines] the card, fields and buttons take the shape", async ({ context }) => {
+  test("[signin-engines] the card, fields and buttons take the shape", async ({ page }) => {
     const radii: Record<string, string[]> = {};
+    await open(page, "/components/sign-in-card");
     for (const shape of ["round", "square"]) {
-      // A page of its own per shape, since the look is read when the page loads.
-      const page = await context.newPage();
-      await open(page, "/components/sign-in-card", { shape });
+      await relook(page, { shape });
       const radius = (el: Locator) => el.evaluate((e) => getComputedStyle(e).borderTopLeftRadius);
       const seen = [await radius(card(page)), await radius(field(page, "Password")), await radius(button(page, "Sign in"))];
       expect(seen).toEqual([

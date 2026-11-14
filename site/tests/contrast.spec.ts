@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { relook } from "./page";
 
 // The contrast step (prefers-contrast: more), GlimStone's own, apart from a
 // Windows contrast theme. It does not depend on a framework, so only one
@@ -7,9 +8,8 @@ test.beforeEach(({}, info) => test.skip(info.project.metadata.fw !== "react", "f
 
 async function look(page: Page, contrast: "more" | "no-preference", theme: "dark" | "light") {
   await page.emulateMedia({ contrast });
-  await page.addInitScript((t) => localStorage.setItem("gs-docs-look", JSON.stringify({ theme: t })), theme);
   await page.goto("/#/engines/colour");
-  await page.locator("main h1").waitFor();
+  await relook(page, { theme });
   return page.evaluate(() => {
     const host = document.createElement("div");
     host.innerHTML = `<span data-probe="muted" style="color: var(--carbon-text-muted)">m</span>
