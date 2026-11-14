@@ -13,6 +13,10 @@
       "@glimstone/svelte/Collapsible": ["../packages/svelte/src/entries/collapsible.ts"],
       "@glimstone/svelte/Accordion": ["../packages/svelte/src/entries/accordion.ts"],
       "@glimstone/svelte/Avatar": ["../packages/svelte/src/entries/avatar.ts"],
+      "@glimstone/svelte/Timer": ["../packages/svelte/src/entries/timer.ts"],
+      "@glimstone/svelte/Collapsible": ["../packages/svelte/src/entries/collapsible.ts"],
+      "@glimstone/svelte/Accordion": ["../packages/svelte/src/entries/accordion.ts"],
+      "@glimstone/svelte/Avatar": ["../packages/svelte/src/entries/avatar.ts"],
       "@glimstone/svelte/Collapsible": ["../packages/svelte/src/entries/collapsible.ts"],
       "@glimstone/svelte/Accordion": ["../packages/svelte/src/entries/accordion.ts"]
     }

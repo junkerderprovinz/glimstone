@@ -47,6 +47,11 @@
       "types": "./dist/entries/avatar.d.ts",
       "svelte": "./dist/entries/avatar.js",
       "default": "./dist/entries/avatar.js"
+    },
+    "./Timer": {
+      "types": "./dist/entries/timer.d.ts",
+      "svelte": "./dist/entries/timer.js",
+      "default": "./dist/entries/timer.js"
     }
   },
   "files": [
@@ -67,6 +72,7 @@
     "@zag-js/select": "^1.46.0",
     "@zag-js/slider": "^1.46.0",
     "@zag-js/svelte": "^1.47.0",
+    "@zag-js/timer": "^1.47.0",
     "svelte": "^5.29.0"
   }
 }
