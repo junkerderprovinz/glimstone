@@ -3,8 +3,6 @@ import { open, stage } from "./page";
 
 // The rows of Pagination, Steps and Tour, each named after its contract row.
 
-test.beforeEach(({}, info) => test.skip(!["react", "vue"].includes(info.project.name), "React and Vue only so far"));
-
 // The colour a custom property resolves to where the element stands.
 const resolved = (el: import("@playwright/test").Locator, property: string) =>
   el.evaluate((node, p) => {

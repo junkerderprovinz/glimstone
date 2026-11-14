@@ -82,6 +82,11 @@
       "types": "./dist/entries/marquee.d.ts",
       "svelte": "./dist/entries/marquee.js",
       "default": "./dist/entries/marquee.js"
+    },
+    "./Tour": {
+      "types": "./dist/entries/tour.d.ts",
+      "svelte": "./dist/entries/tour.js",
+      "default": "./dist/entries/tour.js"
     }
   },
   "files": [
@@ -109,6 +114,7 @@
     "@zag-js/svelte": "^1.47.0",
     "@zag-js/tags-input": "^1.47.0",
     "@zag-js/timer": "^1.47.0",
+    "@zag-js/tour": "^1.47.0",
     "svelte": "^5.29.0"
   }
 }
