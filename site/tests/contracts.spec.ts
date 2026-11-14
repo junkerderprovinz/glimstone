@@ -4784,6 +4784,14 @@ test.describe("Fortress", () => {
     await others(page).click();
     await page.mouse.move(0, 0);
     const track = () => others(page).evaluate((t) => getComputedStyle(t).backgroundColor);
+    // The click leaves the switch with focus, which shows the colour as the
+    // pointer does, and the track then fades back to grey; the resting colour
+    // is the one it settles on with neither.
+    await others(page).evaluate((t) => {
+      (t as HTMLElement).blur();
+      getComputedStyle(t).backgroundColor;
+      return Promise.all(t.getAnimations({ subtree: true }).map((a) => a.finished));
+    });
     const resting = await track();
     await inside(page).locator(".glim-fortress-switch .glim-fortress-sub").hover();
     await expect.poll(track).not.toBe(resting);
