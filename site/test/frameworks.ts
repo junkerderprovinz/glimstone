@@ -115,8 +115,9 @@ function compile(roots: string[], extra: ts.CompilerOptions, virtual: (path: str
   return ts.createProgram(roots, opts, host);
 }
 
-// A component is an exported name in PascalCase.
-const isComponent = (name: string) => /^[A-Z]/.test(name) && !name.endsWith("Context") && !name.startsWith("Icon");
+// A component is an exported name in PascalCase. A context is no component,
+// and the glyphs stand together under the one glyph entry, as in React.
+const isComponent = (name: string, file: string) => /^[A-Z]/.test(name) && !name.endsWith("Context") && !/[\\/](glyphs\.tsx|MarkSvg\.svelte)$/.test(file);
 
 const solidSrc = join(packages, "solid", "src");
 const solidEntries = ["index.ts", "Select.tsx", "Combobox.tsx", "Slider.tsx"].map((f) => join(solidSrc, f)).filter(existsSync);
@@ -131,7 +132,7 @@ export function solidComponents() {
     for (const symbol of checker.getExportsOfModule(checker.getSymbolAtLocation(solidProgram().getSourceFile(entry)!)!)) {
       const target = symbol.flags & ts.SymbolFlags.Alias ? checker.getAliasedSymbol(symbol) : symbol;
       const file = target.declarations?.[0]?.getSourceFile().fileName;
-      if (isComponent(symbol.name) && target.flags & ts.SymbolFlags.Function && file?.endsWith(".tsx")) components.set(symbol.name, file);
+      if (file && isComponent(symbol.name, file) && target.flags & ts.SymbolFlags.Function && file?.endsWith(".tsx")) components.set(symbol.name, file);
     }
   }
   return components;
@@ -179,7 +180,8 @@ export function svelteComponents() {
   const components = new Map<string, string>();
   for (const entry of svelteEntries) {
     for (const m of read(entry).matchAll(/default as (\w+)(?:, [^}]*)? \} from "(\.{1,2}\/\w+\.svelte)"/g)) {
-      if (isComponent(m[1]!)) components.set(m[1]!, resolve(dirname(entry), m[2]!));
+      const file = resolve(dirname(entry), m[2]!);
+      if (isComponent(m[1]!, file)) components.set(m[1]!, file);
     }
   }
   return components;

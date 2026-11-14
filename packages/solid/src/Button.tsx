@@ -2,7 +2,8 @@ import { createMemo, createRenderEffect, createSignal, mergeProps, onCleanup, Sh
 import { Dynamic } from "solid-js/web";
 import { buttonView, mediaMatches, narrowerThan, subscribeMedia, takePageHue, type ButtonSize, type ButtonTone, type ButtonVariant, type WidthStage } from "@glimstone/core";
 import { useLabelMode } from "./engines.ts";
-import { TipWrap, useTipBubble } from "./useTipBubble.tsx";
+import { TipWrap } from "./TipWrap.tsx";
+import { useTipBubble } from "./useTipBubble.tsx";
 import { BusyRing } from "./BusyRing.tsx";
 import { glyphFor, IconClose } from "./glyphs.tsx";
 import { css } from "./style.ts";
