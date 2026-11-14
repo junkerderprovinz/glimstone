@@ -842,4 +842,13 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "marquee-still", when: "Motion is off, or the system asks for reduced motion", then: "It does not move at all." },
     ],
   },
+  Tour: {
+    pattern: { name: "Dialog (Modal)", url: `${APG}dialog-modal/` },
+    rows: [
+      { id: "tour-dialog", when: "A step is open", then: "It is a modal dialog named by its title and described by its text, with where the tour stands, such as \"1 of 3\"." },
+      { id: "tour-next", when: "Next or Back is pressed", then: "The tour walks to the next or the previous step. On the last step the forward button is Close, which ends the tour." },
+      { id: "tour-escape", keys: ["Escape"], when: "A step is open", then: "The tour ends and the focus goes back to what started it." },
+      { id: "tour-spotlight", when: "A step points at a part of the page", then: "The page behind is darkened, and that part stays clear with the accent's ring around it." },
+    ],
+  },
 };

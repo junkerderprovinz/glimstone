@@ -99,6 +99,10 @@
     "./Marquee": {
       "types": "./dist/entries/marquee.d.ts",
       "default": "./dist/Marquee.js"
+    },
+    "./Tour": {
+      "types": "./dist/entries/tour.d.ts",
+      "default": "./dist/Tour.js"
     }
   },
   "files": [
@@ -134,6 +138,7 @@
     "@zag-js/steps": "^1.47.0",
     "@zag-js/tags-input": "^1.47.0",
     "@zag-js/timer": "^1.47.0",
+    "@zag-js/tour": "^1.47.0",
     "@zag-js/vue": "^1.46.0",
     "vue": "^3.5.0"
   }

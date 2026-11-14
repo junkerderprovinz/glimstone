@@ -16,7 +16,7 @@ import { PopoverPage, SheetPage } from "./pages/overlay";
 import { ListTablePage } from "./pages/lists";
 import { ScrollAreaPage, SplitterPage } from "./pages/layout";
 import { AngleSliderPage, DatePickerPage, FileUploadPage, PinInputPage, RatingPage, SignaturePadPage, TagsInputPage } from "./pages/inputs";
-import { PaginationPage, StepsPage } from "./pages/navigation";
+import { PaginationPage, StepsPage, TourPage } from "./pages/navigation";
 import { AvatarPage, CarouselPage, HoverCardPage, MarqueePage, TimerPage } from "./pages/display";
 import { AccordionPage, CollapsiblePage } from "./pages/reading";
 import {
@@ -144,6 +144,7 @@ const PAGES: Page[] = [
   { path: "/components/table", title: "Table", group: "Components", Comp: TablePage },
   { path: "/components/text-field", title: "TextField", group: "Components", Comp: TextFieldPage },
   { path: "/components/toggle", title: "Toggle", group: "Components", Comp: TogglePage },
+  { path: "/components/tour", title: "Tour", group: "Components", Comp: TourPage, tag: "Zag" },
   { path: "/components/tree", title: "Tree", group: "Components", Comp: TreePage },
   { path: "/components/window", title: "Window", group: "Components", Comp: WindowPage },
   { path: "/components/window-bar", title: "WindowBar", group: "Components", Comp: WindowBarPage },

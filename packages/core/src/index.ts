@@ -64,6 +64,7 @@ export * from "./tagsInput.ts";
 export * from "./theme.ts";
 export * from "./toastEngine.ts";
 export * from "./tooltip.ts";
+export * from "./tour.ts";
 export * from "./tree.ts";
 export * from "./version.ts";
 export * from "./window.ts";

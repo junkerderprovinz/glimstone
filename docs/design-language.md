@@ -1141,6 +1141,15 @@ Help pages, release notes and a list of frequent questions are read, not set, an
 - **A screen reader hears the row once.** The copies that fill the row are hidden from it.
 - **It is decoration around content that is also somewhere else.** Nothing only a marquee shows is ever needed, since half of it is always out of sight.
 
+## Tours
+
+`Tour` walks somebody through a screen, one step a part of it: the first start of a new page, a feature that moved.
+
+- **The page behind is darkened and blurred** with the window's own scrim (rule 15), and the part a step points at is cut clear and ringed in the accent. A step without a target stands in the middle of the page.
+- **A step is a small window**: its title as the badge in the notch, its text, and its foot with where the tour stands ("2 of 3") at the start and Back and Next at the end. Next is the step's one filled button (rule 3). On the last step it is Close, since no window has a Done ("Saving").
+- **Escape ends the tour from any step** and gives the focus back to what started it. Each step is a modal dialog named by its title and described by its text, so the focus stays in it.
+- **It is for the first start, once.** Somebody who closes it has seen it, and the app keeps that on the device. Anything a person needs again belongs on the page or behind its (i), not in a tour.
+
 ## Narrow windows
 
 The web interface at phone width, beside "The bottom bar" that replaces the rail there.

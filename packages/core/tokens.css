@@ -7230,6 +7230,76 @@
   :root[data-motion="off"] .glim-marquee-content { animation: none; }
 }
 
+/* Tour: the page behind is the window's scrim, darkened and blurred, with the
+   part a step points at cut clear by the machine's clip path and ringed in
+   the accent. The step is a small window at the modal step, its title in the
+   notch and its buttons in its foot, the forward one filled since the step is
+   a view of its own (rule 3). */
+@layer components {
+  /* The layer only groups the parts; the backdrop and the spotlight measure
+     against the page, as the machine places them. */
+  .glim-tour-layer { display: contents; }
+  .glim-tour-backdrop {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--glim-scrim);
+    backdrop-filter: blur(var(--glim-scrim-blur));
+    z-index: var(--z-window);
+  }
+  .glim-tour-spotlight {
+    border-radius: var(--radius-control);
+    box-shadow: 0 0 0 var(--focus-ring-width) var(--accent);
+    pointer-events: none;
+    z-index: var(--z-window);
+  }
+  /* The machine stacks the step over its backdrop from this base. */
+  .glim-tour-positioner { --tour-z-index: var(--z-window); }
+  /* A step without a target stands in the middle of the window. */
+  .glim-tour-positioner[data-type="dialog"] {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-window);
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+  }
+  .glim-tour-positioner[data-type="dialog"] > .glim-tour { pointer-events: auto; }
+  .glim-tour {
+    position: relative;
+    width: min(22rem, calc(100vw - 16px));
+    padding: var(--space-9) var(--space-8) var(--space-8);
+    border-radius: var(--radius-card);
+    background-color: var(--carbon-surface);
+    color: var(--carbon-text);
+    box-shadow: var(--elevation-modal);
+    outline: none;
+  }
+  .glim-tour-text {
+    margin: 0 0 var(--space-8);
+    color: var(--carbon-text-sub);
+    font-size: var(--text-body);
+    line-height: 1.5;
+  }
+  .glim-tour-foot {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-4);
+  }
+  .glim-tour-progress {
+    margin-inline-end: auto;
+    color: var(--carbon-text-sub);
+    font-size: var(--text-subline);
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .glim-tour-backdrop { backdrop-filter: none; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .glim-tour[data-state="open"] { animation: glim-fade-in var(--motion-fade-dur, 0s) ease-out; }
+}
+
 /* The contrast step and the Windows contrast themes for the components on the
    Zag machines, written like the rules for the older ones above: an edge on
    every field and pressable part, and the selection colours on what is chosen

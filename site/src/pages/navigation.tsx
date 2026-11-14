@@ -61,3 +61,30 @@ export function StepsPage() {
     </>
   );
 }
+
+export function TourPage() {
+  return (
+    <>
+      <p className="lead">A short walk through a screen, one step a part of it, such as the first start of a new page.</p>
+      <MachineNote file="react/Tour.tsx" machine="tour" />
+      <Demo name="TourFirstStart" />
+      <Code
+        code={`import { Tour } from "@glimstone/react/Tour";
+
+<Tour steps={steps} open={open} onOpenChange={setOpen} />`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>The page behind is darkened and blurred as behind a window, and the part a step points at is left clear and ringed in the accent.</li>
+        <li>A step is a small window: its title in the notch, its text, and Back and Next in its foot, with where the tour stands at the start.</li>
+        <li>Next is the step's one filled button. On the last step it is Close, since a tour has no Done.</li>
+        <li>Escape ends the tour from any step and gives the focus back to what started it.</li>
+        <li>It is for the first start, once. Somebody who closes it has seen it; the app keeps that per device.</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="Tour" />
+      <H2>API</H2>
+      <PropsTable of="Tour" />
+    </>
+  );
+}

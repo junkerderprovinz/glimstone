@@ -974,6 +974,19 @@ export const GLOSSARY: GlossarySection[] = [
           de: "Eine Karte, die zeigt, wohin ein Link im Fließtext führt, solange der Zeiger darauf ruht oder die Tastatur ihn erreicht.",
         },
       },
+      {
+        id: "tour",
+        en: "Tour",
+        de: "Rundgang",
+        proposal: true,
+        code: ["Tour", ".glim-tour"],
+        components: ["Tour"],
+        rules: [3, 15],
+        text: {
+          en: "A short walk through a screen, one step a part of it, with the rest of the page darkened.",
+          de: "Ein kurzer Gang durch eine Seite, ein Schritt je Teil, der Rest der Seite abgedunkelt.",
+        },
+      },
     ],
   },
   {

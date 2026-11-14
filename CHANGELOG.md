@@ -40,6 +40,7 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 - **`HoverCard`**, a card that previews what a link in running text leads to, on Zag's hover-card machine. It opens when the pointer rests or the keyboard arrives, closes on Escape, and holds nothing the link does not.
 - **`Carousel`**, slides seen one page at a time, on Zag's carousel machine. It never moves by itself, its steps and dots stand under the slides, and a move lands at once at the motion level off and under reduced motion.
 - **`Marquee`**, a row that runs past on its own, on Zag's marquee machine. It stops outright at the motion level off and under reduced motion, halts under the pointer and the focus, and its button holds it for good.
+- **`Tour`**, a short walk through a screen, on Zag's tour machine. The page behind takes the window's scrim with the part a step points at left clear, each step is a small window with its title in the notch, and Escape ends it from any step.
 - **`fromEnd` on `ContextMenu`** opens a menu with the focus on its last row, for an app's own menu bar.
 
 - **Windows contrast themes.** Under `forced-colors: active` every card, well, window, menu, field, button and badge gets an edge in the system's text colour. A chosen segment, tile or rail row, a switched-on switch, a ticked checkbox and a bar's fill take the system's selection colours, and an unticked box shows no mark. Before, the switch looked the same on and off, and cards and fields had no edge at all.

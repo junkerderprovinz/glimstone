@@ -37,7 +37,8 @@
       "@glimstone/vue/SignaturePad": ["../packages/vue/src/entries/signaturepad.ts"],
       "@glimstone/vue/HoverCard": ["../packages/vue/src/entries/hovercard.ts"],
       "@glimstone/vue/Carousel": ["../packages/vue/src/entries/carousel.ts"],
-      "@glimstone/vue/Marquee": ["../packages/vue/src/entries/marquee.ts"]
+      "@glimstone/vue/Marquee": ["../packages/vue/src/entries/marquee.ts"],
+      "@glimstone/vue/Tour": ["../packages/vue/src/entries/tour.ts"]
     }
   },
   "include": ["src", "tests", "test", "vite.config.ts", "playwright.config.ts"]

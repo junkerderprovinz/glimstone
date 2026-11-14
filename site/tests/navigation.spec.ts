@@ -154,3 +154,51 @@ test.describe("Steps", () => {
     expect(stops).toEqual(["-1", "0", "-1"]);
   });
 });
+
+test.describe("Tour", () => {
+  const start = (page: Page) => stage(page, "TourFirstStart").getByRole("button", { name: "Start the tour" });
+  const step = (page: Page) => page.getByRole("dialog");
+
+  async function begin(page: Page) {
+    await open(page, "/components/tour");
+    await start(page).click();
+    await expect(step(page)).toBeVisible();
+  }
+
+  test("[tour-dialog] a step is a dialog named by its title and described by its text", async ({ page }) => {
+    await begin(page);
+    await expect(step(page)).toHaveAccessibleName("Add a backup");
+    await expect(step(page)).toHaveAccessibleDescription(/Everything starts here/);
+    await expect(step(page).locator(".glim-tour-progress")).toHaveText("1 of 3");
+  });
+
+  test("[tour-next] Next and Back walk the steps, and the last one closes the tour", async ({ page }) => {
+    await begin(page);
+    await step(page).getByRole("button", { name: "Next" }).click();
+    await expect(step(page)).toHaveAccessibleName("Find a file");
+    await step(page).getByRole("button", { name: "Back" }).click();
+    await expect(step(page)).toHaveAccessibleName("Add a backup");
+    await step(page).getByRole("button", { name: "Next" }).click();
+    await step(page).getByRole("button", { name: "Next" }).click();
+    await expect(step(page)).toHaveAccessibleName("That is all");
+    await step(page).getByRole("button", { name: "Close" }).click();
+    await expect(step(page)).toHaveCount(0);
+  });
+
+  test("[tour-escape] Escape ends the tour and gives the focus back", async ({ page }) => {
+    await begin(page);
+    await page.keyboard.press("Escape");
+    await expect(step(page)).toHaveCount(0);
+    await expect(start(page)).toBeFocused();
+  });
+
+  test("[tour-spotlight] the part a step points at stays clear and takes the accent's ring", async ({ page }) => {
+    await begin(page);
+    const spot = page.locator(".glim-tour-spotlight");
+    await expect(spot).toBeVisible();
+    const target = await stage(page, "TourFirstStart").getByText("Add", { exact: true }).boundingBox();
+    const box = await spot.boundingBox();
+    expect(Math.abs(box!.x - target!.x)).toBeLessThan(12);
+    await expect(page.locator(".glim-tour-backdrop")).toBeVisible();
+  });
+});

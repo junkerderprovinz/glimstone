@@ -79,6 +79,7 @@ const COMPONENTS = {
   HoverCard: "react/HoverCard.tsx",
   Carousel: "react/Carousel.tsx",
   Marquee: "react/Marquee.tsx",
+  Tour: "react/Tour.tsx",
 };
 
 const clean = (s) => s.replace(/\s+/g, " ").trim();
