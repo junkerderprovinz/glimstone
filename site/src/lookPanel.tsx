@@ -79,19 +79,21 @@ export function LookPanel() {
           </span>
           <Code code={rootSnippet(look)} copy={false} />
           <Code code={storeSnippet(look)} copy={false} />
+          <div className="look-snippet-copy">
+            <Button
+              label={copied ? "Copied" : "Copy snippet"}
+              labelKey={copied ? "copied" : "copy"}
+              tone="accent"
+              onClick={copy}
+              data-look="copy"
+            />
+          </div>
         </div>
       </div>
       <div className="look-panel-foot">
         <Button label="Reset" labelKey="reset" tone="subtle" onClick={resetLook} />
         <span style={{ flex: 1 }} />
         <Button label="Close" labelKey="close" onClick={() => setLookPanel(false)} />
-        <Button
-          label={copied ? "Copied" : "Copy snippet"}
-          labelKey={copied ? "copied" : "copy"}
-          tone="accent"
-          onClick={copy}
-          data-look="copy"
-        />
       </div>
     </div>
   );

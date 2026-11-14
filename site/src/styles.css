@@ -578,7 +578,7 @@ pre.code {
 }
 .hero {
   display: grid;
-  grid-template-columns: minmax(0, 26rem) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 24rem) minmax(0, 1fr);
   align-items: center;
   gap: 2rem;
   min-height: min(40rem, calc(100vh - 7rem));
@@ -607,7 +607,7 @@ pre.code {
 }
 
 .wall {
-  --wall-scale: 1;
+  --wall-scale: 0.9;
   position: relative;
   height: min(44rem, calc(100vh - 5rem));
   overflow: clip;
@@ -620,12 +620,12 @@ pre.code {
 .wall-plane {
   position: absolute;
   top: 50%;
-  left: 4%;
+  left: 0;
   display: flex;
   gap: 1.75rem;
   align-items: flex-start;
   transform-origin: 0 50%;
-  transform: translateY(-50%) scale(var(--wall-scale)) perspective(2400px) rotateX(16deg) rotateY(-10deg) rotateZ(10deg);
+  transform: translateY(-50%) scale(var(--wall-scale)) perspective(2400px) rotateX(12deg) rotateY(-8deg) rotateZ(9deg);
 }
 .wall-col { flex: none; width: 22rem; height: 64rem; overflow: hidden; }
 .wall-col:nth-child(2) { width: 27rem; margin-top: -9rem; }
@@ -648,8 +648,7 @@ pre.code {
 .wall-signin .glim-signin { min-height: 0; padding: 0; background: none; }
 .wall-signin .glim-signin-card { width: 100%; }
 @media (max-width: 64rem) {
-  .wall { --wall-scale: 0.8; height: 30rem; margin-inline-end: 0; }
-  .wall-plane { left: 2%; }
+  .wall { --wall-scale: 0.8; height: 30rem; }
 }
 @media (max-width: 30rem) {
   .wall { --wall-scale: 0.66; height: 24rem; }
@@ -735,6 +734,7 @@ pre.code {
 }
 .look-snippet { padding-top: 1.25rem; border-top: 1px solid var(--carbon-border); }
 .look-snippet .code-block { margin: 0.5rem 0 0; }
+.look-snippet-copy { display: flex; justify-content: flex-end; margin-top: 0.75rem; }
 .look-snippet pre.code { padding: 0.75rem 0.875rem; font-size: 0.75rem; background: var(--carbon-bg); }
 .look-panel-foot {
   display: flex;
