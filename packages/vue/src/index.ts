@@ -59,7 +59,7 @@ export { default as Window } from "./Window.vue";
 export { useConfirm, type ConfirmOptions, type ConfirmText } from "./confirm";
 export { useDragArmed } from "./dragArmed";
 export { useFieldName } from "./fieldName";
-export { useAccent, useHue, useLabelMode, useMotion, useRainbow, useShape } from "./engines";
+export { useAccent, useDensity, useHue, useLabelMode, useMotion, useRainbow, useShape } from "./engines";
 export * from "./glyphs";
 export type { InfoAboutCardProps, InfoHelpCardProps, InfoVersionCardProps } from "./info";
 export type { SelectEntry, SelectGroup, SelectOption, SelectSubmenu } from "./selectParts";

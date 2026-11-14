@@ -104,6 +104,32 @@
   --space-13: 2.5rem;   /* 40px */
 }
 
+/* Row density, the axis of lists and tables (data-density, applyDensity in
+   appearance.ts). A row's height, the gap between its parts, its inline
+   padding and a table cell's block padding move together, each on the spacing
+   scale. Normal is the look without a setting. */
+:root,
+:root[data-density="normal"] {
+  --row-h: 2.6rem;
+  --row-gap: var(--space-5);
+  --row-pad: var(--space-4);
+  --cell-pad-block: var(--space-3);
+}
+
+:root[data-density="compact"] {
+  --row-h: var(--space-12);
+  --row-gap: var(--space-4);
+  --row-pad: var(--space-3);
+  --cell-pad-block: var(--space-1);
+}
+
+:root[data-density="airy"] {
+  --row-h: calc(var(--space-13) + var(--space-6));
+  --row-gap: var(--space-6);
+  --row-pad: var(--space-6);
+  --cell-pad-block: var(--space-5);
+}
+
 /* Elevation in fixed steps. Every surface stands on one of them, and a step is
    a shadow and a stacking order together, so something that floats over a
    card also paints over it. The ground and a well are flat. Raised is a card
@@ -4701,7 +4727,7 @@ body {
     font-size: var(--text-subline);
   }
   .glim-table :is(th, td) {
-    padding: var(--space-3) var(--space-4);
+    padding: var(--cell-pad-block) var(--row-pad);
     text-align: start;
     white-space: nowrap;
   }
@@ -4821,10 +4847,10 @@ body {
   .glim-list-row {
     display: flex;
     align-items: center;
-    gap: var(--space-5);
+    gap: var(--row-gap);
     min-width: 0;
-    min-height: 2.6rem;
-    padding-inline: var(--space-4);
+    min-height: var(--row-h);
+    padding-inline: var(--row-pad);
     border-radius: var(--radius-control);
   }
   .glim-list-row:is(:hover, :focus-within) { background-color: var(--carbon-hover); }
@@ -5735,10 +5761,10 @@ a:is(.glim-btn, .glim-icon-btn) { text-decoration: none; }
   .glim-skeleton-row {
     display: flex;
     align-items: center;
-    gap: var(--space-5);
+    gap: var(--row-gap);
     min-width: 0;
-    min-height: 2.6rem;
-    padding-inline: var(--space-4);
+    min-height: var(--row-h);
+    padding-inline: var(--row-pad);
     animation: glim-busy-show 0s var(--busy-delay, 400ms) both;
   }
   .glim-skeleton-block {
@@ -5963,7 +5989,7 @@ a:is(.glim-btn, .glim-icon-btn) { text-decoration: none; }
   }
   .glim-list-tr { cursor: default; }
   .glim-list-tr > td {
-    height: 2.6rem;
+    height: var(--row-h);
     padding: 0 var(--space-5);
     white-space: nowrap;
   }

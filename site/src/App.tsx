@@ -4,13 +4,13 @@ import logoForLight from "../../.github/assets/glimstone-dunkel.svg?raw";
 import logoForDark from "../../.github/assets/glimstone-hell.svg?raw";
 import { Glyph } from "./glyph";
 import { resetLook } from "./look";
-import { AccentControl, LabelControl, MotionControl, RainbowControl, ShapeControl, ThemeControl } from "./lookControls";
+import { AccentControl, DensityControl, LabelControl, MotionControl, RainbowControl, ShapeControl, ThemeControl } from "./lookControls";
 import { Adopting, Glyphs, Introduction, Palette, TypeScale } from "./pages/guide";
 import { Charts } from "./pages/charts";
 import { Calibration } from "./pages/calibration";
 import { GlossaryPage } from "./pages/glossary";
 import { BehaviourGuide, ComboboxPage, SelectPage, SliderPage } from "./pages/zag";
-import { ColourEngine, LabelEngine, MotionEngine, ShapeEngine } from "./pages/engines";
+import { ColourEngine, DensityEngine, LabelEngine, MotionEngine, ShapeEngine } from "./pages/engines";
 import { BusyRingPage, SkeletonRowPage } from "./pages/loading";
 import { PopoverPage, SheetPage } from "./pages/overlay";
 import { ListTablePage } from "./pages/lists";
@@ -77,6 +77,7 @@ const PAGES: Page[] = [
   { path: "/engines/shape", title: "Shape", group: "Engines", Comp: ShapeEngine },
   { path: "/engines/motion", title: "Motion", group: "Engines", Comp: MotionEngine },
   { path: "/engines/label", title: "Label", group: "Engines", Comp: LabelEngine },
+  { path: "/engines/density", title: "Density", group: "Engines", Comp: DensityEngine },
   { path: "/components/badge", title: "Badge", group: "Components", Comp: BadgePage },
   { path: "/components/button", title: "Button", group: "Components", Comp: ButtonPage },
   { path: "/components/busy-ring", title: "BusyRing", group: "Components", Comp: BusyRingPage },
@@ -232,6 +233,7 @@ function LookPanel({ onClose }: { onClose: () => void }) {
     ["Rainbow", RainbowControl],
     ["Corners", ShapeControl],
     ["Motion", MotionControl],
+    ["Density", DensityControl],
     ["Labels", LabelControl],
   ];
   return (

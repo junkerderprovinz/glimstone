@@ -34,6 +34,8 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 
 - **Chart colours.** Eight series in a fixed order (`--chart-1` to `--chart-8`), a sequential blue for heatmaps (`--chart-seq-1` to `--chart-seq-7`) and a diverging blue to orange (`--chart-div-1` to `--chart-div-7`), all OKLCH, in every theme. Any two series stay apart under protanopia, deuteranopia and tritanopia, and each reaches 3:1 on the card and the page. The site shows them under Guide, Charts. Flutter gets them on `GlimTheme`.
 
+- **Row density.** A new axis for lists and tables: `data-density` is `compact`, `normal` or `airy`, set by `applyDensity()` and cached with `cacheAppearance(shape, accent, rainbow, density)`. Rows are 32, 42 or 52px tall, and their gap and padding move with them on the spacing scale. Normal looks as before. Vue has `useDensity()`, and the site has a Density page and a row in the Look panel.
+
 ## 🐛 Fixed
 
 - **The focus ring is opaque and reaches 3:1** on the page, the rail, a card, a well and a row's hover, in every theme, for every preset and any picked colour. On the light theme it stood at 1.9 to 2.0:1 (`rgba(142, 106, 0, .5)`), and a picked accent kept the gold ring. A rainbow position's ring is its hue's ink, where it was the hue at 55% (2.9:1 on the dark rail for red).

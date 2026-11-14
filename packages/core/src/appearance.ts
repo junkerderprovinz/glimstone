@@ -1,7 +1,8 @@
 // Appearance is the set of looks the user owns: what shape the corners take,
-// how much it moves, and what colour it uses for activity, either one accent or
-// a palette handed out by position. All of it is applied to the document root,
-// so every component picks it up through the tokens it already reads.
+// how much it moves, how much room a row takes, and what colour it uses for
+// activity, either one accent or a palette handed out by position. All of it is
+// applied to the document root, so every component picks it up through the
+// tokens it already reads.
 //
 // It has no framework dependency; the React and Vue packages wrap it.
 
@@ -155,6 +156,24 @@ export function applyMotion(motion: Motion | string | undefined): void {
   // A storm somebody found must survive a reload, so the stored set is checked.
   const m: Motion = MOTION_STORED.includes(motion as Motion) ? (motion as Motion) : DEFAULT_MOTION;
   document.documentElement.setAttribute('data-motion', m);
+}
+
+/**
+ * How much room a row of a list or a table takes. The strings go into
+ * `data-density` and storage like the other axes; the stylesheet reads them
+ * through --row-h, --row-gap, --row-pad and --cell-pad-block.
+ */
+export type Density = 'compact' | 'normal' | 'airy';
+
+/** The densities a picker shows, tightest first. */
+export const DENSITIES: Density[] = ['compact', 'normal', 'airy'];
+
+export const DEFAULT_DENSITY: Density = 'normal';
+
+/** Sets the attribute the row tokens key off. */
+export function applyDensity(density: Density | string | undefined): void {
+  const d: Density = DENSITIES.includes(density as Density) ? (density as Density) : DEFAULT_DENSITY;
+  document.documentElement.setAttribute('data-density', d);
 }
 
 /** How many taps on `wild`, once it is chosen, reveal the storm. */
@@ -432,14 +451,20 @@ interface Cached {
   shape?: string;
   accent?: string;
   rainbow?: RainbowState;
+  density?: string;
 }
 
 /** `accent` is the setting, so the system mode is cached as SYSTEM_ACCENT. */
-export function cacheAppearance(shape: string, accent: string, rainbow?: RainbowState): void {
+export function cacheAppearance(shape: string, accent: string, rainbow?: RainbowState, density?: string): void {
   try {
-    // The conditional spread omits the key under exactOptionalPropertyTypes
+    // The conditional spreads omit a key under exactOptionalPropertyTypes
     // instead of storing it as undefined.
-    const payload: Cached = { shape, accent, ...(rainbow !== undefined ? { rainbow } : {}) };
+    const payload: Cached = {
+      shape,
+      accent,
+      ...(rainbow !== undefined ? { rainbow } : {}),
+      ...(density !== undefined ? { density } : {}),
+    };
     localStorage.setItem(storageKey('appearance'), JSON.stringify(payload));
   } catch {
     // With storage disabled the default look flashes once per load.
@@ -455,15 +480,18 @@ export function applyCachedAppearance(): void {
     const raw = localStorage.getItem(storageKey('appearance'));
     if (!raw) {
       applyShape(DEFAULT_SHAPE);
+      applyDensity(DEFAULT_DENSITY);
       applyRainbow(undefined);
       return;
     }
-    const { shape, accent, rainbow } = JSON.parse(raw) as Cached;
+    const { shape, accent, rainbow, density } = JSON.parse(raw) as Cached;
     applyShape(shape);
+    applyDensity(density);
     applyAccent(accent);
     applyRainbow(rainbow);
   } catch {
     applyShape(DEFAULT_SHAPE);
+    applyDensity(DEFAULT_DENSITY);
     applyRainbow(undefined);
   }
 }
