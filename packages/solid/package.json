@@ -72,6 +72,10 @@
       "types": "./dist/Timer.d.ts",
       "default": "./dist/Timer.js"
     },
+    "./AngleSlider": {
+      "types": "./dist/AngleSlider.d.ts",
+      "default": "./dist/AngleSlider.js"
+    },
     "./HoverCard": {
       "types": "./dist/HoverCard.d.ts",
       "default": "./dist/HoverCard.js"
@@ -101,6 +105,7 @@
   "peerDependencies": {
     "@internationalized/date": "^3.12.4",
     "@zag-js/accordion": "^1.47.0",
+    "@zag-js/angle-slider": "^1.47.0",
     "@zag-js/avatar": "^1.47.0",
     "@zag-js/carousel": "^1.47.0",
     "@zag-js/collapsible": "^1.47.0",

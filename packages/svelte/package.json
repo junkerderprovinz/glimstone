@@ -88,6 +88,11 @@
       "svelte": "./dist/entries/timer.js",
       "default": "./dist/entries/timer.js"
     },
+    "./AngleSlider": {
+      "types": "./dist/entries/angleslider.d.ts",
+      "svelte": "./dist/entries/angleslider.js",
+      "default": "./dist/entries/angleslider.js"
+    },
     "./HoverCard": {
       "types": "./dist/entries/hovercard.d.ts",
       "svelte": "./dist/entries/hovercard.js",
@@ -121,6 +126,7 @@
   "peerDependencies": {
     "@internationalized/date": "^3.12.4",
     "@zag-js/accordion": "^1.47.0",
+    "@zag-js/angle-slider": "^1.47.0",
     "@zag-js/avatar": "^1.47.0",
     "@zag-js/carousel": "^1.47.0",
     "@zag-js/collapsible": "^1.47.0",
