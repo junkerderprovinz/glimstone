@@ -115,5 +115,5 @@
 {:else if as === "a"}
   <a data-glim="Badge" {href} {target} {rel} {title} aria-label={ariaLabel} style={hueStyle} class={classes}>{@render children()}</a>
 {:else}
-  <span data-glim="Badge" {title} aria-label={ariaLabel} style={hueStyle} class={classes}>{@render children()}</span>
+  <span data-glim="Badge" {title} role={ariaLabel ? "img" : undefined} aria-label={ariaLabel} style={hueStyle} class={classes}>{@render children()}</span>
 {/if}

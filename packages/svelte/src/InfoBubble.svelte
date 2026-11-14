@@ -26,10 +26,11 @@
      which takes focus and closes the bubble at once. stopPropagation does not
      stop the native forwarding; preventDefault does, and the span keeps the
      focus it took on mousedown. -->
-<!-- svelte-ignore a11y_no_noninteractive_tabindex, a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+<!-- svelte-ignore a11y_no_noninteractive_tabindex, a11y_click_events_have_key_events, a11y_no_noninteractive_element_interactions -->
 <span
   data-glim="InfoBubble"
   bind:this={tooltip.trigger}
+  role="img"
   aria-label={tip}
   aria-describedby={tooltip.describedBy}
   tabindex={0}

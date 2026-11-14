@@ -96,7 +96,7 @@ export function Badge(props: BadgeProps) {
   return (
     <Switch
       fallback={
-        <span data-glim="Badge" title={merged.title} aria-label={merged.ariaLabel} style={hueStyle()} class={classes()}>
+        <span data-glim="Badge" title={merged.title} role={merged.ariaLabel ? "img" : undefined} aria-label={merged.ariaLabel} style={hueStyle()} class={classes()}>
           {merged.children}
         </span>
       }
