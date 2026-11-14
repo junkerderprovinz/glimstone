@@ -13,7 +13,7 @@ function dial(selector: string, name: string): string {
   throw new Error(`${selector} declares no ${name}`);
 }
 
-const LEVELS = [':root', ":root[data-motion='subtle']", ":root[data-motion='off']", ":root[data-motion='storm']"];
+const LEVELS = [':root', ":root[data-motion='wild']", ":root[data-motion='off']", ":root[data-motion='storm']"];
 
 test('a ring waits the house delay before it shows', () => {
   assert.equal(BUSY_DELAY, 400);
@@ -44,8 +44,8 @@ test('every motion level answers every waiting dial', () => {
 
 test('the ring turns slower at subtle than at wild, and storm is the fastest', () => {
   const secs = (level: string) => parseFloat(dial(level, '--motion-spin-dur'));
-  assert.ok(secs(":root[data-motion='subtle']") > secs(':root'));
-  assert.ok(secs(":root[data-motion='storm']") < secs(':root'));
+  assert.ok(secs(':root') > secs(":root[data-motion='wild']"));
+  assert.ok(secs(":root[data-motion='storm']") < secs(":root[data-motion='wild']"));
 });
 
 test('the light on a placeholder is out at motion off', () => {

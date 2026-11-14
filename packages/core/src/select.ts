@@ -78,7 +78,7 @@ export function mountSelect(
 
   // On the body, so no card or scroll box can clip the open list.
   const positioner = document.createElement('div');
-  positioner.style.zIndex = '50';
+  positioner.style.zIndex = 'var(--z-window)';
   const list = document.createElement('div');
   list.className = 'glim-select-content';
   const items: HTMLElement[] = [];
