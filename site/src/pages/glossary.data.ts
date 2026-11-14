@@ -99,8 +99,7 @@ export const GLOSSARY: GlossarySection[] = [
       {
         id: "scroll-area",
         en: "Scroll area",
-        de: "Rollbereich",
-        proposal: true,
+        de: "Scrollbereich",
         code: ["ScrollArea", ".glim-scroll", ".glim-scroll-thumb"],
         components: ["ScrollArea"],
         rules: [21],
@@ -230,7 +229,7 @@ export const GLOSSARY: GlossarySection[] = [
       {
         id: "key-button",
         en: "Key button",
-        de: "Schlüsselknopf",
+        de: "Hauptknopf",
         proposal: true,
         code: ['Button size="key"', ".glim-btn-key", "--btn-h-key"],
         components: [],
@@ -1344,7 +1343,7 @@ export const GLOSSARY: GlossarySection[] = [
       {
         id: "carousel",
         en: "Carousel",
-        de: "Bildlauf",
+        de: "Karussell",
         proposal: true,
         code: ["Carousel", ".glim-carousel", ".glim-carousel-dot"],
         components: ["Carousel"],
