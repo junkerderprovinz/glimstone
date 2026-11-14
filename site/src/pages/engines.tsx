@@ -1,5 +1,5 @@
 import { Button } from "@glimstone/react";
-import { AccentControl, DensityControl, LabelControl, MotionControl, RainbowControl, ShapeControl, ThemeControl } from "../lookControls";
+import { AccentControl, DensityControl, LabelControl, MotionControl, RainbowControl, ReactiveControl, ShapeControl, ThemeControl } from "../lookControls";
 import { SampleSurface } from "../sample";
 import { Callout, Code, ContractTable, Demo, H2, SourceLink } from "../ui";
 import { useLook } from "../look";
@@ -40,7 +40,8 @@ export function ColourEngine() {
       <Live>
         <ThemeControl />
         <AccentControl />
-        <RainbowControl />
+        <RainbowControl label="Rainbow" />
+        <ReactiveControl label="Reactive" />
       </Live>
       <H2>Theme</H2>
       <p>
@@ -102,7 +103,7 @@ export function ShapeEngine() {
     <>
       <p className="lead">One attribute moves every corner in the app. There is no exception list.</p>
       <Live>
-        <ShapeControl />
+        <ShapeControl label="Corners" />
         <Attr name="data-shape" />
       </Live>
       <H2>Three tokens</H2>
@@ -135,7 +136,7 @@ export function DensityEngine() {
         Normal is the look without a setting.
       </p>
       <Live>
-        <DensityControl />
+        <DensityControl label="Density" />
         <Attr name="data-density" />
       </Live>
       <Demo name="DensityRows" />
@@ -158,7 +159,7 @@ export function MotionEngine() {
         numbers, not different animations.
       </p>
       <Live>
-        <MotionControl />
+        <MotionControl label="Motion" />
         <Attr name="data-motion" />
       </Live>
       <H2>Levels</H2>
@@ -225,7 +226,7 @@ export function LabelEngine() {
     <>
       <p className="lead">How much of a control is shown: its words, its glyph, both, or the glyph until hovered.</p>
       <Live>
-        <LabelControl />
+        <LabelControl label="Labels" />
         <Attr name="data-labels-buttons" />
       </Live>
       <H2>Four modes, three surfaces</H2>

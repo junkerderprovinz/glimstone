@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { COPIED_MS, copyText } from "@glimstone/core";
-import { Button, InfoBubble } from "@glimstone/react";
+import { Button, FieldRow, FieldRowGroup, SubCard } from "@glimstone/react";
 import { resetLook, useLook } from "./look";
-import { LOOK_AXES, lookSnippet, rootSnippet, storeSnippet } from "./lookAxes";
+import { LOOK_AXES, LOOK_GROUPS, lookSnippet, rootSnippet, storeSnippet } from "./lookAxes";
 import { Code } from "./ui";
 
 // Whether the panel is open belongs to the page, not to one button: the header
@@ -61,22 +61,18 @@ export function LookPanel() {
         <p>Every page follows each change at once.</p>
       </div>
       <div className="look-panel-body">
-        {LOOK_AXES.map(({ id, label, hint, Control }) => (
-          <div className="look-row" key={id} data-axis={id}>
-            {hint && (
-              <span className="look-row-name">
-                {label}
-                <InfoBubble tip={hint} />
-              </span>
-            )}
-            <Control />
-          </div>
+        {LOOK_GROUPS.map((group) => (
+          <SubCard key={group} title={group}>
+            <FieldRowGroup>
+              {LOOK_AXES.filter((a) => a.group === group).map(({ id, label, hint, Control }) => (
+                <FieldRow key={id} label={label} hint={hint} data-axis={id}>
+                  <Control />
+                </FieldRow>
+              ))}
+            </FieldRowGroup>
+          </SubCard>
         ))}
-        <div className="look-row look-snippet">
-          <span className="look-row-name">
-            For your app
-            <InfoBubble tip="The look above as attributes for the app's root element, and as the values its settings start at." />
-          </span>
+        <SubCard title="For your app" hint="The look above as attributes for the app's root element, and as the values its settings start at.">
           <Code code={rootSnippet(look)} copy={false} />
           <Code code={storeSnippet(look)} copy={false} />
           <div className="look-snippet-copy">
@@ -88,7 +84,7 @@ export function LookPanel() {
               data-look="copy"
             />
           </div>
-        </div>
+        </SubCard>
       </div>
       <div className="look-panel-foot">
         <Button label="Reset" labelKey="reset" tone="subtle" onClick={resetLook} />
