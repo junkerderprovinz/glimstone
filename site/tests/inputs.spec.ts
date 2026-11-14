@@ -5,8 +5,6 @@ import { open, stage } from "./page";
 // DatePicker, Rating, AngleSlider and SignaturePad, each named after its
 // contract row.
 
-test.beforeEach(({}, info) => test.skip(!["react", "vue"].includes(info.project.name), "React and Vue only so far"));
-
 test.describe("PinInput", () => {
   const box = (page: Page, n: number) => stage(page, "PinInputCode").getByRole("textbox", { name: `Character ${n} of 6`, exact: true });
   const status = (page: Page) => stage(page, "PinInputCode").locator("span.glim-num");

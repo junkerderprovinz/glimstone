@@ -93,6 +93,11 @@
       "svelte": "./dist/entries/angleslider.js",
       "default": "./dist/entries/angleslider.js"
     },
+    "./SignaturePad": {
+      "types": "./dist/entries/signaturepad.d.ts",
+      "svelte": "./dist/entries/signaturepad.js",
+      "default": "./dist/entries/signaturepad.js"
+    },
     "./HoverCard": {
       "types": "./dist/entries/hovercard.d.ts",
       "svelte": "./dist/entries/hovercard.js",
@@ -140,6 +145,7 @@
     "@zag-js/pin-input": "^1.47.0",
     "@zag-js/rating-group": "^1.47.0",
     "@zag-js/select": "^1.46.0",
+    "@zag-js/signature-pad": "^1.47.0",
     "@zag-js/slider": "^1.46.0",
     "@zag-js/steps": "^1.47.0",
     "@zag-js/svelte": "^1.47.0",
