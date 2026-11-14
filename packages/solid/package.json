@@ -64,6 +64,10 @@
       "types": "./dist/DatePicker.d.ts",
       "default": "./dist/DatePicker.js"
     },
+    "./Rating": {
+      "types": "./dist/Rating.d.ts",
+      "default": "./dist/Rating.js"
+    },
     "./Timer": {
       "types": "./dist/Timer.d.ts",
       "default": "./dist/Timer.js"
@@ -108,6 +112,7 @@
     "@zag-js/menu": "^1.46.0",
     "@zag-js/pagination": "^1.47.0",
     "@zag-js/pin-input": "^1.47.0",
+    "@zag-js/rating-group": "^1.47.0",
     "@zag-js/select": "^1.46.0",
     "@zag-js/slider": "^1.46.0",
     "@zag-js/solid": "^1.47.0",

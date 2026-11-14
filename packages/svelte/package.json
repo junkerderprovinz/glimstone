@@ -78,6 +78,11 @@
       "svelte": "./dist/entries/datepicker.js",
       "default": "./dist/entries/datepicker.js"
     },
+    "./Rating": {
+      "types": "./dist/entries/rating.d.ts",
+      "svelte": "./dist/entries/rating.js",
+      "default": "./dist/entries/rating.js"
+    },
     "./Timer": {
       "types": "./dist/entries/timer.d.ts",
       "svelte": "./dist/entries/timer.js",
@@ -127,6 +132,7 @@
     "@zag-js/menu": "^1.46.0",
     "@zag-js/pagination": "^1.47.0",
     "@zag-js/pin-input": "^1.47.0",
+    "@zag-js/rating-group": "^1.47.0",
     "@zag-js/select": "^1.46.0",
     "@zag-js/slider": "^1.46.0",
     "@zag-js/steps": "^1.47.0",
