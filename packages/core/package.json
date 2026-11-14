@@ -22,8 +22,8 @@
     "build": "tsc -p tsconfig.build.json && node ../../scripts/gen-drift-manifest.mjs"
   },
   "dependencies": {
-    "@zag-js/select": "^1.46.0",
-    "@zag-js/vanilla": "^1.46.0",
+    "@zag-js/select": "^1.48.0",
+    "@zag-js/vanilla": "^1.48.0",
     "uqr": "^0.1.3"
   }
 }
