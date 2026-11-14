@@ -56,6 +56,10 @@
       "types": "./dist/Steps.d.ts",
       "default": "./dist/Steps.js"
     },
+    "./Splitter": {
+      "types": "./dist/Splitter.d.ts",
+      "default": "./dist/Splitter.js"
+    },
     "./FileUpload": {
       "types": "./dist/FileUpload.d.ts",
       "default": "./dist/FileUpload.js"
@@ -126,6 +130,7 @@
     "@zag-js/signature-pad": "^1.47.0",
     "@zag-js/slider": "^1.46.0",
     "@zag-js/solid": "^1.47.0",
+    "@zag-js/splitter": "^1.47.0",
     "@zag-js/steps": "^1.47.0",
     "@zag-js/tags-input": "^1.47.0",
     "@zag-js/timer": "^1.47.0",
