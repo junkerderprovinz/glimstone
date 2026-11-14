@@ -6640,6 +6640,53 @@
   .glim-splitter-grip[data-disabled] { background-color: var(--carbon-surface2); }
 }
 
+/* ScrollArea: the platform's bar is hidden and a thin one of the house's own
+   stands over the content's edge. Its thumb sits on the third surface and
+   steps up the ramp under the pointer or while it is dragged (rule 21), and
+   it grows a little then, so it is easy to catch. */
+@layer components {
+  .glim-scroll {
+    min-width: 0;
+    border-radius: var(--radius-control);
+  }
+  .glim-scroll-viewport {
+    border-radius: inherit;
+    scrollbar-width: none;
+  }
+  .glim-scroll-viewport::-webkit-scrollbar { display: none; }
+  .glim-scroll-content { min-width: 0; }
+  .glim-scroll-corner { pointer-events: none; }
+  .glim-scroll-viewport:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring);
+    outline-offset: var(--space-1);
+  }
+  .glim-scroll-bar {
+    display: flex;
+    padding: var(--space-1);
+  }
+  .glim-scroll-bar[data-orientation="vertical"] { width: var(--space-5); }
+  .glim-scroll-bar[data-orientation="horizontal"] {
+    flex-direction: column;
+    height: var(--space-5);
+  }
+  .glim-scroll-bar[data-orientation="vertical"]:not([data-overflow-y]),
+  .glim-scroll-bar[data-orientation="horizontal"]:not([data-overflow-x]) { display: none; }
+  .glim-scroll-thumb {
+    flex: 1;
+    border-radius: var(--radius-pill);
+    background-color: var(--carbon-surface3);
+  }
+  .glim-scroll-bar[data-orientation="vertical"] .glim-scroll-thumb { margin-inline-start: var(--space-1); }
+  .glim-scroll-bar[data-orientation="horizontal"] .glim-scroll-thumb { margin-top: var(--space-1); }
+  .glim-scroll-bar:is([data-hover], [data-dragging]) .glim-scroll-thumb {
+    margin: 0;
+    background-color: var(--carbon-hover-raised);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .glim-scroll-thumb { transition: margin var(--motion-control-dur, 0s) ease, background-color var(--motion-control-dur, 0s) ease; }
+}
+
 /* The contrast step and the Windows contrast themes for the components on the
    Zag machines, written like the rules for the older ones above: an edge on
    every field and pressable part, and the selection colours on what is chosen
@@ -6669,5 +6716,9 @@
       background-color: ButtonText;
     }
     .glim-splitter-grip:is([data-focus], [data-dragging]) { background-color: Highlight; }
+    .glim-scroll-thumb {
+      forced-color-adjust: none;
+      background-color: ButtonText;
+    }
   }
 }

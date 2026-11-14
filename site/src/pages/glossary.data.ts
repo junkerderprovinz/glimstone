@@ -96,6 +96,19 @@ export const GLOSSARY: GlossarySection[] = [
           de: "Bereiche nebeneinander mit einem Griff dazwischen, der die Naht verschiebt, mit dem Zeiger oder den Pfeiltasten.",
         },
       },
+      {
+        id: "scroll-area",
+        en: "Scroll area",
+        de: "Rollbereich",
+        proposal: true,
+        code: ["ScrollArea", ".glim-scroll", ".glim-scroll-thumb"],
+        components: ["ScrollArea"],
+        rules: [21],
+        text: {
+          en: "A box that scrolls behind a thin bar of the house's own instead of the platform's.",
+          de: "Ein Kasten, der hinter einer schmalen Leiste des Hauses rollt statt hinter der des Systems.",
+        },
+      },
     ],
   },
   {

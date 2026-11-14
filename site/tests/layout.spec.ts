@@ -56,3 +56,39 @@ test.describe("Splitter", () => {
     expect(reached).not.toBe(rest);
   });
 });
+
+test.describe("ScrollArea", () => {
+  const box = (page: Page) => stage(page, "ScrollAreaLog").getByRole("region", { name: "Backup log" });
+  const top = (page: Page) => box(page).evaluate((el) => el.scrollTop);
+
+  test("[scroll-region] a region named by its label, reached with Tab", async ({ page }) => {
+    await open(page, "/components/scroll-area");
+    await expect(box(page)).toHaveAttribute("tabindex", "0");
+    await box(page).focus();
+    await expect(box(page)).toBeFocused();
+  });
+
+  test("[scroll-keys] the arrow keys and End scroll it", async ({ page }) => {
+    await open(page, "/components/scroll-area");
+    await box(page).focus();
+    await page.keyboard.press("ArrowDown");
+    await expect.poll(() => top(page)).toBeGreaterThan(0);
+    await page.keyboard.press("End");
+    await expect.poll(() => box(page).evaluate((el) => Math.round(el.scrollTop + el.clientHeight) >= el.scrollHeight - 1)).toBe(true);
+  });
+
+  test("[scroll-wheel] the wheel scrolls it", async ({ page }) => {
+    await open(page, "/components/scroll-area");
+    await box(page).hover();
+    await page.mouse.wheel(0, 200);
+    await expect.poll(() => top(page)).toBeGreaterThan(0);
+  });
+
+  test("[scroll-own-bar] the platform's bar is hidden and the house's thumb shows, for the direction that overflows", async ({ page }) => {
+    await open(page, "/components/scroll-area");
+    expect(await box(page).evaluate((el) => getComputedStyle(el).scrollbarWidth)).toBe("none");
+    const bars = stage(page, "ScrollAreaLog").locator(".glim-scroll-bar");
+    await expect(bars.and(page.locator('[data-orientation="vertical"]'))).toBeVisible();
+    await expect(bars.and(page.locator('[data-orientation="horizontal"]'))).toBeHidden();
+  });
+});

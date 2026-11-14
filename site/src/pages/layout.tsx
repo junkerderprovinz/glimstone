@@ -25,3 +25,29 @@ export function SplitterPage() {
     </>
   );
 }
+
+export function ScrollAreaPage() {
+  return (
+    <>
+      <p className="lead">A box that scrolls its content behind thin bars of the house's own, such as a log in a window.</p>
+      <MachineNote file="react/ScrollArea.tsx" machine="scroll-area" />
+      <Demo name="ScrollAreaLog" />
+      <Code
+        code={`import { ScrollArea } from "@glimstone/react/ScrollArea";
+
+<ScrollArea label="Backup log" maxHeight="10rem">{lines}</ScrollArea>`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>The platform's bar is hidden. A thin bar stands over the content's edge, and its thumb steps up the ramp under the pointer.</li>
+        <li>The box is a region named by its label, which Tab reaches and the arrow keys and Page keys scroll.</li>
+        <li>The wheel and a finger scroll it as they would any box.</li>
+        <li>A bar shows only for the direction that has more to show.</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="ScrollArea" />
+      <H2>API</H2>
+      <PropsTable of="ScrollArea" />
+    </>
+  );
+}

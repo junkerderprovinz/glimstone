@@ -14,7 +14,7 @@ import { ColourEngine, DensityEngine, LabelEngine, MotionEngine, ShapeEngine } f
 import { BusyRingPage, SkeletonRowPage } from "./pages/loading";
 import { PopoverPage, SheetPage } from "./pages/overlay";
 import { ListTablePage } from "./pages/lists";
-import { SplitterPage } from "./pages/layout";
+import { ScrollAreaPage, SplitterPage } from "./pages/layout";
 import { PinInputPage, TagsInputPage } from "./pages/inputs";
 import { PaginationPage, StepsPage } from "./pages/navigation";
 import { AvatarPage } from "./pages/display";
@@ -119,6 +119,7 @@ const PAGES: Page[] = [
   { path: "/components/popover", title: "Popover", group: "Components", Comp: PopoverPage },
   { path: "/components/progress-bar", title: "ProgressBar", group: "Components", Comp: ProgressBarPage },
   { path: "/components/row-mark", title: "RowMark", group: "Components", Comp: RowMarkPage },
+  { path: "/components/scroll-area", title: "ScrollArea", group: "Components", Comp: ScrollAreaPage, tag: "Zag" },
   { path: "/components/select", title: "Select", group: "Components", Comp: SelectPage, tag: "Zag" },
   { path: "/components/selector", title: "Selector", group: "Components", Comp: SelectorPage },
   { path: "/components/sheet", title: "Sheet", group: "Components", Comp: SheetPage },

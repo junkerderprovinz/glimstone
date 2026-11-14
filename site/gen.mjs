@@ -69,6 +69,7 @@ const COMPONENTS = {
   TagsInput: "react/TagsInput.tsx",
   Steps: "react/Steps.tsx",
   Splitter: "react/Splitter.tsx",
+  ScrollArea: "react/ScrollArea.tsx",
 };
 
 const clean = (s) => s.replace(/\s+/g, " ").trim();

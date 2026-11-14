@@ -753,4 +753,12 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "splitter-accent", when: "A handle is hovered, focused or dragged", then: "Its grip takes the accent." },
     ],
   },
+  ScrollArea: {
+    rows: [
+      { id: "scroll-region", keys: ["Tab"], when: "Always", then: "The box is a region named by its label, and Tab reaches it." },
+      { id: "scroll-keys", keys: ["ArrowDown", "PageDown", "End"], when: "The box has focus", then: "It scrolls, as a box the platform draws would." },
+      { id: "scroll-wheel", when: "The wheel turns over it, or a finger drags it", then: "It scrolls." },
+      { id: "scroll-own-bar", when: "The content is taller than the box", then: "The platform's bar is hidden and the house's thin bar shows for that direction alone." },
+    ],
+  },
 };

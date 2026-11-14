@@ -1049,6 +1049,14 @@ Help pages, release notes and a list of frequent questions are read, not set, an
 - **The sizes belong to the app**, in percent, through `size` and `onSizeChange`. An app keeps them per device, like the order of a list ("Reordering by dragging").
 - **In a Windows contrast theme** the hairline and the grip take the button text colour, and a grip in use the selection colour (rule 46).
 
+## Scroll areas
+
+`ScrollArea` is a box that scrolls its content behind a bar of the house's own: a log in a window, the list in a narrow popover, the text of a long licence.
+
+- **The platform's bar is hidden** (rule 18), since each system draws it in another width and colour and some put it beside the content, some over it. A thin bar of GlimStone's stands over the content's edge instead, and only for the direction that has more to show.
+- **Its thumb sits on the third surface** and steps up the ramp under the pointer or while it is dragged (rule 21), growing a little then so it is easy to catch. It never takes the accent, since scrolling is no activity of the app's.
+- **The box is a region** named by its label, which Tab reaches and the arrow keys, the Page keys, Home and End scroll. The wheel and a finger scroll it as they would any box.
+
 ## Narrow windows
 
 The web interface at phone width, beside "The bottom bar" that replaces the rail there.
