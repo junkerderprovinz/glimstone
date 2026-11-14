@@ -20,24 +20,37 @@ import { Selector } from "./ui";
 const LABEL_NAMES: Record<LabelMode, string> = { text: "Text", textGlyph: "Both", glyph: "Glyph", reactive: "Reactive" };
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
-export function ThemeControl() {
+export function ThemePicker() {
+  const { theme } = useLook();
+  return (
+    <Selector<Theme>
+      label="Theme"
+      value={theme}
+      onChange={(theme) => setLook({ theme })}
+      options={[
+        { value: "dark", label: "Dark", glyph: <Glyph name="IconMoon" /> },
+        { value: "light", label: "Light", glyph: <Glyph name="IconSun" /> },
+        { value: "system", label: "System", glyph: <Glyph name="IconThemeSystem" /> },
+      ]}
+    />
+  );
+}
+
+export function OledControl() {
   const { theme, oled } = useLook();
   return (
+    <span style={{ display: "inline-flex", flexWrap: "wrap", alignItems: "center", gap: 6 }}>
+      <Toggle label="OLED" checked={oled} onChange={(oled) => setLook({ oled })} refused={oledRefusal(theme)} />
+      <InfoBubble tip="True black for OLED and AMOLED screens, whenever the dark look is showing." />
+    </span>
+  );
+}
+
+export function ThemeControl() {
+  return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 8 }}>
-      <Selector<Theme>
-        label="Theme"
-        value={theme}
-        onChange={(theme) => setLook({ theme })}
-        options={[
-          { value: "dark", label: "Dark", glyph: <Glyph name="IconMoon" /> },
-          { value: "light", label: "Light", glyph: <Glyph name="IconSun" /> },
-          { value: "system", label: "System", glyph: <Glyph name="IconThemeSystem" /> },
-        ]}
-      />
-      <span style={{ display: "inline-flex", flexWrap: "wrap", alignItems: "center", gap: 6 }}>
-        <Toggle label="OLED" checked={oled} onChange={(oled) => setLook({ oled })} refused={oledRefusal(theme)} />
-        <InfoBubble tip="True black for OLED and AMOLED screens, whenever the dark look is showing." />
-      </span>
+      <ThemePicker />
+      <OledControl />
     </div>
   );
 }
