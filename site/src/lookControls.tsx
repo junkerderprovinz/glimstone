@@ -14,7 +14,7 @@ import {
 } from "@glimstone/core";
 import { InfoBubble, Toggle } from "@glimstone/react";
 import { Glyph } from "./glyph";
-import { setLook, useLook, type Rainbow, type Theme } from "./look";
+import { setLook, useLook, type Contrast, type Rainbow, type Theme } from "./look";
 import { Selector } from "./ui";
 
 const LABEL_NAMES: Record<LabelMode, string> = { text: "Text", textGlyph: "Both", glyph: "Glyph", reactive: "Reactive" };
@@ -87,6 +87,21 @@ export function DensityControl() {
       value={density}
       onChange={(density) => setLook({ density })}
       options={DENSITIES.map((d) => ({ value: d, label: cap(d) }))}
+    />
+  );
+}
+
+export function ContrastControl() {
+  const { contrast } = useLook();
+  return (
+    <Selector<Contrast>
+      label="Contrast"
+      value={contrast}
+      onChange={(contrast) => setLook({ contrast })}
+      options={[
+        { value: "system", label: "System" },
+        { value: "more", label: "More" },
+      ]}
     />
   );
 }

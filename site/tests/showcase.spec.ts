@@ -46,6 +46,10 @@ test("the wall follows the accent, the corners and the theme chosen in the panel
   expect(await style(page, ".glim-panel", "background-color")).toBe("rgb(38, 38, 38)");
   await panel(page).getByRole("radio", { name: "Light" }).click();
   await expect.poll(() => style(page, ".glim-panel", "background-color")).toBe("rgb(255, 255, 255)");
+
+  expect(await style(page, ".glim-btn", "outline-style")).toBe("none");
+  await panel(page).locator('[data-axis="contrast"]').getByRole("radio", { name: "More" }).click();
+  expect(await style(page, ".glim-btn", "outline-style")).toBe("solid");
 });
 
 test("the wall drifts with motion on and stands still with motion off or reduced", async ({ page }) => {
@@ -64,7 +68,7 @@ test("the wall drifts with motion on and stands still with motion off or reduced
 test("the panel lists every axis of the look", async ({ page }) => {
   await open(page, "/");
   await openPanel(page);
-  for (const axis of ["theme", "oled", "accent", "rainbow", "shape", "motion", "labels"]) {
+  for (const axis of ["theme", "oled", "accent", "rainbow", "shape", "motion", "density", "contrast", "labels"]) {
     await expect(panel(page).locator(`[data-axis="${axis}"]`), axis).toBeVisible();
   }
   await page.keyboard.press("Escape");
@@ -73,7 +77,7 @@ test("the panel lists every axis of the look", async ({ page }) => {
 
 test("the copy button hands over the root attributes and the settings for the chosen look", async ({ page, context }) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
-  await open(page, "/", { theme: "dark", oled: true, shape: "round", accent: "#1D99F3", rainbow: "reactive", motion: "wild", labels: "glyph" });
+  await open(page, "/", { theme: "dark", oled: true, shape: "round", accent: "#1D99F3", rainbow: "reactive", motion: "wild", density: "compact", contrast: "more", labels: "glyph" });
   await openPanel(page);
   await panel(page).locator('[data-look="copy"]').click();
   await expect(panel(page).locator('[data-look="copy"]')).toContainText("Copied");
@@ -83,6 +87,8 @@ test("the copy button hands over the root attributes and the settings for the ch
   data-rainbow="reactive"
   data-shape="round"
   data-motion="wild"
+  data-density="compact"
+  data-contrast="more"
   data-labels-buttons="glyph"
   data-labels-sidebar="glyph"
   data-labels-tabs="glyph"
@@ -96,6 +102,8 @@ export const lookDefaults = {
   rainbowReactive: true,
   shape: "round",
   motion: "wild",
+  density: "compact",
+  contrast: "more",
   labels: {
     buttons: "glyph",
     sidebar: "glyph",
@@ -114,6 +122,8 @@ test("the default look copies without a theme, an accent or a rainbow", async ({
   expect(snippet).not.toContain("data-theme");
   expect(snippet).not.toContain("--accent");
   expect(snippet).not.toContain("data-rainbow");
+  expect(snippet).not.toContain("data-contrast");
+  expect(snippet).toContain('data-density="normal"');
   expect(snippet).toContain('theme: "system"');
   expect(snippet).toContain('accent: "#FCC419"');
 });

@@ -1,7 +1,7 @@
 import type { ComponentType } from "react";
 import { accentInks, CONTROL_AXES, contrastOn, DEFAULT_ACCENT, SYSTEM_ACCENT } from "@glimstone/core";
 import type { Look } from "./look";
-import { AccentControl, LabelControl, MotionControl, OledControl, RainbowControl, ShapeControl, ThemePicker } from "./lookControls";
+import { AccentControl, ContrastControl, DensityControl, LabelControl, MotionControl, OledControl, RainbowControl, ShapeControl, ThemePicker } from "./lookControls";
 
 /**
  * One axis of the look: the control that sets it, what it puts on an app's
@@ -80,6 +80,22 @@ export const LOOK_AXES: LookAxis[] = [
     Control: MotionControl,
     root: (l) => [["data-motion", l.motion]],
     store: (l) => ({ motion: l.motion }),
+  },
+  {
+    id: "density",
+    label: "Density",
+    hint: "How tall the rows of a list or a table stand, and how much room they leave.",
+    Control: DensityControl,
+    root: (l) => [["data-density", l.density]],
+    store: (l) => ({ density: l.density }),
+  },
+  {
+    id: "contrast",
+    label: "Contrast",
+    hint: "More darkens the quiet text, draws an edge round fields and buttons and thickens the focus ring. System gives that whenever the device asks for more contrast.",
+    Control: ContrastControl,
+    root: (l) => (l.contrast === "more" ? [["data-contrast", "more"]] : []),
+    store: (l) => ({ contrast: l.contrast }),
   },
   {
     id: "labels",

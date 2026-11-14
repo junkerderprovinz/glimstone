@@ -145,7 +145,7 @@ export function DensityEngine() {
         <code>--row-pad</code> its inline padding and <code>--cell-pad-block</code> a table cell's padding above and
         below. A list row, a placeholder row, a list table and a plain table read them, so they change together.
       </p>
-      <Code code={`applyDensity("compact"); // or useDensity() in Vue`} />
+      <Code code={`applyDensity("compact"); // or useDensity() in React and Vue`} />
     </>
   );
 }
