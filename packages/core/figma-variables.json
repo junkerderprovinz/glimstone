@@ -509,7 +509,7 @@
    "name": "colour/brand-coffee",
    "variableCollectionId": "collection:Colour",
    "resolvedType": "COLOR",
-   "description": "The About card's brand marks at rest, adjusted from the published brand colours. A brand colour is designed against white or its own fill, so on the neutral button ground it fails 3:1 in one theme: #FFDD00 reads 1.14:1 on the light #d1d1d1, and PayPal's navy fails on the dark #525252. Warm brands are deepened for the light theme and dark ones lightened for the dark theme. Contrast: 5.7, 3.3, 3.1 and 7.7 to one on the dark ground, 3.2, 3.2, 8.7 and 11.9 on the light one."
+   "description": "The About card's brand marks at rest, adjusted from the published brand colours. A brand colour is designed against white or its own fill, so on the neutral button ground it fails 3:1 in one theme: #FFDD00 reads 1.14:1 on the light #d1d1d1, and PayPal's navy fails on the dark #525252. Warm brands are deepened for the light theme and dark ones lightened for the dark theme. Contrast: 5.7, 3.3, 3.1 and 7.7 to one on the dark ground, 3.2, 3.2, 8.7 and 11.9 on the light one. Discord's blurple, lightened for the dark theme, reads 3.1 on the dark ground and 3.0 on the light one."
   },
   {
    "action": "CREATE",
@@ -529,6 +529,13 @@
    "action": "CREATE",
    "id": "variable:colour.brand-paypal",
    "name": "colour/brand-paypal",
+   "variableCollectionId": "collection:Colour",
+   "resolvedType": "COLOR"
+  },
+  {
+   "action": "CREATE",
+   "id": "variable:colour.brand-discord",
+   "name": "colour/brand-discord",
    "variableCollectionId": "collection:Colour",
    "resolvedType": "COLOR"
   },
@@ -1692,6 +1699,36 @@
     "r": 0.30980392156862746,
     "g": 0.7098039215686275,
     "b": 0.9411764705882353,
+    "a": 1
+   }
+  },
+  {
+   "variableId": "variable:colour.brand-discord",
+   "modeId": "mode:Colour:Light",
+   "value": {
+    "r": 0.34509803921568627,
+    "g": 0.396078431372549,
+    "b": 0.9490196078431372,
+    "a": 1
+   }
+  },
+  {
+   "variableId": "variable:colour.brand-discord",
+   "modeId": "mode:Colour:Dark",
+   "value": {
+    "r": 0.5803921568627451,
+    "g": 0.611764705882353,
+    "b": 0.9686274509803922,
+    "a": 1
+   }
+  },
+  {
+   "variableId": "variable:colour.brand-discord",
+   "modeId": "mode:Colour:OLED",
+   "value": {
+    "r": 0.5803921568627451,
+    "g": 0.611764705882353,
+    "b": 0.9686274509803922,
     "a": 1
    }
   },

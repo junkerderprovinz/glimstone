@@ -1,3 +1,8 @@
+## Unreleased
+
+- `GlimTheme` gains `brandDiscord`, the Discord mark's colour, written from the tokens.
+- `GlimGlyphs` gains `discord`.
+
 ## 4.5.1
 
 - No changes for Flutter. The link to the newest release this release brings lives in the web packages.

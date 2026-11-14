@@ -169,7 +169,7 @@
     "brand-coffee": {
       "$value": "#8a6d00",
       "$type": "color",
-      "$description": "The About card's brand marks at rest, adjusted from the published brand colours. A brand colour is designed against white or its own fill, so on the neutral button ground it fails 3:1 in one theme: #FFDD00 reads 1.14:1 on the light #d1d1d1, and PayPal's navy fails on the dark #525252. Warm brands are deepened for the light theme and dark ones lightened for the dark theme. Contrast: 5.7, 3.3, 3.1 and 7.7 to one on the dark ground, 3.2, 3.2, 8.7 and 11.9 on the light one.\n\nThe mail button has no brand colour: it reaches the app's own authors and follows the user's accent. The manual's book takes the yellow of the README's docs button, which is the coffee button's.",
+      "$description": "The About card's brand marks at rest, adjusted from the published brand colours. A brand colour is designed against white or its own fill, so on the neutral button ground it fails 3:1 in one theme: #FFDD00 reads 1.14:1 on the light #d1d1d1, and PayPal's navy fails on the dark #525252. Warm brands are deepened for the light theme and dark ones lightened for the dark theme. Contrast: 5.7, 3.3, 3.1 and 7.7 to one on the dark ground, 3.2, 3.2, 8.7 and 11.9 on the light one. Discord's blurple, lightened for the dark theme, reads 3.1 on the dark ground and 3.0 on the light one.\n\nThe mail button has no brand colour: it reaches the app's own authors and follows the user's accent. The manual's book takes the yellow of the README's docs button, which is the coffee button's.",
       "$extensions": {
         "org.glimstone": {
           "dark": "#ffdd00"
@@ -200,6 +200,15 @@
       "$extensions": {
         "org.glimstone": {
           "dark": "#4fb5f0"
+        }
+      }
+    },
+    "brand-discord": {
+      "$value": "#5865f2",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "#949cf7"
         }
       }
     },

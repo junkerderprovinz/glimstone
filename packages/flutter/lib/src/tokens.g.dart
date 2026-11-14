@@ -24,6 +24,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     required this.brandDocs,
     required this.brandBitcoin,
     required this.brandPaypal,
+    required this.brandDiscord,
     required this.brandAndroid,
     required this.brandDocker,
     required this.brandUnraidFrom,
@@ -101,6 +102,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
   final Color brandDocs;
   final Color brandBitcoin;
   final Color brandPaypal;
+  final Color brandDiscord;
   final Color brandAndroid;
   final Color brandDocker;
   final Color brandUnraidFrom;
@@ -185,6 +187,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     brandDocs: Color(0xFFFFDD00),
     brandBitcoin: Color(0xFFF7931A),
     brandPaypal: Color(0xFF4FB5F0),
+    brandDiscord: Color(0xFF949CF7),
     brandAndroid: Color(0xFF32DE84),
     brandDocker: Color(0xFF2396ED),
     brandUnraidFrom: Color(0xFFE32929),
@@ -260,6 +263,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     brandDocs: Color(0xFFFFDD00),
     brandBitcoin: Color(0xFFF7931A),
     brandPaypal: Color(0xFF4FB5F0),
+    brandDiscord: Color(0xFF949CF7),
     brandAndroid: Color(0xFF32DE84),
     brandDocker: Color(0xFF2396ED),
     brandUnraidFrom: Color(0xFFE32929),
@@ -334,6 +338,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     brandDocs: Color(0xFF8A6D00),
     brandBitcoin: Color(0xFFA85D00),
     brandPaypal: Color(0xFF003087),
+    brandDiscord: Color(0xFF5865F2),
     brandAndroid: Color(0xFF32DE84),
     brandDocker: Color(0xFF2396ED),
     brandUnraidFrom: Color(0xFFE32929),
@@ -409,6 +414,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     Color? brandDocs,
     Color? brandBitcoin,
     Color? brandPaypal,
+    Color? brandDiscord,
     Color? brandAndroid,
     Color? brandDocker,
     Color? brandUnraidFrom,
@@ -485,6 +491,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
         brandDocs: brandDocs ?? this.brandDocs,
         brandBitcoin: brandBitcoin ?? this.brandBitcoin,
         brandPaypal: brandPaypal ?? this.brandPaypal,
+        brandDiscord: brandDiscord ?? this.brandDiscord,
         brandAndroid: brandAndroid ?? this.brandAndroid,
         brandDocker: brandDocker ?? this.brandDocker,
         brandUnraidFrom: brandUnraidFrom ?? this.brandUnraidFrom,
@@ -564,6 +571,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
       brandDocs: Color.lerp(brandDocs, other.brandDocs, t)!,
       brandBitcoin: Color.lerp(brandBitcoin, other.brandBitcoin, t)!,
       brandPaypal: Color.lerp(brandPaypal, other.brandPaypal, t)!,
+      brandDiscord: Color.lerp(brandDiscord, other.brandDiscord, t)!,
       brandAndroid: Color.lerp(brandAndroid, other.brandAndroid, t)!,
       brandDocker: Color.lerp(brandDocker, other.brandDocker, t)!,
       brandUnraidFrom: Color.lerp(brandUnraidFrom, other.brandUnraidFrom, t)!,

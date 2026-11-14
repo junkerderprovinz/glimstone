@@ -172,6 +172,7 @@
 | ZFS datasets | `IconZFS` |
 | Anomalies | `IconAnomalies` |
 | The GitHub repository | `IconGithub` |
+| The Discord server | `IconDiscord` |
 | Health of the services | `IconHealth` |
 | Queued | `IconQueued` |
 | Time left on a captcha | `IconCaptchaTimer` |
