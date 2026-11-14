@@ -42,7 +42,7 @@ test("every rule cited anywhere exists", () => {
 });
 
 // A topic several rules mention, and the one rule that owns it.
-const OWNERS: Record<string, number> = { notch: 11 };
+const OWNERS: Record<string, number> = { notch: 11, density: 51 };
 
 test("a rule cited for a topic is the rule about that topic", () => {
   const text = new Map(rules.map((r) => [r.number, [r.title, ...r.blocks].join(" ").toLowerCase()]));
