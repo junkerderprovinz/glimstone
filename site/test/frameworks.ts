@@ -119,8 +119,17 @@ function compile(roots: string[], extra: ts.CompilerOptions, virtual: (path: str
 // and the glyphs stand together under the one glyph entry, as in React.
 const isComponent = (name: string, file: string) => /^[A-Z]/.test(name) && !name.endsWith("Context") && !/[\\/](glyphs\.tsx|MarkSvg\.svelte)$/.test(file);
 
-const solidSrc = join(packages, "solid", "src");
-const solidEntries = ["index.ts", "Select.tsx", "Combobox.tsx", "Slider.tsx"].map((f) => join(solidSrc, f)).filter(existsSync);
+// Each package's entry points, as its exports name them: "./Select" has its
+// types in dist/Select.d.ts, so its source is src/Select.tsx.
+function entriesOf(pkg: "solid" | "svelte") {
+  const { exports } = JSON.parse(read(join(packages, pkg, "package.json"))) as { exports: Record<string, { types: string }> };
+  return Object.values(exports).map(({ types }) => {
+    const base = join(packages, pkg, "src", types.replace(/^\.\/dist\//, "").replace(/\.d\.ts$/, ""));
+    return existsSync(`${base}.tsx`) ? `${base}.tsx` : `${base}.ts`;
+  }).filter(existsSync);
+}
+
+const solidEntries = entriesOf("solid");
 let solid: ts.Program | undefined;
 const solidProgram = () => (solid ??= compile(solidEntries, { jsx: ts.JsxEmit.Preserve, jsxImportSource: "solid-js" }, () => undefined));
 
@@ -162,7 +171,6 @@ export function solidSurface(name: string, file: string): Surface {
 
 // A .svelte file reads as the TypeScript of its module script, where its props
 // interface stands, with the component as the default export.
-const svelteSrc = join(packages, "svelte", "src");
 const scriptOf = (text: string, module: boolean) =>
   [...text.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)].find((m) => /\bmodule\b/.test(m[1]!) === module)?.[2] ?? "";
 const asModule = (path: string) => (path.endsWith(".svelte.ts") && existsSync(path.slice(0, -3)) ? path.slice(0, -3) : undefined);
@@ -170,7 +178,7 @@ function svelteVirtual(path: string) {
   const file = asModule(path);
   return file ? `${scriptOf(read(file), true)}\ndeclare const component: unknown;\nexport default component;\n` : undefined;
 }
-const svelteEntries = [join(svelteSrc, "index.ts"), ...["select", "combobox", "slider"].map((f) => join(svelteSrc, "entries", `${f}.ts`))].filter(existsSync);
+const svelteEntries = entriesOf("svelte");
 let svelte: ts.Program | undefined;
 const svelteProgram = () =>
   (svelte ??= compile(svelteEntries, {}, svelteVirtual, (text, from) => (text.endsWith(".svelte") ? `${resolve(dirname(from), text)}.ts` : undefined)));
