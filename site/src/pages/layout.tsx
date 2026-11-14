@@ -51,3 +51,29 @@ export function ScrollAreaPage() {
     </>
   );
 }
+
+export function FloatingPanelPage() {
+  return (
+    <>
+      <p className="lead">A window that stays open beside the work, such as a transfer log, moved by its head and sized by its edges.</p>
+      <MachineNote file="react/FloatingPanel.tsx" machine="floating-panel" />
+      <Demo name="FloatingPanelLog" />
+      <Code
+        code={`import { FloatingPanel } from "@glimstone/react/FloatingPanel";
+
+<FloatingPanel title="Transfer log" open={open} onOpenChange={setOpen}>{log}</FloatingPanel>`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>It is a window like any other: the same surface and radius, its title in the notch, its way out in the foot.</li>
+        <li>Nothing behind it is darkened, since the work behind it goes on. It floats above the page and below a modal window.</li>
+        <li>Its head moves it, its edges size it, and the arrow keys move it while it has focus. Escape closes it.</li>
+        <li>Minimise folds it to its head, Maximise fills the window with it, Restore brings back its size.</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="FloatingPanel" />
+      <H2>API</H2>
+      <PropsTable of="FloatingPanel" />
+    </>
+  );
+}

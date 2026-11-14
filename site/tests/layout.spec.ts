@@ -92,3 +92,52 @@ test.describe("ScrollArea", () => {
     await expect(bars.and(page.locator('[data-orientation="horizontal"]'))).toBeHidden();
   });
 });
+
+test.describe("FloatingPanel", () => {
+  const opener = (page: Page) => stage(page, "FloatingPanelLog").getByRole("button", { name: "Show the transfer log" });
+  const panel = (page: Page) => page.getByRole("dialog", { name: "Transfer log" });
+  const place = (page: Page) => panel(page).evaluate((el) => el.getBoundingClientRect().left);
+
+  async function show(page: Page) {
+    await open(page, "/components/floating-panel");
+    await opener(page).click();
+    await expect(panel(page)).toBeVisible();
+  }
+
+  test("[fpanel-dialog] a dialog named by its title, with its way out in the foot", async ({ page }) => {
+    await show(page);
+    await expect(panel(page).locator(".glim-fpanel-foot").getByRole("button", { name: "Close" })).toBeVisible();
+    await panel(page).getByRole("button", { name: "Close" }).click();
+    await expect(panel(page)).toBeHidden();
+  });
+
+  test("[fpanel-drag] dragging its head moves it", async ({ page }) => {
+    await show(page);
+    const before = await place(page);
+    const head = (await panel(page).locator(".glim-fpanel-head").boundingBox())!;
+    await page.mouse.move(head.x + 20, head.y + head.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(head.x + 120, head.y + head.height / 2 + 30, { steps: 6 });
+    await page.mouse.up();
+    await expect.poll(() => place(page)).toBeGreaterThan(before + 60);
+  });
+
+  test("[fpanel-keys] the arrow keys move it while it has focus, and Escape closes it", async ({ page }) => {
+    await show(page);
+    await panel(page).focus();
+    const before = await place(page);
+    await page.keyboard.press("ArrowRight");
+    await expect.poll(() => place(page)).toBeGreaterThan(before);
+    await page.keyboard.press("Escape");
+    await expect(panel(page)).toBeHidden();
+  });
+
+  test("[fpanel-stage] Minimise folds it to its head and Restore brings it back", async ({ page }) => {
+    await show(page);
+    await panel(page).getByRole("button", { name: "Minimise" }).click();
+    await expect(panel(page)).toHaveAttribute("data-minimized", "");
+    await expect(panel(page).locator(".glim-fpanel-body")).toBeHidden();
+    await panel(page).getByRole("button", { name: "Restore" }).click();
+    await expect(panel(page).locator(".glim-fpanel-body")).toBeVisible();
+  });
+});

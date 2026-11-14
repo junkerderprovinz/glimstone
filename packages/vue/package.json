@@ -103,6 +103,10 @@
     "./Tour": {
       "types": "./dist/entries/tour.d.ts",
       "default": "./dist/Tour.js"
+    },
+    "./FloatingPanel": {
+      "types": "./dist/entries/floatingpanel.d.ts",
+      "default": "./dist/FloatingPanel.js"
     }
   },
   "files": [
@@ -124,6 +128,7 @@
     "@zag-js/combobox": "^1.46.0",
     "@zag-js/date-picker": "^1.47.0",
     "@zag-js/file-upload": "^1.47.0",
+    "@zag-js/floating-panel": "^1.47.0",
     "@zag-js/hover-card": "^1.47.0",
     "@zag-js/marquee": "^1.47.0",
     "@zag-js/menu": "^1.46.0",

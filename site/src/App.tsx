@@ -14,7 +14,7 @@ import { ColourEngine, DensityEngine, LabelEngine, MotionEngine, ShapeEngine } f
 import { BusyRingPage, SkeletonRowPage } from "./pages/loading";
 import { PopoverPage, SheetPage } from "./pages/overlay";
 import { ListTablePage } from "./pages/lists";
-import { ScrollAreaPage, SplitterPage } from "./pages/layout";
+import { FloatingPanelPage, ScrollAreaPage, SplitterPage } from "./pages/layout";
 import { AngleSliderPage, DatePickerPage, FileUploadPage, PinInputPage, RatingPage, SignaturePadPage, TagsInputPage } from "./pages/inputs";
 import { PaginationPage, StepsPage, TourPage } from "./pages/navigation";
 import { AvatarPage, CarouselPage, HoverCardPage, MarqueePage, TimerPage } from "./pages/display";
@@ -103,6 +103,7 @@ const PAGES: Page[] = [
   { path: "/components/empty-state", title: "EmptyState", group: "Components", Comp: EmptyStatePage },
   { path: "/components/field-row", title: "FieldRow", group: "Components", Comp: FieldRowPage },
   { path: "/components/file-upload", title: "FileUpload", group: "Components", Comp: FileUploadPage, tag: "Zag" },
+  { path: "/components/floating-panel", title: "FloatingPanel", group: "Components", Comp: FloatingPanelPage, tag: "Zag" },
   { path: "/components/fortress", title: "Fortress", group: "Components", Comp: FortressPage },
   { path: "/components/glyph-field", title: "GlyphField", group: "Components", Comp: GlyphFieldPage },
   { path: "/components/glyph-tile", title: "GlyphTile", group: "Components", Comp: GlyphTilePage },

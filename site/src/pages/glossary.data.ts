@@ -987,6 +987,19 @@ export const GLOSSARY: GlossarySection[] = [
           de: "Ein kurzer Gang durch eine Seite, ein Schritt je Teil, der Rest der Seite abgedunkelt.",
         },
       },
+      {
+        id: "floating-panel",
+        en: "Floating panel",
+        de: "Schwebefenster",
+        proposal: true,
+        code: ["FloatingPanel", ".glim-fpanel"],
+        components: ["FloatingPanel"],
+        rules: [15],
+        text: {
+          en: "A window that stays open beside the work, moved by its head and sized by its edges, with nothing behind it darkened.",
+          de: "Ein Fenster, das neben der Arbeit offen bleibt, am Kopf verschoben und an den Rändern in der Größe geändert, ohne den Rest abzudunkeln.",
+        },
+      },
     ],
   },
   {

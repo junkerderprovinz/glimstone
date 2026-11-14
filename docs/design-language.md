@@ -1150,6 +1150,14 @@ Help pages, release notes and a list of frequent questions are read, not set, an
 - **Escape ends the tour from any step** and gives the focus back to what started it. Each step is a modal dialog named by its title and described by its text, so the focus stays in it.
 - **It is for the first start, once.** Somebody who closes it has seen it, and the app keeps that on the device. Anything a person needs again belongs on the page or behind its (i), not in a tour.
 
+## Floating panels
+
+`FloatingPanel` is a window that stays open beside the work: a transfer log, a list of what is still queued.
+
+- **It is a window like any other** (rule 15): the same surface and radius, its title as the badge in the notch and its way out, Close, in the foot. It stands at the float step, since nothing behind it is darkened. The work behind it goes on, and the page stays reachable.
+- **It stacks with the chrome**, above the page and below a modal window (`--z-chrome`), so a window that asks a question still covers it.
+- **Its head moves it and its edges size it**, and while it has focus the arrow keys move it. Escape closes it. The stage buttons in its head fold it to its head, fill the window with it or give it its size back. They are glyphs alone, like a desktop window's ("The desktop window frame").
+
 ## Narrow windows
 
 The web interface at phone width, beside "The bottom bar" that replaces the rail there.

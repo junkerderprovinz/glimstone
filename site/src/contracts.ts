@@ -851,4 +851,13 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "tour-spotlight", when: "A step points at a part of the page", then: "The page behind is darkened, and that part stays clear with the accent's ring around it." },
     ],
   },
+  FloatingPanel: {
+    pattern: { name: "Dialog", url: `${APG}dialog-modal/` },
+    rows: [
+      { id: "fpanel-dialog", when: "It is open", then: "A dialog named by its title, with Close in its foot." },
+      { id: "fpanel-drag", when: "Its head is dragged", then: "It moves with the pointer." },
+      { id: "fpanel-keys", keys: ["ArrowRight", "Escape"], when: "It has focus", then: "The arrows move it, and Escape closes it." },
+      { id: "fpanel-stage", when: "Minimise, Maximise or Restore is pressed", then: "It folds to its head, fills the window or takes its size back." },
+    ],
+  },
 };

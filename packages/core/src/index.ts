@@ -24,6 +24,7 @@ export * from "./field.ts";
 export * from "./fileUpload.ts";
 export * from "./fieldError.ts";
 export * from "./flagEmoji.ts";
+export * from "./floatingPanel.ts";
 export * from "./fortress.ts";
 export * from "./fortressText.ts";
 export * from "./fortressTexts.ts";
