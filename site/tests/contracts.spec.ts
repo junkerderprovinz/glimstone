@@ -3942,7 +3942,18 @@ test.describe("SignInCard refusals and engines", () => {
   const card = (page: Page) => stage(page, "SignInCardBasic").locator(".glim-signin-card");
   const field = (page: Page, name: string) => card(page).getByLabel(name, { exact: true });
   const button = (page: Page, name: string) => card(page).getByRole("button", { name, exact: true });
-  const shaking = (el: Locator) => expect.poll(() => el.evaluate((e) => e.classList.contains("glim-shake")));
+  // A shake lasts a few hundred milliseconds, which a poll under load can miss
+  // between two looks, so an observer set up before the key press keeps the
+  // name of every element that took the class.
+  const watchShakes = (page: Page) =>
+    page.evaluate(() => {
+      const seen: string[] = [];
+      (window as unknown as { shook: string[] }).shook = seen;
+      new MutationObserver(() => {
+        for (const el of document.querySelectorAll(".glim-shake")) seen.push((el.getAttribute("aria-label") ?? el.textContent ?? "").trim());
+      }).observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ["class"] });
+    });
+  const shook = (page: Page) => expect.poll(() => page.evaluate(() => (window as unknown as { shook: string[] }).shook));
   const selected = (el: Locator) => el.evaluate((e: HTMLInputElement) => e.selectionStart === 0 && e.selectionEnd === e.value.length && e.value.length > 0);
   // Every transform the button wears while a refused password comes back.
   const movesOnRefusal = (page: Page) =>
@@ -3976,8 +3987,9 @@ test.describe("SignInCard refusals and engines", () => {
   test("[signin-shake] a refused password shakes Sign in and selects the password", async ({ page }) => {
     await open(page, "/components/sign-in-card");
     await field(page, "Password").fill("wrong");
+    await watchShakes(page);
     await page.keyboard.press("Enter");
-    await shaking(button(page, "Sign in")).toBe(true);
+    await shook(page).toContain("Sign in");
     await expect(card(page).getByRole("alert")).toHaveText("That password is not right");
     await expect(field(page, "Password")).toBeFocused();
     expect(await selected(field(page, "Password"))).toBe(true);
@@ -3990,8 +4002,9 @@ test.describe("SignInCard refusals and engines", () => {
     await expect(field(page, "Code")).toBeFocused();
     expect(await button(page, "Sign in").evaluate((e) => e.classList.contains("glim-shake"))).toBe(false);
     await field(page, "Code").fill("000000");
+    await watchShakes(page);
     await page.keyboard.press("Enter");
-    await shaking(button(page, "Sign in")).toBe(true);
+    await shook(page).toContain("Sign in");
     await expect(field(page, "Code")).toBeFocused();
   });
 
@@ -4001,8 +4014,9 @@ test.describe("SignInCard refusals and engines", () => {
     await field(page, "Code from the container log").fill("ABCD-EFGH-JKLM");
     await field(page, "New password").fill("correct horse battery");
     await field(page, "Confirm password").fill("correct horse batterx");
+    await watchShakes(page);
     await page.keyboard.press("Enter");
-    await shaking(button(page, "Set password")).toBe(true);
+    await shook(page).toContain("Set password");
     await expect(field(page, "Confirm password")).toBeFocused();
     expect(await selected(field(page, "Confirm password"))).toBe(true);
   });
