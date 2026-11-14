@@ -157,7 +157,13 @@ test("a click on the chosen swatch opens the picker, and the colour picked lands
   await open(page, "/", { theme: "dark" });
   await openPanel(page);
   const chosen = panel(page).locator('[data-axis="accent"] [aria-checked="true"]');
+  // The picker closes when what it is anchored to scrolls, and Playwright
+  // scrolls the swatch into view before it clicks, so that scroll has to land
+  // before the click opens the picker.
+  await chosen.scrollIntoViewIfNeeded();
+  await page.evaluate(() => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done))));
   await chosen.click();
+  await expect(page.locator('[data-glim="ColorPicker"]')).toBeVisible();
   const hex = page.getByRole("textbox", { name: "Hex" });
   await hex.fill("#2E8B57");
   await page.getByRole("button", { name: "Apply" }).click();
