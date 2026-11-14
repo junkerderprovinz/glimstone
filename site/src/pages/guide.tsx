@@ -28,7 +28,7 @@ export function Introduction() {
         </a>
       </div>
       <H2>Blocks</H2>
-      <p>Whole page parts to start from, each running live in React and Vue with its code a click away.</p>
+      <p>Whole page parts to start from, each running live in React, Vue, Solid and Svelte with its code a click away.</p>
       <div className="tile-grid">
         {BLOCKS.map((b) => (
           <a className="tile" key={b.name} href={`#/blocks?s=${slugify(b.title)}`}>

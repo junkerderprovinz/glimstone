@@ -38,7 +38,7 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 - **Every component rule is in `@layer components`.** Many rules in `tokens.css` stood outside any layer, so an app had to out-specify them to change a component. Now the components and the reset are layered, in the order `base, components`, and a plain rule of the app's own wins. The tokens stay outside. An app that copies `tokens.css` and has unlayered rules of its own that relied on losing to GlimStone should check them.
 - **Site, start page:** beside the heading leans a wall of screens built from the real components, drifting slowly. It follows the accent, the corners, the motion and the theme as they change, and stands still with motion off or when the device asks for less motion.
 - **Site, Make it yours:** the look controls open in a panel beside the page, from the start page and from Look in the header, with every axis in one list. Its copy button hands over the look as attributes for an app's root element and as the starting values of its settings.
-- **Site, Blocks:** a page of whole page parts to start from: a sign-in page, a settings page, a list page with its empty states, the Info tile, an upload area and a confirm flow. Each runs live in React and in Vue, with its code to copy.
+- **Site, Blocks:** a page of whole page parts to start from: a sign-in page, a settings page, a list page with its empty states, the Info tile, an upload area and a confirm flow. Each runs live in React, Vue, Solid and Svelte, with its code to copy.
 
 ## 🔁 Changed
 

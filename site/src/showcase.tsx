@@ -239,7 +239,7 @@ export function Hero() {
         <h1 id="hero-title">One quiet language for a whole family of apps</h1>
         <p className="hero-lead">
           Carbon's greys, one accent and four engines that the person using the app sets once. Every component reads the
-          same tokens in React and Vue, so one change reaches every screen.
+          same tokens in React, Vue, Solid and Svelte, so one change reaches every screen.
         </p>
         <div className="hero-actions">
           <Button label="Make it yours" labelKey="look" tone="accent" size="key" onClick={() => setLookPanel(!panel)} aria-expanded={panel} />
