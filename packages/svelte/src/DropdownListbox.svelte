@@ -49,9 +49,15 @@
   // The portal leaves the trigger's rainbow subtree, so the panel copies the
   // trigger's hue.
   const hue = usePortalHue(() => open, () => triggerRef);
-  // Whether focus is inside the panel, tracked as it moves because it cannot be
-  // read once the panel is gone.
-  let focusInside = false;
+  // Whether focus was in the list as it closed. It is read the moment `open`
+  // turns false, before the list leaves the page: a browser that blurs a
+  // removed element reports the focus gone before the list is.
+  let focusWasInside = false;
+  let wasOpen = false;
+  $effect.pre(() => {
+    if (wasOpen && !open) focusWasInside = !!panel?.contains(document.activeElement);
+    wasOpen = open;
+  });
 
   const options = () => [...(panel?.querySelectorAll<HTMLElement>('[role="option"]') ?? [])];
 
@@ -109,8 +115,8 @@
       pos = null;
       // Focus goes back to the trigger only if it was in the list; a press
       // elsewhere has already put it where somebody wants it.
-      if (focusInside) triggerRef?.focus();
-      focusInside = false;
+      if (focusWasInside) triggerRef?.focus();
+      focusWasInside = false;
       return;
     }
     if (!panel || !triggerRef) return;
@@ -142,11 +148,6 @@
     opts[next]!.focus();
   }
 
-  function onFocusOut(e: FocusEvent) {
-    // Focus that goes nowhere, as when the panel leaves the page, still counts as inside.
-    const to = e.relatedTarget as Node | null;
-    if (to && !panel?.contains(to)) focusInside = false;
-  }
 </script>
 
 {#if open}
@@ -157,8 +158,6 @@
     data-glim="DropdownListbox"
     role="listbox"
     onkeydown={onPanelKey}
-    onfocusin={() => (focusInside = true)}
-    onfocusout={onFocusOut}
     aria-multiselectable={multiselectable ? "true" : undefined}
     aria-label={label}
     class={`glim-listbox glim-fade${hue.className ? ` ${hue.className}` : ""}`}

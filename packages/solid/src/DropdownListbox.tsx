@@ -1,4 +1,4 @@
-import { children, createEffect, createSignal, on, onCleanup, onMount, Show, type JSX } from "solid-js";
+import { children, createComputed, createEffect, createSignal, on, onCleanup, onMount, Show, type JSX } from "solid-js";
 import { computeBubblePosition } from "@glimstone/core";
 import { Lift } from "./Lift.tsx";
 import { usePortalHue, type PortalHue } from "./portalHue.ts";
@@ -43,9 +43,20 @@ export function DropdownListbox(props: DropdownListboxProps) {
   // The portal leaves the trigger's rainbow subtree, so the panel copies the
   // trigger's hue.
   const hue = usePortalHue(() => props.open, () => props.triggerRef);
-  // Whether focus is inside the panel, tracked as it moves because it cannot be
-  // read once the panel is gone.
-  let focusInside = false;
+  let panel: HTMLDivElement | undefined;
+  // Whether focus was in the list as it closed. It is read the moment `open`
+  // turns false, before the list leaves the page: a browser that blurs a
+  // removed element reports the focus gone before the list is.
+  let focusWasInside = false;
+  createComputed(
+    on(
+      () => props.open,
+      (open) => {
+        if (!open) focusWasInside = !!panel?.contains(document.activeElement);
+      },
+      { defer: true },
+    ),
+  );
 
   // Focus returns to the trigger on close only if it was inside the panel; a
   // click elsewhere has already put it where the user wants.
@@ -54,8 +65,8 @@ export function DropdownListbox(props: DropdownListboxProps) {
       () => props.open,
       (open) => {
         if (open) return;
-        if (focusInside) props.triggerRef?.focus();
-        focusInside = false;
+        if (focusWasInside) props.triggerRef?.focus();
+        focusWasInside = false;
       },
       { defer: true },
     ),
@@ -66,13 +77,7 @@ export function DropdownListbox(props: DropdownListboxProps) {
       <Panel
         {...props}
         hue={hue}
-        onFocusIn={() => (focusInside = true)}
-        onFocusOut={(e) => {
-          // Focus that goes nowhere, as when the panel leaves the page, still
-          // counts as inside.
-          const to = e.relatedTarget as Node | null;
-          if (to && !(e.currentTarget as HTMLElement).contains(to)) focusInside = false;
-        }}
+        panel={(el) => (panel = el)}
       />
     </Show>
   );
@@ -81,8 +86,7 @@ export function DropdownListbox(props: DropdownListboxProps) {
 function Panel(
   props: DropdownListboxProps & {
     hue: PortalHue;
-    onFocusIn: () => void;
-    onFocusOut: (e: FocusEvent) => void;
+    panel: (el: HTMLDivElement) => void;
   },
 ) {
   let panel!: HTMLDivElement;
@@ -183,11 +187,12 @@ function Panel(
     <Lift>
       <div
         data-glim="DropdownListbox"
-        ref={panel}
+        ref={(el) => {
+          panel = el;
+          props.panel(el);
+        }}
         role="listbox"
         onKeyDown={onPanelKeyDown}
-        onFocusIn={props.onFocusIn}
-        onFocusOut={props.onFocusOut}
         aria-multiselectable={props.multiselectable ? "true" : undefined}
         aria-label={props.label}
         class={`glim-listbox glim-fade${props.hue.className() ? ` ${props.hue.className()}` : ""}`}
