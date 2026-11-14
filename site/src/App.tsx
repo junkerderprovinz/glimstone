@@ -16,7 +16,7 @@ import { PopoverPage, SheetPage } from "./pages/overlay";
 import { ListTablePage } from "./pages/lists";
 import { FloatingPanelPage, ScrollAreaPage, SplitterPage } from "./pages/layout";
 import { AngleSliderPage, DatePickerPage, FileUploadPage, PinInputPage, RatingPage, SignaturePadPage, TagsInputPage } from "./pages/inputs";
-import { PaginationPage, StepsPage, TourPage } from "./pages/navigation";
+import { PaginationPage, RadioGroupPage, StepsPage, TabsPage, TourPage } from "./pages/navigation";
 import { AvatarPage, CarouselPage, HoverCardPage, MarqueePage, TimerPage } from "./pages/display";
 import { AccordionPage, CollapsiblePage } from "./pages/reading";
 import {
@@ -126,6 +126,7 @@ const PAGES: Page[] = [
   { path: "/components/popover", title: "Popover", group: "Components", Comp: PopoverPage },
   { path: "/components/progress-bar", title: "ProgressBar", group: "Components", Comp: ProgressBarPage },
   { path: "/components/rating", title: "Rating", group: "Components", Comp: RatingPage, tag: "Zag" },
+  { path: "/components/radio-group", title: "Radio group", group: "Components", Comp: RadioGroupPage, tag: "Selector" },
   { path: "/components/row-mark", title: "RowMark", group: "Components", Comp: RowMarkPage },
   { path: "/components/scroll-area", title: "ScrollArea", group: "Components", Comp: ScrollAreaPage, tag: "Zag" },
   { path: "/components/select", title: "Select", group: "Components", Comp: SelectPage, tag: "Zag" },
@@ -143,6 +144,7 @@ const PAGES: Page[] = [
   { path: "/components/timer", title: "Timer", group: "Components", Comp: TimerPage, tag: "Zag" },
   { path: "/components/toast", title: "Toast", group: "Components", Comp: ToastPage },
   { path: "/components/table", title: "Table", group: "Components", Comp: TablePage },
+  { path: "/components/tabs", title: "Tabs", group: "Components", Comp: TabsPage, tag: "Selector" },
   { path: "/components/text-field", title: "TextField", group: "Components", Comp: TextFieldPage },
   { path: "/components/toggle", title: "Toggle", group: "Components", Comp: TogglePage },
   { path: "/components/tour", title: "Tour", group: "Components", Comp: TourPage, tag: "Zag" },

@@ -88,3 +88,56 @@ export function TourPage() {
     </>
   );
 }
+
+export function TabsPage() {
+  return (
+    <>
+      <p className="lead">
+        Tabs are the <a href="#/components/selector">Selector</a>. A second drawing of the same row would drift apart from
+        the first the moment either changed, so there is no Tabs component of its own.
+      </p>
+      <Demo name="SelectorTabs" />
+      <Code
+        code={`import { Selector } from "@glimstone/react";
+
+<Selector label="Settings" items={pages} value={page} onChange={setPage} />`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>With <code>activation</code> left automatic the strip is a tablist, and the arrows choose as they move.</li>
+        <li>Each segment is a tab with a panel of its own, which <code>selectorTabId()</code> names.</li>
+        <li>A settings area with many pages turns the strip on its side, as the vertical tiles.</li>
+      </ul>
+      <p>
+        Everything else is on the <a href="#/components/selector">Selector</a> page: its two stylings, its keys and its
+        behaviour table.
+      </p>
+    </>
+  );
+}
+
+export function RadioGroupPage() {
+  return (
+    <>
+      <p className="lead">
+        A radio group is the <a href="#/components/selector">Selector</a> with <code>activation="manual"</code>. It is the
+        same row as the tabs, so it is the same component.
+      </p>
+      <Demo name="SelectorPickers" />
+      <Code
+        code={`import { Selector } from "@glimstone/react";
+
+<Selector label="Theme" items={themes} value={theme} onChange={setTheme} activation="manual" />`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>The strip is a radiogroup and each segment a radio. The arrows move the focus and Space chooses.</li>
+        <li>A set too long for one row becomes the dropdown, under the strip's name.</li>
+        <li>Several picks at once are <code>select="many"</code>, toggle buttons in a group.</li>
+      </ul>
+      <p>
+        Everything else is on the <a href="#/components/selector">Selector</a> page.
+      </p>
+    </>
+  );
+}
