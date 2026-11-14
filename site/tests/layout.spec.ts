@@ -3,8 +3,6 @@ import { open, stage } from "./page";
 
 // The rows of Splitter, ScrollArea and FloatingPanel, each named after its contract row.
 
-test.beforeEach(({}, info) => test.skip(!["react", "vue"].includes(info.project.name), "React and Vue only so far"));
-
 test.describe("Splitter", () => {
   const handle = (page: Page) => stage(page, "SplitterFolders").getByRole("separator", { name: "Resize" });
   const now = async (page: Page) => Number(await handle(page).getAttribute("aria-valuenow"));
