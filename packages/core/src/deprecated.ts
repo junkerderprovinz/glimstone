@@ -58,6 +58,18 @@ export const DEPRECATED: Record<string, Deprecation> = {
     use: "Read `--accent-ink`, which moves the accent onto the theme's OKLab ink step. The steps themselves are `--ink-l-light` and `--ink-l-dark`.",
     find: String.raw`var\(--ink-mix\)`,
   },
+  "GlimTheme inkMix": {
+    since: "4.5.0",
+    removal: "5.0.0",
+    use: "Use `inkLightness`, the OKLab step the accent's ink moves to: 0.52 on a light theme, 0.74 on a dark one.",
+    find: String.raw`\binkMix\b`,
+  },
+  "GlimTheme focusRing argument": {
+    since: "4.5.0",
+    removal: "5.0.0",
+    use: "Drop the argument. `focusRing` is a getter on `GlimDerived` that returns the accent ink.",
+    find: String.raw`\bfocusRing\s*:`,
+  },
 };
 
 const warned = new Set<string>();

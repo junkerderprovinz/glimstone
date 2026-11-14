@@ -87,6 +87,18 @@ function inkMix(text) {
   return INK_MIXES.reduce((t, [from, to]) => t.replace(from, to), text);
 }
 
+// A literal inkMix below 1 asked for the light ramp's ink, 1 for the dark one.
+const INK_LIGHTNESS = { light: '0.52', dark: '0.74' };
+
+function dartInkMix(text) {
+  return text.replace(/\binkMix(\s*:\s*)(\d+(?:\.\d+)?)(?=\s*[,)])/g, (_, colon, v) => `inkLightness${colon}${Number(v) < 1 ? INK_LIGHTNESS.light : INK_LIGHTNESS.dark}`);
+}
+
+/** The focusRing argument went; the ring is the accent ink, a getter on GlimDerived. */
+function dartFocusRing(text) {
+  return text.replace(/\n?[ \t]*\bfocusRing\s*:\s*(?:[^,()\n]|\([^()]*\))+,/g, '');
+}
+
 function firstMatch(pattern, note) {
   return (text) => [...text.matchAll(pattern)].slice(0, 1).map((m) => ({ index: m.index, note }));
 }
@@ -97,6 +109,7 @@ function firstUse(name, note) {
 
 const SCRIPTS = /\.(tsx?|jsx?|mjs|vue)$/;
 const STYLES = /\.(css|scss|vue|tsx?|jsx?)$/;
+const DART = /\.dart$/;
 
 export const TRANSFORMS = [
   { name: 'Badge shape', rewrite: badgeShape, report: badgeShapeLeft },
@@ -113,10 +126,17 @@ export const TRANSFORMS = [
     rewrite: inkMix,
     report: firstMatch(/--ink-mix\b/g, '--ink-mix goes in 5.0.0: read --accent-ink, or move the colour onto --ink-l-light and --ink-l-dark as tokens.css does for the accent.'),
   },
+  {
+    name: 'GlimTheme inkMix',
+    files: DART,
+    rewrite: dartInkMix,
+    report: firstUse('inkMix', 'inkMix goes in 5.0.0: use inkLightness, the OKLab step the ink moves to (0.52 on a light theme, 0.74 on a dark one).'),
+  },
+  { name: 'GlimTheme focusRing argument', files: DART, rewrite: dartFocusRing },
 ];
 
 const SKIP = new Set(['node_modules', 'dist', 'build', '.git']);
-const SOURCE = /\.(tsx?|jsx?|mjs|vue|css|scss)$/;
+const SOURCE = /\.(tsx?|jsx?|mjs|vue|css|scss|dart)$/;
 
 function* sources(dir) {
   for (const name of readdirSync(dir)) {

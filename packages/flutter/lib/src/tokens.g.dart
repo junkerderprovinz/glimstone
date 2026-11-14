@@ -3,6 +3,9 @@
 
 import 'package:flutter/material.dart';
 
+const _inkMixNote = 'Use inkLightness, the OKLab step the ink moves to. inkMix goes in 5.0.0.';
+const _focusRingNote = 'The ring is the accent ink, the focusRing getter on GlimDerived. The argument goes in 5.0.0.';
+
 /// The colours of one theme, as a [ThemeExtension] an app adds to its
 /// [ThemeData] and reads with `Theme.of(context).extension<GlimTheme>()`.
 @immutable
@@ -78,9 +81,12 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     required this.chartDiv5,
     required this.chartDiv6,
     required this.chartDiv7,
-    required this.inkLightness,
+    double? inkLightness,
+    @Deprecated(_inkMixNote) double? inkMix,
+    @Deprecated(_focusRingNote) Color? focusRing,
     this.shape = GlimShape.soft,
-  });
+  // ignore: deprecated_member_use_from_same_package
+  }) : inkLightness = inkLightness ?? (inkMix == null || inkMix >= 1 ? 0.74 : 0.52);
 
   final Color carbonBg;
   final Color carbonSidebar;
@@ -156,6 +162,11 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
   /// The OKLab lightness the accent's ink moves to, as in tokens.css: at most
   /// this on a light ramp, at least this on a dark one.
   final double inkLightness;
+
+  /// How much of the accent the ink kept against black before [inkLightness]:
+  /// 0.55 on a light theme, 1 on a dark one.
+  @Deprecated(_inkMixNote)
+  double get inkMix => inkLightness < 0.63 ? 0.55 : 1;
 
   /// The shape the user chose; it sets the radii of cards, controls and pills.
   final GlimShape shape;
@@ -456,6 +467,8 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     Color? chartDiv6,
     Color? chartDiv7,
     double? inkLightness,
+    @Deprecated(_inkMixNote) double? inkMix,
+    @Deprecated(_focusRingNote) Color? focusRing,
     GlimShape? shape,
   }) =>
       GlimTheme(
@@ -529,7 +542,8 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
         chartDiv5: chartDiv5 ?? this.chartDiv5,
         chartDiv6: chartDiv6 ?? this.chartDiv6,
         chartDiv7: chartDiv7 ?? this.chartDiv7,
-        inkLightness: inkLightness ?? this.inkLightness,
+        // ignore: deprecated_member_use_from_same_package
+        inkLightness: inkLightness ?? (inkMix == null ? this.inkLightness : (inkMix < 1 ? 0.52 : 0.74)),
         shape: shape ?? this.shape,
       );
 

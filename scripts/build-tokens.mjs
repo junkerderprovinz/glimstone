@@ -212,6 +212,8 @@ function dartTokens() {
   }
   const colours = Object.keys(dark).filter((k) => dartColor(dark[k]) && light[k] && dartColor(light[k]));
   const inkLightness = (theme) => Number(theme === light ? light["ink-l-light"] : light["ink-l-dark"]);
+  // The deprecated inkMix maps onto these: below 1 it asked for the light ramp's ink.
+  const steps = { light: inkLightness(light), dark: inkLightness(dark) };
 
   const metrics = [...tokensOf("layout"), ...tokensOf("button")]
     .filter(([k, t]) => /^(text|btn)-/.test(k) && px(t.$value) !== null)
@@ -234,21 +236,32 @@ function dartTokens() {
 
 import 'package:flutter/material.dart';
 
+const _inkMixNote = 'Use inkLightness, the OKLab step the ink moves to. inkMix goes in 5.0.0.';
+const _focusRingNote = 'The ring is the accent ink, the focusRing getter on GlimDerived. The argument goes in 5.0.0.';
+
 /// The colours of one theme, as a [ThemeExtension] an app adds to its
 /// [ThemeData] and reads with \`Theme.of(context).extension<GlimTheme>()\`.
 @immutable
 class GlimTheme extends ThemeExtension<GlimTheme> {
   const GlimTheme({
 ${fields.map((f) => `    required this.${f},`).join("\n")}
-    required this.inkLightness,
+    double? inkLightness,
+    @Deprecated(_inkMixNote) double? inkMix,
+    @Deprecated(_focusRingNote) Color? focusRing,
     this.shape = GlimShape.${defaultShape},
-  });
+  // ignore: deprecated_member_use_from_same_package
+  }) : inkLightness = inkLightness ?? (inkMix == null || inkMix >= 1 ? ${steps.dark} : ${steps.light});
 
 ${fields.map((f) => `  final Color ${f};`).join("\n")}
 
   /// The OKLab lightness the accent's ink moves to, as in tokens.css: at most
   /// this on a light ramp, at least this on a dark one.
   final double inkLightness;
+
+  /// How much of the accent the ink kept against black before [inkLightness]:
+  /// 0.55 on a light theme, 1 on a dark one.
+  @Deprecated(_inkMixNote)
+  double get inkMix => inkLightness < ${(steps.light + steps.dark) / 2} ? 0.55 : 1;
 
   /// The shape the user chose; it sets the radii of cards, controls and pills.
   final GlimShape shape;
@@ -273,11 +286,14 @@ ${palette(light)}
   GlimTheme copyWith({
 ${fields.map((f) => `    Color? ${f},`).join("\n")}
     double? inkLightness,
+    @Deprecated(_inkMixNote) double? inkMix,
+    @Deprecated(_focusRingNote) Color? focusRing,
     GlimShape? shape,
   }) =>
       GlimTheme(
 ${fields.map((f) => `        ${f}: ${f} ?? this.${f},`).join("\n")}
-        inkLightness: inkLightness ?? this.inkLightness,
+        // ignore: deprecated_member_use_from_same_package
+        inkLightness: inkLightness ?? (inkMix == null ? this.inkLightness : (inkMix < 1 ? ${steps.light} : ${steps.dark})),
         shape: shape ?? this.shape,
       );
 

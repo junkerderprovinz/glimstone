@@ -1911,6 +1911,8 @@ Deprecated today, all removed in 5.0.0:
 | `ToastViewport`'s `focusin` in Vue | 4.5.0 | `focus`, the name of React's handler. `glimstone-migrate` renames the listener. |
 | `ToastViewport`'s `focusout` in Vue | 4.5.0 | `blur`, the name of React's handler. `glimstone-migrate` renames the listener. |
 | `--ink-mix` | 4.5.0 | `--accent-ink`, the accent on the theme's OKLab ink step. `tokens.css` still sets `--ink-mix` to 100% on the dark ramps and 55% on the light one. `glimstone-migrate` turns `color-mix(in srgb, var(--accent) var(--ink-mix), black)` into `var(--accent-ink)` and the same mix of `--item-hue` into `var(--item-hue-glyph)`, and reports any other use. |
+| Flutter `GlimTheme.inkMix` | 4.5.0 | `inkLightness`. As an argument, an `inkMix` below 1 asks for the light ink step and 1 for the dark one, and it reads back as 0.55 or 1. `glimstone-migrate` rewrites a literal and reports the rest. |
+| Flutter `focusRing` argument of `GlimTheme` and `copyWith` | 4.5.0 | Nothing: the ring is the accent ink, the `focusRing` getter on `GlimDerived`. The argument is accepted and ignored, and `glimstone-migrate` removes it. |
 
 ## Adopting GlimStone in another app
 
