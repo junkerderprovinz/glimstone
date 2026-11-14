@@ -960,6 +960,16 @@ Help pages, release notes and a list of frequent questions are read, not set, an
 - **The keys are the APG accordion's**: Enter and Space open and close, the arrows move between rows, Home and End go to the first and the last.
 - **It moves on the control duration.** A collapsible's text grows open over `--motion-control-dur` and the chevron turns with it. At off and under reduced motion the text comes and goes at once.
 
+## Avatars
+
+`Avatar` is a person's picture, and their initials while it loads, when it fails or when there is none.
+
+- **The name is the accessible name**, in every state. The circle is `role="img"` named by it, and the picture and the initials beside it are hidden from a screen reader, so nobody hears "A L" for Ada Lovelace.
+- **Initials are the first letter of the first and the last word**, as capitals in the name's own script, and a letter built from several code points stays whole.
+- **It wears the shape of everything else**: `--radius-pill`, a circle in round and a square in square. A picture follows the shape engine ("Illustrations").
+- **A face is not activity**, so the initials stand on `--carbon-surface3` in the secondary text. Under rainbow a list of people may give each circle its palette position with `hueIndex`, and the initials then take that position's ink.
+- **Three sizes from the button heights**: `md` is `--btn-h` and `lg` is `--btn-h-key`, so an avatar stands level with the controls in its row. `sm` (1.5rem) fits a line of text.
+
 ## Narrow windows
 
 The web interface at phone width, beside "The bottom bar" that replaces the rail there.

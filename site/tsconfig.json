@@ -21,7 +21,8 @@
       "@glimstone/vue/Combobox": ["../packages/vue/src/entries/combobox.ts"],
       "@glimstone/vue/Slider": ["../packages/vue/src/entries/slider.ts"],
       "@glimstone/vue/Collapsible": ["../packages/vue/src/entries/collapsible.ts"],
-      "@glimstone/vue/Accordion": ["../packages/vue/src/entries/accordion.ts"]
+      "@glimstone/vue/Accordion": ["../packages/vue/src/entries/accordion.ts"],
+      "@glimstone/vue/Avatar": ["../packages/vue/src/entries/avatar.ts"]
     }
   },
   "include": ["src", "tests", "test", "vite.config.ts", "playwright.config.ts"]

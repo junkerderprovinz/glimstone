@@ -13,6 +13,7 @@ import { ColourEngine, LabelEngine, MotionEngine, ShapeEngine } from "./pages/en
 import { BusyRingPage, SkeletonRowPage } from "./pages/loading";
 import { PopoverPage, SheetPage } from "./pages/overlay";
 import { ListTablePage } from "./pages/lists";
+import { AvatarPage } from "./pages/display";
 import { AccordionPage, CollapsiblePage } from "./pages/reading";
 import {
   BadgePage,
@@ -77,6 +78,7 @@ const PAGES: Page[] = [
   { path: "/engines/motion", title: "Motion", group: "Engines", Comp: MotionEngine },
   { path: "/engines/label", title: "Label", group: "Engines", Comp: LabelEngine },
   { path: "/components/accordion", title: "Accordion", group: "Components", Comp: AccordionPage, tag: "Zag" },
+  { path: "/components/avatar", title: "Avatar", group: "Components", Comp: AvatarPage, tag: "Zag" },
   { path: "/components/badge", title: "Badge", group: "Components", Comp: BadgePage },
   { path: "/components/button", title: "Button", group: "Components", Comp: ButtonPage },
   { path: "/components/busy-ring", title: "BusyRing", group: "Components", Comp: BusyRingPage },

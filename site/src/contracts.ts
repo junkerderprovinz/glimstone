@@ -692,4 +692,12 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "collapsible-still", when: "Motion is off, or the system asks for reduced motion", then: "The text appears and goes at once." },
     ],
   },
+  Avatar: {
+    rows: [
+      { id: "avatar-name", when: "Always", then: "role=\"img\" named by the person's name, whether the picture or the initials show." },
+      { id: "avatar-fallback", when: "There is no picture, or it fails to load", then: "The initials show, the first letter of the first and the last name." },
+      { id: "avatar-image", when: "The picture has loaded", then: "It shows and the initials go." },
+      { id: "avatar-shape", when: "The shape setting changes", then: "Its corners follow it, a circle in round and none in square." },
+    ],
+  },
 };

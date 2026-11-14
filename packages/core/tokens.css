@@ -6131,3 +6131,48 @@ a:is(.glim-btn, .glim-icon-btn) { text-decoration: none; }
   .glim-collapsible > .glim-disclosure-content[data-state="open"] { animation: glim-disclose-in var(--motion-control-dur, 0s) ease-out; }
   .glim-collapsible > .glim-disclosure-content[data-state="closed"] { animation: glim-disclose-out var(--motion-control-dur, 0s) ease-in; }
 }
+
+/* Avatar: a person's picture in the shape of a pressable thing, or their
+   initials on the third surface. Under rainbow a list of people can give each
+   circle a hue of its own; the initials then take its ink. */
+@layer components {
+  .glim-avatar {
+    display: inline-grid;
+    place-items: center;
+    flex-shrink: 0;
+    overflow: hidden;
+    border-radius: var(--radius-pill);
+    background-color: var(--carbon-surface3);
+    color: var(--carbon-text-sub);
+    font-weight: 600;
+    line-height: 1;
+    user-select: none;
+  }
+  .glim-avatar > * { grid-area: 1 / 1; }
+  .glim-avatar--sm {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: var(--text-meta);
+  }
+  .glim-avatar--md {
+    width: var(--btn-h);
+    height: var(--btn-h);
+    font-size: var(--text-subline);
+  }
+  .glim-avatar--lg {
+    width: var(--btn-h-key);
+    height: var(--btn-h-key);
+    font-size: var(--text-body);
+  }
+  .glim-avatar--hued {
+    background-color: var(--accent);
+    color: var(--accent-contrast);
+  }
+  .glim-avatar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .glim-avatar-image[hidden],
+  .glim-avatar-fallback[hidden] { display: none; }
+}

@@ -2,6 +2,7 @@ export * from "./accordion.ts";
 export * from "./announce.ts";
 export * from "./appearance.ts";
 export * from "./appMarks.ts";
+export * from "./avatar.ts";
 export * from "./badge.ts";
 export * from "./browserAccent.ts";
 export * from "./bubblePosition.ts";

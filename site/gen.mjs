@@ -63,6 +63,7 @@ const COMPONENTS = {
   ListTable: "react/ListTable.tsx",
   Collapsible: "react/Collapsible.tsx",
   Accordion: "react/Accordion.tsx",
+  Avatar: "react/Avatar.tsx",
 };
 
 const clean = (s) => s.replace(/\s+/g, " ").trim();

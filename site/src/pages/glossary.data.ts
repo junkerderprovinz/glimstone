@@ -1136,6 +1136,18 @@ export const GLOSSARY: GlossarySection[] = [
           de: "Eine Zeile, die einen Absatz darunter öffnet, für Text, den man einmal liest.",
         },
       },
+      {
+        id: "avatar",
+        en: "Avatar",
+        de: "Avatar",
+        proposal: true,
+        code: ["Avatar", ".glim-avatar"],
+        components: ["Avatar"],
+        text: {
+          en: "A person's picture, or their initials while it loads or when there is none. The name is what a screen reader hears.",
+          de: "Das Bild einer Person, oder ihre Initialen, solange es lädt oder wenn es keines gibt. Ein Screenreader hört den Namen.",
+        },
+      },
     ],
   },
 ];
