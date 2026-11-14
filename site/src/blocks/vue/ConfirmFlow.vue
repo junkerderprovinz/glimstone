@@ -47,10 +47,10 @@ const trash = glyph("IconTrash");
       :toasts="toasts"
       dismiss-label="Dismiss"
       @dismiss="(id: string) => (toasts = removeToast(toasts, id))"
-      @enter="(id: string) => (toasts = pauseToast(toasts, id, Date.now()))"
-      @leave="(id: string) => (toasts = resumeToast(toasts, id, Date.now()))"
-      @focusin="(id: string) => (toasts = pauseToast(toasts, id, Date.now()))"
-      @focusout="(id: string) => (toasts = resumeToast(toasts, id, Date.now()))"
+      @mouse-enter="(id: string) => (toasts = pauseToast(toasts, id, Date.now()))"
+      @mouse-leave="(id: string) => (toasts = resumeToast(toasts, id, Date.now()))"
+      @focus="(id: string) => (toasts = pauseToast(toasts, id, Date.now()))"
+      @blur="(id: string) => (toasts = resumeToast(toasts, id, Date.now()))"
     />
   </div>
 </template>
