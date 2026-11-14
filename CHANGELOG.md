@@ -4,6 +4,8 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
+Solid and Svelte join React and Vue. `@glimstone/solid` and `@glimstone/svelte` carry every component under React's names, props and defaults and draw the same markup, so an app keeps its look in any of the four.
+
 React and Vue offer the same kit. Every component, hook and type has a twin of the same name in the other package, with the same props, defaults, events and markup, so an app can change its framework by changing its imports. A test compares both packages on every run and fails as soon as they drift apart, and a second one checks that each demo draws the same elements in both. The keyboard follows the WAI-ARIA Authoring Practices in a few more places, and every target on the demo pages is at least 24 pixels, as WCAG 2.2 asks.
 
 The focus ring reads on every ground it stands on, and a field's placeholder can be read on every field fill.
@@ -20,6 +22,10 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 
 ## ✨ Added
 
+- **`@glimstone/solid`**, the components for Solid: controlled values with `onChange` as in React, `JSX.Element` for markup, `@zag-js/solid` under `Select`, `Combobox` and `Slider`, which come from entries of their own.
+- **`@glimstone/svelte`**, the components for Svelte 5 with runes: `bind:value` and `bind:checked` beside React's callbacks, snippets for markup and glyphs, `@zag-js/svelte` under the select, combobox and slider.
+- **Four test runs.** Every contract row runs in a Playwright project per web framework, the twins test compares each demo's markup across all four, and `npm test` fails when a Solid or Svelte component names a prop or default React does not.
+- **`useDensity`** in React, Solid and Svelte, the twin of the Vue composable.
 - **Vue twins** of `AboutCard`, `CoffeeDialog`, `PaypalDialog`, `CryptoDonateDialog`, `DropdownListbox`, `WindowBar`, `ToastCard` and `PresenceBadges`, with `usePaypalButtons`, `useDialogKeys`, `usePortalHue` and `deviceGlyph`. Vue also exports the core's badge, button, selector and select types that React re-exports.
 - **React twins** of the Vue composables: `useRainbow`, `useHue`, `useShape`, `useMotion` and `useAccent`. Each returns the value and its setter, as `useState` does.
 - **`fromEnd` on `ContextMenu`** opens a menu with the focus on its last row, for an app's own menu bar.
