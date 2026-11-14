@@ -47,6 +47,10 @@
     "./PinInput": {
       "types": "./dist/entries/pininput.d.ts",
       "default": "./dist/PinInput.js"
+    },
+    "./TagsInput": {
+      "types": "./dist/entries/tagsinput.d.ts",
+      "default": "./dist/TagsInput.js"
     }
   },
   "files": [
@@ -68,6 +72,7 @@
     "@zag-js/pin-input": "^1.47.0",
     "@zag-js/select": "^1.46.0",
     "@zag-js/slider": "^1.46.0",
+    "@zag-js/tags-input": "^1.47.0",
     "@zag-js/vue": "^1.46.0",
     "vue": "^3.5.0"
   }

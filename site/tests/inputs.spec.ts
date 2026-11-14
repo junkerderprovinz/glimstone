@@ -78,3 +78,63 @@ test.describe("PinInput", () => {
     expect(first).toBeLessThan(last);
   });
 });
+
+test.describe("TagsInput", () => {
+  const field = (page: Page) => stage(page, "TagsInputLabels").getByRole("textbox", { name: "Labels", exact: true });
+  const tags = (page: Page) => stage(page, "TagsInputLabels").locator(".glim-tag-text");
+  const count = (page: Page) => stage(page, "TagsInputLabels").locator("span.glim-num");
+
+  test("[tags-add] Enter or a comma adds what was typed as a tag", async ({ page }) => {
+    await open(page, "/components/tags-input");
+    await field(page).fill("daily");
+    await page.keyboard.press("Enter");
+    await expect(tags(page)).toHaveText(["photos", "weekly", "daily"]);
+    await page.keyboard.type("offsite,");
+    await expect(tags(page)).toHaveText(["photos", "weekly", "daily", "offsite"]);
+    await expect(field(page)).toHaveValue("");
+    await expect(count(page)).toHaveText("4 labels");
+  });
+
+  test("[tags-remove] a tag's remove mark takes it away", async ({ page }) => {
+    await open(page, "/components/tags-input");
+    await stage(page, "TagsInputLabels").getByRole("button", { name: "Remove photos" }).click();
+    await expect(tags(page)).toHaveText(["weekly"]);
+  });
+
+  test("[tags-backspace] in an empty field Backspace picks the last tag, and again removes it", async ({ page }) => {
+    await open(page, "/components/tags-input");
+    await field(page).click();
+    await page.keyboard.press("Backspace");
+    await expect(stage(page, "TagsInputLabels").locator(".glim-tag[data-highlighted]")).toHaveText("weekly");
+    await page.keyboard.press("Backspace");
+    await expect(tags(page)).toHaveText(["photos"]);
+  });
+
+  test("[tags-arrows] the arrows walk the tags from the field", async ({ page }) => {
+    await open(page, "/components/tags-input");
+    await field(page).click();
+    await page.keyboard.press("ArrowLeft");
+    await expect(stage(page, "TagsInputLabels").locator(".glim-tag[data-highlighted]")).toHaveText("weekly");
+    await page.keyboard.press("ArrowLeft");
+    await expect(stage(page, "TagsInputLabels").locator(".glim-tag[data-highlighted]")).toHaveText("photos");
+    await page.keyboard.press("Delete");
+    await expect(tags(page)).toHaveText(["weekly"]);
+  });
+
+  test("[tags-paste] a pasted list becomes one tag per entry", async ({ page }) => {
+    await open(page, "/components/tags-input");
+    await page.context().grantPermissions(["clipboard-read", "clipboard-write"]);
+    await page.evaluate(() => navigator.clipboard.writeText("music,videos"));
+    await field(page).focus();
+    await page.keyboard.press("ControlOrMeta+V");
+    await expect(tags(page)).toHaveText(["photos", "weekly", "music", "videos"]);
+  });
+
+  test("[tags-ground] a tag stands one surface step above the field", async ({ page }) => {
+    await open(page, "/components/tags-input");
+    const ground = (sel: string) => stage(page, "TagsInputLabels").locator(sel).first().evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(await ground(".glim-tag")).not.toBe(await ground(".glim-tags-control"));
+    await field(page).click();
+    expect(await ground(".glim-tag")).not.toBe(await ground(".glim-tags-control"));
+  });
+});

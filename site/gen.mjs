@@ -66,6 +66,7 @@ const COMPONENTS = {
   Avatar: "react/Avatar.tsx",
   Pagination: "react/Pagination.tsx",
   PinInput: "react/PinInput.tsx",
+  TagsInput: "react/TagsInput.tsx",
 };
 
 const clean = (s) => s.replace(/\s+/g, " ").trim();

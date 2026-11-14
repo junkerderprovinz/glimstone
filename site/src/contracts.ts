@@ -721,4 +721,14 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "pin-ltr", when: "The page runs right to left", then: "The boxes still run left to right, since a code is data." },
     ],
   },
+  TagsInput: {
+    rows: [
+      { id: "tags-add", keys: ["Enter", ","], when: "Something is typed in the field", then: "It becomes a tag at the end, and the field empties." },
+      { id: "tags-remove", when: "A tag's remove mark is pressed", then: "That tag goes. The mark is a button named \"Remove\" and the tag." },
+      { id: "tags-backspace", keys: ["Backspace"], when: "The field is empty", then: "The last tag is picked and takes the accent, and a second Backspace removes it." },
+      { id: "tags-arrows", keys: ["ArrowLeft", "ArrowRight", "Delete"], when: "The field is empty, or a tag is picked", then: "The arrows pick the tag before or after, and Delete removes the picked one." },
+      { id: "tags-paste", when: "A list is pasted into the field", then: "Each entry becomes a tag." },
+      { id: "tags-ground", when: "Always, with focus too", then: "A tag's fill is one surface step away from the field's, so it never vanishes into it." },
+    ],
+  },
 };

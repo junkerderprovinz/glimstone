@@ -623,6 +623,19 @@ export const GLOSSARY: GlossarySection[] = [
           de: "Ein kurzer Code, ein Zeichen je Kästchen. Ein eingefügter Code füllt alle Kästchen, und sie laufen in jeder Sprache von links nach rechts.",
         },
       },
+      {
+        id: "tags-input",
+        en: "Tags input",
+        de: "Schlagwortfeld",
+        proposal: true,
+        code: ["TagsInput", ".glim-tags", ".glim-tag"],
+        components: ["TagsInput"],
+        rules: [14, 21],
+        text: {
+          en: "A field that turns what is typed into tags. Enter or a comma adds one, and each tag carries its own remove mark.",
+          de: "Ein Feld, das Getipptes zu Schlagwörtern macht. Enter oder ein Komma fügt eines hinzu, und jedes trägt sein eigenes Entfernen-Zeichen.",
+        },
+      },
     ],
   },
   {

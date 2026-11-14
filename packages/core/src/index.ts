@@ -51,6 +51,7 @@ export * from "./signIn.ts";
 export * from "./storage.ts";
 export * from "./tipBubble.ts";
 export * from "./table.ts";
+export * from "./tagsInput.ts";
 export * from "./theme.ts";
 export * from "./toastEngine.ts";
 export * from "./tooltip.ts";

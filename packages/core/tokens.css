@@ -6241,3 +6241,104 @@ a:is(.glim-btn, .glim-icon-btn) { text-decoration: none; }
   }
   .glim-pin-cell:disabled { cursor: not-allowed; }
 }
+
+/* TagsInput: the field's fill with the tags as pills inside it, each one
+   surface step above the field so it never vanishes into it, also in a well
+   and while the field has focus. A tag the arrow keys picked takes the
+   accent, since the next Backspace removes it. */
+@layer components {
+  .glim-tags {
+    display: grid;
+    gap: 0.375rem;
+    min-width: 0;
+  }
+  .glim-tags-control {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem;
+    min-height: var(--btn-h);
+    padding: 0.25rem;
+    border-radius: var(--radius-control);
+    background-color: var(--carbon-surface2);
+    cursor: text;
+    --tag-ground: var(--carbon-surface3);
+  }
+  .glim-tags-control:focus-within {
+    background-color: var(--carbon-surface3);
+    --tag-ground: var(--carbon-hover-raised);
+  }
+  :is(.glim-well, .glim-subcard) .glim-tags-control {
+    background-color: var(--carbon-surface3);
+    --tag-ground: var(--carbon-hover-raised);
+  }
+  :is(.glim-well, .glim-subcard) .glim-tags-control:focus-within {
+    background-color: var(--carbon-hover-raised);
+    --tag-ground: var(--carbon-surface3);
+  }
+  .glim-tags-control[data-disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .glim-tag-item {
+    display: inline-flex;
+    min-width: 0;
+  }
+  .glim-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.125rem;
+    max-width: 100%;
+    height: 1.5rem;
+    padding-inline: 0.55rem 0.125rem;
+    border-radius: var(--radius-pill);
+    background-color: var(--tag-ground);
+    color: var(--carbon-text);
+    font-size: var(--text-subline);
+  }
+  .glim-tag[data-highlighted] {
+    background-color: var(--accent);
+    color: var(--accent-contrast);
+  }
+  .glim-tag-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .glim-tag-remove {
+    display: inline-grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background-color: transparent;
+    color: inherit;
+    cursor: pointer;
+  }
+  .glim-tag-remove svg {
+    width: 0.625rem;
+    height: 0.625rem;
+  }
+  .glim-tag:not([data-highlighted]) .glim-tag-remove:hover { color: var(--accent-glyph); }
+  .glim-tag-remove:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 1px;
+  }
+  .glim-tag-edit[hidden] { display: none; }
+  .glim-tags-input {
+    flex: 1;
+    min-width: 6rem;
+    height: 1.5rem;
+    padding-inline: 0.375rem;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: var(--text-body);
+    outline: none;
+  }
+  .glim-tags-input::placeholder { color: var(--carbon-text-muted); }
+}

@@ -988,6 +988,15 @@ Help pages, release notes and a list of frequent questions are read, not set, an
 - **A code is data**, so the boxes run left to right under a right-to-left language too ("Right-to-left languages").
 - **Each box has a name of its own**, "Character 2 of 6" by default, under the label of the whole. `text.cell` takes the app's words. `mask` draws dots for a secret, and `otp` lets a phone offer the code it just received.
 
+## Tags
+
+`TagsInput` is a field that turns what is typed into tags: the labels of a backup, the addresses a notice goes to, the folders an exclusion names.
+
+- **It is a field** (rule 14): borderless, filled, a step up the ramp while it has focus. The tags stand inside it as pills, and each tag is one surface step away from the field's fill in every state, on a card and in a well alike, so a tag never sits on its own colour ("A compact selector's groove").
+- **Enter or a comma adds a tag, and so does leaving the field.** A pasted list becomes one tag per entry. `max` caps the count, and the same tag twice is refused unless `allowDuplicates` is set.
+- **Backspace in an empty field picks the last tag**, which takes the accent because the next press removes it. The arrows walk the tags and Delete removes the picked one. Each tag also carries a remove mark, a bare glyph button that turns to the accent under the pointer (rule 40).
+- **A screen reader hears every change**, a tag added, picked or removed, through Zag's live region in the words `text` passes.
+
 ## Narrow windows
 
 The web interface at phone width, beside "The bottom bar" that replaces the rail there.
