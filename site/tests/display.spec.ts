@@ -3,8 +3,6 @@ import { open, relook, stage } from "./page";
 
 // The rows of Avatar, Timer, Marquee, HoverCard and Carousel, each named after its contract row.
 
-test.beforeEach(({}, info) => test.skip(!["react", "vue"].includes(info.project.name), "React and Vue only so far"));
-
 test.describe("Avatar", () => {
   const person = (page: Page, name: string) => stage(page, "AvatarPeople").getByRole("img", { name, exact: true });
 
