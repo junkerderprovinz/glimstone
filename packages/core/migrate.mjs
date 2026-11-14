@@ -12,9 +12,9 @@ import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-/** Each opening `<Badge ...>` tag in a JSX or Vue source, with where it starts and ends. */
-function* badgeTags(text) {
-  for (const m of text.matchAll(/<Badge(?=[\s/>])/g)) {
+/** Each opening `<Name ...>` tag in a JSX or Vue source, with where it starts and ends. */
+function* tags(text, name) {
+  for (const m of text.matchAll(new RegExp(`<${name}(?=[\\s/>])`, 'g'))) {
     let depth = 0;
     let quote = '';
     for (let i = m.index + m[0].length; i < text.length; i++) {
@@ -38,7 +38,7 @@ const SHAPE = /(\s+)(:?)shape=(?:"([^"]*)"|'([^']*)'|\{\s*["']([^"']*)["']\s*\}|
 function badgeShape(text) {
   let out = '';
   let at = 0;
-  for (const { start, end } of badgeTags(text)) {
+  for (const { start, end } of tags(text, 'Badge')) {
     const tag = text.slice(start, end);
     const m = SHAPE.exec(tag);
     if (!m) continue;
@@ -54,12 +54,26 @@ function badgeShape(text) {
 
 function badgeShapeLeft(text) {
   const left = [];
-  for (const { start, end } of badgeTags(text)) {
+  for (const { start, end } of tags(text, 'Badge')) {
     if (/\s(:shape=|shape=\{(?!\s*["'][^"']*["']\s*\}))/.test(text.slice(start, end))) {
       left.push({ index: start, note: 'Badge shape set from an expression: set form="circle" where it is "circle" and drop it otherwise.' });
     }
   }
   return left;
+}
+
+/** A Vue listener on ToastViewport for the old event name becomes one for the new name. */
+function toastEvent(from, to) {
+  const listener = new RegExp(`(\\s(?:@|v-on:))${from}(?=[.=\\s/>])`, 'g');
+  return (text) => {
+    let out = '';
+    let at = 0;
+    for (const { start, end } of tags(text, 'ToastViewport')) {
+      out += text.slice(at, start) + text.slice(start, end).replace(listener, `$1${to}`);
+      at = end;
+    }
+    return out + text.slice(at);
+  };
 }
 
 function firstUse(name, note) {
@@ -71,6 +85,10 @@ export const TRANSFORMS = [
   { name: 'BadgeShape', rewrite: (text) => text.replace(/\bBadgeShape\b/g, 'BadgeForm') },
   { name: 'AboutCard', report: firstUse('AboutCard', "AboutCard goes in 5.0.0: move to InfoTile by hand, which adds the version rows' sub-lines, the other components, Check for updates and the bug report.") },
   { name: 'DropdownListbox', report: firstUse('DropdownListbox', 'DropdownListbox goes in 5.0.0: move to Select by hand, which keeps focus on its trigger.') },
+  { name: 'ToastViewport enter', rewrite: toastEvent('enter', 'mouse-enter') },
+  { name: 'ToastViewport leave', rewrite: toastEvent('leave', 'mouse-leave') },
+  { name: 'ToastViewport focusin', rewrite: toastEvent('focusin', 'focus') },
+  { name: 'ToastViewport focusout', rewrite: toastEvent('focusout', 'blur') },
 ];
 
 const SKIP = new Set(['node_modules', 'dist', 'build', '.git']);

@@ -22,7 +22,7 @@ function run(root: string, ...flags: string[]) {
   return { status: r.status, out: r.stdout + r.stderr };
 }
 
-for (const file of ['Status.tsx', 'Status.vue']) {
+for (const file of ['Status.tsx', 'Status.vue', 'Toasts.vue']) {
   test(`${file} is rewritten to the current names`, () => {
     const root = app();
     assert.equal(run(root).status, 0);
