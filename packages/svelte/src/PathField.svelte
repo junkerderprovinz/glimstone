@@ -31,6 +31,7 @@
 </script>
 
 <script lang="ts">
+  import { tick } from "svelte";
   import { fieldWidthClass, PATH_ROOM_PX } from "@glimstone/core";
   import Button from "./Button.svelte";
   import { useFieldName } from "./fieldName.js";
@@ -74,6 +75,9 @@
 
   async function ask() {
     const answer = await pick(value);
+    // The picker's window gives the focus back to the button as it leaves,
+    // which in Svelte happens after the answer arrives, so the field waits for it.
+    await tick();
     ref?.focus();
     if (!answer) return;
     set(answer);
