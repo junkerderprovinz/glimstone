@@ -1040,6 +1040,15 @@ Help pages, release notes and a list of frequent questions are read, not set, an
 - **Back and Next stand in the foot, at the end**, as every card's own buttons do ("Page actions"). Both follow the label mode. On the last step Next turns into Finish and calls `onFinish`. Both stay secondary, since the view's one filled button is the page's or the window's.
 - **The words are the app's**: `text` takes Back, Next and Finish.
 
+## Splitters
+
+`Splitter` sets two or more panels side by side, or one above the other, with a handle between each pair: a list beside its preview, a tree beside its folder.
+
+- **A hairline marks the seam** (rule 5), and a short grip in the middle of it takes the accent while the handle is hovered, focused or dragged, the moment somebody acts on it. At rest it is the third surface. The handle is 24px across, the smallest target WCAG 2.2 allows, with the hairline in its middle.
+- **The keys are the APG window splitter's.** Each handle is a separator named by `text.resize`, with the size of the panel before it as its value. The arrows move the seam a step and Shift ten, and Home and End take it as far as the panels' `minSize` and `maxSize` allow.
+- **The sizes belong to the app**, in percent, through `size` and `onSizeChange`. An app keeps them per device, like the order of a list ("Reordering by dragging").
+- **In a Windows contrast theme** the hairline and the grip take the button text colour, and a grip in use the selection colour (rule 46).
+
 ## Narrow windows
 
 The web interface at phone width, beside "The bottom bar" that replaces the rail there.

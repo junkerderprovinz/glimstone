@@ -68,6 +68,7 @@ const COMPONENTS = {
   PinInput: "react/PinInput.tsx",
   TagsInput: "react/TagsInput.tsx",
   Steps: "react/Steps.tsx",
+  Splitter: "react/Splitter.tsx",
 };
 
 const clean = (s) => s.replace(/\s+/g, " ").trim();

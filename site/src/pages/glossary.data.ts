@@ -83,6 +83,19 @@ export const GLOSSARY: GlossarySection[] = [
           de: "Steht dort, wo eine Liste noch nichts hat oder ein Filter nichts findet. Beide Fälle bekommen ihren eigenen Satz, damit niemand einen Filter sucht, den es nicht gibt.",
         },
       },
+      {
+        id: "splitter",
+        en: "Splitter",
+        de: "Teiler",
+        proposal: true,
+        code: ["Splitter", ".glim-splitter", ".glim-splitter-handle"],
+        components: ["Splitter"],
+        rules: [5],
+        text: {
+          en: "Panels side by side with a handle between them that moves the seam, by pointer or the arrow keys.",
+          de: "Bereiche nebeneinander mit einem Griff dazwischen, der die Naht verschiebt, mit dem Zeiger oder den Pfeiltasten.",
+        },
+      },
     ],
   },
   {

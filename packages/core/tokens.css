@@ -6583,6 +6583,63 @@
   }
 }
 
+/* Splitter: a hairline marks each seam, and a grip on it takes the accent
+   while the handle is hovered, focused or dragged, since that is the moment
+   somebody acts on it. The handle is 24px across, the smallest target WCAG
+   2.2 allows, with the hairline in its middle. */
+@layer components {
+  .glim-splitter { min-height: 0; }
+  .glim-splitter-panel {
+    min-width: 0;
+    min-height: 0;
+    overflow: auto;
+  }
+  .glim-splitter-handle {
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex: none;
+    outline: none;
+  }
+  .glim-splitter-handle[data-orientation="horizontal"] { width: var(--space-10); }
+  .glim-splitter-handle[data-orientation="vertical"] { height: var(--space-10); }
+  .glim-splitter-handle::before {
+    content: "";
+    position: absolute;
+    background-color: color-mix(in srgb, var(--carbon-border) 60%, transparent);
+  }
+  .glim-splitter-handle[data-orientation="horizontal"]::before {
+    inset-block: 0;
+    inset-inline-start: calc(50% - 0.5px);
+    width: 1px;
+  }
+  .glim-splitter-handle[data-orientation="vertical"]::before {
+    inset-inline: 0;
+    top: calc(50% - 0.5px);
+    height: 1px;
+  }
+  .glim-splitter-grip {
+    position: relative;
+    border-radius: var(--radius-pill);
+    background-color: var(--carbon-surface3);
+  }
+  .glim-splitter-handle[data-orientation="horizontal"] .glim-splitter-grip {
+    width: var(--space-2);
+    height: var(--space-13);
+  }
+  .glim-splitter-handle[data-orientation="vertical"] .glim-splitter-grip {
+    width: var(--space-13);
+    height: var(--space-2);
+  }
+  .glim-splitter-handle:hover .glim-splitter-grip,
+  .glim-splitter-grip:is([data-focus], [data-dragging]) { background-color: var(--accent); }
+  .glim-splitter-handle:focus-visible .glim-splitter-grip {
+    outline: var(--focus-ring-width) solid var(--focus-ring);
+    outline-offset: var(--space-1);
+  }
+  .glim-splitter-grip[data-disabled] { background-color: var(--carbon-surface2); }
+}
+
 /* The contrast step and the Windows contrast themes for the components on the
    Zag machines, written like the rules for the older ones above: an edge on
    every field and pressable part, and the selection colours on what is chosen
@@ -6607,5 +6664,10 @@
       background-color: CanvasText;
     }
     .glim-tags-control[data-disabled] { border-color: GrayText; }
+    :is(.glim-splitter-grip, .glim-splitter-handle::before) {
+      forced-color-adjust: none;
+      background-color: ButtonText;
+    }
+    .glim-splitter-grip:is([data-focus], [data-dragging]) { background-color: Highlight; }
   }
 }

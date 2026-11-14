@@ -14,6 +14,7 @@ import { ColourEngine, DensityEngine, LabelEngine, MotionEngine, ShapeEngine } f
 import { BusyRingPage, SkeletonRowPage } from "./pages/loading";
 import { PopoverPage, SheetPage } from "./pages/overlay";
 import { ListTablePage } from "./pages/lists";
+import { SplitterPage } from "./pages/layout";
 import { PinInputPage, TagsInputPage } from "./pages/inputs";
 import { PaginationPage, StepsPage } from "./pages/navigation";
 import { AvatarPage } from "./pages/display";
@@ -125,6 +126,7 @@ const PAGES: Page[] = [
   { path: "/components/sign-in-card", title: "SignInCard", group: "Components", Comp: SignInCardPage },
   { path: "/components/skeleton-row", title: "SkeletonRow", group: "Components", Comp: SkeletonRowPage },
   { path: "/components/slider", title: "Slider", group: "Components", Comp: SliderPage, tag: "Zag" },
+  { path: "/components/splitter", title: "Splitter", group: "Components", Comp: SplitterPage, tag: "Zag" },
   { path: "/components/steps", title: "Steps", group: "Components", Comp: StepsPage, tag: "Zag" },
   { path: "/components/sub-card", title: "SubCard", group: "Components", Comp: SubCardPage },
   { path: "/components/tags-input", title: "TagsInput", group: "Components", Comp: TagsInputPage, tag: "Zag" },

@@ -26,7 +26,8 @@
       "@glimstone/vue/Pagination": ["../packages/vue/src/entries/pagination.ts"],
       "@glimstone/vue/PinInput": ["../packages/vue/src/entries/pininput.ts"],
       "@glimstone/vue/TagsInput": ["../packages/vue/src/entries/tagsinput.ts"],
-      "@glimstone/vue/Steps": ["../packages/vue/src/entries/steps.ts"]
+      "@glimstone/vue/Steps": ["../packages/vue/src/entries/steps.ts"],
+      "@glimstone/vue/Splitter": ["../packages/vue/src/entries/splitter.ts"]
     }
   },
   "include": ["src", "tests", "test", "vite.config.ts", "playwright.config.ts"]

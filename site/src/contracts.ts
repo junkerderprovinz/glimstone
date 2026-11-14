@@ -743,4 +743,14 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "steps-one-stop", keys: ["Tab"], when: "The focus enters the row", then: "It lands on the step in force, so the row is one stop." },
     ],
   },
+  Splitter: {
+    pattern: { name: "Window Splitter", url: `${APG}windowsplitter/` },
+    rows: [
+      { id: "splitter-role", when: "Always", then: "Each handle is a focusable separator named by text.resize, with aria-valuenow, -min and -max for the panel before it." },
+      { id: "splitter-arrows", keys: ["ArrowLeft", "ArrowRight", "Shift"], when: "A handle has focus", then: "The seam moves a step, ten with Shift, and the sizes reach onSizeChange." },
+      { id: "splitter-ends", keys: ["Home", "End"], when: "A handle has focus", then: "The seam goes as far as the panels' limits allow." },
+      { id: "splitter-drag", when: "A handle is dragged", then: "The seam follows the pointer." },
+      { id: "splitter-accent", when: "A handle is hovered, focused or dragged", then: "Its grip takes the accent." },
+    ],
+  },
 };
