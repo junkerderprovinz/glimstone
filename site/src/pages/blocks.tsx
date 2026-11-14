@@ -100,8 +100,8 @@ export function BlocksPage() {
   return (
     <>
       <p className="lead">
-        Whole page parts, put together from the components the way an app puts them together. Each one runs here as it
-        would in an app, in every framework, and its code copies in one click.
+        Page parts built from the components the way an app builds them. Each one runs here as it would in an app, in
+        React and in Vue, and its code copies with one click.
       </p>
       {BLOCKS.map((b) => (
         <Fragment key={b.name}>

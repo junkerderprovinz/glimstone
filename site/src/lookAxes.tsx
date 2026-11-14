@@ -40,7 +40,7 @@ export const LOOK_AXES: LookAxis[] = [
   {
     id: "accent",
     label: "Accent",
-    hint: "Marks what is active or chosen. The ink on it is worked out to stay readable.",
+    hint: "The colour of what is active or chosen. Text on it is picked so it stays readable.",
     Control: AccentControl,
     root: (l) => {
       const fill = hex(l.accent);
@@ -60,7 +60,7 @@ export const LOOK_AXES: LookAxis[] = [
   {
     id: "rainbow",
     label: "Rainbow",
-    hint: "Hands every card and selector a colour of its own. Reactive keeps them grey until the pointer comes.",
+    hint: "Gives every card and selector a colour of its own. Reactive keeps them grey until the pointer reaches them.",
     Control: RainbowControl,
     root: (l) => (l.rainbow === "off" ? [] : [["data-rainbow", l.rainbow]]),
     store: (l) => ({ rainbow: l.rainbow !== "off", rainbowReactive: l.rainbow === "reactive" }),
