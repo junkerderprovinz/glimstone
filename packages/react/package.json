@@ -19,10 +19,12 @@
     "@glimstone/core": "4.4.1"
   },
   "peerDependencies": {
+    "@internationalized/date": "^3.12.4",
     "@zag-js/accordion": "^1.47.0",
     "@zag-js/avatar": "^1.47.0",
     "@zag-js/collapsible": "^1.47.0",
     "@zag-js/combobox": "^1.46.0",
+    "@zag-js/date-picker": "^1.47.0",
     "@zag-js/file-upload": "^1.47.0",
     "@zag-js/menu": "^1.46.0",
     "@zag-js/pagination": "^1.47.0",

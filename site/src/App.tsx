@@ -15,7 +15,7 @@ import { BusyRingPage, SkeletonRowPage } from "./pages/loading";
 import { PopoverPage, SheetPage } from "./pages/overlay";
 import { ListTablePage } from "./pages/lists";
 import { ScrollAreaPage, SplitterPage } from "./pages/layout";
-import { FileUploadPage, PinInputPage, TagsInputPage } from "./pages/inputs";
+import { DatePickerPage, FileUploadPage, PinInputPage, TagsInputPage } from "./pages/inputs";
 import { PaginationPage, StepsPage } from "./pages/navigation";
 import { AvatarPage } from "./pages/display";
 import { AccordionPage, CollapsiblePage } from "./pages/reading";
@@ -96,6 +96,7 @@ const PAGES: Page[] = [
   { path: "/components/confirm-dialog", title: "ConfirmDialog", group: "Components", Comp: ConfirmDialogPage },
   { path: "/components/context-menu", title: "ContextMenu", group: "Components", Comp: ContextMenuPage },
   { path: "/components/copy-field", title: "CopyField", group: "Components", Comp: CopyFieldPage },
+  { path: "/components/date-picker", title: "DatePicker", group: "Components", Comp: DatePickerPage, tag: "Zag" },
   { path: "/components/dropdown-listbox", title: "DropdownListbox", group: "Components", Comp: DropdownPage, tag: "Old" },
   { path: "/components/empty-state", title: "EmptyState", group: "Components", Comp: EmptyStatePage },
   { path: "/components/field-row", title: "FieldRow", group: "Components", Comp: FieldRowPage },

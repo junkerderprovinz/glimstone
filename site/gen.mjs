@@ -71,6 +71,7 @@ const COMPONENTS = {
   Splitter: "react/Splitter.tsx",
   ScrollArea: "react/ScrollArea.tsx",
   FileUpload: "react/FileUpload.tsx",
+  DatePicker: "react/DatePicker.tsx",
 };
 
 const clean = (s) => s.replace(/\s+/g, " ").trim();

@@ -83,3 +83,30 @@ export function FileUploadPage() {
     </>
   );
 }
+
+export function DatePickerPage() {
+  return (
+    <>
+      <p className="lead">A day picked from a calendar, such as the day a backup is kept until.</p>
+      <MachineNote file="react/DatePicker.tsx" machine="date-picker" />
+      <Demo name="DatePickerKeep" />
+      <Code
+        code={`import { DatePicker } from "@glimstone/react/DatePicker";
+
+<DatePicker label="Keep until" value={day} onChange={setDay} min="2026-11-05" />`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>The trigger is a field that shows the day and takes no typing, as the time picker's does.</li>
+        <li>The calendar floats beside it on the body, so no card clips it, and opens on the chosen day.</li>
+        <li>The chosen day is filled with the accent, today carries the accent's ink, and a day outside min and max is struck through.</li>
+        <li>The head steps out to the months and the years, so a date far away is three presses, not thirty.</li>
+        <li>A day travels as "2026-11-14", and the calendar speaks the page's language unless <code>locale</code> names another.</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="DatePicker" />
+      <H2>API</H2>
+      <PropsTable of="DatePicker" />
+    </>
+  );
+}

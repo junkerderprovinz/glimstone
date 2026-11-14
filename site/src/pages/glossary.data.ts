@@ -479,6 +479,19 @@ export const GLOSSARY: GlossarySection[] = [
           de: "Eine Aufgabe in benannten Schritten. Der aktuelle Schritt trägt den Akzent, ein erledigter ein Häkchen, Zurück und Weiter stehen im Fuß.",
         },
       },
+      {
+        id: "date-picker",
+        en: "Date picker",
+        de: "Datumswähler",
+        proposal: true,
+        code: ["DatePicker", ".glim-date", ".glim-date-cell"],
+        components: ["DatePicker"],
+        rules: [14, 18],
+        text: {
+          en: "A day picked from a calendar. The trigger shows the day and takes no typing, and the chosen day takes the accent.",
+          de: "Ein Tag aus einem Kalender. Der Auslöser zeigt den Tag und nimmt keine Eingabe, der gewählte Tag trägt den Akzent.",
+        },
+      },
     ],
   },
   {

@@ -1067,6 +1067,16 @@ Help pages, release notes and a list of frequent questions are read, not set, an
 - **A refused file is named with its reason**, a line in the fault colour under the list, such as "photo.png is not a kind of file this takes". `accept`, `maxFiles` and `maxFileSize` decide, and `text.refused` takes the app's words for each reason.
 - **It hands the files over and nothing else.** Where the app then writes them, its window says first (rule 25).
 
+## The date picker
+
+`DatePicker` picks a day from a calendar: the day a backup is kept until, the first day of a report. Like "The time picker" it replaces the browser's `<input type="date">`, whose calendar is the operating system's (rule 18).
+
+- **The trigger shows the day and takes no typing.** It is a field, borderless and filled (rule 14), with the calendar glyph at its end, and it reads the day in the page's language, "20 Nov 2026" or "20.11.2026". A screen reader hears the label and the day.
+- **The calendar floats beside it on the body** at the float step, so no card or scroll box clips it, and it opens on the chosen day. It keeps the trigger's rainbow position, as a select's list does.
+- **The chosen day is filled with the accent** (rule 3), today carries the accent's ink, a day of the month before or after is muted, and a day outside `min` and `max` is struck through and cannot be chosen.
+- **The keys are the APG date picker dialog's**: the arrows move a day or a week, Page Up and Page Down a month, Enter chooses and Escape closes, and both give the focus back to the trigger. The month in the head steps out to the months of the year and the year to a span of years, so a date far away is three presses.
+- **A day travels as an ISO day**, "2026-11-14", so an app stores and sends it as it is and never handles the machine's date objects. The calendar speaks the page's language unless `locale` names another, and `text` takes the words of its buttons.
+
 ## Narrow windows
 
 The web interface at phone width, beside "The bottom bar" that replaces the rail there.

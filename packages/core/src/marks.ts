@@ -112,6 +112,12 @@ export const MARKS = {
     size: 16,
     body: '<path fill-rule="evenodd" d="M7 14A7 7 0 1 0 7 0a7 7 0 0 0 0 14Zm3.146 -8.31L7.353 2.895a0.5 0.5 0 0 0 -0.707 0L3.854 5.69a0.5 0.5 0 0 0 0.353 0.854H6l0 3.707a1 1 0 0 0 2 0l0 -3.707h1.793a0.5 0.5 0 0 0 0.353 -0.854Z" clip-rule="evenodd" stroke-width="1"></path>',
   },
+  /** `IconCalendar` from the assortment: the end of a date field. */
+  calendar: {
+    viewBox: "0.625 0.5 12.75 12.75",
+    size: 14,
+    body: '<path fill-rule="evenodd" d="M2.25 2H11.75A1.5 1.5 0 0 1 13.25 3.5V11.75A1.5 1.5 0 0 1 11.75 13.25H2.25A1.5 1.5 0 0 1 0.75 11.75V3.5A1.5 1.5 0 0 1 2.25 2ZM3.25 0.5H4.5V2H3.25ZM9.5 0.5H10.75V2H9.5ZM2.25 6H4.75V8.25H2.25ZM5.75 6H8.25V8.25H5.75ZM9.25 6H11.75V8.25H9.25ZM2.25 9.5H4.75V11.75H2.25ZM5.75 9.5H8.25V11.75H5.75Z"></path>',
+  },
 } satisfies Record<string, Mark>;
 
 // The toast's severity as filled shapes (design-language.md, "Icon glyphs"). The

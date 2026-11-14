@@ -187,3 +187,92 @@ test.describe("FileUpload", () => {
     await expect(zone(page)).not.toHaveAttribute("data-dragging", "");
   });
 });
+
+test.describe("DatePicker", () => {
+  const trigger = (page: Page) => stage(page, "DatePickerKeep").locator(".glim-date-trigger");
+  const panel = (page: Page) => page.locator(".glim-date-panel");
+  const focusedDay = (page: Page) => page.evaluate(() => document.activeElement?.getAttribute("data-value"));
+  const caption = (page: Page) => stage(page, "DatePickerKeep").getByText(/^Kept /);
+
+  async function openIt(page: Page) {
+    await open(page, "/components/date-picker");
+    await trigger(page).focus();
+    await page.keyboard.press("Enter");
+    await expect(panel(page)).toBeVisible();
+  }
+
+  test("[date-trigger] the trigger is a field that shows the day and is named by the label", async ({ page }) => {
+    await open(page, "/components/date-picker");
+    await expect(trigger(page)).toHaveText("20 Nov 2026");
+    expect(await trigger(page).evaluate((el) => el.tagName)).toBe("BUTTON");
+    await expect(stage(page, "DatePickerKeep").getByRole("button", { name: /Keep until/ })).toHaveCount(1);
+  });
+
+  test("[date-open] Enter opens the calendar on the chosen day", async ({ page }) => {
+    await openIt(page);
+    await expect.poll(() => focusedDay(page)).toBe("2026-11-20");
+    await expect(panel(page).getByRole("grid")).toBeVisible();
+  });
+
+  test("[date-arrows] the arrows walk the days and Page Down the months", async ({ page }) => {
+    await openIt(page);
+    await expect.poll(() => focusedDay(page)).toBe("2026-11-20");
+    await page.keyboard.press("ArrowRight");
+    await expect.poll(() => focusedDay(page)).toBe("2026-11-21");
+    await page.keyboard.press("ArrowDown");
+    await expect.poll(() => focusedDay(page)).toBe("2026-11-28");
+    await page.keyboard.press("PageDown");
+    await expect.poll(() => focusedDay(page)).toBe("2026-12-28");
+  });
+
+  test("[date-choose] Enter on a day chooses it, closes the calendar and gives the focus back", async ({ page }) => {
+    await openIt(page);
+    await expect.poll(() => focusedDay(page)).toBe("2026-11-20");
+    await page.keyboard.press("ArrowRight");
+    await expect.poll(() => focusedDay(page)).toBe("2026-11-21");
+    await page.keyboard.press("Enter");
+    await expect(panel(page)).toBeHidden();
+    await expect(caption(page)).toHaveText("Kept until 2026-11-21");
+    await expect(trigger(page)).toBeFocused();
+  });
+
+  test("[date-escape] Escape closes the calendar and gives the focus back", async ({ page }) => {
+    await openIt(page);
+    await page.keyboard.press("Escape");
+    await expect(panel(page)).toBeHidden();
+    await expect(trigger(page)).toBeFocused();
+    await expect(caption(page)).toHaveText("Kept until 2026-11-20");
+  });
+
+  test("[date-range] a day outside min and max cannot be chosen", async ({ page }) => {
+    await openIt(page);
+    const early = panel(page).locator('.glim-date-cell[data-value="2026-11-04"]');
+    await expect(early).toHaveAttribute("data-disabled", "");
+    await early.dispatchEvent("click");
+    await expect(caption(page)).toHaveText("Kept until 2026-11-20");
+  });
+
+  test("[date-views] the head steps out to the months, and a month steps back in", async ({ page }) => {
+    await openIt(page);
+    await panel(page).locator('button.glim-date-title[data-view="day"]').click();
+    await expect(panel(page).locator('button.glim-date-title[data-view="month"]')).toHaveText("2026");
+    await panel(page).getByRole("button", { name: "Next year" }).click();
+    await panel(page).getByText("Jan", { exact: true }).click();
+    await expect(panel(page).locator('button.glim-date-title[data-view="day"]')).toHaveText("January 2027");
+  });
+
+  test("[date-accent] the chosen day is filled with the accent", async ({ page }) => {
+    await openIt(page);
+    const day = panel(page).locator('.glim-date-cell[data-value="2026-11-20"]');
+    const fill = await day.evaluate((el) => getComputedStyle(el).backgroundColor);
+    const accent = await day.evaluate((el) => {
+      const probe = document.createElement("span");
+      probe.style.backgroundColor = "var(--accent)";
+      el.append(probe);
+      const colour = getComputedStyle(probe).backgroundColor;
+      probe.remove();
+      return colour;
+    });
+    expect(fill).toBe(accent);
+  });
+});

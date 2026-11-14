@@ -6765,6 +6765,149 @@
   }
 }
 
+/* DatePicker: the trigger is a text field that shows the day and takes no
+   typing, with the calendar glyph at its end. The calendar floats on the
+   body at the float step. The chosen day is filled with the accent, today
+   carries the accent's ink, and a day outside the month or the range is
+   muted. */
+@layer components {
+  .glim-date {
+    display: grid;
+    gap: var(--space-3);
+    min-width: 0;
+  }
+  .glim-date-control { display: flex; }
+  .glim-input.glim-date-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    width: auto;
+    min-width: 11rem;
+    text-align: start;
+    cursor: pointer;
+  }
+  .glim-date-trigger > svg {
+    flex-shrink: 0;
+    width: 0.875rem;
+    height: 0.875rem;
+    color: var(--carbon-text-sub);
+  }
+  .glim-date-trigger:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+  .glim-date-trigger[data-disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .glim-date-value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .glim-date-value--empty { color: var(--field-placeholder); }
+  .glim-date-positioner { z-index: var(--z-menu); }
+  .glim-date-panel {
+    padding: var(--space-6);
+    border-radius: var(--radius-card);
+    background-color: var(--carbon-surface);
+    box-shadow: var(--elevation-float);
+    outline: none;
+  }
+  .glim-date-panel[hidden] { display: none; }
+  .glim-date-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+  }
+  .glim-date-step,
+  .glim-date-title {
+    display: inline-grid;
+    place-items: center;
+    height: var(--btn-h);
+    border: 0;
+    border-radius: var(--radius-control);
+    background-color: transparent;
+    color: var(--carbon-text);
+    font: inherit;
+    font-size: var(--text-body);
+    cursor: pointer;
+  }
+  .glim-date-step {
+    width: var(--btn-h);
+    color: var(--carbon-text-sub);
+  }
+  .glim-date-step svg:dir(rtl) { scale: -1 1; }
+  .glim-date-title {
+    padding-inline: var(--space-4);
+    font-weight: 600;
+  }
+  span.glim-date-title { cursor: default; }
+  :is(.glim-date-step, button.glim-date-title):hover { background-color: var(--carbon-hover); }
+  :is(.glim-date-step, .glim-date-title):focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring);
+    outline-offset: 0;
+  }
+  .glim-date-step[data-disabled] {
+    opacity: 0.4;
+    cursor: default;
+  }
+  .glim-date-grid {
+    border-collapse: separate;
+    border-spacing: var(--space-1);
+  }
+  .glim-date-weekday {
+    padding-bottom: var(--space-2);
+    color: var(--carbon-text-sub);
+    font-size: var(--text-meta);
+    font-weight: 500;
+  }
+  .glim-date-cell {
+    display: grid;
+    place-items: center;
+    width: var(--btn-h);
+    height: var(--btn-h);
+    border-radius: var(--radius-control);
+    color: var(--carbon-text);
+    font-size: var(--text-subline);
+    cursor: pointer;
+    outline: none;
+  }
+  .glim-date-cell--wide {
+    width: 3.5rem;
+    font-size: var(--text-body);
+  }
+  .glim-date-cell:hover { background-color: var(--carbon-hover); }
+  .glim-date-cell[data-focus] {
+    outline: var(--focus-ring-width) solid var(--focus-ring);
+    outline-offset: -2px;
+  }
+  .glim-date-cell[data-today] {
+    color: var(--accent-ink);
+    font-weight: 700;
+  }
+  .glim-date-cell[data-outside-range] { color: var(--carbon-text-sub); }
+  .glim-date-cell[data-disabled],
+  .glim-date-cell[data-unavailable] {
+    color: var(--carbon-text-muted);
+    text-decoration: line-through;
+    cursor: default;
+  }
+  .glim-date-cell[data-disabled]:hover { background-color: transparent; }
+  .glim-date-cell[data-selected] {
+    background-color: var(--accent);
+    color: var(--accent-contrast);
+    font-weight: 600;
+  }
+  .glim-date-cell[data-selected]:hover { background-color: var(--accent-hover); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .glim-date-panel[data-state="open"] { animation: glim-fade-in var(--motion-fade-dur, 0s) ease-out; }
+}
+
 /* The contrast step and the Windows contrast themes for the components on the
    Zag machines, written like the rules for the older ones above: an edge on
    every field and pressable part, and the selection colours on what is chosen
@@ -6777,8 +6920,8 @@
     }
   }
   @media (forced-colors: active) {
-    :is(.glim-page, .glim-tags-control, .glim-tag, .glim-avatar, .glim-steps-indicator, .glim-upload-drop) { border: 1px solid ButtonText; }
-    :is(.glim-page[data-selected], .glim-tag[data-highlighted], .glim-steps-indicator[data-current], .glim-upload-drop[data-dragging]) {
+    :is(.glim-page, .glim-tags-control, .glim-tag, .glim-avatar, .glim-steps-indicator, .glim-upload-drop, .glim-date-panel) { border: 1px solid ButtonText; }
+    :is(.glim-page[data-selected], .glim-tag[data-highlighted], .glim-steps-indicator[data-current], .glim-upload-drop[data-dragging], .glim-date-cell[data-selected]) {
       forced-color-adjust: none;
       border-color: Highlight;
       background-color: Highlight;
@@ -6789,6 +6932,7 @@
       background-color: CanvasText;
     }
     .glim-tags-control[data-disabled] { border-color: GrayText; }
+    .glim-date-cell[data-disabled] { color: GrayText; }
     :is(.glim-splitter-grip, .glim-splitter-handle::before) {
       forced-color-adjust: none;
       background-color: ButtonText;

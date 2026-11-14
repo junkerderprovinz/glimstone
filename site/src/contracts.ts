@@ -769,4 +769,17 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "upload-drag", when: "Files are held over the zone", then: "It takes the accent's wash, and lets it go when they leave." },
     ],
   },
+  DatePicker: {
+    pattern: { name: "Date Picker Dialog", url: `${APG}dialog-modal/examples/datepicker-dialog/` },
+    rows: [
+      { id: "date-trigger", when: "Always", then: "The trigger is a button that shows the day and is named by the label and the day." },
+      { id: "date-open", keys: ["Enter", "Space"], when: "The trigger has focus", then: "The calendar opens as a grid with the focus on the chosen day." },
+      { id: "date-arrows", keys: ["ArrowRight", "ArrowDown", "PageDown"], when: "A day has focus", then: "The arrows move a day or a week, Page Down and Page Up a month." },
+      { id: "date-choose", keys: ["Enter"], when: "A day has focus", then: "It is chosen, the calendar closes and the focus goes back to the trigger." },
+      { id: "date-escape", keys: ["Escape"], when: "The calendar is open", then: "It closes without a change and the focus goes back to the trigger." },
+      { id: "date-range", when: "A day lies before min or after max", then: "It is disabled and cannot be chosen." },
+      { id: "date-views", when: "The month in the head is pressed", then: "The months of the year show, and a month leads back to its days." },
+      { id: "date-accent", when: "The calendar is open", then: "The chosen day is filled with the accent." },
+    ],
+  },
 };

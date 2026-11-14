@@ -54,3 +54,4 @@ export const IconCopy = markComponent(MARKS.copy);
 export const IconBack = markComponent(MARKS.back);
 export const IconForward = markComponent(MARKS.forward);
 export const IconUpload = markComponent(MARKS.upload);
+export const IconCalendar = markComponent(MARKS.calendar);
