@@ -174,7 +174,7 @@ An adopting app may add eggs of its own. They belong in that app's own notes, an
 
 <p><a id="6-adopting-glimstone-in-an-app" href="#6-adopting-glimstone-in-an-app"><picture><source media="(prefers-color-scheme: dark)" srcset=".github/assets/sections/6-adopting-glimstone-in-an-app-dark.svg"><img src=".github/assets/sections/6-adopting-glimstone-in-an-app.svg" alt="6. Adopting GlimStone in an app" width="100%"></picture></a></p>
 
-1. Install the core and the framework package: `npm install @glimstone/core @glimstone/react`, or `@glimstone/vue`. Select, Combobox and Slider come from their own entries (`@glimstone/react/Select`) and need the Zag packages beside them.
+1. Install the core and the framework package: `npm install @glimstone/core @glimstone/react`, or `@glimstone/vue`. The components on a Zag machine, such as Select, DatePicker or Accordion, come from their own entries (`@glimstone/react/Select`) and need their Zag packages beside them.
 2. Load `@glimstone/core/tokens.css` before the app's own stylesheet, and under Tailwind v4 `@glimstone/core/tailwind-theme.css` after it.
 3. At the app root, before the first render, call `applyCachedAppearance()` and `applyStoredLabelModes()`, or the app opens in the default look and snaps over on load. `setStoragePrefix()` first keeps choices an app already stored under its own name.
 4. Register the app's own icons once through the package's `setGlyphResolver`, and take the glyph sizing rules in [`glyphs.md`](packages/core/glyphs.md) with them: artwork from different sets fills its own viewBox by wildly different amounts.
