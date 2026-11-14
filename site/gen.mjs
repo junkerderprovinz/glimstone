@@ -67,6 +67,7 @@ const COMPONENTS = {
   Pagination: "react/Pagination.tsx",
   PinInput: "react/PinInput.tsx",
   TagsInput: "react/TagsInput.tsx",
+  Steps: "react/Steps.tsx",
 };
 
 const clean = (s) => s.replace(/\s+/g, " ").trim();

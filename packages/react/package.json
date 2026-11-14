@@ -29,6 +29,7 @@
     "@zag-js/react": "^1.46.0",
     "@zag-js/select": "^1.46.0",
     "@zag-js/slider": "^1.46.0",
+    "@zag-js/steps": "^1.47.0",
     "@zag-js/tags-input": "^1.47.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

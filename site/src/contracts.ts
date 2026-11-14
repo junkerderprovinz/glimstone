@@ -731,4 +731,15 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "tags-ground", when: "Always, with focus too", then: "A tag's fill is one surface step away from the field's, so it never vanishes into it." },
     ],
   },
+  Steps: {
+    pattern: { name: "Tabs", url: `${APG}tabs/` },
+    rows: [
+      { id: "steps-tabs", when: "Always", then: "The row is a tablist of the named steps. The step in force is the selected tab with aria-current=\"step\", and its content the tabpanel." },
+      { id: "steps-next", when: "Next or Back is pressed", then: "The next or the previous step comes in. On the first step Back is disabled." },
+      { id: "steps-finish", when: "The last step is in force", then: "Next is Finish, and it calls onFinish." },
+      { id: "steps-done", when: "A step lies behind the one in force", then: "It carries a tick. The step in force is filled with the accent." },
+      { id: "steps-arrows", keys: ["ArrowRight", "ArrowLeft", "Home", "End", "Enter"], when: "A step in the row has focus", then: "The arrows move the focus along the row and wrap round, Home and End go to the ends, and Enter goes to that step." },
+      { id: "steps-one-stop", keys: ["Tab"], when: "The focus enters the row", then: "It lands on the step in force, so the row is one stop." },
+    ],
+  },
 };

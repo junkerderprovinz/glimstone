@@ -997,6 +997,15 @@ Help pages, release notes and a list of frequent questions are read, not set, an
 - **Backspace in an empty field picks the last tag**, which takes the accent because the next press removes it. The arrows walk the tags and Delete removes the picked one. Each tag also carries a remove mark, a bare glyph button that turns to the accent under the pointer (rule 40).
 - **A screen reader hears every change**, a tag added, picked or removed, through Zag's live region in the words `text` passes.
 
+## Steps
+
+`Steps` walks a task in named steps, the wizard that "Pickers and wizards" describes: setting up a storage location, pairing a server, importing settings.
+
+- **Every step has a name**, which stands in the row and is the accessible name of its tab. The row is a tablist with one stop for Tab, on the step in force, and the arrows, Home and End move the focus along it as in the APG tabs pattern. Enter or a press goes to a step, and with `linear` only Back and Next move, for a task whose steps depend on each other.
+- **The step in force is filled with the accent** (rule 3). A finished step carries a tick on the third surface and a step ahead its number on the second, so the row stays quiet (rule 33). A hairline joins each step to the next. It is a join, not a mark beside what is chosen (rule 5).
+- **Back and Next stand in the foot, at the end**, as every card's own buttons do ("Page actions"). Both follow the label mode. On the last step Next turns into Finish and calls `onFinish`. Both stay secondary, since the view's one filled button is the page's or the window's.
+- **The words are the app's**: `text` takes Back, Next and Finish.
+
 ## Narrow windows
 
 The web interface at phone width, beside "The bottom bar" that replaces the rail there.

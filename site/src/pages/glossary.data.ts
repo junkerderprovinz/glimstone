@@ -440,6 +440,19 @@ export const GLOSSARY: GlossarySection[] = [
           de: "Die alte Auswahlliste, deren Auslöser die App selbst baut. Sie bleibt, bis jede App auf das Auswahlfeld umgestellt ist.",
         },
       },
+      {
+        id: "steps",
+        en: "Steps",
+        de: "Schritte",
+        proposal: true,
+        code: ["Steps", ".glim-steps"],
+        components: ["Steps"],
+        rules: [3, 33],
+        text: {
+          en: "A task walked in named steps. The step in force takes the accent, a finished one a tick, and Back and Next stand in the foot.",
+          de: "Eine Aufgabe in benannten Schritten. Der aktuelle Schritt trägt den Akzent, ein erledigter ein Häkchen, Zurück und Weiter stehen im Fuß.",
+        },
+      },
     ],
   },
   {

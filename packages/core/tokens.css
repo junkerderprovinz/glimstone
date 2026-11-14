@@ -6342,3 +6342,101 @@ a:is(.glim-btn, .glim-icon-btn) { text-decoration: none; }
   }
   .glim-tags-input::placeholder { color: var(--carbon-text-muted); }
 }
+
+/* Steps: the row of named steps, the step in force and its foot. The step in
+   force is filled with the accent, a finished one carries a tick on the third
+   surface and the ones ahead their number on the second, so the row stays
+   quiet (rule 33). A hairline joins each step to the next. */
+@layer components {
+  .glim-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    min-width: 0;
+  }
+  .glim-steps-list {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .glim-steps-item {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+  .glim-steps-item:last-child { flex: none; }
+  .glim-steps-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+    min-height: var(--btn-h);
+    padding: 0.25rem 0.5rem 0.25rem 0.25rem;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background-color: transparent;
+    color: var(--carbon-text-sub);
+    font: inherit;
+    font-size: var(--text-body);
+    cursor: pointer;
+  }
+  .glim-steps-trigger:hover { background-color: var(--carbon-hover); }
+  :is(.glim-well, .glim-subcard) .glim-steps-trigger:hover { background-color: var(--carbon-surface3); }
+  .glim-steps-trigger[data-current] { cursor: default; }
+  .glim-steps-trigger:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+  .glim-steps-trigger[data-current] {
+    color: var(--carbon-text);
+    font-weight: 600;
+  }
+  .glim-steps-indicator {
+    display: inline-grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: var(--radius-pill);
+    background-color: var(--carbon-surface2);
+    color: var(--carbon-text-muted);
+    font-size: var(--text-meta);
+    font-weight: 600;
+  }
+  .glim-steps-indicator svg {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+  .glim-steps-indicator[data-complete] {
+    background-color: var(--carbon-surface3);
+    color: var(--carbon-text);
+  }
+  .glim-steps-indicator[data-current] {
+    background-color: var(--accent);
+    color: var(--accent-contrast);
+  }
+  .glim-steps-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .glim-steps-separator {
+    flex: 1;
+    min-width: 1rem;
+    height: 1px;
+    background-color: color-mix(in srgb, var(--carbon-border) 60%, transparent);
+  }
+  .glim-steps-content:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 4px;
+    border-radius: var(--radius-control);
+  }
+  .glim-steps-content[hidden] { display: none; }
+  .glim-steps-foot {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+  }
+}

@@ -73,3 +73,68 @@ test.describe("Pagination", () => {
     expect(rest).toBe(await resolved(nav(page), "--carbon-surface2"));
   });
 });
+
+test.describe("Steps", () => {
+  const tab = (page: Page, name: string) => stage(page, "StepsStorage").getByRole("tab", { name, exact: true });
+  const button = (page: Page, name: string) => stage(page, "StepsStorage").getByRole("button", { name, exact: true });
+  const panel = (page: Page) => stage(page, "StepsStorage").getByRole("tabpanel");
+
+  test("[steps-tabs] the row is a list of tabs, the step in force selected and current", async ({ page }) => {
+    await open(page, "/components/steps");
+    await expect(stage(page, "StepsStorage").getByRole("tablist")).toBeVisible();
+    await expect(tab(page, "Kind")).toHaveAttribute("aria-selected", "true");
+    await expect(tab(page, "Kind")).toHaveAttribute("aria-current", "step");
+    await expect(panel(page)).toHaveText("Pick where the backups go: a folder, a server or a cloud.");
+  });
+
+  test("[steps-next] Next and Back move a step, and Back is disabled on the first", async ({ page }) => {
+    await open(page, "/components/steps");
+    await expect(button(page, "Back")).toBeDisabled();
+    await button(page, "Next").click();
+    await expect(tab(page, "Address")).toHaveAttribute("aria-selected", "true");
+    await button(page, "Back").click();
+    await expect(tab(page, "Kind")).toHaveAttribute("aria-selected", "true");
+  });
+
+  test("[steps-finish] on the last step Next is Finish, which hands the task over", async ({ page }) => {
+    await open(page, "/components/steps");
+    await button(page, "Next").click();
+    await button(page, "Next").click();
+    await expect(button(page, "Next")).toHaveCount(0);
+    await button(page, "Finish").click();
+    await expect(stage(page, "StepsStorage").getByText("Storage location added")).toBeVisible();
+  });
+
+  test("[steps-done] a finished step carries a tick, the one in force the accent", async ({ page }) => {
+    await open(page, "/components/steps");
+    await button(page, "Next").click();
+    const first = stage(page, "StepsStorage").locator(".glim-steps-indicator").first();
+    await expect(first).toHaveAttribute("data-complete", "");
+    await expect(first.locator("svg")).toHaveCount(1);
+    const current = stage(page, "StepsStorage").locator(".glim-steps-indicator[data-current]");
+    await expect(current).toHaveText("2");
+  });
+
+  test("[steps-arrows] the arrows, Home and End move the focus along the row, Enter goes there", async ({ page }) => {
+    await open(page, "/components/steps");
+    await tab(page, "Kind").focus();
+    await page.keyboard.press("ArrowRight");
+    await expect(tab(page, "Address")).toBeFocused();
+    await page.keyboard.press("End");
+    await expect(tab(page, "Check")).toBeFocused();
+    await page.keyboard.press("ArrowRight");
+    await expect(tab(page, "Kind")).toBeFocused();
+    await page.keyboard.press("End");
+    await page.keyboard.press("Enter");
+    await expect(tab(page, "Check")).toHaveAttribute("aria-selected", "true");
+    await page.keyboard.press("Home");
+    await expect(tab(page, "Kind")).toBeFocused();
+  });
+
+  test("[steps-one-stop] the row is one stop for Tab, on the step in force", async ({ page }) => {
+    await open(page, "/components/steps");
+    await button(page, "Next").click();
+    const stops = await stage(page, "StepsStorage").getByRole("tab").evaluateAll((tabs) => tabs.map((t) => t.getAttribute("tabindex")));
+    expect(stops).toEqual(["-1", "0", "-1"]);
+  });
+});

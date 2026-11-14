@@ -14,7 +14,7 @@ import { BusyRingPage, SkeletonRowPage } from "./pages/loading";
 import { PopoverPage, SheetPage } from "./pages/overlay";
 import { ListTablePage } from "./pages/lists";
 import { PinInputPage, TagsInputPage } from "./pages/inputs";
-import { PaginationPage } from "./pages/navigation";
+import { PaginationPage, StepsPage } from "./pages/navigation";
 import { AvatarPage } from "./pages/display";
 import { AccordionPage, CollapsiblePage } from "./pages/reading";
 import {
@@ -122,6 +122,7 @@ const PAGES: Page[] = [
   { path: "/components/sign-in-card", title: "SignInCard", group: "Components", Comp: SignInCardPage },
   { path: "/components/skeleton-row", title: "SkeletonRow", group: "Components", Comp: SkeletonRowPage },
   { path: "/components/slider", title: "Slider", group: "Components", Comp: SliderPage, tag: "Zag" },
+  { path: "/components/steps", title: "Steps", group: "Components", Comp: StepsPage, tag: "Zag" },
   { path: "/components/sub-card", title: "SubCard", group: "Components", Comp: SubCardPage },
   { path: "/components/tags-input", title: "TagsInput", group: "Components", Comp: TagsInputPage, tag: "Zag" },
   { path: "/components/toast", title: "Toast", group: "Components", Comp: ToastPage },

@@ -32,3 +32,32 @@ export function PaginationPage() {
     </>
   );
 }
+
+export function StepsPage() {
+  return (
+    <>
+      <p className="lead">A task walked in named steps, such as setting up a storage location.</p>
+      <MachineNote file="react/Steps.tsx" machine="steps" />
+      <Demo name="StepsStorage" />
+      <Code
+        code={`import { Steps } from "@glimstone/react/Steps";
+
+<Steps items={steps} content={(s) => <StepForm step={s} />} onFinish={save} />`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>Every step has a name, which stands in the row and is the name of its tab ("Pickers and wizards").</li>
+        <li>The step in force is filled with the accent. A finished step carries a tick, and the steps ahead their number, both quiet.</li>
+        <li>Back and Next stand in the foot, at the end. On the last step Next turns into Finish, which calls <code>onFinish</code>.</li>
+        <li>
+          A step in the row is pressed to go back to it. With <code>linear</code> only Back and Next move, for a task
+          whose steps depend on each other.
+        </li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="Steps" />
+      <H2>API</H2>
+      <PropsTable of="Steps" />
+    </>
+  );
+}
