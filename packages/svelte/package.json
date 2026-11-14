@@ -53,6 +53,11 @@
       "svelte": "./dist/entries/pagination.js",
       "default": "./dist/entries/pagination.js"
     },
+    "./Steps": {
+      "types": "./dist/entries/steps.d.ts",
+      "svelte": "./dist/entries/steps.js",
+      "default": "./dist/entries/steps.js"
+    },
     "./Timer": {
       "types": "./dist/entries/timer.d.ts",
       "svelte": "./dist/entries/timer.js",
@@ -95,6 +100,7 @@
     "@zag-js/pagination": "^1.47.0",
     "@zag-js/select": "^1.46.0",
     "@zag-js/slider": "^1.46.0",
+    "@zag-js/steps": "^1.47.0",
     "@zag-js/svelte": "^1.47.0",
     "@zag-js/timer": "^1.47.0",
     "svelte": "^5.29.0"
