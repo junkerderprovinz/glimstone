@@ -60,6 +60,10 @@
       "types": "./dist/FileUpload.d.ts",
       "default": "./dist/FileUpload.js"
     },
+    "./DatePicker": {
+      "types": "./dist/DatePicker.d.ts",
+      "default": "./dist/DatePicker.js"
+    },
     "./Timer": {
       "types": "./dist/Timer.d.ts",
       "default": "./dist/Timer.js"
@@ -91,11 +95,13 @@
     "@glimstone/core": "4.4.1"
   },
   "peerDependencies": {
+    "@internationalized/date": "^3.12.4",
     "@zag-js/accordion": "^1.47.0",
     "@zag-js/avatar": "^1.47.0",
     "@zag-js/carousel": "^1.47.0",
     "@zag-js/collapsible": "^1.47.0",
     "@zag-js/combobox": "^1.46.0",
+    "@zag-js/date-picker": "^1.47.0",
     "@zag-js/file-upload": "^1.47.0",
     "@zag-js/hover-card": "^1.47.0",
     "@zag-js/marquee": "^1.47.0",

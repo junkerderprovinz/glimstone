@@ -73,6 +73,11 @@
       "svelte": "./dist/entries/fileupload.js",
       "default": "./dist/entries/fileupload.js"
     },
+    "./DatePicker": {
+      "types": "./dist/entries/datepicker.d.ts",
+      "svelte": "./dist/entries/datepicker.js",
+      "default": "./dist/entries/datepicker.js"
+    },
     "./Timer": {
       "types": "./dist/entries/timer.d.ts",
       "svelte": "./dist/entries/timer.js",
@@ -109,11 +114,13 @@
     "@glimstone/core": "4.4.1"
   },
   "peerDependencies": {
+    "@internationalized/date": "^3.12.4",
     "@zag-js/accordion": "^1.47.0",
     "@zag-js/avatar": "^1.47.0",
     "@zag-js/carousel": "^1.47.0",
     "@zag-js/collapsible": "^1.47.0",
     "@zag-js/combobox": "^1.46.0",
+    "@zag-js/date-picker": "^1.47.0",
     "@zag-js/file-upload": "^1.47.0",
     "@zag-js/hover-card": "^1.47.0",
     "@zag-js/marquee": "^1.47.0",
