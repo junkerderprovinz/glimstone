@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { open } from "./page";
+import { open, relook } from "./page";
 
 // The start page's wall and the Make it yours panel. Neither depends on a
 // framework, so one project runs them in depth and every project checks that
@@ -84,7 +84,7 @@ test("the panel lists every axis of the look", async ({ page }) => {
   inDepth();
   await open(page, "/");
   await openPanel(page);
-  for (const axis of ["theme", "oled", "accent", "rainbow", "reactive", "contrast", "shape", "motion", "density", "labels"]) {
+  for (const axis of ["theme", "oled", "accent", "rainbow", "contrast", "shape", "motion", "density", "labels"]) {
     await expect(panel(page).locator(`[data-axis="${axis}"]`), axis).toBeVisible();
   }
   await page.keyboard.press("Escape");
@@ -98,6 +98,13 @@ test("the copy button hands over the root attributes and the settings for the ch
   await openPanel(page);
   await panel(page).locator('[data-look="copy"]').click();
   await expect(panel(page).locator('[data-look="copy"]')).toContainText("Copied");
+  // The rainbow's colours as applyRainbow() set them on the page, which the snippet has to repeat.
+  const rainbow = await page.evaluate(() =>
+    Array.from({ length: 8 }, (_, i) => {
+      const root = document.documentElement.style;
+      return `--rb-${i}: ${root.getPropertyValue(`--rb-${i}`)}; --rb-ink-${i}: ${root.getPropertyValue(`--rb-ink-${i}`)}`;
+    }).join("; "),
+  );
   expect(await clipboard(page)).toBe(`<html
   data-theme="dark"
   data-oled
@@ -109,7 +116,7 @@ test("the copy button hands over the root attributes and the settings for the ch
   data-labels-buttons="glyph"
   data-labels-sidebar="glyph"
   data-labels-tabs="glyph"
-  style="--accent: #1D99F3; --accent-contrast: #161616; --accent-soft: rgba(29, 153, 243, 0.14)"
+  style="--accent: #1D99F3; --accent-contrast: #161616; --accent-soft: rgba(29, 153, 243, 0.14); ${rainbow}"
 >
 
 export const lookDefaults = {
@@ -117,6 +124,18 @@ export const lookDefaults = {
   accent: "#1D99F3",
   rainbow: true,
   rainbowReactive: true,
+  rainbowRotate: false,
+  rainbowSeed: 0,
+  rainbowPalette: [
+    "#FF8389",
+    "#FF832B",
+    "#FCC419",
+    "#6FDC8C",
+    "#3DDBD9",
+    "#1D99F3",
+    "#BE95FF",
+    "#FF7EB6"
+  ],
   contrast: "more",
   shape: "round",
   motion: "wild",
@@ -142,13 +161,77 @@ test("the panel is a settings page: sub-cards of field rows, a glyph on every se
     expect(await segments.count(), axis).toBeGreaterThan(1);
     for (const segment of await segments.all()) await expect(segment.locator("svg"), axis).toHaveCount(1);
   }
-  for (const axis of ["oled", "rainbow", "reactive", "contrast"]) {
+  for (const axis of ["oled", "rainbow", "contrast"]) {
     const row = panel(page).locator(`[data-axis="${axis}"]`);
     await expect(row.locator('[data-glim="InfoBubble"]'), axis).toHaveCount(1);
     const rowBox = (await row.boundingBox())!;
     const switchBox = (await row.getByRole("switch").boundingBox())!;
     expect(Math.abs(rowBox.x + rowBox.width - (switchBox.x + switchBox.width)), axis).toBeLessThan(2);
   }
+});
+
+test("every label mode shows in the panel's selectors as it says, at desktop and at phone width", async ({ page }) => {
+  inDepth();
+  const shown = (mode: string) =>
+    panel(page).evaluate((el, m) => {
+      const segments = [...el.querySelectorAll(".glim-sel-seg")];
+      const words = segments.filter((s) => {
+        const label = s.querySelector(".glim-sel-label, .glim-label-reactive");
+        return !!label && label.getBoundingClientRect().width > 4;
+      }).length;
+      const glyphs = segments.filter((s) => (s.querySelector("svg")?.getBoundingClientRect().width ?? 0) > 0).length;
+      return { mode: m, segments: segments.length, words, glyphs };
+    }, mode);
+  await open(page, "/");
+  for (const width of [1620, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const labels of ["text", "textGlyph", "glyph"]) {
+      await relook(page, { theme: "dark", labels });
+      await openPanel(page);
+      const s = await shown(labels);
+      expect(s.words, `${labels} at ${width}`).toBe(labels === "glyph" ? 0 : s.segments);
+      expect(s.glyphs, `${labels} at ${width}`).toBe(labels === "text" ? 0 : s.segments);
+    }
+  }
+});
+
+test("with the rainbow on, the panel shows its palette and the settings under it, as an app's settings page does", async ({ page }) => {
+  inDepth();
+  await open(page, "/", { theme: "dark" });
+  await openPanel(page);
+  for (const axis of ["reactive", "rotate", "palette"]) await expect(panel(page).locator(`[data-axis="${axis}"]`), axis).toHaveCount(0);
+  await panel(page).locator('[data-axis="rainbow"]').getByRole("switch").click();
+  for (const axis of ["reactive", "rotate", "palette"]) await expect(panel(page).locator(`[data-axis="${axis}"]`), axis).toBeVisible();
+  const swatches = panel(page).locator('[data-axis="palette"] [data-position]');
+  await expect(swatches).toHaveCount(8);
+  const root = await page.evaluate(() => Array.from({ length: 8 }, (_, i) => {
+    const probe = document.createElement("span");
+    probe.style.color = `var(--rb-${i})`;
+    document.body.append(probe);
+    const colour = getComputedStyle(probe).color;
+    probe.remove();
+    return colour;
+  }));
+  for (const [i, colour] of root.entries()) await expect(swatches.nth(i)).toHaveCSS("background-color", colour);
+  expect(await panel(page).locator('[data-axis="accent"] .look-swatches').evaluate((el) => getComputedStyle(el).opacity)).toBe("0.5");
+
+  const first = swatches.first();
+  await first.scrollIntoViewIfNeeded();
+  await page.evaluate(() => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done))));
+  await first.click();
+  await page.getByRole("textbox", { name: "Hex" }).fill("#2E8B57");
+  await page.getByRole("button", { name: "Apply" }).click();
+  expect(await page.evaluate(() => document.documentElement.style.getPropertyValue("--rb-0"))).toBe("#2e8b57");
+});
+
+test("the frameworks under the hero carry their marks and lead to their adoption notes", async ({ page }) => {
+  inDepth();
+  await open(page, "/", { theme: "dark" });
+  const links = page.locator(".hero-frameworks a");
+  await expect(links).toHaveText(["React", "Vue", "Solid", "Svelte"]);
+  for (const link of await links.all()) await expect(link.locator(".fw-mark svg")).toHaveCount(1);
+  await links.filter({ hasText: "Svelte" }).click();
+  await expect(page.locator("main h3#svelte")).toBeInViewport();
 });
 
 test("a click on the chosen swatch opens the picker, and the colour picked lands on the page and in the snippet", async ({ page, context, browserName }) => {
