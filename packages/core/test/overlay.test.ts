@@ -7,7 +7,7 @@ const CSS = readFileSync(new URL('../tokens.css', import.meta.url), 'utf8');
 
 function dial(selector: string, name: string): string {
   for (let at = CSS.indexOf(`${selector} {`); at >= 0; at = CSS.indexOf(`${selector} {`, at + 1)) {
-    const m = CSS.slice(at, CSS.indexOf('}', at)).match(new RegExp(`${name}:\s*([^;]+);`));
+    const m = CSS.slice(at, CSS.indexOf('}', at)).match(new RegExp(`${name}:\\s*([^;]+);`));
     if (m) return m[1].trim();
   }
   throw new Error(`${selector} declares no ${name}`);
