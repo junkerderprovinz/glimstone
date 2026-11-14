@@ -1,0 +1,11 @@
+.my-link {
+  color: color-mix(in srgb, var(--accent) var(--ink-mix), black);
+}
+
+.my-tab-glyph {
+  fill: color-mix(in srgb, var(--item-hue) var(--ink-mix), black);
+}
+
+.my-chart-line {
+  stroke: color-mix(in srgb, var(--chart-tint) var(--ink-mix), black);
+}

@@ -52,6 +52,12 @@ export const DEPRECATED: Record<string, Deprecation> = {
     use: "Listen to `blur`, the name of React's handler.",
     find: String.raw`<ToastViewport\b[^>]*?\s(?:@|v-on:)focusout=`,
   },
+  "--ink-mix": {
+    since: "4.5.0",
+    removal: "5.0.0",
+    use: "Read `--accent-ink`, which moves the accent onto the theme's OKLab ink step. The steps themselves are `--ink-l-light` and `--ink-l-dark`.",
+    find: String.raw`var\(--ink-mix\)`,
+  },
 };
 
 const warned = new Set<string>();

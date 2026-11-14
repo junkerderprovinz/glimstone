@@ -76,9 +76,27 @@ function toastEvent(from, to) {
   };
 }
 
+// An app's own CSS that mixed the accent with --ink-mix gets the token that
+// does it now; any other mix is reported, since the new ink is not a mix.
+const INK_MIXES = [
+  [/color-mix\(\s*in srgb,\s*var\(--accent\)\s+var\(--ink-mix\),\s*black\s*\)/g, 'var(--accent-ink)'],
+  [/color-mix\(\s*in srgb,\s*var\(--item-hue\)\s+var\(--ink-mix\),\s*black\s*\)/g, 'var(--item-hue-glyph)'],
+];
+
+function inkMix(text) {
+  return INK_MIXES.reduce((t, [from, to]) => t.replace(from, to), text);
+}
+
+function firstMatch(pattern, note) {
+  return (text) => [...text.matchAll(pattern)].slice(0, 1).map((m) => ({ index: m.index, note }));
+}
+
 function firstUse(name, note) {
   return (text) => [...text.matchAll(new RegExp(`\\b${name}\\b`, 'g'))].slice(0, 1).map((m) => ({ index: m.index, note }));
 }
+
+const SCRIPTS = /\.(tsx?|jsx?|mjs|vue)$/;
+const STYLES = /\.(css|scss|vue|tsx?|jsx?)$/;
 
 export const TRANSFORMS = [
   { name: 'Badge shape', rewrite: badgeShape, report: badgeShapeLeft },
@@ -89,10 +107,16 @@ export const TRANSFORMS = [
   { name: 'ToastViewport leave', rewrite: toastEvent('leave', 'mouse-leave') },
   { name: 'ToastViewport focusin', rewrite: toastEvent('focusin', 'focus') },
   { name: 'ToastViewport focusout', rewrite: toastEvent('focusout', 'blur') },
+  {
+    name: '--ink-mix',
+    files: STYLES,
+    rewrite: inkMix,
+    report: firstMatch(/--ink-mix\b/g, '--ink-mix goes in 5.0.0: read --accent-ink, or move the colour onto --ink-l-light and --ink-l-dark as tokens.css does for the accent.'),
+  },
 ];
 
 const SKIP = new Set(['node_modules', 'dist', 'build', '.git']);
-const SOURCE = /\.(tsx?|jsx?|mjs|vue)$/;
+const SOURCE = /\.(tsx?|jsx?|mjs|vue|css|scss)$/;
 
 function* sources(dir) {
   for (const name of readdirSync(dir)) {
@@ -113,7 +137,8 @@ function main(args) {
   let todo = 0;
   for (const path of dirs.flatMap((d) => [...sources(d)])) {
     const text = readFileSync(path, 'utf8');
-    const next = TRANSFORMS.reduce((t, { rewrite }) => (rewrite ? rewrite(t) : t), text);
+    const own = TRANSFORMS.filter(({ files = SCRIPTS }) => files.test(path));
+    const next = own.reduce((t, { rewrite }) => (rewrite ? rewrite(t) : t), text);
     const shown = relative(process.cwd(), path);
     if (next !== text) {
       todo++;
@@ -121,7 +146,7 @@ function main(args) {
       console.log(`${shown}: ${check ? 'would rewrite' : 'rewrote'}`);
     }
     const now = check ? text : next;
-    for (const { report } of TRANSFORMS) {
+    for (const { report } of own) {
       for (const { index, note } of report?.(now) ?? []) {
         todo++;
         console.log(`${shown}:${now.slice(0, index).split('\n').length}: ${note}`);

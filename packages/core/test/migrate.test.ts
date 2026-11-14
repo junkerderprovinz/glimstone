@@ -22,7 +22,7 @@ function run(root: string, ...flags: string[]) {
   return { status: r.status, out: r.stdout + r.stderr };
 }
 
-for (const file of ['Status.tsx', 'Status.vue', 'Toasts.vue']) {
+for (const file of ['Status.tsx', 'Status.vue', 'Toasts.vue', 'app.css']) {
   test(`${file} is rewritten to the current names`, () => {
     const root = app();
     assert.equal(run(root).status, 0);
@@ -41,6 +41,7 @@ test('what cannot be rewritten is reported with file and line', () => {
   assert.match(r.out, /Status\.tsx:17: Badge shape set from an expression/);
   assert.match(r.out, /Status\.vue:9: Badge shape set from an expression/);
   assert.match(r.out, /Status\.tsx:1: DropdownListbox .*Select/);
+  assert.match(r.out, /app\.css:10: --ink-mix goes in 5\.0\.0/);
 });
 
 test('--check changes nothing and fails while there is something to do', () => {

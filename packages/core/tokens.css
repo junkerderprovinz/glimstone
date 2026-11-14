@@ -351,6 +351,27 @@
   }
 }
 
+/* Deprecated tokens, kept so an app's own CSS that reads them still works until
+   5.0.0 (rule 52). --ink-mix is how much of the accent the ink kept against
+   black: all of it on the dark ramps and 55% on the light one. The stylesheet
+   no longer reads it, so it needs the theme's own selectors rather than a
+   light-dark(), which only takes colours. npx glimstone-migrate rewrites the
+   mix it was made for. */
+:root,
+[data-theme="dark"] {
+  --ink-mix: 100%;
+}
+
+[data-theme="light"] {
+  --ink-mix: 55%;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --ink-mix: 55%;
+  }
+}
+
 /* Chart colours (rule 50), every one an OKLCH value written out, so a phone app
    and a design tool read the same numbers. The series come in a fixed order:
    the eight accent hues, alternating warm and cool, on lightness steps chosen

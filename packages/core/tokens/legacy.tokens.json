@@ -1,0 +1,33 @@
+{
+  "legacy": {
+    "$description": "Deprecated tokens, kept so an app's own CSS that reads them still works until 5.0.0 (rule 52). --ink-mix is how much of the accent the ink kept against black: all of it on the dark ramps and 55% on the light one. The stylesheet no longer reads it, so it needs the theme's own selectors rather than a light-dark(), which only takes colours. npx glimstone-migrate rewrites the mix it was made for.",
+    "$extensions": {
+      "org.glimstone": {
+        "selector": ":root,\n[data-theme=\"dark\"]",
+        "modes": [
+          {
+            "name": "light",
+            "selector": "[data-theme=\"light\"]",
+            "also": [
+              {
+                "selector": ":root:not([data-theme=\"dark\"])",
+                "media": "(prefers-color-scheme: light)"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ink-mix": {
+      "$value": "100%",
+      "$type": "dimension",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "light": "55%"
+          }
+        }
+      }
+    }
+  }
+}
