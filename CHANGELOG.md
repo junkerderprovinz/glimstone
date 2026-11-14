@@ -2,6 +2,15 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+Nothing in the packages changes, so apps have nothing to move.
+
+## 🐛 Fixed
+
+- **The README's stage script looks its scenes up in a `Map`.** A link with `?scene=constructor` or `?scene=toString` reached the plain object's prototype and broke the page.
+- **The overlay test's dial lookup escapes its whitespace class.** Inside a template literal `\s` reached `RegExp` as a plain `s`, so the test only passed by chance.
+
 ## 4.4.1 - 2026-11-13
 
 After a removal the fortress takes no new app until the phrase changes, and its words say so in all 42 languages.
