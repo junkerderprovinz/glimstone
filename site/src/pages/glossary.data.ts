@@ -688,6 +688,19 @@ export const GLOSSARY: GlossarySection[] = [
           de: "Solange eine Liste sortierbar ist, wackeln ihre Zeilen sanft und aus dem Takt. Die Zeile unter dem Zeiger steht still.",
         },
       },
+      {
+        id: "pagination",
+        en: "Pagination",
+        de: "Seitenwahl",
+        proposal: true,
+        code: ["Pagination", ".glim-pagination", ".glim-page"],
+        components: ["Pagination"],
+        rules: [3],
+        text: {
+          en: "The pages of a long list. The page in force takes the accent, and the steps follow the label mode.",
+          de: "Die Seiten einer langen Liste. Die aktuelle Seite trägt den Akzent, die Schritte folgen dem Beschriftungsmodus.",
+        },
+      },
     ],
   },
   {

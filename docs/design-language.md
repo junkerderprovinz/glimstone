@@ -970,6 +970,15 @@ Help pages, release notes and a list of frequent questions are read, not set, an
 - **A face is not activity**, so the initials stand on `--carbon-surface3` in the secondary text. Under rainbow a list of people may give each circle its palette position with `hueIndex`, and the initials then take that position's ink.
 - **Three sizes from the button heights**: `md` is `--btn-h` and `lg` is `--btn-h-key`, so an avatar stands level with the controls in its row. `sm` (1.5rem) fits a line of text.
 
+## Pagination
+
+`Pagination` is the row of pages under a list too long to show at once. A list page that loads everything keeps its one `ListTable` ("Lists"). The pages are for a list the server hands out a page at a time.
+
+- **Every page is a badge**, quiet at rest on `--carbon-surface2` at the field height, and the page in force is filled with the accent (rule 3). It hovers to `--accent-hover` like the primary button.
+- **The first and the last page always stand in the row.** The pages beside the one in force stand around it, `siblingCount` on each side, and a muted gap marks the rest, so the row keeps its width while the page changes.
+- **The two steps are ordinary buttons** (`variant="icon"`) and follow the label mode: "Previous page" and "Next page" with their arrows, or the arrows alone. At either end the step that would go past it is disabled. Under a right-to-left language the arrows turn round.
+- **A screen reader hears a navigation** named by `text.label`, each page as "Page 3 of 20", and the page in force as the current one. All four words come from `text`, so an app passes its own translation.
+
 ## Narrow windows
 
 The web interface at phone width, beside "The bottom bar" that replaces the rail there.

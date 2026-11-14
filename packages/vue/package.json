@@ -39,6 +39,10 @@
     "./Avatar": {
       "types": "./dist/entries/avatar.d.ts",
       "default": "./dist/Avatar.js"
+    },
+    "./Pagination": {
+      "types": "./dist/entries/pagination.d.ts",
+      "default": "./dist/Pagination.js"
     }
   },
   "files": [
@@ -56,6 +60,7 @@
     "@zag-js/collapsible": "^1.47.0",
     "@zag-js/combobox": "^1.46.0",
     "@zag-js/menu": "^1.46.0",
+    "@zag-js/pagination": "^1.47.0",
     "@zag-js/select": "^1.46.0",
     "@zag-js/slider": "^1.46.0",
     "@zag-js/vue": "^1.46.0",

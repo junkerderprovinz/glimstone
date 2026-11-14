@@ -34,6 +34,7 @@ export * from "./meter.ts";
 export * from "./motionNative.ts";
 export * from "./numberField.ts";
 export * from "./overlay.ts";
+export * from "./pagination.ts";
 export * from "./paypal.ts";
 export * from "./pill.ts";
 export * from "./portalHue.ts";

@@ -6176,3 +6176,45 @@ a:is(.glim-btn, .glim-icon-btn) { text-decoration: none; }
   .glim-avatar-image[hidden],
   .glim-avatar-fallback[hidden] { display: none; }
 }
+
+/* Pagination: every page is a quiet badge at the field height, and the one in
+   force is filled with the accent, as anything chosen is (rule 3). The steps
+   are ordinary buttons; under a right-to-left language their arrows turn. */
+@layer components {
+  .glim-pagination {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  .glim-page {
+    min-width: var(--btn-h);
+    height: var(--btn-h);
+    padding-inline: 0.5rem;
+    border: 0;
+    border-radius: var(--radius-control);
+    background-color: var(--carbon-surface2);
+    color: var(--carbon-text);
+    font: inherit;
+    font-size: var(--text-body);
+    cursor: pointer;
+  }
+  .glim-page:hover { background-color: var(--carbon-surface3); }
+  :is(.glim-well, .glim-subcard) .glim-page { background-color: var(--carbon-surface3); }
+  :is(.glim-well, .glim-subcard) .glim-page:hover { background-color: var(--carbon-hover-raised); }
+  .glim-page[data-selected] {
+    background-color: var(--accent);
+    color: var(--accent-contrast);
+    font-weight: 600;
+  }
+  .glim-page[data-selected]:hover { background-color: var(--accent-hover); }
+  .glim-page:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+  .glim-page-gap {
+    min-width: 1.5rem;
+    color: var(--carbon-text-muted);
+    text-align: center;
+  }
+  .glim-pagination > .glim-btn svg:dir(rtl) { scale: -1 1; }
+}

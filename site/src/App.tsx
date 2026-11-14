@@ -13,6 +13,7 @@ import { ColourEngine, LabelEngine, MotionEngine, ShapeEngine } from "./pages/en
 import { BusyRingPage, SkeletonRowPage } from "./pages/loading";
 import { PopoverPage, SheetPage } from "./pages/overlay";
 import { ListTablePage } from "./pages/lists";
+import { PaginationPage } from "./pages/navigation";
 import { AvatarPage } from "./pages/display";
 import { AccordionPage, CollapsiblePage } from "./pages/reading";
 import {
@@ -105,6 +106,7 @@ const PAGES: Page[] = [
   { path: "/components/menu-bar", title: "MenuBar", group: "Components", Comp: MenuBarPage },
   { path: "/components/meter", title: "Meter", group: "Components", Comp: MeterPage },
   { path: "/components/number-field", title: "NumberField", group: "Components", Comp: NumberFieldPage },
+  { path: "/components/pagination", title: "Pagination", group: "Components", Comp: PaginationPage, tag: "Zag" },
   { path: "/components/password-field", title: "PasswordField", group: "Components", Comp: PasswordFieldPage },
   { path: "/components/path-field", title: "PathField", group: "Components", Comp: PathFieldPage },
   { path: "/components/pill", title: "Pill", group: "Components", Comp: PillPage },

@@ -64,6 +64,7 @@ const COMPONENTS = {
   Collapsible: "react/Collapsible.tsx",
   Accordion: "react/Accordion.tsx",
   Avatar: "react/Avatar.tsx",
+  Pagination: "react/Pagination.tsx",
 };
 
 const clean = (s) => s.replace(/\s+/g, " ").trim();

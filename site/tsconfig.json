@@ -22,7 +22,8 @@
       "@glimstone/vue/Slider": ["../packages/vue/src/entries/slider.ts"],
       "@glimstone/vue/Collapsible": ["../packages/vue/src/entries/collapsible.ts"],
       "@glimstone/vue/Accordion": ["../packages/vue/src/entries/accordion.ts"],
-      "@glimstone/vue/Avatar": ["../packages/vue/src/entries/avatar.ts"]
+      "@glimstone/vue/Avatar": ["../packages/vue/src/entries/avatar.ts"],
+      "@glimstone/vue/Pagination": ["../packages/vue/src/entries/pagination.ts"]
     }
   },
   "include": ["src", "tests", "test", "vite.config.ts", "playwright.config.ts"]

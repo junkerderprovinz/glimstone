@@ -700,4 +700,14 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "avatar-shape", when: "The shape setting changes", then: "Its corners follow it, a circle in round and none in square." },
     ],
   },
+  Pagination: {
+    rows: [
+      { id: "pagination-nav", when: "Always", then: "A navigation named by its label. Each page is a button named \"Page 3 of 20\", and the one in force carries aria-current=\"page\"." },
+      { id: "pagination-press", when: "A page or a step is pressed", then: "The list goes to that page." },
+      { id: "pagination-keys", keys: ["Tab", "Enter", "Space"], when: "The row has focus", then: "Tab reaches each page and each step in turn, and Enter or Space takes it." },
+      { id: "pagination-ends", when: "The first or the last page is in force", then: "The step that would go past it is disabled." },
+      { id: "pagination-gaps", when: "There are more pages than fit", then: "The first and the last page stay, the pages beside the one in force stand around it, and a gap marks the rest." },
+      { id: "pagination-accent", when: "Always", then: "The page in force is filled with the accent, the others with a quiet fill." },
+    ],
+  },
 };

@@ -51,3 +51,5 @@ export const IconWindowRestore = markComponent(MARKS.windowRestore);
 export const IconEye = markComponent(MARKS.eye);
 export const IconEyeOff = markComponent(MARKS.eyeOff);
 export const IconCopy = markComponent(MARKS.copy);
+export const IconBack = markComponent(MARKS.back);
+export const IconForward = markComponent(MARKS.forward);

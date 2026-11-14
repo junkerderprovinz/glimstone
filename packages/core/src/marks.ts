@@ -94,6 +94,18 @@ export const MARKS = {
     size: 14,
     body: '<rect x="6.8" y="2.5" width="2.4" height="11" rx="0.6" transform="rotate(45 8 8)"/><rect x="6.8" y="2.5" width="2.4" height="11" rx="0.6" transform="rotate(-45 8 8)"/>',
   },
+  /** `IconBack` from the assortment: the previous page or step. It turns round under a right-to-left language. */
+  back: {
+    viewBox: "4.25 3.6 12.8 12.8",
+    size: 14,
+    body: '<path d="M6.6 10 13 3.6l1.7 1.7L10 10l4.7 4.7-1.7 1.7L6.6 10Z"/>',
+  },
+  /** `IconForward` from the assortment: the next page or step. */
+  forward: {
+    viewBox: "2.95 3.6 12.8 12.8",
+    size: 14,
+    body: '<path d="M13.4 10 7 16.4l-1.7-1.7L10 10 5.3 5.3 7 3.6 13.4 10Z"/>',
+  },
 } satisfies Record<string, Mark>;
 
 // The toast's severity as filled shapes (design-language.md, "Icon glyphs"). The
