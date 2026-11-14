@@ -292,16 +292,12 @@ pre.code {
   --sh-class: var(--status-info-text);
   --sh-identifier: var(--carbon-text);
   --sh-sign: var(--carbon-text-muted);
-  --sh-property: #78a9ff;
+  --sh-property: light-dark(#0043ce, #78a9ff);
   --sh-entity: var(--status-ok-text);
   --sh-jsxliterals: var(--carbon-text);
   --sh-string: var(--status-warn-text);
-  --sh-keyword: #be95ff;
+  --sh-keyword: light-dark(#6929c4, #be95ff);
   --sh-comment: var(--carbon-text-muted);
-}
-[data-theme="light"] { --sh-property: #0043ce; --sh-keyword: #6929c4; }
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) { --sh-property: #0043ce; --sh-keyword: #6929c4; }
 }
 
 .props { width: 100%; border-collapse: collapse; font-size: var(--text-subline); margin: 1rem 0; }

@@ -19,7 +19,7 @@ test('an anchor name is a dashed ident whatever the id holds', () => {
 });
 
 test('every motion level answers the sheet dials, and off does not slide', () => {
-  for (const level of [':root', ":root[data-motion='subtle']", ":root[data-motion='off']", ":root[data-motion='storm']"]) {
+  for (const level of [':root', ":root[data-motion='wild']", ":root[data-motion='off']", ":root[data-motion='storm']"]) {
     dial(level, '--motion-sheet-dur');
     dial(level, '--motion-sheet-shift');
   }

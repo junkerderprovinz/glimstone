@@ -62,9 +62,9 @@ test('the source is told to listeners, so a picker can show or hide the wand', (
   assert.deepEqual(seen, ['#0078D4', undefined]);
 });
 
-test('an accent that fails as text on a ramp gets that ramp its own ink', () => {
+test('a pale yellow reads from the ink step of the stylesheet and gets no ink of its own', () => {
   applyAccent('#FFFF00');
-  assert.ok(root.style.get('--accent-ink-light'));
+  assert.equal(root.style.get('--accent-ink-light'), undefined);
   assert.equal(root.style.get('--accent-ink-dark'), undefined);
   applyAccent('#FCC419');
   assert.equal(root.style.get('--accent-ink-light'), undefined);

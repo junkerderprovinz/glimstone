@@ -1,4 +1,4 @@
-// The label, colour and motion engines as composables. Each value belongs to
+// The label, colour, motion and density engines as composables. Each value belongs to
 // the document, not a component: a button and a nav row far apart in the tree
 // read the same mode, so every composable follows the document and writes back
 // through the core.
@@ -6,9 +6,11 @@
 import { computed, onScopeDispose, shallowRef, type Ref, type WritableComputedRef } from "vue";
 import {
   applyAccent,
+  applyDensity,
   applyMotion,
   applyRainbow,
   applyShape,
+  DEFAULT_DENSITY,
   DEFAULT_MOTION,
   DEFAULT_SHAPE,
   getLabelMode,
@@ -18,6 +20,7 @@ import {
   setLabelMode,
   subscribeLabelMode,
   subscribeRainbow,
+  type Density,
   type LabelAxis,
   type LabelMode,
   type Motion,
@@ -53,7 +56,7 @@ export function useHue(index: () => number | undefined): Ref<Record<string, stri
   });
 }
 
-// Shape, motion and accent live on the root element only, so a reader watches
+// Shape, motion, density and accent live on the root element only, so a reader watches
 // the attribute rather than waiting for a call that told it.
 function rootValue<T>(attribute: string, read: () => T): Ref<T> {
   const value = shallowRef(read());
@@ -71,6 +74,11 @@ export function useShape(): WritableComputedRef<Shape> {
 export function useMotion(): WritableComputedRef<Motion> {
   const motion = rootValue("data-motion", () => (document.documentElement.getAttribute("data-motion") as Motion) ?? DEFAULT_MOTION);
   return computed({ get: () => motion.value, set: applyMotion });
+}
+
+export function useDensity(): WritableComputedRef<Density> {
+  const density = rootValue("data-density", () => (document.documentElement.getAttribute("data-density") as Density) ?? DEFAULT_DENSITY);
+  return computed({ get: () => density.value, set: applyDensity });
 }
 
 /** The accent the user chose, or "" for the default. */

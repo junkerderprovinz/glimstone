@@ -6,24 +6,49 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 React and Vue offer the same kit. Every component, hook and type has a twin of the same name in the other package, with the same props, defaults, events and markup, so an app can change its framework by changing its imports. A test compares both packages on every run and fails as soon as they drift apart, and a second one checks that each demo draws the same elements in both. The keyboard follows the WAI-ARIA Authoring Practices in a few more places, and every target on the demo pages is at least 24 pixels, as WCAG 2.2 asks.
 
+The focus ring reads on every ground it stands on, and a field's placeholder can be read on every field fill.
+
 **Adopting apps:**
 
 - **Vue toasts:** `ToastViewport` emits `mouse-enter`, `mouse-leave`, `focus` and `blur`, the names of React's handlers. Rename `@enter`, `@leave`, `@focusin` and `@focusout` where the app listens.
 - **Vue giving windows:** the QR code and the coin marks of `CryptoDonateDialog` go into its `qr` and `mark` slots, and the app's selector in `PaypalDialog` into `selector`. `PaypalDialog` binds `frequency`, `preset` and `typed` with `v-model`, and `usePaypalButtons` takes a getter for its options and hands back the ref for `buttonsRef`.
 - **Types:** `CryptoCoin`, `CryptoNetwork`, `ToastViewportEntry`, `SidebarCount`, `InstanceFigure`, `SignInLabelKeys`, `FortressLabelKeys` and `MenuBarHandle` live in `@glimstone/core`. React exports them under the same names as before, so an import from `@glimstone/react` keeps working.
 - **Your own copy of the tokens:** take the `.glim-list-filter` rule from `tokens.css`.
+- **Focus ring:** `--focus-ring` is `--accent-ink`, opaque, so it follows a picked accent. An app that keeps its own copy of the tokens takes the three `--focus-ring` lines from `tokens.css`, and drops any ring colour of its own that it set for a custom accent.
+- **Placeholders:** a field's placeholder reads the new `--field-placeholder` instead of `--carbon-text-muted`. Point your own `::placeholder` rules at it.
+- **Flutter:** `GlimTheme` has `fieldPlaceholder`, and `focusRing` is a getter on `GlimDerived` that returns the accent ink. It is no longer a constructor argument or a `copyWith` parameter.
 
 ## ✨ Added
 
 - **Vue twins** of `AboutCard`, `CoffeeDialog`, `PaypalDialog`, `CryptoDonateDialog`, `DropdownListbox`, `WindowBar`, `ToastCard` and `PresenceBadges`, with `usePaypalButtons`, `useDialogKeys`, `usePortalHue` and `deviceGlyph`. Vue also exports the core's badge, button, selector and select types that React re-exports.
 - **React twins** of the Vue composables: `useRainbow`, `useHue`, `useShape`, `useMotion` and `useAccent`. Each returns the value and its setter, as `useState` does.
 - **`fromEnd` on `ContextMenu`** opens a menu with the focus on its last row, for an app's own menu bar.
+- **Windows contrast themes.** Under `forced-colors: active` every card, well, window, menu, field, button and badge gets an edge in the system's text colour. A chosen segment, tile or rail row, a switched-on switch, a ticked checkbox and a bar's fill take the system's selection colours, and an unticked box shows no mark. Before, the switch looked the same on and off, and cards and fields had no edge at all.
+
+- **Elevation steps.** `--elevation-raised`, `--elevation-float` and `--elevation-modal` are the three shadows, and `--z-raised` up to `--z-bubble` the stacking order that goes with them. Menus, select lists, bubbles, popovers and a held row float. Windows and sheets take the modal step. A select's list and a window used to carry shadows of their own. `--elevation` stays as the raised step.
+
+- **A spacing scale.** `--space-1` to `--space-13` run from 2 to 40px, 2px apart up to 16px. Every padding, margin and gap in the components reads a step, and a test fails on one that does not. The 31 distances the stylesheet held moved to the nearest step, none by more than 2px.
+
+- **A contrast step.** When the system asks for more contrast (`prefers-contrast: more`), the accent's ink takes a second OKLab step, 0.40 on light and 0.84 on dark, so the presets read at 8.9 to 9.7:1 as text. Sub and muted text move a step toward the text colour, borders darken to `#6f6f6f` on light and `#8d8d8d` on dark, cards get a ring in that colour, fields and buttons a 1px edge, and the focus ring is 3px. The accent fill stays. `--focus-ring-width` is new, and an app that draws its own rings should read it.
+
+- **Chart colours.** Eight series in a fixed order (`--chart-1` to `--chart-8`), a sequential blue for heatmaps (`--chart-seq-1` to `--chart-seq-7`) and a diverging blue to orange (`--chart-div-1` to `--chart-div-7`), all OKLCH, in every theme. Any two series stay apart under protanopia, deuteranopia and tritanopia, and each reaches 3:1 on the card and the page. The site shows them under Guide, Charts. Flutter gets them on `GlimTheme`.
+
+- **Row density.** A new axis for lists and tables: `data-density` is `compact`, `normal` or `airy`, set by `applyDensity()` and cached with `cacheAppearance(shape, accent, rainbow, density)`. Rows are 32, 42 or 52px tall, and their gap and padding move with them on the spacing scale. Normal looks as before. Vue has `useDensity()`, and the site has a Density page and a row in the Look panel.
+
+- **Every component rule is in `@layer components`.** Many rules in `tokens.css` stood outside any layer, so an app had to out-specify them to change a component. Now the components and the reset are layered, in the order `base, components`, and a plain rule of the app's own wins. The tokens stay outside. An app that copies `tokens.css` and has unlayered rules of its own that relied on losing to GlimStone should check them.
 
 ## 🔁 Changed
 
 - **Home and End on a closed `Select`** open the list on its first or last option. Before, they chose that option without showing anything.
 - **Enter no longer flips a `Checkbox`.** Space does, as on a native checkbox.
 - **`Meter` and `SkeletonRow` in React** name the defaults they already had, a `threshold` of 0.9 and `tile` and `badge` on, so the props table says so. Nothing changes on screen.
+- **No setting means soft corners and calm motion.** A page without `data-shape` or `data-motion` used to get round pills and wild motion from the stylesheet, while `appearance.ts` already defaulted to soft and subtle. The bare `:root` now carries soft's radii and subtle's numbers, and `round` and `wild` are values of their own. An app whose own rules keyed off `[data-motion='subtle']` to mean "the quiet one" should test for `wild` instead.
+
+- **Each theme is written once.** The colour tokens are one block of `light-dark(light, dark)` values on `:root, [data-theme]`, and `color-scheme` decides which side shows, so `tokens.css` no longer repeats every value under `prefers-color-scheme` and `data-theme`. A chosen theme still wins over the system in both directions, also on a subtree. OLED is a small `[data-oled]` block. `--ink-mix` is gone. An app with its own copy of the tokens takes the new block whole. The light theme's card shadow takes the dark theme's shape at its own strength, 2px longer than before.
+- **Components answer to their own width.** A field row and a field row group wrap their controls under 26rem of their own width, a list row hides its badges under 30rem, and an instance card takes the smaller mark under 30rem, wherever they stand, not only below a 600px window. The provider tiles go two to a row when two 13rem tiles do not fit.
+
+- **The accent ramps are built in OKLab.** The accent's ink moves onto a fixed lightness step, 0.52 on the light ramp and 0.74 on the dark ones, keeping its hue, and rainbow glyphs, rings and button tints follow the same steps. The eight presets read between 5.2 and 5.9:1 as text on white, where the sRGB mix spread them from 4.9 to 8.0:1. Sunflower's light ink goes from `#8B6C0E` to `#836407`, Blue's from `#105486` to `#126DAF`, and on the dark ramps Blue's ink lifts from `#1D99F3` (4.97:1) to `#62B1F8` (6.60:1). Info text on light is Sunflower's step, `oklch(0.52 0.104 86.7)`. The light theme's fault and warning washes drop from 10 to 6%, so their text reaches 4.5:1 on them (4.28 and 4.37:1 before).
+- **Flutter:** `GlimTheme.inkMix` is `inkLightness`, and `accentInk` moves the accent in OKLab as the web does. The generator resolves `oklch()` tokens to sRGB. The package needs Flutter 3.27 or later.
 
 ## ⚡ Improved
 
@@ -31,6 +56,12 @@ React and Vue offer the same kit. Every component, hook and type has a twin of t
 - **Lists:** PageDown and PageUp move the focus ten rows in a `ListTable`, and Shift picks along.
 - **Sheets:** Tab and Shift+Tab stay inside an open `Sheet`.
 - **Target size:** the ▾ in a list's column header is 24 pixels wide. Every other target on the demo pages already was, or has the room around it that WCAG 2.2 allows instead.
+
+## 🐛 Fixed
+
+- **A picked mid-tone accent keeps its ink readable under the pointer.** On the light theme the hover of `#777777` darkened toward its black ink, down to 3.64:1. Where the hover would take the ink under 4.5:1, `applyAccent()` now steps it away from the ink instead (`--accent-hover-light`, `--accent-hover-dark`), and a saturated green or teal whose ink missed 4.5:1 on its own 14% wash (4.35:1) gets a darker ink. The contrast test sweeps 153 picked colours as well as the presets. An app with its own copy of the tokens takes the new `--accent-hover` line. In Flutter, `GlimTheme.withAccent()` takes a picked accent, and `accentInk` and `accentHover` follow the same rules, colour for colour.
+- **The focus ring is opaque and reaches 3:1** on the page, the rail, a card, a well and a row's hover, in every theme, for every preset and any picked colour. On the light theme it stood at 1.9 to 2.0:1 (`rgba(142, 106, 0, .5)`), and a picked accent kept the gold ring. A rainbow position's ring is its hue's ink, where it was the hue at 55% (2.9:1 on the dark rail for red).
+- **Placeholder text reaches 4.5:1** on every field fill. The muted grey it used stood at 3.5:1 on the dark surface2 and 2.4:1 on a sub-card's surface3, 4.1 and 3.3:1 on light.
 
 ## 4.4.1 - 2026-11-13
 
