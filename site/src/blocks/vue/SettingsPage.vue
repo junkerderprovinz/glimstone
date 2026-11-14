@@ -34,9 +34,9 @@ const weekly = ref(false);
 </script>
 
 <template>
-  <div style="display: flex; gap: 24px; width: 100%; min-height: 360px">
+  <div style="display: flex; flex-wrap: wrap; gap: 24px; width: 100%; min-height: 360px">
     <Selector v-model="page" label="Settings pages" orientation="vertical" :items="PAGES" />
-    <div style="flex: 1; min-width: 0; display: grid; align-content: start; gap: 40px; padding-top: 12px">
+    <div style="flex: 1 1 20rem; min-width: 0; display: grid; align-content: start; gap: 40px; padding-top: 12px">
       <template v-if="page === 'general'">
         <Card title="General">
           <FieldRowGroup>

@@ -33,8 +33,8 @@ const trash = glyph("IconTrash");
 </script>
 
 <template>
-  <div style="display: grid; gap: 16px; width: 100%; max-width: 640px">
-    <div style="display: flex; gap: 8px; align-items: center">
+  <div style="display: grid; gap: 28px; width: 100%; max-width: 640px">
+    <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
       <TextField v-model="filter" label="Filter" placeholder="Filter by name" width="grow" />
       <Button label="Add a backup" label-key="add" tone="accent" size="key" @click="add" />
     </div>

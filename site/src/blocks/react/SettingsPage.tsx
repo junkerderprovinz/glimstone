@@ -32,9 +32,9 @@ export default function SettingsPage() {
   const [failures, setFailures] = useState(true);
   const [weekly, setWeekly] = useState(false);
   return (
-    <div style={{ display: "flex", gap: 24, width: "100%", minHeight: 360 }}>
+    <div style={{ display: "flex", flexWrap: "wrap", gap: 24, width: "100%", minHeight: 360 }}>
       <Selector label="Settings pages" orientation="vertical" items={PAGES} value={page} onChange={setPage} />
-      <div style={{ flex: 1, minWidth: 0, display: "grid", alignContent: "start", gap: 40, paddingTop: 12 }}>
+      <div style={{ flex: "1 1 20rem", minWidth: 0, display: "grid", alignContent: "start", gap: 40, paddingTop: 12 }}>
         {page === "general" && (
           <>
             <Card title="General">

@@ -30,8 +30,8 @@ export default function ListPage() {
     setFilter("");
   };
   return (
-    <div style={{ display: "grid", gap: 16, width: "100%", maxWidth: 640 }}>
-      <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+    <div style={{ display: "grid", gap: 28, width: "100%", maxWidth: 640 }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
         <TextField label="Filter" placeholder="Filter by name" width="grow" value={filter} onChange={(e) => setFilter(e.target.value)} />
         <Button label="Add a backup" labelKey="add" tone="accent" size="key" onClick={add} />
       </div>
