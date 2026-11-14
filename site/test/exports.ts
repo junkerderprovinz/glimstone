@@ -9,6 +9,14 @@ const read = (path: string) => readFileSync(path, "utf8");
 // and the glyph components stand together under the one glyph entry.
 const isComponent = (name: string) => /^[A-Z]/.test(name) && !name.endsWith("Context");
 
+// The Zag controls ship as entries of their own, which the Vue package names
+// in its exports: "./Select" is Select.tsx in React and entries/select.ts in Vue.
+const zagEntries = Object.entries(
+  (JSON.parse(read(join(packages, "vue", "package.json"))) as { exports: Record<string, { types: string }> }).exports,
+)
+  .filter(([key]) => key !== ".")
+  .map(([key, { types }]) => ({ react: `${key.slice(2)}.tsx`, vue: types.replace(/^\.\/dist\//, "").replace(/\.d\.ts$/, ".ts") }));
+
 /** reactComponents maps each exported React component to the file it is written in. */
 export function reactComponents() {
   const src = join(packages, "react", "src");
@@ -16,8 +24,7 @@ export function reactComponents() {
   const files = [...read(join(src, "index.ts")).matchAll(/export \* from "\.\/(\w+\.tsx?)"/g)]
     .map((m) => m[1]!)
     .filter((file) => file !== "glyphs.tsx");
-  // Select, Combobox and Slider ship as entry points of their own.
-  for (const file of [...files, "Select.tsx", "Combobox.tsx", "Slider.tsx"]) {
+  for (const file of [...files, ...zagEntries.map((e) => e.react)]) {
     for (const m of read(join(src, file)).matchAll(/^export (?:function|const|class) (\w+)/gm)) {
       if (isComponent(m[1]!)) components.set(m[1]!, join(src, file));
     }
@@ -32,8 +39,8 @@ export function vueComponents() {
   for (const m of read(join(src, "index.ts")).matchAll(/export \{ default as (\w+) \} from "\.\/(\w+\.vue)"/g)) {
     components.set(m[1]!, join(src, m[2]!));
   }
-  for (const file of ["select", "combobox", "slider"]) {
-    for (const m of read(join(src, "entries", `${file}.ts`)).matchAll(/default as (\w+) \} from "\.\.\/(\w+\.vue)"/g)) {
+  for (const { vue: file } of zagEntries) {
+    for (const m of read(join(src, file)).matchAll(/default as (\w+) \} from "\.\.\/(\w+\.vue)"/g)) {
       components.set(m[1]!, join(src, m[2]!));
     }
   }
@@ -43,8 +50,8 @@ export function vueComponents() {
 // Each package's entry points: the index, and the Zag controls that ship as
 // entries of their own.
 const entries = {
-  react: ["index.ts", "Select.tsx", "Combobox.tsx", "Slider.tsx"].map((f) => join(packages, "react", "src", f)),
-  vue: ["index.ts", "entries/select.ts", "entries/combobox.ts", "entries/slider.ts"].map((f) => join(packages, "vue", "src", f)),
+  react: ["index.ts", ...zagEntries.map((e) => e.react)].map((f) => join(packages, "react", "src", f)),
+  vue: ["index.ts", ...zagEntries.map((e) => e.vue)].map((f) => join(packages, "vue", "src", f)),
 };
 
 // The checker reads a .vue file as a module with one default export, which is
