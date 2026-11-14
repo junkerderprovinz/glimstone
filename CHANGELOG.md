@@ -17,6 +17,7 @@ React and Vue offer the same kit. Every component, hook and type has a twin of t
 
 - **Vue twins** of `AboutCard`, `CoffeeDialog`, `PaypalDialog`, `CryptoDonateDialog`, `DropdownListbox`, `WindowBar`, `ToastCard` and `PresenceBadges`, with `usePaypalButtons`, `useDialogKeys`, `usePortalHue` and `deviceGlyph`. Vue also exports the core's badge, button, selector and select types that React re-exports.
 - **React twins** of the Vue composables: `useRainbow`, `useHue`, `useShape`, `useMotion` and `useAccent`. Each returns the value and its setter, as `useState` does.
+- **`Accordion` and `Collapsible`** for reading matter, such as the questions of a help page, on Zag's accordion and collapsible machines. Each row is a heading with a button in it. Rule 26 still keeps them off pages that set something ("Reading matter").
 - **`fromEnd` on `ContextMenu`** opens a menu with the focus on its last row, for an app's own menu bar.
 
 ## 🔁 Changed

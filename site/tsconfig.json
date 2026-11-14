@@ -19,7 +19,9 @@
       "@glimstone/vue": ["../packages/vue/src/index.ts"],
       "@glimstone/vue/Select": ["../packages/vue/src/entries/select.ts"],
       "@glimstone/vue/Combobox": ["../packages/vue/src/entries/combobox.ts"],
-      "@glimstone/vue/Slider": ["../packages/vue/src/entries/slider.ts"]
+      "@glimstone/vue/Slider": ["../packages/vue/src/entries/slider.ts"],
+      "@glimstone/vue/Collapsible": ["../packages/vue/src/entries/collapsible.ts"],
+      "@glimstone/vue/Accordion": ["../packages/vue/src/entries/accordion.ts"]
     }
   },
   "include": ["src", "tests", "test", "vite.config.ts", "playwright.config.ts"]

@@ -61,6 +61,8 @@ const COMPONENTS = {
   Popover: "react/Popover.tsx",
   Sheet: "react/Sheet.tsx",
   ListTable: "react/ListTable.tsx",
+  Collapsible: "react/Collapsible.tsx",
+  Accordion: "react/Accordion.tsx",
 };
 
 const clean = (s) => s.replace(/\s+/g, " ").trim();

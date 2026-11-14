@@ -1110,6 +1110,32 @@ export const GLOSSARY: GlossarySection[] = [
           { en: "Crypto window", de: "Krypto-Fenster", code: "CryptoDonateDialog", proposal: true },
         ],
       },
+      {
+        id: "accordion",
+        en: "Accordion",
+        de: "Akkordeon",
+        proposal: true,
+        code: ["Accordion", ".glim-accordion"],
+        components: ["Accordion"],
+        rules: [26],
+        text: {
+          en: "Questions whose answers open under them, for reading matter such as a help page. Never on a page that sets something.",
+          de: "Fragen, deren Antworten sich darunter öffnen, für Lesestoff wie eine Hilfeseite. Nie auf einer Seite, die etwas einstellt.",
+        },
+      },
+      {
+        id: "collapsible",
+        en: "Collapsible",
+        de: "Aufklappzeile",
+        proposal: true,
+        code: ["Collapsible", ".glim-disclosure-trigger"],
+        components: ["Collapsible"],
+        rules: [26],
+        text: {
+          en: "One row that opens a passage under it, for text that is read once.",
+          de: "Eine Zeile, die einen Absatz darunter öffnet, für Text, den man einmal liest.",
+        },
+      },
     ],
   },
 ];

@@ -6053,3 +6053,81 @@ a:is(.glim-btn, .glim-icon-btn) { text-decoration: none; }
     margin-top: 0;
   }
 }
+
+/* Collapsible and Accordion: a row that opens the text under it. The row has
+   no fill of its own, so it hovers to --carbon-hover, and on the second
+   surface one step up (rule 21). Open is no activity and takes no accent. */
+@layer components {
+  .glim-accordion {
+    display: flex;
+    flex-direction: column;
+  }
+  .glim-accordion-item + .glim-accordion-item {
+    border-top: 1px solid color-mix(in srgb, var(--carbon-border) 60%, transparent);
+  }
+  .glim-disclosure-heading {
+    margin: 0;
+    font: inherit;
+  }
+  .glim-disclosure-trigger {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    min-height: var(--btn-h-key);
+    padding: 0.5rem 0.75rem;
+    border: 0;
+    border-radius: var(--radius-control);
+    background-color: transparent;
+    color: var(--carbon-text);
+    font: inherit;
+    font-size: var(--text-body);
+    font-weight: 500;
+    line-height: 1.25rem;
+    text-align: start;
+    cursor: pointer;
+  }
+  .glim-disclosure-trigger:hover { background-color: var(--carbon-hover); }
+  :is(.glim-well, .glim-subcard) .glim-disclosure-trigger:hover { background-color: var(--carbon-surface3); }
+  .glim-disclosure-trigger:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+  .glim-disclosure-trigger[data-disabled] {
+    color: var(--carbon-text-muted);
+    background-color: transparent;
+    cursor: default;
+  }
+  .glim-disclosure-label {
+    flex: 1;
+    min-width: 0;
+  }
+  .glim-disclosure-indicator {
+    display: inline-flex;
+    flex-shrink: 0;
+    color: var(--carbon-text-sub);
+  }
+  .glim-disclosure-indicator[data-state="open"] { rotate: 180deg; }
+  .glim-disclosure-content { overflow: hidden; }
+  .glim-disclosure-body {
+    padding: 0.25rem 0.75rem 0.75rem;
+    color: var(--carbon-text-sub);
+    font-size: var(--text-body);
+    line-height: 1.5;
+  }
+}
+/* The machine waits for the closing animation before it hides the text, and
+   without one it hides it at once, which is what off and reduced motion get. */
+@keyframes glim-disclose-in {
+  from { height: 0; opacity: 0; }
+  to   { height: var(--height); opacity: 1; }
+}
+@keyframes glim-disclose-out {
+  from { height: var(--height); opacity: 1; }
+  to   { height: 0; opacity: 0; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .glim-disclosure-indicator { transition: rotate var(--motion-control-dur, 0s) ease; }
+  .glim-collapsible > .glim-disclosure-content[data-state="open"] { animation: glim-disclose-in var(--motion-control-dur, 0s) ease-out; }
+  .glim-collapsible > .glim-disclosure-content[data-state="closed"] { animation: glim-disclose-out var(--motion-control-dur, 0s) ease-in; }
+}

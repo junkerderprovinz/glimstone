@@ -141,7 +141,7 @@ The CSS prefix is `glim-`.
 
 25. **An action that writes files says where before it writes.** Its window names the folder and the file names first and shows the finished path afterwards, with a copy button. A server-side export that says nothing sends people to their downloads folder, which is where a browser puts files and where these are not. Where the action offers formats, they are a selector with plain names, and the usual one is preselected rather than labelled "(default)". Found in an export, reported as "Export to where? Not clear."
 
-26. **Nothing expands in place.** No accordion, no "Advanced" fold, no chevron row that opens inline, anywhere in an app. What used to sit under a fold becomes a sub-card (rule 1) or a card of its own, and a row that used to expand opens a sheet: a window over the page holding its detail, such as an anomaly's details or its watching settings. Folds read as nesting, and the person has to open each one to learn what a page holds. The expanders in "Two pages that do the same job" are the record of a drift, not a pattern to build. A `Tree`, such as the folders of a picker, is not a fold: a fold hides a part of a page, and a tree's rows are the content being walked through.
+26. **Nothing expands in place.** No accordion, no "Advanced" fold, no chevron row that opens inline, on any page that sets or lists something. What used to sit under a fold becomes a sub-card (rule 1) or a card of its own, and a row that used to expand opens a sheet: a window over the page holding its detail, such as an anomaly's details or its watching settings. Folds read as nesting, and the person has to open each one to learn what a page holds. The expanders in "Two pages that do the same job" are the record of a drift, not a pattern to build. A `Tree`, such as the folders of a picker, is not a fold: a fold hides a part of a page, and a tree's rows are the content being walked through. Reading matter, such as a help page's questions, is the one place a row opens its text ("Reading matter").
 
 27. **No Simple/Advanced switch; three levels instead of a mode.** The design has to be clear enough not to need one. Everyday things stand on the page, details on the object's own page, rare things in their own card or sub-card, and rare or dangerous actions in the More menu ("Page actions"). What a switch used to hide is either always shown or placed by that level.
 
@@ -950,6 +950,15 @@ Two more surfaces stand over the page, both in the browser's top layer, so no ca
 - **A `Sheet` is a panel at the end edge** for the details of a row or a longer form beside its list. It is a `<dialog>` shown with `showModal()`, so the page behind it is inert by itself. It is a card inset by the page gutter, which leaves the title's notch room above it, and on a phone it rises from the bottom at full width. Its foot works as a window's, with Cancel or Close added, so its head has no close mark.
 - **What opens from inside a sheet renders into the sheet.** `<body>` lies under the top layer, so a bubble, a menu or a list portalled there would sit behind the sheet. Every component asks `portalTarget()` where to render.
 - **A sheet slides in** by `--motion-sheet-shift` of its width over `--motion-sheet-dur`: all of it at wild, a quarter at subtle, nothing at "off" and under reduced motion.
+
+## Reading matter
+
+Help pages, release notes and a list of frequent questions are read, not set, and the one place a row may open the text under it. Rule 26 still holds everywhere else: on a page that sets something, a fold hides what the page holds.
+
+- **`Accordion` is the list of questions, `Collapsible` the single passage.** Each row is a heading with a button in it, so a screen reader can walk from question to question, and `headingLevel` fits it into the page. One item opens at a time unless `multiple` is set, and an open item closes again on its own row.
+- **The row is bare.** It has no fill of its own, so it hovers to `--carbon-hover`, and on a sub-card or in a well to `--carbon-surface3` (rule 21). Rows are parted by hairlines. Open is no activity, so nothing takes the accent. The chevron at the end turns over.
+- **The keys are the APG accordion's**: Enter and Space open and close, the arrows move between rows, Home and End go to the first and the last.
+- **It moves on the control duration.** A collapsible's text grows open over `--motion-control-dur` and the chevron turns with it. At off and under reduced motion the text comes and goes at once.
 
 ## Narrow windows
 

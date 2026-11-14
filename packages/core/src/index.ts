@@ -1,3 +1,4 @@
+export * from "./accordion.ts";
 export * from "./announce.ts";
 export * from "./appearance.ts";
 export * from "./appMarks.ts";

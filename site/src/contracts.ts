@@ -674,4 +674,22 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "target-size", when: "Any demo page, in either framework", then: "Every button, link, field and row is at least 24 by 24 pixels, or a 24 pixel circle on its centre touches no other target. A link inside a sentence is exempt." },
     ],
   },
+  Accordion: {
+    pattern: { name: "Accordion", url: `${APG}accordion/` },
+    rows: [
+      { id: "accordion-heading", when: "Always", then: "Each row is a button inside a heading, with aria-expanded and aria-controls pointing at its text." },
+      { id: "accordion-toggle", keys: ["Enter", "Space"], when: "A row has focus", then: "Its text opens, and closes again on the next press." },
+      { id: "accordion-one", when: "An item opens while another is open, and multiple is off", then: "The other one closes." },
+      { id: "accordion-arrows", keys: ["ArrowDown", "ArrowUp", "Home", "End"], when: "A row has focus", then: "The focus moves to the next or the previous row, or to the first or the last." },
+      { id: "accordion-region", when: "An item is open", then: "Its text is a region named by its row." },
+    ],
+  },
+  Collapsible: {
+    pattern: { name: "Disclosure", url: `${APG}disclosure/` },
+    rows: [
+      { id: "collapsible-toggle", keys: ["Enter", "Space"], when: "The row has focus", then: "The text opens and aria-expanded turns true, and the next press closes it." },
+      { id: "collapsible-hidden", when: "It is closed", then: "The text is hidden from the page and from a screen reader." },
+      { id: "collapsible-still", when: "Motion is off, or the system asks for reduced motion", then: "The text appears and goes at once." },
+    ],
+  },
 };

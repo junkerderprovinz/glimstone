@@ -19,6 +19,8 @@
     "@glimstone/core": "4.4.1"
   },
   "peerDependencies": {
+    "@zag-js/accordion": "^1.47.0",
+    "@zag-js/collapsible": "^1.47.0",
     "@zag-js/combobox": "^1.46.0",
     "@zag-js/menu": "^1.46.0",
     "@zag-js/react": "^1.46.0",
