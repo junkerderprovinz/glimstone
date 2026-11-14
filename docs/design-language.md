@@ -1160,6 +1160,16 @@ Help pages, release notes and a list of frequent questions are read, not set, an
 - **It stacks with the chrome**, above the page and below a modal window (`--z-chrome`), so a window that asks a question still covers it.
 - **Its head moves it and its edges size it**, and while it has focus the arrow keys move it. Escape closes it. The stage buttons in its head fold it to its head, fill the window with it or give it its size back. They are glyphs alone, like a desktop window's ("The desktop window frame").
 
+## The components' words in every language
+
+The components on the Zag machines speak the 42 languages of the glossary, as the fortress does ("The fortress").
+
+- **`componentText(lang)` from the core hands out every component's `text`**: `componentText(lang).pagination` for a Pagination, `.steps` for Steps, and so on. A regional tag such as `pt-BR` takes its base language, and a language GlimStone does not carry takes English, which is also what every component speaks without a `text`.
+- **Each language is a module of its own** under `componentLocales/`, so an app with one language imports its own table and builds the part it needs with the component's builder, such as `paginationText(de.pagination, "de")`.
+- **Counts follow the language.** A sentence that counts, such as a rating's "3 of 5 stars" or a timer's "2 minutes, 5 seconds", carries every plural form its language has, Arabic's six and Polish's four, and the numbers come in the language's own digits.
+- **An app's own words win.** `text` takes a partial table, so `{ ...componentText(lang).steps, finish: "Save" }` keeps every other word of the language.
+- **A test holds every table to English**: the same sentences with the same placeholders, every plural form a count needs, no long dash, and the glossary of `@glimstone/terms`. On the Pagination page the components stand in Arabic, right to left.
+
 ## Narrow windows
 
 The web interface at phone width, beside "The bottom bar" that replaces the rail there.

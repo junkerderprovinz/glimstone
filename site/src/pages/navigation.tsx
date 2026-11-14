@@ -25,6 +25,20 @@ export function PaginationPage() {
         </li>
         <li>A screen reader hears the row's name, and each page as "Page 3 of 20", with the one in force marked as the current page.</li>
       </ul>
+      <H2>In every language</H2>
+      <p>
+        <code>componentText(lang)</code> from the core hands out the words of every component here in the 42 languages
+        of the glossary, with each language's plural forms and digits. Pass a component its part, and merge an app's own
+        words over it where they differ. Below in Arabic, right to left, with Finish worded by the app.
+      </p>
+      <Demo name="PaginationArabic" />
+      <Code
+        code={`import { componentText } from "@glimstone/core";
+
+const words = componentText(lang);
+<Pagination count={195} text={words.pagination} />
+<Steps items={steps} content={draw} text={{ ...words.steps, finish: "Save" }} />`}
+      />
       <H2>Behaviour</H2>
       <ContractTable of="Pagination" />
       <H2>API</H2>

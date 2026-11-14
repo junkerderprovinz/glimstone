@@ -4,6 +4,8 @@
 // panel. A date travels as an ISO day, "2026-11-14", so an app never handles
 // the machine's own date objects.
 
+import { en } from "./componentLocales/en.ts";
+
 export type DateView = "day" | "month" | "year";
 
 export interface DatePickerText {
@@ -17,13 +19,7 @@ export interface DatePickerText {
   zoomOut: string;
 }
 
-export const DATE_PICKER_TEXT: DatePickerText = {
-  placeholder: "No date",
-  calendar: "Calendar",
-  previous: { day: "Previous month", month: "Previous year", year: "Previous years" },
-  next: { day: "Next month", month: "Next year", year: "Next years" },
-  zoomOut: "Choose a month or a year",
-};
+export const DATE_PICKER_TEXT: DatePickerText = en.datePicker;
 
 /** The language the page is in, which the calendar is drawn in unless the app names another. */
 export function pageLocale(): string {

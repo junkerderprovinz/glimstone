@@ -1,0 +1,83 @@
+import type { ComponentWords } from "../componentWords.ts";
+
+export const ar: ComponentWords = {
+  pagination: { label: "الصفحات", previous: "الصفحة السابقة", next: "الصفحة التالية", page: "الصفحة {page} من {pages}" },
+  pinInput: { cell: "الحرف {index} من {length}" },
+  tagsInput: {
+    remove: "إزالة {tag}",
+    added: "أُضيف {tag}",
+    selected: "اختير {tag}. يزيله مفتاح Backspace أو Delete",
+    removed: "أُزيل {tag}",
+  },
+  steps: { back: "رجوع", next: "التالي", finish: "إنهاء" },
+  splitter: { resize: "تغيير الحجم" },
+  fileUpload: {
+    drop: "أفلت الملفات هنا أو اخترها",
+    remove: "إزالة {name}",
+    refused: {
+      TOO_MANY_FILES: "{name} ملف زائد عن الحد",
+      FILE_INVALID_TYPE: "{name} ليس من نوع الملفات المقبول هنا",
+      FILE_TOO_LARGE: "{name} كبير جدًا",
+      FILE_TOO_SMALL: "{name} صغير جدًا",
+      FILE_INVALID: "تتعذر قراءة {name}",
+      FILE_EXISTS: "{name} موجود في القائمة من قبل",
+    },
+  },
+  datePicker: {
+    placeholder: "بلا تاريخ",
+    calendar: "التقويم",
+    previous: { day: "الشهر السابق", month: "السنة السابقة", year: "السنوات السابقة" },
+    next: { day: "الشهر التالي", month: "السنة التالية", year: "السنوات التالية" },
+    zoomOut: "اختر شهرًا أو سنة",
+  },
+  rating: {
+    star: {
+      zero: "{value} من {count} نجمة",
+      one: "{value} من {count} نجمة",
+      two: "{value} من {count} نجمة",
+      few: "{value} من {count} نجوم",
+      many: "{value} من {count} نجمة",
+      other: "{value} من {count} نجمة",
+    },
+  },
+  timer: {
+    start: "بدء",
+    pause: "إيقاف مؤقت",
+    resume: "متابعة",
+    reset: "إعادة الضبط",
+    hours: {
+      zero: "{count} ساعة",
+      one: "{count} ساعة",
+      two: "{count} ساعة",
+      few: "{count} ساعات",
+      many: "{count} ساعة",
+      other: "{count} ساعة",
+    },
+    minutes: {
+      zero: "{count} دقيقة",
+      one: "{count} دقيقة",
+      two: "{count} دقيقة",
+      few: "{count} دقائق",
+      many: "{count} دقيقة",
+      other: "{count} دقيقة",
+    },
+    seconds: {
+      zero: "{count} ثانية",
+      one: "{count} ثانية",
+      two: "{count} ثانية",
+      few: "{count} ثوانٍ",
+      many: "{count} ثانية",
+      other: "{count} ثانية",
+    },
+  },
+  carousel: {
+    previous: "الشريحة السابقة",
+    next: "الشريحة التالية",
+    slide: "{index} من {count}",
+    goTo: "الشريحة {index}",
+  },
+  marquee: { pause: "إيقاف مؤقت", resume: "متابعة" },
+  tour: { back: "رجوع", next: "التالي", close: "إغلاق", progress: "{step} من {steps}" },
+  floatingPanel: { minimize: "تصغير", maximize: "تكبير", restore: "استعادة", close: "إغلاق" },
+  signaturePad: { area: "التوقيع", clear: "مسح" },
+};

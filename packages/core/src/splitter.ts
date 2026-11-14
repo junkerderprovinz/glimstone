@@ -2,6 +2,8 @@
 // panels it lays out, the handle's name and the id the machine gives the
 // handle between two panels.
 
+import { en } from "./componentLocales/en.ts";
+
 export interface SplitterPanel {
   /** Names the panel to the machine and in the handle beside it. */
   id: string;
@@ -17,9 +19,7 @@ export interface SplitterText {
   resize: string;
 }
 
-export const SPLITTER_TEXT: SplitterText = {
-  resize: "Resize",
-};
+export const SPLITTER_TEXT: SplitterText = en.splitter;
 
 /** The handle between a panel and the next, in the form the machine names it. */
 export function splitterHandleId(before: SplitterPanel, after: SplitterPanel): `${string}:${string}` {

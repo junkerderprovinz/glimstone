@@ -3,6 +3,10 @@
 // told otherwise, so every move the page starts asks first whether the motion
 // level or the system wants it still.
 
+import { en } from "./componentLocales/en.ts";
+import type { ComponentWords } from "./componentWords.ts";
+import { fill } from "./fortressText.ts";
+
 export interface CarouselText {
   previous: string;
   next: string;
@@ -12,12 +16,17 @@ export interface CarouselText {
   goTo: (index: number) => string;
 }
 
-export const CAROUSEL_TEXT: CarouselText = {
-  previous: "Previous slide",
-  next: "Next slide",
-  slide: (index, count) => `${index} of ${count}`,
-  goTo: (index) => `Slide ${index}`,
-};
+/** The words of a Carousel from a language's table, its counts in that language's digits. */
+export function carouselText(w: ComponentWords["carousel"], lang: string): CarouselText {
+  return {
+    previous: w.previous,
+    next: w.next,
+    slide: (index, count) => fill(w.slide, { index: index.toLocaleString(lang), count: count.toLocaleString(lang) }),
+    goTo: (index) => fill(w.goTo, { index: index.toLocaleString(lang) }),
+  };
+}
+
+export const CAROUSEL_TEXT: CarouselText = carouselText(en.carousel, "en");
 
 /** Whether a move should land at once: at the motion level off, or when the system asks for reduced motion. */
 export function stillMotion(): boolean {

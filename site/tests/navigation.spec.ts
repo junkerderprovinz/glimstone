@@ -73,6 +73,32 @@ test.describe("Pagination", () => {
     expect(rest).toBe(await resolved(nav(page), "--carbon-surface2"));
   });
 
+  test("[pagination-languages] in Arabic every component reads right to left, and the app's own word wins", async ({ page }) => {
+    // A right-to-left app sets the direction on the page, where the components read
+    // it as they mount, so the page is drawn again once it is set.
+    await open(page, "/components/pagination");
+    await page.evaluate(() => (document.documentElement.dir = "rtl"));
+    await page.evaluate(() => (location.hash = "#/components/steps?fw=" + new URLSearchParams(location.hash.split("?")[1]).get("fw")));
+    await page.locator("main h1").first().waitFor();
+    await page.goBack();
+    await page.locator('[data-demo="PaginationArabic"]').first().waitFor();
+    const demo = stage(page, "PaginationArabic");
+    const nav = demo.getByRole("navigation", { name: "الصفحات" });
+    await expect(nav.getByRole("button", { name: "الصفحة 1 من 20" })).toHaveAttribute("aria-current", "page");
+    const back = await nav.getByRole("button", { name: "الصفحة السابقة" }).boundingBox();
+    const next = await nav.getByRole("button", { name: "الصفحة التالية" }).boundingBox();
+    expect(back!.x).toBeGreaterThan(next!.x);
+    await expect(demo.getByRole("button", { name: "إزالة صور" })).toBeVisible();
+    await expect(demo.getByRole("button", { name: "التالي", exact: true })).toBeVisible();
+    const steps = demo.getByRole("tab");
+    expect((await steps.nth(0).boundingBox())!.x).toBeGreaterThan((await steps.nth(2).boundingBox())!.x);
+    await demo.getByRole("button", { name: "التالي", exact: true }).click();
+    await demo.getByRole("button", { name: "التالي", exact: true }).click();
+    await expect(demo.getByRole("button", { name: "حفظ" })).toBeVisible();
+    const spill = await demo.evaluate((root) => [...root.querySelectorAll<HTMLElement>("*")].filter((el) => el.scrollWidth > el.clientWidth + 1 && getComputedStyle(el).overflowX === "hidden").length);
+    expect(spill).toBe(0);
+  });
+
   test("[pagination-forced] in a contrast theme every page has an edge and the one in force the selection colours", async ({ page }) => {
     await page.emulateMedia({ forcedColors: "active" });
     await open(page, "/components/pagination");

@@ -2,6 +2,8 @@
 // and the keys of its row. The machine draws the row as tabs but gives them no
 // arrow keys, so the row takes the tabs pattern's own.
 
+import { en } from "./componentLocales/en.ts";
+
 export interface StepsItem {
   /** The step's name in the row and the accessible name of its tab. */
   title: string;
@@ -14,11 +16,7 @@ export interface StepsText {
   finish: string;
 }
 
-export const STEPS_TEXT: StepsText = {
-  back: "Back",
-  next: "Next",
-  finish: "Finish",
-};
+export const STEPS_TEXT: StepsText = en.steps;
 
 /**
  * The step a key moves the focus to in the row, or null for a key the row
