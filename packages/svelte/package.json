@@ -53,6 +53,11 @@
       "svelte": "./dist/entries/pagination.js",
       "default": "./dist/entries/pagination.js"
     },
+    "./TagsInput": {
+      "types": "./dist/entries/tagsinput.d.ts",
+      "svelte": "./dist/entries/tagsinput.js",
+      "default": "./dist/entries/tagsinput.js"
+    },
     "./Steps": {
       "types": "./dist/entries/steps.d.ts",
       "svelte": "./dist/entries/steps.js",
@@ -102,6 +107,7 @@
     "@zag-js/slider": "^1.46.0",
     "@zag-js/steps": "^1.47.0",
     "@zag-js/svelte": "^1.47.0",
+    "@zag-js/tags-input": "^1.47.0",
     "@zag-js/timer": "^1.47.0",
     "svelte": "^5.29.0"
   }

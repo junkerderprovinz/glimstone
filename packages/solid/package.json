@@ -44,6 +44,10 @@
       "types": "./dist/Pagination.d.ts",
       "default": "./dist/Pagination.js"
     },
+    "./TagsInput": {
+      "types": "./dist/TagsInput.d.ts",
+      "default": "./dist/TagsInput.js"
+    },
     "./Steps": {
       "types": "./dist/Steps.d.ts",
       "default": "./dist/Steps.js"
@@ -88,6 +92,7 @@
     "@zag-js/slider": "^1.46.0",
     "@zag-js/solid": "^1.47.0",
     "@zag-js/steps": "^1.47.0",
+    "@zag-js/tags-input": "^1.47.0",
     "@zag-js/timer": "^1.47.0",
     "solid-js": "^1.9.0"
   }
