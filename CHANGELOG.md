@@ -12,7 +12,7 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 
 **Adopting apps:**
 
-- **Vue toasts:** `ToastViewport` emits `mouse-enter`, `mouse-leave`, `focus` and `blur`, the names of React's handlers. Rename `@enter`, `@leave`, `@focusin` and `@focusout` where the app listens.
+- **Vue toasts:** `ToastViewport` emits `mouse-enter`, `mouse-leave`, `focus` and `blur`, the names of React's handlers. The old `enter`, `leave`, `focusin` and `focusout` are deprecated and go in 5.0.0: until then they keep firing beside the new names, and the first one a page listens to says so once on the console. Rename `@enter`, `@leave`, `@focusin` and `@focusout` where the app listens.
 - **Vue giving windows:** the QR code and the coin marks of `CryptoDonateDialog` go into its `qr` and `mark` slots, and the app's selector in `PaypalDialog` into `selector`. `PaypalDialog` binds `frequency`, `preset` and `typed` with `v-model`, and `usePaypalButtons` takes a getter for its options and hands back the ref for `buttonsRef`.
 - **Types:** `CryptoCoin`, `CryptoNetwork`, `ToastViewportEntry`, `SidebarCount`, `InstanceFigure`, `SignInLabelKeys`, `FortressLabelKeys` and `MenuBarHandle` live in `@glimstone/core`. React exports them under the same names as before, so an import from `@glimstone/react` keeps working.
 - **Your own copy of the tokens:** take the `.glim-list-filter` rule from `tokens.css`.

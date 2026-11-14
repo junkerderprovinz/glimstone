@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { exportedNames, reactComponents, vueComponents } from "./exports.ts";
+import { DEPRECATED } from "../../packages/core/src/deprecated.ts";
 import { drift, reactSurface, vueSurface } from "./surface.ts";
 
 // An app moves from one framework to the other by changing its imports and
@@ -24,11 +25,15 @@ test("both packages export the same types", () => {
   assert.deepEqual({ notInVue: missing(react, vue), notInReact: missing(vue, react) }, { notInVue: [], notInReact: [] });
 });
 
+// A renamed event keeps its old name in Vue until the next major release, and
+// the deprecation list says which ones those are.
 const vue = vueComponents();
 for (const [name, file] of reactComponents()) {
   test(`${name} takes the same props, events and slots in React and Vue`, () => {
     const twin = vue.get(name);
     assert.ok(twin, `${name} has no Vue twin`);
-    assert.deepEqual(drift(reactSurface(name, file), vueSurface(twin)), []);
+    const surface = vueSurface(twin);
+    for (const event of surface.events) if (DEPRECATED[`${name} ${event}`]) surface.events.delete(event);
+    assert.deepEqual(drift(reactSurface(name, file), surface), []);
   });
 }
