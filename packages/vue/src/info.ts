@@ -29,6 +29,8 @@ export interface InfoHelpCardProps {
     hint?: string;
     report: string;
     repoButton: string;
+    /** Only drawn together with `discordUrl`. */
+    discordButton?: string;
     mailButton: string;
     mailSubject: string;
     bugReport?: string;
@@ -38,6 +40,10 @@ export interface InfoHelpCardProps {
   };
   repoUrl: string;
   repoGlyph?: Component;
+  /** An invite to the app's Discord server, for an app that takes its questions there rather than by mail. */
+  discordUrl?: string;
+  /** `IconDiscord`, Discord's own mark. */
+  discordGlyph?: Component;
   /** The workshop's own mailbox. Omit it and the card offers no mail route. */
   mailAddress?: string;
   /** The envelope, `MAIL_SVG` from appMarks.ts, which opens under the pointer. */

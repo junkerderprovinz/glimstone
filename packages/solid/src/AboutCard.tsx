@@ -1,6 +1,7 @@
 import { children, createMemo, createSignal, For, mergeProps, Show, splitProps, type JSX } from "solid-js";
 import {
   mailHref,
+  offersDiscord,
   offersMail,
   openInBrowser,
   runUpdateCheck,
@@ -224,6 +225,8 @@ export interface InfoHelpCardProps {
     hint?: string;
     report: string;
     repoButton: string;
+    /** "Discord". Only drawn together with `discordUrl`. */
+    discordButton?: string;
     mailButton: string;
     mailSubject: string;
     /** "Bug report". Only drawn together with `onBugReport`. */
@@ -239,6 +242,11 @@ export interface InfoHelpCardProps {
   /** The mark on the repository button, passed for the same reason as the
    *  give buttons' marks. */
   repoGlyph?: JSX.Element;
+  /** An invite to the app's Discord server, for an app that takes its
+   *  questions there rather than by mail. */
+  discordUrl?: string;
+  /** `IconDiscord`, Discord's own mark. */
+  discordGlyph?: JSX.Element;
   /** The workshop's own mailbox. Omit it and the card offers no mail route. */
   mailAddress?: string;
   /** The envelope, `MAIL_SVG` from appMarks.ts, which opens under the pointer. */
@@ -257,10 +265,11 @@ export interface InfoHelpCardProps {
   hueIndex?: number;
 }
 
-/** The second card: a sentence inviting a report, then GitHub, Email, the manual and the bug report. */
+/** The second card: a sentence inviting a report, then GitHub, Discord, Email, the manual and the bug report. */
 export function InfoHelpCard(props: InfoHelpCardProps) {
   const merged = mergeProps({ openUrl: openInBrowser }, props);
   const wantsMail = () => offersMail(merged.text.report, merged.mailAddress);
+  const wantsDiscord = () => offersDiscord(merged.text.report, merged.discordUrl) && Boolean(merged.text.discordButton);
 
   return (
     <Card data-glim="InfoHelpCard" title={merged.text.title} hint={merged.text.hint} hueIndex={merged.hueIndex}>
@@ -272,6 +281,14 @@ export function InfoHelpCard(props: InfoHelpCardProps) {
           mark={merged.repoGlyph}
           markClass="glim-github-mark"
         />
+        <Show when={wantsDiscord()}>
+          <ReadmeButton
+            brand="discord"
+            parts={[{ name: merged.text.discordButton!, onClick: () => merged.openUrl(merged.discordUrl!) }]}
+            mark={merged.discordGlyph}
+            markClass="glim-discord-mark"
+          />
+        </Show>
         {/* This button reaches the app's own authors rather than a third
             party, so it follows the user's accent and rainbow. */}
         <Show when={wantsMail()}>
@@ -354,6 +371,7 @@ export function AboutCard(props: {
     paypalButton?: string;
     report: string;
     repoButton: string;
+    discordButton?: string;
     mailButton: string;
     mailSubject: string;
     version: string;
@@ -372,6 +390,8 @@ export function AboutCard(props: {
   paypalGlyph?: JSX.Element;
   onPaypal?: () => void;
   onCrypto?: () => void;
+  discordUrl?: string;
+  discordGlyph?: JSX.Element;
   mailAddress?: string;
   mailGlyph?: JSX.Element;
   openUrl?: (url: string) => void;
@@ -402,11 +422,14 @@ export function AboutCard(props: {
           title: merged.text.helpTitle,
           report: merged.text.report,
           repoButton: merged.text.repoButton,
+          discordButton: merged.text.discordButton,
           mailButton: merged.text.mailButton,
           mailSubject: merged.text.mailSubject,
         },
         repoUrl: merged.repoUrl,
         repoGlyph: merged.repoGlyph,
+        discordUrl: merged.discordUrl,
+        discordGlyph: merged.discordGlyph,
         mailAddress: merged.mailAddress,
         mailGlyph: merged.mailGlyph,
         openUrl: merged.openUrl,

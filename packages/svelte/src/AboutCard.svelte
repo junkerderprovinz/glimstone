@@ -11,6 +11,7 @@
       paypalButton?: string;
       report: string;
       repoButton: string;
+      discordButton?: string;
       mailButton: string;
       mailSubject: string;
       version: string;
@@ -29,6 +30,8 @@
     paypalGlyph?: Snippet;
     onPaypal?: () => void;
     onCrypto?: () => void;
+    discordUrl?: string;
+    discordGlyph?: Snippet;
     mailAddress?: string;
     mailGlyph?: Snippet;
     openUrl?: (url: string) => void;
@@ -58,6 +61,8 @@
     paypalGlyph,
     onPaypal,
     onCrypto,
+    discordUrl,
+    discordGlyph,
     mailAddress,
     mailGlyph,
     openUrl = openInBrowser,
@@ -77,9 +82,18 @@
   about={{ text, onCoffee, coffeeArt, onPaypal, paypalGlyph, onCrypto, cryptoGlyph }}
   version={{ text: { title: text.version, unreleased: text.unreleased }, rows, openUrl }}
   help={{
-    text: { title: text.helpTitle, report: text.report, repoButton: text.repoButton, mailButton: text.mailButton, mailSubject: text.mailSubject },
+    text: {
+      title: text.helpTitle,
+      report: text.report,
+      repoButton: text.repoButton,
+      discordButton: text.discordButton,
+      mailButton: text.mailButton,
+      mailSubject: text.mailSubject,
+    },
     repoUrl,
     repoGlyph,
+    discordUrl,
+    discordGlyph,
     mailAddress,
     mailGlyph,
     openUrl,

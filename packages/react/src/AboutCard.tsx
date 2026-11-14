@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from "react";
 import {
   mailHref,
+  offersDiscord,
   offersMail,
   openInBrowser,
   runUpdateCheck,
@@ -223,6 +224,8 @@ export interface InfoHelpCardProps {
     hint?: string;
     report: string;
     repoButton: string;
+    /** "Discord". Only drawn together with `discordUrl`. */
+    discordButton?: string;
     mailButton: string;
     mailSubject: string;
     /** "Bug report". Only drawn together with `onBugReport`. */
@@ -238,6 +241,11 @@ export interface InfoHelpCardProps {
   /** The mark on the repository button, passed for the same reason as the
    *  give buttons' marks. */
   repoGlyph?: ReactNode;
+  /** An invite to the app's Discord server, for an app that takes its
+   *  questions there rather than by mail. */
+  discordUrl?: string;
+  /** `IconDiscord`, Discord's own mark. */
+  discordGlyph?: ReactNode;
   /** The workshop's own mailbox. Omit it and the card offers no mail route. */
   mailAddress?: string;
   /** The envelope, `MAIL_SVG` from appMarks.ts, which opens under the pointer. */
@@ -256,11 +264,13 @@ export interface InfoHelpCardProps {
   hueIndex?: number;
 }
 
-/** The second card: a sentence inviting a report, then GitHub, Email, the manual and the bug report. */
+/** The second card: a sentence inviting a report, then GitHub, Discord, Email, the manual and the bug report. */
 export function InfoHelpCard({
   text,
   repoUrl,
   repoGlyph,
+  discordUrl,
+  discordGlyph,
   mailAddress,
   mailGlyph,
   manualUrl,
@@ -271,6 +281,7 @@ export function InfoHelpCard({
   hueIndex,
 }: InfoHelpCardProps) {
   const wantsMail = offersMail(text.report, mailAddress);
+  const wantsDiscord = offersDiscord(text.report, discordUrl) && Boolean(text.discordButton);
 
   return (
     <Card data-glim="InfoHelpCard" title={text.title} hint={text.hint} hueIndex={hueIndex}>
@@ -282,6 +293,14 @@ export function InfoHelpCard({
           mark={repoGlyph}
           markClass="glim-github-mark"
         />
+        {wantsDiscord && (
+          <ReadmeButton
+            brand="discord"
+            parts={[{ name: text.discordButton!, onClick: () => openUrl(discordUrl!) }]}
+            mark={discordGlyph}
+            markClass="glim-discord-mark"
+          />
+        )}
         {wantsMail && (
           // This button reaches the app's own authors rather than a third
           // party, so it follows the user's accent and rainbow.
@@ -362,6 +381,8 @@ export function AboutCard({
   paypalGlyph,
   onPaypal,
   onCrypto,
+  discordUrl,
+  discordGlyph,
   mailAddress,
   mailGlyph,
   openUrl = openInBrowser,
@@ -376,6 +397,7 @@ export function AboutCard({
     paypalButton?: string;
     report: string;
     repoButton: string;
+    discordButton?: string;
     mailButton: string;
     mailSubject: string;
     version: string;
@@ -394,6 +416,8 @@ export function AboutCard({
   paypalGlyph?: ReactNode;
   onPaypal?: () => void;
   onCrypto?: () => void;
+  discordUrl?: string;
+  discordGlyph?: ReactNode;
   mailAddress?: string;
   mailGlyph?: ReactNode;
   openUrl?: (url: string) => void;
@@ -415,11 +439,14 @@ export function AboutCard({
           title: text.helpTitle,
           report: text.report,
           repoButton: text.repoButton,
+          discordButton: text.discordButton,
           mailButton: text.mailButton,
           mailSubject: text.mailSubject,
         },
         repoUrl,
         repoGlyph,
+        discordUrl,
+        discordGlyph,
         mailAddress,
         mailGlyph,
         openUrl,

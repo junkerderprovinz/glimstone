@@ -9,6 +9,8 @@
       hint?: string;
       report: string;
       repoButton: string;
+      /** "Discord". Only drawn together with `discordUrl`. */
+      discordButton?: string;
       mailButton: string;
       mailSubject: string;
       /** "Bug report". Only drawn together with `onBugReport`. */
@@ -24,6 +26,11 @@
     /** The mark on the repository button, passed for the same reason as the
      *  give buttons' marks. */
     repoGlyph?: Snippet;
+    /** An invite to the app's Discord server, for an app that takes its
+     *  questions there rather than by mail. */
+    discordUrl?: string;
+    /** `IconDiscord`, Discord's own mark. */
+    discordGlyph?: Snippet;
     /** The workshop's own mailbox. Omit it and the card offers no mail route. */
     mailAddress?: string;
     /** The envelope, `MAIL_SVG` from appMarks.ts, which opens under the pointer. */
@@ -44,16 +51,18 @@
 </script>
 
 <script lang="ts">
-  import { mailHref, offersMail, openInBrowser } from "@glimstone/core";
+  import { mailHref, offersDiscord, offersMail, openInBrowser } from "@glimstone/core";
   import Card from "./Card.svelte";
   import ReadmeButton from "./ReadmeButton.svelte";
 
   // The second card of the Info tile: a sentence inviting a report, then
-  // GitHub, Email, the manual and the bug report.
+  // GitHub, Discord, Email, the manual and the bug report.
   let {
     text,
     repoUrl,
     repoGlyph,
+    discordUrl,
+    discordGlyph,
     mailAddress,
     mailGlyph,
     manualUrl,
@@ -65,12 +74,16 @@
   }: InfoHelpCardProps = $props();
 
   const wantsMail = $derived(offersMail(text.report, mailAddress));
+  const wantsDiscord = $derived(offersDiscord(text.report, discordUrl) && Boolean(text.discordButton));
 </script>
 
 <Card data-glim="InfoHelpCard" title={text.title} hint={text.hint} {hueIndex}>
   <p class="glim-info-text">{text.report}</p>
   <div class="glim-readme-btn-rows">
     <ReadmeButton brand="github" parts={[{ name: text.repoButton, onClick: () => openUrl(repoUrl) }]} mark={repoGlyph} markClass="glim-github-mark" />
+    {#if wantsDiscord}
+      <ReadmeButton brand="discord" parts={[{ name: text.discordButton!, onClick: () => openUrl(discordUrl!) }]} mark={discordGlyph} markClass="glim-discord-mark" />
+    {/if}
     <!-- This button reaches the app's own authors rather than a third party,
          so it follows the user's accent and rainbow. -->
     {#if wantsMail}

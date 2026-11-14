@@ -125,7 +125,9 @@ wrapper, so they stack in the page's own rhythm.
   window with the release notes and the changes as tabs, or, in an app that
   marks no changes, "Release notes" from `onReleaseNotes` with
   `text.releaseNotes`, which opens the notes alone. The card never draws both.
-- **Help:** the report sentence, GitHub, Email with `MAIL_SVG` when the
+- **Help:** the report sentence, GitHub, Discord with `IconDiscord` as
+  `discordGlyph` when the sentence names Discord and `discordUrl` and
+  `text.discordButton` are set, Email with `MAIL_SVG` when the
   sentence names a mail route and `mailAddress` is set, the manual when
   `manualUrl` and `text.manual` are set, with `MANUAL_SVG` as `manualGlyph` and
   "Open" as `text.manualSub`, and the bug report when `onBugReport` and

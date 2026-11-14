@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { mailHref, offersMail, openInBrowser } from "@glimstone/core";
+import { mailHref, offersDiscord, offersMail, openInBrowser } from "@glimstone/core";
 import type { InfoHelpCardProps } from "./info";
 import Card from "./Card.vue";
 import ReadmeButton from "./ReadmeButton.vue";
 
 // The second card of the Info tile: a sentence inviting a report, then GitHub,
-// Email, the manual and the bug report. No card names a route no control on it
-// can reach, so mail shows only where the sentence names it.
+// Discord, Email, the manual and the bug report. No card names a route no
+// control on it can reach, so Discord and mail show only where the sentence
+// names them.
 const props = withDefaults(defineProps<InfoHelpCardProps>(), { openUrl: openInBrowser });
 const wantsMail = computed(() => offersMail(props.text.report, props.mailAddress));
+const wantsDiscord = computed(() => offersDiscord(props.text.report, props.discordUrl) && Boolean(props.text.discordButton));
 </script>
 
 <template>
@@ -18,6 +20,14 @@ const wantsMail = computed(() => offersMail(props.text.report, props.mailAddress
     <div class="glim-readme-btn-rows">
       <ReadmeButton brand="github" :parts="[{ name: text.repoButton, onClick: () => openUrl(repoUrl) }]" mark-class="glim-github-mark">
         <template v-if="repoGlyph" #mark><component :is="repoGlyph" /></template>
+      </ReadmeButton>
+      <ReadmeButton
+        v-if="wantsDiscord"
+        brand="discord"
+        :parts="[{ name: text.discordButton!, onClick: () => openUrl(discordUrl!) }]"
+        mark-class="glim-discord-mark"
+      >
+        <template v-if="discordGlyph" #mark><component :is="discordGlyph" /></template>
       </ReadmeButton>
       <!-- This button reaches the app's own authors rather than a third party,
            so it follows the user's accent and rainbow. -->
