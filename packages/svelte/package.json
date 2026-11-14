@@ -57,6 +57,11 @@
       "types": "./dist/entries/hovercard.d.ts",
       "svelte": "./dist/entries/hovercard.js",
       "default": "./dist/entries/hovercard.js"
+    },
+    "./Carousel": {
+      "types": "./dist/entries/carousel.d.ts",
+      "svelte": "./dist/entries/carousel.js",
+      "default": "./dist/entries/carousel.js"
     }
   },
   "files": [
@@ -71,6 +76,7 @@
   "peerDependencies": {
     "@zag-js/accordion": "^1.47.0",
     "@zag-js/avatar": "^1.47.0",
+    "@zag-js/carousel": "^1.47.0",
     "@zag-js/collapsible": "^1.47.0",
     "@zag-js/combobox": "^1.46.0",
     "@zag-js/hover-card": "^1.47.0",

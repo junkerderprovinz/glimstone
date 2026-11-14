@@ -47,6 +47,10 @@
     "./HoverCard": {
       "types": "./dist/HoverCard.d.ts",
       "default": "./dist/HoverCard.js"
+    },
+    "./Carousel": {
+      "types": "./dist/Carousel.d.ts",
+      "default": "./dist/Carousel.js"
     }
   },
   "files": [
@@ -61,6 +65,7 @@
   "peerDependencies": {
     "@zag-js/accordion": "^1.47.0",
     "@zag-js/avatar": "^1.47.0",
+    "@zag-js/carousel": "^1.47.0",
     "@zag-js/collapsible": "^1.47.0",
     "@zag-js/combobox": "^1.46.0",
     "@zag-js/hover-card": "^1.47.0",
