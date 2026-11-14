@@ -73,6 +73,11 @@
       "svelte": "./dist/entries/splitter.js",
       "default": "./dist/entries/splitter.js"
     },
+    "./ScrollArea": {
+      "types": "./dist/entries/scrollarea.d.ts",
+      "svelte": "./dist/entries/scrollarea.js",
+      "default": "./dist/entries/scrollarea.js"
+    },
     "./FileUpload": {
       "types": "./dist/entries/fileupload.d.ts",
       "svelte": "./dist/entries/fileupload.js",
@@ -149,6 +154,7 @@
     "@zag-js/pagination": "^1.47.0",
     "@zag-js/pin-input": "^1.47.0",
     "@zag-js/rating-group": "^1.47.0",
+    "@zag-js/scroll-area": "^1.47.0",
     "@zag-js/select": "^1.46.0",
     "@zag-js/signature-pad": "^1.47.0",
     "@zag-js/slider": "^1.46.0",

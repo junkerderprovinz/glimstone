@@ -60,6 +60,10 @@
       "types": "./dist/Splitter.d.ts",
       "default": "./dist/Splitter.js"
     },
+    "./ScrollArea": {
+      "types": "./dist/ScrollArea.d.ts",
+      "default": "./dist/ScrollArea.js"
+    },
     "./FileUpload": {
       "types": "./dist/FileUpload.d.ts",
       "default": "./dist/FileUpload.js"
@@ -126,6 +130,7 @@
     "@zag-js/pagination": "^1.47.0",
     "@zag-js/pin-input": "^1.47.0",
     "@zag-js/rating-group": "^1.47.0",
+    "@zag-js/scroll-area": "^1.47.0",
     "@zag-js/select": "^1.46.0",
     "@zag-js/signature-pad": "^1.47.0",
     "@zag-js/slider": "^1.46.0",
