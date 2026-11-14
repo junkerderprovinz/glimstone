@@ -35,6 +35,10 @@
     "./Accordion": {
       "types": "./dist/Accordion.d.ts",
       "default": "./dist/Accordion.js"
+    },
+    "./Avatar": {
+      "types": "./dist/Avatar.d.ts",
+      "default": "./dist/Avatar.js"
     }
   },
   "files": [
@@ -48,6 +52,7 @@
   },
   "peerDependencies": {
     "@zag-js/accordion": "^1.47.0",
+    "@zag-js/avatar": "^1.47.0",
     "@zag-js/collapsible": "^1.47.0",
     "@zag-js/combobox": "^1.46.0",
     "@zag-js/menu": "^1.46.0",
