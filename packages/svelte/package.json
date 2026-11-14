@@ -32,6 +32,16 @@
       "types": "./dist/entries/slider.d.ts",
       "svelte": "./dist/entries/slider.js",
       "default": "./dist/entries/slider.js"
+    },
+    "./Collapsible": {
+      "types": "./dist/entries/collapsible.d.ts",
+      "svelte": "./dist/entries/collapsible.js",
+      "default": "./dist/entries/collapsible.js"
+    },
+    "./Accordion": {
+      "types": "./dist/entries/accordion.d.ts",
+      "svelte": "./dist/entries/accordion.js",
+      "default": "./dist/entries/accordion.js"
     }
   },
   "files": [
@@ -44,6 +54,8 @@
     "@glimstone/core": "4.4.1"
   },
   "peerDependencies": {
+    "@zag-js/accordion": "^1.47.0",
+    "@zag-js/collapsible": "^1.47.0",
     "@zag-js/combobox": "^1.46.0",
     "@zag-js/menu": "^1.46.0",
     "@zag-js/select": "^1.46.0",

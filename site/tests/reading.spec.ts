@@ -3,8 +3,6 @@ import { open, stage } from "./page";
 
 // The rows of Accordion and Collapsible, each named after its contract row.
 
-test.beforeEach(({}, info) => test.skip(!["react", "vue"].includes(info.project.name), "React and Vue only so far"));
-
 test.describe("Accordion", () => {
   const row = (page: Page, name: string) => stage(page, "AccordionHelp").getByRole("button", { name });
   const where = "Where are the backups kept?";

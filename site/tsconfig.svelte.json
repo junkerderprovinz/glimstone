@@ -9,7 +9,9 @@
       "@glimstone/svelte": ["../packages/svelte/src/index.ts"],
       "@glimstone/svelte/Select": ["../packages/svelte/src/entries/select.ts"],
       "@glimstone/svelte/Combobox": ["../packages/svelte/src/entries/combobox.ts"],
-      "@glimstone/svelte/Slider": ["../packages/svelte/src/entries/slider.ts"]
+      "@glimstone/svelte/Slider": ["../packages/svelte/src/entries/slider.ts"],
+      "@glimstone/svelte/Collapsible": ["../packages/svelte/src/entries/collapsible.ts"],
+      "@glimstone/svelte/Accordion": ["../packages/svelte/src/entries/accordion.ts"]
     }
   },
   "include": ["src/svelte", "src/svelte-demos"],

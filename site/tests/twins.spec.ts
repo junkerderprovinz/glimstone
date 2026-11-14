@@ -22,7 +22,7 @@ test("[twins-markup] every demo draws the same markup in React, Vue, Solid and S
     await page.evaluate(() => document.fonts.ready);
     differ.push(
       ...(await page.evaluate((path) => {
-        const ids = /_r_[0-9a-z]+_|«r[0-9a-z]+»|:r[0-9a-z]+:|\bv[0-9a-zA-Z]+-\d+\b/g;
+        const ids = /_r_[0-9a-z]+_|«r[0-9a-z]+»|:r[0-9a-z]+:|\bv[0-9a-zA-Z]+-\d+\b|\bcl-\d+\b|\bc\d+\b/g;
         const dropped = /^(id|for|name|value|aria-labelledby|aria-describedby|aria-controls|aria-activedescendant|data-uid|data-controls)$/;
         const shape = (el: Element, depth: number): string[] => {
           const attrs = [...el.attributes]
