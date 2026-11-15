@@ -2,7 +2,7 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 4.5.0 - 2026-11-15
 
 Solid and Svelte join React and Vue. `@glimstone/solid` and `@glimstone/svelte` carry every component under React's names, props and defaults and draw the same markup, so an app keeps its look in any of the four.
 
@@ -10,8 +10,11 @@ React and Vue offer the same kit. Every component, hook and type has a twin of t
 
 The focus ring reads on every ground it stands on, and a field's placeholder can be read on every field fill.
 
+After a removal the fortress takes no new app until the phrase changes, and its words say so in all 42 languages.
+
 **Adopting apps:**
 
+- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.5.0, all at the same number.
 - **Vue toasts:** `ToastViewport` emits `mouse-enter`, `mouse-leave`, `focus` and `blur`, the names of React's handlers. The old `enter`, `leave`, `focusin` and `focusout` are deprecated and go in 5.0.0: until then they keep firing beside the new names, and the first one a page listens to says so once on the console. Rename `@enter`, `@leave`, `@focusin` and `@focusout` where the app listens, or let `npx glimstone-migrate src` do it.
 - **Vue giving windows:** the QR code and the coin marks of `CryptoDonateDialog` go into its `qr` and `mark` slots, and the app's selector in `PaypalDialog` into `selector`. `PaypalDialog` binds `frequency`, `preset` and `typed` with `v-model`, and `usePaypalButtons` takes a getter for its options and hands back the ref for `buttonsRef`.
 - **Types:** `CryptoCoin`, `CryptoNetwork`, `ToastViewportEntry`, `SidebarCount`, `InstanceFigure`, `SignInLabelKeys`, `FortressLabelKeys` and `MenuBarHandle` live in `@glimstone/core`. React exports them under the same names as before, so an import from `@glimstone/react` keeps working.
@@ -22,9 +25,14 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 - **Flutter 3.27:** the Flutter package needs Flutter 3.27 or later, for `Color.r` and `Color.from`. Raise the SDK constraint in the app's `pubspec.yaml` with it.
 - **Copies that drift:** `npx glimstone-drift src` compares an app's copied GlimStone files with the release its `GLIMSTONE_VERSION` names and lists each one that differs, with the release it matches instead. It also lists app classes with the `glim-` prefix and deprecated names still in use. Add `--strict` to fail a CI step on any of them.
 - **Deprecated names warn:** a page that uses `Badge`'s `shape`, `AboutCard` or `DropdownListbox`, in any of the four packages, logs one console warning per name with what to use instead. All three go in 5.0.0, the fixed rule for deprecating and removing in the design language, which also lists `BadgeShape`.
+- **The fortress after a removal:** once a member is removed, the kit lets no new app join until the phrase changes, and the old phrase gets nobody in. `removeBack`, `removedBody` and `removedNote` say exactly that, and `removedHereHint` points the removed app to the new phrase.
+- **Joining in that window:** the kit refuses such a join with the code `closedUntilNewPhrase`. Let `onJoin` answer `{ code }` and `Fortress` shows `joinLocked`, the way `phrase` shows `joinRefused`. An `error` of the app's own still wins. `joinRefusalText(text, code)` gives the same sentence for a window of the app's own.
+- **Plugins:** copy `packages/core/vanilla/fortress-card.js` again. It carries the new words in every language and shows `joinLocked` when the adapter's `join` rejects with `{ code: "closedUntilNewPhrase" }`.
 - **A bundle for plugin pages:** every release carries `glimstone-plugin-x.y.z.zip` for a page without a build step, such as an Unraid plugin's. It holds the core as `glimstone.js`, which puts it on `window.GlimStone`, and as the module `glimstone.mjs`, with `tokens.css`, the fortress card and `glyphs.json`.
 - **Moving off deprecated names:** `npx glimstone-migrate src` rewrites `Badge`'s `shape` to `form`, `BadgeShape` to `BadgeForm` and the old `ToastViewport` listeners in Vue templates to the new names in place, and names the file and line of each `AboutCard` and `DropdownListbox` to move by hand. In CSS it turns `color-mix(in srgb, var(--accent) var(--ink-mix), black)` into `var(--accent-ink)` and the same mix of `--item-hue` into `var(--item-hue-glyph)`, and reports any other `--ink-mix`. In Dart it turns a literal `inkMix:` into `inkLightness:` with the matching step, removes the `focusRing:` argument and reports any other `inkMix`. `--check` writes nothing and fails while there is something left.
 - **Tokens from one source:** the values in `tokens.css`, `tailwind-theme.css` and the Flutter `tokens.g.dart` are written from the DTCG files in `packages/core/tokens`, and nothing about the custom properties changes. A tool that reads W3C design tokens can take those files from the package (`@glimstone/core/tokens/*.json`), and `@glimstone/core/figma-variables.json` creates the colours, shapes, densities and lengths as Figma variables through Figma's variables API.
+- **Flutter:** move the git dependency to `ref: v4.5.0`.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.5.0.
 
 ## ✨ Added
 
@@ -58,6 +66,7 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 - **`Tour`**, a short walk through a screen, on Zag's tour machine. The page behind takes the window's scrim with the part a step points at left clear, each step is a small window with its title in the notch, and Escape ends it from any step.
 - **`FloatingPanel`**, a window that stays open beside the work, on Zag's floating-panel machine. It has a window's surface, notch and foot without a scrim, moves by its head and by the arrow keys, sizes by its edges, and folds, fills or restores from its head.
 - **The new components speak the 42 languages of the glossary.** `componentText(lang)` hands out the `text` of each, with the plural forms and digits of every language, and each language is a module of its own under `componentLocales/`. An app's own words still win.
+- **`joinLocked`** tells an app that tries to join after a removal, before the phrase has changed, why the fortress turns it away and that it needs the new phrase. React, Vue, Solid, Svelte and the plugin card pick it for the kit's code on their own, so an app only passes the code on.
 - **Tabs and Radio group pages** on the site, which lead to `Selector`: it is both, a tablist with automatic activation and a radio group with `activation="manual"`, so neither gets a second component.
 - **`fromEnd` on `ContextMenu`** opens a menu with the focus on its last row, for an app's own menu bar.
 - **Windows contrast themes.** Under `forced-colors: active` every card, well, window, menu, field, button and badge gets an edge in the system's text colour. A chosen segment, tile or rail row, a switched-on switch, a ticked checkbox and a bar's fill take the system's selection colours, and an unticked box shows no mark. Before, the switch looked the same on and off, and cards and fields had no edge at all.
@@ -92,6 +101,7 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 - **Lists:** PageDown and PageUp move the focus ten rows in a `ListTable`, and Shift picks along.
 - **DropdownListbox:** a letter jumps to the next option that starts with it, in React and in Vue.
 - **Sheets:** Tab and Shift+Tab stay inside an open `Sheet`.
+- **A removal closes the fortress to new apps until the phrase changes.** The remove window, the question after it and the line under the switch say so plainly, where they used to promise the old phrase a way back in. An app that was removed learns that the new phrase brings it back once the phrase has changed.
 - **Target size:** the ▾ in a list's column header is 24 pixels wide. Every other target on the demo pages already was, or has the room around it that WCAG 2.2 allows instead.
 
 ## 🐛 Fixed
@@ -103,30 +113,9 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 - **The README's stage script looks its scenes up in a `Map`.** A link with `?scene=constructor` or `?scene=toString` reached the plain object's prototype and broke the page.
 - **The overlay test's dial lookup escapes its whitespace class.** Inside a template literal `\s` reached `RegExp` as a plain `s`, so the test only passed by chance.
 
-## 4.4.1 - 2026-11-13
-
-After a removal the fortress takes no new app until the phrase changes, and its words say so in all 42 languages.
-
-**Adopting apps:**
-
-- **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.4.1, all at the same number. Nothing is renamed or removed.
-- **The new rule:** once a member is removed, the kit lets no new app join until the phrase changes, and the old phrase gets nobody in. `removeBack`, `removedBody` and `removedNote` say exactly that, and `removedHereHint` points the removed app to the new phrase.
-- **Joining in that window:** the kit refuses such a join with the code `closedUntilNewPhrase`. Let `onJoin` answer `{ code }` and `Fortress` shows `joinLocked`, the way `phrase` shows `joinRefused`. An `error` of the app's own still wins. `joinRefusalText(text, code)` gives the same sentence for a window of the app's own.
-- **Plugins:** copy `packages/core/vanilla/fortress-card.js` again. It carries the new words in every language and shows `joinLocked` when the adapter's `join` rejects with `{ code: "closedUntilNewPhrase" }`.
-- **Flutter:** move the git dependency to `ref: v4.4.1`. Nothing changed there.
-- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.4.1.
-
-## ✨ Added
-
-- **`joinLocked`** tells an app that tries to join in that window why the fortress turns it away and that it needs the new phrase. React, Vue and the plugin card pick it for the kit's code on their own, so an app only passes the code on.
-
-## ⚡ Improved
-
-- **A removal closes the fortress to new apps until the phrase changes.** The remove window, the question after it and the line under the switch say so plainly, where they used to promise the old phrase a way back in. An app that was removed learns that the new phrase brings it back once the phrase has changed.
-
 ## 🌐 Translations
 
-- **All 42 languages** carry the new words, each in its own terms and form of address.
+- **The new fortress words are in all 42 languages**, each in its own terms and form of address.
 
 ## 4.4.0 - 2026-11-13
 
