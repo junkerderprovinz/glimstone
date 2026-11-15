@@ -2,11 +2,20 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 4.5.1 - 2026-11-15
+
+The GlimStone version on an app's Info tile opens the newest release, so a number whose patch tag folded away still leads to its notes.
+
+**Adopting apps:**
+
+- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.5.1, all packages at the same number.
+- **The GlimStone row:** set `latest: true` on the GlimStone row you hand the Version card. An app that builds the link itself takes `GLIMSTONE_RELEASE_URL` from its GlimStone package in place of `releases/tag/v<version>`.
+- **Flutter:** move the git dependency to `ref: v4.5.1`. Nothing else changes there.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.5.1.
 
 ## ⚡ Improved
 
-- **The GlimStone version opens the newest release.** A row with `latest` links `releases/latest` instead of its own tag, and `GLIMSTONE_REPO` and `GLIMSTONE_RELEASE_URL` come from every package. A folded patch tag no longer leaves an app linking a page that is gone.
+- **The GlimStone version opens the newest release.** A row with `latest` links `releases/latest` instead of its own tag, and `GLIMSTONE_REPO` and `GLIMSTONE_RELEASE_URL` come from every package. Once a patch folds into the next minor and its tag goes, the number still opens the notes its changes went into.
 
 ## 4.5.0 - 2026-11-15
 

@@ -1,3 +1,7 @@
+## 4.5.1
+
+- No changes for Flutter. The link to the newest release this release brings lives in the web packages.
+
 ## 4.5.0
 
 - `GlimTheme.inkMix` is `inkLightness`, the OKLab step the accent's ink moves to, and `accentInk` moves the accent in OKLab as tokens.css does. `GlimTheme` gains `fieldPlaceholder`, and `focusRing` is a getter on `GlimDerived`.
