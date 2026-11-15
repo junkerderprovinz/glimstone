@@ -100,6 +100,8 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 - **The focus ring is opaque and reaches 3:1** on the page, the rail, a card, a well and a row's hover, in every theme, for every preset and any picked colour. On the light theme it stood at 1.9 to 2.0:1 (`rgba(142, 106, 0, .5)`), and a picked accent kept the gold ring. A rainbow position's ring is its hue's ink, where it was the hue at 55% (2.9:1 on the dark rail for red).
 - **A reactive button stays under the pointer.** In the `reactive` label mode a button keeps the width stage its label takes in the other modes, and its words open inside it, as the label engine promises. It used to hug its glyph and grow as the words arrived, so in a row that wraps, the button could slide out from under the pointer, close, slide back and open again without end. At rest a reactive button is now as wide as in `textGlyph`.
 - **Placeholder text reaches 4.5:1** on every field fill. The muted grey it used stood at 3.5:1 on the dark surface2 and 2.4:1 on a sub-card's surface3, 4.1 and 3.3:1 on light.
+- **The README's stage script looks its scenes up in a `Map`.** A link with `?scene=constructor` or `?scene=toString` reached the plain object's prototype and broke the page.
+- **The overlay test's dial lookup escapes its whitespace class.** Inside a template literal `\s` reached `RegExp` as a plain `s`, so the test only passed by chance.
 
 ## 4.4.1 - 2026-11-13
 
