@@ -75,4 +75,4 @@ export { useTipBubble, type TipBubble } from "./bubble.svelte.js";
 export * from "./useDragArmed.svelte.js";
 export { usePaypalButtons, type PaypalButtonsOptions } from "./usePaypalButtons.svelte.js";
 export type { ToastAction } from "@glimstone/core";
-export { GLIMSTONE_VERSION } from "@glimstone/core";
+export { GLIMSTONE_RELEASE_URL, GLIMSTONE_REPO, GLIMSTONE_VERSION } from "@glimstone/core";

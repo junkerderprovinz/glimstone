@@ -62,4 +62,4 @@ export * from "./useTipBubble.tsx";
 export * from "./Window.tsx";
 export * from "./WindowBar.tsx";
 export type { ToastAction } from "@glimstone/core";
-export { GLIMSTONE_VERSION } from "@glimstone/core";
+export { GLIMSTONE_RELEASE_URL, GLIMSTONE_REPO, GLIMSTONE_VERSION } from "@glimstone/core";

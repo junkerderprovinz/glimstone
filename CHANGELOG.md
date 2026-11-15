@@ -2,6 +2,12 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+## ⚡ Improved
+
+- **The GlimStone version opens the newest release.** A row with `latest` links `releases/latest` instead of its own tag, and `GLIMSTONE_REPO` and `GLIMSTONE_RELEASE_URL` come from every package. A folded patch tag no longer leaves an app linking a page that is gone.
+
 ## 4.5.0 - 2026-11-15
 
 Solid and Svelte join React and Vue. `@glimstone/solid` and `@glimstone/svelte` carry every component under React's names, props and defaults and draw the same markup, so an app keeps its look in any of the four.

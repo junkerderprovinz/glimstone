@@ -116,7 +116,8 @@ wrapper, so they stack in the page's own rhythm.
   the app ships, each with a `name`, an optional `sub` line, the `version` read
   from the build and the `repoUrl` whose release page the number opens. A row
   without `repoUrl`, or a build that is not a published release, shows the
-  number as plain text. `updateCheck.run` checks them all and resolves to how
+  number as plain text. The GlimStone row sets `latest`, so its number opens
+  the newest release at `GLIMSTONE_RELEASE_URL`. `updateCheck.run` checks them all and resolves to how
   many have a newer release; the button turns `ok` with `upToDate`, `warn` with
   `updatesFound(n)`, or `danger` with `checkFailed` and a shake when it rejects.
   The app puts the reason for a failure in its toast. One button stands

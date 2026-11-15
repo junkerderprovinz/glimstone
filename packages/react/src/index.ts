@@ -63,4 +63,4 @@ export * from "./useLabelMode.ts";
 export * from "./usePaypalButtons.ts";
 export * from "./useTipBubble.tsx";
 export type { ToastAction } from "@glimstone/core";
-export { GLIMSTONE_VERSION } from "@glimstone/core";
+export { GLIMSTONE_RELEASE_URL, GLIMSTONE_REPO, GLIMSTONE_VERSION } from "@glimstone/core";

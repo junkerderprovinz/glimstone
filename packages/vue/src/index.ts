@@ -83,4 +83,4 @@ export type { SelectMode, SelectSize, SelectWidth, SelectorActivation, SelectorO
 export type { BadgeForm, BusyRingSize, ButtonSize, ColorName, ColorPickerPanelText, FieldWidth, ListColumn, ListTableText, MeterSize, PillTone, SelectRows, TableColumn, ToastAction, WindowSize } from "@glimstone/core";
 export { selectorTabId } from "@glimstone/core";
 export { useTipBubble, type TipBubble } from "./tipBubble";
-export { GLIMSTONE_VERSION } from "@glimstone/core";
+export { GLIMSTONE_RELEASE_URL, GLIMSTONE_REPO, GLIMSTONE_VERSION } from "@glimstone/core";

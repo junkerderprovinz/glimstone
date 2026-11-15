@@ -510,6 +510,10 @@ Each of the three rules for the card's copy (one sentence at most about what the
 
 An app once re-copied the engines but not the version number kept beside the card, so the card claimed GlimStone 1.7.5 while the files were newer. 1.7.5 had never been cut at all, because 1.7.1 through 1.7.10 were folded into 1.8.0. Since every version on the card is a link, the string opened a 404: that tag answered 404 and the real one answered 200. `gh release list` caught it, which is why the release list, not the changelog, is the check.
 
+## The Info tile and the About card: the GlimStone row opens the newest release
+
+The GlimStone row linked its own tag until 4.5.0 folded 4.4.1 in. Six apps were showing `GlimStone 4.4.1`, and deleting that tag would have turned every one of their links into a 404, so the tag was kept against the fold rule. The row was then pointed at the newest release, which no fold can take away.
+
 ## The Info tile and the About card: only published versions
 
 The rules that a version is not bumped before its release exists, and that a same-day correction keeps the version, were both learned in one afternoon. Five numbers were spent on one body of work, none of them released, and the apps quoting them had nowhere to send anybody. It was reported in one line: the version on screen has to point at the last release and show that release's own number, never an unpublished tag.
