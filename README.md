@@ -14,7 +14,6 @@
   <a href="https://www.npmjs.com/package/@glimstone/vue"><img src="https://img.shields.io/npm/v/@glimstone/vue?style=for-the-badge&logo=vuedotjs&logoColor=white&label=vue&color=cb3837" alt="@glimstone/vue on npm" height="36"></a>&nbsp;
   <a href="https://www.npmjs.com/package/@glimstone/solid"><img src="https://img.shields.io/npm/v/@glimstone/solid?style=for-the-badge&logo=solid&logoColor=white&label=solid&color=cb3837" alt="@glimstone/solid on npm" height="36"></a>&nbsp;
   <a href="https://www.npmjs.com/package/@glimstone/svelte"><img src="https://img.shields.io/npm/v/@glimstone/svelte?style=for-the-badge&logo=svelte&logoColor=white&label=svelte&color=cb3837" alt="@glimstone/svelte on npm" height="36"></a>&nbsp;
-  <a href="https://junkerderprovinz.github.io/glimstone/"><img src="https://img.shields.io/badge/Docs-online-526CFE?style=for-the-badge&logo=githubpages&logoColor=white" alt="Documentation" height="36"></a>&nbsp;
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-AGPL--3.0-blue?style=for-the-badge&logo=gnu&logoColor=white" alt="License: AGPL-3.0" height="36"></a>
 </p>
 
@@ -26,6 +25,14 @@ One core without a framework and a package each for React, Vue, Solid, Svelte an
 so a plain-CSS Unraid plugin and an app in any of them speak the same language. Published for reference<br>
 rather than for outside adoption; <a href="docs/design-language.md">docs/design-language.md</a> carries the reasoning and everything else.
 </p>
+
+<!-- docs-button: written by scripts/gen_download_buttons.py -->
+<p align="center">
+  <a href="https://junkerderprovinz.github.io/glimstone/#/guide/adopting"><img src="https://raw.githubusercontent.com/junkerderprovinz/glimstone/main/.github/assets/download-buttons/buttons.svg?v=399374c88eb4#svgView(viewBox(0,0,1010.28,245.3))" alt="Read the documentation" width="192" height="46.618"></a>
+  &nbsp;
+  <a href="https://junkerderprovinz.github.io/glimstone/"><img src="https://raw.githubusercontent.com/junkerderprovinz/glimstone/main/.github/assets/download-buttons/buttons.svg?v=399374c88eb4#svgView(viewBox(1035,0,1010.28,245.3))" alt="Try it live" width="192" height="46.618"></a>
+</p>
+<!-- /docs-button -->
 
 <br>
 
@@ -63,13 +70,15 @@ If it has earned a place on your server or computer, toss a coin to your knight:
 
 <br>
 
+<!-- give-buttons: written by scripts/gen_download_buttons.py -->
 <p align="center">
-  <a href="https://buymeacoffee.com/junkerderprovinz"><img src="https://raw.githubusercontent.com/junkerderprovinz/junkerderprovinz/main/donate/buttons/give.svg#svgView(viewBox(0,0,841.9,245.3))" alt="Buy me a coffee" width="160" height="46.62"></a>
+  <a href="https://buymeacoffee.com/junkerderprovinz"><img src="https://raw.githubusercontent.com/junkerderprovinz/glimstone/main/.github/assets/download-buttons/buttons.svg?v=399374c88eb4#svgView(viewBox(2070,0,841.9,245.3))" alt="Buy me a coffee" width="160" height="46.618"></a>
   &nbsp;
-  <a href="https://www.paypal.com/donate/?hosted_button_id=76FVV52TKXTUS"><img src="https://raw.githubusercontent.com/junkerderprovinz/junkerderprovinz/main/donate/buttons/give.svg#svgView(viewBox(841.9,0,841.9,245.3))" alt="PayPal" width="160" height="46.62"></a>
+  <a href="https://www.paypal.com/donate/?hosted_button_id=76FVV52TKXTUS"><img src="https://raw.githubusercontent.com/junkerderprovinz/glimstone/main/.github/assets/download-buttons/buttons.svg?v=399374c88eb4#svgView(viewBox(2936,0,841.9,245.3))" alt="PayPal" width="160" height="46.618"></a>
   &nbsp;
-  <a href="https://junkerderprovinz.github.io/junkerderprovinz/"><img src="https://raw.githubusercontent.com/junkerderprovinz/junkerderprovinz/main/donate/buttons/give.svg#svgView(viewBox(1683.8,0,841.9,245.3))" alt="Donate with crypto" width="160" height="46.62"></a>
+  <a href="https://junkerderprovinz.github.io/junkerderprovinz/"><img src="https://raw.githubusercontent.com/junkerderprovinz/glimstone/main/.github/assets/download-buttons/buttons.svg?v=399374c88eb4#svgView(viewBox(3802,0,841.9,245.3))" alt="Donate with crypto" width="160" height="46.618"></a>
 </p>
+<!-- /give-buttons -->
 
 <br>
 
