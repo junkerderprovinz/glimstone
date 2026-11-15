@@ -20,13 +20,16 @@ const version = {
 const help = {
   text: {
     title: "Help",
-    report: "Something broken, or an idea? An issue or a mail is welcome.",
+    report: "Something broken, or an idea? An issue, a mail or a word on Discord is welcome.",
     repoButton: "GitHub",
+    discordButton: "Discord",
     mailButton: "Mail",
     mailSubject: "Your app",
   },
   repoUrl: REPO,
   repoGlyph: glyph("IconGithub"),
+  discordUrl: "https://discord.gg/example",
+  discordGlyph: glyph("IconDiscord"),
   mailAddress: "post@example.com",
   mailGlyph: art(MAIL_SVG),
 };

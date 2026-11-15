@@ -23,13 +23,16 @@ export default function InfoPage() {
         help={{
           text: {
             title: "Help",
-            report: "Something broken, or an idea? An issue or a mail is welcome.",
+            report: "Something broken, or an idea? An issue, a mail or a word on Discord is welcome.",
             repoButton: "GitHub",
+            discordButton: "Discord",
             mailButton: "Mail",
             mailSubject: "Your app",
           },
           repoUrl: REPO,
           repoGlyph: <Glyph name="IconGithub" size={20} />,
+          discordUrl: "https://discord.gg/example",
+          discordGlyph: <Glyph name="IconDiscord" size={20} />,
           mailAddress: "post@example.com",
           mailGlyph: <Art svg={MAIL_SVG} />,
         }}
