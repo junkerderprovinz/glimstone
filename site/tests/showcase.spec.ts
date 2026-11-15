@@ -258,6 +258,34 @@ test("a click on the chosen swatch opens the picker, and the colour picked lands
   expect(snippet).toContain('accent: "#2e8b57"');
 });
 
+test("Reset accent after a picked colour brings back the default accent on the page and in the snippet", async ({ page, context, browserName }) => {
+  inDepth();
+  if (browserName === "chromium") await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await open(page, "/", { theme: "dark" });
+  await openPanel(page);
+  const row = panel(page).locator('[data-axis="accent"]');
+  const reset = row.locator('[data-look="reset-accent"]');
+  await expect(reset).toBeDisabled();
+  const chosen = row.locator('[aria-checked="true"]');
+  await chosen.scrollIntoViewIfNeeded();
+  await page.evaluate(() => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done))));
+  await chosen.click();
+  await page.getByRole("textbox", { name: "Hex" }).fill("#2E8B57");
+  await page.getByRole("button", { name: "Apply" }).click();
+  await expect.poll(() => style(page, ".glim-btn--accent", "background-color")).toBe("rgb(46, 139, 87)");
+
+  await reset.click();
+  await expect.poll(() => style(page, ".glim-btn--accent", "background-color")).toBe("rgb(252, 196, 25)");
+  await expect(row.locator('[data-swatch="Sunflower"]')).toHaveAttribute("aria-checked", "true");
+  await expect(row.locator('[data-swatch="Sunflower"]')).not.toHaveAttribute("aria-label", /#2E8B57/i);
+  await expect(reset).toBeDisabled();
+  await panel(page).locator('[data-look="copy"]').click();
+  const snippet = await clipboard(page);
+  expect(snippet).not.toContain("--accent");
+  expect(snippet).not.toContain("2e8b57");
+  expect(snippet).toContain('accent: "#FCC419"');
+});
+
 test("the default look copies without a theme, an accent or a rainbow", async ({ page, context, browserName }) => {
   inDepth();
   if (browserName === "chromium") await context.grantPermissions(["clipboard-read", "clipboard-write"]);

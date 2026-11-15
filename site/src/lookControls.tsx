@@ -1,6 +1,7 @@
 import { useState, useSyncExternalStore } from "react";
 import {
   ACCENTS,
+  DEFAULT_ACCENT,
   RAINBOW,
   DENSITIES,
   MOTION_LEVELS,
@@ -180,12 +181,12 @@ export function PaletteControl() {
         />
       ))}
       <Button
-        label="Reset the palette"
+        label="Reset palette"
         labelKey="reset"
         tone="subtle"
-        variant="icon"
-        compact
+        title="Back to the eight colours of the rainbow."
         disabled={isDefault}
+        data-look="reset-palette"
         onClick={() => setLook({ palette: RAINBOW })}
       />
       {editing && (
@@ -224,8 +225,8 @@ function slotOf(accent: string): number {
 
 /**
  * The eight presets, after the device's own colour where it gives one. A click
- * chooses a swatch, and a click on the chosen one opens the picker for any
- * colour.
+ * chooses a swatch, a click on the chosen one opens the picker for any colour,
+ * and Reset accent puts back the default preset.
  */
 export function AccentControl() {
   const { accent, rainbow } = useLook();
@@ -234,49 +235,58 @@ export function AccentControl() {
   const slot = accent === SYSTEM_ACCENT ? -1 : slotOf(accent);
   const off = rainbow !== "off";
   return (
-    <div
-      role="radiogroup"
-      aria-label="Accent"
-      className="look-swatches"
-      style={{ opacity: off ? 0.5 : 1, pointerEvents: off ? "none" : "auto" }}
-    >
-      {system && (
-        <button
-          type="button"
-          role="radio"
-          className="swatch swatch-system"
-          aria-label="System colour"
-          title="System colour"
-          aria-checked={accent === SYSTEM_ACCENT}
-          style={{ background: system, color: contrastOn(system) }}
-          onClick={() => setLook({ accent: SYSTEM_ACCENT })}
-        >
-          <Glyph name="IconAccentSystem" />
-        </button>
-      )}
-      {ACCENTS.map((a, i) => {
-        const chosen = i === slot;
-        const own = chosen && accent.toLowerCase() !== a.hex.toLowerCase();
-        const shown = chosen ? accent : a.hex;
-        const name = own ? accent.toUpperCase() : a.name;
-        return (
+    <div className="look-swatches" style={{ opacity: off ? 0.5 : 1, pointerEvents: off ? "none" : "auto" }}>
+      <div role="radiogroup" aria-label="Accent" style={{ display: "contents" }}>
+        {system && (
           <button
-            key={a.hex}
             type="button"
             role="radio"
-            className="swatch"
-            data-swatch={a.name}
-            aria-label={chosen ? `${name}, click again for any colour` : name}
-            title={chosen ? `${name}. Click again for any colour.` : name}
-            aria-checked={chosen}
-            aria-haspopup={chosen ? "dialog" : undefined}
-            style={{ background: shown, color: contrastOn(shown) }}
-            onClick={(e) => (chosen ? setAnchor(anchor ? null : e.currentTarget) : setLook({ accent: a.hex }))}
+            className="swatch swatch-system"
+            aria-label="System colour"
+            title="System colour"
+            aria-checked={accent === SYSTEM_ACCENT}
+            style={{ background: system, color: contrastOn(system) }}
+            onClick={() => setLook({ accent: SYSTEM_ACCENT })}
           >
-            {chosen && <Glyph name="IconPencil" size={12} />}
+            <Glyph name="IconAccentSystem" />
           </button>
-        );
-      })}
+        )}
+        {ACCENTS.map((a, i) => {
+          const chosen = i === slot;
+          const own = chosen && accent.toLowerCase() !== a.hex.toLowerCase();
+          const shown = chosen ? accent : a.hex;
+          const name = own ? accent.toUpperCase() : a.name;
+          return (
+            <button
+              key={a.hex}
+              type="button"
+              role="radio"
+              className="swatch"
+              data-swatch={a.name}
+              aria-label={chosen ? `${name}, click again for any colour` : name}
+              title={chosen ? `${name}. Click again for any colour.` : name}
+              aria-checked={chosen}
+              aria-haspopup={chosen ? "dialog" : undefined}
+              style={{ background: shown, color: contrastOn(shown) }}
+              onClick={(e) => (chosen ? setAnchor(anchor ? null : e.currentTarget) : setLook({ accent: a.hex }))}
+            >
+              {chosen && <Glyph name="IconPencil" size={12} />}
+            </button>
+          );
+        })}
+      </div>
+      <Button
+        label="Reset accent"
+        labelKey="reset"
+        tone="subtle"
+        title="Back to Sunflower, without a colour of your own."
+        disabled={accent.toUpperCase() === DEFAULT_ACCENT}
+        onClick={() => {
+          setAnchor(null);
+          setLook({ accent: DEFAULT_ACCENT });
+        }}
+        data-look="reset-accent"
+      />
       {anchor && (
         <ColorPicker
           value={accent === SYSTEM_ACCENT ? (system ?? ACCENTS[0].hex) : accent}

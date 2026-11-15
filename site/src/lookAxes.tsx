@@ -82,7 +82,7 @@ export const LOOK_AXES: LookAxis[] = [
     hint: (l) =>
       rainbowOn(l)
         ? "The rainbow owns the colours while it is on. The accent still paints what the rainbow does not reach, and comes back when the rainbow is off."
-        : "The colour of what is active or chosen. Click the chosen swatch again to pick any colour.",
+        : "The colour of what is active or chosen. Click the chosen swatch again to pick any colour, and Reset accent to go back to Sunflower.",
     group: "Colour",
     Control: AccentControl,
     root: (l) => {
