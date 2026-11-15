@@ -4,6 +4,7 @@
     "$extensions": {
       "org.glimstone": {
         "selector": ":root",
+        "layer": "components",
         "modes": [
           {
             "name": "bar",

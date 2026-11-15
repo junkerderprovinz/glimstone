@@ -2,6 +2,19 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+The desktop window bar keeps its height again, and a tab change slides the right way in a right-to-left script.
+
+**Adopting apps:**
+
+- **Your own copy of the tokens:** copy `tokens.css` again. An app that sets `--window-bar` or `--tab-dir-sign` on `:root` outside a cascade layer still overrides GlimStone's value, as it did before.
+
+## 🐛 Fixed
+
+- **The window bar keeps its height.** Its `--window-bar` default of 0 sat outside the cascade layers and outranked the 2.5rem the bar sets inside them, so `WindowBar` collapsed to nothing and the page no longer started below it. Both values now sit in the same layer, and a test fails on any property the root sets both inside and outside a layer.
+- **Tabs slide the right way in a right-to-left script.** `--tab-dir-sign` kept its 1 under `dir="rtl"` for the same reason.
+
 ## 4.5.2 - 2026-11-15
 
 The Help card can send people to Discord. An app that answers its questions there swaps the mail button for an invite, and an app that keeps its mailbox changes nothing.
