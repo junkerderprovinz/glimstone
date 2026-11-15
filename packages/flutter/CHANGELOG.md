@@ -1,7 +1,8 @@
-## Unreleased
+## 4.5.2
 
 - `GlimTheme` gains `brandDiscord`, the Discord mark's colour, written from the tokens.
 - `GlimGlyphs` gains `discord`.
+- A `GlimTheme` you build with its constructor passes `brandDiscord` as well.
 
 ## 4.5.1
 

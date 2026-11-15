@@ -2,16 +2,18 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 4.5.2 - 2026-11-15
 
 The Help card can send people to Discord. An app that answers its questions there swaps the mail button for an invite, and an app that keeps its mailbox changes nothing.
 
 **Adopting apps:**
 
+- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.5.2, all packages at the same number.
 - **Discord:** pass `discordUrl` with the invite, `discordGlyph` with `IconDiscord` and `text.discordButton` ("Discord") to `InfoHelpCard` or `InfoTile`'s `help`, in all four packages, and name Discord in `text.report`. The deprecated `AboutCard` takes the same three. The button stands right after GitHub and opens the invite through `openUrl`.
 - **Swapping mail for Discord:** drop "email" from the sentence, or leave out `mailAddress`, and the mail button goes. Mail and Discord can also stand side by side when the sentence names both.
 - **Your own copy of the tokens:** take `--brand-discord`, `.glim-discord-mark` and `.glim-tile-discord` from `tokens.css`. `ReadmeButton` knows `brand="discord"`.
-- **Flutter:** `GlimTheme.brandDiscord` and `GlimGlyphs.discord`.
+- **Flutter:** move the git dependency to `ref: v4.5.2`. `GlimTheme` gains `brandDiscord` and `GlimGlyphs` gains `discord`. A `GlimTheme` you build with its constructor passes `brandDiscord` as well.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.5.2.
 
 ## ✨ Added
 
