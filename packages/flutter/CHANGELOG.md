@@ -1,3 +1,7 @@
+## 4.5.3
+
+- No changes for Flutter. The fix for the window bar and the tab direction lives in tokens.css.
+
 ## 4.5.2
 
 - `GlimTheme` gains `brandDiscord`, the Discord mark's colour, written from the tokens.

@@ -2,13 +2,16 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 4.5.3 - 2026-11-16
 
 The desktop window bar keeps its height again, and a tab change slides the right way in a right-to-left script.
 
 **Adopting apps:**
 
+- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.5.3, all packages at the same number.
 - **Your own copy of the tokens:** copy `tokens.css` again. An app that sets `--window-bar` or `--tab-dir-sign` on `:root` outside a cascade layer still overrides GlimStone's value, as it did before.
+- **Flutter:** move the git dependency to `ref: v4.5.3`. Nothing else changes there.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.5.3.
 
 ## 🐛 Fixed
 
