@@ -46,6 +46,15 @@ extension GlimDerived on GlimTheme {
   /// The focus ring, the accent ink at full strength.
   Color get focusRing => accentInk;
 
+  /// The ground of whatever the pointer is over, a button, a row, a menu
+  /// entry or a tile: [carbonSurface3]'s lightness in the accent's hue, as
+  /// `--hover`.
+  Color get hover {
+    final lab = _oklab(accent);
+    final nudge = carbonBg.computeLuminance() > 0.5 ? 0.0 : _hoverNudge;
+    return _srgb(_oklab(carbonSurface3)[0] - nudge, lab[1] * _hoverChroma, lab[2] * _hoverChroma);
+  }
+
   /// This theme with a picked accent, its fill ink and its wash worked out
   /// the way applyAccent does on the web.
   GlimTheme withAccent(Color picked) => copyWith(
@@ -75,6 +84,12 @@ Color glimContrastOn(Color fill) {
 // of the accent in --accent-soft.
 const _hoverStep = 0.15;
 const _softShare = 0.14;
+
+// The share of the accent's chroma the hover takes, and how far it sits below
+// surface3 on a dark ramp, where a saturated green would otherwise take the
+// secondary text under 4.5:1 (--hover-chroma and --hover in tokens.css).
+const _hoverChroma = 0.3;
+const _hoverNudge = 0.007;
 
 // Channels from 0 to 255, as the core's contrast.ts counts them.
 const _white = [255.0, 255.0, 255.0];

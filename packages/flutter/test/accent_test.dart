@@ -65,6 +65,18 @@ void main() {
       }
       expect(misses, isEmpty);
     });
+
+    test('every picked accent keeps the text and the secondary text at 4.5:1 on the hover on $name', () {
+      final misses = <String>[];
+      for (final picked in sweep) {
+        final g = base.withAccent(picked);
+        for (final (what, ink) in [('text', g.carbonText), ('secondary text', g.carbonTextSub)]) {
+          final r = ratio(ink, g.hover);
+          if (r < glimMinTextContrast) misses.add('${hex(picked)} $what ${r.toStringAsFixed(2)}');
+        }
+      }
+      expect(misses, isEmpty);
+    });
   }
 
   // The colours packages/core/src/contrast.ts hands out for the same accents.
