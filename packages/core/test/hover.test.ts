@@ -15,10 +15,10 @@ const hovered = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
 
 const declared = (body: string, property: RegExp) => [...body.matchAll(new RegExp(`(?<![\\w-])(?:${property.source})\\s*:\\s*([^;]+);`, 'g'))].map((m) => m[1]!.trim());
 
-// A ground that comes from the accent, from a button's tint, from a rainbow
-// position, from a brand tile or from a state hue, each of which the hover is
-// allowed to light.
-const LIT = /var\(--(hover|hover-filled|hover-raised|accent[\w-]*|btn-tint(?:ed)?|item-hue[\w-]*|tile|status-[\w-]+)\)/;
+// The one hover ground, and the grounds that come from the accent, from a
+// rainbow position, from a brand tile or from a state hue, each of which the
+// hover is allowed to light.
+const LIT = /var\(--(hover|accent[\w-]*|item-hue[\w-]*|tile|status-[\w-]+)\)/;
 
 // The system colours a forced-colors rule paints with.
 const SYSTEM = /^(Highlight|HighlightText|ButtonFace|ButtonText|Canvas|CanvasText|LinkText|GrayText|SelectedItem)$/;
@@ -47,10 +47,8 @@ test('a control without a ground of its own takes the accent ink under the point
   assert.deepEqual(grey, []);
 });
 
-test('the Tailwind hover colours take a rainbow position\'s hue', () => {
+test('the Tailwind hover colour takes a rainbow position\'s hue', () => {
   const position = tailwind.match(/\[data-rainbow\] \.glim-hue \{([^}]*)\}/)?.[1] ?? '';
-  for (const [utility, token] of [['hover', 'hover'], ['hoverFilled', 'hover-filled'], ['hoverRaised', 'hover-raised']]) {
-    assert.match(tailwind, new RegExp(`--color-${utility}: var\\(--${token}\\);`), `@theme lacks --color-${utility}`);
-    assert.match(position, new RegExp(`--color-${utility}: var\\(--${token}\\);`), `a rainbow position does not restate --color-${utility}`);
-  }
+  assert.match(tailwind, /--color-hover: var\(--hover\);/);
+  assert.match(position, /--color-hover: var\(--hover\);/);
 });

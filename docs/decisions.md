@@ -46,7 +46,7 @@ The variant first shipped as a glyph in every mode, on the reasoning that such a
 
 Measured first on a Settings page, where both the gap between cards and the gap below the tab strip went from `gap-6`, then the largest gap in that app, to `gap-10` at once.
 
-## Rule 21: hover moves up the surface ramp
+## Rule 21: one hover colour
 
 The ramp first stopped at surface3, so the controls standing on it had nowhere to go and each of them reached back down to `--carbon-hover`. `--carbon-hover-raised` was added for them.
 
@@ -55,6 +55,8 @@ The rule itself came from a list of filled tiles whose class said `hover:bg-carb
 The step for the accent-filled button was decided after buttons that did not react to the pointer were reported across an app.
 
 The steps were neutral grey until a list row in an adopting app was reported beside the button above it: the button lit up in the accent and the row turned grey, and the row's glyph tile, filled with surface2, vanished into a hover painted with the same surface2. The hover took the accent's hue then, on the lightness each grey step had, so the contrast measured on the grey still holds. A wash of the accent over the ground was tried on paper first. On the dark ramp it lifted the row far enough to take the secondary text under 4.5:1, and a near-black or near-white accent made it disappear into the card.
+
+Three tints followed at first, one on each grey step an element could stand on, and a button mixed 22% of its tint into its own step on top. On a preview a button and the row beside it then lit up in visibly different colours, and on the dark ramp a pale accent took the neutral button's label to 3.47:1. One colour for all of them replaced the four: surface3's lightness, the step that still lifts a row and a quiet button and keeps the text and the secondary text at 4.5:1.
 
 ## Rule 22: a settings card configures, the shell operates
 

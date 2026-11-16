@@ -49,8 +49,8 @@ export function ButtonPage() {
       </p>
       <p>
         Every tone has a fill, because a button with words and no ground reads as text (rule 38). Under the pointer{" "}
-        <code>neutral</code> and <code>subtle</code> mix a little of <code>--btn-tint</code> into their ground and turn
-        the glyph to it, so a grey button does not look flat (rule 40).
+        <code>neutral</code> and <code>subtle</code> take <code>--hover</code>, the colour a row or a menu entry lights up in,
+        and turn the glyph to <code>--btn-tint</code>, so a grey button does not look flat (rule 40).
       </p>
       <H2>States and variants</H2>
       <Demo name="ButtonStates" />

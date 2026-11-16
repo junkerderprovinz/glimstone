@@ -758,7 +758,7 @@ test.describe("Select's trigger attributes", () => {
 
 test.describe("Select in a well", () => {
   const ground = (el: Locator) => el.evaluate((e) => getComputedStyle(e).backgroundColor);
-  // A hover tint is worked out from the accent in place, so it is read off a
+  // The hover is worked out from the accent in place, so it is read off a
   // probe standing where the trigger stands.
   const tint = (el: Locator, token: string) =>
     el.evaluate((e, t) => {
@@ -777,7 +777,7 @@ test.describe("Select in a well", () => {
       const trigger = box.locator(".glim-select-trigger");
       expect(await ground(trigger)).toBe(await ground(box.locator(".glim-input")));
       await trigger.hover();
-      await expect.poll(() => ground(trigger)).toBe(await tint(trigger, "--hover-raised"));
+      await expect.poll(() => ground(trigger)).toBe(await tint(trigger, "--hover"));
       await page.mouse.move(0, 0);
     }
   });

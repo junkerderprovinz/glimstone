@@ -117,7 +117,7 @@ void main() {
     final lit = ground();
     final glim = GlimTheme.dark;
     expect(lit, isNot(rest));
-    expect(lit, glim.tintedHover(glim.carbonHoverRaised));
+    expect(lit, glim.hover);
     await mouse.removePointer();
   });
 }

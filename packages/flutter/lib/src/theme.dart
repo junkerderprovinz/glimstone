@@ -46,33 +46,13 @@ extension GlimDerived on GlimTheme {
   /// The focus ring, the accent ink at full strength.
   Color get focusRing => accentInk;
 
-  /// The ground of a row or anything else with no fill of its own under the
-  /// pointer: [carbonHover]'s lightness in the accent's hue, as `--hover`.
-  Color get hover => _hoverTint(carbonHover, 0);
-
-  /// The hover of something filled with surface2, as `--hover-filled`.
-  Color get hoverFilled => _hoverTint(carbonSurface3, _upperHoverNudge);
-
-  /// The hover of something filled with surface3, as `--hover-raised`.
-  Color get hoverRaised => _hoverTint(carbonHoverRaised, _upperHoverNudge);
-
-  double get _upperHoverNudge => carbonBg.computeLuminance() > 0.5 ? 0 : _hoverNudge;
-
-  /// A surface-filled button's ground under the pointer (rule 40): a little
-  /// of the ink mixed into [step], the ramp step its tone hovers to. On a dark
-  /// ramp a pale ink would lift it past what the label reads on, so there it
-  /// stops at the lightness `--hover-raised` has on the dark ramp, as
-  /// tokens.css does.
-  Color tintedHover(Color step) {
-    final mixed = Color.lerp(step, accentInk, _tintShare)!;
-    final lab = _oklab(mixed);
-    if (carbonBg.computeLuminance() > 0.5 || lab[0] <= _tintCeiling) return mixed;
-    return _srgb(_tintCeiling, lab[1], lab[2]);
-  }
-
-  Color _hoverTint(Color step, double nudge) {
+  /// The ground of whatever the pointer is over, a button, a row, a menu
+  /// entry or a tile: [carbonSurface3]'s lightness in the accent's hue, as
+  /// `--hover`.
+  Color get hover {
     final lab = _oklab(accent);
-    return _srgb(_oklab(step)[0] - nudge, lab[1] * _hoverChroma, lab[2] * _hoverChroma);
+    final nudge = carbonBg.computeLuminance() > 0.5 ? 0.0 : _hoverNudge;
+    return _srgb(_oklab(carbonSurface3)[0] - nudge, lab[1] * _hoverChroma, lab[2] * _hoverChroma);
   }
 
   /// This theme with a picked accent, its fill ink and its wash worked out
@@ -105,17 +85,11 @@ Color glimContrastOn(Color fill) {
 const _hoverStep = 0.15;
 const _softShare = 0.14;
 
-// The share of the accent's chroma a hover tint takes, and how far the two
-// upper tints sit below their step on a dark ramp, where a saturated green
-// would otherwise take the step's text under 4.5:1 (--hover-chroma and the
-// hover tints in tokens.css).
+// The share of the accent's chroma the hover takes, and how far it sits below
+// surface3 on a dark ramp, where a saturated green would otherwise take the
+// secondary text under 4.5:1 (--hover-chroma and --hover in tokens.css).
 const _hoverChroma = 0.3;
 const _hoverNudge = 0.007;
-
-// The share of the ink a tinted button's hovered ground takes, as the 22% of
-// --btn-tint in tokens.css, and the lightness it stops at on a dark ramp.
-const _tintShare = 0.22;
-const _tintCeiling = 0.535;
 
 // Channels from 0 to 255, as the core's contrast.ts counts them.
 const _white = [255.0, 255.0, 255.0];

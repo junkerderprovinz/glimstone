@@ -78,12 +78,9 @@
   --color-statusFailHover: var(--status-fail-hover);
   --color-statusWarnHover: var(--status-warn-hover);
 
-  /* The accent's hover tints (rule 21): hover:bg-hover for a row or anything
-     else with no fill, hover:bg-hoverFilled for something filled with surface2,
-     hover:bg-hoverRaised for something filled with surface3. */
+  /* The accent's hover (rule 21): hover:bg-hover on anything the pointer can
+     reach, a button, a row, a menu entry or a tile. */
   --color-hover: var(--hover);
-  --color-hoverFilled: var(--hover-filled);
-  --color-hoverRaised: var(--hover-raised);
 }
 /* tokens:theme end */
 
@@ -99,8 +96,6 @@
   --color-accentGlyph: var(--accent-glyph);
   --color-accentHover: var(--accent-hover);
   --color-hover: var(--hover);
-  --color-hoverFilled: var(--hover-filled);
-  --color-hoverRaised: var(--hover-raised);
 }
 [data-rainbow='reactive'] .glim-hue {
   --color-accent: var(--carbon-text-muted);

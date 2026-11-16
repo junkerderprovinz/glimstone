@@ -42,10 +42,9 @@ done
 # 4. Nothing may point at a file that only exists inside an adopting app.
 grep -n "index\.css" $components && note "a comment names an app's own stylesheet"
 
-# 5. Hover moves up the surface ramp (rule 21). On the dark ramp `--hover` keeps
-#    the lightness of #353535, below surface2's #393939, so a control filled with
-#    surface2 or surface3 that hovers to it goes darker. A bare control on a
-#    card, such as a row's glyph button, is right to use `--hover`.
+# 5. No filled control hovers to the grey step below it (rule 21). On the dark
+#    ramp `--carbon-hover` is #353535, below surface2's #393939, so a control
+#    filled with surface2 or surface3 that hovers to it goes darker.
 while IFS= read -r hit; do
   note "a surface-filled control hovers down the ramp (rule 21): $hit"
 done < <(perl -0777 -ne '
@@ -58,7 +57,7 @@ done < <(perl -0777 -ne '
   }
   while (/([^{}]+)\{([^{}]*)\}/g) {
     my ($sel, $body) = ($1, $2);
-    next unless $body =~ /background(?:-color)?:\s*var\(--(?:carbon-)?hover\)/;
+    next unless $body =~ /background(?:-color)?:\s*var\(--carbon-hover\)/;
     for my $s (map { s/^\s+|\s+$//gr } split /,/, $sel) {
       (my $base = $s) =~ s/:hover//;
       print "$s\n" if $fill{$base};

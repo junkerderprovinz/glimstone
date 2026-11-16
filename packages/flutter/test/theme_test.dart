@@ -27,22 +27,14 @@ void main() {
     expect(GlimTheme.light.focusRing, GlimTheme.light.accentInk);
   });
 
-  test('a row hovers to the accent on its ramp\'s hover step', () {
-    expectNear(GlimTheme.dark.hover, 0xFF403313);
-    expectNear(GlimTheme.oled.hover, 0xFF2E2101);
-    expectNear(GlimTheme.light.hover, 0xFFEFDFBB);
-  });
-
-  test('a filled control hovers to the accent a step further up', () {
-    expectNear(GlimTheme.dark.hoverFilled, 0xFF5C4F2F);
-    expectNear(GlimTheme.dark.hoverRaised, 0xFF7A6C4B);
-    expectNear(GlimTheme.oled.hoverRaised, 0xFF5C4F2F);
-    expectNear(GlimTheme.light.hoverFilled, 0xFFE0D0AC);
-    expectNear(GlimTheme.light.hoverRaised, 0xFFD5C5A1);
+  test('the hover is the accent on surface3\'s lightness', () {
+    expectNear(GlimTheme.dark.hover, 0xFF5C4F2F);
+    expectNear(GlimTheme.oled.hover, 0xFF433616);
+    expectNear(GlimTheme.light.hover, 0xFFE0D0AC);
   });
 
   test('the hover follows a picked accent', () {
-    expectNear(GlimTheme.dark.withAccent(const Color(0xFF1D99F3)).hover, 0xFF1F374E);
-    expectNear(GlimTheme.light.withAccent(const Color(0xFF1D99F3)).hover, 0xFFC7E4FF);
+    expectNear(GlimTheme.dark.withAccent(const Color(0xFF1D99F3)).hover, 0xFF3A536B);
+    expectNear(GlimTheme.light.withAccent(const Color(0xFF1D99F3)).hover, 0xFFB8D5F1);
   });
 }
