@@ -143,9 +143,13 @@ test.describe("FileUpload", () => {
   const settings = { name: "settings.json", mimeType: "application/json", buffer: Buffer.from('{"theme":"dark"}') };
 
   test("[upload-button] the drop zone is one button that opens the picker", async ({ page }) => {
+    // Waiting for the chooser is what turns on Playwright's interception of the
+    // dialog, and that does not finish before the call returns. Under load the
+    // picker can open first and the event never comes, so the wait starts
+    // before the page is even open.
+    const chooser = page.waitForEvent("filechooser");
     await open(page, "/components/file-upload");
     await zone(page).focus();
-    const chooser = page.waitForEvent("filechooser");
     await page.keyboard.press("Enter");
     await (await chooser).setFiles(settings);
     await expect(stage(page, "FileUploadImport").getByText("Ready to import settings.json")).toBeVisible();
