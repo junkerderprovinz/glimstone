@@ -4,34 +4,32 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
-Accent text holds 4.5:1 on surface2 in the light theme. Its ink sits one step deeper, at an OKLab lightness of 0.50 where it was 0.52.
-
-Whatever the pointer is over now lights up in the accent, and in one colour: buttons, rows, menu entries, tiles, tabs, pages and the window buttons.
+Whatever the pointer is over lights up in the accent, in one colour for buttons, rows, menus and tiles, and accent text in the light theme reads at 4.5:1 on every ground it stands on.
 
 **Adopting apps:**
 
-- **Your own copy of the tokens:** copy `tokens.css` again, or set `--ink-l-light` to 0.5. An app that keeps its own step for the light ink can drop it and take GlimStone's.
-- **Flutter:** `GlimTheme.light` carries `inkLightness: 0.5`. A theme built with its own `inkLightness` keeps it.
-- **Your own hovers:** swap `hover:bg-carbon-hover`, a hover to `surface3` and `hover:bg-carbon-hoverRaised` for `hover:bg-hover`. In plain CSS the token is `--hover`. `--carbon-hover` and `--carbon-hover-raised` stay as the grey steps a field's focus uses.
+- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.5.4, all packages at the same number.
+- **Your own copy of the tokens:** copy `tokens.css` and `tailwind-theme.css` again. They bring `--hover`, the light ink step `--ink-l-light: 0.5` and the tints declared again inside `[data-rainbow] .glim-hue`, so a rainbow position's hover takes its hue. An app that keeps its own step for the light ink can drop it and take GlimStone's.
+- **Your own hovers:** swap `hover:bg-carbon-hover`, a hover to `surface3` and `hover:bg-carbon-hoverRaised` for `hover:bg-hover`, or `--hover` in plain CSS. `--carbon-hover` and `--carbon-hover-raised` stay as the grey steps a field's focus uses.
 - **A row with a glyph tile:** fill the tile with the accent while the row is hovered, as `GlyphTile` does. A tile filled with surface2 disappears into a row that hovers to surface2.
-- **Your own copy of the tokens:** copy `tokens.css` and `tailwind-theme.css` again. The tints are declared again inside `[data-rainbow] .glim-hue`, and `tailwind-theme.css` repeats `--color-hover` there, so a rainbow position's hover takes its hue.
-- **Flutter:** `GlimDerived` gains `hover`.
+- **Flutter:** move the git dependency to `ref: v4.5.4`. `GlimDerived` gains `hover`, which a neutral or quiet `GlimButton` hovers to, and `GlimTheme.light` carries `inkLightness: 0.5`. A theme built with its own `inkLightness` keeps it.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.5.4.
 
 ## ✨ Added
 
 - **`--hover` and `--hover-chroma`**, with the Tailwind colour `hover`.
-- **Tests** that hold every hover in the stylesheet to an accent-derived ground, every glyph without a ground to the accent's ink, each tint to its step's lightness and the accent's hue, and the text on a hovered row to 4.5:1 for 153 picked colours in all six themes, and a button, a row, a menu entry and a tile to the same colour under the pointer.
+- **Tests for every hover.** They hold each hover in the stylesheet to a ground taken from the accent, each tint to its step's lightness and the accent's hue, and each glyph without a ground to the accent's ink. The text on a hovered row keeps 4.5:1 for 153 picked colours in all six themes, and a button, a row, a menu entry and a tile show the same colour under the pointer.
 
 ## 🎨 Design
 
-- **Hover takes the accent's hue, in one colour for everything** (rule 21). `--hover` keeps surface3's OKLab lightness and 30% of the accent's chroma: a button, a row, a menu entry and a tile light up alike, and the text and the secondary text on it keep 4.5:1 for every picked colour, on dark, OLED, light and the contrast step. A grey accent leaves the grey step, and under rainbow the hover takes the position's hue.
+- **Hover takes the accent's hue, in one colour for everything** (rule 21). `--hover` keeps surface3's OKLab lightness with 30% of the accent's chroma, so the text and the secondary text on it keep 4.5:1 for every picked colour on dark, OLED, light and the contrast step. A grey accent gives the plain grey step, and under rainbow the hover takes the position's hue.
 - **Glyphs without a ground of their own** take the accent's ink under the pointer: the number field's steppers, the password eye and the version link. A tree's expand toggle and a carousel dot light up in the accent as well.
-- **Options marked by the pointer** in Select and in a menu opened from a Select take the same tint as a menu entry.
-- **A neutral or quiet button hovers to `--hover`** (rule 40), the colour of a row beside it, instead of 22% of its tint mixed into its own step. On the dark ramp that mix took a pale accent past what the label reads on, Sunflower's neutral hover to `#8e825c` at 3.47:1. It is `#5c4f2f` now, with the label at 7.30:1. The glyph still turns to `--btn-tint`.
+- **Options under the pointer** in Select, and in a menu opened from a Select, take the same tint as a menu entry.
 
 ## 🐛 Fixed
 
-- **Accent text reads at 4.5:1 on surface2.** The eight presets reach 4.7 to 5.2:1 there, where 0.52 left the weakest at 4.27:1, and 5.8 to 6.4:1 on white. Sunflower's ink goes from `#836407` to `#7C5F07`, and the info text takes the same step.
+- **A neutral or quiet button keeps its label readable under the pointer** (rule 40). It hovers to `--hover`, the colour of the row beside it, instead of mixing 22% of its tint into its own step. On the dark ramp that mix took Sunflower's neutral hover to `#8e825c` with the label at 3.47:1, and `#5c4f2f` gives it 7.30:1.
+- **Accent text reads at 4.5:1 on surface2 in the light theme.** The light ink sits at an OKLab lightness of 0.50 where it was 0.52, so the eight presets reach 4.7 to 5.2:1 on surface2 and 5.8 to 6.4:1 on white. Sunflower's ink goes from `#836407` to `#7C5F07`, and the info text takes the same step.
 
 ## 4.5.3 - 2026-11-16
 
