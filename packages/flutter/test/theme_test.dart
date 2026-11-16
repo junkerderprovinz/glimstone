@@ -12,7 +12,7 @@ void expectNear(Color actual, int expected) {
 
 void main() {
   test('the light ramp darkens Sunflower onto its ink step', () {
-    expectNear(GlimTheme.light.accentInk, 0xFF836407);
+    expectNear(GlimTheme.light.accentInk, 0xFF7C5F07);
   });
 
   test('a bright accent is its own ink on the dark ramp', () {

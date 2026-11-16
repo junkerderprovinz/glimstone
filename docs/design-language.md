@@ -18,7 +18,7 @@ A layered, low-noise interface system: a small light in dark masonry.
 | Text, secondary | `#c6c6c6` | `#525252` |
 | Text, muted | `#8d8d8d` | `#6f6f6f` |
 | **Accent (default)** | `#FCC419` | `#FCC419` |
-| **Accent as ink** | `#FCC419` | `#836407` (derived) |
+| **Accent as ink** | `#FCC419` | `#7C5F07` (derived) |
 | Settled | `#6fdc8c` | `#0e6027` |
 | Fault | `#ff8389` | `#da1e28` |
 | Warning | `#FF832B` | `#ba4e00` |
@@ -43,7 +43,7 @@ wrong for one of them.**
 
 `--accent-ink` is **derived, not a second colour anybody picks**: the accent
 moved in OKLab onto a fixed lightness step, keeping its hue. On the light ramp
-it goes down to `--ink-l-light` (0.52), on the dark ramps up to `--ink-l-dark`
+it goes down to `--ink-l-light` (0.50), on the dark ramps up to `--ink-l-dark`
 (0.74), and an accent already past its step, a deep one on light or a bright
 one on dark, is its own ink. OKLab is built so that its lightness follows what
 the eye sees, so one step gives every hue nearly the same contrast. A mix toward
@@ -68,9 +68,10 @@ single accent's ink inside a hued subtree as well. A text utility such as
 `.glim-hue`, while the one glyph rule that reads `--accent-text` directly takes the
 position.
 
-Measured against white, the palest ground here, the eight presets land
-between 5.2 and 5.9:1. On Sunflower the ink is `#836407`, and the info text
-takes the same step. On the dark ramps only two
+The light step is set on surface2, the darkest ground accent text stands on
+in the light theme: there the eight presets land between 4.7 and 5.2:1, on
+white between 5.8 and 6.4:1. On Sunflower the ink is `#7C5F07`, and the info
+text takes the same step. On the dark ramps only two
 presets move: Blue from `#1D99F3` to `#62B1F8` (4.97 to 6.60:1 on the card) and
 Orange by a hair. The others are already brighter than the step.
 
@@ -1848,7 +1849,7 @@ Defined once under `:root, [data-theme]`, each colour that differs between the t
 | `--accent` / `--accent-contrast` / `--accent-soft` | activity, as a fill and the computed ink on it |
 | `--accent-ink` | the same activity colour where it is read: text, a stroke on the page ground. Derived from `--accent`, never set by hand |
 | `--accent-ink-light` / `--accent-ink-dark` | set by `applyAccent()` only where the derived ink falls short of 4.5:1 on that ramp's card, and then `--accent-ink` takes it (rule 45). No preset sets them |
-| `--ink-l-light`, `--ink-l-dark` | the OKLab lightness steps of the accent's ink: at most 0.52 on the light ramp, at least 0.74 on the dark ones ("The palette") |
+| `--ink-l-light`, `--ink-l-dark` | the OKLab lightness steps of the accent's ink: at most 0.50 on the light ramp, at least 0.74 on the dark ones ("The palette") |
 | `--status-{ok,fail,warn,info,neutral}-{text,bg,solid}` | states |
 | `--status-warn-bg-strong` / `--status-warn-bg-soft` | the two ends of the warn wash: opaque for a chip that has to hold its own against a row's hover fill, quiet for a paragraph that explains rather than warns |
 | `--elevation-raised`, `--hairline` | the card's shadow and its top light, per theme. OLED keeps both, and on black the shadow cannot be seen, so a card's fill is its edge (rule 43). `--elevation` is the same step under its older name |

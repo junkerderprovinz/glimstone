@@ -51,6 +51,15 @@ test('every preset and rainbow ink on the light ramp lands within a point of the
   assert.ok(Math.max(...ratios) - Math.min(...ratios) < 1, ratios.map((r) => r.toFixed(2)).join(' '));
 });
 
+test('every preset and rainbow ink on the light ramp reads at 4.5:1 on the page, a card and surface2', () => {
+  for (const hex of [...ACCENTS.map((a) => a.hex), ...RAINBOW]) {
+    for (const ground of ['#F4F4F4', '#FFFFFF', '#E8E8E8']) {
+      const r = contrastRatio(darkenTo(hex, INK_LIGHTNESS.light), ground);
+      assert.ok(r >= 4.5, `${hex} on ${ground}: ${r.toFixed(2)}:1`);
+    }
+  }
+});
+
 test('the lightness steps are the ones tokens.css declares, the contrast step second', () => {
   const css = readFileSync(new URL('../tokens.css', import.meta.url), 'utf8');
   // The contrast step is declared for the system and for data-contrast, with one value.
@@ -59,9 +68,9 @@ test('the lightness steps are the ones tokens.css declares, the contrast step se
   assert.deepEqual(values('--ink-l-dark'), [INK_LIGHTNESS.dark, INK_LIGHTNESS.darkMore]);
 });
 
-test('on the contrast step every preset and rainbow ink reads at 7:1 on white', () => {
+test('on the contrast step every preset and rainbow ink reads at 7:1 on the page and a card', () => {
   for (const hex of [...ACCENTS.map((a) => a.hex), ...RAINBOW]) {
-    assert.ok(contrastRatio(darkenTo(hex, INK_LIGHTNESS.lightMore), '#FFFFFF') >= 7, hex);
+    for (const ground of ['#F4F4F4', '#FFFFFF']) assert.ok(contrastRatio(darkenTo(hex, INK_LIGHTNESS.lightMore), ground) >= 7, `${hex} on ${ground}`);
     assert.ok(contrastRatio(lightenTo(hex, INK_LIGHTNESS.darkMore), '#262626') >= 7, hex);
   }
 });

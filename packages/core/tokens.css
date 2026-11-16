@@ -256,14 +256,15 @@
      The ink is the accent moved in OKLab onto a lightness step, keeping its
      hue: down to --ink-l-light on the light ramp, up to --ink-l-dark on the
      dark ones. OKLab's lightness follows the eye, so every hue on one step
-     reads at nearly the same contrast, 5.2 to 5.9:1 on white for the eight
-     presets. A straight line toward black never leaves sRGB; one toward white
-     can by a hair, and the browser clips it. An accent already past the step, a
-     bright one on dark or a deep one on light, is its own ink. applyAccent sets
-     --accent-ink-light or --accent-ink-dark only where a picked colour would
-     still miss 4.5:1 on a ramp's card, which no colour has been found to do
-     (contrast.ts). */
-  --ink-l-light: 0.52;
+     reads at nearly the same contrast. The light step is set on surface2, the
+     darkest ground accent text stands on in the light theme: the eight presets
+     read at 4.7 to 5.2:1 on it and 5.8 to 6.4:1 on white. A straight line
+     toward black never leaves sRGB; one toward white can by a hair, and the
+     browser clips it. An accent already past the step, a bright one on dark or
+     a deep one on light, is its own ink. applyAccent sets --accent-ink-light or
+     --accent-ink-dark only where a picked colour would still miss 4.5:1 on a
+     ramp's card, which no colour has been found to do (contrast.ts). */
+  --ink-l-light: 0.5;
   --ink-l-dark: 0.74;
   --accent-ink: light-dark(var(--accent-ink-light, oklab(from var(--accent) min(l, var(--ink-l-light)) calc(a * min(1, var(--ink-l-light) / l)) calc(b * min(1, var(--ink-l-light) / l)))), var(--accent-ink-dark, oklab(from var(--accent) max(l, var(--ink-l-dark)) calc(a * min(1, (1 - var(--ink-l-dark)) / (1 - l))) calc(b * min(1, (1 - var(--ink-l-dark)) / (1 - l))))));
 
@@ -275,8 +276,8 @@
      and its resume control carry the difference.
 
      Info is the default accent, so its light text is Sunflower's ink step. */
-  --status-info-text: light-dark(oklch(0.52 0.104 86.7), #FCC419);
-  --status-info-bg: light-dark(oklch(0.52 0.104 86.7 / 0.12), rgba(252, 196, 25, 0.13));
+  --status-info-text: light-dark(oklch(0.5 0.1 86.7), #FCC419);
+  --status-info-bg: light-dark(oklch(0.5 0.1 86.7 / 0.12), rgba(252, 196, 25, 0.13));
   --status-info-solid: light-dark(#A87D00, #FCC419);
   --status-ok-text: light-dark(#0e6027, #6fdc8c);
   --status-ok-bg: light-dark(rgba(14, 96, 39, 0.11), rgba(111, 220, 140, 0.13));

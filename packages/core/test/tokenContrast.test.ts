@@ -230,6 +230,7 @@ const GROUND_PAIRS: [string, string][] = [
   ['--accent-ink', '--carbon-bg'],
   ['--accent-ink', '--carbon-sidebar'],
   ['--accent-ink', '--carbon-surface'],
+  ['--accent-ink', '--carbon-surface2'],
   ['--accent-contrast', '--accent-hover'],
   ...['info', 'ok', 'fail', 'warn', 'neutral'].flatMap((s) => [
     [`--status-${s}-text`, '--carbon-surface'] as [string, string],

@@ -88,7 +88,7 @@ function inkMix(text) {
 }
 
 // A literal inkMix below 1 asked for the light ramp's ink, 1 for the dark one.
-const INK_LIGHTNESS = { light: '0.52', dark: '0.74' };
+const INK_LIGHTNESS = { light: '0.5', dark: '0.74' };
 
 function dartInkMix(text) {
   return text.replace(/\binkMix(\s*:\s*)(\d+(?:\.\d+)?)(?=\s*[,)])/g, (_, colon, v) => `inkLightness${colon}${Number(v) < 1 ? INK_LIGHTNESS.light : INK_LIGHTNESS.dark}`);
@@ -130,7 +130,7 @@ export const TRANSFORMS = [
     name: 'GlimTheme inkMix',
     files: DART,
     rewrite: dartInkMix,
-    report: firstUse('inkMix', 'inkMix goes in 5.0.0: use inkLightness, the OKLab step the ink moves to (0.52 on a light theme, 0.74 on a dark one).'),
+    report: firstUse('inkMix', 'inkMix goes in 5.0.0: use inkLightness, the OKLab step the ink moves to (0.5 on a light theme, 0.74 on a dark one).'),
   },
   { name: 'GlimTheme focusRing argument', files: DART, rewrite: dartFocusRing },
 ];

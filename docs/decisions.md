@@ -16,6 +16,8 @@ For a long time the accent was one token, darkened for the light theme. An adopt
 
 The ink was first an sRGB mix toward black, which did not follow a colour the user chose the way the derived ink does. Against white that mix put blue at 8.0:1 and Sunflower at 4.9:1, a spread of 4.9 to 8.0:1 across the presets, where the OKLab step keeps all eight between 5.2 and 5.9:1. The info text was `#8E6A00` before it took the same step, a shade lighter than the Sunflower ink `#836407`.
 
+The light step was 0.52 at first, measured on the white card. Accent text stands on surface2 as well, a row or a panel, and there 0.52 left the presets at 4.27:1. It moved to 0.50, the smallest step that clears 4.5:1 there with room to spare (0.51 lands on 4.50:1 exactly), and the Sunflower ink went to `#7C5F07`.
+
 ## The spacing scale: 31 distances
 
 Before the scale the stylesheet held 31 different distances, 0.3, 0.35, 0.4, 0.45 and 0.55rem among them, within a pixel of each other and of the steps beside them. Each moved to the nearest step, so no distance changed by more than 2px.

@@ -13,8 +13,9 @@ const EXTREMES = {
   'the crossover grey': '#7B7B7B',
 };
 
-// The grounds accent text sits on: each ramp's page ground and card.
-const LIGHT_GROUNDS = ['#FFFFFF'];
+// The grounds accent text sits on: each ramp's page ground and card, and on
+// light a row or panel in surface2 as well, the darkest of its grounds.
+const LIGHT_GROUNDS = ['#F4F4F4', '#FFFFFF', '#E8E8E8'];
 const DARK_GROUNDS = ['#161616', '#262626'];
 const OLED_GROUNDS = ['#000000', '#161616'];
 
@@ -65,7 +66,7 @@ test('an accent that already reads keeps the stylesheet ink', () => {
   assert.deepEqual(accentInks('#FCC419'), { light: undefined, dark: undefined });
 });
 
-test('every colour gets an ink that reads at 4.5:1 on the card and on its own wash', () => {
+test('every colour gets an ink that reads at 4.5:1 on the card, on light surface2 and on its own wash', () => {
   const misses: string[] = [];
   for (let r = 0; r < 256; r += 15) {
     for (let g = 0; g < 256; g += 15) {
@@ -73,7 +74,7 @@ test('every colour gets an ink that reads at 4.5:1 on the card and on its own wa
         const hex = '#' + [r, g, b].map((v) => v.toString(16).padStart(2, '0')).join('');
         const wash = (card: number) => '#' + [r, g, b].map((v) => Math.round(card + (v - card) * 0.14).toString(16).padStart(2, '0')).join('');
         const [light, dark] = [lightInk(hex), darkInk(hex)];
-        for (const [ink, grounds] of [[light, ['#FFFFFF', wash(255)]], [dark, ['#262626', wash(38)]]] as const) {
+        for (const [ink, grounds] of [[light, ['#FFFFFF', '#E8E8E8', wash(255)]], [dark, ['#262626', wash(38)]]] as const) {
           for (const g of grounds) if (contrastRatio(ink, g) < MIN_TEXT_CONTRAST) misses.push(`${hex} on ${g}`);
         }
       }

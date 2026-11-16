@@ -61,7 +61,7 @@ export const DEPRECATED: Record<string, Deprecation> = {
   "GlimTheme inkMix": {
     since: "4.5.0",
     removal: "5.0.0",
-    use: "Use `inkLightness`, the OKLab step the accent's ink moves to: 0.52 on a light theme, 0.74 on a dark one.",
+    use: "Use `inkLightness`, the OKLab step the accent's ink moves to: 0.5 on a light theme, 0.74 on a dark one.",
     find: String.raw`\binkMix\b`,
   },
   "GlimTheme focusRing argument": {

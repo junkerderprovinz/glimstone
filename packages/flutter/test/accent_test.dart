@@ -58,7 +58,7 @@ void main() {
 
         check('ink on the fill', g.accentContrast, g.accent);
         check('ink on the hover', g.accentContrast, g.accentHover);
-        for (final ground in [g.carbonBg, g.carbonSidebar, g.carbonSurface]) {
+        for (final ground in [g.carbonBg, g.carbonSidebar, g.carbonSurface, g.carbonSurface2]) {
           check('text on the ground', g.accentInk, ground);
         }
         check('text on the wash', g.accentInk, over(g.accentSoft, g.carbonSurface));
@@ -73,11 +73,11 @@ void main() {
     final dark = GlimTheme.dark;
     final cases = <(int, String, String, String, String?, String?)>[
       // accent, fill ink, light ink, dark ink, light hover, dark hover
-      (0xFF777777, '#060606', '#696969', '#ABABAB', '#8B8B8B', null),
-      (0xFF009E34, '#161616', '#007C27', '#75C07C', '#26AD52', null),
-      (0xFF00A385, '#161616', '#007A64', '#6CBDA6', '#26B197', null),
-      (0xFF1D99F3, '#161616', '#126DAF', '#62B1F8', null, null),
-      (0xFF6B6B6B, '#FFFFFF', '#696969', '#ABABAB', null, '#5B5B5B'),
+      (0xFF777777, '#060606', '#636363', '#ABABAB', '#8B8B8B', null),
+      (0xFF009E34, '#161616', '#007926', '#75C07C', '#26AD52', null),
+      (0xFF00A385, '#161616', '#00755E', '#6CBDA6', '#26B197', null),
+      (0xFF1D99F3, '#161616', '#1067A6', '#62B1F8', null, null),
+      (0xFF6B6B6B, '#FFFFFF', '#636363', '#ABABAB', null, '#5B5B5B'),
     ];
     for (final (accent, onFill, inkLight, inkDark, hoverLight, hoverDark) in cases) {
       final c = Color(accent);

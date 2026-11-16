@@ -87,7 +87,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     @Deprecated(_focusRingNote) Color? focusRing,
     this.shape = GlimShape.soft,
   // ignore: deprecated_member_use_from_same_package
-  }) : inkLightness = inkLightness ?? (inkMix == null || inkMix >= 1 ? 0.74 : 0.52);
+  }) : inkLightness = inkLightness ?? (inkMix == null || inkMix >= 1 ? 0.74 : 0.5);
 
   final Color carbonBg;
   final Color carbonSidebar;
@@ -168,7 +168,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
   /// How much of the accent the ink kept against black before [inkLightness]:
   /// 0.55 on a light theme, 1 on a dark one.
   @Deprecated(_inkMixNote)
-  double get inkMix => inkLightness < 0.63 ? 0.55 : 1;
+  double get inkMix => inkLightness < 0.62 ? 0.55 : 1;
 
   /// The shape the user chose; it sets the radii of cards, controls and pills.
   final GlimShape shape;
@@ -356,8 +356,8 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     accent: Color(0xFFFCC419),
     accentContrast: Color(0xFF161616),
     accentSoft: Color(0x24FCC419),
-    statusInfoText: Color(0xFF836407),
-    statusInfoBg: Color(0x1F836407),
+    statusInfoText: Color(0xFF7C5E07),
+    statusInfoBg: Color(0x1F7C5E07),
     statusInfoSolid: Color(0xFFA87D00),
     statusOkText: Color(0xFF0E6027),
     statusOkBg: Color(0x1C0E6027),
@@ -396,7 +396,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     chartDiv5: Color(0xFFE2B293),
     chartDiv6: Color(0xFFCA7D44),
     chartDiv7: Color(0xFF9F5102),
-    inkLightness: 0.52,
+    inkLightness: 0.5,
   );
 
   @override
@@ -550,7 +550,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
         chartDiv6: chartDiv6 ?? this.chartDiv6,
         chartDiv7: chartDiv7 ?? this.chartDiv7,
         // ignore: deprecated_member_use_from_same_package
-        inkLightness: inkLightness ?? (inkMix == null ? this.inkLightness : (inkMix < 1 ? 0.52 : 0.74)),
+        inkLightness: inkLightness ?? (inkMix == null ? this.inkLightness : (inkMix < 1 ? 0.5 : 0.74)),
         shape: shape ?? this.shape,
       );
 

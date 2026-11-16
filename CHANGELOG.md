@@ -2,6 +2,19 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+Accent text holds 4.5:1 on surface2 in the light theme. Its ink sits one step deeper, at an OKLab lightness of 0.50 where it was 0.52.
+
+**Adopting apps:**
+
+- **Your own copy of the tokens:** copy `tokens.css` again, or set `--ink-l-light` to 0.5. An app that keeps its own step for the light ink can drop it and take GlimStone's.
+- **Flutter:** `GlimTheme.light` carries `inkLightness: 0.5`. A theme built with its own `inkLightness` keeps it.
+
+## 🐛 Fixed
+
+- **Accent text reads at 4.5:1 on surface2.** The eight presets reach 4.7 to 5.2:1 there, where 0.52 left the weakest at 4.27:1, and 5.8 to 6.4:1 on white. Sunflower's ink goes from `#836407` to `#7C5F07`, and the info text takes the same step.
+
 ## 4.5.3 - 2026-11-16
 
 The desktop window bar keeps its height again, and a tab change slides the right way in a right-to-left script.

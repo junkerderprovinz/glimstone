@@ -1,3 +1,7 @@
+## Unreleased
+
+- `GlimTheme.light`'s `inkLightness` is 0.5, so `accentInk` reads at 4.5:1 on `carbonSurface2` as well. Sunflower's ink is `#7C5F07`, and `statusInfoText` takes the same step.
+
 ## 4.5.3
 
 - No changes for Flutter. The fix for the window bar and the tab direction lives in tokens.css.

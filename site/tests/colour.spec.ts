@@ -61,7 +61,7 @@ test("a pale accent's text moves onto the light ramp's ink step and keeps its hu
     return getComputedStyle(probe).color;
   });
   const [l, a, b] = ink.match(/^oklab\(([\d.-]+) ([\d.-]+) ([\d.-]+)\)$/)!.slice(1).map(Number);
-  expect(l).toBeCloseTo(0.52, 3);
+  expect(l).toBeCloseTo(0.5, 3);
   // Yellow sits at about 110 degrees in OKLab.
   expect((Math.atan2(b, a) * 180) / Math.PI).toBeCloseTo(110, 0);
 });
