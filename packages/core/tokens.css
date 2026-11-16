@@ -468,6 +468,35 @@
   --status-warn-hover: color-mix(in srgb, var(--status-warn-solid) 85%, var(--carbon-text));
 }
 
+/* The ground of whatever the pointer is over, in the accent's hue (rule 21).
+   Each tint keeps the OKLab lightness of the neutral step it replaces, so text
+   reads on it as it did on the grey and it never lands on the ground it lifts
+   from: --hover on --carbon-hover, for an element with no fill of its own,
+   --hover-filled on surface3, for one filled with surface2, and --hover-raised
+   on --carbon-hover-raised, for one filled with surface3. On the dark ramps the
+   two upper ones sit 0.007 below their step, where a saturated green would
+   otherwise take the step's text under 4.5:1. The chroma is a share of the
+   accent's own, so a grey accent leaves the neutral step. Declared again inside
+   a rainbow position, so the hover takes the position's hue there, and in
+   reactive mode only once the position lights up. */
+:root,
+[data-theme],
+[data-rainbow] .glim-hue {
+  /* How much of the accent's chroma a hover takes. */
+  --hover-chroma: 0.3;
+  --hover: light-dark(oklab(from var(--accent) 0.907 calc(a * var(--hover-chroma)) calc(b * var(--hover-chroma))), oklab(from var(--accent) 0.329 calc(a * var(--hover-chroma)) calc(b * var(--hover-chroma))));
+  --hover-filled: light-dark(oklab(from var(--accent) 0.861 calc(a * var(--hover-chroma)) calc(b * var(--hover-chroma))), oklab(from var(--accent) 0.432 calc(a * var(--hover-chroma)) calc(b * var(--hover-chroma))));
+  --hover-raised: light-dark(oklab(from var(--accent) 0.827 calc(a * var(--hover-chroma)) calc(b * var(--hover-chroma))), oklab(from var(--accent) 0.535 calc(a * var(--hover-chroma)) calc(b * var(--hover-chroma))));
+}
+
+/* OLED moves the steps one Carbon step down, and the tints with them. */
+[data-oled],
+[data-oled][data-rainbow] .glim-hue {
+  --hover: light-dark(oklab(from var(--accent) 0.907 calc(a * var(--hover-chroma)) calc(b * var(--hover-chroma))), oklab(from var(--accent) 0.256 calc(a * var(--hover-chroma)) calc(b * var(--hover-chroma))));
+  --hover-filled: light-dark(oklab(from var(--accent) 0.861 calc(a * var(--hover-chroma)) calc(b * var(--hover-chroma))), oklab(from var(--accent) 0.338 calc(a * var(--hover-chroma)) calc(b * var(--hover-chroma))));
+  --hover-raised: light-dark(oklab(from var(--accent) 0.827 calc(a * var(--hover-chroma)) calc(b * var(--hover-chroma))), oklab(from var(--accent) 0.432 calc(a * var(--hover-chroma)) calc(b * var(--hover-chroma))));
+}
+
 /* The house font is Noto Sans, shipped with the app for Latin, Cyrillic, Greek,
    Vietnamese and Devanagari, with Noto's own cuts for Arabic, Hebrew and Thai.
    The "Variable" names are the shipped files, the plain ones an install on the
@@ -2098,7 +2127,7 @@
     cursor: pointer;
     transition: color 120ms ease;
   }
-  .glim-num-step:hover:not(:disabled) { color: var(--carbon-text, #f4f4f4); }
+  .glim-num-step:hover:not(:disabled) { color: var(--accent-glyph); }
   .glim-num-step:disabled {
     /* A control that looks pressable and does nothing is worse. */
     opacity: .35;
@@ -2817,7 +2846,7 @@
   .glim-window-button:focus-visible {
     outline: none;
   }
-  /* A blank control on the ground, so it hovers to --carbon-hover (rule 21).
+  /* A blank control on the ground, so it hovers to --hover (rule 21).
      Close hovers like the other two: it hides or quits the way the native
      button does, and nothing is lost that a red warning would guard. */
   .glim-window-square {
@@ -2834,7 +2863,7 @@
     height: 1rem;
   }
   .glim-window-button:hover .glim-window-square {
-    background-color: var(--carbon-hover);
+    background-color: var(--hover);
     color: var(--carbon-text);
   }
   .glim-window-button:focus-visible .glim-window-square {
@@ -2888,7 +2917,7 @@
     cursor: pointer;
   }
   .glim-combobox-control { padding-inline-end: var(--space-2); cursor: text; }
-  .glim-select-trigger:hover { background: var(--carbon-hover); }
+  .glim-select-trigger:hover { background: var(--hover); }
   .glim-select-trigger:focus-visible,
   .glim-combobox-control:focus-within {
     outline: var(--focus-ring-width) solid var(--focus-ring);
@@ -2900,7 +2929,7 @@
     border-color: transparent;
     background: var(--carbon-surface3);
   }
-  :is(.glim-well, .glim-subcard) .glim-select-trigger:not(.glim-select-trigger--inset):hover { background: var(--carbon-hover-raised); }
+  :is(.glim-well, .glim-subcard) .glim-select-trigger:not(.glim-select-trigger--inset):hover { background: var(--hover-raised); }
   .glim-select-trigger[data-disabled] { opacity: 0.5; cursor: default; }
   /* Busy: the trigger keeps its focus and takes no input until the answer is back. */
   .glim-select-trigger[data-readonly] { opacity: 0.5; cursor: progress; }
@@ -2966,7 +2995,7 @@
     color: var(--carbon-text-sub);
   }
   .glim-select-trigger--inset:hover {
-    background: var(--carbon-surface3);
+    background: var(--hover-filled);
     color: var(--carbon-text);
   }
   .glim-select-trigger--row .glim-select-indicator svg,
@@ -3000,7 +3029,7 @@
     color: var(--carbon-text-sub);
     cursor: pointer;
   }
-  .glim-combobox-toggle:hover { background: var(--carbon-hover); }
+  .glim-combobox-toggle:hover { background: var(--hover); }
   .glim-select-indicator {
     display: inline-flex;
     color: var(--carbon-text-sub);
@@ -3035,7 +3064,7 @@
     font-size: var(--text-body);
     cursor: pointer;
   }
-  .glim-select-item[data-highlighted] { background: var(--carbon-hover); }
+  .glim-select-item[data-highlighted] { background: var(--hover); }
   .glim-select-item[data-state="checked"] { font-weight: 600; }
   .glim-select-item[data-disabled] { color: var(--carbon-text-muted); cursor: default; }
   .glim-select-check { display: inline-flex; color: var(--accent-ink); }
@@ -3082,7 +3111,7 @@
     box-shadow: var(--elevation-float), var(--hairline);
   }
   .glim-select-content--menu .glim-menu-item[data-state="checked"] { background-color: var(--accent-soft); }
-  .glim-select-content--menu .glim-menu-item[data-highlighted] { background-color: var(--carbon-hover); }
+  .glim-select-content--menu .glim-menu-item[data-highlighted] { background-color: var(--hover); }
   .glim-select-content--menu .glim-menu-item[data-disabled] {
     opacity: 0.45;
     background-color: transparent;
@@ -3272,7 +3301,7 @@
      solid status tokens under the ground's ink: in both themes the solid values
      sit at the opposite lightness to the ground, so one ink reads on both.
 
-     Filled tones hover up their own ramp (rule 21). `--carbon-hover` is for
+     Filled tones hover up their own ramp (rule 21). `--hover` is for
      controls with no fill, and on the dark ramp it is darker than surface2. The
      accent and status fills have no ramp, so each steps toward the theme's text
      colour; `opacity` would let the card show through and move the other way.
@@ -3285,8 +3314,8 @@
   .glim-btn--warn { background-color: var(--status-warn-solid); color: var(--carbon-bg); }
   @media (hover: hover) {
     .glim-btn--accent:hover { background-color: var(--accent-hover); }
-    .glim-btn--neutral:hover { background-color: var(--carbon-hover-raised); }
-    .glim-btn--subtle:hover { background-color: var(--carbon-surface3); }
+    .glim-btn--neutral:hover { background-color: var(--hover-raised); }
+    .glim-btn--subtle:hover { background-color: var(--hover-filled); }
     .glim-btn--ok:hover { background-color: var(--status-ok-hover); }
     .glim-btn--danger:hover { background-color: var(--status-fail-hover); }
     .glim-btn--warn:hover { background-color: var(--status-warn-hover); }
@@ -3778,11 +3807,11 @@
   }
   @media (hover: hover) {
     .glim-give-network:not(.glim-active):hover {
-      background-color: var(--carbon-hover-raised);
+      background-color: var(--hover-raised);
       color: var(--carbon-text);
     }
     .glim-give-coin--plain:hover {
-      background-color: var(--carbon-surface3);
+      background-color: var(--hover-filled);
       color: var(--carbon-text);
     }
   }
@@ -3981,7 +4010,7 @@
     text-decoration: none;
   }
   @media (hover: hover) {
-    a.glim-version-number:hover { color: var(--carbon-text); }
+    a.glim-version-number:hover { color: var(--accent-ink); }
   }
   .glim-version-actions {
     display: flex;
@@ -4058,7 +4087,7 @@
      needs a lighter text token. */
   .glim-sel--well .glim-sel-seg { color: var(--carbon-text-sub); }
   .glim-sel--well .glim-sel-seg:not(.glim-active):not(:disabled):hover {
-    background-color: var(--carbon-hover);
+    background-color: var(--hover);
     color: var(--carbon-text);
   }
   /* In the bare strip every segment is a badge at rest, not only the chosen
@@ -4068,7 +4097,7 @@
     color: var(--carbon-text-sub);
   }
   .glim-sel--chip .glim-sel-seg:not(.glim-active):not(:disabled):hover {
-    background-color: var(--carbon-surface3);
+    background-color: var(--hover-filled);
     color: var(--carbon-text);
   }
   .glim-sel .glim-sel-seg.glim-active {
@@ -4190,7 +4219,7 @@
     transition: background-color 120ms ease, color 120ms ease;
   }
   .glim-sel-tile:not(.glim-active):hover {
-    background-color: var(--carbon-surface3);
+    background-color: var(--hover-filled);
     color: var(--carbon-text);
   }
   .glim-sel-tile.glim-active {
@@ -4273,7 +4302,7 @@
     transition: background-color 150ms ease, color 150ms ease, translate 150ms ease;
   }
   .glim-nav-row:not(.glim-active):hover {
-    background-color: var(--carbon-hover);
+    background-color: var(--hover);
     color: var(--carbon-text);
   }
   .glim-nav-row.glim-active {
@@ -4454,10 +4483,12 @@
   :is(.glim-subcard, .glim-well) .glim-sel-tile:not(.glim-active) {
     background-color: var(--carbon-surface3);
   }
-  .glim-subcard .glim-num-field:focus,
+  .glim-subcard .glim-num-field:focus {
+    background-color: var(--carbon-hover-raised);
+  }
   .glim-subcard .glim-sel--chip .glim-sel-seg:not(.glim-active):not(:disabled):hover,
   :is(.glim-subcard, .glim-well) .glim-sel-tile:not(.glim-active):hover {
-    background-color: var(--carbon-hover-raised);
+    background-color: var(--hover-raised);
   }
 
   /* The general window (Window): the confirm surface's frame, grown to hold a
@@ -4522,7 +4553,7 @@
      it, so the first row it focused stays unlit (focusFirstMenuRow). */
   .glim-menu-item:hover,
   .glim-menu:not([data-pointer]) .glim-menu-item:focus-visible,
-  .glim-menu-item[aria-expanded="true"] { background-color: var(--carbon-hover); }
+  .glim-menu-item[aria-expanded="true"] { background-color: var(--hover); }
   .glim-menu-item:disabled {
     opacity: 0.45;
     cursor: default;
@@ -4604,7 +4635,7 @@
     cursor: pointer;
   }
   .glim-menu-head-edit:hover,
-  .glim-menu:not([data-pointer]) .glim-menu-head-edit:focus-visible { background-color: var(--carbon-hover); }
+  .glim-menu:not([data-pointer]) .glim-menu-head-edit:focus-visible { background-color: var(--hover); }
   .glim-menu-head-edit svg {
     width: 0.85rem;
     height: 0.85rem;
@@ -4628,7 +4659,7 @@
   }
   .glim-menubar-item:hover,
   .glim-menubar-item[aria-expanded="true"] {
-    background-color: var(--carbon-surface2);
+    background-color: var(--hover);
     color: var(--carbon-text);
   }
 
@@ -4646,7 +4677,7 @@
     text-align: start;
     cursor: pointer;
   }
-  .glim-checkbox:hover { background-color: var(--carbon-hover); }
+  .glim-checkbox:hover { background-color: var(--hover); }
   .glim-checkbox:disabled {
     opacity: 0.55;
     cursor: default;
@@ -4680,7 +4711,7 @@
   }
   .glim-checkbox--slim:hover { background-color: transparent; }
   .glim-checkbox--slim[aria-checked="false"]:not(:disabled):hover > .glim-checkbox-box {
-    background-color: var(--carbon-surface3);
+    background-color: var(--hover-filled);
   }
 
   /* A key cap (Kbd), in the app's own type rather than the browser's monospace. */
@@ -4951,8 +4982,8 @@
     cursor: pointer;
     user-select: none;
   }
-  .glim-tree-row:not([aria-selected="true"]):hover { background-color: var(--carbon-hover); }
-  .glim-well .glim-tree-row:not([aria-selected="true"]):hover { background-color: var(--carbon-surface3); }
+  .glim-tree-row:not([aria-selected="true"]):hover { background-color: var(--hover); }
+  .glim-well .glim-tree-row:not([aria-selected="true"]):hover { background-color: var(--hover-filled); }
   .glim-tree-row[aria-selected="true"] {
     background-color: var(--accent);
     color: var(--accent-contrast);
@@ -4967,7 +4998,7 @@
     color: var(--carbon-text-muted);
   }
   .glim-tree-toggle:hover {
-    background-color: color-mix(in srgb, currentColor 18%, transparent);
+    background-color: color-mix(in srgb, var(--accent) 18%, transparent);
     color: var(--carbon-text);
   }
   .glim-tree-toggle > svg {
@@ -5028,7 +5059,7 @@
     padding-inline: var(--row-pad);
     border-radius: var(--radius-control);
   }
-  .glim-list-row:is(:hover, :focus-within) { background-color: var(--carbon-hover); }
+  .glim-list-row:is(:hover, :focus-within) { background-color: var(--hover); }
   .glim-list-row--opens { cursor: pointer; }
   .glim-list-row-tile {
     display: grid;
@@ -5145,7 +5176,7 @@
     color: var(--carbon-text-muted);
     cursor: pointer;
   }
-  .glim-secret-eye:hover { color: var(--carbon-text); }
+  .glim-secret-eye:hover { color: var(--accent-glyph); }
   .glim-secret-eye > svg {
     width: 0.95rem;
     height: 0.95rem;
@@ -5552,7 +5583,7 @@
     padding: var(--space-5) var(--space-7);
     border-radius: var(--radius-control);
   }
-  .glim-permission:hover { background-color: var(--carbon-hover); }
+  .glim-permission:hover { background-color: var(--hover); }
   .glim-permission-pair {
     display: inline-flex;
     align-items: center;
@@ -6177,7 +6208,7 @@
     color: var(--accent-ink);
   }
   @media (hover: hover) {
-    :is(.glim-list-sort, .glim-list-filter):hover { background-color: var(--carbon-hover); color: var(--carbon-text); }
+    :is(.glim-list-sort, .glim-list-filter):hover { background-color: var(--hover); color: var(--carbon-text); }
   }
   .glim-list-tr { cursor: default; }
   .glim-list-tr > td {
@@ -6187,7 +6218,7 @@
   }
   .glim-list-tr > td:first-child { border-start-start-radius: var(--radius-control); border-end-start-radius: var(--radius-control); }
   .glim-list-tr > td:last-child { border-start-end-radius: var(--radius-control); border-end-end-radius: var(--radius-control); }
-  .glim-list-tr:hover > td { background-color: var(--carbon-hover); }
+  .glim-list-tr:hover > td { background-color: var(--hover); }
   .glim-list-tr[aria-selected="true"] > td {
     background-color: var(--accent-soft);
     color: var(--accent-ink);
@@ -6258,7 +6289,7 @@
 }
 
 /* Collapsible and Accordion: a row that opens the text under it. The row has
-   no fill of its own, so it hovers to --carbon-hover, and on the second
+   no fill of its own, so it hovers to --hover, and on the second
    surface one step up (rule 21). Open is no activity and takes no accent. Its
    height and inline room follow the row density, like a list row. */
 @layer components {
@@ -6291,8 +6322,8 @@
     text-align: start;
     cursor: pointer;
   }
-  .glim-disclosure-trigger:hover { background-color: var(--carbon-hover); }
-  :is(.glim-well, .glim-subcard) .glim-disclosure-trigger:hover { background-color: var(--carbon-surface3); }
+  .glim-disclosure-trigger:hover { background-color: var(--hover); }
+  :is(.glim-well, .glim-subcard) .glim-disclosure-trigger:hover { background-color: var(--hover-filled); }
   .glim-disclosure-trigger:focus-visible {
     outline: var(--focus-ring-width) solid var(--focus-ring);
     outline-offset: 2px;
@@ -6402,9 +6433,9 @@
     font-size: var(--text-body);
     cursor: pointer;
   }
-  .glim-page:hover { background-color: var(--carbon-surface3); }
+  .glim-page:hover { background-color: var(--hover-filled); }
   :is(.glim-well, .glim-subcard) .glim-page { background-color: var(--carbon-surface3); }
-  :is(.glim-well, .glim-subcard) .glim-page:hover { background-color: var(--carbon-hover-raised); }
+  :is(.glim-well, .glim-subcard) .glim-page:hover { background-color: var(--hover-raised); }
   .glim-page[data-selected] {
     background-color: var(--accent);
     color: var(--accent-contrast);
@@ -6579,8 +6610,8 @@
     font-size: var(--text-body);
     cursor: pointer;
   }
-  .glim-steps-trigger:hover { background-color: var(--carbon-hover); }
-  :is(.glim-well, .glim-subcard) .glim-steps-trigger:hover { background-color: var(--carbon-surface3); }
+  .glim-steps-trigger:hover { background-color: var(--hover); }
+  :is(.glim-well, .glim-subcard) .glim-steps-trigger:hover { background-color: var(--hover-filled); }
   .glim-steps-trigger[data-current] { cursor: default; }
   .glim-steps-trigger:focus-visible {
     outline: var(--focus-ring-width) solid var(--focus-ring);
@@ -6865,9 +6896,9 @@
     color: var(--carbon-text-sub);
   }
   .glim-upload-words { max-width: 22rem; }
-  .glim-upload-drop:hover { background-color: var(--carbon-surface3); }
+  .glim-upload-drop:hover { background-color: var(--hover-filled); }
   :is(.glim-well, .glim-subcard) .glim-upload-drop { background-color: var(--carbon-surface3); }
-  :is(.glim-well, .glim-subcard) .glim-upload-drop:hover { background-color: var(--carbon-hover-raised); }
+  :is(.glim-well, .glim-subcard) .glim-upload-drop:hover { background-color: var(--hover-raised); }
   .glim-upload-drop:focus-visible {
     outline: var(--focus-ring-width) solid var(--focus-ring);
     outline-offset: 2px;
@@ -6896,7 +6927,7 @@
     padding-inline: var(--row-pad) var(--space-2);
     border-radius: var(--radius-control);
   }
-  .glim-upload-file:hover { background-color: var(--carbon-hover); }
+  .glim-upload-file:hover { background-color: var(--hover); }
   .glim-upload-file + .glim-upload-file { border-top: 1px solid color-mix(in srgb, var(--carbon-border) 60%, transparent); }
   .glim-upload-name {
     flex: 1;
@@ -6993,7 +7024,7 @@
     font-weight: 600;
   }
   span.glim-date-title { cursor: default; }
-  :is(.glim-date-step, button.glim-date-title):hover { background-color: var(--carbon-hover); }
+  :is(.glim-date-step, button.glim-date-title):hover { background-color: var(--hover); }
   :is(.glim-date-step, .glim-date-title):focus-visible {
     outline: var(--focus-ring-width) solid var(--focus-ring);
     outline-offset: 0;
@@ -7027,7 +7058,7 @@
     width: 3.5rem;
     font-size: var(--text-body);
   }
-  .glim-date-cell:hover { background-color: var(--carbon-hover); }
+  .glim-date-cell:hover { background-color: var(--hover); }
   .glim-date-cell[data-focus] {
     outline: var(--focus-ring-width) solid var(--focus-ring);
     outline-offset: -2px;
@@ -7331,7 +7362,7 @@
     border-radius: var(--radius-pill);
     background-color: var(--carbon-text-muted);
   }
-  .glim-carousel-dot:hover::before { background-color: var(--carbon-text-sub); }
+  .glim-carousel-dot:hover::before { background-color: var(--accent); }
   .glim-carousel-dot[data-current]::before {
     width: var(--space-9);
     background-color: var(--accent);

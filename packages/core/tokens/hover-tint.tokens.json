@@ -1,0 +1,66 @@
+{
+  "hover-tint": {
+    "$description": "The ground of whatever the pointer is over, in the accent's hue (rule 21). Each tint keeps the OKLab lightness of the neutral step it replaces, so text reads on it as it did on the grey and it never lands on the ground it lifts from: --hover on --carbon-hover, for an element with no fill of its own, --hover-filled on surface3, for one filled with surface2, and --hover-raised on --carbon-hover-raised, for one filled with surface3. On the dark ramps the two upper ones sit 0.007 below their step, where a saturated green would otherwise take the step's text under 4.5:1. The chroma is a share of the accent's own, so a grey accent leaves the neutral step. Declared again inside a rainbow position, so the hover takes the position's hue there, and in reactive mode only once the position lights up.",
+    "$extensions": {
+      "org.glimstone": {
+        "selector": ":root,\n[data-theme],\n[data-rainbow] .glim-hue",
+        "theme": true,
+        "modes": [
+          {
+            "name": "oled",
+            "selector": "[data-oled],\n[data-oled][data-rainbow] .glim-hue",
+            "$description": "OLED moves the steps one Carbon step down, and the tints with them."
+          }
+        ]
+      }
+    },
+    "hover-chroma": {
+      "$value": 0.3,
+      "$type": "number",
+      "$description": "How much of the accent's chroma a hover takes."
+    },
+    "hover": {
+      "$value": "oklab(from {colour.accent} 0.907 calc(a * {hover-tint.hover-chroma}) calc(b * {hover-tint.hover-chroma}))",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "oklab(from {colour.accent} 0.329 calc(a * {hover-tint.hover-chroma}) calc(b * {hover-tint.hover-chroma}))",
+          "modes": {
+            "oled": {
+              "dark": "oklab(from {colour.accent} 0.256 calc(a * {hover-tint.hover-chroma}) calc(b * {hover-tint.hover-chroma}))"
+            }
+          },
+          "tailwind": "color-hover",
+          "tailwindNote": "The accent's hover tints (rule 21): hover:bg-hover for a row or anything else with no fill, hover:bg-hoverFilled for something filled with surface2, hover:bg-hoverRaised for something filled with surface3."
+        }
+      }
+    },
+    "hover-filled": {
+      "$value": "oklab(from {colour.accent} 0.861 calc(a * {hover-tint.hover-chroma}) calc(b * {hover-tint.hover-chroma}))",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "oklab(from {colour.accent} 0.432 calc(a * {hover-tint.hover-chroma}) calc(b * {hover-tint.hover-chroma}))",
+          "modes": {
+            "oled": {
+              "dark": "oklab(from {colour.accent} 0.338 calc(a * {hover-tint.hover-chroma}) calc(b * {hover-tint.hover-chroma}))"
+            }
+          },
+          "tailwind": "color-hoverFilled"
+        }
+      }
+    },
+    "hover-raised": {
+      "$value": "oklab(from {colour.accent} 0.827 calc(a * {hover-tint.hover-chroma}) calc(b * {hover-tint.hover-chroma}))",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "oklab(from {colour.accent} 0.535 calc(a * {hover-tint.hover-chroma}) calc(b * {hover-tint.hover-chroma}))",
+          "modes": {
+            "oled": {
+              "dark": "oklab(from {colour.accent} 0.432 calc(a * {hover-tint.hover-chroma}) calc(b * {hover-tint.hover-chroma}))"
+            }
+          },
+          "tailwind": "color-hoverRaised"
+        }
+      }
+    }
+  }
+}

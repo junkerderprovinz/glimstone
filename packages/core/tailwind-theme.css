@@ -77,6 +77,13 @@
   --color-statusOkHover: var(--status-ok-hover);
   --color-statusFailHover: var(--status-fail-hover);
   --color-statusWarnHover: var(--status-warn-hover);
+
+  /* The accent's hover tints (rule 21): hover:bg-hover for a row or anything
+     else with no fill, hover:bg-hoverFilled for something filled with surface2,
+     hover:bg-hoverRaised for something filled with surface3. */
+  --color-hover: var(--hover);
+  --color-hoverFilled: var(--hover-filled);
+  --color-hoverRaised: var(--hover-raised);
 }
 /* tokens:theme end */
 
@@ -91,6 +98,9 @@
   --color-accentSoft: var(--item-hue-soft);
   --color-accentGlyph: var(--accent-glyph);
   --color-accentHover: var(--accent-hover);
+  --color-hover: var(--hover);
+  --color-hoverFilled: var(--hover-filled);
+  --color-hoverRaised: var(--hover-raised);
 }
 [data-rainbow='reactive'] .glim-hue {
   --color-accent: var(--carbon-text-muted);

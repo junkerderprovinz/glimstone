@@ -2,7 +2,7 @@
   import { IconTipButton } from "@glimstone/svelte";
   import { glyph } from "../svelte/glyph";
 
-  const ROW = "inline-flex h-8 w-8 items-center justify-center rounded-pill text-carbon-textSub hover:bg-carbon-hover hover:text-carbon-text";
+  const ROW = "inline-flex h-8 w-8 items-center justify-center rounded-pill text-carbon-textSub hover:bg-hover hover:text-carbon-text";
   const up = glyph("IconMoveUp");
   const down = glyph("IconMoveDown");
   const pin = glyph("IconPin");

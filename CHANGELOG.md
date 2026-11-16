@@ -2,6 +2,28 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+Whatever the pointer is over now lights up in the accent: rows, menu entries, tiles, tabs, pages and the window buttons, as the buttons already did.
+
+**Adopting apps:**
+
+- **Your own hovers:** swap `hover:bg-carbon-hover` for `hover:bg-hover`, a hover to `surface3` on something filled with surface2 for `hover:bg-hoverFilled`, and `hover:bg-carbon-hoverRaised` for `hover:bg-hoverRaised`. In plain CSS the tokens are `--hover`, `--hover-filled` and `--hover-raised`. `--carbon-hover` and `--carbon-hover-raised` stay as the grey steps a field's focus uses.
+- **A row with a glyph tile:** fill the tile with the accent while the row is hovered, as `GlyphTile` does. A tile filled with surface2 disappears into a row that hovers to surface2.
+- **Your own copy of the tokens:** copy `tokens.css` and `tailwind-theme.css` again. The tints are declared again inside `[data-rainbow] .glim-hue`, and `tailwind-theme.css` repeats `--color-hover`, `--color-hoverFilled` and `--color-hoverRaised` there, so a rainbow position's hover takes its hue.
+- **Flutter:** `GlimDerived` gains `hover`, `hoverFilled` and `hoverRaised`.
+
+## 🎨 Design
+
+- **Hover takes the accent's hue** (rule 21). Each tint keeps the OKLab lightness of the grey step it replaces and 30% of the accent's chroma, so text reads on it as it did on the grey: on a hovered row the text and the secondary text keep 4.5:1 for every picked colour, on dark, OLED, light and the contrast step. A grey accent leaves the grey step, and under rainbow the hover takes the position's hue.
+- **Glyphs without a ground of their own** take the accent's ink under the pointer: the number field's steppers, the password eye and the version link. A tree's expand toggle and a carousel dot light up in the accent as well.
+- **Options marked by the pointer** in Select and in a menu opened from a Select take the same tint as a menu entry.
+
+## ✨ Added
+
+- **`--hover`, `--hover-filled`, `--hover-raised` and `--hover-chroma`**, with the Tailwind colours `hover`, `hoverFilled` and `hoverRaised`.
+- **Tests** that hold every hover in the stylesheet to an accent-derived ground, every glyph without a ground to the accent's ink, each tint to its step's lightness and the accent's hue, and the text on a hovered row to 4.5:1 for 153 picked colours in all six themes.
+
 ## 4.5.3 - 2026-11-16
 
 The desktop window bar keeps its height again, and a tab change slides the right way in a right-to-left script.

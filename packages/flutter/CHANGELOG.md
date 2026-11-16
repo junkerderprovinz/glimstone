@@ -1,3 +1,7 @@
+## Unreleased
+
+- `GlimDerived` gains `hover`, `hoverFilled` and `hoverRaised`, the accent's hover tints as tokens.css works them out: the lightness of `carbonHover`, `carbonSurface3` and `carbonHoverRaised` with 30% of the accent's chroma.
+
 ## 4.5.3
 
 - No changes for Flutter. The fix for the window bar and the tab direction lives in tokens.css.

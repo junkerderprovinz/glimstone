@@ -249,7 +249,7 @@
   text-decoration: none;
 }
 .gl-legend-item:hover,
-.gl-legend-item.is-hot { background: var(--carbon-hover); }
+.gl-legend-item.is-hot { background: var(--hover); }
 .gl-legend-text { display: grid; gap: 1px; min-width: 0; }
 .gl-legend-name { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem; }
 .gl-legend-name strong { font-size: var(--text-body); font-weight: 650; }
@@ -292,7 +292,7 @@
   color: var(--carbon-text-sub);
   cursor: pointer;
 }
-.gl-own-row-btn:hover { background: var(--carbon-hover); color: var(--carbon-text); }
+.gl-own-row-btn:hover { background: var(--hover); color: var(--carbon-text); }
 
 .gl-dense-row {
   display: flex;

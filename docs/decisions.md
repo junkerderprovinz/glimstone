@@ -54,6 +54,8 @@ The rule itself came from a list of filled tiles whose class said `hover:bg-carb
 
 The step for the accent-filled button was decided after buttons that did not react to the pointer were reported across an app.
 
+The steps were neutral grey until a list row in an adopting app was reported beside the button above it: the button lit up in the accent and the row turned grey, and the row's glyph tile, filled with surface2, vanished into a hover painted with the same surface2. The hover took the accent's hue then, on the lightness each grey step had, so the contrast measured on the grey still holds. A wash of the accent over the ground was tried on paper first. On the dark ramp it lifted the row far enough to take the secondary text under 4.5:1, and a near-black or near-white accent made it disappear into the card.
+
 ## Rule 22: a settings card configures, the shell operates
 
 The password card had grown *Sign out* and *Sign out everywhere* along its bottom edge, so the two most consequential controls on a form with unsaved fields were the two that throw it away, and one of them repeated a control the shell already carried. *Sign out* left the card untouched because the shell offered it. *Sign out everywhere* had no second home, and deleting its only button would have removed the one way to revoke outstanding sessions. So it moved into the action that implies it: changing the password ends every other session, which is what somebody changing a password out of suspicion expected anyway.
