@@ -2,7 +2,7 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 4.5.4 - 2026-11-16
 
 Whatever the pointer is over lights up in the accent, in one colour for buttons, rows, menus and tiles, and accent text in the light theme reads at 4.5:1 on every ground it stands on.
 

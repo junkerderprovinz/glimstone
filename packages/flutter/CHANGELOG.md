@@ -1,4 +1,4 @@
-## Unreleased
+## 4.5.4
 
 - `GlimTheme.light`'s `inkLightness` is 0.5, so `accentInk` reads at 4.5:1 on `carbonSurface2` as well. Sunflower's ink is `#7C5F07`, and `statusInfoText` takes the same step.
 - `GlimDerived` gains `hover`, the accent's hover as tokens.css works it out: the lightness of `carbonSurface3` with 30% of the accent's chroma. A neutral or quiet `GlimButton` hovers to it, as a row does, instead of 22% of the ink mixed into its own step.
