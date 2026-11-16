@@ -130,7 +130,7 @@ test("the focus ring is the accent ink, opaque, and follows a picked accent", as
   const ring = await painted(page, "var(--focus-ring)");
   expect(ring).toBe(await painted(page, "var(--accent-ink)"));
   // Blue on the light ramp's ink step, with no alpha of its own.
-  expect(ring).toMatch(/^oklab\(0\.52 -[\d.]+ -[\d.]+\)$/);
+  expect(ring).toMatch(/^oklab\(0\.5 -[\d.]+ -[\d.]+\)$/);
 });
 
 test("a pale accent's focus ring takes the darkened ink on the light theme", async ({ page }) => {
@@ -138,7 +138,7 @@ test("a pale accent's focus ring takes the darkened ink on the light theme", asy
   const ring = await painted(page, "var(--focus-ring)");
   expect(ring).toBe(await painted(page, "var(--accent-ink)"));
   expect(ring).not.toMatch(/rgba|\//);
-  expect(ring).toMatch(/^oklab\(0\.52 /);
+  expect(ring).toMatch(/^oklab\(0\.5 /);
 });
 
 for (const [theme, grey] of [["dark", "rgb(198, 198, 198)"], ["light", "rgb(82, 82, 82)"]] as const) {
