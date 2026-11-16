@@ -15,9 +15,10 @@ const hovered = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
 
 const declared = (body: string, property: RegExp) => [...body.matchAll(new RegExp(`(?<![\\w-])(?:${property.source})\\s*:\\s*([^;]+);`, 'g'))].map((m) => m[1]!.trim());
 
-// A ground that comes from the accent, from a rainbow position, from a brand
-// tile or from a state hue, each of which the hover is allowed to light.
-const LIT = /var\(--(hover|hover-filled|hover-raised|accent[\w-]*|btn-tint|item-hue[\w-]*|tile|status-[\w-]+)\)/;
+// A ground that comes from the accent, from a button's tint, from a rainbow
+// position, from a brand tile or from a state hue, each of which the hover is
+// allowed to light.
+const LIT = /var\(--(hover|hover-filled|hover-raised|accent[\w-]*|btn-tint(?:ed)?|item-hue[\w-]*|tile|status-[\w-]+)\)/;
 
 // The system colours a forced-colors rule paints with.
 const SYSTEM = /^(Highlight|HighlightText|ButtonFace|ButtonText|Canvas|CanvasText|LinkText|GrayText|SelectedItem)$/;

@@ -65,6 +65,18 @@ void main() {
       }
       expect(misses, isEmpty);
     });
+
+    test('every picked accent keeps a tinted button\'s label at 4.5:1 under the pointer on $name', () {
+      final misses = <String>[];
+      for (final picked in sweep) {
+        final g = base.withAccent(picked);
+        for (final (tone, step) in [('neutral', g.carbonHoverRaised), ('subtle', g.carbonSurface3)]) {
+          final r = ratio(g.carbonText, g.tintedHover(step));
+          if (r < glimMinTextContrast) misses.add('${hex(picked)} $tone ${r.toStringAsFixed(2)}');
+        }
+      }
+      expect(misses, isEmpty);
+    });
   }
 
   // The colours packages/core/src/contrast.ts hands out for the same accents.

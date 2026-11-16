@@ -18,11 +18,12 @@ Whatever the pointer is over now lights up in the accent: rows, menu entries, ti
 - **Hover takes the accent's hue** (rule 21). Each tint keeps the OKLab lightness of the grey step it replaces and 30% of the accent's chroma, so text reads on it as it did on the grey: on a hovered row the text and the secondary text keep 4.5:1 for every picked colour, on dark, OLED, light and the contrast step. A grey accent leaves the grey step, and under rainbow the hover takes the position's hue.
 - **Glyphs without a ground of their own** take the accent's ink under the pointer: the number field's steppers, the password eye and the version link. A tree's expand toggle and a carousel dot light up in the accent as well.
 - **Options marked by the pointer** in Select and in a menu opened from a Select take the same tint as a menu entry.
+- **A neutral or quiet button's label keeps 4.5:1 under the pointer** (rule 40). On the dark ramp a pale accent lifted the tinted ground past what the label reads on, Sunflower's neutral hover to `#8e825c` at 3.47:1. There the ground now keeps the tint's hue and stops at the lightness `--hover-raised` has on that ramp, `#796d48` at 4.66:1 for Sunflower.
 
 ## ✨ Added
 
 - **`--hover`, `--hover-filled`, `--hover-raised` and `--hover-chroma`**, with the Tailwind colours `hover`, `hoverFilled` and `hoverRaised`.
-- **Tests** that hold every hover in the stylesheet to an accent-derived ground, every glyph without a ground to the accent's ink, each tint to its step's lightness and the accent's hue, and the text on a hovered row to 4.5:1 for 153 picked colours in all six themes.
+- **Tests** that hold every hover in the stylesheet to an accent-derived ground, every glyph without a ground to the accent's ink, each tint to its step's lightness and the accent's hue, and the text on a hovered row to 4.5:1 for 153 picked colours in all six themes, as well as a tinted button's label under the pointer, in every rainbow position too.
 
 ## 4.5.3 - 2026-11-16
 

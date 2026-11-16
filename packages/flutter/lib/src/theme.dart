@@ -58,6 +58,18 @@ extension GlimDerived on GlimTheme {
 
   double get _upperHoverNudge => carbonBg.computeLuminance() > 0.5 ? 0 : _hoverNudge;
 
+  /// A surface-filled button's ground under the pointer (rule 40): a little
+  /// of the ink mixed into [step], the ramp step its tone hovers to. On a dark
+  /// ramp a pale ink would lift it past what the label reads on, so there it
+  /// stops at the lightness `--hover-raised` has on the dark ramp, as
+  /// tokens.css does.
+  Color tintedHover(Color step) {
+    final mixed = Color.lerp(step, accentInk, _tintShare)!;
+    final lab = _oklab(mixed);
+    if (carbonBg.computeLuminance() > 0.5 || lab[0] <= _tintCeiling) return mixed;
+    return _srgb(_tintCeiling, lab[1], lab[2]);
+  }
+
   Color _hoverTint(Color step, double nudge) {
     final lab = _oklab(accent);
     return _srgb(_oklab(step)[0] - nudge, lab[1] * _hoverChroma, lab[2] * _hoverChroma);
@@ -99,6 +111,11 @@ const _softShare = 0.14;
 // hover tints in tokens.css).
 const _hoverChroma = 0.3;
 const _hoverNudge = 0.007;
+
+// The share of the ink a tinted button's hovered ground takes, as the 22% of
+// --btn-tint in tokens.css, and the lightness it stops at on a dark ramp.
+const _tintShare = 0.22;
+const _tintCeiling = 0.535;
 
 // Channels from 0 to 255, as the core's contrast.ts counts them.
 const _white = [255.0, 255.0, 255.0];

@@ -178,13 +178,13 @@ class _GlimButtonState extends State<GlimButton> {
       GlimTone.accent => (lit ? g.accentHover : g.accent, g.accentContrast),
       GlimTone.neutral => (
           lit
-              ? Color.lerp(g.carbonHoverRaised, g.accentInk, 0.22)!
+              ? g.tintedHover(g.carbonHoverRaised)
               : g.carbonSurface3,
           g.carbonText
         ),
       GlimTone.subtle => (
           lit
-              ? Color.lerp(g.carbonSurface3, g.accentInk, 0.22)!
+              ? g.tintedHover(g.carbonSurface3)
               : g.carbonSurface2,
           g.carbonText
         ),

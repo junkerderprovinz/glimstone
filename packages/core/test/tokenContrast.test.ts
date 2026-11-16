@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { accentHovers, accentInks, contrastOn, contrastRatio, MIN_TEXT_CONTRAST } from '../src/contrast.ts';
 import { ACCENTS, hueVars, RAINBOW } from '../src/appearance.ts';
-import { srgbOf, type Oklab } from '../src/oklab.ts';
+import { inkCss, srgbOf, type Oklab } from '../src/oklab.ts';
 
 // What tokens.css promises, read from tokens.css itself, so a changed value is
 // measured rather than trusted.
@@ -155,10 +155,15 @@ function resolve(value: string, scope: Record<string, string>): Rgba {
     const [l, c, h] = [Number(lch[1]), Number(lch[2]), (Number(lch[3]) * Math.PI) / 180];
     return fromOklab([l, c * Math.cos(h), c * Math.sin(h)], lch[4] === undefined ? 1 : Number(lch[4]));
   }
-  const m = v.match(/^color-mix\(in srgb,\s*([\s\S]+?)\s+(var\(--[\w-]+\)|[\d.]+%),\s*([\s\S]+)\)$/);
+  const m = v.match(/^color-mix\(in srgb,\s*([\s\S]+)\)$/);
   if (m) {
-    const share = parseFloat(m[2]!.startsWith('var(') ? scope[m[2]!.slice(4, -1)]! : m[2]!) / 100;
-    return mix(resolve(m[1]!, scope), share, resolve(m[3]!, scope));
+    // Either colour may carry the share, and the other takes the rest.
+    const [[a, ofA], [b, ofB]] = split(m[1]!, /,/).map((part) => {
+      const s = part.match(/^([\s\S]+?)\s+(var\(--[\w-]+\)|[\d.]+%)$/);
+      if (!s) return [part, undefined] as const;
+      return [s[1]!, parseFloat(s[2]!.startsWith('var(') ? scope[s[2]!.slice(4, -1)]! : s[2]!) / 100] as const;
+    }) as [readonly [string, number | undefined], readonly [string, number | undefined]];
+    return mix(resolve(a, scope), ofA ?? (ofB === undefined ? 0.5 : 1 - ofB), resolve(b, scope));
   }
   return parse(v);
 }
@@ -408,5 +413,64 @@ for (const [themeName, theme] of Object.entries(THEMES)) {
       const own = oklabOfRgb(parse(hue));
       for (const { tint } of HOVERS) assert.ok(hueGap(labOf(tint, scope), own) <= 6, `position ${i} ${tint}`);
     });
+  });
+}
+
+/** The declarations of the rule whose selector is exactly `selector`. */
+function rule(selector: string): Record<string, string> {
+  const start = bare.indexOf(`${selector} {`);
+  assert.ok(start >= 0, `no rule ${selector}`);
+  const body = bare.slice(start + selector.length + 2, bare.indexOf('}', start));
+  return Object.fromEntries([...body.matchAll(/([\w-]+)\s*:\s*([^;]+);/g)].map((m) => [m[1]!, m[2]!.trim()]));
+}
+
+// A surface-filled button under the pointer (rule 40): each tone's hover rule
+// sets the tinted mix, one shared rule makes the ground of it, and the label is
+// the tone's own.
+const TINTED_GROUND = rule(':is(.glim-btn-neutral, .glim-btn-subtle):not(:disabled):is(:hover, :focus-visible)')['background-color']!;
+const TINTED = (['neutral', 'subtle'] as const).map((tone) => ({
+  tone,
+  hovered: rule(`.glim-btn-${tone}:not(:disabled):is(:hover, :focus-visible)`),
+  label: rule(`.glim-btn--${tone}`)['color']!,
+}));
+
+/** The scope a tinted button's hover resolves in, with `tint` as its --btn-tint. */
+const tintedScope = (scope: Record<string, string>, tint: string, hovered: Record<string, string>) => ({ ...scope, '--btn-tint': tint, ...hovered });
+
+/** Each tinted button's label on its hovered ground. */
+const tintedRatios = (scope: Record<string, string>, tint: string) =>
+  TINTED.map(({ tone, hovered, label }) => {
+    const lit = { ...tintedScope(scope, tint, hovered), '--lit': TINTED_GROUND, '--label': label };
+    return [tone, pairRatio('--label', '--lit', lit)] as const;
+  });
+
+for (const [themeName, theme] of Object.entries(THEMES)) {
+  test(`a tinted button's label reads at 4.5:1 under the pointer for ${SWEEP.length} picked accents on ${themeName}`, () => {
+    const misses = SWEEP.flatMap((accent) =>
+      tintedRatios(withAccent(theme, accent), 'var(--accent-glyph)')
+        .filter(([, r]) => r < MIN_TEXT_CONTRAST)
+        .map(([tone, r]) => `${accent} ${tone}: ${r.toFixed(2)}:1`),
+    );
+    assert.deepEqual(misses, []);
+  });
+
+  test(`a tinted button's label reads at 4.5:1 under the pointer in every rainbow position on ${themeName}`, () => {
+    const misses = RAINBOW.flatMap((hue, i) =>
+      tintedRatios({ ...theme, ...hueVars(i), [`--rb-${i}`]: hue }, inkCss(`var(--rb-${i})`))
+        .filter(([, r]) => r < MIN_TEXT_CONTRAST)
+        .map(([tone, r]) => `position ${i} ${tone}: ${r.toFixed(2)}:1`),
+    );
+    assert.deepEqual(misses, []);
+  });
+
+  test(`a tinted button lights up in the accent's hue under the pointer on ${themeName}`, () => {
+    for (const { name, hex: accent } of ACCENTS) {
+      const own = oklabOfRgb(parse(accent));
+      for (const { tone, hovered } of TINTED) {
+        const lab = oklabOfRgb(resolve(TINTED_GROUND, tintedScope(withAccent(theme, accent), 'var(--accent-glyph)', hovered)));
+        assert.ok(chroma(lab) >= 0.01, `${name} ${tone} chroma ${chroma(lab).toFixed(3)}`);
+        assert.ok(hueGap(lab, own) <= 10, `${name} ${tone} hue ${hueGap(lab, own).toFixed(1)} degrees off`);
+      }
+    }
   });
 }

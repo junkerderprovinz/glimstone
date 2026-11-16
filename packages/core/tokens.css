@@ -2252,17 +2252,23 @@
      its glyph all of it; its words keep the text colour, which the accent on a
      tinted ground would not be legible against. A bare glyph button has no
      ground to tint. `--btn-tint` reads `--accent-glyph`; under rainbow
-     takePageHue() sets it inline to the button's own position on the page. */
+     takePageHue() sets it inline to the button's own position on the page.
+     On the dark ramp a pale tint lifts the ground toward the label, which on
+     #6f6f6f already stands near 4.5:1, so there the ground keeps the tint's hue
+     and stops at the lightness --hover-raised has on that ramp (rule 21). */
   .glim-btn-neutral,
   .glim-btn-subtle,
   .glim-btn-bare {
     --btn-tint: var(--accent-glyph);
   }
   .glim-btn-subtle:not(:disabled):is(:hover, :focus-visible) {
-    background-color: color-mix(in srgb, var(--carbon-surface3), var(--btn-tint) 22%);
+    --btn-tinted: color-mix(in srgb, var(--carbon-surface3), var(--btn-tint) 22%);
   }
   .glim-btn-neutral:not(:disabled):is(:hover, :focus-visible) {
-    background-color: color-mix(in srgb, var(--carbon-hover-raised), var(--btn-tint) 22%);
+    --btn-tinted: color-mix(in srgb, var(--carbon-hover-raised), var(--btn-tint) 22%);
+  }
+  :is(.glim-btn-neutral, .glim-btn-subtle):not(:disabled):is(:hover, :focus-visible) {
+    background-color: light-dark(var(--btn-tinted), oklab(from var(--btn-tinted) min(l, 0.535) a b));
   }
   :is(.glim-btn-neutral, .glim-btn-subtle):not(:disabled):is(:hover, :focus-visible) > .glim-btn-glyph,
   .glim-btn-bare:not(:disabled):is(:hover, :focus-visible) {

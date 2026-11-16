@@ -1,6 +1,7 @@
 ## Unreleased
 
 - `GlimDerived` gains `hover`, `hoverFilled` and `hoverRaised`, the accent's hover tints as tokens.css works them out: the lightness of `carbonHover`, `carbonSurface3` and `carbonHoverRaised` with 30% of the accent's chroma.
+- `GlimDerived` gains `tintedHover`, the ground a neutral or quiet button takes under the pointer. On a dark ramp it stops at the lightness `--hover-raised` has there, so the label keeps 4.5:1 for a pale accent.
 
 ## 4.5.3
 
