@@ -47,7 +47,7 @@
     "@zag-js/vue": "^1.48.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
-    "solid-js": "^1.9.19",
+    "solid-js": "^2.0.0",
     "sugar-high": "^2.6.0",
     "svelte": "^5.57.3",
     "svelte-check": "^4.7.8",
