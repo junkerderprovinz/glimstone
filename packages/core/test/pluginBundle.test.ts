@@ -58,5 +58,5 @@ test('the stylesheet is the one the packages ship', () => {
 
 test('the readme names the release it was built from', () => {
   const version = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).version;
-  assert.match(readFileSync(join(out, 'README.txt'), 'utf8'), new RegExp(`GlimStone ${version.replace(/\./g, '\.')}`));
+  assert.match(readFileSync(join(out, 'README.txt'), 'utf8'), new RegExp(`GlimStone ${version.replace(/\./g, '\\.')}`));
 });
