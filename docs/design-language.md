@@ -938,6 +938,7 @@ A page without React mounts the same select machine through [`packages/core/src/
 - **A wizard names its steps.** Each step has a title, and a finished step shrinks to a one-line summary with "Change".
 - **After a tile is picked, the same window shows the form**, with Back and Save, and the window's title carries the picker's info bubble. Container registries open the same window that storage providers and MCP clients use.
 - **A picker of brands shows their logos**, and the pick is stored with the entry, so a self-hosted registry keeps its logo whatever its address is. Dashboard Icons is one source for the logos.
+- **`PickerWindow` draws all of this.** The app hands over its items and groups and gets back the id of the tile chosen. What follows the pick is the app's: it closes the window, or passes the tile's form as children, which takes the tiles' place with Back and the form's actions in the foot. A brand's mark is markup with its tile colour, `{ svg, tile, ink }`, and one of the app's own glyphs lights its tile in the accent. The marks of the common notification services come from `@glimstone/core/serviceMarks`, which an app addresses by id, never by a service's name, and their sources and licences travel with the package. The arrows move across the grid, up from the first row back to the search, and Enter in the search picks the one tile a query leaves.
 - **Discover instead of asking to type.** What the app can find (containers, virtual machines, folders) is offered as a choice, and typing is the fallback.
 
 ## Windows

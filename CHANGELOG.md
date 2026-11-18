@@ -2,6 +2,21 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+A big picker is a single component. The app hands `PickerWindow` its list and gets back the id of the tile somebody chose, and the marks of the common notification services ship with their tile colours and their licences.
+
+**Adopting apps:**
+
+- **A picker of your own:** replace the window, the tile grid and the search with `PickerWindow` from the framework package. Pass `items` (id, label, mark, group, hint, terms, last), `groups` and `text`, and handle `onPick`. A pick that needs a form passes it as children with its `actions` and `onBack`. A brand's mark is any `{ svg, tile, ink }`, so storage providers and registries keep the marks the app already has.
+- **A notification channel picker:** take the marks from `@glimstone/core/serviceMarks` by id. Their sources and licences ship in `@glimstone/core/service-marks/`.
+
+## ✨ Added
+
+- **`PickerWindow`** in React, Vue, Solid and Svelte: the tiles in their groups under an open search, alphabetical in the page's language with the tile that takes anything last, the arrow keys across the grid, Enter on the one tile a query leaves, and Escape that empties the search before it closes the window. The window keeps its height while a query narrows it, and a form the app passes after a pick takes the tiles' place with Back in the foot.
+- **`pickSections`, `pickKey`, `pickTileStyle` and their DOM helpers** in the core, for a page without a framework.
+- **`SERVICE_MARKS`** in its own entry, `@glimstone/core/serviceMarks`: eight notification services' marks as markup, each with the colour its tile lights up in and the ink on it. A colour that one theme's tile would swallow is a `light-dark()` pair, so the marks need no stylesheet. `scripts/gen_service_marks.py` writes them from `packages/core/service-marks/`, where every source and licence is recorded.
+
 ## 4.5.4 - 2026-11-16
 
 Whatever the pointer is over lights up in the accent, in one colour for buttons, rows, menus and tiles, and accent text in the light theme reads at 4.5:1 on every ground it stands on.
