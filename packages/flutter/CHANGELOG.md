@@ -1,3 +1,7 @@
+## 4.5.6
+
+- No changes for Flutter. The picker's new options live in the web packages.
+
 ## 4.5.5
 
 - No changes for Flutter. The picker and the service marks live in the web packages.

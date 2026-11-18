@@ -2,16 +2,19 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 4.5.6 - 2026-11-18
 
 The picker window learns what the pickers it replaces could do: a form after the pick that stays open and narrow, foot buttons that show how a test went, and tiles with a second line or a tooltip.
 
 **Adopting apps:**
 
+- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.5.6, all packages at the same number.
 - **Your picker's words:** `text` takes `clear`, the name of the search's own clear button.
 - **A tile with a kind:** split a name such as "SMB / Windows share" into `label: "SMB"` and `sub: "Windows share"`. A short word that needs no (i) goes in `tip`.
 - **A test in the foot:** give the action `busy` while it runs, then `tone: "ok"` or `"danger"` and a `title` with the outcome. Keep its label as it is, so the button keeps its width.
 - **A window of your own with a form:** pass `closeOnBackdrop={false}` to `Window`.
+- **Flutter:** move the git dependency to `ref: v4.5.6`. Nothing else changes there.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.5.6.
 
 ## ✨ Added
 
