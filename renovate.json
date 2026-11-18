@@ -26,6 +26,11 @@
       "allowedVersions": "<25"
     },
     {
+      "description": "Solid 2 changes the reactivity core the Solid bindings are written against, so it waits until they are ported",
+      "matchPackageNames": ["solid-js"],
+      "allowedVersions": "<2"
+    },
+    {
       "description": "GitHub Actions: auto-merge minor, patch and digest updates",
       "matchManagers": ["github-actions"],
       "matchUpdateTypes": ["minor", "patch", "digest"],
