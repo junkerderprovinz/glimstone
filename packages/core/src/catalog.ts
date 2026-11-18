@@ -1,0 +1,73 @@
+// A catalog is the shared list of one kind of provider ("Pickers and wizards"
+// in the design language): each with its name, its group, the words a search
+// finds it by and its brand's mark. An app offers the providers it can reach,
+// joins them with its own data by id, and leaves out the rest.
+
+import type { PickGroup, PickItem, TileMark } from "./picker.ts";
+
+export interface CatalogEntry<G extends string = string, I extends string = string> {
+  /** Stable, and what the app stores. */
+  id: I;
+  /** The provider's own name. A brand's name is not translated. */
+  name: string;
+  /** What kind of thing it is, as the tile's second line, such as "Windows share" beside SMB. */
+  kind?: string;
+  group: G;
+  /** Further words a search finds it by, such as the protocol it speaks or the company behind it. */
+  terms?: readonly string[];
+  mark?: TileMark;
+  /** For a provider without a brand of its own, the glyph that means it (glyphs.md), which the app draws. */
+  glyph?: string;
+  /** The name and kind are words rather than a brand, which the app says in its own language. */
+  word?: boolean;
+}
+
+export interface Catalog<G extends string = string, I extends string = string> {
+  /** The groups in the order a picker shows them. */
+  groups: readonly G[];
+  entries: readonly CatalogEntry<G, I>[];
+}
+
+/** What an app hands over to make a picker of a catalog. `M` is its framework's kind of glyph. */
+export interface CatalogPick<G extends string, I extends string, M> {
+  /** The providers the app offers. An id the catalog does not know is left out, for the app to add its own tile. */
+  ids: readonly I[];
+  /** Each group's eyebrow in the app's language. */
+  titles: Readonly<Record<G, string>>;
+  /** The app's glyph for a provider without a mark. */
+  glyph: (entry: CatalogEntry<G, I>) => M;
+  /** The page's language, which the tiles are sorted in. */
+  lang: string;
+  /** The app's own words for a tile, which win over the catalog's: a translated name, a hint, a tooltip. */
+  own?: (entry: CatalogEntry<G, I>) => Partial<PickItem<M>> | undefined;
+}
+
+/**
+ * The tiles and groups of a PickerWindow for the providers an app offers:
+ * group by group in the catalog's order, alphabetical within a group, and
+ * only the groups that keep a tile.
+ */
+export function catalogPicker<G extends string, I extends string, M>(
+  catalog: Catalog<G, I>,
+  pick: CatalogPick<G, I, M>,
+): { items: PickItem<M>[]; groups: PickGroup[] } {
+  const asked = new Set<string>(pick.ids);
+  const rank = (g: G) => catalog.groups.indexOf(g);
+  const items = catalog.entries
+    .filter((e) => asked.has(e.id))
+    .map((e) => {
+      const item: PickItem<M> = { id: e.id, label: e.name, group: e.group, ...pick.own?.(e) };
+      if (e.kind && item.sub === undefined) item.sub = e.kind;
+      // A translated name still finds the provider by the name its own documentation uses.
+      const terms = [...(item.label !== e.name ? [e.name] : []), ...(e.terms ?? []), ...(item.terms ?? [])];
+      if (terms.length > 0) item.terms = terms;
+      item.mark ??= e.mark ?? pick.glyph(e);
+      return { item, group: e.group };
+    })
+    .sort((a, b) => rank(a.group) - rank(b.group) || a.item.label.localeCompare(b.item.label, pick.lang, { sensitivity: "base" }))
+    .map(({ item }) => item);
+  const groups = catalog.groups
+    .filter((g) => items.some((i) => i.group === g))
+    .map((g) => ({ id: g, title: pick.titles[g] }));
+  return { items, groups };
+}
