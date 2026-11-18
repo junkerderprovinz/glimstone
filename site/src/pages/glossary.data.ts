@@ -848,6 +848,18 @@ export const GLOSSARY: GlossarySection[] = [
         },
       },
       {
+        id: "picker-window",
+        en: "Picker window",
+        de: "Auswahlfenster",
+        code: ["PickerWindow", ".glim-pick-window", ".glim-provider-pick"],
+        components: ["PickerWindow"],
+        rules: [15],
+        text: {
+          en: "The window for a big pick: README buttons in their groups under an open search, each lit in its brand's colour. The app hands over its list and gets back the id of the tile chosen.",
+          de: "Das Fenster für eine große Auswahl: README-Knöpfe in ihren Gruppen unter einer offenen Suche, jeder in der Farbe seiner Marke beleuchtet. Die App übergibt ihre Liste und bekommt die ID der gewählten Kachel zurück.",
+        },
+      },
+      {
         id: "window-foot",
         en: "Window foot",
         de: "Fenster-Fuß",

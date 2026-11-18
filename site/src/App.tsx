@@ -58,6 +58,7 @@ import {
   TogglePage,
   ToastPage,
   WindowBarPage,
+  PickerWindowPage,
   WindowPage,
 } from "./pages/components";
 
@@ -124,6 +125,7 @@ const PAGES: Page[] = [
   { path: "/components/pagination", title: "Pagination", group: "Components", Comp: PaginationPage, tag: "Zag" },
   { path: "/components/password-field", title: "PasswordField", group: "Components", Comp: PasswordFieldPage },
   { path: "/components/path-field", title: "PathField", group: "Components", Comp: PathFieldPage },
+  { path: "/components/picker-window", title: "PickerWindow", group: "Components", Comp: PickerWindowPage },
   { path: "/components/pill", title: "Pill", group: "Components", Comp: PillPage },
   { path: "/components/pin-input", title: "PinInput", group: "Components", Comp: PinInputPage, tag: "Zag" },
   { path: "/components/popover", title: "Popover", group: "Components", Comp: PopoverPage },

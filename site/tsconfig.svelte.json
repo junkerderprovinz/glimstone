@@ -6,6 +6,7 @@
     "paths": {
       "@glimstone/core/glyphs.json": ["../packages/core/glyphs.json"],
       "@glimstone/core": ["../packages/core/src/index.ts"],
+      "@glimstone/core/*": ["../packages/core/src/*"],
       "@glimstone/svelte": ["../packages/svelte/src/index.ts"],
       "@glimstone/svelte/Select": ["../packages/svelte/src/entries/select.ts"],
       "@glimstone/svelte/Combobox": ["../packages/svelte/src/entries/combobox.ts"],

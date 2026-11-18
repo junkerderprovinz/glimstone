@@ -82,6 +82,7 @@ const COMPONENTS = {
   Marquee: "react/Marquee.tsx",
   Tour: "react/Tour.tsx",
   FloatingPanel: "react/FloatingPanel.tsx",
+  PickerWindow: "react/PickerWindow.tsx",
 };
 
 const clean = (s) => s.replace(/\s+/g, " ").trim();

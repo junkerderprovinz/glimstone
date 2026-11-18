@@ -367,6 +367,21 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "table-more", when: "It has a more line", then: "It spans the columns under the last row." },
     ],
   },
+  PickerWindow: {
+    pattern: { name: "Dialog (modal)", url: `${APG}dialog-modal/` },
+    rows: [
+      { id: "picker-dialog", when: "The picker is open", then: "A dialog named by its notch, with the search focused and only the way out in its foot." },
+      { id: "picker-groups", when: "The items name groups", then: "Each group stands under its eyebrow in the order given, its tiles in alphabetical order and the tile that takes anything last." },
+      { id: "picker-tiles", when: "A tile is shown", then: "A button named by its label, with its mark, and its hint in an info bubble." },
+      { id: "picker-lit", when: "The pointer is over a tile", then: "A brand's tile fills with the brand's colour, any other with the accent." },
+      { id: "picker-search", when: "Somebody types in the search", then: "Every group narrows at once, by name, id and the item's own words, and the window keeps its height." },
+      { id: "picker-none", when: "Nothing matches", then: "One sentence says so, with the query in it." },
+      { id: "picker-pick", keys: ["Enter"], when: "A tile is clicked, or Enter is pressed in a search that leaves one tile", then: "onPick receives that tile's id." },
+      { id: "picker-arrows", keys: ["ArrowDown", "ArrowRight", "ArrowUp", "Home", "End"], when: "Focus is in the search or on a tile", then: "ArrowDown goes from the search to the first tile, the arrows move across the grid, and up from the first row goes back to the search." },
+      { id: "picker-form", when: "The app passes a form after a pick", then: "The form takes the tiles' place with its first field focused, and Cancel, Back and the form's actions stand in the foot. Back brings the tiles back." },
+      { id: "picker-escape", keys: ["Escape"], when: "The search holds a query", then: "Escape empties it and the window stays. A second Escape closes it." },
+    ],
+  },
   Window: {
     pattern: { name: "Dialog (modal)", url: `${APG}dialog-modal/` },
     rows: [
@@ -497,6 +512,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "picker-hex", when: "A valid hex colour is typed", then: "The square, the preview and the name follow." },
       { id: "picker-name", when: "Names are on", then: "The name is the nearest of the list in OKLab, such as Petrol for #1b6b73." },
       { id: "picker-apply", keys: ["Enter"], when: "Inside the picker", then: "The colour and its name are applied, the picker closes and focus goes back to its control." },
+      { id: "picker-form", when: "The app passes a form after a pick", then: "The form takes the tiles' place with its first field focused, and Cancel, Back and the form's actions stand in the foot. Back brings the tiles back." },
       { id: "picker-escape", keys: ["Escape"], when: "The picker is open", then: "It closes without applying and focus goes back to its control." },
       { id: "picker-outside", when: "A click lands beside the picker", then: "It closes without applying." },
       { id: "picker-window", keys: ["Escape", "Tab"], when: "The picker floats over a window", then: "Escape closes the picker alone, and Tab stays inside the picker." },

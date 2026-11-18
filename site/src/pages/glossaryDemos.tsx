@@ -36,6 +36,7 @@ import {
   NumberField,
   PasswordField,
   PathField,
+  PickerWindow,
   Pill,
   Popover,
   ProgressBar,
@@ -64,6 +65,7 @@ import { Combobox } from "@glimstone/react/Combobox";
 import { Select } from "@glimstone/react/Select";
 import { Slider } from "@glimstone/react/Slider";
 import { COFFEE_BUTTON_SVG, fortressText, GLIMSTONE_VERSION, LINUX_SVG, MAIL_SVG, MANUAL_SVG, type FortressPermission, type SignInText } from "@glimstone/core";
+import { SERVICE_MARKS } from "@glimstone/core/serviceMarks";
 import logo from "../../../.github/assets/logo.svg?url";
 import { Glyph } from "../glyph";
 import { APPS, HOME, household, instancesTab, OPEN_APPS, PERMISSIONS, STATUS_LOG, STATUS_REPORT } from "../fortressData";
@@ -1045,6 +1047,34 @@ function WindowDemo() {
   );
 }
 
+function PickerWindowDemo() {
+  const t = useT();
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{ ...column, justifyItems: "start" }}>
+      <Button label={t("Open the picker", "Auswahl öffnen")} labelKey={null} glyph={<Glyph name="IconExternalLink" />} tone="subtle" onClick={() => setOpen(true)} />
+      {open && (
+        <PickerWindow
+          title={t("Add a channel", "Kanal hinzufügen")}
+          items={[
+            { id: "ntfy", label: "ntfy", mark: SERVICE_MARKS.ntfy },
+            { id: "gotify", label: "Gotify", mark: SERVICE_MARKS.gotify },
+            { id: "matrix", label: "Matrix", mark: SERVICE_MARKS.matrix },
+            { id: "smtp", label: t("Email", "E-Mail"), mark: <Glyph name="IconMail" /> },
+          ]}
+          text={{
+            search: t("Search services", "Dienste suchen"),
+            none: t("Nothing matches “{query}”.", "Nichts passt zu „{query}“."),
+            close: t("Close", "Schließen"),
+          }}
+          onPick={() => setOpen(false)}
+          onClose={() => setOpen(false)}
+        />
+      )}
+    </div>
+  );
+}
+
 function FootDemo() {
   const t = useT();
   return (
@@ -1762,6 +1792,7 @@ export const DEMOS: Record<string, ComponentType> = {
   "list-table": ListTableDemo,
   "move-mode": MoveModeDemo,
   window: WindowDemo,
+  "picker-window": PickerWindowDemo,
   "window-foot": FootDemo,
   "confirm-dialog": ConfirmDemo,
   popover: PopoverDemo,

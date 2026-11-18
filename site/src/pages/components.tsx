@@ -990,6 +990,91 @@ export function WindowPage() {
   );
 }
 
+export function PickerWindowPage() {
+  return (
+    <>
+      <p className="lead">
+        The window for a big pick: storage providers, registries, the channels a message goes out on. The app hands
+        over its list and gets back the id of the tile somebody chose. The tiles, the search and the keys come with it.
+      </p>
+      <Head file="react/PickerWindow.tsx" />
+      <Demo name="PickerWindowChannels" />
+      <Usage
+        code={`import { PickerWindow } from "@glimstone/react";
+import { SERVICE_MARKS } from "@glimstone/core/serviceMarks";
+
+{open && (
+  <PickerWindow
+    title="Add a channel"
+    hint="Where a message goes."
+    groups={[{ id: "services", title: "Services" }, { id: "standards", title: "Email and webhooks" }]}
+    items={[
+      { id: "gotify", label: "Gotify", group: "services", mark: SERVICE_MARKS.gotify, hint: t("gotifyHint") },
+      { id: "smtp", label: "Email", group: "standards", mark: <IconMail />, terms: ["mail"] },
+    ]}
+    text={{ search: "Search services", none: "Nothing matches “{query}”.", close: t("close"), cancel: t("cancel"), back: t("back") }}
+    onPick={(id) => { setOpen(false); addChannel(id); }}
+    onClose={() => setOpen(false)}
+  />
+)}`}
+      />
+      <H2>What the app passes in</H2>
+      <ul>
+        <li>
+          <code>items</code>: one entry per tile, with its <code>id</code>, the <code>label</code> it shows, and where it
+          applies a <code>group</code>, a <code>hint</code> for its info bubble, the <code>terms</code> the search
+          should also find it by, and <code>last</code> for the tile that takes anything.
+        </li>
+        <li>
+          <code>mark</code>: a brand's mark from <code>@glimstone/core/serviceMarks</code>, or any other{" "}
+          <code>{"{ svg, tile, ink }"}</code>, lights the tile in that brand's colour. One of the app's own glyphs
+          lights it in the accent, as it does for email and webhooks, which belong to nobody.
+        </li>
+        <li>
+          <code>groups</code>: the eyebrows, in the order they stand. Without groups the tiles stand together.
+        </li>
+        <li>
+          <code>text</code>: every word, so the window speaks the app's language, Cancel and Back included for the
+          form. <code>none</code> takes{" "}
+          <code>{"{query}"}</code> and should name the tile that takes anything.
+        </li>
+      </ul>
+      <H2>A form after the pick</H2>
+      <p>
+        When a pick needs a few fields first, the app passes them as <code>children</code> and its forward button in{" "}
+        <code>actions</code>. The form takes the tiles' place, and Cancel and Back join the foot. Back calls{" "}
+        <code>onBack</code>, and the tiles come back with the search as it was.
+      </p>
+      <Demo name="PickerWindowForm" />
+      <H2>The marks</H2>
+      <p>
+        <code>SERVICE_MARKS</code> holds the marks of the common notification services, each as markup with the colour
+        its tile lights up in. The app picks the one it means by id, so the window never guesses a logo from a name.
+        Their sources and licences travel with the package in <code>service-marks/</code>, and{" "}
+        <code>scripts/gen_service_marks.py</code> writes them.
+      </p>
+      <H2>Rules</H2>
+      <ul>
+        <li>The tiles stand in their groups, each in alphabetical order for the page's language, with the tile that takes anything last.</li>
+        <li>The search stands open at the top end. It finds a tile by its name, its id and its own words, across every group at once.</li>
+        <li>While a query narrows the tiles, the window keeps its height, so the field does not move away from the eye.</li>
+        <li>Under the pointer a brand's tile fills with the brand's colour, and any other tile with the accent.</li>
+        <li>While the tiles show, the foot holds only the way out. What follows a pick is the app's: it closes the window, or shows the tile's form in it.</li>
+      </ul>
+      <H2>Keyboard</H2>
+      <ul>
+        <li>The search has the focus when the window opens. ArrowDown goes to the first tile, and Enter picks the only tile a query leaves.</li>
+        <li>The arrows move across the grid, up and down to the nearest tile in the next row, and up from the first row back to the search. Home and End go to the first and the last tile.</li>
+        <li>Escape empties the search first, and closes the window once the search is empty.</li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="PickerWindow" />
+      <H2>API</H2>
+      <PropsTable of="PickerWindow" />
+    </>
+  );
+}
+
 export function ContextMenuPage() {
   return (
     <>
