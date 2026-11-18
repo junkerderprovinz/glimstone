@@ -58,7 +58,9 @@ npm install @glimstone/core
   `catalogPicker` turns a `Catalog`, the ids an app offers and the app's group
   titles into a picker window's tiles and groups. The storage catalog has its
   own entry, `@glimstone/core/storageProviders`, with the providers' marks and
-  `storage-marks/` beside it for their sources and licences.
+  `storage-marks/` beside it for their sources and licences. The notification
+  catalog is `@glimstone/core/notifyProviders`, the services a message goes
+  out to and then email and webhooks, wearing the marks of `serviceMarks`.
 - Where a dragged item goes: `dropIndex` places it among the others by its
   leading edge, along a row, down a column or line by line in a grid.
 - What runs without a framework: `mountSelect`, `wireTooltips` with

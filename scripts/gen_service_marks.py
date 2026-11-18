@@ -3,8 +3,8 @@
     npm pack simple-icons@16 somewhere and unpack it, then:
     python scripts/gen_service_marks.py <path to simple-icons/icons>
 
-Two kinds of source. Discord, ntfy and Matrix come from Simple Icons, which is
-CC0 and carries no attribution duty. The rest are whole SVG files in
+Two kinds of source. Discord, ntfy, Matrix and Unraid come from Simple Icons,
+which is CC0 and carries no attribution duty. The rest are whole SVG files in
 packages/core/service-marks/, each with its source and licence recorded below
 and in that folder's README. Every mark is a trademark of its owner, used only
 to name the service it refers to, on a tile that picks exactly that service,
@@ -33,6 +33,7 @@ SIMPLE = [
     ("discord", "discord", "Discord"),
     ("ntfy", "ntfy", "ntfy"),
     ("matrix", "matrix", "Matrix"),
+    ("unraid", "unraid", "Unraid"),
 ]
 
 # The id -> the file in service-marks/, what it is, where it comes from, its licence.
