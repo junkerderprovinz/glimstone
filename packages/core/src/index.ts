@@ -44,6 +44,7 @@ export * from "./numberField.ts";
 export * from "./overlay.ts";
 export * from "./pagination.ts";
 export * from "./paypal.ts";
+export * from "./picker.ts";
 export * from "./pill.ts";
 export * from "./pinInput.ts";
 export * from "./portalHue.ts";
