@@ -324,3 +324,19 @@ test.describe("at phone width", () => {
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
   });
 });
+
+test("[site-nav-left] the docs nav stands at the window's left edge, and opening Make it yours moves neither it nor the page", async ({ page }) => {
+  inDepth();
+  await page.setViewportSize({ width: 1920, height: 1000 });
+  await open(page, "/components/picker-window");
+  const nav = page.getByRole("navigation", { name: "Docs" });
+  const gutter = await page.locator(".site-frame").evaluate((f) => parseFloat(getComputedStyle(f).paddingInlineStart));
+  const left = () => nav.evaluate((n) => n.getBoundingClientRect().left);
+  const pageLeft = () => page.locator("main").evaluate((m) => m.getBoundingClientRect().left);
+  expect(await left()).toBe(gutter);
+  const before = await pageLeft();
+  await page.getByRole("button", { name: "Look" }).click();
+  await expect(panel(page)).toBeVisible();
+  expect(await left()).toBe(gutter);
+  expect(await pageLeft()).toBe(before);
+});
