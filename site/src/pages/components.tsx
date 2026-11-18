@@ -1057,6 +1057,38 @@ import { SERVICE_MARKS } from "@glimstone/core/serviceMarks";
         Their sources and licences travel with the package in <code>service-marks/</code>, and{" "}
         <code>scripts/gen_service_marks.py</code> writes them.
       </p>
+      <H2>A catalog</H2>
+      <p>
+        Where several apps pick from the same kind of provider, the list lives in GlimStone as a catalog: each provider
+        with its id, its name, what kind of thing it is, its group, the words a search finds it by, and its mark. The app
+        passes the ids it can reach and the titles of the groups in its language, and <code>catalogPicker</code> hands
+        back the tiles and groups for the window, the groups in the catalog's order and the empty ones left out. A
+        provider without a brand of its own names a glyph by meaning, which the app draws. What the app needs to connect
+        to a provider stays with the app, joined by the same id. The storage catalog below offers every provider it has.
+      </p>
+      <Demo name="PickerWindowStorage" />
+      <Usage
+        code={`import { catalogPicker } from "@glimstone/core";
+import { STORAGE_PROVIDERS } from "@glimstone/core/storageProviders";
+
+const { items, groups } = catalogPicker(STORAGE_PROVIDERS, {
+  ids: ["nextcloud", "gdrive", "b2", "minio", "s3", "sftp", "smb", "webdav"],
+  titles: { cloud: t("clouds"), storage: t("buckets"), protocol: t("servers"), layered: t("layered") },
+  glyph: (provider) => <Glyph name={provider.glyph} />,
+  lang,
+  // A name that is a word, such as "Windows share" under SMB, comes in the app's language.
+  own: (provider) =>
+    provider.word ? { label: t(\`provider.\${provider.id}\`), sub: provider.kind && t(\`provider.\${provider.id}Kind\`) } : undefined,
+});
+
+<PickerWindow title={t("addStorage")} items={items} groups={groups} text={text} onPick={connect} onClose={close} />`}
+      />
+      <p>
+        <code>STORAGE_PROVIDERS</code> holds clouds, bucket stores, protocols and the targets built on another target,
+        in that order. Brand names stay as their owners write them, and a name marked as a <code>word</code> is the
+        app's to translate. Every mark's source and licence is in <code>storage-marks/</code>, and{" "}
+        <code>scripts/gen_storage_marks.py</code> writes them.
+      </p>
       <H2>Rules</H2>
       <ul>
         <li>The tiles stand in their groups, each in alphabetical order for the page's language, with the tile that takes anything last.</li>
