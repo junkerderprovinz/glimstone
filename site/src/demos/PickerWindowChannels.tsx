@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Button, PickerWindow } from "@glimstone/react";
-import { CHANNEL_GROUPS, CHANNEL_TEXT, channelItems, pickedLine } from "../channelData";
+import { CHANNEL_TEXT, channelPicker, pickedLine } from "../channelData";
 import { Glyph } from "../glyph";
 
-const ITEMS = channelItems(<Glyph name="IconMail" />, <Glyph name="IconLink" />);
+const { items, groups } = channelPicker((name) => <Glyph name={name} />);
 
 export default function PickerWindowChannels() {
   const [open, setOpen] = useState(false);
@@ -16,8 +16,8 @@ export default function PickerWindowChannels() {
         <PickerWindow
           title="Add a channel"
           hint="Where a message goes. Pick a service, then fill in its few fields."
-          items={ITEMS}
-          groups={CHANNEL_GROUPS}
+          items={items}
+          groups={groups}
           text={CHANNEL_TEXT}
           onPick={(id) => {
             setOpen(false);

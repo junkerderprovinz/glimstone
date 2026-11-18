@@ -1,9 +1,10 @@
 import { createSignal, Show } from "solid-js";
 import { Button, Card, FieldRow, PickerWindow, TextField } from "@glimstone/solid";
-import { CHANNEL_GROUPS, CHANNEL_TEXT, channelItems, labelOf, testAddress } from "../channelData";
+import { CHANNEL_TEXT, channelPicker, labelOf, testAddress } from "../channelData";
 import { Glyph } from "../solid/glyph";
 
 export default function PickerWindowForm() {
+  const channels = channelPicker((name) => <Glyph name={name} />);
   const [open, setOpen] = createSignal(false);
   const [picked, setPicked] = createSignal<string | null>(null);
   const [address, setAddress] = createSignal("");
@@ -28,8 +29,8 @@ export default function PickerWindowForm() {
       <Show when={open()}>
         <PickerWindow
           title={picked() ? labelOf(picked()!) : "Connect a service"}
-          items={channelItems(<Glyph name="IconMail" />, <Glyph name="IconLink" />)}
-          groups={CHANNEL_GROUPS}
+          items={channels.items}
+          groups={channels.groups}
           text={CHANNEL_TEXT}
           onPick={setPicked}
           start={reached() === null ? undefined : reached() ? "Reached" : "Not reached"}
