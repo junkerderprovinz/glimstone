@@ -2,14 +2,17 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 4.5.7 - 2026-11-18
 
 A long form after a pick scrolls inside the picker window, and the picker's foot takes a start line.
 
 **Adopting apps:**
 
+- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.5.7, all packages at the same number.
 - **A form of your own that scrolls itself:** drop the scroll box around it. The window's body scrolls during the form step, as any window's does.
 - **A verdict beside the foot's buttons:** pass it as `start` to `PickerWindow`, or in the `start` slot in Vue, instead of handing it through to the window yourself.
+- **Flutter:** move the git dependency to `ref: v4.5.7`. Nothing else changes there.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.5.7.
 
 ## ✨ Added
 
