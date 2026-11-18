@@ -10,6 +10,7 @@ A big picker is a single component. The app hands `PickerWindow` its list and ge
 
 - **A picker of your own:** replace the window, the tile grid and the search with `PickerWindow` from the framework package. Pass `items` (id, label, mark, group, hint, terms, last), `groups` and `text`, and handle `onPick`. A pick that needs a form passes it as children with its `actions` and `onBack`. A brand's mark is any `{ svg, tile, ink }`, so storage providers and registries keep the marks the app already has.
 - **A notification channel picker:** take the marks from `@glimstone/core/serviceMarks` by id. Their sources and licences ship in `@glimstone/core/service-marks/`.
+- **A plugin page:** the bundle carries `service-marks.js`, which puts the marks on `window.GlimServiceMarks`, and the `service-marks/` folder with their licences, which goes wherever the marks go.
 
 ## ✨ Added
 
