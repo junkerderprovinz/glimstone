@@ -32,7 +32,6 @@ body {
   grid-template-columns: 15rem minmax(0, 1fr) 13rem;
   gap: 2.5rem;
   max-width: 88rem;
-  margin: 0 auto;
   padding: 0 var(--page-gutter);
 }
 @media (max-width: 80rem) {
@@ -722,7 +721,7 @@ pre.code {
 }
 :root { --look-w: 28rem; }
 @media (min-width: 64rem) {
-  :root[data-look-open] .site-frame { margin-inline-end: var(--look-w); max-width: calc(88rem - var(--look-w)); }
+  :root[data-look-open] .site-frame { max-width: min(88rem, calc(100% - var(--look-w))); }
   :root[data-look-open] .site-frame:not(.is-home) { grid-template-columns: 15rem minmax(0, 1fr); }
   :root[data-look-open] .site-toc { display: none; }
 }
