@@ -95,6 +95,12 @@ export const MARKS = {
     body: '<rect x="6.8" y="2.5" width="2.4" height="11" rx="0.6" transform="rotate(45 8 8)"/><rect x="6.8" y="2.5" width="2.4" height="11" rx="0.6" transform="rotate(-45 8 8)"/>',
   },
   /** `IconBack` from the assortment: the previous page or step. It turns round under a right-to-left language. */
+  /** `IconSearch` from the assortment: the picker window's search field. */
+  search: {
+    viewBox: "-0.001 0 13.988 13.988",
+    size: 14,
+    body: '<path fill-rule="evenodd" clip-rule="evenodd" d="M2 6a4 4 0 1 1 8 0 4 4 0 0 1 -8 0Zm4 -6a6 6 0 1 0 3.476 10.89l2.817 2.817a1 1 0 0 0 1.414 -1.414l-2.816 -2.816A6 6 0 0 0 6 0Z"/>',
+  },
   back: {
     viewBox: "4.25 3.6 12.8 12.8",
     size: 14,

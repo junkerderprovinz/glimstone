@@ -45,6 +45,7 @@ export const IconEye = markSnippet(MARKS.eye);
 export const IconEyeOff = markSnippet(MARKS.eyeOff);
 export const IconCopy = markSnippet(MARKS.copy);
 export const IconBack = markSnippet(MARKS.back);
+export const IconSearch = markSnippet(MARKS.search);
 export const IconForward = markSnippet(MARKS.forward);
 export const IconUpload = markSnippet(MARKS.upload);
 export const IconCalendar = markSnippet(MARKS.calendar);

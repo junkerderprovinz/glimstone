@@ -9,6 +9,7 @@ import {
   type ReadmePart,
 } from "@glimstone/core";
 import { InfoBubble } from "./InfoBubble.tsx";
+import { useTipBubble } from "./useTipBubble.tsx";
 
 // A button in the shape of the README's download buttons, on the App tab and
 // the About card ("The App tab" in design-language.md). The first part carries
@@ -33,6 +34,8 @@ export interface ReadmeButtonProps {
   art?: ReactNode;
   /** The "(i)" at the end of the unit, for what the name cannot say. */
   hint?: string;
+  /** A few words in the first part's bubble, for a name that needs no (i). */
+  tip?: string;
   /** Holds the second lines in view while one reports what it did, such as "Copied". */
   note?: boolean;
   /** The second line of a unit whose first part has neither `href` nor `onClick`. */
@@ -42,11 +45,12 @@ export interface ReadmeButtonProps {
   onLinkClick?: (e: MouseEvent<HTMLAnchorElement>) => void;
 }
 
-export function ReadmeButton({ brand, parts, mark, markClass, art, hint, note, soonLabel, onLinkClick }: ReadmeButtonProps) {
+export function ReadmeButton({ brand, parts, mark, markClass, art, hint, tip, note, soonLabel, onLinkClick }: ReadmeButtonProps) {
   const ref = useRef<HTMLDivElement>(null);
   const soon = readmeSoon(parts);
   const words = parts.map((p) => `${p.name}\n${p.sub ?? ""}`).join("\n") + (soon ? soonLabel : "");
   useLayoutEffect(() => (ref.current ? keepReadmeFit(ref.current) : undefined), [words]);
+  const tooltip = useTipBubble(tip);
 
   return (
     <div data-glim="ReadmeButton" ref={ref} className={readmeUnitClass(brand, parts.length, !!note, soon)}>
@@ -54,6 +58,7 @@ export function ReadmeButton({ brand, parts, mark, markClass, art, hint, note, s
         const sub = soon ? soonLabel : part.sub;
         const label = readmePartLabel(part, sub);
         const className = readmePartClass(i, soon);
+        const tipped = i === 0 ? { ...tooltip.handlers, ref: tooltip.ref, "aria-describedby": tooltip.describedBy } : {};
         const face =
           i === 0 && art ? (
             <span className="glim-readme-btn-art" aria-hidden>
@@ -74,7 +79,7 @@ export function ReadmeButton({ brand, parts, mark, markClass, art, hint, note, s
           );
         if (soon) {
           return (
-            <span key={i} className={className} aria-disabled aria-label={label}>
+            <span key={i} {...tipped} className={className} aria-disabled aria-label={label}>
               {face}
             </span>
           );
@@ -83,6 +88,7 @@ export function ReadmeButton({ brand, parts, mark, markClass, art, hint, note, s
           return (
             <a
               key={i}
+              {...tipped}
               href={part.href}
               target="_blank"
               rel="noreferrer noopener"
@@ -95,7 +101,7 @@ export function ReadmeButton({ brand, parts, mark, markClass, art, hint, note, s
           );
         }
         return (
-          <button key={i} type="button" onClick={part.onClick} aria-label={label} className={className}>
+          <button key={i} {...tipped} type="button" onClick={part.onClick} aria-label={label} className={className}>
             {face}
           </button>
         );
@@ -106,6 +112,7 @@ export function ReadmeButton({ brand, parts, mark, markClass, art, hint, note, s
           <InfoBubble tip={hint} />
         </span>
       )}
+      {tooltip.bubble}
     </div>
   );
 }

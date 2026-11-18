@@ -52,6 +52,7 @@ export const IconEye = markComponent(MARKS.eye);
 export const IconEyeOff = markComponent(MARKS.eyeOff);
 export const IconCopy = markComponent(MARKS.copy);
 export const IconBack = markComponent(MARKS.back);
+export const IconSearch = markComponent(MARKS.search);
 export const IconForward = markComponent(MARKS.forward);
 export const IconUpload = markComponent(MARKS.upload);
 export const IconCalendar = markComponent(MARKS.calendar);

@@ -52,6 +52,7 @@ export const IconEye = () => <MarkSvg mark={MARKS.eye} class="glim-mark" />;
 export const IconEyeOff = () => <MarkSvg mark={MARKS.eyeOff} class="glim-mark" />;
 export const IconCopy = () => <MarkSvg mark={MARKS.copy} class="glim-mark" />;
 export const IconBack = () => <MarkSvg mark={MARKS.back} class="glim-mark" />;
+export const IconSearch = () => <MarkSvg mark={MARKS.search} class="glim-mark" />;
 export const IconForward = () => <MarkSvg mark={MARKS.forward} class="glim-mark" />;
 export const IconUpload = () => <MarkSvg mark={MARKS.upload} class="glim-mark" />;
 export const IconCalendar = () => <MarkSvg mark={MARKS.calendar} class="glim-mark" />;

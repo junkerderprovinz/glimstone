@@ -17,6 +17,8 @@
     art?: Snippet;
     /** The "(i)" at the end of the unit, for what the name cannot say. */
     hint?: string;
+    /** A few words in the first part's bubble, for a name that needs no (i). */
+    tip?: string;
     /** Holds the second lines in view while one reports what it did, such as "Copied". */
     note?: boolean;
     /** The second line of a unit whose first part has neither `href` nor `onClick`. */
@@ -29,7 +31,9 @@
 
 <script lang="ts">
   import { keepReadmeFit, readmePartClass, readmePartLabel, readmeSoon, readmeUnitClass } from "@glimstone/core";
+  import { useTipBubble } from "./bubble.svelte.js";
   import InfoBubble from "./InfoBubble.svelte";
+  import TipBubble from "./TipBubble.svelte";
 
   // A button in the shape of the README's download buttons, on the App tab and
   // the About card ("The App tab" in design-language.md). The first part carries
@@ -38,7 +42,7 @@
   // brand's colour ("Brand tiles"). A link where a part leads to a file or a
   // listing, a button where it does something on the page, and a quiet unit with
   // "Soon" as its second line where the listing does not exist yet.
-  let { brand, parts, mark, markClass, art, hint, note, soonLabel, onLinkClick }: ReadmeButtonProps = $props();
+  let { brand, parts, mark, markClass, art, hint, tip, note, soonLabel, onLinkClick }: ReadmeButtonProps = $props();
 
   let root: HTMLDivElement;
   const soon = $derived(readmeSoon(parts));
@@ -49,6 +53,22 @@
   });
 
   const sub = (part: ReadmePart) => (soon ? soonLabel : part.sub);
+
+  const tooltip = useTipBubble(() => tip);
+  // The first part is the bubble's trigger; the segments after it say nothing of their own.
+  const tipped = (i: number) =>
+    i === 0
+      ? {
+          "aria-describedby": tooltip.describedBy,
+          onmouseenter: tooltip.show,
+          onmouseleave: tooltip.hide,
+          onfocus: tooltip.showOnFocus,
+          onblur: tooltip.hide,
+        }
+      : {};
+  const trigger = (el: HTMLElement) => {
+    tooltip.trigger = el;
+  };
 </script>
 
 {#snippet face(part: ReadmePart, i: number)}
@@ -68,15 +88,16 @@
 <div data-glim="ReadmeButton" bind:this={root} class={readmeUnitClass(brand, parts.length, !!note, soon)}>
   {#each parts as part, i (i)}
     {#if soon}
-      <span class={readmePartClass(i, soon)} aria-disabled="true" aria-label={readmePartLabel(part, sub(part))}>{@render face(part, i)}</span>
+      <span {...tipped(i)} {@attach i === 0 && trigger} class={readmePartClass(i, soon)} aria-disabled="true" aria-label={readmePartLabel(part, sub(part))}>{@render face(part, i)}</span>
     {:else if part.href}
-      <a href={part.href} target="_blank" rel="noreferrer noopener" onclick={onLinkClick} aria-label={readmePartLabel(part, sub(part))} class={readmePartClass(i, soon)}>
+      <a {...tipped(i)} {@attach i === 0 && trigger} href={part.href} target="_blank" rel="noreferrer noopener" onclick={onLinkClick} aria-label={readmePartLabel(part, sub(part))} class={readmePartClass(i, soon)}>
         {@render face(part, i)}
       </a>
     {:else}
-      <button type="button" onclick={part.onClick} aria-label={readmePartLabel(part, sub(part))} class={readmePartClass(i, soon)}>{@render face(part, i)}</button>
+      <button {...tipped(i)} {@attach i === 0 && trigger} type="button" onclick={part.onClick} aria-label={readmePartLabel(part, sub(part))} class={readmePartClass(i, soon)}>{@render face(part, i)}</button>
     {/if}
   {/each}
   {#if !soon}<span class="glim-readme-btn-sheen" aria-hidden="true"></span>{/if}
   {#if hint}<span class="glim-readme-btn-hint"><InfoBubble tip={hint} /></span>{/if}
+  <TipBubble state={tooltip} />
 </div>

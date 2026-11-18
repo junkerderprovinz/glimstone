@@ -9,6 +9,7 @@ import {
   type ReadmePart,
 } from "@glimstone/core";
 import { InfoBubble } from "./InfoBubble.tsx";
+import { useTipBubble } from "./useTipBubble.tsx";
 
 // A button in the shape of the README's download buttons, on the App tab and
 // the About card ("The App tab" in design-language.md). The first part carries
@@ -33,6 +34,8 @@ export interface ReadmeButtonProps {
   art?: JSX.Element;
   /** The "(i)" at the end of the unit, for what the name cannot say. */
   hint?: string;
+  /** A few words in the first part's bubble, for a name that needs no (i). */
+  tip?: string;
   /** Holds the second lines in view while one reports what it did, such as "Copied". */
   note?: boolean;
   /** The second line of a unit whose first part has neither `href` nor `onClick`. */
@@ -49,6 +52,7 @@ export function ReadmeButton(props: ReadmeButtonProps) {
   createEffect(on(words, () => onCleanup(keepReadmeFit(root))));
   const mark = children(() => props.mark);
   const art = children(() => props.art);
+  const tooltip = useTipBubble(() => props.tip);
 
   return (
     <div data-glim="ReadmeButton" ref={root} class={readmeUnitClass(props.brand, props.parts.length, !!props.note, soon())}>
@@ -57,6 +61,7 @@ export function ReadmeButton(props: ReadmeButtonProps) {
           const sub = () => (soon() ? props.soonLabel : part().sub);
           const label = () => readmePartLabel(part(), sub());
           const className = () => readmePartClass(i, soon());
+          const tipped = () => (i === 0 ? { ...tooltip.handlers, ref: tooltip.ref, "aria-describedby": tooltip.describedBy() } : {});
           const face = () => (
             <Show
               when={i === 0 && art()}
@@ -84,18 +89,18 @@ export function ReadmeButton(props: ReadmeButtonProps) {
           return (
             <Switch
               fallback={
-                <button type="button" onClick={() => part().onClick?.()} aria-label={label()} class={className()}>
+                <button {...tipped()} type="button" onClick={() => part().onClick?.()} aria-label={label()} class={className()}>
                   {face()}
                 </button>
               }
             >
               <Match when={soon()}>
-                <span class={className()} aria-disabled="true" aria-label={label()}>
+                <span {...tipped()} class={className()} aria-disabled="true" aria-label={label()}>
                   {face()}
                 </span>
               </Match>
               <Match when={part().href}>
-                <a href={part().href} target="_blank" rel="noreferrer noopener" onClick={(e) => props.onLinkClick?.(e)} aria-label={label()} class={className()}>
+                <a {...tipped()} href={part().href} target="_blank" rel="noreferrer noopener" onClick={(e) => props.onLinkClick?.(e)} aria-label={label()} class={className()}>
                   {face()}
                 </a>
               </Match>
@@ -113,6 +118,7 @@ export function ReadmeButton(props: ReadmeButtonProps) {
           </span>
         )}
       </Show>
+      {tooltip.bubble}
     </div>
   );
 }

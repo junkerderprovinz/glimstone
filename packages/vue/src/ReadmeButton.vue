@@ -2,6 +2,8 @@
 import { computed, onScopeDispose, shallowRef, watch, type Component } from "vue";
 import { keepReadmeFit, readmePartClass, readmePartLabel, readmeSoon, readmeUnitClass, type ReadmeBrand, type ReadmePart } from "@glimstone/core";
 import InfoBubble from "./InfoBubble.vue";
+import { useTipBubble } from "./tipBubble";
+import TipBubble from "./TipBubble.vue";
 
 // A button in the shape of the README's download buttons ("The App tab" in
 // design-language.md). The first part carries the mark and the full name; the
@@ -19,6 +21,8 @@ const props = withDefaults(
     markClass?: string;
     /** The "(i)" at the end of the unit, for what the name cannot say. */
     hint?: string;
+    /** A few words in the first part's bubble, for a name that needs no (i). */
+    tip?: string;
     /** Holds the second lines in view while one reports what it did, such as "Copied". */
     note?: boolean;
     /** The second line of a unit whose first part has neither `href` nor `onClick`. */
@@ -43,6 +47,19 @@ watch(
 );
 onScopeDispose(() => stop?.());
 
+const tooltip = useTipBubble(() => props.tip);
+const tipped = (i: number) =>
+  i === 0
+    ? {
+        ref: (el: unknown) => (tooltip.trigger.value = el as HTMLElement | null),
+        "aria-describedby": tooltip.describedBy.value,
+        onMouseenter: tooltip.show,
+        onMouseleave: tooltip.hide,
+        onFocus: tooltip.showOnFocus,
+        onBlur: tooltip.hide,
+      }
+    : {};
+
 const sub = (p: ReadmePart) => (soon.value ? props.soonLabel : p.sub);
 const label = (p: ReadmePart) => readmePartLabel(p, sub(p));
 const tag = (p: ReadmePart): string | Component => (soon.value ? "span" : p.href ? "a" : "button");
@@ -56,7 +73,7 @@ const attrs = (p: ReadmePart) =>
 
 <template>
   <div ref="root" data-glim="ReadmeButton" :class="readmeUnitClass(brand, parts.length, note, soon)">
-    <component :is="tag(p)" v-for="(p, i) in parts" :key="i" v-bind="attrs(p)" :aria-label="label(p)" :class="readmePartClass(i, soon)">
+    <component :is="tag(p)" v-for="(p, i) in parts" :key="i" v-bind="{ ...attrs(p), ...tipped(i) }" :aria-label="label(p)" :class="readmePartClass(i, soon)">
       <span v-if="i === 0 && $slots.art" class="glim-readme-btn-art" aria-hidden="true"><slot name="art" /></span>
       <template v-else>
         <span v-if="i === 0 && $slots.mark" :class="`glim-readme-btn-mark ${markClass ?? ''}`" aria-hidden="true"><slot name="mark" /></span>
@@ -68,5 +85,6 @@ const attrs = (p: ReadmePart) =>
     </component>
     <span v-if="!soon" class="glim-readme-btn-sheen" aria-hidden="true" />
     <span v-if="hint" class="glim-readme-btn-hint"><InfoBubble :tip="hint" /></span>
+    <TipBubble :state="tooltip" />
   </div>
 </template>
