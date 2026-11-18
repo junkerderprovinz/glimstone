@@ -2,6 +2,30 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+The picker window learns what the pickers it replaces could do: a form after the pick that stays open and narrow, foot buttons that show how a test went, and tiles with a second line or a tooltip.
+
+**Adopting apps:**
+
+- **Your picker's words:** `text` takes `clear`, the name of the search's own clear button.
+- **A tile with a kind:** split a name such as "SMB / Windows share" into `label: "SMB"` and `sub: "Windows share"`. A short word that needs no (i) goes in `tip`.
+- **A test in the foot:** give the action `busy` while it runs, then `tone: "ok"` or `"danger"` and a `title` with the outcome. Keep its label as it is, so the button keeps its width.
+- **A window of your own with a form:** pass `closeOnBackdrop={false}` to `Window`.
+
+## ✨ Added
+
+- **`WindowAction` takes `tone`, `busy` and `title`** in React, Vue, Solid and Svelte.
+- **`Window` takes `closeOnBackdrop`**, on by default.
+- **`PickItem` takes `sub` and `tip`**, and `ReadmeButton` takes `tip` for a tooltip on its first part.
+- **`IconSearch`** among the marks the components draw.
+
+## 🎨 Design
+
+- **A form after the pick narrows the window to a form's width** around the same middle, on the motion level's window duration, and a press beside the window leaves the form open.
+- **The picker's search wears the search glyph and clears with a grey button of its own.** The browser's blue clear button is hidden, and a long placeholder ends in an ellipsis inside the field.
+- **A picker opened from a card wears the card's rainbow colour**, as a list opened from it does.
+
 ## 4.5.5 - 2026-11-18
 
 A big picker is a single component. The app hands `PickerWindow` its list and gets back the id of the tile somebody chose, and the marks of the common notification services ship with their tile colours and their licences.
