@@ -43,8 +43,17 @@ test('a lit tile can turn every painted part into its ink or its cut-out', () =>
   }
 });
 
+// Healthchecks.io lights in its green with the near-black ink, at 8:1 rather than the 2.4:1 white would reach.
+const NAMED_INK = new Set(['healthchecks']);
+
+test("Healthchecks.io lights in its own green, with near-black ink", () => {
+  assert.equal(SERVICE_MARKS.healthchecks.tile, '#5cb85f');
+  assert.equal(SERVICE_MARKS.healthchecks.ink, '#161616');
+});
+
 test('the ink on a lit tile is white wherever white reaches 2:1, near-black below that', () => {
   for (const [id, mark] of marks) {
+    if (NAMED_INK.has(id)) continue;
     const white = contrastRatio('#ffffff', mark.tile!);
     assert.equal(mark.ink, white >= 2 ? '#ffffff' : '#161616', id);
   }

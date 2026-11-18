@@ -25,6 +25,7 @@ The picker window learns what the pickers it replaces could do: a form after the
 - **A form after the pick narrows the window to a form's width** around the same middle, on the motion level's window duration, and a press beside the window leaves the form open.
 - **The picker's search wears the search glyph and clears with a grey button of its own.** The browser's blue clear button is hidden, and a long placeholder ends in an ellipsis inside the field.
 - **A picker opened from a card wears the card's rainbow colour**, as a list opened from it does.
+- **The health-check service's tile lights in its green**, `#5cb85f` with the near-black ink at 8:1, where it took the dark grey of its mark.
 
 ## 4.5.5 - 2026-11-18
 

@@ -261,6 +261,9 @@ TILE_COLOUR = {
     # Slack's aubergine rather than the cyan of one of its four bars, which
     # holds white ink no better than 2:1.
     "slack": ("#4a154b", None),
+    # Healthchecks.io's green rather than the dark grey that covers more of
+    # the mark, with the near-black ink at 8:1, as the plugins draw it.
+    "healthchecks": ("#5cb85f", "#161616"),
 }
 
 
