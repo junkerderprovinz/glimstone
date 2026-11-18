@@ -2,6 +2,25 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+Apps that connect to storage pick their providers from one shared catalog, which carries each provider's group, search words and mark, so they no longer keep a list of their own.
+
+**Adopting apps:**
+
+- **A storage picker of your own:** pass `STORAGE_PROVIDERS` from `@glimstone/core/storageProviders` to `catalogPicker` from `@glimstone/core`, with the ids your backend reaches, your group titles, a glyph for a provider without a mark and the page's language. Hand the `items` and `groups` it returns to `PickerWindow`. Keep what your backend needs to connect beside the ids, and drop your own copies of the marks and tile colours.
+- **Your provider ids:** the catalog uses the ids the apps have in common, such as `nextcloud`, `gdrive`, `b2` and `hetznerobj`. Map an id of your own to the catalog's before you switch.
+- **Names that are words:** an entry with `word: true`, such as SMB's "Windows share", "S3 compatible" or "Encrypted", comes in your language through `own`. Brand names are not translated.
+- **Targets built on another target**, such as an encrypted or a merged one, have a group of their own, `layered`, after the protocols. Give it a title, or leave its ids out.
+- **A backend the catalog does not know:** `catalogPicker` leaves an unknown id out, so add its tile yourself.
+- **Flutter:** nothing changes there.
+
+## ✨ Added
+
+- **`catalogPicker`** in `@glimstone/core`, with the types `Catalog`, `CatalogEntry` and `CatalogPick`: a catalog of any kind of provider, the ids an app offers and its group titles become a picker window's tiles and groups.
+- **`STORAGE_PROVIDERS`** in its own entry, `@glimstone/core/storageProviders`: 96 providers in four groups, 68 of them with their brand's mark and the rest with a glyph by meaning. The marks are `STORAGE_MARKS` in `@glimstone/core/storageMarks`. `scripts/gen_storage_marks.py` writes them from `packages/core/storage-marks/`, where every source and licence is recorded.
+- **`GLOSSARY.md`**, the words pickers and catalogs use: provider, target, catalog, group, mark and glyph.
+
 ## 4.5.8 - 2026-11-19
 
 A picker group can say how well it suits the job, a tile can wait in plain view, and the last pick stays marked.

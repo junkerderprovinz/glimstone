@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button, FieldRow, PickerWindow, TextField } from "@glimstone/react";
-import { STORAGE_GROUPS, STORAGE_TEXT, placeOf, storageItems } from "../storageData";
+import { STORAGE_GROUPS, STORAGE_TEXT, placeOf, storageItems } from "../placeData";
 import { Glyph } from "../glyph";
 
 const ITEMS = storageItems((name) => <Glyph name={name} />);
