@@ -49,6 +49,8 @@ export interface PickerWindowProps {
   actions?: WindowAction[];
   /** Back from the form to the tiles, with the search as it was. */
   onBack?: () => void;
+  /** A quiet line at the start of the foot, such as the verdict of a test. */
+  start?: JSX.Element;
   /** Called for every way out: the foot, Escape and, while the tiles show, a press beside the window. */
   onClose: () => void;
 }
@@ -102,6 +104,7 @@ export function PickerWindow(props: PickerWindowProps) {
       class={["glim-pick-window", form() && "glim-pick-window--form", hue && "glim-hue"].filter(Boolean).join(" ")}
       style={hue ?? undefined}
       text={{ cancel: props.text.cancel, close: props.text.close }}
+      start={props.start}
       actions={form() ? [back(), ...merged.actions] : [{ label: props.text.close, labelKey: "common.close", glyph: <IconClose />, wayOut: true }]}
       // A stray press beside the window would throw away what was typed into the form.
       closeOnBackdrop={!form()}

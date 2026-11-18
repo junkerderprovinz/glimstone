@@ -24,6 +24,8 @@
     actions?: WindowAction[];
     /** Back from the form to the tiles, with the search as it was. */
     onBack?: () => void;
+    /** A quiet line at the start of the foot, such as the verdict of a test. */
+    start?: string | Snippet;
     /** Called for every way out: the foot, Escape and, while the tiles show, a press beside the window. */
     onClose: () => void;
   }
@@ -59,7 +61,7 @@
   // follows: it closes the window, or passes the picked tile's form as
   // children, which takes the tiles' place with Back and the form's actions in
   // the foot.
-  let { title, hint, items, groups = [], text, onPick, children, actions = [], onBack, onClose }: PickerWindowProps = $props();
+  let { title, hint, items, groups = [], text, onPick, children, actions = [], onBack, start, onClose }: PickerWindowProps = $props();
 
   let query = $state("");
   const hue = pickerHue();
@@ -117,6 +119,7 @@
   style={css(hue ?? undefined)}
   bind:ref={card}
   text={{ cancel: text.cancel, close: text.close }}
+  {start}
   actions={form ? [back, ...actions] : [{ label: text.close, labelKey: "common.close", glyph: IconClose, wayOut: true }]}
   closeOnBackdrop={!form}
   {onClose}

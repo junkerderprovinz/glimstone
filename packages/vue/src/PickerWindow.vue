@@ -43,6 +43,8 @@ const props = withDefaults(
     text: PickerText;
     /** The form's buttons, the forward one last. Cancel and Back stand before them. */
     actions?: WindowAction[];
+    /** A quiet line at the start of the foot, such as the verdict of a test; the `start` slot takes markup. */
+    start?: string;
   }>(),
   { groups: () => [], actions: () => [] },
 );
@@ -106,10 +108,12 @@ const onTileKey = (e: KeyboardEvent) => {
     :class="['glim-pick-window', { 'glim-pick-window--form': form(), 'glim-hue': hue }]"
     :style="hue ?? undefined"
     :text="{ cancel: text.cancel, close: text.close }"
+    :start="start"
     :close-on-backdrop="!form()"
     :actions="foot()"
     @close="emit('close')"
   >
+    <template v-if="$slots.start" #start><slot name="start" /></template>
     <template v-if="hint" #title>{{ title }}<InfoBubble :tip="hint" on-accent /></template>
     <slot v-if="form()" />
     <template v-else>
