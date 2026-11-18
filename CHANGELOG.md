@@ -20,6 +20,10 @@ A picker group can say how well it suits the job, a tile can wait in plain view,
 - **`TileMark` takes `hover` and `className`**, and `BrandMark` takes `hover`.
 - **`pickMarkClass` and `pickFocusTarget`** in `@glimstone/core`.
 
+## 🐛 Fixed
+
+- **The site's nav stays at the window's left edge.** Opening Make it yours no longer slides it towards the middle, and the page beside it stays where it was.
+
 ## 4.5.7 - 2026-11-18
 
 A long form after a pick scrolls inside the picker window, and the picker's foot takes a start line.
