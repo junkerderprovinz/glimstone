@@ -12,8 +12,8 @@
     "brotli": 148736
   },
   "@glimstone/react": {
-    "gzip": 33280,
-    "brotli": 28416
+    "gzip": 35328,
+    "brotli": 30208
   },
   "@glimstone/solid": {
     "gzip": 44288,
