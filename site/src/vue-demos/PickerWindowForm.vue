@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { Button, PickerWindow, TextField } from "@glimstone/vue";
+import { Button, FieldRow, PickerWindow, TextField } from "@glimstone/vue";
 import { CHANNEL_GROUPS, CHANNEL_TEXT, channelItems, labelOf } from "../channelData";
 import { glyph } from "../vue/glyph";
 
@@ -42,7 +42,9 @@ const actions = [
       @close="close"
     >
       <template v-if="picked" #default>
-        <TextField v-model="address" label="Address" />
+        <FieldRow label="Address" hint="Where the service takes its messages.">
+          <TextField v-model="address" width="medium" />
+        </FieldRow>
       </template>
     </PickerWindow>
   </div>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Button, PickerWindow, TextField } from "@glimstone/svelte";
+  import { Button, FieldRow, PickerWindow, TextField } from "@glimstone/svelte";
   import { CHANNEL_GROUPS, CHANNEL_TEXT, channelItems, labelOf } from "../channelData";
   import { glyph } from "../svelte/glyph";
 
@@ -15,7 +15,11 @@
   }
 </script>
 
-{#snippet form()}<TextField label="Address" bind:value={address} />{/snippet}
+{#snippet form()}
+  <FieldRow label="Address" hint="Where the service takes its messages.">
+    <TextField width="medium" bind:value={address} />
+  </FieldRow>
+{/snippet}
 
 <div style="display: flex; align-items: center; gap: 12px">
   <Button label="Connect a service" labelKey="add" onClick={() => (open = true)} />

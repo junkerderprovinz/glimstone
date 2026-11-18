@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, PickerWindow, TextField } from "@glimstone/react";
+import { Button, FieldRow, PickerWindow, TextField } from "@glimstone/react";
 import { CHANNEL_GROUPS, CHANNEL_TEXT, channelItems, labelOf } from "../channelData";
 import { Glyph } from "../glyph";
 
@@ -29,7 +29,11 @@ export default function PickerWindowForm() {
           onBack={() => setPicked(null)}
           onClose={close}
         >
-          {picked && <TextField label="Address" value={address} onChange={(e) => setAddress(e.target.value)} />}
+          {picked && (
+            <FieldRow label="Address" hint="Where the service takes its messages.">
+              <TextField width="medium" value={address} onChange={(e) => setAddress(e.target.value)} />
+            </FieldRow>
+          )}
         </PickerWindow>
       )}
     </div>

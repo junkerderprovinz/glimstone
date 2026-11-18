@@ -1,5 +1,5 @@
 import { createSignal, Show } from "solid-js";
-import { Button, PickerWindow, TextField } from "@glimstone/solid";
+import { Button, FieldRow, PickerWindow, TextField } from "@glimstone/solid";
 import { CHANNEL_GROUPS, CHANNEL_TEXT, channelItems, labelOf } from "../channelData";
 import { Glyph } from "../solid/glyph";
 
@@ -37,7 +37,9 @@ export default function PickerWindowForm() {
           onClose={close}
         >
           <Show when={picked()}>
-            <TextField label="Address" value={address()} onInput={(e) => setAddress(e.currentTarget.value)} />
+            <FieldRow label="Address" hint="Where the service takes its messages.">
+              <TextField width="medium" value={address()} onInput={(e) => setAddress(e.currentTarget.value)} />
+            </FieldRow>
           </Show>
         </PickerWindow>
       </Show>

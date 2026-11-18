@@ -133,6 +133,7 @@ test.describe("PickerWindow", () => {
     const form = page.getByRole("dialog", { name: "Gotify" });
     const address = form.getByRole("textbox", { name: "Address" });
     await expect(address).toBeFocused();
+    await expect(form.locator(".glim-field-row-label")).toHaveText("Address");
     await expect(form.locator(".glim-provider-pick")).toHaveCount(0);
     await expect(form.locator(".glim-modal-foot button")).toHaveText(["Cancel", "Back", "Save"]);
     await form.getByRole("button", { name: "Back" }).click();
