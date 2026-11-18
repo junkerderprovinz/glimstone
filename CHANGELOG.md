@@ -2,6 +2,24 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+A picker group can say how well it suits the job, a tile can wait in plain view, and the last pick stays marked.
+
+**Adopting apps:**
+
+- **A rating for a group:** give `PickGroup` a `badge` with a `label` and one of the badge tones, and a `hint` for its (i). Both stand in the eyebrow's line.
+- **A choice that is not ready yet:** give the item a `status` instead of leaving it out. The tile stays in view with that word as its second line and cannot be picked.
+- **Back to the tiles from a form:** pass the last pick as `selected`, and that tile is marked and takes the focus.
+- **A logo that loses its layers on the lit tile:** give its `TileMark` a `hover` drawing, and a `className` for the box where the app paints the mark at rest.
+
+## ✨ Added
+
+- **`PickGroup` takes `badge` and `hint`**, and `PickItem` takes `status`, in React, Vue, Solid and Svelte.
+- **`PickerWindow` takes `selected`**, and `ReadmeButton` takes `current`, which sets `aria-current` on its first part.
+- **`TileMark` takes `hover` and `className`**, and `BrandMark` takes `hover`.
+- **`pickMarkClass` and `pickFocusTarget`** in `@glimstone/core`.
+
 ## 4.5.7 - 2026-11-18
 
 A long form after a pick scrolls inside the picker window, and the picker's foot takes a start line.
