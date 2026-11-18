@@ -2,15 +2,18 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 4.5.5 - 2026-11-18
 
 A big picker is a single component. The app hands `PickerWindow` its list and gets back the id of the tile somebody chose, and the marks of the common notification services ship with their tile colours and their licences.
 
 **Adopting apps:**
 
+- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.5.5, all packages at the same number.
 - **A picker of your own:** replace the window, the tile grid and the search with `PickerWindow` from the framework package. Pass `items` (id, label, mark, group, hint, terms, last), `groups` and `text`, and handle `onPick`. A pick that needs a form passes it as children with its `actions` and `onBack`. A brand's mark is any `{ svg, tile, ink }`, so storage providers and registries keep the marks the app already has.
 - **A notification channel picker:** take the marks from `@glimstone/core/serviceMarks` by id. Their sources and licences ship in `@glimstone/core/service-marks/`.
 - **A plugin page:** the bundle carries `service-marks.js`, which puts the marks on `window.GlimServiceMarks`, and the `service-marks/` folder with their licences, which goes wherever the marks go.
+- **Flutter:** move the git dependency to `ref: v4.5.5`. Nothing else changes there.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.5.5.
 
 ## ✨ Added
 
