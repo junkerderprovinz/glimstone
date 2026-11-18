@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { Button, FieldRow, PickerWindow, TextField } from "@glimstone/vue";
-import { STORAGE_GROUPS, STORAGE_TEXT, placeOf, storageItems } from "../storageData";
+import { STORAGE_GROUPS, STORAGE_TEXT, placeOf, storageItems } from "../placeData";
 import { glyph } from "../vue/glyph";
 
 const ITEMS = storageItems(glyph);

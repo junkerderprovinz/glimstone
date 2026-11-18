@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Button, FieldRow, PickerWindow, TextField } from "@glimstone/svelte";
-  import { STORAGE_GROUPS, STORAGE_TEXT, placeOf, storageItems } from "../storageData";
+  import { STORAGE_GROUPS, STORAGE_TEXT, placeOf, storageItems } from "../placeData";
   import { glyph } from "../svelte/glyph";
 
   const ITEMS = storageItems(glyph);

@@ -1,6 +1,6 @@
 import { createSignal, Show } from "solid-js";
 import { Button, FieldRow, PickerWindow, TextField } from "@glimstone/solid";
-import { STORAGE_GROUPS, STORAGE_TEXT, placeOf, storageItems } from "../storageData";
+import { STORAGE_GROUPS, STORAGE_TEXT, placeOf, storageItems } from "../placeData";
 import { Glyph } from "../solid/glyph";
 
 export default function PickerWindowStates() {
