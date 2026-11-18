@@ -3,6 +3,9 @@
 // one search across all of them, and the arrow keys across the grid. The app
 // brings the list; nothing here knows what is being picked.
 
+import { focusedAsker } from "./dialog.ts";
+import { readPortalHue } from "./portalHue.ts";
+
 /** A mark kept as markup, with the colours its tile lights up in ("Brand tiles"). Without them the tile lights up in the accent. */
 export interface TileMark {
   svg: string;
@@ -19,14 +22,18 @@ export interface PickGroup {
 /** One tile. `M` is the framework's own kind of glyph, for a choice that has no brand. */
 export interface PickItem<M = unknown> {
   id: string;
-  /** The name shown, which is also the tile's accessible name. */
+  /** The short name shown, which is also the tile's accessible name with `sub`. */
   label: string;
+  /** What kind of thing it is, such as "Windows share" beside SMB, as the tile's second line under the pointer. */
+  sub?: string;
   /** A brand's TileMark, or one of the app's glyphs, which lights up in the accent. */
   mark?: M | TileMark;
   /** The group it stands in. Without one it stands after the groups. */
   group?: string;
   /** What the name cannot say, in the tile's info bubble. */
   hint?: string;
+  /** A short word on the tile's tooltip, for a name that needs no (i). */
+  tip?: string;
   /** Further words the search finds it by, such as the services it reaches. */
   terms?: readonly string[];
   /** The tile that takes anything, such as an address typed by hand, which stands last. */
@@ -38,6 +45,8 @@ export interface PickerText {
   search: string;
   /** The sentence when nothing matches, with `{query}`. It names the tile that takes anything. */
   none: string;
+  /** The name of the button that empties the search. */
+  clear: string;
   /** The way out while the tiles show. */
   close: string;
   /** The way out beside a form's forward action. */
@@ -69,8 +78,8 @@ export function pickMatches(query: string, names: readonly string[]): boolean {
 /**
  * The sections a picker shows for a query: one per group in the order given,
  * an untitled one after them for tiles outside every group, and only those
- * the query leaves a tile in. The search reads the name, the id and the item's
- * own words.
+ * the query leaves a tile in. The search reads the name and its second line,
+ * the id and the item's own words.
  */
 export function pickSections<I extends PickItem>(
   items: readonly I[],
@@ -80,7 +89,7 @@ export function pickSections<I extends PickItem>(
 ): PickSection<I>[] {
   const order = (a: I, b: I) =>
     Number(!!a.last) - Number(!!b.last) || a.label.localeCompare(b.label, lang, { sensitivity: "base" });
-  const found = items.filter((item) => pickMatches(query, [item.label, item.id, ...(item.terms ?? [])]));
+  const found = items.filter((item) => pickMatches(query, [item.label, item.sub ?? "", item.id, ...(item.terms ?? [])]));
   const known = new Set(groups.map((g) => g.id));
   const sections: PickSection<I>[] = groups.map((g) => ({ id: g.id, title: g.title, items: found.filter((i) => i.group === g.id) }));
   sections.push({ id: "", title: undefined, items: found.filter((i) => i.group === undefined || !known.has(i.group)) });
@@ -171,6 +180,16 @@ export function pickSearchKey(key: string, query: string, list: HTMLElement | nu
     return true;
   }
   return false;
+}
+
+/**
+ * The rainbow position of the control that opens the picker, so the window
+ * wears its card's colour as a list opened from it does. Read before the
+ * window takes the focus; null when there is none to wear.
+ */
+export function pickerHue(): Record<string, string> | null {
+  const opener = focusedAsker();
+  return opener ? readPortalHue(opener) : null;
 }
 
 /** Keeps the tiles' area at the height it opened with, so the search does not move away from the eye while a query narrows it. */

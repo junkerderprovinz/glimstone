@@ -58,6 +58,15 @@ test('a search finds a tile by its id and by its own words as well as by its nam
   assert.deepEqual(view('pushover'), [['Services', ['Shoutrrr']]]);
 });
 
+test('a search finds a tile by the second line of its name, and not by its tooltip', () => {
+  const items = [
+    { id: 'smb', label: 'SMB', sub: 'Windows share', tip: 'Reaches a NAS' },
+    { id: 'sftp', label: 'SFTP' },
+  ];
+  assert.deepEqual(pickSections(items, [], 'windows', 'en')[0]!.items.map((i) => i.id), ['smb']);
+  assert.deepEqual(pickSections(items, [], 'nas', 'en'), []);
+});
+
 test('a search leaves no section when nothing matches', () => {
   assert.deepEqual(view('carrier pigeon'), []);
 });

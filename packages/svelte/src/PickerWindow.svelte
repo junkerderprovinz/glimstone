@@ -24,7 +24,7 @@
     actions?: WindowAction[];
     /** Back from the form to the tiles, with the search as it was. */
     onBack?: () => void;
-    /** Called for every way out: the foot, Escape and a press beside the window. */
+    /** Called for every way out: the foot, Escape and, while the tiles show, a press beside the window. */
     onClose: () => void;
   }
 </script>
@@ -36,6 +36,7 @@
     holdPickHeight,
     isTileMark,
     pageLocale,
+    pickerHue,
     pickSearchKey,
     pickSections,
     pickTileKey,
@@ -43,7 +44,9 @@
     windowFocusTarget,
   } from "@glimstone/core";
   import BrandMark from "./BrandMark.svelte";
-  import { IconBack, IconClose } from "./glyphs.js";
+  import GlyphField from "./GlyphField.svelte";
+  import { IconBack, IconClose, IconSearch } from "./glyphs.js";
+  import IconButton from "./IconButton.svelte";
   import InfoBubble from "./InfoBubble.svelte";
   import ReadmeButton from "./ReadmeButton.svelte";
   import { css } from "./style.js";
@@ -59,8 +62,9 @@
   let { title, hint, items, groups = [], text, onPick, children, actions = [], onBack, onClose }: PickerWindowProps = $props();
 
   let query = $state("");
+  const hue = pickerHue();
   let card: HTMLElement | null = $state(null);
-  let search: HTMLInputElement | undefined = $state();
+  let search: HTMLInputElement | null = $state(null);
   let scroll: HTMLDivElement | undefined = $state();
   const form = $derived(!!children);
   $effect(() => {
@@ -92,31 +96,46 @@
   }
 </script>
 
+{#snippet clearButton()}
+  <IconButton
+    tip={text.clear}
+    glyph={IconClose}
+    onclick={() => {
+      query = "";
+      search?.focus();
+    }}
+  />
+{/snippet}
+
 {#snippet notch()}{title}<InfoBubble tip={hint ?? ""} onAccent />{/snippet}
 
 <Window
   data-glim="PickerWindow"
   {title}
   drawn={hint ? notch : undefined}
-  class="glim-pick-window"
+  class={["glim-pick-window", form && "glim-pick-window--form", hue && "glim-hue"].filter(Boolean).join(" ")}
+  style={css(hue ?? undefined)}
   bind:ref={card}
   text={{ cancel: text.cancel, close: text.close }}
   actions={form ? [back, ...actions] : [{ label: text.close, labelKey: "common.close", glyph: IconClose, wayOut: true }]}
+  closeOnBackdrop={!form}
   {onClose}
 >
   {#if children}
     {@render children()}
   {:else}
-    <input
-      bind:this={search}
+    <GlyphField
+      bind:ref={search}
       bind:value={query}
-      class="glim-input glim-pick-search"
+      class="glim-pick-search"
+      glyph={IconSearch}
       type="search"
-      aria-label={text.search}
+      label={text.search}
       placeholder={text.search}
       spellcheck="false"
       autocomplete="off"
       onkeydown={(e) => used(e, pickSearchKey(e.key, query, scroll ?? null, () => (query = "")))}
+      after={query ? clearButton : undefined}
     />
     <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div bind:this={scroll} class="glim-pick-scroll" onkeydown={onTileKey}>
@@ -132,10 +151,11 @@
                 <li style={css(pickTileStyle(item.mark))}>
                   <ReadmeButton
                     brand="house"
-                    parts={[{ name: item.label, onClick: () => onPick(item.id) }]}
+                    parts={[{ name: item.label, sub: item.sub, onClick: () => onPick(item.id) }]}
                     mark={isTileMark(item.mark) ? brand : (item.mark as Snippet | undefined)}
                     markClass={isTileMark(item.mark) ? undefined : "glim-house-mark"}
                     hint={item.hint}
+                    tip={item.tip}
                   />
                 </li>
               {/each}

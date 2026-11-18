@@ -4,16 +4,19 @@ import {
   holdPickHeight,
   isTileMark,
   pageLocale,
-  windowFocusTarget,
+  pickerHue,
   pickSearchKey,
   pickSections,
   pickTileKey,
   pickTileStyle,
+  windowFocusTarget,
   type PickGroup,
   type PickItem,
   type PickerText,
 } from "@glimstone/core";
-import { IconBack, IconClose } from "./glyphs.tsx";
+import { GlyphField } from "./GlyphField.tsx";
+import { IconBack, IconClose, IconSearch } from "./glyphs.tsx";
+import { IconButton } from "./IconButton.tsx";
 import { InfoBubble } from "./InfoBubble.tsx";
 import { BrandMark, ReadmeButton } from "./ReadmeButton.tsx";
 import { Window, type WindowAction } from "./Window.tsx";
@@ -46,12 +49,13 @@ export interface PickerWindowProps {
   actions?: WindowAction[];
   /** Back from the form to the tiles, with the search as it was. */
   onBack?: () => void;
-  /** Called for every way out: the foot, Escape and a press beside the window. */
+  /** Called for every way out: the foot, Escape and, while the tiles show, a press beside the window. */
   onClose: () => void;
 }
 
 export function PickerWindow({ title, hint, items, groups = [], text, onPick, children, actions = [], onBack, onClose }: PickerWindowProps) {
   const [query, setQuery] = useState("");
+  const [hue] = useState(pickerHue);
   const card = useRef<HTMLDivElement>(null);
   const search = useRef<HTMLInputElement>(null);
   const scroll = useRef<HTMLDivElement>(null);
@@ -91,26 +95,42 @@ export function PickerWindow({ title, hint, items, groups = [], text, onPick, ch
         ) : undefined
       }
       ref={card}
-      className="glim-pick-window"
+      className={["glim-pick-window", form && "glim-pick-window--form", hue && "glim-hue"].filter(Boolean).join(" ")}
+      style={hue ?? undefined}
       text={{ cancel: text.cancel, close: text.close }}
       actions={form ? [back, ...actions] : [{ label: text.close, labelKey: "common.close", glyph: <IconClose />, wayOut: true }]}
+      // A stray press beside the window would throw away what was typed into the form.
+      closeOnBackdrop={!form}
       onClose={onClose}
     >
       {form ? (
         children
       ) : (
         <>
-          <input
+          <GlyphField
             ref={search}
-            className="glim-input glim-pick-search"
+            className="glim-pick-search"
+            glyph={<IconSearch />}
             type="search"
-            aria-label={text.search}
+            label={text.search}
             placeholder={text.search}
             spellCheck={false}
             autoComplete="off"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={(e) => used(e, pickSearchKey(e.key, query, scroll.current, () => setQuery("")))}
+            after={
+              query && (
+                <IconButton
+                  tip={text.clear}
+                  glyph={<IconClose />}
+                  onClick={() => {
+                    setQuery("");
+                    search.current?.focus();
+                  }}
+                />
+              )
+            }
           />
           <div
             ref={scroll}
@@ -128,10 +148,11 @@ export function PickerWindow({ title, hint, items, groups = [], text, onPick, ch
                       <li key={item.id} style={pickTileStyle(item.mark) as CSSProperties | undefined}>
                         <ReadmeButton
                           brand="house"
-                          parts={[{ name: item.label, onClick: () => onPick(item.id) }]}
+                          parts={[{ name: item.label, sub: item.sub, onClick: () => onPick(item.id) }]}
                           mark={isTileMark(item.mark) ? <BrandMark svg={item.mark.svg} /> : item.mark}
                           markClass={isTileMark(item.mark) ? undefined : "glim-house-mark"}
                           hint={item.hint}
+                          tip={item.tip}
                         />
                       </li>
                     ))}

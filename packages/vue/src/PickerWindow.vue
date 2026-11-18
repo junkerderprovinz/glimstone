@@ -5,6 +5,7 @@ import {
   holdPickHeight,
   isTileMark,
   pageLocale,
+  pickerHue,
   pickSearchKey,
   pickSections,
   pickTileKey,
@@ -14,7 +15,9 @@ import {
   type PickerText,
 } from "@glimstone/core";
 import BrandMark from "./BrandMark.vue";
-import { IconBack, IconClose } from "./glyphs";
+import GlyphField from "./GlyphField.vue";
+import { IconBack, IconClose, IconSearch } from "./glyphs";
+import IconButton from "./IconButton.vue";
 import InfoBubble from "./InfoBubble.vue";
 import ReadmeButton from "./ReadmeButton.vue";
 import Window from "./Window.vue";
@@ -48,7 +51,9 @@ const slots = useSlots();
 
 const query = ref("");
 const win = shallowRef<{ card: HTMLElement | null } | null>(null);
-const search = shallowRef<HTMLInputElement | null>(null);
+const field = shallowRef<{ input: HTMLInputElement | null } | null>(null);
+const search = () => field.value?.input ?? null;
+const hue = pickerHue();
 const scroll = shallowRef<HTMLElement | null>(null);
 // Slots are not reactive, so the switch between the tiles and a form is
 // noticed after the render that made it.
@@ -83,9 +88,13 @@ const used = (e: KeyboardEvent, handled: boolean) => {
   e.preventDefault();
   e.stopPropagation();
 };
+function clear() {
+  query.value = "";
+  search()?.focus();
+}
 const onSearchKey = (e: KeyboardEvent) => used(e, pickSearchKey(e.key, query.value, scroll.value, () => (query.value = "")));
 const onTileKey = (e: KeyboardEvent) => {
-  if (e.target !== e.currentTarget) used(e, pickTileKey(e.key, e.target as Element, e.currentTarget as HTMLElement, search.value));
+  if (e.target !== e.currentTarget) used(e, pickTileKey(e.key, e.target as Element, e.currentTarget as HTMLElement, search()));
 };
 </script>
 
@@ -94,25 +103,32 @@ const onTileKey = (e: KeyboardEvent) => {
     ref="win"
     data-glim="PickerWindow"
     :title="title"
-    class="glim-pick-window"
+    :class="['glim-pick-window', { 'glim-pick-window--form': form(), 'glim-hue': hue }]"
+    :style="hue ?? undefined"
     :text="{ cancel: text.cancel, close: text.close }"
+    :close-on-backdrop="!form()"
     :actions="foot()"
     @close="emit('close')"
   >
     <template v-if="hint" #title>{{ title }}<InfoBubble :tip="hint" on-accent /></template>
     <slot v-if="form()" />
     <template v-else>
-      <input
-        ref="search"
+      <GlyphField
+        ref="field"
         v-model="query"
-        class="glim-input glim-pick-search"
+        class="glim-pick-search"
+        :glyph="IconSearch"
         type="search"
-        :aria-label="text.search"
+        :label="text.search"
         :placeholder="text.search"
         spellcheck="false"
         autocomplete="off"
         @keydown="onSearchKey"
-      />
+      >
+        <template v-if="query" #after>
+          <IconButton :tip="text.clear" :glyph="IconClose" @click="clear" />
+        </template>
+      </GlyphField>
       <div ref="scroll" class="glim-pick-scroll" @keydown="onTileKey">
         <p v-if="sections.length === 0" class="glim-pick-none">{{ fill(text.none, { query: query.trim() }) }}</p>
         <template v-else>
@@ -122,9 +138,10 @@ const onTileKey = (e: KeyboardEvent) => {
               <li v-for="item in s.items" :key="item.id" :style="pickTileStyle(item.mark)">
                 <ReadmeButton
                   brand="house"
-                  :parts="[{ name: item.label, onClick: () => emit('pick', item.id) }]"
+                  :parts="[{ name: item.label, sub: item.sub, onClick: () => emit('pick', item.id) }]"
                   :mark-class="isTileMark(item.mark) ? undefined : 'glim-house-mark'"
                   :hint="item.hint"
+                  :tip="item.tip"
                 >
                   <template v-if="item.mark" #mark>
                     <BrandMark v-if="isTileMark(item.mark)" :svg="item.mark.svg" />
