@@ -54,6 +54,11 @@ npm install @glimstone/core
   a brand's tile in its colour. The notification services' marks come from
   their own entry, `@glimstone/core/serviceMarks`, each with its tile colour;
   `service-marks/` beside it holds their sources and licences.
+- A catalog of providers, shared by every app that picks from the same kind:
+  `catalogPicker` turns a `Catalog`, the ids an app offers and the app's group
+  titles into a picker window's tiles and groups. The storage catalog has its
+  own entry, `@glimstone/core/storageProviders`, with the providers' marks and
+  `storage-marks/` beside it for their sources and licences.
 - Where a dragged item goes: `dropIndex` places it among the others by its
   leading edge, along a row, down a column or line by line in a grid.
 - What runs without a framework: `mountSelect`, `wireTooltips` with
