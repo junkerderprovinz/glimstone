@@ -1,10 +1,11 @@
 // Builds the bundle a page without a build step includes, such as an Unraid
 // plugin's PHP page: the core as one script with a global and as a module, the
-// stylesheet, the fortress card and the glyphs. The release workflow zips the
+// stylesheet, the fortress card, the glyphs and the notification services'
+// marks with their licences. The release workflow zips the
 // folder and attaches it to the GitHub release.
 //
 // Run: node scripts/build-plugin-bundle.mjs [out]   (default dist/glimstone-plugin)
-import { copyFileSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { copyFileSync, cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { build } from "vite";
@@ -15,22 +16,29 @@ const out = resolve(process.argv[2] ?? join(root, "dist/glimstone-plugin"));
 const { version } = JSON.parse(readFileSync(join(core, "package.json"), "utf8"));
 
 rmSync(out, { recursive: true, force: true });
-await build({
-  configFile: false,
-  logLevel: "warn",
-  // Zag reads it to decide on its warnings, and a browser has no process.
-  define: { "process.env.NODE_ENV": JSON.stringify("production") },
-  build: {
-    outDir: out,
-    emptyOutDir: false,
-    lib: {
-      entry: join(core, "src/index.ts"),
-      name: "GlimStone",
-      formats: ["iife", "es"],
-      fileName: (format) => (format === "iife" ? "glimstone.js" : "glimstone.mjs"),
+// The marks are a script of their own, so a page without a picker of brands
+// does not load them.
+for (const [entry, name, file] of [
+  ["src/index.ts", "GlimStone", "glimstone"],
+  ["src/serviceMarks.ts", "GlimServiceMarks", "service-marks"],
+]) {
+  await build({
+    configFile: false,
+    logLevel: "warn",
+    // Zag reads it to decide on its warnings, and a browser has no process.
+    define: { "process.env.NODE_ENV": JSON.stringify("production") },
+    build: {
+      outDir: out,
+      emptyOutDir: false,
+      lib: {
+        entry: join(core, entry),
+        name,
+        formats: ["iife", "es"],
+        fileName: (format) => (format === "iife" ? `${file}.js` : `${file}.mjs`),
+      },
     },
-  },
-});
+  });
+}
 
 mkdirSync(out, { recursive: true });
 for (const [from, to] of [
@@ -42,6 +50,7 @@ for (const [from, to] of [
   copyFileSync(join(core, from), join(out, to));
 }
 copyFileSync(join(root, "LICENSE"), join(out, "LICENSE"));
+cpSync(join(core, "service-marks"), join(out, "service-marks"), { recursive: true });
 
 writeFileSync(
   join(out, "README.txt"),
@@ -65,6 +74,11 @@ engine. glimstone.mjs is the same code as a module, for <script type="module">.
 The fortress card is fortress-card.js with fortress-card.css; call
 GlimFortressCard.mount(element, adapter, options) as the design language
 describes. glyphs.json holds every glyph as SVG.
+
+service-marks.js puts the notification services' marks on
+window.GlimServiceMarks.SERVICE_MARKS, each as SVG markup with the colour its
+tile lights up in. service-marks/ holds their sources and licences, and goes
+wherever the marks go.
 
 https://github.com/junkerderprovinz/glimstone/blob/v${version}/docs/design-language.md
 `,

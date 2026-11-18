@@ -24,8 +24,19 @@ test('the bundle holds what a plugin page includes, and nothing to build', () =>
     'glimstone.js',
     'glimstone.mjs',
     'glyphs.json',
+    'service-marks',
+    'service-marks.js',
+    'service-marks.mjs',
     'tokens.css',
   ]);
+});
+
+test('the service marks come on a global of their own, with the sources and licences beside them', () => {
+  const sandbox: { GlimServiceMarks?: { SERVICE_MARKS?: Record<string, { svg: string; tile: string }> } } = {};
+  vm.runInNewContext(readFileSync(join(out, 'service-marks.js'), 'utf8'), sandbox);
+  assert.match(sandbox.GlimServiceMarks?.SERVICE_MARKS?.gotify?.svg ?? '', /^<svg /);
+  const folder = readdirSync(join(out, 'service-marks'));
+  for (const file of ['README.md', 'LICENSE-dashboard-icons.txt', 'LICENSE-shoutrrr.txt']) assert.ok(folder.includes(file), file);
 });
 
 test('the script tag build puts the core on one global without touching the page', () => {
@@ -37,7 +48,7 @@ test('the script tag build puts the core on one global without touching the page
 });
 
 test('the scripts run in a browser, which has no process', () => {
-  for (const file of ['glimstone.js', 'glimstone.mjs']) assert.doesNotMatch(readFileSync(join(out, file), 'utf8'), /process\.env/, file);
+  for (const file of ['glimstone.js', 'glimstone.mjs', 'service-marks.js', 'service-marks.mjs']) assert.doesNotMatch(readFileSync(join(out, file), 'utf8'), /process\.env/, file);
 });
 
 test('the stylesheet is the one the packages ship', () => {
