@@ -48,6 +48,12 @@ npm install @glimstone/core
   ProgressBar, `copyText` with its fallback for plain http, and for the
   ColorPicker `floatColorPicker`, `placeColorPicker` and `nearestColorName`,
   which finds the closest name in OKLab in a list such as `COLOR_NAMES_DE`.
+- What a picker window does with the app's list: `pickSections` puts the tiles
+  in their groups, alphabetical in the reader's language and narrowed by one
+  search, `pickKey` moves the focus across the grid, and `pickTileStyle` lights
+  a brand's tile in its colour. The notification services' marks come from
+  their own entry, `@glimstone/core/serviceMarks`, each with its tile colour;
+  `service-marks/` beside it holds their sources and licences.
 - Where a dragged item goes: `dropIndex` places it among the others by its
   leading edge, along a row, down a column or line by line in a grid.
 - What runs without a framework: `mountSelect`, `wireTooltips` with

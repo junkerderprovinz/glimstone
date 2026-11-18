@@ -42,6 +42,7 @@ export { default as NumberField, type NumberFieldProps } from "./NumberField.sve
 export { default as PasswordField, type PasswordFieldProps } from "./PasswordField.svelte";
 export { default as PathField, type PathFieldProps } from "./PathField.svelte";
 export { default as PaypalDialog, type PaypalDialogProps, type PaypalSelectorProps } from "./PaypalDialog.svelte";
+export { default as PickerWindow, type PickGroup, type PickerItem, type PickerText, type PickerWindowProps, type TileMark } from "./PickerWindow.svelte";
 export { default as Pill, type PillProps, type PillTone } from "./Pill.svelte";
 export { default as Popover, type PopoverProps } from "./Popover.svelte";
 export { default as PresenceBadges, type PresenceBadgesProps } from "./PresenceBadges.svelte";

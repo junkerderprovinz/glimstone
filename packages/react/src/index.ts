@@ -36,6 +36,7 @@ export * from "./NumberField.tsx";
 export * from "./PasswordField.tsx";
 export * from "./PathField.tsx";
 export * from "./PaypalDialog.tsx";
+export * from "./PickerWindow.tsx";
 export * from "./Pill.tsx";
 export * from "./Popover.tsx";
 export * from "./ProgressBar.tsx";
