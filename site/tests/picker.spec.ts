@@ -296,3 +296,83 @@ test.describe("PickerWindow", () => {
     expect(await fills()).toBe("rgb(130, 130, 130)");
   });
 });
+
+test.describe("PickerWindow states", () => {
+  const places = (page: Page) => page.getByRole("dialog", { name: "Choose a place" });
+  const focused = (page: Page) => page.evaluate(() => document.activeElement?.getAttribute("aria-label"));
+
+  async function showPlaces(page: Page) {
+    await open(page, "/components/picker-window");
+    await stage(page, "PickerWindowStates").getByRole("button", { name: "Choose a place" }).click();
+    await expect(places(page)).toBeVisible();
+  }
+
+  test("[picker-group-badge] a group's badge and its (i) stand in the eyebrow's line", async ({ page }) => {
+    await showPlaces(page);
+    // Firefox's content process crashes on evaluateAll under a dialog found by its name, so the window's own marker finds it.
+    const lines = await page
+      .locator('[data-glim="PickerWindow"] .glim-pick-section')
+      .evaluateAll((all) =>
+        all.map((s) => {
+          const eyebrow = s.querySelector(".glim-eyebrow")!.getBoundingClientRect();
+          const badge = s.querySelector('[data-glim="Badge"]');
+          const box = badge?.getBoundingClientRect();
+          return {
+            title: s.querySelector(".glim-eyebrow")?.textContent,
+            badge: badge?.textContent,
+            info: s.querySelectorAll(".glim-pick-eyebrow .glim-info-icon").length,
+            inLine: !!box && box.top < eyebrow.bottom && box.bottom > eyebrow.top,
+          };
+        }),
+      );
+    expect(lines).toEqual([
+      { title: "On this server", badge: "Best fit", info: 0, inLine: true },
+      { title: "On your network", badge: "Good", info: 0, inLine: true },
+      { title: "In the cloud", badge: "Slower", info: 1, inLine: true },
+    ]);
+  });
+
+  test("[picker-status] a tile that cannot be picked yet stays in view with its reason, and neither a click nor the keys pick it", async ({ page }) => {
+    await showPlaces(page);
+    const usb = places(page).locator('.glim-provider-pick [aria-disabled="true"]', { hasText: "USB disk" });
+    await expect(usb).toBeVisible();
+    await expect(usb).toContainText("Not plugged in");
+    await expect(places(page).getByRole("button", { name: /USB disk/ })).toHaveCount(0);
+    await usb.click();
+    await expect(places(page).getByRole("searchbox")).toBeVisible();
+
+    await places(page).getByRole("searchbox").fill("usb");
+    await page.keyboard.press("Enter");
+    await expect(places(page).getByRole("searchbox")).toBeVisible();
+
+    await places(page).getByRole("searchbox").fill("");
+    await page.keyboard.press("ArrowDown");
+    expect(await focused(page)).toBe("Folder On this server's disks");
+    await page.keyboard.press("ArrowRight");
+    expect(await focused(page)).toBe("NFS Unix share");
+  });
+
+  test("[picker-selected] Back from the form marks the tile picked before and puts the focus on it", async ({ page }) => {
+    await showPlaces(page);
+    await places(page).getByRole("button", { name: "SMB Windows share" }).click();
+    const form = page.getByRole("dialog", { name: "SMB" });
+    await expect(form.getByRole("textbox", { name: "Path" })).toBeVisible();
+    await form.getByRole("button", { name: "Back" }).click();
+    const smb = places(page).getByRole("button", { name: "SMB Windows share" });
+    await expect(smb).toHaveAttribute("aria-current", "true");
+    await expect(smb).toBeFocused();
+    await expect(places(page).locator('[aria-current="true"]')).toHaveCount(1);
+  });
+
+  test("[picker-mark-hover] a mark brings its own class and shows its hover drawing on the lit tile", async ({ page }) => {
+    await showPlaces(page);
+    const folder = places(page).getByRole("button", { name: "Folder On this server's disks" });
+    const box = folder.locator(".glim-readme-btn-mark");
+    await expect(box).toHaveClass(/glim-demo-folder-mark/);
+    await expect(box.locator(".glim-mark-rest")).toBeVisible();
+    await expect(box.locator(".glim-mark-hover")).toBeHidden();
+    await folder.hover();
+    await expect(box.locator(".glim-mark-rest")).toBeHidden();
+    await expect(box.locator(".glim-mark-hover")).toBeVisible();
+  });
+});

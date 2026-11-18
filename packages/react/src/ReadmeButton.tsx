@@ -40,12 +40,14 @@ export interface ReadmeButtonProps {
   note?: boolean;
   /** The second line of a unit whose first part has neither `href` nor `onClick`. */
   soonLabel?: string;
+  /** Marks the first part as the one chosen, such as a picker's tile picked before. */
+  current?: boolean;
   /** Runs on a click on a part's link, for an app whose webview has no browser
    *  behind it to open the address in. */
   onLinkClick?: (e: MouseEvent<HTMLAnchorElement>) => void;
 }
 
-export function ReadmeButton({ brand, parts, mark, markClass, art, hint, tip, note, soonLabel, onLinkClick }: ReadmeButtonProps) {
+export function ReadmeButton({ brand, parts, mark, markClass, art, hint, tip, note, soonLabel, current, onLinkClick }: ReadmeButtonProps) {
   const ref = useRef<HTMLDivElement>(null);
   const soon = readmeSoon(parts);
   const words = parts.map((p) => `${p.name}\n${p.sub ?? ""}`).join("\n") + (soon ? soonLabel : "");
@@ -58,7 +60,10 @@ export function ReadmeButton({ brand, parts, mark, markClass, art, hint, tip, no
         const sub = soon ? soonLabel : part.sub;
         const label = readmePartLabel(part, sub);
         const className = readmePartClass(i, soon);
-        const tipped = i === 0 ? { ...tooltip.handlers, ref: tooltip.ref, "aria-describedby": tooltip.describedBy } : {};
+        const tipped =
+          i === 0
+            ? { ...tooltip.handlers, ref: tooltip.ref, "aria-describedby": tooltip.describedBy, "aria-current": current || undefined }
+            : {};
         const face =
           i === 0 && art ? (
             <span className="glim-readme-btn-art" aria-hidden>
@@ -117,7 +122,13 @@ export function ReadmeButton({ brand, parts, mark, markClass, art, hint, tip, no
   );
 }
 
-/** A vendor mark kept as its own markup, from appMarks.ts. */
-export function BrandMark({ svg }: { svg: string }) {
-  return <span data-glim="BrandMark" className="glim-brand-svg" aria-hidden dangerouslySetInnerHTML={{ __html: svg }} />;
+/** A vendor mark kept as its own markup, from appMarks.ts, with the drawing a lit tile shows instead where it has one. */
+export function BrandMark({ svg, hover }: { svg: string; hover?: string }) {
+  if (!hover) return <span data-glim="BrandMark" className="glim-brand-svg" aria-hidden dangerouslySetInnerHTML={{ __html: svg }} />;
+  return (
+    <span data-glim="BrandMark" className="glim-brand-svg" aria-hidden>
+      <span className="glim-mark-rest" dangerouslySetInnerHTML={{ __html: svg }} />
+      <span className="glim-mark-hover" dangerouslySetInnerHTML={{ __html: hover }} />
+    </span>
+  );
 }

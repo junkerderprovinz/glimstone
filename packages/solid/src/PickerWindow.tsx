@@ -5,15 +5,17 @@ import {
   isTileMark,
   pageLocale,
   pickerHue,
+  pickFocusTarget,
+  pickMarkClass,
   pickSearchKey,
   pickSections,
   pickTileKey,
   pickTileStyle,
-  windowFocusTarget,
   type PickGroup,
   type PickItem,
   type PickerText,
 } from "@glimstone/core";
+import { Badge } from "./Badge.tsx";
 import { GlyphField } from "./GlyphField.tsx";
 import { IconBack, IconClose, IconSearch } from "./glyphs.tsx";
 import { IconButton } from "./IconButton.tsx";
@@ -28,7 +30,7 @@ import { Window, type WindowAction } from "./Window.tsx";
 // follows: it closes the window, or passes the picked tile's form as children,
 // which takes the tiles' place with Back and the form's actions in the foot.
 
-export type { PickGroup, PickerText, TileMark } from "@glimstone/core";
+export type { PickBadge, PickGroup, PickerText, TileMark } from "@glimstone/core";
 
 export type PickerItem = PickItem<JSX.Element>;
 
@@ -51,6 +53,8 @@ export interface PickerWindowProps {
   onBack?: () => void;
   /** A quiet line at the start of the foot, such as the verdict of a test. */
   start?: JSX.Element;
+  /** The id of the tile picked before, which stands marked and takes the focus when the tiles show. */
+  selected?: string;
   /** Called for every way out: the foot, Escape and, while the tiles show, a press beside the window. */
   onClose: () => void;
 }
@@ -67,7 +71,7 @@ export function PickerWindow(props: PickerWindowProps) {
   createEffect(
     on(form, () => {
       if (scroll?.isConnected) holdPickHeight(scroll);
-      if (card) windowFocusTarget(card)?.focus();
+      if (card) pickFocusTarget(card, scroll?.isConnected ? scroll : null)?.focus();
     }),
   );
   // Back keeps the window open, so it returns false.
@@ -146,7 +150,17 @@ export function PickerWindow(props: PickerWindowProps) {
               {(s) => (
                 <section class="glim-pick-section">
                   <Show when={s.title}>
-                    <h3 class="glim-eyebrow">{s.title}</h3>
+                    <div class="glim-pick-eyebrow">
+                      <h3 class="glim-eyebrow">{s.title}</h3>
+                      <Show when={s.badge}>
+                        {(badge) => (
+                          <Badge size="small" tone={badge().tone}>
+                            {badge().label}
+                          </Badge>
+                        )}
+                      </Show>
+                      <Show when={s.hint}>{(hint) => <InfoBubble tip={hint()} />}</Show>
+                    </div>
                   </Show>
                   <ul class="glim-provider-pick">
                     <For each={s.items}>
@@ -154,9 +168,11 @@ export function PickerWindow(props: PickerWindowProps) {
                         <li style={pickTileStyle(item.mark) as JSX.CSSProperties | undefined}>
                           <ReadmeButton
                             brand="house"
-                            parts={[{ name: item.label, sub: item.sub, onClick: () => props.onPick(item.id) }]}
-                            mark={isTileMark(item.mark) ? <BrandMark svg={item.mark.svg} /> : (item.mark as JSX.Element)}
-                            markClass={isTileMark(item.mark) ? undefined : "glim-house-mark"}
+                            parts={[{ name: item.label, sub: item.sub, onClick: item.status ? undefined : () => props.onPick(item.id) }]}
+                            soonLabel={item.status}
+                            current={item.id === props.selected}
+                            mark={isTileMark(item.mark) ? <BrandMark svg={item.mark.svg} hover={item.mark.hover} /> : (item.mark as JSX.Element)}
+                            markClass={pickMarkClass(item.mark)}
                             hint={item.hint}
                             tip={item.tip}
                           />

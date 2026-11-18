@@ -40,6 +40,8 @@ export interface ReadmeButtonProps {
   note?: boolean;
   /** The second line of a unit whose first part has neither `href` nor `onClick`. */
   soonLabel?: string;
+  /** Marks the first part as the one chosen, such as a picker's tile picked before. */
+  current?: boolean;
   /** Runs on a click on a part's link, for an app whose webview has no browser
    *  behind it to open the address in. */
   onLinkClick?: (e: MouseEvent) => void;
@@ -61,7 +63,10 @@ export function ReadmeButton(props: ReadmeButtonProps) {
           const sub = () => (soon() ? props.soonLabel : part().sub);
           const label = () => readmePartLabel(part(), sub());
           const className = () => readmePartClass(i, soon());
-          const tipped = () => (i === 0 ? { ...tooltip.handlers, ref: tooltip.ref, "aria-describedby": tooltip.describedBy() } : {});
+          const tipped = () =>
+            i === 0
+              ? { ...tooltip.handlers, ref: tooltip.ref, "aria-describedby": tooltip.describedBy(), "aria-current": props.current || undefined }
+              : {};
           const face = () => (
             <Show
               when={i === 0 && art()}
@@ -124,6 +129,13 @@ export function ReadmeButton(props: ReadmeButtonProps) {
 }
 
 /** A vendor mark kept as its own markup, from appMarks.ts. */
-export function BrandMark(props: { svg: string }) {
-  return <span data-glim="BrandMark" class="glim-brand-svg" aria-hidden="true" innerHTML={props.svg} />;
+export function BrandMark(props: { svg: string; hover?: string }) {
+  return (
+    <Show when={props.hover} fallback={<span data-glim="BrandMark" class="glim-brand-svg" aria-hidden="true" innerHTML={props.svg} />}>
+      <span data-glim="BrandMark" class="glim-brand-svg" aria-hidden="true">
+        <span class="glim-mark-rest" innerHTML={props.svg} />
+        <span class="glim-mark-hover" innerHTML={props.hover} />
+      </span>
+    </Show>
+  );
 }

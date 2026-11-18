@@ -27,8 +27,10 @@ const props = withDefaults(
     note?: boolean;
     /** The second line of a unit whose first part has neither `href` nor `onClick`. */
     soonLabel?: string;
+    /** Marks the first part as the one chosen, such as a picker's tile picked before. */
+    current?: boolean;
   }>(),
-  { note: false },
+  { note: false, current: false },
 );
 const emit = defineEmits<{ linkClick: [e: MouseEvent] }>();
 defineSlots<{ mark?: () => unknown; art?: () => unknown }>();
@@ -53,6 +55,7 @@ const tipped = (i: number) =>
     ? {
         ref: (el: unknown) => (tooltip.trigger.value = el as HTMLElement | null),
         "aria-describedby": tooltip.describedBy.value,
+        "aria-current": props.current || undefined,
         onMouseenter: tooltip.show,
         onMouseleave: tooltip.hide,
         onFocus: tooltip.showOnFocus,

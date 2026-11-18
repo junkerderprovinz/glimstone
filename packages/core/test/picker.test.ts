@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { isTileMark, pickKey, pickMatches, pickSections, pickTileStyle, type PickBox } from '../src/picker.ts';
+import { isTileMark, pickKey, pickMarkClass, pickMatches, pickSections, pickTileStyle, type PickBox } from '../src/picker.ts';
 
 const services = [
   { id: 'slack', label: 'Slack', group: 'services' },
@@ -48,6 +48,18 @@ test('the order follows the language, so an umlaut sorts beside its letter', () 
   assert.deepEqual(pickSections(items, [], '', 'de')[0]!.items.map((i) => i.id), ['o', 'p', 'z']);
 });
 
+test("a group's badge and (i) travel with its section, for the eyebrow's line", () => {
+  const rated = [
+    { id: 'services', title: 'Services', badge: { label: 'Best fit', tone: 'ok' as const }, hint: 'Reached from the internet.' },
+    { id: 'standards', title: 'Email and webhooks' },
+  ];
+  const [first, second] = pickSections(services, rated, '', 'en');
+  assert.deepEqual(first!.badge, { label: 'Best fit', tone: 'ok' });
+  assert.equal(first!.hint, 'Reached from the internet.');
+  assert.equal(second!.badge, undefined);
+  assert.equal(second!.hint, undefined);
+});
+
 test('a search narrows every section at once and drops the ones it empties', () => {
   assert.deepEqual(view('web'), [['Email and webhooks', ['Webhook']]]);
 });
@@ -91,6 +103,13 @@ test('a tile mark is markup with the colours its tile lights up in', () => {
   assert.equal(isTileMark('<svg/>'), false);
   assert.equal(isTileMark(() => null), false);
   assert.equal(isTileMark({ type: 'span', props: {} }), false);
+});
+
+test("a brand's mark box takes the class its mark brings, and an app's glyph the house mark's", () => {
+  assert.equal(pickMarkClass({ svg: '<svg/>', className: 'glim-tile-mark-registry' }), 'glim-tile-mark-registry');
+  assert.equal(pickMarkClass({ svg: '<svg/>' }), undefined);
+  assert.equal(pickMarkClass('a glyph'), 'glim-house-mark');
+  assert.equal(pickMarkClass(undefined), 'glim-house-mark');
 });
 
 test("a brand's tile hands its colour pair down, and any other tile lights up in the accent", () => {

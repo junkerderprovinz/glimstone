@@ -1050,6 +1050,15 @@ import { SERVICE_MARKS } from "@glimstone/core/serviceMarks";
         knows, and its <code>title</code> says how it came out.
       </p>
       <Demo name="PickerWindowForm" />
+      <H2>Groups that rate, tiles that wait</H2>
+      <p>
+        A group can say how well it suits the job with a <code>badge</code> and explain itself with a <code>hint</code>,
+        both in its eyebrow's line. A tile with a <code>status</code> stays in view with that word as its second line,
+        and neither a click nor the keys pick it, so the reader learns the option exists and what it waits for. Pass the
+        last pick as <code>selected</code>, and Back from its form finds that tile marked and in focus. A brand's mark
+        can bring a <code>hover</code> drawing for the lit tile and a <code>className</code> for its box.
+      </p>
+      <Demo name="PickerWindowStates" />
       <H2>The marks</H2>
       <p>
         <code>SERVICE_MARKS</code> holds the marks of the common notification services, each as markup with the colour

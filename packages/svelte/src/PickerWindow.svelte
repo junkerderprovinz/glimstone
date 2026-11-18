@@ -3,7 +3,7 @@
   import type { PickGroup, PickItem, PickerText } from "@glimstone/core";
   import type { WindowAction } from "./WindowFootRow.svelte";
 
-  export type { PickGroup, PickerText, TileMark } from "@glimstone/core";
+  export type { PickBadge, PickGroup, PickerText, TileMark } from "@glimstone/core";
 
   export type PickerItem = PickItem<Snippet>;
 
@@ -26,6 +26,8 @@
     onBack?: () => void;
     /** A quiet line at the start of the foot, such as the verdict of a test. */
     start?: string | Snippet;
+    /** The id of the tile picked before, which stands marked and takes the focus when the tiles show. */
+    selected?: string;
     /** Called for every way out: the foot, Escape and, while the tiles show, a press beside the window. */
     onClose: () => void;
   }
@@ -39,12 +41,14 @@
     isTileMark,
     pageLocale,
     pickerHue,
+    pickFocusTarget,
+    pickMarkClass,
     pickSearchKey,
     pickSections,
     pickTileKey,
     pickTileStyle,
-    windowFocusTarget,
   } from "@glimstone/core";
+  import Badge from "./Badge.svelte";
   import BrandMark from "./BrandMark.svelte";
   import GlyphField from "./GlyphField.svelte";
   import { IconBack, IconClose, IconSearch } from "./glyphs.js";
@@ -61,7 +65,7 @@
   // follows: it closes the window, or passes the picked tile's form as
   // children, which takes the tiles' place with Back and the form's actions in
   // the foot.
-  let { title, hint, items, groups = [], text, onPick, children, actions = [], onBack, start, onClose }: PickerWindowProps = $props();
+  let { title, hint, items, groups = [], text, onPick, children, actions = [], onBack, start, selected, onClose }: PickerWindowProps = $props();
 
   let query = $state("");
   const hue = pickerHue();
@@ -73,7 +77,7 @@
     void form;
     void tick().then(() => {
       if (scroll) holdPickHeight(scroll);
-      if (card) windowFocusTarget(card)?.focus();
+      if (card) pickFocusTarget(card, scroll ?? null)?.focus();
     });
   });
   // Back keeps the window open, so it returns false.
@@ -147,16 +151,24 @@
       {:else}
         {#each sections as s (s.id)}
           <section class="glim-pick-section">
-            {#if s.title}<h3 class="glim-eyebrow">{s.title}</h3>{/if}
+            {#if s.title}
+              <div class="glim-pick-eyebrow">
+                <h3 class="glim-eyebrow">{s.title}</h3>
+                {#if s.badge}<Badge size="small" tone={s.badge.tone}>{s.badge.label}</Badge>{/if}
+                {#if s.hint}<InfoBubble tip={s.hint} />{/if}
+              </div>
+            {/if}
             <ul class="glim-provider-pick">
               {#each s.items as item (item.id)}
-                {#snippet brand()}{#if isTileMark(item.mark)}<BrandMark svg={item.mark.svg} />{/if}{/snippet}
+                {#snippet brand()}{#if isTileMark(item.mark)}<BrandMark svg={item.mark.svg} hover={item.mark.hover} />{/if}{/snippet}
                 <li style={css(pickTileStyle(item.mark))}>
                   <ReadmeButton
                     brand="house"
-                    parts={[{ name: item.label, sub: item.sub, onClick: () => onPick(item.id) }]}
+                    parts={[{ name: item.label, sub: item.sub, onClick: item.status ? undefined : () => onPick(item.id) }]}
+                    soonLabel={item.status}
+                    current={item.id === selected}
                     mark={isTileMark(item.mark) ? brand : (item.mark as Snippet | undefined)}
-                    markClass={isTileMark(item.mark) ? undefined : "glim-house-mark"}
+                    markClass={pickMarkClass(item.mark)}
                     hint={item.hint}
                     tip={item.tip}
                   />

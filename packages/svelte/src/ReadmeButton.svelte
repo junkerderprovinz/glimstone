@@ -23,6 +23,8 @@
     note?: boolean;
     /** The second line of a unit whose first part has neither `href` nor `onClick`. */
     soonLabel?: string;
+    /** Marks the first part as the one chosen, such as a picker's tile picked before. */
+    current?: boolean;
     /** Runs on a click on a part's link, for an app whose webview has no browser
      *  behind it to open the address in. */
     onLinkClick?: (e: MouseEvent) => void;
@@ -42,7 +44,7 @@
   // brand's colour ("Brand tiles"). A link where a part leads to a file or a
   // listing, a button where it does something on the page, and a quiet unit with
   // "Soon" as its second line where the listing does not exist yet.
-  let { brand, parts, mark, markClass, art, hint, tip, note, soonLabel, onLinkClick }: ReadmeButtonProps = $props();
+  let { brand, parts, mark, markClass, art, hint, tip, note, soonLabel, current, onLinkClick }: ReadmeButtonProps = $props();
 
   let root: HTMLDivElement;
   const soon = $derived(readmeSoon(parts));
@@ -60,6 +62,7 @@
     i === 0
       ? {
           "aria-describedby": tooltip.describedBy,
+          "aria-current": current || undefined,
           onmouseenter: tooltip.show,
           onmouseleave: tooltip.hide,
           onfocus: tooltip.showOnFocus,

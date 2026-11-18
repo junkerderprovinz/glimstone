@@ -5,15 +5,17 @@ import {
   isTileMark,
   pageLocale,
   pickerHue,
+  pickFocusTarget,
+  pickMarkClass,
   pickSearchKey,
   pickSections,
   pickTileKey,
   pickTileStyle,
-  windowFocusTarget,
   type PickGroup,
   type PickItem,
   type PickerText,
 } from "@glimstone/core";
+import { Badge } from "./Badge.tsx";
 import { GlyphField } from "./GlyphField.tsx";
 import { IconBack, IconClose, IconSearch } from "./glyphs.tsx";
 import { IconButton } from "./IconButton.tsx";
@@ -28,7 +30,7 @@ import { Window, type WindowAction } from "./Window.tsx";
 // follows: it closes the window, or passes the picked tile's form as children,
 // which takes the tiles' place with Back and the form's actions in the foot.
 
-export type { PickGroup, PickerText, TileMark } from "@glimstone/core";
+export type { PickBadge, PickGroup, PickerText, TileMark } from "@glimstone/core";
 
 export type PickerItem = PickItem<ReactNode>;
 
@@ -51,11 +53,13 @@ export interface PickerWindowProps {
   onBack?: () => void;
   /** A quiet line at the start of the foot, such as the verdict of a test. */
   start?: ReactNode;
+  /** The id of the tile picked before, which stands marked and takes the focus when the tiles show. */
+  selected?: string;
   /** Called for every way out: the foot, Escape and, while the tiles show, a press beside the window. */
   onClose: () => void;
 }
 
-export function PickerWindow({ title, hint, items, groups = [], text, onPick, children, actions = [], onBack, start, onClose }: PickerWindowProps) {
+export function PickerWindow({ title, hint, items, groups = [], text, onPick, children, actions = [], onBack, start, selected, onClose }: PickerWindowProps) {
   const [query, setQuery] = useState("");
   const [hue] = useState(pickerHue);
   const card = useRef<HTMLDivElement>(null);
@@ -64,7 +68,7 @@ export function PickerWindow({ title, hint, items, groups = [], text, onPick, ch
   const form = children !== undefined && children !== null && children !== false;
   useLayoutEffect(() => {
     if (scroll.current) holdPickHeight(scroll.current);
-    if (card.current) windowFocusTarget(card.current)?.focus();
+    if (card.current) pickFocusTarget(card.current, scroll.current)?.focus();
   }, [form]);
   // Back keeps the window open, so it returns false.
   const back: WindowAction = {
@@ -145,15 +149,27 @@ export function PickerWindow({ title, hint, items, groups = [], text, onPick, ch
             ) : (
               sections.map((s) => (
                 <section key={s.id} className="glim-pick-section">
-                  {s.title && <h3 className="glim-eyebrow">{s.title}</h3>}
+                  {s.title && (
+                    <div className="glim-pick-eyebrow">
+                      <h3 className="glim-eyebrow">{s.title}</h3>
+                      {s.badge && (
+                        <Badge size="small" tone={s.badge.tone}>
+                          {s.badge.label}
+                        </Badge>
+                      )}
+                      {s.hint && <InfoBubble tip={s.hint} />}
+                    </div>
+                  )}
                   <ul className="glim-provider-pick">
                     {s.items.map((item) => (
                       <li key={item.id} style={pickTileStyle(item.mark) as CSSProperties | undefined}>
                         <ReadmeButton
                           brand="house"
-                          parts={[{ name: item.label, sub: item.sub, onClick: () => onPick(item.id) }]}
-                          mark={isTileMark(item.mark) ? <BrandMark svg={item.mark.svg} /> : item.mark}
-                          markClass={isTileMark(item.mark) ? undefined : "glim-house-mark"}
+                          parts={[{ name: item.label, sub: item.sub, onClick: item.status ? undefined : () => onPick(item.id) }]}
+                          soonLabel={item.status}
+                          current={item.id === selected}
+                          mark={isTileMark(item.mark) ? <BrandMark svg={item.mark.svg} hover={item.mark.hover} /> : item.mark}
+                          markClass={pickMarkClass(item.mark)}
                           hint={item.hint}
                           tip={item.tip}
                         />

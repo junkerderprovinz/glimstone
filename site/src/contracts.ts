@@ -389,6 +389,10 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "picker-start", when: "The app gives a start line", then: "It stands at the start of the foot, such as the verdict of a test." },
       { id: "picker-hue", when: "The picker opens from a card with a rainbow position", then: "The window wears that card's colour." },
       { id: "picker-escape", keys: ["Escape"], when: "The search holds a query", then: "Escape empties it and the window stays. A second Escape closes it." },
+      { id: "picker-group-badge", when: "A group has a badge or a hint", then: "Both stand in its eyebrow's line, the hint as an (i)." },
+      { id: "picker-status", when: "A tile has a status", then: "It stays in view, disabled, with the status as its second line, and neither a click, Enter nor the arrows pick it." },
+      { id: "picker-selected", when: "The app names the tile picked before and Back leads from its form to the tiles", then: "That tile carries aria-current, a ring in its colour, and the focus." },
+      { id: "picker-mark-hover", when: "A brand's mark brings a hover drawing or a class", then: "The class sits on the mark's box, and the lit tile shows the hover drawing instead of the mark." },
     ],
   },
   Window: {

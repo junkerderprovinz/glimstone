@@ -6,14 +6,16 @@ import {
   isTileMark,
   pageLocale,
   pickerHue,
+  pickFocusTarget,
+  pickMarkClass,
   pickSearchKey,
   pickSections,
   pickTileKey,
   pickTileStyle,
-  windowFocusTarget,
   type PickGroup,
   type PickerText,
 } from "@glimstone/core";
+import Badge from "./Badge.vue";
 import BrandMark from "./BrandMark.vue";
 import GlyphField from "./GlyphField.vue";
 import { IconBack, IconClose, IconSearch } from "./glyphs";
@@ -45,6 +47,8 @@ const props = withDefaults(
     actions?: WindowAction[];
     /** A quiet line at the start of the foot, such as the verdict of a test; the `start` slot takes markup. */
     start?: string;
+    /** The id of the tile picked before, which stands marked and takes the focus when the tiles show. */
+    selected?: string;
   }>(),
   { groups: () => [], actions: () => [] },
 );
@@ -64,12 +68,13 @@ let showing = false;
 onMounted(() => {
   showing = form();
   if (scroll.value) holdPickHeight(scroll.value);
+  if (props.selected && win.value?.card) pickFocusTarget(win.value.card, scroll.value)?.focus();
 });
 onUpdated(() => {
   if (form() === showing) return;
   showing = form();
   if (scroll.value) holdPickHeight(scroll.value);
-  if (win.value?.card) windowFocusTarget(win.value.card)?.focus();
+  if (win.value?.card) pickFocusTarget(win.value.card, scroll.value)?.focus();
 });
 // Back keeps the window open, so it returns false.
 const back = computed<WindowAction>(() => ({
@@ -137,18 +142,24 @@ const onTileKey = (e: KeyboardEvent) => {
         <p v-if="sections.length === 0" class="glim-pick-none">{{ fill(text.none, { query: query.trim() }) }}</p>
         <template v-else>
           <section v-for="s in sections" :key="s.id" class="glim-pick-section">
-            <h3 v-if="s.title" class="glim-eyebrow">{{ s.title }}</h3>
+            <div v-if="s.title" class="glim-pick-eyebrow">
+              <h3 class="glim-eyebrow">{{ s.title }}</h3>
+              <Badge v-if="s.badge" size="small" :tone="s.badge.tone">{{ s.badge.label }}</Badge>
+              <InfoBubble v-if="s.hint" :tip="s.hint" />
+            </div>
             <ul class="glim-provider-pick">
               <li v-for="item in s.items" :key="item.id" :style="pickTileStyle(item.mark)">
                 <ReadmeButton
                   brand="house"
-                  :parts="[{ name: item.label, sub: item.sub, onClick: () => emit('pick', item.id) }]"
-                  :mark-class="isTileMark(item.mark) ? undefined : 'glim-house-mark'"
+                  :parts="[{ name: item.label, sub: item.sub, onClick: item.status ? undefined : () => emit('pick', item.id) }]"
+                  :soon-label="item.status"
+                  :current="item.id === selected"
+                  :mark-class="pickMarkClass(item.mark)"
                   :hint="item.hint"
                   :tip="item.tip"
                 >
                   <template v-if="item.mark" #mark>
-                    <BrandMark v-if="isTileMark(item.mark)" :svg="item.mark.svg" />
+                    <BrandMark v-if="isTileMark(item.mark)" :svg="item.mark.svg" :hover="item.mark.hover" />
                     <component :is="item.mark" v-else />
                   </template>
                 </ReadmeButton>

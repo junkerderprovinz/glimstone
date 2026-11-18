@@ -3,20 +3,35 @@
 // one search across all of them, and the arrow keys across the grid. The app
 // brings the list; nothing here knows what is being picked.
 
+import type { BadgeTone } from "./badge.ts";
 import { focusedAsker } from "./dialog.ts";
 import { readPortalHue } from "./portalHue.ts";
+import { windowFocusTarget } from "./window.ts";
 
 /** A mark kept as markup, with the colours its tile lights up in ("Brand tiles"). Without them the tile lights up in the accent. */
 export interface TileMark {
   svg: string;
   tile?: string;
   ink?: string;
+  /** The mark drawn on the lit tile instead, for a brand whose layers do not survive one ink. */
+  hover?: string;
+  /** The class on the mark's box, where the app paints a mark of its own at rest. */
+  className?: string;
+}
+
+/** How well a group suits the job, as a badge in its eyebrow's line, such as "Best fit". */
+export interface PickBadge {
+  label: string;
+  tone?: BadgeTone;
 }
 
 export interface PickGroup {
   id: string;
   /** The eyebrow over the group's tiles. */
   title: string;
+  badge?: PickBadge;
+  /** What the group's name cannot say, as the (i) in its eyebrow's line. */
+  hint?: string;
 }
 
 /** One tile. `M` is the framework's own kind of glyph, for a choice that has no brand. */
@@ -38,6 +53,8 @@ export interface PickItem<M = unknown> {
   terms?: readonly string[];
   /** The tile that takes anything, such as an address typed by hand, which stands last. */
   last?: boolean;
+  /** Why the tile cannot be picked yet, such as "Needs a direct address", as its second line. The tile stays in view. */
+  status?: string;
 }
 
 export interface PickerText {
@@ -58,6 +75,8 @@ export interface PickerText {
 export interface PickSection<I> {
   id: string;
   title?: string;
+  badge?: PickBadge;
+  hint?: string;
   items: I[];
 }
 
@@ -91,13 +110,24 @@ export function pickSections<I extends PickItem>(
     Number(!!a.last) - Number(!!b.last) || a.label.localeCompare(b.label, lang, { sensitivity: "base" });
   const found = items.filter((item) => pickMatches(query, [item.label, item.sub ?? "", item.id, ...(item.terms ?? [])]));
   const known = new Set(groups.map((g) => g.id));
-  const sections: PickSection<I>[] = groups.map((g) => ({ id: g.id, title: g.title, items: found.filter((i) => i.group === g.id) }));
+  const sections: PickSection<I>[] = groups.map((g) => ({
+    id: g.id,
+    title: g.title,
+    badge: g.badge,
+    hint: g.hint,
+    items: found.filter((i) => i.group === g.id),
+  }));
   sections.push({ id: "", title: undefined, items: found.filter((i) => i.group === undefined || !known.has(i.group)) });
   return sections.filter((s) => s.items.length > 0).map((s) => ({ ...s, items: s.items.sort(order) }));
 }
 
 export function isTileMark(mark: unknown): mark is TileMark {
   return typeof mark === "object" && mark !== null && typeof (mark as TileMark).svg === "string";
+}
+
+/** The class on a tile's mark box: the one a brand's mark brings, or the house mark's for one of the app's glyphs. */
+export function pickMarkClass(mark: unknown): string | undefined {
+  return isTileMark(mark) ? mark.className : "glim-house-mark";
 }
 
 /** The colour pair a brand's tile hands down to `.glim-provider-pick`, or nothing for the accent. */
@@ -144,6 +174,11 @@ export function pickKey(key: string, from: number, boxes: readonly PickBox[], rt
 }
 
 const TILE = ".glim-provider-pick button.glim-readme-btn";
+
+/** Where the focus goes when the tiles show: the tile picked before, or the window's first stop. */
+export function pickFocusTarget(card: HTMLElement, list: HTMLElement | null): HTMLElement | null {
+  return list?.querySelector<HTMLElement>(`${TILE}[aria-current="true"]`) ?? windowFocusTarget(card);
+}
 
 /**
  * Handles a key on a tile of the picker's `list`: moves the focus across the
