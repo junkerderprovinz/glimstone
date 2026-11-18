@@ -2,16 +2,19 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 4.5.8 - 2026-11-19
 
 A picker group can say how well it suits the job, a tile can wait in plain view, and the last pick stays marked.
 
 **Adopting apps:**
 
+- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.5.8, all packages at the same number.
 - **A rating for a group:** give `PickGroup` a `badge` with a `label` and one of the badge tones, and a `hint` for its (i). Both stand in the eyebrow's line.
 - **A choice that is not ready yet:** give the item a `status` instead of leaving it out. The tile stays in view with that word as its second line and cannot be picked.
 - **Back to the tiles from a form:** pass the last pick as `selected`, and that tile is marked and takes the focus.
 - **A logo that loses its layers on the lit tile:** give its `TileMark` a `hover` drawing, and a `className` for the box where the app paints the mark at rest.
+- **Flutter:** move the git dependency to `ref: v4.5.8`. Nothing else changes there.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.5.8.
 
 ## ✨ Added
 
