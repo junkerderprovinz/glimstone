@@ -12,6 +12,7 @@ export const CHANNEL_GROUPS: PickGroup[] = [
 export const CHANNEL_TEXT: PickerText = {
   search: "Search services",
   none: "Nothing matches “{query}”. A webhook reaches almost anything.",
+  clear: "Clear the search",
   close: "Close",
   cancel: "Cancel",
   back: "Back",
@@ -37,10 +38,14 @@ const SERVICES: { id: ServiceMarkId; label: string; hint: string; terms?: string
 export function channelItems<M>(mail: M, link: M) {
   return [
     ...SERVICES.map((s) => ({ ...s, group: "services", mark: SERVICE_MARKS[s.id] })),
-    { id: "smtp", label: "Email", group: "standards", hint: "Sends each message as an email through your own mail server.", terms: ["mail"], mark: mail },
-    { id: "webhook", label: "Webhook", group: "standards", hint: "Sends each message to any address that takes a request.", last: true, mark: link },
+    { id: "smtp", label: "Email", sub: "SMTP", group: "standards", hint: "Sends each message as an email through your own mail server.", terms: ["mail"], mark: mail },
+    { id: "webhook", label: "Webhook", group: "standards", tip: "Any address that takes a request", last: true, mark: link },
   ];
 }
+
+/** What the form demo's test answers: an address on https is reached, after a moment. */
+export const testAddress = (address: string) =>
+  new Promise<boolean>((done) => setTimeout(() => done(address.startsWith("https://")), 400));
 
 export const labelOf = (id: string) => LABELS.get(id) ?? id;
 

@@ -1065,6 +1065,7 @@ function PickerWindowDemo() {
           text={{
             search: t("Search services", "Dienste suchen"),
             none: t("Nothing matches “{query}”.", "Nichts passt zu „{query}“."),
+            clear: t("Clear the search", "Suche leeren"),
             close: t("Close", "Schließen"),
             cancel: t("Cancel", "Abbrechen"),
             back: t("Back", "Zurück"),

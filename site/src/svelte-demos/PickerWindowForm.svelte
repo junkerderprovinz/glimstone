@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { Button, FieldRow, PickerWindow, TextField } from "@glimstone/svelte";
-  import { CHANNEL_GROUPS, CHANNEL_TEXT, channelItems, labelOf } from "../channelData";
+  import { Button, Card, FieldRow, PickerWindow, TextField } from "@glimstone/svelte";
+  import { CHANNEL_GROUPS, CHANNEL_TEXT, channelItems, labelOf, testAddress } from "../channelData";
   import { glyph } from "../svelte/glyph";
 
   const ITEMS = channelItems(glyph("IconMail"), glyph("IconLink"));
@@ -8,10 +8,17 @@
   let open = $state(false);
   let picked = $state<string | null>(null);
   let address = $state("");
+  let testing = $state(false);
+  let reached = $state<boolean | null>(null);
   let saved = $state("Nothing saved yet");
-  function close() {
-    open = false;
+  function back() {
     picked = null;
+    reached = null;
+  }
+  async function test() {
+    testing = true;
+    reached = await testAddress(address);
+    testing = false;
   }
 </script>
 
@@ -21,9 +28,11 @@
   </FieldRow>
 {/snippet}
 
-<div style="display: flex; align-items: center; gap: 12px">
-  <Button label="Connect a service" labelKey="add" onClick={() => (open = true)} />
-  <output>{saved}</output>
+<Card title="Storage" hueIndex={2}>
+  <div style="display: flex; align-items: center; gap: 12px">
+    <Button label="Connect a service" labelKey="add" onClick={() => (open = true)} />
+    <output>{saved}</output>
+  </div>
   {#if open}
     <PickerWindow
       title={picked ? labelOf(picked) : "Connect a service"}
@@ -33,6 +42,17 @@
       onPick={(id) => (picked = id)}
       actions={[
         {
+          label: "Test connection",
+          labelKey: "confirm",
+          tone: reached === null ? undefined : reached ? "ok" : "danger",
+          busy: testing,
+          title: reached === null ? undefined : reached ? "Reached" : "Not reached",
+          onClick: () => {
+            void test();
+            return false;
+          },
+        },
+        {
           label: "Save",
           labelKey: "save",
           primary: true,
@@ -41,9 +61,12 @@
           },
         },
       ]}
-      onBack={() => (picked = null)}
-      onClose={close}
+      onBack={back}
+      onClose={() => {
+        open = false;
+        back();
+      }}
       children={picked ? form : undefined}
     />
   {/if}
-</div>
+</Card>

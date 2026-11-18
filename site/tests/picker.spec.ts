@@ -34,7 +34,7 @@ test.describe("PickerWindow", () => {
       );
     expect(sections).toEqual([
       { title: "Services", names: ["Apprise", "Discord", "Gotify", "Healthchecks.io", "Matrix", "ntfy", "Shoutrrr", "Slack"] },
-      { title: "Email and webhooks", names: ["Email", "Webhook"] },
+      { title: "Email and webhooks", names: ["Email SMTP", "Webhook"] },
     ]);
   });
 
@@ -47,7 +47,8 @@ test.describe("PickerWindow", () => {
       await expect(tile).toHaveAttribute("type", "button");
       await expect(tile.locator(".glim-readme-btn-mark svg")).toHaveCount(1);
     }
-    await expect(picker(page).locator(".glim-provider-pick li .glim-readme-btn-hint .glim-info-icon")).toHaveCount(count);
+    // Every tile but the webhook's, which carries a tooltip instead.
+    await expect(picker(page).locator(".glim-provider-pick li .glim-readme-btn-hint .glim-info-icon")).toHaveCount(count - 1);
     await expect(picker(page)).not.toContainText("Pushes each message");
   });
 
@@ -68,16 +69,16 @@ test.describe("PickerWindow", () => {
       probe.remove();
       return colour;
     });
-    expect(await fill("Email")).toBe(accent);
+    expect(await fill("Email SMTP")).toBe(accent);
   });
 
   test("[picker-search] the search narrows every group at once, by name, id and own words, and the window keeps its height", async ({ page }) => {
     await show(page);
     const height = await picker(page).evaluate((card) => card.getBoundingClientRect().height);
     await search(page).fill("mail");
-    await expect.poll(() => names(page)).toEqual(["Email"]);
+    await expect.poll(() => names(page)).toEqual(["Email SMTP"]);
     await search(page).fill("smtp");
-    await expect.poll(() => names(page)).toEqual(["Email"]);
+    await expect.poll(() => names(page)).toEqual(["Email SMTP"]);
     await search(page).fill("pushover");
     await expect.poll(() => names(page)).toEqual(["Shoutrrr"]);
     expect(await picker(page).evaluate((card) => card.getBoundingClientRect().height)).toBeCloseTo(height, 0);
@@ -135,7 +136,7 @@ test.describe("PickerWindow", () => {
     await expect(address).toBeFocused();
     await expect(form.locator(".glim-field-row-label")).toHaveText("Address");
     await expect(form.locator(".glim-provider-pick")).toHaveCount(0);
-    await expect(form.locator(".glim-modal-foot button")).toHaveText(["Cancel", "Back", "Save"]);
+    await expect(form.locator(".glim-modal-foot button")).toHaveText(["Cancel", "Back", "Test connection", "Save"]);
     await form.getByRole("button", { name: "Back" }).click();
     const again = page.getByRole("dialog", { name: "Connect a service" });
     await expect(again.getByRole("searchbox", { name: "Search services" })).toHaveValue("got");
@@ -145,6 +146,105 @@ test.describe("PickerWindow", () => {
     await page.getByRole("dialog", { name: "Gotify" }).getByRole("button", { name: "Save" }).click();
     await expect(page.getByRole("dialog")).toHaveCount(0);
     await expect(stage(page, "PickerWindowForm").locator("output")).toHaveText("Saved: Gotify at https://push.example.org");
+  });
+
+  test("[picker-sub] a tile's second line names what kind of thing it is, under the pointer", async ({ page }) => {
+    await show(page);
+    const email = picker(page).getByRole("button", { name: "Email SMTP", exact: true });
+    await expect(email.locator(".glim-readme-btn-name")).toHaveText("Email");
+    await expect(email.locator(".glim-readme-btn-sub")).toHaveText("SMTP");
+  });
+
+  test("[picker-tip] a tile with a tooltip shows it under the pointer and carries no (i)", async ({ page }) => {
+    await show(page);
+    const webhook = picker(page).getByRole("button", { name: "Webhook", exact: true });
+    await expect(webhook.locator("xpath=ancestor::li").locator(".glim-info-icon")).toHaveCount(0);
+    await webhook.hover();
+    await expect(page.getByRole("tooltip")).toHaveText("Any address that takes a request");
+  });
+
+  test("[picker-search-clear] the search empties with a button of its own, and the browser's is hidden", async ({ page }) => {
+    await show(page);
+    const clear = picker(page).getByRole("button", { name: "Clear the search" });
+    await expect(clear).toHaveCount(0);
+    await search(page).fill("slack");
+    await expect(clear).toBeVisible();
+    await clear.click();
+    await expect(search(page)).toHaveValue("");
+    await expect(search(page)).toBeFocused();
+    await expect(tiles(page)).toHaveCount(10);
+    expect(await search(page).evaluate((el) => getComputedStyle(el).textOverflow)).toBe("ellipsis");
+    // Chromium draws a clear button of its own and computes no style for it, so the rule that hides it is read instead.
+    test.skip(test.info().project.use.browserName !== "chromium", "Only Chromium draws its own clear button");
+    const hidden = await page.evaluate(() => {
+      const rules = (list: CSSRuleList): CSSRule[] => [...list].flatMap((r) => ("cssRules" in r ? [r, ...rules((r as CSSGroupingRule).cssRules)] : [r]));
+      return [...document.styleSheets]
+        .flatMap((sheet) => rules(sheet.cssRules))
+        .some((r) => r instanceof CSSStyleRule && r.selectorText.includes(".glim-pick-search") && r.selectorText.includes("search-cancel-button") && r.style.display === "none");
+    });
+    expect(hidden).toBe(true);
+  });
+
+  test("[picker-search-fits] a long placeholder ends in an ellipsis inside the field rather than being cut", async ({ page }) => {
+    await show(page);
+    const field = picker(page).locator(".glim-pick-search");
+    const box = await field.boundingBox();
+    const card = await picker(page).boundingBox();
+    expect(box!.x + box!.width).toBeLessThanOrEqual(card!.x + card!.width);
+    await search(page).evaluate((el) => ((el as HTMLInputElement).placeholder = "Speicher und Clouds durchsuchen, auch die ganz entlegenen"));
+    expect(await search(page).evaluate((el) => getComputedStyle(el).textOverflow)).toBe("ellipsis");
+  });
+
+  test("[picker-form-backdrop] a press beside the form leaves it open, a press beside the tiles closes the window", async ({ page }) => {
+    await open(page, "/components/picker-window");
+    await stage(page, "PickerWindowForm").getByRole("button", { name: "Connect a service" }).click();
+    await page.getByRole("dialog").getByRole("button", { name: "Gotify", exact: true }).click();
+    await page.getByRole("dialog", { name: "Gotify" }).getByRole("textbox", { name: "Address" }).fill("https://push.example.org");
+    await page.mouse.click(8, 8);
+    await expect(page.getByRole("dialog", { name: "Gotify" })).toBeVisible();
+    await expect(page.getByRole("dialog", { name: "Gotify" }).getByRole("textbox", { name: "Address" })).toHaveValue("https://push.example.org");
+    await page.getByRole("dialog").getByRole("button", { name: "Back" }).click();
+    await page.mouse.click(8, 8);
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+  });
+
+  test("[picker-form-width] the form narrows to a form's width around the same middle", async ({ page }) => {
+    await open(page, "/components/picker-window", { motion: "off" });
+    await stage(page, "PickerWindowForm").getByRole("button", { name: "Connect a service" }).click();
+    const tilesBox = (await page.getByRole("dialog").boundingBox())!;
+    await page.getByRole("dialog").getByRole("button", { name: "Gotify", exact: true }).click();
+    await expect.poll(async () => (await page.getByRole("dialog", { name: "Gotify" }).boundingBox())!.width).toBeLessThan(tilesBox.width - 64);
+    const formBox = (await page.getByRole("dialog", { name: "Gotify" }).boundingBox())!;
+    expect(formBox.x + formBox.width / 2).toBeCloseTo(tilesBox.x + tilesBox.width / 2, 0);
+  });
+
+  test("[picker-hue] a picker opened from a card wears the card's rainbow colour", async ({ page }) => {
+    await open(page, "/components/picker-window", { rainbow: "on" });
+    const opener = stage(page, "PickerWindowForm").getByRole("button", { name: "Connect a service" });
+    const cardAccent = await opener.evaluate((el) => getComputedStyle(el).getPropertyValue("--accent").trim());
+    await opener.click();
+    const dialog = page.getByRole("dialog");
+    await expect(dialog).toHaveClass(/glim-hue/);
+    expect(await dialog.evaluate((el) => getComputedStyle(el).getPropertyValue("--accent").trim())).toBe(cardAccent);
+  });
+
+  test("[window-action-state] a foot button runs with a ring, keeps its width, and turns green when it worked", async ({ page }) => {
+    await open(page, "/components/picker-window");
+    await stage(page, "PickerWindowForm").getByRole("button", { name: "Connect a service" }).click();
+    await page.getByRole("dialog").getByRole("button", { name: "Gotify", exact: true }).click();
+    const form = page.getByRole("dialog", { name: "Gotify" });
+    await form.getByRole("textbox", { name: "Address" }).fill("https://push.example.org");
+    const button = form.getByRole("button", { name: "Test connection" });
+    const width = (await button.boundingBox())!.width;
+    await button.click();
+    await expect(button).toHaveAttribute("aria-busy", "true");
+    expect((await button.boundingBox())!.width).toBeCloseTo(width, 0);
+    await expect(button).not.toHaveAttribute("aria-busy", "true");
+    await expect(button).toHaveClass(/glim-btn--ok/);
+    await expect(form).toBeVisible();
+    await form.getByRole("textbox", { name: "Address" }).fill("http://plain.example.org");
+    await button.click();
+    await expect(button).toHaveClass(/glim-btn--danger/);
   });
 
   test("[picker-escape] Escape empties the search first and closes the window from an empty one", async ({ page }) => {

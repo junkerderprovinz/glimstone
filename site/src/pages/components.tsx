@@ -1012,7 +1012,7 @@ import { SERVICE_MARKS } from "@glimstone/core/serviceMarks";
       { id: "gotify", label: "Gotify", group: "services", mark: SERVICE_MARKS.gotify, hint: t("gotifyHint") },
       { id: "smtp", label: "Email", group: "standards", mark: <IconMail />, terms: ["mail"] },
     ]}
-    text={{ search: "Search services", none: "Nothing matches “{query}”.", close: t("close"), cancel: t("cancel"), back: t("back") }}
+    text={{ search: "Search services", none: "Nothing matches “{query}”.", clear: t("clear"), close: t("close"), cancel: t("cancel"), back: t("back") }}
     onPick={(id) => { setOpen(false); addChannel(id); }}
     onClose={() => setOpen(false)}
   />
@@ -1021,9 +1021,10 @@ import { SERVICE_MARKS } from "@glimstone/core/serviceMarks";
       <H2>What the app passes in</H2>
       <ul>
         <li>
-          <code>items</code>: one entry per tile, with its <code>id</code>, the <code>label</code> it shows, and where it
-          applies a <code>group</code>, a <code>hint</code> for its info bubble, the <code>terms</code> the search
-          should also find it by, and <code>last</code> for the tile that takes anything.
+          <code>items</code>: one entry per tile, with its <code>id</code>, the short <code>label</code> it shows, and
+          where it applies a <code>sub</code> for the second line under the pointer, a <code>group</code>, a{" "}
+          <code>hint</code> for its info bubble or a <code>tip</code> for a tooltip without one, the <code>terms</code>{" "}
+          the search should also find it by, and <code>last</code> for the tile that takes anything.
         </li>
         <li>
           <code>mark</code>: a brand's mark from <code>@glimstone/core/serviceMarks</code>, or any other{" "}
@@ -1041,9 +1042,12 @@ import { SERVICE_MARKS } from "@glimstone/core/serviceMarks";
       </ul>
       <H2>A form after the pick</H2>
       <p>
-        When a pick needs a few fields first, the app passes them as <code>children</code> and its forward button in{" "}
-        <code>actions</code>. The form takes the tiles' place, and Cancel and Back join the foot. Back calls{" "}
-        <code>onBack</code>, and the tiles come back with the search as it was.
+        When a pick needs a few fields first, the app passes them as <code>children</code> and its buttons in{" "}
+        <code>actions</code>. The form takes the tiles' place, the window narrows to a form's width, and Cancel and Back
+        join the foot. Back calls <code>onBack</code>, and the tiles come back with the search as it was. A press beside
+        the window leaves a form open, so nothing typed is lost. An action such as Test connection can show{" "}
+        <code>busy</code> while it runs and turn <code>ok</code> or <code>danger</code> with <code>tone</code> when it
+        knows, and its <code>title</code> says how it came out.
       </p>
       <Demo name="PickerWindowForm" />
       <H2>The marks</H2>
@@ -1059,6 +1063,7 @@ import { SERVICE_MARKS } from "@glimstone/core/serviceMarks";
         <li>The search stands open at the top end. It finds a tile by its name, its id and its own words, across every group at once.</li>
         <li>While a query narrows the tiles, the window keeps its height, so the field does not move away from the eye.</li>
         <li>Under the pointer a brand's tile fills with the brand's colour, and any other tile with the accent.</li>
+        <li>Opened from a card, the window wears the card's rainbow colour, as a list opened from it does.</li>
         <li>While the tiles show, the foot holds only the way out. What follows a pick is the app's: it closes the window, or shows the tile's form in it.</li>
       </ul>
       <H2>Keyboard</H2>
