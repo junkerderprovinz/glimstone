@@ -1066,6 +1066,8 @@ function PickerWindowDemo() {
             search: t("Search services", "Dienste suchen"),
             none: t("Nothing matches “{query}”.", "Nichts passt zu „{query}“."),
             close: t("Close", "Schließen"),
+            cancel: t("Cancel", "Abbrechen"),
+            back: t("Back", "Zurück"),
           }}
           onPick={() => setOpen(false)}
           onClose={() => setOpen(false)}
