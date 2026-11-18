@@ -38,7 +38,9 @@ function press(action: WindowAction) {
       :label="a.label"
       :label-key="a.labelKey"
       :glyph="a.glyph"
-      :tone="a.primary ? 'accent' : 'neutral'"
+      :tone="a.tone ?? (a.primary ? 'accent' : 'neutral')"
+      :busy="a.busy"
+      :title="a.title"
       :disabled="a.disabled"
       @click="press(a)"
     />

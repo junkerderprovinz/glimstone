@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { windowFoot } from "@glimstone/core";
+import { windowFoot, type ButtonTone } from "@glimstone/core";
 import { Button } from "./Button.tsx";
 import { IconCancel, IconClose } from "./glyphs.tsx";
 
@@ -16,6 +16,12 @@ export interface WindowAction {
   /** This action already leaves the window, so no Cancel or Close is added. */
   wayOut?: boolean;
   disabled?: boolean;
+  /** Its fill once it has run, such as `ok` or `danger`, in place of the accent or the neutral grey. */
+  tone?: ButtonTone;
+  /** The busy ring in place of the glyph while it runs. The words, and so the width, stay. */
+  busy?: boolean;
+  /** What changes, such as how a test came out, in the button's bubble. */
+  title?: string;
   /** Attributes for the action's button, such as a data hook. */
   attrs?: Record<string, string>;
   /** Runs on press. The window closes afterwards unless it returns false. */
@@ -48,7 +54,9 @@ export function WindowFootRow({
           label={a.label}
           labelKey={a.labelKey}
           glyph={a.glyph}
-          tone={a.primary ? "accent" : "neutral"}
+          tone={a.tone ?? (a.primary ? "accent" : "neutral")}
+          busy={a.busy}
+          title={a.title}
           disabled={a.disabled}
           onClick={() => {
             if (a.onClick?.() !== false) onClose();

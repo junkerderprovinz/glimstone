@@ -28,6 +28,9 @@ export interface WindowProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, "t
   size?: WindowSize;
   /** The words of the way out the window adds. */
   text: { cancel: string; close: string };
+  /** Off while the window holds typed input, which a stray press beside the
+   *  card would throw away. Escape and the foot still close it. */
+  closeOnBackdrop?: boolean;
   /** Called for every way out: the foot, Escape and a press beside the window. */
   onClose: () => void;
   class?: string;
@@ -36,8 +39,8 @@ export interface WindowProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, "t
 }
 
 export function Window(props: WindowProps) {
-  const merged = mergeProps({ actions: [], size: "normal" }, props);
-  const [own, rest] = splitProps(merged, ["title", "drawn", "children", "actions", "start", "size", "text", "onClose", "class", "ref"]);
+  const merged = mergeProps({ actions: [], size: "normal", closeOnBackdrop: true }, props);
+  const [own, rest] = splitProps(merged, ["title", "drawn", "children", "actions", "start", "size", "text", "closeOnBackdrop", "onClose", "class", "ref"]);
   const drawn = children(() => own.drawn);
   let card: HTMLDivElement | undefined;
   const titleId = createUniqueId();
@@ -66,7 +69,7 @@ export function Window(props: WindowProps) {
         class="glim-modal-backdrop"
         // A press beside an open menu only closes the menu, not the window under it.
         onMouseDown={(e) => {
-          if (e.target === e.currentTarget && !menuIsOpen()) leave();
+          if (own.closeOnBackdrop && e.target === e.currentTarget && !menuIsOpen()) leave();
         }}
       >
         <div

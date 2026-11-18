@@ -34,8 +34,11 @@ const props = withDefaults(
     size?: WindowSize;
     /** The words of the way out the window adds. */
     text: { cancel: string; close: string };
+    /** Off while the window holds typed input, which a stray press beside the
+     *  card would throw away. Escape and the foot still close it. */
+    closeOnBackdrop?: boolean;
   }>(),
-  { actions: () => [], size: "normal" },
+  { actions: () => [], size: "normal", closeOnBackdrop: true },
 );
 const emit = defineEmits<{ close: [] }>();
 const slots = useSlots();
@@ -66,7 +69,7 @@ defineExpose({ card });
 
 // A press beside an open menu only closes the menu, not the window under it.
 function pressBeside() {
-  if (!menuIsOpen()) leave();
+  if (props.closeOnBackdrop && !menuIsOpen()) leave();
 }
 </script>
 

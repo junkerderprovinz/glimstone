@@ -36,6 +36,9 @@ export interface WindowProps extends Omit<HTMLAttributes<HTMLDivElement>, "title
   size?: WindowSize;
   /** The words of the way out the window adds. */
   text: { cancel: string; close: string };
+  /** Off while the window holds typed input, which a stray press beside the
+   *  card would throw away. Escape and the foot still close it. */
+  closeOnBackdrop?: boolean;
   /** Called for every way out: the foot, Escape and a press beside the window. */
   onClose: () => void;
   className?: string;
@@ -43,7 +46,7 @@ export interface WindowProps extends Omit<HTMLAttributes<HTMLDivElement>, "title
   ref?: Ref<HTMLDivElement>;
 }
 
-export function Window({ title, drawn, children, actions = [], start, size = "normal", text, onClose, className, ref, ...rest }: WindowProps) {
+export function Window({ title, drawn, children, actions = [], start, size = "normal", text, closeOnBackdrop = true, onClose, className, ref, ...rest }: WindowProps) {
   const card = useRef<HTMLDivElement>(null);
   useImperativeHandle(ref, () => card.current!);
   const titleId = useId();
@@ -75,7 +78,7 @@ export function Window({ title, drawn, children, actions = [], start, size = "no
       className="glim-modal-backdrop"
       // A press beside an open menu only closes the menu, not the window under it.
       onMouseDown={(e) => {
-        if (e.target === e.currentTarget && !menuIsOpen()) leave();
+        if (closeOnBackdrop && e.target === e.currentTarget && !menuIsOpen()) leave();
       }}
     >
       <div
