@@ -1,9 +1,9 @@
 <script lang="ts">
   import { Button, Card, FieldRow, PickerWindow, TextField } from "@glimstone/svelte";
-  import { CHANNEL_GROUPS, CHANNEL_TEXT, channelItems, labelOf, testAddress } from "../channelData";
+  import { CHANNEL_TEXT, channelPicker, labelOf, testAddress } from "../channelData";
   import { glyph } from "../svelte/glyph";
 
-  const ITEMS = channelItems(glyph("IconMail"), glyph("IconLink"));
+  const { items, groups } = channelPicker(glyph);
 
   let open = $state(false);
   let picked = $state<string | null>(null);
@@ -36,8 +36,8 @@
   {#if open}
     <PickerWindow
       title={picked ? labelOf(picked) : "Connect a service"}
-      items={ITEMS}
-      groups={CHANNEL_GROUPS}
+      {items}
+      {groups}
       text={CHANNEL_TEXT}
       onPick={(id) => (picked = id)}
       start={reached === null ? undefined : reached ? "Reached" : "Not reached"}

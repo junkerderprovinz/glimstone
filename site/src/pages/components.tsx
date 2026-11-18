@@ -1098,6 +1098,13 @@ const { items, groups } = catalogPicker(STORAGE_PROVIDERS, {
         app's to translate. Every mark's source and licence is in <code>storage-marks/</code>, and{" "}
         <code>scripts/gen_storage_marks.py</code> writes them.
       </p>
+      <p>
+        <code>NOTIFY_PROVIDERS</code> in <code>@glimstone/core/notifyProviders</code> holds the notification services,
+        then email and webhooks, and wears the marks of <code>SERVICE_MARKS</code>. The channel windows above pick from
+        it: they pass the ids they send to, a hint per tile through <code>own</code>, and the webhook's tooltip with{" "}
+        <code>last</code>, since it takes anything. A service reached only through Shoutrrr, such as Telegram, is a word
+        the Shoutrrr tile is found by rather than a tile of its own.
+      </p>
       <H2>Rules</H2>
       <ul>
         <li>The tiles stand in their groups, each in alphabetical order for the page's language, with the tile that takes anything last.</li>

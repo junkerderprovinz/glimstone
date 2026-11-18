@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { Button, PickerWindow } from "@glimstone/vue";
-import { CHANNEL_GROUPS, CHANNEL_TEXT, channelItems, pickedLine } from "../channelData";
+import { CHANNEL_TEXT, channelPicker, pickedLine } from "../channelData";
 import { glyph } from "../vue/glyph";
 
-const ITEMS = channelItems(glyph("IconMail"), glyph("IconLink"));
+const { items, groups } = channelPicker(glyph);
 
 const open = ref(false);
 const picked = ref<string[]>([]);
@@ -22,8 +22,8 @@ function pick(id: string) {
       v-if="open"
       title="Add a channel"
       hint="Where a message goes. Pick a service, then fill in its few fields."
-      :items="ITEMS"
-      :groups="CHANNEL_GROUPS"
+      :items="items"
+      :groups="groups"
       :text="CHANNEL_TEXT"
       @pick="pick"
       @close="open = false"

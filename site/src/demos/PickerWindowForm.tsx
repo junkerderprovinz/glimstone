@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Button, Card, FieldRow, PickerWindow, TextField } from "@glimstone/react";
-import { CHANNEL_GROUPS, CHANNEL_TEXT, channelItems, labelOf, testAddress } from "../channelData";
+import { CHANNEL_TEXT, channelPicker, labelOf, testAddress } from "../channelData";
 import { Glyph } from "../glyph";
 
-const ITEMS = channelItems(<Glyph name="IconMail" />, <Glyph name="IconLink" />);
+const { items, groups } = channelPicker((name) => <Glyph name={name} />);
 
 export default function PickerWindowForm() {
   const [open, setOpen] = useState(false);
@@ -30,8 +30,8 @@ export default function PickerWindowForm() {
       {open && (
         <PickerWindow
           title={picked ? labelOf(picked) : "Connect a service"}
-          items={ITEMS}
-          groups={CHANNEL_GROUPS}
+          items={items}
+          groups={groups}
           text={CHANNEL_TEXT}
           onPick={setPicked}
           start={reached === null ? undefined : reached ? "Reached" : "Not reached"}

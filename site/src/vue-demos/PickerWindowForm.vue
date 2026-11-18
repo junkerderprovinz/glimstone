@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { Button, Card, FieldRow, PickerWindow, TextField } from "@glimstone/vue";
-import { CHANNEL_GROUPS, CHANNEL_TEXT, channelItems, labelOf, testAddress } from "../channelData";
+import { CHANNEL_TEXT, channelPicker, labelOf, testAddress } from "../channelData";
 import { glyph } from "../vue/glyph";
 
-const ITEMS = channelItems(glyph("IconMail"), glyph("IconLink"));
+const { items, groups } = channelPicker(glyph);
 
 const open = ref(false);
 const picked = ref<string | null>(null);
@@ -57,8 +57,8 @@ const actions = computed(() => [
     <PickerWindow
       v-if="open"
       :title="picked ? labelOf(picked) : 'Connect a service'"
-      :items="ITEMS"
-      :groups="CHANNEL_GROUPS"
+      :items="items"
+      :groups="groups"
       :text="CHANNEL_TEXT"
       :actions="actions"
       :start="reached === null ? undefined : reached ? 'Reached' : 'Not reached'"
