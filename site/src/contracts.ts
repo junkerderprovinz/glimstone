@@ -385,6 +385,8 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "picker-search-fits", when: "The placeholder is longer than the field", then: "It ends in an ellipsis inside the field." },
       { id: "picker-form-backdrop", when: "A press lands beside the window", then: "During a form it stays open with what was typed; with the tiles it closes." },
       { id: "picker-form-width", when: "The form takes the tiles' place", then: "The window narrows to a form's width around the same middle, without a jump." },
+      { id: "picker-form-scroll", when: "The form is taller than the window", then: "The window's body scrolls under its notch and above its foot; only the tiles hold their height." },
+      { id: "picker-start", when: "The app gives a start line", then: "It stands at the start of the foot, such as the verdict of a test." },
       { id: "picker-hue", when: "The picker opens from a card with a rainbow position", then: "The window wears that card's colour." },
       { id: "picker-escape", keys: ["Escape"], when: "The search holds a query", then: "Escape empties it and the window stays. A second Escape closes it." },
     ],

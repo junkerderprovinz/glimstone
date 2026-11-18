@@ -40,6 +40,7 @@
       groups={CHANNEL_GROUPS}
       text={CHANNEL_TEXT}
       onPick={(id) => (picked = id)}
+      start={reached === null ? undefined : reached ? "Reached" : "Not reached"}
       actions={[
         {
           label: "Test connection",

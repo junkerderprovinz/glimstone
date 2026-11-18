@@ -2,6 +2,23 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+A long form after a pick scrolls inside the picker window, and the picker's foot takes a start line.
+
+**Adopting apps:**
+
+- **A form of your own that scrolls itself:** drop the scroll box around it. The window's body scrolls during the form step, as any window's does.
+- **A verdict beside the foot's buttons:** pass it as `start` to `PickerWindow`, or in the `start` slot in Vue, instead of handing it through to the window yourself.
+
+## ✨ Added
+
+- **`PickerWindow` takes `start`**, the quiet line at the start of its foot, in React, Vue, Solid and Svelte.
+
+## 🐛 Fixed
+
+- **A long form after a pick is no longer cut off.** The window's body scrolls during the form step, and only the tiles hold their height with the search above them.
+
 ## 4.5.6 - 2026-11-18
 
 The picker window learns what the pickers it replaces could do: a form after the pick that stays open and narrow, foot buttons that show how a test went, and tiles with a second line or a tooltip.

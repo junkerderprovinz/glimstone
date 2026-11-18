@@ -247,6 +247,27 @@ test.describe("PickerWindow", () => {
     await expect(button).toHaveClass(/glim-btn--danger/);
   });
 
+  test("[picker-form-scroll] a form scrolls inside the window like any window's body, and the tiles hold their height", async ({ page }) => {
+    await open(page, "/components/picker-window");
+    await stage(page, "PickerWindowForm").getByRole("button", { name: "Connect a service" }).click();
+    const body = page.getByRole("dialog").locator(".glim-window-body");
+    expect(await body.evaluate((el) => getComputedStyle(el).overflowY)).toBe("hidden");
+    await page.getByRole("dialog").getByRole("button", { name: "Gotify", exact: true }).click();
+    const formBody = page.getByRole("dialog", { name: "Gotify" }).locator(".glim-window-body");
+    expect(await formBody.evaluate((el) => getComputedStyle(el).overflowY)).toBe("auto");
+  });
+
+  test("[picker-start] the foot's start line carries what the app puts there, such as a test's verdict", async ({ page }) => {
+    await open(page, "/components/picker-window");
+    await stage(page, "PickerWindowForm").getByRole("button", { name: "Connect a service" }).click();
+    await page.getByRole("dialog").getByRole("button", { name: "Gotify", exact: true }).click();
+    const form = page.getByRole("dialog", { name: "Gotify" });
+    await expect(form.locator(".glim-window-start")).toHaveCount(0);
+    await form.getByRole("textbox", { name: "Address" }).fill("https://push.example.org");
+    await form.getByRole("button", { name: "Test connection" }).click();
+    await expect(form.locator(".glim-modal-foot > .glim-window-start")).toHaveText("Reached");
+  });
+
   test("[picker-escape] Escape empties the search first and closes the window from an empty one", async ({ page }) => {
     await show(page);
     await search(page).fill("slack");
