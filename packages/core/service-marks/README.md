@@ -1,10 +1,13 @@
 # The notification services' marks, and where they come from
 
-`scripts/gen_service_marks.py` turns these files, and three marks from Simple
+`scripts/gen_service_marks.py` turns these files, and four marks from Simple
 Icons, into `src/serviceMarks.ts`: each mark as markup for `BrandMark`, with the
-colour its tile lights up in ("Brand tiles" in the design language). An app
-imports them from `@glimstone/core/serviceMarks` and passes the one it means by
-id, `SERVICE_MARKS.gotify`. The picker never chooses a mark by a service's name.
+colour its tile lights up in ("Brand tiles" in the design language). The
+notification catalog in `src/notifyProviders.ts` names the mark each service
+wears, and an app reaches it through `@glimstone/core/notifyProviders`. An app
+that draws its own tiles imports the marks from `@glimstone/core/serviceMarks`
+and passes the one it means by id, `SERVICE_MARKS.gotify`. The picker never
+chooses a mark by a service's name.
 
 The files are reproduced as drawn, gradients, groups and all, because a mark
 drawn in several tones is several tones, and flattening one would be redrawing
@@ -18,8 +21,8 @@ swallow becomes a `light-dark()` pair, same hue, other lightness.
 
 ## Sources and licences
 
-**Simple Icons** (<https://simpleicons.org>, **CC0 1.0**) for `discord`, `ntfy`
-and `matrix`. CC0 asks for nothing, so they need no file here.
+**Simple Icons** (<https://simpleicons.org>, **CC0 1.0**) for `discord`, `ntfy`,
+`matrix` and `unraid`. CC0 asks for nothing, so they need no file here.
 
 **Dashboard Icons** (`homarr-labs/dashboard-icons`, <https://dashboardicons.com>)
 for `slack.svg` and `gotify.svg`. They are under the **Apache-2.0** licence, whose
