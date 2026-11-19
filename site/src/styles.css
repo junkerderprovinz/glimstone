@@ -506,13 +506,6 @@ pre.code {
 }
 
 .logo { width: 38px; display: inline-flex; }
-.logo.on-dark { display: none; }
-[data-theme="dark"] .logo.on-dark { display: inline-flex; }
-[data-theme="dark"] .logo.on-light { display: none; }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .logo.on-dark { display: inline-flex; }
-  :root:not([data-theme="light"]) .logo.on-light { display: none; }
-}
 @media (max-width: 40rem) {
   .hide-narrow { display: none !important; }
   .site-header { gap: 0.625rem; }

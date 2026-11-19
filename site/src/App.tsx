@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState, type ComponentType } from "react";
 import { GLIMSTONE_VERSION, Badge, Button } from "@glimstone/react";
-import logoForLight from "../../.github/assets/glimstone-dunkel.svg?raw";
-import logoForDark from "../../.github/assets/glimstone-hell.svg?raw";
+import logo from "../../.github/assets/logo.svg?raw";
 import { Glyph } from "./glyph";
 import { LookPanel, setLookPanel, useLookPanel } from "./lookPanel";
 import { Hero } from "./showcase";
@@ -287,8 +286,7 @@ export function App() {
           <Glyph name="IconMenu" />
         </button>
         <a href="#/" style={{ display: "flex", alignItems: "center", gap: 10, color: "inherit", textDecoration: "none" }}>
-          <span className="logo on-light" dangerouslySetInnerHTML={{ __html: logoForLight }} />
-          <span className="logo on-dark" dangerouslySetInnerHTML={{ __html: logoForDark }} />
+          <span className="logo" dangerouslySetInnerHTML={{ __html: logo }} />
           <strong style={{ fontSize: 16 }}>GlimStone</strong>
         </a>
         <span className="hide-narrow">

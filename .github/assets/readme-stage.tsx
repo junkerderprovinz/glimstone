@@ -29,8 +29,7 @@ import {
   type LabelMode,
 } from "@glimstone/core";
 import { Badge, Button, Card, InfoBubble, Selector, ToastViewport, Toggle } from "@glimstone/react";
-import logoForLight from "./glimstone-dunkel.svg?url";
-import logoForDark from "./glimstone-hell.svg?url";
+import logo from "./logo.svg?url";
 import "./readme-stage.css";
 
 const q = new URLSearchParams(location.search);
@@ -54,14 +53,11 @@ applyRainbow({ on: q.has("rainbow"), rotate: q.has("seed"), seed: Number(q.get("
 for (const axis of CONTROL_AXES) setLabelMode(axis, (q.get("labels") as LabelMode) ?? "textGlyph");
 labelModeChanged();
 
-const logo = theme === "light" ? logoForLight : logoForDark;
-
 function Ground({ children, relief = true }: { children: ReactNode; relief?: boolean }) {
   return (
     <div className="rs-ground">
       <div className="rs-wall" />
-      {/* Pressed from the pale mark in both themes; the dark one turns to a flat slab under the filter. */}
-      {relief && <img className="rs-relief" src={logoForDark} alt="" />}
+      {relief && <img className="rs-relief" src={logo} alt="" />}
       <div className="rs-vignette" />
       {children}
     </div>
