@@ -27,7 +27,12 @@ LOCAL = [
     ("capsolver", "CapSolver", "capsolver.com, favicon.svg", BRAND),
     ("solvecha", "Solvecha", "solvecha.com, site/static/favicon.svg", BRAND),
     ("twocaptcha", "2Captcha", "2captcha.com, twocaptcha-logo.svg without the word", BRAND),
+    ("anticaptcha", "Anti-Captcha", "anti-captcha.com, _nuxt/logo.108c78f7.svg", BRAND),
+    ("deathbycaptcha", "DeathByCaptcha", "the boxed name of DeathByCaptcha's logo as an SVG", BRAND),
 ]
+
+# The marks that are the brand's name written out.
+WORDMARK = {"deathbycaptcha"}
 
 HEAD = """// The marks of captcha solvers, as markup for BrandMark, each with the colour
 // its tile lights up in and the ink that holds on it ("Brand tiles"). Written
@@ -49,11 +54,18 @@ HOVER = ["capsolver"]
 TILE_COLOUR = {
     # The teal square Solvecha's icon stands on, which the generator lifts off.
     "solvecha": ("#0e7c66", None),
+    # A white logo, lit in the navy of Anti-Captcha's own site.
+    "anticaptcha": ("#111d35", None),
 }
 
-MARKS = MarkSet(ROOT / "packages" / "core" / "captcha-marks", {}, set(), TILE_COLOUR, set())
+FORCE_THEMED = {
+    # The white letters in that navy on the light ground.
+    "anticaptcha": {"white": ("#ffffff", "#111d35")},
+}
+
+MARKS = MarkSet(ROOT / "packages" / "core" / "captcha-marks", FORCE_THEMED, set(), TILE_COLOUR, set())
 
 hovers = {slug: local_hover(slug, MARKS) for slug in HOVER}
-entries = {m[0]: local(*m, MARKS, hover=hovers.get(m[0])) for m in LOCAL}
+entries = {m[0]: local(*m, MARKS, hover=hovers.get(m[0]), wordmark=m[0] in WORDMARK) for m in LOCAL}
 ids = write(OUT, HEAD, entries, "CAPTCHA_MARKS", "CaptchaMarkId")
 print("%s: %d marks from captcha-marks/" % (OUT.name, len(ids)))

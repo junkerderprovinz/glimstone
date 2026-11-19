@@ -326,7 +326,7 @@ test.describe("The captcha catalog in a PickerWindow", () => {
     await expect(stage(page, "PickerWindowCaptcha").locator("output")).toHaveText("Picked: CapMonster Cloud");
   });
 
-  test("[captcha-marks] a solver with a mark lights in its brand's colour, one without in the accent", async ({ page }) => {
+  test("[captcha-marks] every solver lights in its brand's colour", async ({ page }) => {
     await showCaptcha(page);
     const fill = async (name: string) => {
       const tile = picker(page).getByRole("button", { name, exact: true });
@@ -334,15 +334,7 @@ test.describe("The captcha catalog in a PickerWindow", () => {
       return tile.evaluate((b) => getComputedStyle(b).backgroundColor);
     };
     expect(await fill("CapMonster Cloud")).toBe("rgb(125, 110, 255)");
-    const accent = await page.evaluate(() => {
-      const probe = document.createElement("div");
-      probe.style.backgroundColor = "var(--accent)";
-      document.body.append(probe);
-      const colour = getComputedStyle(probe).backgroundColor;
-      probe.remove();
-      return colour;
-    });
-    expect(await fill("Anti-Captcha")).toBe(accent);
+    expect(await fill("Anti-Captcha")).toBe("rgb(17, 29, 53)");
   });
 });
 
