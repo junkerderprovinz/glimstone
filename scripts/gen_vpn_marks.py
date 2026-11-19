@@ -27,6 +27,7 @@ SRC = Path(sys.argv[1]) if len(sys.argv) > 1 else None
 OUT = ROOT / "packages" / "core" / "src" / "vpnMarks.ts"
 
 DASHBOARD = "Apache-2.0"
+SELFHST = "CC-BY-4.0"
 
 # The id a catalog entry names its mark by -> the Simple Icons slug, with what it is.
 SIMPLE = [
@@ -53,10 +54,36 @@ LOCAL = [
     ("fsecure", "F-Secure, for its VPN",
      "F-Secure's media kit, f-secure_2023_logo.zip, F-SECURE_LOGO_VERTICAL_POSITIVE_RGB.svg without the word", BRAND),
     ("purevpn", "PureVPN", "PureVPN's press room, PureVPN.zip, vpn original.svg without the word", BRAND),
+
+    ("azirevpn", "AzireVPN", "selfhst/icons, svg/azirevpn.svg", SELFHST),
+    ("ipvanish", "IPVanish", "selfhst/icons, svg/ipvanish.svg", SELFHST),
+    ("njalla", "Njalla VPN", "selfhst/icons, svg/njalla.svg", SELFHST),
+    ("ovpn", "OVPN", "selfhst/icons, svg/ovpn.svg", SELFHST),
+    ("privadovpn", "PrivadoVPN", "selfhst/icons, svg/privadovpn.svg", SELFHST),
+
+    ("cactusvpn", "CactusVPN", "cactusvpn.com, images/logo.svg without the word", BRAND),
+    ("cyberghost", "CyberGhost", "cyberghostvpn.com, navigation/icons/logo-cyberghost.svg without the word", BRAND),
+    ("hideme", "hide.me", "hide.me, favicon.svg", BRAND),
+    ("hma", "HMA VPN", "hidemyass.com, the hma-logo symbol in its page header", BRAND),
+    ("hotspotshield", "Hotspot Shield", "hotspotshield.com, imgs/hotspot-shield-logo.1.0.0.svg without the word", BRAND),
+    ("levpn", "Le VPN", "le-vpn.com, icons/favicon.svg", BRAND),
+    ("obscura", "Obscura VPN", "obscura.com, favicon.svg", BRAND),
+    ("privatevpn", "PrivateVPN", "privatevpn.com, logotype_light.svg without the word", BRAND),
+    ("strongvpn", "StrongVPN", "strongvpn.com, uploads/2023/01/logo.svg without the word", BRAND),
+    ("trustzone", "Trust.Zone", "trust.zone, images/favicon/safari-pinned-tab.svg", BRAND),
+    ("unlocator", "Unlocator VPN", "unlocator.com, logo.svg without the word", BRAND),
+    ("vpnunlimited", "VPN Unlimited", "vpnunlimited.com, svg/vpnu_mark.svg", BRAND),
+    ("vyprvpn", "VyprVPN", "vyprvpn.com, images/vyprvpn_logo.svg without the word", BRAND),
+    ("windscribe", "Windscribe", "windscribe.com, images/badge-logo.svg", BRAND),
+    ("xvpn", "X-VPN", "xvpn.io, safari-pinned-tab.svg", BRAND),
+    ("zoogvpn", "ZoogVPN", "zoogvpn.com, ZoogVPN-darck-logo.svg without the word", BRAND),
 ]
 
 # The lit tile's drawing, by id: a Simple Icons slug, or None for <id>-hover.svg.
 HOVER = {
+    "ipvanish": None,
+    "levpn": None,
+    "privadovpn": None,
     "protonvpn": "protonvpn",
     "purevpn": None,
 }
@@ -78,6 +105,11 @@ import type { TileMark } from "./picker.ts";
 TILE_COLOUR = {
     # Proton's violet rather than the pale lilac its gradient covers most with.
     "protonvpn": ("#6d4aff", None),
+    # Single-colour marks, lit in the colour each brand's own site gives them.
+    "hma": ("#0059a5", None),
+    "trustzone": ("#005a88", None),
+    "windscribe": ("#1c2332", None),
+    "xvpn": ("#000000", None),
 }
 
 MARKS = MarkSet(ROOT / "packages" / "core" / "vpn-marks", {}, set(), TILE_COLOUR, set())
