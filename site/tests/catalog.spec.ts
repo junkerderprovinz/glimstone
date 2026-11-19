@@ -393,7 +393,7 @@ test.describe("The identity catalog in a PickerWindow", () => {
     await expect(stage(page, "PickerWindowIdentity").locator("output")).toHaveText("Picked: Pocket ID");
   });
 
-  test("[identity-marks] a service with a mark lights in its brand's colour, Kanidm and Other sign-in service in the accent", async ({ page }) => {
+  test("[identity-marks] a service lights in its brand's colour, the Other sign-in service in the accent", async ({ page }) => {
     await showIdentity(page);
     const fill = async (name: string) => {
       const tile = picker(page).getByRole("button", { name, exact: true });
@@ -410,7 +410,7 @@ test.describe("The identity catalog in a PickerWindow", () => {
       probe.remove();
       return colour;
     });
-    expect(await fill("Kanidm")).toBe(accent);
+    expect(await fill("Kanidm")).toBe("rgb(255, 102, 0)");
     expect(await fill("Other sign-in service")).toBe(accent);
   });
 
@@ -421,6 +421,6 @@ test.describe("The identity catalog in a PickerWindow", () => {
     await tile.hover();
     await expect(tile.locator(".glim-mark-hover")).toBeVisible();
     await expect(tile.locator(".glim-mark-rest")).toBeHidden();
-    expect(await tile.evaluate((b) => getComputedStyle(b).backgroundColor)).toBe("rgb(77, 77, 77)");
+    expect(await tile.evaluate((b) => getComputedStyle(b).backgroundColor)).toBe("rgb(0, 117, 143)");
   });
 });

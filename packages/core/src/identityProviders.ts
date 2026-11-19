@@ -21,7 +21,7 @@ const ENTRIES = [
     terms: ["goauthentik", "SAML", "LDAP", "RADIUS", "forward auth"],
     mark: M.authentik,
   },
-  { id: "kanidm", name: "Kanidm", group: "selfHosted", terms: ["LDAP", "RADIUS"], glyph: "IconKey" },
+  { id: "kanidm", name: "Kanidm", group: "selfHosted", terms: ["LDAP", "RADIUS"], mark: M.kanidm },
   { id: "keycloak", name: "Keycloak", group: "selfHosted", terms: ["Red Hat", "SAML"], mark: M.keycloak },
   { id: "pocket-id", name: "Pocket ID", group: "selfHosted", terms: ["passkeys"], mark: M.pocketid },
   { id: "zitadel", name: "ZITADEL", group: "selfHosted", terms: ["SAML"], mark: M.zitadel },

@@ -1153,8 +1153,7 @@ const { items, groups } = catalogPicker(STORAGE_PROVIDERS, {
         <code>IDENTITY_PROVIDERS</code> in <code>@glimstone/core/identityProviders</code> holds the services an app hands
         its login to over OpenID Connect, each of them one that people run on their own server. The catalog has no tile
         for an issuer it does not know: the window below adds Other sign-in service itself and marks it <code>last</code>.
-        Keycloak brings a <code>hover</code> drawing in one colour, and Kanidm wears the key glyph, since its artwork
-        may not be recoloured. The sources are in <code>identity-marks/</code>.
+        Keycloak brings a <code>hover</code> drawing in one colour. The sources are in <code>identity-marks/</code>.
       </p>
       <Demo name="PickerWindowIdentity" />
       <H2>Rules</H2>

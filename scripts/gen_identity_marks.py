@@ -39,6 +39,7 @@ LOCAL = [
     ("keycloak", "Keycloak", "cncf/artwork, projects/keycloak/icon/color/keycloak-icon-color.svg", BRAND),
     ("pocketid", "Pocket ID", "pocket-id/pocket-id, backend/resources/default-images/logoLight.svg", "BSD-2-Clause"),
     ("zitadel", "ZITADEL", "homarr-labs/dashboard-icons, svg/zitadel.svg", DASHBOARD),
+    ("kanidm", "Kanidm", "kanidm.com, images/logo.svg without the lettering on the passport", BRAND),
 ]
 
 # The marks whose lit tile shows <id>-hover.svg.
@@ -68,7 +69,13 @@ FORCE_THEMED = {
 # tile they turn ink as the outline does instead of cut-outs that vanish.
 ONE_INK = {"zitadel"}
 
-MARKS = MarkSet(ROOT / "packages" / "core" / "identity-marks", FORCE_THEMED, set(), {}, ONE_INK)
+TILE_COLOUR = {
+    # Keycloak's blue, deepened until white on it reaches 4.5:1, rather than the
+    # grey of its outline.
+    "keycloak": ("#00758f", None),
+}
+
+MARKS = MarkSet(ROOT / "packages" / "core" / "identity-marks", FORCE_THEMED, set(), TILE_COLOUR, ONE_INK)
 
 if SRC is None or not SRC.is_dir():
     raise SystemExit("pass the icons folder of simple-icons@16: python scripts/gen_identity_marks.py <path>")

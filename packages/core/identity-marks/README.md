@@ -40,17 +40,24 @@ than under a licence: `keycloak.svg` and `keycloak-hover.svg` are
 `projects/keycloak/icon/black/keycloak-icon-black.svg` from the CNCF's artwork
 repository <https://github.com/cncf/artwork>, whose logos are used under the
 Linux Foundation's trademark policy. The lit tile shows the black one, since
-in a single ink the colour one's facets swallow its two blue brackets.
+in a single ink the colour one's facets swallow its two blue brackets. It
+lights in Keycloak's blue, deepened to `#00758f` so the white ink reaches
+4.5:1, rather than the grey of its facets.
+
+**The service's own website**, under the same trademark position:
+`kanidm.svg` is <https://kanidm.com/images/logo.svg>, the crab with its
+passport from <https://kanidm.com/>, without the lettering on the passport,
+which no tile is large enough to show.
 
 Apache-2.0 and BSD-2-Clause may be carried into this project's AGPL-3.0, so the
 combined work stays AGPL-3.0.
 
 ## Left out
 
-A service whose own mark has no clean source wears the sign-in glyph. Kanidm's
-repository licenses its artwork CC-BY-NC-ND, which rules out a work that may be
-sold and a recoloured copy. The Kanidm icon in Dashboard Icons is that same
-artwork, so Kanidm wears the glyph.
+A service whose own mark has no clean source wears the sign-in glyph. Every
+service in the catalog has a mark. Kanidm's repository licenses its artwork
+CC-BY-NC-ND, so its mark is used as the other brands' are, under the trademark
+position below, as its own site serves it, and not under that licence.
 
 ## Trademarks
 
