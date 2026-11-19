@@ -3243,8 +3243,8 @@ test.describe("ConnectionRow", () => {
   const row = (page: Page, name: string) => stage(page, "ConnectionRowBasic").getByRole("group", { name, exact: true });
   const button = (page: Page, name: string, label: string) => row(page, name).getByRole("button", { name: label, exact: true });
   const tile = (page: Page, name: string) => row(page, name).locator(".glim-connection-tile");
-  // The packages' own check and cross carry glim-mark, the site's glyphs do not.
-  const outcome = (el: Locator) => el.locator(".glim-btn-glyph svg.glim-mark").getAttribute("viewBox");
+  // The packages' own glyphs carry glim-mark, the site's do not.
+  const markOf = (el: Locator) => el.locator(".glim-btn-glyph svg.glim-mark").getAttribute("viewBox");
 
   test("[connection-name] a group named after the service holds its buttons", async ({ page }) => {
     await open(page, "/components/connection-row");
@@ -3282,6 +3282,33 @@ test.describe("ConnectionRow", () => {
     await expect(row(page, "GitHub Container Registry").locator(".glim-connection-actions button")).toHaveText(["Edit", "Remove"]);
   });
 
+  test("[connection-glyphs] Test, Edit and Remove wear the package's check, pencil and bin", async ({ page }) => {
+    await open(page, "/components/connection-row");
+    const worn = await Promise.all(["Test", "Edit", "Remove"].map((label) => markOf(button(page, "Mullvad VPN", label))));
+    expect(worn).toEqual([MARKS.check.viewBox, MARKS.pencil.viewBox, MARKS.trash.viewBox]);
+  });
+
+  test("[connection-actions] the app's own actions stand first, then Test, Edit and Remove", async ({ page }) => {
+    await open(page, "/components/connection-row");
+    await expect(row(page, "Media share").locator(".glim-connection-actions button")).toHaveText(["Mount", "Test", "Edit", "Remove"]);
+    await expect(button(page, "Media share", "Mount")).toHaveAttribute("data-connection", "mount");
+  });
+
+  test("[connection-action-run] an action runs with a ring, then turns green with a check and says what it did", async ({ page }) => {
+    await open(page, "/components/connection-row");
+    await button(page, "Media share", "Mount").click();
+    await expect(button(page, "Media share", "Mount")).toHaveAttribute("aria-busy", "true");
+    const done = button(page, "Media share", "Unmount");
+    await expect(done).toHaveClass(/glim-btn--ok/);
+    expect(await markOf(done)).toBe(MARKS.check.viewBox);
+    await page.mouse.move(0, 0);
+    await centre(done);
+    await done.hover();
+    await expect(page.locator(".glim-bubble", { hasText: "Mounted at /mnt/remotes/media" })).toBeVisible();
+    await done.click();
+    await expect(button(page, "Media share", "Mount")).not.toHaveClass(/glim-btn--ok/);
+  });
+
   test("[connection-test] a test runs with a ring at the same width, then turns green with a check and says what it found", async ({ page }) => {
     await open(page, "/components/connection-row");
     const run = button(page, "Mullvad VPN", "Test");
@@ -3291,7 +3318,7 @@ test.describe("ConnectionRow", () => {
     expect((await run.boundingBox())!.width).toBeCloseTo(width, 0);
     await expect(run).not.toHaveAttribute("aria-busy", "true");
     await expect(run).toHaveClass(/glim-btn--ok/);
-    expect(await outcome(run)).toBe(MARKS.check.viewBox);
+    expect(await markOf(run)).toBe(MARKS.check.viewBox);
     await page.mouse.move(0, 0);
     await centre(run);
     await run.hover();
@@ -3311,14 +3338,14 @@ test.describe("ConnectionRow", () => {
     await run.click();
     await expect(run).toHaveClass(/glim-btn--danger/);
     await expect(run).toHaveAttribute("data-shakes", "1");
-    expect(await outcome(run)).toBe(MARKS.close.viewBox);
+    expect(await markOf(run)).toBe(MARKS.close.viewBox);
   });
 
-  test("[connection-narrow] below 640px the buttons show their glyphs alone and keep their names", async ({ page }) => {
+  test("[connection-narrow] below 640px the buttons, the app's own among them, show their glyphs alone and keep their names", async ({ page }) => {
     await page.setViewportSize({ width: 480, height: 800 });
     await open(page, "/components/connection-row");
-    for (const label of ["Test", "Edit", "Remove"]) {
-      const b = button(page, "Mullvad VPN", label);
+    for (const label of ["Mount", "Test", "Edit", "Remove"]) {
+      const b = button(page, "Media share", label);
       await expect(b.locator("svg")).toBeVisible();
       expect(await b.evaluate((e) => Math.abs(e.getBoundingClientRect().width - e.getBoundingClientRect().height) < 1)).toBe(true);
     }

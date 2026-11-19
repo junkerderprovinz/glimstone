@@ -45,6 +45,7 @@ export const IconCheck = () => <MarkSvg mark={MARKS.check} class="glim-mark" />;
 export const IconExpand = () => <MarkSvg mark={MARKS.expand} class="glim-mark" />;
 export const IconFolderOpen = () => <MarkSvg mark={MARKS.folderOpen} class="glim-mark" />;
 export const IconPencil = () => <MarkSvg mark={MARKS.pencil} class="glim-mark" />;
+export const IconTrash = () => <MarkSvg mark={MARKS.trash} class="glim-mark" />;
 export const IconWindowMinimise = () => <MarkSvg mark={MARKS.windowMinimise} class="glim-mark" />;
 export const IconWindowMaximise = () => <MarkSvg mark={MARKS.windowMaximise} class="glim-mark" />;
 export const IconWindowRestore = () => <MarkSvg mark={MARKS.windowRestore} class="glim-mark" />;

@@ -1,9 +1,11 @@
 <script lang="ts" module>
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
-  import type { ConnectionRowLabelKeys, ConnectionRowText, ConnectionTest, TileMark } from "@glimstone/core";
+  import type { ConnectionAction as CoreConnectionAction, ConnectionRowLabelKeys, ConnectionRowText, ConnectionTest, TileMark } from "@glimstone/core";
 
   export type { ConnectionRowLabelKeys, ConnectionRowText, ConnectionTest } from "@glimstone/core";
+
+  export type ConnectionAction = CoreConnectionAction<Snippet>;
 
   export interface ConnectionRowProps extends Omit<HTMLAttributes<HTMLDivElement>, "children" | "class"> {
     /** The service's name, also the row's accessible name. */
@@ -18,6 +20,8 @@
     children?: Snippet;
     /** Where the test stands: `busy` while it runs, then `tone` and a `title` with what it found. */
     test?: ConnectionTest;
+    /** Buttons of the app's own, such as Mount, before Test, Edit and Remove, so those keep their places at the end. */
+    actions?: ConnectionAction[];
     text: ConnectionRowText;
     labelKeys?: Partial<ConnectionRowLabelKeys>;
     onTest?: () => void;
@@ -28,26 +32,29 @@
 </script>
 
 <script lang="ts">
-  import { CONNECTION_ROW_KEYS, connectionTestFace, connectionTile } from "@glimstone/core";
+  import { connectionButtons, connectionTestFace, connectionTile } from "@glimstone/core";
   import BrandMark from "./BrandMark.svelte";
   import Button from "./Button.svelte";
-  import { IconCheck, IconClose } from "./glyphs.js";
+  import { IconCheck, IconClose, IconPencil, IconTrash } from "./glyphs.js";
   import { css } from "./style.js";
 
   // A connected service or account as a compact row ("Connections" in the design
   // language): its mark lit on a tile the row's whole height, its name with any
-  // badges, one quiet line on how it stands, and its test, edit and remove at
-  // the end. A button stands only where its handler is passed. The other props
-  // of a <div> go to the row.
-  let { name, mark, status, badges, children, test, text, labelKeys, onTest, onEdit, onRemove, class: className, ...rest }: ConnectionRowProps = $props();
+  // badges, one quiet line on how it stands, and at the end the app's own
+  // actions, then its test, edit and remove. A built-in button stands only where
+  // its handler is passed. The other props of a <div> go to the row.
+  let { name, mark, status, badges, children, test, actions, text, labelKeys, onTest, onEdit, onRemove, class: className, ...rest }: ConnectionRowProps = $props();
 
   // On a phone the buttons show their glyphs alone, so they keep to one line.
   const NARROW = 640;
 
-  const keys = $derived({ ...CONNECTION_ROW_KEYS, ...labelKeys });
   const tile = $derived(connectionTile(mark));
-  const face = $derived(connectionTestFace(test));
-  const outcome = $derived(face.outcome === "check" ? IconCheck : face.outcome === "cross" ? IconClose : undefined);
+  const buttons = $derived(
+    connectionButtons({ actions, test, text, labelKeys, onTest, onEdit, onRemove }, { test: IconCheck, edit: IconPencil, remove: IconTrash }).map((b) => {
+      const face = connectionTestFace(b);
+      return { ...b, face, glyph: face.outcome === "check" ? IconCheck : face.outcome === "cross" ? IconClose : b.glyph };
+    }),
+  );
 </script>
 
 <div data-glim="ConnectionRow" role="group" aria-label={name} {...rest} class={["glim-well glim-connection", className].filter(Boolean).join(" ")}>
@@ -66,24 +73,23 @@
         {#if status}<p class="glim-connection-status">{status}</p>{/if}
         {@render children?.()}
       </div>
-      {#if onTest || onEdit || onRemove}
+      {#if buttons.length > 0}
         <span class="glim-connection-actions">
-          {#if onTest}
+          {#each buttons as b (b.id)}
             <Button
-              label={text.test}
-              labelKey={keys.test}
-              glyph={outcome}
-              tone={face.tone}
-              busy={test?.busy}
-              title={test?.title}
+              label={b.label}
+              labelKey={b.labelKey}
+              glyph={b.glyph}
+              tone={b.face.tone}
+              busy={b.busy}
+              title={b.title}
+              disabled={b.disabled}
               compactBelow={NARROW}
-              class={face.shake ? "glim-shake" : ""}
-              data-connection="test"
-              onClick={onTest}
+              class={b.face.shake ? "glim-shake" : ""}
+              data-connection={b.id}
+              onClick={b.onClick}
             />
-          {/if}
-          {#if onEdit}<Button label={text.edit} labelKey={keys.edit} compactBelow={NARROW} data-connection="edit" onClick={onEdit} />{/if}
-          {#if onRemove}<Button label={text.remove} labelKey={keys.remove} compactBelow={NARROW} data-connection="remove" onClick={onRemove} />{/if}
+          {/each}
         </span>
       {/if}
     </div>

@@ -4,6 +4,7 @@
 import type { Component } from "vue";
 import type {
   ButtonTone,
+  ConnectionAction as CoreConnectionAction,
   MenuEntry as CoreMenuEntry,
   MenuHead as CoreMenuHead,
   MenuItem as CoreMenuItem,
@@ -16,6 +17,7 @@ export type MenuItem = CoreMenuItem<Component>;
 export type MenuHead = CoreMenuHead<Component>;
 export type TreeNode = CoreTreeNode<Component>;
 export type PickerItem = PickItem<Component>;
+export type ConnectionAction = CoreConnectionAction<Component>;
 
 export interface MenuBarMenu {
   label: string;

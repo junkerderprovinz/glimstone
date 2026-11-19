@@ -333,9 +333,12 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "connection-brand", when: "Its mark is a brand's", then: "The tile stands the row's whole height in the brand's colour, with the mark in its ink." },
       { id: "connection-glyph", when: "Its mark is one of the app's glyphs", then: "The tile takes the accent, with the glyph in the accent's ink." },
       { id: "connection-buttons", when: "A handler is left out", then: "Its button is not drawn, and the others keep the order Test, Edit, Remove." },
+      { id: "connection-glyphs", when: "Always", then: "Test wears the check, Edit the pencil and Remove the bin of the package, whatever glyph the app would pick for their keys." },
+      { id: "connection-actions", when: "The app passes actions of its own", then: "They stand first, in the order given, as the same kind of button, so Test, Edit and Remove keep their places at the end." },
       { id: "connection-test", when: "Test is pressed", then: "It shows the busy ring at the same width, then turns green with a check, and its bubble says what the test found." },
       { id: "connection-fail", when: "The test fails", then: "The button turns red with a cross and shakes once." },
-      { id: "connection-narrow", when: "The window is narrower than 640px", then: "The buttons show their glyphs alone, and the label stays their name." },
+      { id: "connection-action-run", when: "An action of the app's runs", then: "It shows the busy ring, then turns green with a check, and its bubble says what it did." },
+      { id: "connection-narrow", when: "The window is narrower than 640px", then: "The buttons, the app's own among them, show their glyphs alone, and the label stays their name." },
     ],
   },
   IconButton: {

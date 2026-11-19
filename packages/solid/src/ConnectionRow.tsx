@@ -1,17 +1,19 @@
-import { children, createMemo, Show, splitProps, type JSX } from "solid-js";
-import { CONNECTION_ROW_KEYS, connectionTestFace, connectionTile, type ConnectionRowLabelKeys, type ConnectionRowText, type ConnectionTest, type TileMark } from "@glimstone/core";
+import { children, createMemo, Index, Show, splitProps, type JSX } from "solid-js";
+import { connectionButtons, connectionTestFace, connectionTile, type ConnectionAction as CoreConnectionAction, type ConnectionRowLabelKeys, type ConnectionRowText, type ConnectionTest, type TileMark } from "@glimstone/core";
 import { Button } from "./Button.tsx";
 import { BrandMark } from "./ReadmeButton.tsx";
-import { IconCheck, IconClose } from "./glyphs.tsx";
+import { IconCheck, IconClose, IconPencil, IconTrash } from "./glyphs.tsx";
 import { css } from "./style.ts";
 
 export type { ConnectionRowLabelKeys, ConnectionRowText, ConnectionTest } from "@glimstone/core";
 
+export type ConnectionAction = CoreConnectionAction<JSX.Element>;
+
 // A connected service or account as a compact row ("Connections" in the design
 // language): its mark lit on a tile the row's whole height, its name with any
-// badges, one quiet line on how it stands, and its test, edit and remove at
-// the end. A button stands only where its handler is passed. The other props
-// of a <div> go to the row.
+// badges, one quiet line on how it stands, and at the end the app's own
+// actions, then its test, edit and remove. A built-in button stands only where
+// its handler is passed. The other props of a <div> go to the row.
 
 export interface ConnectionRowProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, "children" | "class"> {
   /** The service's name, also the row's accessible name. */
@@ -26,6 +28,8 @@ export interface ConnectionRowProps extends Omit<JSX.HTMLAttributes<HTMLDivEleme
   children?: JSX.Element;
   /** Where the test stands: `busy` while it runs, then `tone` and a `title` with what it found. */
   test?: ConnectionTest;
+  /** Buttons of the app's own, such as Mount, before Test, Edit and Remove, so those keep their places at the end. */
+  actions?: ConnectionAction[];
   text: ConnectionRowText;
   labelKeys?: Partial<ConnectionRowLabelKeys>;
   onTest?: () => void;
@@ -38,12 +42,11 @@ export interface ConnectionRowProps extends Omit<JSX.HTMLAttributes<HTMLDivEleme
 const NARROW = 640;
 
 export function ConnectionRow(props: ConnectionRowProps) {
-  const [own, rest] = splitProps(props, ["name", "mark", "status", "badges", "children", "test", "text", "labelKeys", "onTest", "onEdit", "onRemove", "class"]);
-  const keys = () => ({ ...CONNECTION_ROW_KEYS, ...own.labelKeys });
+  const [own, rest] = splitProps(props, ["name", "mark", "status", "badges", "children", "test", "actions", "text", "labelKeys", "onTest", "onEdit", "onRemove", "class"]);
   // A glyph is drawn anew on every read, so the mark is read once.
   const mark = createMemo(() => own.mark);
   const tile = () => connectionTile(mark());
-  const face = () => connectionTestFace(own.test);
+  const buttons = createMemo(() => connectionButtons(own, { test: <IconCheck />, edit: <IconPencil />, remove: <IconTrash /> }));
   // Read twice, to test and to draw, so it is resolved once.
   const badges = children(() => own.badges);
   return (
@@ -69,28 +72,29 @@ export function ConnectionRow(props: ConnectionRowProps) {
             </Show>
             {own.children}
           </div>
-          <Show when={own.onTest || own.onEdit || own.onRemove}>
+          <Show when={buttons().length > 0}>
             <span class="glim-connection-actions">
-              <Show when={own.onTest}>
-                <Button
-                  label={own.text.test}
-                  labelKey={keys().test}
-                  glyph={face().outcome === "check" ? <IconCheck /> : face().outcome === "cross" ? <IconClose /> : undefined}
-                  tone={face().tone}
-                  busy={own.test?.busy}
-                  title={own.test?.title}
-                  compactBelow={NARROW}
-                  class={face().shake ? "glim-shake" : ""}
-                  data-connection="test"
-                  onClick={() => own.onTest?.()}
-                />
-              </Show>
-              <Show when={own.onEdit}>
-                <Button label={own.text.edit} labelKey={keys().edit} compactBelow={NARROW} data-connection="edit" onClick={() => own.onEdit?.()} />
-              </Show>
-              <Show when={own.onRemove}>
-                <Button label={own.text.remove} labelKey={keys().remove} compactBelow={NARROW} data-connection="remove" onClick={() => own.onRemove?.()} />
-              </Show>
+              {/* Index keeps each button in place while its action changes, so focus stays on it. */}
+              <Index each={buttons()}>
+                {(b) => {
+                  const face = () => connectionTestFace(b());
+                  return (
+                    <Button
+                      label={b().label}
+                      labelKey={b().labelKey}
+                      glyph={face().outcome === "check" ? <IconCheck /> : face().outcome === "cross" ? <IconClose /> : b().glyph}
+                      tone={face().tone}
+                      busy={b().busy}
+                      title={b().title}
+                      disabled={b().disabled}
+                      compactBelow={NARROW}
+                      class={face().shake ? "glim-shake" : ""}
+                      data-connection={b().id}
+                      onClick={() => b().onClick()}
+                    />
+                  );
+                }}
+              </Index>
             </span>
           </Show>
         </div>

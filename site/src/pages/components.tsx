@@ -1685,6 +1685,7 @@ import { VPN_MARKS } from "@glimstone/core/vpnMarks";
   mark={VPN_MARKS[vpn.provider] ?? <IconShield />}
   status={t("vpn.leavesIn", { place: vpn.place })}
   test={{ busy: testing, tone: verdict && (verdict.ok ? "ok" : "danger"), title: verdict?.said }}
+  actions={[{ id: "mount", label: t("mount"), labelKey: "mount", glyph: <IconLink />, busy: mounting, onClick: mount }]}
   text={{ test: t("test"), edit: t("edit"), remove: t("remove") }}
   onTest={test}
   onEdit={edit}
@@ -1704,7 +1705,8 @@ import { VPN_MARKS } from "@glimstone/core/vpnMarks";
         </li>
         <li>
           Test, Edit and Remove stand at the end in that order, each only where its handler is passed, and show their
-          glyphs alone below 640px. They stay in view, unlike a list row's buttons (rule 6), because the outcome of a
+          glyphs alone below 640px. They wear the package's check, pencil and bin, whatever the app's resolver would give
+          for their keys. They stay in view, unlike a list row's buttons (rule 6), because the outcome of a
           test has to be seen.
         </li>
         <li>
@@ -1712,6 +1714,15 @@ import { VPN_MARKS } from "@glimstone/core/vpnMarks";
           <code>ok</code> or <code>danger</code> and a <code>title</code> with what it found. The label stays, so the
           button keeps its width, and a check or a cross says the outcome without the colour. A failed test shakes the
           button ("Failure feedback").
+        </li>
+        <li>
+          <code>actions</code> adds buttons of the app's own, such as Mount and Unmount for a remote share, to the same
+          row. Each brings its <code>label</code>, <code>labelKey</code> and <code>glyph</code>, as a window's action
+          does, and reports on itself like the test, with <code>busy</code>, <code>tone</code> and <code>title</code>.
+          They stand first, in the order given, so Test, Edit and Remove keep their places at the end, and below 640px
+          they show their glyphs alone too. <code>labelKeys</code> stays for the three built-in buttons. Vue takes the
+          same prop rather than a slot, so the row keeps the order, the narrow rule and the outcome glyphs for every
+          button in all four packages.
         </li>
         <li>
           Rows stand in a card one under the other. The row has the well's surface and no shadow, so a card holds as many

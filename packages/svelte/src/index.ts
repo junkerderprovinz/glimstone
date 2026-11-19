@@ -8,7 +8,7 @@ export { default as Checkbox, type CheckboxProps } from "./Checkbox.svelte";
 export { default as CoffeeDialog, type CoffeeDialogProps } from "./CoffeeDialog.svelte";
 export { default as ColorPicker, type ColorName, type ColorPickerPanelText, type ColorPickerProps } from "./ColorPicker.svelte";
 export { default as ConfirmDialog, type ConfirmDialogProps } from "./ConfirmDialog.svelte";
-export { default as ConnectionRow, type ConnectionRowLabelKeys, type ConnectionRowProps, type ConnectionRowText, type ConnectionTest } from "./ConnectionRow.svelte";
+export { default as ConnectionRow, type ConnectionAction, type ConnectionRowLabelKeys, type ConnectionRowProps, type ConnectionRowText, type ConnectionTest } from "./ConnectionRow.svelte";
 export { default as ContextMenu, type ContextMenuProps, type MenuEntry, type MenuHead, type MenuItem } from "./ContextMenu.svelte";
 export { default as CopyField, type CopyFieldProps } from "./CopyField.svelte";
 export { default as CryptoDonateDialog, type CryptoCoin, type CryptoDonateDialogProps, type CryptoNetwork } from "./CryptoDonateDialog.svelte";
@@ -71,7 +71,7 @@ export { useAccent, useDensity, useHue, useLabelMode, useMotion, useRainbow, use
 export { useConfirm, useDialogKeys, type ConfirmOptions, type ConfirmText } from "./confirm.svelte.js";
 export { useFieldName } from "./fieldName.js";
 export { deviceGlyph } from "./fortressParts.js";
-export { glyphFor, IconBack, IconCalendar, IconCancel, IconCheck, IconClose, IconCopy, IconExpand, IconEye, IconEyeOff, IconFolderOpen, IconForward, IconPause, IconPencil, IconPlay, IconResetArrow, IconSearch, IconStar, IconUpload, IconWindowMaximise, IconWindowMinimise, IconWindowRestore, setGlyphResolver } from "./glyphs.js";
+export { glyphFor, IconBack, IconCalendar, IconCancel, IconCheck, IconClose, IconCopy, IconExpand, IconEye, IconEyeOff, IconFolderOpen, IconForward, IconPause, IconPencil, IconPlay, IconResetArrow, IconSearch, IconStar, IconTrash, IconUpload, IconWindowMaximise, IconWindowMinimise, IconWindowRestore, setGlyphResolver } from "./glyphs.js";
 export * from "./portalHue.svelte.js";
 export { useTipBubble, type TipBubble } from "./bubble.svelte.js";
 export * from "./useDragArmed.svelte.js";
