@@ -38,7 +38,7 @@ const ENTRIES = [
   { id: "jottacloud", name: "Jottacloud", group: "cloud", mark: M.jottacloud },
   { id: "kdrive", name: "kDrive", kind: "Infomaniak", group: "cloud", mark: M.kdrive },
   { id: "koofr", name: "Koofr", group: "cloud", mark: M.koofr },
-  { id: "linkbox", name: "TeleBox", group: "cloud", terms: ["Linkbox"], mark: M.linkbox },
+  { id: "linkbox", name: "TeleBox", group: "cloud", mark: M.linkbox },
   { id: "mailru", name: "Mail.ru Cloud", group: "cloud", mark: M.mailru },
   { id: "mega", name: "MEGA", group: "cloud", mark: M.mega },
   { id: "nextcloud", name: "Nextcloud", group: "cloud", terms: ["WebDAV"], mark: M.nextcloud },
