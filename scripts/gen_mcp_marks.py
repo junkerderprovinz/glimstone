@@ -5,10 +5,12 @@
 
 The same two kinds of source as the storage providers' marks: the SIMPLE ones
 from Simple Icons, the rest whole SVG files in packages/core/mcp-marks/, each
-with its source and licence recorded below and in that folder's README. Every
-mark is a trademark of its owner, used only to name the client it refers to,
-on a tile that picks exactly that client, reproduced unmodified apart from its
-colour, with no claim of endorsement by or affiliation with any of them.
+with its source and licence recorded below and in that folder's README. A logo
+whose colours flatten into one blot on a lit tile brings `<id>-hover.svg`, its
+brand's single-colour version, as the drawing that tile shows. Every mark is a
+trademark of its owner, used only to name the client it refers to, on a tile
+that picks exactly that client, reproduced unmodified apart from its colour,
+with no claim of endorsement by or affiliation with any of them.
 
 The machinery is in brand_marks.py, which needs the svgelements package (pip
 install svgelements).
@@ -16,7 +18,7 @@ install svgelements).
 import sys
 from pathlib import Path
 
-from brand_marks import MarkSet, local, simple, simple_data, write
+from brand_marks import MarkSet, local, local_hover, simple, simple_data, write
 
 ROOT = Path(__file__).parent.parent
 SRC = Path(sys.argv[1]) if len(sys.argv) > 1 else None
@@ -51,11 +53,17 @@ LOCAL = [
     ("n8n", "n8n", "homarr-labs/dashboard-icons, svg/n8n.svg", DASHBOARD),
     ("openai", "OpenAI", "homarr-labs/dashboard-icons, svg/openai.svg", DASHBOARD),
     ("openwebui", "Open WebUI", "homarr-labs/dashboard-icons, svg/open-webui.svg", DASHBOARD),
+    ("visualstudio", "Visual Studio", "homarr-labs/dashboard-icons, svg/visual-studio-2026.svg", DASHBOARD),
+
+    ("antigravity", "Antigravity", "lobehub/lobe-icons, icons/antigravity-color.svg", "MIT"),
 
     ("continuedev", "Continue", "continuedev/continue, docs/logo/light.svg", "Apache-2.0"),
     ("goose", "Goose", "block/goose, documentation/static/img/goose.svg", "Apache-2.0"),
     ("roo", "Roo Code", "RooCodeInc/Roo-Code, src/assets/images/roo-logo.svg, in black", "Apache-2.0"),
 ]
+
+# The marks with a drawing of their own for the lit tile, `<id>-hover.svg`.
+HOVER = ["antigravity"]
 
 HEAD = """// The marks of MCP clients, as markup for BrandMark, each with the colour its
 // tile lights up in and the ink that holds on it ("Brand tiles"). Written by
@@ -82,7 +90,9 @@ if SRC is None or not SRC.is_dir():
     raise SystemExit("pass the icons folder of simple-icons@16: python scripts/gen_mcp_marks.py <path>")
 
 data = simple_data(SRC)
+hovers = {slug: local_hover(slug, MARKS) for slug in HOVER}
 entries = {m[0]: simple(*m, SRC, data, MARKS) for m in SIMPLE}
-entries.update({m[0]: local(*m, MARKS) for m in LOCAL})
+entries.update({m[0]: local(*m, MARKS, hover=hovers.get(m[0])) for m in LOCAL})
 ids = write(OUT, HEAD, entries, "MCP_MARKS", "McpMarkId")
-print("%s: %d marks (%d from Simple Icons, %d from mcp-marks/)" % (OUT.name, len(ids), len(SIMPLE), len(LOCAL)))
+print("%s: %d marks (%d from Simple Icons, %d from mcp-marks/, %d with a drawing for the lit tile)"
+      % (OUT.name, len(ids), len(SIMPLE), len(LOCAL), len(hovers)))

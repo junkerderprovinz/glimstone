@@ -32,10 +32,10 @@ const ENTRIES = [
   { id: "grok", name: "Grok", group: "web", terms: ["xAI"], mark: M.grok },
   { id: "lechat", name: "Le Chat", group: "web", terms: ["Mistral"], mark: M.mistral },
 
-  { id: "antigravity", name: "Antigravity", group: "editor", terms: ["Google"], glyph: "IconCode" },
+  { id: "antigravity", name: "Antigravity", group: "editor", terms: ["Google"], mark: M.antigravity },
   { id: "cursor", name: "Cursor", group: "editor", mark: M.cursor },
   { id: "jetbrains", name: "JetBrains", group: "editor", terms: ["Junie", "AI Assistant", "IntelliJ IDEA"], mark: M.jetbrains },
-  { id: "visualstudio", name: "Visual Studio", group: "editor", terms: ["Microsoft"], glyph: "IconCode" },
+  { id: "visualstudio", name: "Visual Studio", group: "editor", terms: ["Microsoft"], mark: M.visualstudio },
   { id: "windsurf", name: "Windsurf", group: "editor", terms: ["Codeium", "Devin"], mark: M.windsurf },
   { id: "zed", name: "Zed", group: "editor", mark: M.zed },
 
