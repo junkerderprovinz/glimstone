@@ -1,5 +1,5 @@
 """The machinery that turns brand marks into markup for BrandMark, shared by
-the generators of the notification services' and the storage providers' marks.
+the generators of every set of marks.
 
 Each mark comes out as a whole SVG with the colour its tile lights up in and the
 ink that holds on it ("Brand tiles" in the design language). A colour that one
@@ -569,12 +569,13 @@ def _quote(text):
     return "'%s'" % text.replace("\\", "\\\\").replace("'", "\\'")
 
 
-def entry(slug, note, svg, colour, ink):
-    return "/** %s */\nconst %s: TileMark = {\n  svg: %s,\n  tile: '%s',\n  ink: '%s',\n};\n" % (
-        note, slug, _quote(svg), colour, ink)
+def entry(slug, note, svg, colour, ink, hover=None):
+    lit = "" if hover is None else "  hover: %s,\n" % _quote(hover)
+    return "/** %s */\nconst %s: TileMark = {\n  svg: %s,\n  tile: '%s',\n  ink: '%s',\n%s};\n" % (
+        note, slug, _quote(svg), colour, ink, lit)
 
 
-def simple(slug, si_slug, name, icons, data, marks):
+def _simple_source(si_slug, icons, data):
     svg = io.open(icons / (si_slug + ".svg"), encoding="utf-8").read()
     box = re.search(r'viewBox="([^"]+)"', svg)
     paths = re.findall(r'<path d="([^"]+)"', svg)
@@ -582,36 +583,52 @@ def simple(slug, si_slug, name, icons, data, marks):
         raise SystemExit("cannot read %s.svg" % si_slug)
     if si_slug not in data:
         raise SystemExit("no brand colour for %s: the data file did not carry it" % si_slug)
-    colour, licence = data[si_slug]
+    return box.group(1), paths, data[si_slug]
+
+
+def simple_hover(slug, si_slug, icons, data):
+    """The Simple Icons drawing of a brand as the lit tile's drawing, for a
+    mark whose colours do not survive one ink: one shape with its own holes."""
+    box, paths, (colour, _) = _simple_source(si_slug, icons, data)
+    markup = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="%s" fill="var(--mark-ink, %s)">%s</svg>' % (
+        box, colour, "".join('<path d="%s"/>' % d for d in paths))
+    return crop_to_ink(markup, slug + " hover")
+
+
+def simple(slug, si_slug, name, icons, data, marks, hover=None):
+    box, paths, (colour, licence) = _simple_source(si_slug, icons, data)
     # The brand's own colour rather than currentColor, which would make a
     # silhouette of the logo. `fill` sits on the svg, so one value paints it all.
     swap = themed([colour], si_slug, marks)
     painted = swap.get(colour, colour)
     aside = "" if not swap else ", lifted on the ground it cannot be read on"
     markup = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="%s" fill="var(--mark-ink, %s)">%s</svg>' % (
-        box.group(1), painted, "".join('<path d="%s"/>' % d for d in paths))
+        box, painted, "".join('<path d="%s"/>' % d for d in paths))
     return entry(slug, "%s. Simple Icons: %s (%s), in its own %s%s." % (name, si_slug, licence, colour, aside),
-                 crop_to_ink(markup, slug), *tile(si_slug, colour, marks))
+                 crop_to_ink(markup, slug), *tile(si_slug, colour, marks), hover=hover)
 
 
-def local(slug, name, source, licence, marks):
-    path = marks.folder / (slug + ".svg")
+def _drawing(slug, file, marks, prefix):
+    """A file of the set as markup whose parts a lit tile can repaint: its
+    viewBox, its body, the root's painting attributes, the colours it paints
+    with, those painting straight onto the page, and the colour it says its
+    tile lights up in."""
+    path = marks.folder / (file + ".svg")
     root = _unwrap_switch(_inline_css(ET.fromstring(io.open(path, encoding="utf-8").read()), slug))
     box = root.get("viewBox")
     if not box:
         w, h = root.get("width"), root.get("height")
         if not w or not h:
-            raise SystemExit("%s/%s.svg has neither viewBox nor size" % (marks.folder.name, slug))
+            raise SystemExit("%s/%s.svg has neither viewBox nor size" % (marks.folder.name, file))
         box = "0 0 %s %s" % (w, h)
 
     plate = _drop_plate(root, slug)
     ground, largest = roles(root, slug in marks.one_ink)
-    colour, ink = tile(slug, largest or plate, marks)
 
-    ids = {el.get("id"): "glim-%s-%s" % (slug, el.get("id")) for el in root.iter() if el.get("id")}
-    body = "".join(c for c in (_markup(k, ids, slug, marks.folder.name) for k in root) if c)
+    ids = {el.get("id"): "%s-%s" % (prefix, el.get("id")) for el in root.iter() if el.get("id")}
+    body = "".join(c for c in (_markup(k, ids, file, marks.folder.name) for k in root) if c)
     if not body:
-        raise SystemExit("%s/%s.svg is empty" % (marks.folder.name, slug))
+        raise SystemExit("%s/%s.svg is empty" % (marks.folder.name, file))
 
     # The root's painting attributes come along with the drawing.
     skip = {"viewBox", "width", "height", "id", "class", "role", "style", "x", "y", "version"}
@@ -631,13 +648,30 @@ def local(slug, name, source, licence, marks):
     if not found:
         root_attrs.append('fill="var(--mark-ink, #000000)"')
         found = ["#000000"]
+    return box, body, root_attrs, found, ground, largest or plate
 
+
+def _svg(box, root_attrs, body):
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="%s"%s>%s</svg>' % (
+        box, "".join(" " + a for a in root_attrs), body)
+
+
+def local_hover(slug, marks):
+    """`<slug>-hover.svg`, the brand's single-colour version, as the lit tile's
+    drawing: its parts turn the tile's ink and a part lying on another becomes
+    a cut-out. Its own colours never show, so none needs a second value."""
+    box, body, root_attrs, _, _, _ = _drawing(slug, slug + "-hover", marks, "glim-%s-hover" % slug)
+    return crop_to_ink(_svg(box, root_attrs, body), slug + " hover")
+
+
+def local(slug, name, source, licence, marks, hover=None):
+    box, body, root_attrs, found, ground, largest = _drawing(slug, slug, marks, "glim-" + slug)
+    colour, ink = tile(slug, largest, marks)
     swap = themed(found, slug, marks, ground)
     body = apply_swap(body, swap)
     root_attrs = [apply_swap(a, swap) for a in root_attrs]
-    markup = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="%s"%s>%s</svg>' % (
-        box, "".join(" " + a for a in root_attrs), body)
-    return entry(slug, "%s. Source: %s (%s)." % (name, source, licence), crop_to_ink(markup, slug), colour, ink)
+    return entry(slug, "%s. Source: %s (%s)." % (name, source, licence),
+                 crop_to_ink(_svg(box, root_attrs, body), slug), colour, ink, hover=hover)
 
 
 def simple_data(icons):
