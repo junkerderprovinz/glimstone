@@ -225,7 +225,7 @@ test.describe("The VPN catalog in a PickerWindow", () => {
       { title: "Only in their own app", count: count("appOnly") },
     ]);
     const [providers, appOnly] = sections.map((s) => s.names);
-    expect(providers!.at(-1)).toBe("Own WireGuard config");
+    expect(providers!.at(-1)).toBe("WireGuard");
     expect(providers!.slice(0, -1)).toEqual(alphabetical(providers!.slice(0, -1)));
     expect(appOnly).toEqual(alphabetical(appOnly!));
   });

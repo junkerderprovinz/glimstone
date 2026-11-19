@@ -50,9 +50,9 @@ test('every mark has its tile colour and an ink that reaches 2:1 on it', () => {
   }
 });
 
-test('an own WireGuard configuration is a word the app translates, and every provider is a brand', () => {
-  const words = entries.filter((e) => e.word).map((e) => e.id).sort();
-  assert.deepEqual(words, ['custom']);
+test('every entry is a brand the app shows as it is, the own configuration as WireGuard', () => {
+  assert.deepEqual(entries.filter((e) => e.word).map((e) => e.id), []);
+  assert.equal(entries.find((e) => e.id === 'custom')?.name, 'WireGuard');
 });
 
 test("Proton VPN's gradient, which melts on its lit tile, brings a drawing in one ink with its cut-outs", () => {

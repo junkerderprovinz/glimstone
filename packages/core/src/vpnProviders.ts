@@ -23,7 +23,7 @@ const ENTRIES = [
   { id: "azirevpn", name: "AzireVPN", group: "provider", mark: M.azirevpn },
   { id: "cactusvpn", name: "CactusVPN", group: "provider", mark: M.cactusvpn },
   { id: "cryptostorm", name: "cryptostorm", group: "provider", glyph: VPN },
-  { id: "custom", name: "Own WireGuard config", group: "provider", terms: [".conf"], mark: M.wireguard, word: true },
+  { id: "custom", name: "WireGuard", group: "provider", terms: [".conf"], mark: M.wireguard },
   { id: "fastestvpn", name: "FastestVPN", group: "provider", glyph: VPN },
   { id: "hideme", name: "hide.me", group: "provider", mark: M.hideme },
   { id: "ipvanish", name: "IPVanish", group: "provider", mark: M.ipvanish },

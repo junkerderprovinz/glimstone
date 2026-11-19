@@ -10,7 +10,7 @@ const TITLES = { provider: "Providers", appOnly: "Only in their own app" };
 
 export const VPN_TEXT: PickerText = {
   search: "Search VPNs",
-  none: "Nothing matches “{query}”. Own WireGuard config takes any WireGuard server.",
+  none: "Nothing matches “{query}”. WireGuard takes any WireGuard server.",
   clear: "Clear the search",
   close: "Close",
   cancel: "Cancel",
