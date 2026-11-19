@@ -7,6 +7,7 @@ export * from "./Checkbox.tsx";
 export * from "./CoffeeDialog.tsx";
 export * from "./ColorPicker.tsx";
 export * from "./ConfirmDialog.tsx";
+export * from "./ConnectionRow.tsx";
 export * from "./ContextMenu.tsx";
 export * from "./CopyField.tsx";
 export * from "./CryptoDonateDialog.tsx";

@@ -550,6 +550,10 @@ The rule that a tile filled with an engine colour paints its mark in that colour
 
 The hover on a brand tile used to be one grey for every tile, before each tile took its brand's colour.
 
+## Connections: from a sub-card to a row
+
+An app's settings first gave each connected VPN a sub-card with a notch badge, its logo, a line of jobs and the buttons below it, and three of them filled the screen. The row put the name, the logo and the status on one line and the buttons on one more, then stood the logo on a tile in the brand's colour the full height of the row, which made the list readable at a glance. A red line for a failed connection was weighed and left out: the state colours reach only 4.1:1 as text on the light well, so a deviation is a badge after the name.
+
 ## Pairing instances: the relay well
 
 The relay well first spanned a fixed share of the row at the taller page-level height, and it broke into two rows of two beside a lot of empty card. It was then pinned to one width at the button height, kept to one row.

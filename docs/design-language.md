@@ -1315,6 +1315,18 @@ A tile that carries somebody else's mark (a cloud provider in a storage picker, 
 
 In `packages/core/tokens.css`, `.glim-brand-tile` is the tile, and `--tile` and `--tile-ink` are its fill and ink, from a `.glim-tile-<brand>` class or the tile's own style. A mark paints each part with `var(--mark-ink, <own colour>)` or, for a cut-out, `var(--mark-cut, <own colour>)`, and the lit tile sets both. Variables reach fills that a mark sets inline, which a plain `fill` rule does not. A hover mark carries `.glim-mark-hover`, the mark it replaces `.glim-mark-rest`. An app with many generated marks decides each part's role when it generates them, not in the page.
 
+## Connections (a service or an account the app uses)
+
+A VPN, a cloud drive, a registry or a debrid account the app is signed in to stands as one compact row, so a settings card can list several of them without a sub-card for each.
+
+- **The mark is lit on a tile the row's whole height.** A brand's mark from a catalog stands on its own colour with its ink, as its tile in a picker shows under the pointer, and takes the lit drawing where it has one. One of the app's glyphs stands on the accent. The tile is about as wide as a row at rest is high, so it is square there and only grows taller when the row wraps.
+- **The name, then one quiet line on how it stands.** Who is signed in, where the traffic leaves, or the reason the last test gave. Further lines, such as what uses the connection, follow in the same small type. A state that is not the normal case, such as an expired sign-in, is a badge after the name (rule 33), since the state colours as text miss 4.5:1 on the well's surface in the light theme.
+- **Test, Edit and Remove stand at the end in that order**, each only where the app offers it. They stay in view, unlike a list row's buttons (rule 6), because the outcome of a test has to be seen. Below 640px they show their glyphs alone and keep to one line.
+- **A test reports on its own button** ("Failure feedback"). It shows the busy ring while it runs and keeps its label, so it keeps its width. Then it turns `ok` with a check or `danger` with a cross, its bubble says what the test found, and a failure shakes it once.
+- **Rows stand in a card one under the other.** The row has the well's surface and no shadow, so a card holds as many as it needs (rule 1).
+
+`ConnectionRow` is this row in all four packages, with `connectionTile()` and `connectionTestFace()` in [`packages/core/src/connectionRow.ts`](../packages/core/src/connectionRow.ts). An OLED screen rings a near-black tile with `--tile-edge`, and a Windows contrast theme draws the mark in the text colour with an edge after the tile.
+
 ## The App tab (every other way to get the app)
 
 **Automatic updates are not on it.** The switch that lets the installed app update itself stands on General, in every app that has Settings tabs: the App tab offers other ways to get the product, and how this copy keeps itself current concerns the app as a whole.

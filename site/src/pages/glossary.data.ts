@@ -758,6 +758,19 @@ export const GLOSSARY: GlossarySection[] = [
         },
       },
       {
+        id: "connection-row",
+        en: "Connection row",
+        de: "Verbindungszeile",
+        proposal: true,
+        code: ["ConnectionRow", ".glim-connection"],
+        components: ["ConnectionRow"],
+        rules: [1, 33],
+        text: {
+          en: "A connected service or account in one row: its mark lit on a brand tile the row's whole height, the name, one quiet line on how it stands, and Test, Edit and Remove at the end.",
+          de: "Ein verbundener Dienst oder ein Konto in einer Zeile: sein Zeichen auf einer Markenkachel so hoch wie die Zeile, der Name, eine leise Zeile zum Stand, und Testen, Bearbeiten und Entfernen am Ende.",
+        },
+      },
+      {
         id: "glyph-tile",
         en: "Glyph tile",
         de: "Glyphenkachel",

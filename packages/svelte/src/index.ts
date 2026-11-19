@@ -8,6 +8,7 @@ export { default as Checkbox, type CheckboxProps } from "./Checkbox.svelte";
 export { default as CoffeeDialog, type CoffeeDialogProps } from "./CoffeeDialog.svelte";
 export { default as ColorPicker, type ColorName, type ColorPickerPanelText, type ColorPickerProps } from "./ColorPicker.svelte";
 export { default as ConfirmDialog, type ConfirmDialogProps } from "./ConfirmDialog.svelte";
+export { default as ConnectionRow, type ConnectionRowLabelKeys, type ConnectionRowProps, type ConnectionRowText, type ConnectionTest } from "./ConnectionRow.svelte";
 export { default as ContextMenu, type ContextMenuProps, type MenuEntry, type MenuHead, type MenuItem } from "./ContextMenu.svelte";
 export { default as CopyField, type CopyFieldProps } from "./CopyField.svelte";
 export { default as CryptoDonateDialog, type CryptoCoin, type CryptoDonateDialogProps, type CryptoNetwork } from "./CryptoDonateDialog.svelte";

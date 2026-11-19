@@ -14,6 +14,8 @@ export const glyphByName = new Map(GLYPHS.map((g) => [g.name, g]));
 const KEYS: Record<string, string> = {
   save: "IconSave",
   delete: "IconTrash",
+  remove: "IconTrash",
+  test: "IconCheck",
   cancel: "IconClose",
   copy: "IconCopy",
   copied: "IconCheck",
