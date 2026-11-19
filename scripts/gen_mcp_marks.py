@@ -18,7 +18,7 @@ install svgelements).
 import sys
 from pathlib import Path
 
-from brand_marks import MarkSet, local, local_hover, simple, simple_data, write
+from brand_marks import BRAND, MarkSet, local, local_hover, simple, simple_data, write
 
 ROOT = Path(__file__).parent.parent
 SRC = Path(sys.argv[1]) if len(sys.argv) > 1 else None
@@ -57,6 +57,8 @@ LOCAL = [
 
     ("antigravity", "Antigravity", "lobehub/lobe-icons, icons/antigravity-color.svg", "MIT"),
 
+    ("msty", "Msty", "msty.ai, brands/studio.svg", BRAND),
+
     ("continuedev", "Continue", "continuedev/continue, docs/logo/light.svg", "Apache-2.0"),
     ("goose", "Goose", "block/goose, documentation/static/img/goose.svg", "Apache-2.0"),
     ("roo", "Roo Code", "RooCodeInc/Roo-Code, src/assets/images/roo-logo.svg, in black", "Apache-2.0"),
@@ -82,6 +84,8 @@ import type { TileMark } from "./picker.ts";
 TILE_COLOUR = {
     # ChatGPT's green rather than the paler one its plate is drawn in.
     "chatgpt": ("#10a37f", None),
+    # Msty's blue from its cube rather than the black outline round it.
+    "msty": ("#198fe1", None),
 }
 
 MARKS = MarkSet(ROOT / "packages" / "core" / "mcp-marks", {}, set(), TILE_COLOUR, set())

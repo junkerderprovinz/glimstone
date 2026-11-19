@@ -48,6 +48,11 @@ into one blot on its lit tile, so the lit tile shows the single-colour arch.
   <https://github.com/RooCodeInc/Roo-Code>, which paints in `currentColor`,
   written in black.
 
+**The client's own website**, used under the trademark position below rather
+than under a licence: `msty.svg` is <https://msty.ai/brands/studio.svg>, the
+cube that <https://msty.ai/> names as its organisation's logo. Its tile lights
+in the blue of the cube, `#198fe1`, rather than the black outline round it.
+
 Apache-2.0 and MIT may be carried into this project's AGPL-3.0, so the combined
 work stays AGPL-3.0.
 
@@ -60,8 +65,7 @@ Copilot mark.
 
 A client whose own mark has no clean source wears the glyph of its kind
 instead. Jan's logo exists only as a picture inside an SVG, in its own
-repository as in Dashboard Icons, and Msty has none in an icon set, a
-repository or a press page of its own.
+repository, on jan.ai and in Dashboard Icons, and selfh.st icons has none.
 
 ## Trademarks
 

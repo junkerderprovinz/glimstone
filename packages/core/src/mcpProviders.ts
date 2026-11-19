@@ -24,7 +24,7 @@ const ENTRIES = [
   { id: "anythingllm", name: "AnythingLLM", group: "models", mark: M.anythingllm },
   { id: "jan", name: "Jan", group: "models", glyph: "IconApp" },
   { id: "lmstudio", name: "LM Studio", group: "models", mark: M.lmstudio },
-  { id: "msty", name: "Msty", group: "models", glyph: "IconApp" },
+  { id: "msty", name: "Msty", group: "models", mark: M.msty },
   { id: "openwebui", name: "Open WebUI", group: "models", terms: ["Ollama"], mark: M.openwebui },
 
   { id: "chatgpt", name: "ChatGPT", group: "web", terms: ["OpenAI"], mark: M.chatgpt },
