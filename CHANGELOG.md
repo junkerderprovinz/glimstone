@@ -40,6 +40,7 @@ Apps that connect to storage, send notifications, set up MCP clients, sign in to
 
 ## 🎨 Design
 
+- **GlimStone has a new mark:** an eight-pointed star of steel around a gold stone, in place of the wall of bricks. It carries its own lit and shaded halves, so one drawing reads on light and dark grounds, on the banners, in the site's header and in the README's pictures.
 - **A black or grey mark turns white in the dark theme.** It was lifted only as far as 3:1 on the dark tile and stayed grey, Matrix's among them. Grey carries no brand colour to stay close to, so it goes all the way to white.
 - **Proton VPN's mark keeps its shape on the lit tile.** In one ink its gradient ran together into a shape that read like a 7. The lit tile now shows Proton VPN's single-colour drawing from Simple Icons, with the gap between its two parts.
 
