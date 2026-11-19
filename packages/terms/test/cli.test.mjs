@@ -14,15 +14,16 @@ test('reports each break with file, line, language and key, and fails', () => {
   const r = run('app');
   assert.equal(r.status, 1);
   const lines = r.stdout.trim().split('\n');
-  assert.ok(lines.some((l) => /^app[\\/]i18n\.ts:8\s+de\s+nav\.relay\s+relay: "relais" is not used, write "Relay"/.test(l)), r.stdout);
+  assert.ok(lines.some((l) => /^app[\\/]i18n\.ts:9\s+de\s+nav\.relay\s+relay: "relais" is not used, write "Relay"/.test(l)), r.stdout);
+  assert.ok(lines.some((l) => /^app[\\/]i18n\.ts:12\s+de\s+auth\.failed\s+signIn: "login" is not used, write "Anmeldung"/.test(l)), r.stdout);
   assert.ok(lines.some((l) => /^app[\\/]locales[\\/]fr\.ts:5\s+fr\s+backup\.run\s+backup: the English says backup, the translation lacks "sauvegarde"/.test(l)), r.stdout);
-  assert.match(r.stdout, /2 breaks of the glossary/);
+  assert.match(r.stdout, /3 breaks of the glossary/);
 });
 
 test('passes once the ignore list covers every break', () => {
   const dir = mkdtempSync(join(tmpdir(), 'terms-'));
   const ignore = join(dir, 'ignore.json');
-  writeFileSync(ignore, JSON.stringify(['de:nav.relay', 'fr:backup.*']));
+  writeFileSync(ignore, JSON.stringify(['de:nav.relay', 'de:auth.*', 'fr:backup.*']));
   const r = run(`--ignore=${ignore}`, 'app');
   assert.equal(r.status, 0, r.stdout + r.stderr);
   assert.match(r.stdout, /no breaks of the glossary/);

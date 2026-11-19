@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { matchesForbidden, matchesStems } from '../check.mjs';
+import { checkTables, matchesForbidden, matchesStems } from '../check.mjs';
 
 const glossary = JSON.parse(readFileSync(new URL('../terms.json', import.meta.url), 'utf8'));
 const { languages, terms } = glossary;
@@ -61,6 +61,28 @@ test('forbids no variant that the word itself contains', () => {
         assert.equal(matchesForbidden(form, word), false, `${id} ${lang}: "${form}" holds the forbidden "${word}"`);
       }
     }
+  }
+});
+
+// A term built from others, such as fortress sign-in, has to carry their
+// words too, or the check would fault the glossary's own translation.
+test('keeps the words of every term to the whole glossary', () => {
+  const tables = {};
+  for (const lang of SHIPPED) {
+    tables[lang] = {};
+    for (const [id, term] of Object.entries(terms)) {
+      for (const form of ['singular', 'plural']) {
+        tables[lang][`${id}.${form}`] = { value: term[lang][form], file: `${lang}.json`, line: 1 };
+      }
+    }
+  }
+  const found = checkTables(tables, { glossary });
+  assert.deepEqual(found.map((v) => `${v.lang} ${v.key} ${v.term} ${v.kind}`), []);
+});
+
+test('keeps 2FA out of every language', () => {
+  for (const lang of SHIPPED) {
+    assert.ok(terms.twoFactor[lang].forbidden.some((word) => matchesForbidden('2FA', word)), lang);
   }
 });
 

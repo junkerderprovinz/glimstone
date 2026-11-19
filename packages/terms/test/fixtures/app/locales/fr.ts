@@ -4,6 +4,7 @@ const fr: Translations = {
   'nav.relay': 'Relais',
   'backup.run': 'Lancer une copie',
   'jobs.title': 'Tâches',
+  'auth.failed': 'Échec de la connexion',
 };
 
 export default fr;
