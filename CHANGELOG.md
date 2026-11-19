@@ -6,7 +6,7 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 Apps pick their providers from shared catalogs: storage, notifications, MCP clients, container registries, VPNs, download services, captcha solvers and transfer services. Each catalog carries every provider's group, search words and mark, so an app no longer keeps a list of its own. A big picker is a single component, `PickerWindow`, which rates its groups, keeps a tile that cannot be picked yet in view and marks the last pick. Whatever the pointer is over lights up in the accent, the Help card can send people to Discord, and GlimStone has a new mark.
 
-**Adopting apps:**
+## 🧩 Adopting apps
 
 - **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.6.0, all packages at the same number.
 - **The GlimStone row:** set `latest: true` on the GlimStone row you hand the Version card. An app that builds the link itself takes `GLIMSTONE_RELEASE_URL` from its GlimStone package in place of `releases/tag/v<version>`.
@@ -100,7 +100,7 @@ The focus ring reads on every ground it stands on, and a field's placeholder can
 
 After a removal the fortress takes no new app until the phrase changes, and its words say so in all 42 languages.
 
-**Adopting apps:**
+## 🧩 Adopting apps
 
 - **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.5.0, all at the same number.
 - **Vue toasts:** `ToastViewport` emits `mouse-enter`, `mouse-leave`, `focus` and `blur`, the names of React's handlers. The old `enter`, `leave`, `focusin` and `focusout` are deprecated and go in 5.0.0: until then they keep firing beside the new names, and the first one a page listens to says so once on the console. Rename `@enter`, `@leave`, `@focusin` and `@focusout` where the app listens, or let `npx glimstone-migrate src` do it.
@@ -209,7 +209,7 @@ After a removal the fortress takes no new app until the phrase changes, and its 
 
 The fortress moves in. An app's Instances tab shows its own instances first and the other apps of the fortress behind one switch, with the permissions and the phrase as the only way in, in all 42 languages. Every member opens from anywhere through the fortress, and any member can take another app's instance out. The window that asks first moves on to the phrase, since the old one still lets it back in. `@glimstone/terms` keeps the shared words of an interface and checks an app's translations against them. Around them come a list with its tools inside it, popovers and sheets in the top layer, loaders that wait before they show, errors under fields, toasts read out through live regions, a bilingual glossary of every element, four more README brands and labels inside the sign-in fields.
 
-**Adopting apps:**
+## 🧩 Adopting apps
 
 - **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.4.0, all at the same number. Nothing is removed, and `Badge`'s `shape` is deprecated but still works.
 - **Installing the terms:** `npm install --save-dev @glimstone/terms`. It ships at the same number as the other packages and depends on nothing.
@@ -323,7 +323,7 @@ The fortress moves in. An app's Instances tab shows its own instances first and 
 
 A horizontal selector keeps to one row at every width and turns into a dropdown where its labels do not fit. The release also brings `dropIndex` for where a dragged item lands, a tremble of every reorderable list while an item is held, the sign-in card for every app with a login, a quieter OLED look, steadier toasts and a corrected wand glyph.
 
-**Adopting apps:**
+## 🧩 Adopting apps
 
 - **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.3.0, all at the same number.
 - **`pairsOnPhone`** is still accepted and has no effect, so an app can drop it wherever it passes it.
@@ -405,7 +405,7 @@ OLED and the system's colour. A switch under the Design picker puts the dark loo
 
 There are new components too, for the parts apps kept building for themselves: `TextField` and `TextArea`, `FieldRow` and `FieldRowGroup`, `PathField`, `GlyphField`, `Tree`, `Table`, `RowMark`, `GlyphTile`, `ListRow` and `IconButton`, all in React and Vue. `Button`, `Toggle`, `Selector`, `Window`, `Select`, `ContextMenu`, `SidebarRow`, `Card`, `SubCard`, `PasswordField`, `CopyField` and the toasts take the hooks an app kept working around, and a few small bugs are gone.
 
-**Adopting apps:**
+## 🧩 Adopting apps
 
 - **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.2.0, all at the same number. Nothing is renamed or removed.
 - **OLED:** put a `Toggle` labelled OLED under the Design picker, with an info bubble that says it gives true black for OLED and AMOLED screens. Call `applyOled(on)` from `@glimstone/core`, which keeps the choice on the device, and keep it out of any settings a server syncs. `applyCachedAppearance()` applies it at boot, and an app that boots its own way calls `applyOled(storedOled())`. `darkShowing()` and `watchDarkShowing()` tell a settings page whether OLED is in effect.
@@ -485,7 +485,7 @@ There are new components too, for the parts apps kept building for themselves: `
 
 Eleven new components for apps that work like a desktop program: a general window, a context menu and a menu bar, a checkbox, key caps and data pills, a password field and a copy field, a meter and a progress bar, and a colour picker, all in React and Vue. Nineteen glyphs tell the kinds of a file apart. A checkbox may now stand in a menu row and among choices that are applied together. A menu opened with the mouse leaves its first row unlit, only a bar whose work runs carries a sheen, and dense lists get a quiet meter and a slim checkbox.
 
-**Adopting apps:**
+## 🧩 Adopting apps
 
 - **Moving up:** install `@glimstone/core` with `@glimstone/react` or `@glimstone/vue` at 4.1.0, all at the same number. Nothing from 4.0.0 is renamed or removed.
 - **Checkboxes:** a `Checkbox` stands under a notice that can be switched off, in a menu row that is on or off, and among choices applied together, such as a window that picks a list's columns. Every other on/off control stays a `Toggle` (rule 39).
@@ -523,7 +523,7 @@ Eleven new components for apps that work like a desktop program: a general windo
 
 GlimStone ships as packages: a core without a framework and one package each for React, Vue and Flutter, all with one version number. The components draw only with `glim-` classes, so an app without Tailwind gets the same pixels.
 
-**Adopting apps:**
+## 🧩 Adopting apps
 
 - **Nothing changes until an app moves.** The copied files keep working. Moving means installing `@glimstone/core` with `@glimstone/react` and importing from them instead of `./components/…`; Select, Combobox and Slider come from `@glimstone/react/Select` and its siblings.
 - **Stored choices:** call `setStoragePrefix("myapp")` (the app's own prefix) at boot, before `applyCachedAppearance()` and `applyStoredLabelModes()`.
@@ -554,7 +554,7 @@ GlimStone ships as packages: a core without a framework and one package each for
 
 Every button with words has a fill, wherever it stands and Cancel included, and every button takes the accent when the pointer or the keyboard reaches it. Under rainbow each button lights up in a colour of its own. A list page drops the Filter, Sort and Search buttons over its list: the cards stand on top, the list below, and sorting, filtering and searching move into the list's header. A notice or a confirmation that can be switched off carries a checkbox for it, the one place a checkbox stands instead of a switch. Six glyphs say what kind of file a row holds, F-Droid joins the brand marks with its own logo, and checking for an update and installing it both wear the two arrows of `IconSync`. A small script finds bare buttons with words in an app's sources.
 
-**Adopting apps:**
+## 🧩 Adopting apps
 
 - **Buttons with words:** give every button that shows a word a fill, anywhere in the app. That includes every answer in a window's foot, Cancel, Close and Back among them. Keep the ghost kind for glyph-only buttons in toolbars and list rows. A source check keeps them filled.
 - **Bare button check:** copy `reference/check-bare-buttons.mjs` beside the web sources and run `node check-bare-buttons.mjs src` in CI. Pass `--bare` and `--worded` if the app's Button spells its bare kind or its label prop differently.
@@ -602,7 +602,7 @@ Every button with words has a fill, wherever it stands and Cancel included, and 
 
 Desktop apps get a title bar of their own, and every button and Look selector in the family can now wear a glyph. On Windows and Linux the bar is drawn in the app's look, while macOS keeps its own. The Labels selector gets new glyphs and a Row height selector three of its own. Buttons that only had words get theirs, so the Glyph choice of the label setting reaches them too. Twenty-three glyphs join the assortment, four meanings move off the glyphs they shared, and `IconSignIn` turns so its arrow points into the door. `IconUnlink` and `IconSleep` join the assortment, `IconUpdate` also covers the update check, a passkey sign-in wears `IconKey`, and the Version card shows its numbers without a "v". Bars that change all the time get a class of their own. Select becomes the one dropdown that can do everything. It splits its list into groups with headings, opens submenus beside their rows, carries a glyph per option and takes one of three sizes and four widths. An outside label can name it and a long value can wrap. The wheel steps it while it has focus, it stays busy while an answer is out and shakes when one is refused. It mirrors under a right-to-left language, gives a finger taller rows and keeps still under reduced motion. The design language has a section of its own for it.
 
-**Adopting apps:**
+## 🧩 Adopting apps
 
 - **Desktop window frame:** make the main window frameless on Windows and Linux and render `reference/react/WindowBar.tsx` only there, with the app's own window calls. Copy the window frame rules from `reference/tokens.css`, mark the frame that holds the rail and the content with `.glim-shell`, and size a full-height shell and anything fixed to the top edge with `--window-bar`.
 - **Window glyphs:** copy `reference/react/glyphs.tsx` again, and take `IconWindowMinimise`, `IconWindowMaximise` and `IconWindowRestore` from `reference/glyphs.json` where the app has a title bar.
@@ -673,7 +673,7 @@ Desktop apps get a title bar of their own, and every button and Look selector in
 
 Nine findings from restyling a host's own pages. Two rules keep a live page fast, the tooltip leaves structure alone, the label engine reaches buttons the app does not own, a move mode wiggles, and the glyph set grows by six and redraws its grip. A star marks the default entry and a card's own buttons move to its foot. What's new shows one card per release, and a number field that React hides no longer blanks the page.
 
-**Adopting apps:**
+## 🧩 Adopting apps
 
 - **Stylesheets:** rewrite every `:has()` that tests `[class…]` or `[style…]` to test a class by name, and give every bar or meter that changes all the time `contain: size layout` and a real height.
 - **Tooltips:** copy `reference/tooltip.ts` again. A `title` on a table, a row group, a card or a section stays where it is.
@@ -718,7 +718,7 @@ Nine findings from restyling a host's own pages. Two rules keep a live page fast
 
 GlimStone gets a site, and its components get behaviour contracts: which keys do what, where focus goes and what a screen reader hears, each row tested on every push. Select, Combobox and Slider arrive on Zag's state machines, and ConfirmDialog ships with the hook that gives it Escape and a focus trap. Smaller rules give the Version card one button and the Look settings their glyphs, and cover a phone app's own screen header, the removal of something that keeps state, a narrow web bottom bar and an Info tab in a simple app's Settings.
 
-**Adopting apps:**
+## 🧩 Adopting apps
 
 - **Select:** replace DropdownListbox with `Select`. Install `@zag-js/react` and `@zag-js/select`, copy `reference/react/Select.tsx` and the select rules from `reference/tokens.css` (`.glim-field-label` through `.glim-select-empty`). A plugin page without React uses `reference/select.ts`.
 - **Confirm:** copy `reference/react/useConfirm.tsx` and call `await confirm(question)` where the app has its own hook. The app's own confirm hook or window can then go, or keep only what goes beyond it, such as a phone sheet.
@@ -757,7 +757,7 @@ GlimStone gets a site, and its components get behaviour contracts: which keys do
 
 What a redesign and a finished login settled, written down so the next app can follow them. The Info tile puts Version first, the Version card gains Release notes and a counting New button, and the Help card a Manual button in the README's yellow. Dropdowns stand beside their labels, every page gets a search button and every picker window has one shape. Pages and windows run the full width, selectors wear their own colours under rainbow, and a fill level sloshes. A new section, "The first way in", gives every app the same password rules, the same reset through the container log and the same line between the owner's browser and a paired phone.
 
-**Adopting apps:**
+## 🧩 Adopting apps
 
 - **Info tile:** show Version, Help, then About, and remove the What's new card.
 - **Version card:** add "Release notes" and, if the app marks its changes, a "New · n" button after it, so "Check for updates" stays last. Both open one window, "New in x.y.z", with the release notes and the changes as two tabs. `InfoVersionCard` takes `onReleaseNotes` and `whatsNew`.
@@ -823,7 +823,7 @@ What a redesign and a finished login settled, written down so the next app can f
 
 The last rounds of the redesign move into the language. Illustrations get their rules, the green dots lead to a change and go when they are clicked, an overview opens on about five cards, and lists, pickers and the rail each gain a few. The reference code is unchanged.
 
-**Adopting apps:**
+## 🧩 Adopting apps
 
 - **Overview:** show about five cards at first and keep the rest under Customize. Take every count from one function, and let the cards fill each row at one height.
 - **Lists:** put Filter, Sort and Search above the list's card and name the card after the chosen tile. Fill a row's glyph tile with the accent while the row is hovered, focused or picked. A list of things that run shows its last fourteen runs as a strip, followed by one status.
@@ -864,7 +864,7 @@ The last rounds of the redesign move into the language. Illustrations get their 
 
 The reference code follows the rules 3.2.0 wrote down. Under rainbow, text keeps the single accent while glyphs take their position's hue. The tokens carry the five type sizes, filled buttons and clickable badges hover by a colour step instead of `opacity`, and the About card becomes the Info tile with About, Version and Help.
 
-**Adopting apps:**
+## 🧩 Adopting apps
 
 - **Tokens:** copy `reference/tokens.css` again. Merging by hand, add `--accent-glyph` beside `--accent-ink`, the `:root, [data-theme]` block with `--accent-hover` and `--status-{ok,fail,warn}-hover`, and `--text-status`, `--text-title`, `--text-subline` and `--text-meta` beside `--text-body`, with `--text-heading`, `--text-dense` and `--text-caption` pointing at them. In the three rainbow blocks, replace the `--accent-ink` lines with `--accent-glyph` and add `--accent-hover` to `[data-rainbow] .glim-hue`.
 - **Tailwind:** copy `reference/tailwind-theme.css` again. It adds `accentGlyph`, `accentHover` and `status{Ok,Fail,Warn}Hover`, maps the type scale to `text-status`, `text-title`, `text-body`, `text-subline` and `text-meta`, and stops redefining `--color-accentInk` under `.glim-hue`.
@@ -896,7 +896,7 @@ The reference code follows the rules 3.2.0 wrote down. Under rainbow, text keeps
 
 A full redesign becomes the standard. Its rules for structure, navigation, lists, page actions, wording, narrow windows, first start and what's new move into the language. Warnings turn orange, the type scale has five sizes, Settings ends in an Info tile, and row buttons, selectors, sub-cards, the settings search and illustrations follow the redesign. The glyph set holds one standard drawing per meaning, 116 of them in `reference/glyphs.json`, and the App tab follows the README's download rows.
 
-**Adopting apps:**
+## 🧩 Adopting apps
 
 - **Tokens:** copy the `--status-warn-*` values from `reference/tokens.css` again, in all three theme blocks. Move every text to one of the five sizes 12, 13, 14, 16 and 22px.
 - **Structure:** replace every fold, accordion and Simple/Advanced switch with sub-cards, cards of their own or a sheet. Remove page headings and info strips, merge one-row cards, and keep each fact and each setting in one place.
@@ -991,7 +991,9 @@ A full redesign becomes the standard. Its rules for structure, navigation, lists
 
 A settings area with many pages can stand its tabs in a column of tiles beside the content, and the search over all of Settings shows only when somebody scrolls up for it. A button that runs a test shows its verdict on itself, and the closed envelope on the About card's mail button sits in the middle of its button. Phone apps share one pairing page, one scanner and one settings page and answer every press on a touch screen, and a new file maps every glyph to the component each app renders, with one eye for all of them. The design language also says where the switch for automatic updates belongs and which giving windows a phone keeps in the app.
 
-**Adopting apps:** copy `reference/react/Button.tsx` and `reference/appMarks.ts` again. Merging by hand, add `ok: "bg-statusOkSolid text-carbon-background hover:opacity-90"` to the button's tone table and `"ok"` to `ButtonTone`, change both viewBoxes of `MAIL_SVG` to `2 2.32 20 19.36` and give its hover `<svg>` `overflow="visible"`. A Test connection button then turns `ok` or `danger` with its answer and changes its word and glyph with it, instead of a coloured word elsewhere in the form. Move a switch for automatic updates to the General tab if it stands anywhere else. An app whose settings strip wraps into several rows moves its tabs into a column of tiles beside the content ("Vertical tiles"), and an app with a search box above its settings pages renders it only after an upward scroll ("The settings search"). An app that pairs a phone with a twelve-word phrase builds the page and the scanner as "Pairing a phone" describes them, and the window that shows the words on the web puts the QR code to their right. A phone app opens its settings from a gear beside the plus, lays them out as "A phone app's settings" describes with one button in its Danger zone, and gives every control a press state: dimmed while held, and a README button lit in its brand colour until the finger lifts. An app that shows or hides a secret uses `IconEye` and `IconEyeOff` as `reference/glyphs.md` draws them, and an app that adds or swaps a glyph updates its row in `reference/glyph-map.md` in the same commit.
+## 🧩 Adopting apps
+
+Copy `reference/react/Button.tsx` and `reference/appMarks.ts` again. Merging by hand, add `ok: "bg-statusOkSolid text-carbon-background hover:opacity-90"` to the button's tone table and `"ok"` to `ButtonTone`, change both viewBoxes of `MAIL_SVG` to `2 2.32 20 19.36` and give its hover `<svg>` `overflow="visible"`. A Test connection button then turns `ok` or `danger` with its answer and changes its word and glyph with it, instead of a coloured word elsewhere in the form. Move a switch for automatic updates to the General tab if it stands anywhere else. An app whose settings strip wraps into several rows moves its tabs into a column of tiles beside the content ("Vertical tiles"), and an app with a search box above its settings pages renders it only after an upward scroll ("The settings search"). An app that pairs a phone with a twelve-word phrase builds the page and the scanner as "Pairing a phone" describes them, and the window that shows the words on the web puts the QR code to their right. A phone app opens its settings from a gear beside the plus, lays them out as "A phone app's settings" describes with one button in its Danger zone, and gives every control a press state: dimmed while held, and a README button lit in its brand colour until the finger lifts. An app that shows or hides a secret uses `IconEye` and `IconEyeOff` as `reference/glyphs.md` draws them, and an app that adds or swaps a glyph updates its row in `reference/glyph-map.md` in the same commit.
 
 ## 🎨 Design
 
@@ -1017,7 +1019,7 @@ A major release, because the App tab's tiles make way for the buttons in the fam
 
 At rest a README button is grey with the brand's mark; under the pointer it takes the brand's colour, the name moves up for a second line and a sheen crosses once. The About card gives and reports with the same buttons, and every giving window opens with the same appeal. Every horizontal selector spans its card, and a label wraps only when its box has run out of room. The page behind a window is blurred, and the first row of every page stands level with the rail's top edge. On the motion side every level answers every dial, the reference carries seven more animations and the reorder wiggle, and a phone gets its own confirm swell.
 
-**Adopting apps:**
+## 🧩 Adopting apps
 
 - **Tokens:** copy `reference/tokens.css` again. Merging by hand, remove `--carbon-tile-hover`, `--carbon-tile-hover-ink` and the four `--brand-*-hover` values from all three theme blocks, drop `.glim-brand-btn` with its `.glim-brand-<name>` blocks, and replace the `.group:hover .glim-*-mark` block with the brand tile rules (`.glim-brand-tile`, `.glim-mark-hover`, the `.glim-tile-*` and `.glim-*-mark` classes).
 - **New in the tokens:** `.glim-readme-btn` and `.glim-about-give`; motion blocks that declare every dial at every level, with the new keyframes and the `@property` registration of the radius tokens; `--glim-scrim` in all three theme blocks with `--glim-scrim-blur`, `.glim-modal-backdrop` and its `prefers-reduced-transparency` block; `--btn-h-transport` with `.glim-btn-transport`; the light blocks' `--brand-android`, `--brand-docker` and `--brand-unraid-*`; and the accent lines of the `@media (prefers-color-scheme: light)` block.
@@ -1071,11 +1073,17 @@ At rest a README button is grey with the brand's mark; under the pointer it take
 
 A phone app's motion is a table in the reference now, the same numbers for every app: cards fly in from both sides on every tab and every return to it, a flung page runs past its edge and springs back, and a press gives way under the finger. The coffee and PayPal buttons on the About card open windows in which the donor pays without leaving the app, and PayPal takes monthly and yearly giving too. The App tab is one standard: every other way to get the app as a tile of one shape, only the forms this instance is not, listings that are coming marked as coming, and the APK with a Download button and a code to scan. In round everything somebody presses is a true pill, soft is the default shape, and a fourth shape hides behind square.
 
-**Adopting apps with a phone app:** copy `reference/motionNative.ts` as it is and read the level's numbers from `NATIVE_MOTION` instead of a table of your own. Give every tab the arrival line, lists included, and follow "On a phone" under "The motion engine" for the rest: the late-mount rule for rows a list mounts while scrolling, the start for a page that mounts after its tab was focused, and the edge spring with the platform's own overscroll switched off where `edge` is not 0.
+## 🧩 Adopting apps with a phone app
 
-**Adopting apps:** copy `reference/paypal.ts`, `reference/react/CoffeeDialog.tsx`, `reference/react/PaypalDialog.tsx` and `reference/react/usePaypalButtons.ts`. `AboutCard` takes `onCoffee` and `onPaypal` in place of `coffeeUrl` and `paypalUrl`. Pass the app's horizontal selector to `PaypalDialog` as `renderSelector`. Allow `https://www.paypal.com`, `https://*.paypal.com` and `https://*.paypalobjects.com` for scripts, frames and connections, and `https://buymeacoffee.com` for frames, wherever the app sends a Content-Security-Policy.
+Copy `reference/motionNative.ts` as it is and read the level's numbers from `NATIVE_MOTION` instead of a table of your own. Give every tab the arrival line, lists included, and follow "On a phone" under "The motion engine" for the rest: the late-mount rule for rows a list mounts while scrolling, the start for a page that mounts after its tab was focused, and the edge spring with the platform's own overscroll switched off where `edge` is not 0.
 
-**Adopting apps with an App tab or a shape picker:** copy `reference/react/AppTile.tsx` and `reference/appMarks.ts`, and the `--brand-android`, `--brand-docker`, `--brand-windows` and `--brand-unraid-*` pairs from all three theme blocks of `reference/tokens.css` together with the `.glim-android-mark`, `.glim-docker-mark`, `.glim-windows-mark` and `.glim-unraid-mark` rules. For the shapes, copy the `:root` and `leaf` blocks of `reference/tokens.css` and `SHAPES_STORED`, `DEFAULT_SHAPE` and `leafTap()` from `reference/appearance.ts`, point buttons, tabs, badges, selector segments and switches at `--radius-pill` instead of `--radius-control`, and call soft "Abgerundet" in German. Build the App tab as "The App tab" in design-language.md describes: the phone card where there is a phone app, and a second card with the desktop app in a container or a server install in the desktop app. An app with only one form gets no App tab. A desktop build passes its shell's browser opener to the tiles as `onLinkClick` and to `AboutCard` as `openUrl`; where the shell opens no popups, the About card's PayPal button opens the donation page in the browser.
+## 🧩 Adopting apps
+
+Copy `reference/paypal.ts`, `reference/react/CoffeeDialog.tsx`, `reference/react/PaypalDialog.tsx` and `reference/react/usePaypalButtons.ts`. `AboutCard` takes `onCoffee` and `onPaypal` in place of `coffeeUrl` and `paypalUrl`. Pass the app's horizontal selector to `PaypalDialog` as `renderSelector`. Allow `https://www.paypal.com`, `https://*.paypal.com` and `https://*.paypalobjects.com` for scripts, frames and connections, and `https://buymeacoffee.com` for frames, wherever the app sends a Content-Security-Policy.
+
+## 🧩 Adopting apps with an App tab or a shape picker
+
+Copy `reference/react/AppTile.tsx` and `reference/appMarks.ts`, and the `--brand-android`, `--brand-docker`, `--brand-windows` and `--brand-unraid-*` pairs from all three theme blocks of `reference/tokens.css` together with the `.glim-android-mark`, `.glim-docker-mark`, `.glim-windows-mark` and `.glim-unraid-mark` rules. For the shapes, copy the `:root` and `leaf` blocks of `reference/tokens.css` and `SHAPES_STORED`, `DEFAULT_SHAPE` and `leafTap()` from `reference/appearance.ts`, point buttons, tabs, badges, selector segments and switches at `--radius-pill` instead of `--radius-control`, and call soft "Abgerundet" in German. Build the App tab as "The App tab" in design-language.md describes: the phone card where there is a phone app, and a second card with the desktop app in a container or a server install in the desktop app. An app with only one form gets no App tab. A desktop build passes its shell's browser opener to the tiles as `onLinkClick` and to `AboutCard` as `openUrl`; where the shell opens no popups, the About card's PayPal button opens the donation page in the browser.
 
 ## ✨ Added
 
@@ -1104,7 +1112,9 @@ A phone app's motion is a table in the reference now, the same numbers for every
 
 Noto Sans becomes the house font, disco glides round the colour wheel instead of jumping, a button's glyph is the size of its words, a selector that wraps fills its box, row actions stay visible, the brand block at the top of the rail is one layout for every app, and a picker tile hovers to a grey instead of white.
 
-**Adopting apps:** install `@fontsource-variable/noto-sans`, `-noto-sans-arabic`, `-noto-sans-hebrew` and `-noto-sans-thai`, import the four at the entry point, and copy the `--font-sans` and `--font-cjk` block from `reference/tokens.css`; the body reads `var(--font-sans)` and the app keeps no font list of its own. Copy `--carbon-tile-hover` and `--carbon-tile-hover-ink` into all three theme blocks, hover every brand-mark tile to them, and switch its marks to their light-ground values while hovered. Take the hover-only reveal off row actions. Set the rail's brand block to the sizes in "The sidebar": mark above the name, 104px, name 20px bold in one colour. `hueVars()` takes the palette position instead of a colour, so every `hueVars(rainbowAt(i))` becomes `hueVars(i)`, and `applyRainbow` also writes `--rb-ink-N`. Disco moves out of `appearance.ts` into `reference/disco.ts` and `reference/discoLoop.ts`: copy both, and call `applyDisco(on)` with the stored switch at boot and whenever the switch or the rainbow state changes. For a wrapping selector, give every pinned segment the pinned width as its `min-width` and `flex: 1 0 calc((100% - perRow * gap) / perRow)` in place of `flex: none` and a fixed `width`, work out `perRow` as "The one horizontal selector" describes, and work it out again when the parent resizes. Segments that are not pinned take `flex: 1 0 auto`. The track keeps `width: fit-content; max-width: 100%`. Copy the three `.glim-btn-glyph` size rules from `reference/tokens.css`.
+## 🧩 Adopting apps
+
+Install `@fontsource-variable/noto-sans`, `-noto-sans-arabic`, `-noto-sans-hebrew` and `-noto-sans-thai`, import the four at the entry point, and copy the `--font-sans` and `--font-cjk` block from `reference/tokens.css`; the body reads `var(--font-sans)` and the app keeps no font list of its own. Copy `--carbon-tile-hover` and `--carbon-tile-hover-ink` into all three theme blocks, hover every brand-mark tile to them, and switch its marks to their light-ground values while hovered. Take the hover-only reveal off row actions. Set the rail's brand block to the sizes in "The sidebar": mark above the name, 104px, name 20px bold in one colour. `hueVars()` takes the palette position instead of a colour, so every `hueVars(rainbowAt(i))` becomes `hueVars(i)`, and `applyRainbow` also writes `--rb-ink-N`. Disco moves out of `appearance.ts` into `reference/disco.ts` and `reference/discoLoop.ts`: copy both, and call `applyDisco(on)` with the stored switch at boot and whenever the switch or the rainbow state changes. For a wrapping selector, give every pinned segment the pinned width as its `min-width` and `flex: 1 0 calc((100% - perRow * gap) / perRow)` in place of `flex: none` and a fixed `width`, work out `perRow` as "The one horizontal selector" describes, and work it out again when the parent resizes. Segments that are not pinned take `flex: 1 0 auto`. The track keeps `width: fit-content; max-width: 100%`. Copy the three `.glim-btn-glyph` size rules from `reference/tokens.css`.
 
 ## 🎨 Design
 
@@ -1123,7 +1133,9 @@ Noto Sans becomes the house font, disco glides round the colour wheel instead of
 
 A dragged item floats under the pointer and lands in its gap, with the look in the reference; the mark is laid as a running bond under a new claim; and the storm plays under reduced motion as its exemption intends.
 
-**Adopting apps:** copy the drag lift block from `reference/tokens.css` (the `--drag-*` tokens and the classes `.glim-drag-lift`, `.glim-drag-shift` and `.glim-drag-settle`, right after the motion engine) and let the reorder script set each item's `translate` and switch the classes. An app that keeps storm's tokens inside its `no-preference` block moves them out of it.
+## 🧩 Adopting apps
+
+Copy the drag lift block from `reference/tokens.css` (the `--drag-*` tokens and the classes `.glim-drag-lift`, `.glim-drag-shift` and `.glim-drag-settle`, right after the motion engine) and let the reorder script set each item's `translate` and switch the classes. An app that keeps storm's tokens inside its `no-preference` block moves them out of it.
 
 ## ✨ Added
 
@@ -1146,7 +1158,9 @@ A dragged item floats under the pointer and lands in its gap, with the look in t
 
 Where a window's way out lives is written down, tooltips close when the control under them changes, and the web reference gets the phone's bottom bar axis.
 
-**Adopting apps:** copy `reference/react/useTipBubble.tsx`, `reference/tooltip.ts`, `reference/controls.ts` and `reference/react/useLabelMode.ts` again. Nothing changes for an app without a phone bar, because `ControlAxis` and `CONTROL_AXES` still hold the same three axes. An app whose web UI has a phone bar appends `BOTTOM_BAR_AXIS` to its label settings and passes it to `applyStoredLabelModes`.
+## 🧩 Adopting apps
+
+Copy `reference/react/useTipBubble.tsx`, `reference/tooltip.ts`, `reference/controls.ts` and `reference/react/useLabelMode.ts` again. Nothing changes for an app without a phone bar, because `ControlAxis` and `CONTROL_AXES` still hold the same three axes. An app whose web UI has a phone bar appends `BOTTOM_BAR_AXIS` to its label settings and passes it to `applyStoredLabelModes`.
 
 ## ✨ Added
 
@@ -1167,7 +1181,9 @@ Where a window's way out lives is written down, tooltips close when the control 
 
 The About card's give row gets its fifth mark, its crypto button drops the coin disc, and button labels stop losing their descenders.
 
-**Adopting apps:** pass `mailGlyph` to `AboutCard`, an envelope rather than a paper plane, and hand `cryptoGlyph` a flat Bitcoin letterform instead of a coin disc. The card puts `glim-brand-bitcoin` on that button itself now, so a two-colour coin logo passed there would be flattened to one ink. Copies of `tokens.css` need the two new `line-height: 1.4` lines.
+## 🧩 Adopting apps
+
+Pass `mailGlyph` to `AboutCard`, an envelope rather than a paper plane, and hand `cryptoGlyph` a flat Bitcoin letterform instead of a coin disc. The card puts `glim-brand-bitcoin` on that button itself now, so a two-colour coin logo passed there would be flattened to one ink. Copies of `tokens.css` need the two new `line-height: 1.4` lines.
 
 ## 🎨 Design
 
@@ -1183,7 +1199,9 @@ The About card's give row gets its fifth mark, its crypto button drops the coin 
 
 Opacity never rides a spring, and the single curve token splits in two because a page may overshoot where a toast may not.
 
-**Adopting apps:** `--motion-curve` becomes `--motion-page-ease`, plus `--motion-toast-ease` for the toast. Take opacity out of `glim-page-in` and `glim-toast-in` and pair each with `glim-fade-in` on `ease-out`, or give the whole animation a curve that does not spring. Both satisfy the rule.
+## 🧩 Adopting apps
+
+`--motion-curve` becomes `--motion-page-ease`, plus `--motion-toast-ease` for the toast. Take opacity out of `glim-page-in` and `glim-toast-in` and pair each with `glim-fade-in` on `ease-out`, or give the whole animation a curve that does not spring. Both satisfy the rule.
 
 ## 🎨 Design
 
@@ -1221,7 +1239,9 @@ The phone's bottom bar is written down, with the numbers measured on the app tha
 
 One rule about ancestors, and the harder rule that the previous release left behind by stopping where it did.
 
-**Adopting apps:** remove every `--motion-page-scale` declaration and take the `scale()` out of your own copy of `glim-page-in`. Nothing else moves: no level name, no attribute, no stored value, and no migration. A locally re-added scale or tilt on that keyframe reproduces the defect this release removes.
+## 🧩 Adopting apps
+
+Remove every `--motion-page-scale` declaration and take the `scale()` out of your own copy of `glim-page-in`. Nothing else moves: no level name, no attribute, no stored value, and no migration. A locally re-added scale or tilt on that keyframe reproduces the defect this release removes.
 
 ## 🎨 Design
 
@@ -1241,7 +1261,9 @@ One rule about ancestors, and the harder rule that the previous release left beh
 
 A second easter egg, the accessibility rule the first one carried reversed for the one case it was wrong about, and two rules from a settings-card report.
 
-**Adopting apps:** `DEFAULT_MOTION` is `subtle`, not `wild`. If you shipped the old default, migrate any stored value that used to name the top level before you change it, because moving a default is not moving a choice.
+## 🧩 Adopting apps
+
+`DEFAULT_MOTION` is `subtle`, not `wild`. If you shipped the old default, migrate any stored value that used to name the top level before you change it, because moving a default is not moving a choice.
 
 ## ✨ Added
 
@@ -1267,7 +1289,9 @@ A second easter egg, the accessibility rule the first one carried reversed for t
 
 A major release, because the motion axis renamed a value adopting apps write into the DOM.
 
-**Adopting apps:** the top motion level is `wild`, not `full` (attribute, selectors, stored value). `ConfirmDialog` no longer takes a `tone`. `bg-black/60` behind a floating window becomes `var(--glim-scrim)`.
+## 🧩 Adopting apps
+
+The top motion level is `wild`, not `full` (attribute, selectors, stored value). `ConfirmDialog` no longer takes a `tone`. `bg-black/60` behind a floating window becomes `var(--glim-scrim)`.
 
 ## ✨ Added
 
