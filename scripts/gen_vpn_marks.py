@@ -112,7 +112,13 @@ TILE_COLOUR = {
     "xvpn": ("#000000", None),
 }
 
-MARKS = MarkSet(ROOT / "packages" / "core" / "vpn-marks", {}, set(), TILE_COLOUR, set())
+FORCE_THEMED = {
+    # Njalla's navy, which its green stroke keeps from being lifted, in white on
+    # the dark ground.
+    "njalla": {"#203742": ("#ffffff", "#203742")},
+}
+
+MARKS = MarkSet(ROOT / "packages" / "core" / "vpn-marks", FORCE_THEMED, set(), TILE_COLOUR, set())
 
 if SRC is None or not SRC.is_dir():
     raise SystemExit("pass the icons folder of simple-icons@16: python scripts/gen_vpn_marks.py <path>")
