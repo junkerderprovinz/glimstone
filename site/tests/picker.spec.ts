@@ -279,7 +279,7 @@ test.describe("PickerWindow", () => {
     await expect(picker(page)).toBeHidden();
   });
 
-  test("a mark keeps its own colours at rest and lifts the ones a dark tile would swallow", async ({ page }) => {
+  test("a mark keeps its own colours at rest, and a black one turns white on the dark tile", async ({ page }) => {
     const fills = async () =>
       picker(page)
         .getByRole("button", { name: "Matrix", exact: true })
@@ -293,7 +293,7 @@ test.describe("PickerWindow", () => {
     expect(await fills()).toBe("rgb(0, 0, 0)");
     await relook(page, { theme: "dark" });
     await opener().click();
-    expect(await fills()).toBe("rgb(130, 130, 130)");
+    expect(await fills()).toBe("rgb(255, 255, 255)");
   });
 });
 
