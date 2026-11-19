@@ -112,6 +112,15 @@ test("a brand's mark box takes the class its mark brings, and an app's glyph the
   assert.equal(pickMarkClass(undefined), 'glim-house-mark');
 });
 
+test("a wordmark's box takes the class that spreads it across the tile, beside the class its mark brings", () => {
+  assert.equal(pickMarkClass({ svg: '<svg/>', wordmark: true }), 'glim-readme-btn-mark--wordmark');
+  assert.equal(
+    pickMarkClass({ svg: '<svg/>', wordmark: true, className: 'glim-demo-mark' }),
+    'glim-demo-mark glim-readme-btn-mark--wordmark',
+  );
+  assert.equal(pickMarkClass({ svg: '<svg/>', wordmark: false, className: 'glim-demo-mark' }), 'glim-demo-mark');
+});
+
 test("a brand's tile hands its colour pair down, and any other tile lights up in the accent", () => {
   assert.deepEqual(pickTileStyle({ svg: '<svg/>', tile: '#5865f2', ink: '#ffffff' }), {
     '--provider-tile': '#5865f2',
