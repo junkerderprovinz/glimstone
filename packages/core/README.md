@@ -68,7 +68,10 @@ npm install @glimstone/core
   The VPN catalog is `@glimstone/core/vpnProviders`, and the download catalog,
   the debrid services and the file hosters, is
   `@glimstone/core/downloadProviders`; `vpn-marks/` and `download-marks/` hold
-  their marks' sources and licences.
+  their marks' sources and licences. The captcha solvers an app hands a
+  captcha to are `@glimstone/core/captchaProviders`, and the transfer services
+  it fetches a sent file from are `@glimstone/core/transferProviders`, with
+  `captcha-marks/` and `transfer-marks/` for their marks.
 - Where a dragged item goes: `dropIndex` places it among the others by its
   leading edge, along a row, down a column or line by line in a grid.
 - What runs without a framework: `mountSelect`, `wireTooltips` with
