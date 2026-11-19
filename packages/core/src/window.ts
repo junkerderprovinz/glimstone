@@ -16,6 +16,14 @@ export interface WindowActionBase {
 }
 
 /**
+ * Whether a foot's start line has anything to show. No value, `null`, `false`
+ * and an empty string draw nothing, so they leave the foot without one.
+ */
+export function footStartShows(start: unknown): boolean {
+  return start !== undefined && start !== null && start !== false && start !== "";
+}
+
+/**
  * The foot's buttons in order. A window whose foot has anything in it can be
  * left from there: without a way out among its actions it gets Cancel when
  * one of them goes forward and Close otherwise, before the others, so the

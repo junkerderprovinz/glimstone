@@ -34,7 +34,7 @@ export default function PickerWindowForm() {
           groups={groups}
           text={CHANNEL_TEXT}
           onPick={setPicked}
-          start={reached === null ? undefined : reached ? "Reached" : "Not reached"}
+          start={reached === null ? "" : reached ? "Reached" : "Not reached"}
           actions={[
             {
               label: "Test connection",

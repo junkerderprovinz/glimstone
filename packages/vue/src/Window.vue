@@ -2,6 +2,7 @@
 import { computed, onMounted, onUnmounted, shallowRef, useId, useSlots } from "vue";
 import {
   focusedAsker,
+  footStartShows,
   menuIsOpen,
   returnFocus,
   stackWindow,
@@ -47,7 +48,7 @@ const card = shallowRef<HTMLElement | null>(null);
 const titleId = useId();
 // Read before the window takes the focus.
 const asker = focusedAsker();
-const hasStart = computed(() => props.start !== undefined || !!slots.start);
+const hasStart = computed(() => footStartShows(props.start) || !!slots.start);
 
 // Leaving takes the window off the stack at once, so the page is live again
 // by the time the caller hands the focus back to a field in it.

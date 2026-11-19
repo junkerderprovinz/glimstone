@@ -61,7 +61,7 @@ const actions = computed(() => [
       :groups="groups"
       :text="CHANNEL_TEXT"
       :actions="actions"
-      :start="reached === null ? undefined : reached ? 'Reached' : 'Not reached'"
+      :start="reached === null ? '' : reached ? 'Reached' : 'Not reached'"
       @pick="picked = $event"
       @back="back"
       @close="close"

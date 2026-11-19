@@ -279,6 +279,18 @@ test.describe("PickerWindow", () => {
     await expect(form.locator(".glim-modal-foot > .glim-window-start")).toHaveText("Reached");
   });
 
+  test("[picker-start-empty] an empty start line leaves no element, and the buttons share one line", async ({ page }) => {
+    await open(page, "/components/picker-window");
+    await stage(page, "PickerWindowForm").getByRole("button", { name: "Connect a service" }).click();
+    await page.getByRole("dialog").getByRole("button", { name: "Gotify", exact: true }).click();
+    const form = page.getByRole("dialog", { name: "Gotify" });
+    await expect(form.locator(".glim-modal-foot .glim-btn")).toHaveCount(4);
+    await expect(form.locator(".glim-window-start")).toHaveCount(0);
+    // Read through the picker's data hook: evaluateAll under a named dialog crashes Firefox.
+    const rows = await page.locator('[data-glim="PickerWindow"] .glim-modal-foot .glim-btn').evaluateAll((all) => new Set(all.map((b) => Math.round(b.getBoundingClientRect().top))).size);
+    expect(rows).toBe(1);
+  });
+
   test("[picker-escape] Escape empties the search first and closes the window from an empty one", async ({ page }) => {
     await show(page);
     await search(page).fill("slack");

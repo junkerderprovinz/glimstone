@@ -1,5 +1,5 @@
 import { children, createMemo, For, Show, type JSX } from "solid-js";
-import { windowFoot, type ButtonTone } from "@glimstone/core";
+import { footStartShows, windowFoot, type ButtonTone } from "@glimstone/core";
 import { Button } from "./Button.tsx";
 import { IconCancel, IconClose } from "./glyphs.tsx";
 
@@ -35,8 +35,9 @@ export function WindowFootRow(props: {
   onClose: () => void;
 }) {
   const start = children(() => props.start);
+  const hasStart = createMemo(() => footStartShows(start()));
   const foot = createMemo(() =>
-    windowFoot<WindowAction>(props.actions, start() !== undefined, {
+    windowFoot<WindowAction>(props.actions, hasStart(), {
       cancel: { label: props.text.cancel, labelKey: "common.cancel", glyph: <IconCancel />, wayOut: true },
       close: { label: props.text.close, labelKey: "common.close", glyph: <IconClose />, wayOut: true },
     }),
@@ -44,26 +45,28 @@ export function WindowFootRow(props: {
   return (
     <Show when={foot().length > 0}>
       <div class="glim-modal-foot">
-        <Show when={start() !== undefined}>
+        <Show when={hasStart()}>
           <span class="glim-window-start">{start()}</span>
         </Show>
-        <For each={foot()}>
-          {(a) => (
-            <Button
-              {...a.attrs}
-              label={a.label}
-              labelKey={a.labelKey}
-              glyph={a.glyph}
-              tone={a.tone ?? (a.primary ? "accent" : "neutral")}
-              busy={a.busy}
-              title={a.title}
-              disabled={a.disabled}
-              onClick={() => {
-                if (a.onClick?.() !== false) props.onClose();
-              }}
-            />
-          )}
-        </For>
+        <div class="glim-window-actions">
+          <For each={foot()}>
+            {(a) => (
+              <Button
+                {...a.attrs}
+                label={a.label}
+                labelKey={a.labelKey}
+                glyph={a.glyph}
+                tone={a.tone ?? (a.primary ? "accent" : "neutral")}
+                busy={a.busy}
+                title={a.title}
+                disabled={a.disabled}
+                onClick={() => {
+                  if (a.onClick?.() !== false) props.onClose();
+                }}
+              />
+            )}
+          </For>
+        </div>
       </div>
     </Show>
   );

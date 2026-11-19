@@ -31,18 +31,20 @@ function press(action: WindowAction) {
 <template>
   <div v-if="foot.length" class="glim-modal-foot">
     <span v-if="hasStart" class="glim-window-start"><slot name="start">{{ start }}</slot></span>
-    <Button
-      v-for="(a, i) in foot"
-      v-bind="a.attrs"
-      :key="i"
-      :label="a.label"
-      :label-key="a.labelKey"
-      :glyph="a.glyph"
-      :tone="a.tone ?? (a.primary ? 'accent' : 'neutral')"
-      :busy="a.busy"
-      :title="a.title"
-      :disabled="a.disabled"
-      @click="press(a)"
-    />
+    <div class="glim-window-actions">
+      <Button
+        v-for="(a, i) in foot"
+        v-bind="a.attrs"
+        :key="i"
+        :label="a.label"
+        :label-key="a.labelKey"
+        :glyph="a.glyph"
+        :tone="a.tone ?? (a.primary ? 'accent' : 'neutral')"
+        :busy="a.busy"
+        :title="a.title"
+        :disabled="a.disabled"
+        @click="press(a)"
+      />
+    </div>
   </div>
 </template>

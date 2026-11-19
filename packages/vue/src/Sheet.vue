@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, useId, useSlots, watch } from "vue";
-import { openSheet } from "@glimstone/core";
+import { footStartShows, openSheet } from "@glimstone/core";
 import Badge from "./Badge.vue";
 import type { WindowAction } from "./windowParts";
 import WindowFootRow from "./WindowFootRow.vue";
@@ -28,7 +28,7 @@ const emit = defineEmits<{ close: [] }>();
 const slots = useSlots();
 const el = ref<HTMLDialogElement | null>(null);
 const titleId = useId();
-const hasStart = computed(() => props.start !== undefined || !!slots.start);
+const hasStart = computed(() => footStartShows(props.start) || !!slots.start);
 let stop: (() => void) | undefined;
 
 watch(

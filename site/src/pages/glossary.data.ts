@@ -880,8 +880,8 @@ export const GLOSSARY: GlossarySection[] = [
         components: [],
         rules: [15, 38],
         text: {
-          en: "The row of buttons at the bottom. Cancel or Close joins by itself, and the forward action stands last, in the accent. The line at the start gives way first when room runs short.",
-          de: "Die Knopfzeile unten. Abbrechen oder Schließen kommt von selbst dazu, die Aktion nach vorn steht zuletzt im Akzent. Der Starttext links gibt zuerst nach, wenn der Platz knapp wird.",
+          en: "The row of buttons at the bottom. Cancel or Close joins by itself, and the forward action stands last, in the accent. The line at the start stays beside the buttons while it fits there and otherwise moves above them, so the buttons keep to one row.",
+          de: "Die Knopfzeile unten. Abbrechen oder Schließen kommt von selbst dazu, die Aktion nach vorn steht zuletzt im Akzent. Der Starttext steht neben den Knöpfen, solange er dort Platz hat, sonst rückt er darüber, und die Knöpfe bleiben in einer Reihe.",
         },
       },
       {
