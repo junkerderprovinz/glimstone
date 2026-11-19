@@ -14,6 +14,7 @@ Apps that connect to storage or send notifications pick their providers from a s
 - **A channel picker of your own:** pass `NOTIFY_PROVIDERS` from `@glimstone/core/notifyProviders` to `catalogPicker` the same way, with the ids your app sends to and titles for `service` and `standard`. Your hints go in through `own`, and so does `last: true` for the webhook, which takes anything. Email and the webhook are words to translate, the services are brands. `SERVICE_MARKS` stays as it is for an app that draws its own tiles.
 - **Services behind Shoutrrr:** Telegram, Pushover, Teams and the rest stay search words on the Shoutrrr tile. Offer one as a tile of its own only once your app speaks to it directly.
 - **Targets built on another target**, such as an encrypted or a merged one, have a group of their own, `layered`, after the protocols. Give it a title, or leave its ids out.
+- **A group that rates itself:** give its entry in `titles` as `{ title, badge, hint }` instead of a plain title, and the badge and the (i) stand in its eyebrow's line.
 - **A backend the catalog does not know:** `catalogPicker` leaves an unknown id out, so add its tile yourself.
 - **Flutter:** nothing changes there.
 
@@ -24,6 +25,10 @@ Apps that connect to storage or send notifications pick their providers from a s
 - **`NOTIFY_PROVIDERS`** in its own entry, `@glimstone/core/notifyProviders`: nine services wearing the marks of `SERVICE_MARKS`, then email and the webhook with a glyph each. The documentation site's channel pickers pick from it.
 - **Unraid's mark** in `SERVICE_MARKS`, from Simple Icons, for the server's own notifications.
 - **`GLOSSARY.md`**, the words pickers and catalogs use: provider, target, catalog, group, mark and glyph.
+
+## 🎨 Design
+
+- **A black or grey mark turns white in the dark theme.** It was lifted only as far as 3:1 on the dark tile and stayed grey, Matrix's among them. Grey carries no brand colour to stay close to, so it goes all the way to white.
 
 ## 4.5.8 - 2026-11-19
 
