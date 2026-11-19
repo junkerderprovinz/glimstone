@@ -197,10 +197,16 @@ def themed(colours, slug, marks, ground=None):
     return swap
 
 
+# Below this spread between its channels a colour shows no hue, only a tint of
+# a few units the eye does not resolve, and lifting it would invent one.
+NEUTRAL_SPREAD = 8
+
+
 def white_or_lifted(colour):
     """A black or grey part turns white on the dark ground, since grey carries
     no brand colour to stay close to; a coloured one is lifted just to the floor."""
-    if len(set(_rgb(colour) or ())) == 1:
+    rgb = _rgb(colour)
+    if max(rgb) - min(rgb) <= NEUTRAL_SPREAD:
         return "#ffffff"
     return shift(colour, SURFACE_DARK, upward=True, target=DARK_FLOOR, step=0.002)
 
