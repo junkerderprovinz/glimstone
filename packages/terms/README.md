@@ -31,7 +31,6 @@ for, and the variants it forbids. Each term opens with a definition.
 | `role` | role | Rolle |
 | `serviceGroup` | group at the sign-in service | Gruppe beim Anmeldedienst |
 | `trustedProxy` | trusted proxy | vorgeschalteter Proxy |
-| `fortressSignIn` | fortress sign-in | Anmeldung über die Festung |
 | `passkey` | passkey | Passkey, never Hauptschlüssel |
 | `twoFactor` | two-factor authentication | Zwei-Faktor-Authentifizierung, never 2FA |
 | `session` | session | Sitzung, never Session |

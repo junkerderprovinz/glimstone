@@ -64,7 +64,7 @@ test('forbids no variant that the word itself contains', () => {
   }
 });
 
-// A term built from others, such as fortress sign-in, has to carry their
+// A term built from others, such as sign-in service, has to carry their
 // words too, or the check would fault the glossary's own translation.
 test('keeps the words of every term to the whole glossary', () => {
   const tables = {};
