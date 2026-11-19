@@ -71,7 +71,9 @@ npm install @glimstone/core
   their marks' sources and licences. The captcha solvers an app hands a
   captcha to are `@glimstone/core/captchaProviders`, and the transfer services
   it fetches a sent file from are `@glimstone/core/transferProviders`, with
-  `captcha-marks/` and `transfer-marks/` for their marks.
+  `captcha-marks/` and `transfer-marks/` for their marks. The sign-in
+  services an app hands its login to over OpenID Connect are
+  `@glimstone/core/identityProviders`, with `identity-marks/` for theirs.
 - Where a dragged item goes: `dropIndex` places it among the others by its
   leading edge, along a row, down a column or line by line in a grid.
 - What runs without a framework: `mountSelect`, `wireTooltips` with
