@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { windowFoot, type ButtonTone } from "@glimstone/core";
+import { footStartShows, windowFoot, type ButtonTone } from "@glimstone/core";
 import { Button } from "./Button.tsx";
 import { IconCancel, IconClose } from "./glyphs.tsx";
 
@@ -39,30 +39,33 @@ export function WindowFootRow({
   text: { cancel: string; close: string };
   onClose: () => void;
 }) {
-  const foot = windowFoot<WindowAction>(actions, start !== undefined, {
+  const hasStart = footStartShows(start);
+  const foot = windowFoot<WindowAction>(actions, hasStart, {
     cancel: { label: text.cancel, labelKey: "common.cancel", glyph: <IconCancel />, wayOut: true },
     close: { label: text.close, labelKey: "common.close", glyph: <IconClose />, wayOut: true },
   });
   if (foot.length === 0) return null;
   return (
     <div className="glim-modal-foot">
-      {start !== undefined && <span className="glim-window-start">{start}</span>}
-      {foot.map((a, i) => (
-        <Button
-          {...a.attrs}
-          key={i}
-          label={a.label}
-          labelKey={a.labelKey}
-          glyph={a.glyph}
-          tone={a.tone ?? (a.primary ? "accent" : "neutral")}
-          busy={a.busy}
-          title={a.title}
-          disabled={a.disabled}
-          onClick={() => {
-            if (a.onClick?.() !== false) onClose();
-          }}
-        />
-      ))}
+      {hasStart && <span className="glim-window-start">{start}</span>}
+      <div className="glim-window-actions">
+        {foot.map((a, i) => (
+          <Button
+            {...a.attrs}
+            key={i}
+            label={a.label}
+            labelKey={a.labelKey}
+            glyph={a.glyph}
+            tone={a.tone ?? (a.primary ? "accent" : "neutral")}
+            busy={a.busy}
+            title={a.title}
+            disabled={a.disabled}
+            onClick={() => {
+              if (a.onClick?.() !== false) onClose();
+            }}
+          />
+        ))}
+      </div>
     </div>
   );
 }

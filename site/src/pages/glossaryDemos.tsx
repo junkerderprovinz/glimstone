@@ -113,7 +113,7 @@ export function WindowInPlace({
       {(foot || start) && (
         <div className="glim-modal-foot">
           {start !== undefined && <span className="glim-window-start">{start}</span>}
-          {foot}
+          <div className="glim-window-actions">{foot}</div>
         </div>
       )}
     </div>

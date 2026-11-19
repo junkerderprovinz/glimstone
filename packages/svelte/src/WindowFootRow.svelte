@@ -26,7 +26,7 @@
 </script>
 
 <script lang="ts">
-  import { windowFoot } from "@glimstone/core";
+  import { footStartShows, windowFoot } from "@glimstone/core";
   import Button from "./Button.svelte";
   import { IconCancel, IconClose } from "./glyphs.js";
 
@@ -44,8 +44,9 @@
     onClose: () => void;
   } = $props();
 
+  const hasStart = $derived(footStartShows(start));
   const foot = $derived(
-    windowFoot<WindowAction>(actions, start !== undefined, {
+    windowFoot<WindowAction>(actions, hasStart, {
       cancel: { label: text.cancel, labelKey: "common.cancel", glyph: IconCancel, wayOut: true },
       close: { label: text.close, labelKey: "common.close", glyph: IconClose, wayOut: true },
     }),
@@ -54,23 +55,25 @@
 
 {#if foot.length > 0}
   <div class="glim-modal-foot">
-    {#if start !== undefined}
-      <span class="glim-window-start">{#if typeof start === "string"}{start}{:else}{@render start()}{/if}</span>
+    {#if hasStart}
+      <span class="glim-window-start">{#if typeof start === "string"}{start}{:else}{@render start?.()}{/if}</span>
     {/if}
-    {#each foot as a, i (i)}
-      <Button
-        {...a.attrs}
-        label={a.label}
-        labelKey={a.labelKey}
-        glyph={a.glyph}
-        tone={a.tone ?? (a.primary ? "accent" : "neutral")}
-        busy={a.busy}
-        title={a.title}
-        disabled={a.disabled}
-        onClick={() => {
-          if (a.onClick?.() !== false) onClose();
-        }}
-      />
-    {/each}
+    <div class="glim-window-actions">
+      {#each foot as a, i (i)}
+        <Button
+          {...a.attrs}
+          label={a.label}
+          labelKey={a.labelKey}
+          glyph={a.glyph}
+          tone={a.tone ?? (a.primary ? "accent" : "neutral")}
+          busy={a.busy}
+          title={a.title}
+          disabled={a.disabled}
+          onClick={() => {
+            if (a.onClick?.() !== false) onClose();
+          }}
+        />
+      {/each}
+    </div>
   </div>
 {/if}

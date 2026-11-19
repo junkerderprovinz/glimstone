@@ -2227,17 +2227,17 @@
   .glim-btn-lg { min-width: var(--btn-w-lg); }
   /* A foot holds several answers in one row, so they hug their words down to the
      smallest floor. An explicit stage is a width of its own and stays. */
-  .glim-modal-foot > :is(.glim-btn-sm, .glim-btn-md, .glim-btn-lg),
-  .glim-modal-foot > .glim-tip-wrap > :is(.glim-btn-sm, .glim-btn-md, .glim-btn-lg) { min-width: var(--btn-w-xs); }
+  :is(.glim-modal-foot, .glim-window-actions) > :is(.glim-btn-sm, .glim-btn-md, .glim-btn-lg),
+  :is(.glim-modal-foot, .glim-window-actions) > .glim-tip-wrap > :is(.glim-btn-sm, .glim-btn-md, .glim-btn-lg) { min-width: var(--btn-w-xs); }
   /* A button wider than the whole foot, as on a phone, runs its words onto a
      second line and grows with them instead of ending in an ellipsis. */
-  :is(.glim-modal-foot, .glim-modal-foot > .glim-tip-wrap) > .glim-btn {
+  :is(.glim-modal-foot, .glim-window-actions, :is(.glim-modal-foot, .glim-window-actions) > .glim-tip-wrap) > .glim-btn {
     height: auto;
     min-height: var(--btn-h);
     padding-block: var(--space-3);
   }
-  :is(.glim-modal-foot, .glim-modal-foot > .glim-tip-wrap) > .glim-btn-key { min-height: var(--btn-h-key); }
-  :is(.glim-modal-foot, .glim-modal-foot > .glim-tip-wrap) > .glim-btn > .glim-btn-label {
+  :is(.glim-modal-foot, .glim-window-actions, :is(.glim-modal-foot, .glim-window-actions) > .glim-tip-wrap) > .glim-btn-key { min-height: var(--btn-h-key); }
+  :is(.glim-modal-foot, .glim-window-actions, :is(.glim-modal-foot, .glim-window-actions) > .glim-tip-wrap) > .glim-btn > .glim-btn-label {
     white-space: normal;
     text-wrap: balance;
     text-align: center;
@@ -3360,7 +3360,7 @@
     flex-shrink: 0;
     max-width: 100%;
   }
-  .glim-modal-foot > .glim-tip-wrap { flex: none; }
+  :is(.glim-modal-foot, .glim-window-actions) > .glim-tip-wrap { flex: none; }
 
   /* The fills a button can take (ButtonTone). `ok`, `danger` and `warn` put the
      solid status tokens under the ground's ink: in both themes the solid values
@@ -4575,14 +4575,21 @@
     gap: var(--space-8);
     padding-top: var(--space-11);
   }
-  /* The start text gives way first and wraps, so a button does not drop to the
-     next line for a few pixels. */
+  /* A window's buttons wrap as one group, so a start line too long to stand
+     beside all of them takes a line of its own above them, and none of them
+     drops below the others for it. */
   .glim-window-start {
-    flex: 1 1 0;
-    min-width: min(4rem, 100%);
+    flex: 1 1 auto;
     overflow-wrap: anywhere;
     font-size: var(--text-meta);
     color: var(--carbon-text-muted);
+  }
+  .glim-window-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: inherit;
   }
 
   /* The context menu and the menus of the bar (ContextMenu, MenuBar). Both sit

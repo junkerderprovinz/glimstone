@@ -2236,6 +2236,57 @@ test.describe("Window", () => {
     expect(look).toBe(1);
   });
 
+  // Where the start line and the buttons of a foot sit, read from the dialog
+  // itself for the reason given at footNames.
+  const footLayout = (dialog: Locator, extra?: number) =>
+    dialog.evaluate((card: HTMLElement, extra) => {
+      const foot = card.querySelector<HTMLElement>(".glim-modal-foot")!;
+      const buttons = () => [...foot.querySelectorAll<HTMLElement>(".glim-btn")];
+      const style = getComputedStyle(foot);
+      const pad = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
+      if (extra !== null) {
+        const need = buttons().reduce((sum, b) => sum + b.getBoundingClientRect().width, 0) + parseFloat(style.columnGap) * buttons().length;
+        card.style.width = `${need + pad + extra}px`;
+        card.style.maxWidth = "none";
+      }
+      const boxes = buttons().map((b) => b.getBoundingClientRect());
+      const start = foot.querySelector(".glim-window-start")?.getBoundingClientRect();
+      return {
+        rows: new Set(boxes.map((b) => Math.round(b.top))).size,
+        top: Math.min(...boxes.map((b) => b.top)),
+        bottom: Math.max(...boxes.map((b) => b.bottom)),
+        left: Math.min(...boxes.map((b) => b.left)),
+        start: start && { top: start.top, bottom: start.bottom, right: start.right, width: start.width },
+        room: foot.clientWidth - pad,
+      };
+    }, extra ?? null);
+
+  test("[window-foot-start-above] a start too long to stand beside the buttons takes its own line above them", async ({ page }) => {
+    await openMove(page);
+    const look = await footLayout(move(page));
+    expect(look.rows).toBe(1);
+    expect(look.start!.bottom).toBeLessThanOrEqual(look.top);
+    expect(look.start!.width).toBeCloseTo(look.room, 0);
+  });
+
+  test("[window-foot-start-narrow] in a narrow foot the start moves above the buttons before one of them wraps", async ({ page }) => {
+    await open(page, "/components/window");
+    await stage(page, "WindowBusyFoot").getByRole("button", { name: "Compare" }).click();
+    const look = await footLayout(page.getByRole("dialog", { name: "Compare two folders" }), 40);
+    expect(look.rows).toBe(1);
+    expect(look.start!.bottom).toBeLessThanOrEqual(look.top);
+  });
+
+  test("[window-foot-start-beside] a start that fits stays beside the buttons, on their line", async ({ page }) => {
+    await open(page, "/components/window");
+    await stage(page, "WindowBusyFoot").getByRole("button", { name: "Compare" }).click();
+    const look = await footLayout(page.getByRole("dialog", { name: "Compare two folders" }));
+    expect(look.rows).toBe(1);
+    expect(look.start!.right).toBeLessThanOrEqual(look.left);
+    expect(look.start!.top).toBeLessThan(look.bottom);
+    expect(look.start!.bottom).toBeGreaterThan(look.top);
+  });
+
   test("[window-foot-floor] a short word keeps the smallest floor", async ({ page }) => {
     await open(page, "/components/window");
     await stage(page, "WindowBusyFoot").getByRole("button", { name: "Unsaved" }).click();

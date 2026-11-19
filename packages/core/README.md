@@ -39,7 +39,8 @@ npm install @glimstone/core
   `appCardView` says what another app's card shows, and `fortressText(lang)`
   hands out the words in every language of the glossary, each also a module of
   its own under `fortressLocales/`.
-- What windows and menus share: `windowFoot` adds the way out, `stackWindow`
+- What windows and menus share: `windowFoot` adds the way out, `footStartShows`
+  tells whether the foot's start line has anything to show, `stackWindow`
   gives Escape and Tab to the window in front, and `menu.ts` holds the menu
   model with `tidyMenu`, `menuRowView`, `placeMenu`, `menuMove`,
   `focusFirstMenuRow` and `claimMenu`. `menuIsOpen` and `windowIsOpen` tell an app's own key handler
