@@ -15,6 +15,8 @@ export interface TileMark {
   ink?: string;
   /** The mark drawn on the lit tile instead, for a brand whose layers do not survive one ink. */
   hover?: string;
+  /** The mark is the brand's name written out, so the tile shows it alone. */
+  wordmark?: boolean;
   /** The class on the mark's box, where the app paints a mark of its own at rest. */
   className?: string;
 }
@@ -125,9 +127,15 @@ export function isTileMark(mark: unknown): mark is TileMark {
   return typeof mark === "object" && mark !== null && typeof (mark as TileMark).svg === "string";
 }
 
-/** The class on a tile's mark box: the one a brand's mark brings, or the house mark's for one of the app's glyphs. */
+/**
+ * The class on a tile's mark box: the one a brand's mark brings, with the
+ * wordmark's that spreads it across the tile in place of the name, or the
+ * house mark's for one of the app's glyphs.
+ */
 export function pickMarkClass(mark: unknown): string | undefined {
-  return isTileMark(mark) ? mark.className : "glim-house-mark";
+  if (!isTileMark(mark)) return "glim-house-mark";
+  if (!mark.wordmark) return mark.className;
+  return [mark.className, "glim-readme-btn-mark--wordmark"].filter(Boolean).join(" ");
 }
 
 /** The colour pair a brand's tile hands down to `.glim-provider-pick`, or nothing for the accent. */

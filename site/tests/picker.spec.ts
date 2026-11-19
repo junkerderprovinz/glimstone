@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 import { open, relook, stage } from "./page";
 
 const picker = (page: Page) => page.getByRole("dialog", { name: "Add a channel" });
@@ -386,4 +386,87 @@ test.describe("PickerWindow states", () => {
     await expect(box.locator(".glim-mark-rest")).toBeHidden();
     await expect(box.locator(".glim-mark-hover")).toBeVisible();
   });
+
+  test("[picker-wordmark] a wordmark stands alone in the tile's middle, and the tile keeps its name for the search and the screen reader", async ({ page }) => {
+    await showPlaces(page);
+    const nimbo = places(page).getByRole("button", { name: "Nimbo Cloud drive", exact: true });
+    await expect(nimbo.locator(".glim-readme-btn-name")).toBeHidden();
+    await expect(nimbo.locator(".glim-readme-btn-mark")).toHaveClass(/glim-readme-btn-mark--wordmark/);
+    for (const dir of ["ltr", "rtl"]) {
+      await page.evaluate((d) => (document.documentElement.dir = d), dir);
+      const { tile, mark, box } = await drawn(nimbo);
+      expect(mark.left, dir).toBeGreaterThanOrEqual(tile.left + 8);
+      expect(mark.right, dir).toBeLessThanOrEqual(tile.right - 8);
+      expect(mark.top, dir).toBeGreaterThanOrEqual(tile.top + 8);
+      expect(mark.bottom, dir).toBeLessThanOrEqual(tile.bottom - 8);
+      expect(Math.abs(mark.left + mark.right - tile.left - tile.right) / 2, dir).toBeLessThan(1);
+      // Wider than the square mark box a tile with a name gives its mark.
+      expect(box.width, dir).toBeGreaterThan(tile.width * 0.8);
+    }
+    await places(page).getByRole("searchbox").fill("nimbo");
+    await expect(places(page).locator(".glim-provider-pick button.glim-readme-btn")).toHaveAccessibleName("Nimbo Cloud drive");
+  });
+
+  test("[picker-wordmark-lit] a wordmark tile lights up in its colour, and its wordmark rises in the tile's ink above the second line", async ({ page }) => {
+    await open(page, "/components/picker-window", { motion: "off" });
+    await stage(page, "PickerWindowStates").getByRole("button", { name: "Choose a place" }).click();
+    const nimbo = places(page).getByRole("button", { name: "Nimbo Cloud drive", exact: true });
+    const rest = await drawn(nimbo);
+    await nimbo.hover();
+    await expect(nimbo.locator(".glim-readme-btn-sub")).toHaveCSS("opacity", "0.9");
+    expect(await nimbo.evaluate((b) => getComputedStyle(b).backgroundColor)).toBe("rgb(11, 107, 203)");
+    expect(await nimbo.locator("svg").evaluate((svg) => getComputedStyle(svg).stroke)).toBe("rgb(255, 255, 255)");
+    const lit = await drawn(nimbo);
+    expect(lit.mark.top).toBeLessThan(rest.mark.top);
+    expect(lit.mark.bottom).toBeLessThanOrEqual(lit.sub.top);
+    expect(lit.mark.top).toBeGreaterThanOrEqual(lit.tile.top);
+  });
+});
+
+/** Where a tile's wordmark is drawn, its box, and the line of its second line, in page pixels. */
+const drawn = (tile: Locator) =>
+  tile.evaluate((b) => {
+    const rect = (el: Element) => {
+      const { left, right, top, bottom, width } = el.getBoundingClientRect();
+      return { left, right, top, bottom, width };
+    };
+    // The second line's box reaches past its line to keep the descenders, so its line starts below the padding.
+    const sub = b.querySelector(".glim-readme-btn-sub")!;
+    const line = rect(sub);
+    line.top += parseFloat(getComputedStyle(sub).paddingTop);
+    // Firefox bounds a stroked path generously, so the drawing is placed from its own box in the viewBox,
+    // which the SVG scales into its element as preserveAspectRatio's default does.
+    const svg = b.querySelector<SVGSVGElement>(".glim-readme-btn-mark svg")!;
+    const path = svg.querySelector("path")!;
+    const style = getComputedStyle(path);
+    const half = style.stroke === "none" ? 0 : parseFloat(style.strokeWidth) / 2;
+    const view = svg.viewBox.baseVal;
+    const at = rect(svg);
+    const height = at.bottom - at.top;
+    const scale = Math.min(at.width / view.width, height / view.height);
+    const left = at.left + (at.width - view.width * scale) / 2;
+    const top = at.top + (height - view.height * scale) / 2;
+    const own = path.getBBox();
+    const mark = {
+      left: left + (own.x - half - view.x) * scale,
+      right: left + (own.x + own.width + half - view.x) * scale,
+      top: top + (own.y - half - view.y) * scale,
+      bottom: top + (own.y + own.height + half - view.y) * scale,
+    };
+    return { tile: rect(b), box: rect(b.querySelector(".glim-readme-btn-mark")!), mark, sub: line };
+  });
+
+test("[picker-wordmark-status] a wordmark tile that cannot be picked yet keeps its reason under the wordmark", async ({ page }) => {
+  await open(page, "/components/picker-window", { motion: "off" });
+  await stage(page, "PickerWindowVpn").getByRole("button", { name: "Add a VPN" }).click();
+  // Scoped by the component's own attribute, which Firefox needs under a named dialog.
+  const hma = page.locator('[data-glim="PickerWindow"] [aria-label="HMA VPN Not supported"]');
+  await expect(hma).toHaveAttribute("aria-disabled", "true");
+  await expect(hma.locator(".glim-readme-btn-name")).toBeHidden();
+  await expect(hma.locator(".glim-readme-btn-sub")).toHaveText("Not supported");
+  await expect(hma.locator(".glim-readme-btn-sub")).toBeVisible();
+  const { tile, mark, sub } = await drawn(hma);
+  expect(mark.bottom).toBeLessThanOrEqual(sub.top);
+  expect(mark.top).toBeGreaterThanOrEqual(tile.top);
+  expect(Math.abs(mark.left + mark.right - tile.left - tile.right) / 2).toBeLessThan(1);
 });
