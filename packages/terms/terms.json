@@ -4017,7 +4017,7 @@
       }
     },
     "signInService": {
-      "definition": "An OpenID Connect server such as Pocket ID or Authentik that people sign in at in place of the app's own form. The interface never calls it a provider, since that word already names the storage and notification services an app picks from.",
+      "definition": "An OpenID Connect server that people sign in at in place of the app's own form. The interface never calls it a provider, since that word already names the storage and notification services an app picks from.",
       "en": {
         "singular": "sign-in service",
         "plural": "sign-in services",
