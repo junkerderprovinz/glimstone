@@ -4,11 +4,26 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## 4.6.0 - 2026-11-19
 
-Apps pick their providers from shared catalogs: storage, notifications, MCP clients, container registries, VPNs, download services, captcha solvers and transfer services. Each catalog carries every provider's group, search words and mark, so an app no longer keeps a list of its own. GlimStone also has a new mark.
+Apps pick their providers from shared catalogs: storage, notifications, MCP clients, container registries, VPNs, download services, captcha solvers and transfer services. Each catalog carries every provider's group, search words and mark, so an app no longer keeps a list of its own. A big picker is a single component, `PickerWindow`, which rates its groups, keeps a tile that cannot be picked yet in view and marks the last pick. Whatever the pointer is over lights up in the accent, the Help card can send people to Discord, and GlimStone has a new mark.
 
 **Adopting apps:**
 
 - **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.6.0, all packages at the same number.
+- **The GlimStone row:** set `latest: true` on the GlimStone row you hand the Version card. An app that builds the link itself takes `GLIMSTONE_RELEASE_URL` from its GlimStone package in place of `releases/tag/v<version>`.
+- **Your own copy of the tokens:** copy `tokens.css` and `tailwind-theme.css` again. They bring `--hover`, the light ink step `--ink-l-light: 0.5`, the tints declared again inside `[data-rainbow] .glim-hue` so a rainbow position's hover takes its hue, and `--brand-discord` with `.glim-discord-mark` and `.glim-tile-discord`. An app that keeps its own step for the light ink can drop it and take GlimStone's, and one that sets `--window-bar` or `--tab-dir-sign` on `:root` outside a cascade layer still overrides GlimStone's value.
+- **Your own hovers:** swap `hover:bg-carbon-hover`, a hover to `surface3` and `hover:bg-carbon-hoverRaised` for `hover:bg-hover`, or `--hover` in plain CSS. `--carbon-hover` and `--carbon-hover-raised` stay as the grey steps a field's focus uses.
+- **A row with a glyph tile:** fill the tile with the accent while the row is hovered, as `GlyphTile` does. A tile filled with surface2 disappears into a row that hovers to surface2.
+- **Discord:** pass `discordUrl` with the invite, `discordGlyph` with `IconDiscord` and `text.discordButton` ("Discord") to `InfoHelpCard` or `InfoTile`'s `help`, in all four packages, and name Discord in `text.report`. The deprecated `AboutCard` takes the same three. The button stands right after GitHub and opens the invite through `openUrl`, and `ReadmeButton` knows `brand="discord"`.
+- **Swapping mail for Discord:** drop "email" from the sentence, or leave out `mailAddress`, and the mail button goes. Mail and Discord can also stand side by side when the sentence names both.
+- **A picker of your own:** replace the window, the tile grid and the search with `PickerWindow` from the framework package. Pass `items` (id, label, mark, group, hint, terms, last), `groups` and `text` (with `clear`, the name of the search's own clear button), and handle `onPick`. A pick that needs a form passes it as children with its `actions` and `onBack`. A brand's mark is any `{ svg, tile, ink }`.
+- **A tile with a kind:** split a name such as "SMB / Windows share" into `label: "SMB"` and `sub: "Windows share"`. A short word that needs no (i) goes in `tip`.
+- **A test in the foot:** give the action `busy` while it runs, then `tone: "ok"` or `"danger"` and a `title` with the outcome. Keep its label as it is, so the button keeps its width. A verdict beside the foot's buttons goes in as `start` to `PickerWindow`, or in the `start` slot in Vue.
+- **A form after the pick:** leave out a scroll box of your own around it. The window's body scrolls during the form step, as any window's does. A window of your own with a form passes `closeOnBackdrop={false}` to `Window`.
+- **A rating for a group:** give `PickGroup` a `badge` with a `label` and one of the badge tones, and a `hint` for its (i). Both stand in the eyebrow's line.
+- **A choice that is not ready yet:** give the item a `status` instead of leaving it out. The tile stays in view with that word as its second line and cannot be picked.
+- **Back to the tiles from a form:** pass the last pick as `selected`, and that tile is marked and takes the focus.
+- **A logo that loses its layers on the lit tile:** give its `TileMark` a `hover` drawing, and a `className` for the box where the app paints the mark at rest.
+- **A plugin page:** the bundle carries `service-marks.js`, which puts the marks on `window.GlimServiceMarks`, and the `service-marks/` folder with their licences, which goes wherever the marks go.
 - **A storage picker of your own:** pass `STORAGE_PROVIDERS` from `@glimstone/core/storageProviders` to `catalogPicker` from `@glimstone/core`, with the ids your backend reaches, your group titles, a glyph for a provider without a mark and the page's language. Hand the `items` and `groups` it returns to `PickerWindow`. Keep what your backend needs to connect beside the ids, and drop your own copies of the marks and tile colours.
 - **Your provider ids:** the catalog uses the ids the apps have in common, such as `nextcloud`, `gdrive`, `b2` and `hetznerobj`. Map an id of your own to the catalog's before you switch.
 - **Names that are words:** an entry with `word: true`, such as SMB's "Windows share", "S3 compatible" or "Encrypted", comes in your language through `own`. Brand names are not translated.
@@ -23,11 +38,21 @@ Apps pick their providers from shared catalogs: storage, notifications, MCP clie
 - **A captcha solver picker:** pass `CAPTCHA_PROVIDERS` from `@glimstone/core/captchaProviders` with a title for `solver`. The ids are the words you store a solver's key under, such as `2captcha`, `capmonster` and `deathbycaptcha`. The order the solvers are tried in stays with your app.
 - **A transfer service picker:** pass `TRANSFER_PROVIDERS` from `@glimstone/core/transferProviders` with a title for `transfer`. The ids are the words your clients go by, `wetransfer` and `swisstransfer`, and the domains of their links, `we.tl` among them, are search words. Dropbox, Google Drive and OneDrive stay in the storage catalog.
 - **A backend the catalog does not know:** `catalogPicker` leaves an unknown id out, so add its tile yourself.
-- **Flutter:** move the git dependency to `ref: v4.6.0`. Nothing else changes there.
+- **Flutter:** move the git dependency to `ref: v4.6.0`. `GlimTheme` gains `brandDiscord`, `GlimGlyphs` gains `discord`, and `GlimDerived` gains `hover`, which a neutral or quiet `GlimButton` hovers to. A `GlimTheme` you build with its constructor passes `brandDiscord` as well. `GlimTheme.light` carries `inkLightness: 0.5`, and a theme built with its own `inkLightness` keeps it.
 - **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.6.0.
 
 ## ✨ Added
 
+- **`PickerWindow`** in React, Vue, Solid and Svelte: the tiles in their groups under an open search, alphabetical in the page's language with the tile that takes anything last, the arrow keys across the grid, Enter on the one tile a query leaves, and Escape that empties the search before it closes the window. The window keeps its height while a query narrows it, and a form the app passes after a pick takes the tiles' place with Back in the foot.
+- **`PickerWindow` takes `start`**, the quiet line at the start of its foot, and `selected`. `PickGroup` takes `badge` and `hint`, and `PickItem` takes `sub`, `tip` and `status`.
+- **`ReadmeButton` takes `tip`** for a tooltip on its first part and `current`, which sets `aria-current` on it. `TileMark` takes `hover` and `className`, and `BrandMark` takes `hover`.
+- **`WindowAction` takes `tone`, `busy` and `title`**, and `Window` takes `closeOnBackdrop`, on by default.
+- **`pickSections`, `pickKey`, `pickTileStyle`, `pickMarkClass`, `pickFocusTarget` and their DOM helpers** in the core, for a page without a framework.
+- **`SERVICE_MARKS`** in its own entry, `@glimstone/core/serviceMarks`: the notification services' marks as markup, each with the colour its tile lights up in and the ink on it, Unraid's among them. A colour that one theme's tile would swallow is a `light-dark()` pair, so the marks need no stylesheet. `scripts/gen_service_marks.py` writes them from `packages/core/service-marks/`, where every source and licence is recorded.
+- **`IconSearch`** among the marks the components draw, and **`IconDiscord`**, Discord's mark from Simple Icons, for the Help card's button only.
+- **A Discord route on the Help card**, with Discord's mark in its own blurple, lightened on the dark theme so it reads at rest, and the true colour when the button lights up.
+- **`--hover` and `--hover-chroma`**, with the Tailwind colour `hover`.
+- **Tests for every hover.** They hold each hover in the stylesheet to a ground taken from the accent, each tint to its step's lightness and the accent's hue, and each glyph without a ground to the accent's ink. The text on a hovered row keeps 4.5:1 for 153 picked colours in all six themes, and a button, a row, a menu entry and a tile show the same colour under the pointer.
 - **`catalogPicker`** in `@glimstone/core`, with the types `Catalog`, `CatalogEntry` and `CatalogPick`: a catalog of any kind of provider, the ids an app offers and its group titles become a picker window's tiles and groups.
 - **`STORAGE_PROVIDERS`** in its own entry, `@glimstone/core/storageProviders`: 96 providers in four groups, 68 of them with their brand's mark and the rest with a glyph by meaning. The marks are `STORAGE_MARKS` in `@glimstone/core/storageMarks`. `scripts/gen_storage_marks.py` writes them from `packages/core/storage-marks/`, where every source and licence is recorded.
 - **`NOTIFY_PROVIDERS`** in its own entry, `@glimstone/core/notifyProviders`: nine services wearing the marks of `SERVICE_MARKS`, then email and the webhook with a glyph each. The documentation site's channel pickers pick from it.
@@ -37,184 +62,33 @@ Apps pick their providers from shared catalogs: storage, notifications, MCP clie
 - **`DOWNLOAD_PROVIDERS`** in its own entry, `@glimstone/core/downloadProviders`: 20 debrid services, then 19 file hosters by domain, with their other domains as search words. Seven of the 39 wear their brand's mark, and the rest a glyph. The marks are `DOWNLOAD_MARKS` in `@glimstone/core/downloadMarks`, which `scripts/gen_download_marks.py` writes from `packages/core/download-marks/`.
 - **`CAPTCHA_PROVIDERS`** in its own entry, `@glimstone/core/captchaProviders`: seven captcha solvers in one group. CapMonster Cloud wears its brand's mark, and the rest the captcha glyph. The marks are `CAPTCHA_MARKS` in `@glimstone/core/captchaMarks`, which `scripts/gen_captcha_marks.py` writes from `packages/core/captcha-marks/`.
 - **`TRANSFER_PROVIDERS`** in its own entry, `@glimstone/core/transferProviders`: WeTransfer and SwissTransfer, each with its brand's mark and the domains of its links as search words. The marks are `TRANSFER_MARKS` in `@glimstone/core/transferMarks`, which `scripts/gen_transfer_marks.py` writes from `packages/core/transfer-marks/`.
-- **Unraid's mark** in `SERVICE_MARKS`, from Simple Icons, for the server's own notifications.
 - **`GLOSSARY.md`**, the words pickers and catalogs use: provider, target, catalog, group, mark and glyph.
 
 ## 🎨 Design
 
 - **GlimStone has a new mark:** an eight-pointed star of steel around a gold stone, in place of the wall of bricks. It carries its own lit and shaded halves, so one drawing reads on light and dark grounds, on the banners, in the site's header and in the README's pictures.
-- **A black or grey mark turns white in the dark theme.** It was lifted only as far as 3:1 on the dark tile and stayed grey, Matrix's among them. Grey carries no brand colour to stay close to, so it goes all the way to white.
-- **Proton VPN's mark keeps its shape on the lit tile.** In one ink its gradient ran together into a shape that read like a 7. The lit tile now shows Proton VPN's single-colour drawing from Simple Icons, with the gap between its two parts.
-
-## 4.5.8 - 2026-11-19
-
-A picker group can say how well it suits the job, a tile can wait in plain view, and the last pick stays marked.
-
-**Adopting apps:**
-
-- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.5.8, all packages at the same number.
-- **A rating for a group:** give `PickGroup` a `badge` with a `label` and one of the badge tones, and a `hint` for its (i). Both stand in the eyebrow's line.
-- **A choice that is not ready yet:** give the item a `status` instead of leaving it out. The tile stays in view with that word as its second line and cannot be picked.
-- **Back to the tiles from a form:** pass the last pick as `selected`, and that tile is marked and takes the focus.
-- **A logo that loses its layers on the lit tile:** give its `TileMark` a `hover` drawing, and a `className` for the box where the app paints the mark at rest.
-- **Flutter:** move the git dependency to `ref: v4.5.8`. Nothing else changes there.
-- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.5.8.
-
-## ✨ Added
-
-- **`PickGroup` takes `badge` and `hint`**, and `PickItem` takes `status`, in React, Vue, Solid and Svelte.
-- **`PickerWindow` takes `selected`**, and `ReadmeButton` takes `current`, which sets `aria-current` on its first part.
-- **`TileMark` takes `hover` and `className`**, and `BrandMark` takes `hover`.
-- **`pickMarkClass` and `pickFocusTarget`** in `@glimstone/core`.
-
-## 🐛 Fixed
-
-- **The site's nav stays at the window's left edge.** Opening Make it yours no longer slides it towards the middle, and the page beside it stays where it was.
-
-## 4.5.7 - 2026-11-18
-
-A long form after a pick scrolls inside the picker window, and the picker's foot takes a start line.
-
-**Adopting apps:**
-
-- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.5.7, all packages at the same number.
-- **A form of your own that scrolls itself:** drop the scroll box around it. The window's body scrolls during the form step, as any window's does.
-- **A verdict beside the foot's buttons:** pass it as `start` to `PickerWindow`, or in the `start` slot in Vue, instead of handing it through to the window yourself.
-- **Flutter:** move the git dependency to `ref: v4.5.7`. Nothing else changes there.
-- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.5.7.
-
-## ✨ Added
-
-- **`PickerWindow` takes `start`**, the quiet line at the start of its foot, in React, Vue, Solid and Svelte.
-
-## 🐛 Fixed
-
-- **A long form after a pick is no longer cut off.** The window's body scrolls during the form step, and only the tiles hold their height with the search above them.
-
-## 4.5.6 - 2026-11-18
-
-The picker window learns what the pickers it replaces could do: a form after the pick that stays open and narrow, foot buttons that show how a test went, and tiles with a second line or a tooltip.
-
-**Adopting apps:**
-
-- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.5.6, all packages at the same number.
-- **Your picker's words:** `text` takes `clear`, the name of the search's own clear button.
-- **A tile with a kind:** split a name such as "SMB / Windows share" into `label: "SMB"` and `sub: "Windows share"`. A short word that needs no (i) goes in `tip`.
-- **A test in the foot:** give the action `busy` while it runs, then `tone: "ok"` or `"danger"` and a `title` with the outcome. Keep its label as it is, so the button keeps its width.
-- **A window of your own with a form:** pass `closeOnBackdrop={false}` to `Window`.
-- **Flutter:** move the git dependency to `ref: v4.5.6`. Nothing else changes there.
-- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.5.6.
-
-## ✨ Added
-
-- **`WindowAction` takes `tone`, `busy` and `title`** in React, Vue, Solid and Svelte.
-- **`Window` takes `closeOnBackdrop`**, on by default.
-- **`PickItem` takes `sub` and `tip`**, and `ReadmeButton` takes `tip` for a tooltip on its first part.
-- **`IconSearch`** among the marks the components draw.
-
-## 🎨 Design
-
+- **Hover takes the accent's hue, in one colour for everything** (rule 21). `--hover` keeps surface3's OKLab lightness with 30% of the accent's chroma, so the text and the secondary text on it keep 4.5:1 for every picked colour on dark, OLED, light and the contrast step. A grey accent gives the plain grey step, and under rainbow the hover takes the position's hue.
+- **Glyphs without a ground of their own** take the accent's ink under the pointer: the number field's steppers, the password eye and the version link. A tree's expand toggle and a carousel dot light up in the accent as well.
+- **Options under the pointer** in Select, and in a menu opened from a Select, take the same tint as a menu entry.
 - **A form after the pick narrows the window to a form's width** around the same middle, on the motion level's window duration, and a press beside the window leaves the form open.
 - **The picker's search wears the search glyph and clears with a grey button of its own.** The browser's blue clear button is hidden, and a long placeholder ends in an ellipsis inside the field.
 - **A picker opened from a card wears the card's rainbow colour**, as a list opened from it does.
 - **The health-check service's tile lights in its green**, `#5cb85f` with the near-black ink at 8:1, where it took the dark grey of its mark.
+- **A black or grey mark turns white in the dark theme.** It was lifted only as far as 3:1 on the dark tile and stayed grey, Matrix's among them. Grey carries no brand colour to stay close to, so it goes all the way to white.
+- **Proton VPN's mark keeps its shape on the lit tile.** In one ink its gradient ran together into a shape that read like a 7. The lit tile now shows Proton VPN's single-colour drawing from Simple Icons, with the gap between its two parts.
 
-## 4.5.5 - 2026-11-18
+## ⚡ Improved
 
-A big picker is a single component. The app hands `PickerWindow` its list and gets back the id of the tile somebody chose, and the marks of the common notification services ship with their tile colours and their licences.
-
-**Adopting apps:**
-
-- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.5.5, all packages at the same number.
-- **A picker of your own:** replace the window, the tile grid and the search with `PickerWindow` from the framework package. Pass `items` (id, label, mark, group, hint, terms, last), `groups` and `text`, and handle `onPick`. A pick that needs a form passes it as children with its `actions` and `onBack`. A brand's mark is any `{ svg, tile, ink }`, so storage providers and registries keep the marks the app already has.
-- **A notification channel picker:** take the marks from `@glimstone/core/serviceMarks` by id. Their sources and licences ship in `@glimstone/core/service-marks/`.
-- **A plugin page:** the bundle carries `service-marks.js`, which puts the marks on `window.GlimServiceMarks`, and the `service-marks/` folder with their licences, which goes wherever the marks go.
-- **Flutter:** move the git dependency to `ref: v4.5.5`. Nothing else changes there.
-- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.5.5.
-
-## ✨ Added
-
-- **`PickerWindow`** in React, Vue, Solid and Svelte: the tiles in their groups under an open search, alphabetical in the page's language with the tile that takes anything last, the arrow keys across the grid, Enter on the one tile a query leaves, and Escape that empties the search before it closes the window. The window keeps its height while a query narrows it, and a form the app passes after a pick takes the tiles' place with Back in the foot.
-- **`pickSections`, `pickKey`, `pickTileStyle` and their DOM helpers** in the core, for a page without a framework.
-- **`SERVICE_MARKS`** in its own entry, `@glimstone/core/serviceMarks`: eight notification services' marks as markup, each with the colour its tile lights up in and the ink on it. A colour that one theme's tile would swallow is a `light-dark()` pair, so the marks need no stylesheet. `scripts/gen_service_marks.py` writes them from `packages/core/service-marks/`, where every source and licence is recorded.
-
-## 4.5.4 - 2026-11-16
-
-Whatever the pointer is over lights up in the accent, in one colour for buttons, rows, menus and tiles, and accent text in the light theme reads at 4.5:1 on every ground it stands on.
-
-**Adopting apps:**
-
-- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.5.4, all packages at the same number.
-- **Your own copy of the tokens:** copy `tokens.css` and `tailwind-theme.css` again. They bring `--hover`, the light ink step `--ink-l-light: 0.5` and the tints declared again inside `[data-rainbow] .glim-hue`, so a rainbow position's hover takes its hue. An app that keeps its own step for the light ink can drop it and take GlimStone's.
-- **Your own hovers:** swap `hover:bg-carbon-hover`, a hover to `surface3` and `hover:bg-carbon-hoverRaised` for `hover:bg-hover`, or `--hover` in plain CSS. `--carbon-hover` and `--carbon-hover-raised` stay as the grey steps a field's focus uses.
-- **A row with a glyph tile:** fill the tile with the accent while the row is hovered, as `GlyphTile` does. A tile filled with surface2 disappears into a row that hovers to surface2.
-- **Flutter:** move the git dependency to `ref: v4.5.4`. `GlimDerived` gains `hover`, which a neutral or quiet `GlimButton` hovers to, and `GlimTheme.light` carries `inkLightness: 0.5`. A theme built with its own `inkLightness` keeps it.
-- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.5.4.
-
-## ✨ Added
-
-- **`--hover` and `--hover-chroma`**, with the Tailwind colour `hover`.
-- **Tests for every hover.** They hold each hover in the stylesheet to a ground taken from the accent, each tint to its step's lightness and the accent's hue, and each glyph without a ground to the accent's ink. The text on a hovered row keeps 4.5:1 for 153 picked colours in all six themes, and a button, a row, a menu entry and a tile show the same colour under the pointer.
-
-## 🎨 Design
-
-- **Hover takes the accent's hue, in one colour for everything** (rule 21). `--hover` keeps surface3's OKLab lightness with 30% of the accent's chroma, so the text and the secondary text on it keep 4.5:1 for every picked colour on dark, OLED, light and the contrast step. A grey accent gives the plain grey step, and under rainbow the hover takes the position's hue.
-- **Glyphs without a ground of their own** take the accent's ink under the pointer: the number field's steppers, the password eye and the version link. A tree's expand toggle and a carousel dot light up in the accent as well.
-- **Options under the pointer** in Select, and in a menu opened from a Select, take the same tint as a menu entry.
+- **The GlimStone version opens the newest release.** A row with `latest` links `releases/latest` instead of its own tag, and `GLIMSTONE_REPO` and `GLIMSTONE_RELEASE_URL` come from every package, so the number still opens the notes its changes went into.
 
 ## 🐛 Fixed
 
 - **A neutral or quiet button keeps its label readable under the pointer** (rule 40). It hovers to `--hover`, the colour of the row beside it, instead of mixing 22% of its tint into its own step. On the dark ramp that mix took Sunflower's neutral hover to `#8e825c` with the label at 3.47:1, and `#5c4f2f` gives it 7.30:1.
 - **Accent text reads at 4.5:1 on surface2 in the light theme.** The light ink sits at an OKLab lightness of 0.50 where it was 0.52, so the eight presets reach 4.7 to 5.2:1 on surface2 and 5.8 to 6.4:1 on white. Sunflower's ink goes from `#836407` to `#7C5F07`, and the info text takes the same step.
-
-## 4.5.3 - 2026-11-16
-
-The desktop window bar keeps its height again, and a tab change slides the right way in a right-to-left script.
-
-**Adopting apps:**
-
-- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.5.3, all packages at the same number.
-- **Your own copy of the tokens:** copy `tokens.css` again. An app that sets `--window-bar` or `--tab-dir-sign` on `:root` outside a cascade layer still overrides GlimStone's value, as it did before.
-- **Flutter:** move the git dependency to `ref: v4.5.3`. Nothing else changes there.
-- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.5.3.
-
-## 🐛 Fixed
-
-- **The window bar keeps its height.** Its `--window-bar` default of 0 sat outside the cascade layers and outranked the 2.5rem the bar sets inside them, so `WindowBar` collapsed to nothing and the page no longer started below it. Both values now sit in the same layer, and a test fails on any property the root sets both inside and outside a layer.
+- **The window bar keeps its height.** Its `--window-bar` default of 0 sat outside the cascade layers and outranked the 2.5rem the bar sets inside them, so `WindowBar` collapsed to nothing and the page did not start below it. Both values sit in the same layer, and a test fails on any property the root sets both inside and outside a layer.
 - **Tabs slide the right way in a right-to-left script.** `--tab-dir-sign` kept its 1 under `dir="rtl"` for the same reason.
-
-## 4.5.2 - 2026-11-15
-
-The Help card can send people to Discord. An app that answers its questions there swaps the mail button for an invite, and an app that keeps its mailbox changes nothing.
-
-**Adopting apps:**
-
-- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.5.2, all packages at the same number.
-- **Discord:** pass `discordUrl` with the invite, `discordGlyph` with `IconDiscord` and `text.discordButton` ("Discord") to `InfoHelpCard` or `InfoTile`'s `help`, in all four packages, and name Discord in `text.report`. The deprecated `AboutCard` takes the same three. The button stands right after GitHub and opens the invite through `openUrl`.
-- **Swapping mail for Discord:** drop "email" from the sentence, or leave out `mailAddress`, and the mail button goes. Mail and Discord can also stand side by side when the sentence names both.
-- **Your own copy of the tokens:** take `--brand-discord`, `.glim-discord-mark` and `.glim-tile-discord` from `tokens.css`. `ReadmeButton` knows `brand="discord"`.
-- **Flutter:** move the git dependency to `ref: v4.5.2`. `GlimTheme` gains `brandDiscord` and `GlimGlyphs` gains `discord`. A `GlimTheme` you build with its constructor passes `brandDiscord` as well.
-- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.5.2.
-
-## ✨ Added
-
-- **A Discord route on the Help card**, with Discord's mark in its own blurple, lightened on the dark theme so it reads at rest, and the true colour when the button lights up.
-- **`IconDiscord`**, Discord's mark from Simple Icons, for that button only.
-
-## 4.5.1 - 2026-11-15
-
-The GlimStone version on an app's Info tile opens the newest release, so a number whose patch tag folded away still leads to its notes.
-
-**Adopting apps:**
-
-- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.5.1, all packages at the same number.
-- **The GlimStone row:** set `latest: true` on the GlimStone row you hand the Version card. An app that builds the link itself takes `GLIMSTONE_RELEASE_URL` from its GlimStone package in place of `releases/tag/v<version>`.
-- **Flutter:** move the git dependency to `ref: v4.5.1`. Nothing else changes there.
-- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.5.1.
-
-## ⚡ Improved
-
-- **The GlimStone version opens the newest release.** A row with `latest` links `releases/latest` instead of its own tag, and `GLIMSTONE_REPO` and `GLIMSTONE_RELEASE_URL` come from every package. Once a patch folds into the next minor and its tag goes, the number still opens the notes its changes went into.
+- **A long form after a pick is not cut off.** The window's body scrolls during the form step, and only the tiles hold their height with the search above them.
+- **The site's nav stays at the window's left edge.** Opening Make it yours does not slide it towards the middle, and the page beside it stays where it was.
 
 ## 4.5.0 - 2026-11-15
 
