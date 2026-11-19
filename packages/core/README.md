@@ -60,7 +60,11 @@ npm install @glimstone/core
   own entry, `@glimstone/core/storageProviders`, with the providers' marks and
   `storage-marks/` beside it for their sources and licences. The notification
   catalog is `@glimstone/core/notifyProviders`, the services a message goes
-  out to and then email and webhooks, wearing the marks of `serviceMarks`.
+  out to and then email and webhooks, wearing the marks of `serviceMarks`. The
+  AI apps that connect to an MCP server are `@glimstone/core/mcpProviders`, and
+  the container registries `@glimstone/core/registryProviders`, each with
+  their marks and a folder beside them for the sources, `mcp-marks/` and
+  `registry-marks/`.
 - Where a dragged item goes: `dropIndex` places it among the others by its
   leading edge, along a row, down a column or line by line in a grid.
 - What runs without a framework: `mountSelect`, `wireTooltips` with
