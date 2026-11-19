@@ -4,7 +4,7 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
-Apps that connect to storage, send notifications, set up MCP clients, sign in to container registries, route through a VPN, sign in to debrid services and file hosters, hand captchas to a solver or fetch files from a transfer service pick their providers from a shared catalog, which carries each provider's group, search words and mark, so they no longer keep a list of their own.
+Apps pick their providers from shared catalogs: storage, notifications, MCP clients, container registries, VPNs, download services, captcha solvers and transfer services. Each catalog carries every provider's group, search words and mark, so an app no longer keeps a list of its own. GlimStone also has a new mark.
 
 **Adopting apps:**
 
