@@ -4,7 +4,7 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
-Apps that connect to storage or send notifications pick their providers from a shared catalog, which carries each provider's group, search words and mark, so they no longer keep a list of their own.
+Apps that connect to storage, send notifications, set up MCP clients or sign in to container registries pick their providers from a shared catalog, which carries each provider's group, search words and mark, so they no longer keep a list of their own.
 
 **Adopting apps:**
 
@@ -15,6 +15,8 @@ Apps that connect to storage or send notifications pick their providers from a s
 - **Services behind Shoutrrr:** Telegram, Pushover, Teams and the rest stay search words on the Shoutrrr tile. Offer one as a tile of its own only once your app speaks to it directly.
 - **Targets built on another target**, such as an encrypted or a merged one, have a group of their own, `layered`, after the protocols. Give it a title, or leave its ids out.
 - **A group that rates itself:** give its entry in `titles` as `{ title, badge, hint }` instead of a plain title, and the badge and the (i) stand in its eyebrow's line.
+- **An MCP client picker of your own:** pass `MCP_PROVIDERS` from `@glimstone/core/mcpProviders` to `catalogPicker` with the ids your setup dialog knows and titles for its seven groups. The ids are the ones the apps already store, such as `claude-code`, `copilot-cli` and `vibe`. The web chat at claude.ai is `claude`, so map an id like `claudeai` before you switch. Other client is a word to translate and takes `last: true` through `own`. The setup steps, paths and key handling stay with your app.
+- **A registry picker of your own:** pass `REGISTRY_PROVIDERS` from `@glimstone/core/registryProviders` to `catalogPicker` with titles for `public`, `cloud` and `selfHosted`. The host you sign in to stays yours: hand it in as the tile's `sub` through `own`, and give Other registry `last: true`. Drop your own copies of the logos and tile colours.
 - **A backend the catalog does not know:** `catalogPicker` leaves an unknown id out, so add its tile yourself.
 - **Flutter:** nothing changes there.
 
@@ -23,6 +25,8 @@ Apps that connect to storage or send notifications pick their providers from a s
 - **`catalogPicker`** in `@glimstone/core`, with the types `Catalog`, `CatalogEntry` and `CatalogPick`: a catalog of any kind of provider, the ids an app offers and its group titles become a picker window's tiles and groups.
 - **`STORAGE_PROVIDERS`** in its own entry, `@glimstone/core/storageProviders`: 96 providers in four groups, 68 of them with their brand's mark and the rest with a glyph by meaning. The marks are `STORAGE_MARKS` in `@glimstone/core/storageMarks`. `scripts/gen_storage_marks.py` writes them from `packages/core/storage-marks/`, where every source and licence is recorded.
 - **`NOTIFY_PROVIDERS`** in its own entry, `@glimstone/core/notifyProviders`: nine services wearing the marks of `SERVICE_MARKS`, then email and the webhook with a glyph each. The documentation site's channel pickers pick from it.
+- **`MCP_PROVIDERS`** in its own entry, `@glimstone/core/mcpProviders`: 33 MCP clients in seven groups, from chat apps to automation, 28 of them with their brand's mark and the rest with a glyph. The marks are `MCP_MARKS` in `@glimstone/core/mcpMarks`, which `scripts/gen_mcp_marks.py` writes from `packages/core/mcp-marks/`, where every source and licence is recorded.
+- **`REGISTRY_PROVIDERS`** in its own entry, `@glimstone/core/registryProviders`: twelve container registries in three groups, each with its mark except Other registry. The marks are `REGISTRY_MARKS` in `@glimstone/core/registryMarks`, and GitLab's, Quay's, Gitea's and Harbor's bring a `hover` drawing in one colour for the lit tile. `scripts/gen_registry_marks.py` writes them from `packages/core/registry-marks/`.
 - **Unraid's mark** in `SERVICE_MARKS`, from Simple Icons, for the server's own notifications.
 - **`GLOSSARY.md`**, the words pickers and catalogs use: provider, target, catalog, group, mark and glyph.
 
