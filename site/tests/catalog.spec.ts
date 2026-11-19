@@ -1,4 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
+import { MCP_PROVIDERS } from "../../packages/core/src/mcpProviders.ts";
+import { REGISTRY_PROVIDERS } from "../../packages/core/src/registryProviders.ts";
 import { STORAGE_PROVIDERS } from "../../packages/core/src/storageProviders.ts";
 import { open, stage } from "./page";
 
@@ -81,5 +83,87 @@ test.describe("A catalog in a PickerWindow", () => {
     await search(page).press("Enter");
     await expect(picker(page)).toHaveCount(0);
     await expect(stage(page, "PickerWindowStorage").locator("output")).toHaveText("Picked: Garage");
+  });
+});
+
+const sections = (page: Page) =>
+  picker(page)
+    .locator(".glim-pick-section")
+    .evaluateAll((all) =>
+      all.map((s) => ({
+        title: s.querySelector(".glim-eyebrow")?.textContent,
+        names: [...s.querySelectorAll("button.glim-readme-btn")].map((b) => b.getAttribute("aria-label") ?? ""),
+      })),
+    );
+
+async function showOther(page: Page, demo: string, button: string, searchName: string) {
+  await open(page, "/components/picker-window");
+  await stage(page, demo).getByRole("button", { name: button }).click();
+  await expect(picker(page).getByRole("searchbox", { name: searchName })).toBeFocused();
+  return picker(page).getByRole("searchbox", { name: searchName });
+}
+
+test.describe("The MCP catalog in a PickerWindow", () => {
+  const show = (page: Page) => showOther(page, "PickerWindowMcpClients", "Connect a client", "Search clients");
+
+  test("[mcp-groups] the clients stand in the catalog's groups, with Other client last", async ({ page }) => {
+    await show(page);
+    const found = await sections(page);
+    const count = (group: string) => MCP_PROVIDERS.entries.filter((e) => e.group === group).length;
+    expect(found.map(({ title, names }) => ({ title, count: names.length }))).toEqual([
+      { title: "Chat apps", count: count("chat") },
+      { title: "Local models", count: count("models") },
+      { title: "In the browser", count: count("web") },
+      { title: "Editors", count: count("editor") },
+      { title: "VS Code extensions", count: count("extension") },
+      { title: "In the terminal", count: count("terminal") },
+      { title: "Automation", count: count("automation") },
+    ]);
+    expect(found.at(-1)?.names.at(-1)).toBe("Other client");
+  });
+
+  test("[mcp-search] a client is found by its maker's name, and a pick hands back its id", async ({ page }) => {
+    const search = await show(page);
+    await search.fill("anthropic");
+    await expect.poll(() => names(page)).toEqual(["Claude Desktop", "Claude", "Claude Code"]);
+    await search.fill("vibe");
+    await search.press("Enter");
+    await expect(picker(page)).toHaveCount(0);
+    await expect(stage(page, "PickerWindowMcpClients").locator("output")).toHaveText("Picked: Mistral Vibe");
+  });
+});
+
+test.describe("The registry catalog in a PickerWindow", () => {
+  const show = (page: Page) => showOther(page, "PickerWindowRegistries", "Add a registry", "Search registries");
+
+  test("[registry-groups] public registries, then the clouds, then the self-hosted ones with Other registry last", async ({ page }) => {
+    await show(page);
+    const found = await sections(page);
+    const count = (group: string) => REGISTRY_PROVIDERS.entries.filter((e) => e.group === group).length;
+    expect(found.map(({ title, names }) => ({ title, count: names.length }))).toEqual([
+      { title: "Public", count: count("public") },
+      { title: "In a cloud account", count: count("cloud") },
+      { title: "Self-hosted", count: count("selfHosted") },
+    ]);
+    expect(found.at(-1)?.names.at(-1)).toBe("Other registry Your own address");
+  });
+
+  test("[registry-hover] a multicoloured logo shows its one-colour drawing on the lit tile", async ({ page }) => {
+    await show(page);
+    const tile = picker(page).getByRole("button", { name: "GitLab registry.gitlab.com", exact: true });
+    await expect(tile.locator(".glim-mark-hover")).toBeHidden();
+    await tile.hover();
+    await expect(tile.locator(".glim-mark-hover")).toBeVisible();
+    await expect(tile.locator(".glim-mark-rest")).toBeHidden();
+    expect(await tile.evaluate((b) => getComputedStyle(b).backgroundColor)).toBe("rgb(226, 67, 41)");
+  });
+
+  test("[registry-search] a registry is found by its host, and a pick hands back its id", async ({ page }) => {
+    const search = await show(page);
+    await search.fill("ghcr.io");
+    await expect.poll(() => names(page)).toEqual(["GitHub ghcr.io"]);
+    await search.press("Enter");
+    await expect(picker(page)).toHaveCount(0);
+    await expect(stage(page, "PickerWindowRegistries").locator("output")).toHaveText("Picked: GitHub");
   });
 });

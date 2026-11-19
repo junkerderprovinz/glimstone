@@ -1105,6 +1105,22 @@ const { items, groups } = catalogPicker(STORAGE_PROVIDERS, {
         <code>last</code>, since it takes anything. A service reached only through Shoutrrr, such as Telegram, is a word
         the Shoutrrr tile is found by rather than a tile of its own.
       </p>
+      <p>
+        <code>MCP_PROVIDERS</code> in <code>@glimstone/core/mcpProviders</code> holds the AI apps that connect to an
+        app's MCP server: chat apps, apps for local models, chats in the browser, editors, VS Code extensions, tools in
+        the terminal and automation, in that order. Other client takes any address, so the app marks it{" "}
+        <code>last</code>.
+      </p>
+      <Demo name="PickerWindowMcpClients" />
+      <p>
+        <code>REGISTRY_PROVIDERS</code> in <code>@glimstone/core/registryProviders</code> holds the container
+        registries: the public ones, then those a cloud hands out per account, then those people run themselves, with
+        Other registry last. The host to sign in to is the app's, and comes in through <code>own</code> as the tile's
+        second line. GitLab, Quay, Gitea and Harbor bring a <code>hover</code> drawing in one colour, since their logos
+        melt into one shape on the lit tile. The sources of both sets are in <code>mcp-marks/</code> and{" "}
+        <code>registry-marks/</code>.
+      </p>
+      <Demo name="PickerWindowRegistries" />
       <H2>Rules</H2>
       <ul>
         <li>The tiles stand in their groups, each in alphabetical order for the page's language, with the tile that takes anything last.</li>
