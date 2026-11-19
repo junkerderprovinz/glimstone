@@ -285,7 +285,7 @@ test.describe("The download catalog in a PickerWindow", () => {
     await expect(stage(page, "PickerWindowDownload").locator("output")).toHaveText("Picked: Rapidgator");
   });
 
-  test("[download-marks] a debrid service lights in its brand's colour, a hoster without a mark in the accent", async ({ page }) => {
+  test("[download-marks] a provider lights in its brand's colour, BestDebrid without a mark in the accent", async ({ page }) => {
     await showDownload(page);
     const fill = async (name: string) => {
       const tile = picker(page).getByRole("button", { name, exact: true });
@@ -302,7 +302,8 @@ test.describe("The download catalog in a PickerWindow", () => {
       probe.remove();
       return colour;
     });
-    expect(await fill("Rapidgator")).toBe(accent);
+    expect(await fill("Rapidgator")).toBe("rgb(252, 144, 32)");
+    expect(await fill("BestDebrid")).toBe(accent);
   });
 });
 
