@@ -5252,6 +5252,13 @@
     justify-content: flex-end;
     gap: var(--space-3);
   }
+  /* The state washes are measured over the card, and the well's darker ground
+     takes their text under 4.5:1, so a badge here lays its wash over the card's
+     surface. A neutral one steps up a surface, or it vanishes into the well. */
+  .glim-connection-badges .glim-badge--ok { background: linear-gradient(var(--status-ok-bg), var(--status-ok-bg)) var(--carbon-surface); }
+  .glim-connection-badges .glim-badge--fail { background: linear-gradient(var(--status-fail-bg), var(--status-fail-bg)) var(--carbon-surface); }
+  .glim-connection-badges .glim-badge--active { background: linear-gradient(var(--accent-soft), var(--accent-soft)) var(--carbon-surface); }
+  .glim-connection-badges .glim-badge--neutral { background-color: var(--carbon-surface3); }
   .glim-connection-about {
     display: flex;
     flex: 1 1 12rem;
