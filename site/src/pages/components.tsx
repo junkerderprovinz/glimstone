@@ -1671,6 +1671,62 @@ export function ListRowPage() {
   );
 }
 
+export function ConnectionRowPage() {
+  return (
+    <>
+      <p className="lead">A service or an account the app is connected to, as one compact row with its logo, its state and its buttons.</p>
+      <Head file="react/ConnectionRow.tsx" />
+      <Demo name="ConnectionRowBasic" />
+      <Usage
+        code={`import { ConnectionRow } from "@glimstone/react";
+import { VPN_MARKS } from "@glimstone/core/vpnMarks";
+
+<ConnectionRow
+  name={vpn.name}
+  mark={VPN_MARKS[vpn.provider] ?? <IconShield />}
+  status={t("vpn.leavesIn", { place: vpn.place })}
+  test={{ busy: testing, tone: verdict && (verdict.ok ? "ok" : "danger"), title: verdict?.said }}
+  text={{ test: t("test"), edit: t("edit"), remove: t("remove") }}
+  onTest={test}
+  onEdit={edit}
+  onRemove={remove}
+/>`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>
+          The tile at the start is as tall as the row. A brand's mark from a catalog stands on its own colour, as its
+          tile in a picker does under the pointer, and one of the app's glyphs stands on the accent.
+        </li>
+        <li>
+          <code>status</code> is one quiet line, such as who is signed in or where the traffic leaves. A state that is
+          not the normal case goes in <code>badges</code>, a slot in Vue, after the name (rule 33). The children, the
+          default slot in Vue, add more quiet lines.
+        </li>
+        <li>
+          Test, Edit and Remove stand at the end in that order, each only where its handler is passed, and show their
+          glyphs alone below 640px. They stay in view, unlike a list row's buttons (rule 6), because the outcome of a
+          test has to be seen.
+        </li>
+        <li>
+          <code>test</code> works like a window's test action: <code>busy</code> while it runs, then <code>tone</code>{" "}
+          <code>ok</code> or <code>danger</code> and a <code>title</code> with what it found. The label stays, so the
+          button keeps its width, and a check or a cross says the outcome without the colour. A failed test shakes the
+          button ("Failure feedback").
+        </li>
+        <li>
+          Rows stand in a card one under the other. The row has the well's surface and no shadow, so a card holds as many
+          as it needs (rule 1).
+        </li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="ConnectionRow" />
+      <H2>API</H2>
+      <PropsTable of="ConnectionRow" />
+    </>
+  );
+}
+
 export function IconButtonPage() {
   return (
     <>

@@ -46,6 +46,7 @@ const COMPONENTS = {
   Tree: "react/Tree.tsx",
   RowMark: "react/RowMark.tsx",
   ListRow: "react/ListRow.tsx",
+  ConnectionRow: "react/ConnectionRow.tsx",
   IconButton: "react/IconButton.tsx",
   GlyphField: "react/GlyphField.tsx",
   GlyphTile: "react/GlyphTile.tsx",

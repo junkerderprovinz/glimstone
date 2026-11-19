@@ -1,6 +1,8 @@
 import { expect, test, type Locator, type Page } from "@playwright/test";
 import GLYPHS from "../../packages/core/glyphs.json" with { type: "json" };
 import jsQR from "jsqr";
+import { MARKS } from "../../packages/core/src/marks.ts";
+import { VPN_MARKS } from "../../packages/core/src/vpnMarks.ts";
 import { relook } from "./page";
 
 // Each test is named after its contract row, "[id] ...", which is how the site
@@ -3234,6 +3236,92 @@ test.describe("ListRow on a touch screen", () => {
     await open(page, "/components/list-row");
     const actions = stage(page, "ListRowBasic").locator(".glim-list-row-actions").first();
     expect(await actions.evaluate((e) => getComputedStyle(e).opacity)).toBe("1");
+  });
+});
+
+test.describe("ConnectionRow", () => {
+  const row = (page: Page, name: string) => stage(page, "ConnectionRowBasic").getByRole("group", { name, exact: true });
+  const button = (page: Page, name: string, label: string) => row(page, name).getByRole("button", { name: label, exact: true });
+  const tile = (page: Page, name: string) => row(page, name).locator(".glim-connection-tile");
+  // The packages' own check and cross carry glim-mark, the site's glyphs do not.
+  const outcome = (el: Locator) => el.locator(".glim-btn-glyph svg.glim-mark").getAttribute("viewBox");
+
+  test("[connection-name] a group named after the service holds its buttons", async ({ page }) => {
+    await open(page, "/components/connection-row");
+    await expect(row(page, "Mullvad VPN")).toBeVisible();
+    await expect(button(page, "Mullvad VPN", "Edit")).toBeVisible();
+  });
+
+  test("[connection-brand] the tile is the row's height in the brand's colour, the mark in its ink", async ({ page }) => {
+    await open(page, "/components/connection-row");
+    const look = await tile(page, "Mullvad VPN").evaluate((t) => ({
+      ground: getComputedStyle(t).backgroundColor,
+      ink: getComputedStyle(t.querySelector("svg")!).fill,
+      tall: t.getBoundingClientRect().height === t.closest(".glim-connection")!.getBoundingClientRect().height,
+    }));
+    expect(look).toEqual({ ground: hexToRgb(VPN_MARKS.mullvad.tile!), ink: hexToRgb(VPN_MARKS.mullvad.ink!), tall: true });
+  });
+
+  test("[connection-glyph] the app's glyph stands on the accent in the accent's ink", async ({ page }) => {
+    await open(page, "/components/connection-row");
+    const look = await tile(page, "Backup server").evaluate((t) => {
+      const probe = document.createElement("span");
+      probe.style.backgroundColor = "var(--accent)";
+      probe.style.color = "var(--accent-contrast)";
+      t.append(probe);
+      const want = { ground: getComputedStyle(probe).backgroundColor, ink: getComputedStyle(probe).color };
+      probe.remove();
+      return { want, got: { ground: getComputedStyle(t).backgroundColor, ink: getComputedStyle(t).color } };
+    });
+    expect(look.got).toEqual(look.want);
+  });
+
+  test("[connection-buttons] a button stands only for a handler, in the order Test, Edit, Remove", async ({ page }) => {
+    await open(page, "/components/connection-row");
+    await expect(row(page, "Mullvad VPN").locator(".glim-connection-actions button")).toHaveText(["Test", "Edit", "Remove"]);
+    await expect(row(page, "GitHub Container Registry").locator(".glim-connection-actions button")).toHaveText(["Edit", "Remove"]);
+  });
+
+  test("[connection-test] a test runs with a ring at the same width, then turns green with a check and says what it found", async ({ page }) => {
+    await open(page, "/components/connection-row");
+    const run = button(page, "Mullvad VPN", "Test");
+    const width = (await run.boundingBox())!.width;
+    await run.click();
+    await expect(run).toHaveAttribute("aria-busy", "true");
+    expect((await run.boundingBox())!.width).toBeCloseTo(width, 0);
+    await expect(run).not.toHaveAttribute("aria-busy", "true");
+    await expect(run).toHaveClass(/glim-btn--ok/);
+    expect(await outcome(run)).toBe(MARKS.check.viewBox);
+    await page.mouse.move(0, 0);
+    await centre(run);
+    await run.hover();
+    await expect(page.locator(".glim-bubble", { hasText: "Reached" })).toBeVisible();
+  });
+
+  test("[connection-fail] a failed test turns red with a cross and shakes once", async ({ page }) => {
+    await open(page, "/components/connection-row");
+    const run = button(page, "Backup server", "Test");
+    // The shake is over in a fifth of a second, so it is counted as it starts.
+    await run.evaluate((el) => {
+      el.dataset.shakes = "0";
+      el.addEventListener("animationstart", (e) => {
+        if ((e as AnimationEvent).animationName.startsWith("glim-shake")) el.dataset.shakes = String(Number(el.dataset.shakes) + 1);
+      });
+    });
+    await run.click();
+    await expect(run).toHaveClass(/glim-btn--danger/);
+    await expect(run).toHaveAttribute("data-shakes", "1");
+    expect(await outcome(run)).toBe(MARKS.close.viewBox);
+  });
+
+  test("[connection-narrow] below 640px the buttons show their glyphs alone and keep their names", async ({ page }) => {
+    await page.setViewportSize({ width: 480, height: 800 });
+    await open(page, "/components/connection-row");
+    for (const label of ["Test", "Edit", "Remove"]) {
+      const b = button(page, "Mullvad VPN", label);
+      await expect(b.locator("svg")).toBeVisible();
+      expect(await b.evaluate((e) => Math.abs(e.getBoundingClientRect().width - e.getBoundingClientRect().height) < 1)).toBe(true);
+    }
   });
 });
 

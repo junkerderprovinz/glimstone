@@ -327,6 +327,17 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "list-row-narrow", when: "The window is narrower than 600px", then: "The badges go and the name keeps the room." },
     ],
   },
+  ConnectionRow: {
+    rows: [
+      { id: "connection-name", when: "Always", then: "It is a group named after the service, so its buttons are heard with the name." },
+      { id: "connection-brand", when: "Its mark is a brand's", then: "The tile stands the row's whole height in the brand's colour, with the mark in its ink." },
+      { id: "connection-glyph", when: "Its mark is one of the app's glyphs", then: "The tile takes the accent, with the glyph in the accent's ink." },
+      { id: "connection-buttons", when: "A handler is left out", then: "Its button is not drawn, and the others keep the order Test, Edit, Remove." },
+      { id: "connection-test", when: "Test is pressed", then: "It shows the busy ring at the same width, then turns green with a check, and its bubble says what the test found." },
+      { id: "connection-fail", when: "The test fails", then: "The button turns red with a cross and shakes once." },
+      { id: "connection-narrow", when: "The window is narrower than 640px", then: "The buttons show their glyphs alone, and the label stays their name." },
+    ],
+  },
   IconButton: {
     pattern: { name: "Button", url: `${APG}button/` },
     rows: [
