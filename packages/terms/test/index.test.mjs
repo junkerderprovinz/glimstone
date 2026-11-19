@@ -23,5 +23,4 @@ test('hands out the glossary itself', () => {
   assert.equal(glossary.terms.backup.de.singular, 'Sicherung');
   assert.deepEqual(glossary.terms.permission.de, { singular: 'Berechtigung', plural: 'Berechtigungen', gender: 'f', stems: ['berechtigung'] });
   assert.equal(glossary.terms.signInService.de.singular, 'Anmeldedienst');
-  assert.equal(glossary.terms.trustedProxy.de.singular, 'vorgeschalteter Proxy');
 });

@@ -30,7 +30,6 @@ for, and the variants it forbids. Each term opens with a definition.
 | `account` | account | Konto, never Account |
 | `role` | role | Rolle |
 | `serviceGroup` | group at the sign-in service | Gruppe beim Anmeldedienst |
-| `trustedProxy` | trusted proxy | vorgeschalteter Proxy |
 | `passkey` | passkey | Passkey, never Hauptschlüssel |
 | `twoFactor` | two-factor authentication | Zwei-Faktor-Authentifizierung, never 2FA |
 | `session` | session | Sitzung, never Session |
