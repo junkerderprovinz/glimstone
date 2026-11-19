@@ -25,6 +25,16 @@ for, and the variants it forbids. Each term opens with a definition.
 | `pairing` | pairing | Kopplung |
 | `phrase` | phrase | Phrase, never Festungs-Phrase |
 | `job` | job | Auftrag |
+| `signIn` | sign-in | Anmeldung, never Login or Einloggen |
+| `signInService` | sign-in service | Anmeldedienst, never Identitätsanbieter |
+| `account` | account | Konto, never Account |
+| `role` | role | Rolle |
+| `serviceGroup` | group at the sign-in service | Gruppe beim Anmeldedienst |
+| `trustedProxy` | trusted proxy | vorgeschalteter Proxy |
+| `passkey` | passkey | Passkey, never Hauptschlüssel |
+| `twoFactor` | two-factor authentication | Zwei-Faktor-Authentifizierung, never 2FA |
+| `session` | session | Sitzung, never Session |
+| `apiToken` | API token | API-Token |
 
 A stem is the part every inflection shares: `kopi` finds the Polish "kopia
 zapasowa" and "kopii zapasowej" alike. In languages that build compounds
@@ -46,6 +56,14 @@ the English text unchanged is left to the app's own tests.
 
 `permission` is held to its forbidden variants alone, because the English word
 also names file and system permissions.
+
+`serviceGroup` asks for its word only where the English says "group at the
+sign-in service" in full. A plain "group" asks for nothing, since a group of
+instances goes by that word too. `twoFactor` also counts "two-factor" alone,
+which German writes as the start of a compound such as Zwei-Faktor-Code, and
+"2FA" on its own is forbidden in every language. Where the platforms of a
+language say login, as in Danish and Dutch, login is the word. Where they have
+a word of their own, as in German, French and Spanish, login is forbidden.
 
 From the command line, in CI:
 

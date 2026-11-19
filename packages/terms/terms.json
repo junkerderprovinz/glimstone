@@ -3609,6 +3609,3654 @@
           "任务"
         ]
       }
+    },
+    "signIn": {
+      "definition": "Proving to an app who you are, with a password, a passkey, a sign-in service or the fortress. Each sign-in starts a session.",
+      "en": {
+        "singular": "sign-in",
+        "plural": "sign-ins",
+        "stems": [
+          "sign-in",
+          "sign-ins"
+        ]
+      },
+      "de": {
+        "singular": "Anmeldung",
+        "plural": "Anmeldungen",
+        "gender": "f",
+        "stems": [
+          "anmeld",
+          "angemeld"
+        ],
+        "forbidden": [
+          "*login*",
+          "*log-in*",
+          "einlogg*",
+          "eingeloggt*"
+        ]
+      },
+      "ar": {
+        "singular": "تسجيل الدخول",
+        "plural": "عمليات تسجيل الدخول",
+        "gender": "m",
+        "stems": [
+          "دخول"
+        ]
+      },
+      "bg": {
+        "singular": "вход",
+        "plural": "входове",
+        "gender": "m",
+        "stems": [
+          "вход",
+          "влиз",
+          "влез",
+          "вляз"
+        ]
+      },
+      "ca": {
+        "singular": "inici de sessió",
+        "plural": "inicis de sessió",
+        "gender": "m",
+        "stems": [
+          "sessió"
+        ],
+        "forbidden": [
+          "login*"
+        ]
+      },
+      "cs": {
+        "singular": "přihlášení",
+        "plural": "přihlášení",
+        "gender": "n",
+        "stems": [
+          "přihlá"
+        ]
+      },
+      "da": {
+        "singular": "login",
+        "plural": "logins",
+        "gender": "n",
+        "stems": [
+          "login",
+          "log ind",
+          "logget ind",
+          "logge ind",
+          "log på",
+          "logget på"
+        ]
+      },
+      "el": {
+        "singular": "σύνδεση",
+        "plural": "συνδέσεις",
+        "gender": "f",
+        "stems": [
+          "σύνδε"
+        ]
+      },
+      "es": {
+        "singular": "inicio de sesión",
+        "plural": "inicios de sesión",
+        "gender": "m",
+        "stems": [
+          "sesión"
+        ],
+        "forbidden": [
+          "login*"
+        ]
+      },
+      "et": {
+        "singular": "sisselogimine",
+        "plural": "sisselogimised",
+        "stems": [
+          "sisselog",
+          "logi sisse",
+          "logige sisse"
+        ]
+      },
+      "eu": {
+        "singular": "saio-hasiera",
+        "plural": "saio-hasierak",
+        "stems": [
+          "saio"
+        ]
+      },
+      "fa": {
+        "singular": "ورود",
+        "plural": "ورودها",
+        "stems": [
+          "ورود",
+          "وارد"
+        ],
+        "forbidden": [
+          "لاگین*"
+        ]
+      },
+      "fi": {
+        "singular": "kirjautuminen",
+        "plural": "kirjautumiset",
+        "stems": [
+          "kirjau"
+        ],
+        "forbidden": [
+          "login*"
+        ]
+      },
+      "fr": {
+        "singular": "connexion",
+        "plural": "connexions",
+        "gender": "f",
+        "stems": [
+          "connex",
+          "connect"
+        ],
+        "forbidden": [
+          "login*"
+        ]
+      },
+      "gl": {
+        "singular": "inicio de sesión",
+        "plural": "inicios de sesión",
+        "gender": "m",
+        "stems": [
+          "sesión"
+        ],
+        "forbidden": [
+          "login*"
+        ]
+      },
+      "he": {
+        "singular": "התחברות",
+        "plural": "התחברויות",
+        "gender": "f",
+        "stems": [
+          "התחבר"
+        ],
+        "forbidden": [
+          "*לוגין*"
+        ]
+      },
+      "hi": {
+        "singular": "साइन इन",
+        "plural": "साइन इन",
+        "gender": "m",
+        "stems": [
+          "साइन इन",
+          "साइन-इन"
+        ]
+      },
+      "hr": {
+        "singular": "prijava",
+        "plural": "prijave",
+        "gender": "f",
+        "stems": [
+          "prijav"
+        ]
+      },
+      "hu": {
+        "singular": "bejelentkezés",
+        "plural": "bejelentkezések",
+        "stems": [
+          "bejelentkez",
+          "jelentkez"
+        ],
+        "forbidden": [
+          "login*"
+        ]
+      },
+      "id": {
+        "singular": "masuk",
+        "plural": "masuk",
+        "stems": [
+          "masuk",
+          "login"
+        ]
+      },
+      "is": {
+        "singular": "innskráning",
+        "plural": "innskráningar",
+        "gender": "f",
+        "stems": [
+          "innskrá",
+          "skrá inn",
+          "skráð inn",
+          "skráðu þig inn"
+        ]
+      },
+      "it": {
+        "singular": "accesso",
+        "plural": "accessi",
+        "gender": "m",
+        "stems": [
+          "access",
+          "acced",
+          "login"
+        ]
+      },
+      "ja": {
+        "singular": "ログイン",
+        "plural": "ログイン",
+        "stems": [
+          "ログイン",
+          "サインイン"
+        ]
+      },
+      "ko": {
+        "singular": "로그인",
+        "plural": "로그인",
+        "stems": [
+          "로그인"
+        ]
+      },
+      "lt": {
+        "singular": "prisijungimas",
+        "plural": "prisijungimai",
+        "gender": "m",
+        "stems": [
+          "prisijung",
+          "prisijunk"
+        ]
+      },
+      "lv": {
+        "singular": "pierakstīšanās",
+        "plural": "pierakstīšanās",
+        "gender": "f",
+        "stems": [
+          "pierakst"
+        ]
+      },
+      "ms": {
+        "singular": "log masuk",
+        "plural": "log masuk",
+        "stems": [
+          "log masuk"
+        ]
+      },
+      "nl": {
+        "singular": "login",
+        "plural": "logins",
+        "gender": "c",
+        "stems": [
+          "inlog",
+          "login",
+          "ingelogd",
+          "log in",
+          "logt in"
+        ]
+      },
+      "no": {
+        "singular": "innlogging",
+        "plural": "innlogginger",
+        "gender": "m",
+        "stems": [
+          "innlogg",
+          "logg inn",
+          "logget inn",
+          "pålogg"
+        ]
+      },
+      "pl": {
+        "singular": "logowanie",
+        "plural": "logowania",
+        "gender": "n",
+        "stems": [
+          "logow",
+          "zalog"
+        ]
+      },
+      "pt": {
+        "singular": "início de sessão",
+        "plural": "inícios de sessão",
+        "gender": "m",
+        "stems": [
+          "sessão",
+          "sessões",
+          "login"
+        ]
+      },
+      "ro": {
+        "singular": "conectare",
+        "plural": "conectări",
+        "gender": "f",
+        "stems": [
+          "conect"
+        ],
+        "forbidden": [
+          "login*",
+          "logare*"
+        ]
+      },
+      "ru": {
+        "singular": "вход",
+        "plural": "входы",
+        "gender": "m",
+        "stems": [
+          "вход",
+          "войти",
+          "войдите",
+          "вошли",
+          "вошёл"
+        ]
+      },
+      "sk": {
+        "singular": "prihlásenie",
+        "plural": "prihlásenia",
+        "gender": "n",
+        "stems": [
+          "prihlá"
+        ]
+      },
+      "sl": {
+        "singular": "prijava",
+        "plural": "prijave",
+        "gender": "f",
+        "stems": [
+          "prijav"
+        ]
+      },
+      "sr": {
+        "singular": "пријава",
+        "plural": "пријаве",
+        "gender": "f",
+        "stems": [
+          "пријав"
+        ]
+      },
+      "sv": {
+        "singular": "inloggning",
+        "plural": "inloggningar",
+        "gender": "c",
+        "stems": [
+          "inlogg",
+          "logga in",
+          "loggat in",
+          "loggar in"
+        ]
+      },
+      "th": {
+        "singular": "การลงชื่อเข้าใช้",
+        "plural": "การลงชื่อเข้าใช้",
+        "stems": [
+          "ลงชื่อเข้าใช้",
+          "เข้าสู่ระบบ"
+        ]
+      },
+      "tr": {
+        "singular": "giriş",
+        "plural": "girişler",
+        "stems": [
+          "giriş",
+          "oturum aç"
+        ]
+      },
+      "uk": {
+        "singular": "вхід",
+        "plural": "входи",
+        "gender": "m",
+        "stems": [
+          "вхід",
+          "вход",
+          "увійт",
+          "увійд",
+          "увійш"
+        ]
+      },
+      "vi": {
+        "singular": "đăng nhập",
+        "plural": "đăng nhập",
+        "stems": [
+          "đăng nhập"
+        ]
+      },
+      "zh": {
+        "singular": "登录",
+        "plural": "登录",
+        "stems": [
+          "登录"
+        ]
+      }
+    },
+    "signInService": {
+      "definition": "An OpenID Connect server that people sign in at in place of the app's own form. The interface never calls it a provider, since that word already names the storage and notification services an app picks from.",
+      "en": {
+        "singular": "sign-in service",
+        "plural": "sign-in services",
+        "stems": [
+          "sign-in service",
+          "sign-in services"
+        ],
+        "forbidden": [
+          "identity provider*",
+          "login provider*",
+          "sign-in provider*",
+          "oidc provider*",
+          "openid provider*"
+        ]
+      },
+      "de": {
+        "singular": "Anmeldedienst",
+        "plural": "Anmeldedienste",
+        "gender": "m",
+        "stems": [
+          "anmeldedienst"
+        ],
+        "forbidden": [
+          "*identitätsanbieter*",
+          "*anmeldeanbieter*",
+          "*identity-provider*",
+          "identity provider*",
+          "*oidc-anbieter*",
+          "*login-anbieter*"
+        ]
+      },
+      "ar": {
+        "singular": "خدمة تسجيل الدخول",
+        "plural": "خدمات تسجيل الدخول",
+        "gender": "f",
+        "stems": [
+          "خدمة",
+          "خدمات"
+        ]
+      },
+      "bg": {
+        "singular": "услуга за вход",
+        "plural": "услуги за вход",
+        "gender": "f",
+        "stems": [
+          "услуг"
+        ]
+      },
+      "ca": {
+        "singular": "servei d'inici de sessió",
+        "plural": "serveis d'inici de sessió",
+        "gender": "m",
+        "stems": [
+          "servei"
+        ]
+      },
+      "cs": {
+        "singular": "přihlašovací služba",
+        "plural": "přihlašovací služby",
+        "gender": "f",
+        "stems": [
+          "služb",
+          "služe"
+        ]
+      },
+      "da": {
+        "singular": "logintjeneste",
+        "plural": "logintjenester",
+        "gender": "c",
+        "stems": [
+          "tjeneste"
+        ]
+      },
+      "el": {
+        "singular": "υπηρεσία σύνδεσης",
+        "plural": "υπηρεσίες σύνδεσης",
+        "gender": "f",
+        "stems": [
+          "υπηρεσί"
+        ]
+      },
+      "es": {
+        "singular": "servicio de inicio de sesión",
+        "plural": "servicios de inicio de sesión",
+        "gender": "m",
+        "stems": [
+          "servicio"
+        ],
+        "forbidden": [
+          "proveedor de identidad*",
+          "proveedores de identidad*"
+        ]
+      },
+      "et": {
+        "singular": "sisselogimisteenus",
+        "plural": "sisselogimisteenused",
+        "stems": [
+          "teenus"
+        ]
+      },
+      "eu": {
+        "singular": "saio-hasierako zerbitzua",
+        "plural": "saio-hasierako zerbitzuak",
+        "stems": [
+          "zerbitzu"
+        ]
+      },
+      "fa": {
+        "singular": "سرویس ورود",
+        "plural": "سرویس‌های ورود",
+        "stems": [
+          "سرویس"
+        ]
+      },
+      "fi": {
+        "singular": "kirjautumispalvelu",
+        "plural": "kirjautumispalvelut",
+        "stems": [
+          "palvelu"
+        ]
+      },
+      "fr": {
+        "singular": "service de connexion",
+        "plural": "services de connexion",
+        "gender": "m",
+        "stems": [
+          "service"
+        ],
+        "forbidden": [
+          "fournisseur d'identité*",
+          "fournisseurs d'identité*"
+        ]
+      },
+      "gl": {
+        "singular": "servizo de inicio de sesión",
+        "plural": "servizos de inicio de sesión",
+        "gender": "m",
+        "stems": [
+          "servizo"
+        ]
+      },
+      "he": {
+        "singular": "שירות התחברות",
+        "plural": "שירותי התחברות",
+        "gender": "m",
+        "stems": [
+          "שירות"
+        ]
+      },
+      "hi": {
+        "singular": "साइन इन सेवा",
+        "plural": "साइन इन सेवाएँ",
+        "gender": "f",
+        "stems": [
+          "सेवा"
+        ]
+      },
+      "hr": {
+        "singular": "usluga za prijavu",
+        "plural": "usluge za prijavu",
+        "gender": "f",
+        "stems": [
+          "uslug",
+          "usluz"
+        ]
+      },
+      "hu": {
+        "singular": "bejelentkezési szolgáltatás",
+        "plural": "bejelentkezési szolgáltatások",
+        "stems": [
+          "szolgáltatás"
+        ]
+      },
+      "id": {
+        "singular": "layanan masuk",
+        "plural": "layanan masuk",
+        "stems": [
+          "layanan"
+        ]
+      },
+      "is": {
+        "singular": "innskráningarþjónusta",
+        "plural": "innskráningarþjónustur",
+        "gender": "f",
+        "stems": [
+          "þjónust"
+        ]
+      },
+      "it": {
+        "singular": "servizio di accesso",
+        "plural": "servizi di accesso",
+        "gender": "m",
+        "stems": [
+          "serviz"
+        ],
+        "forbidden": [
+          "provider di identità",
+          "fornitore di identità",
+          "fornitori di identità"
+        ]
+      },
+      "ja": {
+        "singular": "ログインサービス",
+        "plural": "ログインサービス",
+        "stems": [
+          "サービス"
+        ],
+        "forbidden": [
+          "*idプロバイダ*",
+          "*アイデンティティプロバイダ*"
+        ]
+      },
+      "ko": {
+        "singular": "로그인 서비스",
+        "plural": "로그인 서비스",
+        "stems": [
+          "서비스"
+        ],
+        "forbidden": [
+          "*id 공급자*",
+          "*id 제공자*"
+        ]
+      },
+      "lt": {
+        "singular": "prisijungimo paslauga",
+        "plural": "prisijungimo paslaugos",
+        "gender": "f",
+        "stems": [
+          "paslaug"
+        ]
+      },
+      "lv": {
+        "singular": "pierakstīšanās pakalpojums",
+        "plural": "pierakstīšanās pakalpojumi",
+        "gender": "m",
+        "stems": [
+          "pakalpojum"
+        ]
+      },
+      "ms": {
+        "singular": "perkhidmatan log masuk",
+        "plural": "perkhidmatan log masuk",
+        "stems": [
+          "perkhidmatan"
+        ]
+      },
+      "nl": {
+        "singular": "inlogdienst",
+        "plural": "inlogdiensten",
+        "gender": "c",
+        "stems": [
+          "dienst"
+        ],
+        "forbidden": [
+          "*identiteitsprovider*",
+          "identity provider*"
+        ]
+      },
+      "no": {
+        "singular": "innloggingstjeneste",
+        "plural": "innloggingstjenester",
+        "gender": "m",
+        "stems": [
+          "tjeneste"
+        ]
+      },
+      "pl": {
+        "singular": "usługa logowania",
+        "plural": "usługi logowania",
+        "gender": "f",
+        "stems": [
+          "usług",
+          "usłudz"
+        ],
+        "forbidden": [
+          "dostawca tożsamości",
+          "dostawcy tożsamości",
+          "dostawcę tożsamości",
+          "dostawców tożsamości"
+        ]
+      },
+      "pt": {
+        "singular": "serviço de início de sessão",
+        "plural": "serviços de início de sessão",
+        "gender": "m",
+        "stems": [
+          "serviço"
+        ],
+        "forbidden": [
+          "provedor de identidade*",
+          "provedores de identidade*",
+          "fornecedor de identidade*",
+          "fornecedores de identidade*"
+        ]
+      },
+      "ro": {
+        "singular": "serviciu de conectare",
+        "plural": "servicii de conectare",
+        "gender": "n",
+        "stems": [
+          "servici"
+        ]
+      },
+      "ru": {
+        "singular": "служба входа",
+        "plural": "службы входа",
+        "gender": "f",
+        "stems": [
+          "служб"
+        ]
+      },
+      "sk": {
+        "singular": "prihlasovacia služba",
+        "plural": "prihlasovacie služby",
+        "gender": "f",
+        "stems": [
+          "služb",
+          "služie"
+        ]
+      },
+      "sl": {
+        "singular": "storitev za prijavo",
+        "plural": "storitve za prijavo",
+        "gender": "f",
+        "stems": [
+          "storit"
+        ]
+      },
+      "sr": {
+        "singular": "услуга за пријаву",
+        "plural": "услуге за пријаву",
+        "gender": "f",
+        "stems": [
+          "услуг",
+          "услуз"
+        ]
+      },
+      "sv": {
+        "singular": "inloggningstjänst",
+        "plural": "inloggningstjänster",
+        "gender": "c",
+        "stems": [
+          "tjänst"
+        ]
+      },
+      "th": {
+        "singular": "บริการลงชื่อเข้าใช้",
+        "plural": "บริการลงชื่อเข้าใช้",
+        "stems": [
+          "บริการ"
+        ]
+      },
+      "tr": {
+        "singular": "giriş hizmeti",
+        "plural": "giriş hizmetleri",
+        "stems": [
+          "hizmet"
+        ]
+      },
+      "uk": {
+        "singular": "служба входу",
+        "plural": "служби входу",
+        "gender": "f",
+        "stems": [
+          "служб"
+        ]
+      },
+      "vi": {
+        "singular": "dịch vụ đăng nhập",
+        "plural": "dịch vụ đăng nhập",
+        "stems": [
+          "dịch vụ"
+        ]
+      },
+      "zh": {
+        "singular": "登录服务",
+        "plural": "登录服务",
+        "stems": [
+          "服务"
+        ],
+        "forbidden": [
+          "*身份提供*"
+        ]
+      }
+    },
+    "account": {
+      "definition": "One person in an app, with their name, their ways in and their role. An account is a person, a member is an instance.",
+      "en": {
+        "singular": "account",
+        "plural": "accounts",
+        "stems": [
+          "account",
+          "accounts"
+        ]
+      },
+      "de": {
+        "singular": "Konto",
+        "plural": "Konten",
+        "gender": "n",
+        "stems": [
+          "konto",
+          "konten"
+        ],
+        "forbidden": [
+          "*account*"
+        ]
+      },
+      "ar": {
+        "singular": "حساب",
+        "plural": "حسابات",
+        "gender": "m",
+        "stems": [
+          "حساب"
+        ]
+      },
+      "bg": {
+        "singular": "акаунт",
+        "plural": "акаунти",
+        "gender": "m",
+        "stems": [
+          "акаунт"
+        ]
+      },
+      "ca": {
+        "singular": "compte",
+        "plural": "comptes",
+        "gender": "m",
+        "stems": [
+          "compte"
+        ]
+      },
+      "cs": {
+        "singular": "účet",
+        "plural": "účty",
+        "gender": "m",
+        "stems": [
+          "účet",
+          "účt"
+        ]
+      },
+      "da": {
+        "singular": "konto",
+        "plural": "konti",
+        "gender": "c",
+        "stems": [
+          "konto",
+          "konti"
+        ]
+      },
+      "el": {
+        "singular": "λογαριασμός",
+        "plural": "λογαριασμοί",
+        "gender": "m",
+        "stems": [
+          "λογαριασμ"
+        ]
+      },
+      "es": {
+        "singular": "cuenta",
+        "plural": "cuentas",
+        "gender": "f",
+        "stems": [
+          "cuenta"
+        ]
+      },
+      "et": {
+        "singular": "konto",
+        "plural": "kontod",
+        "stems": [
+          "konto"
+        ]
+      },
+      "eu": {
+        "singular": "kontua",
+        "plural": "kontuak",
+        "stems": [
+          "kontu"
+        ]
+      },
+      "fa": {
+        "singular": "حساب",
+        "plural": "حساب‌ها",
+        "stems": [
+          "حساب"
+        ]
+      },
+      "fi": {
+        "singular": "tili",
+        "plural": "tilit",
+        "stems": [
+          "tili",
+          "tile"
+        ]
+      },
+      "fr": {
+        "singular": "compte",
+        "plural": "comptes",
+        "gender": "m",
+        "stems": [
+          "compte"
+        ]
+      },
+      "gl": {
+        "singular": "conta",
+        "plural": "contas",
+        "gender": "f",
+        "stems": [
+          "conta"
+        ]
+      },
+      "he": {
+        "singular": "חשבון",
+        "plural": "חשבונות",
+        "gender": "m",
+        "stems": [
+          "חשבון",
+          "חשבונ"
+        ]
+      },
+      "hi": {
+        "singular": "खाता",
+        "plural": "खाते",
+        "gender": "m",
+        "stems": [
+          "खाता",
+          "खाते",
+          "खातों"
+        ]
+      },
+      "hr": {
+        "singular": "račun",
+        "plural": "računi",
+        "gender": "m",
+        "stems": [
+          "račun"
+        ]
+      },
+      "hu": {
+        "singular": "fiók",
+        "plural": "fiókok",
+        "stems": [
+          "fiók"
+        ]
+      },
+      "id": {
+        "singular": "akun",
+        "plural": "akun",
+        "stems": [
+          "akun"
+        ]
+      },
+      "is": {
+        "singular": "aðgangur",
+        "plural": "aðgangar",
+        "gender": "m",
+        "stems": [
+          "aðgang"
+        ]
+      },
+      "it": {
+        "singular": "account",
+        "plural": "account",
+        "gender": "m",
+        "stems": [
+          "account"
+        ]
+      },
+      "ja": {
+        "singular": "アカウント",
+        "plural": "アカウント",
+        "stems": [
+          "アカウント"
+        ]
+      },
+      "ko": {
+        "singular": "계정",
+        "plural": "계정",
+        "stems": [
+          "계정"
+        ]
+      },
+      "lt": {
+        "singular": "paskyra",
+        "plural": "paskyros",
+        "gender": "f",
+        "stems": [
+          "paskyr"
+        ]
+      },
+      "lv": {
+        "singular": "konts",
+        "plural": "konti",
+        "gender": "m",
+        "stems": [
+          "kont"
+        ]
+      },
+      "ms": {
+        "singular": "akaun",
+        "plural": "akaun",
+        "stems": [
+          "akaun"
+        ]
+      },
+      "nl": {
+        "singular": "account",
+        "plural": "accounts",
+        "gender": "n",
+        "stems": [
+          "account"
+        ]
+      },
+      "no": {
+        "singular": "konto",
+        "plural": "kontoer",
+        "gender": "m",
+        "stems": [
+          "konto"
+        ]
+      },
+      "pl": {
+        "singular": "konto",
+        "plural": "konta",
+        "gender": "n",
+        "stems": [
+          "kont",
+          "koncie"
+        ]
+      },
+      "pt": {
+        "singular": "conta",
+        "plural": "contas",
+        "gender": "f",
+        "stems": [
+          "conta"
+        ]
+      },
+      "ro": {
+        "singular": "cont",
+        "plural": "conturi",
+        "gender": "n",
+        "stems": [
+          "cont"
+        ]
+      },
+      "ru": {
+        "singular": "учётная запись",
+        "plural": "учётные записи",
+        "gender": "f",
+        "stems": [
+          "учётн",
+          "аккаунт"
+        ]
+      },
+      "sk": {
+        "singular": "účet",
+        "plural": "účty",
+        "gender": "m",
+        "stems": [
+          "účet",
+          "účt"
+        ]
+      },
+      "sl": {
+        "singular": "račun",
+        "plural": "računi",
+        "gender": "m",
+        "stems": [
+          "račun"
+        ]
+      },
+      "sr": {
+        "singular": "налог",
+        "plural": "налози",
+        "gender": "m",
+        "stems": [
+          "налог",
+          "налоз"
+        ]
+      },
+      "sv": {
+        "singular": "konto",
+        "plural": "konton",
+        "gender": "n",
+        "stems": [
+          "konto"
+        ]
+      },
+      "th": {
+        "singular": "บัญชี",
+        "plural": "บัญชี",
+        "stems": [
+          "บัญชี"
+        ]
+      },
+      "tr": {
+        "singular": "hesap",
+        "plural": "hesaplar",
+        "stems": [
+          "hesap",
+          "hesab"
+        ]
+      },
+      "uk": {
+        "singular": "обліковий запис",
+        "plural": "облікові записи",
+        "gender": "m",
+        "stems": [
+          "обліков"
+        ]
+      },
+      "vi": {
+        "singular": "tài khoản",
+        "plural": "tài khoản",
+        "stems": [
+          "tài khoản"
+        ]
+      },
+      "zh": {
+        "singular": "账户",
+        "plural": "账户",
+        "stems": [
+          "账户",
+          "帐户",
+          "账号",
+          "帐号"
+        ]
+      }
+    },
+    "role": {
+      "definition": "What a person may do in an app, set on their account. What one app may start in another is a permission.",
+      "en": {
+        "singular": "role",
+        "plural": "roles",
+        "stems": [
+          "role",
+          "roles"
+        ]
+      },
+      "de": {
+        "singular": "Rolle",
+        "plural": "Rollen",
+        "gender": "f",
+        "stems": [
+          "rolle"
+        ]
+      },
+      "ar": {
+        "singular": "دور",
+        "plural": "أدوار",
+        "gender": "m",
+        "stems": [
+          "دور",
+          "أدوار"
+        ]
+      },
+      "bg": {
+        "singular": "роля",
+        "plural": "роли",
+        "gender": "f",
+        "stems": [
+          "рол"
+        ]
+      },
+      "ca": {
+        "singular": "rol",
+        "plural": "rols",
+        "gender": "m",
+        "stems": [
+          "rol"
+        ]
+      },
+      "cs": {
+        "singular": "role",
+        "plural": "role",
+        "gender": "f",
+        "stems": [
+          "rol"
+        ]
+      },
+      "da": {
+        "singular": "rolle",
+        "plural": "roller",
+        "gender": "c",
+        "stems": [
+          "rolle"
+        ]
+      },
+      "el": {
+        "singular": "ρόλος",
+        "plural": "ρόλοι",
+        "gender": "m",
+        "stems": [
+          "ρόλ"
+        ]
+      },
+      "es": {
+        "singular": "rol",
+        "plural": "roles",
+        "gender": "m",
+        "stems": [
+          "rol"
+        ]
+      },
+      "et": {
+        "singular": "roll",
+        "plural": "rollid",
+        "stems": [
+          "roll"
+        ]
+      },
+      "eu": {
+        "singular": "rola",
+        "plural": "rolak",
+        "stems": [
+          "rol"
+        ]
+      },
+      "fa": {
+        "singular": "نقش",
+        "plural": "نقش‌ها",
+        "stems": [
+          "نقش"
+        ]
+      },
+      "fi": {
+        "singular": "rooli",
+        "plural": "roolit",
+        "stems": [
+          "rool"
+        ]
+      },
+      "fr": {
+        "singular": "rôle",
+        "plural": "rôles",
+        "gender": "m",
+        "stems": [
+          "rôle"
+        ]
+      },
+      "gl": {
+        "singular": "rol",
+        "plural": "roles",
+        "gender": "m",
+        "stems": [
+          "rol"
+        ]
+      },
+      "he": {
+        "singular": "תפקיד",
+        "plural": "תפקידים",
+        "gender": "m",
+        "stems": [
+          "תפקיד"
+        ]
+      },
+      "hi": {
+        "singular": "भूमिका",
+        "plural": "भूमिकाएँ",
+        "gender": "f",
+        "stems": [
+          "भूमिका"
+        ]
+      },
+      "hr": {
+        "singular": "uloga",
+        "plural": "uloge",
+        "gender": "f",
+        "stems": [
+          "ulog",
+          "uloz"
+        ]
+      },
+      "hu": {
+        "singular": "szerepkör",
+        "plural": "szerepkörök",
+        "stems": [
+          "szerepkör"
+        ]
+      },
+      "id": {
+        "singular": "peran",
+        "plural": "peran",
+        "stems": [
+          "peran"
+        ]
+      },
+      "is": {
+        "singular": "hlutverk",
+        "plural": "hlutverk",
+        "gender": "n",
+        "stems": [
+          "hlutverk"
+        ]
+      },
+      "it": {
+        "singular": "ruolo",
+        "plural": "ruoli",
+        "gender": "m",
+        "stems": [
+          "ruol"
+        ]
+      },
+      "ja": {
+        "singular": "ロール",
+        "plural": "ロール",
+        "stems": [
+          "ロール",
+          "役割"
+        ]
+      },
+      "ko": {
+        "singular": "역할",
+        "plural": "역할",
+        "stems": [
+          "역할"
+        ]
+      },
+      "lt": {
+        "singular": "vaidmuo",
+        "plural": "vaidmenys",
+        "gender": "m",
+        "stems": [
+          "vaidm"
+        ]
+      },
+      "lv": {
+        "singular": "loma",
+        "plural": "lomas",
+        "gender": "f",
+        "stems": [
+          "lom"
+        ]
+      },
+      "ms": {
+        "singular": "peranan",
+        "plural": "peranan",
+        "stems": [
+          "peranan"
+        ]
+      },
+      "nl": {
+        "singular": "rol",
+        "plural": "rollen",
+        "gender": "c",
+        "stems": [
+          "rol"
+        ]
+      },
+      "no": {
+        "singular": "rolle",
+        "plural": "roller",
+        "gender": "m",
+        "stems": [
+          "rolle"
+        ]
+      },
+      "pl": {
+        "singular": "rola",
+        "plural": "role",
+        "gender": "f",
+        "stems": [
+          "rol"
+        ]
+      },
+      "pt": {
+        "singular": "função",
+        "plural": "funções",
+        "gender": "f",
+        "stems": [
+          "funç",
+          "papel",
+          "papéi"
+        ]
+      },
+      "ro": {
+        "singular": "rol",
+        "plural": "roluri",
+        "gender": "n",
+        "stems": [
+          "rol"
+        ]
+      },
+      "ru": {
+        "singular": "роль",
+        "plural": "роли",
+        "gender": "f",
+        "stems": [
+          "рол"
+        ]
+      },
+      "sk": {
+        "singular": "rola",
+        "plural": "roly",
+        "gender": "f",
+        "stems": [
+          "rol"
+        ]
+      },
+      "sl": {
+        "singular": "vloga",
+        "plural": "vloge",
+        "gender": "f",
+        "stems": [
+          "vlog",
+          "vloz"
+        ]
+      },
+      "sr": {
+        "singular": "улога",
+        "plural": "улоге",
+        "gender": "f",
+        "stems": [
+          "улог",
+          "улоз"
+        ]
+      },
+      "sv": {
+        "singular": "roll",
+        "plural": "roller",
+        "gender": "c",
+        "stems": [
+          "roll"
+        ]
+      },
+      "th": {
+        "singular": "บทบาท",
+        "plural": "บทบาท",
+        "stems": [
+          "บทบาท"
+        ]
+      },
+      "tr": {
+        "singular": "rol",
+        "plural": "roller",
+        "stems": [
+          "rol"
+        ]
+      },
+      "uk": {
+        "singular": "роль",
+        "plural": "ролі",
+        "gender": "f",
+        "stems": [
+          "рол"
+        ]
+      },
+      "vi": {
+        "singular": "vai trò",
+        "plural": "vai trò",
+        "stems": [
+          "vai trò"
+        ]
+      },
+      "zh": {
+        "singular": "角色",
+        "plural": "角色",
+        "stems": [
+          "角色"
+        ]
+      }
+    },
+    "serviceGroup": {
+      "definition": "A group the sign-in service reports for a person. Group alone will do only where no group of instances stands nearby.",
+      "en": {
+        "singular": "group at the sign-in service",
+        "plural": "groups at the sign-in service",
+        "stems": [
+          "group at the sign-in service",
+          "groups at the sign-in service"
+        ]
+      },
+      "de": {
+        "singular": "Gruppe beim Anmeldedienst",
+        "plural": "Gruppen beim Anmeldedienst",
+        "gender": "f",
+        "stems": [
+          "gruppe"
+        ]
+      },
+      "ar": {
+        "singular": "مجموعة في خدمة تسجيل الدخول",
+        "plural": "مجموعات في خدمة تسجيل الدخول",
+        "gender": "f",
+        "stems": [
+          "مجموع"
+        ]
+      },
+      "bg": {
+        "singular": "група в услугата за вход",
+        "plural": "групи в услугата за вход",
+        "gender": "f",
+        "stems": [
+          "груп"
+        ]
+      },
+      "ca": {
+        "singular": "grup al servei d'inici de sessió",
+        "plural": "grups al servei d'inici de sessió",
+        "gender": "m",
+        "stems": [
+          "grup"
+        ]
+      },
+      "cs": {
+        "singular": "skupina v přihlašovací službě",
+        "plural": "skupiny v přihlašovací službě",
+        "gender": "f",
+        "stems": [
+          "skupin"
+        ]
+      },
+      "da": {
+        "singular": "gruppe i logintjenesten",
+        "plural": "grupper i logintjenesten",
+        "gender": "c",
+        "stems": [
+          "gruppe"
+        ]
+      },
+      "el": {
+        "singular": "ομάδα στην υπηρεσία σύνδεσης",
+        "plural": "ομάδες στην υπηρεσία σύνδεσης",
+        "gender": "f",
+        "stems": [
+          "ομάδ"
+        ]
+      },
+      "es": {
+        "singular": "grupo del servicio de inicio de sesión",
+        "plural": "grupos del servicio de inicio de sesión",
+        "gender": "m",
+        "stems": [
+          "grupo"
+        ]
+      },
+      "et": {
+        "singular": "grupp sisselogimisteenuses",
+        "plural": "grupid sisselogimisteenuses",
+        "stems": [
+          "grupp",
+          "grupi"
+        ]
+      },
+      "eu": {
+        "singular": "saio-hasierako zerbitzuko taldea",
+        "plural": "saio-hasierako zerbitzuko taldeak",
+        "stems": [
+          "talde"
+        ]
+      },
+      "fa": {
+        "singular": "گروه در سرویس ورود",
+        "plural": "گروه‌ها در سرویس ورود",
+        "stems": [
+          "گروه"
+        ]
+      },
+      "fi": {
+        "singular": "ryhmä kirjautumispalvelussa",
+        "plural": "ryhmät kirjautumispalvelussa",
+        "stems": [
+          "ryhm"
+        ]
+      },
+      "fr": {
+        "singular": "groupe du service de connexion",
+        "plural": "groupes du service de connexion",
+        "gender": "m",
+        "stems": [
+          "groupe"
+        ]
+      },
+      "gl": {
+        "singular": "grupo do servizo de inicio de sesión",
+        "plural": "grupos do servizo de inicio de sesión",
+        "gender": "m",
+        "stems": [
+          "grupo"
+        ]
+      },
+      "he": {
+        "singular": "קבוצה בשירות ההתחברות",
+        "plural": "קבוצות בשירות ההתחברות",
+        "gender": "f",
+        "stems": [
+          "קבוצ"
+        ]
+      },
+      "hi": {
+        "singular": "साइन इन सेवा का समूह",
+        "plural": "साइन इन सेवा के समूह",
+        "gender": "m",
+        "stems": [
+          "समूह"
+        ]
+      },
+      "hr": {
+        "singular": "grupa u usluzi za prijavu",
+        "plural": "grupe u usluzi za prijavu",
+        "gender": "f",
+        "stems": [
+          "grup"
+        ]
+      },
+      "hu": {
+        "singular": "csoport a bejelentkezési szolgáltatásban",
+        "plural": "csoportok a bejelentkezési szolgáltatásban",
+        "stems": [
+          "csoport"
+        ]
+      },
+      "id": {
+        "singular": "grup di layanan masuk",
+        "plural": "grup di layanan masuk",
+        "stems": [
+          "grup"
+        ]
+      },
+      "is": {
+        "singular": "hópur hjá innskráningarþjónustunni",
+        "plural": "hópar hjá innskráningarþjónustunni",
+        "gender": "m",
+        "stems": [
+          "hóp"
+        ]
+      },
+      "it": {
+        "singular": "gruppo del servizio di accesso",
+        "plural": "gruppi del servizio di accesso",
+        "gender": "m",
+        "stems": [
+          "grupp"
+        ]
+      },
+      "ja": {
+        "singular": "ログインサービスのグループ",
+        "plural": "ログインサービスのグループ",
+        "stems": [
+          "グループ"
+        ]
+      },
+      "ko": {
+        "singular": "로그인 서비스의 그룹",
+        "plural": "로그인 서비스의 그룹",
+        "stems": [
+          "그룹"
+        ]
+      },
+      "lt": {
+        "singular": "grupė prisijungimo paslaugoje",
+        "plural": "grupės prisijungimo paslaugoje",
+        "gender": "f",
+        "stems": [
+          "grup"
+        ]
+      },
+      "lv": {
+        "singular": "grupa pierakstīšanās pakalpojumā",
+        "plural": "grupas pierakstīšanās pakalpojumā",
+        "gender": "f",
+        "stems": [
+          "grup"
+        ]
+      },
+      "ms": {
+        "singular": "kumpulan di perkhidmatan log masuk",
+        "plural": "kumpulan di perkhidmatan log masuk",
+        "stems": [
+          "kumpulan"
+        ]
+      },
+      "nl": {
+        "singular": "groep bij de inlogdienst",
+        "plural": "groepen bij de inlogdienst",
+        "gender": "c",
+        "stems": [
+          "groep"
+        ]
+      },
+      "no": {
+        "singular": "gruppe hos innloggingstjenesten",
+        "plural": "grupper hos innloggingstjenesten",
+        "gender": "m",
+        "stems": [
+          "gruppe"
+        ]
+      },
+      "pl": {
+        "singular": "grupa w usłudze logowania",
+        "plural": "grupy w usłudze logowania",
+        "gender": "f",
+        "stems": [
+          "grup"
+        ]
+      },
+      "pt": {
+        "singular": "grupo no serviço de início de sessão",
+        "plural": "grupos no serviço de início de sessão",
+        "gender": "m",
+        "stems": [
+          "grupo"
+        ]
+      },
+      "ro": {
+        "singular": "grup din serviciul de conectare",
+        "plural": "grupuri din serviciul de conectare",
+        "gender": "n",
+        "stems": [
+          "grup"
+        ]
+      },
+      "ru": {
+        "singular": "группа в службе входа",
+        "plural": "группы в службе входа",
+        "gender": "f",
+        "stems": [
+          "групп"
+        ]
+      },
+      "sk": {
+        "singular": "skupina v prihlasovacej službe",
+        "plural": "skupiny v prihlasovacej službe",
+        "gender": "f",
+        "stems": [
+          "skupin"
+        ]
+      },
+      "sl": {
+        "singular": "skupina v storitvi za prijavo",
+        "plural": "skupine v storitvi za prijavo",
+        "gender": "f",
+        "stems": [
+          "skupin"
+        ]
+      },
+      "sr": {
+        "singular": "група у услузи за пријаву",
+        "plural": "групе у услузи за пријаву",
+        "gender": "f",
+        "stems": [
+          "груп"
+        ]
+      },
+      "sv": {
+        "singular": "grupp i inloggningstjänsten",
+        "plural": "grupper i inloggningstjänsten",
+        "gender": "c",
+        "stems": [
+          "grupp"
+        ]
+      },
+      "th": {
+        "singular": "กลุ่มในบริการลงชื่อเข้าใช้",
+        "plural": "กลุ่มในบริการลงชื่อเข้าใช้",
+        "stems": [
+          "กลุ่ม"
+        ]
+      },
+      "tr": {
+        "singular": "giriş hizmetindeki grup",
+        "plural": "giriş hizmetindeki gruplar",
+        "stems": [
+          "grup"
+        ]
+      },
+      "uk": {
+        "singular": "група в службі входу",
+        "plural": "групи в службі входу",
+        "gender": "f",
+        "stems": [
+          "груп"
+        ]
+      },
+      "vi": {
+        "singular": "nhóm ở dịch vụ đăng nhập",
+        "plural": "nhóm ở dịch vụ đăng nhập",
+        "stems": [
+          "nhóm"
+        ]
+      },
+      "zh": {
+        "singular": "登录服务中的组",
+        "plural": "登录服务中的组",
+        "stems": [
+          "组"
+        ]
+      }
+    },
+    "trustedProxy": {
+      "definition": "A reverse proxy in front of the app whose word the app takes on where a request comes from.",
+      "en": {
+        "singular": "trusted proxy",
+        "plural": "trusted proxies",
+        "stems": [
+          "trusted proxy",
+          "trusted proxies"
+        ]
+      },
+      "de": {
+        "singular": "vorgeschalteter Proxy",
+        "plural": "vorgeschaltete Proxys",
+        "gender": "m",
+        "stems": [
+          "vorgeschalt"
+        ]
+      },
+      "ar": {
+        "singular": "وكيل موثوق",
+        "plural": "وكلاء موثوقون",
+        "gender": "m",
+        "stems": [
+          "موثوق"
+        ]
+      },
+      "bg": {
+        "singular": "доверен прокси",
+        "plural": "доверени проксита",
+        "gender": "m",
+        "stems": [
+          "доверен"
+        ]
+      },
+      "ca": {
+        "singular": "proxy de confiança",
+        "plural": "proxies de confiança",
+        "gender": "m",
+        "stems": [
+          "confiança"
+        ]
+      },
+      "cs": {
+        "singular": "důvěryhodný proxy server",
+        "plural": "důvěryhodné proxy servery",
+        "gender": "m",
+        "stems": [
+          "důvěryhodn"
+        ]
+      },
+      "da": {
+        "singular": "betroet proxy",
+        "plural": "betroede proxyer",
+        "gender": "c",
+        "stems": [
+          "betroe"
+        ]
+      },
+      "el": {
+        "singular": "αξιόπιστος διακομιστής μεσολάβησης",
+        "plural": "αξιόπιστοι διακομιστές μεσολάβησης",
+        "gender": "m",
+        "stems": [
+          "αξιόπιστ"
+        ]
+      },
+      "es": {
+        "singular": "proxy de confianza",
+        "plural": "proxies de confianza",
+        "gender": "m",
+        "stems": [
+          "confianza"
+        ]
+      },
+      "et": {
+        "singular": "usaldusväärne puhverserver",
+        "plural": "usaldusväärsed puhverserverid",
+        "stems": [
+          "usaldusväär"
+        ]
+      },
+      "eu": {
+        "singular": "konfiantzazko proxya",
+        "plural": "konfiantzazko proxyak",
+        "stems": [
+          "konfiantza"
+        ]
+      },
+      "fa": {
+        "singular": "پراکسی مورد اعتماد",
+        "plural": "پراکسی‌های مورد اعتماد",
+        "stems": [
+          "مورد اعتماد"
+        ]
+      },
+      "fi": {
+        "singular": "luotettu välityspalvelin",
+        "plural": "luotetut välityspalvelimet",
+        "stems": [
+          "luotet"
+        ]
+      },
+      "fr": {
+        "singular": "proxy de confiance",
+        "plural": "proxys de confiance",
+        "gender": "m",
+        "stems": [
+          "confiance"
+        ]
+      },
+      "gl": {
+        "singular": "proxy de confianza",
+        "plural": "proxies de confianza",
+        "gender": "m",
+        "stems": [
+          "confianza"
+        ]
+      },
+      "he": {
+        "singular": "פרוקסי מהימן",
+        "plural": "פרוקסי מהימנים",
+        "gender": "m",
+        "stems": [
+          "מהימן",
+          "מהימנ"
+        ]
+      },
+      "hi": {
+        "singular": "विश्वसनीय प्रॉक्सी",
+        "plural": "विश्वसनीय प्रॉक्सी",
+        "gender": "m",
+        "stems": [
+          "विश्वसनीय"
+        ]
+      },
+      "hr": {
+        "singular": "pouzdani proxy",
+        "plural": "pouzdani proxyji",
+        "gender": "m",
+        "stems": [
+          "pouzdan"
+        ]
+      },
+      "hu": {
+        "singular": "megbízható proxy",
+        "plural": "megbízható proxyk",
+        "stems": [
+          "megbízható"
+        ]
+      },
+      "id": {
+        "singular": "proxy tepercaya",
+        "plural": "proxy tepercaya",
+        "stems": [
+          "tepercaya",
+          "terpercaya"
+        ]
+      },
+      "is": {
+        "singular": "traustur milliþjónn",
+        "plural": "traustir milliþjónar",
+        "gender": "m",
+        "stems": [
+          "traust"
+        ]
+      },
+      "it": {
+        "singular": "proxy attendibile",
+        "plural": "proxy attendibili",
+        "gender": "m",
+        "stems": [
+          "attendibil"
+        ]
+      },
+      "ja": {
+        "singular": "信頼済みプロキシ",
+        "plural": "信頼済みプロキシ",
+        "stems": [
+          "信頼"
+        ]
+      },
+      "ko": {
+        "singular": "신뢰할 수 있는 프록시",
+        "plural": "신뢰할 수 있는 프록시",
+        "stems": [
+          "신뢰"
+        ]
+      },
+      "lt": {
+        "singular": "patikimas tarpinis serveris",
+        "plural": "patikimi tarpiniai serveriai",
+        "gender": "m",
+        "stems": [
+          "patikim"
+        ]
+      },
+      "lv": {
+        "singular": "uzticams starpniekserveris",
+        "plural": "uzticami starpniekserveri",
+        "gender": "m",
+        "stems": [
+          "uzticam"
+        ]
+      },
+      "ms": {
+        "singular": "proksi dipercayai",
+        "plural": "proksi dipercayai",
+        "stems": [
+          "dipercayai"
+        ]
+      },
+      "nl": {
+        "singular": "vertrouwde proxy",
+        "plural": "vertrouwde proxy's",
+        "gender": "c",
+        "stems": [
+          "vertrouwd"
+        ]
+      },
+      "no": {
+        "singular": "klarert proxy",
+        "plural": "klarerte proxyer",
+        "gender": "m",
+        "stems": [
+          "klarert"
+        ]
+      },
+      "pl": {
+        "singular": "zaufany serwer proxy",
+        "plural": "zaufane serwery proxy",
+        "gender": "m",
+        "stems": [
+          "zaufan"
+        ]
+      },
+      "pt": {
+        "singular": "proxy confiável",
+        "plural": "proxies confiáveis",
+        "gender": "m",
+        "stems": [
+          "confiáve"
+        ]
+      },
+      "ro": {
+        "singular": "proxy de încredere",
+        "plural": "proxy-uri de încredere",
+        "gender": "n",
+        "stems": [
+          "încredere"
+        ]
+      },
+      "ru": {
+        "singular": "доверенный прокси-сервер",
+        "plural": "доверенные прокси-серверы",
+        "gender": "m",
+        "stems": [
+          "доверенн"
+        ]
+      },
+      "sk": {
+        "singular": "dôveryhodný server proxy",
+        "plural": "dôveryhodné servery proxy",
+        "gender": "m",
+        "stems": [
+          "dôveryhodn"
+        ]
+      },
+      "sl": {
+        "singular": "zaupanja vreden strežnik proxy",
+        "plural": "zaupanja vredni strežniki proxy",
+        "gender": "m",
+        "stems": [
+          "zaupanja vred"
+        ]
+      },
+      "sr": {
+        "singular": "поуздан прокси",
+        "plural": "поуздани проксији",
+        "gender": "m",
+        "stems": [
+          "поуздан"
+        ]
+      },
+      "sv": {
+        "singular": "betrodd proxy",
+        "plural": "betrodda proxyer",
+        "gender": "c",
+        "stems": [
+          "betrodd"
+        ]
+      },
+      "th": {
+        "singular": "พร็อกซีที่เชื่อถือได้",
+        "plural": "พร็อกซีที่เชื่อถือได้",
+        "stems": [
+          "เชื่อถือ"
+        ]
+      },
+      "tr": {
+        "singular": "güvenilir proxy",
+        "plural": "güvenilir proxy'ler",
+        "stems": [
+          "güvenilir"
+        ]
+      },
+      "uk": {
+        "singular": "довірений проксі-сервер",
+        "plural": "довірені проксі-сервери",
+        "gender": "m",
+        "stems": [
+          "довірен"
+        ]
+      },
+      "vi": {
+        "singular": "proxy tin cậy",
+        "plural": "proxy tin cậy",
+        "stems": [
+          "tin cậy"
+        ]
+      },
+      "zh": {
+        "singular": "受信任的代理",
+        "plural": "受信任的代理",
+        "stems": [
+          "信任",
+          "可信"
+        ]
+      }
+    },
+    "passkey": {
+      "definition": "A key on a device or in a password manager that signs a person in without the password. It stands beside the password, never in its place.",
+      "en": {
+        "singular": "passkey",
+        "plural": "passkeys",
+        "stems": [
+          "passkey",
+          "passkeys"
+        ]
+      },
+      "de": {
+        "singular": "Passkey",
+        "plural": "Passkeys",
+        "gender": "m",
+        "stems": [
+          "passkey"
+        ],
+        "forbidden": [
+          "*hauptschlüssel*",
+          "*zugangsschlüssel*"
+        ]
+      },
+      "ar": {
+        "singular": "مفتاح مرور",
+        "plural": "مفاتيح مرور",
+        "gender": "m",
+        "stems": [
+          "مفتاح مرور",
+          "مفتاح المرور",
+          "مفاتيح مرور",
+          "مفاتيح المرور"
+        ]
+      },
+      "bg": {
+        "singular": "ключ за достъп",
+        "plural": "ключове за достъп",
+        "gender": "m",
+        "stems": [
+          "ключ за достъп",
+          "ключа за достъп",
+          "ключове за достъп"
+        ]
+      },
+      "ca": {
+        "singular": "clau d'accés",
+        "plural": "claus d'accés",
+        "gender": "f",
+        "stems": [
+          "clau d'accés",
+          "claus d'accés"
+        ]
+      },
+      "cs": {
+        "singular": "přístupový klíč",
+        "plural": "přístupové klíče",
+        "gender": "m",
+        "stems": [
+          "přístupov"
+        ]
+      },
+      "da": {
+        "singular": "adgangsnøgle",
+        "plural": "adgangsnøgler",
+        "gender": "c",
+        "stems": [
+          "adgangsnøgle"
+        ]
+      },
+      "el": {
+        "singular": "κλειδί πρόσβασης",
+        "plural": "κλειδιά πρόσβασης",
+        "gender": "n",
+        "stems": [
+          "κλειδί πρόσβασης",
+          "κλειδιά πρόσβασης"
+        ]
+      },
+      "es": {
+        "singular": "llave de acceso",
+        "plural": "llaves de acceso",
+        "gender": "f",
+        "stems": [
+          "llave de acceso",
+          "llaves de acceso"
+        ]
+      },
+      "et": {
+        "singular": "pääsuvõti",
+        "plural": "pääsuvõtmed",
+        "stems": [
+          "pääsuvõt"
+        ]
+      },
+      "eu": {
+        "singular": "sarbide-gakoa",
+        "plural": "sarbide-gakoak",
+        "stems": [
+          "sarbide-gako"
+        ]
+      },
+      "fa": {
+        "singular": "کلید عبور",
+        "plural": "کلیدهای عبور",
+        "stems": [
+          "کلید عبور",
+          "کلیدهای عبور"
+        ]
+      },
+      "fi": {
+        "singular": "pääsyavain",
+        "plural": "pääsyavaimet",
+        "stems": [
+          "pääsyavai"
+        ]
+      },
+      "fr": {
+        "singular": "clé d'accès",
+        "plural": "clés d'accès",
+        "gender": "f",
+        "stems": [
+          "clé d'accès",
+          "clés d'accès"
+        ]
+      },
+      "gl": {
+        "singular": "chave de acceso",
+        "plural": "chaves de acceso",
+        "gender": "f",
+        "stems": [
+          "chave de acceso",
+          "chaves de acceso"
+        ]
+      },
+      "he": {
+        "singular": "מפתח גישה",
+        "plural": "מפתחות גישה",
+        "gender": "m",
+        "stems": [
+          "מפתח גישה",
+          "מפתחות גישה",
+          "מפתחי גישה"
+        ]
+      },
+      "hi": {
+        "singular": "पासकी",
+        "plural": "पासकी",
+        "gender": "f",
+        "stems": [
+          "पासकी"
+        ]
+      },
+      "hr": {
+        "singular": "pristupni ključ",
+        "plural": "pristupni ključevi",
+        "gender": "m",
+        "stems": [
+          "pristupn"
+        ]
+      },
+      "hu": {
+        "singular": "azonosítókulcs",
+        "plural": "azonosítókulcsok",
+        "stems": [
+          "azonosítókulcs"
+        ]
+      },
+      "id": {
+        "singular": "kunci sandi",
+        "plural": "kunci sandi",
+        "stems": [
+          "kunci sandi"
+        ]
+      },
+      "is": {
+        "singular": "aðgangslykill",
+        "plural": "aðgangslyklar",
+        "gender": "m",
+        "stems": [
+          "aðgangslyk"
+        ]
+      },
+      "it": {
+        "singular": "passkey",
+        "plural": "passkey",
+        "gender": "f",
+        "stems": [
+          "passkey"
+        ]
+      },
+      "ja": {
+        "singular": "パスキー",
+        "plural": "パスキー",
+        "stems": [
+          "パスキー"
+        ]
+      },
+      "ko": {
+        "singular": "패스키",
+        "plural": "패스키",
+        "stems": [
+          "패스키"
+        ]
+      },
+      "lt": {
+        "singular": "prieigos raktas",
+        "plural": "prieigos raktai",
+        "gender": "m",
+        "stems": [
+          "prieigos rakt"
+        ]
+      },
+      "lv": {
+        "singular": "piekļuves atslēga",
+        "plural": "piekļuves atslēgas",
+        "gender": "f",
+        "stems": [
+          "piekļuves atslēg"
+        ]
+      },
+      "ms": {
+        "singular": "kunci laluan",
+        "plural": "kunci laluan",
+        "stems": [
+          "kunci laluan"
+        ]
+      },
+      "nl": {
+        "singular": "toegangssleutel",
+        "plural": "toegangssleutels",
+        "gender": "c",
+        "stems": [
+          "toegangssleutel"
+        ]
+      },
+      "no": {
+        "singular": "tilgangsnøkkel",
+        "plural": "tilgangsnøkler",
+        "gender": "m",
+        "stems": [
+          "tilgangsnøk",
+          "passnøk"
+        ]
+      },
+      "pl": {
+        "singular": "klucz dostępu",
+        "plural": "klucze dostępu",
+        "gender": "m",
+        "stems": [
+          "klucz dostęp",
+          "klucze dostęp",
+          "klucza dostęp",
+          "kluczy dostęp",
+          "kluczem dostęp",
+          "kluczami dostęp"
+        ]
+      },
+      "pt": {
+        "singular": "chave de acesso",
+        "plural": "chaves de acesso",
+        "gender": "f",
+        "stems": [
+          "chave de acesso",
+          "chaves de acesso"
+        ]
+      },
+      "ro": {
+        "singular": "cheie de acces",
+        "plural": "chei de acces",
+        "gender": "f",
+        "stems": [
+          "cheie de acces",
+          "cheia de acces",
+          "chei de acces",
+          "cheile de acces"
+        ]
+      },
+      "ru": {
+        "singular": "ключ доступа",
+        "plural": "ключи доступа",
+        "gender": "m",
+        "stems": [
+          "ключ доступа",
+          "ключа доступа",
+          "ключи доступа",
+          "ключей доступа",
+          "ключом доступа"
+        ]
+      },
+      "sk": {
+        "singular": "prístupový kľúč",
+        "plural": "prístupové kľúče",
+        "gender": "m",
+        "stems": [
+          "prístupov"
+        ]
+      },
+      "sl": {
+        "singular": "ključ za dostop",
+        "plural": "ključi za dostop",
+        "gender": "m",
+        "stems": [
+          "ključ za dostop",
+          "ključa za dostop",
+          "ključi za dostop",
+          "ključev za dostop",
+          "ključem za dostop"
+        ]
+      },
+      "sr": {
+        "singular": "приступни кључ",
+        "plural": "приступни кључеви",
+        "gender": "m",
+        "stems": [
+          "приступн"
+        ]
+      },
+      "sv": {
+        "singular": "lösennyckel",
+        "plural": "lösennycklar",
+        "gender": "c",
+        "stems": [
+          "lösennyck"
+        ]
+      },
+      "th": {
+        "singular": "พาสคีย์",
+        "plural": "พาสคีย์",
+        "stems": [
+          "พาสคีย์"
+        ]
+      },
+      "tr": {
+        "singular": "geçiş anahtarı",
+        "plural": "geçiş anahtarları",
+        "stems": [
+          "geçiş anahtar"
+        ]
+      },
+      "uk": {
+        "singular": "ключ доступу",
+        "plural": "ключі доступу",
+        "gender": "m",
+        "stems": [
+          "ключ доступу",
+          "ключа доступу",
+          "ключі доступу",
+          "ключів доступу",
+          "ключем доступу"
+        ]
+      },
+      "vi": {
+        "singular": "khóa truy cập",
+        "plural": "khóa truy cập",
+        "stems": [
+          "khóa truy cập"
+        ]
+      },
+      "zh": {
+        "singular": "通行密钥",
+        "plural": "通行密钥",
+        "stems": [
+          "通行密钥"
+        ]
+      }
+    },
+    "twoFactor": {
+      "definition": "A code from an authenticator app that the sign-in asks for after the password. Two-factor will do as a short form, 2FA will not.",
+      "en": {
+        "singular": "two-factor authentication",
+        "plural": "two-factor authentication",
+        "stems": [
+          "two-factor authentication",
+          "two-factor"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "de": {
+        "singular": "Zwei-Faktor-Authentifizierung",
+        "plural": "Zwei-Faktor-Authentifizierung",
+        "gender": "f",
+        "stems": [
+          "zwei-faktor"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "ar": {
+        "singular": "المصادقة الثنائية",
+        "plural": "المصادقة الثنائية",
+        "gender": "f",
+        "stems": [
+          "ثنائي",
+          "بعاملين"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "bg": {
+        "singular": "двуфакторно удостоверяване",
+        "plural": "двуфакторно удостоверяване",
+        "gender": "n",
+        "stems": [
+          "двуфактор"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "ca": {
+        "singular": "autenticació de dos factors",
+        "plural": "autenticació de dos factors",
+        "gender": "f",
+        "stems": [
+          "dos factors"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "cs": {
+        "singular": "dvoufaktorové ověřování",
+        "plural": "dvoufaktorové ověřování",
+        "gender": "n",
+        "stems": [
+          "dvoufaktor",
+          "dvoufáz"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "da": {
+        "singular": "tofaktorgodkendelse",
+        "plural": "tofaktorgodkendelse",
+        "gender": "c",
+        "stems": [
+          "tofaktor",
+          "to-faktor"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "el": {
+        "singular": "έλεγχος ταυτότητας δύο παραγόντων",
+        "plural": "έλεγχος ταυτότητας δύο παραγόντων",
+        "gender": "m",
+        "stems": [
+          "δύο παραγόντων"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "es": {
+        "singular": "autenticación de dos factores",
+        "plural": "autenticación de dos factores",
+        "gender": "f",
+        "stems": [
+          "dos factores"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "et": {
+        "singular": "kaheastmeline autentimine",
+        "plural": "kaheastmeline autentimine",
+        "stems": [
+          "kaheastmeli",
+          "kahefaktori"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "eu": {
+        "singular": "bi faktoreko autentifikazioa",
+        "plural": "bi faktoreko autentifikazioa",
+        "stems": [
+          "bi faktore"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "fa": {
+        "singular": "احراز هویت دومرحله‌ای",
+        "plural": "احراز هویت دومرحله‌ای",
+        "stems": [
+          "دومرحله",
+          "دو مرحله",
+          "دوعاملی",
+          "دو عاملی"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "fi": {
+        "singular": "kaksivaiheinen tunnistautuminen",
+        "plural": "kaksivaiheinen tunnistautuminen",
+        "stems": [
+          "kaksivaihei",
+          "kaksiosai"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "fr": {
+        "singular": "authentification à deux facteurs",
+        "plural": "authentification à deux facteurs",
+        "gender": "f",
+        "stems": [
+          "deux facteurs"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "gl": {
+        "singular": "autenticación de dous factores",
+        "plural": "autenticación de dous factores",
+        "gender": "f",
+        "stems": [
+          "dous factores"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "he": {
+        "singular": "אימות דו-שלבי",
+        "plural": "אימות דו-שלבי",
+        "gender": "m",
+        "stems": [
+          "דו-שלבי",
+          "דו שלבי"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "hi": {
+        "singular": "दो-कारक प्रमाणीकरण",
+        "plural": "दो-कारक प्रमाणीकरण",
+        "gender": "m",
+        "stems": [
+          "दो-कारक",
+          "दो कारक"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "hr": {
+        "singular": "dvofaktorska autentifikacija",
+        "plural": "dvofaktorska autentifikacija",
+        "gender": "f",
+        "stems": [
+          "dvofaktor"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "hu": {
+        "singular": "kéttényezős hitelesítés",
+        "plural": "kéttényezős hitelesítés",
+        "stems": [
+          "kéttényezős",
+          "kétlépcsős"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "id": {
+        "singular": "autentikasi dua faktor",
+        "plural": "autentikasi dua faktor",
+        "stems": [
+          "dua faktor"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "is": {
+        "singular": "tveggja þátta auðkenning",
+        "plural": "tveggja þátta auðkenning",
+        "gender": "f",
+        "stems": [
+          "tveggja þátta"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "it": {
+        "singular": "autenticazione a due fattori",
+        "plural": "autenticazione a due fattori",
+        "gender": "f",
+        "stems": [
+          "due fattori"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "ja": {
+        "singular": "2要素認証",
+        "plural": "2要素認証",
+        "stems": [
+          "要素認証",
+          "段階認証"
+        ],
+        "forbidden": [
+          "*2fa*"
+        ]
+      },
+      "ko": {
+        "singular": "2단계 인증",
+        "plural": "2단계 인증",
+        "stems": [
+          "2단계 인증",
+          "이중 인증"
+        ],
+        "forbidden": [
+          "2fa*"
+        ]
+      },
+      "lt": {
+        "singular": "dviejų veiksnių autentifikavimas",
+        "plural": "dviejų veiksnių autentifikavimas",
+        "gender": "m",
+        "stems": [
+          "dviejų veiksn",
+          "dviejų lyg"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "lv": {
+        "singular": "divfaktoru autentifikācija",
+        "plural": "divfaktoru autentifikācija",
+        "gender": "f",
+        "stems": [
+          "divfaktor",
+          "divpakāp"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "ms": {
+        "singular": "pengesahan dua faktor",
+        "plural": "pengesahan dua faktor",
+        "stems": [
+          "dua faktor"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "nl": {
+        "singular": "tweestapsverificatie",
+        "plural": "tweestapsverificatie",
+        "gender": "c",
+        "stems": [
+          "tweestaps",
+          "tweefactor",
+          "twee-factor"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "no": {
+        "singular": "tofaktorautentisering",
+        "plural": "tofaktorautentisering",
+        "gender": "m",
+        "stems": [
+          "tofaktor",
+          "to-faktor",
+          "totrinns"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "pl": {
+        "singular": "uwierzytelnianie dwuskładnikowe",
+        "plural": "uwierzytelnianie dwuskładnikowe",
+        "gender": "n",
+        "stems": [
+          "dwuskładnik",
+          "dwuetap"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "pt": {
+        "singular": "autenticação de dois fatores",
+        "plural": "autenticação de dois fatores",
+        "gender": "f",
+        "stems": [
+          "dois fatores",
+          "dois factores"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "ro": {
+        "singular": "autentificare cu doi factori",
+        "plural": "autentificare cu doi factori",
+        "gender": "f",
+        "stems": [
+          "doi factori"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "ru": {
+        "singular": "двухфакторная аутентификация",
+        "plural": "двухфакторная аутентификация",
+        "gender": "f",
+        "stems": [
+          "двухфактор",
+          "двухэтап"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "sk": {
+        "singular": "dvojfaktorové overenie",
+        "plural": "dvojfaktorové overenie",
+        "gender": "n",
+        "stems": [
+          "dvojfaktor",
+          "dvojstup"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "sl": {
+        "singular": "dvostopenjsko preverjanje pristnosti",
+        "plural": "dvostopenjsko preverjanje pristnosti",
+        "gender": "n",
+        "stems": [
+          "dvostopenj",
+          "dvofaktor"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "sr": {
+        "singular": "двофакторска аутентификација",
+        "plural": "двофакторска аутентификација",
+        "gender": "f",
+        "stems": [
+          "двофактор"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "sv": {
+        "singular": "tvåfaktorsautentisering",
+        "plural": "tvåfaktorsautentisering",
+        "gender": "c",
+        "stems": [
+          "tvåfaktor",
+          "tvåstegs"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "th": {
+        "singular": "การยืนยันตัวตนแบบสองปัจจัย",
+        "plural": "การยืนยันตัวตนแบบสองปัจจัย",
+        "stems": [
+          "สองปัจจัย",
+          "สองขั้นตอน"
+        ],
+        "forbidden": [
+          "*2fa*"
+        ]
+      },
+      "tr": {
+        "singular": "iki faktörlü kimlik doğrulama",
+        "plural": "iki faktörlü kimlik doğrulama",
+        "stems": [
+          "iki faktörlü",
+          "iki adımlı"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "uk": {
+        "singular": "двофакторна автентифікація",
+        "plural": "двофакторна автентифікація",
+        "gender": "f",
+        "stems": [
+          "двофактор",
+          "двоетап"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "vi": {
+        "singular": "xác thực hai yếu tố",
+        "plural": "xác thực hai yếu tố",
+        "stems": [
+          "hai yếu tố",
+          "hai bước"
+        ],
+        "forbidden": [
+          "2fa"
+        ]
+      },
+      "zh": {
+        "singular": "双重身份验证",
+        "plural": "双重身份验证",
+        "stems": [
+          "双重",
+          "双因素",
+          "两步"
+        ],
+        "forbidden": [
+          "*2fa*"
+        ]
+      }
+    },
+    "session": {
+      "definition": "One sign-in in one browser, until it runs out or is ended. A session belongs to a person, a pairing links instances.",
+      "en": {
+        "singular": "session",
+        "plural": "sessions",
+        "stems": [
+          "session",
+          "sessions"
+        ]
+      },
+      "de": {
+        "singular": "Sitzung",
+        "plural": "Sitzungen",
+        "gender": "f",
+        "stems": [
+          "sitzung"
+        ],
+        "forbidden": [
+          "*session*"
+        ]
+      },
+      "ar": {
+        "singular": "جلسة",
+        "plural": "جلسات",
+        "gender": "f",
+        "stems": [
+          "جلس"
+        ]
+      },
+      "bg": {
+        "singular": "сесия",
+        "plural": "сесии",
+        "gender": "f",
+        "stems": [
+          "сеси"
+        ]
+      },
+      "ca": {
+        "singular": "sessió",
+        "plural": "sessions",
+        "gender": "f",
+        "stems": [
+          "sessió"
+        ]
+      },
+      "cs": {
+        "singular": "relace",
+        "plural": "relace",
+        "gender": "f",
+        "stems": [
+          "relac"
+        ]
+      },
+      "da": {
+        "singular": "session",
+        "plural": "sessioner",
+        "gender": "c",
+        "stems": [
+          "session"
+        ]
+      },
+      "el": {
+        "singular": "συνεδρία",
+        "plural": "συνεδρίες",
+        "gender": "f",
+        "stems": [
+          "συνεδρί"
+        ]
+      },
+      "es": {
+        "singular": "sesión",
+        "plural": "sesiones",
+        "gender": "f",
+        "stems": [
+          "sesión"
+        ]
+      },
+      "et": {
+        "singular": "seanss",
+        "plural": "seansid",
+        "stems": [
+          "seans"
+        ]
+      },
+      "eu": {
+        "singular": "saioa",
+        "plural": "saioak",
+        "stems": [
+          "saio"
+        ]
+      },
+      "fa": {
+        "singular": "نشست",
+        "plural": "نشست‌ها",
+        "stems": [
+          "نشست"
+        ]
+      },
+      "fi": {
+        "singular": "istunto",
+        "plural": "istunnot",
+        "stems": [
+          "istun"
+        ]
+      },
+      "fr": {
+        "singular": "session",
+        "plural": "sessions",
+        "gender": "f",
+        "stems": [
+          "session"
+        ]
+      },
+      "gl": {
+        "singular": "sesión",
+        "plural": "sesións",
+        "gender": "f",
+        "stems": [
+          "sesión"
+        ]
+      },
+      "he": {
+        "singular": "הפעלה",
+        "plural": "הפעלות",
+        "gender": "f",
+        "stems": [
+          "הפעל",
+          "סשן"
+        ]
+      },
+      "hi": {
+        "singular": "सत्र",
+        "plural": "सत्र",
+        "gender": "m",
+        "stems": [
+          "सत्र"
+        ]
+      },
+      "hr": {
+        "singular": "sesija",
+        "plural": "sesije",
+        "gender": "f",
+        "stems": [
+          "sesij"
+        ]
+      },
+      "hu": {
+        "singular": "munkamenet",
+        "plural": "munkamenetek",
+        "stems": [
+          "munkamenet"
+        ]
+      },
+      "id": {
+        "singular": "sesi",
+        "plural": "sesi",
+        "stems": [
+          "sesi"
+        ]
+      },
+      "is": {
+        "singular": "seta",
+        "plural": "setur",
+        "gender": "f",
+        "stems": [
+          "seta",
+          "setu"
+        ]
+      },
+      "it": {
+        "singular": "sessione",
+        "plural": "sessioni",
+        "gender": "f",
+        "stems": [
+          "session"
+        ]
+      },
+      "ja": {
+        "singular": "セッション",
+        "plural": "セッション",
+        "stems": [
+          "セッション"
+        ]
+      },
+      "ko": {
+        "singular": "세션",
+        "plural": "세션",
+        "stems": [
+          "세션"
+        ]
+      },
+      "lt": {
+        "singular": "seansas",
+        "plural": "seansai",
+        "gender": "m",
+        "stems": [
+          "seans"
+        ]
+      },
+      "lv": {
+        "singular": "sesija",
+        "plural": "sesijas",
+        "gender": "f",
+        "stems": [
+          "sesij"
+        ]
+      },
+      "ms": {
+        "singular": "sesi",
+        "plural": "sesi",
+        "stems": [
+          "sesi"
+        ]
+      },
+      "nl": {
+        "singular": "sessie",
+        "plural": "sessies",
+        "gender": "c",
+        "stems": [
+          "sessie"
+        ]
+      },
+      "no": {
+        "singular": "økt",
+        "plural": "økter",
+        "gender": "m",
+        "stems": [
+          "økt"
+        ]
+      },
+      "pl": {
+        "singular": "sesja",
+        "plural": "sesje",
+        "gender": "f",
+        "stems": [
+          "sesj"
+        ]
+      },
+      "pt": {
+        "singular": "sessão",
+        "plural": "sessões",
+        "gender": "f",
+        "stems": [
+          "sessão",
+          "sessões"
+        ]
+      },
+      "ro": {
+        "singular": "sesiune",
+        "plural": "sesiuni",
+        "gender": "f",
+        "stems": [
+          "sesiun"
+        ]
+      },
+      "ru": {
+        "singular": "сеанс",
+        "plural": "сеансы",
+        "gender": "m",
+        "stems": [
+          "сеанс",
+          "сесси"
+        ]
+      },
+      "sk": {
+        "singular": "relácia",
+        "plural": "relácie",
+        "gender": "f",
+        "stems": [
+          "relác"
+        ]
+      },
+      "sl": {
+        "singular": "seja",
+        "plural": "seje",
+        "gender": "f",
+        "stems": [
+          "sej"
+        ]
+      },
+      "sr": {
+        "singular": "сесија",
+        "plural": "сесије",
+        "gender": "f",
+        "stems": [
+          "сесиј"
+        ]
+      },
+      "sv": {
+        "singular": "session",
+        "plural": "sessioner",
+        "gender": "c",
+        "stems": [
+          "session"
+        ]
+      },
+      "th": {
+        "singular": "เซสชัน",
+        "plural": "เซสชัน",
+        "stems": [
+          "เซสชัน"
+        ]
+      },
+      "tr": {
+        "singular": "oturum",
+        "plural": "oturumlar",
+        "stems": [
+          "oturum"
+        ]
+      },
+      "uk": {
+        "singular": "сеанс",
+        "plural": "сеанси",
+        "gender": "m",
+        "stems": [
+          "сеанс",
+          "сесі"
+        ]
+      },
+      "vi": {
+        "singular": "phiên",
+        "plural": "phiên",
+        "stems": [
+          "phiên"
+        ]
+      },
+      "zh": {
+        "singular": "会话",
+        "plural": "会话",
+        "stems": [
+          "会话"
+        ]
+      }
+    },
+    "apiToken": {
+      "definition": "A secret that a script sends in place of a sign-in. A person creates it and can revoke it.",
+      "en": {
+        "singular": "API token",
+        "plural": "API tokens",
+        "stems": [
+          "API token",
+          "API tokens"
+        ]
+      },
+      "de": {
+        "singular": "API-Token",
+        "plural": "API-Tokens",
+        "gender": "n",
+        "stems": [
+          "api-token"
+        ]
+      },
+      "ar": {
+        "singular": "رمز API",
+        "plural": "رموز API",
+        "gender": "m",
+        "stems": [
+          "رمز api",
+          "رموز api"
+        ]
+      },
+      "bg": {
+        "singular": "API токен",
+        "plural": "API токени",
+        "gender": "m",
+        "stems": [
+          "токен"
+        ]
+      },
+      "ca": {
+        "singular": "testimoni d'API",
+        "plural": "testimonis d'API",
+        "gender": "m",
+        "stems": [
+          "testimoni",
+          "token"
+        ]
+      },
+      "cs": {
+        "singular": "token API",
+        "plural": "tokeny API",
+        "gender": "m",
+        "stems": [
+          "token"
+        ]
+      },
+      "da": {
+        "singular": "API-token",
+        "plural": "API-tokens",
+        "gender": "n",
+        "stems": [
+          "api-token"
+        ]
+      },
+      "el": {
+        "singular": "διακριτικό API",
+        "plural": "διακριτικά API",
+        "gender": "n",
+        "stems": [
+          "διακριτικ",
+          "token"
+        ]
+      },
+      "es": {
+        "singular": "token de API",
+        "plural": "tokens de API",
+        "gender": "m",
+        "stems": [
+          "token"
+        ]
+      },
+      "et": {
+        "singular": "API-tõend",
+        "plural": "API-tõendid",
+        "stems": [
+          "tõend",
+          "token"
+        ]
+      },
+      "eu": {
+        "singular": "API tokena",
+        "plural": "API tokenak",
+        "stems": [
+          "token"
+        ]
+      },
+      "fa": {
+        "singular": "توکن API",
+        "plural": "توکن‌های API",
+        "stems": [
+          "توکن"
+        ]
+      },
+      "fi": {
+        "singular": "API-tunnus",
+        "plural": "API-tunnukset",
+        "stems": [
+          "api-tunnu",
+          "api-token"
+        ]
+      },
+      "fr": {
+        "singular": "jeton d'API",
+        "plural": "jetons d'API",
+        "gender": "m",
+        "stems": [
+          "jeton"
+        ]
+      },
+      "gl": {
+        "singular": "token de API",
+        "plural": "tokens de API",
+        "gender": "m",
+        "stems": [
+          "token"
+        ]
+      },
+      "he": {
+        "singular": "אסימון API",
+        "plural": "אסימוני API",
+        "gender": "m",
+        "stems": [
+          "אסימון",
+          "אסימונ",
+          "טוקן"
+        ]
+      },
+      "hi": {
+        "singular": "API टोकन",
+        "plural": "API टोकन",
+        "gender": "m",
+        "stems": [
+          "टोकन"
+        ]
+      },
+      "hr": {
+        "singular": "API token",
+        "plural": "API tokeni",
+        "gender": "m",
+        "stems": [
+          "token"
+        ]
+      },
+      "hu": {
+        "singular": "API-token",
+        "plural": "API-tokenek",
+        "stems": [
+          "token",
+          "jogkivonat"
+        ]
+      },
+      "id": {
+        "singular": "token API",
+        "plural": "token API",
+        "stems": [
+          "token"
+        ]
+      },
+      "is": {
+        "singular": "API-tákn",
+        "plural": "API-tákn",
+        "gender": "n",
+        "stems": [
+          "tákn",
+          "token"
+        ]
+      },
+      "it": {
+        "singular": "token API",
+        "plural": "token API",
+        "gender": "m",
+        "stems": [
+          "token"
+        ]
+      },
+      "ja": {
+        "singular": "API トークン",
+        "plural": "API トークン",
+        "stems": [
+          "トークン"
+        ]
+      },
+      "ko": {
+        "singular": "API 토큰",
+        "plural": "API 토큰",
+        "stems": [
+          "토큰"
+        ]
+      },
+      "lt": {
+        "singular": "API žetonas",
+        "plural": "API žetonai",
+        "gender": "m",
+        "stems": [
+          "žeton",
+          "token"
+        ]
+      },
+      "lv": {
+        "singular": "API marķieris",
+        "plural": "API marķieri",
+        "gender": "m",
+        "stems": [
+          "marķier",
+          "token"
+        ]
+      },
+      "ms": {
+        "singular": "token API",
+        "plural": "token API",
+        "stems": [
+          "token"
+        ]
+      },
+      "nl": {
+        "singular": "API-token",
+        "plural": "API-tokens",
+        "gender": "n",
+        "stems": [
+          "token"
+        ]
+      },
+      "no": {
+        "singular": "API-token",
+        "plural": "API-tokener",
+        "gender": "n",
+        "stems": [
+          "token"
+        ]
+      },
+      "pl": {
+        "singular": "token API",
+        "plural": "tokeny API",
+        "gender": "m",
+        "stems": [
+          "token"
+        ]
+      },
+      "pt": {
+        "singular": "token de API",
+        "plural": "tokens de API",
+        "gender": "m",
+        "stems": [
+          "token"
+        ]
+      },
+      "ro": {
+        "singular": "token API",
+        "plural": "tokenuri API",
+        "gender": "n",
+        "stems": [
+          "token"
+        ]
+      },
+      "ru": {
+        "singular": "токен API",
+        "plural": "токены API",
+        "gender": "m",
+        "stems": [
+          "токен"
+        ]
+      },
+      "sk": {
+        "singular": "token API",
+        "plural": "tokeny API",
+        "gender": "m",
+        "stems": [
+          "token"
+        ]
+      },
+      "sl": {
+        "singular": "žeton API",
+        "plural": "žetoni API",
+        "gender": "m",
+        "stems": [
+          "žeton",
+          "token"
+        ]
+      },
+      "sr": {
+        "singular": "API токен",
+        "plural": "API токени",
+        "gender": "m",
+        "stems": [
+          "токен"
+        ]
+      },
+      "sv": {
+        "singular": "API-token",
+        "plural": "API-tokens",
+        "gender": "c",
+        "stems": [
+          "token"
+        ]
+      },
+      "th": {
+        "singular": "โทเค็น API",
+        "plural": "โทเค็น API",
+        "stems": [
+          "โทเค็น"
+        ]
+      },
+      "tr": {
+        "singular": "API belirteci",
+        "plural": "API belirteçleri",
+        "stems": [
+          "belirte",
+          "token"
+        ]
+      },
+      "uk": {
+        "singular": "токен API",
+        "plural": "токени API",
+        "gender": "m",
+        "stems": [
+          "токен"
+        ]
+      },
+      "vi": {
+        "singular": "mã thông báo API",
+        "plural": "mã thông báo API",
+        "stems": [
+          "mã thông báo",
+          "token"
+        ]
+      },
+      "zh": {
+        "singular": "API 令牌",
+        "plural": "API 令牌",
+        "stems": [
+          "令牌"
+        ]
+      }
     }
   }
 }

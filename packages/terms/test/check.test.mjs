@@ -27,6 +27,10 @@ const glossary = {
       fr: { singular: 'relais', plural: 'relais', stems: ['relais'] },
       es: { singular: 'relay', plural: 'relays', stems: ['relay'], forbidden: ['relé', 'relés'] },
     },
+    serviceGroup: {
+      en: { singular: 'group at the sign-in service', plural: 'groups at the sign-in service', stems: ['group at the sign-in service', 'groups at the sign-in service'] },
+      de: { singular: 'Gruppe beim Anmeldedienst', plural: 'Gruppen beim Anmeldedienst', stems: ['gruppe'] },
+    },
     permission: {
       enforce: false,
       en: { singular: 'permission', plural: 'permissions', stems: ['permission', 'permissions'] },
@@ -79,6 +83,14 @@ test('reads the English for whole words only', () => {
     fr: at('fr', { a: 'Les messages passent', b: 'Deux serveurs' }),
   });
   assert.deepEqual(brief(found), ['fr b relay missing']);
+});
+
+test('asks for a term of several words only where the English has all of them', () => {
+  const found = run({
+    en: at('en', { a: 'Groups', b: 'Each group at the sign-in service' }),
+    de: at('de', { a: 'Mitglieder', b: 'Jede Rolle' }),
+  });
+  assert.deepEqual(brief(found), ['de b serviceGroup missing']);
 });
 
 test('flags a forbidden variant even where the English has no such term', () => {

@@ -9,6 +9,7 @@ test('checks an app directory against the glossary in one call', () => {
   const found = checkLocales([app]);
   assert.deepEqual(found.map((v) => `${v.lang} ${v.key} ${v.term} ${v.kind}`), [
     'de nav.relay relay forbidden',
+    'de auth.failed signIn forbidden',
     'fr backup.run backup missing',
   ]);
 });
@@ -21,4 +22,6 @@ test('hands out the glossary itself', () => {
   assert.equal(glossary.terms.relay.de.singular, 'Relay');
   assert.equal(glossary.terms.backup.de.singular, 'Sicherung');
   assert.deepEqual(glossary.terms.permission.de, { singular: 'Berechtigung', plural: 'Berechtigungen', gender: 'f', stems: ['berechtigung'] });
+  assert.equal(glossary.terms.signInService.de.singular, 'Anmeldedienst');
+  assert.equal(glossary.terms.trustedProxy.de.singular, 'vorgeschalteter Proxy');
 });
