@@ -22,7 +22,7 @@ const ENTRIES = [
   { id: "perplexity", name: "Perplexity", group: "chat", mark: M.perplexity },
 
   { id: "anythingllm", name: "AnythingLLM", group: "models", mark: M.anythingllm },
-  { id: "jan", name: "Jan", group: "models", glyph: "IconApp" },
+  { id: "jan", name: "Jan", group: "models", mark: M.jan },
   { id: "lmstudio", name: "LM Studio", group: "models", mark: M.lmstudio },
   { id: "msty", name: "Msty", group: "models", mark: M.msty },
   { id: "openwebui", name: "Open WebUI", group: "models", terms: ["Ollama"], mark: M.openwebui },

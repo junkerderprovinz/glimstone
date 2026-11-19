@@ -58,6 +58,7 @@ LOCAL = [
     ("antigravity", "Antigravity", "lobehub/lobe-icons, icons/antigravity-color.svg", "MIT"),
 
     ("msty", "Msty", "msty.ai, brands/studio.svg", BRAND),
+    ("jan", "Jan", "traced from the picture docs.jan.ai/assets/logo-jan.svg wraps, which has no vector", BRAND),
 
     ("continuedev", "Continue", "continuedev/continue, docs/logo/light.svg", "Apache-2.0"),
     ("goose", "Goose", "block/goose, documentation/static/img/goose.svg", "Apache-2.0"),
@@ -88,7 +89,13 @@ TILE_COLOUR = {
     "msty": ("#198fe1", None),
 }
 
-MARKS = MarkSet(ROOT / "packages" / "core" / "mcp-marks", {}, set(), TILE_COLOUR, set())
+FORCE_THEMED = {
+    # Jan's two yellows, which fade into a light tile, deepened as a pair so the
+    # shading of the hand stays where it is.
+    "jan": {"#ffca28": ("#ffca28", "#a67c00"), "#eda600": ("#eda600", "#8a6400")},
+}
+
+MARKS = MarkSet(ROOT / "packages" / "core" / "mcp-marks", FORCE_THEMED, set(), TILE_COLOUR, set())
 
 if SRC is None or not SRC.is_dir():
     raise SystemExit("pass the icons folder of simple-icons@16: python scripts/gen_mcp_marks.py <path>")
