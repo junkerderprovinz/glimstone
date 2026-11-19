@@ -35,23 +35,46 @@ covers most with.
 **GPL-3.0**, unmodified. The GPL-3.0 may be carried into this project's
 AGPL-3.0, and Apache-2.0 may too, so the combined work stays AGPL-3.0.
 
+**Wikimedia Commons**: `kaspersky.svg` is
+<https://commons.wikimedia.org/wiki/File:Kaspersky_icon.svg>, unmodified, which
+Commons holds as **public domain** (PD-textlogo, a mark too simple for
+copyright). It is still Kaspersky's trademark, used under the position below.
+
+**The brands' own press material**, used under the trademark position below
+rather than under a licence. Each press page hands the files out for others to
+show the brand and names no further terms:
+
+- `fsecure.svg`: the F of `2023_Logo/VERTICAL/RGB/POSITIVE/F-SECURE_LOGO_VERTICAL_POSITIVE_RGB.svg`
+  in <https://assets.f-secure.com/z/for-media/f-secure_2023_logo.zip>, the logo
+  download on <https://company.f-secure.com/en/for-media>, without the word
+  under it.
+- `purevpn.svg` and `purevpn-hover.svg`: the disc of `PureVPN/vpn original.svg`
+  and of `PureVPN/vpn all dark.svg` in
+  <https://images.purevpn-tools.com/press-room/PureVPN.zip>, the media kit on
+  <https://www.purevpn.com/press-enquiry.php>, each without the word beside it.
+  The single-colour disc is the lit tile's drawing, where the rings of the
+  colour logo would melt into one.
+
 ## Owners' marks for a narrower product
 
 A few providers wear the mark of the company that runs them, because the VPN
 has no mark of its own that could be sourced cleanly: Avast SecureLine VPN,
-Avira Phantom VPN, Bitdefender VPN, McAfee VPN, Mozilla VPN and Norton VPN. The
+Avira Phantom VPN, Bitdefender VPN, F-Secure VPN, Kaspersky VPN, McAfee VPN,
+Mozilla VPN and Norton VPN. The
 own WireGuard configuration wears WireGuard's mark, since that is what it is.
 
-A provider whose own mark has no clean source wears the glyph of its kind. No
-icon set carries Anonine, Astrill VPN, AzireVPN, CactusVPN, cryptostorm,
-CyberGhost, FastestVPN, F-Secure VPN, hide.me, HMA VPN, Hotspot Shield,
-IPVanish, Ivacy VPN, Le VPN, Njalla VPN, OVPN, PrivadoVPN, PrivateVPN, PureVPN,
-StrongVPN, TorGuard, Trust.Zone, TunnelBear, Turbo VPN, Unlocator VPN, VPN.ac,
-VPN Unlimited, VyprVPN, Xeovo, X-VPN or ZoogVPN, and their sites hand out
-their logos as pictures or under no stated terms. Windscribe's own repository
-carries only its wordmark, Obscura VPN's client names no licence the mark could
-be used under, and the Kaspersky mark in Simple Icons is a wordmark five times
-as wide as it is tall, which a tile shrinks past reading.
+A provider whose own mark has no clean source wears the glyph of its kind.
+Neither Simple Icons, Dashboard Icons nor Lobe Icons carries Anonine, Astrill
+VPN, AzireVPN, CactusVPN, cryptostorm, CyberGhost, FastestVPN, hide.me, HMA
+VPN, Hotspot Shield, IPVanish, Ivacy VPN, Le VPN, Njalla VPN, OVPN,
+PrivadoVPN, PrivateVPN, StrongVPN, TorGuard, Trust.Zone, TunnelBear, Turbo
+VPN, Unlocator VPN, VPN.ac, VPN Unlimited, VyprVPN, Xeovo, X-VPN or ZoogVPN,
+and their sites hand out their logos as pictures or under no stated terms.
+VyprVPN's media kit holds its logo only as pictures. Wikimedia Commons has
+AzireVPN, Njalla and TunnelBear only as wordmarks, which a tile shrinks past
+reading. Windscribe's badge lies in its desktop client under the GPL-2.0
+without the "or later" that would let it into this project's AGPL-3.0, and
+Obscura VPN's client names no licence the mark could be used under.
 
 ## Trademarks
 
@@ -67,7 +90,8 @@ any other, drop the SVG in here as its source has it, leaving out at most the
 word beside the mark, add a line to `LOCAL` naming its source and licence, add
 both to the section above and the licence's text beside this file when it asks
 for one. A logo whose colours do not survive one ink gets its brand's
-single-colour version from Simple Icons under `HOVER`. Then give the provider
+single-colour version under `HOVER`: a Simple Icons slug, or `<id>-hover.svg`
+beside the logo. Then give the provider
 its `mark` in `src/vpnProviders.ts` and run the generator:
 
     npm pack simple-icons@16 && tar xzf simple-icons-*.tgz
