@@ -3,6 +3,7 @@ import { MCP_PROVIDERS } from "../../packages/core/src/mcpProviders.ts";
 import { REGISTRY_PROVIDERS } from "../../packages/core/src/registryProviders.ts";
 import { CAPTCHA_PROVIDERS } from "../../packages/core/src/captchaProviders.ts";
 import { DOWNLOAD_PROVIDERS } from "../../packages/core/src/downloadProviders.ts";
+import { IDENTITY_PROVIDERS } from "../../packages/core/src/identityProviders.ts";
 import { STORAGE_PROVIDERS } from "../../packages/core/src/storageProviders.ts";
 import { TRANSFER_PROVIDERS } from "../../packages/core/src/transferProviders.ts";
 import { VPN_PROVIDERS } from "../../packages/core/src/vpnProviders.ts";
@@ -196,6 +197,12 @@ async function showTransfer(page: Page) {
   await expect(picker(page).getByRole("searchbox", { name: "Search transfer services" })).toBeFocused();
 }
 
+async function showIdentity(page: Page) {
+  await open(page, "/components/picker-window");
+  await stage(page, "PickerWindowIdentity").getByRole("button", { name: "Add single sign-on" }).click();
+  await expect(picker(page).getByRole("searchbox", { name: "Search sign-in services" })).toBeFocused();
+}
+
 const sectionsOf = (page: Page) =>
   picker(page)
     .locator(".glim-pick-section")
@@ -368,5 +375,59 @@ test.describe("The transfer catalog in a PickerWindow", () => {
     };
     expect(await fill("WeTransfer")).toBe("rgb(64, 159, 255)");
     expect(await fill("SwissTransfer")).toBe("rgb(59, 180, 113)");
+  });
+});
+
+test.describe("The identity catalog in a PickerWindow", () => {
+  test("[identity-groups] the sign-in services stand in one group, alphabetical, with the app's own Other provider last", async ({ page }) => {
+    await showIdentity(page);
+    const sections = await sectionsOf(page);
+    const names = alphabetical(IDENTITY_PROVIDERS.entries.map((e) => e.name));
+    expect(sections).toEqual([{ title: "Self-hosted", names: [...names, "Other provider"] }]);
+    const marks = picker(page).locator(".glim-provider-pick button.glim-readme-btn .glim-readme-btn-mark");
+    await expect(marks.filter({ has: page.locator("svg") })).toHaveCount(IDENTITY_PROVIDERS.entries.length + 1);
+  });
+
+  test("[identity-search] a service is found by a protocol it speaks besides OpenID Connect, and a pick hands back its id", async ({ page }) => {
+    await showIdentity(page);
+    const search = picker(page).getByRole("searchbox", { name: "Search sign-in services" });
+    await search.fill("saml");
+    await expect.poll(() => names(page)).toEqual(["authentik", "Keycloak", "ZITADEL"]);
+    await search.fill("passkeys");
+    await expect.poll(() => names(page)).toEqual(["Pocket ID"]);
+    await search.press("Enter");
+    await expect(picker(page)).toHaveCount(0);
+    await expect(stage(page, "PickerWindowIdentity").locator("output")).toHaveText("Picked: Pocket ID");
+  });
+
+  test("[identity-marks] a service with a mark lights in its brand's colour, Kanidm and Other provider in the accent", async ({ page }) => {
+    await showIdentity(page);
+    const fill = async (name: string) => {
+      const tile = picker(page).getByRole("button", { name, exact: true });
+      await tile.hover();
+      return tile.evaluate((b) => getComputedStyle(b).backgroundColor);
+    };
+    expect(await fill("authentik")).toBe("rgb(253, 75, 45)");
+    expect(await fill("Authelia")).toBe("rgb(17, 49, 85)");
+    const accent = await page.evaluate(() => {
+      const probe = document.createElement("div");
+      probe.style.backgroundColor = "var(--accent)";
+      document.body.append(probe);
+      const colour = getComputedStyle(probe).backgroundColor;
+      probe.remove();
+      return colour;
+    });
+    expect(await fill("Kanidm")).toBe(accent);
+    expect(await fill("Other provider")).toBe(accent);
+  });
+
+  test("[identity-hover] Keycloak shows its one-colour drawing on the lit tile", async ({ page }) => {
+    await showIdentity(page);
+    const tile = picker(page).getByRole("button", { name: "Keycloak", exact: true });
+    await expect(tile.locator(".glim-mark-hover")).toBeHidden();
+    await tile.hover();
+    await expect(tile.locator(".glim-mark-hover")).toBeVisible();
+    await expect(tile.locator(".glim-mark-rest")).toBeHidden();
+    expect(await tile.evaluate((b) => getComputedStyle(b).backgroundColor)).toBe("rgb(77, 77, 77)");
   });
 });

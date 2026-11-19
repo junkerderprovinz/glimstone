@@ -1149,6 +1149,14 @@ const { items, groups } = catalogPicker(STORAGE_PROVIDERS, {
         The marks travel with their sources and licences in <code>captcha-marks/</code> and <code>transfer-marks/</code>.
       </p>
       <Demo name="PickerWindowTransfer" />
+      <p>
+        <code>IDENTITY_PROVIDERS</code> in <code>@glimstone/core/identityProviders</code> holds the services an app hands
+        its login to over OpenID Connect, each of them one that people run on their own server. The catalog has no tile
+        for an issuer it does not know: the window below adds Other provider itself and marks it <code>last</code>.
+        Keycloak brings a <code>hover</code> drawing in one colour, and Kanidm wears the sign-in glyph, since its artwork
+        may not be recoloured. The sources are in <code>identity-marks/</code>.
+      </p>
+      <Demo name="PickerWindowIdentity" />
       <H2>Rules</H2>
       <ul>
         <li>The tiles stand in their groups, each in alphabetical order for the page's language, with the tile that takes anything last.</li>
