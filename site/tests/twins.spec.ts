@@ -8,7 +8,10 @@ import { expect, test } from "@playwright/test";
 // generated ids, the value React mirrors into a controlled field's attribute,
 // an empty class, and where text nodes split. A selector strip takes its
 // colour from its place among the page's strips, so a twin standing beside
-// another is one place further on and its strip colour is left out too.
+// another is one place further on and its strip colour is left out too. A
+// scroll area measures its content once the layout is there, at a moment each
+// framework schedules differently, so the sizes, offsets and overflowing sides
+// its engine writes are left out as well.
 
 const pages = [...readFileSync(new URL("../src/App.tsx", import.meta.url), "utf8").matchAll(/path: "(\/components\/[^"]+)"/g)].map((m) => m[1]!);
 
@@ -24,15 +27,19 @@ test("[twins-markup] every demo draws the same markup in React, Vue, Solid and S
       ...(await page.evaluate((path) => {
         const ids = /_r_[0-9a-z]+_|«r[0-9a-z]+»|:r[0-9a-z]+:|\bv[0-9a-zA-Z]+-\d+\b|\bcl-\d+\b|\bc\d+\b/g;
         const dropped = /^(id|for|name|value|aria-labelledby|aria-describedby|aria-controls|aria-activedescendant|data-uid|data-controls)$/;
+        const measuredAttr = /^data-(overflow-[xy]|at-\w+|state)$/;
+        const measuredStyle = /^(transform|--thumb-|--corner-|--scroll-area-)/;
         const shape = (el: Element, depth: number): string[] => {
+          const measured = !!el.closest('[data-scope="scroll-area"]');
           const attrs = [...el.attributes]
             .filter((a) => !dropped.test(a.name) && !a.name.startsWith("data-v-") && !(a.name === "class" && a.value.trim() === ""))
+            .filter((a) => !(measured && measuredAttr.test(a.name)))
             .map((a) => {
               if (a.name === "class") return `class=${[...el.classList].sort().join(".")}`;
               if (a.name === "style") {
                 const style = (el as HTMLElement).style;
                 const strip = el.getAttribute("data-glim") === "Selector";
-                const props = [...style].filter((p) => !(strip && p.startsWith("--item-hue"))).sort();
+                const props = [...style].filter((p) => !(strip && p.startsWith("--item-hue")) && !(measured && measuredStyle.test(p))).sort();
                 return `style=${props.map((p) => `${p}:${style.getPropertyValue(p)}`).join(";")}`;
               }
               // React writes a true data attribute as "true", Vue as a bare attribute.
