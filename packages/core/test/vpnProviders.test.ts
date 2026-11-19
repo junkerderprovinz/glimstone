@@ -1,0 +1,72 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { VPN_PROVIDERS } from '../src/vpnProviders.ts';
+import { VPN_MARKS } from '../src/vpnMarks.ts';
+import { contrastRatio } from '../src/contrast.ts';
+import { catalogPicker } from '../src/catalog.ts';
+
+const entries = VPN_PROVIDERS.entries;
+const glyphs = new Set((JSON.parse(readFileSync(new URL('../glyphs.json', import.meta.url), 'utf8')) as { name: string }[]).map((g) => g.name));
+
+test('providers that hand out WireGuard come first, then those that keep it to their own app', () => {
+  assert.deepEqual(VPN_PROVIDERS.groups, ['provider', 'appOnly']);
+});
+
+test('every id is unique, lower case and safe to store', () => {
+  const ids = entries.map((e) => e.id);
+  assert.equal(new Set(ids).size, ids.length);
+  for (const id of ids) assert.match(id, /^[a-z0-9]+$/, id);
+});
+
+test('every provider stands in a group the catalog knows', () => {
+  for (const e of entries) assert.ok(VPN_PROVIDERS.groups.includes(e.group), `${e.id}: ${e.group}`);
+});
+
+test('every group has providers', () => {
+  for (const g of VPN_PROVIDERS.groups) assert.ok(entries.some((e) => e.group === g), g);
+});
+
+test('a provider wears a mark from the set or names a glyph, never both and never neither', () => {
+  const marks = new Set(Object.values(VPN_MARKS));
+  for (const e of entries) {
+    assert.ok(!!e.mark !== !!e.glyph, e.id);
+    if (e.mark) assert.ok(marks.has(e.mark), e.id);
+    if (e.glyph) assert.ok(glyphs.has(e.glyph), `${e.id}: ${e.glyph}`);
+  }
+});
+
+test('every mark in the set is worn by a provider', () => {
+  const worn = new Set(entries.map((e) => e.mark));
+  for (const [id, mark] of Object.entries(VPN_MARKS)) assert.ok(worn.has(mark), id);
+});
+
+test('every mark has its tile colour and an ink that reaches 2:1 on it', () => {
+  for (const e of entries) {
+    if (!e.mark) continue;
+    assert.match(e.mark.tile ?? '', /^#[0-9a-f]{6}$/, e.id);
+    assert.match(e.mark.ink ?? '', /^#[0-9a-f]{6}$/, e.id);
+    assert.ok(contrastRatio(e.mark.ink!, e.mark.tile!) >= 2, e.id);
+  }
+});
+
+test('an own WireGuard configuration is a word the app translates, and every provider is a brand', () => {
+  const words = entries.filter((e) => e.word).map((e) => e.id).sort();
+  assert.deepEqual(words, ['custom']);
+});
+
+test('the search words add something the name and id do not already say', () => {
+  for (const e of entries) {
+    for (const term of e.terms ?? []) {
+      assert.notEqual(term.toLowerCase(), e.id, e.id);
+      assert.ok(!e.name.toLowerCase().includes(term.toLowerCase()), `${e.id}: ${term}`);
+    }
+  }
+});
+
+test('the whole catalog makes a picker with every group in order', () => {
+  const titles = { provider: 'Providers', appOnly: 'Only in their own app' };
+  const { items, groups } = catalogPicker(VPN_PROVIDERS, { ids: entries.map((e) => e.id), titles, glyph: (e) => e.glyph, lang: 'en' });
+  assert.equal(items.length, entries.length);
+  assert.deepEqual(groups.map((g) => g.title), ['Providers', 'Only in their own app']);
+});

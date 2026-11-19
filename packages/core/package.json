@@ -17,7 +17,7 @@
     "./tokens/*.json": "./tokens/*.json",
     "./*": { "types": "./dist/*.d.ts", "default": "./dist/*.js" }
   },
-  "files": ["dist", "vanilla", "service-marks", "storage-marks", "mcp-marks", "registry-marks", "tokens", "tokens.css", "tailwind-theme.css", "figma-variables.json", "glyphs.json", "glyphs.md", "glyph-map.md", "check-bare-buttons.mjs", "check-drift.mjs", "drift-manifest.json", "migrate.mjs"],
+  "files": ["dist", "vanilla", "service-marks", "storage-marks", "mcp-marks", "registry-marks", "vpn-marks", "download-marks", "tokens", "tokens.css", "tailwind-theme.css", "figma-variables.json", "glyphs.json", "glyphs.md", "glyph-map.md", "check-bare-buttons.mjs", "check-drift.mjs", "drift-manifest.json", "migrate.mjs"],
   "scripts": {
     "build": "tsc -p tsconfig.build.json && node ../../scripts/gen-drift-manifest.mjs"
   },
