@@ -16,8 +16,8 @@
     "brotli": 30208
   },
   "@glimstone/solid": {
-    "gzip": 44288,
-    "brotli": 36608
+    "gzip": 46592,
+    "brotli": 38400
   },
   "@glimstone/svelte": {
     "gzip": 52224,
