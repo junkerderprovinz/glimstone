@@ -1,8 +1,10 @@
 import { expect, test, type Page } from "@playwright/test";
 import { MCP_PROVIDERS } from "../../packages/core/src/mcpProviders.ts";
 import { REGISTRY_PROVIDERS } from "../../packages/core/src/registryProviders.ts";
+import { CAPTCHA_PROVIDERS } from "../../packages/core/src/captchaProviders.ts";
 import { DOWNLOAD_PROVIDERS } from "../../packages/core/src/downloadProviders.ts";
 import { STORAGE_PROVIDERS } from "../../packages/core/src/storageProviders.ts";
+import { TRANSFER_PROVIDERS } from "../../packages/core/src/transferProviders.ts";
 import { VPN_PROVIDERS } from "../../packages/core/src/vpnProviders.ts";
 import { open, stage } from "./page";
 
@@ -182,6 +184,18 @@ async function showDownload(page: Page) {
   await expect(picker(page).getByRole("searchbox", { name: "Search services and hosters" })).toBeFocused();
 }
 
+async function showCaptcha(page: Page) {
+  await open(page, "/components/picker-window");
+  await stage(page, "PickerWindowCaptcha").getByRole("button", { name: "Add a solver" }).click();
+  await expect(picker(page).getByRole("searchbox", { name: "Search solvers" })).toBeFocused();
+}
+
+async function showTransfer(page: Page) {
+  await open(page, "/components/picker-window");
+  await stage(page, "PickerWindowTransfer").getByRole("button", { name: "Add a transfer link" }).click();
+  await expect(picker(page).getByRole("searchbox", { name: "Search transfer services" })).toBeFocused();
+}
+
 const sectionsOf = (page: Page) =>
   picker(page)
     .locator(".glim-pick-section")
@@ -282,5 +296,77 @@ test.describe("The download catalog in a PickerWindow", () => {
       return colour;
     });
     expect(await fill("Rapidgator")).toBe(accent);
+  });
+});
+
+test.describe("The captcha catalog in a PickerWindow", () => {
+  test("[captcha-groups] the solvers stand in one group, alphabetical", async ({ page }) => {
+    await showCaptcha(page);
+    const sections = await sectionsOf(page);
+    expect(sections.map(({ title, names }) => ({ title, count: names.length }))).toEqual([
+      { title: "Captcha solvers", count: CAPTCHA_PROVIDERS.entries.length },
+    ]);
+    expect(sections[0]!.names).toEqual(alphabetical(sections[0]!.names));
+  });
+
+  test("[captcha-search] a solver is found by the company behind it, and a pick hands back its id", async ({ page }) => {
+    await showCaptcha(page);
+    const search = picker(page).getByRole("searchbox", { name: "Search solvers" });
+    await search.fill("zennolab");
+    await expect.poll(() => names(page)).toEqual(["CapMonster Cloud"]);
+    await search.press("Enter");
+    await expect(picker(page)).toHaveCount(0);
+    await expect(stage(page, "PickerWindowCaptcha").locator("output")).toHaveText("Picked: CapMonster Cloud");
+  });
+
+  test("[captcha-marks] a solver with a mark lights in its brand's colour, one without in the accent", async ({ page }) => {
+    await showCaptcha(page);
+    const fill = async (name: string) => {
+      const tile = picker(page).getByRole("button", { name, exact: true });
+      await tile.hover();
+      return tile.evaluate((b) => getComputedStyle(b).backgroundColor);
+    };
+    expect(await fill("CapMonster Cloud")).toBe("rgb(125, 110, 255)");
+    const accent = await page.evaluate(() => {
+      const probe = document.createElement("div");
+      probe.style.backgroundColor = "var(--accent)";
+      document.body.append(probe);
+      const colour = getComputedStyle(probe).backgroundColor;
+      probe.remove();
+      return colour;
+    });
+    expect(await fill("2Captcha")).toBe(accent);
+  });
+});
+
+test.describe("The transfer catalog in a PickerWindow", () => {
+  test("[transfer-groups] the transfer services stand in one group, alphabetical, each with its mark", async ({ page }) => {
+    await showTransfer(page);
+    const sections = await sectionsOf(page);
+    expect(sections).toEqual([{ title: "Transfer services", names: ["SwissTransfer", "WeTransfer"] }]);
+    await expect(picker(page).locator(".glim-provider-pick button.glim-readme-btn .glim-readme-btn-mark svg")).toHaveCount(
+      TRANSFER_PROVIDERS.entries.length,
+    );
+  });
+
+  test("[transfer-search] a service is found by the short domain of its links, and a pick hands back its id", async ({ page }) => {
+    await showTransfer(page);
+    const search = picker(page).getByRole("searchbox", { name: "Search transfer services" });
+    await search.fill("we.tl");
+    await expect.poll(() => names(page)).toEqual(["WeTransfer"]);
+    await search.press("Enter");
+    await expect(picker(page)).toHaveCount(0);
+    await expect(stage(page, "PickerWindowTransfer").locator("output")).toHaveText("Picked: WeTransfer");
+  });
+
+  test("[transfer-marks] each service lights in its brand's colour", async ({ page }) => {
+    await showTransfer(page);
+    const fill = async (name: string) => {
+      const tile = picker(page).getByRole("button", { name, exact: true });
+      await tile.hover();
+      return tile.evaluate((b) => getComputedStyle(b).backgroundColor);
+    };
+    expect(await fill("WeTransfer")).toBe("rgb(64, 159, 255)");
+    expect(await fill("SwissTransfer")).toBe("rgb(59, 180, 113)");
   });
 });

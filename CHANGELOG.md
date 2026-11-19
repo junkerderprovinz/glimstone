@@ -4,7 +4,7 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
-Apps that connect to storage, send notifications, set up MCP clients, sign in to container registries, route through a VPN or sign in to debrid services and file hosters pick their providers from a shared catalog, which carries each provider's group, search words and mark, so they no longer keep a list of their own.
+Apps that connect to storage, send notifications, set up MCP clients, sign in to container registries, route through a VPN, sign in to debrid services and file hosters, hand captchas to a solver or fetch files from a transfer service pick their providers from a shared catalog, which carries each provider's group, search words and mark, so they no longer keep a list of their own.
 
 **Adopting apps:**
 
@@ -19,6 +19,8 @@ Apps that connect to storage, send notifications, set up MCP clients, sign in to
 - **A registry picker of your own:** pass `REGISTRY_PROVIDERS` from `@glimstone/core/registryProviders` to `catalogPicker` with titles for `public`, `cloud` and `selfHosted`. The host you sign in to stays yours: hand it in as the tile's `sub` through `own`, and give Other registry `last: true`. Drop your own copies of the logos and tile colours.
 - **A VPN picker of your own:** pass `VPN_PROVIDERS` from `@glimstone/core/vpnProviders` to `catalogPicker` with the ids you connect to and titles for `provider` and `appOnly`. The ids are the ones the apps already store, such as `nordvpn`, `protonvpn`, `pia` and `custom`. Give the `appOnly` tiles a `status` through `own`, which keeps them in view as tiles that cannot be picked, and `custom`, the own WireGuard config, `last: true` and a name in your language.
 - **An account picker for downloads:** pass `DOWNLOAD_PROVIDERS` from `@glimstone/core/downloadProviders` with titles for `debrid` and `hoster`. A debrid service's id is the word you store its key under, such as `realdebrid` or `torbox`, and a hoster's is the domain its login is filed under, such as `rapidgator.net`. The catalog holds the hosters an app talks to with a client of its own, so add the tile of any other hoster yourself.
+- **A captcha solver picker:** pass `CAPTCHA_PROVIDERS` from `@glimstone/core/captchaProviders` with a title for `solver`. The ids are the words you store a solver's key under, such as `2captcha`, `capmonster` and `deathbycaptcha`. The order the solvers are tried in stays with your app.
+- **A transfer service picker:** pass `TRANSFER_PROVIDERS` from `@glimstone/core/transferProviders` with a title for `transfer`. The ids are the words your clients go by, `wetransfer` and `swisstransfer`, and the domains of their links, `we.tl` among them, are search words. Dropbox, Google Drive and OneDrive stay in the storage catalog.
 - **A backend the catalog does not know:** `catalogPicker` leaves an unknown id out, so add its tile yourself.
 - **Flutter:** nothing changes there.
 
@@ -31,6 +33,8 @@ Apps that connect to storage, send notifications, set up MCP clients, sign in to
 - **`REGISTRY_PROVIDERS`** in its own entry, `@glimstone/core/registryProviders`: twelve container registries in three groups, each with its mark except Other registry. The marks are `REGISTRY_MARKS` in `@glimstone/core/registryMarks`, and GitLab's, Quay's, Gitea's and Harbor's bring a `hover` drawing in one colour for the lit tile. `scripts/gen_registry_marks.py` writes them from `packages/core/registry-marks/`.
 - **`VPN_PROVIDERS`** in its own entry, `@glimstone/core/vpnProviders`: 34 providers that hand out WireGuard, the own WireGuard config among them, then 15 that keep it inside their own app. 15 of the 49 wear their brand's or their owner's mark, and the rest a glyph. The marks are `VPN_MARKS` in `@glimstone/core/vpnMarks`, which `scripts/gen_vpn_marks.py` writes from `packages/core/vpn-marks/`.
 - **`DOWNLOAD_PROVIDERS`** in its own entry, `@glimstone/core/downloadProviders`: 20 debrid services, then 19 file hosters by domain, with their other domains as search words. Seven of the 39 wear their brand's mark, and the rest a glyph. The marks are `DOWNLOAD_MARKS` in `@glimstone/core/downloadMarks`, which `scripts/gen_download_marks.py` writes from `packages/core/download-marks/`.
+- **`CAPTCHA_PROVIDERS`** in its own entry, `@glimstone/core/captchaProviders`: seven captcha solvers in one group. CapMonster Cloud wears its brand's mark, and the rest the captcha glyph. The marks are `CAPTCHA_MARKS` in `@glimstone/core/captchaMarks`, which `scripts/gen_captcha_marks.py` writes from `packages/core/captcha-marks/`.
+- **`TRANSFER_PROVIDERS`** in its own entry, `@glimstone/core/transferProviders`: WeTransfer and SwissTransfer, each with its brand's mark and the domains of its links as search words. The marks are `TRANSFER_MARKS` in `@glimstone/core/transferMarks`, which `scripts/gen_transfer_marks.py` writes from `packages/core/transfer-marks/`.
 - **Unraid's mark** in `SERVICE_MARKS`, from Simple Icons, for the server's own notifications.
 - **`GLOSSARY.md`**, the words pickers and catalogs use: provider, target, catalog, group, mark and glyph.
 

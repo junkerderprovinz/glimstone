@@ -15,8 +15,7 @@ every colour is wrapped in `var(--mark-ink, ...)` or `var(--mark-cut, ...)`.
 
 **Simple Icons** (<https://simpleicons.org>) for `wetransfer`. The set is
 **CC0 1.0** and asks for nothing, and the icon names no licence of its own.
-Dashboard Icons carries WeTransfer only as a picture inside an SVG, which is
-why the mark comes from Simple Icons.
+Dashboard Icons has WeTransfer only as a picture wrapped in an SVG.
 
 **Dashboard Icons** (`homarr-labs/dashboard-icons`, <https://dashboardicons.com>),
 under **Apache-2.0** (text in `LICENSE-apache-2.0.txt`), copyright the Homarr

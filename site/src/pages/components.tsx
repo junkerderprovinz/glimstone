@@ -1136,6 +1136,19 @@ const { items, groups } = catalogPicker(STORAGE_PROVIDERS, {
         catalogs travel with their sources and licences in <code>vpn-marks/</code> and <code>download-marks/</code>.
       </p>
       <Demo name="PickerWindowDownload" />
+      <p>
+        <code>CAPTCHA_PROVIDERS</code> in <code>@glimstone/core/captchaProviders</code> holds the paid services an app
+        hands a captcha to before it asks a person. Their keys unlock no link, so they stand in a catalog of their own,
+        and the order they are tried in stays with the app.
+      </p>
+      <Demo name="PickerWindowCaptcha" />
+      <p>
+        <code>TRANSFER_PROVIDERS</code> in <code>@glimstone/core/transferProviders</code> holds the services that send a
+        file as a link, which an app fetches without an account. The domains their links are written with, such as{" "}
+        <code>we.tl</code>, are words their tiles are found by. A cloud drive's shared link belongs to the storage catalog.
+        The marks travel with their sources and licences in <code>captcha-marks/</code> and <code>transfer-marks/</code>.
+      </p>
+      <Demo name="PickerWindowTransfer" />
       <H2>Rules</H2>
       <ul>
         <li>The tiles stand in their groups, each in alphabetical order for the page's language, with the tile that takes anything last.</li>
