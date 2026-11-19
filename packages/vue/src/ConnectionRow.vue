@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { computed, type Component } from "vue";
-import { CONNECTION_ROW_KEYS, connectionTestFace, connectionTile, type ConnectionRowLabelKeys, type ConnectionRowText, type ConnectionTest, type TileMark } from "@glimstone/core";
+import { connectionButtons, connectionTestFace, connectionTile, type ConnectionRowLabelKeys, type ConnectionRowText, type ConnectionTest, type TileMark } from "@glimstone/core";
 import BrandMark from "./BrandMark.vue";
 import Button from "./Button.vue";
 import { IconCheck, IconClose } from "./glyphs";
+import type { ConnectionAction } from "./windowParts";
 
 // A connected service or account as a compact row ("Connections" in the design
 // language): its mark lit on a tile the row's whole height, its name with the
 // `badges` slot, one quiet line on how it stands, the default slot for more
-// lines, and its test, edit and remove at the end. A button stands only where
-// its listener is passed.
+// lines, and at the end the app's own actions, then its test, edit and remove.
+// A built-in button stands only where its listener is passed.
 const props = defineProps<{
   /** The service's name, also the row's accessible name. */
   name: string;
@@ -19,6 +20,8 @@ const props = defineProps<{
   status?: string;
   /** Where the test stands: `busy` while it runs, then `tone` and a `title` with what it found. */
   test?: ConnectionTest;
+  /** Buttons of the app's own, such as Mount, before Test, Edit and Remove, so those keep their places at the end. */
+  actions?: ConnectionAction[];
   text: ConnectionRowText;
   labelKeys?: Partial<ConnectionRowLabelKeys>;
   onTest?: () => void;
@@ -29,10 +32,13 @@ const props = defineProps<{
 // On a phone the buttons show their glyphs alone, so they keep to one line.
 const NARROW = 640;
 
-const keys = computed(() => ({ ...CONNECTION_ROW_KEYS, ...props.labelKeys }));
 const tile = computed(() => connectionTile(props.mark));
-const face = computed(() => connectionTestFace(props.test));
-const outcome = computed(() => (face.value.outcome === "check" ? IconCheck : face.value.outcome === "cross" ? IconClose : undefined));
+const buttons = computed(() =>
+  connectionButtons(props).map((b) => {
+    const face = connectionTestFace(b);
+    return { ...b, face, glyph: face.outcome === "check" ? IconCheck : face.outcome === "cross" ? IconClose : b.glyph };
+  }),
+);
 </script>
 
 <template>
@@ -53,22 +59,22 @@ const outcome = computed(() => (face.value.outcome === "check" ? IconCheck : fac
           <p v-if="status" class="glim-connection-status">{{ status }}</p>
           <slot />
         </div>
-        <span v-if="onTest || onEdit || onRemove" class="glim-connection-actions">
+        <span v-if="buttons.length > 0" class="glim-connection-actions">
           <Button
-            v-if="onTest"
-            :label="text.test"
-            :label-key="keys.test"
-            :glyph="outcome"
-            :tone="face.tone"
-            :busy="test?.busy"
-            :title="test?.title"
+            v-for="b in buttons"
+            :key="b.id"
+            :label="b.label"
+            :label-key="b.labelKey"
+            :glyph="b.glyph"
+            :tone="b.face.tone"
+            :busy="b.busy"
+            :title="b.title"
+            :disabled="b.disabled"
             :compact-below="NARROW"
-            :class="{ 'glim-shake': face.shake }"
-            data-connection="test"
-            @click="onTest"
+            :class="{ 'glim-shake': b.face.shake }"
+            :data-connection="b.id"
+            @click="b.onClick"
           />
-          <Button v-if="onEdit" :label="text.edit" :label-key="keys.edit" :compact-below="NARROW" data-connection="edit" @click="onEdit" />
-          <Button v-if="onRemove" :label="text.remove" :label-key="keys.remove" :compact-below="NARROW" data-connection="remove" @click="onRemove" />
         </span>
       </div>
     </div>

@@ -3282,6 +3282,27 @@ test.describe("ConnectionRow", () => {
     await expect(row(page, "GitHub Container Registry").locator(".glim-connection-actions button")).toHaveText(["Edit", "Remove"]);
   });
 
+  test("[connection-actions] the app's own actions stand first, then Test, Edit and Remove", async ({ page }) => {
+    await open(page, "/components/connection-row");
+    await expect(row(page, "Media share").locator(".glim-connection-actions button")).toHaveText(["Mount", "Test", "Edit", "Remove"]);
+    await expect(button(page, "Media share", "Mount")).toHaveAttribute("data-connection", "mount");
+  });
+
+  test("[connection-action-run] an action runs with a ring, then turns green with a check and says what it did", async ({ page }) => {
+    await open(page, "/components/connection-row");
+    await button(page, "Media share", "Mount").click();
+    await expect(button(page, "Media share", "Mount")).toHaveAttribute("aria-busy", "true");
+    const done = button(page, "Media share", "Unmount");
+    await expect(done).toHaveClass(/glim-btn--ok/);
+    expect(await outcome(done)).toBe(MARKS.check.viewBox);
+    await page.mouse.move(0, 0);
+    await centre(done);
+    await done.hover();
+    await expect(page.locator(".glim-bubble", { hasText: "Mounted at /mnt/remotes/media" })).toBeVisible();
+    await done.click();
+    await expect(button(page, "Media share", "Mount")).not.toHaveClass(/glim-btn--ok/);
+  });
+
   test("[connection-test] a test runs with a ring at the same width, then turns green with a check and says what it found", async ({ page }) => {
     await open(page, "/components/connection-row");
     const run = button(page, "Mullvad VPN", "Test");
@@ -3314,11 +3335,11 @@ test.describe("ConnectionRow", () => {
     expect(await outcome(run)).toBe(MARKS.close.viewBox);
   });
 
-  test("[connection-narrow] below 640px the buttons show their glyphs alone and keep their names", async ({ page }) => {
+  test("[connection-narrow] below 640px the buttons, the app's own among them, show their glyphs alone and keep their names", async ({ page }) => {
     await page.setViewportSize({ width: 480, height: 800 });
     await open(page, "/components/connection-row");
-    for (const label of ["Test", "Edit", "Remove"]) {
-      const b = button(page, "Mullvad VPN", label);
+    for (const label of ["Mount", "Test", "Edit", "Remove"]) {
+      const b = button(page, "Media share", label);
       await expect(b.locator("svg")).toBeVisible();
       expect(await b.evaluate((e) => Math.abs(e.getBoundingClientRect().width - e.getBoundingClientRect().height) < 1)).toBe(true);
     }

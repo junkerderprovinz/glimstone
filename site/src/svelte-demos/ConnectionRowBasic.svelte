@@ -1,16 +1,28 @@
 <script lang="ts">
   import { Badge, Card, ConnectionRow, type ConnectionTest } from "@glimstone/svelte";
-  import { CONNECTION_TEXT, CONNECTIONS, testConnection, type DemoConnection } from "../connectionData";
+  import { CONNECTION_TEXT, CONNECTIONS, mountAction, testConnection, toggleMount, type DemoConnection, type DemoMount } from "../connectionData";
   import { glyph } from "../svelte/glyph";
 
   let rows = $state(CONNECTIONS);
   let tests = $state<Record<string, ConnectionTest>>({});
+  let mounts = $state<Record<string, DemoMount>>({});
   let said = $state("Nothing pressed yet");
 
   async function test(c: DemoConnection) {
     tests = { ...tests, [c.id]: { busy: true } };
     const found = await testConnection(c);
     tests = { ...tests, [c.id]: found };
+  }
+  async function mount(c: DemoConnection) {
+    const mounted = mounts[c.id]?.mounted ?? false;
+    mounts = { ...mounts, [c.id]: { mounted, busy: true } };
+    const now = await toggleMount(mounted);
+    mounts = { ...mounts, [c.id]: { mounted: now } };
+  }
+  function actions(c: DemoConnection) {
+    if (!c.mountable) return undefined;
+    const a = mountAction(mounts[c.id]);
+    return [{ ...a, glyph: glyph(a.glyph), onClick: () => void mount(c) }];
   }
   function remove(c: DemoConnection) {
     rows = rows.filter((r) => r.id !== c.id);
@@ -30,6 +42,7 @@
         badges={c.badge ? badge : undefined}
         children={c.more ? more : undefined}
         test={tests[c.id]}
+        actions={actions(c)}
         text={CONNECTION_TEXT}
         onTest={c.untested ? undefined : () => void test(c)}
         onEdit={() => (said = `Editing ${c.name}`)}

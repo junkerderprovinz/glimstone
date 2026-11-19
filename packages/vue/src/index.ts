@@ -77,7 +77,7 @@ export * from "./glyphs";
 export type { InfoAboutCardProps, InfoHelpCardProps, InfoVersionCardProps } from "./info";
 export type { SelectEntry, SelectGroup, SelectOption, SelectSubmenu } from "./selectParts";
 export type { SelectorItem } from "./selectorItem";
-export type { MenuBarMenu, MenuEntry, MenuHead, MenuItem, PickerItem, TreeNode, WindowAction } from "./windowParts";
+export type { ConnectionAction, MenuBarMenu, MenuEntry, MenuHead, MenuItem, PickerItem, TreeNode, WindowAction } from "./windowParts";
 export type { ConnectionRowLabelKeys, ConnectionRowText, ConnectionTest, PickBadge, PickGroup, PickerText, ResetAnswer, SignInAnswer, SignInText, TileMark } from "@glimstone/core";
 export type { ChangeAnswer, FortressAnswer, FortressApp, FortressInstance, FortressLogLine, FortressPermission, FortressStatusReport, FortressText, PhraseAnswer } from "@glimstone/core";
 export type { BadgeShape, BadgeSize, BadgeTone, ButtonTone, ButtonVariant, CryptoCoin, CryptoNetwork, FortressLabelKeys, InstanceFigure, MenuBarHandle, NotchInset, ReadmeBrand, ReadmePart } from "@glimstone/core";
