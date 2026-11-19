@@ -1,6 +1,6 @@
 {
   "name": "@glimstone/svelte",
-  "version": "4.5.8",
+  "version": "4.6.0",
   "description": "GlimStone's components for Svelte",
   "license": "AGPL-3.0-only",
   "repository": {
@@ -141,7 +141,7 @@
     "build": "svelte-package -i src -o dist"
   },
   "dependencies": {
-    "@glimstone/core": "4.5.8"
+    "@glimstone/core": "4.6.0"
   },
   "peerDependencies": {
     "@internationalized/date": "^3.12.4",

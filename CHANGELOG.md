@@ -2,12 +2,13 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 4.6.0 - 2026-11-19
 
 Apps pick their providers from shared catalogs: storage, notifications, MCP clients, container registries, VPNs, download services, captcha solvers and transfer services. Each catalog carries every provider's group, search words and mark, so an app no longer keeps a list of its own. GlimStone also has a new mark.
 
 **Adopting apps:**
 
+- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.6.0, all packages at the same number.
 - **A storage picker of your own:** pass `STORAGE_PROVIDERS` from `@glimstone/core/storageProviders` to `catalogPicker` from `@glimstone/core`, with the ids your backend reaches, your group titles, a glyph for a provider without a mark and the page's language. Hand the `items` and `groups` it returns to `PickerWindow`. Keep what your backend needs to connect beside the ids, and drop your own copies of the marks and tile colours.
 - **Your provider ids:** the catalog uses the ids the apps have in common, such as `nextcloud`, `gdrive`, `b2` and `hetznerobj`. Map an id of your own to the catalog's before you switch.
 - **Names that are words:** an entry with `word: true`, such as SMB's "Windows share", "S3 compatible" or "Encrypted", comes in your language through `own`. Brand names are not translated.
@@ -22,7 +23,8 @@ Apps pick their providers from shared catalogs: storage, notifications, MCP clie
 - **A captcha solver picker:** pass `CAPTCHA_PROVIDERS` from `@glimstone/core/captchaProviders` with a title for `solver`. The ids are the words you store a solver's key under, such as `2captcha`, `capmonster` and `deathbycaptcha`. The order the solvers are tried in stays with your app.
 - **A transfer service picker:** pass `TRANSFER_PROVIDERS` from `@glimstone/core/transferProviders` with a title for `transfer`. The ids are the words your clients go by, `wetransfer` and `swisstransfer`, and the domains of their links, `we.tl` among them, are search words. Dropbox, Google Drive and OneDrive stay in the storage catalog.
 - **A backend the catalog does not know:** `catalogPicker` leaves an unknown id out, so add its tile yourself.
-- **Flutter:** nothing changes there.
+- **Flutter:** move the git dependency to `ref: v4.6.0`. Nothing else changes there.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.6.0.
 
 ## ✨ Added
 

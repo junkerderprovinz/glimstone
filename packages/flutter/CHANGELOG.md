@@ -1,3 +1,7 @@
+## 4.6.0
+
+- No changes for Flutter. The catalogs and the new mark live in the web packages.
+
 ## 4.5.8
 
 - No changes for Flutter. The picker's new states live in the web packages.
