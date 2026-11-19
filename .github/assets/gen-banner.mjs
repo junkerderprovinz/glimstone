@@ -43,7 +43,7 @@ const markBox = parseViewBox(readFileSync(join(__dir, "logo.svg"), "utf8"));
 const NAME = "GlimStone";
 const CLAIM = "Set in stone, lit where it counts.";
 const W = 1600, H = 500;
-const LH = 240, LW = Math.round((LH * markBox.w) / markBox.h);
+const LH = 386, LW = Math.round((LH * markBox.w) / markBox.h);
 const nameSize = 132, claimSize = 44, gap = 70, lineGap = 8;
 
 const THEMES = [
