@@ -1,4 +1,5 @@
 import { expect, test, type Locator, type Page } from "@playwright/test";
+import { BUSY_DELAY } from "../../packages/core/src/busy.ts";
 import { open, relook, stage } from "./page";
 
 const visibility = (el: Locator) => el.evaluate((e) => getComputedStyle(e).visibility);
@@ -42,7 +43,11 @@ test.describe("BusyRing", () => {
     await sizes(page).getByRole("button", { name: "Wait" }).click();
     const late = sizes(page).locator(".glim-busy-ring").last();
     expect(await visibility(late)).toBe("hidden");
-    await expect.poll(() => visibility(late), { timeout: 1000 }).toBe("visible");
+    // A poll's checks thin out to half a second apart, too coarse to time a
+    // 400 ms wait, so its length is read from the reveal and the poll only
+    // waits for it to end.
+    expect(await late.evaluate((e) => getComputedStyle(e).animationDelay)).toBe(`${BUSY_DELAY / 1000}s`);
+    await expect.poll(() => visibility(late), { timeout: 5000 }).toBe("visible");
   });
 
   test("[busy-ring-label] with a label it is a status, without one it is hidden", async ({ page }) => {
