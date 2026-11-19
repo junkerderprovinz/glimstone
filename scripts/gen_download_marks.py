@@ -41,6 +41,8 @@ LOCAL = [
     ("pixeldrain", "Pixeldrain", "Fornaxian/pixeldrain_web, res/static/img/pixeldrain.svg", "AGPL-3.0"),
 
     ("fichier", "1Fichier", "traced from img.1fichier.com/logo.png, which has no vector", BRAND),
+    ("torbox", "TorBox", "torbox.app, logo.svg", BRAND),
+    ("workupload", "Workupload", "workupload.com, img/workupload_logo_medium.svg without the word", BRAND),
 ]
 
 HEAD = """// The marks of debrid services and file hosters, as markup for BrandMark, each
