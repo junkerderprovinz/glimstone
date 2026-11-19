@@ -185,7 +185,7 @@ def themed(colours, slug, marks, ground=None):
     for colour in rest:
         key = _rgb(colour)
         if key not in minted:
-            on_dark = shift(colour, SURFACE_DARK, upward=True, target=DARK_FLOOR, step=0.002) if lift else colour
+            on_dark = white_or_lifted(colour) if lift else colour
             on_light = (
                 shift(colour, SURFACE_LIGHT, upward=False, target=TARGET,
                       also=[(g, SHIFTED_FLOOR) for g in GROUNDS_LIGHT])
@@ -195,6 +195,14 @@ def themed(colours, slug, marks, ground=None):
         if minted[key]:
             swap[colour] = minted[key]
     return swap
+
+
+def white_or_lifted(colour):
+    """A black or grey part turns white on the dark ground, since grey carries
+    no brand colour to stay close to; a coloured one is lifted just to the floor."""
+    if len(set(_rgb(colour) or ())) == 1:
+        return "#ffffff"
+    return shift(colour, SURFACE_DARK, upward=True, target=DARK_FLOOR, step=0.002)
 
 
 def apply_swap(source, swap):

@@ -73,3 +73,12 @@ test('the README records where every mark comes from, and every licence it names
   for (const [, licence] of readme.matchAll(/`(LICENSE-[\w-]+\.txt)`/g)) assert.ok(files.includes(licence!), licence);
   for (const svg of files.filter((f) => f.endsWith('.svg'))) assert.ok(svg.replace('.svg', '') in SERVICE_MARKS, svg);
 });
+
+test('a black or grey mark turns white in the dark theme, since grey carries no brand colour to stay close to', () => {
+  for (const [id, mark] of marks) {
+    for (const [, light, dark] of mark.svg.matchAll(/light-dark\((#[0-9a-f]{6}), (#[0-9a-f]{6})\)/g)) {
+      const [r, g, b] = [1, 3, 5].map((i) => parseInt(light!.slice(i, i + 2), 16));
+      if (r === g && g === b && dark !== light) assert.equal(dark, '#ffffff', `${id}: ${light}`);
+    }
+  }
+});
