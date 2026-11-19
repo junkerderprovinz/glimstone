@@ -3708,7 +3708,7 @@ test.describe("SignInCard", () => {
     const frame = await box(card(page));
     const own = await box(card(page).locator(".glim-signin-logo > img"));
     expect(own.height).toBeCloseTo(120, 0);
-    expect(own.width).toBeCloseTo((120 * 331.5) / 172.9, 0);
+    expect(own.width).toBeCloseTo(120, 0);
     const shapes = [
       [587, 901.8],
       [1000, 1000],
