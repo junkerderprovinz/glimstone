@@ -575,8 +575,10 @@ def _quote(text):
     return "'%s'" % text.replace("\\", "\\\\").replace("'", "\\'")
 
 
-def entry(slug, note, svg, colour, ink, hover=None):
+def entry(slug, note, svg, colour, ink, hover=None, wordmark=False):
     lit = "" if hover is None else "  hover: %s,\n" % _quote(hover)
+    if wordmark:
+        lit += "  wordmark: true,\n"
     return "/** %s */\nconst %s: TileMark = {\n  svg: %s,\n  tile: '%s',\n  ink: '%s',\n%s};\n" % (
         note, slug, _quote(svg), colour, ink, lit)
 
@@ -601,7 +603,7 @@ def simple_hover(slug, si_slug, icons, data):
     return crop_to_ink(markup, slug + " hover")
 
 
-def simple(slug, si_slug, name, icons, data, marks, hover=None):
+def simple(slug, si_slug, name, icons, data, marks, hover=None, wordmark=False):
     box, paths, (colour, licence) = _simple_source(si_slug, icons, data)
     # The brand's own colour rather than currentColor, which would make a
     # silhouette of the logo. `fill` sits on the svg, so one value paints it all.
@@ -611,7 +613,7 @@ def simple(slug, si_slug, name, icons, data, marks, hover=None):
     markup = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="%s" fill="var(--mark-ink, %s)">%s</svg>' % (
         box, painted, "".join('<path d="%s"/>' % d for d in paths))
     return entry(slug, "%s. Simple Icons: %s (%s), in its own %s%s." % (name, si_slug, licence, colour, aside),
-                 crop_to_ink(markup, slug), *tile(si_slug, colour, marks), hover=hover)
+                 crop_to_ink(markup, slug), *tile(si_slug, colour, marks), hover=hover, wordmark=wordmark)
 
 
 def _drawing(slug, file, marks, prefix):
@@ -671,14 +673,14 @@ def local_hover(slug, marks):
     return crop_to_ink(_svg(box, root_attrs, body), slug + " hover")
 
 
-def local(slug, name, source, licence, marks, hover=None):
+def local(slug, name, source, licence, marks, hover=None, wordmark=False):
     box, body, root_attrs, found, ground, largest = _drawing(slug, slug, marks, "glim-" + slug)
     colour, ink = tile(slug, largest, marks)
     swap = themed(found, slug, marks, ground)
     body = apply_swap(body, swap)
     root_attrs = [apply_swap(a, swap) for a in root_attrs]
     return entry(slug, "%s. Source: %s (%s)." % (name, source, licence),
-                 crop_to_ink(_svg(box, root_attrs, body), slug), colour, ink, hover=hover)
+                 crop_to_ink(_svg(box, root_attrs, body), slug), colour, ink, hover=hover, wordmark=wordmark)
 
 
 def simple_data(icons):

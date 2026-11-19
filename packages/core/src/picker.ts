@@ -15,6 +15,8 @@ export interface TileMark {
   ink?: string;
   /** The mark drawn on the lit tile instead, for a brand whose layers do not survive one ink. */
   hover?: string;
+  /** The mark is the brand's name written out, so the tile shows it alone. */
+  wordmark?: boolean;
   /** The class on the mark's box, where the app paints a mark of its own at rest. */
   className?: string;
 }

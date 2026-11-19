@@ -14,20 +14,18 @@ import { VPN_MARKS as M } from "./vpnMarks.ts";
 
 export type VpnGroup = "provider" | "appOnly";
 
-const VPN = "IconShieldOn";
-
 const ENTRIES = [
   { id: "airvpn", name: "AirVPN", group: "provider", mark: M.airvpn },
-  { id: "anonine", name: "Anonine", group: "provider", glyph: VPN },
-  { id: "astrill", name: "Astrill VPN", group: "provider", glyph: VPN },
+  { id: "anonine", name: "Anonine", group: "provider", mark: M.anonine },
+  { id: "astrill", name: "Astrill VPN", group: "provider", mark: M.astrill },
   { id: "azirevpn", name: "AzireVPN", group: "provider", mark: M.azirevpn },
   { id: "cactusvpn", name: "CactusVPN", group: "provider", mark: M.cactusvpn },
-  { id: "cryptostorm", name: "cryptostorm", group: "provider", glyph: VPN },
+  { id: "cryptostorm", name: "cryptostorm", group: "provider", mark: M.cryptostorm },
   { id: "custom", name: "WireGuard", group: "provider", terms: [".conf"], mark: M.wireguard },
-  { id: "fastestvpn", name: "FastestVPN", group: "provider", glyph: VPN },
+  { id: "fastestvpn", name: "FastestVPN", group: "provider", mark: M.fastestvpn },
   { id: "hideme", name: "hide.me", group: "provider", mark: M.hideme },
   { id: "ipvanish", name: "IPVanish", group: "provider", mark: M.ipvanish },
-  { id: "ivacy", name: "Ivacy VPN", group: "provider", glyph: VPN },
+  { id: "ivacy", name: "Ivacy VPN", group: "provider", mark: M.ivacy },
   { id: "ivpn", name: "IVPN", group: "provider", mark: M.ivpn },
   { id: "kaspersky", name: "Kaspersky VPN", group: "provider", mark: M.kaspersky },
   { id: "levpn", name: "Le VPN", group: "provider", mark: M.levpn },
@@ -43,13 +41,13 @@ const ENTRIES = [
   { id: "purevpn", name: "PureVPN", group: "provider", mark: M.purevpn },
   { id: "strongvpn", name: "StrongVPN", group: "provider", mark: M.strongvpn },
   { id: "surfshark", name: "Surfshark", group: "provider", mark: M.surfshark },
-  { id: "torguard", name: "TorGuard", group: "provider", glyph: VPN },
+  { id: "torguard", name: "TorGuard", group: "provider", mark: M.torguard },
   { id: "trustzone", name: "Trust.Zone", group: "provider", mark: M.trustzone },
   { id: "unlocator", name: "Unlocator VPN", group: "provider", mark: M.unlocator },
-  { id: "vpnac", name: "VPN.ac", group: "provider", glyph: VPN },
+  { id: "vpnac", name: "VPN.ac", group: "provider", mark: M.vpnac },
   { id: "vpnunlimited", name: "VPN Unlimited", group: "provider", terms: ["KeepSolid"], mark: M.vpnunlimited },
   { id: "windscribe", name: "Windscribe", group: "provider", mark: M.windscribe },
-  { id: "xeovo", name: "Xeovo", group: "provider", glyph: VPN },
+  { id: "xeovo", name: "Xeovo", group: "provider", mark: M.xeovo },
   { id: "zoogvpn", name: "ZoogVPN", group: "provider", mark: M.zoogvpn },
 
   { id: "avast", name: "Avast SecureLine VPN", group: "appOnly", mark: M.avast },
@@ -63,8 +61,8 @@ const ENTRIES = [
   { id: "mcafee", name: "McAfee VPN", group: "appOnly", mark: M.mcafee },
   { id: "mozillavpn", name: "Mozilla VPN", group: "appOnly", mark: M.mozilla },
   { id: "norton", name: "Norton VPN", group: "appOnly", mark: M.norton },
-  { id: "tunnelbear", name: "TunnelBear", group: "appOnly", glyph: VPN },
-  { id: "turbovpn", name: "Turbo VPN", group: "appOnly", glyph: VPN },
+  { id: "tunnelbear", name: "TunnelBear", group: "appOnly", mark: M.tunnelbear },
+  { id: "turbovpn", name: "Turbo VPN", group: "appOnly", mark: M.turbovpn },
   { id: "vyprvpn", name: "VyprVPN", group: "appOnly", mark: M.vyprvpn },
   { id: "xvpn", name: "X-VPN", group: "appOnly", mark: M.xvpn },
 ] as const satisfies readonly CatalogEntry<VpnGroup>[];
