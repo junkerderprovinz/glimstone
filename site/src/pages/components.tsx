@@ -1676,7 +1676,7 @@ export function ConnectionRowPage() {
     <>
       <p className="lead">A service or an account the app is connected to, as one compact row with its logo, its state and its buttons.</p>
       <Head file="react/ConnectionRow.tsx" />
-      <Demo name="ConnectionRowBasic" />
+      <Demo name="ConnectionRowBasic" stacked />
       <Usage
         code={`import { ConnectionRow } from "@glimstone/react";
 import { VPN_MARKS } from "@glimstone/core/vpnMarks";

@@ -163,7 +163,7 @@ function FlutterFrame({ name }: { name: string }) {
  * src/solid-demos and src/svelte-demos and its Flutter twin where there are
  * ones, with each source one click away.
  */
-export function Demo({ name, left }: { name: string; left?: boolean }) {
+export function Demo({ name, left, stacked }: { name: string; left?: boolean; stacked?: boolean }) {
   const mod = demoModules[`./demos/${name}.tsx`];
   const vue = vueModules[`./vue-demos/${name}.vue`];
   const solid = solidModules[`./solid-demos/${name}.tsx`];
@@ -204,7 +204,7 @@ export function Demo({ name, left }: { name: string; left?: boolean }) {
   return (
     <div className="demo">
       {view === "preview" ? (
-        <div className={several ? "demo-pair" : undefined}>
+        <div className={several ? `demo-pair${stacked ? " stacked" : ""}` : undefined}>
           {showReact && stage("react", <mod.default />)}
           {showVue && stage("vue", <VueIsland component={vue.default} />)}
           {showSolid && stage("solid", <SolidIsland component={solid.default} />)}

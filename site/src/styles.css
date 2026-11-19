@@ -241,6 +241,9 @@ body {
 .demo-pair > .demo-cell + .demo-cell { border-inline-start: 1px solid var(--carbon-border); }
 .demo-pair > .demo-cell { position: relative; display: flex; flex-direction: column; min-width: 0; }
 .demo-pair > .demo-cell > .demo-stage { flex: 1; }
+/* A demo whose component wants the width stands one framework under the other. */
+.demo-pair.stacked { grid-template-columns: 1fr; }
+.demo-pair.stacked > .demo-cell + .demo-cell { border-inline-start: 0; border-top: 1px solid var(--carbon-border); }
 .demo-fw {
   position: absolute;
   top: 0.5rem;
