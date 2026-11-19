@@ -69,7 +69,7 @@ export function catalogPicker<G extends string, I extends string, M>(
   const groups = catalog.groups
     .filter((g) => items.some((i) => i.group === g))
     .map((g) => {
-      const title = pick.titles[g];
+      const title: string | Omit<PickGroup, "id"> = pick.titles[g];
       return typeof title === "string" ? { id: g, title } : { id: g, ...title };
     });
   return { items, groups };
