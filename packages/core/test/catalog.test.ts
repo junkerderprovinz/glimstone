@@ -37,6 +37,16 @@ test("the groups keep the catalog's order whatever order the ids come in, with t
   ]);
 });
 
+test("a group's entry in the titles can bring a badge and a hint for its eyebrow's line", () => {
+  const rated = {
+    ...titles,
+    commercial: { title: 'Services', badge: { label: 'Best fit', tone: 'ok' as const }, hint: 'Hosted for you.' },
+  };
+  const { groups } = catalogPicker(tunnels, { ids: ['wire', 'hearth', 'zulu'], titles: rated, glyph, lang: 'en' });
+  assert.deepEqual(groups[0], { id: 'commercial', title: 'Services', badge: { label: 'Best fit', tone: 'ok' }, hint: 'Hosted for you.' });
+  assert.deepEqual(groups[1], { id: 'selfhosted', title: 'Your own' });
+});
+
 test('a group none of whose providers is asked for is left out', () => {
   const { groups } = catalogPicker(tunnels, { ids: ['wire', 'zulu'], titles, glyph, lang: 'en' });
   assert.deepEqual(groups.map((g) => g.id), ['commercial', 'protocol']);

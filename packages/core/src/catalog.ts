@@ -32,8 +32,8 @@ export interface Catalog<G extends string = string, I extends string = string> {
 export interface CatalogPick<G extends string, I extends string, M> {
   /** The providers the app offers. An id the catalog does not know is left out, for the app to add its own tile. */
   ids: readonly I[];
-  /** Each group's eyebrow in the app's language. */
-  titles: Readonly<Record<G, string>>;
+  /** Each group's eyebrow in the app's language, or the eyebrow with the badge and (i) that stand in its line. */
+  titles: Readonly<Record<G, string | Omit<PickGroup, "id">>>;
   /** The app's glyph for a provider without a mark. */
   glyph: (entry: CatalogEntry<G, I>) => M;
   /** The page's language, which the tiles are sorted in. */
@@ -68,6 +68,9 @@ export function catalogPicker<G extends string, I extends string, M>(
     .map(({ item }) => item);
   const groups = catalog.groups
     .filter((g) => items.some((i) => i.group === g))
-    .map((g) => ({ id: g, title: pick.titles[g] }));
+    .map((g) => {
+      const title = pick.titles[g];
+      return typeof title === "string" ? { id: g, title } : { id: g, ...title };
+    });
   return { items, groups };
 }
