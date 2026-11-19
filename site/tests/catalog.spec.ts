@@ -379,11 +379,11 @@ test.describe("The transfer catalog in a PickerWindow", () => {
 });
 
 test.describe("The identity catalog in a PickerWindow", () => {
-  test("[identity-groups] the sign-in services stand in one group, alphabetical, with the app's own Other provider last", async ({ page }) => {
+  test("[identity-groups] the sign-in services stand in one group, alphabetical, with the app's own Other sign-in service last", async ({ page }) => {
     await showIdentity(page);
     const sections = await sectionsOf(page);
     const names = alphabetical(IDENTITY_PROVIDERS.entries.map((e) => e.name));
-    expect(sections).toEqual([{ title: "Self-hosted", names: [...names, "Other provider"] }]);
+    expect(sections).toEqual([{ title: "Self-hosted", names: [...names, "Other sign-in service"] }]);
     const marks = picker(page).locator(".glim-provider-pick button.glim-readme-btn .glim-readme-btn-mark");
     await expect(marks.filter({ has: page.locator("svg") })).toHaveCount(IDENTITY_PROVIDERS.entries.length + 1);
   });
@@ -400,7 +400,7 @@ test.describe("The identity catalog in a PickerWindow", () => {
     await expect(stage(page, "PickerWindowIdentity").locator("output")).toHaveText("Picked: Pocket ID");
   });
 
-  test("[identity-marks] a service with a mark lights in its brand's colour, Kanidm and Other provider in the accent", async ({ page }) => {
+  test("[identity-marks] a service with a mark lights in its brand's colour, Kanidm and Other sign-in service in the accent", async ({ page }) => {
     await showIdentity(page);
     const fill = async (name: string) => {
       const tile = picker(page).getByRole("button", { name, exact: true });
@@ -418,7 +418,7 @@ test.describe("The identity catalog in a PickerWindow", () => {
       return colour;
     });
     expect(await fill("Kanidm")).toBe(accent);
-    expect(await fill("Other provider")).toBe(accent);
+    expect(await fill("Other sign-in service")).toBe(accent);
   });
 
   test("[identity-hover] Keycloak shows its one-colour drawing on the lit tile", async ({ page }) => {

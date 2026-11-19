@@ -7,7 +7,7 @@ import { IDENTITY_PROVIDERS } from "@glimstone/core/identityProviders";
 
 const TITLES = { selfHosted: "Self-hosted" };
 
-const OTHER = "Other provider";
+const OTHER = "Other sign-in service";
 
 export const IDENTITY_TEXT: PickerText = {
   search: "Search sign-in services",
