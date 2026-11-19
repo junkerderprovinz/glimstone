@@ -335,7 +335,7 @@ test.describe("The captcha catalog in a PickerWindow", () => {
       probe.remove();
       return colour;
     });
-    expect(await fill("2Captcha")).toBe(accent);
+    expect(await fill("Anti-Captcha")).toBe(accent);
   });
 });
 

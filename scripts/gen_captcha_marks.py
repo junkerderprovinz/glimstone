@@ -14,7 +14,7 @@ install svgelements).
 """
 from pathlib import Path
 
-from brand_marks import MarkSet, local, write
+from brand_marks import BRAND, MarkSet, local, local_hover, write
 
 ROOT = Path(__file__).parent.parent
 OUT = ROOT / "packages" / "core" / "src" / "captchaMarks.ts"
@@ -23,6 +23,10 @@ OUT = ROOT / "packages" / "core" / "src" / "captchaMarks.ts"
 # it is, where it comes from, its licence.
 LOCAL = [
     ("capmonster", "CapMonster Cloud", "ZennoLab/capmonster-captcha-solver-docs, static/img/logoNoText.svg", "MIT"),
+
+    ("capsolver", "CapSolver", "capsolver.com, favicon.svg", BRAND),
+    ("solvecha", "Solvecha", "solvecha.com, site/static/favicon.svg", BRAND),
+    ("twocaptcha", "2Captcha", "2captcha.com, twocaptcha-logo.svg without the word", BRAND),
 ]
 
 HEAD = """// The marks of captcha solvers, as markup for BrandMark, each with the colour
@@ -39,8 +43,17 @@ HEAD = """// The marks of captcha solvers, as markup for BrandMark, each with th
 import type { TileMark } from "./picker.ts";
 """
 
-MARKS = MarkSet(ROOT / "packages" / "core" / "captcha-marks", {}, set(), {}, set())
+# The marks with a drawing of their own for the lit tile, `<id>-hover.svg`.
+HOVER = ["capsolver"]
 
-entries = {m[0]: local(*m, MARKS) for m in LOCAL}
+TILE_COLOUR = {
+    # The teal square Solvecha's icon stands on, which the generator lifts off.
+    "solvecha": ("#0e7c66", None),
+}
+
+MARKS = MarkSet(ROOT / "packages" / "core" / "captcha-marks", {}, set(), TILE_COLOUR, set())
+
+hovers = {slug: local_hover(slug, MARKS) for slug in HOVER}
+entries = {m[0]: local(*m, MARKS, hover=hovers.get(m[0])) for m in LOCAL}
 ids = write(OUT, HEAD, entries, "CAPTCHA_MARKS", "CaptchaMarkId")
 print("%s: %d marks from captcha-marks/" % (OUT.name, len(ids)))
