@@ -25,6 +25,7 @@ SRC = Path(sys.argv[1]) if len(sys.argv) > 1 else None
 OUT = ROOT / "packages" / "core" / "src" / "storageMarks.ts"
 
 DASHBOARD = "Apache-2.0"
+SELFHST = "CC-BY-4.0"
 
 # The id a catalog entry names its mark by -> the Simple Icons slug, with what it is.
 SIMPLE = [
@@ -85,6 +86,7 @@ LOCAL = [
     ("juicefs", "JuiceFS",
      "juicedata/juicefs, docs/en/images/juicefs-logo-new.svg, the mark without the word", "Apache-2.0"),
     ("opencloud", "OpenCloud", "opencloud-eu/opencloud, services/idp/src/images/icon-lilac.svg", "Apache-2.0"),
+    ("rustfs", "RustFS", "rustfs/console, assets/logo-symbol.svg", "Apache-2.0"),
     ("pixeldrain", "Pixeldrain", "Fornaxian/pixeldrain_web, res/static/img/pixeldrain.svg", "AGPL-3.0"),
     ("seaweedfs", "SeaweedFS", "seaweedfs/seaweedfs, note/icon.svg", "Apache-2.0"),
     ("silo", "Silo", "pgsty/silo, .github/silo.svg", "AGPL-3.0"),
@@ -102,6 +104,11 @@ LOCAL = [
     ("shade", "Shade", "shade.inc, the logo in the page header", BRAND),
     ("sugarsync", "SugarSync", "sugarsync.com, assets/img/logo-adfca65fa4.svg, the mark without the word", BRAND),
     ("ulozto", "Ulož.to", "ulozto.net, the logo in the page header, the mark without the word", BRAND),
+    ("koofr", "Koofr", "koofr.eu, static/gen/a89ebffb2dead3f76e64.svg, the logo its stylesheet draws", BRAND),
+    ("pikpak", "PikPak", "mypikpak.com, the mark of the LogoSVG component in the site's script", BRAND),
+    ("sia", "Sia", "sia.tech, _astro/sia_logo_dark.CszkgMV_.svg", BRAND),
+
+    ("oxicloud", "OxiCloud", "selfhst/icons, svg/oxicloud.svg", SELFHST),
 ]
 
 HEAD = """// The marks of storage providers, as markup for BrandMark, each with the
@@ -125,9 +132,16 @@ FORCE_THEMED = {
     # OpenCloud's lilac on the dark ground and its petrol on the light one, the
     # pair its own light and dark logos use.
     "opencloud": {"#e2baff": ("#e2baff", "#20434f")},
+    # Sia's near-black letters, which its coloured squares keep from being
+    # lifted, in white on the dark ground.
+    "sia": {"#1D2609": ("#ffffff", "#1D2609")},
 }
 
 TILE_COLOUR = {
+    # Koofr's green from its own stylesheet, for a mark drawn in white.
+    "koofr": ("#71ba05", None),
+    # Sia's green square rather than the near-black of its letters.
+    "sia": ("#36d955", None),
     # OpenCloud's lilac on its petrol, the brand's own pair.
     "opencloud": ("#20434f", "#e2baff"),
     # A white drawing with no colour of its own, lit on black as the brand's

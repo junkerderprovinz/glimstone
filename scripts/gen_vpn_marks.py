@@ -8,11 +8,11 @@ from Simple Icons, whose icons are CC0 unless the set names another licence for
 one, which the generated comment then carries. The rest are whole SVG files in
 packages/core/vpn-marks/, each with its source and licence recorded below and
 in that folder's README. A logo whose colours flatten into one blot on a lit
-tile brings its brand's single-colour version from Simple Icons as the drawing
-that tile shows. Every mark is a trademark of its owner, used only to name the
-provider it refers to, on a tile that picks exactly that provider,
-reproduced unmodified apart from its colour, with no claim of endorsement by or
-affiliation with any of them.
+tile brings its brand's single-colour version, from Simple Icons or as
+`<id>-hover.svg` beside the logo, as the drawing that tile shows. Every mark is
+a trademark of its owner, used only to name the provider it refers to, on a
+tile that picks exactly that provider, reproduced unmodified apart from its
+colour, with no claim of endorsement by or affiliation with any of them.
 
 The machinery is in brand_marks.py, which needs the svgelements package (pip
 install svgelements).
@@ -20,13 +20,14 @@ install svgelements).
 import sys
 from pathlib import Path
 
-from brand_marks import MarkSet, local, simple, simple_data, simple_hover, write
+from brand_marks import BRAND, MarkSet, local, local_hover, simple, simple_data, simple_hover, write
 
 ROOT = Path(__file__).parent.parent
 SRC = Path(sys.argv[1]) if len(sys.argv) > 1 else None
 OUT = ROOT / "packages" / "core" / "src" / "vpnMarks.ts"
 
 DASHBOARD = "Apache-2.0"
+SELFHST = "CC-BY-4.0"
 
 # The id a catalog entry names its mark by -> the Simple Icons slug, with what it is.
 SIMPLE = [
@@ -49,11 +50,42 @@ LOCAL = [
     ("airvpn", "AirVPN", "homarr-labs/dashboard-icons, svg/airvpn.svg", DASHBOARD),
     ("protonvpn", "Proton VPN", "homarr-labs/dashboard-icons, svg/proton-vpn.svg", DASHBOARD),
     ("ivpn", "IVPN", "ivpn/desktop-app, ui/References/Linux/ui/ivpnicon.svg", "GPL-3.0"),
+    ("kaspersky", "Kaspersky, for its VPN", "Wikimedia Commons, File:Kaspersky icon.svg", "public domain"),
+    ("fsecure", "F-Secure, for its VPN",
+     "F-Secure's media kit, f-secure_2023_logo.zip, F-SECURE_LOGO_VERTICAL_POSITIVE_RGB.svg without the word", BRAND),
+    ("purevpn", "PureVPN", "PureVPN's press room, PureVPN.zip, vpn original.svg without the word", BRAND),
+
+    ("azirevpn", "AzireVPN", "selfhst/icons, svg/azirevpn.svg", SELFHST),
+    ("ipvanish", "IPVanish", "selfhst/icons, svg/ipvanish.svg", SELFHST),
+    ("njalla", "Njalla VPN", "selfhst/icons, svg/njalla.svg", SELFHST),
+    ("ovpn", "OVPN", "selfhst/icons, svg/ovpn.svg", SELFHST),
+    ("privadovpn", "PrivadoVPN", "selfhst/icons, svg/privadovpn.svg", SELFHST),
+
+    ("cactusvpn", "CactusVPN", "cactusvpn.com, images/logo.svg without the word", BRAND),
+    ("cyberghost", "CyberGhost", "cyberghostvpn.com, navigation/icons/logo-cyberghost.svg without the word", BRAND),
+    ("hideme", "hide.me", "hide.me, favicon.svg", BRAND),
+    ("hma", "HMA VPN", "hidemyass.com, the hma-logo symbol in its page header", BRAND),
+    ("hotspotshield", "Hotspot Shield", "hotspotshield.com, imgs/hotspot-shield-logo.1.0.0.svg without the word", BRAND),
+    ("levpn", "Le VPN", "le-vpn.com, icons/favicon.svg", BRAND),
+    ("obscura", "Obscura VPN", "obscura.com, favicon.svg", BRAND),
+    ("privatevpn", "PrivateVPN", "privatevpn.com, logotype_light.svg without the word", BRAND),
+    ("strongvpn", "StrongVPN", "strongvpn.com, uploads/2023/01/logo.svg without the word", BRAND),
+    ("trustzone", "Trust.Zone", "trust.zone, images/favicon/safari-pinned-tab.svg", BRAND),
+    ("unlocator", "Unlocator VPN", "unlocator.com, logo.svg without the word", BRAND),
+    ("vpnunlimited", "VPN Unlimited", "vpnunlimited.com, svg/vpnu_mark.svg", BRAND),
+    ("vyprvpn", "VyprVPN", "vyprvpn.com, images/vyprvpn_logo.svg without the word", BRAND),
+    ("windscribe", "Windscribe", "windscribe.com, images/badge-logo.svg", BRAND),
+    ("xvpn", "X-VPN", "xvpn.io, safari-pinned-tab.svg", BRAND),
+    ("zoogvpn", "ZoogVPN", "zoogvpn.com, ZoogVPN-darck-logo.svg without the word", BRAND),
 ]
 
-# The lit tile's drawing, by id: the Simple Icons slug of the brand's single-colour version.
+# The lit tile's drawing, by id: a Simple Icons slug, or None for <id>-hover.svg.
 HOVER = {
+    "ipvanish": None,
+    "levpn": None,
+    "privadovpn": None,
     "protonvpn": "protonvpn",
+    "purevpn": None,
 }
 
 HEAD = """// The marks of VPN providers, as markup for BrandMark, each with the colour
@@ -73,6 +105,11 @@ import type { TileMark } from "./picker.ts";
 TILE_COLOUR = {
     # Proton's violet rather than the pale lilac its gradient covers most with.
     "protonvpn": ("#6d4aff", None),
+    # Single-colour marks, lit in the colour each brand's own site gives them.
+    "hma": ("#0059a5", None),
+    "trustzone": ("#005a88", None),
+    "windscribe": ("#1c2332", None),
+    "xvpn": ("#000000", None),
 }
 
 MARKS = MarkSet(ROOT / "packages" / "core" / "vpn-marks", {}, set(), TILE_COLOUR, set())
@@ -81,7 +118,10 @@ if SRC is None or not SRC.is_dir():
     raise SystemExit("pass the icons folder of simple-icons@16: python scripts/gen_vpn_marks.py <path>")
 
 data = simple_data(SRC)
-hovers = {slug: simple_hover(slug, si_slug, SRC, data) for slug, si_slug in HOVER.items()}
+hovers = {
+    slug: simple_hover(slug, si_slug, SRC, data) if si_slug else local_hover(slug, MARKS)
+    for slug, si_slug in HOVER.items()
+}
 entries = {m[0]: simple(*m, SRC, data, MARKS, hover=hovers.get(m[0])) for m in SIMPLE}
 entries.update({m[0]: local(*m, MARKS, hover=hovers.get(m[0])) for m in LOCAL})
 ids = write(OUT, HEAD, entries, "VPN_MARKS", "VpnMarkId")

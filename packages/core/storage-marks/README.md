@@ -59,6 +59,16 @@ Labs team and contributors:
   <https://github.com/Fornaxian/pixeldrain_web>, **AGPL-3.0**, unmodified.
 - `silo.svg`: `.github/silo.svg` from <https://github.com/pgsty/silo>,
   **AGPL-3.0**, the emblem on its own.
+- `rustfs.svg`: `assets/logo-symbol.svg` from
+  <https://github.com/rustfs/console>, RustFS's own console, **Apache-2.0**,
+  unmodified. It is the drawing Simple Icons took its RustFS icon from.
+
+**selfh.st icons** (`selfhst/icons`, <https://selfh.st/icons>,
+<https://github.com/selfhst/icons>), by selfh.st, under **CC BY 4.0** (text in
+`LICENSE-cc-by-4.0.txt`, <https://creativecommons.org/licenses/by/4.0/>):
+`oxicloud.svg` is `svg/oxicloud.svg`, unmodified apart from the colour the
+generator gives it. CC BY 4.0 may be carried into this project's AGPL-3.0 with
+this attribution.
 
 **The brands' own websites and material**, for the providers no icon set
 carries. Each is its owner's, used under the trademark position below rather
@@ -81,6 +91,13 @@ than under a licence.
   repository <https://github.com/imagekit-developer/n8n-nodes-imagekit>.
 - `jottacloud.svg`: <https://jottacloud.com/cms_uploads/logos/Logo-1.svg>, the
   logo in the site's header, without the word.
+- `koofr.svg`: <https://koofr.eu/static/gen/a89ebffb2dead3f76e64.svg>, the logo
+  the stylesheet of <https://koofr.eu/> draws, in white. Its tile lights in the
+  `#71ba05` the same stylesheet gives the brand.
+- `pikpak.svg`: the mark of the `LogoSVG` component in the script that
+  <https://mypikpak.com/> loads (`pikcloud/Bujv0GMx.js`), the path without the
+  word written out as a whole SVG in `#306eff`, the `--color-primary` the
+  component paints it with.
 - `putio.svg`: <https://put.io/_astro/favicon.BBPAv1GZ.svg>, the app icon the
   home page offers to copy. put.io's brand page asks for its SVGs to be used as
   they are, and the file is, apart from the plate the generator drops.
@@ -88,6 +105,10 @@ than under a licence.
   from <https://www.qingcloud.com>.
 - `quatrix.svg`: <https://www.quatrix.it/assets/img/quatrix-logo.svg>, the logo
   in the site's header, without the word.
+- `sia.svg`: <https://sia.tech/_astro/sia_logo_dark.CszkgMV_.svg>, the logo of
+  <https://sia.tech/>, Sia's three letters and its squares, which still read on
+  a tile. The letters turn white on the dark ground, where their near-black
+  would vanish, and the tile lights in the green of its squares.
 - `shade.svg`: the logo in the header of <https://shade.inc>, an inline SVG
   symbol given its own `svg` element with the namespace and nothing else
   changed.
@@ -118,11 +139,10 @@ right owner, if a broader thing than the tile does:
 
 A mark naming a different company's product is worse than none. A provider
 whose own mark has no clean source wears the glyph of its kind instead: Gofile,
-Koofr, Linkbox, OpenDrive and Synology C2 publish their logos only as PNG, the
-PikPak logo lives only inside the site's script bundle, and the trademark
-policy that Simple Icons points to for RustFS's icon is no longer online. Sia's
-favicon is a checkerboard whose dark squares vanish on the dark tile and which
-turns into a blank square once lit.
+Linkbox and OpenDrive show their logos only as pictures, Synology C2's site has
+its cloud only as PNG and Synology's own mark is a wordmark too wide for a
+tile, and the site of Storage Made Easy, which made the Enterprise File Fabric,
+is gone.
 
 ## Trademarks
 
