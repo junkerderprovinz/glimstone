@@ -13,7 +13,7 @@ export default function ConnectionRowBasic() {
     setTests((t) => ({ ...t, [c.id]: found }));
   };
   return (
-    <div style={{ width: "100%", "max-width": "640px", "padding-top": "12px" }}>
+    <div style={{ width: "100%", "max-width": "1280px", "padding-top": "12px" }}>
       <Card title="Connections">
         <For each={rows()}>
           {(c) => (

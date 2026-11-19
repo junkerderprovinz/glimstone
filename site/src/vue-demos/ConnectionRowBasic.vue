@@ -20,7 +20,7 @@ function remove(c: DemoConnection) {
 </script>
 
 <template>
-  <div style="width: 100%; max-width: 640px; padding-top: 12px">
+  <div style="width: 100%; max-width: 1280px; padding-top: 12px">
     <Card title="Connections">
       <ConnectionRow
         v-for="c in rows"
