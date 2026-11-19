@@ -36,6 +36,8 @@ Labs team and contributors:
   `googledrive.svg` is `svg/google-drive.svg`, `mega.svg` is
   `svg/mega-nz.svg`, `onedrive.svg` is `svg/microsoft-onedrive.svg` and
   `oraclecloud.svg` is `svg/oracle-cloud.svg`.
+- `linode.svg` lights in Linode's green, deepened to `#007a43` so the white
+  ink reaches 4.5:1, rather than the black it measures as.
 - `kdrive.svg` is `svg/infomaniak-kdrive.svg` and `versity.svg` is
   `svg/versitygw.svg`, each with the word beside the mark left out, since the
   provider's name stands beside it on the tile.
@@ -76,7 +78,8 @@ than under a licence.
 
 - `dosya.svg`: <https://dosya.dev/favicon.svg>, with the colours its light theme
   gives the two classes written onto the parts. The generator brings back the
-  dark theme's own `#fafafa` and `#22c55e`.
+  dark theme's own `#fafafa` and `#22c55e`, and the tile lights in its green,
+  deepened to `#15803d` so the white ink reaches 4.5:1.
 - `drime.svg`: the brand mark in the footer of <https://drime.cloud>, where the
   page carries it as an inline SVG.
 - `fichier.svg`: 1Fichier has its logo only as PNG, `logo.png` on
@@ -116,6 +119,21 @@ than under a licence.
   the logo in the site's header, without the word.
 - `ulozto.svg`: the first inline SVG in the header of <https://ulozto.net>, the
   three-colour mark without the word.
+- `gofile.svg`: Gofile's folder with its speed lines, the brand's logo as an
+  SVG file.
+- `opendrive.svg`: OpenDrive's four bars, as
+  <https://free.arinco.org/images/storage/storage-opendrive-logo.svg> serves
+  the logo, without the link and the title round it. Its navy bars turn white
+  on the dark ground.
+- `linkbox.svg`: TeleBox, which was Linkbox and keeps its id. The app icon,
+  <https://cdn-1.webcatalog.io/catalog/linkbox/linkbox-icon-filled-256.webp>,
+  is the only source and a picture, so the mark is drawn from it: the green
+  square, the white band and the two pale faces beside it, measured off the
+  picture, without the soft glow under them. `linkbox-hover.svg` is the band
+  with the faces outlined, since on the lit tile the square would cover them.
+- `synologyc2.svg`: the C2 cloud of
+  <https://static.profile.c2.synology.com/static/edafcde1a2fae082.png>, drawn
+  from that picture as three round strokes in its own gradients.
 
 Apache-2.0 may be carried into this project's AGPL-3.0, and the AGPL-3.0 files
 are under this project's own licence, so the combined work stays AGPL-3.0.
@@ -138,11 +156,9 @@ right owner, if a broader thing than the tile does:
 - Hetzner Object Storage and the Storage Box wear Hetzner's.
 
 A mark naming a different company's product is worse than none. A provider
-whose own mark has no clean source wears the glyph of its kind instead: Gofile,
-Linkbox and OpenDrive show their logos only as pictures, Synology C2's site has
-its cloud only as PNG and Synology's own mark is a wordmark too wide for a
-tile, and the site of Storage Made Easy, which made the Enterprise File Fabric,
-is gone.
+whose own mark has no clean source wears the glyph of its kind instead: the
+site of Storage Made Easy, which made the Enterprise File Fabric, is gone, so
+it wears the storage glyph.
 
 ## Trademarks
 
@@ -157,8 +173,9 @@ For a mark Simple Icons carries, add a line to `SIMPLE` in the generator. For
 any other, drop the SVG in here as its source has it, leaving out at most the
 word beside the mark, add a line to `LOCAL` naming its source and licence, add
 both to the section above and the licence's text beside this file when it asks
-for one, then give the provider its `mark` in `src/storageProviders.ts` and run
-the generator:
+for one, and its id to `HOVER` with an `<id>-hover.svg` where its colours do
+not survive one ink, then give the provider its `mark` in
+`src/storageProviders.ts` and run the generator:
 
     npm pack simple-icons@16 && tar xzf simple-icons-*.tgz
     python scripts/gen_storage_marks.py package/icons

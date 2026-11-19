@@ -52,7 +52,7 @@ test.describe("A catalog in a PickerWindow", () => {
     await show(page);
     const tiles = picker(page).locator(".glim-provider-pick button.glim-readme-btn");
     await expect(tiles).toHaveCount(STORAGE_PROVIDERS.entries.length);
-    await expect(picker(page).locator(".glim-provider-pick button.glim-readme-btn .glim-readme-btn-mark svg")).toHaveCount(
+    await expect(picker(page).locator(".glim-provider-pick button.glim-readme-btn .glim-readme-btn-mark:has(svg)")).toHaveCount(
       STORAGE_PROVIDERS.entries.length,
     );
     const fill = async (name: string) => {

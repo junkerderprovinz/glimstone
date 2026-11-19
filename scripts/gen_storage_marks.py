@@ -18,7 +18,7 @@ install svgelements).
 import sys
 from pathlib import Path
 
-from brand_marks import BRAND, MarkSet, local, simple, simple_data, write
+from brand_marks import BRAND, MarkSet, local, local_hover, simple, simple_data, write
 
 ROOT = Path(__file__).parent.parent
 SRC = Path(sys.argv[1]) if len(sys.argv) > 1 else None
@@ -107,6 +107,12 @@ LOCAL = [
     ("koofr", "Koofr", "koofr.eu, static/gen/a89ebffb2dead3f76e64.svg, the logo its stylesheet draws", BRAND),
     ("pikpak", "PikPak", "mypikpak.com, the mark of the LogoSVG component in the site's script", BRAND),
     ("sia", "Sia", "sia.tech, _astro/sia_logo_dark.CszkgMV_.svg", BRAND),
+    ("gofile", "Gofile", "Gofile's logo as an SVG", BRAND),
+    ("linkbox", "TeleBox", "drawn from TeleBox's app icon, cdn-1.webcatalog.io/catalog/linkbox/linkbox-icon-filled-256.webp, "
+     "which has no vector", BRAND),
+    ("opendrive", "OpenDrive", "free.arinco.org, images/storage/storage-opendrive-logo.svg", BRAND),
+    ("synologyc2", "Synology C2", "drawn from the C2 cloud of static.profile.c2.synology.com/static/edafcde1a2fae082.png, "
+     "which has no vector", BRAND),
 
     ("oxicloud", "OxiCloud", "selfhst/icons, svg/oxicloud.svg", SELFHST),
 ]
@@ -135,6 +141,9 @@ FORCE_THEMED = {
     # Sia's near-black letters, which its coloured squares keep from being
     # lifted, in white on the dark ground.
     "sia": {"#1D2609": ("#ffffff", "#1D2609")},
+    # OpenDrive's navy bars, which its light blue ones keep from being lifted,
+    # in white on the dark ground.
+    "opendrive": {"#1E3047": ("#ffffff", "#1E3047")},
 }
 
 TILE_COLOUR = {
@@ -158,6 +167,10 @@ TILE_COLOUR = {
     "seaweedfs": ("#0162bf", None),
     # The navy AWS sets its logo on, rather than the black of the letters.
     "aws": ("#232f3e", None),
+    # Linode's green and dosya.dev's, deepened until white on them reaches
+    # 4.5:1, rather than the black their marks measure as.
+    "linode": ("#007a43", None),
+    "dosya": ("#15803d", None),
 }
 
 # JuiceFS's two loops cross rather than one lying in the other, so both turn
@@ -166,11 +179,16 @@ ONE_INK = {"juicefs"}
 
 MARKS = MarkSet(ROOT / "packages" / "core" / "storage-marks", FORCE_THEMED, set(), TILE_COLOUR, ONE_INK)
 
+# The marks whose lit tile shows <id>-hover.svg: TeleBox's band in the ink with
+# the faces beside it outlined, which its square app icon would cover.
+HOVER = ["linkbox"]
+
 if SRC is None or not SRC.is_dir():
     raise SystemExit("pass the icons folder of simple-icons@16: python scripts/gen_storage_marks.py <path>")
 
 data = simple_data(SRC)
 entries = {m[0]: simple(*m, SRC, data, MARKS) for m in SIMPLE}
-entries.update({m[0]: local(*m, MARKS) for m in LOCAL})
+hovers = {slug: local_hover(slug, MARKS) for slug in HOVER}
+entries.update({m[0]: local(*m, MARKS, hover=hovers.get(m[0])) for m in LOCAL})
 ids = write(OUT, HEAD, entries, "STORAGE_MARKS", "StorageMarkId")
 print("%s: %d marks (%d from Simple Icons, %d from storage-marks/)" % (OUT.name, len(ids), len(SIMPLE), len(LOCAL)))
