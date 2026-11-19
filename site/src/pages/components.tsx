@@ -1121,6 +1121,21 @@ const { items, groups } = catalogPicker(STORAGE_PROVIDERS, {
         <code>registry-marks/</code>.
       </p>
       <Demo name="PickerWindowRegistries" />
+      <p>
+        <code>VPN_PROVIDERS</code> in <code>@glimstone/core/vpnProviders</code> holds the VPN providers that hand out
+        WireGuard, then those that keep it inside their own app. The window below offers them all: a provider of the
+        second group waits in view with a <code>status</code>, so nobody searches for it in vain, and the own WireGuard
+        configuration, a <code>word</code> to translate, stands last.
+      </p>
+      <Demo name="PickerWindowVpn" />
+      <p>
+        <code>DOWNLOAD_PROVIDERS</code> in <code>@glimstone/core/downloadProviders</code> holds the debrid services,
+        which unlock the links of many hosters with one account, then the file hosters an app signs in to with a client
+        of its own. A hoster's id is the domain its logins are filed under, and its other domains, such as{" "}
+        <code>rg.to</code>, are words its tile is found by. Each group's title here carries its own (i). The marks of both
+        catalogs travel with their sources and licences in <code>vpn-marks/</code> and <code>download-marks/</code>.
+      </p>
+      <Demo name="PickerWindowDownload" />
       <H2>Rules</H2>
       <ul>
         <li>The tiles stand in their groups, each in alphabetical order for the page's language, with the tile that takes anything last.</li>

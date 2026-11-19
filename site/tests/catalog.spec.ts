@@ -1,7 +1,9 @@
 import { expect, test, type Page } from "@playwright/test";
 import { MCP_PROVIDERS } from "../../packages/core/src/mcpProviders.ts";
 import { REGISTRY_PROVIDERS } from "../../packages/core/src/registryProviders.ts";
+import { DOWNLOAD_PROVIDERS } from "../../packages/core/src/downloadProviders.ts";
 import { STORAGE_PROVIDERS } from "../../packages/core/src/storageProviders.ts";
+import { VPN_PROVIDERS } from "../../packages/core/src/vpnProviders.ts";
 import { open, stage } from "./page";
 
 // Scoped by the component's own attribute: in Firefox, evaluateAll under a
@@ -165,5 +167,109 @@ test.describe("The registry catalog in a PickerWindow", () => {
     await search.press("Enter");
     await expect(picker(page)).toHaveCount(0);
     await expect(stage(page, "PickerWindowRegistries").locator("output")).toHaveText("Picked: GitHub");
+  });
+});
+
+async function showVpn(page: Page) {
+  await open(page, "/components/picker-window");
+  await stage(page, "PickerWindowVpn").getByRole("button", { name: "Add a VPN" }).click();
+  await expect(picker(page).getByRole("searchbox", { name: "Search VPNs" })).toBeFocused();
+}
+
+async function showDownload(page: Page) {
+  await open(page, "/components/picker-window");
+  await stage(page, "PickerWindowDownload").getByRole("button", { name: "Add an account" }).click();
+  await expect(picker(page).getByRole("searchbox", { name: "Search services and hosters" })).toBeFocused();
+}
+
+const sectionsOf = (page: Page) =>
+  picker(page)
+    .locator(".glim-pick-section")
+    .evaluateAll((all) =>
+      all.map((s) => ({
+        title: s.querySelector(".glim-eyebrow")?.textContent,
+        names: [...s.querySelectorAll(".glim-readme-btn-name")].map((n) => n.textContent ?? ""),
+      })),
+    );
+
+const alphabetical = (names: string[]) => [...names].sort((a, b) => a.localeCompare(b, "en", { sensitivity: "base" }));
+
+test.describe("The VPN catalog in a PickerWindow", () => {
+  test("[vpn-groups] the providers stand first and alphabetical with the own configuration last, then those kept to their own app", async ({ page }) => {
+    await showVpn(page);
+    const sections = await sectionsOf(page);
+    const count = (group: string) => VPN_PROVIDERS.entries.filter((e) => e.group === group).length;
+    expect(sections.map(({ title, names }) => ({ title, count: names.length }))).toEqual([
+      { title: "Providers", count: count("provider") },
+      { title: "Only in their own app", count: count("appOnly") },
+    ]);
+    const [providers, appOnly] = sections.map((s) => s.names);
+    expect(providers!.at(-1)).toBe("Own WireGuard config");
+    expect(providers!.slice(0, -1)).toEqual(alphabetical(providers!.slice(0, -1)));
+    expect(appOnly).toEqual(alphabetical(appOnly!));
+  });
+
+  test("[vpn-waits] a provider kept to its own app stays in view with its reason, and a click does not pick it", async ({ page }) => {
+    await showVpn(page);
+    const express = picker(page).locator('.glim-provider-pick [aria-disabled="true"]', { hasText: "ExpressVPN" });
+    await expect(express).toContainText("Not supported");
+    await express.click();
+    await expect(picker(page)).toHaveCount(1);
+    await expect(picker(page).locator('.glim-provider-pick [aria-disabled="true"]')).toHaveCount(
+      VPN_PROVIDERS.entries.filter((e) => e.group === "appOnly").length,
+    );
+  });
+
+  test("[vpn-pick] the search finds a provider by its own words, and a pick hands back its id", async ({ page }) => {
+    await showVpn(page);
+    const search = picker(page).getByRole("searchbox", { name: "Search VPNs" });
+    await search.fill("nordlynx");
+    await expect.poll(() => names(page)).toEqual(["NordVPN"]);
+    await search.press("Enter");
+    await expect(picker(page)).toHaveCount(0);
+    await expect(stage(page, "PickerWindowVpn").locator("output")).toHaveText("Picked: NordVPN");
+  });
+});
+
+test.describe("The download catalog in a PickerWindow", () => {
+  test("[download-groups] the debrid services stand first, then the hosters, each alphabetical", async ({ page }) => {
+    await showDownload(page);
+    const sections = await sectionsOf(page);
+    const count = (group: string) => DOWNLOAD_PROVIDERS.entries.filter((e) => e.group === group).length;
+    expect(sections.map(({ title, names }) => ({ title, count: names.length }))).toEqual([
+      { title: "Debrid services", count: count("debrid") },
+      { title: "File hosters", count: count("hoster") },
+    ]);
+    for (const { names } of sections) expect(names).toEqual(alphabetical(names));
+  });
+
+  test("[download-search] a hoster is found by another domain it answers on, and a pick hands back its id", async ({ page }) => {
+    await showDownload(page);
+    const search = picker(page).getByRole("searchbox", { name: "Search services and hosters" });
+    await search.fill("rg.to");
+    await expect.poll(() => names(page)).toEqual(["Rapidgator"]);
+    await search.press("Enter");
+    await expect(picker(page)).toHaveCount(0);
+    await expect(stage(page, "PickerWindowDownload").locator("output")).toHaveText("Picked: Rapidgator");
+  });
+
+  test("[download-marks] a debrid service lights in its brand's colour, a hoster without a mark in the accent", async ({ page }) => {
+    await showDownload(page);
+    const fill = async (name: string) => {
+      const tile = picker(page).getByRole("button", { name, exact: true });
+      await tile.scrollIntoViewIfNeeded();
+      await tile.hover();
+      return tile.evaluate((b) => getComputedStyle(b).backgroundColor);
+    };
+    expect(await fill("Debrid-Link")).toBe("rgb(38, 78, 112)");
+    const accent = await page.evaluate(() => {
+      const probe = document.createElement("div");
+      probe.style.backgroundColor = "var(--accent)";
+      document.body.append(probe);
+      const colour = getComputedStyle(probe).backgroundColor;
+      probe.remove();
+      return colour;
+    });
+    expect(await fill("Rapidgator")).toBe(accent);
   });
 });
