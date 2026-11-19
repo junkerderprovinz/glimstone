@@ -635,7 +635,8 @@ def _drawing(slug, file, marks, prefix):
     root_attrs = ['%s="%s"' % (raw, _attr(value)) for raw, value in root.attrib.items()
                   if not raw.startswith("{") and raw not in skip]
 
-    painted_text = re.sub(r"<mask\b.*?</mask>", " ", body, flags=re.S) + " " + " ".join(root_attrs)
+    # A mask or a clip path only says which parts show, and its white is no colour.
+    painted_text = re.sub(r"<(mask|clipPath)\b.*?</\1>", " ", body, flags=re.S) + " " + " ".join(root_attrs)
     found = re.findall(r'"(#[0-9a-fA-F]{3,8}|rgb\([^"]*\)|%s)"' % "|".join(KEYWORDS), painted_text) \
         + re.findall(r'--mark-(?:ink|cut), (#[0-9a-fA-F]{3,8}|rgb\([^)]*\)|%s)\)' % "|".join(KEYWORDS), painted_text) \
         + re.findall(r':(#[0-9a-fA-F]{3,8})(?=[;"])', painted_text)
