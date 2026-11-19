@@ -65,6 +65,10 @@ npm install @glimstone/core
   the container registries `@glimstone/core/registryProviders`, each with
   their marks and a folder beside them for the sources, `mcp-marks/` and
   `registry-marks/`.
+  The VPN catalog is `@glimstone/core/vpnProviders`, and the download catalog,
+  the debrid services and the file hosters, is
+  `@glimstone/core/downloadProviders`; `vpn-marks/` and `download-marks/` hold
+  their marks' sources and licences.
 - Where a dragged item goes: `dropIndex` places it among the others by its
   leading edge, along a row, down a column or line by line in a grid.
 - What runs without a framework: `mountSelect`, `wireTooltips` with
