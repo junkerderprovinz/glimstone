@@ -1,3 +1,7 @@
+## 4.7.0
+
+- No changes for Flutter. The connection row, the sign-in catalog and the new marks live in the web packages.
+
 ## 4.6.0
 
 - No changes for Flutter. The catalogs and the new mark live in the web packages.

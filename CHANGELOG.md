@@ -2,6 +2,42 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 4.7.0 - 2026-11-19
+
+A connected service or account is one row, `ConnectionRow`, with its mark on a brand tile, who is signed in and the test at the end. Sign-in services get a catalog of their own, the glossary learns the words of signing in, and 42 more providers wear their brand's mark instead of a glyph.
+
+## 🧩 Adopting apps
+
+- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.7.0, all packages at the same number.
+- **A connected service or account:** show it as `ConnectionRow` in place of a sub-card of your own. Pass `name`, the catalog's mark or one of your glyphs as `mark`, `status` with who is signed in or where it connects, and `text` with the words for Test, Edit and Remove. A button stands only where you pass `onTest`, `onEdit` or `onRemove`. Give `test` `busy` while the test runs, then `tone: "ok"` or `"danger"` and a `title` with what it found, as on a window's test action. A state that is not the normal case goes in `badges` (a slot in Vue), more quiet lines go in as children, and `labelKeys` maps the buttons to your own keys (`test`, `edit` and `remove` by default).
+- **A sign-in picker:** pass `IDENTITY_PROVIDERS` from `@glimstone/core/identityProviders` with a title for `selfHosted`. The ids are the ones a server stores: `pocket-id`, `authentik`, `authelia`, `keycloak`, `kanidm` and `zitadel`. The catalog has no tile for an issuer of your own, so add one after the catalog's tiles with `last: true`. The issuer, the client and the scopes stay with your app.
+- **The sign-in words:** run `glimstone-terms` over your locales. German texts lose Login, Einloggen, Account, Session, Hauptschlüssel and Identitätsanbieter for Anmeldung, Konto, Sitzung, Passkey and Anmeldedienst. "2FA" on its own gives way to two-factor authentication in every language. To take the words on one at a time, start with `--terms=signIn,twoFactor`.
+- **WireGuard by its name:** the VPN catalog's own configuration is called WireGuard, a name no app translates. Drop any translation of "Own WireGuard config" and show the tile as WireGuard in every language.
+- **Marks in place of your own:** a provider that wore a glyph in 4.6.0 may wear its mark now. Drop any logo of your own for an entry that has one in its catalog.
+- **Flutter:** move the git dependency to `ref: v4.7.0`.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.7.0.
+
+## ✨ Added
+
+- **`ConnectionRow`** in React, Vue, Solid and Svelte: a connected service or account as one compact row. Its mark is lit on a brand tile the full height of the row, followed by the name, a quiet status line, and Test, Edit and Remove at the end. A test shows the busy ring, then turns green with a check or red with a cross and shakes. The core carries `connectionTile`, `connectionTestFace`, `CONNECTION_ROW_KEYS` and the types `ConnectionTest`, `ConnectionRowText` and `ConnectionRowLabelKeys`.
+- **`IDENTITY_PROVIDERS`** in its own entry, `@glimstone/core/identityProviders`: six sign-in services that people run on their own server, in one group, with the protocols they speak besides OpenID Connect as search words. Five wear their brand's mark, Keycloak's with a `hover` drawing in one colour, and Kanidm wears the key glyph, as does the tile an app adds for a service of its own. The marks are `IDENTITY_MARKS` in `@glimstone/core/identityMarks`, which `scripts/gen_identity_marks.py` writes from `packages/core/identity-marks/`.
+- **Ten sign-in words in `@glimstone/terms`:** sign-in, sign-in service, account, role, group at the sign-in service, trusted proxy, passkey, two-factor authentication, session and API token, each with a definition, singular, plural, gender and stems in all 42 languages. The definitions keep the pairs apart: an account is a person and a member an instance, a role says what a person may do and a permission what one app may start in another, a session is one sign-in in one browser and a pairing links instances.
+- **More brand marks in the catalogs:** 24 VPN providers (among them CyberGhost, Hotspot Shield, IPVanish, PureVPN and Windscribe), Antigravity, Visual Studio and Msty in `MCP_PROVIDERS`, TorBox and Workupload in `DOWNLOAD_PROVIDERS`, 2Captcha, CapSolver and Solvecha in `CAPTCHA_PROVIDERS`, and Koofr, PikPak, Sia, OxiCloud and RustFS in `STORAGE_PROVIDERS` wear their marks instead of a glyph. Where a logo loses its layers on the lit tile, it brings a `hover` drawing in one colour. Every source and licence is recorded in its `*-marks/` folder, selfh.st icons' CC BY 4.0 attribution among them.
+
+## 🎨 Design
+
+- **Connections stand as rows** ("Connections" in the design language). The mark stands on the brand's colour or on the accent, on a tile as tall as the row. The buttons stay in view and show their glyphs alone below 640px. A problem is a badge after the name whose wash lies over the card's surface, so its words keep 4.5:1 on the well. OLED rings a near-black tile, and a Windows contrast theme draws the mark in the text colour.
+- **The README banner draws the mark at the family's banner height**, 386 of its 500 pixels.
+
+## ⚡ Improved
+
+- **Adopting apps is a heading** like the other sections of the notes, here and in every release since 2.0.0.
+
+## 🐛 Fixed
+
+- **A tile's name keeps its descenders.** The clip that ends a long name sat on a line box a pixel shorter than the bold text, so it cut the bottom off the g, p and y of every picker tile and README button. The name's box reaches a little past the line and gives that room back outside, so nothing moves, and a test holds every tile name to its box.
+- **Near-black brand marks turn white in the dark theme.** Cline's `#18181B`, Windsurf's `#0B100F` and GitHub's `#181717` (registries) carry a tint of a few units, so they missed the grey rule and were lifted only to 3:1, as a dull grey or, for Windsurf, a teal the brand doesn't have. Any colour whose channels lie within 8 of each other counts as grey, and a test checks every catalog's marks against their resting tile in both themes. Njalla's navy is drawn in white on the dark tile the same way.
+
 ## 4.6.0 - 2026-11-19
 
 Apps pick their providers from shared catalogs: storage, notifications, MCP clients, container registries, VPNs, download services, captcha solvers and transfer services. Each catalog carries every provider's group, search words and mark, so an app no longer keeps a list of its own. A big picker is a single component, `PickerWindow`, which rates its groups, keeps a tile that cannot be picked yet in view and marks the last pick. Whatever the pointer is over lights up in the accent, the Help card can send people to Discord, and GlimStone has a new mark.
