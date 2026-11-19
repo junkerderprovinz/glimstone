@@ -35,7 +35,7 @@
   import { connectionButtons, connectionTestFace, connectionTile } from "@glimstone/core";
   import BrandMark from "./BrandMark.svelte";
   import Button from "./Button.svelte";
-  import { IconCheck, IconClose } from "./glyphs.js";
+  import { IconCheck, IconClose, IconPencil, IconTrash } from "./glyphs.js";
   import { css } from "./style.js";
 
   // A connected service or account as a compact row ("Connections" in the design
@@ -50,7 +50,7 @@
 
   const tile = $derived(connectionTile(mark));
   const buttons = $derived(
-    connectionButtons({ actions, test, text, labelKeys, onTest, onEdit, onRemove }).map((b) => {
+    connectionButtons({ actions, test, text, labelKeys, onTest, onEdit, onRemove }, { test: IconCheck, edit: IconPencil, remove: IconTrash }).map((b) => {
       const face = connectionTestFace(b);
       return { ...b, face, glyph: face.outcome === "check" ? IconCheck : face.outcome === "cross" ? IconClose : b.glyph };
     }),

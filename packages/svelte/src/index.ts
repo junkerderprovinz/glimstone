@@ -71,7 +71,7 @@ export { useAccent, useDensity, useHue, useLabelMode, useMotion, useRainbow, use
 export { useConfirm, useDialogKeys, type ConfirmOptions, type ConfirmText } from "./confirm.svelte.js";
 export { useFieldName } from "./fieldName.js";
 export { deviceGlyph } from "./fortressParts.js";
-export { glyphFor, IconBack, IconCalendar, IconCancel, IconCheck, IconClose, IconCopy, IconExpand, IconEye, IconEyeOff, IconFolderOpen, IconForward, IconPause, IconPencil, IconPlay, IconResetArrow, IconSearch, IconStar, IconUpload, IconWindowMaximise, IconWindowMinimise, IconWindowRestore, setGlyphResolver } from "./glyphs.js";
+export { glyphFor, IconBack, IconCalendar, IconCancel, IconCheck, IconClose, IconCopy, IconExpand, IconEye, IconEyeOff, IconFolderOpen, IconForward, IconPause, IconPencil, IconPlay, IconResetArrow, IconSearch, IconStar, IconTrash, IconUpload, IconWindowMaximise, IconWindowMinimise, IconWindowRestore, setGlyphResolver } from "./glyphs.js";
 export * from "./portalHue.svelte.js";
 export { useTipBubble, type TipBubble } from "./bubble.svelte.js";
 export * from "./useDragArmed.svelte.js";

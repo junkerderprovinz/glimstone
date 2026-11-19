@@ -38,6 +38,7 @@ export const IconCheck = markSnippet(MARKS.check);
 export const IconExpand = markSnippet(MARKS.expand);
 export const IconFolderOpen = markSnippet(MARKS.folderOpen);
 export const IconPencil = markSnippet(MARKS.pencil);
+export const IconTrash = markSnippet(MARKS.trash);
 export const IconWindowMinimise = markSnippet(MARKS.windowMinimise);
 export const IconWindowMaximise = markSnippet(MARKS.windowMaximise);
 export const IconWindowRestore = markSnippet(MARKS.windowRestore);

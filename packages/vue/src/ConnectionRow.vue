@@ -3,7 +3,7 @@ import { computed, type Component } from "vue";
 import { connectionButtons, connectionTestFace, connectionTile, type ConnectionRowLabelKeys, type ConnectionRowText, type ConnectionTest, type TileMark } from "@glimstone/core";
 import BrandMark from "./BrandMark.vue";
 import Button from "./Button.vue";
-import { IconCheck, IconClose } from "./glyphs";
+import { IconCheck, IconClose, IconPencil, IconTrash } from "./glyphs";
 import type { ConnectionAction } from "./windowParts";
 
 // A connected service or account as a compact row ("Connections" in the design
@@ -34,7 +34,7 @@ const NARROW = 640;
 
 const tile = computed(() => connectionTile(props.mark));
 const buttons = computed(() =>
-  connectionButtons(props).map((b) => {
+  connectionButtons(props, { test: IconCheck, edit: IconPencil, remove: IconTrash }).map((b) => {
     const face = connectionTestFace(b);
     return { ...b, face, glyph: face.outcome === "check" ? IconCheck : face.outcome === "cross" ? IconClose : b.glyph };
   }),

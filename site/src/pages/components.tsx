@@ -1706,7 +1706,8 @@ import { VPN_MARKS } from "@glimstone/core/vpnMarks";
         </li>
         <li>
           Test, Edit and Remove stand at the end in that order, each only where its handler is passed, and show their
-          glyphs alone below 640px. They stay in view, unlike a list row's buttons (rule 6), because the outcome of a
+          glyphs alone below 640px. They wear the package's check, pencil and bin, whatever the app's resolver would give
+          for their keys. They stay in view, unlike a list row's buttons (rule 6), because the outcome of a
           test has to be seen.
         </li>
         <li>

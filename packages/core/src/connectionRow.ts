@@ -39,7 +39,7 @@ export interface ConnectionRowText {
   remove: string;
 }
 
-/** The label keys behind the row's buttons, which pick their glyphs (see Button). */
+/** The translation keys behind the row's buttons. Their glyphs come with the row. */
 export interface ConnectionRowLabelKeys {
   test: string;
   edit: string;
@@ -87,13 +87,14 @@ export interface ConnectionRowButtons<G> {
 /**
  * The row's buttons in order: the app's own actions first, then Test, Edit
  * and Remove where their handlers are passed, so the familiar three keep
- * their places at the end of every row.
+ * their places at the end of every row. The three wear the package's
+ * `glyphs`, so no resolver of an app can give them another.
  */
-export function connectionButtons<G>(row: ConnectionRowButtons<G>): ConnectionAction<G>[] {
+export function connectionButtons<G>(row: ConnectionRowButtons<G>, glyphs: { test: G; edit: G; remove: G }): ConnectionAction<G>[] {
   const keys = { ...CONNECTION_ROW_KEYS, ...row.labelKeys };
   const buttons = [...(row.actions ?? [])];
-  if (row.onTest) buttons.push({ ...row.test, id: "test", label: row.text.test, labelKey: keys.test, onClick: row.onTest });
-  if (row.onEdit) buttons.push({ id: "edit", label: row.text.edit, labelKey: keys.edit, onClick: row.onEdit });
-  if (row.onRemove) buttons.push({ id: "remove", label: row.text.remove, labelKey: keys.remove, onClick: row.onRemove });
+  if (row.onTest) buttons.push({ ...row.test, id: "test", label: row.text.test, labelKey: keys.test, glyph: glyphs.test, onClick: row.onTest });
+  if (row.onEdit) buttons.push({ id: "edit", label: row.text.edit, labelKey: keys.edit, glyph: glyphs.edit, onClick: row.onEdit });
+  if (row.onRemove) buttons.push({ id: "remove", label: row.text.remove, labelKey: keys.remove, glyph: glyphs.remove, onClick: row.onRemove });
   return buttons;
 }

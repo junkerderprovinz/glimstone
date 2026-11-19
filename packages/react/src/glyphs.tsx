@@ -43,6 +43,7 @@ export const IconCheck = () => <MarkSvg mark={MARKS.check} className="glim-mark"
 export const IconExpand = () => <MarkSvg mark={MARKS.expand} className="glim-mark" />;
 export const IconFolderOpen = () => <MarkSvg mark={MARKS.folderOpen} className="glim-mark" />;
 export const IconPencil = () => <MarkSvg mark={MARKS.pencil} className="glim-mark" />;
+export const IconTrash = () => <MarkSvg mark={MARKS.trash} className="glim-mark" />;
 export const IconWindowMinimise = () => <MarkSvg mark={MARKS.windowMinimise} className="glim-mark" />;
 export const IconWindowMaximise = () => <MarkSvg mark={MARKS.windowMaximise} className="glim-mark" />;
 export const IconWindowRestore = () => <MarkSvg mark={MARKS.windowRestore} className="glim-mark" />;

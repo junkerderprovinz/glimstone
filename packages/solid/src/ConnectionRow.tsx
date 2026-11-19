@@ -2,7 +2,7 @@ import { children, createMemo, Index, Show, splitProps, type JSX } from "solid-j
 import { connectionButtons, connectionTestFace, connectionTile, type ConnectionAction as CoreConnectionAction, type ConnectionRowLabelKeys, type ConnectionRowText, type ConnectionTest, type TileMark } from "@glimstone/core";
 import { Button } from "./Button.tsx";
 import { BrandMark } from "./ReadmeButton.tsx";
-import { IconCheck, IconClose } from "./glyphs.tsx";
+import { IconCheck, IconClose, IconPencil, IconTrash } from "./glyphs.tsx";
 import { css } from "./style.ts";
 
 export type { ConnectionRowLabelKeys, ConnectionRowText, ConnectionTest } from "@glimstone/core";
@@ -46,7 +46,7 @@ export function ConnectionRow(props: ConnectionRowProps) {
   // A glyph is drawn anew on every read, so the mark is read once.
   const mark = createMemo(() => own.mark);
   const tile = () => connectionTile(mark());
-  const buttons = createMemo(() => connectionButtons(own));
+  const buttons = createMemo(() => connectionButtons(own, { test: <IconCheck />, edit: <IconPencil />, remove: <IconTrash /> }));
   // Read twice, to test and to draw, so it is resolved once.
   const badges = children(() => own.badges);
   return (

@@ -39,24 +39,25 @@ test('a failed test turns the button red with a cross and shakes it', () => {
 const text = { test: 'Test', edit: 'Edit', remove: 'Remove' };
 const run = () => {};
 const mount = { id: 'mount', label: 'Mount', labelKey: 'mount', onClick: run };
+const glyphs = { test: 'check', edit: 'pencil', remove: 'trash' };
 
 test("the app's own actions stand first, then Test, Edit and Remove", () => {
-  const ids = connectionButtons({ actions: [mount, { ...mount, id: 'eject' }], text, onTest: run, onEdit: run, onRemove: run }).map((b) => b.id);
+  const ids = connectionButtons({ actions: [mount, { ...mount, id: 'eject' }], text, onTest: run, onEdit: run, onRemove: run }, glyphs).map((b) => b.id);
   assert.deepEqual(ids, ['mount', 'eject', 'test', 'edit', 'remove']);
 });
 
 test('a built-in button stands only where its handler is passed', () => {
-  assert.deepEqual(connectionButtons({ text, onEdit: run }).map((b) => b.id), ['edit']);
-  assert.deepEqual(connectionButtons({ text }), []);
+  assert.deepEqual(connectionButtons({ text, onEdit: run }, glyphs).map((b) => b.id), ['edit']);
+  assert.deepEqual(connectionButtons({ text }, glyphs), []);
 });
 
 test('the built-in buttons take their words from the text and their glyphs from the label keys', () => {
-  const [testButton, edit] = connectionButtons({ text, labelKeys: { test: 'probe' }, onTest: run, onEdit: run });
+  const [testButton, edit] = connectionButtons({ text, labelKeys: { test: 'probe' }, onTest: run, onEdit: run }, glyphs);
   assert.deepEqual([testButton?.label, testButton?.labelKey, edit?.label, edit?.labelKey], ['Test', 'probe', 'Edit', 'edit']);
 });
 
 test('only the test button carries where the test stands', () => {
-  const [testButton, edit] = connectionButtons({ text, test: { busy: true, title: 'Running' }, onTest: run, onEdit: run });
+  const [testButton, edit] = connectionButtons({ text, test: { busy: true, title: 'Running' }, onTest: run, onEdit: run }, glyphs);
   assert.deepEqual([testButton?.busy, testButton?.title], [true, 'Running']);
   assert.deepEqual([edit?.busy, edit?.title], [undefined, undefined]);
 });
@@ -68,7 +69,12 @@ test('each button runs its own handler', () => {
     text,
     onTest: () => pressed.push('test'),
     onRemove: () => pressed.push('remove'),
-  });
+  }, glyphs);
   for (const b of buttons) b.onClick();
   assert.deepEqual(pressed, ['mount', 'test', 'remove']);
+});
+
+test("Test, Edit and Remove wear the package's glyphs and an action of the app's its own", () => {
+  const worn = connectionButtons({ actions: [{ ...mount, glyph: 'link' }], text, onTest: run, onEdit: run, onRemove: run }, glyphs).map((b) => b.glyph);
+  assert.deepEqual(worn, ['link', 'check', 'pencil', 'trash']);
 });

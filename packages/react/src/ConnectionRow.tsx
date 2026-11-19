@@ -2,7 +2,7 @@ import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
 import { connectionButtons, connectionTestFace, connectionTile, type ConnectionAction as CoreConnectionAction, type ConnectionRowLabelKeys, type ConnectionRowText, type ConnectionTest, type TileMark } from "@glimstone/core";
 import { Button } from "./Button.tsx";
 import { BrandMark } from "./ReadmeButton.tsx";
-import { IconCheck, IconClose } from "./glyphs.tsx";
+import { IconCheck, IconClose, IconPencil, IconTrash } from "./glyphs.tsx";
 
 export type { ConnectionRowLabelKeys, ConnectionRowText, ConnectionTest } from "@glimstone/core";
 
@@ -41,7 +41,7 @@ const NARROW = 640;
 
 export function ConnectionRow({ name, mark, status, badges, children, test, actions, text, labelKeys, onTest, onEdit, onRemove, className, ...rest }: ConnectionRowProps) {
   const tile = connectionTile(mark);
-  const buttons = connectionButtons({ actions, test, text, labelKeys, onTest, onEdit, onRemove });
+  const buttons = connectionButtons({ actions, test, text, labelKeys, onTest, onEdit, onRemove }, { test: <IconCheck />, edit: <IconPencil />, remove: <IconTrash /> });
   return (
     <div data-glim="ConnectionRow" role="group" aria-label={name} {...rest} className={["glim-well glim-connection", className].filter(Boolean).join(" ")}>
       <span className="glim-connection-tile" style={tile.style as CSSProperties | undefined} aria-hidden="true">
