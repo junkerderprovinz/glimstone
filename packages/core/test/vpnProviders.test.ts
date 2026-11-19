@@ -55,6 +55,10 @@ test('an own WireGuard configuration is a word the app translates, and every pro
   assert.deepEqual(words, ['custom']);
 });
 
+test("Proton VPN's gradient, which melts on its lit tile, brings a drawing in one ink with its cut-outs", () => {
+  assert.ok(VPN_MARKS.protonvpn.hover);
+});
+
 test('the search words add something the name and id do not already say', () => {
   for (const e of entries) {
     for (const term of e.terms ?? []) {

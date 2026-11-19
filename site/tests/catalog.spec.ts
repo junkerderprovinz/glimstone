@@ -229,6 +229,17 @@ test.describe("The VPN catalog in a PickerWindow", () => {
     await expect(picker(page)).toHaveCount(0);
     await expect(stage(page, "PickerWindowVpn").locator("output")).toHaveText("Picked: NordVPN");
   });
+
+  test("[vpn-hover] Proton VPN shows its one-colour drawing with its cut-outs on the lit tile", async ({ page }) => {
+    await showVpn(page);
+    const tile = picker(page).getByRole("button", { name: "Proton VPN", exact: true });
+    await expect(tile.locator(".glim-mark-hover")).toBeHidden();
+    await tile.scrollIntoViewIfNeeded();
+    await tile.hover();
+    await expect(tile.locator(".glim-mark-hover")).toBeVisible();
+    await expect(tile.locator(".glim-mark-rest")).toBeHidden();
+    expect(await tile.evaluate((b) => getComputedStyle(b).backgroundColor)).toBe("rgb(109, 74, 255)");
+  });
 });
 
 test.describe("The download catalog in a PickerWindow", () => {

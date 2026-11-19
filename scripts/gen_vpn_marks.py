@@ -7,8 +7,10 @@ Two kinds of source, as for the storage providers' marks. The SIMPLE ones come
 from Simple Icons, whose icons are CC0 unless the set names another licence for
 one, which the generated comment then carries. The rest are whole SVG files in
 packages/core/vpn-marks/, each with its source and licence recorded below and
-in that folder's README. Every mark is a trademark of its owner, used only to
-name the provider it refers to, on a tile that picks exactly that provider,
+in that folder's README. A logo whose colours flatten into one blot on a lit
+tile brings its brand's single-colour version from Simple Icons as the drawing
+that tile shows. Every mark is a trademark of its owner, used only to name the
+provider it refers to, on a tile that picks exactly that provider,
 reproduced unmodified apart from its colour, with no claim of endorsement by or
 affiliation with any of them.
 
@@ -18,7 +20,7 @@ install svgelements).
 import sys
 from pathlib import Path
 
-from brand_marks import MarkSet, local, simple, simple_data, write
+from brand_marks import MarkSet, local, simple, simple_data, simple_hover, write
 
 ROOT = Path(__file__).parent.parent
 SRC = Path(sys.argv[1]) if len(sys.argv) > 1 else None
@@ -49,6 +51,11 @@ LOCAL = [
     ("ivpn", "IVPN", "ivpn/desktop-app, ui/References/Linux/ui/ivpnicon.svg", "GPL-3.0"),
 ]
 
+# The lit tile's drawing, by id: the Simple Icons slug of the brand's single-colour version.
+HOVER = {
+    "protonvpn": "protonvpn",
+}
+
 HEAD = """// The marks of VPN providers, as markup for BrandMark, each with the colour
 // its tile lights up in and the ink that holds on it ("Brand tiles"). Written
 // by scripts/gen_vpn_marks.py; packages/core/vpn-marks/ holds the sources,
@@ -74,7 +81,9 @@ if SRC is None or not SRC.is_dir():
     raise SystemExit("pass the icons folder of simple-icons@16: python scripts/gen_vpn_marks.py <path>")
 
 data = simple_data(SRC)
-entries = {m[0]: simple(*m, SRC, data, MARKS) for m in SIMPLE}
-entries.update({m[0]: local(*m, MARKS) for m in LOCAL})
+hovers = {slug: simple_hover(slug, si_slug, SRC, data) for slug, si_slug in HOVER.items()}
+entries = {m[0]: simple(*m, SRC, data, MARKS, hover=hovers.get(m[0])) for m in SIMPLE}
+entries.update({m[0]: local(*m, MARKS, hover=hovers.get(m[0])) for m in LOCAL})
 ids = write(OUT, HEAD, entries, "VPN_MARKS", "VpnMarkId")
-print("%s: %d marks (%d from Simple Icons, %d from vpn-marks/)" % (OUT.name, len(ids), len(SIMPLE), len(LOCAL)))
+print("%s: %d marks (%d from Simple Icons, %d from vpn-marks/, %d with a drawing for the lit tile)"
+      % (OUT.name, len(ids), len(SIMPLE), len(LOCAL), len(hovers)))

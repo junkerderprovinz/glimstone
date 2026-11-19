@@ -37,6 +37,7 @@ Apps that connect to storage, send notifications, set up MCP clients, sign in to
 ## 🎨 Design
 
 - **A black or grey mark turns white in the dark theme.** It was lifted only as far as 3:1 on the dark tile and stayed grey, Matrix's among them. Grey carries no brand colour to stay close to, so it goes all the way to white.
+- **Proton VPN's mark keeps its shape on the lit tile.** In one ink its gradient ran together into a shape that read like a 7. The lit tile now shows Proton VPN's single-colour drawing from Simple Icons, with the gap between its two parts.
 
 ## 4.5.8 - 2026-11-19
 

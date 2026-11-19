@@ -10,14 +10,18 @@ The generator treats these files the way it treats the storage providers' marks
 (see `../storage-marks/README.md`): gradients and groups stay as drawn, every
 `id` gets a `glim-<id>-` prefix, the viewBox is tightened onto the ink, and
 every colour is wrapped in `var(--mark-ink, ...)` or `var(--mark-cut, ...)`.
+A logo of several colours that would melt into one blot on its lit tile also
+brings a `hover` drawing, the brand's single-colour version with its holes,
+which the lit tile shows instead.
 
 ## Sources and licences
 
 **Simple Icons** (<https://simpleicons.org>) for `avast`, `avira`,
 `bitdefender`, `expressvpn`, `mcafee`, `mozilla`, `mullvad`, `nordvpn`,
 `norton`, `pia` (the set's `privateinternetaccess`), `surfshark` and
-`wireguard`. The set is **CC0 1.0** and asks for nothing, and none of these
-icons names a licence of its own.
+`wireguard`, and for the lit tile's drawing of `protonvpn`, whose gradient
+would otherwise flatten into a single wedge there. The set is **CC0 1.0** and
+asks for nothing, and none of these icons names a licence of its own.
 
 **Dashboard Icons** (`homarr-labs/dashboard-icons`, <https://dashboardicons.com>),
 under **Apache-2.0** (text in `LICENSE-apache-2.0.txt`), copyright the Homarr
@@ -62,8 +66,9 @@ For a mark Simple Icons carries, add a line to `SIMPLE` in the generator. For
 any other, drop the SVG in here as its source has it, leaving out at most the
 word beside the mark, add a line to `LOCAL` naming its source and licence, add
 both to the section above and the licence's text beside this file when it asks
-for one, then give the provider its `mark` in `src/vpnProviders.ts` and run the
-generator:
+for one. A logo whose colours do not survive one ink gets its brand's
+single-colour version from Simple Icons under `HOVER`. Then give the provider
+its `mark` in `src/vpnProviders.ts` and run the generator:
 
     npm pack simple-icons@16 && tar xzf simple-icons-*.tgz
     python scripts/gen_vpn_marks.py package/icons
