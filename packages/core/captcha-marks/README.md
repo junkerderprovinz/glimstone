@@ -38,10 +38,9 @@ serves:
 ## Left out
 
 A solver whose own mark has no clean source wears the captcha glyph. No icon
-set carries 9kw.eu, Anti-Captcha or DeathByCaptcha, selfh.st icons included.
-Anti-Captcha's header SVG holds only part of its name, DeathByCaptcha's site
-and browser extensions show it only as a picture, and 9kw.eu's site did not
-answer.
+set carries Anti-Captcha or DeathByCaptcha, selfh.st icons included.
+Anti-Captcha's header SVG holds only part of its name, and DeathByCaptcha's
+site and browser extensions show it only as a picture.
 
 ## Trademarks
 

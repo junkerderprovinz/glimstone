@@ -49,10 +49,9 @@ is under this project's own licence, so the combined work stays AGPL-3.0.
 ## Left out
 
 A provider whose own mark has no clean source wears the glyph of its kind. No
-icon set carries AllDebrid, BestDebrid, CocoLeech, CoolDebrid, DebridItalia,
-Deepbrid, FakirDebrid, LinkSnappy, Mega-Debrid, MultiUp, MyDebrid, NeoDebrid,
-Offcloud, ProLeech, RPNet or Zevera, nor Clicknupload, ddownload, FileBoom,
-filer.net, FileSpace, Gofile, KatFile, Keep2Share, KrakenFiles, NitroFlare,
+icon set carries AllDebrid, BestDebrid, CocoLeech, CoolDebrid, Deepbrid,
+FakirDebrid, Mega-Debrid, MyDebrid, Offcloud, RPNet or Zevera, nor ddownload,
+FileBoom, filer.net, Gofile, KatFile, Keep2Share, KrakenFiles, NitroFlare,
 Rapidgator, Send.now, TezFiles or Uploadrar, selfh.st icons included, and
 their sites show their logos as pictures. BestDebrid's header logo is a stock
 icon from Ionicons rather than a mark of its own, RPNet's SVG holds only
