@@ -20,12 +20,12 @@
     "brotli": 36608
   },
   "@glimstone/svelte": {
-    "gzip": 49664,
-    "brotli": 39936
+    "gzip": 52224,
+    "brotli": 41984
   },
   "@glimstone/vue": {
-    "gzip": 43520,
-    "brotli": 36352
+    "gzip": 45568,
+    "brotli": 37888
   },
   "plugin glimstone.js": {
     "gzip": 215040,
