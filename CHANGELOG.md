@@ -4,7 +4,7 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
-Apps that connect to storage, send notifications, set up MCP clients or sign in to container registries pick their providers from a shared catalog, which carries each provider's group, search words and mark, so they no longer keep a list of their own.
+Apps that connect to storage, send notifications, set up MCP clients, sign in to container registries, route through a VPN or sign in to debrid services and file hosters pick their providers from a shared catalog, which carries each provider's group, search words and mark, so they no longer keep a list of their own.
 
 **Adopting apps:**
 
@@ -17,6 +17,8 @@ Apps that connect to storage, send notifications, set up MCP clients or sign in 
 - **A group that rates itself:** give its entry in `titles` as `{ title, badge, hint }` instead of a plain title, and the badge and the (i) stand in its eyebrow's line.
 - **An MCP client picker of your own:** pass `MCP_PROVIDERS` from `@glimstone/core/mcpProviders` to `catalogPicker` with the ids your setup dialog knows and titles for its seven groups. The ids are the ones the apps already store, such as `claude-code`, `copilot-cli` and `vibe`. The web chat at claude.ai is `claude`, so map an id like `claudeai` before you switch. Other client is a word to translate and takes `last: true` through `own`. The setup steps, paths and key handling stay with your app.
 - **A registry picker of your own:** pass `REGISTRY_PROVIDERS` from `@glimstone/core/registryProviders` to `catalogPicker` with titles for `public`, `cloud` and `selfHosted`. The host you sign in to stays yours: hand it in as the tile's `sub` through `own`, and give Other registry `last: true`. Drop your own copies of the logos and tile colours.
+- **A VPN picker of your own:** pass `VPN_PROVIDERS` from `@glimstone/core/vpnProviders` to `catalogPicker` with the ids you connect to and titles for `provider` and `appOnly`. The ids are the ones the apps already store, such as `nordvpn`, `protonvpn`, `pia` and `custom`. Give the `appOnly` tiles a `status` through `own`, which keeps them in view as tiles that cannot be picked, and `custom`, the own WireGuard config, `last: true` and a name in your language.
+- **An account picker for downloads:** pass `DOWNLOAD_PROVIDERS` from `@glimstone/core/downloadProviders` with titles for `debrid` and `hoster`. A debrid service's id is the word you store its key under, such as `realdebrid` or `torbox`, and a hoster's is the domain its login is filed under, such as `rapidgator.net`. The catalog holds the hosters an app talks to with a client of its own, so add the tile of any other hoster yourself.
 - **A backend the catalog does not know:** `catalogPicker` leaves an unknown id out, so add its tile yourself.
 - **Flutter:** nothing changes there.
 
@@ -27,6 +29,8 @@ Apps that connect to storage, send notifications, set up MCP clients or sign in 
 - **`NOTIFY_PROVIDERS`** in its own entry, `@glimstone/core/notifyProviders`: nine services wearing the marks of `SERVICE_MARKS`, then email and the webhook with a glyph each. The documentation site's channel pickers pick from it.
 - **`MCP_PROVIDERS`** in its own entry, `@glimstone/core/mcpProviders`: 33 MCP clients in seven groups, from chat apps to automation, 28 of them with their brand's mark and the rest with a glyph. The marks are `MCP_MARKS` in `@glimstone/core/mcpMarks`, which `scripts/gen_mcp_marks.py` writes from `packages/core/mcp-marks/`, where every source and licence is recorded.
 - **`REGISTRY_PROVIDERS`** in its own entry, `@glimstone/core/registryProviders`: twelve container registries in three groups, each with its mark except Other registry. The marks are `REGISTRY_MARKS` in `@glimstone/core/registryMarks`, and GitLab's, Quay's, Gitea's and Harbor's bring a `hover` drawing in one colour for the lit tile. `scripts/gen_registry_marks.py` writes them from `packages/core/registry-marks/`.
+- **`VPN_PROVIDERS`** in its own entry, `@glimstone/core/vpnProviders`: 34 providers that hand out WireGuard, the own WireGuard config among them, then 15 that keep it inside their own app. 15 of the 49 wear their brand's or their owner's mark, and the rest a glyph. The marks are `VPN_MARKS` in `@glimstone/core/vpnMarks`, which `scripts/gen_vpn_marks.py` writes from `packages/core/vpn-marks/`.
+- **`DOWNLOAD_PROVIDERS`** in its own entry, `@glimstone/core/downloadProviders`: 20 debrid services, then 19 file hosters by domain, with their other domains as search words. Seven of the 39 wear their brand's mark, and the rest a glyph. The marks are `DOWNLOAD_MARKS` in `@glimstone/core/downloadMarks`, which `scripts/gen_download_marks.py` writes from `packages/core/download-marks/`.
 - **Unraid's mark** in `SERVICE_MARKS`, from Simple Icons, for the server's own notifications.
 - **`GLOSSARY.md`**, the words pickers and catalogs use: provider, target, catalog, group, mark and glyph.
 
