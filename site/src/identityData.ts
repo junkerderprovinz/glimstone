@@ -23,10 +23,10 @@ export function identityPicker<M>(glyph: (name: string) => M) {
   const { items, groups } = catalogPicker(IDENTITY_PROVIDERS, {
     ids: IDENTITY_PROVIDERS.entries.map((e) => e.id),
     titles: TITLES,
-    glyph: (entry) => glyph(entry.glyph ?? "IconSignIn"),
+    glyph: (entry) => glyph(entry.glyph ?? "IconKey"),
     lang: "en",
   });
-  const other: PickItem<M> = { id: "custom", label: OTHER, group: "selfHosted", tip: "Any OpenID Connect issuer", last: true, mark: glyph("IconSignIn") };
+  const other: PickItem<M> = { id: "custom", label: OTHER, group: "selfHosted", tip: "Any OpenID Connect issuer", last: true, mark: glyph("IconKey") };
   return { items: [...items, other], groups };
 }
 
