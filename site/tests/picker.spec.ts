@@ -185,6 +185,17 @@ test.describe("PickerWindow", () => {
     expect(hidden).toBe(true);
   });
 
+  test("[picker-name-descenders] a tile's name keeps the descenders of g, p and y inside its box", async ({ page }) => {
+    await open(page, "/components/picker-window");
+    await stage(page, "PickerWindowIdentity").getByRole("button", { name: "Add single sign-on" }).click();
+    const window = page.getByRole("dialog", { name: "Add single sign-on" });
+    await expect(window).toBeVisible();
+    const cut = await window.locator(".glim-readme-btn-name").evaluateAll((all) =>
+      all.filter((el) => el.scrollHeight > el.clientHeight).map((el) => el.textContent),
+    );
+    expect(cut).toEqual([]);
+  });
+
   test("[picker-search-fits] a long placeholder ends in an ellipsis inside the field rather than being cut", async ({ page }) => {
     await show(page);
     const field = picker(page).locator(".glim-pick-search");
