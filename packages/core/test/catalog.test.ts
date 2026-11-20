@@ -1,6 +1,15 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { catalogPicker, type Catalog } from '../src/catalog.ts';
+import { CAPTCHA_PROVIDERS } from '../src/captchaProviders.ts';
+import { DOWNLOAD_PROVIDERS } from '../src/downloadProviders.ts';
+import { IDENTITY_PROVIDERS } from '../src/identityProviders.ts';
+import { MCP_PROVIDERS } from '../src/mcpProviders.ts';
+import { NOTIFY_PROVIDERS } from '../src/notifyProviders.ts';
+import { REGISTRY_PROVIDERS } from '../src/registryProviders.ts';
+import { STORAGE_PROVIDERS } from '../src/storageProviders.ts';
+import { TRANSFER_PROVIDERS } from '../src/transferProviders.ts';
+import { VPN_PROVIDERS } from '../src/vpnProviders.ts';
 
 // A catalog of another kind than storage, so nothing here leans on one.
 type Group = 'commercial' | 'selfhosted' | 'protocol';
@@ -13,6 +22,7 @@ const tunnels: Catalog<Group> = {
     { id: 'hearth', name: 'Hearth', group: 'selfhosted' },
     { id: 'wire', name: 'WireGuard', kind: 'Tunnel', group: 'protocol', glyph: 'IconNetwork' },
     { id: 'plain', name: 'Plain tunnel', group: 'protocol', glyph: 'IconLink', word: true },
+    { id: 'any', name: 'Any server', group: 'protocol', glyph: 'IconLink', word: true, last: true },
   ],
 };
 const titles = { commercial: 'Services', selfhosted: 'Your own', protocol: 'Protocols' };
@@ -82,4 +92,27 @@ test("the app's own words win, and the catalog's name stays findable beside a tr
   assert.deepEqual(items.map((i) => i.label), ['Hearth', 'Einfacher Tunnel']);
   assert.equal(items[1]!.hint, 'Ohne Anbieter.');
   assert.deepEqual(items[1]!.terms, ['Plain tunnel']);
+});
+
+test('the catch-all a catalog marks last comes to the app marked last, unless its own words say otherwise', () => {
+  const ids = ['any', 'wire', 'plain'] as const;
+  const marked = catalogPicker(tunnels, { ids, titles, glyph, lang: 'en' }).items;
+  assert.deepEqual(marked.filter((i) => i.last).map((i) => i.id), ['any']);
+  const own = catalogPicker(tunnels, { ids, titles, glyph, lang: 'en', own: (e) => (e.id === 'any' ? { last: false } : undefined) }).items;
+  assert.equal(own.find((i) => i.id === 'any')!.last, false);
+});
+
+test('a shared catalog keeps at most one catch-all in a group, and the ones that take anything stand last', () => {
+  const catalogs: Catalog[] = [CAPTCHA_PROVIDERS, DOWNLOAD_PROVIDERS, IDENTITY_PROVIDERS, MCP_PROVIDERS, NOTIFY_PROVIDERS, REGISTRY_PROVIDERS, STORAGE_PROVIDERS, TRANSFER_PROVIDERS, VPN_PROVIDERS];
+  for (const catalog of catalogs) {
+    for (const group of catalog.groups) {
+      assert.ok(catalog.entries.filter((e) => e.group === group && e.last).length <= 1, group);
+    }
+  }
+  const last = (catalog: Catalog) => catalog.entries.filter((e) => e.last).map((e) => e.id);
+  assert.deepEqual(last(STORAGE_PROVIDERS), ['s3']);
+  assert.deepEqual(last(VPN_PROVIDERS), ['custom']);
+  assert.deepEqual(last(NOTIFY_PROVIDERS), ['webhook']);
+  assert.deepEqual(last(MCP_PROVIDERS), ['other']);
+  assert.deepEqual(last(REGISTRY_PROVIDERS), ['other']);
 });

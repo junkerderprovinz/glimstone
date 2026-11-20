@@ -5,7 +5,7 @@
 //
 // A registry everybody reaches at one address is public. One a cloud hands out
 // per account sits under the clouds, and one people run themselves stands last,
-// with the registry at any address, which the app marks last.
+// with the registry at any address last of all.
 //
 // A registry wears its own mark or its owner's, never a neighbour's.
 
@@ -35,6 +35,7 @@ const ENTRIES = [
     terms: ["Docker Distribution", "Nexus", "Artifactory", "Zot"],
     glyph: "IconDatabase",
     word: true,
+    last: true,
   },
 ] as const satisfies readonly CatalogEntry<RegistryGroup>[];
 

@@ -85,7 +85,7 @@ const ENTRIES = [
   { id: "qingstor", name: "QingStor", group: "storage", terms: ["QingCloud"], mark: M.qingcloud },
   { id: "r2", name: "Cloudflare R2", group: "storage", terms: S3, mark: M.cloudflare },
   { id: "rustfs", name: "RustFS", group: "storage", terms: S3, mark: M.rustfs },
-  { id: "s3", name: "S3 compatible", group: "storage", glyph: "IconDatabase", word: true },
+  { id: "s3", name: "Custom S3", group: "storage", terms: ["S3 compatible"], glyph: "IconDatabase", word: true, last: true },
   { id: "scaleway", name: "Scaleway Object Storage", group: "storage", terms: S3, mark: M.scaleway },
   { id: "seaweedfs", name: "SeaweedFS", group: "storage", terms: S3, mark: M.seaweedfs },
   { id: "sia", name: "Sia", group: "storage", mark: M.sia },

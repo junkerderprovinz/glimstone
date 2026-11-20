@@ -31,7 +31,7 @@ export function mcpPicker<M>(glyph: (name: string) => M) {
     titles: TITLES,
     glyph: (entry) => glyph(entry.glyph ?? "IconApp"),
     lang: "en",
-    own: (entry) => (entry.id === "other" ? { tip: "Any client that reaches a server by its address", last: true } : undefined),
+    own: (entry) => (entry.id === "other" ? { tip: "Any client that reaches a server by its address" } : undefined),
   });
 }
 

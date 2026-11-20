@@ -4,7 +4,6 @@
 // framework's demo draws the glyphs its own way.
 import { catalogPicker, type PickerText } from "@glimstone/core";
 import { VPN_PROVIDERS } from "@glimstone/core/vpnProviders";
-import { VPN_LAST } from "./vpnIds";
 
 const TITLES = { provider: "Providers", appOnly: "Only in their own app" };
 
@@ -17,8 +16,6 @@ export const VPN_TEXT: PickerText = {
   back: "Back",
 };
 
-const LAST = new Set<string>(VPN_LAST);
-
 /** The picker's tiles and groups, with the framework's own glyph for a provider without a mark. */
 export function vpnPicker<M>(glyph: (name: string) => M) {
   return catalogPicker(VPN_PROVIDERS, {
@@ -29,8 +26,8 @@ export function vpnPicker<M>(glyph: (name: string) => M) {
     own: (entry) =>
       entry.group === "appOnly"
         ? { status: "Not supported", hint: "Allows WireGuard only in its own app." }
-        : LAST.has(entry.id)
-          ? { tip: "Any WireGuard server", last: true }
+        : entry.last
+          ? { tip: "Any WireGuard server" }
           : undefined,
   });
 }

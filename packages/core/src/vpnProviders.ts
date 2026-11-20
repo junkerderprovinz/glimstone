@@ -7,7 +7,7 @@
 // login, stands under providers. One that keeps WireGuard inside its own app
 // stands apart, so an app can show it as a tile that waits rather than leave
 // somebody searching for it. The own configuration takes any WireGuard server
-// and is the tile an app marks last.
+// and stands last.
 
 import type { Catalog, CatalogEntry } from "./catalog.ts";
 import { VPN_MARKS as M } from "./vpnMarks.ts";
@@ -21,7 +21,7 @@ const ENTRIES = [
   { id: "azirevpn", name: "AzireVPN", group: "provider", mark: M.azirevpn },
   { id: "cactusvpn", name: "CactusVPN", group: "provider", mark: M.cactusvpn },
   { id: "cryptostorm", name: "cryptostorm", group: "provider", mark: M.cryptostorm },
-  { id: "custom", name: "WireGuard", group: "provider", terms: [".conf"], mark: M.wireguard },
+  { id: "custom", name: "WireGuard", group: "provider", terms: [".conf"], mark: M.wireguard, last: true },
   { id: "fastestvpn", name: "FastestVPN", group: "provider", mark: M.fastestvpn },
   { id: "hideme", name: "hide.me", group: "provider", mark: M.hideme },
   { id: "ipvanish", name: "IPVanish", group: "provider", mark: M.ipvanish },

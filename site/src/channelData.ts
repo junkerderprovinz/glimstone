@@ -17,7 +17,7 @@ export const CHANNEL_TEXT: PickerText = {
   back: "Back",
 };
 
-const OWN: Partial<Record<NotifyProviderId, { hint?: string; tip?: string; last?: boolean }>> = {
+const OWN: Partial<Record<NotifyProviderId, { hint?: string; tip?: string }>> = {
   apprise: { hint: "Hands each message to an Apprise server, which passes it on to the services it knows." },
   discord: { hint: "Posts each message into a channel through its webhook." },
   gotify: { hint: "Pushes each message to a Gotify server of your own." },
@@ -27,7 +27,7 @@ const OWN: Partial<Record<NotifyProviderId, { hint?: string; tip?: string; last?
   shoutrrr: { hint: "Reaches dozens of services through one address each." },
   slack: { hint: "Posts each message into a channel through its incoming webhook." },
   smtp: { hint: "Sends each message as an email through your own mail server." },
-  webhook: { tip: "Any address that takes a request", last: true },
+  webhook: { tip: "Any address that takes a request" },
 };
 
 /** The picker's tiles and groups, with the framework's own glyph for email and webhooks. */

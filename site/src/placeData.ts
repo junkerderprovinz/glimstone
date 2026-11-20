@@ -18,7 +18,7 @@ export const STORAGE_GROUPS: PickGroup[] = [
 
 export const STORAGE_TEXT: PickerText = {
   search: "Search places",
-  none: "Nothing matches “{query}”. S3 compatible reaches most clouds.",
+  none: "Nothing matches “{query}”. Custom S3 reaches most clouds.",
   clear: "Clear the search",
   close: "Close",
   cancel: "Cancel",
@@ -56,7 +56,7 @@ export function storageItems<M>(glyph: (name: string) => M) {
     { id: "nfs", label: "NFS", sub: "Unix share", group: "network", mark: glyph("IconNetwork") },
     { id: "nimbo", label: "Nimbo", sub: "Cloud drive", group: "cloud", mark: NIMBO_MARK },
     { id: "webdav", label: "WebDAV", group: "cloud", status: "Needs a direct address", mark: glyph("IconCloud") },
-    { id: "s3", label: "S3 compatible", group: "cloud", last: true, mark: glyph("IconCloud") },
+    { id: "s3", label: "Custom S3", group: "cloud", last: true, mark: glyph("IconCloud") },
   ];
 }
 
@@ -67,7 +67,7 @@ const LABELS = new Map([
   ["nfs", "NFS"],
   ["nimbo", "Nimbo"],
   ["webdav", "WebDAV"],
-  ["s3", "S3 compatible"],
+  ["s3", "Custom S3"],
 ]);
 
 export const placeOf = (id: string) => LABELS.get(id) ?? id;

@@ -8,7 +8,7 @@ const TITLES = { cloud: "Clouds", storage: "Object storage", protocol: "Servers 
 
 export const STORAGE_TEXT: PickerText = {
   search: "Search providers",
-  none: "Nothing matches “{query}”. S3 compatible reaches most bucket stores, and WebDAV most servers.",
+  none: "Nothing matches “{query}”. Custom S3 reaches most bucket stores, and WebDAV most servers.",
   clear: "Clear the search",
   close: "Close",
   cancel: "Cancel",

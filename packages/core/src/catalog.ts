@@ -20,6 +20,8 @@ export interface CatalogEntry<G extends string = string, I extends string = stri
   glyph?: string;
   /** The name and kind are words rather than a brand, which the app says in its own language. */
   word?: boolean;
+  /** The tile that takes any provider of its group, which stands last in it. */
+  last?: boolean;
 }
 
 export interface Catalog<G extends string = string, I extends string = string> {
@@ -58,6 +60,7 @@ export function catalogPicker<G extends string, I extends string, M>(
     .map((e) => {
       const item: PickItem<M> = { id: e.id, label: e.name, group: e.group, ...pick.own?.(e) };
       if (e.kind && item.sub === undefined) item.sub = e.kind;
+      if (e.last && item.last === undefined) item.last = true;
       // A translated name still finds the provider by the name its own documentation uses.
       const terms = [...(item.label !== e.name ? [e.name] : []), ...(e.terms ?? []), ...(item.terms ?? [])];
       if (terms.length > 0) item.terms = terms;
