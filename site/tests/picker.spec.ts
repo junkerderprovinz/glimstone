@@ -399,7 +399,7 @@ test.describe("PickerWindow states", () => {
     await expect(box.locator(".glim-mark-hover")).toBeVisible();
   });
 
-  test("[picker-wordmark] a wordmark stands alone in the tile's middle, and the tile keeps its name for the search and the screen reader", async ({ page }) => {
+  test("[picker-wordmark] a wordmark stands alone where a tile's mark starts, and the tile keeps its name for the search and the screen reader", async ({ page }) => {
     await showPlaces(page);
     const nimbo = places(page).getByRole("button", { name: "Nimbo Cloud drive", exact: true });
     await expect(nimbo.locator(".glim-readme-btn-name")).toBeHidden();
@@ -411,7 +411,9 @@ test.describe("PickerWindow states", () => {
       expect(mark.right, dir).toBeLessThanOrEqual(tile.right - 8);
       expect(mark.top, dir).toBeGreaterThanOrEqual(tile.top + 8);
       expect(mark.bottom, dir).toBeLessThanOrEqual(tile.bottom - 8);
-      expect(Math.abs(mark.left + mark.right - tile.left - tile.right) / 2, dir).toBeLessThan(1);
+      // 14px is the start of the mark box on every tile.
+      if (dir === "ltr") expect(Math.abs(mark.left - tile.left - 14), dir).toBeLessThan(1.5);
+      else expect(Math.abs(tile.right - 14 - mark.right), dir).toBeLessThan(1.5);
       // Wider than the square mark box a tile with a name gives its mark.
       expect(box.width, dir).toBeGreaterThan(tile.width * 0.8);
     }
@@ -430,6 +432,7 @@ test.describe("PickerWindow states", () => {
     expect(await nimbo.locator("svg").evaluate((svg) => getComputedStyle(svg).stroke)).toBe("rgb(255, 255, 255)");
     const lit = await drawn(nimbo);
     expect(lit.mark.top).toBeLessThan(rest.mark.top);
+    expect(Math.abs(lit.mark.left - rest.mark.left)).toBeLessThan(1.5);
     expect(lit.mark.bottom).toBeLessThanOrEqual(lit.sub.top);
     expect(lit.mark.top).toBeGreaterThanOrEqual(lit.tile.top);
   });
