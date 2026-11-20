@@ -31,8 +31,20 @@ body {
   display: grid;
   grid-template-columns: 15rem minmax(0, 1fr) 13rem;
   gap: 2.5rem;
-  max-width: 88rem;
   padding: 0 var(--page-gutter);
+}
+/* On a wide screen the page keeps the width it has at 88rem and stands in the
+   middle of the room between the nav and the window's edge, where the contents
+   list stands, so it does not cling to the nav. */
+@media (min-width: 88rem) {
+  .site-frame > main {
+    max-width: 53rem;
+    margin-inline-start: max(0px, (100% - 53rem) / 2);
+  }
+  .site-frame.is-home > main {
+    max-width: 68.5rem;
+    margin-inline-start: max(0px, (100% - 68.5rem) / 2);
+  }
 }
 @media (max-width: 80rem) {
   .site-frame { grid-template-columns: 15rem minmax(0, 1fr); }
@@ -717,9 +729,15 @@ pre.code {
 }
 :root { --look-w: 28rem; }
 @media (min-width: 64rem) {
-  :root[data-look-open] .site-frame { max-width: min(88rem, calc(100% - var(--look-w))); }
+  :root[data-look-open] .site-frame { max-width: calc(100% - var(--look-w)); }
   :root[data-look-open] .site-frame:not(.is-home) { grid-template-columns: 15rem minmax(0, 1fr); }
   :root[data-look-open] .site-toc { display: none; }
+}
+/* The panel takes the contents list's column and its own width off the frame,
+   so the page's margin gives them back and the page stays where it stood. */
+@media (min-width: 88rem) {
+  :root[data-look-open] .site-frame:not(.is-home) > main { margin-inline-start: max(0px, (100% + 12.5rem - 53rem) / 2); }
+  :root[data-look-open] .site-frame.is-home > main { margin-inline-start: max(0px, (100% + var(--look-w) - 68.5rem) / 2); }
 }
 @media (max-width: 63.99rem) {
   .look-panel {

@@ -325,6 +325,24 @@ test.describe("at phone width", () => {
   });
 });
 
+test("[site-centre] on a wide screen the page stands in the middle between the nav and the window's edge, with the contents list at that edge", async ({ page }) => {
+  inDepth();
+  await page.setViewportSize({ width: 1920, height: 1000 });
+  for (const path of ["/components/angle-slider", "/"]) {
+    await open(page, path);
+    const box = (sel: string) => page.locator(sel).first().evaluate((e) => e.getBoundingClientRect().toJSON() as DOMRect);
+    const frame = page.locator(".site-frame");
+    const [gutter, gap] = await frame.evaluate((f) => [parseFloat(getComputedStyle(f).paddingInlineEnd), parseFloat(getComputedStyle(f).columnGap)]);
+    const edge = (await box(".site-frame")).right - gutter;
+    const nav = await box(".site-nav");
+    const main = await box(".site-frame > main");
+    const room = { start: nav.right + gap, end: path === "/" ? edge : (await box(".site-toc")).left - gap };
+    if (path !== "/") expect(Math.abs((await box(".site-toc")).right - edge), path).toBeLessThan(1);
+    expect(Math.abs(main.left - room.start - (room.end - main.right)), path).toBeLessThan(2);
+    expect(main.left - room.start, path).toBeGreaterThan(100);
+  }
+});
+
 test("[site-nav-left] the docs nav stands at the window's left edge, and opening Make it yours moves neither it nor the page", async ({ page }) => {
   inDepth();
   await page.setViewportSize({ width: 1920, height: 1000 });
