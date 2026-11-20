@@ -2,6 +2,55 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 4.8.0 - 2026-11-20
+
+A new password is typed twice, a connection row takes actions of an app's own, and every catalog puts its catch-all last by itself. Logos that are their name stand alone on their tile, nearly every provider in the VPN, captcha and download catalogs wears its mark, and Arabic button labels keep their tails.
+
+## 🧩 Adopting apps
+
+- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.8.0, all packages at the same number.
+- **A new password, typed twice:** add `confirm` to the `PasswordField` that sets it, and keep "Set password" disabled until `onConfirmedChange` reports true (`@confirmed-change` in Vue). Pass `componentText(lang).passwordField` as `text` for the field's words in the app's language.
+- **The sign-in card's reset form** says "The passwords do not match", as the field does. Fill its `confirmPassword`, `mismatch`, `show` and `hide` from `componentText(lang).passwordField` to get them in the app's language.
+- **More buttons in a connection row:** pass `actions` to `ConnectionRow`, each with `id`, `label`, `labelKey`, `glyph` and `onClick`, for something like Mount and Unmount on a remote share. They stand before Test, Edit and Remove in the order you give. Give an action `busy` while it runs, then `tone: "ok"` or `"danger"` and a `title` with what it did, as on the test. The `id` becomes the button's `data-connection` hook. Vue takes the same prop, not a slot.
+- **Test, Edit and Remove wear GlimStone's glyphs:** the row draws `IconCheck`, `IconPencil` and `IconTrash` itself, so your resolver's answer for `test`, `edit` and `remove` no longer shows there. `labelKeys` still sets the translation keys.
+- **The catch-all comes last by itself:** a catalog entry can carry `last`, and `catalogPicker` hands it on. Custom S3, the webhook, Other client, Other registry and WireGuard stand last without your help, so drop the `last: true` you passed through `own`. A tile you add yourself, such as your own sign-in service, still takes `last: true`.
+- **S3 compatible is Custom S3:** the storage entry `s3` keeps its id and is called Custom S3, with S3 compatible as a search word. It is a word, so give it a name in your language through `own`.
+- **Versity is Versity:** the storage entry `versity` drops "S3 Gateway" from its name and keeps it as a search word.
+- **Linkbox is TeleBox:** the storage entry `linkbox` keeps its id and is called TeleBox. Drop any translation of "Linkbox".
+- **Providers that are gone:** the captcha catalog drops `9kw`. The download catalog drops `debriditalia`, `linksnappy`, `multiup`, `neodebrid`, `proleech`, `clicknupload.click` and `filespace.com`. Remove those ids from what you pass to `catalogPicker` and from the settings you keep beside them.
+- **Marks in place of your own:** most entries that wore a glyph in 4.7.0 have a mark now. Drop any logo of your own for an entry that has one.
+- **Logos that are their name:** if a brand's logo is just its name written out, set `wordmark: true` on its `TileMark`. The tile shows the logo alone, and `label` stays its accessible name and what the search finds. A logo with a symbol of its own keeps the symbol beside the name instead.
+- **Nine sign-in words:** `trustedProxy` leaves `@glimstone/terms`, since sign-in through a trusted proxy is left to the sign-in service.
+- **Your own copy of the stylesheet:** copy `tokens.css` again. It brings the rules for `.glim-window-actions`, which a window's foot buttons sit in, the room for descenders on `.glim-btn-label`, the inner edge of a connection tile in OLED and the size of a wordmark on its tile.
+- **Flutter:** move the git dependency to `ref: v4.8.0`.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.8.0.
+
+## ✨ Added
+
+- **`confirm` on `PasswordField`** in React, Vue, Solid and Svelte. Once the field holds a character, a second one labelled "Confirm password" appears under it, with its own eye, and a line under it says when the two do not match. The core adds `passwordConfirmView()`, and the field's words (Show, Hide, Confirm password, The passwords do not match) come in all 42 languages.
+- **Actions of the app's own in `ConnectionRow`**, in React, Vue, Solid and Svelte: the same kind of button in the same row, with their glyphs alone below 640px. Each one reports on itself like the test, with the busy ring, then green with a check or red with a cross and a shake. The core adds `connectionButtons()` and the types `ConnectionAction` and `ConnectionRowButtons`.
+- **`IconTrash`** in React, Vue, Solid and Svelte, from the new core mark `MARKS.trash`.
+- **`last` on `CatalogEntry`:** the tile that takes any provider of its group, which `catalogPicker` puts last unless the app's own words say otherwise.
+- **`wordmark` on `TileMark`:** a picker tile can show a brand's wordmark alone across the tile. `pickMarkClass` gives the mark box `.glim-readme-btn-mark--wordmark`, so the four packages render the same markup.
+- **Every VPN provider wears its mark:** Anonine, Astrill VPN, cryptostorm, FastestVPN, Ivacy VPN, TorGuard, TunnelBear, Turbo VPN, VPN.ac and Xeovo join the rest.
+- **Every captcha solver wears its mark:** Anti-Captcha and DeathByCaptcha.
+- **Debrid services and file hosters:** AllDebrid, CocoLeech, CoolDebrid, Deepbrid, FakirDebrid, Mega-Debrid, MyDebrid, Offcloud, RPNet and Zevera wear their marks, and so does every hoster: ddownload, FileBoom, filer.net, Gofile, KatFile, Keep2Share, KrakenFiles, NitroFlare, Rapidgator, Send.now, TezFiles and Uploadrar. BestDebrid alone keeps a glyph, the download arrow. Keep2Share's name stands without its slate plate, which is the colour its tile lights in.
+- **Storage and sign-in:** Gofile, TeleBox, OpenDrive and Synology C2 wear their marks, and Kanidm and Jan wear theirs in `IDENTITY_PROVIDERS` and `MCP_PROVIDERS`. TeleBox shows its band and outlined faces at rest and lit alike.
+- **Brand colours on the lit tile:** Keycloak lights in its blue, Linode and dosya.dev in their greens, VyprVPN in its orange and TorGuard in its green, where the tile was grey or black.
+- **Sources:** logos that exist only as pictures are traced or redrawn as vectors, and every source and licence is recorded in its `*-marks/` folder.
+
+## 🎨 Design
+
+- **A wordmark stands in for the name** ("Pickers and wizards" in the design language). It sits in the middle of the tile, between even margins that leave the same room on both sides when there's an (i), and stays near the size of a name: a long one is held to 6rem, a short one grows to the full height. When a second line or a status comes in, it moves up to where the name would sit. A logo with a symbol of its own, such as TorGuard's padlock or KatFile's badge, shows the symbol beside the name instead.
+- **A mark keeps its shape under the pointer.** Where a logo's parts would run together in one ink, the lit tile shows a drawing of its own with gaps between the parts. A detail that reads only in its own colour, such as Zevera's white spot, paints through `--mark-kept`, which no tile sets.
+
+## 🐛 Fixed
+
+- **A window's foot keeps its buttons on one row.** The start line and the buttons wrapped as separate items, so the start's minimum width pushed the last button onto a second line, and an empty start still took that room. The buttons wrap as one group: a start line stays beside them while it fits and otherwise takes the foot's full width above them. A start of `null`, `false` or `""` draws nothing in all four packages, and the core tells them apart with `footStartShows`.
+- **Arabic button labels keep their tails and dots.** With Noto Sans Arabic, the clip that ends a long label cut what hangs below the line, so التالي read as التالى. The label's box reaches 0.15em past the line on both sides and gives that room back, and a test checks Arabic labels in Chromium and Firefox.
+- **A connection tile in OLED has no frame on the row's edge.** The ring that lifts a near-black tile off the card ran round the whole tile and drew a light line along the row's own edge. It stands only toward the name.
+- **Garage, premiumize.me and Keycloak keep their shape on a lit tile.** Garage lost the lower half of its wheel, because its source carries a hidden second copy of the drawing that set the parts' roles wrong. premiumize.me's figure ran into its check, and Keycloak's lit drawing was the brand's black version, a different shape from the one at rest. Each lit tile shows a drawing of its own in the shape of the mark at rest.
+
 ## 4.7.0 - 2026-11-19
 
 A connected service or account is one row, `ConnectionRow`, with its mark on a brand tile, who is signed in and the test at the end. Sign-in services get a catalog of their own, the glossary learns the words of signing in, and 42 more providers wear their brand's mark instead of a glyph.
