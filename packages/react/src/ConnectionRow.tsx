@@ -45,7 +45,7 @@ export function ConnectionRow({ name, mark, status, badges, children, test, acti
   return (
     <div data-glim="ConnectionRow" role="group" aria-label={name} {...rest} className={["glim-well glim-connection", className].filter(Boolean).join(" ")}>
       <span className="glim-connection-tile" style={tile.style as CSSProperties | undefined} aria-hidden="true">
-        <span className="glim-connection-mark">{tile.svg === undefined ? (mark as ReactNode) : <BrandMark svg={tile.svg} />}</span>
+        <span className={tile.wordmark ? "glim-connection-mark glim-connection-mark--wordmark" : "glim-connection-mark"}>{tile.svg === undefined ? (mark as ReactNode) : <BrandMark svg={tile.svg} />}</span>
       </span>
       <div className="glim-connection-main">
         <div className="glim-connection-head">

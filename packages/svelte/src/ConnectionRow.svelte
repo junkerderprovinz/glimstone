@@ -59,7 +59,7 @@
 
 <div data-glim="ConnectionRow" role="group" aria-label={name} {...rest} class={["glim-well glim-connection", className].filter(Boolean).join(" ")}>
   <span class="glim-connection-tile" style={css(tile.style)} aria-hidden="true">
-    <span class="glim-connection-mark">
+    <span class={tile.wordmark ? "glim-connection-mark glim-connection-mark--wordmark" : "glim-connection-mark"}>
       {#if tile.svg !== undefined}<BrandMark svg={tile.svg} />{:else}{@render (mark as Snippet)()}{/if}
     </span>
   </span>

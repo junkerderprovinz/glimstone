@@ -44,7 +44,7 @@ const buttons = computed(() =>
 <template>
   <div data-glim="ConnectionRow" role="group" :aria-label="name" class="glim-well glim-connection">
     <span class="glim-connection-tile" :style="tile.style" aria-hidden="true">
-      <span class="glim-connection-mark">
+      <span :class="tile.wordmark ? 'glim-connection-mark glim-connection-mark--wordmark' : 'glim-connection-mark'">
         <BrandMark v-if="tile.svg !== undefined" :svg="tile.svg" />
         <component :is="mark" v-else />
       </span>

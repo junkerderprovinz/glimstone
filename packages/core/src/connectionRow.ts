@@ -51,14 +51,17 @@ export const CONNECTION_ROW_KEYS: ConnectionRowLabelKeys = { test: "test", edit:
 /**
  * What the tile draws: a brand's mark as the lit picker tile shows it, with
  * its colour pair, or nothing for one of the app's glyphs, whose tile takes
- * the accent.
+ * the accent. A wordmark says so, since a name written out needs the tile's
+ * width rather than the square a symbol fits in.
  */
-export function connectionTile(mark: unknown): { svg?: string; style?: Record<string, string> } {
+export function connectionTile(mark: unknown): { svg?: string; style?: Record<string, string>; wordmark?: true } {
   if (!isTileMark(mark)) return {};
-  return {
+  const tile: { svg?: string; style?: Record<string, string>; wordmark?: true } = {
     svg: mark.hover ?? mark.svg,
     style: mark.tile && mark.ink ? { "--tile": mark.tile, "--tile-ink": mark.ink } : undefined,
   };
+  if (mark.wordmark) tile.wordmark = true;
+  return tile;
 }
 
 /**

@@ -3345,6 +3345,15 @@ test.describe("ConnectionRow", () => {
     expect(await edge()).toBe("rgba(255, 255, 255, 0.2) 1px 0px 0px 0px inset");
   });
 
+  test("[connection-wordmark] a wordmark takes the tile's width less a margin, where a symbol keeps its square", async ({ page }) => {
+    await open(page, "/components/connection-row");
+    const width = (name: string) => tile(page, name).evaluate((t) => ({ tile: t.getBoundingClientRect().width, mark: t.querySelector(".glim-connection-mark")!.getBoundingClientRect().width }));
+    const word = await width("AllDebrid");
+    const symbol = await width("Mullvad VPN");
+    expect(word.mark).toBeGreaterThan(symbol.mark * 1.5);
+    expect(word.mark).toBeLessThan(word.tile);
+  });
+
   test("[connection-glyph] the app's glyph stands on the accent in the accent's ink", async ({ page }) => {
     await open(page, "/components/connection-row");
     const look = await tile(page, "Backup server").evaluate((t) => {

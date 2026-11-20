@@ -1,10 +1,12 @@
-// The connection row demos: a VPN, a cloud drive and a registry wearing their
-// catalog marks, and a server and a share of the app's own under their glyphs.
+// The connection row demos: a VPN, a cloud drive, a registry and a debrid
+// account wearing their catalog marks, the last one a wordmark, and a server
+// and a share of the app's own under their glyphs.
 // A test reaches the first two and the share and fails on the server, and the
 // registry has no test until it is signed in again. The share brings a Mount
 // of its own that turns into Unmount. Each framework's demo draws the glyphs
 // its own way.
 import type { ConnectionRowText, ConnectionTest, TileMark } from "@glimstone/core";
+import { DOWNLOAD_MARKS } from "@glimstone/core/downloadMarks";
 import { REGISTRY_MARKS } from "@glimstone/core/registryMarks";
 import { STORAGE_MARKS } from "@glimstone/core/storageMarks";
 import { VPN_MARKS } from "@glimstone/core/vpnMarks";
@@ -34,6 +36,7 @@ export const CONNECTIONS: DemoConnection[] = [
   { id: "mullvad", name: "Mullvad VPN", mark: VPN_MARKS.mullvad, status: "Connected, traffic leaves in Vienna", more: "Used by nightly-backup and photos", reaches: true },
   { id: "nextcloud", name: "Nextcloud", mark: STORAGE_MARKS.nextcloud, status: "Signed in as maria at cloud.example.org", reaches: true },
   { id: "ghcr", name: "GitHub Container Registry", mark: REGISTRY_MARKS.github, status: "Signed in as maria-builds", badge: "Sign-in expired", reaches: false, untested: true },
+  { id: "alldebrid", name: "AllDebrid", mark: DOWNLOAD_MARKS.alldebrid, status: "Premium until 12 March", reaches: true },
   { id: "sftp", name: "Backup server", mark: "IconServer", status: "Not tested yet", badge: "Read only", tone: "neutral", reaches: false },
   { id: "media", name: "Media share", mark: "IconFolder", status: "SMB share on 192.168.1.20", reaches: true, mountable: true },
 ];

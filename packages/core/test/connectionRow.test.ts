@@ -13,6 +13,11 @@ test('a brand whose layers do not survive one ink shows its lit drawing', () => 
   assert.equal(connectionTile({ svg: '<svg id="rest"/>', hover: '<svg id="lit"/>', tile: '#6d4aff', ink: '#ffffff' }).svg, '<svg id="lit"/>');
 });
 
+test("a wordmark says so, so the row can give it the tile's width", () => {
+  assert.equal(connectionTile({ svg: '<svg/>', tile: '#fbc624', ink: '#161616', wordmark: true }).wordmark, true);
+  assert.equal(connectionTile({ svg: '<svg/>', tile: '#fbc624', ink: '#161616' }).wordmark, undefined);
+});
+
 test('a mark without its colour pair and a glyph of the app stand on the accent', () => {
   assert.deepEqual(connectionTile({ svg: '<svg/>' }), { svg: '<svg/>', style: undefined });
   assert.deepEqual(connectionTile({ type: 'span' }), {});

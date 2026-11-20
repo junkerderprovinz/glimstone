@@ -52,7 +52,7 @@ export function ConnectionRow(props: ConnectionRowProps) {
   return (
     <div data-glim="ConnectionRow" role="group" aria-label={own.name} {...rest} class={["glim-well glim-connection", own.class].filter(Boolean).join(" ")}>
       <span class="glim-connection-tile" style={css(tile().style)} aria-hidden="true">
-        <span class="glim-connection-mark">
+        <span class={tile().wordmark ? "glim-connection-mark glim-connection-mark--wordmark" : "glim-connection-mark"}>
           <Show when={tile().svg} fallback={mark() as JSX.Element}>
             {(svg) => <BrandMark svg={svg()} />}
           </Show>

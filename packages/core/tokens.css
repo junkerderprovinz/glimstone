@@ -5290,6 +5290,12 @@
     width: 100%;
     height: 100%;
   }
+  /* A name written out takes the tile's width, less the margin a symbol keeps
+     round it, and the height of a name rather than of a symbol. */
+  .glim-connection-mark--wordmark {
+    width: calc(100% - var(--space-8));
+    height: 1.5rem;
+  }
   .glim-connection-main {
     display: flex;
     flex: 1 1 0;
