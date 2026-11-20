@@ -94,7 +94,7 @@ const ENTRIES = [
   { id: "storj", name: "Storj", group: "storage", mark: M.storj },
   { id: "swift", name: "OpenStack Swift", group: "storage", mark: M.openstack },
   { id: "synologyc2", name: "Synology C2", group: "storage", terms: S3, mark: M.synologyc2 },
-  { id: "versity", name: "Versity S3 Gateway", group: "storage", mark: M.versity },
+  { id: "versity", name: "Versity", group: "storage", terms: ["S3 Gateway"], mark: M.versity },
   { id: "wasabi", name: "Wasabi", group: "storage", terms: S3, mark: M.wasabi },
 
   { id: "doi", name: "DOI", group: "protocol", terms: ["Zenodo", "Dataverse", "Figshare"], mark: M.doi },
