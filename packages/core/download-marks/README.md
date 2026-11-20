@@ -77,7 +77,8 @@ picture is drawn in and compared with it side by side:
   logo its site serves only as a picture
   (<https://cdn.alldebrid.com/lib/images/default/logo_alldebrid.png>), in its
   black, yellow and white, marked as a wordmark and lit in its yellow,
-  `#fbc624`.
+  `#fbc624`. The black turns white on the dark ground, where the outline and
+  the A would vanish.
 - `cocoleech.svg`: <https://cocoleech.com/images/coco2.png>, its name in brown
   with the green swoosh, marked as a wordmark. The brown turns the lighter
   brown of its own highlight on the dark ground.

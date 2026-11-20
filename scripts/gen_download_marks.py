@@ -114,6 +114,9 @@ FORCE_THEMED = {
     # Keep2Share's white letters, off their slate plate, in that slate on the
     # light ground.
     "keep2share": {"#fff": ("#ffffff", "#465a65")},
+    # AllDebrid's black outline and A, which the yellow keeps from being lifted,
+    # in white on the dark ground.
+    "alldebrid": {"#000000": ("#ffffff", "#000000")},
     # Dark letters that the rest of the logo keeps from being lifted: CocoLeech's
     # brown in the lighter brown of its own highlight, Uploadrar's black in white.
     "cocoleech": {"#5a2c08": ("#c58e52", "#5a2c08")},
