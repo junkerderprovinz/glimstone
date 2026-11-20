@@ -3336,6 +3336,15 @@ test.describe("ConnectionRow", () => {
     expect(look).toEqual({ ground: hexToRgb(VPN_MARKS.mullvad.tile!), ink: hexToRgb(VPN_MARKS.mullvad.ink!), tall: true });
   });
 
+  test("[connection-oled] in OLED the tile keeps its edge only toward the row, so no frame lies on the row's own edge", async ({ page }) => {
+    await page.emulateMedia({ colorScheme: "dark" });
+    await open(page, "/components/connection-row", { oled: true });
+    const edge = () => tile(page, "Mullvad VPN").evaluate((t) => getComputedStyle(t).boxShadow);
+    expect(await edge()).toBe("rgba(255, 255, 255, 0.2) -1px 0px 0px 0px inset");
+    await page.evaluate(() => (document.documentElement.dir = "rtl"));
+    expect(await edge()).toBe("rgba(255, 255, 255, 0.2) 1px 0px 0px 0px inset");
+  });
+
   test("[connection-glyph] the app's glyph stands on the accent in the accent's ink", async ({ page }) => {
     await open(page, "/components/connection-row");
     const look = await tile(page, "Backup server").evaluate((t) => {

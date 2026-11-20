@@ -5254,7 +5254,9 @@
      colour pair from the tile's own style or the accent for one of the app's
      glyphs. The tile is about as wide as a row at rest is high, so it stands
      square there and grows taller with a row that wraps; a width that followed
-     the height would push the row taller still. */
+     the height would push the row taller still. Its other edges are the row's,
+     so the edge that lifts a near-black tile off the card stands only toward
+     the name, where a ring all round would draw a frame the card shows through. */
   .glim-connection {
     display: flex;
     min-width: 0;
@@ -5273,7 +5275,10 @@
     width: 5.5rem;
     background-color: var(--tile);
     color: var(--tile-ink);
-    box-shadow: inset 0 0 0 1px var(--tile-edge, transparent);
+    box-shadow: inset -1px 0 0 var(--tile-edge, transparent);
+  }
+  [dir="rtl"] .glim-connection-tile {
+    box-shadow: inset 1px 0 0 var(--tile-edge, transparent);
   }
   .glim-connection-mark {
     display: flex;
