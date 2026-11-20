@@ -33,15 +33,24 @@ test("every id inside a mark carries the mark's own prefix, so two marks on one 
   }
 });
 
-test('a lit tile can turn every painted part into its ink or its cut-out', () => {
+test('a lit tile can turn every painted part into its ink or its cut-out, or keep it in its own colour', () => {
   for (const [id, mark] of marks) {
     // A mask or a clip path only says which parts show, and its white is no colour.
     const drawn = mark.svg.replace(/<(mask|clipPath)\b.*?<\/\1>/gs, '');
     const paints = [...drawn.matchAll(/(?:fill|stroke)[=:]"?([^";]+)/g)].map((m) => m[1]!.trim());
     for (const paint of paints) {
       if (paint === 'none' || paint.startsWith('url(')) continue;
-      assert.match(paint, /^var\(--mark-(ink|cut), /, `${id}: ${paint}`);
+      assert.match(paint, /^var\(--mark-(ink|cut|kept), /, `${id}: ${paint}`);
     }
+  }
+});
+
+test('the drawing for the lit tile paints in one colour, with its cut-outs in the tile', () => {
+  for (const [id, mark] of marks) {
+    if (!mark.hover) continue;
+    const colours = new Set([...mark.hover.matchAll(/var\(--mark-ink, ([^)]+)\)/g)].map((m) => m[1]));
+    assert.equal(colours.size, 1, `${id}: ${[...colours].join(', ')}`);
+    assert.doesNotMatch(mark.hover, /url\(#/, id);
   }
 });
 
@@ -64,7 +73,7 @@ test('the README records where every mark comes from, and every licence it names
   for (const [id] of marks) assert.match(readme, new RegExp('`' + id + '(\\.svg)?`'), id);
   const files = readdirSync(folder);
   for (const [, licence] of readme.matchAll(/`(LICENSE-[\w-]+\.txt)`/g)) assert.ok(files.includes(licence!), licence);
-  for (const svg of files.filter((f) => f.endsWith('.svg'))) assert.ok(svg.replace('.svg', '') in DOWNLOAD_MARKS, svg);
+  for (const svg of files.filter((f) => f.endsWith('.svg'))) assert.ok(svg.replace(/(-hover)?\.svg$/, '') in DOWNLOAD_MARKS, svg);
 });
 
 test('a black or grey mark turns white in the dark theme, since grey carries no brand colour to stay close to', () => {

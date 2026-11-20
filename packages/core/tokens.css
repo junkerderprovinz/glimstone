@@ -2288,8 +2288,10 @@
      mark take that colour's ink (--tile-ink). A mark paints each part with
      var(--mark-ink, <own colour>), or var(--mark-cut, <own colour>) where the
      part lies on another part of the mark, so it keeps its own colours at rest
-     and turns ink with its cut-outs in the tile colour under the pointer. The
-     variables work through inline fills, which a plain fill rule does not reach.
+     and turns ink with its cut-outs in the tile colour under the pointer. A
+     detail that only reads in its own colour paints with var(--mark-kept, ...),
+     which nothing sets. The variables work through inline fills, which a plain
+     fill rule does not reach.
      No transition: a mark of many parts would trail its tile. Only under a real
      pointer, or a tap on a touch screen would leave a resting tile lit. */
   @media (hover: hover) {

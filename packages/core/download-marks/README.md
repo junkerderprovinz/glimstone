@@ -60,7 +60,7 @@ each as the brand draws it:
 - `gofile.svg`: Gofile's folder with its speed lines.
 - `keep2share.svg`: Keep2Share's name, marked as a wordmark, without the slate
   plate it sits on, which is the colour its tile lights in. Off the plate its
-  2 turns white in a box of its blue, and on the light ground the white
+  2 is cut out of a box of its blue, and on the light ground the white
   letters take that slate.
 - `mydebrid.svg`: the M of MyDebrid's logo.
 - `rapidgator.svg`: Rapidgator's rg on its orange plate.

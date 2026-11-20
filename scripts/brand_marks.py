@@ -52,6 +52,7 @@ class MarkSet:
     one_ink: set = field(default_factory=set)
     # Colours a lit tile leaves as they are, by slug, for a detail that only
     # reads in its own colour, such as a white spot between ink and cut-out.
+    # They paint through --mark-kept, which no tile sets.
     kept: dict = field(default_factory=dict)
 
 
@@ -461,9 +462,7 @@ def roles(root, one_ink=False, kept=frozenset()):
                     break
 
     for part in parts:
-        if part["rgb"] in kept:
-            continue
-        role = "--mark-cut" if part["depth"] % 2 else "--mark-ink"
+        role = "--mark-kept" if part["rgb"] in kept else "--mark-cut" if part["depth"] % 2 else "--mark-ink"
         el = part["el"]
         for prop in ("fill", "stroke"):
             value = part[prop]
