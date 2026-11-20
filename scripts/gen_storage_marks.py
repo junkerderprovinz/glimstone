@@ -179,9 +179,9 @@ ONE_INK = {"juicefs"}
 
 MARKS = MarkSet(ROOT / "packages" / "core" / "storage-marks", FORCE_THEMED, set(), TILE_COLOUR, ONE_INK)
 
-# The marks whose lit tile shows <id>-hover.svg: premiumize.me's figure and
-# check in one ink, kept apart by a gap where the check crosses the figure.
-HOVER = ["premiumize"]
+# The marks whose lit tile shows <id>-hover.svg: Garage's and premiumize.me's
+# parts in one ink, kept apart by gaps where one crosses another.
+HOVER = ["garage", "premiumize"]
 
 if SRC is None or not SRC.is_dir():
     raise SystemExit("pass the icons folder of simple-icons@16: python scripts/gen_storage_marks.py <path>")

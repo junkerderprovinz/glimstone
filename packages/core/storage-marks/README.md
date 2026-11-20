@@ -38,6 +38,11 @@ Labs team and contributors:
   `oraclecloud.svg` is `svg/oracle-cloud.svg`.
 - `linode.svg` lights in Linode's green, deepened to `#007a43` so the white
   ink reaches 4.5:1, rather than the black it measures as.
+- `garage.svg` is the orange drawing without the yellow and blue copy of it
+  that lies under it, out of sight, in the source file. `garage-hover.svg`,
+  the lit tile's drawing, is its roof, body, wheel and pointer in one colour,
+  with the grey band left as a gap and a gap cut round the wheel, which hangs
+  below the body and would otherwise lose its lower half to the tile.
 - `premiumize-hover.svg`, the lit tile's drawing, is the figure and check of
   `premiumize.svg` in one colour, with a gap cut into the figure along the
   check so the two stay apart in a single ink.
