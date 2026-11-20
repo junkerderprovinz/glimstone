@@ -56,4 +56,5 @@ export const hr: ComponentWords = {
   tour: { back: "Natrag", next: "Dalje", close: "Zatvori", progress: "{step} od {steps}" },
   floatingPanel: { minimize: "Smanji", maximize: "Povećaj", restore: "Vrati", close: "Zatvori" },
   signaturePad: { area: "Potpis", clear: "Očisti" },
+  passwordField: { show: "Prikaži", hide: "Sakrij", confirm: "Potvrdi lozinku", mismatch: "Lozinke se ne podudaraju" },
 };

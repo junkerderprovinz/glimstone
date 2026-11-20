@@ -76,7 +76,7 @@ needs none of them.
 | `FieldRow`, `FieldRowGroup` | One labelled row: the name at its start with an "(i)", the control at its end, named by the row, or a lone value as a pill, and rows that share one column for their names. `useFieldName` gives an app's own control the same name |
 | `GlyphField` | A field with a glyph inside it, such as a filter, and controls after it in the box |
 | `Table` | A short list of facts in columns |
-| `PasswordField`, `CopyField` | A secret with the reveal eye inside the field, and a value in monospace with a button that copies it |
+| `PasswordField`, `CopyField` | A secret with the reveal eye inside the field (a new one typed twice with `confirm`), and a value in monospace with a button that copies it |
 | `Fortress`, `FortressPairing`, `InstanceCard`, `FortressAppCard`, `FortressPermissions` | The fortress in an app's Instances tab: the app's own cards as children, the switch for the other apps, a card per app with a row per instance, the permissions with a switch each, and the windows to join with the phrase, remove an instance and show the phrase beside its QR code. `FortressPairing` is the card in the pairing settings that changes the phrase and leaves |
 | `SignInCard`, `SignInField` | The sign-in page: the app's logo and name, the password, a code when the app asks for one, a passkey and the reset form in the same card. The app's own fields, buttons and steps go into `fields`, `actions` and `step`, and `SignInField` gives a field of the app's own the label above it |
 | `PathField`, `Tree` | A path with a button that asks the app for one, and a hierarchy loaded as it opens, for the picker behind that button |

@@ -61,4 +61,5 @@ export const lt: ComponentWords = {
   tour: { back: "Atgal", next: "Toliau", close: "Uždaryti", progress: "{step} iš {steps}" },
   floatingPanel: { minimize: "Sumažinti", maximize: "Padidinti", restore: "Atkurti", close: "Uždaryti" },
   signaturePad: { area: "Parašas", clear: "Išvalyti" },
+  passwordField: { show: "Rodyti", hide: "Slėpti", confirm: "Patvirtinkite slaptažodį", mismatch: "Slaptažodžiai nesutampa" },
 };

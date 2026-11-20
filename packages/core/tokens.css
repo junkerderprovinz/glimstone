@@ -5418,6 +5418,28 @@
     height: 0.95rem;
   }
 
+  /* The second field of a PasswordField with confirm, drawn as a row of its
+     own under the first: its label at the start, the field at the end with
+     the first one's width, and the mismatch line under the field. The line's
+     live region holds no room while it is empty. */
+  .glim-secret-confirm {
+    display: flex;
+    flex-basis: 100%;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-2) var(--space-6);
+    min-width: 0;
+  }
+  .glim-secret-confirm-label { margin-inline-end: auto; }
+  .glim-secret-confirm-box {
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
+  .glim-secret-confirm-live { display: block; }
+  .glim-field-row-controls:has(> .glim-secret-confirm) { flex-wrap: wrap; }
+
   /* A value to copy (CopyField): the value in monospace, read-only so it can
      still be selected and scrolled, and its button beside it. */
   .glim-copy {

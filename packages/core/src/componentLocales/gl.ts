@@ -55,4 +55,5 @@ export const gl: ComponentWords = {
   tour: { back: "Atrás", next: "Seguinte", close: "Pechar", progress: "{step} de {steps}" },
   floatingPanel: { minimize: "Minimizar", maximize: "Maximizar", restore: "Restaurar", close: "Pechar" },
   signaturePad: { area: "Sinatura", clear: "Borrar" },
+  passwordField: { show: "Amosar", hide: "Agochar", confirm: "Confirmar o contrasinal", mismatch: "Os contrasinais non coinciden" },
 };

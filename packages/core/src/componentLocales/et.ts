@@ -45,4 +45,5 @@ export const et: ComponentWords = {
   tour: { back: "Tagasi", next: "Edasi", close: "Sulge", progress: "{step}/{steps}" },
   floatingPanel: { minimize: "Minimeeri", maximize: "Maksimeeri", restore: "Taasta", close: "Sulge" },
   signaturePad: { area: "Allkiri", clear: "Tühjenda" },
+  passwordField: { show: "Näita", hide: "Peida", confirm: "Kinnita parool", mismatch: "Paroolid ei kattu" },
 };

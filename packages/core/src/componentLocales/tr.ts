@@ -45,4 +45,5 @@ export const tr: ComponentWords = {
   tour: { back: "Geri", next: "İleri", close: "Kapat", progress: "{step}/{steps}" },
   floatingPanel: { minimize: "Simge durumuna küçült", maximize: "Ekranı kapla", restore: "Önceki boyut", close: "Kapat" },
   signaturePad: { area: "İmza", clear: "Temizle" },
+  passwordField: { show: "Göster", hide: "Gizle", confirm: "Parolayı onayla", mismatch: "Parolalar eşleşmiyor" },
 };

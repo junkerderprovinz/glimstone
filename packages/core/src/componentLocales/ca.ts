@@ -56,4 +56,5 @@ export const ca: ComponentWords = {
   tour: { back: "Enrere", next: "Següent", close: "Tanca", progress: "{step} de {steps}" },
   floatingPanel: { minimize: "Minimitza", maximize: "Maximitza", restore: "Restaura", close: "Tanca" },
   signaturePad: { area: "Signatura", clear: "Esborra" },
+  passwordField: { show: "Mostra", hide: "Amaga", confirm: "Confirma la contrasenya", mismatch: "Les contrasenyes no coincideixen" },
 };

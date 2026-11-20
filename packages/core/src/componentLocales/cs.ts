@@ -52,4 +52,5 @@ export const cs: ComponentWords = {
   tour: { back: "Zpět", next: "Další", close: "Zavřít", progress: "{step} z {steps}" },
   floatingPanel: { minimize: "Minimalizovat", maximize: "Maximalizovat", restore: "Obnovit", close: "Zavřít" },
   signaturePad: { area: "Podpis", clear: "Vymazat" },
+  passwordField: { show: "Zobrazit", hide: "Skrýt", confirm: "Potvrzení hesla", mismatch: "Hesla se neshodují" },
 };

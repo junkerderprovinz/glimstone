@@ -56,4 +56,5 @@ export const lv: ComponentWords = {
   tour: { back: "Atpakaļ", next: "Tālāk", close: "Aizvērt", progress: "{step} no {steps}" },
   floatingPanel: { minimize: "Minimizēt", maximize: "Maksimizēt", restore: "Atjaunot", close: "Aizvērt" },
   signaturePad: { area: "Paraksts", clear: "Notīrīt" },
+  passwordField: { show: "Rādīt", hide: "Slēpt", confirm: "Apstipriniet paroli", mismatch: "Paroles nesakrīt" },
 };

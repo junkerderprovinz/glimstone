@@ -3571,6 +3571,71 @@ test.describe("PasswordField", () => {
     await expect(field(page, "Token")).toBeDisabled();
     await expect(eye(page, "Token")).toBeDisabled();
   });
+
+  const twice = (page: Page) => stage(page, "PasswordFieldConfirm");
+  const first = (page: Page) => twice(page).locator('input[aria-label="New password"]');
+  const second = (page: Page) => twice(page).getByLabel("Confirm password", { exact: true });
+  const mismatch = (page: Page) => twice(page).locator(".glim-field-error");
+
+  test("[pw-confirm-appears] the second field stands from the first character", async ({ page }) => {
+    await open(page, "/components/password-field");
+    await expect(second(page)).toHaveCount(0);
+    await first(page).pressSequentially("h");
+    await expect(second(page)).toBeVisible();
+    await expect(second(page)).toHaveAttribute("type", "password");
+    await expect(second(page)).toHaveAttribute("autocomplete", "new-password");
+    await expect(second(page).locator("xpath=..").getByRole("button")).toHaveAccessibleName("Show");
+    const a = (await first(page).boundingBox())!;
+    const b = (await second(page).boundingBox())!;
+    expect(b.width).toBeCloseTo(a.width, 0);
+    expect(b.y).toBeGreaterThan(a.y + a.height);
+  });
+
+  test("[pw-confirm-mismatch] a line under the second field while the two differ", async ({ page }) => {
+    await open(page, "/components/password-field");
+    await first(page).fill("hunter22");
+    await expect(mismatch(page)).toHaveCount(0);
+    await second(page).fill("hunter2");
+    await expect(mismatch(page)).toHaveText("The passwords do not match");
+    await expect(second(page)).toHaveAttribute("aria-invalid", "true");
+    await expect(second(page)).toHaveAccessibleDescription("The passwords do not match");
+    await expect(mismatch(page).locator("xpath=..")).toHaveAttribute("aria-live", "polite");
+    expect((await mismatch(page).boundingBox())!.y).toBeGreaterThan((await second(page).boundingBox())!.y);
+    await second(page).fill("hunter22");
+    await expect(mismatch(page)).toHaveCount(0);
+    await expect(second(page)).not.toHaveAttribute("aria-invalid", "true");
+  });
+
+  test("[pw-confirm-submit] Set password waits for the two to match", async ({ page }) => {
+    await open(page, "/components/password-field");
+    const set = twice(page).getByRole("button", { name: "Set password" });
+    await expect(set).toBeDisabled();
+    await first(page).fill("hunter22");
+    await expect(set).toBeDisabled();
+    await second(page).fill("hunter23");
+    await expect(set).toBeDisabled();
+    await second(page).fill("hunter22");
+    await expect(set).toBeEnabled();
+    await first(page).fill("hunter222");
+    await expect(set).toBeDisabled();
+    await second(page).fill("hunter222");
+    await set.click();
+    await expect(twice(page).locator("output")).toHaveText("Password set");
+    await expect(first(page)).toHaveValue("");
+    await expect(second(page)).toHaveCount(0);
+    await expect(set).toBeDisabled();
+  });
+
+  test("[pw-confirm-hide] emptying the first field takes the second away", async ({ page }) => {
+    await open(page, "/components/password-field");
+    await first(page).fill("hunter22");
+    await second(page).fill("hunter22");
+    await first(page).fill("");
+    await expect(second(page)).toHaveCount(0);
+    await first(page).pressSequentially("x");
+    await expect(second(page)).toHaveValue("");
+    await expect(mismatch(page)).toHaveCount(0);
+  });
 });
 
 test.describe("CopyField", () => {
@@ -4095,7 +4160,7 @@ test.describe("SignInCard", () => {
     await field(page, "New password").fill("correct horse battery");
     await field(page, "Confirm password").fill("correct horse batterx");
     await button(page, "Set password").click();
-    await expect(card(page).getByRole("alert")).toHaveText("The two passwords are not the same.");
+    await expect(card(page).getByRole("alert")).toHaveText("The passwords do not match");
     await expect(said(page)).toHaveText("Nothing yet");
     await field(page, "Confirm password").fill("correct horse battery");
     await button(page, "Set password").click();

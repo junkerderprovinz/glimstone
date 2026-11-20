@@ -2,9 +2,12 @@
 // sign-in card"). The app answers each step through a callback, the flow keeps
 // what was typed and which form shows, and the React and Vue cards draw it.
 
+import { PASSWORD_FIELD_TEXT } from "./passwordField.ts";
 import { shake } from "./selectModel.ts";
 
-/** The card's words, translated by the app. */
+/** The card's words, translated by the app. The reset form's second field, its
+ *  mismatch and the eye say what a PasswordField says, which
+ *  `componentText(lang).passwordField` has in every language. */
 export interface SignInText {
   password: string;
   signIn: string;
@@ -55,15 +58,15 @@ export const signInTextEn: SignInText = {
   resetCode: "Code from the container log",
   resetCodeTip: "The app has written a code to its container log. On Unraid: Docker tab, the app's icon, Logs. A code is valid for 10 minutes.",
   newPassword: "New password",
-  confirmPassword: "Confirm password",
+  confirmPassword: PASSWORD_FIELD_TEXT.confirm,
   setPassword: "Set password",
   saving: "Saving…",
-  mismatch: "The two passwords are not the same.",
+  mismatch: PASSWORD_FIELD_TEXT.mismatch,
   tooShort: "The new password needs at least 12 characters.",
   resetRejected: "That code is wrong or has expired. If it expired, the log now shows a new one.",
   failed: "That did not work. Please try again.",
-  show: "Show",
-  hide: "Hide",
+  show: PASSWORD_FIELD_TEXT.show,
+  hide: PASSWORD_FIELD_TEXT.hide,
 };
 
 /**

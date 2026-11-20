@@ -827,11 +827,14 @@ export function SignInCardPage() {
       <Demo name="SignInCardBasic" />
       <Usage
         code={`import { SignInCard } from "@glimstone/react";
+import { componentText } from "@glimstone/core";
+
+const pw = componentText(lang).passwordField;
 
 <SignInCard
   logo="/logo.svg"
   appName="GlimStone"
-  text={text}
+  text={{ ...text, confirmPassword: pw.confirm, mismatch: pw.mismatch, show: pw.show, hide: pw.hide }}
   passkey={offerPasskey}
   reset
   minPassword={12}
@@ -854,6 +857,10 @@ export function SignInCardPage() {
         <li>The logo stands 7.5rem tall at its own proportions with the name under it, centred in the card. No server name, no pill above the card.</li>
         <li>Labels stand above their fields, in normal case. The first empty field has the focus when the card opens.</li>
         <li>Sign in stays disabled until the password field holds something. Every button is as wide as the fields.</li>
+        <li>
+          The reset form's Confirm password, its mismatch and the eye take a PasswordField's words from{" "}
+          <code>componentText(lang).passwordField</code>, so both read alike in all 42 languages.
+        </li>
         <li>
           A refused try shakes the button that sent it and selects the refused field. At motion off and under reduced
           motion nothing moves, and the reason above the button says it alone.
@@ -1430,6 +1437,33 @@ export function PasswordFieldPage() {
         <li>
           A secret that is already stored is a row with Change, not an empty field on every visit ("The reveal eye" in the
           design language).
+        </li>
+      </ul>
+      <H2>A new password, typed twice</H2>
+      <Demo name="PasswordFieldConfirm" />
+      <Code
+        code={`<PasswordField\n  confirm\n  onConfirmedChange={setConfirmed}\n  value={pw}\n  onChange={(e) => setPw(e.target.value)}\n  text={componentText(lang).passwordField}\n/>\n<Button label={t("setPassword")} disabled={!confirmed} onClick={save} />`}
+      />
+      <ul>
+        <li>
+          With <code>confirm</code>, a second field with its own label stands under the first once the first holds a
+          character, and goes again, emptied, when the first is emptied. A slip of the finger then never becomes a
+          password nobody can sign in with.
+        </li>
+        <li>
+          While the second field holds something other than the first, a line under it says the passwords do not match.
+          The field carries <code>aria-invalid</code>, the line is its description and a screen reader hears it politely.
+        </li>
+        <li>
+          The action that sets the password waits for <code>onConfirmedChange</code> to say true:{" "}
+          <code>@confirmed-change</code> in Vue.
+        </li>
+        <li>
+          Both fields fill in as <code>new-password</code>, so a password manager offers a new one, and the second field
+          keeps the first one's width.
+        </li>
+        <li>
+          The label, the line and the eye's words come in all 42 languages from <code>componentText(lang).passwordField</code>.
         </li>
       </ul>
       <H2>Behaviour</H2>

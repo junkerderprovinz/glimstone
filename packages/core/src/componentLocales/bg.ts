@@ -50,4 +50,5 @@ export const bg: ComponentWords = {
   tour: { back: "Назад", next: "Напред", close: "Затваряне", progress: "{step} от {steps}" },
   floatingPanel: { minimize: "Минимизиране", maximize: "Максимизиране", restore: "Възстановяване", close: "Затваряне" },
   signaturePad: { area: "Подпис", clear: "Изчистване" },
+  passwordField: { show: "Показване", hide: "Скриване", confirm: "Потвърждаване на паролата", mismatch: "Паролите не съвпадат" },
 };

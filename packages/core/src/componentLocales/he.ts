@@ -51,4 +51,5 @@ export const he: ComponentWords = {
   tour: { back: "הקודם", next: "הבא", close: "סגירה", progress: "{step} מתוך {steps}" },
   floatingPanel: { minimize: "מזעור", maximize: "הגדלה", restore: "שחזור", close: "סגירה" },
   signaturePad: { area: "חתימה", clear: "ניקוי" },
+  passwordField: { show: "הצגה", hide: "הסתרה", confirm: "אימות הסיסמה", mismatch: "הסיסמאות אינן תואמות" },
 };
