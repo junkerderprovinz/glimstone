@@ -5304,21 +5304,20 @@
     min-width: 0;
     padding: var(--space-6) var(--space-8);
   }
-  /* The badges follow the name and move under it before it ends in an
-     ellipsis, and the buttons move under the status the same way. */
+  /* The name keeps its line and the badges move under it before it ends in an
+     ellipsis, and the buttons do the same under the status. */
   .glim-connection-head,
   .glim-connection-foot {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    justify-content: flex-end;
     min-width: 0;
   }
   .glim-connection-head { gap: var(--space-2) var(--space-6); }
-  .glim-connection-foot {
-    justify-content: flex-end;
-    gap: var(--space-4) var(--space-8);
-  }
+  .glim-connection-foot { gap: var(--space-4) var(--space-8); }
   .glim-connection-name {
+    flex: 1 1 12rem;
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -5330,25 +5329,22 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    justify-content: flex-end;
     gap: var(--space-3);
   }
-  .glim-connection-actions { justify-content: flex-end; }
-  /* A badge takes the buttons' height, so it does not look small beside them.
-     The state washes are measured over the card, and the well's darker ground
-     takes their text under 4.5:1, so a badge here lays its wash over the card's
-     surface. A neutral one keeps the well's ground inside a ring of the next
-     surface: on the buttons' own surface it would read as one more button. */
+  /* A badge stays a size below the buttons, so it reads as a state and not as
+     one more thing to press. The state washes are measured over the card, and
+     the well's darker ground takes their text under 4.5:1, so a badge here lays
+     its wash over the card's surface. A neutral one stands halfway between the
+     well and the buttons' surface. */
   .glim-connection-badges .glim-badge {
-    --badge-h: var(--btn-h);
-    --badge-px: var(--btn-pad-x);
+    --badge-h: 1.5rem;
+    --badge-px: 0.625rem;
   }
   .glim-connection-badges .glim-badge--ok { background: linear-gradient(var(--status-ok-bg), var(--status-ok-bg)) var(--carbon-surface); }
   .glim-connection-badges .glim-badge--fail { background: linear-gradient(var(--status-fail-bg), var(--status-fail-bg)) var(--carbon-surface); }
   .glim-connection-badges .glim-badge--active { background: linear-gradient(var(--accent-soft), var(--accent-soft)) var(--carbon-surface); }
-  .glim-connection-badges .glim-badge--neutral {
-    background-color: var(--carbon-surface2);
-    box-shadow: inset 0 0 0 1px var(--carbon-surface3);
-  }
+  .glim-connection-badges .glim-badge--neutral { background-color: color-mix(in srgb, var(--carbon-surface2), var(--carbon-surface3)); }
   .glim-connection-about {
     display: flex;
     flex: 1 1 12rem;

@@ -3466,23 +3466,24 @@ test.describe("ConnectionRow", () => {
     }
   });
 
-  test("[connection-badge] a badge follows the name at the buttons' height, and moves under the name before it is cut", async ({ page }) => {
+  test("[connection-badge] a badge stands at the end of the name's line, smaller than the buttons, and moves under the name before it is cut", async ({ page }) => {
     await open(page, "/components/connection-row");
     const ghcr = row(page, "GitHub Container Registry");
     const box = (l: Locator) => l.evaluate((e) => e.getBoundingClientRect().toJSON() as DOMRect);
     const name = ghcr.locator(".glim-connection-name");
     const badge = ghcr.locator(".glim-badge");
-    expect((await box(badge)).height).toBe((await box(button(page, "GitHub Container Registry", "Edit"))).height);
-    expect((await box(badge)).left - (await box(name)).right).toBeLessThanOrEqual(16);
+    const head = ghcr.locator(".glim-connection-head");
+    expect((await box(badge)).height).toBeLessThan((await box(button(page, "GitHub Container Registry", "Edit"))).height);
+    expect(Math.abs((await box(head)).right - (await box(badge)).right)).toBeLessThan(1);
     await page.evaluate(() => (document.documentElement.dir = "rtl"));
-    expect((await box(name)).left - (await box(badge)).right).toBeLessThanOrEqual(16);
+    expect(Math.abs((await box(badge)).left - (await box(head)).left)).toBeLessThan(1);
     await page.evaluate(() => (document.documentElement.dir = "ltr"));
     await page.setViewportSize({ width: 480, height: 800 });
     expect((await box(badge)).top).toBeGreaterThanOrEqual((await box(name)).bottom);
     expect(await name.evaluate((n) => n.scrollWidth <= n.clientWidth)).toBe(true);
   });
 
-  test("[connection-badge-ground] in light, dark and OLED a badge keeps a ground no button shares and does not answer the pointer", async ({ page }) => {
+  test("[connection-badge-ground] in light, dark and OLED a badge keeps a ground of its own between the well and the buttons, without a ring, and does not answer the pointer", async ({ page }) => {
     await open(page, "/components/connection-row");
     for (const [scheme, oled] of [["light", false], ["dark", false], ["dark", true]] as const) {
       await page.emulateMedia({ colorScheme: scheme });
@@ -3493,13 +3494,15 @@ test.describe("ConnectionRow", () => {
       // The demo's badges all report a failure, so a neutral one joins them.
       await ghcr.locator(".glim-connection-badges").evaluate((b) => b.insertAdjacentHTML("beforeend", '<span class="glim-badge glim-badge--medium glim-badge--neutral">Read only</span>'));
       const edit = await button(page, "GitHub Container Registry", "Edit").evaluate((b) => getComputedStyle(b).backgroundColor);
+      const well = await ghcr.evaluate((r) => getComputedStyle(r).backgroundColor);
       const where = `${scheme}${oled ? " OLED" : ""}`;
       const look = (badge: Locator) => badge.evaluate((e) => ({ ground: getComputedStyle(e).backgroundColor, wash: getComputedStyle(e).backgroundImage, ring: getComputedStyle(e).boxShadow, cursor: getComputedStyle(e).cursor }));
       const fail = await look(ghcr.locator(".glim-badge--fail"));
       const neutral = await look(ghcr.locator(".glim-badge--neutral"));
       expect(fail.wash, where).toContain("gradient");
       expect(neutral.ground, where).not.toBe(edit);
-      expect(neutral.ring, where).not.toBe("none");
+      expect(neutral.ground, where).not.toBe(well);
+      expect(neutral.ring, where).toBe("none");
       for (const badge of [ghcr.locator(".glim-badge--fail"), ghcr.locator(".glim-badge--neutral")]) {
         const rest = await look(badge);
         expect(rest.cursor, where).not.toBe("pointer");
