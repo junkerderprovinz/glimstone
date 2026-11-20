@@ -263,12 +263,11 @@ const koofr: TileMark = {
   ink: '#ffffff',
 };
 
-/** TeleBox. Source: drawn from TeleBox's app icon, cdn-1.webcatalog.io/catalog/linkbox/linkbox-icon-filled-256.webp, which has no vector (the brand's own mark). */
+/** TeleBox. Source: drawn from TeleBox's app icon, cdn-1.webcatalog.io/catalog/linkbox/linkbox-icon-filled-256.webp, which has no vector, as its band and outlined faces in its green (the brand's own mark). */
 const linkbox: TileMark = {
-  svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path fill="var(--mark-ink, #58bb71)" d="M0 0H256V256H0Z"/><path fill="var(--mark-cut, #bbe3c5)" d="M20 104V167L75 198L130.4 136.5ZM237 167V104L182 73L126.6 135.5Z"/><path fill="var(--mark-ink, #ffffff)" d="M75 73L237 166L183 197L21 104Z"/></svg>',
+  svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="20 73 217 124"><path fill="none" stroke="var(--mark-ink, #58bb71)" stroke-width="10" stroke-linejoin="round" d="M25 107V164L75 192L127 134ZM232 164V107L182 79L130 137Z"/><path fill="var(--mark-ink, #58bb71)" d="M75 73L237 166L183 197L21 104Z"/></svg>',
   tile: '#58bb71',
   ink: '#ffffff',
-  hover: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="20 73 217 124"><path fill="none" stroke="var(--mark-ink, #ffffff)" stroke-width="10" stroke-linejoin="round" d="M25 107V164L75 192L127 134ZM232 164V107L182 79L130 137Z"/><path fill="var(--mark-ink, #ffffff)" d="M75 73L237 166L183 197L21 104Z"/></svg>',
 };
 
 /** Linode. Source: homarr-labs/dashboard-icons, svg/linode.svg (Apache-2.0). */
@@ -388,6 +387,7 @@ const premiumize: TileMark = {
   svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240"><g style="display:inline" transform="translate(-5 47.638)"><circle cx="124" cy="-.138" r="47.5" style="fill:var(--mark-ink, #a00);fill-opacity:1"/><path d="M125 64.831a65 62.532 0 0 0-65 62.531v65h130v-65a65 62.532 0 0 0-65-62.531" style="fill:var(--mark-cut, #a00);fill-opacity:1;stroke:none"/><path d="m5 97.362 110 25 130-130c-33.227 57.786-74.464 116.997-120 185z" style="fill:var(--mark-ink, light-dark(#7a6200, #fc0));fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.0347985px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"/></g></svg>',
   tile: '#ffcc00',
   ink: '#161616',
+  hover: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240"><g transform="translate(-5 47.638)"><circle cx="124" cy="-.138" r="47.5" fill="var(--mark-ink, #000000)"/><path d="M123.8 64.8 114.5 65.7 105.4 67.8 96.7 71.1 88.5 75.6 81.2 81.2 74.7 87.7 69.3 95.1 64.8 103.8 112.8 114.7 155.4 72.1 148.0 68.9 140.1 66.5 132.0 65.2zM60.0 142.4 60.0 191.8 60.6 192.4 189.4 192.4 190.0 191.8 189.9 123.9 188.2 112.8 184.3 101.7 131.1 180.8 125.4 186.0z" fill="var(--mark-ink, #000000)"/><path d="m5 97.362 110 25 130-130c-33.227 57.786-74.464 116.997-120 185z" fill="var(--mark-ink, #000000)"/></g></svg>',
 };
 
 /** Proton Drive. Simple Icons: protondrive (CC0), in its own #EB508D. */

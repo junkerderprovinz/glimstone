@@ -109,7 +109,7 @@ LOCAL = [
     ("sia", "Sia", "sia.tech, _astro/sia_logo_dark.CszkgMV_.svg", BRAND),
     ("gofile", "Gofile", "Gofile's logo as an SVG", BRAND),
     ("linkbox", "TeleBox", "drawn from TeleBox's app icon, cdn-1.webcatalog.io/catalog/linkbox/linkbox-icon-filled-256.webp, "
-     "which has no vector", BRAND),
+     "which has no vector, as its band and outlined faces in its green", BRAND),
     ("opendrive", "OpenDrive", "free.arinco.org, images/storage/storage-opendrive-logo.svg", BRAND),
     ("synologyc2", "Synology C2", "drawn from the C2 cloud of static.profile.c2.synology.com/static/edafcde1a2fae082.png, "
      "which has no vector", BRAND),
@@ -179,9 +179,9 @@ ONE_INK = {"juicefs"}
 
 MARKS = MarkSet(ROOT / "packages" / "core" / "storage-marks", FORCE_THEMED, set(), TILE_COLOUR, ONE_INK)
 
-# The marks whose lit tile shows <id>-hover.svg: TeleBox's band in the ink with
-# the faces beside it outlined, which its square app icon would cover.
-HOVER = ["linkbox"]
+# The marks whose lit tile shows <id>-hover.svg: premiumize.me's figure and
+# check in one ink, kept apart by a gap where the check crosses the figure.
+HOVER = ["premiumize"]
 
 if SRC is None or not SRC.is_dir():
     raise SystemExit("pass the icons folder of simple-icons@16: python scripts/gen_storage_marks.py <path>")

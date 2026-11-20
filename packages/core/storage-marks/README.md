@@ -38,6 +38,9 @@ Labs team and contributors:
   `oraclecloud.svg` is `svg/oracle-cloud.svg`.
 - `linode.svg` lights in Linode's green, deepened to `#007a43` so the white
   ink reaches 4.5:1, rather than the black it measures as.
+- `premiumize-hover.svg`, the lit tile's drawing, is the figure and check of
+  `premiumize.svg` in one colour, with a gap cut into the figure along the
+  check so the two stay apart in a single ink.
 - `kdrive.svg` is `svg/infomaniak-kdrive.svg` and `versity.svg` is
   `svg/versitygw.svg`, each with the word beside the mark left out, since the
   provider's name stands beside it on the tile.
@@ -127,10 +130,11 @@ than under a licence.
   on the dark ground.
 - `linkbox.svg`: TeleBox, which was Linkbox and keeps its id. The app icon,
   <https://cdn-1.webcatalog.io/catalog/linkbox/linkbox-icon-filled-256.webp>,
-  is the only source and a picture, so the mark is drawn from it: the green
-  square, the white band and the two pale faces beside it, measured off the
-  picture, without the soft glow under them. `linkbox-hover.svg` is the band
-  with the faces outlined, since on the lit tile the square would cover them.
+  is the only source and a picture, so the mark is drawn from it: the band and
+  the two faces beside it, measured off the picture, the faces outlined, all in
+  the icon's green, `#58bb71`, without the square they sit on. The square would
+  cover them on a lit tile, and a mark that changes shape under the pointer
+  reads as two marks.
 - `synologyc2.svg`: the C2 cloud of
   <https://static.profile.c2.synology.com/static/edafcde1a2fae082.png>, drawn
   from that picture as three round strokes in its own gradients.
