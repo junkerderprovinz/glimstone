@@ -421,6 +421,14 @@ test.describe("PickerWindow states", () => {
     await expect(places(page).locator(".glim-provider-pick button.glim-readme-btn")).toHaveAccessibleName("Nimbo Cloud drive");
   });
 
+  test("[picker-mark-edge] a mark drawn to the edge of its box keeps the soft edge its box would shave", async ({ page }) => {
+    await open(page, "/components/picker-window");
+    await page.getByRole("button", { name: "Add an account" }).first().click();
+    const best = page.locator('[data-glim="PickerWindow"] .glim-readme-btn', { hasText: "BestDebrid" });
+    // BestDebrid's filled circle touches all four sides of its viewBox, and its tile sits on a fraction of a pixel.
+    expect(await best.locator(".glim-readme-btn-mark svg").first().evaluate((svg) => getComputedStyle(svg).overflow)).toBe("visible");
+  });
+
   test("[picker-wordmark-lit] a wordmark tile lights up in its colour, and its wordmark rises in the tile's ink above the second line", async ({ page }) => {
     await open(page, "/components/picker-window", { motion: "off" });
     await stage(page, "PickerWindowStates").getByRole("button", { name: "Choose a place" }).click();

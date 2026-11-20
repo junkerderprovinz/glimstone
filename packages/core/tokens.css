@@ -2520,6 +2520,13 @@
     height: 100%;
   }
 
+  /* A mark is cropped to its drawing, and a tile's middle rarely falls on a
+     whole pixel, so the SVG's own clip would shave the soft edge of a shape
+     that reaches the box, such as a filled circle's bottom. */
+  .glim-readme-btn-mark svg {
+    overflow: visible;
+  }
+
   .glim-readme-btn-mark svg:not(.glim-mark-hover),
   .glim-readme-btn-art svg {
     display: block;
