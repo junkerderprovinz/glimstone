@@ -33,7 +33,7 @@ export default function ConnectionRowBasic() {
               name={c.name}
               mark={typeof c.mark === "string" ? <Glyph name={c.mark} /> : c.mark}
               status={c.status}
-              badges={c.badge && <Badge tone="fail">{c.badge}</Badge>}
+              badges={c.badge && <Badge tone={c.tone ?? "fail"}>{c.badge}</Badge>}
               test={tests()[c.id]}
               actions={actions(c)}
               text={CONNECTION_TEXT}

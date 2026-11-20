@@ -17,8 +17,10 @@ export interface DemoConnection {
   /** A catalog mark, or the name of the glyph that stands in for one. */
   mark: TileMark | string;
   status: string;
-  /** Badges after the name, as words with a fail tone. */
+  /** A badge after the name. */
   badge?: string;
+  /** The badge's tone, fail unless it says a plain fact. */
+  tone?: "fail" | "neutral";
   /** A second quiet line. */
   more?: string;
   reaches: boolean;
@@ -32,7 +34,7 @@ export const CONNECTIONS: DemoConnection[] = [
   { id: "mullvad", name: "Mullvad VPN", mark: VPN_MARKS.mullvad, status: "Connected, traffic leaves in Vienna", more: "Used by nightly-backup and photos", reaches: true },
   { id: "nextcloud", name: "Nextcloud", mark: STORAGE_MARKS.nextcloud, status: "Signed in as maria at cloud.example.org", reaches: true },
   { id: "ghcr", name: "GitHub Container Registry", mark: REGISTRY_MARKS.github, status: "Signed in as maria-builds", badge: "Sign-in expired", reaches: false, untested: true },
-  { id: "sftp", name: "Backup server", mark: "IconServer", status: "Not tested yet", reaches: false },
+  { id: "sftp", name: "Backup server", mark: "IconServer", status: "Not tested yet", badge: "Read only", tone: "neutral", reaches: false },
   { id: "media", name: "Media share", mark: "IconFolder", status: "SMB share on 192.168.1.20", reaches: true, mountable: true },
 ];
 

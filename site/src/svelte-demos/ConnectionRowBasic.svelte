@@ -33,7 +33,7 @@
 <div style="width: 100%; max-width: 1280px; padding-top: 12px">
   <Card title="Connections">
     {#each rows as c (c.id)}
-      {#snippet badge()}<Badge tone="fail">{c.badge}</Badge>{/snippet}
+      {#snippet badge()}<Badge tone={c.tone ?? "fail"}>{c.badge}</Badge>{/snippet}
       {#snippet more()}<span>{c.more}</span>{/snippet}
       <ConnectionRow
         name={c.name}

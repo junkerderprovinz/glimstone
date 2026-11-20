@@ -47,7 +47,7 @@ function remove(c: DemoConnection) {
         @edit="said = `Editing ${c.name}`"
         @remove="remove(c)"
       >
-        <template v-if="c.badge" #badges><Badge tone="fail">{{ c.badge }}</Badge></template>
+        <template v-if="c.badge" #badges><Badge :tone="c.tone ?? 'fail'">{{ c.badge }}</Badge></template>
         <span v-if="c.more">{{ c.more }}</span>
       </ConnectionRow>
       <output>{{ said }}</output>
