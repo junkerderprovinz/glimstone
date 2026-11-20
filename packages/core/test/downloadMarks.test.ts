@@ -76,6 +76,10 @@ test('the README records where every mark comes from, and every licence it names
   for (const svg of files.filter((f) => f.endsWith('.svg'))) assert.ok(svg.replace(/(-hover)?\.svg$/, '') in DOWNLOAD_MARKS, svg);
 });
 
+test("AllDebrid leaves out the black behind its yellow letters on the dark ground, where it would draw a white rim", () => {
+  assert.match(DOWNLOAD_MARKS.alldebrid!.svg, /light-dark\(#000000, transparent\)/);
+});
+
 test('a black or grey mark turns white in the dark theme, since grey carries no brand colour to stay close to', () => {
   for (const [id, mark] of marks) {
     for (const [, light, dark] of mark.svg.matchAll(/light-dark\((#[0-9a-f]{6}), (#[0-9a-f]{6})\)/g)) {

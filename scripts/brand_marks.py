@@ -39,7 +39,8 @@ class MarkSet:
     # Colours that follow the theme although the mark as a whole reads fine,
     # by slug: {colour as written: (on dark, on light)}. White in a logo is
     # mostly a knockout on the brand's own shape and must stay white, and no
-    # measurement here tells it from white on the page.
+    # measurement here tells it from white on the page. None on dark leaves out
+    # a part that only keeps the logo off a light ground.
     force_themed: dict = field(default_factory=dict)
     # Marks with a dark outline round every part, which keeps a pale part
     # apart from a light ground by itself.
@@ -165,10 +166,12 @@ def themed(colours, slug, marks, ground=None):
     for colour, (on_dark, on_light) in marks.force_themed.get(slug, {}).items():
         if colour not in usable:
             raise SystemExit("force_themed names %s in %s, which does not paint with it" % (colour, slug))
-        if contrast(on_dark, SURFACE_DARK) < DARK_FLOOR or on_light_grounds(on_light) < SHIFTED_FLOOR:
+        on_dark = on_dark or "transparent"
+        dark = 21.0 if on_dark == "transparent" else contrast(on_dark, SURFACE_DARK)
+        if dark < DARK_FLOOR or on_light_grounds(on_light) < SHIFTED_FLOOR:
             raise SystemExit(
                 "force_themed %s/%s is too faint: %.2f on the dark ground, %.2f on the worst light one"
-                % (slug, colour, contrast(on_dark, SURFACE_DARK), on_light_grounds(on_light))
+                % (slug, colour, dark, on_light_grounds(on_light))
             )
         swap[colour] = both(on_light, on_dark)
 
