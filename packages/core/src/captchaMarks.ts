@@ -13,7 +13,7 @@ import type { TileMark } from "./picker.ts";
 
 /** Anti-Captcha. Source: anti-captcha.com, _nuxt/logo.108c78f7.svg (the brand's own mark). */
 const anticaptcha: TileMark = {
-  svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 78 24" fill="none"><g clip-path="url(#glim-anticaptcha-clip0_458_27096)"><path fill-rule="evenodd" clip-rule="evenodd" d="M26.6477 0.149096L38.6477 25.1491L41.3523 23.8509L29.3523 -1.1491L26.6477 0.149096ZM21.3667 23.3817L10.5 -0.639294L-0.366661 23.3817L2.36666 24.6183L10.5 6.63929L18.6333 24.6183L21.3667 23.3817ZM48 0H65.5V3H58V24H55V3H48V0ZM75 -0.5V24H78V-0.5H75Z" fill="var(--mark-ink, light-dark(#111d35, #ffffff))"/></g><defs><clipPath id="glim-anticaptcha-clip0_458_27096"><rect width="78" height="23" fill="light-dark(#111d35, #ffffff)" transform="translate(0 0.5)"/></clipPath></defs></svg>',
+  svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-9.75 0 97.5 24" fill="none"><g clip-path="url(#glim-anticaptcha-clip0_458_27096)"><path fill-rule="evenodd" clip-rule="evenodd" d="M26.6477 0.149096L38.6477 25.1491L41.3523 23.8509L29.3523 -1.1491L26.6477 0.149096ZM21.3667 23.3817L10.5 -0.639294L-0.366661 23.3817L2.36666 24.6183L10.5 6.63929L18.6333 24.6183L21.3667 23.3817ZM48 0H65.5V3H58V24H55V3H48V0ZM75 -0.5V24H78V-0.5H75Z" fill="var(--mark-ink, light-dark(#111d35, #ffffff))"/></g><defs><clipPath id="glim-anticaptcha-clip0_458_27096"><rect width="78" height="23" fill="light-dark(#111d35, #ffffff)" transform="translate(0 0.5)"/></clipPath></defs></svg>',
   tile: '#111d35',
   ink: '#ffffff',
 };

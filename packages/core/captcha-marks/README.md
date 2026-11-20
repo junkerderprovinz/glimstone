@@ -37,7 +37,9 @@ serves:
 - `anticaptcha.svg`: <https://anti-captcha.com/_nuxt/logo.108c78f7.svg>, the
   header logo of <https://anti-captcha.com/>, the first letters of its name
   drawn in white. It lights in the `#111d35` the page sets it on and takes
-  that navy on the light ground.
+  that navy on the light ground. Its letters run the full width of a mark's
+  box, so the generator gives the box a quarter more room, half on each side,
+  to keep them off the name.
 - `deathbycaptcha.svg`: DeathByCaptcha's boxed name as an SVG, marked as a
   wordmark. Its near-black turns white on the dark ground.
 

@@ -18,7 +18,7 @@ import { DOWNLOAD_MARKS as M } from "./downloadMarks.ts";
 
 export type DownloadGroup = "debrid" | "hoster";
 
-const DEBRID = "IconUnlock";
+const DEBRID = "IconDownload";
 
 const ENTRIES = [
   { id: "alldebrid", name: "AllDebrid", group: "debrid", mark: M.alldebrid },

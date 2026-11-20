@@ -467,18 +467,3 @@ const drawn = (tile: Locator) =>
     };
     return { tile: rect(b), box: rect(b.querySelector(".glim-readme-btn-mark")!), mark, sub: line };
   });
-
-test("[picker-wordmark-status] a wordmark tile that cannot be picked yet keeps its reason under the wordmark", async ({ page }) => {
-  await open(page, "/components/picker-window", { motion: "off" });
-  await stage(page, "PickerWindowVpn").getByRole("button", { name: "Add a VPN" }).click();
-  // Scoped by the component's own attribute, which Firefox needs under a named dialog.
-  const hma = page.locator('[data-glim="PickerWindow"] [aria-label="HMA VPN Not supported"]');
-  await expect(hma).toHaveAttribute("aria-disabled", "true");
-  await expect(hma.locator(".glim-readme-btn-name")).toBeHidden();
-  await expect(hma.locator(".glim-readme-btn-sub")).toHaveText("Not supported");
-  await expect(hma.locator(".glim-readme-btn-sub")).toBeVisible();
-  const { tile, mark, sub } = await drawn(hma);
-  expect(mark.bottom).toBeLessThanOrEqual(sub.top);
-  expect(mark.top).toBeGreaterThanOrEqual(tile.top);
-  expect(Math.abs(mark.left + mark.right - tile.left - tile.right) / 2).toBeLessThan(1);
-});

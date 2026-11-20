@@ -35,13 +35,13 @@ beside the outline rather than on it.
 Schneider (text in `LICENSE-pocket-id.txt`), unmodified.
 
 **The brand's own material**, used under the trademark position below rather
-than under a licence: `keycloak.svg` and `keycloak-hover.svg` are
-`projects/keycloak/icon/color/keycloak-icon-color.svg` and
-`projects/keycloak/icon/black/keycloak-icon-black.svg` from the CNCF's artwork
+than under a licence: `keycloak.svg` is
+`projects/keycloak/icon/color/keycloak-icon-color.svg` from the CNCF's artwork
 repository <https://github.com/cncf/artwork>, whose logos are used under the
-Linux Foundation's trademark policy. The lit tile shows the black one, since
-in a single ink the colour one's facets swallow its two blue brackets. It
-lights in Keycloak's blue, deepened to `#00758f` so the white ink reaches
+Linux Foundation's trademark policy. `keycloak-hover.svg` is the same drawing
+with its grey facets in black and its blue brackets in white, since in a single
+ink the facets swallow the brackets; the lit tile shows its outline in ink with
+the brackets cut out, the same shape as at rest. It lights in Keycloak's blue, deepened to `#00758f` so the white ink reaches
 4.5:1, rather than the grey of its facets.
 
 **The service's own website**, under the same trademark position:

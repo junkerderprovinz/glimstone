@@ -80,10 +80,10 @@ LOCAL = [
     ("anonine", "Anonine", "the logo of anonine.com as an SVG, without the tagline under the name", BRAND),
     ("astrill", "Astrill VPN", "astrill.com, the white logo in its page header", BRAND),
     ("ivacy", "Ivacy VPN", "ivacy.com, the logo in its page header without the word", BRAND),
-    ("torguard", "TorGuard", "torguard.net, images/logo.svg without the tagline", BRAND),
+    ("torguard", "TorGuard", "torguard.net, images/logo.svg, the padlock without the word", BRAND),
     ("tunnelbear", "TunnelBear", "tunnelbear.com, static/img/tunnelbear-app-DXzLP4Lt.svg", BRAND),
     ("turbovpn", "Turbo VPN", "the rabbit of Turbo VPN's logo as an SVG", BRAND),
-    ("vpnac", "VPN.ac", "vpn.ac, assets/images/logo.svg without the tagline", BRAND),
+    ("vpnac", "VPN.ac", "vpn.ac, assets/images/logo.svg, the AC badge without the word", BRAND),
     ("xeovo", "Xeovo", "xeovo.com, static/images/logo_hidden.svg", BRAND),
 
     ("cryptostorm", "cryptostorm", "traced from the figure of cryptostorm's logo, privacysharks.com, "
@@ -92,7 +92,7 @@ LOCAL = [
 ]
 
 # The marks that are the brand's name written out.
-WORDMARK = {"anonine", "astrill", "torguard", "vpnac"}
+WORDMARK = {"anonine", "astrill"}
 
 # The lit tile's drawing, by id: a Simple Icons slug, or None for <id>-hover.svg.
 HOVER = {
@@ -128,6 +128,8 @@ TILE_COLOUR = {
     # White and pale logos, lit in the colour each brand's own site sets them on.
     "astrill": ("#34448b", None),
     "xeovo": ("#06de6b", None),
+    # TorGuard's white padlock, lit in the green of the TOR in its name.
+    "torguard": ("#63de03", None),
     # Ivacy's blue rather than the cyan of the shield's other half.
     "ivacy": ("#21a7f4", None),
     # VyprVPN's orange rather than black, a hair lighter so the near-black ink
@@ -140,10 +142,8 @@ FORCE_THEMED = {
     # the dark ground.
     "njalla": {"#203742": ("#ffffff", "#203742")},
     # Anonine's near-black name, whose faint blue would lift to a dull violet,
-    # and VPN.ac's navy, which its blue dots keep from being lifted, in white on
-    # the dark ground.
+    # in white on the dark ground.
     "anonine": {"#1C1D29": ("#ffffff", "#1C1D29")},
-    "vpnac": {"#164671": ("#ffffff", "#164671")},
     # Astrill's white logo in the blue of its own site on the light ground.
     "astrill": {"#FFF": ("#ffffff", "#34448b")},
     # FastestVPN's two yellows, which fade into a light tile, deepened as a pair

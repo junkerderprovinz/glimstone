@@ -121,13 +121,14 @@ left out:
   page sets it on and takes that blue on the light ground.
 - `ivacy.svg`: the shield of the logo the header of <https://www.ivacy.com/>
   draws inline, without the word, lit in its `#21a7f4`.
-- `torguard.svg`: <https://torguard.net/images/logo.svg>, its symbol and its
-  name without the tagline under them, marked as a wordmark.
+- `torguard.svg`: the padlock of <https://torguard.net/images/logo.svg>,
+  without the name and the tagline, lit in the `#63de03` of the TOR in its
+  name.
 - `tunnelbear.svg`: <https://www.tunnelbear.com/static/img/tunnelbear-app-DXzLP4Lt.svg>,
   the app icon of <https://www.tunnelbear.com/>.
 - `turbovpn.svg`: the rabbit of Turbo VPN's logo as an SVG.
-- `vpnac.svg`: <https://vpn.ac/assets/images/logo.svg>, without the tagline
-  beside it, marked as a wordmark. Its navy turns white on the dark ground.
+- `vpnac.svg`: the round AC badge of <https://vpn.ac/assets/images/logo.svg>,
+  without the name and the tagline beside it.
 - `xeovo.svg`: <https://xeovo.com/static/images/logo_hidden.svg>, the brackets
   of the logo of <https://xeovo.com/> as the page serves them on their own,
   lit in the `#06de6b` of the page.

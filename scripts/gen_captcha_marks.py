@@ -12,6 +12,7 @@ affiliation with any of them.
 The machinery is in brand_marks.py, which needs the svgelements package (pip
 install svgelements).
 """
+import re
 from pathlib import Path
 
 from brand_marks import BRAND, MarkSet, local, local_hover, write
@@ -67,5 +68,21 @@ MARKS = MarkSet(ROOT / "packages" / "core" / "captcha-marks", FORCE_THEMED, set(
 
 hovers = {slug: local_hover(slug, MARKS) for slug in HOVER}
 entries = {m[0]: local(*m, MARKS, hover=hovers.get(m[0]), wordmark=m[0] in WORDMARK) for m in LOCAL}
+
+# Anti-Captcha's letters run the full width of the mark's box and end where the
+# name begins, so its box gets this share of room, half on either side, which
+# keeps them apart in a right-to-left tile too.
+ROOM = {"anticaptcha": 0.25}
+
+
+def roomier(markup, share):
+    def widen(match):
+        x, y, w, h = (float(v) for v in match.group(1).split())
+        return 'viewBox="%g %g %g %g"' % (round(x - w * share / 2, 2), y, round(w * (1 + share), 2), h)
+    return re.sub(r'viewBox="([^"]+)"', widen, markup, count=1)
+
+
+for slug, share in ROOM.items():
+    entries[slug] = roomier(entries[slug], share)
 ids = write(OUT, HEAD, entries, "CAPTCHA_MARKS", "CaptchaMarkId")
 print("%s: %d marks from captcha-marks/" % (OUT.name, len(ids)))

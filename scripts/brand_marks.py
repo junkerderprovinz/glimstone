@@ -50,6 +50,9 @@ class MarkSet:
     # Marks whose parts all turn ink on a lit tile, where a part lying on
     # another is a stroke crossing it rather than a hole in it.
     one_ink: set = field(default_factory=set)
+    # Colours a lit tile leaves as they are, by slug, for a detail that only
+    # reads in its own colour, such as a white spot between ink and cut-out.
+    kept: dict = field(default_factory=dict)
 
 
 # A mark drawn in its brand colours vanishes on one of the grounds: navy or
@@ -369,7 +372,7 @@ def _gradient_colour(root, ref):
     return None
 
 
-def roles(root, one_ink=False):
+def roles(root, one_ink=False, kept=frozenset()):
     """Mark every painted part as ink or cut-out for a lit tile: a part lying
     on a part of another colour becomes a cut-out in the tile colour, like the
     eyes on a face, and every other part turns the tile's ink. Returns the
@@ -458,6 +461,8 @@ def roles(root, one_ink=False):
                     break
 
     for part in parts:
+        if part["rgb"] in kept:
+            continue
         role = "--mark-cut" if part["depth"] % 2 else "--mark-ink"
         el = part["el"]
         for prop in ("fill", "stroke"):
@@ -631,7 +636,7 @@ def _drawing(slug, file, marks, prefix):
         box = "0 0 %s %s" % (w, h)
 
     plate = _drop_plate(root, slug)
-    ground, largest = roles(root, slug in marks.one_ink)
+    ground, largest = roles(root, slug in marks.one_ink, {_rgb(c) for c in marks.kept.get(slug, ())})
 
     ids = {el.get("id"): "%s-%s" % (prefix, el.get("id")) for el in root.iter() if el.get("id")}
     body = "".join(c for c in (_markup(k, ids, file, marks.folder.name) for k in root) if c)

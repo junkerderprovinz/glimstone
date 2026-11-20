@@ -18,7 +18,7 @@ install svgelements).
 import sys
 from pathlib import Path
 
-from brand_marks import BRAND, MarkSet, local, simple, simple_data, write
+from brand_marks import BRAND, MarkSet, local, local_hover, simple, simple_data, write
 
 ROOT = Path(__file__).parent.parent
 SRC = Path(sys.argv[1]) if len(sys.argv) > 1 else None
@@ -49,19 +49,19 @@ LOCAL = [
     ("deepbrid", "Deepbrid", "the D of Deepbrid's logo as an SVG", BRAND),
     ("ddownload", "ddownload", "ddownload's logo as an SVG", BRAND),
     ("fileboom", "FileBoom", "FileBoom's logo as an SVG", BRAND),
-    ("filer", "filer.net", "the logo of filer.net as an SVG, without the picture hidden under its square", BRAND),
+    ("filer", "filer.net", "the square of filer.net's logo as an SVG, without the word", BRAND),
     ("gofile", "Gofile", "Gofile's logo as an SVG", BRAND),
-    ("keep2share", "Keep2Share", "Keep2Share's logo as an SVG", BRAND),
+    ("keep2share", "Keep2Share", "Keep2Share's logo as an SVG, without the slate plate it sits on", BRAND),
     ("mydebrid", "MyDebrid", "the M of MyDebrid's logo as an SVG", BRAND),
     ("rapidgator", "Rapidgator", "Rapidgator's logo as an SVG", BRAND),
-    ("zevera", "Zevera", "Zevera's logo as an SVG", BRAND),
+    ("zevera", "Zevera", "Zevera's logo as an SVG, its ring drawn a little heavier", BRAND),
 
     ("alldebrid", "AllDebrid", "traced from AllDebrid's logo, which has no vector", BRAND),
     ("cocoleech", "CocoLeech", "traced from cocoleech.com/images/coco2.png, which has no vector", BRAND),
     ("cooldebrid", "CoolDebrid", "traced from cooldebrid.com/img/logo1.png, which has no vector, without the word", BRAND),
     ("fakirdebrid", "FakirDebrid", "traced from fakirdebrid.net/images/logo2.png, which has no vector, without the word",
      BRAND),
-    ("katfile", "KatFile", "traced from katfile.com/images/logo.png, which has no vector", BRAND),
+    ("katfile", "KatFile", "traced from katfile.com/images/logo.png, which has no vector, the round FILE badge without the word", BRAND),
     ("krakenfiles", "KrakenFiles", "traced from krakenfiles.com/images/kf_logo_dark.png, which has no vector", BRAND),
     ("megadebrid", "Mega-Debrid", "traced from cdn.mega-debrid.eu/images/publicHome/logo.png, which has no vector",
      BRAND),
@@ -72,8 +72,7 @@ LOCAL = [
 ]
 
 # The marks that are the brand's name written out.
-WORDMARK = {"alldebrid", "cocoleech", "ddownload", "fileboom", "filer", "katfile", "keep2share", "megadebrid",
-            "tezfiles", "uploadrar"}
+WORDMARK = {"alldebrid", "cocoleech", "ddownload", "fileboom", "keep2share", "megadebrid", "tezfiles", "uploadrar"}
 
 HEAD = """// The marks of debrid services and file hosters, as markup for BrandMark, each
 // with the colour its tile lights up in and the ink that holds on it ("Brand
@@ -103,6 +102,8 @@ TILE_COLOUR = {
     "rapidgator": ("#fc9020", None),
     "uploadrar": ("#10bbb8", None),
     "zevera": ("#ffce32", None),
+    # The slate of the plate Keep2Share's logo sits on, rather than the blue 2.
+    "keep2share": ("#465a65", None),
 }
 
 FORCE_THEMED = {
@@ -110,6 +111,9 @@ FORCE_THEMED = {
     "katfile": {"#ffffff": ("#ffffff", "#3074b5")},
     "megadebrid": {"#ffffff": ("#ffffff", "#239f85")},
     "rpnet": {"#ffffff": ("#ffffff", "#232838")},
+    # Keep2Share's white letters, off their slate plate, in that slate on the
+    # light ground.
+    "keep2share": {"#fff": ("#ffffff", "#465a65")},
     # Dark letters that the rest of the logo keeps from being lifted: CocoLeech's
     # brown in the lighter brown of its own highlight, Uploadrar's black in white.
     "cocoleech": {"#5a2c08": ("#c58e52", "#5a2c08")},
@@ -121,13 +125,22 @@ FORCE_THEMED = {
 # ribbon.
 ONE_INK = {"tezfiles", "sendnow"}
 
-MARKS = MarkSet(ROOT / "packages" / "core" / "download-marks", FORCE_THEMED, set(), TILE_COLOUR, ONE_INK)
+# The marks whose lit tile shows <id>-hover.svg: premiumize.me's figure and
+# check in one ink, kept apart by a gap where the check crosses the figure.
+HOVER = ["premiumize"]
+
+# Zevera's white spot in the notch of its V, which turns the disc's ink on a
+# lit tile and is gone.
+KEPT = {"zevera": {"#fff"}}
+
+MARKS = MarkSet(ROOT / "packages" / "core" / "download-marks", FORCE_THEMED, set(), TILE_COLOUR, ONE_INK, KEPT)
 
 if SRC is None or not SRC.is_dir():
     raise SystemExit("pass the icons folder of simple-icons@16: python scripts/gen_download_marks.py <path>")
 
 data = simple_data(SRC)
 entries = {m[0]: simple(*m, SRC, data, MARKS) for m in SIMPLE}
-entries.update({m[0]: local(*m, MARKS, wordmark=m[0] in WORDMARK) for m in LOCAL})
+hovers = {slug: local_hover(slug, MARKS) for slug in HOVER}
+entries.update({m[0]: local(*m, MARKS, hover=hovers.get(m[0]), wordmark=m[0] in WORDMARK) for m in LOCAL})
 ids = write(OUT, HEAD, entries, "DOWNLOAD_MARKS", "DownloadMarkId")
 print("%s: %d marks (%d from Simple Icons, %d from download-marks/)" % (OUT.name, len(ids), len(SIMPLE), len(LOCAL)))

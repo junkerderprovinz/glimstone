@@ -24,7 +24,9 @@ of its own.
 under **Apache-2.0** (text in `LICENSE-apache-2.0.txt`), copyright the Homarr
 Labs team and contributors: `mega.svg` is `svg/mega-nz.svg`, `premiumize.svg`
 is `svg/premiumize.svg` and `realdebrid.svg` is `svg/real-debrid.svg`, all
-unmodified.
+unmodified. `premiumize-hover.svg`, the lit tile's drawing, is the same
+figure and check in one colour, with a gap cut into the figure along the
+check so the two stay apart in a single ink.
 
 **The project's own repository**: `pixeldrain.svg` is
 `res/static/img/pixeldrain.svg` from <https://github.com/Fornaxian/pixeldrain_web>,
@@ -53,14 +55,18 @@ each as the brand draws it:
 - `deepbrid.svg`: the D of Deepbrid's logo.
 - `ddownload.svg`: ddownload's name, marked as a wordmark.
 - `fileboom.svg`: FileBoom's name with the bomb in it, marked as a wordmark.
-- `filer.svg`: the logo of filer.net, its F in the green square and the rest
-  of its name, marked as a wordmark, without the picture its file hides under
-  the square.
+- `filer.svg`: the F in the green square of filer.net's logo, without the rest
+  of its name.
 - `gofile.svg`: Gofile's folder with its speed lines.
-- `keep2share.svg`: Keep2Share's name on its slate plate, marked as a wordmark.
+- `keep2share.svg`: Keep2Share's name, marked as a wordmark, without the slate
+  plate it sits on, which is the colour its tile lights in. Off the plate its
+  2 turns white in a box of its blue, and on the light ground the white
+  letters take that slate.
 - `mydebrid.svg`: the M of MyDebrid's logo.
 - `rapidgator.svg`: Rapidgator's rg on its orange plate.
-- `zevera.svg`: Zevera's V in its ring, lit in its yellow, `#ffce32`.
+- `zevera.svg`: Zevera's V in its ring, lit in its yellow, `#ffce32`, with the
+  ring drawn a little heavier so it holds at a tile's size. The white spot in
+  the notch of the V keeps its white on the lit tile.
 
 **The brands' own pictures, traced**, for the providers whose logo has no
 vector anywhere, under the same trademark position. Each was traced with
@@ -80,8 +86,8 @@ picture is drawn in and compared with it side by side:
 - `fakirdebrid.svg`: the stopwatch of <https://fakirdebrid.net/images/logo2.png>,
   without the word beside it. The site turns away a plain download, so the
   file came from the Internet Archive's copy of 5 August 2025.
-- `katfile.svg`: <https://katfile.com/images/logo.png>, its white name, marked
-  as a wordmark and lit in the `#3074b5` of its page.
+- `katfile.svg`: the round FILE badge of <https://katfile.com/images/logo.png>,
+  without the K and the T beside it, lit in the `#3074b5` of its page.
 - `krakenfiles.svg`: the KF of <https://krakenfiles.com/images/kf_logo_dark.png>.
 - `megadebrid.svg`: <https://cdn.mega-debrid.eu/images/publicHome/logo.png>, its
   white name, marked as a wordmark and lit in the `#239f85` of its page.
