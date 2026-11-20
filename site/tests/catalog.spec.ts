@@ -25,7 +25,7 @@ async function show(page: Page) {
 }
 
 test.describe("A catalog in a PickerWindow", () => {
-  test("[catalog-groups] every provider stands in its group, the groups in the catalog's order, each alphabetical", async ({ page }) => {
+  test("[catalog-groups] every provider stands in its group, the groups in the catalog's order, each alphabetical with its catch-all last", async ({ page }) => {
     await show(page);
     const sections = await picker(page)
       .locator(".glim-pick-section")
@@ -43,9 +43,12 @@ test.describe("A catalog in a PickerWindow", () => {
       { title: "Servers and shares", count: count("protocol") },
       { title: "On another target", count: count("layered") },
     ]);
+    const last = new Set(STORAGE_PROVIDERS.entries.filter((e) => e.last).map((e) => e.name));
     for (const { names } of sections) {
-      expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b, "en", { sensitivity: "base" })));
+      const rank = (name: string) => Number(last.has(name));
+      expect(names).toEqual([...names].sort((a, b) => rank(a) - rank(b) || a.localeCompare(b, "en", { sensitivity: "base" })));
     }
+    expect(sections[1]!.names.at(-1)).toBe("Custom S3");
   });
 
   test("[catalog-marks] every tile carries a mark, a brand's lit in its colour and a glyph's in the accent", async ({ page }) => {
