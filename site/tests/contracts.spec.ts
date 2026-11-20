@@ -4137,7 +4137,7 @@ test.describe("SignInCard", () => {
     await field(page, "New password").fill("correct horse battery");
     await field(page, "Confirm password").fill("correct horse batterx");
     await button(page, "Set password").click();
-    await expect(card(page).getByRole("alert")).toHaveText("The two passwords are not the same.");
+    await expect(card(page).getByRole("alert")).toHaveText("The passwords do not match");
     await expect(said(page)).toHaveText("Nothing yet");
     await field(page, "Confirm password").fill("correct horse battery");
     await button(page, "Set password").click();

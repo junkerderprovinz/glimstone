@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { passwordConfirmView } from '../src/passwordField.ts';
+import { PASSWORD_FIELD_TEXT, passwordConfirmView } from '../src/passwordField.ts';
+import { signInTextEn } from '../src/signIn.ts';
 
 test('an empty password asks for nothing again and cannot be set', () => {
   assert.deepEqual(passwordConfirmView('', ''), { shown: false, mismatch: false, confirmed: false });
@@ -21,4 +22,9 @@ test('the same password twice may be set', () => {
 
 test('a repetition left over from an emptied first field hides with it', () => {
   assert.deepEqual(passwordConfirmView('', 'hunter22'), { shown: false, mismatch: false, confirmed: false });
+});
+
+test("the sign-in card's reset form says what the field says", () => {
+  const { confirmPassword, mismatch, show, hide } = signInTextEn;
+  assert.deepEqual({ confirm: confirmPassword, mismatch, show, hide }, PASSWORD_FIELD_TEXT);
 });

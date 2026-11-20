@@ -827,11 +827,14 @@ export function SignInCardPage() {
       <Demo name="SignInCardBasic" />
       <Usage
         code={`import { SignInCard } from "@glimstone/react";
+import { componentText } from "@glimstone/core";
+
+const pw = componentText(lang).passwordField;
 
 <SignInCard
   logo="/logo.svg"
   appName="GlimStone"
-  text={text}
+  text={{ ...text, confirmPassword: pw.confirm, mismatch: pw.mismatch, show: pw.show, hide: pw.hide }}
   passkey={offerPasskey}
   reset
   minPassword={12}
@@ -854,6 +857,10 @@ export function SignInCardPage() {
         <li>The logo stands 7.5rem tall at its own proportions with the name under it, centred in the card. No server name, no pill above the card.</li>
         <li>Labels stand above their fields, in normal case. The first empty field has the focus when the card opens.</li>
         <li>Sign in stays disabled until the password field holds something. Every button is as wide as the fields.</li>
+        <li>
+          The reset form's Confirm password, its mismatch and the eye take a PasswordField's words from{" "}
+          <code>componentText(lang).passwordField</code>, so both read alike in all 42 languages.
+        </li>
         <li>
           A refused try shakes the button that sent it and selects the refused field. At motion off and under reduced
           motion nothing moves, and the reason above the button says it alone.
