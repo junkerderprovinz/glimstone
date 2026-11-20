@@ -147,14 +147,25 @@ test.describe("Button", () => {
 
   test("[button-arabic-descenders] Arabic words keep their tails and dots inside the label", async ({ page }) => {
     await open(page, "/components/button");
-    const cut = await rowDemo(page).locator(".glim-btn-label").evaluateAll((all) =>
-      all.slice(0, 3).flatMap((label, i) => {
-        label.textContent = ["التالي", "الموقع", "استخدم هذا المجلد"][i];
-        label.closest(".glim-btn")!.setAttribute("dir", "rtl");
-        return label.scrollHeight > label.clientHeight ? [label.textContent] : [];
-      }),
-    );
-    expect(cut).toEqual([]);
+    const button = rowDemo(page).locator(".glim-btn:has(.glim-btn-label)").first();
+    const label = button.locator(".glim-btn-label");
+    await button.evaluate((b) => b.setAttribute("dir", "rtl"));
+    for (const word of ["التالي", "الموقع"]) {
+      await label.evaluate(async (l, w) => {
+        (l as HTMLElement).style.paddingBlock = (l as HTMLElement).style.marginBlock = "";
+        l.textContent = w;
+        await document.fonts.load(`500 14px "Noto Sans Arabic Variable"`, w);
+      }, word);
+      // Noto Sans Arabic hangs its tails below the line box, and the label clips what hangs past
+      // its box, so a cut tail shows only beside the same label with room to spare.
+      const clipped = await button.screenshot({ animations: "disabled" });
+      await label.evaluate((l) => {
+        (l as HTMLElement).style.paddingBlock = "1em";
+        (l as HTMLElement).style.marginBlock = "-1em";
+      });
+      const whole = await button.screenshot({ animations: "disabled" });
+      expect(clipped.equals(whole), word).toBe(true);
+    }
   });
 
   test("[button-href] an href makes it a link", async ({ page }) => {
