@@ -1,6 +1,6 @@
 {
   "name": "@glimstone/solid",
-  "version": "4.8.0",
+  "version": "4.8.1",
   "description": "GlimStone's components for Solid",
   "license": "AGPL-3.0-only",
   "repository": {
@@ -116,7 +116,7 @@
     "build": "vite build && tsc -p tsconfig.build.json"
   },
   "dependencies": {
-    "@glimstone/core": "4.8.0"
+    "@glimstone/core": "4.8.1"
   },
   "peerDependencies": {
     "@internationalized/date": "^3.12.4",

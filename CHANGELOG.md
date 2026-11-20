@@ -2,6 +2,35 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 4.8.1 - 2026-11-20
+
+A connection row sets its buttons off the well and keeps its badges a size smaller, a wordmark starts where a symbol would, and on a wide screen the docs stand in the middle.
+
+## 🧩 Adopting apps
+
+- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.8.1, all packages at the same number.
+- **A quiet button in a connection row** steps up a surface by itself. Drop any override you added to keep it from vanishing into the row.
+- **Your own copy of the stylesheet:** copy `tokens.css` again. It brings the connection row's buttons and badges, the width of a wordmark on a connection tile, the place of a wordmark on a picker tile and the soft edge of a mark that reaches its box.
+- **Flutter:** move the git dependency to `ref: v4.8.1`.
+- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.8.1.
+
+## ✨ Added
+
+- **`wordmark` from `connectionTile()`:** it says when a brand's mark is its name written out, and the four `ConnectionRow` packages give that mark `.glim-connection-mark--wordmark`, which takes the tile's width less a margin.
+
+## 🎨 Design
+
+- **Every button in a connection row stands a surface step off the row.** The row is a well on `--carbon-surface2`, so a button rests on `--carbon-surface3` and lights up in `--hover` under the pointer, in light, dark and OLED. A quiet button an app draws into the row steps up the same way.
+- **A connection badge is a size below the buttons.** It stands at the end of the name's line, 1.5rem high, and moves under the name before the name is cut. A neutral badge has no ring and is filled halfway between the well and the buttons' surface.
+- **A wordmark on a picker tile starts where a symbol would**, so a row of tiles no longer draws the eye to the ones that carry one. A long wordmark may take 7rem, so ddownload and Mega-Debrid read at the size of a name.
+- **A wordmark on a connection tile** spans the tile less a margin, where it was squeezed into a symbol's square.
+
+## 🐛 Fixed
+
+- **AllDebrid on the dark ground.** Its black outline and A turn white, where they vanished, and the black behind its yellow letters is left out, where it drew a white rim.
+- **A mark that reaches its box keeps its soft edge.** A tile's middle rarely falls on a whole pixel, and the SVG's own clip shaved the edge of a shape drawn to the box, so BestDebrid's circle looked cut off.
+- **The docs stand in the middle of a wide screen.** Past 88rem the page keeps its width and stands between the nav and the window's edge, where the contents list moves, instead of clinging to the nav. Opening Make it yours still moves neither.
+
 ## 4.8.0 - 2026-11-20
 
 A new password is typed twice, a connection row takes actions of an app's own, and every catalog puts its catch-all last by itself. Logos that are their name stand alone on their tile, nearly every provider in the VPN, captcha and download catalogs wears its mark, and Arabic button labels keep their tails.
