@@ -145,6 +145,18 @@ test.describe("Button", () => {
     expect(look).toEqual({ whole: true, inside: true });
   });
 
+  test("[button-arabic-descenders] Arabic words keep their tails and dots inside the label", async ({ page }) => {
+    await open(page, "/components/button");
+    const cut = await rowDemo(page).locator(".glim-btn-label").evaluateAll((all) =>
+      all.slice(0, 3).flatMap((label, i) => {
+        label.textContent = ["التالي", "الموقع", "استخدم هذا المجلد"][i];
+        label.closest(".glim-btn")!.setAttribute("dir", "rtl");
+        return label.scrollHeight > label.clientHeight ? [label.textContent] : [];
+      }),
+    );
+    expect(cut).toEqual([]);
+  });
+
   test("[button-href] an href makes it a link", async ({ page }) => {
     await open(page, "/components/button");
     const link = rowDemo(page).getByRole("link", { name: "Release page" });

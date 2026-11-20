@@ -2809,12 +2809,15 @@
      line height: `.glim-btn`'s `line-height: 1` gives a 14px line box where
      Segoe UI needs about 18.6px, and a box that hides its overflow cuts off the
      descenders of p, g, y and j. 1.4 clears the tallest face in the stack, and
-     the button keeps its height. */
+     the button keeps its height. Arabic hangs its tails and dots lower still,
+     so the box reaches a little past the line and gives that room back. */
   .glim-btn-label {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     line-height: 1.4;
+    padding-block: 0.15em;
+    margin-block: -0.15em;
   }
 
   /* The collapsed reactive label is still a flex item, and the gap beside it
@@ -2839,6 +2842,8 @@
     transform-origin: left center;
     /* This box hides its overflow too; see `.glim-btn-label`. */
     line-height: 1.4;
+    padding-block: 0.15em;
+    margin-block: -0.15em;
   }
 
   /* Keep these states in step with the motion block below, which restores the
