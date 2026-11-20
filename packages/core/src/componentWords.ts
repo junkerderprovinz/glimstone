@@ -1,4 +1,4 @@
-// The words of the components on the Zag machines, as one table a language.
+// The words the components bring along, as one table a language.
 // GlimStone carries them in every language the glossary (@glimstone/terms)
 // holds, in componentLocales/, one module a language, so an app can load just
 // its own. A sentence that names a value carries it as a placeholder, and one
@@ -74,4 +74,5 @@ export interface ComponentWords {
   };
   floatingPanel: { minimize: string; maximize: string; restore: string; close: string };
   signaturePad: { area: string; clear: string };
+  passwordField: { show: string; hide: string; confirm: string; mismatch: string };
 }

@@ -50,4 +50,5 @@ export const nl: ComponentWords = {
   tour: { back: "Terug", next: "Volgende", close: "Sluiten", progress: "{step} van {steps}" },
   floatingPanel: { minimize: "Minimaliseren", maximize: "Maximaliseren", restore: "Herstellen", close: "Sluiten" },
   signaturePad: { area: "Handtekening", clear: "Wissen" },
+  passwordField: { show: "Tonen", hide: "Verbergen", confirm: "Wachtwoord bevestigen", mismatch: "De wachtwoorden komen niet overeen" },
 };

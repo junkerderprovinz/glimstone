@@ -56,4 +56,5 @@ export const sr: ComponentWords = {
   tour: { back: "Назад", next: "Даље", close: "Затвори", progress: "{step} од {steps}" },
   floatingPanel: { minimize: "Умањи", maximize: "Увећај", restore: "Врати", close: "Затвори" },
   signaturePad: { area: "Потпис", clear: "Обриши" },
+  passwordField: { show: "Прикажи", hide: "Сакриј", confirm: "Потврди лозинку", mismatch: "Лозинке се не поклапају" },
 };

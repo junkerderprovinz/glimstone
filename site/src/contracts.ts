@@ -501,6 +501,10 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "pw-disabled", when: "The field is disabled", then: "The eye is disabled too." },
       { id: "pw-focus", when: "The field has focus", then: "Its fill steps up the ramp and no ring shows (rule 14)." },
       { id: "pw-expose", when: "The caller asks for the input", then: "The field hands it over, and eyeAttrs land on the eye." },
+      { id: "pw-confirm-appears", when: "It has confirm and the first character is typed", then: "A second field named by its own label stands under it, as wide as the first and with an eye of its own." },
+      { id: "pw-confirm-mismatch", when: "The second field holds something other than the first", then: "A line under it says the passwords do not match. The field is aria-invalid and described by the line, which a screen reader hears politely. Once the two match, the line goes." },
+      { id: "pw-confirm-submit", when: "The second field is empty or differs", then: "The action that sets the password stays disabled, and turns on once the two match." },
+      { id: "pw-confirm-hide", when: "The first field is emptied", then: "The second field goes, and comes back empty with the next character." },
     ],
   },
   CopyField: {

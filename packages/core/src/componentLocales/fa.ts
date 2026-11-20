@@ -45,4 +45,5 @@ export const fa: ComponentWords = {
   tour: { back: "قبلی", next: "بعدی", close: "بستن", progress: "{step} از {steps}" },
   floatingPanel: { minimize: "کوچک کردن", maximize: "بزرگ کردن", restore: "بازگردانی", close: "بستن" },
   signaturePad: { area: "امضا", clear: "پاک کردن" },
+  passwordField: { show: "نمایش", hide: "پنهان کردن", confirm: "تأیید رمز عبور", mismatch: "رمزهای عبور یکسان نیستند" },
 };

@@ -61,4 +61,5 @@ export const ro: ComponentWords = {
   tour: { back: "Înapoi", next: "Înainte", close: "Închide", progress: "{step} din {steps}" },
   floatingPanel: { minimize: "Minimizează", maximize: "Maximizează", restore: "Restaurează", close: "Închide" },
   signaturePad: { area: "Semnătură", clear: "Șterge" },
+  passwordField: { show: "Arată", hide: "Ascunde", confirm: "Confirmă parola", mismatch: "Parolele nu coincid" },
 };

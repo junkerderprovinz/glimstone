@@ -61,4 +61,5 @@ export const it: ComponentWords = {
   tour: { back: "Indietro", next: "Avanti", close: "Chiudi", progress: "{step} di {steps}" },
   floatingPanel: { minimize: "Riduci a icona", maximize: "Ingrandisci", restore: "Ripristina", close: "Chiudi" },
   signaturePad: { area: "Firma", clear: "Cancella" },
+  passwordField: { show: "Mostra", hide: "Nascondi", confirm: "Conferma la password", mismatch: "Le password non corrispondono" },
 };

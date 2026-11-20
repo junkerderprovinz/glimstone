@@ -1432,6 +1432,33 @@ export function PasswordFieldPage() {
           design language).
         </li>
       </ul>
+      <H2>A new password, typed twice</H2>
+      <Demo name="PasswordFieldConfirm" />
+      <Code
+        code={`<PasswordField\n  confirm\n  onConfirmedChange={setConfirmed}\n  value={pw}\n  onChange={(e) => setPw(e.target.value)}\n  text={componentText(lang).passwordField}\n/>\n<Button label={t("setPassword")} disabled={!confirmed} onClick={save} />`}
+      />
+      <ul>
+        <li>
+          With <code>confirm</code>, a second field with its own label stands under the first once the first holds a
+          character, and goes again, emptied, when the first is emptied. A slip of the finger then never becomes a
+          password nobody can sign in with.
+        </li>
+        <li>
+          While the second field holds something other than the first, a line under it says the passwords do not match.
+          The field carries <code>aria-invalid</code>, the line is its description and a screen reader hears it politely.
+        </li>
+        <li>
+          The action that sets the password waits for <code>onConfirmedChange</code> to say true:{" "}
+          <code>@confirmed-change</code> in Vue.
+        </li>
+        <li>
+          Both fields fill in as <code>new-password</code>, so a password manager offers a new one, and the second field
+          keeps the first one's width.
+        </li>
+        <li>
+          The label, the line and the eye's words come in all 42 languages from <code>componentText(lang).passwordField</code>.
+        </li>
+      </ul>
       <H2>Behaviour</H2>
       <ContractTable of="PasswordField" />
       <H2>API</H2>

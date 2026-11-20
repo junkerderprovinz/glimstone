@@ -55,4 +55,5 @@ export const ms: ComponentWords = {
   tour: { back: "Kembali", next: "Seterusnya", close: "Tutup", progress: "{step} daripada {steps}" },
   floatingPanel: { minimize: "Kecilkan", maximize: "Besarkan", restore: "Pulihkan", close: "Tutup" },
   signaturePad: { area: "Tandatangan", clear: "Kosongkan" },
+  passwordField: { show: "Tunjukkan", hide: "Sembunyikan", confirm: "Sahkan kata laluan", mismatch: "Kata laluan tidak sepadan" },
 };

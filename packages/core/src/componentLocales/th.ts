@@ -45,4 +45,5 @@ export const th: ComponentWords = {
   tour: { back: "ย้อนกลับ", next: "ถัดไป", close: "ปิด", progress: "{step} จาก {steps}" },
   floatingPanel: { minimize: "ย่อ", maximize: "ขยาย", restore: "คืนขนาด", close: "ปิด" },
   signaturePad: { area: "ลายเซ็น", clear: "ล้าง" },
+  passwordField: { show: "แสดง", hide: "ซ่อน", confirm: "ยืนยันรหัสผ่าน", mismatch: "รหัสผ่านไม่ตรงกัน" },
 };

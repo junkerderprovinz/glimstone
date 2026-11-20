@@ -1,15 +1,19 @@
 <script lang="ts" module>
   import type { HTMLInputAttributes } from "svelte/elements";
-  import type { FieldWidth } from "@glimstone/core";
+  import type { FieldWidth, PasswordFieldText } from "@glimstone/core";
 
   export interface PasswordFieldProps extends Omit<HTMLInputAttributes, "type" | "width" | "class"> {
     width?: FieldWidth;
     /** Attributes for the eye, such as a data hook. */
     eyeAttrs?: Record<string, string>;
-    /** The eye's name and bubble while the secret is hidden, and once it shows. */
-    text?: { show: string; hide: string };
+    /** The eye's words, and the second field's with `confirm`. English where left out. */
+    text?: Partial<PasswordFieldText>;
     /** Why the value cannot stand, as a line under the field until it is fixed. */
     error?: string;
+    /** Asks for the password again in a second field, which stands once the first holds something. */
+    confirm?: boolean;
+    /** Whether both fields hold the same password, each time that changes. Set password waits for true. */
+    onConfirmedChange?: (confirmed: boolean) => void;
     /** Classes for the wrapper, which carries the field's width. */
     class?: string;
     /** The <input>, bound with `bind:ref`. */
@@ -18,7 +22,7 @@
 </script>
 
 <script lang="ts">
-  import { fieldErrorView, fieldWidthClass } from "@glimstone/core";
+  import { fieldErrorView, fieldWidthClass, PASSWORD_FIELD_TEXT, passwordConfirmView } from "@glimstone/core";
   import FieldError from "./FieldError.svelte";
   import { useFieldName } from "./fieldName.js";
   import { IconEye, IconEyeOff } from "./glyphs.js";
@@ -28,11 +32,14 @@
   // design language). The props are a native <input>'s, so a call site swaps
   // `<input type="password"` for `<PasswordField` and keeps its own listeners;
   // the secret is bound with `bind:value`. Inside a FieldRow the row names it.
+  // With `confirm` it takes a new password, typed twice.
   let {
     width,
     eyeAttrs,
-    text = { show: "Show", hide: "Hide" },
+    text,
     error,
+    confirm = false,
+    onConfirmedChange,
     class: className,
     ref = $bindable(null),
     disabled,
@@ -42,15 +49,26 @@
     ...rest
   }: PasswordFieldProps = $props();
 
+  const words = $derived({ ...PASSWORD_FIELD_TEXT, ...text });
   let shown = $state(false);
+  let repeatShown = $state(false);
+  let repeat = $state("");
   const name = useFieldName(() => ariaLabel ?? undefined);
   const own = $props.id();
-  const err = $derived(fieldErrorView(error, rest.id ?? own, describedBy ?? undefined));
+  const id = $derived(rest.id ?? own);
+  const err = $derived(fieldErrorView(error, id, describedBy ?? undefined));
+  const view = $derived(passwordConfirmView(value == null ? "" : String(value), repeat));
+  const mismatch = $derived(fieldErrorView(view.mismatch ? words.mismatch : undefined, `${id}-confirm`));
+  $effect(() => {
+    if (!view.shown) repeat = "";
+  });
+  const confirmed = $derived(confirm && view.confirmed);
+  $effect(() => onConfirmedChange?.(confirmed));
 </script>
 
 <span data-glim="PasswordField" class={["glim-secret", fieldWidthClass(width), className].filter(Boolean).join(" ")}>
   <input
-    autocomplete="current-password"
+    autocomplete={confirm ? "new-password" : "current-password"}
     spellcheck={false}
     {...rest}
     aria-label={name()}
@@ -62,8 +80,34 @@
     type={shown ? "text" : "password"}
     class="glim-input"
   />
-  <IconTipButton {...eyeAttrs} tip={shown ? text.hide : text.show} class="glim-secret-eye" disabled={!!disabled} onclick={() => (shown = !shown)}>
+  <IconTipButton {...eyeAttrs} tip={shown ? words.hide : words.show} class="glim-secret-eye" disabled={!!disabled} onclick={() => (shown = !shown)}>
     {#if shown}{@render IconEyeOff()}{:else}{@render IconEye()}{/if}
   </IconTipButton>
 </span>
 {#if err.errorId}<FieldError id={err.errorId}>{error}</FieldError>{/if}
+{#if confirm && view.shown}
+  <span class="glim-secret-confirm">
+    <label for="{id}-confirm" class="glim-secret-confirm-label">{words.confirm}</label>
+    <span class={["glim-secret-confirm-box", fieldWidthClass(width)].filter(Boolean).join(" ")}>
+      <span class="glim-secret">
+        <input
+          id="{id}-confirm"
+          autocomplete="new-password"
+          spellcheck={false}
+          bind:value={repeat}
+          aria-invalid={mismatch.invalid}
+          aria-describedby={mismatch.describedBy}
+          {disabled}
+          type={repeatShown ? "text" : "password"}
+          class="glim-input"
+        />
+        <IconTipButton tip={repeatShown ? words.hide : words.show} class="glim-secret-eye" disabled={!!disabled} onclick={() => (repeatShown = !repeatShown)}>
+          {#if repeatShown}{@render IconEyeOff()}{:else}{@render IconEye()}{/if}
+        </IconTipButton>
+      </span>
+      <span aria-live="polite" class="glim-secret-confirm-live">
+        {#if mismatch.errorId}<FieldError id={mismatch.errorId}>{words.mismatch}</FieldError>{/if}
+      </span>
+    </span>
+  </span>
+{/if}

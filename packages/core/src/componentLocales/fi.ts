@@ -45,4 +45,5 @@ export const fi: ComponentWords = {
   tour: { back: "Takaisin", next: "Seuraava", close: "Sulje", progress: "{step}/{steps}" },
   floatingPanel: { minimize: "Pienennä", maximize: "Suurenna", restore: "Palauta", close: "Sulje" },
   signaturePad: { area: "Allekirjoitus", clear: "Tyhjennä" },
+  passwordField: { show: "Näytä", hide: "Piilota", confirm: "Vahvista salasana", mismatch: "Salasanat eivät täsmää" },
 };

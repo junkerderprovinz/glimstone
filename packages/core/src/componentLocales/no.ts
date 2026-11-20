@@ -50,4 +50,5 @@ export const no: ComponentWords = {
   tour: { back: "Tilbake", next: "Neste", close: "Lukk", progress: "{step} av {steps}" },
   floatingPanel: { minimize: "Minimer", maximize: "Maksimer", restore: "Gjenopprett", close: "Lukk" },
   signaturePad: { area: "Signatur", clear: "Tøm" },
+  passwordField: { show: "Vis", hide: "Skjul", confirm: "Bekreft passordet", mismatch: "Passordene er ikke like" },
 };

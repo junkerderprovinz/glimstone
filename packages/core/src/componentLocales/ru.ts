@@ -62,4 +62,5 @@ export const ru: ComponentWords = {
   tour: { back: "Назад", next: "Далее", close: "Закрыть", progress: "{step} из {steps}" },
   floatingPanel: { minimize: "Свернуть", maximize: "Развернуть", restore: "Восстановить", close: "Закрыть" },
   signaturePad: { area: "Подпись", clear: "Очистить" },
+  passwordField: { show: "Показать", hide: "Скрыть", confirm: "Подтвердите пароль", mismatch: "Пароли не совпадают" },
 };

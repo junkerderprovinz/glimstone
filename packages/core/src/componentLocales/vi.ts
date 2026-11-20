@@ -50,4 +50,5 @@ export const vi: ComponentWords = {
   tour: { back: "Quay lại", next: "Tiếp", close: "Đóng", progress: "{step} trên {steps}" },
   floatingPanel: { minimize: "Thu nhỏ", maximize: "Phóng to", restore: "Khôi phục", close: "Đóng" },
   signaturePad: { area: "Chữ ký", clear: "Xóa sạch" },
+  passwordField: { show: "Hiện", hide: "Ẩn", confirm: "Xác nhận mật khẩu", mismatch: "Mật khẩu không khớp" },
 };

@@ -44,6 +44,7 @@ export * from "./motionNative.ts";
 export * from "./numberField.ts";
 export * from "./overlay.ts";
 export * from "./pagination.ts";
+export * from "./passwordField.ts";
 export * from "./paypal.ts";
 export * from "./picker.ts";
 export * from "./catalog.ts";

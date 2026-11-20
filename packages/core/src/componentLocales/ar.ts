@@ -80,4 +80,5 @@ export const ar: ComponentWords = {
   tour: { back: "رجوع", next: "التالي", close: "إغلاق", progress: "{step} من {steps}" },
   floatingPanel: { minimize: "تصغير", maximize: "تكبير", restore: "استعادة", close: "إغلاق" },
   signaturePad: { area: "التوقيع", clear: "مسح" },
+  passwordField: { show: "إظهار", hide: "إخفاء", confirm: "تأكيد كلمة المرور", mismatch: "كلمتا المرور غير متطابقتين" },
 };

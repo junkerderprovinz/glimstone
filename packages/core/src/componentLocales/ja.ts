@@ -45,4 +45,5 @@ export const ja: ComponentWords = {
   tour: { back: "戻る", next: "次へ", close: "閉じる", progress: "{steps} 中 {step}" },
   floatingPanel: { minimize: "最小化", maximize: "最大化", restore: "元のサイズに戻す", close: "閉じる" },
   signaturePad: { area: "署名", clear: "消去" },
+  passwordField: { show: "表示", hide: "非表示", confirm: "パスワードの確認", mismatch: "パスワードが一致しません" },
 };

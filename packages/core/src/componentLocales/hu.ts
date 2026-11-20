@@ -50,4 +50,5 @@ export const hu: ComponentWords = {
   tour: { back: "Vissza", next: "Tovább", close: "Bezárás", progress: "{step}/{steps}" },
   floatingPanel: { minimize: "Kis méret", maximize: "Teljes méret", restore: "Eredeti méret", close: "Bezárás" },
   signaturePad: { area: "Aláírás", clear: "Törlés" },
+  passwordField: { show: "Megjelenítés", hide: "Elrejtés", confirm: "Jelszó megerősítése", mismatch: "A jelszavak nem egyeznek" },
 };

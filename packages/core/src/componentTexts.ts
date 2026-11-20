@@ -1,5 +1,5 @@
-// The words of every component on a Zag machine in one language, for an app
-// that picks its language at run time. An app with one language imports its
+// The words every component brings along, in one language, for an app that
+// picks its language at run time. An app with one language imports its
 // own table from componentLocales/ and builds what it needs from it.
 
 import type { ComponentWords } from "./componentWords.ts";
@@ -25,6 +25,7 @@ import type { MarqueeText } from "./marquee.ts";
 import type { TourText } from "./tour.ts";
 import type { FloatingPanelText } from "./floatingPanel.ts";
 import type { SignaturePadText } from "./signaturePad.ts";
+import type { PasswordFieldText } from "./passwordField.ts";
 import { en } from "./componentLocales/en.ts";
 import { de } from "./componentLocales/de.ts";
 import { ar } from "./componentLocales/ar.ts";
@@ -89,6 +90,7 @@ export interface ComponentText {
   tour: TourText;
   floatingPanel: FloatingPanelText;
   signaturePad: SignaturePadText;
+  passwordField: PasswordFieldText;
 }
 
 /** The words for a language tag such as `pt-BR`: its own, its base language's, or English. */
@@ -112,5 +114,6 @@ export function componentText(lang: string): ComponentText {
     tour: tourText(w.tour, code),
     floatingPanel: w.floatingPanel,
     signaturePad: w.signaturePad,
+    passwordField: w.passwordField,
   };
 }

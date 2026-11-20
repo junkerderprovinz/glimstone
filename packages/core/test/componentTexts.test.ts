@@ -10,6 +10,7 @@ import { PAGINATION_TEXT } from '../src/pagination.ts';
 import { RATING_TEXT } from '../src/rating.ts';
 import { TIMER_TEXT } from '../src/timer.ts';
 import { FILE_UPLOAD_TEXT } from '../src/fileUpload.ts';
+import { PASSWORD_FIELD_TEXT } from '../src/passwordField.ts';
 
 const dir = join(import.meta.dirname, '..', 'src', 'componentLocales');
 const languages = Object.keys(glossary.languages);
@@ -97,6 +98,7 @@ test('the English defaults are the English table', () => {
   assert.equal(t.rating.star(3, 5), RATING_TEXT.star(3, 5));
   assert.equal(t.timer.spoken(1, 4, 30), TIMER_TEXT.spoken(1, 4, 30));
   assert.equal(t.fileUpload.refused('a.png', 'FILE_TOO_LARGE'), FILE_UPLOAD_TEXT.refused('a.png', 'FILE_TOO_LARGE'));
+  assert.deepEqual(t.passwordField, PASSWORD_FIELD_TEXT);
 });
 
 test('a sentence fills its values in the language, its digits too', () => {

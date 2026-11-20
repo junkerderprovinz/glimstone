@@ -45,4 +45,5 @@ export const en: ComponentWords = {
   tour: { back: "Back", next: "Next", close: "Close", progress: "{step} of {steps}" },
   floatingPanel: { minimize: "Minimise", maximize: "Maximise", restore: "Restore", close: "Close" },
   signaturePad: { area: "Signature", clear: "Clear" },
+  passwordField: { show: "Show", hide: "Hide", confirm: "Confirm password", mismatch: "The passwords do not match" },
 };

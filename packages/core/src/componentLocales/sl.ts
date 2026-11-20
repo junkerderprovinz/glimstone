@@ -57,4 +57,5 @@ export const sl: ComponentWords = {
   tour: { back: "Nazaj", next: "Naprej", close: "Zapri", progress: "{step} od {steps}" },
   floatingPanel: { minimize: "Pomanjšaj", maximize: "Povečaj", restore: "Obnovi", close: "Zapri" },
   signaturePad: { area: "Podpis", clear: "Počisti" },
+  passwordField: { show: "Pokaži", hide: "Skrij", confirm: "Potrdi geslo", mismatch: "Gesli se ne ujemata" },
 };

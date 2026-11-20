@@ -45,4 +45,5 @@ export const is: ComponentWords = {
   tour: { back: "Til baka", next: "Áfram", close: "Loka", progress: "{step} af {steps}" },
   floatingPanel: { minimize: "Lágmarka", maximize: "Hámarka", restore: "Endurheimta", close: "Loka" },
   signaturePad: { area: "Undirskrift", clear: "Hreinsa" },
+  passwordField: { show: "Sýna", hide: "Fela", confirm: "Staðfesta lykilorð", mismatch: "Lykilorðin stemma ekki" },
 };

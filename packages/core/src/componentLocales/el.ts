@@ -55,4 +55,5 @@ export const el: ComponentWords = {
   tour: { back: "Πίσω", next: "Επόμενο", close: "Κλείσιμο", progress: "{step} από {steps}" },
   floatingPanel: { minimize: "Ελαχιστοποίηση", maximize: "Μεγιστοποίηση", restore: "Επαναφορά", close: "Κλείσιμο" },
   signaturePad: { area: "Υπογραφή", clear: "Καθαρισμός" },
+  passwordField: { show: "Εμφάνιση", hide: "Απόκρυψη", confirm: "Επιβεβαίωση κωδικού", mismatch: "Οι κωδικοί δεν ταιριάζουν" },
 };
