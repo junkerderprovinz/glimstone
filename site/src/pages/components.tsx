@@ -1734,8 +1734,9 @@ import { VPN_MARKS } from "@glimstone/core/vpnMarks";
         </li>
         <li>
           <code>status</code> is one quiet line, such as who is signed in or where the traffic leaves. A state that is
-          not the normal case goes in <code>badges</code>, a slot in Vue, after the name (rule 33). The children, the
-          default slot in Vue, add more quiet lines.
+          not the normal case goes in <code>badges</code>, a slot in Vue, after the name (rule 33). A badge takes the
+          buttons' height and keeps a ground no button has, so it never passes for one. The children, the default slot
+          in Vue, add more quiet lines.
         </li>
         <li>
           Test, Edit and Remove stand at the end in that order, each only where its handler is passed, and show their

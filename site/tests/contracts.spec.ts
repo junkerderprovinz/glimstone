@@ -3424,6 +3424,83 @@ test.describe("ConnectionRow", () => {
     expect(await markOf(run)).toBe(MARKS.close.viewBox);
   });
 
+  test("[connection-ground] in light, dark and OLED every button stands a step off the row, and its hover lifts it again", async ({ page }) => {
+    await open(page, "/components/connection-row");
+    for (const [scheme, oled] of [["light", false], ["dark", false], ["dark", true]] as const) {
+      await page.emulateMedia({ colorScheme: scheme });
+      await page.evaluate((o) => localStorage.setItem("gs-docs-look", JSON.stringify({ oled: o })), oled);
+      await page.reload();
+      await page.locator("main h1").first().waitFor();
+      const media = row(page, "Media share");
+      // An app that draws its own buttons into the row may hand it a quiet one.
+      await media.locator(".glim-connection-actions").evaluate((a) => a.insertAdjacentHTML("afterbegin", '<button type="button" class="glim-btn glim-btn-subtle glim-btn--subtle">Share</button>'));
+      const ground = await media.evaluate((r) => getComputedStyle(r).backgroundColor);
+      for (const label of ["Share", "Mount", "Test", "Edit", "Remove"]) {
+        const b = button(page, "Media share", label);
+        const fill = () => b.evaluate((e) => getComputedStyle(e).backgroundColor);
+        const lit = await b.evaluate((e) => {
+          const probe = e.appendChild(document.createElement("span"));
+          probe.style.backgroundColor = "var(--hover)";
+          const c = getComputedStyle(probe).backgroundColor;
+          probe.remove();
+          return c;
+        });
+        const rest = await fill();
+        const look = `${label} in ${scheme}${oled ? " OLED" : ""}`;
+        expect(rest, look).not.toBe(ground);
+        await b.hover();
+        await expect.poll(fill, look).toBe(lit);
+        expect(lit, look).not.toBe(rest);
+        expect(lit, look).not.toBe(ground);
+        await page.mouse.move(0, 0);
+      }
+    }
+  });
+
+  test("[connection-badge] a badge follows the name at the buttons' height, and moves under the name before it is cut", async ({ page }) => {
+    await open(page, "/components/connection-row");
+    const ghcr = row(page, "GitHub Container Registry");
+    const box = (l: Locator) => l.evaluate((e) => e.getBoundingClientRect().toJSON() as DOMRect);
+    const name = ghcr.locator(".glim-connection-name");
+    const badge = ghcr.locator(".glim-badge");
+    expect((await box(badge)).height).toBe((await box(button(page, "GitHub Container Registry", "Edit"))).height);
+    expect((await box(badge)).left - (await box(name)).right).toBeLessThanOrEqual(16);
+    await page.evaluate(() => (document.documentElement.dir = "rtl"));
+    expect((await box(name)).left - (await box(badge)).right).toBeLessThanOrEqual(16);
+    await page.evaluate(() => (document.documentElement.dir = "ltr"));
+    await page.setViewportSize({ width: 480, height: 800 });
+    expect((await box(badge)).top).toBeGreaterThanOrEqual((await box(name)).bottom);
+    expect(await name.evaluate((n) => n.scrollWidth <= n.clientWidth)).toBe(true);
+  });
+
+  test("[connection-badge-ground] in light, dark and OLED a badge keeps a ground no button shares and does not answer the pointer", async ({ page }) => {
+    await open(page, "/components/connection-row");
+    for (const [scheme, oled] of [["light", false], ["dark", false], ["dark", true]] as const) {
+      await page.emulateMedia({ colorScheme: scheme });
+      await page.evaluate((o) => localStorage.setItem("gs-docs-look", JSON.stringify({ oled: o })), oled);
+      await page.reload();
+      await page.locator("main h1").first().waitFor();
+      const ghcr = row(page, "GitHub Container Registry");
+      // The demo's badges all report a failure, so a neutral one joins them.
+      await ghcr.locator(".glim-connection-badges").evaluate((b) => b.insertAdjacentHTML("beforeend", '<span class="glim-badge glim-badge--medium glim-badge--neutral">Read only</span>'));
+      const edit = await button(page, "GitHub Container Registry", "Edit").evaluate((b) => getComputedStyle(b).backgroundColor);
+      const where = `${scheme}${oled ? " OLED" : ""}`;
+      const look = (badge: Locator) => badge.evaluate((e) => ({ ground: getComputedStyle(e).backgroundColor, wash: getComputedStyle(e).backgroundImage, ring: getComputedStyle(e).boxShadow, cursor: getComputedStyle(e).cursor }));
+      const fail = await look(ghcr.locator(".glim-badge--fail"));
+      const neutral = await look(ghcr.locator(".glim-badge--neutral"));
+      expect(fail.wash, where).toContain("gradient");
+      expect(neutral.ground, where).not.toBe(edit);
+      expect(neutral.ring, where).not.toBe("none");
+      for (const badge of [ghcr.locator(".glim-badge--fail"), ghcr.locator(".glim-badge--neutral")]) {
+        const rest = await look(badge);
+        expect(rest.cursor, where).not.toBe("pointer");
+        await badge.hover();
+        expect(await look(badge), where).toEqual(rest);
+        await page.mouse.move(0, 0);
+      }
+    }
+  });
+
   test("[connection-narrow] below 640px the buttons, the app's own among them, show their glyphs alone and keep their names", async ({ page }) => {
     await page.setViewportSize({ width: 480, height: 800 });
     await open(page, "/components/connection-row");

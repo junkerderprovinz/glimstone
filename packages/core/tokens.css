@@ -4599,8 +4599,9 @@
   }
   /* What carries surface2 at rest would vanish into the sub-card, so fields,
      quiet buttons, bare selector segments and resting tiles step up one
-     surface, and hover one more (rule 21). A tile does so in a well too. */
-  .glim-subcard .glim-btn--subtle,
+     surface, and hover one more (rule 21). A tile does so in a well too, and a
+     quiet button in a connection row, which is a well. */
+  :is(.glim-subcard, .glim-connection) .glim-btn--subtle,
   .glim-subcard .glim-num-field,
   .glim-subcard .glim-sel--chip .glim-sel-seg:not(.glim-active),
   :is(.glim-subcard, .glim-well) .glim-sel-tile:not(.glim-active) {
@@ -5297,20 +5298,21 @@
     min-width: 0;
     padding: var(--space-6) var(--space-8);
   }
-  /* The name keeps its line and the badges move under it before it ends in an
-     ellipsis, and the buttons do the same under the status. */
+  /* The badges follow the name and move under it before it ends in an
+     ellipsis, and the buttons move under the status the same way. */
   .glim-connection-head,
   .glim-connection-foot {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: flex-end;
     min-width: 0;
   }
   .glim-connection-head { gap: var(--space-2) var(--space-6); }
-  .glim-connection-foot { gap: var(--space-4) var(--space-8); }
+  .glim-connection-foot {
+    justify-content: flex-end;
+    gap: var(--space-4) var(--space-8);
+  }
   .glim-connection-name {
-    flex: 1 1 12rem;
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -5322,16 +5324,25 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: flex-end;
     gap: var(--space-3);
   }
-  /* The state washes are measured over the card, and the well's darker ground
+  .glim-connection-actions { justify-content: flex-end; }
+  /* A badge takes the buttons' height, so it does not look small beside them.
+     The state washes are measured over the card, and the well's darker ground
      takes their text under 4.5:1, so a badge here lays its wash over the card's
-     surface. A neutral one steps up a surface, or it vanishes into the well. */
+     surface. A neutral one keeps the well's ground inside a ring of the next
+     surface: on the buttons' own surface it would read as one more button. */
+  .glim-connection-badges .glim-badge {
+    --badge-h: var(--btn-h);
+    --badge-px: var(--btn-pad-x);
+  }
   .glim-connection-badges .glim-badge--ok { background: linear-gradient(var(--status-ok-bg), var(--status-ok-bg)) var(--carbon-surface); }
   .glim-connection-badges .glim-badge--fail { background: linear-gradient(var(--status-fail-bg), var(--status-fail-bg)) var(--carbon-surface); }
   .glim-connection-badges .glim-badge--active { background: linear-gradient(var(--accent-soft), var(--accent-soft)) var(--carbon-surface); }
-  .glim-connection-badges .glim-badge--neutral { background-color: var(--carbon-surface3); }
+  .glim-connection-badges .glim-badge--neutral {
+    background-color: var(--carbon-surface2);
+    box-shadow: inset 0 0 0 1px var(--carbon-surface3);
+  }
   .glim-connection-about {
     display: flex;
     flex: 1 1 12rem;
