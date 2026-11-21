@@ -1,8 +1,8 @@
 <script lang="ts" module>
   import type { Snippet } from "svelte";
-  import type { SignInHandlers, SignInLabelKeys, SignInText } from "@glimstone/core";
+  import type { SignInCardService, SignInHandlers, SignInLabelKeys, SignInText } from "@glimstone/core";
 
-  export type { ResetAnswer, SignInAnswer, SignInLabelKeys, SignInText } from "@glimstone/core";
+  export type { ResetAnswer, SignInAnswer, SignInCardService, SignInLabelKeys, SignInText } from "@glimstone/core";
 
   export interface SignInCardProps extends SignInHandlers {
     /** The app's logo, as an address or as an inline `<svg>` with a viewBox. It stands 7.5rem tall above the name, as wide as its shape asks. */
@@ -10,7 +10,7 @@
     /** The page's heading. */
     appName: string;
     text: SignInText;
-    /** Offers Sign in with a passkey. Pass it only where a passkey can answer on this address. */
+    /** Draws a passkey button, for a server without the browser's offer in the password field. `onPasskeyOffer` needs none. */
     passkey?: boolean;
     /** Offers Forgot password? and the reset form. */
     reset?: boolean;
@@ -18,6 +18,12 @@
     minPassword?: number;
     /** One line at the top of the sign-in form, such as "You are signed out". */
     note?: string;
+    /** A refusal from outside the card, such as a sign-in service that sent the person back, said above Sign in until the card's next try. */
+    error?: string;
+    /** The sign-in service whose button stands under Sign in, the one second way in the page offers. */
+    service?: SignInCardService;
+    /** Leaves for the sign-in service. */
+    onService?: () => void;
     /** The app's own fields, above the password. */
     fields?: Snippet;
     /** The app's own buttons, under Sign in and the passkey. */
@@ -36,8 +42,10 @@
 
 <script lang="ts">
   import { onDestroy, untrack } from "svelte";
-  import { createSignInFlow, focusFirstField, resetBlocked, showRefusal, signInBlocked, signInStage } from "@glimstone/core";
+  import { createSignInFlow, focusFirstField, passkeyOfferKey, resetBlocked, showRefusal, signInBlocked, signInStage } from "@glimstone/core";
+  import BrandMark from "./BrandMark.svelte";
   import Button from "./Button.svelte";
+  import { glyphFor } from "./glyphs.js";
   import PasswordField from "./PasswordField.svelte";
   import SignInField from "./SignInField.svelte";
   import TextField from "./TextField.svelte";
@@ -53,6 +61,9 @@
     reset = false,
     minPassword = 12,
     note,
+    error: outside,
+    service,
+    onService,
     fields,
     actions,
     step,
@@ -62,6 +73,7 @@
     class: className,
     onSignIn,
     onPasskey,
+    onPasskeyOffer,
     onAskCode,
     onSetPassword,
   }: SignInCardProps = $props();
@@ -72,9 +84,10 @@
     forgot: "forgotPassword",
     back: "back",
     setPassword: "setPassword",
+    service: "signIn",
   };
 
-  const flow = createSignInFlow(() => ({ onSignIn, onPasskey, onAskCode, onSetPassword, text, minPassword }));
+  const flow = createSignInFlow(() => ({ onSignIn, onPasskey, onPasskeyOffer, onAskCode, onSetPassword, text, minPassword }));
   let s = $state.raw(flow.state());
   onDestroy(flow.subscribe(() => (s = flow.state())));
   const ownId = $props.id();
@@ -100,14 +113,27 @@
     if (refusal) return showRefusal(card, refusal);
   });
 
+  const offers = $derived(!!onPasskeyOffer && !step);
+  const offer = $derived(offers ? passkeyOfferKey(s) : null);
+  $effect(() => {
+    if (!offer) return;
+    const stop = new AbortController();
+    untrack(() => void flow.offer(stop.signal));
+    return () => stop.abort();
+  });
+
   function submit(e: SubmitEvent) {
     e.preventDefault();
     void flow.submit();
   }
 </script>
 
-{#snippet error()}
-  {#if s.error}<p class="glim-signin-error" role="alert">{s.error}</p>{/if}
+{#snippet said(line: string | null | undefined)}
+  {#if line}<p class="glim-signin-error" role="alert">{line}</p>{/if}
+{/snippet}
+
+{#snippet serviceMark()}
+  {#if service?.mark}<BrandMark svg={service.mark.svg} />{/if}
 {/snippet}
 
 {#snippet back()}
@@ -162,7 +188,7 @@
             text={eye}
           />
         </SignInField>
-        {@render error()}
+        {@render said(s.error)}
         <!-- Stacked, since the longer translations of the two labels do not fit side by side. -->
         <Button
           label={text.setPassword}
@@ -187,7 +213,7 @@
             data-signin-field="password"
             value={s.password}
             oninput={(e) => flow.set("password", e.currentTarget.value)}
-            autocomplete="current-password"
+            autocomplete={offers ? "current-password webauthn" : "current-password"}
             text={eye}
           />
         </SignInField>
@@ -208,7 +234,7 @@
             <p class="glim-signin-hint">{text.codeHint}</p>
           </div>
         {/if}
-        {@render error()}
+        {@render said(s.error ?? (s.tried ? null : outside))}
         <Button
           label={text.signIn}
           labelKey={keys.signIn}
@@ -231,19 +257,29 @@
             onClick={() => void flow.passkey()}
           />
         {/if}
+        {#if !s.needCode && service}
+          <Button
+            label={service.name}
+            labelKey={null}
+            glyph={service.mark ? serviceMark : glyphFor(keys.service)}
+            data-signin="service"
+            disabled={!!s.busy}
+            onClick={() => onService?.()}
+          />
+        {/if}
         {#if !s.needCode}{@render actions?.()}{/if}
+        <!-- A plain link, the last line of the card: nobody plans to forget a password. -->
         {#if s.needCode}
           {@render back()}
         {:else if reset}
-          <Button
-            label={text.forgot}
-            labelKey={keys.forgot}
-            tone="subtle"
+          <button
+            type="button"
+            class="glim-signin-forgot"
             data-signin="forgot"
             disabled={!!s.busy}
-            busy={s.busy === "askCode"}
-            onClick={() => void flow.forgot()}
-          />
+            aria-busy={s.busy === "askCode" || undefined}
+            onclick={() => void flow.forgot()}>{text.forgot}</button
+          >
         {/if}
       </form>
     {/if}

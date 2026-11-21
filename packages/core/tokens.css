@@ -3737,6 +3737,99 @@
     text-transform: uppercase;
     letter-spacing: 0.2em;
   }
+  /* Forgot password? is the card's last line and a plain link: only its colour
+     moves under the pointer and the focus, the focus ring stays, and nothing
+     underlines it. */
+  .glim-signin-forgot {
+    align-self: center;
+    padding: var(--space-1) var(--space-3);
+    border: 0;
+    border-radius: var(--radius-control);
+    background: none;
+    color: var(--carbon-text-sub);
+    font: inherit;
+    font-size: var(--text-subline);
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .glim-signin-forgot:is(:hover, :focus-visible, :active) {
+    color: var(--accent-ink);
+    text-decoration: none;
+  }
+  .glim-signin-forgot:disabled {
+    color: var(--carbon-text-muted);
+    cursor: default;
+  }
+  .glim-signin-forgot[aria-busy="true"] { cursor: progress; }
+
+  /* The settings tile "Sign-in" (SignInTile): a column of cards, each with its
+     rows, a quiet line where it needs one and its buttons at the end of its foot. */
+  .glim-signin-tile {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-13);
+  }
+  .glim-signin-tile-body,
+  .glim-signin-tile-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    min-width: 0;
+  }
+  .glim-signin-tile-foot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--space-4);
+  }
+  .glim-signin-tile-rows {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .glim-signin-tile-facts {
+    color: var(--carbon-text-sub);
+    font-size: var(--text-meta);
+  }
+  .glim-signin-tile-text,
+  .glim-signin-tile-quiet,
+  .glim-signin-tile-said {
+    margin: 0;
+    font-size: var(--text-subline);
+    color: var(--carbon-text-sub);
+  }
+  .glim-signin-tile-quiet { font-size: var(--text-meta); }
+  .glim-signin-tile-said--fail { color: var(--status-fail-text); }
+  .glim-signin-tile-goes {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin: 0;
+    padding-inline-start: var(--space-9);
+    font-size: var(--text-subline);
+  }
+  /* A QR code stays dark on white in every theme, since a camera reads it so. */
+  .glim-signin-tile-qr {
+    align-self: center;
+    width: 11rem;
+    height: 11rem;
+    padding: var(--space-4);
+    border-radius: var(--radius-control);
+    background-color: #ffffff;
+    fill: #161616;
+  }
+  .glim-signin-tile-codes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3) var(--space-8);
+    margin: 0;
+    padding: var(--space-6) var(--space-8);
+    border-radius: var(--radius-card);
+    background-color: var(--carbon-surface2);
+    list-style: none;
+    font-family: ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+    font-variant-numeric: tabular-nums;
+  }
 
   /* What stands in place of a control the environment forbids
      (UnavailableNotice). A paragraph, because there is no control to hang an

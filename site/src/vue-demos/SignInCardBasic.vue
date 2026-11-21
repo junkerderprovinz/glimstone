@@ -2,12 +2,19 @@
 import { ref } from "vue";
 import { SignInCard } from "@glimstone/vue";
 import { signInTextEn, type SignInAnswer } from "@glimstone/core";
+import { IDENTITY_PROVIDERS } from "@glimstone/core/identityProviders";
 import logo from "../../../.github/assets/logo.svg?url";
 
 // "letmein" signs in, "two-step" asks for a code, which is 123456, and
 // "too-many" is refused with a reason two lines long. Any code from the log
-// works, and the new password needs 12 characters.
+// works, and the new password needs 12 characters. The browser offers its
+// passkeys in the password field, and Pocket ID is the second way in.
 const said = ref("Nothing yet");
+
+const POCKET_ID = { name: "Sign in with Pocket ID", mark: IDENTITY_PROVIDERS.entries.find((e) => e.id === "pocket-id")!.mark };
+
+// No passkey answers here, so the offer runs until the card ends it.
+const offer = (signal: AbortSignal) => new Promise<SignInAnswer>((done) => signal.addEventListener("abort", () => done({})));
 
 async function signIn({ password, code }: { password: string; code?: string }): Promise<SignInAnswer> {
   if (code !== undefined) {
@@ -34,11 +41,12 @@ async function setPassword() {
       :logo="logo"
       app-name="GlimStone"
       :text="signInTextEn"
-      passkey
       reset
       :min-password="12"
+      :service="POCKET_ID"
+      :on-service="() => (said = 'Off to Pocket ID')"
       :on-sign-in="signIn"
-      :on-passkey="async () => ({ needCode: true })"
+      :on-passkey-offer="offer"
       :on-ask-code="async () => ({ ok: true })"
       :on-set-password="setPassword"
     />

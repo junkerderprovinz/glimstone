@@ -53,7 +53,7 @@ export { default as RowMark, type RowMarkProps } from "./RowMark.svelte";
 export { default as Selector, selectorTabId, type SelectMode, type SelectorActivation, type SelectorItem, type SelectorOrientation, type SelectorProps, type SelectorSize, type SelectorVariant } from "./Selector.svelte";
 export { default as Sheet, type SheetProps } from "./Sheet.svelte";
 export { default as SidebarRow, type SidebarCount, type SidebarRowProps } from "./SidebarRow.svelte";
-export { default as SignInCard, type ResetAnswer, type SignInAnswer, type SignInCardProps, type SignInLabelKeys, type SignInText } from "./SignInCard.svelte";
+export { default as SignInCard, type ResetAnswer, type SignInAnswer, type SignInCardProps, type SignInCardService, type SignInLabelKeys, type SignInText } from "./SignInCard.svelte";
 export { default as SignInField, type SignInFieldProps } from "./SignInField.svelte";
 export { default as SkeletonRow, type SkeletonRowProps } from "./SkeletonRow.svelte";
 export { default as SubCard, type SubCardProps } from "./SubCard.svelte";

@@ -1,7 +1,21 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, onUpdated, shallowRef, useId, useSlots, watch } from "vue";
-import { createSignInFlow, focusFirstField, resetBlocked, showRefusal, signInBlocked, signInStage, type ResetAnswer, type SignInAnswer, type SignInText } from "@glimstone/core";
+import { computed, h, onBeforeUnmount, onMounted, onUpdated, ref, shallowRef, useId, useSlots, watch } from "vue";
+import {
+  createSignInFlow,
+  focusFirstField,
+  passkeyOfferKey,
+  resetBlocked,
+  showRefusal,
+  signInBlocked,
+  signInStage,
+  type ResetAnswer,
+  type SignInAnswer,
+  type SignInCardService,
+  type SignInText,
+} from "@glimstone/core";
+import BrandMark from "./BrandMark.vue";
 import Button from "./Button.vue";
+import { glyphFor } from "./glyphs";
 import PasswordField from "./PasswordField.vue";
 import SignInField from "./SignInField.vue";
 import TextField from "./TextField.vue";
@@ -20,7 +34,7 @@ const props = withDefaults(
     /** The page's heading. */
     appName: string;
     text: SignInText;
-    /** Offers Sign in with a passkey. Pass it only where a passkey can answer on this address. */
+    /** Draws a passkey button, for a server without the browser's offer in the password field. `onPasskeyOffer` needs none. */
     passkey?: boolean;
     /** Offers Forgot password? and the reset form. */
     reset?: boolean;
@@ -28,8 +42,14 @@ const props = withDefaults(
     minPassword?: number;
     /** One line at the top of the sign-in form, such as "You are signed out". */
     note?: string;
+    /** A refusal from outside the card, such as a sign-in service that sent the person back, said above Sign in until the card's next try. */
+    error?: string;
+    /** The sign-in service whose button stands under Sign in, the one second way in the page offers. */
+    service?: SignInCardService;
+    /** Leaves for the sign-in service. */
+    onService?: () => void;
     /** The label keys behind the buttons, which pick their glyphs. */
-    labelKeys?: Partial<Record<"signIn" | "passkey" | "forgot" | "back" | "setPassword", string>>;
+    labelKeys?: Partial<Record<"signIn" | "passkey" | "forgot" | "back" | "setPassword" | "service", string>>;
     /** The start of the fields' ids: `-password`, `-code`, `-reset-code`, `-new` and `-confirm` follow it. */
     idPrefix?: string;
     /** Puts the focus in the first empty field when the card opens. */
@@ -37,6 +57,12 @@ const props = withDefaults(
     /** `code` is set once the app asked for one, and `passkey` when a passkey started the sign-in. */
     onSignIn: (input: { password: string; code?: string; passkey: boolean }) => Promise<SignInAnswer>;
     onPasskey?: () => Promise<SignInAnswer>;
+    /**
+     * Lets the browser offer the passkeys it holds in the password field, with
+     * conditional mediation, until `signal` ends the offer. The card starts it
+     * whenever the password form is at rest. An empty answer leaves the card as it was.
+     */
+    onPasskeyOffer?: (signal: AbortSignal) => Promise<SignInAnswer>;
     /** Writes a code to the log. The reset form shows only once this answers ok. */
     onAskCode?: () => Promise<ResetAnswer>;
     onSetPassword?: (input: { code: string; password: string }) => Promise<ResetAnswer>;
@@ -52,13 +78,35 @@ onBeforeUnmount(stop);
 
 const ownId = useId();
 const id = (name: string) => `${props.idPrefix ?? ownId}-${name}`;
-const keys = computed(() => ({ signIn: "signIn", passkey: "signInWithPasskey", forgot: "forgotPassword", back: "back", setPassword: "setPassword", ...props.labelKeys }));
+const keys = computed(() => ({ signIn: "signIn", passkey: "signInWithPasskey", forgot: "forgotPassword", back: "back", setPassword: "setPassword", service: "signIn", ...props.labelKeys }));
 const eye = computed(() => ({ show: props.text.show, hide: props.text.hide }));
+
+const serviceGlyph = computed(() => {
+  const mark = props.service?.mark;
+  return mark ? () => h(BrandMark, { svg: mark.svg }) : glyphFor(keys.value.service);
+});
+const said = computed(() => s.value.error ?? (s.value.tried ? undefined : props.error));
+
+// The step slot is read after each render, so whether the offer runs is too.
+const stepShown = ref(!!slots.step);
+const offers = computed(() => !!props.onPasskeyOffer && !stepShown.value);
+const offer = computed(() => (offers.value ? passkeyOfferKey(s.value) : null));
+watch(
+  offer,
+  (key, _, onCleanup) => {
+    if (!key) return;
+    const stop = new AbortController();
+    void flow.offer(stop.signal);
+    onCleanup(() => stop.abort());
+  },
+  { immediate: true },
+);
 
 // Slots are not reactive, so the form in view is compared after every render.
 const card = shallowRef<HTMLElement | null>(null);
 let shown = "";
 function follow() {
+  stepShown.value = !!slots.step;
   const now = slots.step ? "step" : signInStage(s.value);
   if (now === shown) return;
   if (shown || props.autoFocus) focusFirstField(card.value);
@@ -129,7 +177,14 @@ watch(
         <slot v-if="!s.viaPasskey" name="fields" />
         <!-- Kept while a passkey asks for the code, so the password survives a step back. -->
         <SignInField v-show="!s.viaPasskey" :label="text.password" :for="id('password')">
-          <PasswordField :id="id('password')" data-signin-field="password" :model-value="s.password" autocomplete="current-password" :text="eye" @update:model-value="flow.set('password', $event)" />
+          <PasswordField
+            :id="id('password')"
+            data-signin-field="password"
+            :model-value="s.password"
+            :autocomplete="offers ? 'current-password webauthn' : 'current-password'"
+            :text="eye"
+            @update:model-value="flow.set('password', $event)"
+          />
         </SignInField>
         <SignInField v-if="s.needCode" :label="text.code" :for="id('code')">
           <TextField
@@ -145,7 +200,7 @@ watch(
           />
           <p class="glim-signin-hint">{{ text.codeHint }}</p>
         </SignInField>
-        <p v-if="s.error" class="glim-signin-error" role="alert">{{ s.error }}</p>
+        <p v-if="said" class="glim-signin-error" role="alert">{{ said }}</p>
         <Button
           :label="text.signIn"
           :label-key="keys.signIn"
@@ -167,18 +222,29 @@ watch(
           :busy="s.busy === 'passkey'"
           @click="flow.passkey()"
         />
-        <slot v-if="!s.needCode" name="actions" />
-        <Button v-if="s.needCode" :label="text.back" :label-key="keys.back" tone="subtle" data-signin="back" :disabled="!!s.busy" @click="flow.back()" />
         <Button
+          v-if="!s.needCode && service"
+          :label="service.name"
+          :label-key="null"
+          :glyph="serviceGlyph"
+          data-signin="service"
+          :disabled="!!s.busy"
+          @click="onService?.()"
+        />
+        <slot v-if="!s.needCode" name="actions" />
+        <!-- A plain link, the last line of the card: nobody plans to forget a password. -->
+        <Button v-if="s.needCode" :label="text.back" :label-key="keys.back" tone="subtle" data-signin="back" :disabled="!!s.busy" @click="flow.back()" />
+        <button
           v-else-if="reset"
-          :label="text.forgot"
-          :label-key="keys.forgot"
-          tone="subtle"
+          type="button"
+          class="glim-signin-forgot"
           data-signin="forgot"
           :disabled="!!s.busy"
-          :busy="s.busy === 'askCode'"
+          :aria-busy="s.busy === 'askCode' || undefined"
           @click="flow.forgot()"
-        />
+        >
+          {{ text.forgot }}
+        </button>
       </form>
     </div>
   </div>

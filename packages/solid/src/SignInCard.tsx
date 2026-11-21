@@ -1,11 +1,26 @@
 import { children, createEffect, createMemo, createSignal, createUniqueId, mergeProps, on, onCleanup, Show, type JSX } from "solid-js";
-import { createSignInFlow, focusFirstField, labelInside, resetBlocked, showRefusal, signInBlocked, signInStage, type SignInHandlers, type SignInText, type SignInLabelKeys } from "@glimstone/core";
+import {
+  createSignInFlow,
+  focusFirstField,
+  labelInside,
+  passkeyOfferKey,
+  resetBlocked,
+  showRefusal,
+  signInBlocked,
+  signInStage,
+  type SignInCardService,
+  type SignInHandlers,
+  type SignInLabelKeys,
+  type SignInText,
+} from "@glimstone/core";
 import { Button } from "./Button.tsx";
+import { glyphFor } from "./glyphs.tsx";
 import { InfoBubble } from "./InfoBubble.tsx";
 import { PasswordField } from "./PasswordField.tsx";
+import { BrandMark } from "./ReadmeButton.tsx";
 import { TextField } from "./TextField.tsx";
 
-export type { SignInLabelKeys } from "@glimstone/core";
+export type { SignInCardService, SignInLabelKeys } from "@glimstone/core";
 
 export type { ResetAnswer, SignInAnswer, SignInText } from "@glimstone/core";
 
@@ -19,6 +34,7 @@ const LABEL_KEYS: SignInLabelKeys = {
   forgot: "forgotPassword",
   back: "back",
   setPassword: "setPassword",
+  service: "signIn",
 };
 
 export interface SignInCardProps extends SignInHandlers {
@@ -27,7 +43,7 @@ export interface SignInCardProps extends SignInHandlers {
   /** The page's heading. */
   appName: string;
   text: SignInText;
-  /** Offers Sign in with a passkey. Pass it only where a passkey can answer on this address. */
+  /** Draws a passkey button, for a server without the browser's offer in the password field. `onPasskeyOffer` needs none. */
   passkey?: boolean;
   /** Offers Forgot password? and the reset form. */
   reset?: boolean;
@@ -35,6 +51,12 @@ export interface SignInCardProps extends SignInHandlers {
   minPassword?: number;
   /** One line at the top of the sign-in form, such as "You are signed out". */
   note?: string;
+  /** A refusal from outside the card, such as a sign-in service that sent the person back, said above Sign in until the card's next try. */
+  error?: string;
+  /** The sign-in service whose button stands under Sign in, the one second way in the page offers. */
+  service?: SignInCardService;
+  /** Leaves for the sign-in service. */
+  onService?: () => void;
   /** The app's own fields, above the password. */
   fields?: JSX.Element;
   /** The app's own buttons, under Sign in and the passkey. */
@@ -99,15 +121,28 @@ export function SignInCard(props: SignInCardProps) {
     }),
   );
 
+  const offers = () => !!own.onPasskeyOffer && !step();
+  const offer = createMemo(() => (offers() ? passkeyOfferKey(s()) : null));
+  createEffect(
+    on(offer, (key) => {
+      if (!key) return;
+      const stop = new AbortController();
+      void flow.offer(stop.signal);
+      onCleanup(() => stop.abort());
+    }),
+  );
+
   const submit = (e: SubmitEvent) => {
     e.preventDefault();
     void flow.submit();
   };
-  const error = () => (
-    <Show when={s().error}>
-      <p class="glim-signin-error" role="alert">
-        {s().error}
-      </p>
+  const said = (line: () => string | null | undefined) => (
+    <Show when={line()}>
+      {(text) => (
+        <p class="glim-signin-error" role="alert">
+          {text()}
+        </p>
+      )}
     </Show>
   );
   const back = () => <Button label={own.text.back} labelKey={keys().back} tone="subtle" data-signin="back" disabled={!!s().busy} onClick={flow.back} />;
@@ -144,7 +179,7 @@ export function SignInCard(props: SignInCardProps) {
                       data-signin-field="password"
                       value={s().password}
                       onInput={(e) => flow.set("password", e.currentTarget.value)}
-                      autocomplete="current-password"
+                      autocomplete={offers() ? "current-password webauthn" : "current-password"}
                       text={eye()}
                     />
                   </SignInField>
@@ -167,7 +202,7 @@ export function SignInCard(props: SignInCardProps) {
                       <p class="glim-signin-hint">{own.text.codeHint}</p>
                     </div>
                   </Show>
-                  {error()}
+                  {said(() => s().error ?? (s().tried ? null : own.error))}
                   <Button
                     label={own.text.signIn}
                     labelKey={keys().signIn}
@@ -190,20 +225,34 @@ export function SignInCard(props: SignInCardProps) {
                       onClick={() => void flow.passkey()}
                     />
                   </Show>
+                  <Show when={!s().needCode && own.service}>
+                    {(service) => (
+                      <Button
+                        label={service().name}
+                        labelKey={null}
+                        glyph={service().mark ? <BrandMark svg={service().mark!.svg} /> : glyphFor(keys().service)}
+                        data-signin="service"
+                        disabled={!!s().busy}
+                        onClick={() => own.onService?.()}
+                      />
+                    )}
+                  </Show>
                   <Show when={!s().needCode}>{own.actions}</Show>
+                  {/* A plain link, the last line of the card: nobody plans to forget a password. */}
                   <Show
                     when={s().needCode}
                     fallback={
                       <Show when={own.reset}>
-                        <Button
-                          label={own.text.forgot}
-                          labelKey={keys().forgot}
-                          tone="subtle"
+                        <button
+                          type="button"
+                          class="glim-signin-forgot"
                           data-signin="forgot"
                           disabled={!!s().busy}
-                          busy={s().busy === "askCode"}
+                          aria-busy={s().busy === "askCode" || undefined}
                           onClick={() => void flow.forgot()}
-                        />
+                        >
+                          {own.text.forgot}
+                        </button>
                       </Show>
                     }
                   >
@@ -246,7 +295,7 @@ export function SignInCard(props: SignInCardProps) {
                     text={eye()}
                   />
                 </SignInField>
-                {error()}
+                {said(() => s().error)}
                 {/* Stacked, since the longer translations of the two labels do not fit side by side. */}
                 <Button
                   label={own.text.setPassword}
