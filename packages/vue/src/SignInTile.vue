@@ -12,6 +12,7 @@ import {
   SIGN_IN_TILE_CARDS,
   SIGN_IN_TILE_KEYS,
   signInDevice,
+  signInServiceActions,
   signInServiceBadge,
   signInServiceMark,
   signInServiceStatus,
@@ -266,16 +267,18 @@ function ask(what: SignInTileRemoval, id: string, name: string) {
             :mark="signInServiceMark(providers, x.provider) ?? glyph(keys.service)"
             :status="signInServiceStatus(text, x, when)"
             :test="s.rowTests[x.id]"
+            :actions="signInServiceActions(text, x, s, keys.turnOn, (id) => void flow.confirmService(id))"
             :text="{ test: text.services.test, edit: text.services.edit, remove: text.remove }"
             :data-signin-service="x.provider"
             :on-test="() => flow.testService(x.id)"
-            :on-edit="() => flow.editService(x.id)"
-            :on-remove="() => ask('service', x.id, x.name)"
+            :on-edit="x.fromConfig ? undefined : () => flow.editService(x.id)"
+            :on-remove="x.fromConfig ? undefined : () => ask('service', x.id, x.name)"
           >
             <template #badges>
               <Badge :tone="signInServiceBadge(text, x).tone">{{ signInServiceBadge(text, x).label }}</Badge>
             </template>
             <Toggle
+              v-if="!x.fromConfig"
               :model-value="x.on"
               :label="text.services.show"
               :refused="!x.tested || x.paused ? text.services.mustTest : undefined"

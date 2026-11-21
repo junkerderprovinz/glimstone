@@ -6,7 +6,7 @@
 import type { Catalog, CatalogEntry } from "./catalog.ts";
 import { catalogPicker } from "./catalog.ts";
 import { copyText } from "./clipboard.ts";
-import type { ConnectionTest } from "./connectionRow.ts";
+import type { ConnectionAction, ConnectionTest } from "./connectionRow.ts";
 import { fill, listOf, plural, type Plural } from "./fortressText.ts";
 import type { PickGroup, PickItem, TileMark } from "./picker.ts";
 import { shake } from "./selectModel.ts";
@@ -202,6 +202,10 @@ export interface SignInTileText {
     testOk: string;
     testFailed: string;
     tested: string;
+    /** The quiet line on a service the app sets up in its configuration file. */
+    fromConfig: string;
+    /** Turns such a service on again after a reset paused it. */
+    confirmAgain: string;
     edit: string;
     removeText: string;
     removed: string;
@@ -278,6 +282,7 @@ const ERRORS_EN = {
   passkeyUnknown: "This passkey can’t sign you in here.",
   serviceUnreachable: "The app can’t reach the sign-in service right now.",
   serviceUntested: "It turns on once a test sign-in has worked.",
+  fromConfig: "The app’s configuration file sets up this service, so change it there.",
   secretAgain: "The address or the client changed, so enter the client secret again.",
   secretMissing: "Enter the client secret.",
   issuerInvalid: "That address doesn’t look like a sign-in service.",
@@ -453,6 +458,8 @@ export const signInTileTextEn: SignInTileText = {
     testOk: "Signed in",
     testFailed: "Not signed in",
     tested: "last tested {when}",
+    fromConfig: "from the configuration file",
+    confirmAgain: "Turn on again",
     edit: "Edit",
     removeText: "{name} won’t sign anyone in after this. Its accounts stay and get in another way. Your password still works.",
     removed: "{name} is removed.",
@@ -697,6 +704,8 @@ export interface SignInTileFlow {
   saveService(): Promise<void>;
   testService(id: string): Promise<void>;
   setServiceOn(id: string, on: boolean): Promise<void>;
+  /** Turns a service from the configuration file on again after a reset paused it. */
+  confirmService(id: string): Promise<void>;
 
   block(id: string, blocked: boolean): Promise<void>;
 
@@ -908,7 +917,21 @@ export function signInServiceBadge(text: SignInTileText, s: SignInService): { to
 }
 
 export function signInServiceStatus(text: SignInTileText, s: SignInService, when: When): string {
-  return [s.issuer, ...(s.tested && s.testedAt ? [fill(text.services.tested, { when: when(s.testedAt) })] : [])].join(" · ");
+  return [
+    s.issuer,
+    ...(s.tested && s.testedAt ? [fill(text.services.tested, { when: when(s.testedAt) })] : []),
+    ...(s.fromConfig ? [text.services.fromConfig] : []),
+  ].join(" · ");
+}
+
+/**
+ * A service row's own action: Turn on again, on a service from the
+ * configuration file that a reset paused. Such a service has no Edit, Remove
+ * or switch, since the app's configuration file decides the rest.
+ */
+export function signInServiceActions<G>(text: SignInTileText, s: SignInService, state: SignInTileState, labelKey: string, confirm: (id: string) => void): ConnectionAction<G>[] {
+  if (!s.fromConfig || !s.paused) return [];
+  return [{ id: "confirm", label: text.services.confirmAgain, labelKey, busy: state.busy === `service-confirm-${s.id}`, onClick: () => confirm(s.id) }];
 }
 
 /** What goes off with the password, for the window that removes it. */
@@ -1334,6 +1357,14 @@ export function createSignInTileFlow(options: () => SignInTileOptions): SignInTi
       notify(fill(on ? text().services.turnedOn : text().services.turnedOff, { name: r.value.service.name }));
       await refresh();
     },
+
+    confirmService: (id) =>
+      run(`service-confirm-${id}`, async () => {
+        const r = await options().api.changeService(id, { on: true });
+        if (!r.ok) return failed(r, `service-confirm-${id}`);
+        notify(fill(text().services.turnedOn, { name: r.value.service.name }));
+        await refresh();
+      }),
 
     block: (id, blocked) =>
       run(`account-block-${id}`, async () => {

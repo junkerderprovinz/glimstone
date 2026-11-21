@@ -12,6 +12,7 @@ import {
   signInErrorText,
   signInServiceBadge,
   signInServiceMissing,
+  signInServiceStatus,
   signInTileCards,
   signInTileTextEn as text,
   SIGN_IN_TILE_CARDS,
@@ -38,6 +39,7 @@ const SERVICE: SignInService = {
   paused: false,
   tested: false,
   redirect: 'https://app.example/signin/oidc/callback',
+  fromConfig: false,
 };
 
 // Every call answers as a quiet kit would, and `over` changes the ones a test is about.
@@ -341,6 +343,24 @@ test('a service turns on only after its test sign-in', async () => {
   assert.equal(flow.state().services?.[0]?.on, false);
   assert.deepEqual(said, [['warn', text.services.mustTest]]);
   assert.equal(flow.state().refusal?.hook, 'service-on-s1');
+});
+
+test('a service from the configuration file says so, and turns on again after a reset', async () => {
+  let sent: unknown;
+  const pinned = { ...SERVICE, fromConfig: true, paused: true, tested: true };
+  const { api } = kit({
+    services: async () => ok([pinned]),
+    changeService: async (id, input) => {
+      sent = input;
+      return ok({ service: { ...pinned, ...input, id, paused: false } as SignInService });
+    },
+  });
+  const { flow, said } = tile(api);
+  await flow.refresh();
+  assert.equal(signInServiceStatus(text, pinned, () => ''), 'https://id.example · from the configuration file');
+  await flow.confirmService('s1');
+  assert.deepEqual(sent, { on: true });
+  assert.deepEqual(said, [['success', 'Pocket ID is on the sign-in page.']]);
 });
 
 test('a service badge says how it stands', () => {

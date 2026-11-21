@@ -44,6 +44,7 @@
     SIGN_IN_TILE_CARDS,
     SIGN_IN_TILE_KEYS,
     signInDevice,
+    signInServiceActions,
     signInServiceBadge,
     signInServiceMark,
     signInServiceStatus,
@@ -328,19 +329,22 @@
                 mark={signInServiceMark(providers, x.provider) ?? glyph(keys.service)}
                 status={signInServiceStatus(text, x, when)}
                 test={s.rowTests[x.id]}
+                actions={signInServiceActions(text, x, s, keys.turnOn, (id) => void flow.confirmService(id))}
                 text={{ test: t.test, edit: t.edit, remove: text.remove }}
                 onTest={() => void flow.testService(x.id)}
-                onEdit={() => flow.editService(x.id)}
-                onRemove={() => remove("service", x.id, x.name)}
+                onEdit={x.fromConfig ? undefined : () => flow.editService(x.id)}
+                onRemove={x.fromConfig ? undefined : () => remove("service", x.id, x.name)}
                 data-signin-service={x.provider}
               >
                 {#snippet badges()}<Badge tone={badge.tone}>{badge.label}</Badge>{/snippet}
-                <Toggle
-                  bind:checked={() => x.on, (on) => void flow.setServiceOn(x.id, on)}
-                  label={t.show}
-                  refused={!x.tested || x.paused ? t.mustTest : undefined}
-                  data-signin-tile={`service-on-${x.id}`}
-                />
+                {#if !x.fromConfig}
+                  <Toggle
+                    bind:checked={() => x.on, (on) => void flow.setServiceOn(x.id, on)}
+                    label={t.show}
+                    refused={!x.tested || x.paused ? t.mustTest : undefined}
+                    data-signin-tile={`service-on-${x.id}`}
+                  />
+                {/if}
               </ConnectionRow>
             {/each}
             <div class="glim-signin-tile-foot">

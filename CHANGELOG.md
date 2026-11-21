@@ -15,6 +15,7 @@ The settings of the kit's sign-in come as one tile, its password question as a s
 - **A refusal a sign-in service sent back:** read it with `takeSignInCode()` and pass your sentence for it as `error`.
 - **The settings tile:** put `SignInTile` where the sign-in settings belong, with the client, `IDENTITY_PROVIDERS` as `providers`, your words as `text` and your toasts as `notify`. `cards` picks which cards a tile draws. Pass `returnTo` with the path the tile stands on and `arrived` with the code from `takeSignInCode()`, so a test sign-in says how it went once it comes back.
 - **The password question:** put `SignInReauthWindow` once beside the tiles. Without it a change that wants a fresh sign-in answers `signInAgain`.
+- **A sign-in service from your configuration file:** the tile reads `fromConfig` from the kit and draws such a service without Edit, Remove or switch. Give `services.fromConfig` the words for its quiet line and `services.confirmAgain` the words for turning it on again after a reset.
 - **Words:** `SignInTileText` and `SignInReauthText` carry every word, the kit's codes under `errors` and what a sign-in service sent back under `arrived`. `signInTileTextEn` and `signInReauthTextEn` are the English ones.
 - **Your own copy of the stylesheet:** copy `tokens.css` again. It brings `.glim-signin-forgot` and the `.glim-signin-tile` rules.
 

@@ -17,6 +17,7 @@ import {
   signInDevice,
   signInRedirectAddress,
   signInScopeItems,
+  signInServiceActions,
   signInServiceBadge,
   signInServiceMark,
   signInServiceName,
@@ -398,19 +399,22 @@ function ServicesCard({ ctx, hue, providers }: { ctx: Ctx; hue: number; provider
                 status={signInServiceStatus(text, x, when)}
                 badges={<Badge tone={badge.tone}>{badge.label}</Badge>}
                 test={s.rowTests[x.id]}
+                actions={signInServiceActions(text, x, s, keys.turnOn, (id) => void flow.confirmService(id))}
                 text={{ test: t.test, edit: t.edit, remove: text.remove }}
                 onTest={() => void flow.testService(x.id)}
-                onEdit={() => flow.editService(x.id)}
-                onRemove={() => ask("service", x.id, x.name)}
+                onEdit={x.fromConfig ? undefined : () => flow.editService(x.id)}
+                onRemove={x.fromConfig ? undefined : () => ask("service", x.id, x.name)}
                 data-signin-service={x.provider}
               >
-                <Toggle
-                  checked={x.on}
-                  label={t.show}
-                  refused={!x.tested || x.paused ? t.mustTest : undefined}
-                  onChange={(on) => void flow.setServiceOn(x.id, on)}
-                  data-signin-tile={`service-on-${x.id}`}
-                />
+                {!x.fromConfig && (
+                  <Toggle
+                    checked={x.on}
+                    label={t.show}
+                    refused={!x.tested || x.paused ? t.mustTest : undefined}
+                    onChange={(on) => void flow.setServiceOn(x.id, on)}
+                    data-signin-tile={`service-on-${x.id}`}
+                  />
+                )}
               </ConnectionRow>
             );
           })}

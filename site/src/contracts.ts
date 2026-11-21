@@ -644,6 +644,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "signin-tile-reauth", when: "A new lasting way in is asked for and the sign-in is older than the kit allows", then: "A window asks for the password. A wrong one stays in the window and shakes its button, the right one runs the change." },
       { id: "signin-tile-codes", when: "Two-factor is turned on with its first code", then: "The recovery codes show once, and only the acknowledgement leaves the window." },
       { id: "signin-tile-remove", when: "A passkey, a token, a service or an account is removed", then: "A question names it first, and its button takes the same colour as Cancel." },
+      { id: "signin-tile-config", when: "A sign-in service comes from the app's configuration file", then: "Its row says so in its quiet line and has no Edit, Remove or switch. After a reset paused it, Turn on again in the row turns it on." },
       { id: "signin-tile-services", when: "The picker has a service picked", then: "Its form asks for the address, the client ID and the secret, shows the redirect address and says that the service decides who gets in. Turn on waits for a passed test sign-in." },
       { id: "signin-tile-foot", when: "The service form's test sign-in fails", then: "The reason stands under the form and in the test button's bubble, and every button of the foot stays in one row." },
       { id: "signin-tile-modes", when: "The theme is light, dark or OLED", then: "The cards, rows, fields and windows take that theme's surfaces, and the QR code stays dark on white." },

@@ -4735,6 +4735,19 @@ test.describe("SignInTile", () => {
     await expect(said(page)).toHaveText("Passkey removed.");
   });
 
+  test("[signin-tile-config] a service from the configuration file has no Edit or Remove, and turns on again", async ({ page }) => {
+    await open(page, "/components/sign-in-tile");
+    const row = cardOf(page, "services").getByRole("group", { name: "Kanidm" });
+    await expect(row.locator(".glim-connection-status")).toContainText("from the configuration file");
+    await expect(row.locator('[data-connection="edit"], [data-connection="remove"]')).toHaveCount(0);
+    await expect(row.getByRole("switch")).toHaveCount(0);
+    await expect(row.locator(".glim-connection-badges")).toHaveText("Paused");
+    await row.locator('[data-connection="confirm"]').click();
+    await expect(said(page)).toHaveText("Kanidm is on the sign-in page.");
+    await expect(row.locator(".glim-connection-badges")).toHaveText("On");
+    await expect(row.locator('[data-connection="confirm"]')).toHaveCount(0);
+  });
+
   test("[signin-tile-services] the form of a picked service, and Turn on waits for the test", async ({ page }) => {
     await open(page, "/components/sign-in-tile");
     await cardOf(page, "services").getByRole("button", { name: "Add a sign-in service" }).click();

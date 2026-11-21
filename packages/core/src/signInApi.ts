@@ -12,6 +12,7 @@ export const SIGN_IN_ERRORS = [
   "confirmOff",
   "crossSite",
   "forbidden",
+  "fromConfig",
   "internal",
   "issuerInvalid",
   "lastWayIn",
@@ -223,6 +224,8 @@ export interface SignInService {
   testedAt?: string;
   /** The address to register at the service. */
   redirect: string;
+  /** The app sets it up in its configuration file, so only turning it on again after a reset changes it here. */
+  fromConfig: boolean;
 }
 
 export interface SignInLogEntry {
