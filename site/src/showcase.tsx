@@ -17,9 +17,8 @@ import {
   SubCard,
   ToastCard,
   Toggle,
-  GLIMSTONE_VERSION,
 } from "@glimstone/react";
-import { fortressTextEn, signInTextEn, SHAPES, type ToastSeverity } from "@glimstone/core";
+import { fortressTextEn, signInTextEn, SHAPES, VERSION_CARD_TEXT, type ToastSeverity } from "@glimstone/core";
 import logo from "../../.github/assets/logo.svg?url";
 import { APPS } from "./fortressData";
 import { FrameworkMark, WEB_FRAMEWORKS } from "./frameworks";
@@ -161,12 +160,13 @@ function Info() {
   return (
     <InfoVersionCard
       hueIndex={4}
-      text={{ title: "Version", unreleased: (v) => `${v}, not released yet` }}
-      rows={[
-        { name: "Your app", version: "2.1.0" },
-        { name: "GlimStone", sub: "Design language", version: GLIMSTONE_VERSION },
-        { name: "Fortress", sub: "Pairing", version: GLIMSTONE_VERSION },
-      ]}
+      text={VERSION_CARD_TEXT}
+      name="Your app"
+      version="2.1.0"
+      route="install"
+      state={{ kind: "current" }}
+      onCheck={() => {}}
+      onWhatsNew={() => {}}
     />
   );
 }

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createRawSnippet } from "svelte";
   import { InfoTile } from "@glimstone/svelte";
-  import { COFFEE_BUTTON_SVG, GLIMSTONE_VERSION, MAIL_SVG } from "@glimstone/core";
+  import { COFFEE_BUTTON_SVG, COMPONENTS_CARD_TEXT, MAIL_SVG, VERSION_CARD_TEXT } from "@glimstone/core";
   import { glyph } from "../../svelte/glyph";
 
   const REPO = "https://github.com/junkerderprovinz/glimstone";
@@ -11,10 +11,24 @@
   // The last tile in Settings: what the app is made of, where to report
   // something, and who made it.
   const version = {
-    text: { title: "Version", unreleased: (v: string) => `${v}, not released yet` },
+    text: VERSION_CARD_TEXT,
+    name: "Your app",
+    version: "2.1.0",
+    repoUrl: REPO,
+    route: "install" as const,
+    state: { kind: "available" as const, version: "2.2.0" },
+    onCheck: () => {},
+    onUpdate: () => {},
+    onWhatsNew: () => {},
+    unseen: 3,
+    autoUpdate: true,
+  };
+  const components = {
+    text: COMPONENTS_CARD_TEXT,
+    name: "Your app",
     rows: [
-      { name: "Your app", version: "2.1.0", repoUrl: REPO },
-      { name: "GlimStone", sub: "Design language", version: GLIMSTONE_VERSION, repoUrl: REPO },
+      { name: "rclone", hint: "Cloud transfers", version: "1.75.2" },
+      { name: "Installer", hint: COMPONENTS_CARD_TEXT.installer, version: "1.2.5", kind: "installer" as const },
     ],
   };
   const help = {
@@ -47,5 +61,5 @@
 </script>
 
 <div style="display: grid; gap: 40px; width: 100%; max-width: 480px; padding-top: 12px">
-  <InfoTile hueIndex={0} {version} {help} {about} />
+  <InfoTile hueIndex={0} {version} {components} {help} {about} />
 </div>

@@ -9,7 +9,7 @@ const PARTS: Record<string, string[]> = {
   SignInPage: ["SignInCard"],
   SettingsPage: ["Selector", "Card", "FieldRow", "Toggle"],
   ListPage: ["ListRow", "Pill", "TextField"],
-  InfoPage: ["InfoTile", "InfoVersionCard", "InfoHelpCard", "InfoAboutCard"],
+  InfoPage: ["InfoTile", "InfoVersionCard", "InfoComponentsCard", "InfoHelpCard", "InfoAboutCard"],
   UploadArea: ["Card", "ListRow"],
   ConfirmFlow: ["ListRow", "IconButton"],
 };

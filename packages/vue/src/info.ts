@@ -1,24 +1,50 @@
 import type { Component } from "vue";
-import type { UpdateCheck, VersionRow } from "@glimstone/core";
+import type { ComponentRow, ComponentsCardText, UpdateRoute, UpdateState, VersionCardText } from "@glimstone/core";
 
 // Spelled out rather than core's OpenUrl: the library build cannot read types from
 // another package, and without a runtime type Vue calls the default opener on mount.
 type OpenUrl = (url: string) => void;
 
 export interface InfoVersionCardProps {
-  text: {
-    title: string;
-    /** The card's "(i)", such as what a click on a number opens. */
-    hint?: string;
-    unreleased: (version: string) => string;
-    /** "Release notes". Only drawn with `onReleaseNotes` and without the `whats-new` slot. */
-    releaseNotes?: string;
-  };
-  /** The app first, then the design language, then every component it ships. */
-  rows: VersionRow[];
-  updateCheck?: UpdateCheck;
-  /** Opens the app's window on the running version's release notes, for an app that marks no changes. */
-  onReleaseNotes?: () => void;
+  /** `componentText(lang).versionCard`, or the app's own words in its shape. */
+  text: VersionCardText;
+  /** The app's name, which fills "{app}" in the card's sentences. */
+  name: string;
+  /** Read from the build, never typed in. */
+  version: string;
+  /** The repository whose newest release the number opens. */
+  repoUrl?: string;
+  /** How the app gets a new version, which decides the one action. */
+  route: UpdateRoute;
+  /** Where the updates stand. The app finds out; the card shows it. */
+  state: UpdateState;
+  /** "Check for updates". A store app passes none. */
+  onCheck?: () => void;
+  /** Fetches and installs the new version, or leads to the host's plugin page. */
+  onUpdate?: () => void;
+  /** Starts the downloaded version. */
+  onRestart?: () => void;
+  /** Where a container's update instructions live. */
+  guideUrl?: string;
+  /** Opens the app's window of what changed, a card per release with its notes. */
+  onWhatsNew: () => void;
+  /** How many marked changes are still unseen. */
+  unseen?: number;
+  openUrl?: OpenUrl;
+  hueIndex?: number;
+}
+
+export interface InfoComponentsCardProps {
+  /** `componentText(lang).componentsCard`, or the app's own words in its shape. */
+  text: ComponentsCardText;
+  /** The app's name, which fills "{app}" in the card's sentences. */
+  name: string;
+  /** The app's own parts, the programs it brings along and, for a desktop
+   *  build, its installer. The card adds the design language and sorts them. */
+  rows: ComponentRow[];
+  /** "Update components" at the foot of the card. Omit it where the app updates none. */
+  onUpdate?: () => void;
+  updating?: boolean;
   openUrl?: OpenUrl;
   hueIndex?: number;
 }

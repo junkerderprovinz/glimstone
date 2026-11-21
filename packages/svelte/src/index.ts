@@ -29,9 +29,10 @@ export { default as IconButton, type IconButtonProps } from "./IconButton.svelte
 export { default as IconTipButton, type IconTipButtonProps } from "./IconTipButton.svelte";
 export { default as InfoAboutCard, type InfoAboutCardProps } from "./InfoAboutCard.svelte";
 export { default as InfoBubble, type InfoBubbleProps } from "./InfoBubble.svelte";
+export { default as InfoComponentsCard, type InfoComponentsCardProps, type ComponentRow, type ComponentsCardText } from "./InfoComponentsCard.svelte";
 export { default as InfoHelpCard, type InfoHelpCardProps } from "./InfoHelpCard.svelte";
 export { default as InfoTile, type InfoTileProps } from "./InfoTile.svelte";
-export { default as InfoVersionCard, type InfoVersionCardProps, type UpdateCheck, type VersionRow } from "./InfoVersionCard.svelte";
+export { default as InfoVersionCard, type InfoVersionCardProps, type UpdateCheck, type UpdateRoute, type UpdateState, type VersionCardText, type VersionRow } from "./InfoVersionCard.svelte";
 export { default as InstanceCard, type InstanceCardProps, type InstanceFigure } from "./InstanceCard.svelte";
 export { default as Kbd, type KbdProps } from "./Kbd.svelte";
 export { default as ListRow, type ListRowProps } from "./ListRow.svelte";

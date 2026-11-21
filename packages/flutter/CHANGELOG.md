@@ -1,3 +1,7 @@
+## 4.8.2
+
+- No changes for Flutter. The Version and Components cards of the Info tile live in the web packages.
+
 ## 4.8.1
 
 - No changes for Flutter. The connection row's buttons, badges and wordmarks and the marks' fixes live in the web packages.

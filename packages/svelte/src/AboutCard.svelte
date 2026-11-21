@@ -40,14 +40,15 @@
 </script>
 
 <script lang="ts">
-  import { openInBrowser, warnDeprecated, type VersionRow } from "@glimstone/core";
-  import InfoTile from "./InfoTile.svelte";
+  import { openInBrowser, versionLink, warnDeprecated, type VersionRow } from "@glimstone/core";
+  import Card from "./Card.svelte";
+  import InfoAboutCard from "./InfoAboutCard.svelte";
+  import InfoHelpCard from "./InfoHelpCard.svelte";
 
   // The 3.2.0 props of the single About card, laid out as the Info tile: the
   // About card under `text.title`, the Version card under `text.version` with
   // the app and GlimStone as its rows, and the Help card. Deprecated for
-  // InfoTile, which adds the version rows' sub-lines, the other components,
-  // "Check for updates" and the bug report.
+  // InfoTile, which adds the update state, the components and the bug report.
   let {
     text,
     version,
@@ -74,28 +75,42 @@
     ...(version ? [{ name: text.version, version, repoUrl }] : []),
     { name: "GlimStone", version: glimstoneVersion, repoUrl: glimstoneRepoUrl },
   ]);
+  const at = (offset: number) => (hueIndex === undefined ? undefined : hueIndex + offset);
 </script>
 
-<InfoTile
-  data-glim="AboutCard"
-  {hueIndex}
-  about={{ text, onCoffee, coffeeArt, onPaypal, paypalGlyph, onCrypto, cryptoGlyph }}
-  version={{ text: { title: text.version, unreleased: text.unreleased }, rows, openUrl }}
-  help={{
-    text: {
+<div data-glim="AboutCard" style="display: contents">
+  <Card title={text.version} hueIndex={at(0)}>
+    <ul class="glim-version-rows">
+      {#each rows as row (row.name)}
+        {@const link = versionLink(row)}
+        <li class="glim-version-row">
+          <span class="glim-version-name"><span class="glim-version-part">{row.name}</span></span>
+          {#if link.href}
+            <a href={link.href} target="_blank" rel="noopener noreferrer" class="glim-num glim-version-number">{link.shown}</a>
+          {:else}
+            <span class="glim-num glim-version-number">{link.released ? link.shown : text.unreleased(link.shown)}</span>
+          {/if}
+        </li>
+      {/each}
+    </ul>
+  </Card>
+  <InfoHelpCard
+    hueIndex={at(1)}
+    text={{
       title: text.helpTitle,
       report: text.report,
       repoButton: text.repoButton,
       discordButton: text.discordButton,
       mailButton: text.mailButton,
       mailSubject: text.mailSubject,
-    },
-    repoUrl,
-    repoGlyph,
-    discordUrl,
-    discordGlyph,
-    mailAddress,
-    mailGlyph,
-    openUrl,
-  }}
-/>
+    }}
+    {repoUrl}
+    {repoGlyph}
+    {discordUrl}
+    {discordGlyph}
+    {mailAddress}
+    {mailGlyph}
+    {openUrl}
+  />
+  <InfoAboutCard hueIndex={at(2)} {text} {onCoffee} {coffeeArt} {onPaypal} {paypalGlyph} {onCrypto} {cryptoGlyph} />
+</div>

@@ -38,6 +38,41 @@ The settings of the kit's sign-in come as one tile, its password question as a s
 - **"The sign-in tile"** in the design language, with its checklist, and a page for `SignInTile` with a demo of a signed-in owner and one of an open app.
 - **A sign-in, in the glossary,** is a password, a passkey or a sign-in service.
 
+## 4.8.2 - 2026-11-21
+
+The Info tile has four cards in every app: Version, Components, Help and About. The Version card holds the app with its number, the update switch and one last row with where the updates stand and the buttons that go with it. Every other number moves to the Components card, and every number reads as plain text that opens its project's newest release.
+
+## 🧩 Adopting apps
+
+- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.8.2, all packages at the same number.
+- **InfoVersionCard takes new props.** It shows the app alone. Pass `name`, `version`, `repoUrl`, `route` and `state`, with `onCheck`, `onUpdate`, `onRestart`, `guideUrl`, `onWhatsNew` and `unseen`. `rows`, `updateCheck`, `onReleaseNotes` and `whatsNew` are gone, so a card that still passes them stops building.
+- **Say how your app gets a new version** with `route`: `install` for a desktop build that fetches and installs its own updates, `guide` for a container, `plugins` for a plugin on a host with its own plugin manager, `store` for a phone app. The card picks the one button from it: "Update now" and then "Restart for 2.10.0", "How to update", "Update in the Plugins tab", or none.
+- **Hand the card where the updates stand** as `state`: `current` with `checkedAt`, `checking`, `available` with the new version, `downloading` with a percentage, `ready`, `failed` with a reason, or `store` with the store's name. The card checks nothing itself.
+- **"What's new" is the one name** for the release notes and the window of changes. Drop a "New · n" or "Release notes" button of your own. While `state` says a new version is available, let `onWhatsNew` open that version's notes: the card then hides "Check for updates", and the new number carries no link.
+- **Register glyphs for the buttons:** `version.whatsNew` (the gift, `IconWhatsNew`), `version.check` (`IconSync`), `version.update`, `version.restart`, `version.guide`, `version.plugins` and `components.update`.
+- **The update switch** comes as `autoUpdate` with `onAutoUpdateChange` (`v-model:auto-update` in Vue, `bind:autoUpdate` in Svelte). It reads "Update automatically" on a build that installs its own updates and "Check for updates automatically" on a container. Leave `autoUpdate` out and the card draws no switch.
+- **Move every other version to `InfoComponentsCard`:** pass `rows` with a `kind` (`part` for the app's own engine or server, `tool` for a bundled program, `installer` for a desktop build's installer) and a `hint` that says what it is. The hint goes in the (i) beside the name, never under it. The card adds GlimStone's own row and sorts the rest.
+- **A project without releases in its repository**, such as ffmpeg, takes a `releasePage` that its number opens instead.
+- **The components switch is only for an app that fetches newer components by itself while it runs.** A program that ships with the app moves with the app's own release, so leave `autoUpdate` and `onUpdate` out there.
+- **InfoTile wants `components`** between `version` and `help`.
+- **The words come with GlimStone:** pass `componentText(lang).versionCard` and `componentText(lang).componentsCard` as `text`. They come in all 42 languages, and "{app}" is filled from `name`.
+- **The About card is called "About" alone,** never with the app's name.
+- **Your own copy of the stylesheet:** copy `tokens.css` again. It brings the Version card's head and last row, the dot before "What's new", the progress bar and the (i) beside a component's name.
+- **Flutter:** move the git dependency to v4.8.2.
+
+## ✨ Added
+
+- **`InfoComponentsCard`** in React, Vue, Solid and Svelte: every version an app is made of or brings along, in a fixed order (the app's own parts, the bundled programs by name, the design language, the installer), with a status and one button on a row that needs one.
+- **The logic behind both cards in the core:** `updateLine`, `updateAction`, `checkButton`, `autoSwitch`, `whatsNewLabel`, `componentRows`, `designRow`, `numberLink`, `timeAgo` and `withApp`, with the types `UpdateRoute`, `UpdateState`, `ComponentRow`, `VersionCardText` and `ComponentsCardText`.
+- **The cards' words in all 42 languages,** as `versionCard` and `componentsCard` in `componentText(lang)`. "Last checked 3 minutes ago" uses the language's own way of saying it.
+
+## 🎨 Design
+
+- **One last row in the Version card.** Where the updates stand sits at its start, and the buttons at its end: "What's new", then "Check for updates" while there is something to look for, then the one action, filled with the accent. On a narrow card the buttons drop under the words.
+- **A version number reads as plain text.** It takes the accent's ink under the pointer, has no frame, fill or underline, and opens the newest release of its project.
+- **No sub-lines in the Components card.** What a component is sits in the (i) beside its name.
+- **Version, Components, Help, About** is the order in every app, and no app adds a card of its own for updates or helper programs.
+
 ## 4.8.1 - 2026-11-20
 
 A connection row sets its buttons off the well and keeps its badges a size smaller, a wordmark starts where a symbol would, and on a wide screen the docs stand in the middle.

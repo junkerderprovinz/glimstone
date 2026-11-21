@@ -1,5 +1,5 @@
 import { InfoTile } from "@glimstone/react";
-import { COFFEE_BUTTON_SVG, GLIMSTONE_VERSION, MAIL_SVG } from "@glimstone/core";
+import { COFFEE_BUTTON_SVG, COMPONENTS_CARD_TEXT, MAIL_SVG, VERSION_CARD_TEXT } from "@glimstone/core";
 import { Glyph } from "../../glyph";
 
 const REPO = "https://github.com/junkerderprovinz/glimstone";
@@ -14,10 +14,24 @@ export default function InfoPage() {
       <InfoTile
         hueIndex={0}
         version={{
-          text: { title: "Version", unreleased: (v) => `${v}, not released yet` },
+          text: VERSION_CARD_TEXT,
+          name: "Your app",
+          version: "2.1.0",
+          repoUrl: REPO,
+          route: "install",
+          state: { kind: "available", version: "2.2.0" },
+          onCheck: () => {},
+          onUpdate: () => {},
+          onWhatsNew: () => {},
+          unseen: 3,
+          autoUpdate: true,
+        }}
+        components={{
+          text: COMPONENTS_CARD_TEXT,
+          name: "Your app",
           rows: [
-            { name: "Your app", version: "2.1.0", repoUrl: REPO },
-            { name: "GlimStone", sub: "Design language", version: GLIMSTONE_VERSION, repoUrl: REPO },
+            { name: "rclone", hint: "Cloud transfers", version: "1.75.2" },
+            { name: "Installer", hint: COMPONENTS_CARD_TEXT.installer, version: "1.2.5", kind: "installer" },
           ],
         }}
         help={{
