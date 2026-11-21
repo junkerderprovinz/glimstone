@@ -27,7 +27,8 @@ import {
   signInTestLabel,
   signInTileCards,
   signInWhen,
-  tileNeedsPassword,
+  signInCardNotice,
+  signInPasswordElsewhere,
   tokenFacts,
   type Catalog,
   type SignInApi,
@@ -164,8 +165,8 @@ export function SignInTile(props: SignInTileProps) {
 
 type CardProps = { ctx: Ctx; hue: number };
 
-function NeedsPassword(props: { text: SignInTileText }) {
-  return <UnavailableNotice title={props.text.needsPassword.title} reason={props.text.needsPassword.reason} />;
+function Notice(props: { notice: { title: string; reason: string } }) {
+  return <UnavailableNotice title={props.notice.title} reason={props.notice.reason} />;
 }
 
 function PasswordCard(props: CardProps) {
@@ -173,54 +174,57 @@ function PasswordCard(props: CardProps) {
   const t = () => own.text.password;
   const had = () => !!s().me?.password;
   const open = () => s().me?.via === "open";
+  const elsewhere = () => signInPasswordElsewhere(own.text, s());
   return (
     <Card title={t().title} hint={open() ? t().openHint : fill(t().hint, { min: s().offer?.minPassword ?? 12 })} hueIndex={props.hue} data-signin-card="password">
-      <div class="glim-signin-tile-body">
-        <FieldRow label={t().state} value={had() ? t().set : t().none} tone={had() ? undefined : "warn"} />
-        <Show when={s().editing}>
-          <FieldRowGroup>
-            <Show when={had()}>
-              <FieldRow label={t().current}>
-                <PasswordField autocomplete="current-password" value={s().draft.current} onInput={(e) => flow.set("current", e.currentTarget.value)} text={eye()} error={err("current")} />
+      <Show when={!elsewhere()} fallback={<p class="glim-signin-tile-text">{elsewhere()}</p>}>
+        <div class="glim-signin-tile-body">
+          <FieldRow label={t().state} value={had() ? t().set : t().none} tone={had() ? undefined : "warn"} />
+          <Show when={s().editing}>
+            <FieldRowGroup>
+              <Show when={had()}>
+                <FieldRow label={t().current}>
+                  <PasswordField autocomplete="current-password" value={s().draft.current} onInput={(e) => flow.set("current", e.currentTarget.value)} text={eye()} error={err("current")} />
+                </FieldRow>
+              </Show>
+              <FieldRow label={t().next}>
+                <PasswordField
+                  confirm
+                  value={s().draft.next}
+                  onInput={(e) => flow.set("next", e.currentTarget.value)}
+                  onConfirmedChange={flow.setConfirmed}
+                  text={eye()}
+                  error={err("next")}
+                />
               </FieldRow>
-            </Show>
-            <FieldRow label={t().next}>
-              <PasswordField
-                confirm
-                value={s().draft.next}
-                onInput={(e) => flow.set("next", e.currentTarget.value)}
-                onConfirmedChange={flow.setConfirmed}
-                text={eye()}
-                error={err("next")}
-              />
-            </FieldRow>
-          </FieldRowGroup>
-        </Show>
-        <div class="glim-signin-tile-foot">
-          <Show
-            when={s().editing}
-            fallback={
-              <>
-                <Show when={had()}>
-                  <Button label={t().remove} labelKey={keys().removePassword} data-signin-tile="ask-remove-password" onClick={flow.askRemovePassword} />
-                </Show>
-                <Button label={had() ? t().change : t().add} labelKey={had() ? keys().change : keys().setPassword} data-signin-tile="edit-password" onClick={flow.editPassword} />
-              </>
-            }
-          >
-            <Button label={own.text.cancel} labelKey="common.cancel" glyph={<IconCancel />} onClick={flow.cancelPassword} />
-            <Button
-              label={t().save}
-              labelKey={keys().savePassword}
-              tone="accent"
-              busy={s().busy === "save-password"}
-              disabled={!s().confirmed || (had() && s().draft.current === "")}
-              data-signin-tile="save-password"
-              onClick={() => void flow.savePassword()}
-            />
+            </FieldRowGroup>
           </Show>
+          <div class="glim-signin-tile-foot">
+            <Show
+              when={s().editing}
+              fallback={
+                <>
+                  <Show when={had()}>
+                    <Button label={t().remove} labelKey={keys().removePassword} data-signin-tile="ask-remove-password" onClick={flow.askRemovePassword} />
+                  </Show>
+                  <Button label={had() ? t().change : t().add} labelKey={had() ? keys().change : keys().setPassword} data-signin-tile="edit-password" onClick={flow.editPassword} />
+                </>
+              }
+            >
+              <Button label={own.text.cancel} labelKey="common.cancel" glyph={<IconCancel />} onClick={flow.cancelPassword} />
+              <Button
+                label={t().save}
+                labelKey={keys().savePassword}
+                tone="accent"
+                busy={s().busy === "save-password"}
+                disabled={!s().confirmed || (had() && s().draft.current === "")}
+                data-signin-tile="save-password"
+                onClick={() => void flow.savePassword()}
+              />
+            </Show>
+          </div>
         </div>
-      </div>
+      </Show>
     </Card>
   );
 }
@@ -243,7 +247,7 @@ function TwoFactorCard(props: CardProps) {
   const on = () => !!s().me?.twoFactor;
   return (
     <Card title={t().title} hint={t().hint} hueIndex={props.hue} data-signin-card="twoFactor">
-      <Show when={!tileNeedsPassword(s())} fallback={<NeedsPassword text={own.text} />}>
+      <Show when={!signInCardNotice(own.text, s(), "twoFactor")} fallback={<Notice notice={signInCardNotice(own.text, s(), "twoFactor")!} />}>
         <div class="glim-signin-tile-body">
           <FieldRowGroup>
             <FieldRow label={t().state} value={on() ? t().on : t().off} tone={on() ? "ok" : undefined} />
@@ -271,10 +275,10 @@ function TwoFactorCard(props: CardProps) {
 function PasskeysCard(props: CardProps) {
   const { s, flow, own, keys, when, ask } = props.ctx;
   const t = () => own.text.passkeys;
-  const here = () => !!s().offer?.passkeys;
+  const here = () => s().passkeysHere;
   return (
     <Card title={t().title} hint={t().hint} hueIndex={props.hue} data-signin-card="passkeys">
-      <Show when={!tileNeedsPassword(s())} fallback={<NeedsPassword text={own.text} />}>
+      <Show when={!signInCardNotice(own.text, s(), "passkeys")} fallback={<Notice notice={signInCardNotice(own.text, s(), "passkeys")!} />}>
         <div class="glim-signin-tile-body">
           <Show when={!here()}>
             <UnavailableNotice title={t().unavailableTitle} reason={t().unavailable} />
@@ -364,7 +368,7 @@ function TokensCard(props: CardProps) {
   const t = () => own.text.tokens;
   return (
     <Card title={t().title} hint={t().hint} hueIndex={props.hue} data-signin-card="tokens">
-      <Show when={!tileNeedsPassword(s())} fallback={<NeedsPassword text={own.text} />}>
+      <Show when={!signInCardNotice(own.text, s(), "tokens")} fallback={<Notice notice={signInCardNotice(own.text, s(), "tokens")!} />}>
         <div class="glim-signin-tile-body">
           <Show when={s().tokens.length > 0} fallback={<EmptyState nested glyph={glyphFor(keys().token)} title={t().none} hint={t().noneHint} />}>
             <div class="glim-list glim-signin-tile-rows">
@@ -399,7 +403,7 @@ function ServicesCard(props: CardProps) {
   const t = () => own.text.services;
   return (
     <Card title={t().title} hint={t().hint} hueIndex={props.hue} data-signin-card="services">
-      <Show when={!tileNeedsPassword(s())} fallback={<NeedsPassword text={own.text} />}>
+      <Show when={!signInCardNotice(own.text, s(), "services")} fallback={<Notice notice={signInCardNotice(own.text, s(), "services")!} />}>
         <div class="glim-signin-tile-body">
           <For each={s().services ?? []}>
             {(x) => {
@@ -413,7 +417,7 @@ function ServicesCard(props: CardProps) {
                   test={s().rowTests[x.id]}
                   actions={signInServiceActions(own.text, x, s(), keys().turnOn, (id) => void flow.confirmService(id))}
                   text={{ test: t().test, edit: t().edit, remove: own.text.remove }}
-                  onTest={() => void flow.testService(x.id)}
+                  onTest={x.fromConfig ? undefined : () => void flow.testService(x.id)}
                   onEdit={x.fromConfig ? undefined : () => flow.editService(x.id)}
                   onRemove={x.fromConfig ? undefined : () => ask("service", x.id, x.name)}
                   data-signin-service={x.provider}

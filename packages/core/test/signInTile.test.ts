@@ -13,6 +13,9 @@ import {
   signInServiceBadge,
   signInServiceMissing,
   signInServiceStatus,
+  passkeysAllowedAt,
+  signInCardNotice,
+  signInPasswordElsewhere,
   signInTileCards,
   signInTileTextEn as text,
   SIGN_IN_TILE_CARDS,
@@ -361,6 +364,37 @@ test('a service from the configuration file says so, and turns on again after a 
   await flow.confirmService('s1');
   assert.deepEqual(sent, { on: true });
   assert.deepEqual(said, [['success', 'Pocket ID is on the sign-in page.']]);
+});
+
+test('passkeys work on a name over https or on localhost, never on an IP address or plain http', () => {
+  assert.equal(passkeysAllowedAt({ protocol: 'https:', hostname: 'files.example' }), true);
+  assert.equal(passkeysAllowedAt({ protocol: 'http:', hostname: 'localhost' }), true);
+  assert.equal(passkeysAllowedAt({ protocol: 'https:', hostname: '192.168.20.41' }), false);
+  assert.equal(passkeysAllowedAt({ protocol: 'https:', hostname: '[fd00::1]' }), false);
+  assert.equal(passkeysAllowedAt({ protocol: 'http:', hostname: 'files.example' }), false);
+});
+
+test('an account from a sign-in service is told where its password lives, and two-factor and passkeys point there', async () => {
+  const { api } = kit({
+    me: async () => ok({ ...ME, via: 'service', service: 's1', password: false, owner: false }),
+    services: async () => ok([{ ...SERVICE, on: true, tested: true }]),
+  });
+  const { flow } = tile(api);
+  await flow.refresh();
+  const s = flow.state();
+  assert.equal(signInPasswordElsewhere(text, s), 'You sign in through Pocket ID, so this account has no password here.');
+  assert.deepEqual(signInCardNotice(text, s, 'twoFactor'), { title: text.notLocal.title, reason: 'You sign in through Pocket ID. Set up two-factor and passkeys there.' });
+  assert.deepEqual(signInCardNotice(text, s, 'passkeys')?.title, text.notLocal.title);
+  assert.equal(signInCardNotice(text, s, 'tokens'), null);
+  assert.equal(signInCardNotice(text, s, 'services'), null);
+});
+
+test('an open app sends every lasting way in to the first password', async () => {
+  const { api } = kit({ me: async () => ok({ ...ME, via: 'open', password: false, account: undefined }) });
+  const { flow } = tile(api);
+  await flow.refresh();
+  for (const card of ['twoFactor', 'passkeys', 'tokens', 'services'] as const) assert.deepEqual(signInCardNotice(text, flow.state(), card), text.needsPassword);
+  assert.equal(signInPasswordElsewhere(text, flow.state()), null);
 });
 
 test('a service badge says how it stands', () => {

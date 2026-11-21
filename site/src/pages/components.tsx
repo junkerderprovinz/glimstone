@@ -858,6 +858,12 @@ const arrived = takeSignInCode();
         every lasting way in says that it waits for one, in place of its controls.
       </p>
       <Demo name="SignInTileOpen" />
+      <H2>An account from a sign-in service</H2>
+      <p>
+        An account that signs in through a sign-in service has no password here. The password card says where it
+        signs in, and two-factor and passkeys point to the service, while its API tokens work as for anyone.
+      </p>
+      <Demo name="SignInTileService" />
       <H2>Rules</H2>
       <ul>
         <li>One title per card, with its (i). Every card's own buttons stand at the end of its foot.</li>

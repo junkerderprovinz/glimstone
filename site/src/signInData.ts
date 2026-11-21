@@ -56,23 +56,26 @@ function service(id: string, provider: string, name: string, on: boolean): SignI
   };
 }
 
-export type DemoScene = "signedIn" | "open" | "fresh";
+export type DemoScene = "signedIn" | "open" | "fresh" | "service";
 
 /**
  * A kit for one demo. `signedIn` is the owner, who signed in a while ago, so
  * new ways in ask for the password; `fresh` signed in moments ago; `open` has
- * no password yet.
+ * no password yet; `service` is an account that signs in through Pocket ID and
+ * has no password here.
  */
 export function demoKit(scene: DemoScene = "signedIn"): SignInApi & { leave(url: string): void } {
   const open = scene === "open";
+  const outside = scene === "service";
   let fresh = scene !== "signedIn";
   const me: SignInMe = {
-    account: open ? undefined : "owner",
-    name: open ? undefined : "owner",
+    account: open ? undefined : outside ? "a2" : "owner",
+    name: open ? undefined : outside ? "sam" : "owner",
     role: "admin",
-    via: open ? "open" : "password",
-    owner: true,
-    password: !open,
+    via: open ? "open" : outside ? "service" : "password",
+    service: outside ? "pocket" : undefined,
+    owner: !outside,
+    password: !open && !outside,
     twoFactor: false,
     recoveryLeft: 0,
     fresh,
@@ -85,8 +88,8 @@ export function demoKit(scene: DemoScene = "signedIn"): SignInApi & { leave(url:
         { id: "s1", via: "password", created: "2026-11-21T08:02:00Z", seen: "2026-11-21T10:40:00Z", from: "192.168.20.14", agent: FIREFOX, current: true },
         { id: "s2", via: "service", service: "pocket", created: "2026-11-19T18:30:00Z", seen: "2026-11-20T21:05:00Z", from: "192.168.20.31", agent: PHONE, current: false },
       ];
-  let passkeys: SignInPasskey[] = open ? [] : [{ id: "p1", name: "Firefox on Windows", created: "2026-11-02T14:20:00Z", used: "2026-11-20T07:55:00Z", rpID: "glimstone.example", synced: true, here: true }];
-  let tokens: SignInToken[] = open ? [] : [{ id: "t1", name: "Backup script", scopes: ["read"], created: "2026-10-28T12:00:00Z", used: "2026-11-21T03:00:00Z", expires: "2027-01-26T12:00:00Z" }];
+  let passkeys: SignInPasskey[] = open || outside ? [] : [{ id: "p1", name: "Firefox on Windows", created: "2026-11-02T14:20:00Z", used: "2026-11-20T07:55:00Z", rpID: "glimstone.example", synced: true, here: true }];
+  let tokens: SignInToken[] = open || outside ? [] : [{ id: "t1", name: "Backup script", scopes: ["read"], created: "2026-10-28T12:00:00Z", used: "2026-11-21T03:00:00Z", expires: "2027-01-26T12:00:00Z" }];
   let services: SignInService[] = open
     ? []
     : [
@@ -163,7 +166,7 @@ export function demoKit(scene: DemoScene = "signedIn"): SignInApi & { leave(url:
     leave() {
       fresh = true;
     },
-    options: async () => ok({ open: !me.password, owner: true, minPassword: 12, signedIn: !open, passkeys: true, services: services.filter((s) => s.on).map(({ id, provider, name }) => ({ id, provider, name })) }),
+    options: async () => ok({ open: me.via === "open" && !me.password, owner: true, minPassword: 12, signedIn: !open, passkeys: passkeys.length > 0, services: services.filter((s) => s.on).map(({ id, provider, name }) => ({ id, provider, name })) }),
     login: async (password) => (password === PASSWORD ? ok({ visitor: me }) : no("wrongPassword", 401)),
     loginCode: async () => no("wrongCode", 401),
     offerPasskey: (signal) => new Promise((done) => signal.addEventListener("abort", () => done(null))),

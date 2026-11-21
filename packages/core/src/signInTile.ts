@@ -61,12 +61,16 @@ export interface SignInTileText {
   failed: string;
   /** In place of a card's controls while the account has no password of its own. */
   needsPassword: { title: string; reason: string };
+  /** In place of two-factor's and the passkeys' controls for an account that signs in through a sign-in service, `{name}`. */
+  notLocal: { title: string; reason: string };
   password: {
     title: string;
     /** The (i): how long a password has to be, and that a change ends the other sessions. */
     hint: string;
     /** The (i) while the app is open. */
     openHint: string;
+    /** In place of the card's controls for an account that signs in through a sign-in service, `{name}`. */
+    viaService: string;
     state: string;
     set: string;
     none: string;
@@ -314,10 +318,15 @@ export const signInTileTextEn: SignInTileText = {
     title: "This needs a password first",
     reason: "Set a password of the app’s own above. It always gets you in, even when another way fails.",
   },
+  notLocal: {
+    title: "This comes from your sign-in service",
+    reason: "You sign in through {name}. Set up two-factor and passkeys there.",
+  },
   password: {
     title: "Password",
     hint: "A password needs at least {min} characters. Changing it ends every other session.",
     openHint: "Until a password is set, the app is open and everyone who reaches it is an admin.",
+    viaService: "You sign in through {name}, so this account has no password here.",
     state: "Password",
     set: "Set",
     none: "No password",
@@ -625,6 +634,8 @@ export interface SignInTileState {
   services: SignInService[] | null;
   presets: SignInPreset[];
   accounts: SignInAccount[] | null;
+  /** Passkeys work on the address the page is open on. */
+  passkeysHere: boolean;
   window: SignInTileWindow | null;
   draft: SignInTileDraft;
   /** The password card shows its fields. */
@@ -740,6 +751,7 @@ const START: SignInTileState = {
   services: null,
   presets: [],
   accounts: null,
+  passkeysHere: false,
   window: null,
   draft: EMPTY_DRAFT,
   editing: false,
@@ -840,9 +852,39 @@ export function signInTestLabel(text: SignInTileText, test: ConnectionTest | und
   return t.test;
 }
 
-/** A card whose controls wait for a password of the account's own. */
-export function tileNeedsPassword(s: SignInTileState): boolean {
-  return !s.me?.password;
+/**
+ * Whether passkeys can work on this address, as the kit decides it: https or
+ * localhost, under a name rather than an IP address. The kit's own `passkeys`
+ * says so only once some account has a passkey.
+ */
+export function passkeysAllowedAt(at: { protocol: string; hostname: string }): boolean {
+  const host = at.hostname.replace(/^\[|\]$/g, "");
+  if (host === "localhost") return true;
+  return at.protocol === "https:" && !/^[\d.]+$/.test(host) && !host.includes(":");
+}
+
+/** The sign-in service the account came in through, by its name. */
+function serviceOfMe(s: SignInTileState): string {
+  const id = s.me?.service;
+  return s.services?.find((x) => x.id === id)?.name ?? s.offer?.services.find((x) => x.id === id)?.name ?? id ?? "";
+}
+
+/**
+ * What stands in place of a card's controls, or `null` where they can work:
+ * every lasting way in waits for the first password while the app is open,
+ * and two-factor and passkeys belong to the sign-in service for an account
+ * without a password of its own.
+ */
+export function signInCardNotice(text: SignInTileText, s: SignInTileState, card: "twoFactor" | "passkeys" | "tokens" | "services"): { title: string; reason: string } | null {
+  if (s.me?.via === "open") return text.needsPassword;
+  if (!s.me?.password && (card === "twoFactor" || card === "passkeys")) return { title: text.notLocal.title, reason: fill(text.notLocal.reason, { name: serviceOfMe(s) }) };
+  return null;
+}
+
+/** The password card's line for an account that signs in through a sign-in service and has no password here, or `null`. */
+export function signInPasswordElsewhere(text: SignInTileText, s: SignInTileState): string | null {
+  if (!s.me || s.me.via === "open" || s.me.password) return null;
+  return fill(text.password.viaService, { name: serviceOfMe(s) });
 }
 
 /** The browser and the system in an agent string, as "Firefox on Windows". */
@@ -1030,6 +1072,7 @@ export function createSignInTileFlow(options: () => SignInTileOptions): SignInTi
       services: services?.ok ? services.value : null,
       presets: presets?.ok ? presets.value : [],
       accounts: accounts?.ok ? accounts.value : null,
+      passkeysHere: (offer.ok && offer.value.passkeys) || (typeof location !== "undefined" && passkeysAllowedAt(location)),
     });
   }
 

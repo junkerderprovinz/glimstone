@@ -4276,6 +4276,20 @@ test.describe("SignInCard", () => {
     await expect(field(page, "Code from the container log")).toHaveCount(0);
   });
 
+  test("[signin-reset-name] the reset form asks for the name in an app with several accounts", async ({ page }) => {
+    await open(page, "/components/sign-in-card");
+    const demo = "SignInCardSlots";
+    await field(page, "Name", demo).fill("from the sign-in form");
+    await openReset(page, demo);
+    await expect(field(page, "Name", demo)).toHaveValue("");
+    await field(page, "Code from the container log", demo).fill("ABCD-EFGH-JKLM");
+    await field(page, "New password", demo).fill("correct horse battery");
+    await field(page, "Confirm password", demo).fill("correct horse battery");
+    await expect(button(page, "Set password", demo)).toBeDisabled();
+    await field(page, "Name", demo).fill("sam");
+    await expect(button(page, "Set password", demo)).toBeEnabled();
+  });
+
   test("[signin-reset-check] a short or mismatched password is caught before sending", async ({ page }) => {
     await open(page, "/components/sign-in-card");
     await openReset(page);
@@ -4311,6 +4325,7 @@ test.describe("SignInCard", () => {
     const demo = "SignInCardSlots";
     await openReset(page, demo);
     await field(page, "Code from the container log", demo).fill("ABCD-EFGH-JKLM");
+    await field(page, "Name", demo).fill("sam");
     await field(page, "New password", demo).fill("correct horse battery");
     await field(page, "Confirm password", demo).fill("correct horse battery");
     await button(page, "Set password", demo).click();
@@ -4735,11 +4750,35 @@ test.describe("SignInTile", () => {
     await expect(said(page)).toHaveText("Passkey removed.");
   });
 
+  test("[signin-tile-passkeys-here] Add a passkey stays once the last passkey is gone", async ({ page }) => {
+    await open(page, "/components/sign-in-tile");
+    const card = cardOf(page, "passkeys");
+    const row = card.getByRole("group", { name: "Firefox on Windows" });
+    await row.hover();
+    await row.getByRole("button", { name: "Remove" }).click();
+    await page.locator('[data-glim="ConfirmDialog"]').getByRole("button", { name: "Remove" }).click();
+    await expect(row).toHaveCount(0);
+    await expect(card.getByRole("button", { name: "Add a passkey" })).toBeVisible();
+    await expect(card.locator(".glim-notice")).toHaveCount(0);
+  });
+
+  test("[signin-tile-elsewhere] an account from a sign-in service is sent there for its password, two-factor and passkeys", async ({ page }) => {
+    await open(page, "/components/sign-in-tile");
+    const name = "SignInTileService";
+    await expect(cardOf(page, "password", name)).toContainText("You sign in through Pocket ID, so this account has no password here.");
+    await expect(cardOf(page, "password", name).locator(".glim-btn")).toHaveCount(0);
+    for (const card of ["twoFactor", "passkeys"]) {
+      await expect(cardOf(page, card, name).locator(".glim-notice-reason")).toHaveText("You sign in through Pocket ID. Set up two-factor and passkeys there.");
+      await expect(cardOf(page, card, name).locator(".glim-btn")).toHaveCount(0);
+    }
+    await expect(cardOf(page, "tokens", name).getByRole("button", { name: "Create a token" })).toBeVisible();
+  });
+
   test("[signin-tile-config] a service from the configuration file has no Edit or Remove, and turns on again", async ({ page }) => {
     await open(page, "/components/sign-in-tile");
     const row = cardOf(page, "services").getByRole("group", { name: "Kanidm" });
     await expect(row.locator(".glim-connection-status")).toContainText("from the configuration file");
-    await expect(row.locator('[data-connection="edit"], [data-connection="remove"]')).toHaveCount(0);
+    await expect(row.locator('[data-connection="test"], [data-connection="edit"], [data-connection="remove"]')).toHaveCount(0);
     await expect(row.getByRole("switch")).toHaveCount(0);
     await expect(row.locator(".glim-connection-badges")).toHaveText("Paused");
     await row.locator('[data-connection="confirm"]').click();

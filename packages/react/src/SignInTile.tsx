@@ -26,7 +26,8 @@ import {
   signInTestLabel,
   signInTileCards,
   signInWhen,
-  tileNeedsPassword,
+  signInCardNotice,
+  signInPasswordElsewhere,
   tokenFacts,
   type Catalog,
   type SignInApi,
@@ -165,8 +166,8 @@ export function SignInTile(props: SignInTileProps) {
   );
 }
 
-function NeedsPassword({ text }: { text: SignInTileText }) {
-  return <UnavailableNotice title={text.needsPassword.title} reason={text.needsPassword.reason} />;
+function Notice({ notice }: { notice: { title: string; reason: string } }) {
+  return <UnavailableNotice title={notice.title} reason={notice.reason} />;
 }
 
 function PasswordCard({ ctx, hue }: { ctx: Ctx; hue: number }) {
@@ -174,44 +175,49 @@ function PasswordCard({ ctx, hue }: { ctx: Ctx; hue: number }) {
   const t = text.password;
   const had = !!s.me?.password;
   const open = s.me?.via === "open";
+  const elsewhere = signInPasswordElsewhere(text, s);
   return (
     <Card title={t.title} hint={open ? t.openHint : fill(t.hint, { min: s.offer?.minPassword ?? 12 })} hueIndex={hue} data-signin-card="password">
-      <div className="glim-signin-tile-body">
-        <FieldRow label={t.state} value={had ? t.set : t.none} tone={had ? undefined : "warn"} />
-        {s.editing && (
-          <FieldRowGroup>
-            {had && (
-              <FieldRow label={t.current}>
-                <PasswordField autoComplete="current-password" value={s.draft.current} onChange={(e) => flow.set("current", e.target.value)} text={eye} error={err("current")} />
+      {elsewhere ? (
+        <p className="glim-signin-tile-text">{elsewhere}</p>
+      ) : (
+        <div className="glim-signin-tile-body">
+          <FieldRow label={t.state} value={had ? t.set : t.none} tone={had ? undefined : "warn"} />
+          {s.editing && (
+            <FieldRowGroup>
+              {had && (
+                <FieldRow label={t.current}>
+                  <PasswordField autoComplete="current-password" value={s.draft.current} onChange={(e) => flow.set("current", e.target.value)} text={eye} error={err("current")} />
+                </FieldRow>
+              )}
+              <FieldRow label={t.next}>
+                <PasswordField confirm value={s.draft.next} onChange={(e) => flow.set("next", e.target.value)} onConfirmedChange={flow.setConfirmed} text={eye} error={err("next")} />
               </FieldRow>
-            )}
-            <FieldRow label={t.next}>
-              <PasswordField confirm value={s.draft.next} onChange={(e) => flow.set("next", e.target.value)} onConfirmedChange={flow.setConfirmed} text={eye} error={err("next")} />
-            </FieldRow>
-          </FieldRowGroup>
-        )}
-        <div className="glim-signin-tile-foot">
-          {s.editing ? (
-            <>
-              <Button label={text.cancel} labelKey="common.cancel" glyph={<IconCancel />} onClick={flow.cancelPassword} />
-              <Button
-                label={t.save}
-                labelKey={keys.savePassword}
-                tone="accent"
-                busy={s.busy === "save-password"}
-                disabled={!s.confirmed || (had && s.draft.current === "")}
-                data-signin-tile="save-password"
-                onClick={() => void flow.savePassword()}
-              />
-            </>
-          ) : (
-            <>
-              {had && <Button label={t.remove} labelKey={keys.removePassword} data-signin-tile="ask-remove-password" onClick={flow.askRemovePassword} />}
-              <Button label={had ? t.change : t.add} labelKey={had ? keys.change : keys.setPassword} data-signin-tile="edit-password" onClick={flow.editPassword} />
-            </>
+            </FieldRowGroup>
           )}
+          <div className="glim-signin-tile-foot">
+            {s.editing ? (
+              <>
+                <Button label={text.cancel} labelKey="common.cancel" glyph={<IconCancel />} onClick={flow.cancelPassword} />
+                <Button
+                  label={t.save}
+                  labelKey={keys.savePassword}
+                  tone="accent"
+                  busy={s.busy === "save-password"}
+                  disabled={!s.confirmed || (had && s.draft.current === "")}
+                  data-signin-tile="save-password"
+                  onClick={() => void flow.savePassword()}
+                />
+              </>
+            ) : (
+              <>
+                {had && <Button label={t.remove} labelKey={keys.removePassword} data-signin-tile="ask-remove-password" onClick={flow.askRemovePassword} />}
+                <Button label={had ? t.change : t.add} labelKey={had ? keys.change : keys.setPassword} data-signin-tile="edit-password" onClick={flow.editPassword} />
+              </>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </Card>
   );
 }
@@ -231,11 +237,12 @@ function AskPasswordCard({ ctx, hue }: { ctx: Ctx; hue: number }) {
 function TwoFactorCard({ ctx, hue }: { ctx: Ctx; hue: number }) {
   const { s, flow, text, lang, keys } = ctx;
   const t = text.twoFactor;
+  const notice = signInCardNotice(text, s, "twoFactor");
   const on = !!s.me?.twoFactor;
   return (
     <Card title={t.title} hint={t.hint} hueIndex={hue} data-signin-card="twoFactor">
-      {tileNeedsPassword(s) ? (
-        <NeedsPassword text={text} />
+      {notice ? (
+        <Notice notice={notice} />
       ) : (
         <div className="glim-signin-tile-body">
           <FieldRowGroup>
@@ -261,11 +268,12 @@ function TwoFactorCard({ ctx, hue }: { ctx: Ctx; hue: number }) {
 function PasskeysCard({ ctx, hue }: { ctx: Ctx; hue: number }) {
   const { s, flow, text, keys, when, ask } = ctx;
   const t = text.passkeys;
-  const here = !!s.offer?.passkeys;
+  const notice = signInCardNotice(text, s, "passkeys");
+  const here = s.passkeysHere;
   return (
     <Card title={t.title} hint={t.hint} hueIndex={hue} data-signin-card="passkeys">
-      {tileNeedsPassword(s) ? (
-        <NeedsPassword text={text} />
+      {notice ? (
+        <Notice notice={notice} />
       ) : (
         <div className="glim-signin-tile-body">
           {!here && <UnavailableNotice title={t.unavailableTitle} reason={t.unavailable} />}
@@ -343,10 +351,11 @@ function SessionsCard({ ctx, hue }: { ctx: Ctx; hue: number }) {
 function TokensCard({ ctx, hue }: { ctx: Ctx; hue: number }) {
   const { s, flow, text, keys, when, ask } = ctx;
   const t = text.tokens;
+  const notice = signInCardNotice(text, s, "tokens");
   return (
     <Card title={t.title} hint={t.hint} hueIndex={hue} data-signin-card="tokens">
-      {tileNeedsPassword(s) ? (
-        <NeedsPassword text={text} />
+      {notice ? (
+        <Notice notice={notice} />
       ) : (
         <div className="glim-signin-tile-body">
           {s.tokens.length > 0 ? (
@@ -383,10 +392,11 @@ function TokensCard({ ctx, hue }: { ctx: Ctx; hue: number }) {
 function ServicesCard({ ctx, hue, providers }: { ctx: Ctx; hue: number; providers: Catalog }) {
   const { s, flow, text, keys, when, ask } = ctx;
   const t = text.services;
+  const notice = signInCardNotice(text, s, "services");
   return (
     <Card title={t.title} hint={t.hint} hueIndex={hue} data-signin-card="services">
-      {tileNeedsPassword(s) ? (
-        <NeedsPassword text={text} />
+      {notice ? (
+        <Notice notice={notice} />
       ) : (
         <div className="glim-signin-tile-body">
           {(s.services ?? []).map((x) => {
@@ -401,7 +411,7 @@ function ServicesCard({ ctx, hue, providers }: { ctx: Ctx; hue: number; provider
                 test={s.rowTests[x.id]}
                 actions={signInServiceActions(text, x, s, keys.turnOn, (id) => void flow.confirmService(id))}
                 text={{ test: t.test, edit: t.edit, remove: text.remove }}
-                onTest={() => void flow.testService(x.id)}
+                onTest={x.fromConfig ? undefined : () => void flow.testService(x.id)}
                 onEdit={x.fromConfig ? undefined : () => flow.editService(x.id)}
                 onRemove={x.fromConfig ? undefined : () => ask("service", x.id, x.name)}
                 data-signin-service={x.provider}
