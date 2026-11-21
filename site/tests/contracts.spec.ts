@@ -4651,8 +4651,8 @@ test.describe("useDragArmed", () => {
 });
 
 test.describe("SignInTile", () => {
-  // Solid and Svelte draw the tile once their twins exist.
-  test.beforeEach(({}, info) => test.skip(!["react", "vue"].includes(info.project.metadata.fw), "The tile comes in React and Vue"));
+  // Svelte draws the tile once its twin exists.
+  test.beforeEach(({}, info) => test.skip(!["react", "vue", "solid"].includes(info.project.metadata.fw), "The tile comes in React, Vue and Solid"));
   const demo = (page: Page, name = "SignInTileBasic") => stage(page, name);
   const cardOf = (page: Page, card: string, name?: string) => demo(page, name).locator(`[data-signin-card="${card}"]`);
   const said = (page: Page, name?: string) => demo(page, name).locator('[data-hook="said"]');
