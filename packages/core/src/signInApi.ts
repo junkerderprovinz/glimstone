@@ -204,6 +204,8 @@ export interface SignInServiceInput {
   /** A PEM certificate to trust beside the system's. */
   ca?: string;
   on?: boolean;
+  /** The role a newcomer from the service gets, one of `roles()`. */
+  role?: string;
 }
 
 export interface SignInService {
@@ -226,6 +228,14 @@ export interface SignInService {
   redirect: string;
   /** The app sets it up in its configuration file, so only turning it on again after a reset changes it here. */
   fromConfig: boolean;
+  /** The role a newcomer from the service gets. */
+  role: string;
+}
+
+/** The app's roles, the admin first, and the one a new sign-in service hands its newcomers unless the form picks another. */
+export interface SignInRoles {
+  roles: string[];
+  serviceRole: string;
 }
 
 export interface SignInLogEntry {
@@ -335,7 +345,7 @@ export interface SignInApi {
   addAccount(input: { name: string; password: string; role: string }): Promise<SignInResult<{ account: SignInAccount }>>;
   changeAccount(id: string, input: { blocked?: boolean; role?: string }): Promise<SignInResult<{ account: SignInAccount }>>;
   removeAccount(id: string): Promise<SignInResult<Json>>;
-  roles(): Promise<SignInResult<string[]>>;
+  roles(): Promise<SignInResult<SignInRoles>>;
   presets(): Promise<SignInResult<SignInPreset[]>>;
   services(): Promise<SignInResult<SignInService[]>>;
   addService(input: SignInServiceInput): Promise<SignInResult<{ service: SignInService }>>;
@@ -577,7 +587,7 @@ export function createSignInApi(options: SignInApiOptions = {}): SignInApi {
     addAccount: (input) => call("POST", "accounts", input),
     changeAccount: (id, input) => call("PATCH", at("accounts", id), input),
     removeAccount: (id) => call("DELETE", at("accounts", id)),
-    roles: () => get("roles", list<string>("roles")),
+    roles: () => get<SignInRoles>("roles"),
     presets: () => get("methods/presets", list<SignInPreset>("presets")),
     services: () => get("methods/oidc", list<SignInService>("services")),
     addService: (input) => call("POST", "methods/oidc", input),

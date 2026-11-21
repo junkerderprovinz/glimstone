@@ -13,6 +13,8 @@ import {
   signInServiceBadge,
   signInServiceMissing,
   signInServiceStatus,
+  signInServiceQuiet,
+  signInRoleItems,
   passkeysAllowedAt,
   signInCardNotice,
   signInPasswordElsewhere,
@@ -43,6 +45,7 @@ const SERVICE: SignInService = {
   tested: false,
   redirect: 'https://app.example/signin/oidc/callback',
   fromConfig: false,
+  role: 'admin',
 };
 
 // Every call answers as a quiet kit would, and `over` changes the ones a test is about.
@@ -86,7 +89,7 @@ function kit(over: Partial<SignInApi> = {}) {
     addAccount: async () => no('forbidden'),
     changeAccount: async (id, input) => ok({ account: { id, name: 'guest', role: 'admin', owner: false, via: 'service', created: '', blocked: !!input.blocked, password: false } }),
     removeAccount: done,
-    roles: async () => ok(['admin']),
+    roles: async () => ok({ roles: ['admin'], serviceRole: 'admin' }),
     presets: async () => ok([{ id: 'pocket-id', scopes: 'openid profile email groups', nameClaim: 'preferred_username', groupsClaim: 'groups' }, { id: 'custom', scopes: 'openid profile email', nameClaim: 'preferred_username', groupsClaim: 'groups' }]),
     services: async () => ok([]),
     addService: async (input) => ok({ service: { ...SERVICE, ...input, id: 'new' } as SignInService }),
@@ -395,6 +398,60 @@ test('an open app sends every lasting way in to the first password', async () =>
   await flow.refresh();
   for (const card of ['twoFactor', 'passkeys', 'tokens', 'services'] as const) assert.deepEqual(signInCardNotice(text, flow.state(), card), text.needsPassword);
   assert.equal(signInPasswordElsewhere(text, flow.state()), null);
+});
+
+test('a new service hands its newcomers the app\'s ordinary role, and the role goes with the save', async () => {
+  const sent: unknown[] = [];
+  const { api } = kit({
+    roles: async () => ok({ roles: ['admin', 'user'], serviceRole: 'user' }),
+    services: async () => ok([{ ...SERVICE, role: 'admin' }]),
+    addService: async (input) => {
+      sent.push(input);
+      return ok({ service: { ...SERVICE, ...input, id: 'new' } as SignInService });
+    },
+    changeService: async (id, input) => {
+      sent.push(input);
+      return ok({ service: { ...SERVICE, ...input, id } as SignInService });
+    },
+  });
+  const words = { ...text, roles: { admin: 'Admin', user: 'Member' } };
+  const { flow } = tile(api, { text: words });
+  await flow.refresh();
+  assert.deepEqual(signInRoleItems(words, flow.state().roles), [{ id: 'admin', label: 'Admin' }, { id: 'user', label: 'Member' }]);
+
+  flow.chooseService('pocket-id');
+  assert.equal(flow.state().draft.role, 'user');
+  assert.equal(signInServiceQuiet(words, flow.state(), 'Pocket ID'), 'Pocket ID decides who may sign in, for example through its groups. Whoever Pocket ID lets in for the first time gets the role Member here.');
+  flow.set('issuer', 'https://id.example');
+  flow.set('clientId', 'client');
+  flow.set('secret', 'secret');
+  await flow.testDraft();
+  assert.equal((sent[0] as { role?: string }).role, 'user');
+
+  flow.editService('s1');
+  assert.equal(flow.state().draft.role, 'admin');
+  flow.set('role', 'user');
+  await flow.saveService();
+  assert.equal((sent[1] as { role?: string }).role, 'user');
+});
+
+test('an app with one role offers no choice and sends none', async () => {
+  let sent: { role?: string } = {};
+  const { api } = kit({
+    addService: async (input) => {
+      sent = input;
+      return ok({ service: { ...SERVICE, ...input, id: 'new' } as SignInService });
+    },
+  });
+  const { flow } = tile(api);
+  await flow.refresh();
+  assert.equal(signInRoleItems(text, flow.state().roles), null);
+  flow.chooseService('pocket-id');
+  flow.set('issuer', 'https://id.example');
+  flow.set('clientId', 'client');
+  flow.set('secret', 'secret');
+  await flow.testDraft();
+  assert.equal('role' in sent, false);
 });
 
 test('a service badge says how it stands', () => {

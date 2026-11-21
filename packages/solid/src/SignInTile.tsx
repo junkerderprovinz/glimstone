@@ -21,8 +21,10 @@ import {
   signInServiceActions,
   signInServiceBadge,
   signInServiceMark,
+  signInRoleItems,
   signInServiceName,
   signInServicePicker,
+  signInServiceQuiet,
   signInServiceStatus,
   signInTestLabel,
   signInTileCards,
@@ -775,8 +777,15 @@ function TileWindow(props: { ctx: Ctx }) {
                     {field("nameClaim", t().nameClaim)}
                     {field("groupsClaim", t().groupsClaim)}
                   </Show>
+                  <Show when={signInRoleItems(text(), s().roles)}>
+                    {(items) => (
+                      <FieldRow label={t().role} data-signin-field="role">
+                        <Selector inline activation="manual" value={s().draft.role} onChange={(v) => flow.set("role", v)} items={items()} />
+                      </FieldRow>
+                    )}
+                  </Show>
                 </FieldRowGroup>
-                <p class="glim-signin-tile-quiet">{fill(t().whoGetsIn, { name: name() })}</p>
+                <p class="glim-signin-tile-quiet">{signInServiceQuiet(text(), s(), name())}</p>
                 <Said said={s().said} />
               </div>
             </PickerWindow>

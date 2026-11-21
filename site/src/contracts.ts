@@ -649,6 +649,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "signin-tile-elsewhere", when: "The account signs in through a sign-in service and has no password here", then: "The password card says which service it signs in through and offers no password. Two-factor and passkeys say they belong to that service, and API tokens work." },
       { id: "signin-tile-config", when: "A sign-in service comes from the app's configuration file", then: "Its row says so in its quiet line and has no Test sign-in, Edit, Remove or switch. After a reset paused it, Turn on again in the row turns it on." },
       { id: "signin-tile-services", when: "The picker has a service picked", then: "Its form asks for the address, the client ID and the secret, shows the redirect address and says that the service decides who gets in. Turn on waits for a passed test sign-in." },
+      { id: "signin-tile-role", when: "The app has more than one role and a service's form shows", then: "A selector offers the roles, set to the app's ordinary role for a new service and to the service's own when it is edited, and the quiet line names the role a newcomer gets." },
       { id: "signin-tile-foot", when: "The service form's test sign-in fails", then: "The reason stands under the form and in the test button's bubble, and every button of the foot stays in one row." },
       { id: "signin-tile-modes", when: "The theme is light, dark or OLED", then: "The cards, rows, fields and windows take that theme's surfaces, and the QR code stays dark on white." },
     ],

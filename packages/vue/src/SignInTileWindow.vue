@@ -8,8 +8,10 @@ import {
   SIGN_IN_TOKEN_LIVES,
   signInRedirectAddress,
   signInScopeItems,
+  signInRoleItems,
   signInServiceName,
   signInServicePicker,
+  signInServiceQuiet,
   signInTestLabel,
   type Catalog,
   type SignInApi,
@@ -130,6 +132,7 @@ const formActions = computed<WindowAction[]>(() => {
       : { label: t.turnOn, labelKey: props.keys.turnOn, primary: true, disabled: true, title: t.mustTest, attrs: { "data-signin-tile": "service-turn-on" } },
   ];
 });
+const roleItems = computed(() => signInRoleItems(props.text, props.state.roles));
 const ownFields = computed<[SignInTileField, string][]>(() => [
   ["scopes", props.text.services.scopes],
   ["nameClaim", props.text.services.nameClaim],
@@ -307,8 +310,11 @@ const ownFields = computed<[SignInTileField, string][]>(() => [
             <TextField mono :model-value="state.draft[key]" :error="err(key)" :data-signin-field="key" @update:model-value="flow.set(key, $event)" />
           </FieldRow>
         </template>
+        <FieldRow v-if="roleItems" :label="text.services.role" data-signin-field="role">
+          <Selector inline activation="manual" :model-value="state.draft.role" :items="roleItems" @update:model-value="flow.set('role', $event)" />
+        </FieldRow>
       </FieldRowGroup>
-      <p class="glim-signin-tile-quiet">{{ fill(text.services.whoGetsIn, { name: form.name }) }}</p>
+      <p class="glim-signin-tile-quiet">{{ signInServiceQuiet(text, state, form.name) }}</p>
       <p v-if="state.said" :class="state.said.ok ? 'glim-signin-tile-said' : 'glim-signin-tile-said glim-signin-tile-said--fail'" :role="state.said.ok ? 'status' : 'alert'">
         {{ state.said.message }}
       </p>

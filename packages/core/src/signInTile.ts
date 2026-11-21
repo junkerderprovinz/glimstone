@@ -21,7 +21,9 @@ import type {
   SignInPasskey,
   SignInPreset,
   SignInRedirectCode,
+  SignInRoles,
   SignInService,
+  SignInServiceInput,
   SignInSession,
   SignInSettings,
   SignInToken,
@@ -229,6 +231,10 @@ export interface SignInTileText {
     formHint: string;
     /** The quiet line in the form: the service decides who gets in. */
     whoGetsIn: string;
+    /** The label of the role a newcomer from the service gets, shown where the app has more than one. */
+    role: string;
+    /** The quiet line on that role, with `{name}` and `{role}`. */
+    roleHint: string;
     issuer: string;
     issuerHint: string;
     clientId: string;
@@ -258,9 +264,9 @@ export interface SignInTileText {
     removed: string;
     blockedDone: string;
     unblocked: string;
-    /** The words for each role the app knows, by the kit's name for it. */
-    roles: Record<string, string>;
   };
+  /** The words for each role the app knows, by the kit's name for it. */
+  roles: Record<string, string>;
   /** How an account or a session came in. `{name}` is the sign-in service. */
   via: Record<SignInVia, string>;
   errors: SignInErrorText;
@@ -286,6 +292,7 @@ const ERRORS_EN = {
   passkeyUnknown: "This passkey can’t sign you in here.",
   serviceUnreachable: "The app can’t reach the sign-in service right now.",
   serviceUntested: "It turns on once a test sign-in has worked.",
+  roleUnknown: "The app doesn’t know that role.",
   fromConfig: "The app’s configuration file sets up this service, so change it there.",
   secretAgain: "The address or the client changed, so enter the client secret again.",
   secretMissing: "Enter the client secret.",
@@ -486,7 +493,9 @@ export const signInTileTextEn: SignInTileText = {
     clear: "Clear the search",
     saved: "set up",
     formHint: "Create an application for the app at {name} and give it the redirect address below. The address, client ID and secret come from there.",
-    whoGetsIn: "{name} decides who may sign in, for example through its groups. Everyone it lets through is an admin here.",
+    whoGetsIn: "{name} decides who may sign in, for example through its groups.",
+    role: "Role for newcomers",
+    roleHint: "Whoever {name} lets in for the first time gets the role {role} here.",
     issuer: "Address",
     issuerHint: "The service’s own address, where it publishes its OpenID details, such as https://id.example.",
     clientId: "Client ID",
@@ -516,8 +525,8 @@ export const signInTileTextEn: SignInTileText = {
     removed: "{name} is removed.",
     blockedDone: "{name} is blocked, and their sessions have ended.",
     unblocked: "{name} is unblocked.",
-    roles: { admin: "Admin" },
   },
+  roles: { admin: "Admin" },
   via: {
     open: "no sign-in",
     password: "Password",
@@ -618,6 +627,8 @@ export interface SignInTileDraft {
   scopes: string;
   nameClaim: string;
   groupsClaim: string;
+  /** The role a newcomer from the service gets. */
+  role: string;
 }
 
 export type SignInTileField = keyof SignInTileDraft;
@@ -634,6 +645,8 @@ export interface SignInTileState {
   services: SignInService[] | null;
   presets: SignInPreset[];
   accounts: SignInAccount[] | null;
+  /** The app's roles and the one a new service hands its newcomers. */
+  roles: SignInRoles;
   /** Passkeys work on the address the page is open on. */
   passkeysHere: boolean;
   window: SignInTileWindow | null;
@@ -738,6 +751,7 @@ const EMPTY_DRAFT: SignInTileDraft = {
   scopes: "",
   nameClaim: "",
   groupsClaim: "",
+  role: "",
 };
 
 const START: SignInTileState = {
@@ -751,6 +765,7 @@ const START: SignInTileState = {
   services: null,
   presets: [],
   accounts: null,
+  roles: { roles: [], serviceRole: "" },
   passkeysHere: false,
   window: null,
   draft: EMPTY_DRAFT,
@@ -841,6 +856,19 @@ export function signInServicePicker<M>(
 /** A service's mark from the catalog, or `null` for one the catalog does not know, which wears a glyph. */
 export function signInServiceMark(catalog: Catalog, provider: string): TileMark | null {
   return catalog.entries.find((e) => e.id === provider)?.mark ?? null;
+}
+
+/** The role choice in the service form, or `null` where the app has one role and nothing to choose. */
+export function signInRoleItems(text: SignInTileText, roles: SignInRoles): { id: string; label: string }[] | null {
+  if (roles.roles.length < 2) return null;
+  return roles.roles.map((id) => ({ id, label: text.roles[id] ?? id }));
+}
+
+/** The service form's quiet line: the service decides who gets in, and which role a newcomer gets here. */
+export function signInServiceQuiet(text: SignInTileText, s: SignInTileState, name: string): string {
+  const role = s.draft.role || s.roles.serviceRole;
+  const who = fill(text.services.whoGetsIn, { name });
+  return role ? `${who} ${fill(text.services.roleHint, { name, role: text.roles[role] ?? role })}` : who;
 }
 
 /** The test sign-in's words as its button says them while it runs and once it came out. */
@@ -942,7 +970,7 @@ export function sessionFacts(text: SignInTileText, s: SignInSession, services: r
 export function accountFacts(text: SignInTileText, a: SignInAccount, services: readonly { id: string; name: string }[] | null, when: When): string[] {
   const t = text.accounts;
   return [
-    text.accounts.roles[a.role] ?? a.role,
+    text.roles[a.role] ?? a.role,
     signInViaWords(text, a.via, a.service, services),
     ...(a.groups?.length ? [fill(t.groups, { groups: a.groups.join(", ") })] : []),
     a.seen ? fill(t.seen, { when: when(a.seen) }) : fill(t.created, { when: when(a.created) }),
@@ -1052,7 +1080,7 @@ export function createSignInTileFlow(options: () => SignInTileOptions): SignInTi
     const need = (...c: SignInTileCard[]) => c.some((x) => cards.includes(x));
     const [offer, me] = await Promise.all([api.options(), api.me()]);
     const mine = me.ok && me.value.via !== "open";
-    const [settings, sessions, tokens, passkeys, services, presets, accounts] = await Promise.all([
+    const [settings, sessions, tokens, passkeys, services, presets, accounts, roles] = await Promise.all([
       need("askPassword") ? api.settings() : null,
       need("sessions") && mine ? api.sessions() : null,
       need("tokens", "password") && mine ? api.tokens() : null,
@@ -1060,6 +1088,7 @@ export function createSignInTileFlow(options: () => SignInTileOptions): SignInTi
       need("services", "password", "sessions", "accounts") ? api.services() : null,
       need("services") ? api.presets() : null,
       need("accounts") ? api.accounts() : null,
+      need("services") ? api.roles() : null,
     ]);
     update({
       loaded: true,
@@ -1072,6 +1101,7 @@ export function createSignInTileFlow(options: () => SignInTileOptions): SignInTi
       services: services?.ok ? services.value : null,
       presets: presets?.ok ? presets.value : [],
       accounts: accounts?.ok ? accounts.value : null,
+      roles: roles?.ok ? roles.value : START.roles,
       passkeysHere: (offer.ok && offer.value.passkeys) || (typeof location !== "undefined" && passkeysAllowedAt(location)),
     });
   }
@@ -1097,6 +1127,20 @@ export function createSignInTileFlow(options: () => SignInTileOptions): SignInTi
     const go = options().onLeave;
     if (go) go(url);
     else location.assign(url);
+  };
+  // What the service form sends. The role goes along only where the app has a choice of them.
+  const serviceBody = (provider: string): SignInServiceInput => {
+    const d = state.draft;
+    return {
+      ...(provider === OWN_SIGN_IN_SERVICE ? { name: d.label.trim() } : {}),
+      issuer: d.issuer.trim(),
+      clientId: d.clientId.trim(),
+      ...(d.secret ? { secret: d.secret } : {}),
+      scopes: d.scopes,
+      nameClaim: d.nameClaim,
+      groupsClaim: d.groupsClaim,
+      ...(state.roles.roles.length > 1 && d.role ? { role: d.role } : {}),
+    };
   };
   // The service the form stored, so a second test changes it instead of adding another.
   let stored: string | null = null;
@@ -1313,7 +1357,16 @@ export function createSignInTileFlow(options: () => SignInTileOptions): SignInTi
       stored = null;
       open(
         { kind: "serviceForm", provider },
-        { label: "", issuer: "", clientId: "", secret: "", scopes: p?.scopes ?? "openid profile email", nameClaim: p?.nameClaim ?? "preferred_username", groupsClaim: p?.groupsClaim ?? "groups" },
+        {
+          label: "",
+          issuer: "",
+          clientId: "",
+          secret: "",
+          scopes: p?.scopes ?? "openid profile email",
+          nameClaim: p?.nameClaim ?? "preferred_username",
+          groupsClaim: p?.groupsClaim ?? "groups",
+          role: state.roles.serviceRole,
+        },
       );
     },
     editService(id) {
@@ -1322,7 +1375,7 @@ export function createSignInTileFlow(options: () => SignInTileOptions): SignInTi
       stored = id;
       open(
         { kind: "serviceForm", provider: s.provider, edit: id },
-        { label: s.name, issuer: s.issuer, clientId: s.clientId, secret: "", scopes: s.scopes, nameClaim: s.nameClaim, groupsClaim: s.groupsClaim },
+        { label: s.name, issuer: s.issuer, clientId: s.clientId, secret: "", scopes: s.scopes, nameClaim: s.nameClaim, groupsClaim: s.groupsClaim, role: s.role },
       );
     },
     testDraft: () =>
@@ -1334,16 +1387,7 @@ export function createSignInTileFlow(options: () => SignInTileOptions): SignInTi
         if (missing) return invalid(missing, t.missing, "service-test");
         const { api } = options();
         const d = state.draft;
-        const own = w.provider === OWN_SIGN_IN_SERVICE;
-        const body = {
-          ...(own ? { name: d.label.trim() } : {}),
-          issuer: d.issuer.trim(),
-          clientId: d.clientId.trim(),
-          ...(d.secret ? { secret: d.secret } : {}),
-          scopes: d.scopes,
-          nameClaim: d.nameClaim,
-          groupsClaim: d.groupsClaim,
-        };
+        const body = serviceBody(w.provider);
         update({ formTest: { busy: true }, said: null });
         const saved = stored === null ? await api.addService({ provider: w.provider, ...body }) : await api.changeService(stored, body);
         const report = (message: string) => update({ formTest: { tone: "danger", title: message }, said: { ok: false, message }, ...refuse("service-test") });
@@ -1362,18 +1406,10 @@ export function createSignInTileFlow(options: () => SignInTileOptions): SignInTi
         if (w?.kind !== "serviceForm" || !w.edit) return;
         const missing = signInServiceMissing(state.draft, w.provider, true);
         if (missing) return invalid(missing, text().services.missing, "service-save");
-        const d = state.draft;
-        const r = await options().api.changeService(w.edit, {
-          ...(w.provider === OWN_SIGN_IN_SERVICE ? { name: d.label.trim() } : {}),
-          issuer: d.issuer.trim(),
-          clientId: d.clientId.trim(),
-          ...(d.secret ? { secret: d.secret } : {}),
-          scopes: d.scopes,
-          nameClaim: d.nameClaim,
-          groupsClaim: d.groupsClaim,
-        });
+        const r = await options().api.changeService(w.edit, serviceBody(w.provider));
         if (!r.ok) {
           if (r.error === "secretAgain") return invalid("secret", say(r), "service-save");
+          if (r.error === "roleUnknown") return invalid("role", say(r), "service-save");
           return failed(r, "service-save");
         }
         flow.close();

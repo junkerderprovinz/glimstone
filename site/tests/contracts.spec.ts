@@ -4798,6 +4798,22 @@ test.describe("SignInTile", () => {
     await expect(form.getByRole("button", { name: "Turn on" })).toBeDisabled();
   });
 
+  test("[signin-tile-role] a new service hands its newcomers the ordinary role, and an edited one its own", async ({ page }) => {
+    await open(page, "/components/sign-in-tile");
+    await cardOf(page, "services").getByRole("button", { name: "Add a sign-in service" }).click();
+    await dialog(page, "Add a sign-in service").getByRole("button", { name: "Authelia" }).click();
+    const form = dialog(page, "Authelia");
+    const role = form.locator('[data-signin-field="role"]');
+    await expect(role.getByRole("radio", { name: "Member" })).toHaveAttribute("aria-checked", "true");
+    await expect(form.locator(".glim-signin-tile-quiet")).toContainText("gets the role Member here");
+    await role.getByRole("radio", { name: "Admin" }).click();
+    await expect(form.locator(".glim-signin-tile-quiet")).toContainText("gets the role Admin here");
+    await form.getByRole("button", { name: "Cancel" }).click();
+    const row = cardOf(page, "services").getByRole("group", { name: "Pocket ID" });
+    await row.locator('[data-connection="edit"]').click();
+    await expect(dialog(page, "Pocket ID").locator('[data-signin-field="role"]').getByRole("radio", { name: "Admin" })).toHaveAttribute("aria-checked", "true");
+  });
+
   test("[signin-tile-foot] a failed test reports under the form, and the foot keeps one row", async ({ page }) => {
     await open(page, "/components/sign-in-tile");
     await cardOf(page, "services").getByRole("button", { name: "Add a sign-in service" }).click();

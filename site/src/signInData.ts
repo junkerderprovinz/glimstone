@@ -22,7 +22,7 @@ export const PASSWORD = "letmein";
 
 export { IDENTITY_PROVIDERS };
 
-export const TILE_TEXT = signInTileTextEn;
+export const TILE_TEXT = { ...signInTileTextEn, roles: { admin: "Admin", user: "Member" } };
 
 const FORMAT = new Intl.DateTimeFormat("en", { dateStyle: "medium", timeStyle: "short", timeZone: "UTC" });
 
@@ -53,6 +53,7 @@ function service(id: string, provider: string, name: string, on: boolean): SignI
     testedAt: on ? "2026-11-18T09:12:00Z" : undefined,
     redirect: "https://glimstone.example/signin/oidc/callback",
     fromConfig: false,
+    role: "admin",
   };
 }
 
@@ -255,7 +256,7 @@ export function demoKit(scene: DemoScene = "signedIn"): SignInApi & { leave(url:
       accounts = accounts.filter((a) => a.id !== id);
       return change({});
     },
-    roles: async () => ok(["admin"]),
+    roles: async () => ok({ roles: ["admin", "user"], serviceRole: "user" }),
     presets: async () =>
       ok([
         ...IDENTITY_PROVIDERS.entries.map((e) => ({ id: e.id, scopes: "openid profile email groups", nameClaim: "preferred_username", groupsClaim: "groups" })),
@@ -270,6 +271,7 @@ export function demoKit(scene: DemoScene = "signedIn"): SignInApi & { leave(url:
         return change({ service: made });
       }),
     async changeService(id, input) {
+      if (input.role !== undefined && !["admin", "user"].includes(input.role)) return no("roleUnknown", 400);
       const was = services.find((s) => s.id === id);
       if (!was) return no("notFound", 404);
       if (was.fromConfig && (input.on !== true || Object.keys(input).length > 1)) return no("fromConfig", 409);

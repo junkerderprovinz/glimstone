@@ -7,8 +7,10 @@
     SIGN_IN_TOKEN_LIVES,
     signInRedirectAddress,
     signInScopeItems,
+    signInRoleItems,
     signInServiceName,
     signInServicePicker,
+    signInServiceQuiet,
     signInTestLabel,
     type Catalog,
     type SignInApi,
@@ -295,8 +297,14 @@
           {@render field("nameClaim", t.nameClaim)}
           {@render field("groupsClaim", t.groupsClaim)}
         {/if}
+        {@const roleItems = signInRoleItems(text, s.roles)}
+        {#if roleItems}
+          <FieldRow label={t.role} data-signin-field="role">
+            <Selector inline activation="manual" value={s.draft.role} onChange={(v) => flow.set("role", v)} items={roleItems} />
+          </FieldRow>
+        {/if}
       </FieldRowGroup>
-      <p class="glim-signin-tile-quiet">{fill(t.whoGetsIn, { name })}</p>
+      <p class="glim-signin-tile-quiet">{signInServiceQuiet(text, s, name)}</p>
       {@render said()}
     </div>
   </PickerWindow>

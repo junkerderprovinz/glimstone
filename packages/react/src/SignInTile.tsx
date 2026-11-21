@@ -20,8 +20,10 @@ import {
   signInServiceActions,
   signInServiceBadge,
   signInServiceMark,
+  signInRoleItems,
   signInServiceName,
   signInServicePicker,
+  signInServiceQuiet,
   signInServiceStatus,
   signInTestLabel,
   signInTileCards,
@@ -648,6 +650,7 @@ function TileWindow({ ctx, api, providers }: { ctx: Ctx; api: SignInApi; provide
   const own = w.provider === OWN_SIGN_IN_SERVICE;
   const name = signInServiceName(text, w.provider, s.draft.label, providers.entries.find((e) => e.id === w.provider)?.name);
   const editing = s.services?.find((x) => x.id === w.edit);
+  const roleItems = signInRoleItems(text, s.roles);
   const test = s.formTest;
   const field = (key: SignInTileField, label: string, hint?: string) => (
     <FieldRow label={label} hint={hint}>
@@ -691,8 +694,13 @@ function TileWindow({ ctx, api, providers }: { ctx: Ctx; api: SignInApi; provide
           {own && field("scopes", t.scopes)}
           {own && field("nameClaim", t.nameClaim)}
           {own && field("groupsClaim", t.groupsClaim)}
+          {roleItems && (
+            <FieldRow label={t.role} data-signin-field="role">
+              <Selector inline activation="manual" value={s.draft.role} onChange={(v) => flow.set("role", v)} items={roleItems} />
+            </FieldRow>
+          )}
         </FieldRowGroup>
-        <p className="glim-signin-tile-quiet">{fill(t.whoGetsIn, { name })}</p>
+        <p className="glim-signin-tile-quiet">{signInServiceQuiet(text, s, name)}</p>
         <Said said={s.said} />
       </div>
     </PickerWindow>
