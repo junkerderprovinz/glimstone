@@ -21,8 +21,8 @@ The settings of the kit's sign-in come as one tile, its password question as a s
 ## ✨ Added
 
 - **`createSignInApi()`** in the core: a client for the kit's sign-in contract under any root path, with the WebAuthn exchange for a passkey offered in the password field and for a new passkey, the question before a change that wants a fresh sign-in (`api.reauth`), and a report after every change. `takeSignInCode()` takes the code a sign-in service sent back out of the address.
-- **`SignInTile`** in React and Vue: the cards Password, Asking for the password, Two-factor authentication, Passkeys, Sessions, API tokens, Sign-in services and Accounts, with their windows. The flow is `createSignInTileFlow()` in the core.
-- **`SignInReauthWindow`** in React and Vue: asks for the password and runs the waiting change again.
+- **`SignInTile`** in React, Vue and Solid: the cards Password, Asking for the password, Two-factor authentication, Passkeys, Sessions, API tokens, Sign-in services and Accounts, with their windows. The flow is `createSignInTileFlow()` in the core.
+- **`SignInReauthWindow`** in React, Vue and Solid: asks for the password and runs the waiting change again.
 - **`SignInCard`** takes `onPasskeyOffer`, `service`, `onService` and `error` in React, Vue, Solid and Svelte. The core adds `signInCardHandlers()`, `passkeyOfferKey()` and `restart` on `SignInAnswer` for a code step that ran out.
 
 ## 🎨 Design
