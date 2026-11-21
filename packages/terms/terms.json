@@ -3611,7 +3611,7 @@
       }
     },
     "signIn": {
-      "definition": "Proving to an app who you are, with a password, a passkey, a sign-in service or the fortress. Each sign-in starts a session.",
+      "definition": "Proving to an app who you are, with a password, a passkey or a sign-in service. Each sign-in starts a session.",
       "en": {
         "singular": "sign-in",
         "plural": "sign-ins",
