@@ -5,6 +5,7 @@ import type { InfoComponentsCardProps } from "./info";
 import Button from "./Button.vue";
 import Card from "./Card.vue";
 import FieldRow from "./FieldRow.vue";
+import InfoBubble from "./InfoBubble.vue";
 import Toggle from "./Toggle.vue";
 
 // The second card of the Info tile: every version the app is made of or brings
@@ -28,7 +29,7 @@ function open(e: MouseEvent, href: string) {
       <li v-for="{ row, link } in sorted" :key="row.name" class="glim-version-row">
         <span class="glim-version-name">
           <span class="glim-version-part">{{ row.name }}</span>
-          <span v-if="row.sub" class="glim-version-sub">{{ row.sub }}</span>
+          <InfoBubble v-if="row.hint" :tip="row.hint" />
         </span>
         <span v-if="row.status" class="glim-version-status" :data-tone="row.tone">{{ row.status }}</span>
         <Button v-if="row.action" :label="row.action.label" :label-key="row.action.labelKey" @click="row.action.onClick()" />

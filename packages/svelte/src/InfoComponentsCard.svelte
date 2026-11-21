@@ -27,6 +27,7 @@
   import Button from "./Button.svelte";
   import Card from "./Card.svelte";
   import FieldRow from "./FieldRow.svelte";
+  import InfoBubble from "./InfoBubble.svelte";
   import Toggle from "./Toggle.svelte";
 
   // The second card of the Info tile: every version the app is made of or
@@ -53,7 +54,7 @@
       <li class="glim-version-row">
         <span class="glim-version-name">
           <span class="glim-version-part">{row.name}</span>
-          {#if row.sub}<span class="glim-version-sub">{row.sub}</span>{/if}
+          {#if row.hint}<InfoBubble tip={row.hint} />{/if}
         </span>
         {#if row.status}<span class="glim-version-status" data-tone={row.tone}>{row.status}</span>{/if}
         {#if row.action}

@@ -137,4 +137,5 @@ test('the design language row carries the version of the package it comes from',
   const { GLIMSTONE_VERSION } = await import('../src/version.ts');
   assert.deepEqual(numberLink(designRow(COMPONENTS_CARD_TEXT)), { shown: GLIMSTONE_VERSION, released: true, href: 'https://github.com/junkerderprovinz/glimstone/releases/latest' });
   assert.equal(designRow(COMPONENTS_CARD_TEXT).kind, 'design');
+  assert.equal(designRow(componentText('de').componentsCard).hint, 'Design-System');
 });

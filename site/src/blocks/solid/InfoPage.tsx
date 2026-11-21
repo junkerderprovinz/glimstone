@@ -30,8 +30,8 @@ export default function InfoPage() {
           text: COMPONENTS_CARD_TEXT,
           name: "Your app",
           rows: [
-            { name: "rclone", sub: "Cloud transfers", version: "1.75.2" },
-            { name: "Installer", sub: COMPONENTS_CARD_TEXT.installer, version: "1.2.5", kind: "installer" },
+            { name: "rclone", hint: "Cloud transfers", version: "1.75.2" },
+            { name: "Installer", hint: COMPONENTS_CARD_TEXT.installer, version: "1.2.5", kind: "installer" },
           ],
         }}
         help={{

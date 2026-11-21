@@ -62,9 +62,9 @@ export interface ComponentsCardText {
   auto: string;
   autoHint: string;
   update: string;
-  /** The sub-line under the design language's row. */
+  /** What the design language's row is, in its (i). */
   design: string;
-  /** The sub-line under the installer's row, for a desktop build. */
+  /** What the installer's row is, in its (i), for a desktop build. */
   installer: string;
   unreleased: (version: string) => string;
 }
@@ -201,6 +201,8 @@ export type ComponentKind = "part" | "tool" | "design" | "installer";
 
 export interface ComponentRow extends VersionRow {
   kind?: ComponentKind;
+  /** What the component is, in the (i) beside its name. */
+  hint?: string;
   /** Where the newest release is told about, for a project that publishes no
    *  releases in its repository, such as a download page. */
   releasePage?: string;
@@ -233,7 +235,7 @@ export function componentRows(rows: ComponentRow[]): ComponentRow[] {
 
 /** The design language's row, read from the package that ships it, so it is never typed in. */
 export function designRow(text: ComponentsCardText): ComponentRow {
-  return { name: "GlimStone", sub: text.design, version: GLIMSTONE_VERSION, repoUrl: GLIMSTONE_REPO, kind: "design" };
+  return { name: "GlimStone", hint: text.design, version: GLIMSTONE_VERSION, repoUrl: GLIMSTONE_REPO, kind: "design" };
 }
 
 /**

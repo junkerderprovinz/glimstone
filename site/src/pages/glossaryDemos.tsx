@@ -1716,7 +1716,7 @@ function InfoTileDemo() {
         components={{
           text: words.componentsCard,
           name: t("Example app", "Beispiel-App"),
-          rows: [{ name: "rclone", sub: t("Cloud transfers", "Übertragung in die Cloud"), version: "1.75.2" }],
+          rows: [{ name: "rclone", hint: t("Cloud transfers", "Übertragung in die Cloud"), version: "1.75.2" }],
           openUrl: nothing,
         }}
         help={{

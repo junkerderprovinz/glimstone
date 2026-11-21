@@ -26,6 +26,7 @@ import {
 import { Button } from "./Button.tsx";
 import { Card } from "./Card.tsx";
 import { FieldRow } from "./FieldRow.tsx";
+import { InfoBubble } from "./InfoBubble.tsx";
 import { ReadmeButton } from "./ReadmeButton.tsx";
 import { Toggle } from "./Toggle.tsx";
 
@@ -242,9 +243,7 @@ export function InfoComponentsCard(props: InfoComponentsCardProps) {
             <li class="glim-version-row">
               <span class="glim-version-name">
                 <span class="glim-version-part">{row.name}</span>
-                <Show when={row.sub}>
-                  <span class="glim-version-sub">{row.sub}</span>
-                </Show>
+                <Show when={row.hint}>{(hint) => <InfoBubble tip={hint()} />}</Show>
               </span>
               <Show when={row.status}>
                 <span class="glim-version-status" data-tone={row.tone}>
