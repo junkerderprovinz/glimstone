@@ -231,8 +231,11 @@ export function designRow(text: ComponentsCardText): ComponentRow {
 /**
  * The number and where it leads. Every version reads as plain text and opens
  * the newest release of its project, so a number never leads to a page a
- * folded patch tag has taken away.
+ * folded patch tag has taken away. Only a row with a repository can be an
+ * unreleased build: a program's own numbering, such as "26.01" or "48637",
+ * is shown as it comes.
  */
 export function numberLink(row: VersionRow): { shown: string; released: boolean; href?: string } {
-  return versionLink({ ...row, latest: true });
+  const link = versionLink({ ...row, latest: true });
+  return row.repoUrl ? link : { ...link, released: true };
 }

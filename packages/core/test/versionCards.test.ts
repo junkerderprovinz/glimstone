@@ -112,6 +112,12 @@ test('every number opens the newest release of its project, and an unreleased bu
   assert.equal(numberLink({ name: 'Tool', version: '1.0.0' }).href, undefined);
 });
 
+test("a program's own numbering without a repository is shown as it comes, not as an unreleased build", () => {
+  assert.deepEqual(numberLink({ name: 'Archiver', version: '26.01' }), { shown: '26.01', released: true });
+  assert.deepEqual(numberLink({ name: 'Backend', version: '48637' }), { shown: '48637', released: true });
+  assert.equal(numberLink({ name: 'App', version: 'dev', repoUrl: 'https://example.org/app' }).released, false);
+});
+
 test('the design language row carries the version of the package it comes from', async () => {
   const { GLIMSTONE_VERSION } = await import('../src/version.ts');
   assert.deepEqual(numberLink(designRow(COMPONENTS_CARD_TEXT)), { shown: GLIMSTONE_VERSION, released: true, href: 'https://github.com/junkerderprovinz/glimstone/releases/latest' });
