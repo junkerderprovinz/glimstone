@@ -266,8 +266,10 @@ export function InfoComponentsCard({
                   {row.status}
                 </span>
               )}
-              {row.action && <Button label={row.action.label} labelKey={row.action.labelKey} onClick={row.action.onClick} />}
-              <VersionNumber row={row} unreleased={text.unreleased} openUrl={openUrl} />
+              <span className="glim-version-tail">
+                {row.action && <Button label={row.action.label} labelKey={row.action.labelKey} onClick={row.action.onClick} />}
+                <VersionNumber row={row} unreleased={text.unreleased} openUrl={openUrl} />
+              </span>
             </span>
           </li>
         ))}

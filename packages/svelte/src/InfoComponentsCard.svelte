@@ -58,15 +58,17 @@
         </span>
         <span class="glim-version-end">
           {#if row.status}<span class="glim-version-status" data-tone={row.tone}>{row.status}</span>{/if}
-          {#if row.action}
-            {@const a = row.action}
-            <Button label={a.label} labelKey={a.labelKey} onClick={() => a.onClick()} />
-          {/if}
-          {#if link.href}
-            <a href={link.href} target="_blank" rel="noopener noreferrer" class="glim-num glim-version-number" onclick={(e) => open(e, link.href!)}>{link.shown}</a>
-          {:else}
-            <span class="glim-num glim-version-number">{link.released ? link.shown : text.unreleased(link.shown)}</span>
-          {/if}
+          <span class="glim-version-tail">
+            {#if row.action}
+              {@const a = row.action}
+              <Button label={a.label} labelKey={a.labelKey} onClick={() => a.onClick()} />
+            {/if}
+            {#if link.href}
+              <a href={link.href} target="_blank" rel="noopener noreferrer" class="glim-num glim-version-number" onclick={(e) => open(e, link.href!)}>{link.shown}</a>
+            {:else}
+              <span class="glim-num glim-version-number">{link.released ? link.shown : text.unreleased(link.shown)}</span>
+            {/if}
+          </span>
         </span>
       </li>
     {/each}

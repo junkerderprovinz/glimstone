@@ -251,8 +251,10 @@ export function InfoComponentsCard(props: InfoComponentsCardProps) {
                     {row.status}
                   </span>
                 </Show>
-                <Show when={row.action}>{(a) => <Button label={a().label} labelKey={a().labelKey} onClick={() => a().onClick()} />}</Show>
-                <VersionNumber row={row} unreleased={merged.text.unreleased} openUrl={merged.openUrl} />
+                <span class="glim-version-tail">
+                  <Show when={row.action}>{(a) => <Button label={a().label} labelKey={a().labelKey} onClick={() => a().onClick()} />}</Show>
+                  <VersionNumber row={row} unreleased={merged.text.unreleased} openUrl={merged.openUrl} />
+                </span>
               </span>
             </li>
           )}
