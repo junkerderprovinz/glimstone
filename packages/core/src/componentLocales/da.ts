@@ -55,7 +55,6 @@ export const da: ComponentWords = {
     current: "Opdateret",
     checked: "Sidst kontrolleret {when}",
     available: "Opdatering til {version} tilgængelig",
-    newIn: "Nyt i {version}",
     failed: "Kontrollen mislykkedes",
     downloading: "Henter … {percent}",
     ready: "{version} er klar",

@@ -66,7 +66,6 @@ export const ca: ComponentWords = {
     current: "Al dia",
     checked: "Darrera comprovació {when}",
     available: "Actualització a {version} disponible",
-    newIn: "Novetats de la {version}",
     failed: "La comprovació ha fallat",
     downloading: "S'està baixant … {percent}",
     ready: "La {version} està a punt",

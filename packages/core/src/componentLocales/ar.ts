@@ -90,7 +90,6 @@ export const ar: ComponentWords = {
     current: "محدَّث",
     checked: "آخر فحص {when}",
     available: "التحديث إلى {version} متاح",
-    newIn: "الجديد في {version}",
     failed: "فشل الفحص",
     downloading: "جارٍ التنزيل … {percent}",
     ready: "{version} جاهز",

@@ -27,11 +27,26 @@ test('a current app says so, and when it last looked', () => {
 
 test('each state has its own line and tone', () => {
   assert.equal(updateLine({ kind: 'checking' }, T).tone, 'neutral');
-  assert.deepEqual(updateLine({ kind: 'available', version: '2.10.0' }, T), { line: 'Update to 2.10.0 available', tone: 'warn' });
+  assert.equal(updateLine({ kind: 'available', version: '2.10.0' }, T).line, 'Update to 2.10.0 available');
+  assert.equal(updateLine({ kind: 'available', version: '2.10.0' }, T).tone, 'warn');
   assert.equal(updateLine({ kind: 'downloading', percent: 42 }, T).line, 'Downloading … 42%');
-  assert.deepEqual(updateLine({ kind: 'ready', version: '1.4.0' }, T), { line: '1.4.0 is ready', tone: 'ok' });
+  assert.equal(updateLine({ kind: 'ready', version: '1.4.0' }, T).line, '1.4.0 is ready');
   assert.deepEqual(updateLine({ kind: 'failed', reason: 'GitHub cannot be reached.' }, T), { line: 'Check failed', tone: 'fail', note: 'GitHub cannot be reached.' });
   assert.equal(updateLine({ kind: 'store', store: 'F-Droid' }, T).line, 'Updates come through F-Droid.');
+});
+
+test('a line that names the new version comes split around it, so the number can be the link', () => {
+  assert.deepEqual(updateLine({ kind: 'available', version: '2.10.0' }, T).version, { number: '2.10.0', before: 'Update to ', after: ' available' });
+  assert.deepEqual(updateLine({ kind: 'ready', version: '1.4.0' }, componentText('ja').versionCard).version, { number: '1.4.0', before: '', after: ' の準備ができました' });
+  assert.equal(updateLine({ kind: 'checking' }, T).version, undefined);
+});
+
+test('every language names the new version once, so the line can carry its link', async () => {
+  const { COMPONENT_LANGUAGES } = await import('../src/componentTexts.ts');
+  for (const lang of COMPONENT_LANGUAGES) {
+    const words = componentText(lang).versionCard;
+    for (const line of [words.available('9.8.7'), words.ready('9.8.7')]) assert.equal(line.split('9.8.7').length, 2, `${lang}: ${line}`);
+  }
 });
 
 test('the one action follows the route and appears only once there is a new version', () => {
@@ -110,6 +125,18 @@ test('every number opens the newest release of its project, and an unreleased bu
   assert.equal(numberLink({ name: 'App', version: '2.9.4+branch.1a2b3c', repoUrl: 'https://example.org/app' }).href, 'https://example.org/app/releases/latest');
   assert.equal(numberLink({ name: 'App', version: 'dev', repoUrl: 'https://example.org/app' }).href, undefined);
   assert.equal(numberLink({ name: 'Tool', version: '1.0.0' }).href, undefined);
+});
+
+test('a release numbered without a patch part still links its project', () => {
+  assert.deepEqual(numberLink({ name: 'Archiver', version: '26.01', repoUrl: 'https://example.org/archiver' }), {
+    shown: '26.01',
+    released: true,
+    href: 'https://example.org/archiver/releases/latest',
+  });
+});
+
+test('a project that publishes its releases elsewhere links that page', () => {
+  assert.deepEqual(numberLink({ name: 'Tool', version: '9.0.2', releasePage: 'https://example.org/download' }), { shown: '9.0.2', released: true, href: 'https://example.org/download' });
 });
 
 test("a program's own numbering without a repository is shown as it comes, not as an unreleased build", () => {

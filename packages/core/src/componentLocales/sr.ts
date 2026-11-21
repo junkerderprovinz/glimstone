@@ -66,7 +66,6 @@ export const sr: ComponentWords = {
     current: "Ажурно",
     checked: "Последња провера {when}",
     available: "Доступно ажурирање на {version}",
-    newIn: "Ново у {version}",
     failed: "Провера није успела",
     downloading: "Преузима се … {percent}",
     ready: "{version} је спремна",

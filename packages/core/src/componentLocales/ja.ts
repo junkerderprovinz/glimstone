@@ -55,7 +55,6 @@ export const ja: ComponentWords = {
     current: "最新です",
     checked: "最終確認 {when}",
     available: "{version} へのアップデートがあります",
-    newIn: "{version} の新機能",
     failed: "確認できませんでした",
     downloading: "ダウンロード中 … {percent}",
     ready: "{version} の準備ができました",

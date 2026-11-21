@@ -61,7 +61,6 @@ export const he: ComponentWords = {
     current: "מעודכן",
     checked: "בדיקה אחרונה {when}",
     available: "עדכון לגרסה {version} זמין",
-    newIn: "חדש בגרסה {version}",
     failed: "הבדיקה נכשלה",
     downloading: "מוריד … {percent}",
     ready: "גרסה {version} מוכנה",

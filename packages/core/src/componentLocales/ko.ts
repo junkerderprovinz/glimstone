@@ -55,7 +55,6 @@ export const ko: ComponentWords = {
     current: "최신 상태",
     checked: "마지막 확인 {when}",
     available: "{version}(으)로 업데이트할 수 있음",
-    newIn: "{version}의 새로운 기능",
     failed: "확인하지 못함",
     downloading: "다운로드 중 … {percent}",
     ready: "{version} 준비 완료",

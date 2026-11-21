@@ -71,7 +71,6 @@ export const lt: ComponentWords = {
     current: "Naujausia",
     checked: "Paskutinį kartą tikrinta {when}",
     available: "Galima atnaujinti į {version}",
-    newIn: "Kas nauja {version}",
     failed: "Patikrinti nepavyko",
     downloading: "Atsisiunčiama … {percent}",
     ready: "{version} paruošta",

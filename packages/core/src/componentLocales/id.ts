@@ -65,7 +65,6 @@ export const id: ComponentWords = {
     current: "Terbaru",
     checked: "Terakhir diperiksa {when}",
     available: "Pembaruan ke {version} tersedia",
-    newIn: "Baru di {version}",
     failed: "Pemeriksaan gagal",
     downloading: "Mengunduh … {percent}",
     ready: "{version} siap",

@@ -72,7 +72,6 @@ export const uk: ComponentWords = {
     current: "Актуально",
     checked: "Остання перевірка {when}",
     available: "Доступне оновлення до {version}",
-    newIn: "Нове у {version}",
     failed: "Перевірка не вдалася",
     downloading: "Завантаження … {percent}",
     ready: "{version} готова",

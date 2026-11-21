@@ -95,22 +95,25 @@
     {/if}
   </div>
   <p class="glim-version-state" data-tone={face.tone} role="status">
-    <span class="glim-version-line">{face.line}</span>
+    <span class="glim-version-line">
+      {#if face.version}
+        {@const link = numberLink({ name, version: face.version.number, repoUrl })}
+        {face.version.before}{#if link.href}<a href={link.href} target="_blank" rel="noopener noreferrer" class="glim-num glim-version-number" onclick={(e) => open(e, link.href!)}>{link.shown}</a>{:else}<span class="glim-num glim-version-number">{link.shown}</span>{/if}{face.version.after}
+      {:else}
+        {face.line}
+      {/if}
+    </span>
     {#if face.note}<span class="glim-version-note">{face.note}</span>{/if}
-    {#if state.kind === "available" && repoUrl}
-      {@const href = `${repoUrl}/releases/latest`}
-      <a {href} target="_blank" rel="noopener noreferrer" class="glim-text-action" onclick={(e) => open(e, href)}>{text.newIn(state.version)}</a>
-    {/if}
   </p>
   {#if state.kind === "downloading"}
     <div class="glim-version-progress" role="progressbar" aria-label={face.line} aria-valuemin={0} aria-valuemax={100} aria-valuenow={state.percent}>
       <span style:width={`${state.percent}%`}></span>
     </div>
   {/if}
-  {#if action}
-    <div class="glim-version-actions">
-      <Button label={action.label} labelKey={action.labelKey} tone={action.kind === "guide" ? "neutral" : "accent"} onClick={press} />
-    </div>
+  {#if toggle && autoUpdate !== undefined}
+    <FieldRow label={toggle.label} hint={withApp(toggle.hint, name)}>
+      <Toggle checked={autoUpdate} onChange={flip} label={toggle.label} hideLabel />
+    </FieldRow>
   {/if}
   <div class="glim-version-links">
     <button type="button" class="glim-text-action" onclick={() => onWhatsNew()}>
@@ -120,10 +123,8 @@
     {#if onCheck && route !== "store"}
       <button type="button" class="glim-text-action" disabled={!canCheck(route, state)} onclick={() => onCheck?.()}>{text.check}</button>
     {/if}
+    {#if action}
+      <Button label={action.label} labelKey={action.labelKey} tone={action.kind === "guide" ? "neutral" : "accent"} onClick={press} />
+    {/if}
   </div>
-  {#if toggle && autoUpdate !== undefined}
-    <FieldRow label={toggle.label} hint={withApp(toggle.hint, name)}>
-      <Toggle checked={autoUpdate} onChange={flip} label={toggle.label} hideLabel />
-    </FieldRow>
-  {/if}
 </Card>

@@ -71,7 +71,6 @@ export const es: ComponentWords = {
     current: "Al día",
     checked: "Última comprobación {when}",
     available: "Actualización a {version} disponible",
-    newIn: "Novedades de {version}",
     failed: "La comprobación falló",
     downloading: "Descargando … {percent}",
     ready: "{version} está lista",

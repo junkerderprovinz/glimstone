@@ -60,7 +60,6 @@ export const vi: ComponentWords = {
     current: "Đã cập nhật",
     checked: "Kiểm tra lần cuối {when}",
     available: "Có bản cập nhật lên {version}",
-    newIn: "Mới trong {version}",
     failed: "Kiểm tra thất bại",
     downloading: "Đang tải xuống … {percent}",
     ready: "{version} đã sẵn sàng",

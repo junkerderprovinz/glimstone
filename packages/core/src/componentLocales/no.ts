@@ -60,7 +60,6 @@ export const no: ComponentWords = {
     current: "Oppdatert",
     checked: "Sist sjekket {when}",
     available: "Oppdatering til {version} er tilgjengelig",
-    newIn: "Nytt i {version}",
     failed: "Sjekken mislyktes",
     downloading: "Laster ned … {percent}",
     ready: "{version} er klar",

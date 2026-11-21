@@ -153,10 +153,6 @@ export function InfoVersionCard(props: InfoVersionCardProps) {
   const face = createMemo(() => updateLine(merged.state, merged.text));
   const action = createMemo(() => updateAction(merged.route, merged.state, merged.text));
   const toggle = createMemo(() => autoSwitch(merged.route, merged.text));
-  const found = () => {
-    const s = merged.state;
-    return s.kind === "available" && merged.repoUrl ? { version: s.version, href: `${merged.repoUrl}/releases/latest` } : undefined;
-  };
   const progress = () => {
     const s = merged.state;
     return s.kind === "downloading" ? s.percent : undefined;
@@ -174,16 +170,19 @@ export function InfoVersionCard(props: InfoVersionCardProps) {
         <VersionNumber row={{ name: merged.name, version: merged.version, repoUrl: merged.repoUrl }} unreleased={merged.text.unreleased} openUrl={merged.openUrl} />
       </div>
       <p class="glim-version-state" data-tone={face().tone} role="status">
-        <span class="glim-version-line">{face().line}</span>
+        <span class="glim-version-line">
+          <Show when={face().version} fallback={face().line}>
+            {(v) => (
+              <>
+                {v().before}
+                <VersionNumber row={{ name: merged.name, version: v().number, repoUrl: merged.repoUrl }} unreleased={merged.text.unreleased} openUrl={merged.openUrl} />
+                {v().after}
+              </>
+            )}
+          </Show>
+        </span>
         <Show when={face().note}>
           <span class="glim-version-note">{face().note}</span>
-        </Show>
-        <Show when={found()}>
-          {(f) => (
-            <TextLink href={f().href} openUrl={merged.openUrl}>
-              {merged.text.newIn(f().version)}
-            </TextLink>
-          )}
         </Show>
       </p>
       <Show when={progress() !== undefined}>
@@ -191,11 +190,11 @@ export function InfoVersionCard(props: InfoVersionCardProps) {
           <span style={{ width: `${progress()}%` }} />
         </div>
       </Show>
-      <Show when={action()}>
-        {(a) => (
-          <div class="glim-version-actions">
-            <Button label={a().label} labelKey={a().labelKey} tone={a().kind === "guide" ? "neutral" : "accent"} onClick={press} />
-          </div>
+      <Show when={toggle() && merged.autoUpdate !== undefined ? toggle() : undefined}>
+        {(t) => (
+          <FieldRow label={t().label} hint={withApp(t().hint, merged.name)}>
+            <Toggle checked={merged.autoUpdate ?? false} onChange={(on) => merged.onAutoUpdateChange?.(on)} label={t().label} hideLabel />
+          </FieldRow>
         )}
       </Show>
       <div class="glim-version-links">
@@ -208,14 +207,10 @@ export function InfoVersionCard(props: InfoVersionCardProps) {
             {merged.text.check}
           </button>
         </Show>
+        <Show when={action()}>
+          {(a) => <Button label={a().label} labelKey={a().labelKey} tone={a().kind === "guide" ? "neutral" : "accent"} onClick={press} />}
+        </Show>
       </div>
-      <Show when={toggle() && merged.autoUpdate !== undefined ? toggle() : undefined}>
-        {(t) => (
-          <FieldRow label={t().label} hint={withApp(t().hint, merged.name)}>
-            <Toggle checked={merged.autoUpdate ?? false} onChange={(on) => merged.onAutoUpdateChange?.(on)} label={t().label} hideLabel />
-          </FieldRow>
-        )}
-      </Show>
     </Card>
   );
 }
@@ -282,29 +277,11 @@ export function InfoComponentsCard(props: InfoComponentsCardProps) {
   );
 }
 
-/** A quiet action that opens a page, such as a release's notes. */
-function TextLink(props: { href: string; openUrl: OpenUrl; children: JSX.Element }) {
-  return (
-    <a
-      href={props.href}
-      target="_blank"
-      rel="noopener noreferrer"
-      class="glim-text-action"
-      onClick={(e) => {
-        e.preventDefault();
-        props.openUrl(props.href);
-      }}
-    >
-      {props.children}
-    </a>
-  );
-}
-
 /**
- * A number that reads as plain text and opens the newest release of its
- * project. The underline comes only under the pointer.
+ * A number in the accent's ink that opens the newest release of its
+ * project. It is text: no frame, no fill and no underline.
  */
-function VersionNumber(props: { row: VersionRow; unreleased: (version: string) => string; openUrl: OpenUrl }) {
+function VersionNumber(props: { row: ComponentRow; unreleased: (version: string) => string; openUrl: OpenUrl }) {
   const link = createMemo(() => numberLink(props.row));
   return (
     <Show

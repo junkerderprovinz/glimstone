@@ -60,7 +60,6 @@ export const eu: ComponentWords = {
     current: "Eguneratuta",
     checked: "Azken egiaztapena: {when}",
     available: "{version} bertsiora eguneratzea dago",
-    newIn: "Berria {version} bertsioan",
     failed: "Egiaztapenak huts egin du",
     downloading: "Deskargatzen … {percent}",
     ready: "{version} prest dago",

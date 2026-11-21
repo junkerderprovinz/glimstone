@@ -18,7 +18,7 @@ const face = computed(() => updateLine(props.state, props.text));
 const action = computed(() => updateAction(props.route, props.state, props.text));
 const toggle = computed(() => autoSwitch(props.route, props.text));
 const number = computed(() => numberLink({ name: props.name, version: props.version, repoUrl: props.repoUrl }));
-const newIn = computed(() => (props.state.kind === "available" && props.repoUrl ? `${props.repoUrl}/releases/latest` : ""));
+const inline = computed(() => face.value.version && { ...face.value.version, link: numberLink({ name: props.name, version: face.value.version.number, repoUrl: props.repoUrl }) });
 
 function press() {
   if (action.value?.kind === "restart") props.onRestart?.();
@@ -41,11 +41,16 @@ function open(e: MouseEvent, href: string) {
       <span v-else class="glim-num glim-version-number">{{ number.released ? number.shown : text.unreleased(number.shown) }}</span>
     </div>
     <p class="glim-version-state" :data-tone="face.tone" role="status">
-      <span class="glim-version-line">{{ face.line }}</span>
+      <span class="glim-version-line">
+        <template v-if="inline">
+          {{ inline.before
+          }}<a v-if="inline.link.href" :href="inline.link.href" target="_blank" rel="noopener noreferrer" class="glim-num glim-version-number" @click="open($event, inline.link.href)">{{
+            inline.link.shown
+          }}</a><span v-else class="glim-num glim-version-number">{{ inline.link.shown }}</span>{{ inline.after }}
+        </template>
+        <template v-else>{{ face.line }}</template>
+      </span>
       <span v-if="face.note" class="glim-version-note">{{ face.note }}</span>
-      <a v-if="newIn && state.kind === 'available'" :href="newIn" target="_blank" rel="noopener noreferrer" class="glim-text-action" @click="open($event, newIn)">{{
-        text.newIn(state.version)
-      }}</a>
     </p>
     <div
       v-if="state.kind === 'downloading'"
@@ -58,9 +63,9 @@ function open(e: MouseEvent, href: string) {
     >
       <span :style="{ width: `${state.percent}%` }" />
     </div>
-    <div v-if="action" class="glim-version-actions">
-      <Button :label="action.label" :label-key="action.labelKey" :tone="action.kind === 'guide' ? 'neutral' : 'accent'" @click="press" />
-    </div>
+    <FieldRow v-if="toggle && autoUpdate !== undefined" :label="toggle.label" :hint="withApp(toggle.hint, name)">
+      <Toggle v-model="autoUpdate" :label="toggle.label" hide-label />
+    </FieldRow>
     <div class="glim-version-links">
       <button type="button" class="glim-text-action" @click="onWhatsNew()">
         <span class="glim-text-action-dot" :data-unseen="unseen > 0 ? '' : undefined" aria-hidden="true" />
@@ -69,9 +74,7 @@ function open(e: MouseEvent, href: string) {
       <button v-if="onCheck && route !== 'store'" type="button" class="glim-text-action" :disabled="!canCheck(route, state)" @click="onCheck()">
         {{ text.check }}
       </button>
+      <Button v-if="action" :label="action.label" :label-key="action.labelKey" :tone="action.kind === 'guide' ? 'neutral' : 'accent'" @click="press" />
     </div>
-    <FieldRow v-if="toggle && autoUpdate !== undefined" :label="toggle.label" :hint="withApp(toggle.hint, name)">
-      <Toggle v-model="autoUpdate" :label="toggle.label" hide-label />
-    </FieldRow>
   </Card>
 </template>

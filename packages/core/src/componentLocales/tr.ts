@@ -55,7 +55,6 @@ export const tr: ComponentWords = {
     current: "Güncel",
     checked: "Son denetim {when}",
     available: "{version} sürümüne güncelleme var",
-    newIn: "{version} sürümündeki yenilikler",
     failed: "Denetim başarısız oldu",
     downloading: "İndiriliyor … {percent}",
     ready: "{version} hazır",

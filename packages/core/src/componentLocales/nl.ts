@@ -60,7 +60,6 @@ export const nl: ComponentWords = {
     current: "Bijgewerkt",
     checked: "Laatst gecontroleerd {when}",
     available: "Update naar {version} beschikbaar",
-    newIn: "Nieuw in {version}",
     failed: "Controle mislukt",
     downloading: "Downloaden … {percent}",
     ready: "{version} staat klaar",

@@ -55,7 +55,6 @@ export const en: ComponentWords = {
     current: "Up to date",
     checked: "Last checked {when}",
     available: "Update to {version} available",
-    newIn: "New in {version}",
     failed: "Check failed",
     downloading: "Downloading … {percent}",
     ready: "{version} is ready",

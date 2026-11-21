@@ -71,7 +71,6 @@ export const ro: ComponentWords = {
     current: "La zi",
     checked: "Ultima verificare {when}",
     available: "Actualizare la {version} disponibilă",
-    newIn: "Nou în {version}",
     failed: "Verificarea a eșuat",
     downloading: "Se descarcă … {percent}",
     ready: "{version} este gata",

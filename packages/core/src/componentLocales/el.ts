@@ -65,7 +65,6 @@ export const el: ComponentWords = {
     current: "Ενημερωμένο",
     checked: "Τελευταίος έλεγχος {when}",
     available: "Διαθέσιμη ενημέρωση στην {version}",
-    newIn: "Νέα στην {version}",
     failed: "Ο έλεγχος απέτυχε",
     downloading: "Λήψη … {percent}",
     ready: "Η {version} είναι έτοιμη",

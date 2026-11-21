@@ -55,7 +55,6 @@ export const sv: ComponentWords = {
     current: "Uppdaterad",
     checked: "Senast kontrollerad {when}",
     available: "Uppdatering till {version} finns",
-    newIn: "Nytt i {version}",
     failed: "Kontrollen misslyckades",
     downloading: "Hämtar … {percent}",
     ready: "{version} är klar",

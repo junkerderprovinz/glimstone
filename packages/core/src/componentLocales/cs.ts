@@ -62,7 +62,6 @@ export const cs: ComponentWords = {
     current: "Aktuální",
     checked: "Naposledy zkontrolováno {when}",
     available: "Je dostupná aktualizace na {version}",
-    newIn: "Novinky ve {version}",
     failed: "Kontrola selhala",
     downloading: "Stahuje se … {percent}",
     ready: "{version} je připravena",

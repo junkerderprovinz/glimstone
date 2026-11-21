@@ -71,7 +71,6 @@ export const pt: ComponentWords = {
     current: "Atualizado",
     checked: "Última verificação {when}",
     available: "Atualização para {version} disponível",
-    newIn: "Novidades da {version}",
     failed: "A verificação falhou",
     downloading: "A transferir … {percent}",
     ready: "A {version} está pronta",

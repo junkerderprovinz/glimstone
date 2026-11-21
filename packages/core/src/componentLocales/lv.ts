@@ -66,7 +66,6 @@ export const lv: ComponentWords = {
     current: "Aktuāls",
     checked: "Pēdējā pārbaude {when}",
     available: "Pieejams atjauninājums uz {version}",
-    newIn: "Jaunumi versijā {version}",
     failed: "Pārbaude neizdevās",
     downloading: "Lejupielādē … {percent}",
     ready: "{version} ir gatava",

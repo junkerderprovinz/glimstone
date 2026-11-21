@@ -4,12 +4,12 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
-The Info tile has four cards: Version, Components, Help and About. The Version card shows the app, where its updates stand and one action once there is a new version, and every version number reads as plain text that opens its project's newest release.
+The Info tile has four cards: Version, Components, Help and About. The Version card shows the app, where its updates stand and one action once there is a new version, and every version number is text in the accent's ink that opens its project's newest release.
 
 ## 🧩 Adopting apps
 
 - **InfoVersionCard takes new props.** It shows the app alone: pass `name`, `version`, `repoUrl`, `route` (`install`, `guide`, `plugins` or `store`) and `state`, with `onCheck`, `onUpdate`, `onRestart`, `guideUrl`, `onWhatsNew` and `unseen`. `rows`, `updateCheck`, `onReleaseNotes` and `whatsNew` are gone. An update switch comes as `autoUpdate` with `onAutoUpdateChange` (`v-model:auto-update` in Vue, `bind:autoUpdate` in Svelte).
-- **InfoComponentsCard is new** and takes every other version as `rows`, each with a `kind` (`part`, `tool` or `installer`). It adds GlimStone's row itself and sorts them.
+- **InfoComponentsCard is new** and takes every other version as `rows`, each with a `kind` (`part`, `tool` or `installer`) and, for a project without releases in its repository, a `releasePage`. It adds GlimStone's row itself and sorts them.
 - **InfoTile wants `components`** between `version` and `help`.
 - **The words come with GlimStone**: `componentText(lang).versionCard` and `.componentsCard` in all 42 languages, with "{app}" filled from `name`.
 - **"What's new" is the one name** for the release notes and the window of changes. Drop a "New · n" or "Release notes" button of your own.
@@ -21,7 +21,7 @@ The Info tile has four cards: Version, Components, Help and About. The Version c
 
 ## 🔧 Changed
 
-- A version number has no accent colour under the pointer any more, only an underline.
+- A version number that opens its release is text in the accent's ink, never underlined.
 
 ## 4.8.1 - 2026-11-20
 

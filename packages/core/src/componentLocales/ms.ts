@@ -65,7 +65,6 @@ export const ms: ComponentWords = {
     current: "Terkini",
     checked: "Kali terakhir disemak {when}",
     available: "Kemas kini ke {version} tersedia",
-    newIn: "Baharu dalam {version}",
     failed: "Semakan gagal",
     downloading: "Memuat turun … {percent}",
     ready: "{version} sedia",

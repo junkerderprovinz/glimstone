@@ -60,7 +60,6 @@ export const hu: ComponentWords = {
     current: "Naprakész",
     checked: "Utolsó ellenőrzés {when}",
     available: "Elérhető frissítés: {version}",
-    newIn: "A(z) {version} újdonságai",
     failed: "Az ellenőrzés nem sikerült",
     downloading: "Letöltés … {percent}",
     ready: "A(z) {version} kész",

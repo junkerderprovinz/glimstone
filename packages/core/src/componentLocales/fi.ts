@@ -55,7 +55,6 @@ export const fi: ComponentWords = {
     current: "Ajan tasalla",
     checked: "Viimeksi tarkistettu {when}",
     available: "Päivitys versioon {version} saatavilla",
-    newIn: "Uutta versiossa {version}",
     failed: "Tarkistus epäonnistui",
     downloading: "Ladataan … {percent}",
     ready: "{version} on valmis",

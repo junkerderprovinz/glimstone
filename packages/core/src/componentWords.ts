@@ -85,9 +85,8 @@ export interface ComponentWords {
     current: string;
     /** "{when}", a time before now such as "3 minutes ago". */
     checked: string;
-    /** Each with "{version}". */
+    /** "{version}". */
     available: string;
-    newIn: string;
     failed: string;
     /** "{percent}". */
     downloading: string;

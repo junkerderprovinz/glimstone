@@ -72,7 +72,6 @@ export const ru: ComponentWords = {
     current: "Актуально",
     checked: "Последняя проверка {when}",
     available: "Доступно обновление до {version}",
-    newIn: "Новое в {version}",
     failed: "Проверка не удалась",
     downloading: "Загрузка … {percent}",
     ready: "{version} готова",

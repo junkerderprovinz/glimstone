@@ -4137,18 +4137,9 @@
     color: var(--carbon-text-sub);
     text-decoration: none;
   }
-  /* A number reads as plain text and is still a link: the underline comes
-     only under the pointer or the keyboard. */
-  a.glim-version-number:focus-visible {
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-  @media (hover: hover) {
-    a.glim-version-number:hover {
-      text-decoration: underline;
-      text-underline-offset: 3px;
-    }
-  }
+  /* A number that opens its release is text in the accent's ink: no frame,
+     no fill and no underline, so it never reads as a button. */
+  a.glim-version-number { color: var(--accent-ink); }
   .glim-version-actions {
     display: flex;
     flex-wrap: wrap;
@@ -4168,15 +4159,15 @@
     font-weight: 600;
     color: var(--carbon-text);
   }
-  .glim-version-head .glim-version-number {
-    font-size: var(--text-body);
-    color: var(--carbon-text);
-  }
+  .glim-version-head .glim-version-number { font-size: var(--text-body); }
+  .glim-version-line .glim-version-number { font-size: inherit; line-height: inherit; }
   .glim-version-state {
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
+    justify-content: flex-end;
     gap: var(--space-2) var(--space-6);
+    text-align: end;
     margin-top: calc(-1 * var(--space-4));
     font-size: 0.875rem;
     line-height: 1.25rem;
@@ -4201,8 +4192,9 @@
   .glim-version-links {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     justify-content: flex-end;
-    gap: var(--space-2) var(--space-9);
+    gap: var(--space-4) var(--space-9);
   }
   .glim-version-status { margin-inline-start: auto; font-size: var(--text-meta); }
   .glim-version-status[data-tone="ok"] { color: var(--status-ok-text); }

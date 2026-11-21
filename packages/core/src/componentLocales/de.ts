@@ -55,7 +55,6 @@ export const de: ComponentWords = {
     current: "Aktuell",
     checked: "Zuletzt geprüft {when}",
     available: "Update auf {version} verfügbar",
-    newIn: "Neu in {version}",
     failed: "Prüfung fehlgeschlagen",
     downloading: "Wird geladen … {percent}",
     ready: "{version} ist bereit",

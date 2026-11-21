@@ -55,7 +55,6 @@ export const et: ComponentWords = {
     current: "Ajakohane",
     checked: "Viimati kontrollitud {when}",
     available: "Saadaval on uuendus versioonile {version}",
-    newIn: "Uut versioonis {version}",
     failed: "Kontroll ebaõnnestus",
     downloading: "Laadin alla … {percent}",
     ready: "{version} on valmis",

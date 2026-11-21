@@ -186,23 +186,28 @@ export function InfoVersionCard({
         <VersionNumber row={{ name, version, repoUrl }} unreleased={text.unreleased} openUrl={openUrl} />
       </div>
       <p className="glim-version-state" data-tone={face.tone} role="status">
-        <span className="glim-version-line">{face.line}</span>
+        <span className="glim-version-line">
+          {face.version ? (
+            <>
+              {face.version.before}
+              <VersionNumber row={{ name, version: face.version.number, repoUrl }} unreleased={text.unreleased} openUrl={openUrl} />
+              {face.version.after}
+            </>
+          ) : (
+            face.line
+          )}
+        </span>
         {face.note && <span className="glim-version-note">{face.note}</span>}
-        {state.kind === "available" && repoUrl && (
-          <TextLink href={`${repoUrl}/releases/latest`} openUrl={openUrl}>
-            {text.newIn(state.version)}
-          </TextLink>
-        )}
       </p>
       {state.kind === "downloading" && (
         <div className="glim-version-progress" role="progressbar" aria-label={face.line} aria-valuemin={0} aria-valuemax={100} aria-valuenow={state.percent}>
           <span style={{ width: `${state.percent}%` }} />
         </div>
       )}
-      {action && (
-        <div className="glim-version-actions">
-          <Button label={action.label} labelKey={action.labelKey} tone={action.kind === "guide" ? "neutral" : "accent"} onClick={press} />
-        </div>
+      {toggle && autoUpdate !== undefined && (
+        <FieldRow label={toggle.label} hint={withApp(toggle.hint, name)}>
+          <Toggle checked={autoUpdate} onChange={(on) => onAutoUpdateChange?.(on)} label={toggle.label} hideLabel />
+        </FieldRow>
       )}
       <div className="glim-version-links">
         <button type="button" className="glim-text-action" onClick={onWhatsNew}>
@@ -214,12 +219,8 @@ export function InfoVersionCard({
             {text.check}
           </button>
         )}
+        {action && <Button label={action.label} labelKey={action.labelKey} tone={action.kind === "guide" ? "neutral" : "accent"} onClick={press} />}
       </div>
-      {toggle && autoUpdate !== undefined && (
-        <FieldRow label={toggle.label} hint={withApp(toggle.hint, name)}>
-          <Toggle checked={autoUpdate} onChange={(on) => onAutoUpdateChange?.(on)} label={toggle.label} hideLabel />
-        </FieldRow>
-      )}
     </Card>
   );
 }
@@ -290,29 +291,11 @@ export function InfoComponentsCard({
   );
 }
 
-/** A quiet action that opens a page, such as a release's notes. */
-function TextLink({ href, openUrl, children }: { href: string; openUrl: OpenUrl; children: ReactNode }) {
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="glim-text-action"
-      onClick={(e) => {
-        e.preventDefault();
-        openUrl(href);
-      }}
-    >
-      {children}
-    </a>
-  );
-}
-
 /**
- * A number that reads as plain text and opens the newest release of its
- * project. The underline comes only under the pointer.
+ * A number in the accent's ink that opens the newest release of its
+ * project. It is text: no frame, no fill and no underline.
  */
-function VersionNumber({ row, unreleased, openUrl }: { row: VersionRow; unreleased: (version: string) => string; openUrl: OpenUrl }) {
+function VersionNumber({ row, unreleased, openUrl }: { row: ComponentRow; unreleased: (version: string) => string; openUrl: OpenUrl }) {
   const { shown, released, href } = numberLink(row);
   if (!href) return <span className="glim-num glim-version-number">{released ? shown : unreleased(shown)}</span>;
   return (

@@ -5,7 +5,7 @@
 import { en } from "./componentLocales/en.ts";
 import type { ComponentWords } from "./componentWords.ts";
 import { fill } from "./fortressText.ts";
-import { versionLink, type VersionRow } from "./infoTile.ts";
+import { releaseTag, shownVersion, type VersionRow } from "./infoTile.ts";
 import { GLIMSTONE_REPO, GLIMSTONE_VERSION } from "./version.ts";
 
 /**
@@ -41,7 +41,6 @@ export interface VersionCardText {
   current: string;
   checked: (at: Date, now?: Date) => string;
   available: (version: string) => string;
-  newIn: (version: string) => string;
   failed: string;
   downloading: (percent: number) => string;
   ready: (version: string) => string;
@@ -100,7 +99,6 @@ export function versionCardText(w: ComponentWords["versionCard"], lang: string):
     current: w.current,
     checked: (at, now) => fill(w.checked, { when: timeAgo(at, lang, now) }),
     available: (version) => fill(w.available, { version }),
-    newIn: (version) => fill(w.newIn, { version }),
     failed: w.failed,
     downloading: (percent) => fill(w.downloading, { percent: (percent / 100).toLocaleString(lang, { style: "percent" }) }),
     ready: (version) => fill(w.ready, { version }),
@@ -129,24 +127,38 @@ export function withApp(sentence: string, app: string): string {
   return fill(sentence, { app });
 }
 
-/** The line under the app's version: what the state says, in which tone, and a quieter note after it. */
-export function updateLine(state: UpdateState, text: VersionCardText, now?: Date): { line: string; tone: UpdateTone; note?: string } {
+/**
+ * The line under the app's version: what the state says, in which tone, and a
+ * quieter note after it. A line that names a new version also comes split
+ * around it, so the card can make that number the link to its release.
+ */
+export function updateLine(
+  state: UpdateState,
+  text: VersionCardText,
+  now?: Date,
+): { line: string; tone: UpdateTone; note?: string; version?: { number: string; before: string; after: string } } {
   switch (state.kind) {
     case "current":
       return { line: text.current, tone: "ok", note: state.checkedAt && text.checked(state.checkedAt, now) };
     case "checking":
       return { line: text.checking, tone: "neutral" };
     case "available":
-      return { line: text.available(state.version), tone: "warn" };
+      return around(text.available(state.version), state.version, "warn");
     case "downloading":
       return { line: text.downloading(state.percent), tone: "neutral" };
     case "ready":
-      return { line: text.ready(state.version), tone: "ok" };
+      return around(text.ready(state.version), state.version, "ok");
     case "failed":
       return { line: text.failed, tone: "fail", note: state.reason };
     case "store":
       return { line: text.store(state.store), tone: "neutral" };
   }
+}
+
+function around(line: string, number: string, tone: UpdateTone) {
+  const at = line.indexOf(number);
+  if (at < 0) return { line, tone };
+  return { line, tone, version: { number, before: line.slice(0, at), after: line.slice(at + number.length) } };
 }
 
 export type UpdateActionKind = "update" | "restart" | "guide" | "plugins";
@@ -196,6 +208,9 @@ export type ComponentKind = "part" | "tool" | "design" | "installer";
 
 export interface ComponentRow extends VersionRow {
   kind?: ComponentKind;
+  /** Where the newest release is told about, for a project that publishes no
+   *  releases in its repository, such as a download page. */
+  releasePage?: string;
   /** A short state at the row's end, such as "Updated" or "Missing". */
   status?: string;
   tone?: UpdateTone;
@@ -229,13 +244,15 @@ export function designRow(text: ComponentsCardText): ComponentRow {
 }
 
 /**
- * The number and where it leads. Every version reads as plain text and opens
- * the newest release of its project, so a number never leads to a page a
- * folded patch tag has taken away. Only a row with a repository can be an
- * unreleased build: a program's own numbering, such as "26.01" or "48637",
- * is shown as it comes.
+ * The number and where it leads. Every version opens the newest release of its
+ * project, so a number never leads to a page a folded patch tag has taken
+ * away. A number with dots, such as "26.01" or "2.9.4", is a release; a build
+ * stamp such as "dev" is one only where no repository says otherwise.
  */
-export function numberLink(row: VersionRow): { shown: string; released: boolean; href?: string } {
-  const link = versionLink({ ...row, latest: true });
-  return row.repoUrl ? link : { ...link, released: true };
+export function numberLink(row: VersionRow & { releasePage?: string }): { shown: string; released: boolean; href?: string } {
+  const shown = shownVersion(row.version);
+  if (row.releasePage) return { shown, released: true, href: row.releasePage };
+  if (!row.repoUrl) return { shown, released: true };
+  const released = /^v\d+(\.\d+)+$/.test(releaseTag(row.version));
+  return released ? { shown, released, href: `${row.repoUrl}/releases/latest` } : { shown, released };
 }

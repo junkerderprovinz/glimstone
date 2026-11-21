@@ -55,7 +55,6 @@ export const zh: ComponentWords = {
     current: "已是最新",
     checked: "上次检查 {when}",
     available: "可更新到 {version}",
-    newIn: "{version} 的新功能",
     failed: "检查失败",
     downloading: "正在下载 … {percent}",
     ready: "{version} 已就绪",

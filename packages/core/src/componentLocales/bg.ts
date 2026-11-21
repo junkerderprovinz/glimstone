@@ -60,7 +60,6 @@ export const bg: ComponentWords = {
     current: "Актуално",
     checked: "Последна проверка {when}",
     available: "Има обновление до {version}",
-    newIn: "Ново във {version}",
     failed: "Проверката не успя",
     downloading: "Изтегля се … {percent}",
     ready: "{version} е готова",

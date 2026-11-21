@@ -55,7 +55,6 @@ export const hi: ComponentWords = {
     current: "अप टू डेट",
     checked: "पिछली जाँच {when}",
     available: "{version} का अपडेट उपलब्ध है",
-    newIn: "{version} में नया",
     failed: "जाँच विफल रही",
     downloading: "डाउनलोड हो रहा है … {percent}",
     ready: "{version} तैयार है",

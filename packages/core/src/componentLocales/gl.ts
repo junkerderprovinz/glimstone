@@ -65,7 +65,6 @@ export const gl: ComponentWords = {
     current: "Ao día",
     checked: "Última comprobación {when}",
     available: "Actualización a {version} dispoñible",
-    newIn: "Novidades de {version}",
     failed: "A comprobación fallou",
     downloading: "Descargando … {percent}",
     ready: "{version} está lista",

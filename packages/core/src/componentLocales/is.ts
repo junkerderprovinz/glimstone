@@ -55,7 +55,6 @@ export const is: ComponentWords = {
     current: "Uppfært",
     checked: "Síðast athugað {when}",
     available: "Uppfærsla í {version} í boði",
-    newIn: "Nýtt í {version}",
     failed: "Athugun mistókst",
     downloading: "Sæki … {percent}",
     ready: "{version} er tilbúin",

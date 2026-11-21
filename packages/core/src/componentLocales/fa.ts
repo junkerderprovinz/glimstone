@@ -55,7 +55,6 @@ export const fa: ComponentWords = {
     current: "به‌روز",
     checked: "آخرین بررسی {when}",
     available: "به‌روزرسانی به {version} در دسترس است",
-    newIn: "تازه‌های {version}",
     failed: "بررسی ناموفق بود",
     downloading: "در حال بارگیری … {percent}",
     ready: "{version} آماده است",

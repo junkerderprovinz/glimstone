@@ -55,7 +55,6 @@ export const th: ComponentWords = {
     current: "เป็นปัจจุบัน",
     checked: "ตรวจล่าสุด {when}",
     available: "มีอัปเดตเป็น {version}",
-    newIn: "ใหม่ใน {version}",
     failed: "ตรวจไม่สำเร็จ",
     downloading: "กำลังดาวน์โหลด … {percent}",
     ready: "{version} พร้อมแล้ว",
