@@ -4126,7 +4126,7 @@ test.describe("SignInCard", () => {
   test("[signin-wide] every button as wide as the fields", async ({ page }) => {
     await open(page, "/components/sign-in-card");
     const width = (await box(card(page).locator(".glim-secret"))).width;
-    for (const name of ["Sign in", "Sign in with a passkey", "Forgot password?"]) {
+    for (const name of ["Sign in", "Sign in with Pocket ID"]) {
       expect((await box(button(page, name))).width).toBeCloseTo(width, 0);
     }
     await openReset(page);
@@ -4207,7 +4207,7 @@ test.describe("SignInCard", () => {
     await expect(field(page, "Password")).toHaveValue("two-step");
     await expect(button(page, "Sign in")).toBeDisabled();
     await expect(button(page, "Forgot password?")).toHaveCount(0);
-    await expect(button(page, "Sign in with a passkey")).toHaveCount(0);
+    await expect(button(page, "Sign in with Pocket ID")).toHaveCount(0);
     await code.fill("000000");
     await page.keyboard.press("Enter");
     await expect(card(page).getByRole("alert")).toHaveText("That code is not valid");
@@ -4226,14 +4226,43 @@ test.describe("SignInCard", () => {
     await expect(button(page, "Forgot password?")).toBeVisible();
   });
 
-  test("[signin-passkey] the passkey button only where it is offered", async ({ page }) => {
+  test("[signin-passkey] the browser offers passkeys in the password field, and no button does", async ({ page }) => {
     await open(page, "/components/sign-in-card");
-    const passkey = button(page, "Sign in with a passkey");
-    expect((await box(passkey)).y).toBeGreaterThan((await box(button(page, "Sign in"))).y);
-    await expect(button(page, "Sign in with a passkey", "SignInCardSlots")).toHaveCount(0);
-    await passkey.click();
-    await expect(field(page, "Code")).toBeFocused();
-    await expect(field(page, "Password")).toBeHidden();
+    await expect(field(page, "Password")).toHaveAttribute("autocomplete", "current-password webauthn");
+    await expect(field(page, "Password", "SignInCardSlots")).toHaveAttribute("autocomplete", "current-password");
+    await expect(button(page, "Sign in with a passkey")).toHaveCount(0);
+  });
+
+  test("[signin-service] the service's button under Sign in, with its mark", async ({ page }) => {
+    await open(page, "/components/sign-in-card");
+    const service = button(page, "Sign in with Pocket ID");
+    expect((await box(service)).y).toBeGreaterThan((await box(button(page, "Sign in"))).y);
+    await expect(service.locator(".glim-brand-svg svg")).toHaveCount(1);
+    await expect(card(page).locator(".glim-btn")).toHaveCount(2);
+    await service.click();
+    await expect(said(page)).toHaveText("Off to Pocket ID");
+  });
+
+  test("[signin-forgot] a plain link, the card's last line, never underlined", async ({ page }) => {
+    await open(page, "/components/sign-in-card");
+    const forgot = button(page, "Forgot password?");
+    const last = await card(page).locator("form > *").last().evaluate((e) => e.getAttribute("data-signin"));
+    expect(last).toBe("forgot");
+    expect((await box(forgot)).y).toBeGreaterThan((await box(button(page, "Sign in with Pocket ID"))).y);
+    const look = () => forgot.evaluate((e) => ({ line: getComputedStyle(e).textDecorationLine, ground: getComputedStyle(e).backgroundColor, colour: getComputedStyle(e).color }));
+    const rest = await look();
+    expect(rest.line).toBe("none");
+    expect(rest.ground).toBe("rgba(0, 0, 0, 0)");
+    await forgot.hover();
+    await expect.poll(async () => (await look()).colour).not.toBe(rest.colour);
+    expect((await look()).line).toBe("none");
+    await page.mouse.move(0, 0);
+    await forgot.focus();
+    await page.keyboard.press("Shift+Tab");
+    await page.keyboard.press("Tab");
+    await expect(forgot).toBeFocused();
+    expect((await look()).line).toBe("none");
+    expect(await forgot.evaluate((e) => getComputedStyle(e).outlineStyle)).toBe("solid");
   });
 
   test("[signin-reset] the reset form in the same card, and back", async ({ page }) => {
@@ -4619,6 +4648,141 @@ test.describe("useDragArmed", () => {
       expect(Object.values(await travel(rows(page)))).toEqual([0, 0, 0, 0, 0]);
     });
   }
+});
+
+test.describe("SignInTile", () => {
+  // Solid and Svelte draw the tile once their twins exist.
+  test.beforeEach(({}, info) => test.skip(!["react", "vue"].includes(info.project.metadata.fw), "The tile comes in React and Vue"));
+  const demo = (page: Page, name = "SignInTileBasic") => stage(page, name);
+  const cardOf = (page: Page, card: string, name?: string) => demo(page, name).locator(`[data-signin-card="${card}"]`);
+  const said = (page: Page, name?: string) => demo(page, name).locator('[data-hook="said"]');
+  const dialog = (page: Page, name: string) => page.getByRole("dialog", { name });
+
+  test("[signin-tile-cards] every card with one title", async ({ page }) => {
+    await open(page, "/components/sign-in-tile");
+    const titles = ["Password", "Asking for the password", "Two-factor authentication", "Passkeys", "Sessions", "API tokens", "Sign-in services", "Accounts"];
+    await expect(demo(page).locator("[data-signin-card] > .glim-panel-heading")).toHaveText(titles);
+    for (const card of await demo(page).locator("[data-signin-card]").all()) await expect(card.locator(".glim-panel-heading")).toHaveCount(1);
+  });
+
+  test("[signin-tile-open] without a password every lasting way in waits for one", async ({ page }) => {
+    await open(page, "/components/sign-in-tile");
+    const name = "SignInTileOpen";
+    await expect(cardOf(page, "password", name).getByRole("button", { name: "Set a password" })).toBeVisible();
+    for (const card of ["twoFactor", "passkeys", "tokens", "services"]) {
+      await expect(cardOf(page, card, name).locator(".glim-notice-title")).toHaveText("This needs a password first");
+      await expect(cardOf(page, card, name).locator(".glim-btn")).toHaveCount(0);
+    }
+    await expect(cardOf(page, "sessions", name)).toHaveCount(0);
+  });
+
+  test("[signin-tile-ask] the question saves on the flip", async ({ page }) => {
+    await open(page, "/components/sign-in-tile");
+    const toggle = cardOf(page, "askPassword").getByRole("switch");
+    await expect(toggle).toHaveAttribute("aria-checked", "true");
+    await toggle.click();
+    await expect(toggle).toHaveAttribute("aria-checked", "false");
+    await expect(said(page)).toHaveText("The question is off. Sensitive changes need a fresh sign-in.");
+  });
+
+  test("[signin-tile-reauth] a stale sign-in asks for the password, and the change goes on", async ({ page }) => {
+    await open(page, "/components/sign-in-tile");
+    await cardOf(page, "tokens").getByRole("button", { name: "Create a token" }).click();
+    const create = dialog(page, "Create a token");
+    await create.getByLabel("Name").fill("Nightly export");
+    await create.getByRole("button", { name: "Create" }).click();
+    const ask = dialog(page, "Your password, please");
+    await ask.getByLabel("Password", { exact: true }).fill("wrong");
+    await ask.getByRole("button", { name: "Continue" }).click();
+    await expect(ask.getByText("That password is wrong.")).toBeVisible();
+    await ask.getByLabel("Password", { exact: true }).fill("letmein");
+    await ask.getByRole("button", { name: "Continue" }).click();
+    await expect(ask).toHaveCount(0);
+    await expect(dialog(page, "Your new token")).toBeVisible();
+    await dialog(page, "Your new token").getByRole("button", { name: "I’ve copied the token" }).click();
+    await expect(cardOf(page, "tokens").getByRole("group", { name: "Nightly export" })).toBeVisible();
+  });
+
+  test("[signin-tile-codes] the recovery codes leave only through their acknowledgement", async ({ page }) => {
+    await open(page, "/components/sign-in-tile");
+    await cardOf(page, "twoFactor").getByRole("button", { name: "Set up" }).click();
+    const ask = dialog(page, "Your password, please");
+    await ask.getByLabel("Password", { exact: true }).fill("letmein");
+    await ask.getByRole("button", { name: "Continue" }).click();
+    const setup = dialog(page, "Set up two-factor");
+    await expect(setup.getByRole("img", { name: "QR code for your authenticator app" })).toBeVisible();
+    await setup.getByLabel("Code from the app").fill("123456");
+    await setup.getByRole("button", { name: "Turn on" }).click();
+    const codes = dialog(page, "Recovery codes");
+    await expect(codes.locator(".glim-signin-tile-codes li")).toHaveCount(10);
+    await expect(codes.getByRole("button", { name: "Cancel" })).toHaveCount(0);
+    await page.mouse.click(5, 5);
+    await expect(codes).toBeVisible();
+    await codes.getByRole("button", { name: "I’ve saved the codes" }).click();
+    await expect(codes).toHaveCount(0);
+    await expect(said(page)).toHaveText("Two-factor is on.");
+  });
+
+  test("[signin-tile-remove] a removal asks by name, and its button is no colour of its own", async ({ page }) => {
+    await open(page, "/components/sign-in-tile");
+    const row = cardOf(page, "passkeys").getByRole("group", { name: "Firefox on Windows" });
+    await row.hover();
+    await row.getByRole("button", { name: "Remove" }).click();
+    const ask = page.locator('[data-glim="ConfirmDialog"]');
+    await expect(ask).toContainText("“Firefox on Windows” will no longer sign you in. Your password still works.");
+    const ground = (name: string) => ask.getByRole("button", { name }).evaluate((e) => getComputedStyle(e).backgroundColor);
+    expect(await ground("Remove")).toBe(await ground("Cancel"));
+    await ask.getByRole("button", { name: "Remove" }).click();
+    await expect(row).toHaveCount(0);
+    await expect(said(page)).toHaveText("Passkey removed.");
+  });
+
+  test("[signin-tile-services] the form of a picked service, and Turn on waits for the test", async ({ page }) => {
+    await open(page, "/components/sign-in-tile");
+    await cardOf(page, "services").getByRole("button", { name: "Add a sign-in service" }).click();
+    const picker = dialog(page, "Add a sign-in service");
+    await picker.getByRole("button", { name: "Authelia" }).click();
+    const form = dialog(page, "Authelia");
+    for (const label of ["Address", "Client ID", "Client secret", "Redirect address"]) await expect(form.getByLabel(label, { exact: true }).first()).toBeVisible();
+    await expect(form.locator(".glim-signin-tile-quiet")).toHaveText(/Authelia decides who may sign in/);
+    await expect(form.getByRole("button", { name: "Turn on" })).toBeDisabled();
+  });
+
+  test("[signin-tile-foot] a failed test reports under the form, and the foot keeps one row", async ({ page }) => {
+    await open(page, "/components/sign-in-tile");
+    await cardOf(page, "services").getByRole("button", { name: "Add a sign-in service" }).click();
+    await dialog(page, "Add a sign-in service").getByRole("button", { name: "Authelia" }).click();
+    const form = dialog(page, "Authelia");
+    await form.getByLabel("Address", { exact: true }).fill("https://unreachable.example");
+    await form.getByLabel("Client ID", { exact: true }).fill("glimstone");
+    await form.getByLabel("Client secret", { exact: true }).fill("secret");
+    await form.getByRole("button", { name: "Test sign-in" }).click();
+    const ask = dialog(page, "Your password, please");
+    await ask.getByLabel("Password", { exact: true }).fill("letmein");
+    await ask.getByRole("button", { name: "Continue" }).click();
+    const reason = "The app can’t reach https://unreachable.example. Is the address right, and can the app get there?";
+    await expect(form.getByRole("alert")).toHaveText(reason);
+    await expect(form.locator(".glim-window-start")).toHaveCount(0);
+    // Firefox crashes on evaluateAll under a dialog found by its name, so the foot is found by CSS.
+    const tops = await page.locator('[data-glim="PickerWindow"] .glim-window-actions .glim-btn').evaluateAll((els) => els.map((e) => Math.round(e.getBoundingClientRect().top)));
+    expect(new Set(tops).size).toBe(1);
+  });
+
+  test("[signin-tile-modes] light, dark and OLED surfaces", async ({ page }) => {
+    for (const look of [{ theme: "light" }, { theme: "dark" }, { theme: "dark", oled: true }]) {
+      await open(page, "/components/sign-in-tile", look);
+      const card = cardOf(page, "password");
+      const surface = await card.evaluate((e) => getComputedStyle(e).backgroundColor);
+      const expected = await page.evaluate(() => {
+        const probe = document.body.appendChild(document.createElement("div"));
+        probe.className = "glim-panel";
+        const colour = getComputedStyle(probe).backgroundColor;
+        probe.remove();
+        return colour;
+      });
+      expect(surface).toBe(expected);
+    }
+  });
 });
 
 test.describe("Fortress", () => {

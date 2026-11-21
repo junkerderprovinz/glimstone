@@ -44,6 +44,8 @@ export type SignInErrorText = Partial<Record<SignInErrorCode | SignInClientError
 export interface SignInTileText {
   cancel: string;
   close: string;
+  /** The title of the question before something goes. */
+  confirm: string;
   copy: string;
   copied: string;
   back: string;
@@ -130,7 +132,6 @@ export interface SignInTileText {
     synced: string;
     rename: string;
     renameTitle: string;
-    removeTitle: string;
     removeText: string;
     removed: string;
     added: string;
@@ -172,7 +173,6 @@ export interface SignInTileText {
     expires: string;
     forever: string;
     revoke: string;
-    revokeTitle: string;
     revokeText: string;
     revoked: string;
     newTitle: string;
@@ -203,7 +203,6 @@ export interface SignInTileText {
     testFailed: string;
     tested: string;
     edit: string;
-    removeTitle: string;
     removeText: string;
     removed: string;
     turnedOn: string;
@@ -247,7 +246,6 @@ export interface SignInTileText {
     seen: string;
     created: string;
     groups: string;
-    removeTitle: string;
     removeText: string;
     removed: string;
     blockedDone: string;
@@ -296,6 +294,7 @@ const ERRORS_EN = {
 export const signInTileTextEn: SignInTileText = {
   cancel: "Cancel",
   close: "Close",
+  confirm: "Confirm",
   copy: "Copy",
   copied: "Copied",
   back: "Back",
@@ -342,7 +341,7 @@ export const signInTileTextEn: SignInTileText = {
     hint: "New passkeys, tokens, two-factor and sign-in services want a sign-in from the last few minutes. If yours is older, the app asks for your password once. Without the question you sign out and back in.",
     label: "Ask for the password again",
     on: "The app asks for your password before sensitive changes.",
-    off: "No more question. Sensitive changes want a new sign-in.",
+    off: "The question is off. Sensitive changes need a fresh sign-in.",
   },
   twoFactor: {
     title: "Two-factor authentication",
@@ -387,7 +386,6 @@ export const signInTileTextEn: SignInTileText = {
     synced: "synced across your devices",
     rename: "Rename",
     renameTitle: "Rename the passkey",
-    removeTitle: "Remove the passkey?",
     removeText: "“{name}” will no longer sign you in. Your password still works.",
     removed: "Passkey removed.",
     added: "Passkey added.",
@@ -426,7 +424,6 @@ export const signInTileTextEn: SignInTileText = {
     expires: "expires {when}",
     forever: "never expires",
     revoke: "Revoke",
-    revokeTitle: "Revoke the token?",
     revokeText: "Programs that use “{name}” won’t get in anymore.",
     revoked: "Token revoked.",
     newTitle: "Create a token",
@@ -457,7 +454,6 @@ export const signInTileTextEn: SignInTileText = {
     testFailed: "Not signed in",
     tested: "last tested {when}",
     edit: "Edit",
-    removeTitle: "Remove {name}?",
     removeText: "{name} won’t sign anyone in after this. Its accounts stay and get in another way. Your password still works.",
     removed: "{name} is removed.",
     turnedOn: "{name} is on the sign-in page.",
@@ -500,7 +496,6 @@ export const signInTileTextEn: SignInTileText = {
     seen: "last seen {when}",
     created: "added {when}",
     groups: "groups {groups}",
-    removeTitle: "Remove {name}?",
     removeText: "{name} won’t get in after this, and the account’s sessions and API tokens end.",
     removed: "{name} is removed.",
     blockedDone: "{name} is blocked, and their sessions have ended.",
@@ -780,13 +775,20 @@ export function signInRedirectAddress(api: Pick<SignInApi, "root">, service?: Pi
   return service?.redirect || `${location.origin}${api.root}signin/oidc/callback`;
 }
 
-/** What the window before a removal asks, and its button. */
-export function removalQuestion(text: SignInTileText, what: SignInTileRemoval, name: string): { title: string; message: string; confirm: string } {
-  const t = text;
-  if (what === "passkey") return { title: t.passkeys.removeTitle, message: fill(t.passkeys.removeText, { name }), confirm: t.remove };
-  if (what === "token") return { title: t.tokens.revokeTitle, message: fill(t.tokens.revokeText, { name }), confirm: t.tokens.revoke };
-  if (what === "service") return { title: fill(t.services.removeTitle, { name }), message: fill(t.services.removeText, { name }), confirm: t.remove };
-  return { title: fill(t.accounts.removeTitle, { name }), message: fill(t.accounts.removeText, { name }), confirm: t.remove };
+/** What the question before a removal says, and its button. */
+export function removalQuestion(text: SignInTileText, what: SignInTileRemoval, name: string): { message: string; confirm: string } {
+  if (what === "passkey") return { message: fill(text.passkeys.removeText, { name }), confirm: text.remove };
+  if (what === "token") return { message: fill(text.tokens.revokeText, { name }), confirm: text.tokens.revoke };
+  if (what === "service") return { message: fill(text.services.removeText, { name }), confirm: text.remove };
+  return { message: fill(text.accounts.removeText, { name }), confirm: text.remove };
+}
+
+/** How long a new token can live, in the order the window offers it. */
+export const SIGN_IN_TOKEN_LIVES: readonly SignInTokenLife[] = ["30", "90", "365", "never"];
+
+/** The scopes a new token can take, each in the app's words where it has some. */
+export function signInScopeItems(scopes: readonly string[], words: Record<string, string>): { id: string; label: string }[] {
+  return scopes.map((id) => ({ id, label: words[id] ?? id }));
 }
 
 /**

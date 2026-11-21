@@ -44,6 +44,16 @@ const KEYS: Record<string, string> = {
   devicePc: "IconTabApp",
   deviceLaptop: "IconLaptop",
   devicePhone: "IconPhone",
+  setPassword: "IconKey",
+  removePassword: "IconKeyRevoke",
+  twoFactor: "IconShieldOn",
+  turnOff: "IconShieldOff",
+  revoke: "IconKeyRevoke",
+  block: "IconStop",
+  unblock: "IconUnlock",
+  passkey: "IconKey",
+  apiToken: "IconCode",
+  account: "IconAccounts",
 };
 
 /** The glyph a label key stands for, or undefined where the set has none. */

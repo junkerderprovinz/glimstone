@@ -165,6 +165,7 @@ body {
 .fortress-demo { width: 100%; display: grid; gap: 0.75rem; }
 .signin-demo { width: 100%; display: grid; gap: 0.75rem; justify-items: center; }
 .signin-demo .glim-signin { min-height: 0; width: 100%; padding: 1rem; }
+.signin-tile-demo { width: 100%; display: grid; gap: 0.75rem; align-content: start; }
 /* The calibration page: the prototype and the Vue component side by side, on
    the surface a card or a window gives them and in the prototype's 14px. */
 .cal-pair {

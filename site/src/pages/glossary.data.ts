@@ -981,8 +981,20 @@ export const GLOSSARY: GlossarySection[] = [
         code: ["SignInCard", "SignInField", ".glim-signin-card"],
         components: ["SignInCard", "SignInField"],
         text: {
-          en: "The first way in: logo, name, password, and on request a passkey and a reset by a code from the log.",
-          de: "Der erste Weg hinein: Logo, Name, Passwort und auf Wunsch Passkey und Zurücksetzen über einen Code aus dem Log.",
+          en: "The first way in: logo, name, password with the browser's passkeys in it, a sign-in service, and a reset by a code from the log.",
+          de: "Der erste Weg hinein: Logo, Name, Passwort mit den Passkeys des Browsers darin, ein Anmeldedienst und Zurücksetzen über einen Code aus dem Log.",
+        },
+      },
+      {
+        id: "sign-in-settings",
+        en: "Sign-in settings",
+        de: "Anmeldeeinstellungen",
+        proposal: true,
+        code: ["SignInTile", "SignInReauthWindow", ".glim-signin-tile"],
+        components: ["SignInTile", "SignInReauthWindow"],
+        text: {
+          en: "The cards behind the sign-in: password, the question before sensitive changes, two-factor, passkeys, sessions, API tokens, sign-in services and accounts.",
+          de: "Die Karten hinter der Anmeldung: Passwort, die Rückfrage vor heiklen Änderungen, Zwei-Faktor, Passkeys, Sitzungen, API-Tokens, Anmeldedienste und Konten.",
         },
       },
       {

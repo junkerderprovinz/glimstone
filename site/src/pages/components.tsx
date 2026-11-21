@@ -816,18 +816,99 @@ import { openRefusalText } from "@glimstone/core";
   );
 }
 
+export function SignInTilePage() {
+  return (
+    <>
+      <p className="lead">
+        The settings tile "Sign-in" of an app on the kit's sign-in: the password, the question before sensitive
+        changes, two-factor, passkeys, sessions, API tokens, sign-in services and the accounts, each a card of its own.
+      </p>
+      <Head file="react/SignInTile.tsx" />
+      <Demo name="SignInTileBasic" />
+      <Usage
+        code={`import { SignInReauthWindow, SignInTile } from "@glimstone/react";
+import { createSignInApi, takeSignInCode } from "@glimstone/core";
+import { IDENTITY_PROVIDERS } from "@glimstone/core/identityProviders";
+
+const api = createSignInApi({ root: "/files/" });
+const arrived = takeSignInCode();
+
+<SignInTile
+  api={api}
+  text={t.signInTile}
+  lang={lang}
+  providers={IDENTITY_PROVIDERS}
+  returnTo="/files/settings/sign-in"
+  arrived={arrived}
+  notify={toast}
+/>
+<SignInReauthWindow api={api} text={t.signInReauth} />`}
+      />
+      <H2>The client</H2>
+      <p>
+        <code>createSignInApi()</code> speaks the kit's contract, <code>/api/signin/v1</code>, below the app's root, so
+        an app under <code>/files/</code> names that root once. Every call answers with its value or with the kit's
+        code as it came, and the app turns a code into its own words (<code>signInErrorText()</code>). The tile reads
+        what it shows through the client and reads again after every change, wherever it came from.
+        <code>signInCardHandlers()</code> gives <code>SignInCard</code> its handlers from the same client.
+      </p>
+      <H2>Without a password</H2>
+      <p>
+        While the app is open, everyone who reaches it is an admin. The password card offers the first password, and
+        every lasting way in says that it waits for one, in place of its controls.
+      </p>
+      <Demo name="SignInTileOpen" />
+      <H2>Rules</H2>
+      <ul>
+        <li>One title per card, with its (i). Every card's own buttons stand at the end of its foot.</li>
+        <li>
+          Switches save on the flip, the question before sensitive changes too, and snap back with a shake when the
+          kit refuses. A sign-in service turns on with its passed test sign-in, the one exception.
+        </li>
+        <li>
+          Removing the password names what goes with it. A passkey, a token, a service or an account goes only after
+          a question that names it. Nothing that removes, blocks or switches off is red.
+        </li>
+        <li>
+          Passkeys are offered only where the address allows them. Elsewhere a paragraph says why, and the passkeys
+          made for another address stay listed with the address they answer on.
+        </li>
+        <li>
+          Without a sign-in service the card is one row with "Add a sign-in service". The picker takes the catalog,
+          with the tile for any other service last, and the form's quiet line says that the service decides who gets
+          in. The test sign-in reports under the form and in its button's bubble, never in the foot's start.
+        </li>
+        <li>
+          Secrets shown once, the recovery codes and a new token, leave only through their acknowledgement.
+        </li>
+        <li>
+          <code>SignInReauthWindow</code> stands once beside the tiles. When a change wants a fresh sign-in, it asks
+          for the password and the change runs again. Without it the client answers <code>signInAgain</code>.
+        </li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="SignInTile" />
+      <H2>API</H2>
+      <PropsTable of="SignInTile" />
+      <H2>The password question</H2>
+      <PropsTable of="SignInReauthWindow" />
+    </>
+  );
+}
+
 export function SignInCardPage() {
   return (
     <>
       <p className="lead">
-        The way into an app with a login: its logo and name, the password, a code when the server asks for one, a
-        passkey, and the reset form in the same card.
+        The way into an app with a login: its logo and name, the password with the browser's passkeys in it, a code
+        when the server asks for one, a sign-in service, and the reset form in the same card.
       </p>
       <Head file="react/SignInCard.tsx" />
       <Demo name="SignInCardBasic" />
       <Usage
         code={`import { SignInCard } from "@glimstone/react";
-import { componentText } from "@glimstone/core";
+import { componentText, signInCardHandlers } from "@glimstone/core";
+import { IDENTITY_PROVIDERS } from "@glimstone/core/identityProviders";
 
 const pw = componentText(lang).passwordField;
 
@@ -835,13 +916,12 @@ const pw = componentText(lang).passwordField;
   logo="/logo.svg"
   appName="GlimStone"
   text={{ ...text, confirmPassword: pw.confirm, mismatch: pw.mismatch, show: pw.show, hide: pw.hide }}
-  passkey={offerPasskey}
   reset
-  minPassword={12}
-  onSignIn={({ password, code }) => api.login(password, code)}
-  onPasskey={() => api.loginWithPasskey()}
-  onAskCode={() => api.startPasswordReset()}
-  onSetPassword={({ code, password }) => api.finishPasswordReset(code, password)}
+  minPassword={offer.minPassword}
+  service={{ name: t("signInWith", { name: pocket.name }), mark: IDENTITY_PROVIDERS.entries.find((e) => e.id === pocket.provider)?.mark }}
+  onService={() => location.assign(api.serviceAddress(pocket.id, "/"))}
+  error={arrived && t("arrived." + arrived)}
+  {...signInCardHandlers(api, { words: t.signInTile, onSignedIn: () => router.go("/") })}
 />`}
       />
       <H2>Slots</H2>
@@ -857,6 +937,11 @@ const pw = componentText(lang).passwordField;
         <li>The logo stands 7.5rem tall at its own proportions with the name under it, centred in the card. No server name, no pill above the card.</li>
         <li>Labels stand above their fields, in normal case. The first empty field has the focus when the card opens.</li>
         <li>Sign in stays disabled until the password field holds something. Every button is as wide as the fields.</li>
+        <li>
+          At most two buttons: Sign in, and the sign-in service's with its mark from the catalog. Passkeys come through
+          the browser's offer in the password field (<code>onPasskeyOffer</code>), so the card draws no passkey button.
+        </li>
+        <li>"Forgot password?" is a plain link and the card's last line, with no underline, also under the pointer and the focus.</li>
         <li>
           The reset form's Confirm password, its mismatch and the eye take a PasswordField's words from{" "}
           <code>componentText(lang).passwordField</code>, so both read alike in all 42 languages.

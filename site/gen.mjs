@@ -52,6 +52,8 @@ const COMPONENTS = {
   GlyphTile: "react/GlyphTile.tsx",
   Table: "react/Table.tsx",
   SignInCard: "react/SignInCard.tsx",
+  SignInTile: "react/SignInTile.tsx",
+  SignInReauthWindow: "react/SignInReauthWindow.tsx",
   Fortress: "react/Fortress.tsx",
   FortressPairing: "react/Fortress.tsx",
   FortressAppCard: "react/FortressAppCard.tsx",

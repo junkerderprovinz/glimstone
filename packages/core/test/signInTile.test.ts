@@ -354,7 +354,7 @@ test('a removal goes by its id and says so by name', async () => {
   const { api, calls } = kit({ tokens: async () => ok([{ id: 't1', name: 'Backup', scopes: ['read'], created: '' }]) });
   const { flow, said } = tile(api);
   await flow.refresh();
-  assert.deepEqual(removalQuestion(text, 'token', 'Backup'), { title: 'Revoke the token?', message: 'Programs that use “Backup” won’t get in anymore.', confirm: 'Revoke' });
+  assert.deepEqual(removalQuestion(text, 'token', 'Backup'), { message: 'Programs that use “Backup” won’t get in anymore.', confirm: 'Revoke' });
   await flow.remove('token', 't1');
   assert.ok(calls.includes('revokeToken'));
   assert.deepEqual(said, [['success', text.tokens.revoked]]);
