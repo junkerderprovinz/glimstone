@@ -4137,8 +4137,17 @@
     color: var(--carbon-text-sub);
     text-decoration: none;
   }
+  /* A number reads as plain text and is still a link: the underline comes
+     only under the pointer or the keyboard. */
+  a.glim-version-number:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
   @media (hover: hover) {
-    a.glim-version-number:hover { color: var(--accent-ink); }
+    a.glim-version-number:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
   }
   .glim-version-actions {
     display: flex;
@@ -4146,6 +4155,106 @@
     align-items: flex-end;
     justify-content: flex-end;
     gap: var(--space-6);
+  }
+  .glim-version-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-8);
+  }
+  .glim-version-app {
+    min-width: 0;
+    font-size: var(--text-body);
+    font-weight: 600;
+    color: var(--carbon-text);
+  }
+  .glim-version-head .glim-version-number {
+    font-size: var(--text-body);
+    color: var(--carbon-text);
+  }
+  .glim-version-state {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-2) var(--space-6);
+    margin-top: calc(-1 * var(--space-4));
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: var(--carbon-text-sub);
+  }
+  .glim-version-state[data-tone="ok"] .glim-version-line { color: var(--status-ok-text); }
+  .glim-version-state[data-tone="warn"] .glim-version-line { color: var(--status-warn-text); }
+  .glim-version-state[data-tone="fail"] .glim-version-line { color: var(--status-fail-text); }
+  .glim-version-note { color: var(--carbon-text-muted); }
+  .glim-version-progress {
+    height: 4px;
+    border-radius: 2px;
+    overflow: hidden;
+    background: var(--carbon-surface3);
+  }
+  .glim-version-progress > span {
+    display: block;
+    height: 100%;
+    background: var(--accent);
+    transition: width var(--motion-control-dur) ease-out;
+  }
+  .glim-version-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--space-2) var(--space-9);
+  }
+  .glim-version-status { margin-inline-start: auto; font-size: var(--text-meta); }
+  .glim-version-status[data-tone="ok"] { color: var(--status-ok-text); }
+  .glim-version-status[data-tone="warn"] { color: var(--status-warn-text); }
+  .glim-version-status[data-tone="fail"] { color: var(--status-fail-text); }
+
+  /* A quiet action in running text, such as "What's new" or "Check for
+     updates": no frame and no fill, the accent's ink with a faint underline
+     that turns solid under the pointer. A coarse pointer gets a taller target
+     without moving the line. */
+  .glim-text-action {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin: 0;
+    padding: var(--space-2) 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: var(--accent-ink);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+  .glim-text-action:hover,
+  .glim-text-action:focus-visible { text-decoration-color: currentColor; }
+  .glim-text-action:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+  .glim-text-action:disabled {
+    color: var(--carbon-text-muted);
+    text-decoration-color: transparent;
+    cursor: default;
+  }
+  @media (pointer: coarse) {
+    .glim-text-action { margin-block: calc(-1 * var(--space-4)); padding-block: calc(var(--space-2) + var(--space-4)); }
+  }
+  /* The dot in front of "What's new": green while something is unseen, grey once nothing is. */
+  .glim-text-action-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--carbon-text-muted);
+  }
+  .glim-text-action-dot[data-unseen] {
+    background: var(--status-ok-solid);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--status-ok-solid) 25%, transparent);
   }
 
   /* A brand mark's SVG stands in its parent's box as if it were the parent's

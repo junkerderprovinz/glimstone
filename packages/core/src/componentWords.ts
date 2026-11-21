@@ -75,4 +75,51 @@ export interface ComponentWords {
   floatingPanel: { minimize: string; maximize: string; restore: string; close: string };
   signaturePad: { area: string; clear: string };
   passwordField: { show: string; hide: string; confirm: string; mismatch: string };
+  versionCard: {
+    title: string;
+    /** "{app}". */
+    hint: string;
+    whatsNew: string;
+    check: string;
+    checking: string;
+    current: string;
+    /** "{when}", a time before now such as "3 minutes ago". */
+    checked: string;
+    /** Each with "{version}". */
+    available: string;
+    newIn: string;
+    failed: string;
+    /** "{percent}". */
+    downloading: string;
+    /** "{version}". */
+    ready: string;
+    update: string;
+    /** "{version}". */
+    restart: string;
+    guide: string;
+    plugins: string;
+    /** "{store}". */
+    store: string;
+    auto: string;
+    /** "{app}". */
+    autoHint: string;
+    autoCheck: string;
+    /** "{app}". */
+    autoCheckHint: string;
+    /** "{version}". */
+    unreleased: string;
+  };
+  componentsCard: {
+    title: string;
+    /** "{app}". */
+    hint: string;
+    auto: string;
+    /** "{app}". */
+    autoHint: string;
+    update: string;
+    design: string;
+    installer: string;
+    /** "{version}". */
+    unreleased: string;
+  };
 }

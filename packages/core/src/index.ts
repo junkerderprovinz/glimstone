@@ -33,6 +33,7 @@ export * from "./fortress.ts";
 export * from "./fortressText.ts";
 export * from "./fortressTexts.ts";
 export * from "./infoTile.ts";
+export * from "./versionCards.ts";
 export * from "./inputModality.ts";
 export * from "./listModel.ts";
 export * from "./marks.ts";

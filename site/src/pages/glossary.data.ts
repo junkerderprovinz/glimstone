@@ -1299,13 +1299,14 @@ export const GLOSSARY: GlossarySection[] = [
         en: "Info tile",
         de: "Infokachel",
         code: ["InfoTile", "AboutCard"],
-        components: ["InfoTile", "AboutCard", "InfoVersionCard", "InfoHelpCard", "InfoAboutCard"],
+        components: ["InfoTile", "AboutCard", "InfoVersionCard", "InfoComponentsCard", "InfoHelpCard", "InfoAboutCard"],
         text: {
-          en: "The three cards of the Info tab in this order: the version card with each version as a row, the help card with GitHub, Discord, mail and manual, and the about card with its sentence on money and the donation buttons under it.",
-          de: "Die drei Karten des Info-Reiters in dieser Reihenfolge: die Versionskarte mit jeder Version als Zeile, die Hilfe-Karte mit GitHub, Discord, E-Mail und Handbuch, und die Über-Karte mit dem Satz zum Geld und den Spendenknöpfen darunter.",
+          en: "The four cards of the Info tab in this order: the version card with the app, where its updates stand and what's new, the components card with every other version as a row, the help card with GitHub, Discord, mail and manual, and the about card with its sentence on money and the donation buttons under it.",
+          de: "Die vier Karten des Info-Reiters in dieser Reihenfolge: die Versionskarte mit der App, dem Stand der Updates und den Neuigkeiten, die Komponentenkarte mit jeder anderen Version als Zeile, die Hilfe-Karte mit GitHub, Discord, E-Mail und Handbuch, und die Über-Karte mit dem Satz zum Geld und den Spendenknöpfen darunter.",
         },
         also: [
           { en: "Version card", de: "Versionskarte", code: "InfoVersionCard" },
+          { en: "Components card", de: "Komponentenkarte", code: "InfoComponentsCard" },
           { en: "Help card", de: "Hilfe-Karte", code: "InfoHelpCard" },
           { en: "About card", de: "Über-Karte", code: "InfoAboutCard" },
         ],

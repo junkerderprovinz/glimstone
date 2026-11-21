@@ -26,6 +26,7 @@ import type { TourText } from "./tour.ts";
 import type { FloatingPanelText } from "./floatingPanel.ts";
 import type { SignaturePadText } from "./signaturePad.ts";
 import type { PasswordFieldText } from "./passwordField.ts";
+import { componentsCardText, versionCardText, type ComponentsCardText, type VersionCardText } from "./versionCards.ts";
 import { en } from "./componentLocales/en.ts";
 import { de } from "./componentLocales/de.ts";
 import { ar } from "./componentLocales/ar.ts";
@@ -91,6 +92,8 @@ export interface ComponentText {
   floatingPanel: FloatingPanelText;
   signaturePad: SignaturePadText;
   passwordField: PasswordFieldText;
+  versionCard: VersionCardText;
+  componentsCard: ComponentsCardText;
 }
 
 /** The words for a language tag such as `pt-BR`: its own, its base language's, or English. */
@@ -115,5 +118,7 @@ export function componentText(lang: string): ComponentText {
     floatingPanel: w.floatingPanel,
     signaturePad: w.signaturePad,
     passwordField: w.passwordField,
+    versionCard: versionCardText(w.versionCard, code),
+    componentsCard: componentsCardText(w.componentsCard),
   };
 }

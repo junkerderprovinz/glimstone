@@ -64,7 +64,7 @@ import {
 import { Combobox } from "@glimstone/react/Combobox";
 import { Select } from "@glimstone/react/Select";
 import { Slider } from "@glimstone/react/Slider";
-import { COFFEE_BUTTON_SVG, fortressText, GLIMSTONE_VERSION, LINUX_SVG, MAIL_SVG, MANUAL_SVG, type FortressPermission, type SignInText } from "@glimstone/core";
+import { COFFEE_BUTTON_SVG, componentText, fortressText, LINUX_SVG, MAIL_SVG, MANUAL_SVG, type FortressPermission, type SignInText } from "@glimstone/core";
 import { SERVICE_MARKS } from "@glimstone/core/serviceMarks";
 import logo from "../../../.github/assets/logo.svg?url";
 import { Glyph } from "../glyph";
@@ -1693,17 +1693,30 @@ function GlyphDemo() {
 
 function InfoTileDemo() {
   const t = useT();
+  const words = componentText(useContext(LangContext));
   const repoUrl = "https://github.com/junkerderprovinz/glimstone";
   return (
     <div style={{ display: "grid", gap: 40, width: "100%", maxWidth: 480, paddingTop: 12 }}>
       <InfoTile
         hueIndex={0}
         version={{
-          text: { title: "Version", unreleased: (v) => t(`${v}, not released yet`, `${v}, noch nicht veröffentlicht`) },
-          rows: [
-            { name: t("Example app", "Beispiel-App"), version: "2.1.0", repoUrl },
-            { name: "GlimStone", sub: t("Design language", "Designsprache"), version: GLIMSTONE_VERSION, repoUrl },
-          ],
+          text: words.versionCard,
+          name: t("Example app", "Beispiel-App"),
+          version: "2.1.0",
+          repoUrl,
+          route: "install",
+          state: { kind: "available", version: "2.2.0" },
+          onCheck: () => {},
+          onUpdate: () => {},
+          onWhatsNew: () => {},
+          unseen: 3,
+          autoUpdate: true,
+          openUrl: nothing,
+        }}
+        components={{
+          text: words.componentsCard,
+          name: t("Example app", "Beispiel-App"),
+          rows: [{ name: "rclone", sub: t("Cloud transfers", "Übertragung in die Cloud"), version: "1.75.2" }],
           openUrl: nothing,
         }}
         help={{
