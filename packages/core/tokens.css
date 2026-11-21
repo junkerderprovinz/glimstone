@@ -2813,6 +2813,13 @@
     height: 0.875rem;
     flex: none;
   }
+  /* A brand's mark beside a button's words, such as a sign-in service's, is
+     as tall as a glyph and as wide as its shape asks. */
+  .glim-btn-glyph > .glim-brand-svg > svg {
+    width: auto;
+    height: 0.875rem;
+    flex: none;
+  }
 
   /* Long text ellipsises rather than breaking the row. The label sets its own
      line height: `.glim-btn`'s `line-height: 1` gives a 14px line box where
@@ -3790,6 +3797,16 @@
   .glim-signin-tile-facts {
     color: var(--carbon-text-sub);
     font-size: var(--text-meta);
+    text-align: end;
+  }
+  /* A row's facts wrap beside its name instead of pushing the name out. */
+  .glim-signin-tile-rows .glim-list-row-name {
+    flex: 1 0 auto;
+    max-width: 50%;
+  }
+  .glim-signin-tile-rows .glim-list-row-badges {
+    flex: 0 1 auto;
+    min-width: 0;
   }
   .glim-signin-tile-text,
   .glim-signin-tile-quiet,

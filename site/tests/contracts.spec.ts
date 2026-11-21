@@ -4237,7 +4237,7 @@ test.describe("SignInCard", () => {
     await open(page, "/components/sign-in-card");
     const service = button(page, "Sign in with Pocket ID");
     expect((await box(service)).y).toBeGreaterThan((await box(button(page, "Sign in"))).y);
-    await expect(service.locator(".glim-brand-svg svg")).toHaveCount(1);
+    expect((await box(service.locator(".glim-brand-svg svg"))).height).toBeCloseTo(14, 0);
     await expect(card(page).locator(".glim-btn")).toHaveCount(2);
     await service.click();
     await expect(said(page)).toHaveText("Off to Pocket ID");
