@@ -776,6 +776,7 @@ The settings of the kit's sign-in stand in one tile, "Sign-in", in every app. `S
 - **Sessions name the browser and the system, the way in, where from and when last seen.** This session is marked and has no End. "Sign out everywhere else" ends the others.
 - **A new token is shown once.** The window takes a name, what it can and how long it lives, and the token shows in a window that leaves only through "I've copied the token".
 - **Without a sign-in service the card is one row with "Add a sign-in service".** Each service stands as a connection row ("Connections") with its mark, how it stands as a badge, its address and when it was last tested. The picker takes the identity catalog, with the tile for any other OpenID Connect service last. The form asks for the address, the client ID and the secret, shows the redirect address to register, and one quiet line says that the service decides who gets in. There is no table of groups and roles and no switch for accounts on the first sign-in: whoever the service lets through has an account here.
+- **A newcomer from a sign-in service gets the role its form names**, never the admin's by itself. Where the app has more than one role, the form offers them as a selector (the accent wash, no frame lines), set to the app's ordinary role for a new service and to the service's own when it is edited. The quiet line names the role a newcomer gets. A service from the configuration file has no form, so its file decides the role.
 - **A service the app sets up in its configuration file says so in its row** ("from the configuration file") and has no Test sign-in, Edit, Remove or switch, since the file decides. After a reset paused it, Turn on again stands in its row and turns it on.
 - **A test's result stands under the form and in the test button's bubble, never in the foot's start.** The foot keeps Cancel, Back, Test sign-in and Turn on in one row. A failed test shakes its button and turns it red with a cross, as every test does ("Failure feedback").
 - **Accounts list everyone who can sign in**, with the role in the app's words, the way in, the groups the service reported and when they were last seen. The owner and the account looking have no Block and no Remove.
@@ -793,6 +794,7 @@ The settings of the kit's sign-in stand in one tile, "Sign-in", in every app. `S
 - [ ] Passkeys only where the address allows them, and the others marked with their address.
 - [ ] No service: one row with "Add a sign-in service"; the form with the quiet line on who gets in.
 - [ ] A service from the configuration file says so, has no Test sign-in, Edit, Remove or switch, and offers Turn on again once a reset paused it.
+- [ ] Where the app has several roles, the service form picks the newcomers' role, the ordinary one for a new service, and its quiet line names it.
 - [ ] An account from a sign-in service is sent there for its password, two-factor and passkeys, and keeps its tokens.
 - [ ] A test's result under the form and in the button's bubble, the foot in one row.
 - [ ] `SignInReauthWindow` once beside the tiles, and the change runs again after the password.
