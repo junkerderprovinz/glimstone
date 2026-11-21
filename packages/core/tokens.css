@@ -4109,11 +4109,22 @@
     padding: 0;
     list-style: none;
   }
+  /* On a narrow card a row breaks before its end, so a status and a button
+     keep their room beside the number. */
   .glim-version-row {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: var(--space-8);
+    gap: var(--space-2) var(--space-8);
+  }
+  .glim-version-end {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-2) var(--space-6);
+    margin-inline-start: auto;
   }
   .glim-version-name {
     display: flex;
@@ -4200,7 +4211,7 @@
     background: var(--accent);
     transition: width var(--motion-control-dur) ease-out;
   }
-  .glim-version-status { margin-inline-start: auto; font-size: var(--text-meta); }
+  .glim-version-status { font-size: var(--text-meta); }
   .glim-version-status[data-tone="ok"] { color: var(--status-ok-text); }
   .glim-version-status[data-tone="warn"] { color: var(--status-warn-text); }
   .glim-version-status[data-tone="fail"] { color: var(--status-fail-text); }

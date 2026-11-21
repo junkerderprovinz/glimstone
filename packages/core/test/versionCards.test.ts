@@ -22,7 +22,14 @@ const now = new Date('2026-11-21T12:00:00Z');
 test('a current app says so, and when it last looked', () => {
   const at = new Date(now.getTime() - 3 * 60_000);
   assert.deepEqual(updateLine({ kind: 'current', checkedAt: at }, T, now), { line: 'Up to date', tone: 'ok', note: 'Last checked 3 minutes ago' });
-  assert.deepEqual(updateLine({ kind: 'current' }, T, now), { line: 'Up to date', tone: 'ok', note: undefined });
+});
+
+test('an app that has not looked yet says so instead of claiming to be up to date', () => {
+  assert.deepEqual(updateLine({ kind: 'unchecked' }, T), { line: 'Not checked yet', tone: 'neutral' });
+  assert.deepEqual(updateLine({ kind: 'current' }, T, now), { line: 'Not checked yet', tone: 'neutral' });
+  assert.deepEqual(checkButton('install', { kind: 'unchecked' }), { busy: false });
+  assert.equal(updateAction('install', { kind: 'unchecked' }, T), null);
+  assert.equal(componentText('de').versionCard.unchecked, 'Noch nicht geprüft');
 });
 
 test('each state has its own line and tone', () => {
@@ -32,6 +39,14 @@ test('each state has its own line and tone', () => {
   assert.deepEqual(updateLine({ kind: 'ready', version: '1.4.0' }, T), { line: '1.4.0 is ready', tone: 'ok' });
   assert.deepEqual(updateLine({ kind: 'failed', reason: 'GitHub cannot be reached.' }, T), { line: 'Check failed', tone: 'fail', note: 'GitHub cannot be reached.' });
   assert.equal(updateLine({ kind: 'store', store: 'F-Droid' }, T).line, 'Updates come through F-Droid.');
+  assert.equal(updateLine({ kind: 'store', store: 'Google Play' }, T).line, 'Updates come through Google Play.');
+});
+
+test('a phone app names the store it came from, or none, or the release page for a downloaded file', () => {
+  assert.equal(updateLine({ kind: 'store' }, T).line, 'Updates come through the store you got the app from.');
+  assert.deepEqual(updateLine({ kind: 'direct' }, T), { line: 'New versions come as a download on the release page.', tone: 'neutral' });
+  assert.equal(componentText('de').versionCard.anyStore, 'Updates kommen über den Store, aus dem du die App hast.');
+  assert.equal(checkButton('store', { kind: 'direct' }), null);
 });
 
 test('the one action follows the route and appears only once there is a new version', () => {

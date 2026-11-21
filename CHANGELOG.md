@@ -2,6 +2,29 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+The Version card says "Not checked yet" until an app has looked for updates, a phone app names the store it really came from, and a row in the Components card breaks before its end on a narrow card.
+
+## 🧩 Adopting apps
+
+- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.8.3, all packages at the same number.
+- **Before the first check,** hand the card `state: { kind: "unchecked" }`. A `current` state without `checkedAt` shows the same words, because "Up to date" needs a check behind it, so pass `checkedAt` with every `current`.
+- **Name the store your app came from:** pass `store` with the store's own name, such as F-Droid or Google Play. Leave `store` out where the app cannot tell, and the card says "Updates come through the store you got the app from."
+- **An app installed from a downloaded file,** such as an APK from the release page, takes `state: { kind: "direct" }` and says "New versions come as a download on the release page."
+- **Your own copy of the stylesheet:** copy `tokens.css` again. It brings `.glim-version-end`, which holds a component row's status, button and number together.
+- **Flutter:** move the git dependency to v4.8.3.
+
+## ✨ Added
+
+- **Two states for `InfoVersionCard`:** `unchecked` and `direct`, in React, Vue, Solid and Svelte, with their words in all 42 languages.
+- **A store without a name:** `store` in the `store` state is optional.
+
+## 🎨 Design
+
+- **"Not checked yet" before the first check.** The card no longer claims "Up to date" before it has looked.
+- **A component row breaks before its end.** On a narrow card, at 390px for one, the status, the button and the number move under the name together, so none of them is squeezed out.
+
 ## 4.8.2 - 2026-11-21
 
 The Info tile has four cards in every app: Version, Components, Help and About. The Version card holds the app with its number, the update switch and one last row with where the updates stand and the buttons that go with it. Every other number moves to the Components card, and every number reads as plain text that opens its project's newest release.

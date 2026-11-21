@@ -260,13 +260,15 @@ export function InfoComponentsCard({
               <span className="glim-version-part">{row.name}</span>
               {row.hint && <InfoBubble tip={row.hint} />}
             </span>
-            {row.status && (
-              <span className="glim-version-status" data-tone={row.tone}>
-                {row.status}
-              </span>
-            )}
-            {row.action && <Button label={row.action.label} labelKey={row.action.labelKey} onClick={row.action.onClick} />}
-            <VersionNumber row={row} unreleased={text.unreleased} openUrl={openUrl} />
+            <span className="glim-version-end">
+              {row.status && (
+                <span className="glim-version-status" data-tone={row.tone}>
+                  {row.status}
+                </span>
+              )}
+              {row.action && <Button label={row.action.label} labelKey={row.action.labelKey} onClick={row.action.onClick} />}
+              <VersionNumber row={row} unreleased={text.unreleased} openUrl={openUrl} />
+            </span>
           </li>
         ))}
       </ul>
