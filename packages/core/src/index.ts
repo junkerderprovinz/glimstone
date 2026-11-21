@@ -62,6 +62,8 @@ export * from "./selectScroll.ts";
 export * from "./sidebarRow.ts";
 export * from "./signaturePad.ts";
 export * from "./signIn.ts";
+export * from "./signInApi.ts";
+export * from "./signInTile.ts";
 export * from "./splitter.ts";
 export * from "./steps.ts";
 export * from "./storage.ts";

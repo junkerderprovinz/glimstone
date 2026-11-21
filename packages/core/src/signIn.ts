@@ -3,7 +3,10 @@
 // what was typed and which form shows, and the React and Vue cards draw it.
 
 import { PASSWORD_FIELD_TEXT } from "./passwordField.ts";
+import type { TileMark } from "./picker.ts";
 import { shake } from "./selectModel.ts";
+import type { SignInApi, SignInRemoved, SignInVisitor } from "./signInApi.ts";
+import { signInErrorText, type SignInErrorText } from "./signInTile.ts";
 
 /** The card's words, translated by the app. The reset form's second field, its
  *  mismatch and the eye say what a PasswordField says, which
@@ -72,12 +75,14 @@ export const signInTextEn: SignInText = {
 /**
  * What the app answers to a sign-in or a passkey. `ok` means the card's part is
  * done: the app signs in or shows a step of its own. `needCode` asks for the
- * second step, and `error` is said above Sign in.
+ * second step, and `error` is said above Sign in. `restart` ends a second step
+ * that ran out, so the card asks for the password again.
  */
 export interface SignInAnswer {
   ok?: boolean;
   needCode?: boolean;
   error?: string;
+  restart?: boolean;
 }
 
 /** What the app answers to asking for a reset code or to setting the password. `rejected` means the code from the log was refused. */
@@ -92,6 +97,12 @@ export interface SignInHandlers {
   onSignIn: (input: { password: string; code?: string; passkey: boolean }) => Promise<SignInAnswer>;
   /** An empty answer leaves the card as it was, for a prompt the person closed. */
   onPasskey?: () => Promise<SignInAnswer>;
+  /**
+   * Lets the browser offer the passkeys it holds in the password field, with
+   * conditional mediation, until `signal` ends the offer. The card starts it
+   * whenever the password form is at rest. An empty answer leaves the card as it was.
+   */
+  onPasskeyOffer?: (signal: AbortSignal) => Promise<SignInAnswer>;
   /** Writes a code to the log. The reset form shows only once this answers ok. */
   onAskCode?: () => Promise<ResetAnswer>;
   onSetPassword?: (input: { code: string; password: string }) => Promise<ResetAnswer>;
@@ -126,6 +137,8 @@ export interface SignInState {
   error: string | null;
   refusal: SignInRefusal | null;
   busy: "signIn" | "passkey" | "askCode" | "setPassword" | null;
+  /** The card has sent a try of its own, so an error from outside it no longer stands. */
+  tried: boolean;
 }
 
 export interface SignInOptions extends SignInHandlers {
@@ -140,6 +153,8 @@ export interface SignInFlow {
   set(field: SignInField, value: string): void;
   submit(): Promise<void>;
   passkey(): Promise<void>;
+  /** Runs the browser's passkey offer until `signal` ends it. */
+  offer(signal: AbortSignal): Promise<void>;
   forgot(): Promise<void>;
   back(): void;
 }
@@ -156,6 +171,7 @@ const START: SignInState = {
   error: null,
   refusal: null,
   busy: null,
+  tried: false,
 };
 
 const BUTTON_OF: Record<NonNullable<SignInState["busy"]>, SignInButton> = {
@@ -187,7 +203,7 @@ export function createSignInFlow(options: () => SignInOptions): SignInFlow {
 
   async function run(busy: NonNullable<SignInState["busy"]>, work: () => Promise<void>) {
     if (state.busy) return;
-    update({ busy, error: null });
+    update({ busy, error: null, tried: true });
     pending = {};
     try {
       await work();
@@ -215,8 +231,8 @@ export function createSignInFlow(options: () => SignInOptions): SignInFlow {
         if (tried) refuse(res.error ?? text.codeInvalid, "submit", "code");
         return;
       }
-      // A passkey's sign-in that ended starts over with the password.
-      if (state.viaPasskey) update({ viaPasskey: false, needCode: false, code: "" });
+      // A passkey's sign-in that ended starts over with the password, as does a step that ran out.
+      if (state.viaPasskey || res.restart) update({ viaPasskey: false, needCode: false, code: "" });
       refuse(res.error ?? text.failed, "submit", state.needCode ? "code" : "password");
     });
   }
@@ -259,6 +275,22 @@ export function createSignInFlow(options: () => SignInOptions): SignInFlow {
         if (res.needCode) update({ viaPasskey: true, needCode: true, code: "" });
         else if (res.error !== undefined) refuse(res.error, "passkey");
       });
+    },
+    async offer(signal) {
+      const { onPasskeyOffer } = options();
+      if (!onPasskeyOffer) return;
+      let res: SignInAnswer;
+      try {
+        res = await onPasskeyOffer(signal);
+      } catch {
+        return;
+      }
+      if (signal.aborted || res.ok || state.busy) return;
+      if (res.needCode) update({ viaPasskey: true, needCode: true, code: "", tried: true });
+      else if (res.error !== undefined) {
+        update({ tried: true });
+        refuse(res.error, "submit", "password");
+      }
     },
     async forgot() {
       const { text, onAskCode } = options();
@@ -341,6 +373,16 @@ export function showRefusal(root: HTMLElement | null, refusal: SignInRefusal): (
   return button ? shake(button) : () => {};
 }
 
+/**
+ * Whether the browser's passkey offer can run: the password form at rest,
+ * neither in the code step nor busy. The key changes whenever a new offer
+ * has to start, since an offer that answered is spent.
+ */
+export function passkeyOfferKey(s: SignInState): string | null {
+  if (s.view !== "signIn" || s.needCode || s.busy) return null;
+  return `offer:${s.refusal?.count ?? 0}`;
+}
+
 /** The label keys behind the card's buttons, which pick their glyphs (see Button). */
 export interface SignInLabelKeys {
   signIn: string;
@@ -348,4 +390,73 @@ export interface SignInLabelKeys {
   forgot: string;
   back: string;
   setPassword: string;
+  /** The glyph on a sign-in service's button where its catalog entry has no mark. */
+  service: string;
+}
+
+/** The sign-in service whose button stands under Sign in: its name and the mark its catalog entry carries. */
+export interface SignInCardService {
+  name: string;
+  mark?: TileMark;
+}
+
+export interface SignInCardHandlerOptions {
+  /** The words for the kit's codes. A tile's `SignInTileText` carries them too. */
+  words: { errors: SignInErrorText; failed: string };
+  /** The person is in. */
+  onSignedIn: (visitor: SignInVisitor | undefined) => void;
+  /** A reset went through and signed the person in, with what it took away. */
+  onReset?: (removed: SignInRemoved) => void;
+  /** The account's name, in an app with several local accounts. */
+  name?: () => string | undefined;
+}
+
+/**
+ * The card's handlers for an app on the kit's sign-in: the password and its
+ * code, the browser's passkey offer and the reset through the container log,
+ * each answering with the app's words for the kit's code.
+ */
+export function signInCardHandlers(
+  api: SignInApi,
+  o: SignInCardHandlerOptions,
+): Required<Pick<SignInHandlers, "onSignIn" | "onPasskeyOffer" | "onAskCode" | "onSetPassword">> {
+  const say = (e: Parameters<typeof signInErrorText>[1]) => signInErrorText(o.words, e);
+  return {
+    async onSignIn({ password, code }) {
+      if (code !== undefined) {
+        const r = await api.loginCode(code);
+        if (r.ok) {
+          o.onSignedIn(r.value.visitor);
+          return { ok: true };
+        }
+        if (r.error === "stepExpired") return { error: say(r), restart: true };
+        return { needCode: r.error === "wrongCode", error: say(r) };
+      }
+      const r = await api.login(password, o.name?.());
+      if (!r.ok) return { error: say(r) };
+      if (r.value.step === "code") return { needCode: true };
+      o.onSignedIn(r.value.visitor);
+      return { ok: true };
+    },
+    async onPasskeyOffer(signal) {
+      const r = await api.offerPasskey(signal);
+      if (!r) return {};
+      if (!r.ok) return { error: say(r) };
+      o.onSignedIn(r.value.visitor);
+      return { ok: true };
+    },
+    async onAskCode() {
+      const r = await api.resetCode();
+      return r.ok ? { ok: true } : { error: say(r) };
+    },
+    async onSetPassword({ code, password }) {
+      const r = await api.reset(code, password, o.name?.());
+      if (r.ok) {
+        o.onReset?.(r.value.removed);
+        return { ok: true };
+      }
+      if (r.status === 401) return { rejected: true };
+      return { error: say(r) };
+    },
+  };
 }
