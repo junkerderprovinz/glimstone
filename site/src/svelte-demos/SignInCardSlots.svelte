@@ -36,6 +36,7 @@
     appName="GlimStone"
     text={signInTextEn}
     reset
+    resetName
     autoFocus={false}
     idPrefix="svelte-slots"
     {fields}

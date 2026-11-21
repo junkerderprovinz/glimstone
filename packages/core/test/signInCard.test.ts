@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { createSignInFlow, passkeyOfferKey, signInCardHandlers, signInTextEn, type SignInAnswer, type SignInHandlers } from '../src/signIn.ts';
+import { createSignInFlow, passkeyOfferKey, resetBlocked, signInCardHandlers, signInTextEn, type SignInAnswer, type SignInHandlers } from '../src/signIn.ts';
 import type { SignInApi, SignInFailure } from '../src/signInApi.ts';
 import { signInTileTextEn } from '../src/signInTile.ts';
 
@@ -95,6 +95,42 @@ test('a password that needs a code asks for it, and a wrong code keeps the step'
 test('a wrong code from the log is a rejection the card answers itself', async () => {
   const h = signInCardHandlers(api({ reset: async () => no('resetRefused') }), { words: signInTileTextEn, onSignedIn: () => {} });
   assert.deepEqual(await h.onSetPassword({ code: 'XXXX', password: 'a long password' }), { rejected: true });
+});
+
+test('the reset form asks for the name itself where the app has several accounts', async () => {
+  let sent: unknown;
+  const f = createSignInFlow(() => ({
+    text: signInTextEn,
+    minPassword: 12,
+    resetName: true,
+    onSignIn: async () => ({}),
+    onAskCode: async () => ({ ok: true }),
+    onSetPassword: async (input) => {
+      sent = input;
+      return { ok: true };
+    },
+  }));
+  f.set('password', 'typed in the sign-in form');
+  await f.forgot();
+  f.set('resetCode', 'ABCD-EFGH-JKLM');
+  f.set('newPassword', 'a long new password');
+  f.set('confirm', 'a long new password');
+  assert.equal(resetBlocked(f.state(), true), true);
+  await f.submit();
+  assert.equal(sent, undefined);
+  f.set('resetName', ' sam ');
+  await f.submit();
+  assert.deepEqual(sent, { code: 'ABCD-EFGH-JKLM', password: 'a long new password', name: 'sam' });
+});
+
+test('the handlers reset the account the reset form names', async () => {
+  let asked: unknown[] = [];
+  const h = signInCardHandlers(
+    api({ reset: async (...args: unknown[]) => ((asked = args), { ok: true, value: { removed: { tokens: 0, passkeys: 0, twoFactor: false, services: 0 } } }) }),
+    { words: signInTileTextEn, onSignedIn: () => {}, name: () => 'from the sign-in form' },
+  );
+  await h.onSetPassword({ code: 'X', password: 'a long password', name: 'sam' });
+  assert.deepEqual(asked, ['X', 'a long password', 'sam']);
 });
 
 test('no passkey picked leaves the card as it was', async () => {

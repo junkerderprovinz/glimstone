@@ -17,6 +17,7 @@ export default function SignInCardSlots() {
         appName="GlimStone"
         text={signInTextEn}
         reset
+        resetName
         autoFocus={false}
         idPrefix="slots"
         fields={

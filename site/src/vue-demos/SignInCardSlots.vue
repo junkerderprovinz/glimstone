@@ -23,6 +23,7 @@ async function setPassword() {
       app-name="GlimStone"
       :text="signInTextEn"
       reset
+      reset-name
       :auto-focus="false"
       id-prefix="vue-slots"
       :on-sign-in="async () => ({ error: 'That password is not right' })"

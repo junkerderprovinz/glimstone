@@ -47,6 +47,8 @@ export interface SignInCardProps extends SignInHandlers {
   passkey?: boolean;
   /** Offers Forgot password? and the reset form. */
   reset?: boolean;
+  /** Asks for the account's name in the reset form, in an app with several accounts (the kit's options say `owner: false`). */
+  resetName?: boolean;
   /** The shortest new password the reset form takes, as the server says. */
   minPassword?: number;
   /** One line at the top of the sign-in form, such as "You are signed out". */
@@ -64,7 +66,7 @@ export interface SignInCardProps extends SignInHandlers {
   /** A step the app runs itself, in place of the card's forms. */
   step?: ReactNode;
   labelKeys?: Partial<SignInLabelKeys>;
-  /** The start of the fields' ids: `-password`, `-code`, `-reset-code`, `-new` and `-confirm` follow it. */
+  /** The start of the fields' ids: `-password`, `-code`, `-reset-code`, `-reset-name`, `-new` and `-confirm` follow it. */
   idPrefix?: string;
   /** Puts the focus in the first empty field when the card opens. */
   autoFocus?: boolean;
@@ -98,6 +100,7 @@ export function SignInCard({
   text,
   passkey = false,
   reset = false,
+  resetName = false,
   minPassword = 12,
   note,
   error: outside,
@@ -112,8 +115,8 @@ export function SignInCard({
   className,
   ...handlers
 }: SignInCardProps) {
-  const latest = useRef({ ...handlers, text, minPassword });
-  latest.current = { ...handlers, text, minPassword };
+  const latest = useRef({ ...handlers, text, minPassword, resetName });
+  latest.current = { ...handlers, text, minPassword, resetName };
   const [flow] = useState(() => createSignInFlow(() => latest.current));
   const s = useSyncExternalStore(flow.subscribe, flow.state, flow.state);
   const ownId = useId();
@@ -181,6 +184,19 @@ export function SignInCard({
                   placeholder="XXXX-XXXX-XXXX"
                 />
               </SignInField>
+              {resetName && (
+                <SignInField label={text.name} htmlFor={id("reset-name")}>
+                  <TextField
+                    id={id("reset-name")}
+                    data-signin-field="resetName"
+                    value={s.resetName}
+                    onChange={(e) => flow.set("resetName", e.target.value)}
+                    autoComplete="username"
+                    autoCapitalize="none"
+                    spellCheck={false}
+                  />
+                </SignInField>
+              )}
               <SignInField label={text.newPassword} htmlFor={id("new")}>
                 <PasswordField id={id("new")} data-signin-field="newPassword" value={s.newPassword} onChange={(e) => flow.set("newPassword", e.target.value)} autoComplete="new-password" text={eye} />
               </SignInField>
@@ -195,7 +211,7 @@ export function SignInCard({
                 tone="accent"
                 type="submit"
                 data-signin="set-password"
-                disabled={resetBlocked(s)}
+                disabled={resetBlocked(s, resetName)}
                 busy={s.busy === "setPassword"}
                 title={s.busy === "setPassword" ? text.saving : undefined}
               />

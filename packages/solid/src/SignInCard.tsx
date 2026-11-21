@@ -47,6 +47,8 @@ export interface SignInCardProps extends SignInHandlers {
   passkey?: boolean;
   /** Offers Forgot password? and the reset form. */
   reset?: boolean;
+  /** Asks for the account's name in the reset form, in an app with several accounts (the kit's options say `owner: false`). */
+  resetName?: boolean;
   /** The shortest new password the reset form takes, as the server says. */
   minPassword?: number;
   /** One line at the top of the sign-in form, such as "You are signed out". */
@@ -64,7 +66,7 @@ export interface SignInCardProps extends SignInHandlers {
   /** A step the app runs itself, in place of the card's forms. */
   step?: JSX.Element;
   labelKeys?: Partial<SignInLabelKeys>;
-  /** The start of the fields' ids: `-password`, `-code`, `-reset-code`, `-new` and `-confirm` follow it. */
+  /** The start of the fields' ids: `-password`, `-code`, `-reset-code`, `-reset-name`, `-new` and `-confirm` follow it. */
   idPrefix?: string;
   /** Puts the focus in the first empty field when the card opens. */
   autoFocus?: boolean;
@@ -93,7 +95,7 @@ export function SignInField(props: { label: string; htmlFor: string; hint?: stri
 }
 
 export function SignInCard(props: SignInCardProps) {
-  const own = mergeProps({ passkey: false, reset: false, minPassword: 12, autoFocus: true }, props);
+  const own = mergeProps({ passkey: false, reset: false, resetName: false, minPassword: 12, autoFocus: true }, props);
   const flow = createSignInFlow(() => own);
   const [s, setS] = createSignal(flow.state());
   onCleanup(flow.subscribe(() => setS(flow.state())));
@@ -275,6 +277,19 @@ export function SignInCard(props: SignInCardProps) {
                     placeholder="XXXX-XXXX-XXXX"
                   />
                 </SignInField>
+                <Show when={own.resetName}>
+                  <SignInField label={own.text.name} htmlFor={id("reset-name")}>
+                    <TextField
+                      id={id("reset-name")}
+                      data-signin-field="resetName"
+                      value={s().resetName}
+                      onInput={(e) => flow.set("resetName", e.currentTarget.value)}
+                      autocomplete="username"
+                      autocapitalize="none"
+                      spellcheck={false}
+                    />
+                  </SignInField>
+                </Show>
                 <SignInField label={own.text.newPassword} htmlFor={id("new")}>
                   <PasswordField
                     id={id("new")}
@@ -303,7 +318,7 @@ export function SignInCard(props: SignInCardProps) {
                   tone="accent"
                   type="submit"
                   data-signin="set-password"
-                  disabled={resetBlocked(s())}
+                  disabled={resetBlocked(s(), own.resetName)}
                   busy={s().busy === "setPassword"}
                   title={s().busy === "setPassword" ? own.text.saving : undefined}
                 />

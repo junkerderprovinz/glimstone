@@ -28,6 +28,8 @@ export interface SignInText {
   back: string;
   /** The label of the reset form's code field. */
   resetCode: string;
+  /** The label of the reset form's name field, in an app with several accounts. */
+  name: string;
   /** The (i) beside it: where the log is, how long the code lasts, what a reset removes. */
   resetCodeTip: string;
   newPassword: string;
@@ -59,6 +61,7 @@ export const signInTextEn: SignInText = {
   codeInvalid: "That code is not valid.",
   back: "Back",
   resetCode: "Code from the container log",
+  name: "Name",
   resetCodeTip: "The app has written a code to its container log. On Unraid: Docker tab, the app's icon, Logs. A code is valid for 10 minutes.",
   newPassword: "New password",
   confirmPassword: PASSWORD_FIELD_TEXT.confirm,
@@ -105,10 +108,11 @@ export interface SignInHandlers {
   onPasskeyOffer?: (signal: AbortSignal) => Promise<SignInAnswer>;
   /** Writes a code to the log. The reset form shows only once this answers ok. */
   onAskCode?: () => Promise<ResetAnswer>;
-  onSetPassword?: (input: { code: string; password: string }) => Promise<ResetAnswer>;
+  /** `name` is set where the reset form asks for it (`resetName`). */
+  onSetPassword?: (input: { code: string; password: string; name?: string }) => Promise<ResetAnswer>;
 }
 
-export type SignInField = "password" | "code" | "resetCode" | "newPassword" | "confirm";
+export type SignInField = "password" | "code" | "resetCode" | "resetName" | "newPassword" | "confirm";
 
 /** The card's buttons, by their `data-signin` hook. */
 export type SignInButton = "submit" | "set-password" | "passkey" | "forgot";
@@ -132,6 +136,7 @@ export interface SignInState {
   /** A passkey started this sign-in, so the code goes without the password. */
   viaPasskey: boolean;
   resetCode: string;
+  resetName: string;
   newPassword: string;
   confirm: string;
   error: string | null;
@@ -145,6 +150,8 @@ export interface SignInOptions extends SignInHandlers {
   text: SignInText;
   /** The shortest new password the reset form takes. */
   minPassword: number;
+  /** The reset form asks for the account's name. */
+  resetName?: boolean;
 }
 
 export interface SignInFlow {
@@ -166,6 +173,7 @@ const START: SignInState = {
   needCode: false,
   viaPasskey: false,
   resetCode: "",
+  resetName: "",
   newPassword: "",
   confirm: "",
   error: null,
@@ -238,12 +246,12 @@ export function createSignInFlow(options: () => SignInOptions): SignInFlow {
   }
 
   async function setPassword() {
-    const { text, minPassword, onSetPassword, onAskCode } = options();
-    if (resetBlocked(state) || !onSetPassword) return;
+    const { text, minPassword, onSetPassword, onAskCode, resetName } = options();
+    if (resetBlocked(state, resetName) || !onSetPassword) return;
     if (state.newPassword !== state.confirm) return refuse(text.mismatch, "set-password", "confirm");
     if ([...state.newPassword].length < minPassword) return refuse(text.tooShort, "set-password", "newPassword");
     return run("setPassword", async () => {
-      const res = await onSetPassword({ code: state.resetCode.trim(), password: state.newPassword });
+      const res = await onSetPassword({ code: state.resetCode.trim(), password: state.newPassword, ...(resetName ? { name: state.resetName.trim() } : {}) });
       if (res.ok) return;
       if (res.rejected) {
         // The answer does not say whether the code expired, and the sentence
@@ -297,7 +305,7 @@ export function createSignInFlow(options: () => SignInOptions): SignInFlow {
       if (!onAskCode) return;
       return run("askCode", async () => {
         const res = await onAskCode();
-        if (res.ok) update({ view: "reset", resetCode: "", newPassword: "", confirm: "" });
+        if (res.ok) update({ view: "reset", resetCode: "", resetName: "", newPassword: "", confirm: "" });
         else refuse(res.error ?? text.failed, "forgot");
       });
     },
@@ -315,9 +323,9 @@ export function signInBlocked(s: SignInState): boolean {
   return s.password === "";
 }
 
-/** Set password waits for the code from the log and a new password. */
-export function resetBlocked(s: SignInState): boolean {
-  return !!s.busy || s.resetCode.trim() === "" || s.newPassword === "";
+/** Set password waits for the code from the log, the name where the form asks for one, and a new password. */
+export function resetBlocked(s: SignInState, asksName = false): boolean {
+  return !!s.busy || s.resetCode.trim() === "" || (asksName && s.resetName.trim() === "") || s.newPassword === "";
 }
 
 /**
@@ -407,7 +415,7 @@ export interface SignInCardHandlerOptions {
   onSignedIn: (visitor: SignInVisitor | undefined) => void;
   /** A reset went through and signed the person in, with what it took away. */
   onReset?: (removed: SignInRemoved) => void;
-  /** The account's name, in an app with several local accounts. */
+  /** The account's name from the sign-in form, in an app with several local accounts. The reset form asks for its own (`resetName`). */
   name?: () => string | undefined;
 }
 
@@ -449,8 +457,8 @@ export function signInCardHandlers(
       const r = await api.resetCode();
       return r.ok ? { ok: true } : { error: say(r) };
     },
-    async onSetPassword({ code, password }) {
-      const r = await api.reset(code, password, o.name?.());
+    async onSetPassword({ code, password, name }) {
+      const r = await api.reset(code, password, name);
       if (r.ok) {
         o.onReset?.(r.value.removed);
         return { ok: true };

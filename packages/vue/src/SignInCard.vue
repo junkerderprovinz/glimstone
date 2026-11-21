@@ -38,6 +38,8 @@ const props = withDefaults(
     passkey?: boolean;
     /** Offers Forgot password? and the reset form. */
     reset?: boolean;
+    /** Asks for the account's name in the reset form, in an app with several accounts (the kit's options say `owner: false`). */
+    resetName?: boolean;
     /** The shortest new password the reset form takes, as the server says. */
     minPassword?: number;
     /** One line at the top of the sign-in form, such as "You are signed out". */
@@ -50,7 +52,7 @@ const props = withDefaults(
     onService?: () => void;
     /** The label keys behind the buttons, which pick their glyphs. */
     labelKeys?: Partial<Record<"signIn" | "passkey" | "forgot" | "back" | "setPassword" | "service", string>>;
-    /** The start of the fields' ids: `-password`, `-code`, `-reset-code`, `-new` and `-confirm` follow it. */
+    /** The start of the fields' ids: `-password`, `-code`, `-reset-code`, `-reset-name`, `-new` and `-confirm` follow it. */
     idPrefix?: string;
     /** Puts the focus in the first empty field when the card opens. */
     autoFocus?: boolean;
@@ -67,7 +69,7 @@ const props = withDefaults(
     onAskCode?: () => Promise<ResetAnswer>;
     onSetPassword?: (input: { code: string; password: string }) => Promise<ResetAnswer>;
   }>(),
-  { passkey: false, reset: false, minPassword: 12, autoFocus: true },
+  { passkey: false, reset: false, resetName: false, minPassword: 12, autoFocus: true },
 );
 const slots = useSlots();
 
@@ -151,6 +153,17 @@ watch(
             @update:model-value="flow.set('resetCode', $event)"
           />
         </SignInField>
+        <SignInField v-if="resetName" :label="text.name" :for="id('reset-name')">
+          <TextField
+            :id="id('reset-name')"
+            data-signin-field="resetName"
+            :model-value="s.resetName"
+            autocomplete="username"
+            autocapitalize="none"
+            spellcheck="false"
+            @update:model-value="flow.set('resetName', $event)"
+          />
+        </SignInField>
         <SignInField :label="text.newPassword" :for="id('new')">
           <PasswordField :id="id('new')" data-signin-field="newPassword" :model-value="s.newPassword" autocomplete="new-password" :text="eye" @update:model-value="flow.set('newPassword', $event)" />
         </SignInField>
@@ -165,7 +178,7 @@ watch(
           tone="accent"
           type="submit"
           data-signin="set-password"
-          :disabled="resetBlocked(s)"
+          :disabled="resetBlocked(s, resetName)"
           :busy="s.busy === 'setPassword'"
           :title="s.busy === 'setPassword' ? text.saving : undefined"
         />
