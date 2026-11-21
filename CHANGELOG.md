@@ -12,7 +12,7 @@ The Version card says "Not checked yet" until an app has looked for updates, a p
 - **Before the first check,** hand the card `state: { kind: "unchecked" }`. A `current` state without `checkedAt` shows the same words, because "Up to date" needs a check behind it, so pass `checkedAt` with every `current`.
 - **Name the store your app came from:** pass `store` with the store's own name, such as F-Droid or Google Play. Leave `store` out where the app cannot tell, and the card says "Updates come through the store you got the app from."
 - **An app installed from a downloaded file,** such as an APK from the release page, takes `state: { kind: "direct" }` and says "New versions come as a download on the release page."
-- **Your own copy of the stylesheet:** copy `tokens.css` again. It brings `.glim-version-end`, which holds a component row's status, button and number together, and `.glim-version-tail`, which keeps the button and the number on one line.
+- **Your own copy of the stylesheet:** copy `tokens.css` again. It brings `.glim-version-end`, which holds a component row's status, button and number together, and `.glim-version-tail`, which keeps the button and the number on one line. It also makes a version number a 24px target and lets the Version card's head wrap.
 - **Flutter:** move the git dependency to v4.8.3.
 
 ## ✨ Added
@@ -24,6 +24,8 @@ The Version card says "Not checked yet" until an app has looked for updates, a p
 
 - **"Not checked yet" before the first check.** The card no longer claims "Up to date" before it has looked.
 - **A component row breaks before its end.** On a narrow card the status, the button and the number move under the name together. The button and the number always share one line at the end of the row, and where the status leaves them no room, at 390px in German for one, it stands on a line of its own above them, so nothing is cut off and the page never scrolls sideways.
+- **A version number is a 24px target for a finger.** It looks as before: plain text in the text colour, the accent only under the pointer.
+- **A long build number drops under the app's name** on a phone, where it ran over the name.
 
 ## 4.8.2 - 2026-11-21
 
