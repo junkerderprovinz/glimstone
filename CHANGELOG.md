@@ -4,7 +4,7 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## Unreleased
 
-The Info tile has four cards: Version, Components, Help and About. The Version card shows the app, where its updates stand and one action once there is a new version, and every version number is text in the accent's ink that opens its project's newest release.
+The Info tile has four cards: Version, Components, Help and About. The Version card shows the app and its switch, with a last row that holds where the updates stand and its buttons, and every version number reads as plain text that takes the accent's ink under the pointer and opens its project's newest release.
 
 ## 🧩 Adopting apps
 
@@ -12,16 +12,16 @@ The Info tile has four cards: Version, Components, Help and About. The Version c
 - **InfoComponentsCard is new** and takes every other version as `rows`, each with a `kind` (`part`, `tool` or `installer`) and, for a project without releases in its repository, a `releasePage`. It adds GlimStone's row itself and sorts them.
 - **InfoTile wants `components`** between `version` and `help`.
 - **The words come with GlimStone**: `componentText(lang).versionCard` and `.componentsCard` in all 42 languages, with "{app}" filled from `name`.
-- **"What's new" is the one name** for the release notes and the window of changes. Drop a "New · n" or "Release notes" button of your own.
+- **"What's new" is the one name** for the release notes and the window of changes. Drop a "New · n" or "Release notes" button of your own. While `state` says a new version is available, let `onWhatsNew` open that version's notes.
 
 ## ✨ Added
 
-- `InfoComponentsCard`, `componentRows`, `designRow`, `numberLink`, `updateLine`, `updateAction`, `autoSwitch`, `canCheck`, `whatsNewLabel`, `timeAgo` and `withApp`.
-- `.glim-text-action` for a quiet action in running text, and the Version card's classes in `tokens.css`.
+- `InfoComponentsCard`, `componentRows`, `designRow`, `numberLink`, `updateLine`, `updateAction`, `autoSwitch`, `checkButton`, `whatsNewLabel`, `timeAgo` and `withApp`.
+- The Version and Components cards' classes in `tokens.css`. Register glyphs for the label keys `version.whatsNew`, `version.check`, `version.update`, `version.restart`, `version.guide`, `version.plugins` and `components.update`.
 
 ## 🔧 Changed
 
-- A version number that opens its release is text in the accent's ink, never underlined.
+- A version number that opens its release takes the accent's ink under the pointer instead of an underline.
 
 ## 4.8.1 - 2026-11-20
 

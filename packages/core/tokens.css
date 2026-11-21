@@ -4137,9 +4137,13 @@
     color: var(--carbon-text-sub);
     text-decoration: none;
   }
-  /* A number that opens its release is text in the accent's ink: no frame,
-     no fill and no underline, so it never reads as a button. */
-  a.glim-version-number { color: var(--accent-ink); }
+  /* A number that opens its release reads as plain text and takes the
+     accent's ink under the pointer: no frame, no fill and no underline, so it
+     never reads as a button. */
+  a.glim-version-number:focus-visible { color: var(--accent-ink); }
+  @media (hover: hover) {
+    a.glim-version-number:hover { color: var(--accent-ink); }
+  }
   .glim-version-actions {
     display: flex;
     flex-wrap: wrap;
@@ -4159,16 +4163,27 @@
     font-weight: 600;
     color: var(--carbon-text);
   }
-  .glim-version-head .glim-version-number { font-size: var(--text-body); }
-  .glim-version-line .glim-version-number { font-size: inherit; line-height: inherit; }
-  .glim-version-state {
+  .glim-version-head .glim-version-number {
+    font-size: var(--text-body);
+    color: var(--carbon-text);
+  }
+  /* The card's last row: where the updates stand at its start, the buttons
+     at its end, and the buttons drop under the words when the row is narrow. */
+  .glim-version-foot {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-6) var(--space-8);
+  }
+  .glim-version-foot .glim-version-actions { margin-inline-start: auto; }
+  .glim-version-state {
+    display: flex;
+    flex: 1 1 8rem;
+    flex-wrap: wrap;
     align-items: baseline;
-    justify-content: flex-end;
     gap: var(--space-2) var(--space-6);
-    text-align: end;
-    margin-top: calc(-1 * var(--space-4));
+    min-width: 0;
+    margin: 0;
     font-size: 0.875rem;
     line-height: 1.25rem;
     color: var(--carbon-text-sub);
@@ -4189,62 +4204,19 @@
     background: var(--accent);
     transition: width var(--motion-control-dur) ease-out;
   }
-  .glim-version-links {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: flex-end;
-    gap: var(--space-4) var(--space-9);
-  }
   .glim-version-status { margin-inline-start: auto; font-size: var(--text-meta); }
   .glim-version-status[data-tone="ok"] { color: var(--status-ok-text); }
   .glim-version-status[data-tone="warn"] { color: var(--status-warn-text); }
   .glim-version-status[data-tone="fail"] { color: var(--status-fail-text); }
 
-  /* A quiet action in running text, such as "What's new" or "Check for
-     updates": no frame and no fill, the accent's ink with a faint underline
-     that turns solid under the pointer. A coarse pointer gets a taller target
-     without moving the line. */
-  .glim-text-action {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-3);
-    margin: 0;
-    padding: var(--space-2) 0;
-    border: 0;
-    background: none;
-    font: inherit;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    color: var(--accent-ink);
-    text-decoration: underline;
-    text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
-    text-underline-offset: 3px;
-    cursor: pointer;
-  }
-  .glim-text-action:hover,
-  .glim-text-action:focus-visible { text-decoration-color: currentColor; }
-  .glim-text-action:focus-visible {
-    outline: var(--focus-ring-width) solid var(--focus-ring);
-    outline-offset: 2px;
-    border-radius: 2px;
-  }
-  .glim-text-action:disabled {
-    color: var(--carbon-text-muted);
-    text-decoration-color: transparent;
-    cursor: default;
-  }
-  @media (pointer: coarse) {
-    .glim-text-action { margin-block: calc(-1 * var(--space-4)); padding-block: calc(var(--space-2) + var(--space-4)); }
-  }
-  /* The dot in front of "What's new": green while something is unseen, grey once nothing is. */
-  .glim-text-action-dot {
+  /* The dot before "What's new": green while something is unseen, grey once nothing is. */
+  .glim-version-dot {
     width: 8px;
     height: 8px;
     border-radius: 50%;
     background: var(--carbon-text-muted);
   }
-  .glim-text-action-dot[data-unseen] {
+  .glim-version-dot[data-unseen] {
     background: var(--status-ok-solid);
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--status-ok-solid) 25%, transparent);
   }

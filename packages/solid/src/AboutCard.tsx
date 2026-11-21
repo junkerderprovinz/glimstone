@@ -1,7 +1,7 @@
 import { createMemo, For, mergeProps, Show, splitProps, type JSX } from "solid-js";
 import {
   autoSwitch,
-  canCheck,
+  checkButton,
   componentRows,
   designRow,
   mailHref,
@@ -144,15 +144,17 @@ export interface InfoVersionCardProps {
 }
 
 /**
- * The first card: the app's name and version, one line on where its updates
- * stand, the one action once there is something to do, and two quiet actions,
- * "What's new" and "Check for updates".
+ * The first card: the app's name and version, the switch, and a last row with
+ * where the updates stand at its start and the buttons at its end: "What's
+ * new", "Check for updates" while there is something to look for, and the one
+ * action once there is something to do.
  */
 export function InfoVersionCard(props: InfoVersionCardProps) {
   const merged = mergeProps({ unseen: 0, openUrl: openInBrowser }, props);
   const face = createMemo(() => updateLine(merged.state, merged.text));
   const action = createMemo(() => updateAction(merged.route, merged.state, merged.text));
   const toggle = createMemo(() => autoSwitch(merged.route, merged.text));
+  const check = createMemo(() => checkButton(merged.route, merged.state));
   const progress = () => {
     const s = merged.state;
     return s.kind === "downloading" ? s.percent : undefined;
@@ -169,27 +171,6 @@ export function InfoVersionCard(props: InfoVersionCardProps) {
         <span class="glim-version-app">{merged.name}</span>
         <VersionNumber row={{ name: merged.name, version: merged.version, repoUrl: merged.repoUrl }} unreleased={merged.text.unreleased} openUrl={merged.openUrl} />
       </div>
-      <p class="glim-version-state" data-tone={face().tone} role="status">
-        <span class="glim-version-line">
-          <Show when={face().version} fallback={face().line}>
-            {(v) => (
-              <>
-                {v().before}
-                <VersionNumber row={{ name: merged.name, version: v().number, repoUrl: merged.repoUrl }} unreleased={merged.text.unreleased} openUrl={merged.openUrl} />
-                {v().after}
-              </>
-            )}
-          </Show>
-        </span>
-        <Show when={face().note}>
-          <span class="glim-version-note">{face().note}</span>
-        </Show>
-      </p>
-      <Show when={progress() !== undefined}>
-        <div class="glim-version-progress" role="progressbar" aria-label={face().line} aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress()}>
-          <span style={{ width: `${progress()}%` }} />
-        </div>
-      </Show>
       <Show when={toggle() && merged.autoUpdate !== undefined ? toggle() : undefined}>
         {(t) => (
           <FieldRow label={t().label} hint={withApp(t().hint, merged.name)}>
@@ -197,19 +178,32 @@ export function InfoVersionCard(props: InfoVersionCardProps) {
           </FieldRow>
         )}
       </Show>
-      <div class="glim-version-links">
-        <button type="button" class="glim-text-action" onClick={() => merged.onWhatsNew()}>
-          <span class="glim-text-action-dot" data-unseen={merged.unseen > 0 ? "" : undefined} aria-hidden="true" />
-          {whatsNewLabel(merged.text, merged.unseen)}
-        </button>
-        <Show when={merged.onCheck && merged.route !== "store"}>
-          <button type="button" class="glim-text-action" disabled={!canCheck(merged.route, merged.state)} onClick={() => merged.onCheck?.()}>
-            {merged.text.check}
-          </button>
-        </Show>
-        <Show when={action()}>
-          {(a) => <Button label={a().label} labelKey={a().labelKey} tone={a().kind === "guide" ? "neutral" : "accent"} onClick={press} />}
-        </Show>
+      <Show when={progress() !== undefined}>
+        <div class="glim-version-progress" role="progressbar" aria-label={face().line} aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress()}>
+          <span style={{ width: `${progress()}%` }} />
+        </div>
+      </Show>
+      <div class="glim-version-foot">
+        <p class="glim-version-state" data-tone={face().tone} role="status">
+          <span class="glim-version-line">{face().line}</span>
+          <Show when={face().note}>
+            <span class="glim-version-note">{face().note}</span>
+          </Show>
+        </p>
+        <div class="glim-version-actions">
+          <Button
+            label={whatsNewLabel(merged.text, merged.unseen)}
+            labelKey="version.whatsNew"
+            before={<span class="glim-version-dot" data-unseen={merged.unseen > 0 ? "" : undefined} aria-hidden="true" />}
+            onClick={() => merged.onWhatsNew()}
+          />
+          <Show when={check() && merged.onCheck ? check() : undefined}>
+            {(c) => <Button label={merged.text.check} labelKey="version.check" busy={c().busy} disabled={c().busy} onClick={() => merged.onCheck?.()} />}
+          </Show>
+          <Show when={action()}>
+            {(a) => <Button label={a().label} labelKey={a().labelKey} tone={a().kind === "guide" ? "neutral" : "accent"} onClick={press} />}
+          </Show>
+        </div>
       </div>
     </Card>
   );
@@ -278,8 +272,8 @@ export function InfoComponentsCard(props: InfoComponentsCardProps) {
 }
 
 /**
- * A number in the accent's ink that opens the newest release of its
- * project. It is text: no frame, no fill and no underline.
+ * A number that reads as plain text and opens the newest release of its
+ * project. It takes the accent's ink under the pointer, never an underline.
  */
 function VersionNumber(props: { row: ComponentRow; unreleased: (version: string) => string; openUrl: OpenUrl }) {
   const link = createMemo(() => numberLink(props.row));

@@ -6,7 +6,7 @@ import {
   autoSwitch,
   designRow,
   COMPONENTS_CARD_TEXT,
-  canCheck,
+  checkButton,
   componentRows,
   numberLink,
   timeAgo,
@@ -27,26 +27,11 @@ test('a current app says so, and when it last looked', () => {
 
 test('each state has its own line and tone', () => {
   assert.equal(updateLine({ kind: 'checking' }, T).tone, 'neutral');
-  assert.equal(updateLine({ kind: 'available', version: '2.10.0' }, T).line, 'Update to 2.10.0 available');
-  assert.equal(updateLine({ kind: 'available', version: '2.10.0' }, T).tone, 'warn');
+  assert.deepEqual(updateLine({ kind: 'available', version: '2.10.0' }, T), { line: 'Update to 2.10.0 available', tone: 'warn' });
   assert.equal(updateLine({ kind: 'downloading', percent: 42 }, T).line, 'Downloading … 42%');
-  assert.equal(updateLine({ kind: 'ready', version: '1.4.0' }, T).line, '1.4.0 is ready');
+  assert.deepEqual(updateLine({ kind: 'ready', version: '1.4.0' }, T), { line: '1.4.0 is ready', tone: 'ok' });
   assert.deepEqual(updateLine({ kind: 'failed', reason: 'GitHub cannot be reached.' }, T), { line: 'Check failed', tone: 'fail', note: 'GitHub cannot be reached.' });
   assert.equal(updateLine({ kind: 'store', store: 'F-Droid' }, T).line, 'Updates come through F-Droid.');
-});
-
-test('a line that names the new version comes split around it, so the number can be the link', () => {
-  assert.deepEqual(updateLine({ kind: 'available', version: '2.10.0' }, T).version, { number: '2.10.0', before: 'Update to ', after: ' available' });
-  assert.deepEqual(updateLine({ kind: 'ready', version: '1.4.0' }, componentText('ja').versionCard).version, { number: '1.4.0', before: '', after: ' の準備ができました' });
-  assert.equal(updateLine({ kind: 'checking' }, T).version, undefined);
-});
-
-test('every language names the new version once, so the line can carry its link', async () => {
-  const { COMPONENT_LANGUAGES } = await import('../src/componentTexts.ts');
-  for (const lang of COMPONENT_LANGUAGES) {
-    const words = componentText(lang).versionCard;
-    for (const line of [words.available('9.8.7'), words.ready('9.8.7')]) assert.equal(line.split('9.8.7').length, 2, `${lang}: ${line}`);
-  }
 });
 
 test('the one action follows the route and appears only once there is a new version', () => {
@@ -64,11 +49,14 @@ test('a downloaded version asks for a restart, but only where the app installs i
   assert.equal(updateAction('guide', { kind: 'ready', version: '1.4.0' }, T), null);
 });
 
-test('a store app never checks, and no check starts while one runs', () => {
-  assert.equal(canCheck('store', { kind: 'store', store: 'F-Droid' }), false);
-  assert.equal(canCheck('guide', { kind: 'checking' }), false);
-  assert.equal(canCheck('install', { kind: 'downloading', percent: 10 }), false);
-  assert.equal(canCheck('plugins', { kind: 'current' }), true);
+test('the check is offered while there is something to look for, and never once a new version is found', () => {
+  assert.deepEqual(checkButton('install', { kind: 'current' }), { busy: false });
+  assert.deepEqual(checkButton('guide', { kind: 'failed' }), { busy: false });
+  assert.deepEqual(checkButton('plugins', { kind: 'checking' }), { busy: true });
+  assert.equal(checkButton('install', { kind: 'available', version: '2.0.0' }), null);
+  assert.equal(checkButton('install', { kind: 'downloading', percent: 10 }), null);
+  assert.equal(checkButton('install', { kind: 'ready', version: '2.0.0' }), null);
+  assert.equal(checkButton('store', { kind: 'store', store: 'F-Droid' }), null);
 });
 
 test('the switch installs on a desktop, only looks in a container, and is absent elsewhere', () => {

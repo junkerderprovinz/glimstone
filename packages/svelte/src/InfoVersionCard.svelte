@@ -37,15 +37,15 @@
 </script>
 
 <script lang="ts">
-  import { autoSwitch, canCheck, numberLink, openInBrowser, updateAction, updateLine, whatsNewLabel, withApp } from "@glimstone/core";
+  import { autoSwitch, checkButton, numberLink, openInBrowser, updateAction, updateLine, whatsNewLabel, withApp } from "@glimstone/core";
   import Button from "./Button.svelte";
   import Card from "./Card.svelte";
   import FieldRow from "./FieldRow.svelte";
   import Toggle from "./Toggle.svelte";
 
-  // The first card of the Info tile: the app's name and version, one line on
-  // where its updates stand, the one action once there is something to do, and
-  // two quiet actions, "What's new" and "Check for updates".
+  // The first card of the Info tile: the app's name and version, the switch,
+  // and a last row with where the updates stand at its start and the buttons
+  // at its end.
   let {
     text,
     name,
@@ -68,6 +68,7 @@
   const face = $derived(updateLine(state, text));
   const action = $derived(updateAction(route, state, text));
   const toggle = $derived(autoSwitch(route, text));
+  const check = $derived(checkButton(route, state));
   const number = $derived(numberLink({ name, version, repoUrl }));
 
   function press() {
@@ -94,37 +95,30 @@
       <span class="glim-num glim-version-number">{number.released ? number.shown : text.unreleased(number.shown)}</span>
     {/if}
   </div>
-  <p class="glim-version-state" data-tone={face.tone} role="status">
-    <span class="glim-version-line">
-      {#if face.version}
-        {@const link = numberLink({ name, version: face.version.number, repoUrl })}
-        {face.version.before}{#if link.href}<a href={link.href} target="_blank" rel="noopener noreferrer" class="glim-num glim-version-number" onclick={(e) => open(e, link.href!)}>{link.shown}</a>{:else}<span class="glim-num glim-version-number">{link.shown}</span>{/if}{face.version.after}
-      {:else}
-        {face.line}
-      {/if}
-    </span>
-    {#if face.note}<span class="glim-version-note">{face.note}</span>{/if}
-  </p>
-  {#if state.kind === "downloading"}
-    <div class="glim-version-progress" role="progressbar" aria-label={face.line} aria-valuemin={0} aria-valuemax={100} aria-valuenow={state.percent}>
-      <span style:width={`${state.percent}%`}></span>
-    </div>
-  {/if}
   {#if toggle && autoUpdate !== undefined}
     <FieldRow label={toggle.label} hint={withApp(toggle.hint, name)}>
       <Toggle checked={autoUpdate} onChange={flip} label={toggle.label} hideLabel />
     </FieldRow>
   {/if}
-  <div class="glim-version-links">
-    <button type="button" class="glim-text-action" onclick={() => onWhatsNew()}>
-      <span class="glim-text-action-dot" data-unseen={unseen > 0 ? "" : undefined} aria-hidden="true"></span>
-      {whatsNewLabel(text, unseen)}
-    </button>
-    {#if onCheck && route !== "store"}
-      <button type="button" class="glim-text-action" disabled={!canCheck(route, state)} onclick={() => onCheck?.()}>{text.check}</button>
-    {/if}
-    {#if action}
-      <Button label={action.label} labelKey={action.labelKey} tone={action.kind === "guide" ? "neutral" : "accent"} onClick={press} />
-    {/if}
+  {#if state.kind === "downloading"}
+    <div class="glim-version-progress" role="progressbar" aria-label={face.line} aria-valuemin={0} aria-valuemax={100} aria-valuenow={state.percent}>
+      <span style:width={`${state.percent}%`}></span>
+    </div>
+  {/if}
+  <div class="glim-version-foot">
+    <p class="glim-version-state" data-tone={face.tone} role="status">
+      <span class="glim-version-line">{face.line}</span>
+      {#if face.note}<span class="glim-version-note">{face.note}</span>{/if}
+    </p>
+    <div class="glim-version-actions">
+      {#snippet dot()}<span class="glim-version-dot" data-unseen={unseen > 0 ? "" : undefined} aria-hidden="true"></span>{/snippet}
+      <Button label={whatsNewLabel(text, unseen)} labelKey="version.whatsNew" before={dot} onClick={() => onWhatsNew()} />
+      {#if check && onCheck}
+        <Button label={text.check} labelKey="version.check" busy={check.busy} disabled={check.busy} onClick={() => onCheck?.()} />
+      {/if}
+      {#if action}
+        <Button label={action.label} labelKey={action.labelKey} tone={action.kind === "guide" ? "neutral" : "accent"} onClick={press} />
+      {/if}
+    </div>
   </div>
 </Card>

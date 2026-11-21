@@ -127,38 +127,24 @@ export function withApp(sentence: string, app: string): string {
   return fill(sentence, { app });
 }
 
-/**
- * The line under the app's version: what the state says, in which tone, and a
- * quieter note after it. A line that names a new version also comes split
- * around it, so the card can make that number the link to its release.
- */
-export function updateLine(
-  state: UpdateState,
-  text: VersionCardText,
-  now?: Date,
-): { line: string; tone: UpdateTone; note?: string; version?: { number: string; before: string; after: string } } {
+/** The line at the start of the card's last row: what the state says, in which tone, and a quieter note after it. */
+export function updateLine(state: UpdateState, text: VersionCardText, now?: Date): { line: string; tone: UpdateTone; note?: string } {
   switch (state.kind) {
     case "current":
       return { line: text.current, tone: "ok", note: state.checkedAt && text.checked(state.checkedAt, now) };
     case "checking":
       return { line: text.checking, tone: "neutral" };
     case "available":
-      return around(text.available(state.version), state.version, "warn");
+      return { line: text.available(state.version), tone: "warn" };
     case "downloading":
       return { line: text.downloading(state.percent), tone: "neutral" };
     case "ready":
-      return around(text.ready(state.version), state.version, "ok");
+      return { line: text.ready(state.version), tone: "ok" };
     case "failed":
       return { line: text.failed, tone: "fail", note: state.reason };
     case "store":
       return { line: text.store(state.store), tone: "neutral" };
   }
-}
-
-function around(line: string, number: string, tone: UpdateTone) {
-  const at = line.indexOf(number);
-  if (at < 0) return { line, tone };
-  return { line, tone, version: { number, before: line.slice(0, at), after: line.slice(at + number.length) } };
 }
 
 export type UpdateActionKind = "update" | "restart" | "guide" | "plugins";
@@ -182,12 +168,19 @@ export function updateAction(route: UpdateRoute, state: UpdateState, text: Versi
   }
 }
 
-/** Whether "Check for updates" can be pressed: never for a store app, and not while one runs. */
-export function canCheck(route: UpdateRoute, state: UpdateState): boolean {
-  return route !== "store" && state.kind !== "checking" && state.kind !== "downloading";
+/**
+ * Whether the card offers "Check for updates", and whether a check is running.
+ * Once a new version is found there is nothing left to look for, and a store
+ * app looks for nothing.
+ */
+export function checkButton(route: UpdateRoute, state: UpdateState): { busy: boolean } | null {
+  if (route === "store") return null;
+  if (state.kind === "current" || state.kind === "failed") return { busy: false };
+  if (state.kind === "checking") return { busy: true };
+  return null;
 }
 
-/** The switch under the state: an app that installs updates itself, or one that only looks for them. */
+/** The switch above the last row: an app that installs updates itself, or one that only looks for them. */
 export function autoSwitch(route: UpdateRoute, text: VersionCardText): { label: string; hint: string } | null {
   if (route === "install") return { label: text.auto, hint: text.autoHint };
   if (route === "guide") return { label: text.autoCheck, hint: text.autoCheckHint };

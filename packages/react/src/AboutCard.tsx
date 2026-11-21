@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import {
   autoSwitch,
-  canCheck,
+  checkButton,
   componentRows,
   designRow,
   mailHref,
@@ -149,9 +149,10 @@ export interface InfoVersionCardProps {
 }
 
 /**
- * The first card: the app's name and version, one line on where its updates
- * stand, the one action once there is something to do, and two quiet actions,
- * "What's new" and "Check for updates".
+ * The first card: the app's name and version, the switch, and a last row with
+ * where the updates stand at its start and the buttons at its end: "What's
+ * new", "Check for updates" while there is something to look for, and the one
+ * action once there is something to do.
  */
 export function InfoVersionCard({
   text,
@@ -174,6 +175,7 @@ export function InfoVersionCard({
   const face = updateLine(state, text);
   const action = updateAction(route, state, text);
   const toggle = autoSwitch(route, text);
+  const check = checkButton(route, state);
   const press = () => {
     if (action?.kind === "restart") onRestart?.();
     else if (action?.kind === "guide") guideUrl && openUrl(guideUrl);
@@ -185,41 +187,31 @@ export function InfoVersionCard({
         <span className="glim-version-app">{name}</span>
         <VersionNumber row={{ name, version, repoUrl }} unreleased={text.unreleased} openUrl={openUrl} />
       </div>
-      <p className="glim-version-state" data-tone={face.tone} role="status">
-        <span className="glim-version-line">
-          {face.version ? (
-            <>
-              {face.version.before}
-              <VersionNumber row={{ name, version: face.version.number, repoUrl }} unreleased={text.unreleased} openUrl={openUrl} />
-              {face.version.after}
-            </>
-          ) : (
-            face.line
-          )}
-        </span>
-        {face.note && <span className="glim-version-note">{face.note}</span>}
-      </p>
-      {state.kind === "downloading" && (
-        <div className="glim-version-progress" role="progressbar" aria-label={face.line} aria-valuemin={0} aria-valuemax={100} aria-valuenow={state.percent}>
-          <span style={{ width: `${state.percent}%` }} />
-        </div>
-      )}
       {toggle && autoUpdate !== undefined && (
         <FieldRow label={toggle.label} hint={withApp(toggle.hint, name)}>
           <Toggle checked={autoUpdate} onChange={(on) => onAutoUpdateChange?.(on)} label={toggle.label} hideLabel />
         </FieldRow>
       )}
-      <div className="glim-version-links">
-        <button type="button" className="glim-text-action" onClick={onWhatsNew}>
-          <span className="glim-text-action-dot" data-unseen={unseen > 0 ? "" : undefined} aria-hidden="true" />
-          {whatsNewLabel(text, unseen)}
-        </button>
-        {onCheck && route !== "store" && (
-          <button type="button" className="glim-text-action" disabled={!canCheck(route, state)} onClick={onCheck}>
-            {text.check}
-          </button>
-        )}
-        {action && <Button label={action.label} labelKey={action.labelKey} tone={action.kind === "guide" ? "neutral" : "accent"} onClick={press} />}
+      {state.kind === "downloading" && (
+        <div className="glim-version-progress" role="progressbar" aria-label={face.line} aria-valuemin={0} aria-valuemax={100} aria-valuenow={state.percent}>
+          <span style={{ width: `${state.percent}%` }} />
+        </div>
+      )}
+      <div className="glim-version-foot">
+        <p className="glim-version-state" data-tone={face.tone} role="status">
+          <span className="glim-version-line">{face.line}</span>
+          {face.note && <span className="glim-version-note">{face.note}</span>}
+        </p>
+        <div className="glim-version-actions">
+          <Button
+            label={whatsNewLabel(text, unseen)}
+            labelKey="version.whatsNew"
+            before={<span className="glim-version-dot" data-unseen={unseen > 0 ? "" : undefined} aria-hidden="true" />}
+            onClick={onWhatsNew}
+          />
+          {check && onCheck && <Button label={text.check} labelKey="version.check" busy={check.busy} disabled={check.busy} onClick={onCheck} />}
+          {action && <Button label={action.label} labelKey={action.labelKey} tone={action.kind === "guide" ? "neutral" : "accent"} onClick={press} />}
+        </div>
       </div>
     </Card>
   );
@@ -292,8 +284,8 @@ export function InfoComponentsCard({
 }
 
 /**
- * A number in the accent's ink that opens the newest release of its
- * project. It is text: no frame, no fill and no underline.
+ * A number that reads as plain text and opens the newest release of its
+ * project. It takes the accent's ink under the pointer, never an underline.
  */
 function VersionNumber({ row, unreleased, openUrl }: { row: ComponentRow; unreleased: (version: string) => string; openUrl: OpenUrl }) {
   const { shown, released, href } = numberLink(row);
