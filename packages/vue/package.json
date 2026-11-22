@@ -1,6 +1,6 @@
 {
   "name": "@glimstone/vue",
-  "version": "4.8.2",
+  "version": "4.8.4",
   "description": "GlimStone's components for Vue",
   "license": "AGPL-3.0-only",
   "repository": {
@@ -116,7 +116,7 @@
     "build": "vite build && vue-tsc -p tsconfig.build.json"
   },
   "dependencies": {
-    "@glimstone/core": "4.8.2"
+    "@glimstone/core": "4.8.4"
   },
   "peerDependencies": {
     "@internationalized/date": "^3.12.4",

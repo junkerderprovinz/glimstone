@@ -245,13 +245,17 @@ export function InfoComponentsCard(props: InfoComponentsCardProps) {
                 <span class="glim-version-part">{row.name}</span>
                 <Show when={row.hint}>{(hint) => <InfoBubble tip={hint()} />}</Show>
               </span>
-              <Show when={row.status}>
-                <span class="glim-version-status" data-tone={row.tone}>
-                  {row.status}
+              <span class="glim-version-end">
+                <Show when={row.status}>
+                  <span class="glim-version-status" data-tone={row.tone}>
+                    {row.status}
+                  </span>
+                </Show>
+                <span class="glim-version-tail">
+                  <Show when={row.action}>{(a) => <Button label={a().label} labelKey={a().labelKey} onClick={() => a().onClick()} />}</Show>
+                  <VersionNumber row={row} unreleased={merged.text.unreleased} openUrl={merged.openUrl} />
                 </span>
-              </Show>
-              <Show when={row.action}>{(a) => <Button label={a().label} labelKey={a().labelKey} onClick={() => a().onClick()} />}</Show>
-              <VersionNumber row={row} unreleased={merged.text.unreleased} openUrl={merged.openUrl} />
+              </span>
             </li>
           )}
         </For>

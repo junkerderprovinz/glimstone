@@ -31,12 +31,16 @@ function open(e: MouseEvent, href: string) {
           <span class="glim-version-part">{{ row.name }}</span>
           <InfoBubble v-if="row.hint" :tip="row.hint" />
         </span>
-        <span v-if="row.status" class="glim-version-status" :data-tone="row.tone">{{ row.status }}</span>
-        <Button v-if="row.action" :label="row.action.label" :label-key="row.action.labelKey" @click="row.action.onClick()" />
-        <a v-if="link.href" :href="link.href" target="_blank" rel="noopener noreferrer" class="glim-num glim-version-number" @click="open($event, link.href)">{{
-          link.shown
-        }}</a>
-        <span v-else class="glim-num glim-version-number">{{ link.released ? link.shown : text.unreleased(link.shown) }}</span>
+        <span class="glim-version-end">
+          <span v-if="row.status" class="glim-version-status" :data-tone="row.tone">{{ row.status }}</span>
+          <span class="glim-version-tail">
+            <Button v-if="row.action" :label="row.action.label" :label-key="row.action.labelKey" @click="row.action.onClick()" />
+            <a v-if="link.href" :href="link.href" target="_blank" rel="noopener noreferrer" class="glim-num glim-version-number" @click="open($event, link.href)">{{
+              link.shown
+            }}</a>
+            <span v-else class="glim-num glim-version-number">{{ link.released ? link.shown : text.unreleased(link.shown) }}</span>
+          </span>
+        </span>
       </li>
     </ul>
     <FieldRow v-if="autoUpdate !== undefined" :label="text.auto" :hint="withApp(text.autoHint, name)">

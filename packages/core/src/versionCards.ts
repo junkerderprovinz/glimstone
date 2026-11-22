@@ -5,6 +5,7 @@
 import { en } from "./componentLocales/en.ts";
 import type { ComponentWords } from "./componentWords.ts";
 import { fill } from "./fortressText.ts";
+import { intlHas } from "./intl.ts";
 import { releaseTag, shownVersion, type VersionRow } from "./infoTile.ts";
 import { GLIMSTONE_REPO, GLIMSTONE_VERSION } from "./version.ts";
 
@@ -17,15 +18,22 @@ import { GLIMSTONE_REPO, GLIMSTONE_VERSION } from "./version.ts";
  */
 export type UpdateRoute = "install" | "guide" | "plugins" | "store";
 
-/** Where the app's updates stand. The app finds out; the card only shows it. */
+/**
+ * Where the app's updates stand. The app finds out; the card only shows it.
+ * `store` names the store the app came from, and without a name the card
+ * points at whichever store that was; `direct` is an app installed from a
+ * file the user downloaded, which finds its next version on the release page.
+ */
 export type UpdateState =
+  | { kind: "unchecked" }
   | { kind: "current"; checkedAt?: Date }
   | { kind: "checking" }
   | { kind: "available"; version: string }
   | { kind: "downloading"; percent: number }
   | { kind: "ready"; version: string }
   | { kind: "failed"; reason?: string }
-  | { kind: "store"; store: string };
+  | { kind: "store"; store?: string }
+  | { kind: "direct" };
 
 export type UpdateTone = "neutral" | "ok" | "warn" | "fail";
 
@@ -38,6 +46,7 @@ export interface VersionCardText {
   count: (n: number) => string;
   check: string;
   checking: string;
+  unchecked: string;
   current: string;
   checked: (at: Date, now?: Date) => string;
   available: (version: string) => string;
@@ -49,6 +58,9 @@ export interface VersionCardText {
   guide: string;
   plugins: string;
   store: (store: string) => string;
+  /** The store sentence without a store's name. */
+  anyStore: string;
+  direct: string;
   auto: string;
   autoHint: string;
   autoCheck: string;
@@ -69,8 +81,13 @@ export interface ComponentsCardText {
   unreleased: (version: string) => string;
 }
 
-/** A time before now in the language's words: "3 minutes ago", "yesterday". */
+/** A time before now in the language's words: "3 minutes ago", "yesterday". Without RelativeTimeFormat, the time of day or the date. */
 export function timeAgo(at: Date, lang: string, now: Date = new Date()): string {
+  if (!intlHas("RelativeTimeFormat")) {
+    return at.toDateString() === now.toDateString()
+      ? at.toLocaleTimeString(lang, { hour: "numeric", minute: "2-digit" })
+      : at.toLocaleDateString(lang, { day: "numeric", month: "short" });
+  }
   const seconds = Math.round((at.getTime() - now.getTime()) / 1000);
   const format = new Intl.RelativeTimeFormat(lang, { numeric: "auto" });
   const steps: [Intl.RelativeTimeFormatUnit, number][] = [
@@ -96,6 +113,7 @@ export function versionCardText(w: ComponentWords["versionCard"], lang: string):
     count: (n) => n.toLocaleString(lang),
     check: w.check,
     checking: w.checking,
+    unchecked: w.unchecked,
     current: w.current,
     checked: (at, now) => fill(w.checked, { when: timeAgo(at, lang, now) }),
     available: (version) => fill(w.available, { version }),
@@ -107,6 +125,8 @@ export function versionCardText(w: ComponentWords["versionCard"], lang: string):
     guide: w.guide,
     plugins: w.plugins,
     store: (store) => fill(w.store, { store }),
+    anyStore: w.anyStore,
+    direct: w.direct,
     auto: w.auto,
     autoHint: w.autoHint,
     autoCheck: w.autoCheck,
@@ -130,8 +150,12 @@ export function withApp(sentence: string, app: string): string {
 /** The line at the start of the card's last row: what the state says, in which tone, and a quieter note after it. */
 export function updateLine(state: UpdateState, text: VersionCardText, now?: Date): { line: string; tone: UpdateTone; note?: string } {
   switch (state.kind) {
+    case "unchecked":
+      return { line: text.unchecked, tone: "neutral" };
     case "current":
-      return { line: text.current, tone: "ok", note: state.checkedAt && text.checked(state.checkedAt, now) };
+      // Up to date is a finding, so it needs a check behind it.
+      if (!state.checkedAt) return { line: text.unchecked, tone: "neutral" };
+      return { line: text.current, tone: "ok", note: text.checked(state.checkedAt, now) };
     case "checking":
       return { line: text.checking, tone: "neutral" };
     case "available":
@@ -143,7 +167,9 @@ export function updateLine(state: UpdateState, text: VersionCardText, now?: Date
     case "failed":
       return { line: text.failed, tone: "fail", note: state.reason };
     case "store":
-      return { line: text.store(state.store), tone: "neutral" };
+      return { line: state.store ? text.store(state.store) : text.anyStore, tone: "neutral" };
+    case "direct":
+      return { line: text.direct, tone: "neutral" };
   }
 }
 
@@ -175,7 +201,7 @@ export function updateAction(route: UpdateRoute, state: UpdateState, text: Versi
  */
 export function checkButton(route: UpdateRoute, state: UpdateState): { busy: boolean } | null {
   if (route === "store") return null;
-  if (state.kind === "current" || state.kind === "failed") return { busy: false };
+  if (state.kind === "unchecked" || state.kind === "current" || state.kind === "failed") return { busy: false };
   if (state.kind === "checking") return { busy: true };
   return null;
 }

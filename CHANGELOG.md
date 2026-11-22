@@ -52,6 +52,68 @@ The settings of the kit's sign-in come as one tile, its password question as a s
 - **"The sign-in tile"** in the design language, with its checklist, and a page for `SignInTile` with a demo of a signed-in owner and one of an open app.
 - **A sign-in, in the glossary,** is a password, a passkey or a sign-in service.
 
+## 4.8.5 - 2026-11-22
+
+When an app in the fortress turns down Open because it wants a login first, the toast now asks for an update of that app instead of a password. An app opens from elsewhere without a password, and only one on an older version still gives that answer.
+
+## 🧩 Adopting apps
+
+- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.8.5, all packages at the same number. Your code stays as it is.
+- **Flutter:** move the git dependency to v4.8.5.
+
+## 🐛 Fixed
+
+- **`openRefused.ui_no_login` asks for an update, not a password,** in all 42 languages. In English it reads "This app needs an update before you can open it from here."
+
+## 🧪 Tests
+
+- **A test pins the English and German words:** both name an update and neither names a password.
+
+## 4.8.4 - 2026-11-22
+
+`@glimstone/core` loads in a React Native app again. Hermes, the engine those apps run on, lacks several Intl helpers that a browser has, and the core built one of them while it loaded, so the app stopped before its first screen.
+
+## 🧩 Adopting apps
+
+- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.8.4, all packages at the same number. Your code stays as it is.
+- **Flutter:** move the git dependency to v4.8.4.
+
+## 🐛 Fixed
+
+- **The core loads under Hermes.** It builds each Intl helper the first time it needs one, and only where the engine has it.
+- **The Version card works on a phone.** Where the engine cannot say "5 minutes ago", the card gives the time of the last check, or its date when that was before today.
+- **Initials, lists, counts and sorting get by without the missing helpers.** An initial is then the first character, so an accent typed as a separate mark is left off. A list is joined with commas, a count picks between the forms for one and for more, and numbers in a sorted column still come in their order.
+
+## 🧪 Tests
+
+- **A test loads the whole core with the helpers taken away:** Segmenter, RelativeTimeFormat, ListFormat, DisplayNames and PluralRules. It fills the words in all 42 languages that way.
+- **CI runs the core under Hermes itself.** It bundles the core into one script and runs it with the Hermes command line tool, which has no Intl at all.
+
+## 4.8.3 - 2026-11-22
+
+The Version card says "Not checked yet" until an app has looked for updates, a phone app names the store it really came from, and a row in the Components card breaks before its end on a narrow card.
+
+## 🧩 Adopting apps
+
+- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.8.3, all packages at the same number.
+- **Before the first check,** hand the card `state: { kind: "unchecked" }`. A `current` state without `checkedAt` shows the same words, because "Up to date" needs a check behind it, so pass `checkedAt` with every `current`.
+- **Name the store your app came from:** pass `store` with the store's own name, such as F-Droid or Google Play. Leave `store` out where the app cannot tell, and the card says "Updates come through the store you got the app from."
+- **An app installed from a downloaded file,** such as an APK from the release page, takes `state: { kind: "direct" }` and says "New versions come as a download on the release page."
+- **Your own copy of the stylesheet:** copy `tokens.css` again. It brings `.glim-version-end`, which holds a component row's status, button and number together, and `.glim-version-tail`, which keeps the button and the number on one line. It also makes a version number a 24px target and lets the Version card's head wrap.
+- **Flutter:** move the git dependency to v4.8.3.
+
+## ✨ Added
+
+- **Two states for `InfoVersionCard`:** `unchecked` and `direct`, in React, Vue, Solid and Svelte, with their words in all 42 languages.
+- **A store without a name:** `store` in the `store` state is optional.
+
+## 🎨 Design
+
+- **"Not checked yet" before the first check.** The card no longer claims "Up to date" before it has looked.
+- **A component row breaks before its end.** On a narrow card the status, the button and the number move under the name together. The button and the number always share one line at the end of the row, and where the status leaves them no room, at 390px in German for one, it stands on a line of its own above them, so nothing is cut off and the page never scrolls sideways.
+- **A version number is a 24px target for a finger.** It looks as before: plain text in the text colour, the accent only under the pointer.
+- **A long build number drops under the app's name** on a phone, where it ran over the name.
+
 ## 4.8.2 - 2026-11-21
 
 The Info tile has four cards in every app: Version, Components, Help and About. The Version card holds the app with its number, the update switch and one last row with where the updates stand and the buttons that go with it. Every other number moves to the Components card, and every number reads as plain text that opens its project's newest release.

@@ -5057,7 +5057,7 @@ test.describe("Fortress", () => {
     await open(page, "/components/fortress");
     const echo = opening(page).locator('[data-fortress-app="echo"]');
     await echo.getByRole("button", { name: "Open", exact: true }).click();
-    await expect(said(opening(page))).toHaveText("Toast: This app opens from elsewhere only once it has a password.");
+    await expect(said(opening(page))).toHaveText("Toast: This app needs an update before you can open it from here.");
     await expect(echo.locator(".glim-instance-note")).toHaveCount(0);
     await expect(echo.getByRole("button", { name: "Open", exact: true })).toBeVisible();
   });

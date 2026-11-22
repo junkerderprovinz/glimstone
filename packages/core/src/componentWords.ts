@@ -82,6 +82,7 @@ export interface ComponentWords {
     whatsNew: string;
     check: string;
     checking: string;
+    unchecked: string;
     current: string;
     /** "{when}", a time before now such as "3 minutes ago". */
     checked: string;
@@ -99,6 +100,8 @@ export interface ComponentWords {
     plugins: string;
     /** "{store}". */
     store: string;
+    anyStore: string;
+    direct: string;
     auto: string;
     /** "{app}". */
     autoHint: string;

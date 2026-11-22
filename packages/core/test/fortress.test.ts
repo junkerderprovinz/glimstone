@@ -384,10 +384,19 @@ test('two members claiming one app on one device warn on the card and ask by the
 
 test('a refusal code gets its sentence, and an unknown one the general sentence', async () => {
   const { en } = await import('../src/fortressLocales/en.ts');
-  assert.equal(openRefusalText(en, 'ui_no_login'), 'This app opens from elsewhere only once it has a password.');
+  assert.equal(openRefusalText(en, 'ui_no_login'), 'This app needs an update before you can open it from here.');
   assert.equal(openRefusalText(en, 'failed'), "The app sent something that can't be shown here.");
   assert.equal(openRefusalText(en, 'teapot'), en.openRefused.failed);
   assert.equal(openRefusalText(en, 'toString'), en.openRefused.failed);
+});
+
+test('an app that refuses for want of a login is asked for an update, never for a password', async () => {
+  const { en } = await import('../src/fortressLocales/en.ts');
+  const { de } = await import('../src/fortressLocales/de.ts');
+  assert.match(en.openRefused.ui_no_login, /\bupdate\b/i);
+  assert.doesNotMatch(en.openRefused.ui_no_login, /password/i);
+  assert.match(de.openRefused.ui_no_login, /\bUpdate\b/);
+  assert.doesNotMatch(de.openRefused.ui_no_login, /Passwort/i);
 });
 
 test('the refusal sentences cover the kit codes', async () => {

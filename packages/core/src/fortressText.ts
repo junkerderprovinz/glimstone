@@ -2,6 +2,8 @@
 // carries them in every language the glossary (@glimstone/terms) holds, in
 // fortressLocales/, one module per language, so an app can load just its own.
 
+import { intlHas } from "./intl.ts";
+
 export { en as fortressTextEn } from "./fortressLocales/en.ts";
 
 /** A sentence with a count, by the plural categories of the language (Intl.PluralRules). `other` is always there. */
@@ -159,13 +161,14 @@ export function fill(template: string, values: Record<string, string | number>):
 
 /** The form of `forms` the language uses for `count`, with the count filled in. */
 export function plural(lang: string, forms: Plural, count: number): string {
-  const category = new Intl.PluralRules(lang).select(count);
+  // Without PluralRules, "one" for 1 and "other" for every other count.
+  const category = intlHas("PluralRules") ? new Intl.PluralRules(lang).select(count) : count === 1 ? "one" : "other";
   return fill(forms[category] ?? forms.other, { count: count.toLocaleString(lang) });
 }
 
 /** "A, B and C" in the language's own way. */
 export function listOf(lang: string, items: string[]): string {
-  return new Intl.ListFormat(lang, { type: "conjunction" }).format(items);
+  return intlHas("ListFormat") ? new Intl.ListFormat(lang, { type: "conjunction" }).format(items) : items.join(", ");
 }
 
 /** The label keys behind the fortress's buttons, which pick their glyphs (see Button). */
