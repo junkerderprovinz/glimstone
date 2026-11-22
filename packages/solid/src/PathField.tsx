@@ -42,7 +42,9 @@ export function PathField(props: PathFieldProps) {
   const [tight, setTight] = createSignal(false);
   let input!: HTMLInputElement;
   let box!: HTMLSpanElement;
+  // Measured once on mount as well, so the button's look is right before anything reads or paints it.
   onMount(() => {
+    setTight(box.getBoundingClientRect().width < PATH_ROOM_PX);
     const watcher = new ResizeObserver(([entry]) => setTight(entry!.contentRect.width < PATH_ROOM_PX));
     watcher.observe(box);
     onCleanup(() => watcher.disconnect());

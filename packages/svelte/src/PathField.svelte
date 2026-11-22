@@ -62,7 +62,9 @@
   const name = useFieldName(() => label);
   let box: HTMLSpanElement;
   let tight = $state(false);
+  // Measured once on mount as well, so the button's look is right before anything reads or paints it.
   $effect(() => {
+    tight = box.getBoundingClientRect().width < PATH_ROOM_PX;
     const watcher = new ResizeObserver(([entry]) => (tight = entry!.contentRect.width < PATH_ROOM_PX));
     watcher.observe(box);
     return () => watcher.disconnect();
