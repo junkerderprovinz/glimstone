@@ -587,7 +587,7 @@ Whoever lost the password still owns the box, and the one channel that only the 
 
 - **A request that changes something is accepted only with `Content-Type: application/json` and not with `Sec-Fetch-Site: cross-site`. Anything else gets 415.** A foreign web page can make the owner's browser send a form to an address in the LAN, but not a JSON request, so no other site can change the app's settings through that browser.
 - **The `Host` header is never taken as the app's own address when that address is handed to others.** Anybody can send any Host header, and DNS rebinding makes a browser do it, so only a request from a browser signed in with the password may teach the app where it is reached.
-- **Without a password the app is open to whoever reaches the port, but whatever hands out a secret or deletes data for good still needs a password and a real sign-in.** The refusal has a code of its own (such as `password-not-set`) and a sentence of its own: "Set a login password first, under Settings, Security. Without one this server hands out no key." An open app on a trusted network is a choice the owner may make. Handing its keys to the whole network is not part of that choice.
+- **Every app works fully without a password, and a password is always optional.** Without one nothing is locked or hidden: the app shows a secret and deletes for good after its usual confirm, as it does everything else. Where a password is set, the app asks for it before it shows a secret or deletes for good, through the password check ("Password check on changes") or a fresh sign-in. An open app on a trusted network is the owner's choice, and the app respects it instead of pushing for a password.
 - **The gate fails closed.** When the app cannot read whether a password is set, it answers 503 to everything except sign-in and health, so a database error never opens the API.
 
 ### Device and phone sessions
@@ -649,7 +649,7 @@ One line per rule above, for a session that lifts an app to this version.
 - [ ] The reset logs what it removed, and refused codes are summed at most once a minute.
 - [ ] Changing requests need JSON and not cross-site, or get 415.
 - [ ] The Host header never becomes the address handed to others.
-- [ ] Secrets and permanent deletes need a password even on an open app, with `password-not-set` and its sentence.
+- [ ] Without a password nothing is locked or hidden; with one, showing a secret or deleting for good asks for it first.
 - [ ] The gate answers 503 when it cannot read the auth state.
 - [ ] The pairing card under Settings, Security with its one switch and its (i).
 - [ ] Pairing off means 401 for every paired session.
