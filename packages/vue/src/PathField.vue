@@ -40,7 +40,11 @@ defineExpose({ input });
 const box = shallowRef<HTMLElement | null>(null);
 const tight = ref(false);
 const watcher = new ResizeObserver(([entry]) => (tight.value = entry!.contentRect.width < PATH_ROOM_PX));
-onMounted(() => watcher.observe(box.value!));
+// Measured once on mount as well, so the button's look is right before anything reads or paints it.
+onMounted(() => {
+  tight.value = box.value!.getBoundingClientRect().width < PATH_ROOM_PX;
+  watcher.observe(box.value!);
+});
 onBeforeUnmount(() => watcher.disconnect());
 
 async function ask() {

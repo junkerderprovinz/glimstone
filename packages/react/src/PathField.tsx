@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type InputHTMLAttributes, type ReactNode, type Ref } from "react";
+import { useLayoutEffect, useRef, useState, type InputHTMLAttributes, type ReactNode, type Ref } from "react";
 import { fieldWidthClass, PATH_ROOM_PX, type FieldWidth } from "@glimstone/core";
 import { Button } from "./Button.tsx";
 import { useFieldName } from "./fieldName.ts";
@@ -54,9 +54,12 @@ export function PathField({
   const own = useRef<HTMLInputElement | null>(null);
   const box = useRef<HTMLSpanElement>(null);
   const [tight, setTight] = useState(false);
-  useEffect(() => {
+  // Measured before the first paint as well, so a narrow field never shows its button wide for a frame.
+  useLayoutEffect(() => {
+    const el = box.current!;
+    setTight(el.getBoundingClientRect().width < PATH_ROOM_PX);
     const watcher = new ResizeObserver(([entry]) => setTight(entry!.contentRect.width < PATH_ROOM_PX));
-    watcher.observe(box.current!);
+    watcher.observe(el);
     return () => watcher.disconnect();
   }, []);
 

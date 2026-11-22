@@ -38,7 +38,7 @@ The settings of the kit's sign-in come as one tile, its password question as a s
 ## ✨ Added
 
 - **`createSignInApi()`** in the core: a client for the kit's sign-in contract under any root path, with the WebAuthn exchange for a passkey offered in the password field and for a new passkey, the question before a change that wants a fresh sign-in (`api.reauth`), and a report after every change. `takeSignInCode()` takes the code a sign-in service sent back out of the address.
-- **`SignInTile`** in React, Vue, Solid and Svelte: the cards Password, Asking for the password, Two-factor authentication, Passkeys, Sessions, API tokens, Sign-in services and Accounts, with their windows. The flow is `createSignInTileFlow()` in the core.
+- **`SignInTile`** in React, Vue, Solid and Svelte: the cards Password, Password check on changes, Two-factor authentication, Passkeys, Sessions, API tokens, Sign-in services and Accounts, with their windows. The flow is `createSignInTileFlow()` in the core.
 - **`SignInReauthWindow`** in React, Vue, Solid and Svelte: asks for the password and runs the waiting change again.
 - **`SignInCard`** takes `onPasskeyOffer`, `service`, `onService` and `error` in React, Vue, Solid and Svelte. The core adds `signInCardHandlers()`, `passkeyOfferKey()` and `restart` on `SignInAnswer` for a code step that ran out.
 
@@ -46,6 +46,14 @@ The settings of the kit's sign-in come as one tile, its password question as a s
 
 - **"Forgot password?" is a plain link**, the last line of the sign-in card under every button and reason. Only its colour moves under the pointer and the focus, and nothing underlines it.
 - **The sign-in card has at most two buttons:** Sign in, and the sign-in service's with its mark. Passkeys come through the browser's offer in the password field.
+
+## 🐛 Fixed
+
+- **A narrow `PathField` in React shows its glyph button from the first frame.** It measured its room only after the first paint, so for a moment the button stood wide with its words and then shrank. It measures before the paint now, and all four frameworks also measure once on mount, so the button's look is right before the first frame.
+
+## 🧪 Tests
+
+- **A test notes each pick button's look on the second frame after it appears** and wants it to be the look it settles on.
 
 ## 📚 Docs
 
