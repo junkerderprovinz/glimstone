@@ -30,6 +30,7 @@ jobs:
       - run: bash scripts/check-classes.sh
       - run: npm test
       - run: npm run build:packages
+      - run: bash scripts/check-hermes.sh
       - run: node scripts/size-budget.mjs
       - run: node scripts/gen-flutter.mjs --check
       - run: node scripts/build-tokens.mjs --check

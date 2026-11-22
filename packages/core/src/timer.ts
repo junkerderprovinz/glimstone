@@ -5,6 +5,7 @@
 import { en } from "./componentLocales/en.ts";
 import type { ComponentWords } from "./componentWords.ts";
 import { plural } from "./fortressText.ts";
+import { intlHas } from "./intl.ts";
 
 export interface TimerText {
   start: string;
@@ -22,12 +23,12 @@ export function timerText(w: ComponentWords["timer"], lang: string): TimerText {
     pause: w.pause,
     resume: w.resume,
     reset: w.reset,
-    spoken: (hours, minutes, seconds) =>
-      new Intl.ListFormat(lang, { type: "unit", style: "long" }).format(
-        [hours && plural(lang, w.hours, hours), minutes && plural(lang, w.minutes, minutes), plural(lang, w.seconds, seconds)].filter(
-          (part): part is string => !!part,
-        ),
-      ),
+    spoken: (hours, minutes, seconds) => {
+      const parts = [hours && plural(lang, w.hours, hours), minutes && plural(lang, w.minutes, minutes), plural(lang, w.seconds, seconds)].filter(
+        (part): part is string => !!part,
+      );
+      return intlHas("ListFormat") ? new Intl.ListFormat(lang, { type: "unit", style: "long" }).format(parts) : parts.join(", ");
+    },
   };
 }
 

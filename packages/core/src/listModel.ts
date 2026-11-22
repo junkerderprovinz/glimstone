@@ -5,6 +5,7 @@
 // rules are tested without a DOM.
 
 import type { TableColumn } from "./table.ts";
+import { intlHas } from "./intl.ts";
 
 export interface ListColumn extends TableColumn {
   /** The column's heading; a list column always has one. */
@@ -46,11 +47,24 @@ export function ariaSort(sort: ListSort | null, key: string): "ascending" | "des
   return sort.dir === "asc" ? "ascending" : "descending";
 }
 
-const words = new Intl.Collator(undefined, { numeric: true, sensitivity: "base" });
+// Runs of digits as numbers, the rest without case, for an engine with no Collator.
+function plainOrder(a: string, b: string): number {
+  const x = a.toLowerCase().split(/(\d+)/);
+  const y = b.toLowerCase().split(/(\d+)/);
+  for (let i = 0; i < Math.min(x.length, y.length); i++) {
+    const order = i % 2 ? Number(x[i]) - Number(y[i]) : x[i]! < y[i]! ? -1 : x[i]! > y[i]! ? 1 : 0;
+    if (order) return order;
+  }
+  return x.length - y.length;
+}
+
+let collator: ((a: string, b: string) => number) | undefined;
+const words = (a: string, b: string) =>
+  (collator ??= intlHas("Collator") ? new Intl.Collator(undefined, { numeric: true, sensitivity: "base" }).compare : plainOrder)(a, b);
 
 function compare(a: unknown, b: unknown): number {
   if (typeof a === "number" && typeof b === "number") return a - b;
-  return words.compare(String(a ?? ""), String(b ?? ""));
+  return words(String(a ?? ""), String(b ?? ""));
 }
 
 const field = (row: object, key: string) => (row as Record<string, unknown>)[key];
@@ -153,7 +167,7 @@ export function selectByKey(s: ListSelection, key: string, mods: SelectMods, cou
 
 /** The values a column's filter offers: each value its rows hold, once, in order. */
 export function columnValues<T extends object>(rows: readonly T[], key: string): string[] {
-  return [...new Set(rows.map((row) => String(field(row, key))))].sort(words.compare);
+  return [...new Set(rows.map((row) => String(field(row, key))))].sort(words);
 }
 
 /** What a key on a focused row asks for: open the row, start the search with a

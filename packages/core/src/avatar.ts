@@ -1,4 +1,5 @@
 import { hueVars } from "./appearance.ts";
+import { intlHas } from "./intl.ts";
 
 // A person's picture, or their initials while it loads or when there is none.
 // Zag's avatar machine tells the two apart; this decides what the fallback
@@ -7,8 +8,15 @@ import { hueVars } from "./appearance.ts";
 /** `md` is a field's height, `lg` the key height, `sm` fits a line of text. */
 export type AvatarSize = "sm" | "md" | "lg";
 
-const letters = new Intl.Segmenter(undefined, { granularity: "grapheme" });
-const firstLetter = (word: string) => letters.segment(word)[Symbol.iterator]().next().value?.segment ?? "";
+let letters: Intl.Segmenter | null | undefined;
+
+// Without a Segmenter a letter is a code point, so an accent typed as its own
+// mark or a flag drawn from two symbols comes out as half of itself.
+function firstLetter(word: string): string {
+  if (letters === undefined) letters = intlHas("Segmenter") ? new Intl.Segmenter(undefined, { granularity: "grapheme" }) : null;
+  if (!letters) return Array.from(word)[0] ?? "";
+  return letters.segment(word)[Symbol.iterator]().next().value?.segment ?? "";
+}
 
 /** The first letter of the first and of the last word, as capitals. A combined letter stays whole. */
 export function initials(name: string): string {
