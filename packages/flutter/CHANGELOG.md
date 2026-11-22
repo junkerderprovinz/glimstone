@@ -1,3 +1,7 @@
+## 4.8.5
+
+- No changes for Flutter. The new words are in the web packages' fortress texts.
+
 ## 4.8.4
 
 - No changes for Flutter. The fix is in `@glimstone/core`, which a Flutter app does not load.
