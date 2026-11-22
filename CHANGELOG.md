@@ -2,6 +2,23 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 4.8.5 - 2026-11-22
+
+When an app in the fortress turns down Open because it wants a login first, the toast now asks for an update of that app instead of a password. An app opens from elsewhere without a password, and only one on an older version still gives that answer.
+
+## 🧩 Adopting apps
+
+- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.8.5, all packages at the same number. Your code stays as it is.
+- **Flutter:** move the git dependency to v4.8.5.
+
+## 🐛 Fixed
+
+- **`openRefused.ui_no_login` asks for an update, not a password,** in all 42 languages. In English it reads "This app needs an update before you can open it from here."
+
+## 🧪 Tests
+
+- **A test pins the English and German words:** both name an update and neither names a password.
+
 ## 4.8.4 - 2026-11-22
 
 `@glimstone/core` loads in a React Native app again. Hermes, the engine those apps run on, lacks several Intl helpers that a browser has, and the core built one of them while it loaded, so the app stopped before its first screen.
