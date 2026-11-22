@@ -3058,6 +3058,32 @@ test.describe("PathField", () => {
     await expect(button(page).first().getByText("Choose a folder")).toBeVisible();
   });
 
+  test("[path-narrow-first] a narrow field draws its glyph alone from the first frame", async ({ page }) => {
+    // Notes each pick button's look on the second animation frame after it appears,
+    // when a measurement that waits for a paint has not come in yet.
+    await page.addInitScript(() => {
+      const seen = new Map<Element, number>();
+      const first: string[] = [];
+      Object.assign(window, { pathFirst: first });
+      let frame = 0;
+      const tick = () => {
+        frame++;
+        for (const b of document.querySelectorAll('[data-demo="PathFieldBasic"] .glim-path > .glim-btn')) {
+          if (!seen.has(b)) seen.set(b, frame);
+          else if (seen.get(b) === frame - 1) first.push(b.className);
+        }
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    });
+    await open(page, "/components/path-field");
+    const buttons = demo(page).locator(".glim-path > .glim-btn");
+    await expect.poll(() => page.evaluate(() => (window as unknown as { pathFirst: string[] }).pathFirst.length)).toBe(await buttons.count());
+    const now = await buttons.evaluateAll((els) => els.map((e) => e.className));
+    expect(await page.evaluate(() => (window as unknown as { pathFirst: string[] }).pathFirst)).toEqual(now);
+    expect(now.some((c) => c.includes("glim-btn-icon"))).toBe(true);
+  });
+
   test("[path-attrs] attributes reach the field and the button", async ({ page }) => {
     await open(page, "/components/path-field");
     await expect(field(page)).toHaveAttribute("data-hook", "target");

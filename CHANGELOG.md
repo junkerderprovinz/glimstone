@@ -2,6 +2,16 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+## 🐛 Fixed
+
+- **A narrow `PathField` in React shows its glyph button from the first frame.** It measured its room only after the first paint, so for a moment the button stood wide with its words and then shrank. It measures before the paint now, and all four frameworks also measure once on mount, so the button's look is right before the first frame.
+
+## 🧪 Tests
+
+- **A test notes each pick button's look on the second frame after it appears** and wants it to be the look it settles on.
+
 ## 4.8.5 - 2026-11-22
 
 When an app in the fortress turns down Open because it wants a login first, the toast now asks for an update of that app instead of a password. An app opens from elsewhere without a password, and only one on an older version still gives that answer.

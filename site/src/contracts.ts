@@ -287,6 +287,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "path-half", when: "It stands in a row of a half column", then: "It stays beside the label." },
       { id: "path-width", when: "It has a width", then: "It takes the same widths as a text field." },
       { id: "path-narrow", when: "It has less than 20rem of room", then: "The button shows its glyph alone and leaves the room to the path, and its label stays its name." },
+      { id: "path-narrow-first", when: "A narrow field first shows", then: "Its button is the glyph alone from the first frame, never drawn wide and then narrowed." },
     ],
   },
   Tree: {
