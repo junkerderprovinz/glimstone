@@ -85,7 +85,10 @@ export interface SignInTileText {
     /** The toast once the first password turned sign-in on. */
     first: string;
     wrongCurrent: string;
-    tooShort: string;
+    /** The quiet line under a new password shorter than the app suggests, `{min}`. */
+    shortHint: string;
+    /** Added to the toast when the kit took a short password. */
+    shortSaved: string;
     remove: string;
     removeTitle: string;
     /** What the open app means, above the list of what goes with the password. */
@@ -186,6 +189,10 @@ export interface SignInTileText {
     neverUsed: string;
     expires: string;
     forever: string;
+    /** The row's last fact for a token made while the app was open. */
+    endsWhenClosed: string;
+    /** The create window's quiet line while the app is open. */
+    openHint: string;
     revoke: string;
     revokeText: string;
     revoked: string;
@@ -241,6 +248,8 @@ export interface SignInTileText {
     formHint: string;
     /** The quiet line in the form: the service decides who gets in. */
     whoGetsIn: string;
+    /** Added to the form's quiet line while the app is open, `{name}`. */
+    openBinds: string;
     /** The label of the role a newcomer from the service gets, shown where the app has more than one. */
     role: string;
     /** The quiet line on that role, with `{name}` and `{role}`. */
@@ -334,8 +343,8 @@ export const signInTileTextEn: SignInTileText = {
   mismatch: "The passwords do not match",
   failed: "That didn’t work. Please try again.",
   needsPassword: {
-    title: "This needs a password first",
-    reason: "Set a password of the app’s own above. It always gets you in, even when another way fails.",
+    title: "Ready once there’s a password",
+    reason: "The app is open to everyone right now, so this has nothing to guard yet. Set a password above whenever you like, and this is ready.",
   },
   notLocal: {
     title: "This comes from your sign-in service",
@@ -343,7 +352,7 @@ export const signInTileTextEn: SignInTileText = {
   },
   password: {
     title: "Password",
-    hint: "A password needs at least {min} characters. Changing it ends every other session.",
+    hint: "A password of {min} characters or more is hard to guess, though a shorter one works too. Changing it ends every other session.",
     openHint: "Until a password is set, the app is open and everyone who reaches it is an admin.",
     viaService: "You sign in through {name}, so this account has no password here.",
     state: "Password",
@@ -357,7 +366,8 @@ export const signInTileTextEn: SignInTileText = {
     saved: "Password saved. Every other session has ended.",
     first: "Password set. Sign-in is on.",
     wrongCurrent: "The current password is wrong.",
-    tooShort: "The new password needs at least {min} characters.",
+    shortHint: "Under {min} characters. That works, though a longer password is harder to guess.",
+    shortSaved: "A longer one would be harder to guess.",
     remove: "Remove password",
     removeTitle: "Remove the password?",
     removeText: "Without a password the app is open to anyone who reaches its address. These go with it:",
@@ -457,6 +467,8 @@ export const signInTileTextEn: SignInTileText = {
     neverUsed: "never used",
     expires: "expires {when}",
     forever: "never expires",
+    endsWhenClosed: "ends when the app closes",
+    openHint: "The app has no password yet. A token made now stands for you and stops working once the app closes, with a first password or a first sign-in service.",
     revoke: "Revoke",
     revokeText: "Programs that use “{name}” won’t get in anymore.",
     revoked: "Token revoked.",
@@ -508,6 +520,7 @@ export const signInTileTextEn: SignInTileText = {
     saved: "set up",
     formHint: "Create an application for the app at {name} and give it the redirect address below. The address, client ID and secret come from there.",
     whoGetsIn: "{name} decides who may sign in, for example through its groups.",
+    openBinds: "The app has no password yet. A test sign-in that works makes your account at {name} the owner here, turns {name} on and closes the app, and you come back signed in through it. Turning the last service off opens the app again.",
     role: "Role for newcomers",
     roleHint: "Whoever {name} lets in for the first time gets the role {role} here.",
     issuer: "Address",
@@ -814,10 +827,9 @@ export function signInTileCards(s: SignInTileState, cards: readonly SignInTileCa
   const open = s.me.via === "open";
   return SIGN_IN_TILE_CARDS.filter((c) => {
     if (!cards.includes(c)) return false;
-    if (c === "askPassword") return s.settings !== null;
-    if (c === "sessions") return !open;
+    if (c === "askPassword") return open || s.settings !== null;
     if (c === "services") return open || s.services !== null;
-    if (c === "accounts") return !open && (s.accounts?.length ?? 0) > 0;
+    if (c === "accounts") return open || (s.accounts?.length ?? 0) > 0;
     return true;
   });
 }
@@ -903,8 +915,10 @@ export function signInRoleItems(text: SignInTileText, roles: SignInRoles): { id:
 /** The service form's quiet line: the service decides who gets in, and which role a newcomer gets here. */
 export function signInServiceQuiet(text: SignInTileText, s: SignInTileState, name: string): string {
   const role = s.draft.role || s.roles.serviceRole;
-  const who = fill(text.services.whoGetsIn, { name });
-  return role ? `${who} ${fill(text.services.roleHint, { name, role: text.roles[role] ?? role })}` : who;
+  const lines = [fill(text.services.whoGetsIn, { name })];
+  if (role) lines.push(fill(text.services.roleHint, { name, role: text.roles[role] ?? role }));
+  if (s.me?.via === "open") lines.push(fill(text.services.openBinds, { name }));
+  return lines.join(" ");
 }
 
 /** The test sign-in's words as its button says them while it runs and once it came out. */
@@ -935,12 +949,17 @@ function serviceOfMe(s: SignInTileState): string {
 
 /**
  * What stands in place of a card's controls, or `null` where they can work:
- * every lasting way in waits for the first password while the app is open,
- * and two-factor and passkeys belong to the sign-in service for an account
- * without a password of its own.
+ * while the app is open a card that only means something with a password says
+ * so, tokens and sign-in services working all the same, and two-factor and
+ * passkeys belong to the sign-in service for an account without a password of
+ * its own.
  */
-export function signInCardNotice(text: SignInTileText, s: SignInTileState, card: "twoFactor" | "passkeys" | "tokens" | "services"): { title: string; reason: string } | null {
-  if (s.me?.via === "open") return text.needsPassword;
+export function signInCardNotice(
+  text: SignInTileText,
+  s: SignInTileState,
+  card: "askPassword" | "twoFactor" | "passkeys" | "tokens" | "services" | "sessions" | "accounts",
+): { title: string; reason: string } | null {
+  if (s.me?.via === "open") return card === "tokens" || card === "services" ? null : text.needsPassword;
   if (!s.me?.password && (card === "twoFactor" || card === "passkeys")) return { title: text.notLocal.title, reason: fill(text.notLocal.reason, { name: serviceOfMe(s) }) };
   return null;
 }
@@ -998,6 +1017,7 @@ export function tokenFacts(text: SignInTileText, k: SignInToken, when: When): st
     fill(t.created, { when: when(k.created) }),
     k.used ? fill(t.used, { when: when(k.used) }) : t.neverUsed,
     k.expires ? fill(t.expires, { when: when(k.expires) }) : t.forever,
+    ...(k.endsWhenClosed ? [t.endsWhenClosed] : []),
   ];
 }
 
@@ -1145,7 +1165,7 @@ export function createSignInTileFlow(options: () => SignInTileOptions): SignInTi
     const [settings, sessions, tokens, passkeys, services, presets, accounts, roles] = await Promise.all([
       need("askPassword") ? api.settings() : null,
       need("sessions") && mine ? api.sessions() : null,
-      need("tokens", "password") && mine ? api.tokens() : null,
+      need("tokens", "password") ? api.tokens() : null,
       need("passkeys", "password") && mine ? api.passkeys() : null,
       need("services", "password", "sessions", "accounts") ? api.services() : null,
       need("services") ? api.presets() : null,
@@ -1254,21 +1274,20 @@ export function createSignInTileFlow(options: () => SignInTileOptions): SignInTi
     cancelPassword: () => update({ editing: false, draft: { ...state.draft, current: "", next: "" }, invalid: null }),
     async savePassword() {
       const t = text().password;
-      const min = state.offer?.minPassword ?? 12;
       const had = !!state.me?.password;
       const { current, next } = state.draft;
       if (had && current === "") return invalid("current", t.wrongCurrent, "save-password");
-      if ([...next].length < min) return invalid("next", fill(t.tooShort, { min }), "save-password");
       if (!state.confirmed) return invalid("next", text().mismatch, "save-password");
       return run("save-password", async () => {
         const r = await options().api.setPassword(had ? { current, next } : { next });
         if (!r.ok) {
           if (r.error === "wrongPassword") return invalid("current", t.wrongCurrent, "save-password");
-          if (r.error === "passwordShort") return invalid("next", fill(t.tooShort, { min: r.min ?? min }), "save-password");
+          if (r.error === "passwordShort") return invalid("next", signInErrorText(text(), r), "save-password");
           return failed(r, "save-password");
         }
         update({ editing: false, draft: { ...state.draft, current: "", next: "" } });
-        notify(had ? t.saved : t.first);
+        const said = had ? t.saved : t.first;
+        notify(r.value.short ? `${said} ${t.shortSaved}` : said);
         await refresh();
       });
     },

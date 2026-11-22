@@ -237,6 +237,7 @@ const ownFields = computed<[SignInTileField, string][]>(() => [
     @close="flow.close()"
   >
     <div class="glim-signin-tile-body">
+      <p v-if="state.me?.via === 'open'" class="glim-signin-tile-text">{{ text.tokens.openHint }}</p>
       <FieldRowGroup>
         <FieldRow :label="text.tokens.name" :hint="text.tokens.nameHint">
           <TextField :model-value="state.draft.name" :error="err('name')" @update:model-value="flow.set('name', $event)" @keydown="onEnter($event, flow.makeToken)" />

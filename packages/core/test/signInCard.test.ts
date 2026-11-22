@@ -137,3 +137,21 @@ test('no passkey picked leaves the card as it was', async () => {
   const h = signInCardHandlers(api({ offerPasskey: async () => null }), { words: signInTileTextEn, onSignedIn: () => {} });
   assert.deepEqual(await h.onPasskeyOffer(new AbortController().signal), {});
 });
+
+test('the reset form sends a short new password on', async () => {
+  let sent = '';
+  const f = flow({
+    onAskCode: async () => ({ ok: true }),
+    onSetPassword: async ({ password }) => {
+      sent = password;
+      return { ok: true };
+    },
+  });
+  await f.forgot();
+  f.set('resetCode', 'ABCD');
+  f.set('newPassword', 'short');
+  f.set('confirm', 'short');
+  await f.submit();
+  assert.equal(sent, 'short');
+  assert.equal(f.state().error, null);
+});

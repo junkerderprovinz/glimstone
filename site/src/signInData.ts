@@ -157,7 +157,6 @@ export function demoKit(scene: DemoScene = "signedIn"): SignInApi & { leave(url:
     changed();
     return ok(value);
   };
-  const needsPassword = () => (open && !me.password ? no("setPasswordFirst", 409) : null);
 
   return {
     root: "/",
@@ -180,9 +179,9 @@ export function demoKit(scene: DemoScene = "signedIn"): SignInApi & { leave(url:
     me: async () => ok({ ...me, fresh }),
     async setPassword({ current, next }) {
       if (me.password && current !== PASSWORD) return no("wrongPassword", 401);
-      if (next.length < 12) return no("passwordShort", 400, { min: 12 });
       Object.assign(me, { password: true, via: "password", account: "owner", name: "owner" });
-      return change({});
+      tokens = tokens.filter((t) => !t.endsWhenClosed);
+      return change([...next].length < 12 ? { short: true } : {});
     },
     async removePassword(current) {
       if (current !== PASSWORD) return no("wrongPassword", 401);
@@ -240,7 +239,14 @@ export function demoKit(scene: DemoScene = "signedIn"): SignInApi & { leave(url:
     tokens: async () => ok(tokens),
     makeToken: (input) =>
       lasting(() => {
-        const token = { id: `t${++nextId}`, name: input.name, scopes: input.scopes, created: "2026-11-21T10:45:00Z", expires: input.never ? undefined : "2027-02-19T10:45:00Z" };
+        const token: SignInToken = {
+          id: `t${++nextId}`,
+          name: input.name,
+          scopes: input.scopes,
+          created: "2026-11-21T10:45:00Z",
+          expires: input.never ? undefined : "2027-02-19T10:45:00Z",
+          ...(me.via === "open" ? { endsWhenClosed: true } : {}),
+        };
         tokens = [...tokens, token];
         return change({ token, value: `gs_${token.id}Xq7fK2mWp9RtV4nYc8Hd` });
       }),
@@ -264,7 +270,7 @@ export function demoKit(scene: DemoScene = "signedIn"): SignInApi & { leave(url:
         ...IDENTITY_PROVIDERS.entries.map((e) => ({ id: e.id, scopes: "openid profile email groups", nameClaim: "preferred_username", groupsClaim: "groups" })),
         { id: "custom", scopes: "openid profile email", nameClaim: "preferred_username", groupsClaim: "groups" },
       ]),
-    services: async () => needsPassword() ?? ok(services),
+    services: async () => ok(services),
     addService: (input) =>
       lasting(() => {
         const { secret, ca, ...rest } = input;
@@ -290,6 +296,10 @@ export function demoKit(scene: DemoScene = "signedIn"): SignInApi & { leave(url:
     checkService: async (id) => (services.find((s) => s.id === id)?.issuer.includes("unreachable") ? no("serviceUnreachable", 502) : ok({})),
     async testService(id, back) {
       services = services.map((s) => (s.id === id ? { ...s, tested: true, on: true, testedAt: "2026-11-21T10:46:00Z" } : s));
+      if (me.via === "open") {
+        Object.assign(me, { via: "service", service: id, account: "owner", name: "owner" });
+        tokens = tokens.filter((t) => !t.endsWhenClosed);
+      }
       return ok({ url: `${back}?signin=testOk` });
     },
     settings: async () => (open ? no("setPasswordFirst", 409) : ok({ askPassword })),

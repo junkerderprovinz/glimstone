@@ -10,6 +10,8 @@
     text?: Partial<PasswordFieldText>;
     /** Why the value cannot stand, as a line under the field until it is fixed. */
     error?: string;
+    /** A quiet line under the field that only informs, such as a hint about the value. An error takes its place. */
+    note?: string;
     /** Asks for the password again in a second field, which stands once the first holds something. */
     confirm?: boolean;
     /** Whether both fields hold the same password, each time that changes. Set password waits for true. */
@@ -22,7 +24,7 @@
 </script>
 
 <script lang="ts">
-  import { fieldErrorView, fieldWidthClass, PASSWORD_FIELD_TEXT, passwordConfirmView } from "@glimstone/core";
+  import { fieldErrorView, fieldNoteView, fieldWidthClass, PASSWORD_FIELD_TEXT, passwordConfirmView } from "@glimstone/core";
   import FieldError from "./FieldError.svelte";
   import { useFieldName } from "./fieldName.js";
   import { IconEye, IconEyeOff } from "./glyphs.js";
@@ -38,6 +40,7 @@
     eyeAttrs,
     text,
     error,
+    note,
     confirm = false,
     onConfirmedChange,
     class: className,
@@ -56,7 +59,8 @@
   const name = useFieldName(() => ariaLabel ?? undefined);
   const own = $props.id();
   const id = $derived(rest.id ?? own);
-  const err = $derived(fieldErrorView(error, id, describedBy ?? undefined));
+  const quiet = $derived(fieldNoteView(note, error, id, describedBy ?? undefined));
+  const err = $derived(fieldErrorView(error, id, quiet.describedBy));
   const view = $derived(passwordConfirmView(value == null ? "" : String(value), repeat));
   const mismatch = $derived(fieldErrorView(view.mismatch ? words.mismatch : undefined, `${id}-confirm`));
   $effect(() => {
@@ -85,6 +89,7 @@
   </IconTipButton>
 </span>
 {#if err.errorId}<FieldError id={err.errorId}>{error}</FieldError>{/if}
+{#if quiet.noteId}<span id={quiet.noteId} class="glim-field-note">{note}</span>{/if}
 {#if confirm && view.shown}
   <span class="glim-secret-confirm">
     <label for="{id}-confirm" class="glim-secret-confirm-label">{words.confirm}</label>

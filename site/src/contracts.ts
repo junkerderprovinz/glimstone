@@ -631,7 +631,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "signin-forgot", when: "The card shows Forgot password?", then: "It is a plain link, the last line of the card under every button and reason, with no underline at rest, under the pointer or with the focus." },
       { id: "signin-reset", when: "Forgot password? is pressed and the app has written a code", then: "The reset form takes the sign-in form's place in the same card, with the focus in its code field. Back brings the sign-in form back." },
       { id: "signin-reset-name", when: "The app has several accounts and the reset form shows", then: "The form asks for the account's name itself, and Set password waits for it. What stood in the sign-in form's fields is not used." },
-      { id: "signin-reset-check", when: "The new passwords differ, or one is too short", then: "The form says so and sends nothing." },
+      { id: "signin-reset-check", when: "The new passwords differ, or one is short", then: "Differing passwords are refused before anything is sent. A short one only gets a quiet line under the field, and Set password stays on." },
       { id: "signin-slots", when: "The app fills fields and actions", then: "Its fields stand above the password and its actions under Sign in, with Forgot password? still last." },
       { id: "signin-step", when: "The app hands in a step of its own", then: "It takes the forms' place under the same head." },
       { id: "signin-theme", when: "The system is light or dark", then: "The page takes that theme's ground and the card its surface." },
@@ -640,8 +640,9 @@ export const CONTRACTS: Record<string, Contract> = {
   },
   SignInTile: {
     rows: [
+      { id: "signin-tile-short", when: "A new password is shorter than the app suggests", then: "A quiet line under the field says it works and that a longer one is harder to guess. Save stays on, the kit takes it, and the toast says so once more." },
       { id: "signin-tile-cards", when: "The account is the owner of an app with a password", then: "Each card stands with one title: Password, Password check on changes, Two-factor authentication, Passkeys, Sessions, API tokens, Sign-in services and Accounts." },
-      { id: "signin-tile-open", when: "The app has no password", then: "The password card offers the first one, and the cards of lasting ways in say that they wait for it, in place of their controls." },
+      { id: "signin-tile-open", when: "The app has no password", then: "The password card offers the first one. Tokens and sign-in services work: a token made now says it ends when the app closes, and the service form says that a test sign-in that works makes you its owner, turns it on and closes the app. The other cards stay and say kindly that they are ready once there is a password, in place of their controls." },
       { id: "signin-tile-ask", keys: ["Space"], when: "The switch for the password question is flipped", then: "It saves at once and says so, with no button to apply." },
       { id: "signin-tile-reauth", when: "A new lasting way in is asked for and the sign-in is older than the kit allows", then: "A window asks for the password. A wrong one stays in the window and shakes its button, the right one runs the change." },
       { id: "signin-tile-codes", when: "Two-factor is turned on with its first code", then: "The recovery codes show once, and only the acknowledgement leaves the window." },

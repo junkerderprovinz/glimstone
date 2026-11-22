@@ -5,6 +5,7 @@ import {
   labelInside,
   passkeyOfferKey,
   resetBlocked,
+  signInShortHint,
   showRefusal,
   signInBlocked,
   signInStage,
@@ -49,7 +50,7 @@ export interface SignInCardProps extends SignInHandlers {
   reset?: boolean;
   /** Asks for the account's name in the reset form, in an app with several accounts (the kit's options say `owner: false`). */
   resetName?: boolean;
-  /** The shortest new password the reset form takes, as the server says. */
+  /** The length, as the server says, under which the reset form suggests a longer password. It never refuses a shorter one. */
   minPassword?: number;
   /** One line at the top of the sign-in form, such as "You are signed out". */
   note?: string;
@@ -198,7 +199,15 @@ export function SignInCard({
                 </SignInField>
               )}
               <SignInField label={text.newPassword} htmlFor={id("new")}>
-                <PasswordField id={id("new")} data-signin-field="newPassword" value={s.newPassword} onChange={(e) => flow.set("newPassword", e.target.value)} autoComplete="new-password" text={eye} />
+                <PasswordField
+                  id={id("new")}
+                  data-signin-field="newPassword"
+                  value={s.newPassword}
+                  onChange={(e) => flow.set("newPassword", e.target.value)}
+                  autoComplete="new-password"
+                  text={eye}
+                  note={signInShortHint(text.shortHint, s.newPassword, minPassword)}
+                />
               </SignInField>
               <SignInField label={text.confirmPassword} htmlFor={id("confirm")}>
                 <PasswordField id={id("confirm")} data-signin-field="confirm" value={s.confirm} onChange={(e) => flow.set("confirm", e.target.value)} autoComplete="new-password" text={eye} />

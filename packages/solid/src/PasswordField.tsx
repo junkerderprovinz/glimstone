@@ -1,5 +1,5 @@
-import { createEffect, createSignal, createUniqueId, on, Show, splitProps, type JSX } from "solid-js";
-import { fieldErrorView, fieldWidthClass, PASSWORD_FIELD_TEXT, passwordConfirmView, type FieldWidth, type PasswordFieldText } from "@glimstone/core";
+import { createEffect, createMemo, createSignal, createUniqueId, on, Show, splitProps, type JSX } from "solid-js";
+import { fieldErrorView, fieldNoteView, fieldWidthClass, PASSWORD_FIELD_TEXT, passwordConfirmView, type FieldWidth, type PasswordFieldText } from "@glimstone/core";
 import { FieldError } from "./FieldError.tsx";
 import { useFieldName } from "./fieldName.ts";
 import { IconEye, IconEyeOff } from "./glyphs.tsx";
@@ -19,6 +19,8 @@ export interface PasswordFieldProps extends Omit<JSX.InputHTMLAttributes<HTMLInp
   text?: Partial<PasswordFieldText>;
   /** Why the value cannot stand, as a line under the field until it is fixed. */
   error?: string;
+  /** A quiet line under the field that only informs, such as a hint about the value. An error takes its place. */
+  note?: string;
   /** Asks for the password again in a second field, which stands once the first holds something. */
   confirm?: boolean;
   /** Whether both fields hold the same password, each time that changes. Set password waits for true. */
@@ -33,6 +35,7 @@ export function PasswordField(props: PasswordFieldProps) {
     "eyeAttrs",
     "text",
     "error",
+    "note",
     "confirm",
     "onConfirmedChange",
     "class",
@@ -49,13 +52,17 @@ export function PasswordField(props: PasswordFieldProps) {
   const name = useFieldName(() => own["aria-label"]);
   const fallback = createUniqueId();
   const id = () => rest.id ?? fallback;
-  const err = () => fieldErrorView(own.error, id(), own["aria-describedby"]);
+  const quiet = () => fieldNoteView(own.note, own.error, id(), own["aria-describedby"]);
+  const err = () => fieldErrorView(own.error, id(), quiet().describedBy);
   const view = () => passwordConfirmView(rest.value === undefined ? typed() : String(rest.value), repeat());
   const mismatch = () => fieldErrorView(view().mismatch ? words().mismatch : undefined, `${id()}-confirm`);
   createEffect(() => {
     if (!view().shown) setRepeat("");
   });
-  createEffect(on(() => !!own.confirm && view().confirmed, (confirmed) => own.onConfirmedChange?.(confirmed)));
+  // Through a memo the callback runs only when the answer changes. A parent that
+  // keeps the answer in the same state as a controlled value would loop otherwise.
+  const confirmed = createMemo(() => !!own.confirm && view().confirmed);
+  createEffect(on(confirmed, (yes) => own.onConfirmedChange?.(yes)));
   return (
     <>
       <span
@@ -82,6 +89,13 @@ export function PasswordField(props: PasswordFieldProps) {
         </IconTipButton>
       </span>
       <Show when={err().errorId}>{(id) => <FieldError id={id()}>{own.error}</FieldError>}</Show>
+      <Show when={quiet().noteId}>
+        {(noteId) => (
+          <span id={noteId()} class="glim-field-note">
+            {own.note}
+          </span>
+        )}
+      </Show>
       <Show when={own.confirm && view().shown}>
         <span class="glim-secret-confirm">
           <label for={`${id()}-confirm`} class="glim-secret-confirm-label">

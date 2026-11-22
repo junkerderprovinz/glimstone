@@ -16,6 +16,7 @@ import {
   signInClientPaste,
   signInServiceLabel,
   signInServiceQuiet,
+  tokenFacts,
   signInRoleItems,
   passkeysAllowedAt,
   signInCardNotice,
@@ -25,6 +26,7 @@ import {
   SIGN_IN_TILE_CARDS,
   type SignInTileOptions,
 } from '../src/signInTile.ts';
+import { signInShortHint } from '../src/signIn.ts';
 
 const ok = <T>(value: T): SignInResult<T> => ({ ok: true, value });
 const no = (error: SignInFailure['error'], status = 400, more: Partial<SignInFailure> = {}): SignInFailure => ({ ok: false, status, error, ...more });
@@ -140,11 +142,11 @@ test('a tile reads only what its cards show', async () => {
   assert.deepEqual(calls.sort(), ['me', 'options']);
 });
 
-test('an open app shows no sessions and no accounts, and the services card waits for a password', async () => {
+test('an open app shows every card', async () => {
   const { api } = kit({ me: async () => ok({ ...ME, via: 'open', password: false, account: undefined }), settings: async () => no('setPasswordFirst', 409) });
   const { flow } = tile(api);
   await flow.refresh();
-  assert.deepEqual(signInTileCards(flow.state(), SIGN_IN_TILE_CARDS), ['password', 'twoFactor', 'passkeys', 'tokens', 'services']);
+  assert.deepEqual(signInTileCards(flow.state(), SIGN_IN_TILE_CARDS), [...SIGN_IN_TILE_CARDS]);
 });
 
 test('an admin of a signed-in app sees every card that has something to show', async () => {
@@ -154,18 +156,25 @@ test('an admin of a signed-in app sees every card that has something to show', a
   assert.deepEqual(signInTileCards(flow.state(), SIGN_IN_TILE_CARDS), [...SIGN_IN_TILE_CARDS]);
 });
 
-test('a short new password is caught before anything is sent', async () => {
-  const { api, calls } = kit();
-  const { flow } = tile(api);
+test('a short new password is saved, and the toast suggests a longer one', async () => {
+  const { api, calls } = kit({ setPassword: async () => ok({ short: true }) });
+  const { flow, said } = tile(api);
   await flow.refresh();
   flow.editPassword();
   flow.set('current', 'old password');
   flow.set('next', 'short');
   flow.setConfirmed(true);
   await flow.savePassword();
-  assert.deepEqual(flow.state().invalid, { field: 'next', message: 'The new password needs at least 12 characters.' });
-  assert.equal(flow.state().refusal?.hook, 'save-password');
-  assert.ok(!calls.includes('setPassword'));
+  assert.equal(flow.state().invalid, null);
+  assert.ok(calls.includes('setPassword'));
+  assert.equal(said.at(-1)?.[1], 'Password saved. Every other session has ended. A longer one would be harder to guess.');
+});
+
+test('the hint under a new password shows only while it is shorter than the minimum', () => {
+  const hint = text.password.shortHint;
+  assert.equal(signInShortHint(hint, '', 12), undefined);
+  assert.equal(signInShortHint(hint, 'short', 12), 'Under 12 characters. That works, though a longer password is harder to guess.');
+  assert.equal(signInShortHint(hint, 'twelve chars', 12), undefined);
 });
 
 test('a wrong current password stands under its field, and the next key clears it', async () => {
@@ -391,11 +400,15 @@ test('an account from a sign-in service is told where its password lives, and tw
   assert.equal(signInCardNotice(text, s, 'services'), null);
 });
 
-test('an open app sends every lasting way in to the first password', async () => {
+test('an open app keeps every card and says which ones are ready once there is a password', async () => {
   const { api } = kit({ me: async () => ok({ ...ME, via: 'open', password: false, account: undefined }) });
   const { flow } = tile(api);
   await flow.refresh();
-  for (const card of ['twoFactor', 'passkeys', 'tokens', 'services'] as const) assert.deepEqual(signInCardNotice(text, flow.state(), card), text.needsPassword);
+  for (const card of ['askPassword', 'twoFactor', 'passkeys', 'sessions', 'accounts'] as const) assert.deepEqual(signInCardNotice(text, flow.state(), card), text.needsPassword);
+  for (const card of ['tokens', 'services'] as const) assert.equal(signInCardNotice(text, flow.state(), card), null);
+  assert.match(signInServiceQuiet(text, flow.state(), 'Pocket ID'), /makes your account at Pocket ID the owner here/);
+  const when = (iso: string) => iso;
+  assert.equal(tokenFacts(text, { id: 't', name: 'n', scopes: [], created: 'c', endsWhenClosed: true }, when).at(-1), 'ends when the app closes');
   assert.equal(signInPasswordElsewhere(text, flow.state()), null);
 });
 

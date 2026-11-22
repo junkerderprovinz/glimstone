@@ -29,6 +29,7 @@ import {
   signInTileCards,
   signInWhen,
   signInCardNotice,
+  signInShortHint,
   signInPasswordElsewhere,
   tokenFacts,
   type Catalog,
@@ -194,7 +195,15 @@ function PasswordCard({ ctx, hue }: { ctx: Ctx; hue: number }) {
                 </FieldRow>
               )}
               <FieldRow label={t.next}>
-                <PasswordField confirm value={s.draft.next} onChange={(e) => flow.set("next", e.target.value)} onConfirmedChange={flow.setConfirmed} text={eye} error={err("next")} />
+                <PasswordField
+                  confirm
+                  value={s.draft.next}
+                  onChange={(e) => flow.set("next", e.target.value)}
+                  onConfirmedChange={flow.setConfirmed}
+                  text={eye}
+                  error={err("next")}
+                  note={signInShortHint(t.shortHint, s.draft.next, s.offer?.minPassword ?? 12)}
+                />
               </FieldRow>
             </FieldRowGroup>
           )}
@@ -228,11 +237,16 @@ function PasswordCard({ ctx, hue }: { ctx: Ctx; hue: number }) {
 function AskPasswordCard({ ctx, hue }: { ctx: Ctx; hue: number }) {
   const { s, flow, text } = ctx;
   const t = text.askPassword;
+  const notice = signInCardNotice(text, s, "askPassword");
   return (
     <Card title={t.title} hint={t.hint} hueIndex={hue} data-signin-card="askPassword">
-      <FieldRow label={t.label} hint={t.when}>
-        <Toggle checked={!!s.settings?.askPassword} onChange={(on) => void flow.setAskPassword(on)} data-signin-tile="ask-password" />
-      </FieldRow>
+      {notice ? (
+        <Notice notice={notice} />
+      ) : (
+        <FieldRow label={t.label} hint={t.when}>
+          <Toggle checked={!!s.settings?.askPassword} onChange={(on) => void flow.setAskPassword(on)} data-signin-tile="ask-password" />
+        </FieldRow>
+      )}
     </Card>
   );
 }
@@ -317,6 +331,14 @@ function SessionsCard({ ctx, hue }: { ctx: Ctx; hue: number }) {
   const { s, flow, text, keys, when } = ctx;
   const t = text.sessions;
   const others = s.sessions.some((x) => !x.current);
+  const notice = signInCardNotice(text, s, "sessions");
+  if (notice) {
+    return (
+      <Card title={t.title} hint={t.hint} hueIndex={hue} data-signin-card="sessions">
+        <Notice notice={notice} />
+      </Card>
+    );
+  }
   return (
     <Card title={t.title} hint={t.hint} hueIndex={hue} data-signin-card="sessions">
       <div className="glim-signin-tile-body">
@@ -482,6 +504,14 @@ function ServicesCard({ ctx, hue, providers }: { ctx: Ctx; hue: number; provider
 function AccountsCard({ ctx, hue }: { ctx: Ctx; hue: number }) {
   const { s, flow, text, keys, when, ask } = ctx;
   const t = text.accounts;
+  const notice = signInCardNotice(text, s, "accounts");
+  if (notice) {
+    return (
+      <Card title={t.title} hint={t.hint} hueIndex={hue} data-signin-card="accounts">
+        <Notice notice={notice} />
+      </Card>
+    );
+  }
   return (
     <Card title={t.title} hint={t.hint} hueIndex={hue} data-signin-card="accounts">
       <div className="glim-list glim-signin-tile-rows">
@@ -659,6 +689,7 @@ function TileWindow({ ctx, api, providers }: { ctx: Ctx; api: SignInApi; provide
     return (
       <Window title={t.newTitle} text={words} closeOnBackdrop={false} onClose={flow.close} actions={[act(t.make, keys.createToken, "token-make", flow.makeToken, { primary: true })]}>
         <div className="glim-signin-tile-body">
+          {s.me?.via === "open" && <p className="glim-signin-tile-text">{t.openHint}</p>}
           <FieldRowGroup>
             <FieldRow label={t.name} hint={t.nameHint}>
               <TextField value={s.draft.name} onChange={(e) => flow.set("name", e.target.value)} onKeyDown={enter(() => void flow.makeToken())} error={err("name")} />

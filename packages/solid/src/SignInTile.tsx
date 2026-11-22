@@ -31,6 +31,7 @@ import {
   signInWhen,
   signInCardNotice,
   signInPasswordElsewhere,
+  signInShortHint,
   tokenFacts,
   type Catalog,
   type SignInApi,
@@ -198,6 +199,7 @@ function PasswordCard(props: CardProps) {
                   onConfirmedChange={flow.setConfirmed}
                   text={eye()}
                   error={err("next")}
+                  note={signInShortHint(t().shortHint, s().draft.next, s().offer?.minPassword ?? 12)}
                 />
               </FieldRow>
             </FieldRowGroup>
@@ -237,9 +239,11 @@ function AskPasswordCard(props: CardProps) {
   const t = () => own.text.askPassword;
   return (
     <Card title={t().title} hint={t().hint} hueIndex={props.hue} data-signin-card="askPassword">
-      <FieldRow label={t().label} hint={t().when}>
-        <Toggle checked={!!s().settings?.askPassword} onChange={(on) => void flow.setAskPassword(on)} data-signin-tile="ask-password" />
-      </FieldRow>
+      <Show when={!signInCardNotice(own.text, s(), "askPassword")} fallback={<Notice notice={signInCardNotice(own.text, s(), "askPassword")!} />}>
+        <FieldRow label={t().label} hint={t().when}>
+          <Toggle checked={!!s().settings?.askPassword} onChange={(on) => void flow.setAskPassword(on)} data-signin-tile="ask-password" />
+        </FieldRow>
+      </Show>
     </Card>
   );
 }
@@ -331,43 +335,45 @@ function SessionsCard(props: CardProps) {
   const others = () => s().sessions.some((x) => !x.current);
   return (
     <Card title={t().title} hint={t().hint} hueIndex={props.hue} data-signin-card="sessions">
-      <div class="glim-signin-tile-body">
-        <div class="glim-list glim-signin-tile-rows">
-          <For each={s().sessions}>
-            {(x) => {
-              const device = () => signInDevice(x.agent, t());
-              return (
-                <ListRow
-                  steady
-                  name={device().name}
-                  tile={<GlyphTile glyph={glyphFor(device().phone ? keys().phone : keys().laptop)} />}
-                  meta={sessionFacts(own.text, x, s().serviceLabels, when).join(" · ")}
-                  badges={
-                    <Show when={x.current}>
-                      <Badge size="small" tone="active">
-                        {t().current}
-                      </Badge>
-                    </Show>
-                  }
-                  actions={
-                    <Show when={!x.current}>
-                      <Button
-                        compact
-                        tone="subtle"
-                        label={t().end} labelKey={keys().end} busy={s().busy === `session-end-${x.id}`} data-signin-tile={`session-end-${x.id}`} onClick={() => void flow.endSession(x.id)} />
-                    </Show>
-                  }
-                />
-              );
-            }}
-          </For>
-        </div>
-        <Show when={others()}>
-          <div class="glim-signin-tile-foot">
-            <Button label={t().endOthers} labelKey={keys().endOthers} busy={s().busy === "sessions-end-others"} data-signin-tile="sessions-end-others" onClick={() => void flow.endOtherSessions()} />
+      <Show when={!signInCardNotice(own.text, s(), "sessions")} fallback={<Notice notice={signInCardNotice(own.text, s(), "sessions")!} />}>
+        <div class="glim-signin-tile-body">
+          <div class="glim-list glim-signin-tile-rows">
+            <For each={s().sessions}>
+              {(x) => {
+                const device = () => signInDevice(x.agent, t());
+                return (
+                  <ListRow
+                    steady
+                    name={device().name}
+                    tile={<GlyphTile glyph={glyphFor(device().phone ? keys().phone : keys().laptop)} />}
+                    meta={sessionFacts(own.text, x, s().serviceLabels, when).join(" · ")}
+                    badges={
+                      <Show when={x.current}>
+                        <Badge size="small" tone="active">
+                          {t().current}
+                        </Badge>
+                      </Show>
+                    }
+                    actions={
+                      <Show when={!x.current}>
+                        <Button
+                          compact
+                          tone="subtle"
+                          label={t().end} labelKey={keys().end} busy={s().busy === `session-end-${x.id}`} data-signin-tile={`session-end-${x.id}`} onClick={() => void flow.endSession(x.id)} />
+                      </Show>
+                    }
+                  />
+                );
+              }}
+            </For>
           </div>
-        </Show>
-      </div>
+          <Show when={others()}>
+            <div class="glim-signin-tile-foot">
+              <Button label={t().endOthers} labelKey={keys().endOthers} busy={s().busy === "sessions-end-others"} data-signin-tile="sessions-end-others" onClick={() => void flow.endOtherSessions()} />
+            </div>
+          </Show>
+        </div>
+      </Show>
     </Card>
   );
 }
@@ -493,44 +499,46 @@ function AccountsCard(props: CardProps) {
   const t = () => own.text.accounts;
   return (
     <Card title={t().title} hint={t().hint} hueIndex={props.hue} data-signin-card="accounts">
-      <div class="glim-list glim-signin-tile-rows">
-        <For each={s().accounts ?? []}>
-          {(a) => (
-            <ListRow
-              steady
-              name={a.name}
-              tile={<GlyphTile glyph={glyphFor(keys().account)} />}
-              meta={accountFacts(own.text, a, s().serviceLabels, when).join(" · ")}
-              badges={
-                <Show when={a.owner || a.blocked}>
-                  <Show when={a.owner}>
-                    <Badge size="small">{t().owner}</Badge>
+      <Show when={!signInCardNotice(own.text, s(), "accounts")} fallback={<Notice notice={signInCardNotice(own.text, s(), "accounts")!} />}>
+        <div class="glim-list glim-signin-tile-rows">
+          <For each={s().accounts ?? []}>
+            {(a) => (
+              <ListRow
+                steady
+                name={a.name}
+                tile={<GlyphTile glyph={glyphFor(keys().account)} />}
+                meta={accountFacts(own.text, a, s().serviceLabels, when).join(" · ")}
+                badges={
+                  <Show when={a.owner || a.blocked}>
+                    <Show when={a.owner}>
+                      <Badge size="small">{t().owner}</Badge>
+                    </Show>
+                    <Show when={a.blocked}>
+                      <Badge size="small" tone="warn">
+                        {t().blocked}
+                      </Badge>
+                    </Show>
                   </Show>
-                  <Show when={a.blocked}>
-                    <Badge size="small" tone="warn">
-                      {t().blocked}
-                    </Badge>
+                }
+                actions={
+                  <Show when={!a.owner && a.id !== s().me?.account}>
+                    <Button
+                      compact
+                      tone="subtle"
+                      label={a.blocked ? t().unblock : t().block}
+                      labelKey={a.blocked ? keys().unblock : keys().block}
+                      busy={s().busy === `account-block-${a.id}`}
+                      data-signin-tile={`account-block-${a.id}`}
+                      onClick={() => void flow.block(a.id, !a.blocked)}
+                    />
+                    <Button compact tone="subtle" label={own.text.remove} labelKey={keys().remove} glyph={<IconTrash />} data-signin-tile={`remove-account-${a.id}`} onClick={() => ask("account", a.id, a.name)} />
                   </Show>
-                </Show>
-              }
-              actions={
-                <Show when={!a.owner && a.id !== s().me?.account}>
-                  <Button
-                    compact
-                    tone="subtle"
-                    label={a.blocked ? t().unblock : t().block}
-                    labelKey={a.blocked ? keys().unblock : keys().block}
-                    busy={s().busy === `account-block-${a.id}`}
-                    data-signin-tile={`account-block-${a.id}`}
-                    onClick={() => void flow.block(a.id, !a.blocked)}
-                  />
-                  <Button compact tone="subtle" label={own.text.remove} labelKey={keys().remove} glyph={<IconTrash />} data-signin-tile={`remove-account-${a.id}`} onClick={() => ask("account", a.id, a.name)} />
-                </Show>
-              }
-            />
-          )}
-        </For>
-      </div>
+                }
+              />
+            )}
+          </For>
+        </div>
+      </Show>
     </Card>
   );
 }
@@ -717,6 +725,9 @@ function TileWindow(props: { ctx: Ctx }) {
       <Match when={open("newToken")}>
         <Window title={text().tokens.newTitle} text={words()} closeOnBackdrop={false} onClose={flow.close} actions={[act(text().tokens.make, keys().createToken, "token-make", flow.makeToken, { primary: true })]}>
           <div class="glim-signin-tile-body">
+            <Show when={s().me?.via === "open"}>
+              <p class="glim-signin-tile-text">{text().tokens.openHint}</p>
+            </Show>
             <FieldRowGroup>
               <FieldRow label={text().tokens.name} hint={text().tokens.nameHint}>
                 <TextField value={s().draft.name} onInput={(e) => flow.set("name", e.currentTarget.value)} onKeyDown={enter(() => void flow.makeToken())} error={err("name")} />

@@ -16,7 +16,7 @@
     reset?: boolean;
     /** Asks for the account's name in the reset form, in an app with several accounts (the kit's options say `owner: false`). */
     resetName?: boolean;
-    /** The shortest new password the reset form takes, as the server says. */
+    /** The length, as the server says, under which the reset form suggests a longer password. It never refuses a shorter one. */
     minPassword?: number;
     /** One line at the top of the sign-in form, such as "You are signed out". */
     note?: string;
@@ -44,7 +44,7 @@
 
 <script lang="ts">
   import { onDestroy, untrack } from "svelte";
-  import { createSignInFlow, focusFirstField, passkeyOfferKey, resetBlocked, showRefusal, signInBlocked, signInStage } from "@glimstone/core";
+  import { createSignInFlow, focusFirstField, passkeyOfferKey, resetBlocked, showRefusal, signInBlocked, signInShortHint, signInStage } from "@glimstone/core";
   import BrandMark from "./BrandMark.svelte";
   import Button from "./Button.svelte";
   import { glyphFor } from "./glyphs.js";
@@ -192,6 +192,7 @@
             oninput={(e) => flow.set("newPassword", e.currentTarget.value)}
             autocomplete="new-password"
             text={eye}
+            note={signInShortHint(text.shortHint, s.newPassword, minPassword)}
           />
         </SignInField>
         <SignInField label={text.confirmPassword} htmlFor={id("confirm")}>

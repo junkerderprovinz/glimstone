@@ -5,6 +5,7 @@ import {
   labelInside,
   passkeyOfferKey,
   resetBlocked,
+  signInShortHint,
   showRefusal,
   signInBlocked,
   signInStage,
@@ -49,7 +50,7 @@ export interface SignInCardProps extends SignInHandlers {
   reset?: boolean;
   /** Asks for the account's name in the reset form, in an app with several accounts (the kit's options say `owner: false`). */
   resetName?: boolean;
-  /** The shortest new password the reset form takes, as the server says. */
+  /** The length, as the server says, under which the reset form suggests a longer password. It never refuses a shorter one. */
   minPassword?: number;
   /** One line at the top of the sign-in form, such as "You are signed out". */
   note?: string;
@@ -298,6 +299,7 @@ export function SignInCard(props: SignInCardProps) {
                     onInput={(e) => flow.set("newPassword", e.currentTarget.value)}
                     autocomplete="new-password"
                     text={eye()}
+                    note={signInShortHint(own.text.shortHint, s().newPassword, own.minPassword)}
                   />
                 </SignInField>
                 <SignInField label={own.text.confirmPassword} htmlFor={id("confirm")}>

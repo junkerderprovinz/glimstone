@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef, useAttrs, useId, watch, type StyleValue } from "vue";
-import { fieldErrorView, fieldWidthClass, PASSWORD_FIELD_TEXT, passwordConfirmView, type FieldWidth, type PasswordFieldText } from "@glimstone/core";
+import { fieldErrorView, fieldNoteView, fieldWidthClass, PASSWORD_FIELD_TEXT, passwordConfirmView, type FieldWidth, type PasswordFieldText } from "@glimstone/core";
 import FieldError from "./FieldError.vue";
 import { useFieldName } from "./fieldName";
 import { IconEye, IconEyeOff } from "./glyphs";
@@ -23,6 +23,8 @@ const props = withDefaults(
     disabled?: boolean;
     /** Why the value cannot stand, as a line under the field until it is fixed. */
     error?: string;
+    /** A quiet line under the field that only informs, such as a hint about the value. An error takes its place. */
+    note?: string;
     /** Asks for the password again in a second field, which stands once the first holds something. */
     confirm?: boolean;
   }>(),
@@ -42,7 +44,8 @@ const name = useFieldName(() => attrs["aria-label"] as string | undefined);
 const widthClass = computed(() => fieldWidthClass(props.width));
 const own = useId();
 const id = computed(() => (attrs.id as string | undefined) ?? own);
-const err = computed(() => fieldErrorView(props.error, id.value, attrs["aria-describedby"] as string | undefined));
+const quiet = computed(() => fieldNoteView(props.note, props.error, id.value, attrs["aria-describedby"] as string | undefined));
+const err = computed(() => fieldErrorView(props.error, id.value, quiet.value.describedBy));
 const view = computed(() => passwordConfirmView(value.value, repeat.value));
 const mismatch = computed(() => fieldErrorView(view.value.mismatch ? words.value.mismatch : undefined, `${id.value}-confirm`));
 watch(
@@ -80,6 +83,7 @@ defineExpose({ input });
     </IconTipButton>
   </span>
   <FieldError v-if="err.errorId" :id="err.errorId">{{ error }}</FieldError>
+  <span v-if="quiet.noteId" :id="quiet.noteId" class="glim-field-note">{{ note }}</span>
   <span v-if="confirm && view.shown" class="glim-secret-confirm">
     <label :for="`${id}-confirm`" class="glim-secret-confirm-label">{{ words.confirm }}</label>
     <span :class="['glim-secret-confirm-box', widthClass]">

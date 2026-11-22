@@ -6772,6 +6772,14 @@
     justify-content: flex-end;
     margin-top: 0;
   }
+  /* A line that only informs (fieldNoteView) sits where an error would, in the quiet ink. */
+  .glim-field-note {
+    display: block;
+    flex-basis: 100%;
+    margin-top: var(--space-2);
+    color: var(--carbon-text-sub);
+    font-size: var(--text-subline);
+  }
 }
 
 /* Collapsible and Accordion: a row that opens the text under it. The row has

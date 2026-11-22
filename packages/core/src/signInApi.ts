@@ -116,12 +116,19 @@ export interface SignInMe extends SignInVisitor {
   askPassword: boolean;
 }
 
+/** The kit's answer to a new password. */
+export interface SignInPasswordSet {
+  /** The password is shorter than `minPassword`, which the kit takes all the same. */
+  short?: boolean;
+}
+
 /** What the sign-in page offers. */
 export interface SignInOffer {
   /** Nobody can sign in, so everyone is admin. */
   open: boolean;
   /** One local account, so the page asks for no name. */
   owner: boolean;
+  /** The length from which the app stops suggesting a longer password. */
   minPassword: number;
   signedIn: boolean;
   /** Passkeys answer on this address, through the browser's offer in the password field. */
@@ -148,6 +155,8 @@ export interface SignInToken {
   created: string;
   used?: string;
   expires?: string;
+  /** Made while the app was open: it stands for the admin and ends when the app closes, by the first password or the first sign-in service. */
+  endsWhenClosed?: boolean;
 }
 
 export interface SignInPasskey {
@@ -319,7 +328,7 @@ export interface SignInApi {
   serviceAddress(id: string, back: string): string;
 
   me(): Promise<SignInResult<SignInMe>>;
-  setPassword(input: { next: string; current?: string; name?: string }): Promise<SignInResult<Json>>;
+  setPassword(input: { next: string; current?: string; name?: string }): Promise<SignInResult<SignInPasswordSet>>;
   removePassword(current: string): Promise<SignInResult<Json>>;
   confirm(password: string): Promise<SignInResult<Json>>;
   sessions(): Promise<SignInResult<SignInSession[]>>;

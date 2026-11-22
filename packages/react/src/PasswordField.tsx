@@ -1,5 +1,5 @@
 import { useEffect, useId, useState, type InputHTMLAttributes, type Ref } from "react";
-import { fieldErrorView, fieldWidthClass, PASSWORD_FIELD_TEXT, passwordConfirmView, type FieldWidth, type PasswordFieldText } from "@glimstone/core";
+import { fieldErrorView, fieldNoteView, fieldWidthClass, PASSWORD_FIELD_TEXT, passwordConfirmView, type FieldWidth, type PasswordFieldText } from "@glimstone/core";
 import { FieldError } from "./FieldError.tsx";
 import { useFieldName } from "./fieldName.ts";
 import { IconEye, IconEyeOff } from "./glyphs.tsx";
@@ -19,6 +19,8 @@ export interface PasswordFieldProps extends Omit<InputHTMLAttributes<HTMLInputEl
   text?: Partial<PasswordFieldText>;
   /** Why the value cannot stand, as a line under the field until it is fixed. */
   error?: string;
+  /** A quiet line under the field that only informs, such as a hint about the value. An error takes its place. */
+  note?: string;
   /** Asks for the password again in a second field, which stands once the first holds something. */
   confirm?: boolean;
   /** Whether both fields hold the same password, each time that changes. Set password waits for true. */
@@ -28,7 +30,7 @@ export interface PasswordFieldProps extends Omit<InputHTMLAttributes<HTMLInputEl
   ref?: Ref<HTMLInputElement>;
 }
 
-export function PasswordField({ width, eyeAttrs, text, error, confirm = false, onConfirmedChange, className, ref, disabled, "aria-label": ariaLabel, "aria-describedby": describedBy, ...rest }: PasswordFieldProps) {
+export function PasswordField({ width, eyeAttrs, text, error, note, confirm = false, onConfirmedChange, className, ref, disabled, "aria-label": ariaLabel, "aria-describedby": describedBy, ...rest }: PasswordFieldProps) {
   const words = { ...PASSWORD_FIELD_TEXT, ...text };
   const [shown, setShown] = useState(false);
   const [repeatShown, setRepeatShown] = useState(false);
@@ -37,7 +39,8 @@ export function PasswordField({ width, eyeAttrs, text, error, confirm = false, o
   const name = useFieldName(ariaLabel);
   const own = useId();
   const id = rest.id ?? own;
-  const err = fieldErrorView(error, id, describedBy);
+  const quiet = fieldNoteView(note, error, id, describedBy);
+  const err = fieldErrorView(error, id, quiet.describedBy);
   const view = passwordConfirmView(rest.value === undefined ? typed : String(rest.value), repeat);
   if (!view.shown && repeat) setRepeat("");
   const repeatId = `${id}-confirm`;
@@ -68,6 +71,11 @@ export function PasswordField({ width, eyeAttrs, text, error, confirm = false, o
         </IconTipButton>
       </span>
       {err.errorId && <FieldError id={err.errorId}>{error}</FieldError>}
+      {quiet.noteId && (
+        <span id={quiet.noteId} className="glim-field-note">
+          {note}
+        </span>
+      )}
       {confirm && view.shown && (
         <span className="glim-secret-confirm">
           <label htmlFor={repeatId} className="glim-secret-confirm-label">

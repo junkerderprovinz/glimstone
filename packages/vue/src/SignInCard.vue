@@ -5,6 +5,7 @@ import {
   focusFirstField,
   passkeyOfferKey,
   resetBlocked,
+  signInShortHint,
   showRefusal,
   signInBlocked,
   signInStage,
@@ -40,7 +41,7 @@ const props = withDefaults(
     reset?: boolean;
     /** Asks for the account's name in the reset form, in an app with several accounts (the kit's options say `owner: false`). */
     resetName?: boolean;
-    /** The shortest new password the reset form takes, as the server says. */
+    /** The length, as the server says, under which the reset form suggests a longer password. It never refuses a shorter one. */
     minPassword?: number;
     /** One line at the top of the sign-in form, such as "You are signed out". */
     note?: string;
@@ -165,7 +166,15 @@ watch(
           />
         </SignInField>
         <SignInField :label="text.newPassword" :for="id('new')">
-          <PasswordField :id="id('new')" data-signin-field="newPassword" :model-value="s.newPassword" autocomplete="new-password" :text="eye" @update:model-value="flow.set('newPassword', $event)" />
+          <PasswordField
+            :id="id('new')"
+            data-signin-field="newPassword"
+            :model-value="s.newPassword"
+            autocomplete="new-password"
+            :text="eye"
+            :note="signInShortHint(text.shortHint, s.newPassword, minPassword)"
+            @update:model-value="flow.set('newPassword', $event)"
+          />
         </SignInField>
         <SignInField :label="text.confirmPassword" :for="id('confirm')">
           <PasswordField :id="id('confirm')" data-signin-field="confirm" :model-value="s.confirm" autocomplete="new-password" :text="eye" @update:model-value="flow.set('confirm', $event)" />

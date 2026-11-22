@@ -4194,10 +4194,10 @@ test.describe("SignInCard", () => {
 
       await openReset(page);
       await field(page, "Code from the container log").fill("ABCD-EFGH-JKLM");
-      await field(page, "New password").fill("short");
-      await field(page, "Confirm password").fill("short");
+      await field(page, "New password").fill("correct horse battery");
+      await field(page, "Confirm password").fill("correct horse batterx");
       await button(page, "Set password").click();
-      await expect(alert).toHaveText("The new password needs at least 12 characters.");
+      await expect(alert).toHaveText("The passwords do not match");
       await button(page, "Back").click();
       await expect(field(page, "Password")).toBeVisible();
       expect(await page.evaluate(() => [...(window as typeof window & { signinTops: Set<number> }).signinTops])).toHaveLength(1);
@@ -4297,15 +4297,17 @@ test.describe("SignInCard", () => {
     await expect(button(page, "Set password", demo)).toBeEnabled();
   });
 
-  test("[signin-reset-check] a short or mismatched password is caught before sending", async ({ page }) => {
+  test("[signin-reset-check] a mismatched password is caught before sending, a short one only gets a quiet hint", async ({ page }) => {
     await open(page, "/components/sign-in-card");
     await openReset(page);
     await field(page, "Code from the container log").fill("ABCD-EFGH-JKLM");
     await field(page, "New password").fill("short");
-    await field(page, "Confirm password").fill("short");
-    await button(page, "Set password").click();
-    await expect(card(page).getByRole("alert")).toHaveText("The new password needs at least 12 characters.");
+    const hint = card(page).locator(".glim-field-note");
+    await expect(hint).toHaveText("Under 12 characters. That works, though a longer password is harder to guess.");
+    await expect(card(page).getByRole("alert")).toHaveCount(0);
+    await expect(button(page, "Set password")).toBeEnabled();
     await field(page, "New password").fill("correct horse battery");
+    await expect(hint).toHaveCount(0);
     await field(page, "Confirm password").fill("correct horse batterx");
     await button(page, "Set password").click();
     await expect(card(page).getByRole("alert")).toHaveText("The passwords do not match");
@@ -4685,15 +4687,35 @@ test.describe("SignInTile", () => {
     for (const card of await demo(page).locator("[data-signin-card]").all()) await expect(card.locator(".glim-panel-heading")).toHaveCount(1);
   });
 
-  test("[signin-tile-open] without a password every lasting way in waits for one", async ({ page }) => {
+  test("[signin-tile-open] without a password every card stays and says what a password adds", async ({ page }) => {
     await open(page, "/components/sign-in-tile");
     const name = "SignInTileOpen";
     await expect(cardOf(page, "password", name).getByRole("button", { name: "Set a password" })).toBeVisible();
-    for (const card of ["twoFactor", "passkeys", "tokens", "services"]) {
-      await expect(cardOf(page, card, name).locator(".glim-notice-title")).toHaveText("This needs a password first");
+    for (const card of ["askPassword", "twoFactor", "passkeys", "sessions"]) {
+      await expect(cardOf(page, card, name).locator(".glim-notice-title")).toHaveText("Ready once there’s a password");
       await expect(cardOf(page, card, name).locator(".glim-btn")).toHaveCount(0);
     }
-    await expect(cardOf(page, "sessions", name)).toHaveCount(0);
+    await expect(cardOf(page, "services", name).getByRole("button", { name: "Add a sign-in service" })).toBeVisible();
+    await cardOf(page, "tokens", name).getByRole("button", { name: "Create a token" }).click();
+    const make = dialog(page, "Create a token");
+    await expect(make).toContainText("A token made now stands for you and stops working once the app closes");
+    await make.getByLabel("Name", { exact: true }).fill("Open script");
+    await make.getByRole("button", { name: "Create", exact: true }).click();
+    await dialog(page, "Your new token").getByRole("button", { name: "I’ve copied the token" }).click();
+    await expect(cardOf(page, "tokens", name).locator(".glim-list-row-meta")).toContainText("ends when the app closes");
+  });
+
+  test("[signin-tile-short] a short new password gets a quiet hint and still saves", async ({ page }) => {
+    await open(page, "/components/sign-in-tile");
+    const name = "SignInTileOpen";
+    await cardOf(page, "password", name).getByRole("button", { name: "Set a password" }).click();
+    const box = cardOf(page, "password", name);
+    await box.getByLabel("New password", { exact: true }).fill("short");
+    await expect(box.locator(".glim-field-note")).toHaveText("Under 12 characters. That works, though a longer password is harder to guess.");
+    await expect(box.locator(".glim-field-error")).toHaveCount(0);
+    await box.getByLabel("Confirm password", { exact: true }).fill("short");
+    await box.getByRole("button", { name: "Save password" }).click();
+    await expect(said(page, name)).toHaveText("Password set. Sign-in is on. A longer one would be harder to guess.");
   });
 
   test("[signin-tile-ask] the question saves on the flip", async ({ page }) => {

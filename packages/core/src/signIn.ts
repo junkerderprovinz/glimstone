@@ -2,6 +2,7 @@
 // sign-in card"). The app answers each step through a callback, the flow keeps
 // what was typed and which form shows, and the React and Vue cards draw it.
 
+import { fill } from "./fortressText.ts";
 import { PASSWORD_FIELD_TEXT } from "./passwordField.ts";
 import type { TileMark } from "./picker.ts";
 import { shake } from "./selectModel.ts";
@@ -38,8 +39,10 @@ export interface SignInText {
   /** The bubble on Set password while it works. */
   saving: string;
   mismatch: string;
-  /** Says how many characters a new password needs, with the number filled in. */
+  /** @deprecated Unread: a short password is taken, and `shortHint` says so. */
   tooShort: string;
+  /** The quiet line under a new password shorter than the app suggests, `{min}`. */
+  shortHint: string;
   /** Said when the app refuses the code from the log. */
   resetRejected: string;
   /** Said when a callback throws or answers without a reason. */
@@ -69,6 +72,7 @@ export const signInTextEn: SignInText = {
   saving: "Saving…",
   mismatch: PASSWORD_FIELD_TEXT.mismatch,
   tooShort: "The new password needs at least 12 characters.",
+  shortHint: "Under {min} characters. That works, though a longer password is harder to guess.",
   resetRejected: "That code is wrong or has expired. If it expired, the log now shows a new one.",
   failed: "That did not work. Please try again.",
   show: PASSWORD_FIELD_TEXT.show,
@@ -148,7 +152,7 @@ export interface SignInState {
 
 export interface SignInOptions extends SignInHandlers {
   text: SignInText;
-  /** The shortest new password the reset form takes. */
+  /** The length from which the reset form stops suggesting a longer password. */
   minPassword: number;
   /** The reset form asks for the account's name. */
   resetName?: boolean;
@@ -246,10 +250,9 @@ export function createSignInFlow(options: () => SignInOptions): SignInFlow {
   }
 
   async function setPassword() {
-    const { text, minPassword, onSetPassword, onAskCode, resetName } = options();
+    const { text, onSetPassword, onAskCode, resetName } = options();
     if (resetBlocked(state, resetName) || !onSetPassword) return;
     if (state.newPassword !== state.confirm) return refuse(text.mismatch, "set-password", "confirm");
-    if ([...state.newPassword].length < minPassword) return refuse(text.tooShort, "set-password", "newPassword");
     return run("setPassword", async () => {
       const res = await onSetPassword({ code: state.resetCode.trim(), password: state.newPassword, ...(resetName ? { name: state.resetName.trim() } : {}) });
       if (res.ok) return;
@@ -321,6 +324,14 @@ export function signInBlocked(s: SignInState): boolean {
   if (s.busy) return true;
   if (s.needCode) return s.code.trim() === "";
   return s.password === "";
+}
+
+/**
+ * The quiet line under a new password shorter than `min`, or `undefined`. A
+ * short password is still taken: the app stays usable however it is guarded.
+ */
+export function signInShortHint(hint: string, password: string, min: number): string | undefined {
+  return password !== "" && [...password].length < min ? fill(hint, { min }) : undefined;
 }
 
 /** Set password waits for the code from the log, the name where the form asks for one, and a new password. */

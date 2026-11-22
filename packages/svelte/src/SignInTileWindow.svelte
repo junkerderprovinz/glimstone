@@ -203,6 +203,7 @@
   {@const t = text.tokens}
   <Window title={t.newTitle} text={words} closeOnBackdrop={false} onClose={flow.close} actions={[act(t.make, keys.createToken, "token-make", flow.makeToken, { primary: true })]}>
     <div class="glim-signin-tile-body">
+      {#if s.me?.via === "open"}<p class="glim-signin-tile-text">{t.openHint}</p>{/if}
       <FieldRowGroup>
         <FieldRow label={t.name} hint={t.nameHint}>
           <TextField value={s.draft.name} oninput={(e) => flow.set("name", e.currentTarget.value)} onkeydown={enter(flow.makeToken)} error={err("name")} />

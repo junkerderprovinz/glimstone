@@ -21,6 +21,7 @@ import {
   signInWhen,
   signInCardNotice,
   signInPasswordElsewhere,
+  signInShortHint,
   tokenFacts,
   type Catalog,
   type SignInApi,
@@ -108,7 +109,7 @@ const when = computed(() => props.time ?? signInWhen(props.lang));
 const eye = computed(() => ({ show: props.text.show, hide: props.text.hide, confirm: props.text.confirmPassword, mismatch: props.text.mismatch }));
 const err = (field: SignInTileField) => (s.value.invalid?.field === field ? s.value.invalid.message : undefined);
 const shown = computed(() => signInTileCards(s.value, props.cards));
-const notice = (card: "twoFactor" | "passkeys" | "tokens" | "services") => signInCardNotice(props.text, s.value, card);
+const notice = (card: "askPassword" | "twoFactor" | "passkeys" | "tokens" | "services" | "sessions" | "accounts") => signInCardNotice(props.text, s.value, card);
 const elsewhere = computed(() => signInPasswordElsewhere(props.text, s.value));
 const had = computed(() => !!s.value.me?.password);
 const glyph = (key: string) => glyphFor(key) as Component;
@@ -145,7 +146,15 @@ function ask(what: SignInTileRemoval, id: string, name: string) {
               <PasswordField autocomplete="current-password" :model-value="s.draft.current" :text="eye" :error="err('current')" @update:model-value="flow.set('current', $event)" />
             </FieldRow>
             <FieldRow :label="text.password.next">
-              <PasswordField confirm :model-value="s.draft.next" :text="eye" :error="err('next')" @update:model-value="flow.set('next', $event)" @confirmed-change="flow.setConfirmed" />
+              <PasswordField
+                confirm
+                :model-value="s.draft.next"
+                :text="eye"
+                :error="err('next')"
+                :note="signInShortHint(text.password.shortHint, s.draft.next, s.offer?.minPassword ?? 12)"
+                @update:model-value="flow.set('next', $event)"
+                @confirmed-change="flow.setConfirmed"
+              />
             </FieldRow>
           </FieldRowGroup>
           <div class="glim-signin-tile-foot">
@@ -170,7 +179,8 @@ function ask(what: SignInTileRemoval, id: string, name: string) {
       </Card>
 
       <Card v-else-if="c === 'askPassword'" :title="text.askPassword.title" :hint="text.askPassword.hint" :hue-index="hueStart + i" data-signin-card="askPassword">
-        <FieldRow :label="text.askPassword.label" :hint="text.askPassword.when">
+        <UnavailableNotice v-if="notice('askPassword')" :title="notice('askPassword')!.title">{{ notice('askPassword')!.reason }}</UnavailableNotice>
+        <FieldRow v-else :label="text.askPassword.label" :hint="text.askPassword.when">
           <Toggle :model-value="!!s.settings?.askPassword" data-signin-tile="ask-password" @update:model-value="flow.setAskPassword($event)" />
         </FieldRow>
       </Card>
@@ -221,7 +231,8 @@ function ask(what: SignInTileRemoval, id: string, name: string) {
       </Card>
 
       <Card v-else-if="c === 'sessions'" :title="text.sessions.title" :hint="text.sessions.hint" :hue-index="hueStart + i" data-signin-card="sessions">
-        <div class="glim-signin-tile-body">
+        <UnavailableNotice v-if="notice('sessions')" :title="notice('sessions')!.title">{{ notice('sessions')!.reason }}</UnavailableNotice>
+        <div v-else class="glim-signin-tile-body">
           <div class="glim-list glim-signin-tile-rows">
             <ListRow v-for="x in s.sessions" :key="x.id" steady :name="signInDevice(x.agent, text.sessions).name" :meta="sessionFacts(text, x, s.serviceLabels, when).join(' · ')">
               <template #tile><GlyphTile :glyph="glyph(signInDevice(x.agent, text.sessions).phone ? keys.phone : keys.laptop)" /></template>
@@ -353,7 +364,8 @@ function ask(what: SignInTileRemoval, id: string, name: string) {
       </Card>
 
       <Card v-else :title="text.accounts.title" :hint="text.accounts.hint" :hue-index="hueStart + i" data-signin-card="accounts">
-        <div class="glim-list glim-signin-tile-rows">
+        <UnavailableNotice v-if="notice('accounts')" :title="notice('accounts')!.title">{{ notice('accounts')!.reason }}</UnavailableNotice>
+        <div v-else class="glim-list glim-signin-tile-rows">
           <ListRow v-for="a in s.accounts ?? []" :key="a.id" steady :name="a.name" :meta="accountFacts(text, a, s.serviceLabels, when).join(' · ')">
             <template #tile><GlyphTile :glyph="glyph(keys.account)" /></template>
             <template v-if="a.owner || a.blocked" #badges>
