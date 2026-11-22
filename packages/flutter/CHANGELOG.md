@@ -1,3 +1,7 @@
+## 4.8.4
+
+- No changes for Flutter. The fix is in `@glimstone/core`, which a Flutter app does not load.
+
 ## 4.8.3
 
 - No changes for Flutter. The Version and Components cards of the Info tile live in the web packages.

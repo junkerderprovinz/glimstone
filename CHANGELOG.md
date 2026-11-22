@@ -2,7 +2,7 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 4.8.4 - 2026-11-22
 
 `@glimstone/core` loads in a React Native app again. Hermes, the engine those apps run on, lacks several Intl helpers that a browser has, and the core built one of them while it loaded, so the app stopped before its first screen.
 
