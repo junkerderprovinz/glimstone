@@ -19,7 +19,7 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## 🧪 Tests
 
-- **A test loads the whole core without** Segmenter, RelativeTimeFormat, ListFormat, DisplayNames and PluralRules, and fills the words in all 42 languages.
+- **A test loads the whole core with the helpers taken away:** Segmenter, RelativeTimeFormat, ListFormat, DisplayNames and PluralRules. It fills the words in all 42 languages that way.
 - **CI runs the core under Hermes itself.** It bundles the core into one script and runs it with the Hermes command line tool, which has no Intl at all.
 
 ## 4.8.3 - 2026-11-22
