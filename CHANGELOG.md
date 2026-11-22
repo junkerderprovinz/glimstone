@@ -2,7 +2,7 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 4.8.3 - 2026-11-22
 
 The Version card says "Not checked yet" until an app has looked for updates, a phone app names the store it really came from, and a row in the Components card breaks before its end on a narrow card.
 

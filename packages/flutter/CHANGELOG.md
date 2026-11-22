@@ -1,3 +1,7 @@
+## 4.8.3
+
+- No changes for Flutter. The Version and Components cards of the Info tile live in the web packages.
+
 ## 4.8.2
 
 - No changes for Flutter. The Version and Components cards of the Info tile live in the web packages.
