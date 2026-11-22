@@ -11,6 +11,10 @@ export interface ListRowProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, "
   tip?: string | null;
   /** Sets the name in monospace, for a path. */
   mono?: boolean;
+  /** A quiet line under the name, such as when it was made or where it comes from. */
+  meta?: string;
+  /** Keeps the buttons in view at rest, for a short list of the person's own things, where each row's buttons are the point. */
+  steady?: boolean;
   /** The glyph at the row's start, which fills with the accent while the row is reached. */
   tile?: JSX.Element;
   /** What stands at the row's end at rest. */
@@ -23,7 +27,7 @@ export interface ListRowProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, "
 const stay = (e: MouseEvent) => e.stopPropagation();
 
 export function ListRow(props: ListRowProps) {
-  const [own, rest] = splitProps(props, ["name", "tip", "mono", "tile", "badges", "actions", "class", "onClick", "onKeyDown"]);
+  const [own, rest] = splitProps(props, ["name", "tip", "mono", "meta", "steady", "tile", "badges", "actions", "class", "onClick", "onKeyDown"]);
   const keys: JSX.EventHandler<HTMLDivElement, KeyboardEvent> = (e) => {
     if (typeof own.onKeyDown === "function") own.onKeyDown(e);
     if (!own.onClick || e.target !== e.currentTarget || (e.key !== "Enter" && e.key !== " ")) return;
@@ -34,22 +38,30 @@ export function ListRow(props: ListRowProps) {
   const tile = children(() => own.tile);
   const badges = children(() => own.badges);
   const actions = children(() => own.actions);
-  const classes = () => ["glim-list-row", own.onClick && "glim-list-row--opens", own.class].filter(Boolean).join(" ");
+  const nameLine = () => (
+    <span class={own.mono ? "glim-list-row-name glim-list-row-name--mono" : "glim-list-row-name"}>
+      <span class="glim-list-row-title">{own.name}</span>
+      <Show when={own.tip}>
+        {(tip) => (
+          <span class="glim-list-row-tip" onClick={stay}>
+            <InfoBubble tip={tip()} />
+          </span>
+        )}
+      </Show>
+    </span>
+  );
+  const classes = () => ["glim-list-row", own.onClick && "glim-list-row--opens", own.steady && "glim-list-row--steady", own.class].filter(Boolean).join(" ");
   return (
     <div data-glim="ListRow" role="group" aria-label={own.name} tabIndex={own.onClick ? 0 : undefined} {...rest} onClick={own.onClick} onKeyDown={keys} class={classes()}>
       <Show when={tile()}>
         <span class="glim-list-row-tile">{tile()}</span>
       </Show>
-      <span class={own.mono ? "glim-list-row-name glim-list-row-name--mono" : "glim-list-row-name"}>
-        <span class="glim-list-row-title">{own.name}</span>
-        <Show when={own.tip}>
-          {(tip) => (
-            <span class="glim-list-row-tip" onClick={stay}>
-              <InfoBubble tip={tip()} />
-            </span>
-          )}
-        </Show>
-      </span>
+      <Show when={own.meta} fallback={nameLine()}>
+        <span class="glim-list-row-text">
+          {nameLine()}
+          <span class="glim-list-row-meta">{own.meta}</span>
+        </span>
+      </Show>
       <Show when={badges()}>
         <span class="glim-list-row-badges">{badges()}</span>
       </Show>

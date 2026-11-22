@@ -65,6 +65,9 @@ function act(label: string, labelKey: string, hook: string, run: () => Promise<v
     ...more,
   };
 }
+function onClientPaste(e: ClipboardEvent) {
+  if (props.flow.pasteClient(e.clipboardData?.getData("text") ?? "")) e.preventDefault();
+}
 function onEnter(e: KeyboardEvent, run: () => Promise<void> | void) {
   if (e.key !== "Enter") return;
   e.preventDefault();
@@ -294,7 +297,14 @@ const ownFields = computed<[SignInTileField, string][]>(() => [
           <TextField mono :model-value="state.draft.issuer" :error="err('issuer')" data-signin-field="issuer" @update:model-value="flow.set('issuer', $event)" />
         </FieldRow>
         <FieldRow :label="text.services.clientId">
-          <TextField mono :model-value="state.draft.clientId" :error="err('clientId')" data-signin-field="clientId" @update:model-value="flow.set('clientId', $event)" />
+          <TextField
+            mono
+            :model-value="state.draft.clientId"
+            :error="err('clientId')"
+            data-signin-field="clientId"
+            @update:model-value="flow.set('clientId', $event)"
+            @paste="onClientPaste"
+          />
         </FieldRow>
         <FieldRow :label="text.services.secret" :hint="form.edit ? text.services.secretKept : undefined">
           <PasswordField autocomplete="off" :model-value="state.draft.secret" :text="eye" :error="err('secret')" data-signin-field="secret" @update:model-value="flow.set('secret', $event)" />

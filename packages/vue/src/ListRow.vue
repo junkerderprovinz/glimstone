@@ -11,6 +11,10 @@ const props = defineProps<{
   tip?: string | null;
   /** Sets the name in monospace, for a path. */
   mono?: boolean;
+  /** A quiet line under the name, such as when it was made or where it comes from. */
+  meta?: string;
+  /** Keeps the buttons in view at rest, for a short list of the person's own things, where each row's buttons are the point. */
+  steady?: boolean;
 }>();
 const attrs = useAttrs();
 const opens = computed(() => !!attrs.onClick);
@@ -28,12 +32,19 @@ function press(e: KeyboardEvent) {
     role="group"
     :aria-label="name"
     :tabindex="opens ? 0 : undefined"
-    :class="['glim-list-row', { 'glim-list-row--opens': opens }]"
+    :class="['glim-list-row', { 'glim-list-row--opens': opens, 'glim-list-row--steady': steady }]"
     @keydown.enter.self="press"
     @keydown.space.self="press"
   >
     <span v-if="$slots.tile" class="glim-list-row-tile"><slot name="tile" /></span>
-    <span :class="nameClass">
+    <span v-if="meta" class="glim-list-row-text">
+      <span :class="nameClass">
+        <span class="glim-list-row-title">{{ name }}</span>
+        <span v-if="tip" class="glim-list-row-tip" @click.stop><InfoBubble :tip="tip" /></span>
+      </span>
+      <span class="glim-list-row-meta">{{ meta }}</span>
+    </span>
+    <span v-else :class="nameClass">
       <span class="glim-list-row-title">{{ name }}</span>
       <span v-if="tip" class="glim-list-row-tip" @click.stop><InfoBubble :tip="tip" /></span>
     </span>

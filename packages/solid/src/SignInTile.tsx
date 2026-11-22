@@ -1,7 +1,8 @@
-import { createEffect, createMemo, createSignal, For, Match, mergeProps, on, onCleanup, onMount, Show, Switch, type Accessor, type Component } from "solid-js";
+import { createEffect, createMemo, createSignal, For, Match, mergeProps, on, onCleanup, onMount, Show, Switch, type Accessor, type Component, type JSX } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import {
   accountFacts,
+  connectionTestFace,
   createSignInTileFlow,
   fill,
   passkeyFacts,
@@ -47,13 +48,13 @@ import { Accordion } from "./Accordion.tsx";
 import { Badge } from "./Badge.tsx";
 import { Button } from "./Button.tsx";
 import { Card } from "./Card.tsx";
-import { ConnectionRow } from "./ConnectionRow.tsx";
 import { CopyField } from "./CopyField.tsx";
 import { EmptyState } from "./EmptyState.tsx";
 import { FieldRow } from "./FieldRow.tsx";
 import { FieldRowGroup } from "./FieldRowGroup.tsx";
 import { GlyphTile } from "./GlyphTile.tsx";
-import { glyphFor, IconCancel, IconCheck, IconClose } from "./glyphs.tsx";
+import { glyphFor, IconCancel, IconCheck, IconClose, IconPencil, IconTrash } from "./glyphs.tsx";
+import { BrandMark } from "./ReadmeButton.tsx";
 import { ListRow } from "./ListRow.tsx";
 import { PasswordField } from "./PasswordField.tsx";
 import { PickerWindow } from "./PickerWindow.tsx";
@@ -236,7 +237,7 @@ function AskPasswordCard(props: CardProps) {
   const t = () => own.text.askPassword;
   return (
     <Card title={t().title} hint={t().hint} hueIndex={props.hue} data-signin-card="askPassword">
-      <FieldRow label={t().label}>
+      <FieldRow label={t().label} hint={t().when}>
         <Toggle checked={!!s().settings?.askPassword} onChange={(on) => void flow.setAskPassword(on)} data-signin-tile="ask-password" />
       </FieldRow>
     </Card>
@@ -297,14 +298,15 @@ function PasskeysCard(props: CardProps) {
               <For each={s().passkeys}>
                 {(p) => (
                   <ListRow
+                    steady
                     name={p.name}
                     tile={<GlyphTile glyph={glyphFor(keys().passkey)} />}
+                    meta={passkeyFacts(own.text, p, when).added}
                     tip={passkeyFacts(own.text, p, when).more}
-                    badges={<span class="glim-signin-tile-facts">{passkeyFacts(own.text, p, when).added}</span>}
                     actions={
                       <>
-                        <Button label={t().rename} labelKey={keys().rename} onClick={() => flow.askRenamePasskey(p.id)} />
-                        <Button label={own.text.remove} labelKey={keys().remove} data-signin-tile={`remove-passkey-${p.id}`} onClick={() => ask("passkey", p.id, p.name)} />
+                        <Button compact tone="subtle" label={t().rename} labelKey={keys().rename} glyph={<IconPencil />} data-signin-tile={`passkey-rename-${p.id}`} onClick={() => flow.askRenamePasskey(p.id)} />
+                        <Button compact tone="subtle" label={own.text.remove} labelKey={keys().remove} glyph={<IconTrash />} data-signin-tile={`remove-passkey-${p.id}`} onClick={() => ask("passkey", p.id, p.name)} />
                       </>
                     }
                   />
@@ -336,19 +338,23 @@ function SessionsCard(props: CardProps) {
               const device = () => signInDevice(x.agent, t());
               return (
                 <ListRow
+                  steady
                   name={device().name}
                   tile={<GlyphTile glyph={glyphFor(device().phone ? keys().phone : keys().laptop)} />}
+                  meta={sessionFacts(own.text, x, s().serviceLabels, when).join(" · ")}
                   badges={
-                    <>
-                      <span class="glim-signin-tile-facts">{sessionFacts(own.text, x, s().serviceLabels, when).join(" · ")}</span>
-                      <Show when={x.current}>
-                        <Badge tone="active">{t().current}</Badge>
-                      </Show>
-                    </>
+                    <Show when={x.current}>
+                      <Badge size="small" tone="active">
+                        {t().current}
+                      </Badge>
+                    </Show>
                   }
                   actions={
                     <Show when={!x.current}>
-                      <Button label={t().end} labelKey={keys().end} busy={s().busy === `session-end-${x.id}`} data-signin-tile={`session-end-${x.id}`} onClick={() => void flow.endSession(x.id)} />
+                      <Button
+                        compact
+                        tone="subtle"
+                        label={t().end} labelKey={keys().end} busy={s().busy === `session-end-${x.id}`} data-signin-tile={`session-end-${x.id}`} onClick={() => void flow.endSession(x.id)} />
                     </Show>
                   }
                 />
@@ -378,15 +384,22 @@ function TokensCard(props: CardProps) {
               <For each={s().tokens}>
                 {(k) => (
                   <ListRow
+                    steady
                     name={k.name}
                     tile={<GlyphTile glyph={glyphFor(keys().token)} />}
+                    meta={tokenFacts(own.text, k, when).join(" · ")}
                     badges={
-                      <>
-                        <span class="glim-signin-tile-facts">{tokenFacts(own.text, k, when).join(" · ")}</span>
-                        <For each={k.scopes}>{(scope) => <Badge>{t().scopes[scope] ?? scope}</Badge>}</For>
-                      </>
+                      <Show when={k.scopes.length > 0}>
+                        <For each={k.scopes}>
+                          {(scope) => (
+                            <Badge size="small">
+                              {t().scopes[scope] ?? scope}
+                            </Badge>
+                          )}
+                        </For>
+                      </Show>
                     }
-                    actions={<Button label={t().revoke} labelKey={keys().revoke} data-signin-tile={`remove-token-${k.id}`} onClick={() => ask("token", k.id, k.name)} />}
+                    actions={<Button compact tone="subtle" label={t().revoke} labelKey={keys().revoke} data-signin-tile={`remove-token-${k.id}`} onClick={() => ask("token", k.id, k.name)} />}
                   />
                 )}
               </For>
@@ -408,37 +421,64 @@ function ServicesCard(props: CardProps) {
     <Card title={t().title} hint={t().hint} hueIndex={props.hue} data-signin-card="services">
       <Show when={!signInCardNotice(own.text, s(), "services")} fallback={<Notice notice={signInCardNotice(own.text, s(), "services")!} />}>
         <div class="glim-signin-tile-body">
-          <For each={s().services ?? []}>
-            {(x) => {
-              const badge = () => signInServiceBadge(own.text, x);
-              const label = () => signInServiceLabel(x, own.providers, own.text);
-              return (
-                <ConnectionRow
-                  name={label().name}
-                  mark={label().mark ?? glyphFor(keys().service)}
-                  status={signInServiceStatus(own.text, x, when)}
-                  badges={<Badge tone={badge().tone}>{badge().label}</Badge>}
-                  test={s().rowTests[x.id]}
-                  actions={signInServiceActions(own.text, x, s(), keys().turnOn, (id) => void flow.confirmService(id))}
-                  text={{ test: t().test, edit: t().edit, remove: own.text.remove }}
-                  onTest={x.fromConfig ? undefined : () => void flow.testService(x.id)}
-                  onEdit={x.fromConfig ? undefined : () => flow.editService(x.id)}
-                  onRemove={x.fromConfig ? undefined : () => ask("service", x.id, label().name)}
-                  data-signin-service={x.provider}
-                >
-                  <Show when={!x.fromConfig}>
-                    <Toggle
-                      checked={x.on}
-                      label={t().show}
-                      refused={!x.tested || x.paused ? t().mustTest : undefined}
-                      onChange={(on) => void flow.setServiceOn(x.id, on)}
-                      data-signin-tile={`service-on-${x.id}`}
+          <Show when={(s().services?.length ?? 0) > 0}>
+            <div class="glim-list glim-signin-tile-rows">
+              <For each={s().services ?? []}>
+                {(x) => {
+                  const badge = () => signInServiceBadge(own.text, x);
+                  const label = () => signInServiceLabel(x, own.providers, own.text);
+                  const face = () => connectionTestFace(s().rowTests[x.id]);
+                  return (
+                    <ListRow
+                      steady
+                      name={label().name}
+                      tile={<GlyphTile glyph={label().mark ? <BrandMark svg={label().mark!.svg} /> : glyphFor(keys().service)} />}
+                      meta={signInServiceStatus(own.text, x, when)}
+                      badges={
+                        <Badge size="small" tone={badge().tone}>
+                          {badge().label}
+                        </Badge>
+                      }
+                      data-signin-service={x.provider}
+                      actions={
+                        <>
+                          <Show when={!x.fromConfig}>
+                            <Toggle
+                              checked={x.on}
+                              label={t().show}
+                              hideLabel
+                              refused={!x.tested || x.paused ? t().mustTest : undefined}
+                              onChange={(on) => void flow.setServiceOn(x.id, on)}
+                              data-signin-tile={`service-on-${x.id}`}
+                            />
+                          </Show>
+                          <For each={signInServiceActions<JSX.Element>(own.text, x, s(), keys().turnOn, (id) => void flow.confirmService(id))}>
+                            {(a) => <Button compact tone="subtle" label={a.label} labelKey={a.labelKey} busy={a.busy} data-signin-tile={`service-${a.id}-${x.id}`} onClick={a.onClick} />}
+                          </For>
+                          <Show when={!x.fromConfig}>
+                            <Button
+                              compact
+                              tone={face().tone === "neutral" ? "subtle" : face().tone}
+                              label={t().test}
+                              labelKey={keys().test}
+                              glyph={face().outcome === "cross" ? <IconClose /> : <IconCheck />}
+                              busy={s().rowTests[x.id]?.busy}
+                              title={s().rowTests[x.id]?.title}
+                              class={face().shake ? "glim-shake" : undefined}
+                              data-signin-tile={`service-test-${x.id}`}
+                              onClick={() => void flow.testService(x.id)}
+                            />
+                            <Button compact tone="subtle" label={t().edit} labelKey={keys().edit} glyph={<IconPencil />} data-signin-tile={`service-edit-${x.id}`} onClick={() => flow.editService(x.id)} />
+                            <Button compact tone="subtle" label={own.text.remove} labelKey={keys().remove} glyph={<IconTrash />} data-signin-tile={`remove-service-${x.id}`} onClick={() => ask("service", x.id, label().name)} />
+                          </Show>
+                        </>
+                      }
                     />
-                  </Show>
-                </ConnectionRow>
-              );
-            }}
-          </For>
+                  );
+                }}
+              </For>
+            </div>
+          </Show>
           <div class="glim-signin-tile-foot">
             <Button label={t().add} labelKey={keys().addService} data-signin-tile="service-pick" onClick={flow.pickService} />
           </div>
@@ -457,29 +497,34 @@ function AccountsCard(props: CardProps) {
         <For each={s().accounts ?? []}>
           {(a) => (
             <ListRow
+              steady
               name={a.name}
               tile={<GlyphTile glyph={glyphFor(keys().account)} />}
+              meta={accountFacts(own.text, a, s().serviceLabels, when).join(" · ")}
               badges={
-                <>
-                  <span class="glim-signin-tile-facts">{accountFacts(own.text, a, s().serviceLabels, when).join(" · ")}</span>
+                <Show when={a.owner || a.blocked}>
                   <Show when={a.owner}>
-                    <Badge>{t().owner}</Badge>
+                    <Badge size="small">{t().owner}</Badge>
                   </Show>
                   <Show when={a.blocked}>
-                    <Badge tone="warn">{t().blocked}</Badge>
+                    <Badge size="small" tone="warn">
+                      {t().blocked}
+                    </Badge>
                   </Show>
-                </>
+                </Show>
               }
               actions={
                 <Show when={!a.owner && a.id !== s().me?.account}>
                   <Button
+                    compact
+                    tone="subtle"
                     label={a.blocked ? t().unblock : t().block}
                     labelKey={a.blocked ? keys().unblock : keys().block}
                     busy={s().busy === `account-block-${a.id}`}
                     data-signin-tile={`account-block-${a.id}`}
                     onClick={() => void flow.block(a.id, !a.blocked)}
                   />
-                  <Button label={own.text.remove} labelKey={keys().remove} data-signin-tile={`remove-account-${a.id}`} onClick={() => ask("account", a.id, a.name)} />
+                  <Button compact tone="subtle" label={own.text.remove} labelKey={keys().remove} glyph={<IconTrash />} data-signin-tile={`remove-account-${a.id}`} onClick={() => ask("account", a.id, a.name)} />
                 </Show>
               }
             />
@@ -729,7 +774,15 @@ function TileWindow(props: { ctx: Ctx }) {
           const test = () => s().formTest;
           const field = (key: SignInTileField, label: string, hint?: string, placeholder?: string) => (
             <FieldRow label={label} hint={hint}>
-              <TextField mono={key !== "label"} value={s().draft[key]} placeholder={placeholder} onInput={(e) => flow.set(key, e.currentTarget.value)} error={err(key)} data-signin-field={key} />
+              <TextField
+                mono={key !== "label"}
+                value={s().draft[key]}
+                placeholder={placeholder}
+                onInput={(e) => flow.set(key, e.currentTarget.value)}
+                onPaste={key === "clientId" ? (e) => flow.pasteClient(e.clipboardData?.getData("text") ?? "") && e.preventDefault() : undefined}
+                error={err(key)}
+                data-signin-field={key}
+              />
             </FieldRow>
           );
           return (

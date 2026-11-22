@@ -13,6 +13,7 @@ import {
   signInServiceBadge,
   signInServiceMissing,
   signInServiceStatus,
+  signInClientPaste,
   signInServiceLabel,
   signInServiceQuiet,
   signInRoleItems,
@@ -471,6 +472,24 @@ test('a service without a name of its own is named after its kind in what the ti
   assert.deepEqual(flow.state().serviceLabels, [{ id: 's1', name: 'Pocket ID' }]);
   await flow.setServiceOn('s1', true);
   assert.deepEqual(said, [['success', 'Pocket ID is on the sign-in page.']]);
+});
+
+test('a client ID and secret pasted together land in both fields', async () => {
+  assert.deepEqual(signInClientPaste('glimstone\nsecret-123\n'), { clientId: 'glimstone', secret: 'secret-123' });
+  assert.deepEqual(signInClientPaste('glimstone:secret-123'), { clientId: 'glimstone', secret: 'secret-123' });
+  assert.deepEqual(signInClientPaste('{"client_id": "glimstone", "client_secret": "secret-123"}'), { clientId: 'glimstone', secret: 'secret-123' });
+  assert.deepEqual(signInClientPaste('{"web": {"clientId": "glimstone", "clientSecret": "secret-123"}}'), { clientId: 'glimstone', secret: 'secret-123' });
+  assert.equal(signInClientPaste('glimstone'), null);
+  assert.equal(signInClientPaste('https://id.example'), null);
+  assert.equal(signInClientPaste('{"client_id": "glimstone"}'), null);
+
+  const { api } = kit();
+  const { flow } = tile(api);
+  await flow.refresh();
+  flow.chooseService('pocket-id');
+  assert.equal(flow.pasteClient('just-an-id'), false);
+  assert.equal(flow.pasteClient('glimstone\nsecret-123'), true);
+  assert.deepEqual([flow.state().draft.clientId, flow.state().draft.secret], ['glimstone', 'secret-123']);
 });
 
 test('a service badge says how it stands', () => {

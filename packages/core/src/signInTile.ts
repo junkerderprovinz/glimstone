@@ -93,7 +93,15 @@ export interface SignInTileText {
     goes: { twoFactor: string; passkeys: Plural; services: string; tokens: Plural };
     removed: string;
   };
-  askPassword: { title: string; hint: string; label: string; on: string; off: string };
+  askPassword: {
+    title: string;
+    hint: string;
+    label: string;
+    /** The (i) beside the switch: which changes want a fresh sign-in, and what fresh means. */
+    when: string;
+    on: string;
+    off: string;
+  };
   twoFactor: {
     title: string;
     hint: string;
@@ -362,9 +370,10 @@ export const signInTileTextEn: SignInTileText = {
     removed: "Password removed. The app is open now.",
   },
   askPassword: {
-    title: "Asking for the password",
-    hint: "New passkeys, tokens, two-factor and sign-in services want a sign-in from the last few minutes. If yours is older, the app asks for your password once. Without the question you sign out and back in.",
+    title: "Password check on changes",
+    hint: "Before a sensitive change the app can ask for your password, so you don’t have to sign out and back in.",
     label: "Ask for the password on changes",
+    when: "A new API token or passkey, setting up two-factor, new recovery codes, adding or changing a sign-in service and its test sign-in, turning a service from the configuration file back on, and for admins a new account or another account’s password: these want a sign-in from the last 10 minutes, 5 through a sign-in service. Entering your password counts as signing in again. Without the question the app sends you to sign in again instead. Changing or removing your own password always asks for the current one.",
     on: "The app asks for your password before sensitive changes.",
     off: "The question is off. Sensitive changes need a fresh sign-in.",
   },
@@ -737,6 +746,8 @@ export interface SignInTileFlow {
   testDraft(): Promise<void>;
   saveService(): Promise<void>;
   testService(id: string): Promise<void>;
+  /** Fills the client ID and the secret from text that holds both, and says whether it did. */
+  pasteClient(text: string): boolean;
   setServiceOn(id: string, on: boolean): Promise<void>;
   /** Turns a service from the configuration file on again after a reset paused it. */
   confirmService(id: string): Promise<void>;
@@ -1046,6 +1057,32 @@ export function passwordGoes(text: SignInTileText, lang: string, s: SignInTileSt
 /** The name the service form and its window title use. */
 export function signInServiceName(text: SignInTileText, provider: string, label: string, catalogName: string | undefined): string {
   return label.trim() || catalogName || text.services.own;
+}
+
+/**
+ * A client ID and secret pasted in one go: two lines, `id:secret`, or the JSON
+ * a service hands out. `null` when the text holds only one of them.
+ */
+export function signInClientPaste(text: string): { clientId: string; secret: string } | null {
+  const raw = text.trim();
+  if (raw.startsWith("{")) {
+    try {
+      const doc = JSON.parse(raw) as Record<string, unknown>;
+      const inner = Object.values(doc).find((v) => v && typeof v === "object") as Record<string, unknown> | undefined;
+      for (const o of [doc, inner ?? {}]) {
+        const id = o.client_id ?? o.clientId ?? o.clientID;
+        const secret = o.client_secret ?? o.clientSecret;
+        if (typeof id === "string" && typeof secret === "string" && id && secret) return { clientId: id.trim(), secret: secret.trim() };
+      }
+    } catch {
+      // Text that only looks like JSON is read as lines.
+    }
+    return null;
+  }
+  const lines = raw.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+  if (lines.length === 2) return { clientId: lines[0]!, secret: lines[1]! };
+  const pair = raw.includes("://") ? null : /^([^\s:]+):(\S+)$/.exec(raw);
+  return pair ? { clientId: pair[1]!, secret: pair[2]! } : null;
 }
 
 /** The first field of the service form that still waits for a value. */
@@ -1445,10 +1482,16 @@ export function createSignInTileFlow(options: () => SignInTileOptions): SignInTi
         notify(fill(text().services.updated, { name: labelOf(r.value.service) }));
         await refresh();
       }),
+    pasteClient(text) {
+      const both = signInClientPaste(text);
+      if (!both) return false;
+      update({ draft: { ...state.draft, ...both }, invalid: state.invalid?.field === "clientId" || state.invalid?.field === "secret" ? null : state.invalid, said: null });
+      return true;
+    },
     async testService(id) {
       if (state.rowTests[id]?.busy) return;
       update({ rowTests: { ...state.rowTests, [id]: { busy: true } } });
-      await testAt(id, `service-row-test-${id}`, (e) => update({ rowTests: { ...state.rowTests, [id]: { tone: "danger", title: say(e) } } }));
+      await testAt(id, `service-test-${id}`, (e) => update({ rowTests: { ...state.rowTests, [id]: { tone: "danger", title: say(e) } } }));
     },
     async setServiceOn(id, on) {
       const before = state.services;
@@ -1531,6 +1574,8 @@ export interface SignInTileLabelKeys {
   createToken: string;
   revoke: string;
   addService: string;
+  test: string;
+  edit: string;
   turnOn: string;
   save: string;
   block: string;
@@ -1562,6 +1607,8 @@ export const SIGN_IN_TILE_KEYS: SignInTileLabelKeys = {
   createToken: "add",
   revoke: "revoke",
   addService: "add",
+  test: "test",
+  edit: "edit",
   turnOn: "signIn",
   save: "save",
   block: "block",

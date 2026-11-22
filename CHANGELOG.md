@@ -18,6 +18,9 @@ The settings of the kit's sign-in come as one tile, its password question as a s
 - **The password question:** put `SignInReauthWindow` once beside the tiles. Without it a change that wants a fresh sign-in answers `signInAgain`.
 - **A sign-in service from your configuration file:** the tile reads `fromConfig` from the kit and draws such a service without Edit, Remove or switch. Give `services.fromConfig` the words for its quiet line and `services.confirmAgain` the words for turning it on again after a reset.
 - **A sign-in service without a name of its own:** take its button's name and mark from `signInServiceLabel(service, IDENTITY_PROVIDERS, text)`, as the tile does for its rows and lines. It gives the service's own name, or the catalog's name and mark for its kind, or `services.unnamed` with no mark, for your sign-in glyph.
+- **One row for every sign-in list:** `ListRow` takes `meta`, a quiet line under the name, and `steady`, which keeps its buttons in view. The tile draws tokens, passkeys, sessions, services and accounts with it, its buttons as quiet glyphs.
+- **The password check's card** is titled "Password check on changes" (`askPassword.title`), and `askPassword.when` fills the (i) beside the switch.
+- **Pasting the client:** text holding both the client ID and the secret fills both fields; `signInClientPaste()` reads it.
 - **The service form asks less:** the address, the client ID, the secret, an optional name (the catalog's by default) and the newcomers' role. Scopes and the name and groups claims stand under "More settings", GlimStone's accordion, closed. Give `services.more` its words. The tile now draws `Accordion`, so install its Zag machine (`@zag-js/accordion`) beside the framework package.
 - **The question before changes** reads "Ask for the password on changes" under `askPassword.label`.
 - **A passkey's row** shows when it was added, and the rest moves into its info bubble. `passkeyFacts()` returns `{ added, more }`.

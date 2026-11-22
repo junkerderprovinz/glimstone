@@ -20,6 +20,7 @@
 <div style="display: grid; gap: 2px; width: 100%; max-width: 560px">
   <ListRow name="nightly-backup" tip="Runs at three in the morning." onclick={() => opened++} tile={folder} badges={nightly} actions={buttons} />
   <ListRow name="archive-copy" tile={glyph("IconCloud")} badges={archive} actions={buttons} />
+  <ListRow name="weekly-offsite" meta="Last run yesterday, 22:00 · next on Sunday" steady tile={glyph("IconCloud")} actions={buttons} />
   <ListRow
     name="/mnt/user/media/series/a-very-long-name-that-does-not-fit-beside-its-badges-and-its-buttons-in-one-row/season-01"
     mono

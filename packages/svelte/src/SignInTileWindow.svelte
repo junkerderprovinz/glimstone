@@ -249,7 +249,15 @@
   {@const test = s.formTest}
   {#snippet field(key: SignInTileField, label: string, hint?: string, placeholder?: string)}
     <FieldRow {label} {hint}>
-      <TextField mono={key !== "label"} value={s.draft[key]} {placeholder} oninput={(e) => flow.set(key, e.currentTarget.value)} error={err(key)} data-signin-field={key} />
+      <TextField
+        mono={key !== "label"}
+        value={s.draft[key]}
+        {placeholder}
+        oninput={(e) => flow.set(key, e.currentTarget.value)}
+        onpaste={key === "clientId" ? (e) => flow.pasteClient(e.clipboardData?.getData("text") ?? "") && e.preventDefault() : undefined}
+        error={err(key)}
+        data-signin-field={key}
+      />
     </FieldRow>
   {/snippet}
   {#snippet more()}

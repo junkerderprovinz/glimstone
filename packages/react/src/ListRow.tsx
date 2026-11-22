@@ -11,6 +11,10 @@ export interface ListRowProps extends Omit<HTMLAttributes<HTMLDivElement>, "chil
   tip?: string | null;
   /** Sets the name in monospace, for a path. */
   mono?: boolean;
+  /** A quiet line under the name, such as when it was made or where it comes from. */
+  meta?: string;
+  /** Keeps the buttons in view at rest, for a short list of the person's own things, where each row's buttons are the point. */
+  steady?: boolean;
   /** The glyph at the row's start, which fills with the accent while the row is reached. */
   tile?: ReactNode;
   /** What stands at the row's end at rest. */
@@ -22,25 +26,35 @@ export interface ListRowProps extends Omit<HTMLAttributes<HTMLDivElement>, "chil
 
 const stay = (e: MouseEvent) => e.stopPropagation();
 
-export function ListRow({ name, tip, mono, tile, badges, actions, className, onClick, onKeyDown, ...rest }: ListRowProps) {
+export function ListRow({ name, tip, mono, meta, steady, tile, badges, actions, className, onClick, onKeyDown, ...rest }: ListRowProps) {
   function keys(e: KeyboardEvent<HTMLDivElement>) {
     onKeyDown?.(e);
     if (!onClick || e.target !== e.currentTarget || (e.key !== "Enter" && e.key !== " ")) return;
     e.preventDefault();
     e.currentTarget.click();
   }
-  const classes = ["glim-list-row", onClick && "glim-list-row--opens", className].filter(Boolean).join(" ");
+  const nameLine = (
+    <span className={mono ? "glim-list-row-name glim-list-row-name--mono" : "glim-list-row-name"}>
+      <span className="glim-list-row-title">{name}</span>
+      {tip && (
+        <span className="glim-list-row-tip" onClick={stay}>
+          <InfoBubble tip={tip} />
+        </span>
+      )}
+    </span>
+  );
+  const classes = ["glim-list-row", onClick && "glim-list-row--opens", steady && "glim-list-row--steady", className].filter(Boolean).join(" ");
   return (
     <div data-glim="ListRow" role="group" aria-label={name} tabIndex={onClick ? 0 : undefined} {...rest} onClick={onClick} onKeyDown={keys} className={classes}>
       {tile && <span className="glim-list-row-tile">{tile}</span>}
-      <span className={mono ? "glim-list-row-name glim-list-row-name--mono" : "glim-list-row-name"}>
-        <span className="glim-list-row-title">{name}</span>
-        {tip && (
-          <span className="glim-list-row-tip" onClick={stay}>
-            <InfoBubble tip={tip} />
-          </span>
-        )}
-      </span>
+      {meta ? (
+        <span className="glim-list-row-text">
+          {nameLine}
+          <span className="glim-list-row-meta">{meta}</span>
+        </span>
+      ) : (
+        nameLine
+      )}
       {badges && <span className="glim-list-row-badges">{badges}</span>}
       {actions && (
         <span className="glim-list-row-actions" onClick={stay}>

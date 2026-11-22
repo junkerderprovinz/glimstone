@@ -28,6 +28,13 @@ const LONG = "/mnt/user/media/series/a-very-long-name-that-does-not-fit-beside-i
         <IconButton tip="Delete" :glyph="glyph('IconTrash')" />
       </template>
     </ListRow>
+    <ListRow name="weekly-offsite" meta="Last run yesterday, 22:00 · next on Sunday" steady>
+      <template #tile><Glyph name="IconCloud" /></template>
+      <template #actions>
+        <IconButton tip="Edit" :glyph="glyph('IconPencil')" />
+        <IconButton tip="Delete" :glyph="glyph('IconTrash')" />
+      </template>
+    </ListRow>
     <ListRow :name="LONG" mono>
       <template #tile><Glyph name="IconFolder" /></template>
       <template #badges><Pill class="glim-num">12 GB</Pill></template>

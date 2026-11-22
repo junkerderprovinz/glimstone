@@ -26,6 +26,7 @@ export default function ListRowBasic() {
         actions={buttons()}
       />
       <ListRow name="archive-copy" tile={<Glyph name="IconCloud" />} badges={<Pill class="glim-num">880 MB</Pill>} actions={buttons()} />
+      <ListRow name="weekly-offsite" meta="Last run yesterday, 22:00 · next on Sunday" steady tile={<Glyph name="IconCloud" />} actions={buttons()} />
       <ListRow
         name="/mnt/user/media/series/a-very-long-name-that-does-not-fit-beside-its-badges-and-its-buttons-in-one-row/season-01"
         mono
