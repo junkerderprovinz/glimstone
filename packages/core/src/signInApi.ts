@@ -36,6 +36,7 @@ export const SIGN_IN_ERRORS = [
   "scopeUnknown",
   "secretAgain",
   "secretMissing",
+  "serviceChanged",
   "serviceOff",
   "serviceUnknown",
   "serviceUnreachable",
@@ -68,6 +69,7 @@ export const SIGN_IN_REDIRECTS = [
   "nameTaken",
   "noAccount",
   "renewNeeded",
+  "serviceChanged",
   "serviceOff",
   "serviceRefused",
   "serviceUnknown",
@@ -362,7 +364,8 @@ export interface SignInApi {
   removeService(id: string): Promise<SignInResult<Json>>;
   checkService(id: string): Promise<SignInResult<Json>>;
   /** The address of the test sign-in, which binds the admin and turns the service on. */
-  testService(id: string, back: string): Promise<SignInResult<{ url: string }>>;
+  /** `role` is the newcomers' role the form shows; the kit answers `serviceChanged` when it is no longer the stored one. */
+  testService(id: string, back: string, role?: string): Promise<SignInResult<{ url: string }>>;
   settings(): Promise<SignInResult<SignInSettings>>;
   changeSettings(input: Partial<SignInSettings>): Promise<SignInResult<SignInSettings>>;
   log(limit?: number): Promise<SignInResult<SignInLogEntry[]>>;
@@ -603,7 +606,7 @@ export function createSignInApi(options: SignInApiOptions = {}): SignInApi {
     changeService: (id, input) => call("PATCH", at("methods/oidc", id), input),
     removeService: (id) => call("DELETE", at("methods/oidc", id)),
     checkService: (id) => call("POST", `${at("methods/oidc", id)}/check`, {}),
-    testService: (id, back) => call("POST", `${at("methods/oidc", id)}/test`, { return: back }),
+    testService: (id, back, role) => call("POST", `${at("methods/oidc", id)}/test`, { return: back, ...(role ? { role } : {}) }),
     settings: () => get<SignInSettings>("settings"),
     changeSettings: (input) => call("PATCH", "settings", input),
     log: (limit) => get(limit === undefined ? "log" : `log?limit=${limit}`, list<SignInLogEntry>("entries")),

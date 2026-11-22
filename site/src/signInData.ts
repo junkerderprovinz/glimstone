@@ -294,7 +294,9 @@ export function demoKit(scene: DemoScene = "signedIn"): SignInApi & { leave(url:
       return change({});
     },
     checkService: async (id) => (services.find((s) => s.id === id)?.issuer.includes("unreachable") ? no("serviceUnreachable", 502) : ok({})),
-    async testService(id, back) {
+    async testService(id, back, role) {
+      const was = services.find((s) => s.id === id);
+      if (role && was?.role && role !== was.role) return no("serviceChanged", 409);
       services = services.map((s) => (s.id === id ? { ...s, tested: true, on: true, testedAt: "2026-11-21T10:46:00Z" } : s));
       if (me.via === "open") {
         Object.assign(me, { via: "service", service: id, account: "owner", name: "owner" });

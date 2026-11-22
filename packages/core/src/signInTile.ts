@@ -320,7 +320,8 @@ const ERRORS_EN = {
   issuerInvalid: "That address doesn’t look like a sign-in service.",
   tokenNameMissing: "Give the token a name.",
   scopeUnknown: "The app doesn’t know the scope “{scope}”.",
-  lastWayIn: "That’s the account’s last way in, so it stays.",
+  lastWayIn: "That’s the last way in, so it stays unless the owner, freshly signed in, takes it away.",
+  serviceChanged: "This sign-in service changed a moment ago. It’s reloaded, so look it over and test again.",
   accountOwner: "The owner’s account stays.",
   blocked: "This account is blocked.",
   nameTaken: "That name already belongs to another account.",
@@ -577,6 +578,7 @@ export const signInTileTextEn: SignInTileText = {
     blocked: "This account is blocked.",
     serviceOff: "That sign-in service is switched off.",
     addressMissing: "The app doesn’t know its own address yet, so the sign-in service can’t send you back.",
+    serviceChanged: "The sign-in service changed while you were away, so the test didn’t count. Look it over and test again.",
   },
 };
 
@@ -1231,14 +1233,20 @@ export function createSignInTileFlow(options: () => SignInTileOptions): SignInTi
   // The service the form stored, so a second test changes it instead of adding another.
   let stored: string | null = null;
 
-  async function testAt(id: string, hook: string, report: (e: SignInFailure) => void) {
-    const r = await options().api.testService(id, back());
-    if (!r.ok) {
-      report(r);
-      update(refuse(hook));
+  async function testAt(id: string, hook: string, role: string | undefined, report: (e: SignInFailure) => void) {
+    const r = await options().api.testService(id, back(), role);
+    if (r.ok) return leave(r.value.url);
+    if (r.error === "serviceChanged") {
+      // Someone else saved the service in between: show what is stored now instead of testing the old form.
+      await refresh();
+      const now = state.services?.find((s) => s.id === id);
+      if (now && state.window?.kind === "serviceForm") update({ draft: { ...state.draft, role: now.role ?? "" }, formTest: undefined });
+      update({ rowTests: { ...state.rowTests, [id]: {} } });
+      notify(say(r), "warn");
       return;
     }
-    leave(r.value.url);
+    report(r);
+    update(refuse(hook));
   }
 
   const flow: SignInTileFlow = {
@@ -1483,7 +1491,7 @@ export function createSignInTileFlow(options: () => SignInTileOptions): SignInTi
         stored = saved.value.service.id;
         const check = await api.checkService(stored);
         if (!check.ok) return report(check.error === "notFound" ? say(check) : fill(t.unreachable, { address: d.issuer.trim() }));
-        await testAt(stored, "service-test", (e) => report(say(e)));
+        await testAt(stored, "service-test", d.role || state.roles.serviceRole || undefined, (e) => report(say(e)));
       }),
     saveService: () =>
       run("service-save", async () => {
@@ -1510,7 +1518,8 @@ export function createSignInTileFlow(options: () => SignInTileOptions): SignInTi
     async testService(id) {
       if (state.rowTests[id]?.busy) return;
       update({ rowTests: { ...state.rowTests, [id]: { busy: true } } });
-      await testAt(id, `service-test-${id}`, (e) => update({ rowTests: { ...state.rowTests, [id]: { tone: "danger", title: say(e) } } }));
+      const role = state.services?.find((s) => s.id === id)?.role;
+      await testAt(id, `service-test-${id}`, role || undefined, (e) => update({ rowTests: { ...state.rowTests, [id]: { tone: "danger", title: say(e) } } }));
     },
     async setServiceOn(id, on) {
       const before = state.services;

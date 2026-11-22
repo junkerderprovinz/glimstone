@@ -334,6 +334,38 @@ test('a test sign-in stores the service once, checks the address and leaves for 
   assert.deepEqual(calls.filter((c) => /Service$/.test(c)), ['addService', 'checkService', 'testService', 'changeService', 'checkService', 'testService']);
 });
 
+test('the test sign-in carries the role the form shows, and a service changed meanwhile is reloaded without a shake', async () => {
+  const roles: (string | undefined)[] = [];
+  const { api } = kit({
+    roles: async () => ok({ roles: ['admin', 'user'], serviceRole: 'user' }),
+    services: async () => ok([{ ...SERVICE, id: 'new', role: 'admin' } as SignInService]),
+    testService: async (_id, _back, role) => {
+      roles.push(role);
+      return no('serviceChanged', 409);
+    },
+  });
+  const { flow, said, left } = tile(api);
+  await flow.refresh();
+  flow.chooseService('pocket-id');
+  flow.set('issuer', 'https://id.example');
+  flow.set('clientId', 'client');
+  flow.set('secret', 'secret');
+  await flow.testDraft();
+  assert.deepEqual(roles, ['user']);
+  assert.deepEqual(left, []);
+  assert.equal(flow.state().draft.role, 'admin');
+  assert.equal(flow.state().refusal, null);
+  assert.deepEqual(said.at(-1), ['warn', 'This sign-in service changed a moment ago. It’s reloaded, so look it over and test again.']);
+});
+
+test('coming back from a test the service outran says so', async () => {
+  const { api } = kit();
+  const { flow, said } = tile(api);
+  await flow.refresh();
+  flow.arrive('serviceChanged');
+  assert.deepEqual(said.at(-1), ['warn', 'The sign-in service changed while you were away, so the test didn’t count. Look it over and test again.']);
+});
+
 test('a service the app cannot reach says so under the form and on the test button', async () => {
   const { api } = kit({ checkService: async () => no('serviceUnreachable', 502) });
   const { flow, left } = tile(api);
