@@ -2,13 +2,13 @@
 import { computed, type Component } from "vue";
 import {
   fill,
-  OWN_SIGN_IN_SERVICE,
   passwordGoes,
   qrCode,
   SIGN_IN_TOKEN_LIVES,
   signInRedirectAddress,
   signInScopeItems,
   signInRoleItems,
+  signInServiceLabel,
   signInServiceName,
   signInServicePicker,
   signInServiceQuiet,
@@ -21,6 +21,7 @@ import {
   type SignInTileState,
   type SignInTileText,
 } from "@glimstone/core";
+import Accordion from "./Accordion.vue";
 import CopyField from "./CopyField.vue";
 import FieldRow from "./FieldRow.vue";
 import FieldRowGroup from "./FieldRowGroup.vue";
@@ -112,10 +113,9 @@ const pickerText = computed(() => {
 const form = computed(() => {
   const v = w.value;
   if (v?.kind !== "serviceForm") return null;
-  const own = v.provider === OWN_SIGN_IN_SERVICE;
   const name = signInServiceName(props.text, v.provider, props.state.draft.label, props.providers.entries.find((e) => e.id === v.provider)?.name);
   const editing = props.state.services?.find((x) => x.id === v.edit);
-  return { ...v, own, name, redirect: signInRedirectAddress(props.api, editing) };
+  return { ...v, name, redirect: signInRedirectAddress(props.api, editing) };
 });
 const formActions = computed<WindowAction[]>(() => {
   const t = props.text.services;
@@ -290,9 +290,6 @@ const ownFields = computed<[SignInTileField, string][]>(() => [
     <div class="glim-signin-tile-form" :data-signin-form="form.provider">
       <p class="glim-signin-tile-text">{{ fill(text.services.formHint, { name: form.name }) }}</p>
       <FieldRowGroup>
-        <FieldRow v-if="form.own" :label="text.services.label">
-          <TextField :model-value="state.draft.label" :error="err('label')" data-signin-field="label" @update:model-value="flow.set('label', $event)" />
-        </FieldRow>
         <FieldRow :label="text.services.issuer" :hint="text.services.issuerHint">
           <TextField mono :model-value="state.draft.issuer" :error="err('issuer')" data-signin-field="issuer" @update:model-value="flow.set('issuer', $event)" />
         </FieldRow>
@@ -305,15 +302,28 @@ const ownFields = computed<[SignInTileField, string][]>(() => [
         <FieldRow :label="text.services.redirect" :hint="text.services.redirectHint">
           <CopyField :value="form.redirect" :text="{ copy: text.copy, copied: text.copied }" />
         </FieldRow>
-        <template v-if="form.own">
-          <FieldRow v-for="[key, label] in ownFields" :key="key" :label="label">
-            <TextField mono :model-value="state.draft[key]" :error="err(key)" :data-signin-field="key" @update:model-value="flow.set(key, $event)" />
-          </FieldRow>
-        </template>
+        <FieldRow :label="text.services.label">
+          <TextField
+            :model-value="state.draft.label"
+            :placeholder="signInServiceLabel({ provider: form.provider }, providers, text).name"
+            :error="err('label')"
+            data-signin-field="label"
+            @update:model-value="flow.set('label', $event)"
+          />
+        </FieldRow>
         <FieldRow v-if="roleItems" :label="text.services.role" data-signin-field="role">
           <Selector inline activation="manual" :model-value="state.draft.role" :items="roleItems" @update:model-value="flow.set('role', $event)" />
         </FieldRow>
       </FieldRowGroup>
+      <Accordion :items="[{ value: 'more', title: text.services.more }]">
+        <template #content>
+          <FieldRowGroup>
+            <FieldRow v-for="[key, label] in ownFields" :key="key" :label="label">
+              <TextField mono :model-value="state.draft[key]" :error="err(key)" :data-signin-field="key" @update:model-value="flow.set(key, $event)" />
+            </FieldRow>
+          </FieldRowGroup>
+        </template>
+      </Accordion>
       <p class="glim-signin-tile-quiet">{{ signInServiceQuiet(text, state, form.name) }}</p>
       <p v-if="state.said" :class="state.said.ok ? 'glim-signin-tile-said' : 'glim-signin-tile-said glim-signin-tile-said--fail'" :role="state.said.ok ? 'status' : 'alert'">
         {{ state.said.message }}

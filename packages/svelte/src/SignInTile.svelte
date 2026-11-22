@@ -46,7 +46,7 @@
     signInDevice,
     signInServiceActions,
     signInServiceBadge,
-    signInServiceMark,
+    signInServiceLabel,
     signInServiceStatus,
     signInTileCards,
     signInWhen,
@@ -93,7 +93,7 @@
     labelKeys,
   }: SignInTileProps = $props();
 
-  const flow = createSignInTileFlow(() => ({ api, text, lang, cards, scopes, notify, returnTo, onLeave }));
+  const flow = createSignInTileFlow(() => ({ api, text, lang, cards, scopes, notify, returnTo, onLeave, providers }));
   let s = $state.raw(flow.state());
   onDestroy(flow.subscribe(() => (s = flow.state())));
   onMount(() => flow.start());
@@ -238,9 +238,9 @@
             {#if s.passkeys.length > 0}
               <div class="glim-list glim-signin-tile-rows">
                 {#each s.passkeys as p (p.id)}
-                  <ListRow name={p.name}>
+                  <ListRow name={p.name} tip={passkeyFacts(text, p, when).more}>
                     {#snippet tile()}<GlyphTile glyph={glyph(keys.passkey)} />{/snippet}
-                    {#snippet badges()}<span class="glim-signin-tile-facts">{passkeyFacts(text, p, when).join(" · ")}</span>{/snippet}
+                    {#snippet badges()}<span class="glim-signin-tile-facts">{passkeyFacts(text, p, when).added}</span>{/snippet}
                     {#snippet actions()}
                       <Button label={t.rename} labelKey={keys.rename} onClick={() => flow.askRenamePasskey(p.id)} />
                       <Button label={text.remove} labelKey={keys.remove} data-signin-tile={`remove-passkey-${p.id}`} onClick={() => remove("passkey", p.id, p.name)} />
@@ -268,7 +268,7 @@
               {@const device = signInDevice(x.agent, t)}
               {#snippet tile()}<GlyphTile glyph={glyph(device.phone ? keys.phone : keys.laptop)} />{/snippet}
               {#snippet badges()}
-                <span class="glim-signin-tile-facts">{sessionFacts(text, x, s.services, when).join(" · ")}</span>
+                <span class="glim-signin-tile-facts">{sessionFacts(text, x, s.serviceLabels, when).join(" · ")}</span>
                 {#if x.current}<Badge tone="active">{t.current}</Badge>{/if}
               {/snippet}
               {#snippet end()}
@@ -330,16 +330,17 @@
           <div class="glim-signin-tile-body">
             {#each s.services ?? [] as x (x.id)}
               {@const badge = signInServiceBadge(text, x)}
+              {@const label = signInServiceLabel(x, providers, text)}
               <ConnectionRow
-                name={x.name}
-                mark={signInServiceMark(providers, x.provider) ?? glyph(keys.service)}
+                name={label.name}
+                mark={label.mark ?? glyph(keys.service)}
                 status={signInServiceStatus(text, x, when)}
                 test={s.rowTests[x.id]}
                 actions={signInServiceActions(text, x, s, keys.turnOn, (id) => void flow.confirmService(id))}
                 text={{ test: t.test, edit: t.edit, remove: text.remove }}
                 onTest={x.fromConfig ? undefined : () => void flow.testService(x.id)}
                 onEdit={x.fromConfig ? undefined : () => flow.editService(x.id)}
-                onRemove={x.fromConfig ? undefined : () => remove("service", x.id, x.name)}
+                onRemove={x.fromConfig ? undefined : () => remove("service", x.id, label.name)}
                 data-signin-service={x.provider}
               >
                 {#snippet badges()}<Badge tone={badge.tone}>{badge.label}</Badge>{/snippet}
@@ -366,7 +367,7 @@
           {#each s.accounts ?? [] as a (a.id)}
             {#snippet tile()}<GlyphTile glyph={glyph(keys.account)} />{/snippet}
             {#snippet badges()}
-              <span class="glim-signin-tile-facts">{accountFacts(text, a, s.services, when).join(" · ")}</span>
+              <span class="glim-signin-tile-facts">{accountFacts(text, a, s.serviceLabels, when).join(" · ")}</span>
               {#if a.owner}<Badge>{t.owner}</Badge>{/if}
               {#if a.blocked}<Badge tone="warn">{t.blocked}</Badge>{/if}
             {/snippet}

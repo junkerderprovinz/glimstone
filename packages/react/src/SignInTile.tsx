@@ -3,7 +3,6 @@ import {
   accountFacts,
   createSignInTileFlow,
   fill,
-  OWN_SIGN_IN_SERVICE,
   passkeyFacts,
   passwordGoes,
   plural,
@@ -19,7 +18,7 @@ import {
   signInScopeItems,
   signInServiceActions,
   signInServiceBadge,
-  signInServiceMark,
+  signInServiceLabel,
   signInRoleItems,
   signInServiceName,
   signInServicePicker,
@@ -42,6 +41,7 @@ import {
   type SignInTileText,
   type ToastSeverity,
 } from "@glimstone/core";
+import { Accordion } from "./Accordion.tsx";
 import { Badge } from "./Badge.tsx";
 import { Button } from "./Button.tsx";
 import { Card } from "./Card.tsx";
@@ -286,7 +286,8 @@ function PasskeysCard({ ctx, hue }: { ctx: Ctx; hue: number }) {
                   key={p.id}
                   name={p.name}
                   tile={<GlyphTile glyph={glyphFor(keys.passkey)} />}
-                  badges={<span className="glim-signin-tile-facts">{passkeyFacts(text, p, when).join(" · ")}</span>}
+                  tip={passkeyFacts(text, p, when).more}
+                  badges={<span className="glim-signin-tile-facts">{passkeyFacts(text, p, when).added}</span>}
                   actions={
                     <>
                       <Button label={t.rename} labelKey={keys.rename} onClick={() => flow.askRenamePasskey(p.id)} />
@@ -327,7 +328,7 @@ function SessionsCard({ ctx, hue }: { ctx: Ctx; hue: number }) {
                 tile={<GlyphTile glyph={glyphFor(device.phone ? keys.phone : keys.laptop)} />}
                 badges={
                   <>
-                    <span className="glim-signin-tile-facts">{sessionFacts(text, x, s.services, when).join(" · ")}</span>
+                    <span className="glim-signin-tile-facts">{sessionFacts(text, x, s.serviceLabels, when).join(" · ")}</span>
                     {x.current && <Badge tone="active">{t.current}</Badge>}
                   </>
                 }
@@ -403,11 +404,12 @@ function ServicesCard({ ctx, hue, providers }: { ctx: Ctx; hue: number; provider
         <div className="glim-signin-tile-body">
           {(s.services ?? []).map((x) => {
             const badge = signInServiceBadge(text, x);
+            const label = signInServiceLabel(x, providers, text);
             return (
               <ConnectionRow
                 key={x.id}
-                name={x.name}
-                mark={signInServiceMark(providers, x.provider) ?? glyphFor(keys.service)}
+                name={label.name}
+                mark={label.mark ?? glyphFor(keys.service)}
                 status={signInServiceStatus(text, x, when)}
                 badges={<Badge tone={badge.tone}>{badge.label}</Badge>}
                 test={s.rowTests[x.id]}
@@ -415,7 +417,7 @@ function ServicesCard({ ctx, hue, providers }: { ctx: Ctx; hue: number; provider
                 text={{ test: t.test, edit: t.edit, remove: text.remove }}
                 onTest={x.fromConfig ? undefined : () => void flow.testService(x.id)}
                 onEdit={x.fromConfig ? undefined : () => flow.editService(x.id)}
-                onRemove={x.fromConfig ? undefined : () => ask("service", x.id, x.name)}
+                onRemove={x.fromConfig ? undefined : () => ask("service", x.id, label.name)}
                 data-signin-service={x.provider}
               >
                 {!x.fromConfig && (
@@ -452,7 +454,7 @@ function AccountsCard({ ctx, hue }: { ctx: Ctx; hue: number }) {
             tile={<GlyphTile glyph={glyphFor(keys.account)} />}
             badges={
               <>
-                <span className="glim-signin-tile-facts">{accountFacts(text, a, s.services, when).join(" · ")}</span>
+                <span className="glim-signin-tile-facts">{accountFacts(text, a, s.serviceLabels, when).join(" · ")}</span>
                 {a.owner && <Badge>{t.owner}</Badge>}
                 {a.blocked && <Badge tone="warn">{t.blocked}</Badge>}
               </>
@@ -647,14 +649,13 @@ function TileWindow({ ctx, api, providers }: { ctx: Ctx; api: SignInApi; provide
     return <PickerWindow title={t.pick} hint={t.pickHint} items={items} groups={groups} text={pickerText} onPick={flow.chooseService} onClose={flow.close} />;
   }
 
-  const own = w.provider === OWN_SIGN_IN_SERVICE;
   const name = signInServiceName(text, w.provider, s.draft.label, providers.entries.find((e) => e.id === w.provider)?.name);
   const editing = s.services?.find((x) => x.id === w.edit);
   const roleItems = signInRoleItems(text, s.roles);
   const test = s.formTest;
-  const field = (key: SignInTileField, label: string, hint?: string) => (
+  const field = (key: SignInTileField, label: string, hint?: string, placeholder?: string) => (
     <FieldRow label={label} hint={hint}>
-      <TextField mono={key !== "label"} value={s.draft[key]} onChange={(e) => flow.set(key, e.target.value)} error={err(key)} data-signin-field={key} />
+      <TextField mono={key !== "label"} value={s.draft[key]} placeholder={placeholder} onChange={(e) => flow.set(key, e.target.value)} error={err(key)} data-signin-field={key} />
     </FieldRow>
   );
   return (
@@ -682,7 +683,6 @@ function TileWindow({ ctx, api, providers }: { ctx: Ctx; api: SignInApi; provide
       <div className="glim-signin-tile-form" data-signin-form={w.provider}>
         <p className="glim-signin-tile-text">{fill(t.formHint, { name })}</p>
         <FieldRowGroup>
-          {own && field("label", t.label)}
           {field("issuer", t.issuer, t.issuerHint)}
           {field("clientId", t.clientId)}
           <FieldRow label={t.secret} hint={w.edit ? t.secretKept : undefined}>
@@ -691,15 +691,23 @@ function TileWindow({ ctx, api, providers }: { ctx: Ctx; api: SignInApi; provide
           <FieldRow label={t.redirect} hint={t.redirectHint}>
             <CopyField value={signInRedirectAddress(api, editing)} text={{ copy: text.copy, copied: text.copied }} />
           </FieldRow>
-          {own && field("scopes", t.scopes)}
-          {own && field("nameClaim", t.nameClaim)}
-          {own && field("groupsClaim", t.groupsClaim)}
+          {field("label", t.label, undefined, signInServiceLabel({ provider: w.provider }, providers, text).name)}
           {roleItems && (
             <FieldRow label={t.role} data-signin-field="role">
               <Selector inline activation="manual" value={s.draft.role} onChange={(v) => flow.set("role", v)} items={roleItems} />
             </FieldRow>
           )}
         </FieldRowGroup>
+        <Accordion
+          items={[{ value: "more", title: t.more }]}
+          content={() => (
+            <FieldRowGroup>
+              {field("scopes", t.scopes)}
+              {field("nameClaim", t.nameClaim)}
+              {field("groupsClaim", t.groupsClaim)}
+            </FieldRowGroup>
+          )}
+        />
         <p className="glim-signin-tile-quiet">{signInServiceQuiet(text, s, name)}</p>
         <Said said={s.said} />
       </div>

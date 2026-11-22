@@ -1,6 +1,6 @@
 <script lang="ts">
   import { SignInCard } from "@glimstone/svelte";
-  import { signInTextEn, type SignInAnswer } from "@glimstone/core";
+  import { signInServiceLabel, signInTextEn, signInTileTextEn, type SignInAnswer } from "@glimstone/core";
   import { IDENTITY_PROVIDERS } from "@glimstone/core/identityProviders";
   import logo from "../../../.github/assets/logo.svg?url";
 
@@ -10,7 +10,9 @@
   // passkeys in the password field, and Pocket ID is the second way in.
   let said = $state("Nothing yet");
 
-  const POCKET_ID = { name: "Sign in with Pocket ID", mark: IDENTITY_PROVIDERS.entries.find((e) => e.id === "pocket-id")!.mark };
+  // The kit sends no name for a service set up without one, so the catalog names it.
+  const pocket = signInServiceLabel({ name: "", provider: "pocket-id" }, IDENTITY_PROVIDERS, signInTileTextEn);
+  const POCKET_ID = { name: `Sign in with ${pocket.name}`, mark: pocket.mark ?? undefined };
 
   // No passkey answers here, so the offer runs until the card ends it.
   const offer = (signal: AbortSignal) => new Promise<SignInAnswer>((done) => signal.addEventListener("abort", () => done({})));

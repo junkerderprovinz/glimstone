@@ -1,6 +1,8 @@
 // A made-up kit for the sign-in demos: one owner with the password "letmein",
-// two sessions, a passkey, a token and three sign-in services: one on, one
-// not tested yet, and one from the app's configuration file that a reset paused.
+// two sessions, a passkey, a token and three sign-in services: Pocket ID, on
+// and named after its kind; one with a name of its own, not tested yet; and one
+// of no kind the catalog knows, from the app's configuration file, which a
+// reset paused.
 // Every demo gets a kit of its own, so the frameworks side by side never
 // share a change. A change that wants a fresh sign-in asks for the password
 // once, and a test sign-in comes back as if it had worked.
@@ -94,9 +96,9 @@ export function demoKit(scene: DemoScene = "signedIn"): SignInApi & { leave(url:
   let services: SignInService[] = open
     ? []
     : [
-        service("pocket", "pocket-id", "Pocket ID", true),
-        service("authentik", "authentik", "authentik", false),
-        { ...service("kanidm", "kanidm", "Kanidm", false), fromConfig: true, paused: true, tested: true, testedAt: "2026-11-12T08:30:00Z" },
+        service("pocket", "pocket-id", "", true),
+        service("authentik", "authentik", "Home login", false),
+        { ...service("config", "custom", "", false), fromConfig: true, paused: true, tested: true, testedAt: "2026-11-12T08:30:00Z" },
       ];
   let accounts: SignInAccount[] = open
     ? []

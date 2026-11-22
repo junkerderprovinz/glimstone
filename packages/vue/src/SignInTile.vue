@@ -14,7 +14,7 @@ import {
   signInDevice,
   signInServiceActions,
   signInServiceBadge,
-  signInServiceMark,
+  signInServiceLabel,
   signInServiceStatus,
   signInTileCards,
   signInWhen,
@@ -190,9 +190,9 @@ function ask(what: SignInTileRemoval, id: string, name: string) {
         <div v-else class="glim-signin-tile-body">
           <UnavailableNotice v-if="!s.passkeysHere" :title="text.passkeys.unavailableTitle">{{ text.passkeys.unavailable }}</UnavailableNotice>
           <div v-if="s.passkeys.length > 0" class="glim-list glim-signin-tile-rows">
-            <ListRow v-for="p in s.passkeys" :key="p.id" :name="p.name">
+            <ListRow v-for="p in s.passkeys" :key="p.id" :name="p.name" :tip="passkeyFacts(text, p, when).more">
               <template #tile><GlyphTile :glyph="glyph(keys.passkey)" /></template>
-              <template #badges><span class="glim-signin-tile-facts">{{ passkeyFacts(text, p, when).join(" · ") }}</span></template>
+              <template #badges><span class="glim-signin-tile-facts">{{ passkeyFacts(text, p, when).added }}</span></template>
               <template #actions>
                 <Button :label="text.passkeys.rename" :label-key="keys.rename" @click="flow.askRenamePasskey(p.id)" />
                 <Button :label="text.remove" :label-key="keys.remove" :data-signin-tile="`remove-passkey-${p.id}`" @click="ask('passkey', p.id, p.name)" />
@@ -212,7 +212,7 @@ function ask(what: SignInTileRemoval, id: string, name: string) {
             <ListRow v-for="x in s.sessions" :key="x.id" :name="signInDevice(x.agent, text.sessions).name">
               <template #tile><GlyphTile :glyph="glyph(signInDevice(x.agent, text.sessions).phone ? keys.phone : keys.laptop)" /></template>
               <template #badges>
-                <span class="glim-signin-tile-facts">{{ sessionFacts(text, x, s.services, when).join(" · ") }}</span>
+                <span class="glim-signin-tile-facts">{{ sessionFacts(text, x, s.serviceLabels, when).join(" · ") }}</span>
                 <Badge v-if="x.current" tone="active">{{ text.sessions.current }}</Badge>
               </template>
               <template v-if="!x.current" #actions>
@@ -266,8 +266,8 @@ function ask(what: SignInTileRemoval, id: string, name: string) {
           <ConnectionRow
             v-for="x in s.services ?? []"
             :key="x.id"
-            :name="x.name"
-            :mark="signInServiceMark(providers, x.provider) ?? glyph(keys.service)"
+            :name="signInServiceLabel(x, providers, text).name"
+            :mark="signInServiceLabel(x, providers, text).mark ?? glyph(keys.service)"
             :status="signInServiceStatus(text, x, when)"
             :test="s.rowTests[x.id]"
             :actions="signInServiceActions(text, x, s, keys.turnOn, (id) => void flow.confirmService(id))"
@@ -275,7 +275,7 @@ function ask(what: SignInTileRemoval, id: string, name: string) {
             :data-signin-service="x.provider"
             :on-test="x.fromConfig ? undefined : () => flow.testService(x.id)"
             :on-edit="x.fromConfig ? undefined : () => flow.editService(x.id)"
-            :on-remove="x.fromConfig ? undefined : () => ask('service', x.id, x.name)"
+            :on-remove="x.fromConfig ? undefined : () => ask('service', x.id, signInServiceLabel(x, providers, text).name)"
           >
             <template #badges>
               <Badge :tone="signInServiceBadge(text, x).tone">{{ signInServiceBadge(text, x).label }}</Badge>
@@ -300,7 +300,7 @@ function ask(what: SignInTileRemoval, id: string, name: string) {
           <ListRow v-for="a in s.accounts ?? []" :key="a.id" :name="a.name">
             <template #tile><GlyphTile :glyph="glyph(keys.account)" /></template>
             <template #badges>
-              <span class="glim-signin-tile-facts">{{ accountFacts(text, a, s.services, when).join(" · ") }}</span>
+              <span class="glim-signin-tile-facts">{{ accountFacts(text, a, s.serviceLabels, when).join(" · ") }}</span>
               <Badge v-if="a.owner">{{ text.accounts.owner }}</Badge>
               <Badge v-if="a.blocked" tone="warn">{{ text.accounts.blocked }}</Badge>
             </template>

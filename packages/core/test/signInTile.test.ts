@@ -13,6 +13,7 @@ import {
   signInServiceBadge,
   signInServiceMissing,
   signInServiceStatus,
+  signInServiceLabel,
   signInServiceQuiet,
   signInRoleItems,
   passkeysAllowedAt,
@@ -262,14 +263,12 @@ test('a passkey the browser does not make leaves the window open with the reason
   assert.equal(flow.state().refusal?.hook, 'passkey-add');
 });
 
-test('a passkey row says where it works and whether it is synced, apart', () => {
+test('a passkey row shows when it was added, and the rest goes into its bubble', () => {
   const when = () => 'today';
-  assert.deepEqual(passkeyFacts(text, { id: 'p', name: 'x', created: 'c', rpID: 'old.example', synced: true, here: false }, when), [
-    'added today',
-    'never used',
-    'works only on old.example',
-    'synced across your devices',
-  ]);
+  assert.deepEqual(passkeyFacts(text, { id: 'p', name: 'x', created: 'c', rpID: 'old.example', synced: true, here: false }, when), {
+    added: 'Added today',
+    more: 'Never used · works only on old.example · synced across your devices',
+  });
 });
 
 test('a new token is shown once, with the scope and the life picked', async () => {
@@ -303,13 +302,12 @@ test('the service form fills in what the kit knows for the picked service', asyn
   assert.equal(flow.state().draft.scopes, 'openid profile email');
 });
 
-test('the test sign-in waits for the address, the client and the secret', () => {
+test('the test sign-in waits for the address, the client and the secret, and a name is up to the person', () => {
   const d = { ...createSignInTileFlow(() => ({}) as SignInTileOptions).state().draft };
-  assert.equal(signInServiceMissing({ ...d, issuer: 'id.example' }, 'pocket-id', false), 'issuer');
-  assert.equal(signInServiceMissing({ ...d, issuer: 'https://id.example' }, 'pocket-id', false), 'clientId');
-  assert.equal(signInServiceMissing({ ...d, issuer: 'https://id.example', clientId: 'c' }, 'pocket-id', false), 'secret');
-  assert.equal(signInServiceMissing({ ...d, issuer: 'https://id.example', clientId: 'c' }, 'pocket-id', true), null);
-  assert.equal(signInServiceMissing(d, 'custom', false), 'label');
+  assert.equal(signInServiceMissing({ ...d, issuer: 'id.example' }, false), 'issuer');
+  assert.equal(signInServiceMissing({ ...d, issuer: 'https://id.example' }, false), 'clientId');
+  assert.equal(signInServiceMissing({ ...d, issuer: 'https://id.example', clientId: 'c' }, false), 'secret');
+  assert.equal(signInServiceMissing({ ...d, issuer: 'https://id.example', clientId: 'c' }, true), null);
 });
 
 test('a test sign-in stores the service once, checks the address and leaves for the service', async () => {
@@ -452,6 +450,27 @@ test('an app with one role offers no choice and sends none', async () => {
   flow.set('secret', 'secret');
   await flow.testDraft();
   assert.equal('role' in sent, false);
+});
+
+test('a service is named by its own name, else by its kind in the catalog, else by the app\'s word, never the protocol', () => {
+  const catalog = { groups: ['selfHosted'], entries: [{ id: 'pocket-id', name: 'Pocket ID', group: 'selfHosted', mark: { svg: '<svg/>' } }] };
+  assert.deepEqual(signInServiceLabel({ name: 'Family login', provider: 'pocket-id' }, catalog, text), { name: 'Family login', mark: { svg: '<svg/>' } });
+  assert.deepEqual(signInServiceLabel({ name: ' ', provider: 'pocket-id' }, catalog, text), { name: 'Pocket ID', mark: { svg: '<svg/>' } });
+  assert.deepEqual(signInServiceLabel({ name: '', provider: 'custom' }, catalog, text), { name: 'Sign-in service', mark: null });
+});
+
+test('a service without a name of its own is named after its kind in what the tile says', async () => {
+  const catalog = { groups: ['selfHosted'], entries: [{ id: 'pocket-id', name: 'Pocket ID', group: 'selfHosted' }] };
+  const unnamed = { ...SERVICE, name: '', tested: true };
+  const { api } = kit({
+    services: async () => ok([unnamed]),
+    changeService: async (id, input) => ok({ service: { ...unnamed, ...input, id } as SignInService }),
+  });
+  const { flow, said } = tile(api, { providers: catalog });
+  await flow.refresh();
+  assert.deepEqual(flow.state().serviceLabels, [{ id: 's1', name: 'Pocket ID' }]);
+  await flow.setServiceOn('s1', true);
+  assert.deepEqual(said, [['success', 'Pocket ID is on the sign-in page.']]);
 });
 
 test('a service badge says how it stands', () => {

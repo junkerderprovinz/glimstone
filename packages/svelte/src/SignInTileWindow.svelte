@@ -1,13 +1,13 @@
 <script lang="ts">
   import {
     fill,
-    OWN_SIGN_IN_SERVICE,
     passwordGoes,
     qrCode,
     SIGN_IN_TOKEN_LIVES,
     signInRedirectAddress,
     signInScopeItems,
     signInRoleItems,
+    signInServiceLabel,
     signInServiceName,
     signInServicePicker,
     signInServiceQuiet,
@@ -20,6 +20,7 @@
     type SignInTileState,
     type SignInTileText,
   } from "@glimstone/core";
+  import Accordion from "./Accordion.svelte";
   import CopyField from "./CopyField.svelte";
   import FieldRow from "./FieldRow.svelte";
   import FieldRowGroup from "./FieldRowGroup.svelte";
@@ -243,14 +244,20 @@
   />
 {:else}
   {@const t = text.services}
-  {@const own = w.provider === OWN_SIGN_IN_SERVICE}
   {@const name = signInServiceName(text, w.provider, s.draft.label, providers.entries.find((e) => e.id === w.provider)?.name)}
   {@const editing = s.services?.find((x) => x.id === w.edit)}
   {@const test = s.formTest}
-  {#snippet field(key: SignInTileField, label: string, hint?: string)}
+  {#snippet field(key: SignInTileField, label: string, hint?: string, placeholder?: string)}
     <FieldRow {label} {hint}>
-      <TextField mono={key !== "label"} value={s.draft[key]} oninput={(e) => flow.set(key, e.currentTarget.value)} error={err(key)} data-signin-field={key} />
+      <TextField mono={key !== "label"} value={s.draft[key]} {placeholder} oninput={(e) => flow.set(key, e.currentTarget.value)} error={err(key)} data-signin-field={key} />
     </FieldRow>
+  {/snippet}
+  {#snippet more()}
+    <FieldRowGroup>
+      {@render field("scopes", t.scopes)}
+      {@render field("nameClaim", t.nameClaim)}
+      {@render field("groupsClaim", t.groupsClaim)}
+    </FieldRowGroup>
   {/snippet}
   <PickerWindow
     title={name}
@@ -276,7 +283,6 @@
     <div class="glim-signin-tile-form" data-signin-form={w.provider}>
       <p class="glim-signin-tile-text">{fill(t.formHint, { name })}</p>
       <FieldRowGroup>
-        {#if own}{@render field("label", t.label)}{/if}
         {@render field("issuer", t.issuer, t.issuerHint)}
         {@render field("clientId", t.clientId)}
         <FieldRow label={t.secret} hint={w.edit ? t.secretKept : undefined}>
@@ -292,11 +298,7 @@
         <FieldRow label={t.redirect} hint={t.redirectHint}>
           <CopyField value={signInRedirectAddress(api, editing)} text={copyWords} />
         </FieldRow>
-        {#if own}
-          {@render field("scopes", t.scopes)}
-          {@render field("nameClaim", t.nameClaim)}
-          {@render field("groupsClaim", t.groupsClaim)}
-        {/if}
+        {@render field("label", t.label, undefined, signInServiceLabel({ provider: w.provider }, providers, text).name)}
         {@const roleItems = signInRoleItems(text, s.roles)}
         {#if roleItems}
           <FieldRow label={t.role} data-signin-field="role">
@@ -304,6 +306,7 @@
           </FieldRow>
         {/if}
       </FieldRowGroup>
+      <Accordion items={[{ value: "more", title: t.more }]} content={more} />
       <p class="glim-signin-tile-quiet">{signInServiceQuiet(text, s, name)}</p>
       {@render said()}
     </div>

@@ -4750,6 +4750,13 @@ test.describe("SignInTile", () => {
     await expect(said(page)).toHaveText("Passkey removed.");
   });
 
+  test("[signin-tile-passkey-row] a passkey row shows when it was added, and the rest stands in its bubble", async ({ page }) => {
+    await open(page, "/components/sign-in-tile");
+    const row = cardOf(page, "passkeys").getByRole("group", { name: "Firefox on Windows" });
+    await expect(row.locator(".glim-signin-tile-facts")).toHaveText("Added Nov 2, 2026, 2:20 PM");
+    await expect(row.locator(".glim-list-row-tip")).toHaveCount(1);
+  });
+
   test("[signin-tile-passkeys-here] Add a passkey stays once the last passkey is gone", async ({ page }) => {
     await open(page, "/components/sign-in-tile");
     const card = cardOf(page, "passkeys");
@@ -4774,15 +4781,23 @@ test.describe("SignInTile", () => {
     await expect(cardOf(page, "tokens", name).getByRole("button", { name: "Create a token" })).toBeVisible();
   });
 
+  test("[signin-tile-names] a service is named by its own name, its kind or the app's word, never the protocol", async ({ page }) => {
+    await open(page, "/components/sign-in-tile");
+    const names = cardOf(page, "services").locator(".glim-connection-name");
+    await expect(names).toHaveText(["Pocket ID", "Home login", "Sign-in service"]);
+    await expect(cardOf(page, "services")).not.toContainText("OIDC");
+    await expect(cardOf(page, "services").getByRole("group", { name: "Pocket ID" }).locator(".glim-connection-tile .glim-brand-svg")).toHaveCount(1);
+  });
+
   test("[signin-tile-config] a service from the configuration file has no Edit or Remove, and turns on again", async ({ page }) => {
     await open(page, "/components/sign-in-tile");
-    const row = cardOf(page, "services").getByRole("group", { name: "Kanidm" });
+    const row = cardOf(page, "services").getByRole("group", { name: "Sign-in service" });
     await expect(row.locator(".glim-connection-status")).toContainText("from the configuration file");
     await expect(row.locator('[data-connection="test"], [data-connection="edit"], [data-connection="remove"]')).toHaveCount(0);
     await expect(row.getByRole("switch")).toHaveCount(0);
     await expect(row.locator(".glim-connection-badges")).toHaveText("Paused");
     await row.locator('[data-connection="confirm"]').click();
-    await expect(said(page)).toHaveText("Kanidm is on the sign-in page.");
+    await expect(said(page)).toHaveText("Sign-in service is on the sign-in page.");
     await expect(row.locator(".glim-connection-badges")).toHaveText("On");
     await expect(row.locator('[data-connection="confirm"]')).toHaveCount(0);
   });
@@ -4795,6 +4810,12 @@ test.describe("SignInTile", () => {
     const form = dialog(page, "Authelia");
     for (const label of ["Address", "Client ID", "Client secret", "Redirect address"]) await expect(form.getByLabel(label, { exact: true }).first()).toBeVisible();
     await expect(form.locator(".glim-signin-tile-quiet")).toHaveText(/Authelia decides who may sign in/);
+    await expect(form.locator('[data-signin-field="label"]')).toHaveAttribute("placeholder", "Authelia");
+    const more = form.getByRole("button", { name: "More settings" });
+    await expect(more).toHaveAttribute("aria-expanded", "false");
+    await expect(form.locator('[data-signin-field="scopes"]')).toBeHidden();
+    await more.click();
+    await expect(form.locator('[data-signin-field="scopes"]')).toBeVisible();
     await expect(form.getByRole("button", { name: "Turn on" })).toBeDisabled();
   });
 

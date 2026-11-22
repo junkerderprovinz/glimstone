@@ -222,6 +222,8 @@ export interface SignInTileText {
     pickHint: string;
     group: string;
     own: string;
+    /** A sign-in service with neither a name of its own nor an entry in the catalog. */
+    unnamed: string;
     ownSub: string;
     ownHint: string;
     search: string;
@@ -243,6 +245,8 @@ export interface SignInTileText {
     redirect: string;
     redirectHint: string;
     label: string;
+    /** The fold under the form that holds what only an unusual setup changes. */
+    more: string;
     scopes: string;
     nameClaim: string;
     groupsClaim: string;
@@ -360,7 +364,7 @@ export const signInTileTextEn: SignInTileText = {
   askPassword: {
     title: "Asking for the password",
     hint: "New passkeys, tokens, two-factor and sign-in services want a sign-in from the last few minutes. If yours is older, the app asks for your password once. Without the question you sign out and back in.",
-    label: "Ask for the password again",
+    label: "Ask for the password on changes",
     on: "The app asks for your password before sensitive changes.",
     off: "The question is off. Sensitive changes need a fresh sign-in.",
   },
@@ -399,9 +403,9 @@ export const signInTileTextEn: SignInTileText = {
     add: "Add a passkey",
     none: "No passkeys yet",
     noneHint: "Add one and you sign in here without typing.",
-    created: "added {when}",
-    used: "last used {when}",
-    never: "never used",
+    created: "Added {when}",
+    used: "Last used {when}",
+    never: "Never used",
     here: "works on this address",
     other: "works only on {address}",
     synced: "synced across your devices",
@@ -486,6 +490,7 @@ export const signInTileTextEn: SignInTileText = {
     pickHint: "The app knows the right settings for the services in the catalog. Any other service with OpenID Connect goes through “Other sign-in service”.",
     group: "Self-hosted",
     own: "Other sign-in service",
+    unnamed: "Sign-in service",
     ownSub: "OpenID Connect",
     ownHint: "Any service that speaks OpenID Connect. You fill in the scopes and where names and groups come from.",
     search: "Search sign-in services",
@@ -504,6 +509,7 @@ export const signInTileTextEn: SignInTileText = {
     redirect: "Redirect address",
     redirectHint: "Enter this address at the service. It sends you back there after the sign-in.",
     label: "Name on the sign-in page",
+    more: "More settings",
     scopes: "Scopes",
     nameClaim: "Name from",
     groupsClaim: "Groups from",
@@ -647,6 +653,8 @@ export interface SignInTileState {
   accounts: SignInAccount[] | null;
   /** The app's roles and the one a new service hands its newcomers. */
   roles: SignInRoles;
+  /** Every service the tile knows of by the name it shows (`signInServiceLabel`), for the lines that name one. */
+  serviceLabels: { id: string; name: string }[];
   /** Passkeys work on the address the page is open on. */
   passkeysHere: boolean;
   window: SignInTileWindow | null;
@@ -676,6 +684,8 @@ export interface SignInTileOptions {
   cards: readonly SignInTileCard[];
   /** The scopes a new token can take, the narrowest first. */
   scopes: readonly string[];
+  /** The identity catalog, which names a service that has no name of its own. */
+  providers?: Catalog;
   notify?: (message: string, severity: ToastSeverity) => void;
   /** The path a test sign-in comes back to. */
   returnTo?: string;
@@ -766,6 +776,7 @@ const START: SignInTileState = {
   presets: [],
   accounts: null,
   roles: { roles: [], serviceRole: "" },
+  serviceLabels: [],
   passkeysHere: false,
   window: null,
   draft: EMPTY_DRAFT,
@@ -858,6 +869,20 @@ export function signInServiceMark(catalog: Catalog, provider: string): TileMark 
   return catalog.entries.find((e) => e.id === provider)?.mark ?? null;
 }
 
+/**
+ * How a sign-in service is named on a button or a row: its own name, or the
+ * catalog's name for its kind, or the app's word for a sign-in service, which
+ * wears the app's glyph (`mark` is `null`). Never the protocol's name.
+ */
+export function signInServiceLabel(
+  service: { name?: string; provider?: string },
+  catalog: Catalog | undefined,
+  text: { services: { unnamed: string } },
+): { name: string; mark: TileMark | null } {
+  const entry = catalog?.entries.find((e) => e.id === service.provider);
+  return { name: service.name?.trim() || entry?.name || text.services.unnamed, mark: entry?.mark ?? null };
+}
+
 /** The role choice in the service form, or `null` where the app has one role and nothing to choose. */
 export function signInRoleItems(text: SignInTileText, roles: SignInRoles): { id: string; label: string }[] | null {
   if (roles.roles.length < 2) return null;
@@ -894,7 +919,7 @@ export function passkeysAllowedAt(at: { protocol: string; hostname: string }): b
 /** The sign-in service the account came in through, by its name. */
 function serviceOfMe(s: SignInTileState): string {
   const id = s.me?.service;
-  return s.services?.find((x) => x.id === id)?.name ?? s.offer?.services.find((x) => x.id === id)?.name ?? id ?? "";
+  return s.serviceLabels.find((x) => x.id === id)?.name ?? id ?? "";
 }
 
 /**
@@ -943,15 +968,17 @@ export function signInViaWords(text: SignInTileText, via: SignInVia, service: st
 
 type When = (iso: string) => string;
 
-/** The quiet line under a passkey, its facts apart in the markup's middle dots. */
-export function passkeyFacts(text: SignInTileText, p: SignInPasskey, when: When): string[] {
+/**
+ * A passkey's row: when it was added on the row itself, and the rest (when it
+ * was last used, where it works, whether it is synced) in the row's info
+ * bubble, apart in middle dots.
+ */
+export function passkeyFacts(text: SignInTileText, p: SignInPasskey, when: When): { added: string; more: string } {
   const t = text.passkeys;
-  return [
-    fill(t.created, { when: when(p.created) }),
-    p.used ? fill(t.used, { when: when(p.used) }) : t.never,
-    p.here ? t.here : fill(t.other, { address: p.rpID }),
-    ...(p.synced ? [t.synced] : []),
-  ];
+  return {
+    added: fill(t.created, { when: when(p.created) }),
+    more: [p.used ? fill(t.used, { when: when(p.used) }) : t.never, p.here ? t.here : fill(t.other, { address: p.rpID }), ...(p.synced ? [t.synced] : [])].join(" · "),
+  };
 }
 
 export function tokenFacts(text: SignInTileText, k: SignInToken, when: When): string[] {
@@ -1018,13 +1045,11 @@ export function passwordGoes(text: SignInTileText, lang: string, s: SignInTileSt
 
 /** The name the service form and its window title use. */
 export function signInServiceName(text: SignInTileText, provider: string, label: string, catalogName: string | undefined): string {
-  if (provider === OWN_SIGN_IN_SERVICE) return label.trim() || text.services.own;
-  return catalogName ?? provider;
+  return label.trim() || catalogName || text.services.own;
 }
 
 /** The first field of the service form that still waits for a value. */
-export function signInServiceMissing(d: SignInTileDraft, provider: string, editing: boolean): SignInTileField | null {
-  if (provider === OWN_SIGN_IN_SERVICE && !d.label.trim()) return "label";
+export function signInServiceMissing(d: SignInTileDraft, editing: boolean): SignInTileField | null {
   if (!/^https?:\/\/\S+$/.test(d.issuer.trim())) return "issuer";
   if (!d.clientId.trim()) return "clientId";
   if (!editing && !d.secret) return "secret";
@@ -1102,6 +1127,9 @@ export function createSignInTileFlow(options: () => SignInTileOptions): SignInTi
       presets: presets?.ok ? presets.value : [],
       accounts: accounts?.ok ? accounts.value : null,
       roles: roles?.ok ? roles.value : START.roles,
+      serviceLabels: [...(services?.ok ? services.value : []), ...(offer.ok ? offer.value.services : [])]
+        .filter((x, i, all) => all.findIndex((y) => y.id === x.id) === i)
+        .map((x) => ({ id: x.id, name: signInServiceLabel(x, options().providers, options().text).name })),
       passkeysHere: (offer.ok && offer.value.passkeys) || (typeof location !== "undefined" && passkeysAllowedAt(location)),
     });
   }
@@ -1128,11 +1156,12 @@ export function createSignInTileFlow(options: () => SignInTileOptions): SignInTi
     if (go) go(url);
     else location.assign(url);
   };
+  const labelOf = (service: { name?: string; provider?: string }) => signInServiceLabel(service, options().providers, text()).name;
   // What the service form sends. The role goes along only where the app has a choice of them.
-  const serviceBody = (provider: string): SignInServiceInput => {
+  const serviceBody = (): SignInServiceInput => {
     const d = state.draft;
     return {
-      ...(provider === OWN_SIGN_IN_SERVICE ? { name: d.label.trim() } : {}),
+      name: d.label.trim(),
       issuer: d.issuer.trim(),
       clientId: d.clientId.trim(),
       ...(d.secret ? { secret: d.secret } : {}),
@@ -1383,11 +1412,11 @@ export function createSignInTileFlow(options: () => SignInTileOptions): SignInTi
         const w = state.window;
         if (w?.kind !== "serviceForm") return;
         const t = text().services;
-        const missing = signInServiceMissing(state.draft, w.provider, stored !== null);
+        const missing = signInServiceMissing(state.draft, stored !== null);
         if (missing) return invalid(missing, t.missing, "service-test");
         const { api } = options();
         const d = state.draft;
-        const body = serviceBody(w.provider);
+        const body = serviceBody();
         update({ formTest: { busy: true }, said: null });
         const saved = stored === null ? await api.addService({ provider: w.provider, ...body }) : await api.changeService(stored, body);
         const report = (message: string) => update({ formTest: { tone: "danger", title: message }, said: { ok: false, message }, ...refuse("service-test") });
@@ -1404,16 +1433,16 @@ export function createSignInTileFlow(options: () => SignInTileOptions): SignInTi
       run("service-save", async () => {
         const w = state.window;
         if (w?.kind !== "serviceForm" || !w.edit) return;
-        const missing = signInServiceMissing(state.draft, w.provider, true);
+        const missing = signInServiceMissing(state.draft, true);
         if (missing) return invalid(missing, text().services.missing, "service-save");
-        const r = await options().api.changeService(w.edit, serviceBody(w.provider));
+        const r = await options().api.changeService(w.edit, serviceBody());
         if (!r.ok) {
           if (r.error === "secretAgain") return invalid("secret", say(r), "service-save");
           if (r.error === "roleUnknown") return invalid("role", say(r), "service-save");
           return failed(r, "service-save");
         }
         flow.close();
-        notify(fill(text().services.updated, { name: r.value.service.name }));
+        notify(fill(text().services.updated, { name: labelOf(r.value.service) }));
         await refresh();
       }),
     async testService(id) {
@@ -1433,7 +1462,7 @@ export function createSignInTileFlow(options: () => SignInTileOptions): SignInTi
         update(refuse(`service-on-${id}`));
         return;
       }
-      notify(fill(on ? text().services.turnedOn : text().services.turnedOff, { name: r.value.service.name }));
+      notify(fill(on ? text().services.turnedOn : text().services.turnedOff, { name: labelOf(r.value.service) }));
       await refresh();
     },
 
@@ -1441,7 +1470,7 @@ export function createSignInTileFlow(options: () => SignInTileOptions): SignInTi
       run(`service-confirm-${id}`, async () => {
         const r = await options().api.changeService(id, { on: true });
         if (!r.ok) return failed(r, `service-confirm-${id}`);
-        notify(fill(text().services.turnedOn, { name: r.value.service.name }));
+        notify(fill(text().services.turnedOn, { name: labelOf(r.value.service) }));
         await refresh();
       }),
 
@@ -1464,7 +1493,7 @@ export function createSignInTileFlow(options: () => SignInTileOptions): SignInTi
             : what === "token"
               ? state.tokens.find((x) => x.id === id)?.name
               : what === "service"
-                ? state.services?.find((x) => x.id === id)?.name
+                ? state.serviceLabels.find((x) => x.id === id)?.name
                 : state.accounts?.find((x) => x.id === id)?.name;
         const r =
           what === "passkey"
