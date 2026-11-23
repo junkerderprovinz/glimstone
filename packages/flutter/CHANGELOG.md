@@ -1,3 +1,7 @@
+## 4.9.0
+
+- No changes for Flutter. The sign-in parts and the path field fix are in the web packages.
+
 ## 4.8.5
 
 - No changes for Flutter. The new words are in the web packages' fortress texts.

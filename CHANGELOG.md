@@ -2,7 +2,7 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
-## Unreleased
+## 4.9.0 - 2026-11-23
 
 The settings of the kit's sign-in come as one tile, its password question as a small window, and the sign-in card takes passkeys from the browser, one sign-in service with its mark and a plain link for a forgotten password.
 
