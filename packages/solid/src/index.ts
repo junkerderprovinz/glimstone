@@ -51,6 +51,7 @@ export * from "./SidebarRow.tsx";
 export * from "./SignInCard.tsx";
 export * from "./SignInReauthWindow.tsx";
 export * from "./SignInTile.tsx";
+export * from "./NotifyCard.tsx";
 export * from "./SkeletonRow.tsx";
 export * from "./SubCard.tsx";
 export * from "./Table.tsx";

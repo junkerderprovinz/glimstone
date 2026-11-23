@@ -58,6 +58,7 @@ export { default as SignInCard, type ResetAnswer, type SignInAnswer, type SignIn
 export { default as SignInField, type SignInFieldProps } from "./SignInField.svelte";
 export { default as SignInReauthWindow, type SignInReauthText, type SignInReauthWindowProps } from "./SignInReauthWindow.svelte";
 export { default as SignInTile, type SignInTileCard, type SignInTileLabelKeys, type SignInTileProps, type SignInTileText } from "./SignInTile.svelte";
+export { default as NotifyCard, type NotifyCardLabelKeys, type NotifyCardProps, type NotifyCardText } from "./NotifyCard.svelte";
 export { default as SkeletonRow, type SkeletonRowProps } from "./SkeletonRow.svelte";
 export { default as SubCard, type SubCardProps } from "./SubCard.svelte";
 export { default as Table, type TableColumn, type TableProps } from "./Table.svelte";

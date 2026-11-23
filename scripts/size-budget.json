@@ -8,24 +8,24 @@
     "brotli": 1280
   },
   "@glimstone/core": {
-    "gzip": 230912,
-    "brotli": 185344
+    "gzip": 232960,
+    "brotli": 187392
   },
   "@glimstone/react": {
-    "gzip": 41984,
-    "brotli": 35840
+    "gzip": 44544,
+    "brotli": 37376
   },
   "@glimstone/solid": {
-    "gzip": 54784,
-    "brotli": 44544
+    "gzip": 57856,
+    "brotli": 47104
   },
   "@glimstone/svelte": {
-    "gzip": 65536,
-    "brotli": 51712
+    "gzip": 67072,
+    "brotli": 52224
   },
   "@glimstone/vue": {
-    "gzip": 54272,
-    "brotli": 44544
+    "gzip": 57344,
+    "brotli": 46592
   },
   "plugin glimstone.js": {
     "gzip": 260608,
