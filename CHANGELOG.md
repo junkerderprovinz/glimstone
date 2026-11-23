@@ -4,10 +4,28 @@ All notable changes to the GlimStone design language are documented here. Versio
 
 ## 4.9.0 - 2026-11-23
 
-The settings of the kit's sign-in come as one tile, its password question as a small window, and the sign-in card takes passkeys from the browser, one sign-in service with its mark and a plain link for a forgotten password.
+The settings of the kit's sign-in come as one tile, its password question as a small window, and the sign-in card takes passkeys from the browser, one sign-in service with its mark and a plain link for a forgotten password. A password stays optional throughout: an open app keeps every card, a short password gets only a quiet hint, and nothing is locked without one. The Info tile has four cards in every app: Version, Components, Help and About. The Version card says where the updates stand and carries the buttons that go with it, and every other number moves to the Components card. `@glimstone/core` loads in a React Native app, and a connection row sets its buttons off the well. A narrow path field in React no longer shows its button wide for a moment.
 
 ## 🧩 Adopting apps
 
+- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.9.0, all packages at the same number.
+- **Flutter:** move the git dependency to v4.9.0.
+- **A quiet button in a connection row** steps up a surface by itself. Drop any override you added to keep it from vanishing into the row.
+- **InfoVersionCard takes new props.** It shows the app alone. Pass `name`, `version`, `repoUrl`, `route` and `state`, with `onCheck`, `onUpdate`, `onRestart`, `guideUrl`, `onWhatsNew` and `unseen`. `rows`, `updateCheck`, `onReleaseNotes` and `whatsNew` are gone, so a card that still passes them stops building.
+- **Say how your app gets a new version** with `route`: `install` for a desktop build that fetches and installs its own updates, `guide` for a container, `plugins` for a plugin on a host with its own plugin manager, `store` for a phone app. The card picks the one button from it: "Update now" and then "Restart for 2.10.0", "How to update", "Update in the Plugins tab", or none.
+- **Hand the card where the updates stand** as `state`: `unchecked`, `current` with `checkedAt`, `checking`, `available` with the new version, `downloading` with a percentage, `ready`, `failed` with a reason, `store` or `direct`. The card checks nothing itself.
+- **Before the first check,** hand the card `state: { kind: "unchecked" }`. A `current` state without `checkedAt` shows the same words, because "Up to date" needs a check behind it, so pass `checkedAt` with every `current`.
+- **Name the store your app came from:** pass `store` with the store's own name, such as F-Droid or Google Play. Leave `store` out where the app cannot tell, and the card says "Updates come through the store you got the app from."
+- **An app installed from a downloaded file,** such as an APK from the release page, takes `state: { kind: "direct" }` and says "New versions come as a download on the release page."
+- **"What's new" is the one name** for the release notes and the window of changes. Drop a "New · n" or "Release notes" button of your own. While `state` says a new version is available, let `onWhatsNew` open that version's notes: the card then hides "Check for updates", and the new number carries no link.
+- **Register glyphs for the buttons:** `version.whatsNew` (the gift, `IconWhatsNew`), `version.check` (`IconSync`), `version.update`, `version.restart`, `version.guide`, `version.plugins` and `components.update`.
+- **The update switch** comes as `autoUpdate` with `onAutoUpdateChange` (`v-model:auto-update` in Vue, `bind:autoUpdate` in Svelte). It reads "Update automatically" on a build that installs its own updates and "Check for updates automatically" on a container. Leave `autoUpdate` out and the card draws no switch.
+- **Move every other version to `InfoComponentsCard`:** pass `rows` with a `kind` (`part` for the app's own engine or server, `tool` for a bundled program, `installer` for a desktop build's installer) and a `hint` that says what it is. The hint goes in the (i) beside the name, never under it. The card adds GlimStone's own row and sorts the rest.
+- **A project without releases in its repository**, such as ffmpeg, takes a `releasePage` that its number opens instead.
+- **The components switch is only for an app that fetches newer components by itself while it runs.** A program that ships with the app moves with the app's own release, so leave `autoUpdate` and `onUpdate` out there.
+- **InfoTile wants `components`** between `version` and `help`.
+- **The words come with GlimStone:** pass `componentText(lang).versionCard` and `componentText(lang).componentsCard` as `text`. They come in all 42 languages, and "{app}" is filled from `name`.
+- **The About card is called "About" alone,** never with the app's name.
 - **On the kit's sign-in:** create the client once with `createSignInApi({ root })`, where `root` is the path the app lives under, such as `/files/`. Every call answers with its value or with the kit's code as it came, and `signInErrorText()` says a code in your words.
 - **The sign-in page:** spread `signInCardHandlers(api, { words, onSignedIn })` into `SignInCard`. It answers the password, the code step, the browser's passkey offer and the reset through the container log.
 - **Passkeys on the sign-in page:** drop `passkey` and `onPasskey` and pass `onPasskeyOffer`. The password field then asks for `current-password webauthn`, and the browser lists its passkeys in the field.
@@ -20,9 +38,9 @@ The settings of the kit's sign-in come as one tile, its password question as a s
 - **A sign-in service without a name of its own:** take its button's name and mark from `signInServiceLabel(service, IDENTITY_PROVIDERS, text)`, as the tile does for its rows and lines. It gives the service's own name, or the catalog's name and mark for its kind, or `services.unnamed` with no mark, for your sign-in glyph.
 - **One row for every sign-in list:** `ListRow` takes `meta`, a quiet line under the name, and `steady`, which keeps its buttons in view. The tile draws tokens, passkeys, sessions, services and accounts with it, its buttons as quiet glyphs.
 - **The password check's card** is titled "Password check on changes" (`askPassword.title`), and `askPassword.when` fills the (i) beside the switch.
-- **Pasting the client:** text holding both the client ID and the secret fills both fields; `signInClientPaste()` reads it.
-- **A test sign-in carries the form's role:** `testService(id, back, role)` sends the newcomers' role the form shows. When the service was saved differently meanwhile, the kit answers `serviceChanged`, also as a code on the way back; the tile reloads the service and says so in a warning instead of testing the old form. `lastWayIn` reads that only the owner, freshly signed in, can take the last way in away.
-- **Without a password nothing is locked:** the design language drops the refusal `password-not-set`. An open app shows a secret and deletes for good after its usual confirm; with a password set, it asks for the password first. Remove any such refusal from an open app.
+- **Pasting the client:** text holding both the client ID and the secret fills both fields, and `signInClientPaste()` reads it.
+- **A test sign-in carries the form's role:** `testService(id, back, role)` sends the newcomers' role the form shows. When the service was saved differently meanwhile, the kit answers `serviceChanged`, also as a code on the way back. The tile reloads the service and says so in a warning instead of testing the old form. `lastWayIn` reads that only the owner, freshly signed in, can take the last way in away.
+- **Without a password nothing is locked:** the design language drops the refusal `password-not-set`. An open app shows a secret and deletes for good after its usual confirm. With a password set, it asks for the password first. Remove any such refusal from an open app.
 - **A password is always optional, and length never blocks:** the reset form and the tile take a password of any length. Under `minPassword` a quiet line under the field says so, from the new `shortHint` (`password.shortHint` in the tile), and Set password and Save stay on. `signInShortHint()` gives that line. `SignInText.tooShort` is no longer read. The kit's answer to a new password carries `short` (`SignInPasswordSet`), and the tile's toast then adds `password.shortSaved`.
 - **`PasswordField` takes `note`:** a quiet line under the field that only informs, in place of an error while none stands. `fieldNoteView()` gives its id and description.
 - **Without a password every tile card stays:** the password check, sessions and accounts no longer vanish while the app is open. They, two-factor and passkeys say in a friendly line that they are ready once there is a password (`needsPassword`, reworded).
@@ -33,10 +51,14 @@ The settings of the kit's sign-in come as one tile, its password question as a s
 - **The role of a sign-in service's newcomers:** the tile reads `GET roles` as `{ roles, serviceRole }` and a service's `role`, offers the roles in the service form where there are more than one and sends the picked one. Give `services.role` the label, `services.roleHint` the quiet line with `{name}` and `{role}`, and `roles` the words for each role. `roles` moves up from `accounts.roles`.
 - **An account from a sign-in service:** give `password.viaService` the words for the password card and `notLocal` the words for two-factor and passkeys, both with `{name}` for the service.
 - **Words:** `SignInTileText` and `SignInReauthText` carry every word, the kit's codes under `errors` and what a sign-in service sent back under `arrived`. `signInTileTextEn` and `signInReauthTextEn` are the English ones.
-- **Your own copy of the stylesheet:** copy `tokens.css` again. It brings `.glim-signin-forgot` and the `.glim-signin-tile` rules.
+- **Your own copy of the stylesheet:** copy `tokens.css` again. It brings `.glim-signin-forgot` and the `.glim-signin-tile` rules. For connections and pickers it brings the connection row's buttons and badges, the width of a wordmark on a connection tile, the place of a wordmark on a picker tile and the soft edge of a mark that reaches its box. For the Info tile it brings the Version card's head, which wraps, and its last row, the dot before "What's new", the progress bar, the (i) beside a component's name, `.glim-version-end`, which holds a component row's status, button and number together, and `.glim-version-tail`, which keeps the button and the number on one line. It also makes a version number a 24px target.
 
 ## ✨ Added
 
+- **`InfoComponentsCard`** in React, Vue, Solid and Svelte: every version an app is made of or brings along, in a fixed order (the app's own parts, the bundled programs by name, the design language, the installer), with a status and one button on a row that needs one.
+- **The logic behind both cards in the core:** `updateLine`, `updateAction`, `checkButton`, `autoSwitch`, `whatsNewLabel`, `componentRows`, `designRow`, `numberLink`, `timeAgo` and `withApp`, with the types `UpdateRoute`, `UpdateState`, `ComponentRow`, `VersionCardText` and `ComponentsCardText`. `UpdateState` knows `unchecked` and `direct`, and the store's name in its `store` state is optional.
+- **The cards' words in all 42 languages,** as `versionCard` and `componentsCard` in `componentText(lang)`. "Last checked 3 minutes ago" uses the language's own way of saying it.
+- **`wordmark` from `connectionTile()`:** it says when a brand's mark is its name written out, and the four `ConnectionRow` packages give that mark `.glim-connection-mark--wordmark`, which takes the tile's width less a margin.
 - **`createSignInApi()`** in the core: a client for the kit's sign-in contract under any root path, with the WebAuthn exchange for a passkey offered in the password field and for a new passkey, the question before a change that wants a fresh sign-in (`api.reauth`), and a report after every change. `takeSignInCode()` takes the code a sign-in service sent back out of the address.
 - **`SignInTile`** in React, Vue, Solid and Svelte: the cards Password, Password check on changes, Two-factor authentication, Passkeys, Sessions, API tokens, Sign-in services and Accounts, with their windows. The flow is `createSignInTileFlow()` in the core.
 - **`SignInReauthWindow`** in React, Vue, Solid and Svelte: asks for the password and runs the waiting change again.
@@ -44,147 +66,42 @@ The settings of the kit's sign-in come as one tile, its password question as a s
 
 ## 🎨 Design
 
-- **"Forgot password?" is a plain link**, the last line of the sign-in card under every button and reason. Only its colour moves under the pointer and the focus, and nothing underlines it.
-- **The sign-in card has at most two buttons:** Sign in, and the sign-in service's with its mark. Passkeys come through the browser's offer in the password field.
-
-## 🐛 Fixed
-
-- **A narrow `PathField` in React shows its glyph button from the first frame.** It measured its room only after the first paint, so for a moment the button stood wide with its words and then shrank. It measures before the paint now, and all four frameworks also measure once on mount, so the button's look is right before the first frame.
-
-## 🧪 Tests
-
-- **A test notes each pick button's look on the second frame after it appears** and wants it to be the look it settles on.
-
-## 📚 Docs
-
-- **"The sign-in tile"** in the design language, with its checklist, and a page for `SignInTile` with a demo of a signed-in owner and one of an open app.
-- **A sign-in, in the glossary,** is a password, a passkey or a sign-in service.
-
-## 4.8.5 - 2026-11-22
-
-When an app in the fortress turns down Open because it wants a login first, the toast now asks for an update of that app instead of a password. An app opens from elsewhere without a password, and only one on an older version still gives that answer.
-
-## 🧩 Adopting apps
-
-- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.8.5, all packages at the same number. Your code stays as it is.
-- **Flutter:** move the git dependency to v4.8.5.
-
-## 🐛 Fixed
-
-- **`openRefused.ui_no_login` asks for an update, not a password,** in all 42 languages. In English it reads "This app needs an update before you can open it from here."
-
-## 🧪 Tests
-
-- **A test pins the English and German words:** both name an update and neither names a password.
-
-## 4.8.4 - 2026-11-22
-
-`@glimstone/core` loads in a React Native app again. Hermes, the engine those apps run on, lacks several Intl helpers that a browser has, and the core built one of them while it loaded, so the app stopped before its first screen.
-
-## 🧩 Adopting apps
-
-- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.8.4, all packages at the same number. Your code stays as it is.
-- **Flutter:** move the git dependency to v4.8.4.
-
-## 🐛 Fixed
-
-- **The core loads under Hermes.** It builds each Intl helper the first time it needs one, and only where the engine has it.
-- **The Version card works on a phone.** Where the engine cannot say "5 minutes ago", the card gives the time of the last check, or its date when that was before today.
-- **Initials, lists, counts and sorting get by without the missing helpers.** An initial is then the first character, so an accent typed as a separate mark is left off. A list is joined with commas, a count picks between the forms for one and for more, and numbers in a sorted column still come in their order.
-
-## 🧪 Tests
-
-- **A test loads the whole core with the helpers taken away:** Segmenter, RelativeTimeFormat, ListFormat, DisplayNames and PluralRules. It fills the words in all 42 languages that way.
-- **CI runs the core under Hermes itself.** It bundles the core into one script and runs it with the Hermes command line tool, which has no Intl at all.
-
-## 4.8.3 - 2026-11-22
-
-The Version card says "Not checked yet" until an app has looked for updates, a phone app names the store it really came from, and a row in the Components card breaks before its end on a narrow card.
-
-## 🧩 Adopting apps
-
-- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.8.3, all packages at the same number.
-- **Before the first check,** hand the card `state: { kind: "unchecked" }`. A `current` state without `checkedAt` shows the same words, because "Up to date" needs a check behind it, so pass `checkedAt` with every `current`.
-- **Name the store your app came from:** pass `store` with the store's own name, such as F-Droid or Google Play. Leave `store` out where the app cannot tell, and the card says "Updates come through the store you got the app from."
-- **An app installed from a downloaded file,** such as an APK from the release page, takes `state: { kind: "direct" }` and says "New versions come as a download on the release page."
-- **Your own copy of the stylesheet:** copy `tokens.css` again. It brings `.glim-version-end`, which holds a component row's status, button and number together, and `.glim-version-tail`, which keeps the button and the number on one line. It also makes a version number a 24px target and lets the Version card's head wrap.
-- **Flutter:** move the git dependency to v4.8.3.
-
-## ✨ Added
-
-- **Two states for `InfoVersionCard`:** `unchecked` and `direct`, in React, Vue, Solid and Svelte, with their words in all 42 languages.
-- **A store without a name:** `store` in the `store` state is optional.
-
-## 🎨 Design
-
-- **"Not checked yet" before the first check.** The card no longer claims "Up to date" before it has looked.
-- **A component row breaks before its end.** On a narrow card the status, the button and the number move under the name together. The button and the number always share one line at the end of the row, and where the status leaves them no room, at 390px in German for one, it stands on a line of its own above them, so nothing is cut off and the page never scrolls sideways.
-- **A version number is a 24px target for a finger.** It looks as before: plain text in the text colour, the accent only under the pointer.
-- **A long build number drops under the app's name** on a phone, where it ran over the name.
-
-## 4.8.2 - 2026-11-21
-
-The Info tile has four cards in every app: Version, Components, Help and About. The Version card holds the app with its number, the update switch and one last row with where the updates stand and the buttons that go with it. Every other number moves to the Components card, and every number reads as plain text that opens its project's newest release.
-
-## 🧩 Adopting apps
-
-- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.8.2, all packages at the same number.
-- **InfoVersionCard takes new props.** It shows the app alone. Pass `name`, `version`, `repoUrl`, `route` and `state`, with `onCheck`, `onUpdate`, `onRestart`, `guideUrl`, `onWhatsNew` and `unseen`. `rows`, `updateCheck`, `onReleaseNotes` and `whatsNew` are gone, so a card that still passes them stops building.
-- **Say how your app gets a new version** with `route`: `install` for a desktop build that fetches and installs its own updates, `guide` for a container, `plugins` for a plugin on a host with its own plugin manager, `store` for a phone app. The card picks the one button from it: "Update now" and then "Restart for 2.10.0", "How to update", "Update in the Plugins tab", or none.
-- **Hand the card where the updates stand** as `state`: `current` with `checkedAt`, `checking`, `available` with the new version, `downloading` with a percentage, `ready`, `failed` with a reason, or `store` with the store's name. The card checks nothing itself.
-- **"What's new" is the one name** for the release notes and the window of changes. Drop a "New · n" or "Release notes" button of your own. While `state` says a new version is available, let `onWhatsNew` open that version's notes: the card then hides "Check for updates", and the new number carries no link.
-- **Register glyphs for the buttons:** `version.whatsNew` (the gift, `IconWhatsNew`), `version.check` (`IconSync`), `version.update`, `version.restart`, `version.guide`, `version.plugins` and `components.update`.
-- **The update switch** comes as `autoUpdate` with `onAutoUpdateChange` (`v-model:auto-update` in Vue, `bind:autoUpdate` in Svelte). It reads "Update automatically" on a build that installs its own updates and "Check for updates automatically" on a container. Leave `autoUpdate` out and the card draws no switch.
-- **Move every other version to `InfoComponentsCard`:** pass `rows` with a `kind` (`part` for the app's own engine or server, `tool` for a bundled program, `installer` for a desktop build's installer) and a `hint` that says what it is. The hint goes in the (i) beside the name, never under it. The card adds GlimStone's own row and sorts the rest.
-- **A project without releases in its repository**, such as ffmpeg, takes a `releasePage` that its number opens instead.
-- **The components switch is only for an app that fetches newer components by itself while it runs.** A program that ships with the app moves with the app's own release, so leave `autoUpdate` and `onUpdate` out there.
-- **InfoTile wants `components`** between `version` and `help`.
-- **The words come with GlimStone:** pass `componentText(lang).versionCard` and `componentText(lang).componentsCard` as `text`. They come in all 42 languages, and "{app}" is filled from `name`.
-- **The About card is called "About" alone,** never with the app's name.
-- **Your own copy of the stylesheet:** copy `tokens.css` again. It brings the Version card's head and last row, the dot before "What's new", the progress bar and the (i) beside a component's name.
-- **Flutter:** move the git dependency to v4.8.2.
-
-## ✨ Added
-
-- **`InfoComponentsCard`** in React, Vue, Solid and Svelte: every version an app is made of or brings along, in a fixed order (the app's own parts, the bundled programs by name, the design language, the installer), with a status and one button on a row that needs one.
-- **The logic behind both cards in the core:** `updateLine`, `updateAction`, `checkButton`, `autoSwitch`, `whatsNewLabel`, `componentRows`, `designRow`, `numberLink`, `timeAgo` and `withApp`, with the types `UpdateRoute`, `UpdateState`, `ComponentRow`, `VersionCardText` and `ComponentsCardText`.
-- **The cards' words in all 42 languages,** as `versionCard` and `componentsCard` in `componentText(lang)`. "Last checked 3 minutes ago" uses the language's own way of saying it.
-
-## 🎨 Design
-
-- **One last row in the Version card.** Where the updates stand sits at its start, and the buttons at its end: "What's new", then "Check for updates" while there is something to look for, then the one action, filled with the accent. On a narrow card the buttons drop under the words.
-- **A version number reads as plain text.** It takes the accent's ink under the pointer, has no frame, fill or underline, and opens the newest release of its project.
-- **No sub-lines in the Components card.** What a component is sits in the (i) beside its name.
-- **Version, Components, Help, About** is the order in every app, and no app adds a card of its own for updates or helper programs.
-
-## 4.8.1 - 2026-11-20
-
-A connection row sets its buttons off the well and keeps its badges a size smaller, a wordmark starts where a symbol would, and on a wide screen the docs stand in the middle.
-
-## 🧩 Adopting apps
-
-- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.8.1, all packages at the same number.
-- **A quiet button in a connection row** steps up a surface by itself. Drop any override you added to keep it from vanishing into the row.
-- **Your own copy of the stylesheet:** copy `tokens.css` again. It brings the connection row's buttons and badges, the width of a wordmark on a connection tile, the place of a wordmark on a picker tile and the soft edge of a mark that reaches its box.
-- **Flutter:** move the git dependency to `ref: v4.8.1`.
-- **Version:** `GLIMSTONE_VERSION` from `@glimstone/core` reads 4.8.1.
-
-## ✨ Added
-
-- **`wordmark` from `connectionTile()`:** it says when a brand's mark is its name written out, and the four `ConnectionRow` packages give that mark `.glim-connection-mark--wordmark`, which takes the tile's width less a margin.
-
-## 🎨 Design
-
 - **Every button in a connection row stands a surface step off the row.** The row is a well on `--carbon-surface2`, so a button rests on `--carbon-surface3` and lights up in `--hover` under the pointer, in light, dark and OLED. A quiet button an app draws into the row steps up the same way.
 - **A connection badge is a size below the buttons.** It stands at the end of the name's line, 1.5rem high, and moves under the name before the name is cut. A neutral badge has no ring and is filled halfway between the well and the buttons' surface.
-- **A wordmark on a picker tile starts where a symbol would**, so a row of tiles no longer draws the eye to the ones that carry one. A long wordmark may take 7rem, so ddownload and Mega-Debrid read at the size of a name.
+- **A wordmark on a picker tile starts where a symbol would**, so a row of tiles does not draw the eye to the ones that carry one. A long wordmark may take 7rem, so ddownload and Mega-Debrid read at the size of a name.
 - **A wordmark on a connection tile** spans the tile less a margin, where it was squeezed into a symbol's square.
+- **One last row in the Version card.** Where the updates stand sits at its start, and the buttons at its end: "What's new", then "Check for updates" while there is something to look for, then the one action, filled with the accent. On a narrow card the buttons drop under the words.
+- **"Not checked yet" before the first check.** The card says "Up to date" only once it has looked.
+- **A version number reads as plain text.** It takes the accent's ink under the pointer, has no frame, fill or underline, and opens the newest release of its project. For a finger it is a 24px target.
+- **A long build number drops under the app's name** on a phone.
+- **No sub-lines in the Components card.** What a component is sits in the (i) beside its name.
+- **A component row breaks before its end.** On a narrow card the status, the button and the number move under the name together. The button and the number always share one line at the end of the row, and where the status leaves them no room, at 390px in German for one, it stands on a line of its own above them, so nothing is cut off and the page never scrolls sideways.
+- **Version, Components, Help, About** is the order in every app, and no app adds a card of its own for updates or helper programs.
+- **"Forgot password?" is a plain link**, the last line of the sign-in card under every button and reason. Only its colour moves under the pointer and the focus, and nothing underlines it.
+- **The sign-in card has at most two buttons:** Sign in, and the sign-in service's with its mark. Passkeys come through the browser's offer in the password field.
 
 ## 🐛 Fixed
 
 - **AllDebrid on the dark ground.** Its black outline and A turn white, where they vanished, and the black behind its yellow letters is left out, where it drew a white rim.
 - **A mark that reaches its box keeps its soft edge.** A tile's middle rarely falls on a whole pixel, and the SVG's own clip shaved the edge of a shape drawn to the box, so BestDebrid's circle looked cut off.
 - **The docs stand in the middle of a wide screen.** Past 88rem the page keeps its width and stands between the nav and the window's edge, where the contents list moves, instead of clinging to the nav. Opening Make it yours still moves neither.
+- **`@glimstone/core` loads in a React Native app.** Hermes, the engine those apps run on, lacks several Intl helpers that a browser has, and the core built one of them while it loaded, so the app stopped before its first screen. The core builds each Intl helper the first time it needs one, and only where the engine has it.
+- **The Version card works on a phone.** Where the engine cannot say "5 minutes ago", the card gives the time of the last check, or its date when that was before today.
+- **Initials, lists, counts and sorting get by without the missing helpers.** An initial is then the first character, so an accent typed as a separate mark is left off. A list is joined with commas, a count picks between the forms for one and for more, and numbers in a sorted column still come in their order.
+- **`openRefused.ui_no_login` asks for an update, not a password,** in all 42 languages. An app opens from elsewhere without a password, so an app in the fortress that turns down Open because it wants a login first is on an older version. In English it reads "This app needs an update before you can open it from here."
+- **A narrow `PathField` in React shows its glyph button from the first frame.** It measured its room only after the first paint, so for a moment the button stood wide with its words and then shrank. It measures before the paint now, and all four frameworks also measure once on mount, so the button's look is right before the first frame.
+
+## 🧪 Tests
+
+- **A test loads the whole core with the helpers taken away:** Segmenter, RelativeTimeFormat, ListFormat, DisplayNames and PluralRules. It fills the words in all 42 languages that way.
+- **CI runs the core under Hermes itself.** It bundles the core into one script and runs it with the Hermes command line tool, which has no Intl at all.
+- **A test pins the English and German words of a refused Open:** both name an update and neither names a password.
+- **A test notes each pick button's look on the second frame after it appears** and wants it to be the look it settles on.
+
+## 📚 Docs
+
+- **"The sign-in tile"** in the design language, with its checklist, and a page for `SignInTile` with a demo of a signed-in owner and one of an open app.
+- **A sign-in, in the glossary,** is a password, a passkey or a sign-in service.
 
 ## 4.8.0 - 2026-11-20
 
