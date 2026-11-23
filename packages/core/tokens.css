@@ -3834,6 +3834,54 @@
     font-variant-numeric: tabular-nums;
   }
 
+  /* The notification card (NotifyCard): the channels as rows over the card's
+     foot, and each channel's form in a window. */
+  .glim-notify-body,
+  .glim-notify-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    min-width: 0;
+  }
+  .glim-notify-rows,
+  .glim-notify-checks {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .glim-notify-foot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--space-4);
+  }
+  .glim-notify-text,
+  .glim-notify-said,
+  .glim-notify-problem {
+    margin: 0;
+    font-size: var(--text-subline);
+    color: var(--carbon-text-sub);
+  }
+  .glim-notify-said--fail,
+  .glim-notify-problem { color: var(--status-fail-text); }
+  .glim-notify-headers {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    min-width: 0;
+  }
+  .glim-notify-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4);
+  }
+  .glim-notify-header > * {
+    flex: 1 1 9rem;
+    min-width: 0;
+  }
+  .glim-notify-header > .glim-btn { flex: none; }
+
   /* What stands in place of a control the environment forbids
      (UnavailableNotice). A paragraph, because there is no control to hang an
      info bubble off. */
