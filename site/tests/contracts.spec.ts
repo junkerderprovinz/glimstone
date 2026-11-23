@@ -4700,6 +4700,131 @@ test.describe("useDragArmed", () => {
   }
 });
 
+test.describe("NotifyCard", () => {
+  const demo = (page: Page) => stage(page, "NotifyCardBasic");
+  const row = (page: Page, id: string) => demo(page).locator(`[data-notify-channel="${id}"]`);
+  const said = (page: Page) => demo(page).locator('[data-hook="said"]');
+  const dialog = (page: Page, name: string) => page.getByRole("dialog", { name });
+
+  test("[notify-rows] one row per channel, with its mark, its line and its buttons in view", async ({ page }) => {
+    await open(page, "/components/notify-card");
+    await expect(demo(page).locator("[data-notify-channel]")).toHaveCount(4);
+    await expect(demo(page).locator(".glim-list-row-title")).toHaveText(["ntfy", "Team chat", "Email (SMTP)", "Unraid notifications"]);
+    await expect(row(page, "ntfy").locator(".glim-list-row-meta")).toHaveText("https://ntfy.sh/bravo-alerts · Only on failure");
+    await expect(row(page, "smtp").locator(".glim-list-row-meta")).toHaveText("me@example.com · Switched off");
+    await expect(row(page, "ntfy").locator(".glim-brand-svg")).toHaveCount(1);
+    for (const name of ["Send test", "Edit", "Remove channel"]) await expect(row(page, "ntfy").getByRole("button", { name })).toBeVisible();
+    await expect(row(page, "ntfy").getByRole("switch")).toHaveAttribute("aria-checked", "true");
+  });
+
+  test("[notify-switch] a switch saves on the flip, and one the kit refuses opens the form", async ({ page }) => {
+    await open(page, "/components/notify-card");
+    const ntfy = row(page, "ntfy").getByRole("switch");
+    await ntfy.click();
+    await expect(said(page)).toHaveText("Settings saved");
+    await expect(ntfy).toHaveAttribute("aria-checked", "false");
+    await expect(row(page, "ntfy").locator(".glim-list-row-meta")).toContainText("Switched off");
+    await row(page, "smtp").getByRole("switch").click();
+    const form = dialog(page, "Edit Email (SMTP)");
+    await expect(form).toBeVisible();
+    await expect(form.locator(".glim-field-error")).toHaveText("This one still needs filling in.");
+    await expect(row(page, "smtp").getByRole("switch")).toHaveAttribute("aria-checked", "false");
+  });
+
+  test("[notify-test] a row's test says in its line how it went", async ({ page }) => {
+    await open(page, "/components/notify-card");
+    await row(page, "ntfy").getByRole("button", { name: "Send test" }).click();
+    await expect(row(page, "ntfy").locator(".glim-list-row-meta")).toHaveText("https://ntfy.sh/bravo-alerts · Sent");
+    const discord = row(page, "discord").getByRole("button", { name: "Send test" });
+    await discord.click();
+    await expect(row(page, "discord").locator(".glim-list-row-meta")).toContainText("The service turned down the token or password.");
+    await expect(discord).toHaveClass(/glim-btn--danger/);
+  });
+
+  test("[notify-add] the picker's services come first and the webhook last, and Save adds the channel", async ({ page }) => {
+    await open(page, "/components/notify-card");
+    await demo(page).getByRole("button", { name: "Add channel" }).click();
+    const picker = dialog(page, "Add channel");
+    const names = await picker.locator(".glim-provider-pick button.glim-readme-btn").evaluateAll((all) => all.map((b) => b.getAttribute("aria-label")));
+    expect(names[0]).toMatch(/^Apprise/);
+    expect(names.at(-1)).toMatch(/^Webhook/);
+    await picker.getByRole("button", { name: /^Gotify/ }).click();
+    await picker.getByLabel("Server URL").fill("https://push.example.com");
+    await picker.getByRole("button", { name: "Save" }).click();
+    await expect(picker).toBeHidden();
+    await expect(said(page)).toHaveText("Settings saved");
+    await expect(demo(page).locator("[data-notify-channel]")).toHaveCount(5);
+    await expect(row(page, "gotify").locator(".glim-list-row-meta")).toHaveText("https://push.example.com · Only on failure");
+  });
+
+  test("[notify-problem] a refused save keeps the form open with the reason under its field", async ({ page }) => {
+    await open(page, "/components/notify-card");
+    await demo(page).getByRole("button", { name: "Add channel" }).click();
+    const picker = dialog(page, "Add channel");
+    await picker.getByRole("button", { name: /^ntfy/ }).click();
+    await picker.getByLabel("Topic URL").fill("ntfy.sh/bravo");
+    await picker.getByRole("button", { name: "Save" }).click();
+    await expect(picker.locator(".glim-field-error")).toHaveText("Use an address that starts with http:// or https://.");
+    await expect(picker).toBeVisible();
+    await expect(demo(page).locator("[data-notify-channel]")).toHaveCount(4);
+  });
+
+  test("[notify-secret] a stored token stays out of its field and a moved address asks for it again", async ({ page }) => {
+    await open(page, "/components/notify-card");
+    await row(page, "ntfy").getByRole("button", { name: "Edit" }).click();
+    const form = dialog(page, "Edit ntfy");
+    const token = form.getByLabel("Access token (optional)", { exact: true });
+    await expect(token).toHaveValue("");
+    await expect(form.locator(".glim-field-note")).toHaveText("Saved. Leave the field empty to keep it.");
+    await form.getByLabel("Topic URL").fill("https://ntfy.example.com/bravo");
+    await expect(form.locator(".glim-field-note")).toHaveText("The new address is saved once you enter this again.");
+  });
+
+  test("[notify-events] the app's event kinds are boxes, and the last ticked one stays", async ({ page }) => {
+    await open(page, "/components/notify-card");
+    await row(page, "discord").getByRole("button", { name: "Edit" }).click();
+    const form = dialog(page, "Edit Team chat");
+    const box = (name: string) => form.getByRole("checkbox", { name });
+    await expect(box("A file request got an upload")).toHaveAttribute("aria-checked", "true");
+    await expect(box("Storage is almost full")).toHaveAttribute("aria-checked", "false");
+    await box("A file request got an upload").click();
+    await expect(box("A file request got an upload")).toHaveAttribute("aria-checked", "true");
+    await form.getByRole("button", { name: "Cancel" }).click();
+    await row(page, "ntfy").getByRole("button", { name: "Edit" }).click();
+    for (const b of await dialog(page, "Edit ntfy").getByRole("checkbox").all()) await expect(b).toHaveAttribute("aria-checked", "true");
+  });
+
+  test("[notify-idle] a kind that cannot send here says so in its row and its form", async ({ page }) => {
+    await open(page, "/components/notify-card");
+    await expect(row(page, "unraid").locator(".glim-badge")).toHaveText("Sends nothing here");
+    await expect(row(page, "ntfy").locator(".glim-badge")).toHaveCount(0);
+    await row(page, "unraid").getByRole("button", { name: "Edit" }).click();
+    await expect(dialog(page, "Edit Unraid notifications").locator(".glim-notice-reason")).toHaveText(/no Unraid server/);
+  });
+
+  test("[notify-remove] a channel goes only after a question that names it", async ({ page }) => {
+    await open(page, "/components/notify-card");
+    await row(page, "ntfy").getByRole("button", { name: "Remove channel" }).click();
+    const ask = page.getByRole("alertdialog").or(page.getByRole("dialog", { name: "Remove channel" }));
+    await expect(ask).toContainText("Remove ntfy? It stops sending right away.");
+    await ask.getByRole("button", { name: "Remove channel" }).click();
+    await expect(demo(page).locator("[data-notify-channel]")).toHaveCount(3);
+    await expect(said(page)).toHaveText("Settings saved");
+  });
+
+  test("[notify-phone] the card and a form fit a phone without a sideways scroll", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await open(page, "/components/notify-card");
+    const wide = () => page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
+    expect(await wide()).toBe(false);
+    await row(page, "smtp").getByRole("button", { name: "Edit" }).click();
+    const form = dialog(page, "Edit Email (SMTP)");
+    await expect(form).toBeVisible();
+    expect(await form.evaluate((d) => d.scrollWidth <= d.clientWidth + 1)).toBe(true);
+    expect(await wide()).toBe(false);
+  });
+});
+
 test.describe("SignInTile", () => {
   const demo = (page: Page, name = "SignInTileBasic") => stage(page, name);
   const cardOf = (page: Page, card: string, name?: string) => demo(page, name).locator(`[data-signin-card="${card}"]`);

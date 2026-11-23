@@ -2,6 +2,24 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+## 🧩 Adopting apps
+
+- **Notifications get a card of their own.** Draw `NotifyCard` in the settings with an `api` of three calls in the kit's notify format: `load` answers the stored config with its secrets masked, `save` answers `{ ok: true }` or the kit's problems, and `test` answers `{ ok: true }` or the kit's result code. Pass your app's name as `app` and `NOTIFY_PROVIDERS` as `providers`. Whatever you keep beside the channels in the config comes back as it went out.
+- **The words come with GlimStone:** pass `notifyCardText(lang)` from `@glimstone/core/notifyCardTexts` as `text`. It comes in all 42 languages, and `notifyCardTextEn` comes with the core.
+- **Name the events your app sends** as `events`, each an `id` and a `label`. Each channel then picks the ones it carries, and a channel with every box ticked also gets the events you add later.
+- **A Healthchecks channel** can give a key of your own, such as a job, a check of its own. Pass those keys as `checks`.
+- **A kind that cannot send where your app runs,** such as Unraid's notifications in a container on another host, goes into `unavailable` with the sentence that says why. Its row then wears "Sends nothing here" while it is on.
+
+## ✨ Added
+
+- **`NotifyCard` in React, Vue, Solid and Svelte**, with the same markup in all four. Each channel is one row with its mark, where it sends and when, its switch, Send test, Edit and Remove. Add channel opens the catalog's picker and then the kind's form in the same window, and Edit opens the form in a window of its own. The flow lives in the core as `createNotifyCardFlow`, with the kit's ten kinds, a new channel's defaults, the stored secrets that never come back to the browser, the kit's problems under their fields and a sentence for every result code.
+
+## 🧪 Tests
+
+- **Every row of the card's contract has a test in all four frameworks**, and the flow has node tests of its own, from a moved address that waits for its secret to a switch the kit turns down.
+
 ## 4.9.0 - 2026-11-23
 
 The settings of the kit's sign-in come as one tile, its password question as a small window, and the sign-in card takes passkeys from the browser, one sign-in service with its mark and a plain link for a forgotten password. A password stays optional throughout: an open app keeps every card, a short password gets only a quiet hint, and nothing is locked without one. The Info tile has four cards in every app: Version, Components, Help and About. The Version card says where the updates stand and carries the buttons that go with it, and every other number moves to the Components card. `@glimstone/core` loads in a React Native app, and a connection row sets its buttons off the well. A narrow path field in React no longer shows its button wide for a moment.

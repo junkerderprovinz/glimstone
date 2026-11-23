@@ -53,6 +53,7 @@ const COMPONENTS = {
   Table: "react/Table.tsx",
   SignInCard: "react/SignInCard.tsx",
   SignInTile: "react/SignInTile.tsx",
+  NotifyCard: "react/NotifyCard.tsx",
   SignInReauthWindow: "react/SignInReauthWindow.tsx",
   Fortress: "react/Fortress.tsx",
   FortressPairing: "react/Fortress.tsx",

@@ -816,6 +816,71 @@ import { openRefusalText } from "@glimstone/core";
   );
 }
 
+export function NotifyCardPage() {
+  return (
+    <>
+      <p className="lead">
+        The settings card "Notifications" of an app on the kit's notify package: one row per channel, the catalog's
+        picker to add one, and each kind's form in a window. The app hands in three calls and its event kinds.
+      </p>
+      <Head file="react/NotifyCard.tsx" />
+      <Demo name="NotifyCardBasic" />
+      <Usage
+        code={`import { NotifyCard } from "@glimstone/vue";
+import { notifyCardText } from "@glimstone/core/notifyCardTexts";
+import { NOTIFY_PROVIDERS } from "@glimstone/core/notifyProviders";
+
+const api = {
+  load: () => get("/api/notify"),
+  save: (config) => post("/api/notify", config),
+  test: (channel) => post("/api/notify/test", { channel }),
+};
+
+<NotifyCard
+  :api="api"
+  :text="notifyCardText(lang)"
+  app="CastleParcel"
+  :lang="lang"
+  :providers="NOTIFY_PROVIDERS"
+  :events="[{ id: 'upload', label: t('notify.upload') }]"
+  :notify="toast"
+/>`}
+      />
+      <H2>The three calls</H2>
+      <p>
+        <code>load</code> answers the stored config as the kit's <code>Redacted</code> hands it out, every secret as{" "}
+        <code>********</code>, with whatever the app keeps beside the channels. <code>save</code> gets that config back
+        with the changed channels and answers <code>{"{ ok: true }"}</code>, or <code>{"{ ok: false, problems }"}</code>{" "}
+        with the kit's problems, which the card puts under their fields. <code>test</code> sends one channel as it stands,
+        saved or not, and answers <code>{"{ ok: true }"}</code> or the kit's result code. A <code>message</code> in either
+        answer is the app's own words and wins over the card's.
+      </p>
+      <H2>Rules</H2>
+      <ul>
+        <li>One row per channel, with its mark, the name over where it sends and when, and its switch, Test, Edit and Remove.</li>
+        <li>
+          The switch saves on the flip and snaps back when the kit refuses. A channel the kit cannot use yet opens its form
+          with the reason under the field.
+        </li>
+        <li>
+          A form saves with Save, and its Test sends what stands in the form. A refusal keeps the form open with the reason
+          under the field it is about.
+        </li>
+        <li>A stored secret is never shown. Its field stays empty and keeps it, and a changed address asks for it again.</li>
+        <li>Remove asks first, by the channel's name, and nothing about it is red.</li>
+        <li>
+          The app names the event kinds it sends. Every box starts ticked, and a channel with every box ticked also gets the
+          kinds the app adds later.
+        </li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="NotifyCard" />
+      <H2>API</H2>
+      <PropsTable of="NotifyCard" />
+    </>
+  );
+}
+
 export function SignInTilePage() {
   return (
     <>

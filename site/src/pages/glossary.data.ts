@@ -998,6 +998,18 @@ export const GLOSSARY: GlossarySection[] = [
         },
       },
       {
+        id: "notify-card",
+        en: "Notification card",
+        de: "Benachrichtigungskarte",
+        proposal: true,
+        code: ["NotifyCard", "createNotifyCardFlow", ".glim-notify-body"],
+        components: ["NotifyCard"],
+        text: {
+          en: "The settings card with an app's notification channels: one row per channel, the picker to add one and each kind's form.",
+          de: "Die Einstellungskarte mit den Benachrichtigungskanälen einer App: eine Zeile pro Kanal, der Picker zum Hinzufügen und das Formular jeder Art.",
+        },
+      },
+      {
         id: "hover-card",
         en: "Hover card",
         de: "Vorschaukarte",

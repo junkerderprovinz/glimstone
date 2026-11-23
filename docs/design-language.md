@@ -806,6 +806,19 @@ The settings of the kit's sign-in stand in one tile, "Sign-in", in every app. `S
 - [ ] `SignInReauthWindow` once beside the tiles, and the change runs again after the password.
 - [ ] Light, dark and OLED.
 
+## The notification card
+
+An app's notification channels stand in one card, "Notifications", in its settings. `NotifyCard` draws it, and the flow behind it lives in the core (`createNotifyCardFlow`). The app hands in three calls in the kit's notify format, its name, the notification catalog and the events it sends, so the card names no app and no route of its own.
+
+- **One row per channel**, the same row as every list of the person's own things: the kind's mark, the name over a quiet line with where it sends and when, then its switch and Send test, Edit and Remove as glyph buttons that stay in view. A row's test reports in that quiet line and in its button, red with a cross when the far end said no.
+- **The switch saves on the flip** and snaps back with a shake when the kit refuses ("Saving"). A channel the kit cannot use yet opens its form with the reason under the field, so the person sees what is missing.
+- **A form saves with Save**, since a server's address and its token only make sense together. Send test sends what stands in the form, saved or not. A refusal keeps the form open, with the reason under the field it is about and a reason without a field at the top.
+- **Add channel opens the catalog's picker** ("Pickers and wizards"): the services by their marks, then email and the webhook last. A pick opens the kind's form in the same window, and Back returns to the tiles.
+- **A stored secret never comes back to the browser.** Its field stays empty and a quiet line says it is kept while the field stays so. When the address it belongs to changes, the line asks for it again, since the kit gives a secret back only to the place it was saved for.
+- **The app names its events.** Each channel lists them as boxes, all ticked to begin with, and a channel with every box ticked also gets what the app adds later. The last ticked box stays ticked.
+- **A kind that cannot send where the app runs** wears "Sends nothing here" in its row while it is on, and its form says why in the app's words.
+- **Remove asks first, by the channel's name**, and nothing about it is red ("Destructive and confirmable actions").
+
 ## Dates and times
 
 **A day with a time is spelled out wherever there is room.** *Sunday, 04:10* reads at a glance, *Sun 04:10* has to be decoded. Today and yesterday are words, and an older date keeps its digits.

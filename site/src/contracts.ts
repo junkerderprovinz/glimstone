@@ -662,6 +662,20 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "signin-tile-modes", when: "The theme is light, dark or OLED", then: "The cards, rows, fields and windows take that theme's surfaces, and the QR code stays dark on white." },
     ],
   },
+  NotifyCard: {
+    rows: [
+      { id: "notify-rows", when: "The app has channels", then: "Each stands in one row: the kind's mark, the name over a quiet line with where it sends and when, then its switch and Test, Edit and Remove as glyph buttons that stay in view." },
+      { id: "notify-switch", keys: ["Space"], when: "A row's switch is flipped", then: "It saves at once and says so. A channel the kit cannot use yet snaps back and opens its form with the reason under the field." },
+      { id: "notify-test", when: "Test is pressed in a row", then: "The row's quiet line says how it went, and a refused test turns the button red with a cross." },
+      { id: "notify-add", when: "Add channel is pressed", then: "The picker shows the services by their marks, then email and the webhook last. A pick opens the kind's form in the same window, and Save adds the channel." },
+      { id: "notify-problem", when: "A save is refused", then: "The form stays open, and the reason stands under the field it is about." },
+      { id: "notify-secret", when: "A channel with a stored secret is edited", then: "The secret's field is empty and says the secret is kept while it stays so. A changed address asks for it again." },
+      { id: "notify-events", when: "The app passes its event kinds", then: "The form lists them as boxes, all ticked for a channel that takes every kind. The last ticked box stays ticked." },
+      { id: "notify-idle", when: "A kind sends nothing where the app runs", then: "Its row wears Sends nothing here while it is on, and its form says why." },
+      { id: "notify-remove", when: "Remove is pressed", then: "A question names the channel first, and the channel goes only on its confirmation." },
+      { id: "notify-phone", when: "The window is a phone's, 390px wide", then: "The card and a channel's form fit without a sideways scroll." },
+    ],
+  },
   useDragArmed: {
     rows: [
       { id: "drag-wiggle", when: "An item of a reorderable list is held", then: "Every other item trembles out of step with its neighbours, and the held one does not. On release they stop." },
