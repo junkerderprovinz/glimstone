@@ -5,8 +5,9 @@
  *
  * readme-stage.tsx lays out every scene on the site's own Vite config and
  * styles, so a change to a component or a token shows up on the next run.
- * The headings use the house's store fonts, Bree Serif and Lato, fetched to
- * the OS temp dir.
+ * The headings are set in Bree Serif Light and the captions in Bree Light,
+ * read from HOUSE_FONTS (default %LOCALAPPDATA%\halleluja-fonts). The
+ * browser window bar keeps Lato, fetched to the OS temp dir.
  *
  * Needs the repo's dependencies (npm ci) and Playwright's Chromium.
  * Run: node .github/assets/gen-readme-pictures.mjs [name ...]
@@ -44,10 +45,13 @@ async function cached(file, url) {
   return readFileSync(path);
 }
 const dataUrl = (buf, type) => `data:${type};base64,${buf.toString("base64")}`;
-const fonts = "https://github.com/google/fonts/raw/main/ofl";
+// The house typeface is licensed, so it is read from a local folder and never committed.
+const houseFonts = process.env.HOUSE_FONTS ?? join(process.env.LOCALAPPDATA ?? tmpdir(), "halleluja-fonts");
+const house = (file) => dataUrl(readFileSync(join(houseFonts, file)), "font/ttf");
 const FONT_CSS = `
-@font-face { font-family: "Bree Serif"; src: url(${dataUrl(await cached("BreeSerif-Regular.ttf", `${fonts}/breeserif/BreeSerif-Regular.ttf`), "font/ttf")}); }
-@font-face { font-family: Lato; src: url(${dataUrl(await cached("Lato-Regular.ttf", `${fonts}/lato/Lato-Regular.ttf`), "font/ttf")}); }`;
+@font-face { font-family: "Bree Serif"; font-weight: 300; src: url(${house("bree-serif-light.ttf")}); }
+@font-face { font-family: Bree; src: url(${house("bree-light.ttf")}); }
+@font-face { font-family: Lato; src: url(${dataUrl(await cached("Lato-Regular.ttf", "https://github.com/google/fonts/raw/main/ofl/lato/Lato-Regular.ttf"), "font/ttf")}); }`;
 
 // The site's tokens and props are generated; a fresh clone has none yet.
 execFileSync(process.execPath, ["gen.mjs"], { cwd: SITE, stdio: "ignore" });
@@ -87,6 +91,7 @@ async function shoot({ scene, engine, entry, size: [width, height] }, theme) {
   await page.waitForLoadState("networkidle", { timeout: 180_000 });
   if (scene === "glossary") await page.waitForSelector("iframe[data-ready]", { timeout: 60_000 });
   if (scene === "strip") await page.hover(".rs-with-tip .glim-info-icon");
+  await page.evaluate(() => Promise.all(['300 1em "Bree Serif"', "1em Bree"].map((font) => document.fonts.load(font))));
   await page.evaluate(() => document.fonts.ready);
   // The toast and the cells enter on the motion engine's curve; let them land.
   await page.waitForTimeout(900);
