@@ -58,7 +58,7 @@ body {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  font-family: Lato, sans-serif;
+  font-family: Bree, sans-serif;
 }
 .rs-wall {
   position: absolute;
@@ -203,7 +203,7 @@ body {
   margin: 0;
 }
 .rs-ground figcaption {
-  font: 400 27px/1 Lato, sans-serif;
+  font: 400 27px/1 Bree, sans-serif;
   color: var(--sub);
   margin: 0 0 12px 2px;
 }
@@ -234,7 +234,7 @@ body {
   stroke-linecap: round;
 }
 .rs-tick {
-  font: 400 24px Lato, sans-serif;
+  font: 400 24px Bree, sans-serif;
   fill: var(--sub);
 }
 .rs-legend {
@@ -257,7 +257,7 @@ body {
   translate: 0 -8px;
 }
 .rs-legend b {
-  font: 400 36px/1 "Bree Serif", serif;
+  font: 300 36px/1 "Bree Serif", serif;
   color: var(--head);
   min-width: 112px;
 }

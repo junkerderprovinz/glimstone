@@ -13,12 +13,14 @@
  *   glimstone-banner-dark.svg/.png  dark banner
  *
  * Text is converted to paths with opentype.js so the SVG needs no font: Bree
- * Serif for the name, Lato for the claim.
+ * Serif Regular for the name, Bree Light for the claim. Both are licensed and
+ * never committed, so HOUSE_FONTS (default %LOCALAPPDATA%\halleluja-fonts)
+ * must hold them as TTF.
  *
- * Deps (global): opentype.js, @resvg/resvg-js. Fonts are fetched to the OS
- * temp dir. Run: node .github/assets/gen-banner.mjs
+ * Deps (global): opentype.js, @resvg/resvg-js.
+ * Run: node .github/assets/gen-banner.mjs
  */
-import { readFileSync, writeFileSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { tmpdir } from "node:os";
@@ -51,21 +53,9 @@ const THEMES = [
   { suffix: "-dark", bg: "#0d1117", name: "#e6edf3", claim: "#9aa4ad", logo: "logo.svg" },
 ];
 
-const fontPath = join(tmpdir(), "GlimStone-BreeSerif-Regular.ttf");
-if (!existsSync(fontPath)) {
-  const res = await fetch("https://github.com/google/fonts/raw/main/ofl/breeserif/BreeSerif-Regular.ttf");
-  if (!res.ok) throw new Error(`font fetch ${res.status}`);
-  writeFileSync(fontPath, Buffer.from(await res.arrayBuffer()));
-}
-const font = opentype.parse(readFileSync(fontPath));
-
-const claimFontPath = join(tmpdir(), "GlimStone-Lato-Regular.ttf");
-if (!existsSync(claimFontPath)) {
-  const r = await fetch("https://github.com/google/fonts/raw/main/ofl/lato/Lato-Regular.ttf");
-  if (!r.ok) throw new Error(`claim font fetch ${r.status}`);
-  writeFileSync(claimFontPath, Buffer.from(await r.arrayBuffer()));
-}
-const claimFont = opentype.parse(readFileSync(claimFontPath));
+const fonts = process.env.HOUSE_FONTS ?? join(process.env.LOCALAPPDATA ?? tmpdir(), "halleluja-fonts");
+const font = opentype.parse(readFileSync(join(fonts, "bree-serif-regular.ttf")).buffer);
+const claimFont = opentype.parse(readFileSync(join(fonts, "bree-light.ttf")).buffer);
 
 const nameW = font.getAdvanceWidth(NAME, nameSize);
 const claimW = claimFont.getAdvanceWidth(CLAIM, claimSize);
