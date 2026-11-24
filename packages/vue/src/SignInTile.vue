@@ -20,6 +20,7 @@ import {
   signInTileCards,
   signInWhen,
   signInCardNotice,
+  signInPasswordAsks,
   signInPasswordElsewhere,
   signInShortHint,
   tokenFacts,
@@ -112,6 +113,7 @@ const shown = computed(() => signInTileCards(s.value, props.cards));
 const notice = (card: "askPassword" | "twoFactor" | "passkeys" | "tokens" | "services" | "sessions" | "accounts") => signInCardNotice(props.text, s.value, card);
 const elsewhere = computed(() => signInPasswordElsewhere(props.text, s.value));
 const had = computed(() => !!s.value.me?.password);
+const asks = computed(() => signInPasswordAsks(s.value, props.cards) && !s.value.editing);
 const glyph = (key: string) => glyphFor(key) as Component;
 const testFace = (id: string) => connectionTestFace(s.value.rowTests[id]);
 function serviceGlyph(x: SignInService): Component {
@@ -138,9 +140,20 @@ function ask(what: SignInTileRemoval, id: string, name: string) {
         :hue-index="hueStart + i"
         data-signin-card="password"
       >
-        <p v-if="elsewhere" class="glim-signin-tile-text">{{ elsewhere }}</p>
+        <div v-if="elsewhere" class="glim-signin-tile-body">
+          <p class="glim-signin-tile-text">{{ elsewhere }}</p>
+          <FieldRow v-if="asks" :label="text.askPassword.label" :hint="text.askPassword.when">
+            <Toggle :model-value="!!s.settings?.askPassword" data-signin-tile="ask-password" @update:model-value="flow.setAskPassword($event)" />
+          </FieldRow>
+        </div>
         <div v-else class="glim-signin-tile-body">
-          <FieldRow :label="text.password.state" :value="had ? text.password.set : text.password.none" :tone="had ? undefined : 'warn'" />
+          <FieldRowGroup v-if="had">
+            <FieldRow :label="text.password.state" :value="text.password.set" />
+            <FieldRow v-if="asks" :label="text.askPassword.label" :hint="text.askPassword.when">
+              <Toggle :model-value="!!s.settings?.askPassword" data-signin-tile="ask-password" @update:model-value="flow.setAskPassword($event)" />
+            </FieldRow>
+          </FieldRowGroup>
+          <EmptyState v-else-if="!s.editing" nested :glyph="glyph(keys.setPassword)" :title="text.password.none" :hint="text.password.noneHint" />
           <FieldRowGroup v-if="s.editing">
             <FieldRow v-if="had" :label="text.password.current">
               <PasswordField autocomplete="current-password" :model-value="s.draft.current" :text="eye" :error="err('current')" @update:model-value="flow.set('current', $event)" />
@@ -188,10 +201,11 @@ function ask(what: SignInTileRemoval, id: string, name: string) {
       <Card v-else-if="c === 'twoFactor'" :title="text.twoFactor.title" :hint="text.twoFactor.hint" :hue-index="hueStart + i" data-signin-card="twoFactor">
         <UnavailableNotice v-if="notice('twoFactor')" :title="notice('twoFactor')!.title">{{ notice('twoFactor')!.reason }}</UnavailableNotice>
         <div v-else class="glim-signin-tile-body">
-          <FieldRowGroup>
-            <FieldRow :label="text.twoFactor.state" :value="s.me?.twoFactor ? text.twoFactor.on : text.twoFactor.off" :tone="s.me?.twoFactor ? 'ok' : undefined" />
-            <FieldRow v-if="s.me?.twoFactor" :label="text.twoFactor.codesLeft" :value="plural(lang, text.twoFactor.codesLeftValue, s.me?.recoveryLeft ?? 0)" />
+          <FieldRowGroup v-if="s.me?.twoFactor">
+            <FieldRow :label="text.twoFactor.state" :value="text.twoFactor.on" tone="ok" />
+            <FieldRow :label="text.twoFactor.codesLeft" :value="plural(lang, text.twoFactor.codesLeftValue, s.me?.recoveryLeft ?? 0)" />
           </FieldRowGroup>
+          <EmptyState v-else nested :glyph="glyph(keys.setUp)" :title="text.twoFactor.none" :hint="text.twoFactor.noneHint" />
           <div class="glim-signin-tile-foot">
             <template v-if="s.me?.twoFactor">
               <Button :label="text.twoFactor.newCodes" :label-key="keys.newCodes" :busy="s.busy === 'two-factor-codes'" data-signin-tile="two-factor-codes" @click="flow.newCodes()" />

@@ -30,6 +30,7 @@ import {
   signInTileCards,
   signInWhen,
   signInCardNotice,
+  signInPasswordAsks,
   signInPasswordElsewhere,
   signInShortHint,
   tokenFacts,
@@ -179,11 +180,36 @@ function PasswordCard(props: CardProps) {
   const had = () => !!s().me?.password;
   const open = () => s().me?.via === "open";
   const elsewhere = () => signInPasswordElsewhere(own.text, s());
+  const asks = () => signInPasswordAsks(s(), own.cards) && !s().editing;
   return (
     <Card title={t().title} hint={open() ? t().openHint : fill(t().hint, { min: s().offer?.minPassword ?? 12 })} hueIndex={props.hue} data-signin-card="password">
-      <Show when={!elsewhere()} fallback={<p class="glim-signin-tile-text">{elsewhere()}</p>}>
+      <Show
+        when={!elsewhere()}
+        fallback={
+          <div class="glim-signin-tile-body">
+            <p class="glim-signin-tile-text">{elsewhere()}</p>
+            <Show when={asks()}>
+              <AskPasswordRow ctx={props.ctx} />
+            </Show>
+          </div>
+        }
+      >
         <div class="glim-signin-tile-body">
-          <FieldRow label={t().state} value={had() ? t().set : t().none} tone={had() ? undefined : "warn"} />
+          <Show
+            when={had()}
+            fallback={
+              <Show when={!s().editing}>
+                <EmptyState nested glyph={glyphFor(keys().setPassword)} title={t().none} hint={t().noneHint} />
+              </Show>
+            }
+          >
+            <FieldRowGroup>
+              <FieldRow label={t().state} value={t().set} />
+              <Show when={asks()}>
+                <AskPasswordRow ctx={props.ctx} />
+              </Show>
+            </FieldRowGroup>
+          </Show>
           <Show when={s().editing}>
             <FieldRowGroup>
               <Show when={had()}>
@@ -234,15 +260,22 @@ function PasswordCard(props: CardProps) {
   );
 }
 
-function AskPasswordCard(props: CardProps) {
+function AskPasswordRow(props: { ctx: Ctx }) {
   const { s, flow, own } = props.ctx;
+  return (
+    <FieldRow label={own.text.askPassword.label} hint={own.text.askPassword.when}>
+      <Toggle checked={!!s().settings?.askPassword} onChange={(on) => void flow.setAskPassword(on)} data-signin-tile="ask-password" />
+    </FieldRow>
+  );
+}
+
+function AskPasswordCard(props: CardProps) {
+  const { s, own } = props.ctx;
   const t = () => own.text.askPassword;
   return (
     <Card title={t().title} hint={t().hint} hueIndex={props.hue} data-signin-card="askPassword">
       <Show when={!signInCardNotice(own.text, s(), "askPassword")} fallback={<Notice notice={signInCardNotice(own.text, s(), "askPassword")!} />}>
-        <FieldRow label={t().label} hint={t().when}>
-          <Toggle checked={!!s().settings?.askPassword} onChange={(on) => void flow.setAskPassword(on)} data-signin-tile="ask-password" />
-        </FieldRow>
+        <AskPasswordRow ctx={props.ctx} />
       </Show>
     </Card>
   );
@@ -256,12 +289,12 @@ function TwoFactorCard(props: CardProps) {
     <Card title={t().title} hint={t().hint} hueIndex={props.hue} data-signin-card="twoFactor">
       <Show when={!signInCardNotice(own.text, s(), "twoFactor")} fallback={<Notice notice={signInCardNotice(own.text, s(), "twoFactor")!} />}>
         <div class="glim-signin-tile-body">
-          <FieldRowGroup>
-            <FieldRow label={t().state} value={on() ? t().on : t().off} tone={on() ? "ok" : undefined} />
-            <Show when={on()}>
+          <Show when={on()} fallback={<EmptyState nested glyph={glyphFor(keys().setUp)} title={t().none} hint={t().noneHint} />}>
+            <FieldRowGroup>
+              <FieldRow label={t().state} value={t().on} tone="ok" />
               <FieldRow label={t().codesLeft} value={plural(own.lang, t().codesLeftValue, s().me?.recoveryLeft ?? 0)} />
-            </Show>
-          </FieldRowGroup>
+            </FieldRowGroup>
+          </Show>
           <div class="glim-signin-tile-foot">
             <Show
               when={on()}

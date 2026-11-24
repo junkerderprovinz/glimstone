@@ -52,6 +52,7 @@
     signInTileCards,
     signInWhen,
     signInCardNotice,
+    signInPasswordAsks,
     signInPasswordElsewhere,
     signInShortHint,
     tokenFacts,
@@ -128,6 +129,7 @@
   const notice = (card: "askPassword" | "twoFactor" | "passkeys" | "tokens" | "services" | "sessions" | "accounts") => signInCardNotice(text, s, card);
   const elsewhere = $derived(signInPasswordElsewhere(text, s));
   const had = $derived(!!s.me?.password);
+  const asks = $derived(signInPasswordAsks(s, cards) && !s.editing);
   const glyph = (key: string) => glyphFor(key)!;
 
   function remove(what: SignInTileRemoval, id: string, name: string) {
@@ -142,6 +144,12 @@
   <UnavailableNotice title={n.title} reason={n.reason} />
 {/snippet}
 
+{#snippet askPasswordRow()}
+  <FieldRow label={text.askPassword.label} hint={text.askPassword.when}>
+    <Toggle bind:checked={() => !!s.settings?.askPassword, (on) => void flow.setAskPassword(on)} data-signin-tile="ask-password" />
+  </FieldRow>
+{/snippet}
+
 <div data-glim="SignInTile" class="glim-signin-tile">
   {#each shown as c, i (c)}
     {@const hue = hueStart + i}
@@ -149,10 +157,20 @@
       {@const t = text.password}
       <Card title={t.title} hint={s.me?.via === "open" ? t.openHint : fill(t.hint, { min: s.offer?.minPassword ?? 12 })} hueIndex={hue} data-signin-card="password">
         {#if elsewhere}
-          <p class="glim-signin-tile-text">{elsewhere}</p>
+          <div class="glim-signin-tile-body">
+            <p class="glim-signin-tile-text">{elsewhere}</p>
+            {#if asks}{@render askPasswordRow()}{/if}
+          </div>
         {:else}
           <div class="glim-signin-tile-body">
-            <FieldRow label={t.state} value={had ? t.set : t.none} tone={had ? undefined : "warn"} />
+            {#if had}
+              <FieldRowGroup>
+                <FieldRow label={t.state} value={t.set} />
+                {#if asks}{@render askPasswordRow()}{/if}
+              </FieldRowGroup>
+            {:else if !s.editing}
+              <EmptyState nested glyph={glyph(keys.setPassword)} title={t.none} hint={t.noneHint} />
+            {/if}
             {#if s.editing}
               <FieldRowGroup>
                 {#if had}
@@ -205,9 +223,7 @@
         {#if notice("askPassword")}
           {@render cardNotice(notice("askPassword")!)}
         {:else}
-          <FieldRow label={t.label} hint={t.when}>
-            <Toggle bind:checked={() => !!s.settings?.askPassword, (on) => void flow.setAskPassword(on)} data-signin-tile="ask-password" />
-          </FieldRow>
+          {@render askPasswordRow()}
         {/if}
       </Card>
     {:else if c === "twoFactor"}
@@ -218,10 +234,14 @@
           {@render cardNotice(notice("twoFactor")!)}
         {:else}
           <div class="glim-signin-tile-body">
-            <FieldRowGroup>
-              <FieldRow label={t.state} value={on ? t.on : t.off} tone={on ? "ok" : undefined} />
-              {#if on}<FieldRow label={t.codesLeft} value={plural(lang, t.codesLeftValue, s.me?.recoveryLeft ?? 0)} />{/if}
-            </FieldRowGroup>
+            {#if on}
+              <FieldRowGroup>
+                <FieldRow label={t.state} value={t.on} tone="ok" />
+                <FieldRow label={t.codesLeft} value={plural(lang, t.codesLeftValue, s.me?.recoveryLeft ?? 0)} />
+              </FieldRowGroup>
+            {:else}
+              <EmptyState nested glyph={glyph(keys.setUp)} title={t.none} hint={t.noneHint} />
+            {/if}
             <div class="glim-signin-tile-foot">
               {#if on}
                 <Button label={t.newCodes} labelKey={keys.newCodes} busy={s.busy === "two-factor-codes"} data-signin-tile="two-factor-codes" onClick={() => void flow.newCodes()} />

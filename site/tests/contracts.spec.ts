@@ -4833,7 +4833,7 @@ test.describe("SignInTile", () => {
 
   test("[signin-tile-cards] every card with one title", async ({ page }) => {
     await open(page, "/components/sign-in-tile");
-    const titles = ["Password", "Password check on changes", "Two-factor authentication", "Passkeys", "Sessions", "API tokens", "Sign-in services", "Accounts"];
+    const titles = ["Password", "Two-factor authentication", "Passkeys", "Sessions", "API tokens", "Sign-in services", "Accounts"];
     await expect(demo(page).locator("[data-signin-card] > .glim-panel-heading")).toHaveText(titles);
     for (const card of await demo(page).locator("[data-signin-card]").all()) await expect(card.locator(".glim-panel-heading")).toHaveCount(1);
   });
@@ -4842,7 +4842,10 @@ test.describe("SignInTile", () => {
     await open(page, "/components/sign-in-tile");
     const name = "SignInTileOpen";
     await expect(cardOf(page, "password", name).getByRole("button", { name: "Set a password" })).toBeVisible();
-    for (const card of ["askPassword", "twoFactor", "passkeys", "sessions"]) {
+    await expect(cardOf(page, "password", name).locator(".glim-empty-title")).toHaveText("No password yet");
+    await expect(cardOf(page, "password", name).locator('[data-glim="FieldRow"]')).toHaveCount(0);
+    await expect(cardOf(page, "askPassword", name)).toHaveCount(0);
+    for (const card of ["twoFactor", "passkeys", "sessions"]) {
       await expect(cardOf(page, card, name).locator(".glim-notice-title")).toHaveText("Ready once there’s a password");
       await expect(cardOf(page, card, name).locator(".glim-btn")).toHaveCount(0);
     }
@@ -4871,7 +4874,7 @@ test.describe("SignInTile", () => {
 
   test("[signin-tile-ask] the question saves on the flip", async ({ page }) => {
     await open(page, "/components/sign-in-tile");
-    const toggle = cardOf(page, "askPassword").getByRole("switch");
+    const toggle = cardOf(page, "password").getByRole("switch");
     await expect(toggle).toHaveAttribute("aria-checked", "true");
     await toggle.click();
     await expect(toggle).toHaveAttribute("aria-checked", "false");
@@ -4964,11 +4967,21 @@ test.describe("SignInTile", () => {
     await expect(form.locator('[data-glim="CopyField"]')).toHaveCount(1);
   });
 
-  test("[signin-tile-ask-when] the switch's bubble says which changes ask", async ({ page }) => {
+  test("[signin-tile-ask-when] the question stands in the password card, its bubble saying which changes ask", async ({ page }) => {
     await open(page, "/components/sign-in-tile");
-    const row = cardOf(page, "askPassword").locator('[data-glim="FieldRow"]');
+    const row = cardOf(page, "password").locator('[data-glim="FieldRow"]').filter({ has: page.getByRole("switch") });
+    await expect(row).toContainText("Ask for the password on changes");
     await expect(row.locator('[data-glim="InfoBubble"]')).toHaveCount(1);
-    await expect(cardOf(page, "askPassword").locator(".glim-panel-heading")).toHaveText("Password check on changes");
+    await expect(cardOf(page, "askPassword")).toHaveCount(0);
+  });
+
+  test("[signin-tile-empty] two-factor that is off reads like an empty list, with Set up and no status row", async ({ page }) => {
+    await open(page, "/components/sign-in-tile");
+    const card = cardOf(page, "twoFactor");
+    await expect(card.locator(".glim-empty-title")).toHaveText("Not set up yet");
+    await expect(card.locator(".glim-empty-hint")).toHaveText("Set it up, and a stolen password alone won’t get anyone in.");
+    await expect(card.locator('[data-glim="FieldRow"]')).toHaveCount(0);
+    await expect(card.getByRole("button", { name: "Set up" })).toBeVisible();
   });
 
   test("[signin-tile-passkey-row] a passkey row shows when it was added, and the rest stands in its bubble", async ({ page }) => {

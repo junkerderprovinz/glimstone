@@ -75,7 +75,9 @@ export interface SignInTileText {
     viaService: string;
     state: string;
     set: string;
+    /** The empty state's line while the app has no password yet, and its quiet line. */
     none: string;
+    noneHint: string;
     change: string;
     add: string;
     current: string;
@@ -97,6 +99,7 @@ export interface SignInTileText {
     removed: string;
   };
   askPassword: {
+    /** The card of its own, which a tile without the password card draws. */
     title: string;
     hint: string;
     label: string;
@@ -110,7 +113,11 @@ export interface SignInTileText {
     hint: string;
     state: string;
     on: string;
-    off: string;
+    /** @deprecated The empty state, `none` and `noneHint`, says that two-factor is off. */
+    off?: string;
+    /** The empty state's line while two-factor is off, and its quiet line. */
+    none: string;
+    noneHint: string;
     setUp: string;
     codesLeft: string;
     codesLeftValue: Plural;
@@ -358,7 +365,8 @@ export const signInTileTextEn: SignInTileText = {
     viaService: "You sign in through {name}, so this account has no password here.",
     state: "Password",
     set: "Set",
-    none: "No password",
+    none: "No password yet",
+    noneHint: "Set one, and only people who know it get in.",
     change: "Change",
     add: "Set a password",
     current: "Current password",
@@ -393,7 +401,8 @@ export const signInTileTextEn: SignInTileText = {
     hint: "On top of the password, the app asks for a code from your authenticator app.",
     state: "Two-factor",
     on: "On",
-    off: "Off",
+    none: "Not set up yet",
+    noneHint: "Set it up, and a stolen password alone won’t get anyone in.",
     setUp: "Set up",
     codesLeft: "Recovery codes",
     codesLeftValue: { one: "{count} left", other: "{count} left" },
@@ -829,11 +838,20 @@ export function signInTileCards(s: SignInTileState, cards: readonly SignInTileCa
   const open = s.me.via === "open";
   return SIGN_IN_TILE_CARDS.filter((c) => {
     if (!cards.includes(c)) return false;
-    if (c === "askPassword") return open || s.settings !== null;
+    if (c === "askPassword") return !cards.includes("password") && (open || s.settings !== null);
     if (c === "services") return open || s.services !== null;
     if (c === "accounts") return open || (s.accounts?.length ?? 0) > 0;
     return true;
   });
+}
+
+/**
+ * Whether the password card carries the question before sensitive changes.
+ * It does wherever the tile draws both, since the question is about the
+ * password, and an open app has nothing to ask yet.
+ */
+export function signInPasswordAsks(s: SignInTileState, cards: readonly SignInTileCard[]): boolean {
+  return cards.includes("password") && cards.includes("askPassword") && s.me?.via !== "open" && s.settings !== null;
 }
 
 /** The tile's dates, such as "21 Nov 2026, 14:05", unless the app formats them itself. */

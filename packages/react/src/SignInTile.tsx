@@ -30,6 +30,7 @@ import {
   signInWhen,
   signInCardNotice,
   signInShortHint,
+  signInPasswordAsks,
   signInPasswordElsewhere,
   tokenFacts,
   type Catalog,
@@ -100,6 +101,7 @@ export interface SignInTileProps {
 
 interface Ctx {
   s: SignInTileState;
+  cards: readonly SignInTileCard[];
   flow: SignInTileFlow;
   text: SignInTileText;
   lang: string;
@@ -135,6 +137,7 @@ export function SignInTile(props: SignInTileProps) {
 
   const ctx: Ctx = {
     s,
+    cards,
     flow,
     text,
     lang,
@@ -180,13 +183,24 @@ function PasswordCard({ ctx, hue }: { ctx: Ctx; hue: number }) {
   const had = !!s.me?.password;
   const open = s.me?.via === "open";
   const elsewhere = signInPasswordElsewhere(text, s);
+  const asks = signInPasswordAsks(s, ctx.cards) && !s.editing;
   return (
     <Card title={t.title} hint={open ? t.openHint : fill(t.hint, { min: s.offer?.minPassword ?? 12 })} hueIndex={hue} data-signin-card="password">
       {elsewhere ? (
-        <p className="glim-signin-tile-text">{elsewhere}</p>
+        <div className="glim-signin-tile-body">
+          <p className="glim-signin-tile-text">{elsewhere}</p>
+          {asks && <AskPasswordRow ctx={ctx} />}
+        </div>
       ) : (
         <div className="glim-signin-tile-body">
-          <FieldRow label={t.state} value={had ? t.set : t.none} tone={had ? undefined : "warn"} />
+          {had ? (
+            <FieldRowGroup>
+              <FieldRow label={t.state} value={t.set} />
+              {asks && <AskPasswordRow ctx={ctx} />}
+            </FieldRowGroup>
+          ) : (
+            !s.editing && <EmptyState nested glyph={glyphFor(keys.setPassword)} title={t.none} hint={t.noneHint} />
+          )}
           {s.editing && (
             <FieldRowGroup>
               {had && (
@@ -234,19 +248,22 @@ function PasswordCard({ ctx, hue }: { ctx: Ctx; hue: number }) {
   );
 }
 
-function AskPasswordCard({ ctx, hue }: { ctx: Ctx; hue: number }) {
+function AskPasswordRow({ ctx }: { ctx: Ctx }) {
   const { s, flow, text } = ctx;
+  return (
+    <FieldRow label={text.askPassword.label} hint={text.askPassword.when}>
+      <Toggle checked={!!s.settings?.askPassword} onChange={(on) => void flow.setAskPassword(on)} data-signin-tile="ask-password" />
+    </FieldRow>
+  );
+}
+
+function AskPasswordCard({ ctx, hue }: { ctx: Ctx; hue: number }) {
+  const { s, text } = ctx;
   const t = text.askPassword;
   const notice = signInCardNotice(text, s, "askPassword");
   return (
     <Card title={t.title} hint={t.hint} hueIndex={hue} data-signin-card="askPassword">
-      {notice ? (
-        <Notice notice={notice} />
-      ) : (
-        <FieldRow label={t.label} hint={t.when}>
-          <Toggle checked={!!s.settings?.askPassword} onChange={(on) => void flow.setAskPassword(on)} data-signin-tile="ask-password" />
-        </FieldRow>
-      )}
+      {notice ? <Notice notice={notice} /> : <AskPasswordRow ctx={ctx} />}
     </Card>
   );
 }
@@ -262,10 +279,14 @@ function TwoFactorCard({ ctx, hue }: { ctx: Ctx; hue: number }) {
         <Notice notice={notice} />
       ) : (
         <div className="glim-signin-tile-body">
-          <FieldRowGroup>
-            <FieldRow label={t.state} value={on ? t.on : t.off} tone={on ? "ok" : undefined} />
-            {on && <FieldRow label={t.codesLeft} value={plural(lang, t.codesLeftValue, s.me?.recoveryLeft ?? 0)} />}
-          </FieldRowGroup>
+          {on ? (
+            <FieldRowGroup>
+              <FieldRow label={t.state} value={t.on} tone="ok" />
+              <FieldRow label={t.codesLeft} value={plural(lang, t.codesLeftValue, s.me?.recoveryLeft ?? 0)} />
+            </FieldRowGroup>
+          ) : (
+            <EmptyState nested glyph={glyphFor(keys.setUp)} title={t.none} hint={t.noneHint} />
+          )}
           <div className="glim-signin-tile-foot">
             {on ? (
               <>
