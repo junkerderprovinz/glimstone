@@ -5,9 +5,10 @@
  *
  * readme-stage.tsx lays out every scene on the site's own Vite config and
  * styles, so a change to a component or a token shows up on the next run.
- * The headings are set in Bree Serif Light and the captions in Bree Light,
- * read from HOUSE_FONTS (default %LOCALAPPDATA%\halleluja-fonts). The
- * browser window bar keeps Lato, fetched to the OS temp dir.
+ * The headings are set in Bree Serif Regular, the legend names in Bree Serif
+ * Light and the captions in Bree Light, read from HOUSE_FONTS (default
+ * %LOCALAPPDATA%\halleluja-fonts). The browser window bar keeps Lato, fetched
+ * to the OS temp dir.
  *
  * Needs the repo's dependencies (npm ci) and Playwright's Chromium.
  * Run: node .github/assets/gen-readme-pictures.mjs [name ...]
@@ -49,6 +50,7 @@ const dataUrl = (buf, type) => `data:${type};base64,${buf.toString("base64")}`;
 const houseFonts = process.env.HOUSE_FONTS ?? join(process.env.LOCALAPPDATA ?? tmpdir(), "halleluja-fonts");
 const house = (file) => dataUrl(readFileSync(join(houseFonts, file)), "font/ttf");
 const FONT_CSS = `
+@font-face { font-family: "Bree Serif"; font-weight: 400; src: url(${house("bree-serif-regular.ttf")}); }
 @font-face { font-family: "Bree Serif"; font-weight: 300; src: url(${house("bree-serif-light.ttf")}); }
 @font-face { font-family: Bree; src: url(${house("bree-light.ttf")}); }
 @font-face { font-family: Lato; src: url(${dataUrl(await cached("Lato-Regular.ttf", "https://github.com/google/fonts/raw/main/ofl/lato/Lato-Regular.ttf"), "font/ttf")}); }`;
@@ -91,7 +93,7 @@ async function shoot({ scene, engine, entry, size: [width, height] }, theme) {
   await page.waitForLoadState("networkidle", { timeout: 180_000 });
   if (scene === "glossary") await page.waitForSelector("iframe[data-ready]", { timeout: 60_000 });
   if (scene === "strip") await page.hover(".rs-with-tip .glim-info-icon");
-  await page.evaluate(() => Promise.all(['300 1em "Bree Serif"', "1em Bree"].map((font) => document.fonts.load(font))));
+  await page.evaluate(() => Promise.all(['400 1em "Bree Serif"', '300 1em "Bree Serif"', "1em Bree"].map((font) => document.fonts.load(font))));
   await page.evaluate(() => document.fonts.ready);
   // The toast and the cells enter on the motion engine's curve; let them land.
   await page.waitForTimeout(900);

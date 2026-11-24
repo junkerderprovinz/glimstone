@@ -13,7 +13,7 @@
  *   glimstone-banner-dark.svg/.png  dark banner
  *
  * Text is converted to paths with opentype.js so the SVG needs no font: Bree
- * Serif Light for the name, Bree Light for the claim. Both are licensed and
+ * Serif Regular for the name, Bree Light for the claim. Both are licensed and
  * never committed, so HOUSE_FONTS (default %LOCALAPPDATA%\halleluja-fonts)
  * must hold them as TTF.
  *
@@ -54,7 +54,7 @@ const THEMES = [
 ];
 
 const fonts = process.env.HOUSE_FONTS ?? join(process.env.LOCALAPPDATA ?? tmpdir(), "halleluja-fonts");
-const font = opentype.parse(readFileSync(join(fonts, "bree-serif-light.ttf")).buffer);
+const font = opentype.parse(readFileSync(join(fonts, "bree-serif-regular.ttf")).buffer);
 const claimFont = opentype.parse(readFileSync(join(fonts, "bree-light.ttf")).buffer);
 
 const nameW = font.getAdvanceWidth(NAME, nameSize);

@@ -101,7 +101,7 @@ body {
 }
 .rs-ground h1 {
   margin: 0;
-  font: 300 64px/1.12 "Bree Serif", serif;
+  font: 400 64px/1.12 "Bree Serif", serif;
   color: var(--head);
   text-wrap: balance;
 }
@@ -370,7 +370,7 @@ body {
 }
 .rs-eggs h2 {
   margin: 0;
-  font: 300 44px/1 "Bree Serif", serif;
+  font: 400 44px/1 "Bree Serif", serif;
   color: var(--head);
 }
 .rs-eggs p {
