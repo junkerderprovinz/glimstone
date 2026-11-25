@@ -13,11 +13,12 @@
     "./tokens.css": "./tokens.css",
     "./tailwind-theme.css": "./tailwind-theme.css",
     "./glyphs.json": "./glyphs.json",
+    "./glyphs-line.json": "./glyphs-line.json",
     "./figma-variables.json": "./figma-variables.json",
     "./tokens/*.json": "./tokens/*.json",
     "./*": { "types": "./dist/*.d.ts", "default": "./dist/*.js" }
   },
-  "files": ["dist", "vanilla", "service-marks", "storage-marks", "mcp-marks", "registry-marks", "vpn-marks", "download-marks", "captcha-marks", "office-marks", "transfer-marks", "identity-marks", "tokens", "tokens.css", "tailwind-theme.css", "figma-variables.json", "glyphs.json", "glyphs.md", "glyph-map.md", "check-bare-buttons.mjs", "check-drift.mjs", "drift-manifest.json", "migrate.mjs"],
+  "files": ["dist", "vanilla", "service-marks", "storage-marks", "mcp-marks", "registry-marks", "vpn-marks", "download-marks", "captcha-marks", "office-marks", "transfer-marks", "identity-marks", "tokens", "tokens.css", "tailwind-theme.css", "figma-variables.json", "glyphs.json", "glyphs-line.json", "LICENSE-lucide.txt", "glyphs.md", "glyph-map.md", "check-bare-buttons.mjs", "check-drift.mjs", "drift-manifest.json", "migrate.mjs"],
   "scripts": {
     "build": "tsc -p tsconfig.build.json && node ../../scripts/gen-drift-manifest.mjs"
   },

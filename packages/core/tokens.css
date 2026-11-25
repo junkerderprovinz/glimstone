@@ -692,6 +692,22 @@
   }
 }
 
+/* The glyph engine (data-glyphs, glyphStyle.ts): a glyph that has a line
+   drawing carries it beside the filled one (glyphArt), and the root picks which
+   shows. Filled is the look without a setting; a brand mark has no line drawing
+   and stays filled in both. */
+@layer components {
+  .glim-glyph-line {
+    display: none;
+  }
+  :root[data-glyphs="line"] .glim-glyph-filled {
+    display: none;
+  }
+  :root[data-glyphs="line"] .glim-glyph-line {
+    display: inline;
+  }
+}
+
 /* The hidden leaf shape takes the other diagonal away from every element. */
 @layer components {
   :root[data-shape="leaf"] *,

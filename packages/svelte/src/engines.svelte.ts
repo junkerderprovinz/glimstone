@@ -1,10 +1,14 @@
 import {
   applyAccent,
   applyDensity,
+  applyGlyphs,
+  applyLight,
   applyMotion,
   applyRainbow,
   applyShape,
   DEFAULT_DENSITY,
+  DEFAULT_GLYPHS,
+  DEFAULT_LIGHT,
   DEFAULT_MOTION,
   DEFAULT_SHAPE,
   getLabelMode,
@@ -15,14 +19,16 @@ import {
   subscribeLabelMode,
   subscribeRainbow,
   type Density,
+  type GlyphStyle,
   type LabelAxis,
   type LabelMode,
+  type Light,
   type Motion,
   type RainbowState,
   type Shape,
 } from "@glimstone/core";
 
-// The label, colour, shape, motion and density engines as reactive boxes. Each value
+// The label, colour, shape, motion, light, glyph and density engines as reactive boxes. Each value
 // belongs to the document, not a component, so every box follows the document
 // and writes back through the core through its `current`.
 
@@ -83,6 +89,16 @@ export function useShape(): Box<Shape> {
 
 export function useMotion(): Box<Motion> {
   return follow(() => (document.documentElement.getAttribute("data-motion") as Motion | null) ?? DEFAULT_MOTION, watchRoot("data-motion"), applyMotion);
+}
+
+/** How light falls on the stone. */
+export function useLight(): Box<Light> {
+  return follow(() => (document.documentElement.getAttribute("data-light") as Light | null) ?? DEFAULT_LIGHT, watchRoot("data-light"), applyLight);
+}
+
+/** Whether the glyphs are drawn filled or as lines. */
+export function useGlyphs(): Box<GlyphStyle> {
+  return follow(() => (document.documentElement.getAttribute("data-glyphs") as GlyphStyle | null) ?? DEFAULT_GLYPHS, watchRoot("data-glyphs"), applyGlyphs);
 }
 
 /** The row density of lists and tables. */

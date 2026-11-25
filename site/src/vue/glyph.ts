@@ -1,9 +1,9 @@
 import { h, type FunctionalComponent } from "vue";
 import { setGlyphResolver } from "@glimstone/vue";
-import { glyphByName, glyphNameFor } from "../glyphData";
+import { glyphArtOf, glyphNameFor } from "../glyphData";
 
 export const Glyph: FunctionalComponent<{ name: string; size?: number }> = ({ name, size = 16 }) => {
-  const g = glyphByName.get(name);
+  const g = glyphArtOf(name);
   return g
     ? h("svg", { width: size, height: size, viewBox: g.viewBox, "aria-hidden": "true", fill: "currentColor", innerHTML: g.svg })
     : null;

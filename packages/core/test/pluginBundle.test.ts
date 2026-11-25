@@ -18,11 +18,13 @@ test('the bundle builds', () => {
 test('the bundle holds what a plugin page includes, and nothing to build', () => {
   assert.deepEqual(readdirSync(out).sort(), [
     'LICENSE',
+    'LICENSE-lucide.txt',
     'README.txt',
     'fortress-card.css',
     'fortress-card.js',
     'glimstone.js',
     'glimstone.mjs',
+    'glyphs-line.json',
     'glyphs.json',
     'service-marks',
     'service-marks.js',

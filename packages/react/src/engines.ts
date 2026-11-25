@@ -2,22 +2,28 @@ import { useCallback, useMemo, useSyncExternalStore } from "react";
 import {
   applyAccent,
   applyDensity,
+  applyGlyphs,
+  applyLight,
   applyMotion,
   applyRainbow,
   applyShape,
   DEFAULT_DENSITY,
+  DEFAULT_GLYPHS,
+  DEFAULT_LIGHT,
   DEFAULT_MOTION,
   DEFAULT_SHAPE,
   hueVars,
   rainbowState,
   subscribeRainbow,
   type Density,
+  type GlyphStyle,
+  type Light,
   type Motion,
   type RainbowState,
   type Shape,
 } from "@glimstone/core";
 
-// The colour, shape, motion and density engines as hooks, the twins of the Vue
+// The colour, shape, motion, light, glyph and density engines as hooks, the twins of the Vue
 // composables. Each value belongs to the document, not a component, so every
 // hook follows the document and writes back through the core, in the
 // [value, set] shape of useState.
@@ -48,6 +54,8 @@ function useRoot<T>(attribute: string, read: () => T): T {
 
 const readShape = () => (document.documentElement.getAttribute("data-shape") as Shape | null) ?? DEFAULT_SHAPE;
 const readMotion = () => (document.documentElement.getAttribute("data-motion") as Motion | null) ?? DEFAULT_MOTION;
+const readLight = () => (document.documentElement.getAttribute("data-light") as Light | null) ?? DEFAULT_LIGHT;
+const readGlyphs = () => (document.documentElement.getAttribute("data-glyphs") as GlyphStyle | null) ?? DEFAULT_GLYPHS;
 const readDensity = () => (document.documentElement.getAttribute("data-density") as Density | null) ?? DEFAULT_DENSITY;
 const readAccent = () => document.documentElement.style.getPropertyValue("--accent");
 
@@ -57,6 +65,16 @@ export function useShape(): [Shape, (next: Shape) => void] {
 
 export function useMotion(): [Motion, (next: Motion) => void] {
   return [useRoot("data-motion", readMotion), applyMotion];
+}
+
+/** How light falls on the stone. */
+export function useLight(): [Light, (next: Light) => void] {
+  return [useRoot("data-light", readLight), applyLight];
+}
+
+/** Whether the glyphs are drawn filled or as lines. */
+export function useGlyphs(): [GlyphStyle, (next: GlyphStyle) => void] {
+  return [useRoot("data-glyphs", readGlyphs), applyGlyphs];
 }
 
 /** The row density of lists and tables. */

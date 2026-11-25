@@ -44,6 +44,8 @@ mkdirSync(out, { recursive: true });
 for (const [from, to] of [
   ["tokens.css", "tokens.css"],
   ["glyphs.json", "glyphs.json"],
+  ["glyphs-line.json", "glyphs-line.json"],
+  ["LICENSE-lucide.txt", "LICENSE-lucide.txt"],
   ["vanilla/fortress-card.js", "fortress-card.js"],
   ["vanilla/fortress-card.css", "fortress-card.css"],
 ]) {
@@ -73,7 +75,9 @@ engine. glimstone.mjs is the same code as a module, for <script type="module">.
 
 The fortress card is fortress-card.js with fortress-card.css; call
 GlimFortressCard.mount(element, adapter, options) as the design language
-describes. glyphs.json holds every glyph as SVG.
+describes. glyphs.json holds every glyph as SVG, and glyphs-line.json the
+line drawings the glyph engine shows under data-glyphs="line", from Lucide
+under the ISC licence in LICENSE-lucide.txt.
 
 service-marks.js puts the notification services' marks on
 window.GlimServiceMarks.SERVICE_MARKS, each as SVG markup with the colour its
