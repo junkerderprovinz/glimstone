@@ -14,6 +14,7 @@ export const ru: ComponentWords = {
     selected: "{tag}: выбрано. Backspace или Delete удаляет",
     removed: "{tag}: удалено",
   },
+  multiSelect: { remove: "Удалить {item}", empty: "Ничего не подходит.", toggle: "Показать все варианты", search: "Введите для поиска" },
   steps: { back: "Назад", next: "Далее", finish: "Завершить" },
   splitter: { resize: "Изменить размер" },
   fileUpload: {

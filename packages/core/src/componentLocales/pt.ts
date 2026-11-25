@@ -14,6 +14,7 @@ export const pt: ComponentWords = {
     selected: "{tag} escolhido. Retrocesso ou Delete remove-o",
     removed: "{tag} removido",
   },
+  multiSelect: { remove: "Remover {item}", empty: "Nada corresponde.", toggle: "Mostrar todas as opções", search: "Escreve para procurar" },
   steps: { back: "Voltar", next: "Seguinte", finish: "Concluir" },
   splitter: { resize: "Redimensionar" },
   fileUpload: {

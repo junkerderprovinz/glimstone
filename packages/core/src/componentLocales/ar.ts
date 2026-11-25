@@ -9,6 +9,7 @@ export const ar: ComponentWords = {
     selected: "اختير {tag}. يزيله مفتاح Backspace أو Delete",
     removed: "أُزيل {tag}",
   },
+  multiSelect: { remove: "إزالة {item}", empty: "لا شيء يطابق.", toggle: "إظهار كل الخيارات", search: "اكتب للبحث" },
   steps: { back: "رجوع", next: "التالي", finish: "إنهاء" },
   splitter: { resize: "تغيير الحجم" },
   fileUpload: {

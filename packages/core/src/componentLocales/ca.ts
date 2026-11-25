@@ -9,6 +9,7 @@ export const ca: ComponentWords = {
     selected: "{tag} triat. Retrocés o Supr el treu",
     removed: "{tag} tret",
   },
+  multiSelect: { remove: "Treu {item}", empty: "No hi ha cap coincidència.", toggle: "Mostra totes les opcions", search: "Escriu per cercar" },
   steps: { back: "Enrere", next: "Següent", finish: "Acaba" },
   splitter: { resize: "Canvia la mida" },
   fileUpload: {

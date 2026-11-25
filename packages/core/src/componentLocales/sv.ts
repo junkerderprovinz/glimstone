@@ -9,6 +9,7 @@ export const sv: ComponentWords = {
     selected: "{tag} valt. Backsteg eller Delete tar bort det",
     removed: "{tag} har tagits bort",
   },
+  multiSelect: { remove: "Ta bort {item}", empty: "Inget matchar.", toggle: "Visa alla val", search: "Skriv för att söka" },
   steps: { back: "Tillbaka", next: "Nästa", finish: "Slutför" },
   splitter: { resize: "Ändra storlek" },
   fileUpload: {

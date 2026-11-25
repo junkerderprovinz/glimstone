@@ -28,6 +28,11 @@
       "svelte": "./dist/entries/combobox.js",
       "default": "./dist/entries/combobox.js"
     },
+    "./MultiSelect": {
+      "types": "./dist/entries/multiselect.d.ts",
+      "svelte": "./dist/entries/multiselect.js",
+      "default": "./dist/entries/multiselect.js"
+    },
     "./Slider": {
       "types": "./dist/entries/slider.d.ts",
       "svelte": "./dist/entries/slider.js",

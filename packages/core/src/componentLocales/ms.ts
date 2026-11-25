@@ -14,6 +14,7 @@ export const ms: ComponentWords = {
     selected: "{tag} dipilih. Backspace atau Delete membuangnya",
     removed: "{tag} dibuang",
   },
+  multiSelect: { remove: "Buang {item}", empty: "Tiada yang sepadan.", toggle: "Tunjukkan semua pilihan", search: "Taip untuk mencari" },
   steps: { back: "Kembali", next: "Seterusnya", finish: "Selesai" },
   splitter: { resize: "Ubah saiz" },
   fileUpload: {

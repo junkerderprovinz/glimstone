@@ -9,6 +9,7 @@ export const de: ComponentWords = {
     selected: "{tag} gewählt. Rücktaste oder Entf entfernt es",
     removed: "{tag} entfernt",
   },
+  multiSelect: { remove: "{item} entfernen", empty: "Nichts passt.", toggle: "Alle Möglichkeiten zeigen", search: "Zum Suchen tippen" },
   steps: { back: "Zurück", next: "Weiter", finish: "Abschließen" },
   splitter: { resize: "Größe ändern" },
   fileUpload: {

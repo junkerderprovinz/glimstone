@@ -9,6 +9,7 @@ export const ja: ComponentWords = {
     selected: "{tag} を選択しました。Backspace か Delete で削除します",
     removed: "{tag} を削除しました",
   },
+  multiSelect: { remove: "{item} を削除", empty: "一致するものがありません。", toggle: "すべての選択肢を表示", search: "入力して検索" },
   steps: { back: "戻る", next: "次へ", finish: "完了" },
   splitter: { resize: "サイズを変更" },
   fileUpload: {

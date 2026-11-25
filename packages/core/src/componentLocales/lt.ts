@@ -14,6 +14,7 @@ export const lt: ComponentWords = {
     selected: "{tag}: pasirinkta. Backspace arba Delete pašalina",
     removed: "{tag}: pašalinta",
   },
+  multiSelect: { remove: "Pašalinti {item}", empty: "Niekas neatitinka.", toggle: "Rodyti visas parinktis", search: "Rašyk, kad ieškotum" },
   steps: { back: "Atgal", next: "Toliau", finish: "Baigti" },
   splitter: { resize: "Keisti dydį" },
   fileUpload: {

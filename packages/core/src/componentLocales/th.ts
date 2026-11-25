@@ -9,6 +9,7 @@ export const th: ComponentWords = {
     selected: "เลือก {tag} แล้ว กด Backspace หรือ Delete เพื่อนำออก",
     removed: "นำ {tag} ออกแล้ว",
   },
+  multiSelect: { remove: "นำ {item} ออก", empty: "ไม่มีรายการที่ตรงกัน", toggle: "แสดงตัวเลือกทั้งหมด", search: "พิมพ์เพื่อค้นหา" },
   steps: { back: "ย้อนกลับ", next: "ถัดไป", finish: "เสร็จสิ้น" },
   splitter: { resize: "ปรับขนาด" },
   fileUpload: {

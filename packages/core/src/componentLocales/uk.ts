@@ -14,6 +14,7 @@ export const uk: ComponentWords = {
     selected: "{tag}: вибрано. Backspace або Delete вилучає",
     removed: "{tag}: вилучено",
   },
+  multiSelect: { remove: "Вилучити {item}", empty: "Нічого не підходить.", toggle: "Показати всі варіанти", search: "Введіть для пошуку" },
   steps: { back: "Назад", next: "Далі", finish: "Завершити" },
   splitter: { resize: "Змінити розмір" },
   fileUpload: {

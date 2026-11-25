@@ -154,6 +154,43 @@ export function ComboboxPage() {
   );
 }
 
+export function MultiSelectPage() {
+  return (
+    <>
+      <p className="lead">
+        A field that picks several choices from a list and keeps them as tags, such as the kinds of file a job takes or
+        the days a backup runs.
+      </p>
+      <ZagNote file="react/MultiSelect.tsx" />
+      <Demo name="MultiSelectZag" />
+      <Demo name="MultiSelectShort" />
+      <Code
+        code={`import { MultiSelect } from "@glimstone/react/MultiSelect";
+
+<MultiSelect label="File kinds" options={kinds} value={picked} onChange={setPicked} placeholder="Pick file kinds" />`}
+      />
+      <H2>Rules</H2>
+      <ul>
+        <li>Each pick stands in the field as a tag with its own remove mark, in the look of a TagsInput.</li>
+        <li>A pick keeps the list open for the next one, and picking a chosen entry again puts it back.</li>
+        <li>
+          A list of seven choices or fewer takes no typing and answers like a Select: the arrows walk it and Space picks.
+          A longer list filters while somebody types, and a search that finds nothing says so.
+        </li>
+        <li>Backspace in an empty field removes the last tag, and removing a tag leaves focus in the field.</li>
+        <li>
+          <code>searchAfter</code> moves the point where the search appears, and <code>text</code> passes the words of
+          another language.
+        </li>
+      </ul>
+      <H2>Behaviour</H2>
+      <ContractTable of="MultiSelect" />
+      <H2>API</H2>
+      <PropsTable of="MultiSelect" />
+    </>
+  );
+}
+
 export function SliderPage() {
   return (
     <>

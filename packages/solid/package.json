@@ -24,6 +24,10 @@
       "types": "./dist/Combobox.d.ts",
       "default": "./dist/Combobox.js"
     },
+    "./MultiSelect": {
+      "types": "./dist/MultiSelect.d.ts",
+      "default": "./dist/MultiSelect.js"
+    },
     "./Slider": {
       "types": "./dist/Slider.d.ts",
       "default": "./dist/Slider.js"

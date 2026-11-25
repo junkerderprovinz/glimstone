@@ -130,6 +130,21 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "combo-empty", when: "Nothing matches", then: "The list says so instead of vanishing." },
     ],
   },
+  MultiSelect: {
+    pattern: { name: "Combobox", url: `${APG}combobox/` },
+    rows: [
+      { id: "ms-tags", when: "Somebody picks entries", then: "Each stands in the field as a tag with its own remove button." },
+      { id: "ms-stays-open", keys: ["ArrowDown", "Enter"], when: "An entry is highlighted", then: "It is picked, and the list stays open with focus in the field." },
+      { id: "ms-toggle", when: "A picked entry is picked again", then: "It is put back and its tag goes." },
+      { id: "ms-remove", when: "A tag's remove button is pressed", then: "The tag goes and focus moves to the field." },
+      { id: "ms-backspace", keys: ["Backspace"], when: "The field is empty and has focus", then: "The last tag goes." },
+      { id: "ms-search", when: "The list holds more than seven entries and somebody types", then: "It shows only matching entries, and says so when nothing matches." },
+      { id: "ms-short", when: "The list holds seven entries or fewer", then: "The field takes no typing, and ArrowDown opens the whole list." },
+      { id: "ms-space", keys: ["Space"], when: "A short list is open with an entry highlighted", then: "It is picked and the list stays open, as in a Select." },
+      { id: "ms-escape", keys: ["Escape"], when: "The list is open", then: "It closes and focus stays in the field." },
+      { id: "ms-multiselectable", when: "The list is open", then: "It carries aria-multiselectable, and each entry says with aria-selected whether it is picked." },
+    ],
+  },
   Slider: {
     pattern: { name: "Slider", url: `${APG}slider/` },
     rows: [

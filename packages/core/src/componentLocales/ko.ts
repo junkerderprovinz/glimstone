@@ -9,6 +9,7 @@ export const ko: ComponentWords = {
     selected: "{tag} 선택됨. Backspace나 Delete로 삭제합니다",
     removed: "{tag} 삭제됨",
   },
+  multiSelect: { remove: "{item} 삭제", empty: "일치하는 항목이 없습니다.", toggle: "모든 선택지 보기", search: "입력해서 검색" },
   steps: { back: "이전", next: "다음", finish: "마침" },
   splitter: { resize: "크기 조정" },
   fileUpload: {

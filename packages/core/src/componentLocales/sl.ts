@@ -9,6 +9,7 @@ export const sl: ComponentWords = {
     selected: "{tag}: izbrano. Vračalka ali Delete ga odstrani",
     removed: "{tag}: odstranjeno",
   },
+  multiSelect: { remove: "Odstrani {item}", empty: "Nič se ne ujema.", toggle: "Pokaži vse možnosti", search: "Tipkaj za iskanje" },
   steps: { back: "Nazaj", next: "Naprej", finish: "Dokončaj" },
   splitter: { resize: "Spremeni velikost" },
   fileUpload: {

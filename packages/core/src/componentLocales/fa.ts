@@ -9,6 +9,7 @@ export const fa: ComponentWords = {
     selected: "{tag} انتخاب شد. Backspace یا Delete آن را حذف می‌کند",
     removed: "{tag} حذف شد",
   },
+  multiSelect: { remove: "حذف {item}", empty: "چیزی مطابقت ندارد.", toggle: "نمایش همهٔ گزینه‌ها", search: "برای جست‌وجو بنویس" },
   steps: { back: "قبلی", next: "بعدی", finish: "پایان" },
   splitter: { resize: "تغییر اندازه" },
   fileUpload: {

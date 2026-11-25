@@ -9,6 +9,7 @@ export const da: ComponentWords = {
     selected: "{tag} valgt. Tilbage eller Delete fjerner det",
     removed: "{tag} fjernet",
   },
+  multiSelect: { remove: "Fjern {item}", empty: "Intet passer.", toggle: "Vis alle valg", search: "Skriv for at søge" },
   steps: { back: "Tilbage", next: "Næste", finish: "Afslut" },
   splitter: { resize: "Tilpas størrelse" },
   fileUpload: {

@@ -27,6 +27,13 @@ export interface ComponentWords {
     selected: string;
     removed: string;
   };
+  multiSelect: {
+    /** "{item}". */
+    remove: string;
+    empty: string;
+    toggle: string;
+    search: string;
+  };
   steps: { back: string; next: string; finish: string };
   splitter: { resize: string };
   fileUpload: {
