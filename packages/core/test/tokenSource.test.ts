@@ -40,7 +40,8 @@ test('the Figma colours carry the ramps the stylesheet paints', () => {
   const value = (name: string, mode: string) =>
     figma.variableModeValues.find((x: { variableId: string; modeId: string }) => x.variableId === `variable:colour.${name}` && x.modeId === `mode:Colour:${mode}`).value;
   const hex = (c: { r: number; g: number; b: number }) => '#' + [c.r, c.g, c.b].map((n) => Math.round(n * 255).toString(16).padStart(2, '0')).join('');
-  assert.equal(hex(value('carbon-bg', 'Light')), '#f4f4f4');
-  assert.equal(hex(value('carbon-bg', 'Dark')), '#161616');
+  // The stone ramp, worked out on the default accent.
+  assert.equal(hex(value('carbon-bg', 'Light')), '#f8f7f3');
+  assert.equal(hex(value('carbon-bg', 'Dark')), '#13100b');
   assert.equal(hex(value('carbon-bg', 'OLED')), '#000000');
 });

@@ -110,13 +110,13 @@ function split(args: string, separator: RegExp): string[] {
 
 const NAMED: Record<string, Rgba> = { black: [0, 0, 0, 1], white: [255, 255, 255, 1], transparent: [0, 0, 0, 0] };
 
-/** Works out one channel of a relative oklab(), with `l`, `a` and `b` those of the origin. */
-function channel(expr: string, origin: Oklab, scope: Record<string, string>): number {
+/** Works out one channel of a relative colour, with `keys` naming the origin's channels in order. */
+function channel(expr: string, origin: Oklab, scope: Record<string, string>, keys = 'lab'): number {
   const js = expr
     .replace(/var\((--[\w-]+)\)/g, (_, name: string) => String(Number(scope[name])))
     .replace(/calc\(/g, '(')
     .replace(/\b(min|max)\(/g, 'Math.$1(')
-    .replace(/\b([lab])\b/g, (_, k: string) => String(origin['lab'.indexOf(k)]));
+    .replace(new RegExp(`\\b([${keys}])\\b`, 'g'), (_, k: string) => String(origin[keys.indexOf(k)]));
   assert.match(js, /^[\d.\s+\-*/(),eMathminax]+$/, `cannot work out ${expr}`);
   return Function(`return ${js}`)() as number;
 }
@@ -149,6 +149,15 @@ function resolve(value: string, scope: Record<string, string>): Rgba {
     const o = resolve(origin!, scope);
     const lab = oklabOfRgb(o);
     return fromOklab(exprs.map((e) => channel(e, lab, scope)) as Oklab, o[3]);
+  }
+  const relLch = v.match(/^oklch\(from\s+([\s\S]+)\)$/);
+  if (relLch) {
+    const [origin, ...exprs] = split(relLch[1]!, /\s/);
+    const o = resolve(origin!, scope);
+    const [L, A, B] = oklabOfRgb(o);
+    const hue = (Math.atan2(B, A) * 180) / Math.PI;
+    const [l, c, h] = exprs.map((e) => channel(e, [L, Math.hypot(A, B), hue < 0 ? hue + 360 : hue], scope, 'lch')) as Oklab;
+    return fromOklab([l, c * Math.cos((h * Math.PI) / 180), c * Math.sin((h * Math.PI) / 180)], o[3]);
   }
   const lch = v.match(/^oklch\(\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s*(?:\/\s*([\d.]+))?\s*\)$/);
   if (lch) {
@@ -338,8 +347,8 @@ test('data-contrast="more" asks for the same step as the system setting', () => 
   assert.deepEqual(block(':root[data-contrast="more"],\n:root[data-contrast="more"] [data-theme]', '--ink-l-light'), more);
 });
 
-// The one ground anything takes under the pointer (rule 21): the lightness of
-// surface3, and the grounds it lifts an element off.
+// The one ground anything takes under the pointer (rule 21): a small step darker than
+// surface3 in lightness, and the grounds it lifts an element off.
 const HOVER_STEP = '--carbon-surface3';
 const HOVER_GROUNDS = ['--carbon-surface', '--carbon-surface2'] as const;
 
@@ -368,10 +377,11 @@ const HOVERED = {
 
 for (const [themeName, theme] of Object.entries(THEMES)) {
   for (const { name: accentName, hex: accent } of ACCENTS) {
-    test(`the hover keeps surface3's lightness in ${accentName}'s hue on ${themeName}`, () => {
+    test(`the hover sits a small step darker than surface3 in ${accentName}'s hue on ${themeName}`, () => {
       const scope = withAccent(theme, accent);
       const lab = labOf('--hover', scope);
-      assert.ok(Math.abs(lab[0] - labOf(HOVER_STEP, scope)[0]) <= 0.01, `lightness ${lab[0].toFixed(3)}`);
+      const step = labOf(HOVER_STEP, scope)[0] - lab[0];
+      assert.ok(step >= 0 && step <= 0.025, `lightness ${lab[0].toFixed(3)}`);
       assert.ok(chroma(lab) >= 0.02, `chroma ${chroma(lab).toFixed(3)}`);
       assert.ok(hueGap(lab, oklabOfRgb(parse(accent))) <= 6, `hue ${hueGap(lab, oklabOfRgb(parse(accent))).toFixed(1)} degrees off`);
     });
@@ -416,5 +426,39 @@ for (const [themeName, theme] of Object.entries(THEMES)) {
       const scope = { ...theme, ...hueVars(i), [`--rb-${i}`]: hue, '--accent': position['--accent']! };
       assert.ok(hueGap(labOf('--hover', scope), oklabOfRgb(parse(hue))) <= 6, `position ${i}`);
     });
+  });
+}
+
+// The ground, the surfaces and the text ramp: OKLCH lightness steps that take
+// a faint tint in the accent's hue, never more chroma than a stone shows.
+const STONE = [
+  '--carbon-bg', '--carbon-sidebar', '--carbon-surface', '--carbon-surface2', '--carbon-surface3', '--carbon-hover',
+  '--carbon-hover-raised', '--carbon-border', '--toggle-off', '--carbon-text', '--carbon-text-sub', '--carbon-text-muted',
+  '--sidebar-text', '--field-placeholder',
+];
+const STONE_CHROMA = 0.011;
+
+test('every stone step is written relative to the accent', () => {
+  for (const name of STONE) assert.match(themed[name]!, /^light-dark\(oklch\(from var\(--accent\) /, name);
+});
+
+for (const [themeName, theme] of Object.entries(THEMES)) {
+  test(`the stone takes the accent's hue and stays near grey on ${themeName}`, () => {
+    const misses = [...ACCENTS.map((a) => a.hex), ...CUSTOM_ACCENTS].flatMap((accent) => {
+      const scope = withAccent(theme, accent);
+      const tint = oklabOfRgb(parse(accent));
+      return STONE.flatMap((name) => {
+        const lab = labOf(name, scope);
+        // Eight bits a channel move a colour this grey by up to 0.002 in chroma.
+        if (chroma(lab) > STONE_CHROMA + 0.002) return [`${accent} ${name} chroma ${chroma(lab).toFixed(4)}`];
+        if (chroma(tint) > 0.08 && chroma(lab) > 0.006 && hueGap(lab, tint) > 25) return [`${accent} ${name} ${hueGap(lab, tint).toFixed(0)} degrees off`];
+        return [];
+      });
+    });
+    assert.deepEqual(misses, []);
+  });
+
+  test(`a grey accent leaves the stone grey on ${themeName}`, () => {
+    for (const name of STONE) assert.ok(chroma(labOf(name, withAccent(theme, '#777777'))) < 0.003, name);
   });
 }

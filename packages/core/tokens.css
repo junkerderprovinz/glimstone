@@ -184,20 +184,23 @@
 
 :root,
 [data-theme] {
-  /* Ground and surfaces: IBM Carbon's neutral greys. A warm near-black reads as
-     brown next to a sibling app on this palette. */
-  --carbon-bg: light-dark(#f4f4f4, #161616);
-  --carbon-sidebar: light-dark(#ffffff, #262626);
-  --carbon-surface: light-dark(#ffffff, #262626);
-  --carbon-surface2: light-dark(#e8e8e8, #393939);
-  --carbon-surface3: light-dark(#d1d1d1, #525252);
-  --carbon-hover: light-dark(#e0e0e0, #353535);
-  --carbon-hover-raised: light-dark(#c6c6c6, #6f6f6f);
+  /* Ground and surfaces: the stone ramp, OKLCH lightness steps tinted toward
+     the accent's hue. The tint is a share of the accent's chroma that stops at
+     0.011 on the dark ramp and 0.006 on the light one, so a saturated accent
+     warms or cools the stone without colouring it, and a grey accent leaves it
+     grey. The names keep the carbon- prefix every app already reads. */
+  --carbon-bg: light-dark(oklch(from var(--accent) 0.975 min(calc(c * 0.03), 0.005) h), oklch(from var(--accent) 0.175 min(calc(c * 0.07), 0.011) h));
+  --carbon-sidebar: light-dark(oklch(from var(--accent) 0.995 min(calc(c * 0.015), 0.003) h), oklch(from var(--accent) 0.215 min(calc(c * 0.07), 0.011) h));
+  --carbon-surface: light-dark(oklch(from var(--accent) 0.997 min(calc(c * 0.01), 0.002) h), oklch(from var(--accent) 0.235 min(calc(c * 0.07), 0.011) h));
+  --carbon-surface2: light-dark(oklch(from var(--accent) 0.955 min(calc(c * 0.03), 0.005) h), oklch(from var(--accent) 0.29 min(calc(c * 0.07), 0.011) h));
+  --carbon-surface3: light-dark(oklch(from var(--accent) 0.905 min(calc(c * 0.035), 0.006) h), oklch(from var(--accent) 0.36 min(calc(c * 0.07), 0.011) h));
+  --carbon-hover: light-dark(oklch(from var(--accent) 0.93 min(calc(c * 0.03), 0.005) h), oklch(from var(--accent) 0.3 min(calc(c * 0.07), 0.011) h));
+  --carbon-hover-raised: light-dark(oklch(from var(--accent) 0.86 min(calc(c * 0.05), 0.009) h), oklch(from var(--accent) 0.44 min(calc(c * 0.07), 0.011) h));
 
   /* A switch that is off. On the light ramp surface3 stands too close to a card
      and to the knob to see, so the track goes down to 3:1 against both. */
-  --toggle-off: light-dark(#8d8d8d, #525252);
-  --carbon-border: light-dark(#d1d1d1, #393939);
+  --toggle-off: light-dark(oklch(from var(--accent) 0.64 min(calc(c * 0.05), 0.009) h), oklch(from var(--accent) 0.54 min(calc(c * 0.07), 0.011) h));
+  --carbon-border: light-dark(oklch(from var(--accent) 0.905 min(calc(c * 0.035), 0.006) h), oklch(from var(--accent) 0.3 min(calc(c * 0.07), 0.011) h));
 
   /* The About card's brand marks at rest, adjusted from the published brand
      colours. A brand colour is designed against white or its own fill, so on
@@ -231,15 +234,15 @@
   --brand-github: light-dark(#181717, #ffffff);
 
   /* Text ramp: three steps, the last still legible at 12px. */
-  --carbon-text: light-dark(#161616, #f4f4f4);
-  --carbon-text-sub: light-dark(#525252, #c6c6c6);
-  --carbon-text-muted: light-dark(#6f6f6f, #8d8d8d);
-  --sidebar-text: light-dark(#393939, #e0e0e0);
+  --carbon-text: light-dark(oklch(from var(--accent) 0.2 min(calc(c * 0.05), 0.009) h), oklch(from var(--accent) 0.95 min(calc(c * 0.03), 0.005) h));
+  --carbon-text-sub: light-dark(oklch(from var(--accent) 0.43 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.8 min(calc(c * 0.05), 0.009) h));
+  --carbon-text-muted: light-dark(oklch(from var(--accent) 0.52 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.67 min(calc(c * 0.07), 0.011) h));
+  --sidebar-text: light-dark(oklch(from var(--accent) 0.32 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.88 min(calc(c * 0.05), 0.009) h));
 
   /* A field's placeholder. Muted text falls to 2.4:1 on a sub-card's surface3
      field, so a placeholder takes the sub step, the dimmest that reads at 4.5:1
      on every field fill. */
-  --field-placeholder: light-dark(#525252, #c6c6c6);
+  --field-placeholder: light-dark(oklch(from var(--accent) 0.43 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.8 min(calc(c * 0.05), 0.009) h));
 
   /* Activity, and nothing else. Every sibling app opens with this accent, so a
      fresh install of any of them looks like the same product. */
@@ -321,30 +324,30 @@
 /* OLED, the dark ramp on true black for OLED and AMOLED screens (rule 43).
    `data-oled` on <html> asks for it and counts only while the dark ramp shows,
    chosen or from the system, so each value keeps the light ramp's own as its
-   first half. The surfaces move one Carbon step down and keep their order, so
+   first half. The surfaces move one stone step down and keep their order, so
    every rule that names a step still lands on the step it meant. The hover
    keeps its place between the card and surface2, and hover-raised is the step
    above surface3, as on the dark ramp. The text ramp, the accent and the state
    hues stay: they were measured on darker grounds than they get here.
 
    The elevation stays dark's shadow. It vanishes on black, and a ring in its
-   place would read as a frame round every card, so a card's #161616 is its
+   place would read as a frame round every card, so a card's near-black is its
    edge. Over a card the shadow still lifts a bubble or a menu off it. The
-   switch track stays at #525252 rather than following surface3 down, where it
-   would fall to 1.6:1 on the card. The opaque warning chip stands further from
-   a #161616 card than from a #262626 one, and the hairline and the scrim lose
+   switch track stays on dark's step rather than following surface3 down, where
+   it would lose its 3:1 on the card. The opaque warning chip stands further
+   from a near-black card than from dark's, and the hairline and the scrim lose
    nothing on black, so they stay as well. A lit brand tile in a near-black
    colour, such as GitHub's, would vanish into the card, so --tile-edge rings
    every lit tile. */
 [data-oled] {
-  --carbon-bg: light-dark(#f4f4f4, #000000);
-  --carbon-sidebar: light-dark(#ffffff, #161616);
-  --carbon-surface: light-dark(#ffffff, #161616);
-  --carbon-surface2: light-dark(#e8e8e8, #262626);
-  --carbon-surface3: light-dark(#d1d1d1, #393939);
-  --carbon-hover: light-dark(#e0e0e0, #232323);
-  --carbon-hover-raised: light-dark(#c6c6c6, #525252);
-  --carbon-border: light-dark(#d1d1d1, #262626);
+  --carbon-bg: light-dark(oklch(from var(--accent) 0.975 min(calc(c * 0.03), 0.005) h), #000000);
+  --carbon-sidebar: light-dark(oklch(from var(--accent) 0.995 min(calc(c * 0.015), 0.003) h), oklch(from var(--accent) 0.175 min(calc(c * 0.07), 0.011) h));
+  --carbon-surface: light-dark(oklch(from var(--accent) 0.997 min(calc(c * 0.01), 0.002) h), oklch(from var(--accent) 0.175 min(calc(c * 0.07), 0.011) h));
+  --carbon-surface2: light-dark(oklch(from var(--accent) 0.955 min(calc(c * 0.03), 0.005) h), oklch(from var(--accent) 0.235 min(calc(c * 0.07), 0.011) h));
+  --carbon-surface3: light-dark(oklch(from var(--accent) 0.905 min(calc(c * 0.035), 0.006) h), oklch(from var(--accent) 0.29 min(calc(c * 0.07), 0.011) h));
+  --carbon-hover: light-dark(oklch(from var(--accent) 0.93 min(calc(c * 0.03), 0.005) h), oklch(from var(--accent) 0.255 min(calc(c * 0.07), 0.011) h));
+  --carbon-hover-raised: light-dark(oklch(from var(--accent) 0.86 min(calc(c * 0.05), 0.009) h), oklch(from var(--accent) 0.36 min(calc(c * 0.07), 0.011) h));
+  --carbon-border: light-dark(oklch(from var(--accent) 0.905 min(calc(c * 0.035), 0.006) h), oklch(from var(--accent) 0.235 min(calc(c * 0.07), 0.011) h));
   --tile-edge: light-dark(transparent, rgba(255, 255, 255, .2));
 }
 
@@ -425,11 +428,11 @@
   :root,
   [data-theme] {
     --focus-ring-width: 3px;
-    --carbon-border: light-dark(#6f6f6f, #8d8d8d);
-    --carbon-text-sub: light-dark(#393939, #e0e0e0);
-    --carbon-text-muted: light-dark(#525252, #c6c6c6);
-    --sidebar-text: light-dark(#161616, #f4f4f4);
-    --field-placeholder: light-dark(#393939, #e0e0e0);
+    --carbon-border: light-dark(oklch(from var(--accent) 0.54 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.64 min(calc(c * 0.07), 0.011) h));
+    --carbon-text-sub: light-dark(oklch(from var(--accent) 0.32 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.88 min(calc(c * 0.05), 0.009) h));
+    --carbon-text-muted: light-dark(oklch(from var(--accent) 0.43 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.8 min(calc(c * 0.05), 0.009) h));
+    --sidebar-text: light-dark(oklch(from var(--accent) 0.2 min(calc(c * 0.05), 0.009) h), oklch(from var(--accent) 0.95 min(calc(c * 0.03), 0.005) h));
+    --field-placeholder: light-dark(oklch(from var(--accent) 0.32 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.88 min(calc(c * 0.05), 0.009) h));
     --ink-l-light: 0.40;
     --ink-l-dark: 0.84;
     --status-neutral-text: light-dark(#525252, #c6c6c6);
@@ -442,11 +445,11 @@
 :root[data-contrast="more"],
 :root[data-contrast="more"] [data-theme] {
   --focus-ring-width: 3px;
-  --carbon-border: light-dark(#6f6f6f, #8d8d8d);
-  --carbon-text-sub: light-dark(#393939, #e0e0e0);
-  --carbon-text-muted: light-dark(#525252, #c6c6c6);
-  --sidebar-text: light-dark(#161616, #f4f4f4);
-  --field-placeholder: light-dark(#393939, #e0e0e0);
+  --carbon-border: light-dark(oklch(from var(--accent) 0.54 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.64 min(calc(c * 0.07), 0.011) h));
+  --carbon-text-sub: light-dark(oklch(from var(--accent) 0.32 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.88 min(calc(c * 0.05), 0.009) h));
+  --carbon-text-muted: light-dark(oklch(from var(--accent) 0.43 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.8 min(calc(c * 0.05), 0.009) h));
+  --sidebar-text: light-dark(oklch(from var(--accent) 0.2 min(calc(c * 0.05), 0.009) h), oklch(from var(--accent) 0.95 min(calc(c * 0.03), 0.005) h));
+  --field-placeholder: light-dark(oklch(from var(--accent) 0.32 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.88 min(calc(c * 0.05), 0.009) h));
   --ink-l-light: 0.40;
   --ink-l-dark: 0.84;
   --status-neutral-text: light-dark(#525252, #c6c6c6);
@@ -471,26 +474,24 @@
 
 /* The ground of whatever the pointer is over, in the accent's hue (rule 21). A
    button, a row, a menu entry and a tile all take this one colour, so two
-   things lit side by side never differ. It keeps the OKLab lightness of
+   things lit side by side never differ. It sits a small step darker than
    surface3, which lifts a row off the card and a quiet button off surface2
-   while the text and the secondary text on it keep 4.5:1. On the dark ramps it
-   sits 0.007 below surface3, where a saturated green would otherwise take the
-   secondary text under 4.5:1. The chroma is a share of the accent's own, so a
-   grey accent leaves surface3's grey. Declared again inside a rainbow position,
-   so the hover takes the position's hue there, and in reactive mode only once
-   the position lights up. */
+   while the text and the secondary text on it keep 4.5:1. The chroma is a share
+   of the accent's own, so a grey accent leaves surface3's grey. Declared again
+   inside a rainbow position, so the hover takes the position's hue there, and
+   in reactive mode only once the position lights up. */
 :root,
 [data-theme],
 [data-rainbow] .glim-hue {
   /* How much of the accent's chroma the hover takes. */
-  --hover-chroma: 0.3;
-  --hover: light-dark(oklab(from var(--accent) 0.861 calc(a * var(--hover-chroma)) calc(b * var(--hover-chroma))), oklab(from var(--accent) 0.432 calc(a * var(--hover-chroma)) calc(b * var(--hover-chroma))));
+  --hover-chroma: 0.22;
+  --hover: light-dark(oklab(from var(--accent) 0.885 calc(a * var(--hover-chroma)) calc(b * var(--hover-chroma))), oklab(from var(--accent) 0.345 calc(a * var(--hover-chroma)) calc(b * var(--hover-chroma))));
 }
 
-/* OLED moves surface3 one Carbon step down, and the hover with it. */
+/* OLED moves surface3 one stone step down, and the hover with it. */
 [data-oled],
 [data-oled][data-rainbow] .glim-hue {
-  --hover: light-dark(oklab(from var(--accent) 0.861 calc(a * var(--hover-chroma)) calc(b * var(--hover-chroma))), oklab(from var(--accent) 0.338 calc(a * var(--hover-chroma)) calc(b * var(--hover-chroma))));
+  --hover: light-dark(oklab(from var(--accent) 0.885 calc(a * var(--hover-chroma)) calc(b * var(--hover-chroma))), oklab(from var(--accent) 0.27 calc(a * var(--hover-chroma)) calc(b * var(--hover-chroma))));
 }
 
 /* The house font is Noto Sans, shipped with the app for Latin, Cyrillic, Greek,

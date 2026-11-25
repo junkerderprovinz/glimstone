@@ -8,7 +8,7 @@
           {
             "name": "oled",
             "selector": "[data-oled]",
-            "$description": "OLED, the dark ramp on true black for OLED and AMOLED screens (rule 43). `data-oled` on <html> asks for it and counts only while the dark ramp shows, chosen or from the system, so each value keeps the light ramp's own as its first half. The surfaces move one Carbon step down and keep their order, so every rule that names a step still lands on the step it meant. The hover keeps its place between the card and surface2, and hover-raised is the step above surface3, as on the dark ramp. The text ramp, the accent and the state hues stay: they were measured on darker grounds than they get here.\n\nThe elevation stays dark's shadow. It vanishes on black, and a ring in its place would read as a frame round every card, so a card's #161616 is its edge. Over a card the shadow still lifts a bubble or a menu off it. The switch track stays at #525252 rather than following surface3 down, where it would fall to 1.6:1 on the card. The opaque warning chip stands further from a #161616 card than from a #262626 one, and the hairline and the scrim lose nothing on black, so they stay as well. A lit brand tile in a near-black colour, such as GitHub's, would vanish into the card, so --tile-edge rings every lit tile."
+            "$description": "OLED, the dark ramp on true black for OLED and AMOLED screens (rule 43). `data-oled` on <html> asks for it and counts only while the dark ramp shows, chosen or from the system, so each value keeps the light ramp's own as its first half. The surfaces move one stone step down and keep their order, so every rule that names a step still lands on the step it meant. The hover keeps its place between the card and surface2, and hover-raised is the step above surface3, as on the dark ramp. The text ramp, the accent and the state hues stay: they were measured on darker grounds than they get here.\n\nThe elevation stays dark's shadow. It vanishes on black, and a ring in its place would read as a frame round every card, so a card's near-black is its edge. Over a card the shadow still lifts a bubble or a menu off it. The switch track stays on dark's step rather than following surface3 down, where it would lose its 3:1 on the card. The opaque warning chip stands further from a near-black card than from dark's, and the hairline and the scrim lose nothing on black, so they stay as well. A lit brand tile in a near-black colour, such as GitHub's, would vanish into the card, so --tile-edge rings every lit tile."
           },
           {
             "name": "contrast",
@@ -32,12 +32,11 @@
       }
     },
     "carbon-bg": {
-      "$value": "#f4f4f4",
-      "$type": "color",
-      "$description": "Ground and surfaces: IBM Carbon's neutral greys. A warm near-black reads as brown next to a sibling app on this palette.",
+      "$value": "oklch(from {colour.accent} 0.975 min(calc(c * 0.03), 0.005) h)",
+      "$description": "Ground and surfaces: the stone ramp, OKLCH lightness steps tinted toward the accent's hue. The tint is a share of the accent's chroma that stops at 0.011 on the dark ramp and 0.006 on the light one, so a saturated accent warms or cools the stone without colouring it, and a grey accent leaves it grey. The names keep the carbon- prefix every app already reads.",
       "$extensions": {
         "org.glimstone": {
-          "dark": "#161616",
+          "dark": "oklch(from {colour.accent} 0.175 min(calc(c * 0.07), 0.011) h)",
           "modes": {
             "oled": {
               "dark": "#000000"
@@ -48,14 +47,13 @@
       }
     },
     "carbon-sidebar": {
-      "$value": "#ffffff",
-      "$type": "color",
+      "$value": "oklch(from {colour.accent} 0.995 min(calc(c * 0.015), 0.003) h)",
       "$extensions": {
         "org.glimstone": {
-          "dark": "#262626",
+          "dark": "oklch(from {colour.accent} 0.215 min(calc(c * 0.07), 0.011) h)",
           "modes": {
             "oled": {
-              "dark": "#161616"
+              "dark": "oklch(from {colour.accent} 0.175 min(calc(c * 0.07), 0.011) h)"
             }
           },
           "tailwind": "color-carbon-sidebar"
@@ -63,14 +61,13 @@
       }
     },
     "carbon-surface": {
-      "$value": "#ffffff",
-      "$type": "color",
+      "$value": "oklch(from {colour.accent} 0.997 min(calc(c * 0.01), 0.002) h)",
       "$extensions": {
         "org.glimstone": {
-          "dark": "#262626",
+          "dark": "oklch(from {colour.accent} 0.235 min(calc(c * 0.07), 0.011) h)",
           "modes": {
             "oled": {
-              "dark": "#161616"
+              "dark": "oklch(from {colour.accent} 0.175 min(calc(c * 0.07), 0.011) h)"
             }
           },
           "tailwind": "color-carbon-surface"
@@ -78,14 +75,13 @@
       }
     },
     "carbon-surface2": {
-      "$value": "#e8e8e8",
-      "$type": "color",
+      "$value": "oklch(from {colour.accent} 0.955 min(calc(c * 0.03), 0.005) h)",
       "$extensions": {
         "org.glimstone": {
-          "dark": "#393939",
+          "dark": "oklch(from {colour.accent} 0.29 min(calc(c * 0.07), 0.011) h)",
           "modes": {
             "oled": {
-              "dark": "#262626"
+              "dark": "oklch(from {colour.accent} 0.235 min(calc(c * 0.07), 0.011) h)"
             }
           },
           "tailwind": "color-carbon-surface2"
@@ -93,14 +89,13 @@
       }
     },
     "carbon-surface3": {
-      "$value": "#d1d1d1",
-      "$type": "color",
+      "$value": "oklch(from {colour.accent} 0.905 min(calc(c * 0.035), 0.006) h)",
       "$extensions": {
         "org.glimstone": {
-          "dark": "#525252",
+          "dark": "oklch(from {colour.accent} 0.36 min(calc(c * 0.07), 0.011) h)",
           "modes": {
             "oled": {
-              "dark": "#393939"
+              "dark": "oklch(from {colour.accent} 0.29 min(calc(c * 0.07), 0.011) h)"
             }
           },
           "tailwind": "color-carbon-surface3"
@@ -108,14 +103,13 @@
       }
     },
     "carbon-hover": {
-      "$value": "#e0e0e0",
-      "$type": "color",
+      "$value": "oklch(from {colour.accent} 0.93 min(calc(c * 0.03), 0.005) h)",
       "$extensions": {
         "org.glimstone": {
-          "dark": "#353535",
+          "dark": "oklch(from {colour.accent} 0.3 min(calc(c * 0.07), 0.011) h)",
           "modes": {
             "oled": {
-              "dark": "#232323"
+              "dark": "oklch(from {colour.accent} 0.255 min(calc(c * 0.07), 0.011) h)"
             }
           },
           "tailwind": "color-carbon-hover"
@@ -123,14 +117,13 @@
       }
     },
     "carbon-hover-raised": {
-      "$value": "#c6c6c6",
-      "$type": "color",
+      "$value": "oklch(from {colour.accent} 0.86 min(calc(c * 0.05), 0.009) h)",
       "$extensions": {
         "org.glimstone": {
-          "dark": "#6f6f6f",
+          "dark": "oklch(from {colour.accent} 0.44 min(calc(c * 0.07), 0.011) h)",
           "modes": {
             "oled": {
-              "dark": "#525252"
+              "dark": "oklch(from {colour.accent} 0.36 min(calc(c * 0.07), 0.011) h)"
             }
           },
           "tailwind": "color-carbon-hoverRaised"
@@ -138,28 +131,26 @@
       }
     },
     "toggle-off": {
-      "$value": "#8d8d8d",
-      "$type": "color",
+      "$value": "oklch(from {colour.accent} 0.64 min(calc(c * 0.05), 0.009) h)",
       "$description": "A switch that is off. On the light ramp surface3 stands too close to a card and to the knob to see, so the track goes down to 3:1 against both.",
       "$extensions": {
         "org.glimstone": {
-          "dark": "#525252"
+          "dark": "oklch(from {colour.accent} 0.54 min(calc(c * 0.07), 0.011) h)"
         }
       }
     },
     "carbon-border": {
-      "$value": "#d1d1d1",
-      "$type": "color",
+      "$value": "oklch(from {colour.accent} 0.905 min(calc(c * 0.035), 0.006) h)",
       "$extensions": {
         "org.glimstone": {
-          "dark": "#393939",
+          "dark": "oklch(from {colour.accent} 0.3 min(calc(c * 0.07), 0.011) h)",
           "modes": {
             "oled": {
-              "dark": "#262626"
+              "dark": "oklch(from {colour.accent} 0.235 min(calc(c * 0.07), 0.011) h)"
             },
             "contrast": {
-              "light": "#6f6f6f",
-              "dark": "#8d8d8d"
+              "light": "oklch(from {colour.accent} 0.54 min(calc(c * 0.07), 0.011) h)",
+              "dark": "oklch(from {colour.accent} 0.64 min(calc(c * 0.07), 0.011) h)"
             }
           },
           "tailwind": "color-carbon-border"
@@ -265,26 +256,24 @@
       }
     },
     "carbon-text": {
-      "$value": "#161616",
-      "$type": "color",
+      "$value": "oklch(from {colour.accent} 0.2 min(calc(c * 0.05), 0.009) h)",
       "$description": "Text ramp: three steps, the last still legible at 12px.",
       "$extensions": {
         "org.glimstone": {
-          "dark": "#f4f4f4",
+          "dark": "oklch(from {colour.accent} 0.95 min(calc(c * 0.03), 0.005) h)",
           "tailwind": "color-carbon-text"
         }
       }
     },
     "carbon-text-sub": {
-      "$value": "#525252",
-      "$type": "color",
+      "$value": "oklch(from {colour.accent} 0.43 min(calc(c * 0.07), 0.011) h)",
       "$extensions": {
         "org.glimstone": {
-          "dark": "#c6c6c6",
+          "dark": "oklch(from {colour.accent} 0.8 min(calc(c * 0.05), 0.009) h)",
           "modes": {
             "contrast": {
-              "light": "#393939",
-              "dark": "#e0e0e0"
+              "light": "oklch(from {colour.accent} 0.32 min(calc(c * 0.07), 0.011) h)",
+              "dark": "oklch(from {colour.accent} 0.88 min(calc(c * 0.05), 0.009) h)"
             }
           },
           "tailwind": "color-carbon-textSub"
@@ -292,15 +281,14 @@
       }
     },
     "carbon-text-muted": {
-      "$value": "#6f6f6f",
-      "$type": "color",
+      "$value": "oklch(from {colour.accent} 0.52 min(calc(c * 0.07), 0.011) h)",
       "$extensions": {
         "org.glimstone": {
-          "dark": "#8d8d8d",
+          "dark": "oklch(from {colour.accent} 0.67 min(calc(c * 0.07), 0.011) h)",
           "modes": {
             "contrast": {
-              "light": "#525252",
-              "dark": "#c6c6c6"
+              "light": "oklch(from {colour.accent} 0.43 min(calc(c * 0.07), 0.011) h)",
+              "dark": "oklch(from {colour.accent} 0.8 min(calc(c * 0.05), 0.009) h)"
             }
           },
           "tailwind": "color-carbon-textMuted"
@@ -308,31 +296,29 @@
       }
     },
     "sidebar-text": {
-      "$value": "#393939",
-      "$type": "color",
+      "$value": "oklch(from {colour.accent} 0.32 min(calc(c * 0.07), 0.011) h)",
       "$extensions": {
         "org.glimstone": {
-          "dark": "#e0e0e0",
+          "dark": "oklch(from {colour.accent} 0.88 min(calc(c * 0.05), 0.009) h)",
           "modes": {
             "contrast": {
-              "light": "#161616",
-              "dark": "#f4f4f4"
+              "light": "oklch(from {colour.accent} 0.2 min(calc(c * 0.05), 0.009) h)",
+              "dark": "oklch(from {colour.accent} 0.95 min(calc(c * 0.03), 0.005) h)"
             }
           }
         }
       }
     },
     "field-placeholder": {
-      "$value": "#525252",
-      "$type": "color",
+      "$value": "oklch(from {colour.accent} 0.43 min(calc(c * 0.07), 0.011) h)",
       "$description": "A field's placeholder. Muted text falls to 2.4:1 on a sub-card's surface3 field, so a placeholder takes the sub step, the dimmest that reads at 4.5:1 on every field fill.",
       "$extensions": {
         "org.glimstone": {
-          "dark": "#c6c6c6",
+          "dark": "oklch(from {colour.accent} 0.8 min(calc(c * 0.05), 0.009) h)",
           "modes": {
             "contrast": {
-              "light": "#393939",
-              "dark": "#e0e0e0"
+              "light": "oklch(from {colour.accent} 0.32 min(calc(c * 0.07), 0.011) h)",
+              "dark": "oklch(from {colour.accent} 0.88 min(calc(c * 0.05), 0.009) h)"
             }
           }
         }

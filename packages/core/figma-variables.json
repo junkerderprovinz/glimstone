@@ -444,7 +444,7 @@
    "name": "colour/carbon-bg",
    "variableCollectionId": "collection:Colour",
    "resolvedType": "COLOR",
-   "description": "Ground and surfaces: IBM Carbon's neutral greys. A warm near-black reads as brown next to a sibling app on this palette."
+   "description": "Ground and surfaces: the stone ramp, OKLCH lightness steps tinted toward the accent's hue. The tint is a share of the accent's chroma that stops at 0.011 on the dark ramp and 0.006 on the light one, so a saturated accent warms or cools the stone without colouring it, and a grey accent leaves it grey. The names keep the carbon- prefix every app already reads."
   },
   {
    "action": "CREATE",
@@ -1316,9 +1316,9 @@
    "variableId": "variable:colour.carbon-bg",
    "modeId": "mode:Colour:Light",
    "value": {
-    "r": 0.9568627450980393,
-    "g": 0.9568627450980393,
-    "b": 0.9568627450980393,
+    "r": 0.9725490196078431,
+    "g": 0.9686274509803922,
+    "b": 0.9529411764705882,
     "a": 1
    }
   },
@@ -1326,9 +1326,9 @@
    "variableId": "variable:colour.carbon-bg",
    "modeId": "mode:Colour:Dark",
    "value": {
-    "r": 0.08627450980392157,
-    "g": 0.08627450980392157,
-    "b": 0.08627450980392157,
+    "r": 0.07450980392156863,
+    "g": 0.06274509803921569,
+    "b": 0.043137254901960784,
     "a": 1
    }
   },
@@ -1346,9 +1346,9 @@
    "variableId": "variable:colour.carbon-sidebar",
    "modeId": "mode:Colour:Light",
    "value": {
-    "r": 1,
-    "g": 1,
-    "b": 1,
+    "r": 0.996078431372549,
+    "g": 0.9921568627450981,
+    "b": 0.984313725490196,
     "a": 1
    }
   },
@@ -1356,9 +1356,9 @@
    "variableId": "variable:colour.carbon-sidebar",
    "modeId": "mode:Colour:Dark",
    "value": {
-    "r": 0.14901960784313725,
-    "g": 0.14901960784313725,
-    "b": 0.14901960784313725,
+    "r": 0.10980392156862745,
+    "g": 0.09803921568627451,
+    "b": 0.0784313725490196,
     "a": 1
    }
   },
@@ -1366,9 +1366,9 @@
    "variableId": "variable:colour.carbon-sidebar",
    "modeId": "mode:Colour:OLED",
    "value": {
-    "r": 0.08627450980392157,
-    "g": 0.08627450980392157,
-    "b": 0.08627450980392157,
+    "r": 0.07450980392156863,
+    "g": 0.06274509803921569,
+    "b": 0.043137254901960784,
     "a": 1
    }
   },
@@ -1376,9 +1376,9 @@
    "variableId": "variable:colour.carbon-surface",
    "modeId": "mode:Colour:Light",
    "value": {
-    "r": 1,
-    "g": 1,
-    "b": 1,
+    "r": 0.996078431372549,
+    "g": 0.996078431372549,
+    "b": 0.9921568627450981,
     "a": 1
    }
   },
@@ -1386,9 +1386,9 @@
    "variableId": "variable:colour.carbon-surface",
    "modeId": "mode:Colour:Dark",
    "value": {
-    "r": 0.14901960784313725,
-    "g": 0.14901960784313725,
-    "b": 0.14901960784313725,
+    "r": 0.12549019607843137,
+    "g": 0.11764705882352941,
+    "b": 0.09411764705882353,
     "a": 1
    }
   },
@@ -1396,9 +1396,9 @@
    "variableId": "variable:colour.carbon-surface",
    "modeId": "mode:Colour:OLED",
    "value": {
-    "r": 0.08627450980392157,
-    "g": 0.08627450980392157,
-    "b": 0.08627450980392157,
+    "r": 0.07450980392156863,
+    "g": 0.06274509803921569,
+    "b": 0.043137254901960784,
     "a": 1
    }
   },
@@ -1406,69 +1406,69 @@
    "variableId": "variable:colour.carbon-surface2",
    "modeId": "mode:Colour:Light",
    "value": {
-    "r": 0.9098039215686274,
+    "r": 0.9450980392156862,
+    "g": 0.9411764705882353,
+    "b": 0.9254901960784314,
+    "a": 1
+   }
+  },
+  {
+   "variableId": "variable:colour.carbon-surface2",
+   "modeId": "mode:Colour:Dark",
+   "value": {
+    "r": 0.1803921568627451,
+    "g": 0.16862745098039217,
+    "b": 0.1450980392156863,
+    "a": 1
+   }
+  },
+  {
+   "variableId": "variable:colour.carbon-surface2",
+   "modeId": "mode:Colour:OLED",
+   "value": {
+    "r": 0.12549019607843137,
+    "g": 0.11764705882352941,
+    "b": 0.09411764705882353,
+    "a": 1
+   }
+  },
+  {
+   "variableId": "variable:colour.carbon-surface3",
+   "modeId": "mode:Colour:Light",
+   "value": {
+    "r": 0.8823529411764706,
+    "g": 0.8745098039215686,
+    "b": 0.8588235294117647,
+    "a": 1
+   }
+  },
+  {
+   "variableId": "variable:colour.carbon-surface3",
+   "modeId": "mode:Colour:Dark",
+   "value": {
+    "r": 0.25098039215686274,
+    "g": 0.23921568627450981,
+    "b": 0.21568627450980393,
+    "a": 1
+   }
+  },
+  {
+   "variableId": "variable:colour.carbon-surface3",
+   "modeId": "mode:Colour:OLED",
+   "value": {
+    "r": 0.1803921568627451,
+    "g": 0.16862745098039217,
+    "b": 0.1450980392156863,
+    "a": 1
+   }
+  },
+  {
+   "variableId": "variable:colour.carbon-hover",
+   "modeId": "mode:Colour:Light",
+   "value": {
+    "r": 0.9137254901960784,
     "g": 0.9098039215686274,
-    "b": 0.9098039215686274,
-    "a": 1
-   }
-  },
-  {
-   "variableId": "variable:colour.carbon-surface2",
-   "modeId": "mode:Colour:Dark",
-   "value": {
-    "r": 0.2235294117647059,
-    "g": 0.2235294117647059,
-    "b": 0.2235294117647059,
-    "a": 1
-   }
-  },
-  {
-   "variableId": "variable:colour.carbon-surface2",
-   "modeId": "mode:Colour:OLED",
-   "value": {
-    "r": 0.14901960784313725,
-    "g": 0.14901960784313725,
-    "b": 0.14901960784313725,
-    "a": 1
-   }
-  },
-  {
-   "variableId": "variable:colour.carbon-surface3",
-   "modeId": "mode:Colour:Light",
-   "value": {
-    "r": 0.8196078431372549,
-    "g": 0.8196078431372549,
-    "b": 0.8196078431372549,
-    "a": 1
-   }
-  },
-  {
-   "variableId": "variable:colour.carbon-surface3",
-   "modeId": "mode:Colour:Dark",
-   "value": {
-    "r": 0.3215686274509804,
-    "g": 0.3215686274509804,
-    "b": 0.3215686274509804,
-    "a": 1
-   }
-  },
-  {
-   "variableId": "variable:colour.carbon-surface3",
-   "modeId": "mode:Colour:OLED",
-   "value": {
-    "r": 0.2235294117647059,
-    "g": 0.2235294117647059,
-    "b": 0.2235294117647059,
-    "a": 1
-   }
-  },
-  {
-   "variableId": "variable:colour.carbon-hover",
-   "modeId": "mode:Colour:Light",
-   "value": {
-    "r": 0.8784313725490196,
-    "g": 0.8784313725490196,
-    "b": 0.8784313725490196,
+    "b": 0.8941176470588236,
     "a": 1
    }
   },
@@ -1476,9 +1476,9 @@
    "variableId": "variable:colour.carbon-hover",
    "modeId": "mode:Colour:Dark",
    "value": {
-    "r": 0.20784313725490197,
-    "g": 0.20784313725490197,
-    "b": 0.20784313725490197,
+    "r": 0.18823529411764706,
+    "g": 0.1803921568627451,
+    "b": 0.1568627450980392,
     "a": 1
    }
   },
@@ -1486,9 +1486,9 @@
    "variableId": "variable:colour.carbon-hover",
    "modeId": "mode:Colour:OLED",
    "value": {
-    "r": 0.13725490196078433,
+    "r": 0.1450980392156863,
     "g": 0.13725490196078433,
-    "b": 0.13725490196078433,
+    "b": 0.11372549019607843,
     "a": 1
    }
   },
@@ -1496,69 +1496,69 @@
    "variableId": "variable:colour.carbon-hover-raised",
    "modeId": "mode:Colour:Light",
    "value": {
-    "r": 0.7764705882352941,
-    "g": 0.7764705882352941,
-    "b": 0.7764705882352941,
-    "a": 1
-   }
-  },
-  {
-   "variableId": "variable:colour.carbon-hover-raised",
-   "modeId": "mode:Colour:Dark",
-   "value": {
-    "r": 0.43529411764705883,
-    "g": 0.43529411764705883,
-    "b": 0.43529411764705883,
-    "a": 1
-   }
-  },
-  {
-   "variableId": "variable:colour.carbon-hover-raised",
-   "modeId": "mode:Colour:OLED",
-   "value": {
-    "r": 0.3215686274509804,
-    "g": 0.3215686274509804,
-    "b": 0.3215686274509804,
-    "a": 1
-   }
-  },
-  {
-   "variableId": "variable:colour.toggle-off",
-   "modeId": "mode:Colour:Light",
-   "value": {
-    "r": 0.5529411764705883,
-    "g": 0.5529411764705883,
-    "b": 0.5529411764705883,
-    "a": 1
-   }
-  },
-  {
-   "variableId": "variable:colour.toggle-off",
-   "modeId": "mode:Colour:Dark",
-   "value": {
-    "r": 0.3215686274509804,
-    "g": 0.3215686274509804,
-    "b": 0.3215686274509804,
-    "a": 1
-   }
-  },
-  {
-   "variableId": "variable:colour.toggle-off",
-   "modeId": "mode:Colour:OLED",
-   "value": {
-    "r": 0.3215686274509804,
-    "g": 0.3215686274509804,
-    "b": 0.3215686274509804,
-    "a": 1
-   }
-  },
-  {
-   "variableId": "variable:colour.carbon-border",
-   "modeId": "mode:Colour:Light",
-   "value": {
-    "r": 0.8196078431372549,
+    "r": 0.8274509803921568,
     "g": 0.8196078431372549,
-    "b": 0.8196078431372549,
+    "b": 0.796078431372549,
+    "a": 1
+   }
+  },
+  {
+   "variableId": "variable:colour.carbon-hover-raised",
+   "modeId": "mode:Colour:Dark",
+   "value": {
+    "r": 0.3333333333333333,
+    "g": 0.3215686274509804,
+    "b": 0.2980392156862745,
+    "a": 1
+   }
+  },
+  {
+   "variableId": "variable:colour.carbon-hover-raised",
+   "modeId": "mode:Colour:OLED",
+   "value": {
+    "r": 0.25098039215686274,
+    "g": 0.23921568627450981,
+    "b": 0.21568627450980393,
+    "a": 1
+   }
+  },
+  {
+   "variableId": "variable:colour.toggle-off",
+   "modeId": "mode:Colour:Light",
+   "value": {
+    "r": 0.5568627450980392,
+    "g": 0.5490196078431373,
+    "b": 0.5254901960784314,
+    "a": 1
+   }
+  },
+  {
+   "variableId": "variable:colour.toggle-off",
+   "modeId": "mode:Colour:Dark",
+   "value": {
+    "r": 0.44313725490196076,
+    "g": 0.43137254901960786,
+    "b": 0.40784313725490196,
+    "a": 1
+   }
+  },
+  {
+   "variableId": "variable:colour.toggle-off",
+   "modeId": "mode:Colour:OLED",
+   "value": {
+    "r": 0.44313725490196076,
+    "g": 0.43137254901960786,
+    "b": 0.40784313725490196,
+    "a": 1
+   }
+  },
+  {
+   "variableId": "variable:colour.carbon-border",
+   "modeId": "mode:Colour:Light",
+   "value": {
+    "r": 0.8823529411764706,
+    "g": 0.8745098039215686,
+    "b": 0.8588235294117647,
     "a": 1
    }
   },
@@ -1566,9 +1566,9 @@
    "variableId": "variable:colour.carbon-border",
    "modeId": "mode:Colour:Dark",
    "value": {
-    "r": 0.2235294117647059,
-    "g": 0.2235294117647059,
-    "b": 0.2235294117647059,
+    "r": 0.18823529411764706,
+    "g": 0.1803921568627451,
+    "b": 0.1568627450980392,
     "a": 1
    }
   },
@@ -1576,9 +1576,9 @@
    "variableId": "variable:colour.carbon-border",
    "modeId": "mode:Colour:OLED",
    "value": {
-    "r": 0.14901960784313725,
-    "g": 0.14901960784313725,
-    "b": 0.14901960784313725,
+    "r": 0.12549019607843137,
+    "g": 0.11764705882352941,
+    "b": 0.09411764705882353,
     "a": 1
    }
   },
@@ -2006,9 +2006,9 @@
    "variableId": "variable:colour.carbon-text",
    "modeId": "mode:Colour:Light",
    "value": {
-    "r": 0.08627450980392157,
+    "r": 0.09411764705882353,
     "g": 0.08627450980392157,
-    "b": 0.08627450980392157,
+    "b": 0.07058823529411765,
     "a": 1
    }
   },
@@ -2016,9 +2016,9 @@
    "variableId": "variable:colour.carbon-text",
    "modeId": "mode:Colour:Dark",
    "value": {
-    "r": 0.9568627450980393,
-    "g": 0.9568627450980393,
-    "b": 0.9568627450980393,
+    "r": 0.9411764705882353,
+    "g": 0.9333333333333333,
+    "b": 0.9215686274509803,
     "a": 1
    }
   },
@@ -2026,9 +2026,9 @@
    "variableId": "variable:colour.carbon-text",
    "modeId": "mode:Colour:OLED",
    "value": {
-    "r": 0.9568627450980393,
-    "g": 0.9568627450980393,
-    "b": 0.9568627450980393,
+    "r": 0.9411764705882353,
+    "g": 0.9333333333333333,
+    "b": 0.9215686274509803,
     "a": 1
    }
   },
@@ -2037,8 +2037,8 @@
    "modeId": "mode:Colour:Light",
    "value": {
     "r": 0.3215686274509804,
-    "g": 0.3215686274509804,
-    "b": 0.3215686274509804,
+    "g": 0.30980392156862746,
+    "b": 0.28627450980392155,
     "a": 1
    }
   },
@@ -2046,9 +2046,9 @@
    "variableId": "variable:colour.carbon-text-sub",
    "modeId": "mode:Colour:Dark",
    "value": {
-    "r": 0.7764705882352941,
-    "g": 0.7764705882352941,
-    "b": 0.7764705882352941,
+    "r": 0.7529411764705882,
+    "g": 0.7411764705882353,
+    "b": 0.7215686274509804,
     "a": 1
    }
   },
@@ -2056,9 +2056,9 @@
    "variableId": "variable:colour.carbon-text-sub",
    "modeId": "mode:Colour:OLED",
    "value": {
-    "r": 0.7764705882352941,
-    "g": 0.7764705882352941,
-    "b": 0.7764705882352941,
+    "r": 0.7529411764705882,
+    "g": 0.7411764705882353,
+    "b": 0.7215686274509804,
     "a": 1
    }
   },
@@ -2066,9 +2066,9 @@
    "variableId": "variable:colour.carbon-text-muted",
    "modeId": "mode:Colour:Light",
    "value": {
-    "r": 0.43529411764705883,
-    "g": 0.43529411764705883,
-    "b": 0.43529411764705883,
+    "r": 0.4235294117647059,
+    "g": 0.4117647058823529,
+    "b": 0.3843137254901961,
     "a": 1
    }
   },
@@ -2076,9 +2076,9 @@
    "variableId": "variable:colour.carbon-text-muted",
    "modeId": "mode:Colour:Dark",
    "value": {
-    "r": 0.5529411764705883,
-    "g": 0.5529411764705883,
-    "b": 0.5529411764705883,
+    "r": 0.596078431372549,
+    "g": 0.5843137254901961,
+    "b": 0.5568627450980392,
     "a": 1
    }
   },
@@ -2086,9 +2086,9 @@
    "variableId": "variable:colour.carbon-text-muted",
    "modeId": "mode:Colour:OLED",
    "value": {
-    "r": 0.5529411764705883,
-    "g": 0.5529411764705883,
-    "b": 0.5529411764705883,
+    "r": 0.596078431372549,
+    "g": 0.5843137254901961,
+    "b": 0.5568627450980392,
     "a": 1
    }
   },
@@ -2096,9 +2096,9 @@
    "variableId": "variable:colour.sidebar-text",
    "modeId": "mode:Colour:Light",
    "value": {
-    "r": 0.2235294117647059,
-    "g": 0.2235294117647059,
-    "b": 0.2235294117647059,
+    "r": 0.20784313725490197,
+    "g": 0.2,
+    "b": 0.17647058823529413,
     "a": 1
    }
   },
@@ -2106,9 +2106,9 @@
    "variableId": "variable:colour.sidebar-text",
    "modeId": "mode:Colour:Dark",
    "value": {
-    "r": 0.8784313725490196,
-    "g": 0.8784313725490196,
-    "b": 0.8784313725490196,
+    "r": 0.8549019607843137,
+    "g": 0.8431372549019608,
+    "b": 0.8196078431372549,
     "a": 1
    }
   },
@@ -2116,9 +2116,9 @@
    "variableId": "variable:colour.sidebar-text",
    "modeId": "mode:Colour:OLED",
    "value": {
-    "r": 0.8784313725490196,
-    "g": 0.8784313725490196,
-    "b": 0.8784313725490196,
+    "r": 0.8549019607843137,
+    "g": 0.8431372549019608,
+    "b": 0.8196078431372549,
     "a": 1
    }
   },
@@ -2127,8 +2127,8 @@
    "modeId": "mode:Colour:Light",
    "value": {
     "r": 0.3215686274509804,
-    "g": 0.3215686274509804,
-    "b": 0.3215686274509804,
+    "g": 0.30980392156862746,
+    "b": 0.28627450980392155,
     "a": 1
    }
   },
@@ -2136,9 +2136,9 @@
    "variableId": "variable:colour.field-placeholder",
    "modeId": "mode:Colour:Dark",
    "value": {
-    "r": 0.7764705882352941,
-    "g": 0.7764705882352941,
-    "b": 0.7764705882352941,
+    "r": 0.7529411764705882,
+    "g": 0.7411764705882353,
+    "b": 0.7215686274509804,
     "a": 1
    }
   },
@@ -2146,9 +2146,9 @@
    "variableId": "variable:colour.field-placeholder",
    "modeId": "mode:Colour:OLED",
    "value": {
-    "r": 0.7764705882352941,
-    "g": 0.7764705882352941,
-    "b": 0.7764705882352941,
+    "r": 0.7529411764705882,
+    "g": 0.7411764705882353,
+    "b": 0.7215686274509804,
     "a": 1
    }
   },

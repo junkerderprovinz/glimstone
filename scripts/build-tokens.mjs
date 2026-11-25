@@ -15,7 +15,7 @@
 import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import StyleDictionary from "style-dictionary";
-import { srgbOf } from "../packages/core/src/oklab.ts";
+import { oklabOf, srgbOf } from "../packages/core/src/oklab.ts";
 
 const repo = new URL("../", import.meta.url);
 const source = new URL("packages/core/tokens/", repo);
@@ -158,8 +158,39 @@ function tailwindTheme() {
 
 const h = (n) => Number(n).toString(16).padStart(2, "0").toUpperCase();
 
+const literal = (name) => ORDER.map((id) => groups[id][name]).find(Boolean)?.$value;
+
+/**
+ * A relative oklch() on another token, worked out on that token's own value.
+ * The stone ramp is tinted by the accent the user picks, so a phone app and a
+ * design tool get it on the default accent.
+ */
+function relativeOklch(value) {
+  const m = value.match(/^oklch\(from var\(--([\w-]+)\)\s+(.+)\)$/);
+  if (!m) return null;
+  const [L, a, b] = oklabOf(literal(m[1]));
+  const hue = (Math.atan2(b, a) * 180) / Math.PI;
+  const origin = { l: L, c: Math.hypot(a, b), h: hue < 0 ? hue + 360 : hue };
+  const channels = [""];
+  let depth = 0;
+  for (const ch of m[2]) {
+    if (ch === "(") depth++;
+    if (ch === ")") depth--;
+    if (ch === " " && depth === 0) channels.push("");
+    else channels[channels.length - 1] += ch;
+  }
+  const [l, c, h] = channels.map((expr) => {
+    const js = expr.replace(/calc\(/g, "(").replace(/\b(min|max)\(/g, "Math.$1(").replace(/\b([lch])\b/g, (_, k) => String(origin[k]));
+    if (!/^[\d.\s+\-*/(),Mathminax]+$/.test(js)) throw new Error(`cannot work out ${expr} in ${value}`);
+    return Function(`return ${js}`)();
+  });
+  return srgbOf([l, c * Math.cos((h * Math.PI) / 180), c * Math.sin((h * Math.PI) / 180)]);
+}
+
 /** An oklch(), rgb() or hex colour as sRGB channels from 0 to 255, or null for anything else. */
 function rgbaOf(value) {
+  value = css(value);
+  value = relativeOklch(value) ?? value;
   const hex = value.match(/^#([0-9a-f]{6})([0-9a-f]{2})?$/i);
   if (hex) return [...[0, 2, 4].map((i) => parseInt(hex[1].slice(i, i + 2), 16)), hex[2] ? parseInt(hex[2], 16) / 255 : 1];
   const lch = value.match(/^oklch\(\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s*(?:\/\s*([\d.]+))?\s*\)$/);
