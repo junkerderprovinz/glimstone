@@ -29,6 +29,17 @@ The sign-in tile's lists stand in connection rows, the password question moves i
 - **No password yet and two-factor that is off show an empty state,** a short line and a quiet one over the button, as the passkeys card does without a passkey. No status row says None or Off.
 - **A sign-in service's switch speaks for itself.** Its badge says only what the switch can't: Not tested yet, Paused, and On or Off for a service from the configuration file, which has no switch.
 - **A switch among a list row's buttons keeps a gap from them,** and a quiet button under the pointer fills with the accent so it stays visible on the lit row.
+- **Select and Combobox are drawn as borderless fields.** They take the text field's fill and show focus as a step up its ramp instead of a ring.
+- **A ListTable's header is explained by an (i) at its end** instead of a line over the first row.
+
+## ⚡ Improved
+
+- **Pagination shortens to "3 / 20"** when its row has no room for the page buttons.
+
+## 🐛 Fixed
+
+- **A toast's close cross sits centred on its first line,** also when the message wraps.
+- **A glyph segment in the Selector is measured at its square,** not at the glyph, so the segments line up.
 
 ## 🌐 Translations
 
