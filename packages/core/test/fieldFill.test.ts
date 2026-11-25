@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
 // Rule 14 as the stylesheet draws it, outside the contrast step and Windows'
-// contrast themes, which give every field an edge on purpose.
+// contrast themes, which give every field an edge.
 const source = readFileSync(new URL('../tokens.css', import.meta.url), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
 
 function withoutBlocks(css: string, opening: RegExp): string {

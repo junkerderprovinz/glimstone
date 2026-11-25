@@ -116,7 +116,7 @@ test.describe("Pagination", () => {
     await demo.getByRole("button", { name: "التالي", exact: true }).click();
     await demo.getByRole("button", { name: "التالي", exact: true }).click();
     await expect(demo.getByRole("button", { name: "حفظ" })).toBeVisible();
-    // Words kept for a screen reader alone are clipped to a pixel on purpose.
+    // Words kept for a screen reader alone are clipped to a pixel.
     const spill = await demo.evaluate((root) => [...root.querySelectorAll<HTMLElement>("*:not(.glim-sr-only)")].filter((el) => el.scrollWidth > el.clientWidth + 1 && getComputedStyle(el).overflowX === "hidden").length);
     expect(spill).toBe(0);
   });
