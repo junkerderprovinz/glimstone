@@ -9,6 +9,7 @@ export const zh: ComponentWords = {
     selected: "已选中 {tag}。按 Backspace 或 Delete 移除",
     removed: "已移除 {tag}",
   },
+  multiSelect: { remove: "移除 {item}", empty: "没有匹配项。", toggle: "显示全部选项", search: "输入以搜索" },
   steps: { back: "上一步", next: "下一步", finish: "完成" },
   splitter: { resize: "调整大小" },
   fileUpload: {

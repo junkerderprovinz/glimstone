@@ -21,6 +21,7 @@ const COMPONENTS = {
   ToastViewport: "react/Toast.tsx",
   Select: "react/Select.tsx",
   Combobox: "react/Combobox.tsx",
+  MultiSelect: "react/MultiSelect.tsx",
   Slider: "react/Slider.tsx",
   WindowBar: "react/WindowBar.tsx",
   Selector: "react/Selector.tsx",

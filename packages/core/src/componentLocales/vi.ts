@@ -9,6 +9,7 @@ export const vi: ComponentWords = {
     selected: "Đã chọn {tag}. Backspace hoặc Delete sẽ xóa",
     removed: "Đã xóa {tag}",
   },
+  multiSelect: { remove: "Xóa {item}", empty: "Không có gì khớp.", toggle: "Hiện mọi lựa chọn", search: "Gõ để tìm" },
   steps: { back: "Quay lại", next: "Tiếp", finish: "Hoàn tất" },
   splitter: { resize: "Đổi kích thước" },
   fileUpload: {

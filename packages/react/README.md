@@ -52,6 +52,7 @@ needs none of them.
 | `Badge` | Status pills and the filled section heading the card draws |
 | `Select` | The one dropdown, on Zag's select machine and on its menu machine for a list with submenus |
 | `Combobox` | A field that filters a long list as somebody types |
+| `MultiSelect` | Several picks from a list, kept as tags in the field; a long list filters as somebody types |
 | `Slider` | A value on a range, with the value in words beside the label |
 | `DropdownListbox` | Deprecated, use `Select` |
 | `ConfirmDialog` + `useConfirm` | The confirm surface for a destructive action, and the hook that gives it a portal, Escape, the Tab trap and focus back to the control that asked |

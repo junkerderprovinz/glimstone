@@ -14,6 +14,7 @@ export const bg: ComponentWords = {
     selected: "{tag}: избрано. Backspace или Delete го премахва",
     removed: "{tag}: премахнато",
   },
+  multiSelect: { remove: "Премахване на {item}", empty: "Нищо не съвпада.", toggle: "Показване на всички възможности", search: "Пиши, за да търсиш" },
   steps: { back: "Назад", next: "Напред", finish: "Готово" },
   splitter: { resize: "Промяна на размера" },
   fileUpload: {

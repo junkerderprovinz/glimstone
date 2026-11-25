@@ -6,6 +6,7 @@ import type { ComponentWords } from "./componentWords.ts";
 import { paginationText } from "./pagination.ts";
 import { pinInputText } from "./pinInput.ts";
 import { tagsInputText } from "./tagsInput.ts";
+import { multiSelectText } from "./multiSelect.ts";
 import { fileUploadText } from "./fileUpload.ts";
 import { ratingText } from "./rating.ts";
 import { timerText } from "./timer.ts";
@@ -14,6 +15,7 @@ import { tourText } from "./tour.ts";
 import type { PaginationText } from "./pagination.ts";
 import type { PinInputText } from "./pinInput.ts";
 import type { TagsInputText } from "./tagsInput.ts";
+import type { MultiSelectText } from "./multiSelect.ts";
 import type { StepsText } from "./steps.ts";
 import type { SplitterText } from "./splitter.ts";
 import type { FileUploadText } from "./fileUpload.ts";
@@ -80,6 +82,7 @@ export interface ComponentText {
   pagination: PaginationText;
   pinInput: PinInputText;
   tagsInput: TagsInputText;
+  multiSelect: MultiSelectText;
   steps: StepsText;
   splitter: SplitterText;
   fileUpload: FileUploadText;
@@ -106,6 +109,7 @@ export function componentText(lang: string): ComponentText {
     pagination: paginationText(w.pagination, code),
     pinInput: pinInputText(w.pinInput, code),
     tagsInput: tagsInputText(w.tagsInput, code),
+    multiSelect: multiSelectText(w.multiSelect),
     steps: w.steps,
     splitter: w.splitter,
     fileUpload: fileUploadText(w.fileUpload, code),

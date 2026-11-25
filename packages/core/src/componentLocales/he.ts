@@ -9,6 +9,7 @@ export const he: ComponentWords = {
     selected: "{tag} נבחר. Backspace או Delete מסירים אותו",
     removed: "{tag} הוסר",
   },
+  multiSelect: { remove: "הסרת {item}", empty: "אין התאמה.", toggle: "הצגת כל האפשרויות", search: "הקלדה לחיפוש" },
   steps: { back: "הקודם", next: "הבא", finish: "סיום" },
   splitter: { resize: "שינוי גודל" },
   fileUpload: {

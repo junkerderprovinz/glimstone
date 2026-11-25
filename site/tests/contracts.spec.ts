@@ -1237,6 +1237,96 @@ test.describe("Combobox", () => {
   });
 });
 
+test.describe("MultiSelect", () => {
+  const field = (page: Page, demo = "MultiSelectZag") => stage(page, demo).getByRole("combobox");
+  const list = (page: Page) => page.getByRole("listbox");
+  const tags = (page: Page, demo = "MultiSelectZag") => stage(page, demo).locator(".glim-tag-text").allInnerTexts();
+
+  test("[ms-tags] every pick stands in the field as a tag", async ({ page }) => {
+    await open(page, "/components/multi-select");
+    expect(await tags(page)).toEqual(["Photos"]);
+    await field(page).click();
+    await list(page).getByRole("option", { name: "Videos" }).click();
+    expect(await tags(page)).toEqual(["Photos", "Videos"]);
+  });
+
+  test("[ms-stays-open] Enter picks the highlighted choice and the list stays open", async ({ page }) => {
+    await open(page, "/components/multi-select");
+    await field(page).fill("vid");
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("Enter");
+    expect(await tags(page)).toEqual(["Photos", "Videos"]);
+    await expect(list(page)).toBeVisible();
+    await expect(field(page)).toBeFocused();
+  });
+
+  test("[ms-toggle] picking a chosen choice again puts it back", async ({ page }) => {
+    await open(page, "/components/multi-select");
+    await field(page).click();
+    await list(page).getByRole("option", { name: "Photos" }).click();
+    expect(await tags(page)).toEqual([]);
+  });
+
+  test("[ms-remove] a tag's remove button takes it away and leaves focus in the field", async ({ page }) => {
+    await open(page, "/components/multi-select");
+    await stage(page, "MultiSelectZag").getByRole("button", { name: "Remove Photos" }).click();
+    expect(await tags(page)).toEqual([]);
+    await expect(field(page)).toBeFocused();
+  });
+
+  test("[ms-backspace] Backspace in an empty field takes the last tag", async ({ page }) => {
+    await open(page, "/components/multi-select");
+    await field(page).focus();
+    await page.keyboard.press("Backspace");
+    expect(await tags(page)).toEqual([]);
+  });
+
+  test("[ms-search] typing filters a long list, and a search that finds nothing says so", async ({ page }) => {
+    await open(page, "/components/multi-select");
+    await field(page).fill("ph");
+    expect(await list(page).getByRole("option").allInnerTexts()).toEqual(["Photos"]);
+    await field(page).fill("zzz");
+    await expect(list(page).getByText("Nothing matches.")).toBeVisible();
+  });
+
+  test("[ms-short] a short list takes no typing and opens like a select", async ({ page }) => {
+    await open(page, "/components/multi-select");
+    await field(page, "MultiSelectShort").focus();
+    await page.keyboard.press("ArrowDown");
+    await expect(list(page)).toBeVisible();
+    await page.keyboard.type("x");
+    await expect(field(page, "MultiSelectShort")).toHaveValue("");
+    await expect(list(page).getByRole("option")).toHaveCount(5);
+  });
+
+  test("[ms-space] Space picks the highlighted choice of a short list and keeps it open", async ({ page }) => {
+    await open(page, "/components/multi-select");
+    await field(page, "MultiSelectShort").focus();
+    await page.keyboard.press("ArrowDown");
+    await expect(field(page, "MultiSelectShort")).toHaveAttribute("aria-activedescendant", /.+/);
+    await page.keyboard.press(" ");
+    expect(await tags(page, "MultiSelectShort")).toHaveLength(1);
+    await expect(list(page)).toBeVisible();
+  });
+
+  test("[ms-escape] Escape closes the list and keeps focus in the field", async ({ page }) => {
+    await open(page, "/components/multi-select");
+    await field(page).click();
+    await expect(list(page)).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(list(page)).toBeHidden();
+    await expect(field(page)).toBeFocused();
+  });
+
+  test("[ms-multiselectable] the list says it takes several choices and which are picked", async ({ page }) => {
+    await open(page, "/components/multi-select");
+    await field(page).click();
+    await expect(list(page)).toHaveAttribute("aria-multiselectable", "true");
+    await expect(list(page).getByRole("option", { name: "Photos" })).toHaveAttribute("aria-selected", "true");
+    await expect(list(page).getByRole("option", { name: "Videos" })).toHaveAttribute("aria-selected", "false");
+  });
+});
+
 test.describe("Slider", () => {
   const thumb = (page: Page) => stage(page, "SliderZag").getByRole("slider");
 

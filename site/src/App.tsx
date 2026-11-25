@@ -9,7 +9,7 @@ import { Adopting, Glyphs, Introduction, Palette, Rules, TypeScale } from "./pag
 import { Charts } from "./pages/charts";
 import { Calibration } from "./pages/calibration";
 import { GlossaryPage } from "./pages/glossary";
-import { BehaviourGuide, ComboboxPage, SelectPage, SliderPage } from "./pages/zag";
+import { BehaviourGuide, ComboboxPage, MultiSelectPage, SelectPage, SliderPage } from "./pages/zag";
 import { ColourEngine, DensityEngine, LabelEngine, MotionEngine, ShapeEngine } from "./pages/engines";
 import { BusyRingPage, SkeletonRowPage } from "./pages/loading";
 import { PopoverPage, SheetPage } from "./pages/overlay";
@@ -124,6 +124,7 @@ const PAGES: Page[] = [
   { path: "/components/marquee", title: "Marquee", group: "Components", Comp: MarqueePage, tag: "Zag" },
   { path: "/components/menu-bar", title: "MenuBar", group: "Components", Comp: MenuBarPage },
   { path: "/components/meter", title: "Meter", group: "Components", Comp: MeterPage },
+  { path: "/components/multi-select", title: "MultiSelect", group: "Components", Comp: MultiSelectPage, tag: "Zag" },
   { path: "/components/notify-card", title: "NotifyCard", group: "Components", Comp: NotifyCardPage },
   { path: "/components/number-field", title: "NumberField", group: "Components", Comp: NumberFieldPage },
   { path: "/components/pagination", title: "Pagination", group: "Components", Comp: PaginationPage, tag: "Zag" },

@@ -14,6 +14,7 @@ export const hu: ComponentWords = {
     selected: "{tag} kiválasztva. A Backspace vagy a Delete eltávolítja",
     removed: "{tag} eltávolítva",
   },
+  multiSelect: { remove: "{item} eltávolítása", empty: "Nincs találat.", toggle: "Minden lehetőség megjelenítése", search: "Írj a kereséshez" },
   steps: { back: "Vissza", next: "Tovább", finish: "Befejezés" },
   splitter: { resize: "Átméretezés" },
   fileUpload: {

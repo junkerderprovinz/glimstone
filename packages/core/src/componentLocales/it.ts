@@ -14,6 +14,7 @@ export const it: ComponentWords = {
     selected: "{tag} scelto. Backspace o Canc lo rimuove",
     removed: "{tag} rimosso",
   },
+  multiSelect: { remove: "Rimuovi {item}", empty: "Nessuna corrispondenza.", toggle: "Mostra tutte le scelte", search: "Scrivi per cercare" },
   steps: { back: "Indietro", next: "Avanti", finish: "Fine" },
   splitter: { resize: "Ridimensiona" },
   fileUpload: {

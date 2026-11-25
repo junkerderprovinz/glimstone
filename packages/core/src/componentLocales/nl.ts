@@ -14,6 +14,7 @@ export const nl: ComponentWords = {
     selected: "{tag} gekozen. Backspace of Delete verwijdert het",
     removed: "{tag} verwijderd",
   },
+  multiSelect: { remove: "{item} verwijderen", empty: "Niets komt overeen.", toggle: "Alle keuzes tonen", search: "Typ om te zoeken" },
   steps: { back: "Terug", next: "Volgende", finish: "Voltooien" },
   splitter: { resize: "Grootte wijzigen" },
   fileUpload: {

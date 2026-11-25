@@ -9,6 +9,7 @@ export const lv: ComponentWords = {
     selected: "{tag}: izvēlēts. Backspace vai Delete to noņem",
     removed: "{tag}: noņemts",
   },
+  multiSelect: { remove: "Noņemt {item}", empty: "Nekas neatbilst.", toggle: "Rādīt visas izvēles", search: "Raksti, lai meklētu" },
   steps: { back: "Atpakaļ", next: "Tālāk", finish: "Pabeigt" },
   splitter: { resize: "Mainīt izmēru" },
   fileUpload: {

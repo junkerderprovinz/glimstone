@@ -7189,6 +7189,11 @@
     outline: none;
   }
   .glim-tags-input::placeholder { color: var(--field-placeholder); }
+  /* A MultiSelect over a short list takes no typing, so it opens like a
+     select wherever the field is pressed and shows no caret. */
+  .glim-tags-control--pick,
+  .glim-tags-control--pick .glim-tags-input { cursor: pointer; }
+  .glim-tags-control--pick .glim-tags-input { caret-color: transparent; }
 }
 
 /* Steps: the row of named steps, the step in force and its foot. The step in

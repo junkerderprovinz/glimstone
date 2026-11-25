@@ -9,6 +9,7 @@ export const en: ComponentWords = {
     selected: "{tag} picked. Press Backspace or Delete to remove it",
     removed: "{tag} removed",
   },
+  multiSelect: { remove: "Remove {item}", empty: "Nothing matches.", toggle: "Show all choices", search: "Type to search" },
   steps: { back: "Back", next: "Next", finish: "Finish" },
   splitter: { resize: "Resize" },
   fileUpload: {
