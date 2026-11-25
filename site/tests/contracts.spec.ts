@@ -3703,6 +3703,17 @@ test.describe("PasswordField", () => {
     await expect(eye(page, "Token")).toBeDisabled();
   });
 
+  test("[pw-disabled-height] a disabled field stands as tall as an enabled one, its eye inside", async ({ page }) => {
+    await open(page, "/components/password-field");
+    const wrap = (name: string) => field(page, name).locator("xpath=..");
+    const enabled = (await wrap("Password").boundingBox())!;
+    const off = (await wrap("Token").boundingBox())!;
+    const glyph = (await eye(page, "Token").boundingBox())!;
+    expect(off.height).toBeCloseTo(enabled.height, 0);
+    expect(glyph.y).toBeGreaterThanOrEqual(off.y);
+    expect(glyph.y + glyph.height).toBeLessThanOrEqual(off.y + off.height);
+  });
+
   const twice = (page: Page) => stage(page, "PasswordFieldConfirm");
   const first = (page: Page) => twice(page).locator('input[aria-label="New password"]');
   const second = (page: Page) => twice(page).getByLabel("Confirm password", { exact: true });

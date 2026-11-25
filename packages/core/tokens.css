@@ -5709,14 +5709,16 @@
   /* The reveal eye ("The reveal eye" in the design language): a bare glyph in
      the field's trailing padding, neutral, and the wrapper as wide as a plain
      field. Edge draws an eye of its own into every password field, which
-     would stand beside this one. */
+     would stand beside this one. The wrapper is a flex row, so the box that
+     keeps a disabled eye's bubble never wraps onto a line of its own after a
+     space Svelte leaves between the two. */
   .glim-secret {
     position: relative;
-    display: block;
+    display: flex;
     width: 100%;
     min-width: 0;
   }
-  .glim-secret > .glim-input { padding-inline-end: 2.4rem; }
+  .glim-secret > .glim-input { min-width: 0; padding-inline-end: 2.4rem; }
   .glim-secret > .glim-input::-ms-reveal { display: none; }
   .glim-secret-eye {
     position: absolute;
