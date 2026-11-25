@@ -18,6 +18,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     required this.carbonSurface3,
     required this.carbonHover,
     required this.carbonHoverRaised,
+    required this.surfaceOverlay,
     required this.toggleOff,
     required this.toggleKnob,
     required this.carbonBorder,
@@ -98,6 +99,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
   final Color carbonSurface3;
   final Color carbonHover;
   final Color carbonHoverRaised;
+  final Color surfaceOverlay;
   final Color toggleOff;
   final Color toggleKnob;
   final Color carbonBorder;
@@ -185,6 +187,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     carbonSurface3: Color(0xFF403D37),
     carbonHover: Color(0xFF302E28),
     carbonHoverRaised: Color(0xFF55524C),
+    surfaceOverlay: Color(0xFF2A2722),
     toggleOff: Color(0xFF716E68),
     toggleKnob: Color(0xFF181610),
     carbonBorder: Color(0xFF302E28),
@@ -223,7 +226,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     statusNeutralText: Color(0xFFA8A8A8),
     statusNeutralBg: Color(0x0DFFFFFF),
     statusNeutralSolid: Color(0xFF8D8D8D),
-    glimScrim: Color(0xB8000000),
+    glimScrim: Color(0x80000000),
     tileRest: Color(0x0EFFFFFF),
     scrollbarThumb: Color(0x33FFFFFF),
     fieldRest: Color(0x13FFFFFF),
@@ -263,6 +266,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     carbonSurface3: Color(0xFF2E2B25),
     carbonHover: Color(0xFF25231D),
     carbonHoverRaised: Color(0xFF403D37),
+    surfaceOverlay: Color(0xFF201E18),
     toggleOff: Color(0xFF716E68),
     toggleKnob: Color(0xFF181610),
     carbonBorder: Color(0xFF201E18),
@@ -301,7 +305,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     statusNeutralText: Color(0xFFA8A8A8),
     statusNeutralBg: Color(0x0DFFFFFF),
     statusNeutralSolid: Color(0xFF8D8D8D),
-    glimScrim: Color(0xB8000000),
+    glimScrim: Color(0x80000000),
     tileRest: Color(0x0EFFFFFF),
     scrollbarThumb: Color(0x33FFFFFF),
     fieldRest: Color(0x13FFFFFF),
@@ -340,6 +344,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     carbonSurface3: Color(0xFFE1DFDB),
     carbonHover: Color(0xFFE9E8E4),
     carbonHoverRaised: Color(0xFFD3D1CB),
+    surfaceOverlay: Color(0xFFFFFFFF),
     toggleOff: Color(0xFF8E8C86),
     toggleKnob: Color(0xFFFFFFFF),
     carbonBorder: Color(0xFFE1DFDB),
@@ -378,7 +383,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     statusNeutralText: Color(0xFF6F6F6F),
     statusNeutralBg: Color(0x0B000000),
     statusNeutralSolid: Color(0xFF8D8D8D),
-    glimScrim: Color(0x9E000000),
+    glimScrim: Color(0x6B000000),
     tileRest: Color(0x0B000000),
     scrollbarThumb: Color(0x40000000),
     fieldRest: Color(0x0D000000),
@@ -418,6 +423,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     Color? carbonSurface3,
     Color? carbonHover,
     Color? carbonHoverRaised,
+    Color? surfaceOverlay,
     Color? toggleOff,
     Color? toggleKnob,
     Color? carbonBorder,
@@ -497,6 +503,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
         carbonSurface3: carbonSurface3 ?? this.carbonSurface3,
         carbonHover: carbonHover ?? this.carbonHover,
         carbonHoverRaised: carbonHoverRaised ?? this.carbonHoverRaised,
+        surfaceOverlay: surfaceOverlay ?? this.surfaceOverlay,
         toggleOff: toggleOff ?? this.toggleOff,
         toggleKnob: toggleKnob ?? this.toggleKnob,
         carbonBorder: carbonBorder ?? this.carbonBorder,
@@ -579,6 +586,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
       carbonSurface3: Color.lerp(carbonSurface3, other.carbonSurface3, t)!,
       carbonHover: Color.lerp(carbonHover, other.carbonHover, t)!,
       carbonHoverRaised: Color.lerp(carbonHoverRaised, other.carbonHoverRaised, t)!,
+      surfaceOverlay: Color.lerp(surfaceOverlay, other.surfaceOverlay, t)!,
       toggleOff: Color.lerp(toggleOff, other.toggleOff, t)!,
       toggleKnob: Color.lerp(toggleKnob, other.toggleKnob, t)!,
       carbonBorder: Color.lerp(carbonBorder, other.carbonBorder, t)!,

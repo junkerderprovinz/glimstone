@@ -55,3 +55,28 @@ test('where the browser draws squircles, the soft corners take one', () => {
   assert.match(body, /:root:not\(\[data-shape="round"\]\) :is\([^)]*\.glim-card[^)]*\.glim-btn[^)]*\)/);
   assert.match(body, /corner-shape: superellipse\(1\.6\)/);
 });
+
+const FLOATING = [
+  '.glim-menu', '.glim-popover', '.glim-select-content', '.glim-listbox', '.glim-bubble', '.glim-toast-card', '.glim-modal-card',
+  '.glim-hovercard', '.glim-date-panel', '.glim-picker-popover', '.glim-picker-panel--float', '.glim-fpanel',
+];
+
+test('whatever floats over the page stands on a surface step of its own', () => {
+  for (const layer of FLOATING) {
+    const fills = [...declared(layer, 'background-color'), ...declared(layer, 'background')];
+    assert.ok(fills.includes('var(--surface-overlay)'), `${layer}: ${fills.join(', ')}`);
+    assert.ok(!fills.includes('var(--carbon-surface)'), layer);
+  }
+  assert.match(css, /\.glim-bubble::before \{[^}]*border-color: transparent transparent var\(--surface-overlay\) transparent;/);
+});
+
+test('the scrim behind a window is lighter and blurs the page a little more', () => {
+  assert.match(css, /--glim-scrim: light-dark\(rgba\(0, 0, 0, 0\.42\), rgba\(0, 0, 0, 0\.5\)\);/);
+  assert.match(css, /--glim-scrim-blur: 8px;/);
+});
+
+test('the card carries the lift, and its notch lies flat on it', () => {
+  assert.deepEqual(declared('.glim-panel', 'box-shadow'), ['var(--elevation-raised)']);
+  assert.deepEqual(declared('.glim-panel--nested', 'box-shadow'), ['none']);
+  assert.deepEqual(declared('.glim-badge--notch', 'box-shadow'), ['var(--elevation-notch)']);
+});

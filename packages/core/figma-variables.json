@@ -490,6 +490,14 @@
   },
   {
    "action": "CREATE",
+   "id": "variable:colour.surface-overlay",
+   "name": "colour/surface-overlay",
+   "variableCollectionId": "collection:Colour",
+   "resolvedType": "COLOR",
+   "description": "Whatever floats over the page, a menu, a list, a bubble, a toast or a window: one stone step above the card on the dark ramps, so it stands off the card it opens over without a frame. On the light ramp it is white, the card's own, and its shadow lifts it."
+  },
+  {
+   "action": "CREATE",
    "id": "variable:colour.toggle-off",
    "name": "colour/toggle-off",
    "variableCollectionId": "collection:Colour",
@@ -769,7 +777,7 @@
    "name": "colour/glim-scrim",
    "variableCollectionId": "collection:Colour",
    "resolvedType": "COLOR",
-   "description": "The ground behind a floating window, and the blur that takes the page's detail away beneath it."
+   "description": "The ground behind a floating window, light enough that the page still shows where the window came from, and the blur that takes the page's detail away beneath it."
   },
   {
    "action": "CREATE",
@@ -1535,6 +1543,36 @@
     "r": 0.25098039215686274,
     "g": 0.23921568627450981,
     "b": 0.21568627450980393,
+    "a": 1
+   }
+  },
+  {
+   "variableId": "variable:colour.surface-overlay",
+   "modeId": "mode:Colour:Light",
+   "value": {
+    "r": 1,
+    "g": 1,
+    "b": 1,
+    "a": 1
+   }
+  },
+  {
+   "variableId": "variable:colour.surface-overlay",
+   "modeId": "mode:Colour:Dark",
+   "value": {
+    "r": 0.16470588235294117,
+    "g": 0.15294117647058825,
+    "b": 0.13333333333333333,
+    "a": 1
+   }
+  },
+  {
+   "variableId": "variable:colour.surface-overlay",
+   "modeId": "mode:Colour:OLED",
+   "value": {
+    "r": 0.12549019607843137,
+    "g": 0.11764705882352941,
+    "b": 0.09411764705882353,
     "a": 1
    }
   },
@@ -2685,7 +2723,7 @@
     "r": 0,
     "g": 0,
     "b": 0,
-    "a": 0.62
+    "a": 0.42
    }
   },
   {
@@ -2695,7 +2733,7 @@
     "r": 0,
     "g": 0,
     "b": 0,
-    "a": 0.72
+    "a": 0.5
    }
   },
   {
@@ -2705,7 +2743,7 @@
     "r": 0,
     "g": 0,
     "b": 0,
-    "a": 0.72
+    "a": 0.5
    }
   },
   {

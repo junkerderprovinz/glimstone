@@ -56,7 +56,7 @@ const MORE_TEXT = ['--carbon-text', '--carbon-text-sub', '--carbon-text-muted', 
 
 // A ring stands on the ground around a control: the page, the rail, a card, a
 // well, or a row's hover fill when the ring is drawn inside the row.
-const RING_GROUNDS = ['--carbon-bg', '--carbon-sidebar', '--carbon-surface', '--carbon-surface2', '--carbon-hover'];
+const RING_GROUNDS = ['--carbon-bg', '--carbon-sidebar', '--carbon-surface', '--carbon-surface2', '--carbon-hover', '--surface-overlay'];
 // A field is filled with surface2 on a card and with surface3 in a well or a
 // sub-card.
 const FIELD_GROUNDS = ['--carbon-surface', '--carbon-surface2', '--carbon-surface3'];
@@ -244,6 +244,7 @@ const GROUND_PAIRS: [string, string][] = [
   ['--accent-ink', '--carbon-sidebar'],
   ['--accent-ink', '--carbon-surface'],
   ['--accent-ink', '--carbon-surface2'],
+  ...['--carbon-text', '--carbon-text-sub', '--carbon-text-muted', '--accent-ink'].map((ink) => [ink, '--surface-overlay'] as [string, string]),
   ['--accent-contrast', '--accent-hover'],
   ...['info', 'ok', 'fail', 'warn', 'neutral'].flatMap((s) => [
     [`--status-${s}-text`, '--carbon-surface'] as [string, string],
@@ -357,7 +358,7 @@ test('data-contrast="more" asks for the same step as the system setting', () => 
 // The one ground anything takes under the pointer (rule 21): a small step darker than
 // surface3 in lightness, and the grounds it lifts an element off.
 const HOVER_STEP = '--carbon-surface3';
-const HOVER_GROUNDS = ['--carbon-surface', '--carbon-surface2'] as const;
+const HOVER_GROUNDS = ['--carbon-surface', '--carbon-surface2', '--surface-overlay'] as const;
 
 const chroma = ([, a, b]: Oklab) => Math.hypot(a, b);
 const hueGap = ([, a1, b1]: Oklab, [, a2, b2]: Oklab) => {

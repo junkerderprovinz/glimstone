@@ -130,6 +130,21 @@
         }
       }
     },
+    "surface-overlay": {
+      "$value": "#ffffff",
+      "$type": "color",
+      "$description": "Whatever floats over the page, a menu, a list, a bubble, a toast or a window: one stone step above the card on the dark ramps, so it stands off the card it opens over without a frame. On the light ramp it is white, the card's own, and its shadow lifts it.",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "oklch(from {colour.accent} 0.275 min(calc(c * 0.07), 0.011) h)",
+          "modes": {
+            "oled": {
+              "dark": "oklch(from {colour.accent} 0.235 min(calc(c * 0.07), 0.011) h)"
+            }
+          }
+        }
+      }
+    },
     "toggle-off": {
       "$value": "oklch(from {colour.accent} 0.64 min(calc(c * 0.05), 0.009) h)",
       "$description": "A switch that is off: 3:1 against the card and against the knob, so the track reads without the knob and the knob without the colour.",
@@ -604,17 +619,17 @@
       }
     },
     "glim-scrim": {
-      "$value": "rgba(0, 0, 0, .62)",
+      "$value": "rgba(0, 0, 0, 0.42)",
       "$type": "color",
-      "$description": "The ground behind a floating window, and the blur that takes the page's detail away beneath it.",
+      "$description": "The ground behind a floating window, light enough that the page still shows where the window came from, and the blur that takes the page's detail away beneath it.",
       "$extensions": {
         "org.glimstone": {
-          "dark": "rgba(0, 0, 0, .72)"
+          "dark": "rgba(0, 0, 0, 0.5)"
         }
       }
     },
     "glim-scrim-blur": {
-      "$value": "6px",
+      "$value": "8px",
       "$type": "dimension",
       "$extensions": {
         "org.glimstone": {

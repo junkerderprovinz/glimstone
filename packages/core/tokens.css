@@ -222,6 +222,10 @@
 
   /* The one shadow every app already reads, the raised step. */
   --elevation: var(--elevation-raised);
+
+  /* A heading notch lies flat on its card: a short contact shadow and no lift
+     of its own, since the card carries it. */
+  --elevation-notch: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 :root[data-light="off"],
@@ -263,6 +267,12 @@
   --carbon-surface3: light-dark(oklch(from var(--accent) 0.905 min(calc(c * 0.035), 0.006) h), oklch(from var(--accent) 0.36 min(calc(c * 0.07), 0.011) h));
   --carbon-hover: light-dark(oklch(from var(--accent) 0.93 min(calc(c * 0.03), 0.005) h), oklch(from var(--accent) 0.3 min(calc(c * 0.07), 0.011) h));
   --carbon-hover-raised: light-dark(oklch(from var(--accent) 0.86 min(calc(c * 0.05), 0.009) h), oklch(from var(--accent) 0.44 min(calc(c * 0.07), 0.011) h));
+
+  /* Whatever floats over the page, a menu, a list, a bubble, a toast or a
+     window: one stone step above the card on the dark ramps, so it stands off
+     the card it opens over without a frame. On the light ramp it is white, the
+     card's own, and its shadow lifts it. */
+  --surface-overlay: light-dark(#ffffff, oklch(from var(--accent) 0.275 min(calc(c * 0.07), 0.011) h));
 
   /* A switch that is off: 3:1 against the card and against the knob, so the
      track reads without the knob and the knob without the colour. */
@@ -386,10 +396,11 @@
   --status-neutral-bg: light-dark(rgba(0, 0, 0, 0.045), rgba(255, 255, 255, 0.05));
   --status-neutral-solid: #8d8d8d;
 
-  /* The ground behind a floating window, and the blur that takes the page's
-     detail away beneath it. */
-  --glim-scrim: light-dark(rgba(0, 0, 0, .62), rgba(0, 0, 0, .72));
-  --glim-scrim-blur: 6px;
+  /* The ground behind a floating window, light enough that the page still shows
+     where the window came from, and the blur that takes the page's detail away
+     beneath it. */
+  --glim-scrim: light-dark(rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0.5));
+  --glim-scrim-blur: 8px;
 
   /* A surface draws no line of its own: the light engine's edge and the raised
      step's contact shadow keep a card off the page. The contrast step rings it
@@ -439,6 +450,7 @@
   --carbon-surface3: light-dark(oklch(from var(--accent) 0.905 min(calc(c * 0.035), 0.006) h), oklch(from var(--accent) 0.29 min(calc(c * 0.07), 0.011) h));
   --carbon-hover: light-dark(oklch(from var(--accent) 0.93 min(calc(c * 0.03), 0.005) h), oklch(from var(--accent) 0.255 min(calc(c * 0.07), 0.011) h));
   --carbon-hover-raised: light-dark(oklch(from var(--accent) 0.86 min(calc(c * 0.05), 0.009) h), oklch(from var(--accent) 0.36 min(calc(c * 0.07), 0.011) h));
+  --surface-overlay: light-dark(#ffffff, oklch(from var(--accent) 0.235 min(calc(c * 0.07), 0.011) h));
   --carbon-border: light-dark(oklch(from var(--accent) 0.905 min(calc(c * 0.035), 0.006) h), oklch(from var(--accent) 0.235 min(calc(c * 0.07), 0.011) h));
   --tile-edge: light-dark(transparent, rgba(255, 255, 255, .2));
 }
@@ -801,7 +813,7 @@
     width: max-content;
     max-width: 280px;
     pointer-events: none;
-    background-color: var(--carbon-surface);
+    background-color: var(--surface-overlay);
     color: var(--carbon-text);
     border: none;
     border-radius: var(--radius-control);
@@ -825,13 +837,13 @@
     height: 0;
     border-style: solid;
     border-width: 0 6px 6px 6px;
-    border-color: transparent transparent var(--carbon-surface) transparent;
+    border-color: transparent transparent var(--surface-overlay) transparent;
   }
   .glim-bubble--above::before {
     top: auto;
     bottom: -6px;
     border-width: 6px 6px 0 6px;
-    border-color: var(--carbon-surface) transparent transparent transparent;
+    border-color: var(--surface-overlay) transparent transparent transparent;
   }
 
   /* The "(i)" trigger (packages/core/src/tooltip.ts's infoIcon()): a bare stroked glyph,
@@ -918,7 +930,7 @@
     flex-direction: column;
     gap: var(--space-4);
     padding: var(--space-6);
-    background-color: var(--carbon-surface);
+    background-color: var(--surface-overlay);
     border-radius: var(--radius-card);
     box-shadow: var(--elevation-float);
   }
@@ -976,7 +988,7 @@
     z-index: var(--z-menu);
     padding: var(--space-6);
     border-radius: var(--radius-card);
-    background-color: var(--carbon-surface);
+    background-color: var(--surface-overlay);
     box-shadow: var(--elevation-float), var(--hairline);
   }
   .glim-picker-foot {
@@ -3375,7 +3387,7 @@
     max-height: min(24rem, var(--available-height, 24rem), calc(100dvh - 1rem));
     overflow-y: auto;
     border-radius: var(--radius-card);
-    background: var(--carbon-surface);
+    background: var(--surface-overlay);
     box-shadow: var(--elevation-float), var(--hairline);
     outline: none;
   }
@@ -3564,7 +3576,7 @@
     max-width: 28rem;
     max-height: 85vh;
     border-radius: var(--radius-card);
-    background-color: var(--carbon-surface);
+    background-color: var(--surface-overlay);
     box-shadow: var(--elevation-modal), var(--hairline);
   }
   .glim-modal-card--wide { max-width: 32rem; }
@@ -3795,10 +3807,10 @@
   /* The heading notch centres on the card's top edge at any height: a
      percentage resolves against the badge's own height, where a fixed -11px
      would bury the card's first line once a heading wraps. Without a start
-     offset it sits at its static position, which is direction-aware. It takes
-     the elevation without the hairline, which belongs to a surface's own edge,
-     and z-index only has to clear its own card's content. */
-  .glim-badge--notch { box-shadow: var(--elevation-raised); }
+     offset it sits at its static position, which is direction-aware. It lies
+     flat on the card, which carries the lift, with only a contact shadow, and
+     z-index only has to clear its own card's content. */
+  .glim-badge--notch { box-shadow: var(--elevation-notch); }
   .glim-badge--notch-placed {
     position: absolute;
     top: 0;
@@ -3831,9 +3843,10 @@
 
 
   /* A card (Card): the surface a section sits on, and the one place a section
-     heading is drawn. It is `relative` so the heading notch resolves against it.
-     A nested card drops its surface and side padding but keeps its top padding,
-     which the notch pokes into. */
+     heading is drawn. It is `relative` so the heading notch resolves against it,
+     and it carries the raised step itself. A nested card drops its surface, its
+     lift and its side padding but keeps its top padding, which the notch pokes
+     into. */
   .glim-panel {
     position: relative;
     display: flex;
@@ -3842,11 +3855,13 @@
     padding: var(--space-9);
     border-radius: var(--radius-card);
     background-color: var(--carbon-surface);
+    box-shadow: var(--elevation-raised);
   }
   .glim-panel--nested {
     padding: var(--space-9) 0 0;
     border-radius: 0;
     background-color: transparent;
+    box-shadow: none;
   }
   .glim-panel-heading {
     display: flex;
@@ -4327,7 +4342,7 @@
     max-width: calc(100vw - 2rem);
     padding: var(--space-6) var(--space-7);
     border-radius: var(--radius-card);
-    background-color: var(--carbon-surface);
+    background-color: var(--surface-overlay);
     color: var(--carbon-text);
     pointer-events: auto;
   }
@@ -4451,7 +4466,7 @@
     max-height: 15rem;
     overflow-y: auto;
     border-radius: var(--radius-card);
-    background-color: var(--carbon-surface);
+    background-color: var(--surface-overlay);
     box-shadow: var(--elevation-float), var(--hairline);
     scrollbar-color: var(--carbon-border) transparent;
   }
@@ -5132,7 +5147,7 @@
     overflow: auto;
     padding: var(--space-3);
     border-radius: var(--radius-card);
-    background-color: var(--carbon-surface);
+    background-color: var(--surface-overlay);
     box-shadow: var(--elevation-float), var(--hairline);
   }
   .glim-menu-item {
@@ -6876,7 +6891,7 @@
     padding: var(--space-8);
     border: 0;
     border-radius: var(--radius-card);
-    background-color: var(--carbon-surface);
+    background-color: var(--surface-overlay);
     color: var(--carbon-text);
     box-shadow: var(--elevation-float), var(--hairline);
   }
@@ -7829,7 +7844,7 @@
   .glim-date-panel {
     padding: var(--space-6);
     border-radius: var(--radius-card);
-    background-color: var(--carbon-surface);
+    background-color: var(--surface-overlay);
     box-shadow: var(--elevation-float);
     outline: none;
   }
@@ -8145,7 +8160,7 @@
     max-width: min(20rem, calc(100vw - 16px));
     padding: var(--space-8);
     border-radius: var(--radius-card);
-    background-color: var(--carbon-surface);
+    background-color: var(--surface-overlay);
     color: var(--carbon-text);
     font-size: var(--text-body);
     box-shadow: var(--elevation-float), var(--hairline);
@@ -8337,7 +8352,7 @@
     min-height: 8rem;
     padding-top: var(--space-9);
     border-radius: var(--radius-card);
-    background-color: var(--carbon-surface);
+    background-color: var(--surface-overlay);
     color: var(--carbon-text);
     box-shadow: var(--elevation-float), var(--hairline);
     outline: none;
