@@ -378,3 +378,13 @@ test("[site-nav-left] the docs nav stands at the window's left edge, and opening
   expect(await left()).toBe(gutter);
   expect(await pageLeft()).toBe(before);
 });
+
+test("the header and the docs nav stay in place while a long page scrolls under them", async ({ page }) => {
+  inDepth();
+  await open(page, "/components/toggle");
+  const nav = page.locator(".site-nav");
+  for (const part of [page.locator(".site-header"), nav]) expect(await part.evaluate((el) => getComputedStyle(el).position)).toBe("sticky");
+  const before = (await nav.boundingBox())!.y;
+  await page.evaluate(() => window.scrollTo(0, 1200));
+  await expect.poll(async () => (await nav.boundingBox())!.y).toBeCloseTo(Math.min(before, 56), 0);
+});
