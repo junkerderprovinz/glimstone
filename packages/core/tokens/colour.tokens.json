@@ -575,10 +575,6 @@
         }
       }
     },
-    "elevation-raised": {
-      "$value": "0 1px 2px light-dark(rgba(0, 0, 0, .06), rgba(0, 0, 0, .40)), 0 18px 40px -24px light-dark(rgba(0, 0, 0, .35), rgba(0, 0, 0, .85))",
-      "$description": "The raised step's shadow and its hairline. The shadow is neutral black, since a brown one under a grey card reads as a colour cast."
-    },
     "glim-scrim": {
       "$value": "rgba(0, 0, 0, .62)",
       "$type": "color",

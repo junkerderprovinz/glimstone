@@ -176,6 +176,52 @@ export function applyDensity(density: Density | string | undefined): void {
   document.documentElement.setAttribute('data-density', d);
 }
 
+/**
+ * How light falls on the stone. `edge` draws a light top edge on every raised
+ * surface, `glow` also lets the accent fill and the switches catch light from
+ * above, and `off` leaves the plain shadows. The strings go into `data-light`
+ * and storage like the other axes.
+ *
+ * `stone` is glow with a fine grain over the page, a real level that no picker
+ * offers; `stoneTap` reveals it.
+ */
+export type Light = 'off' | 'edge' | 'glow' | 'stone';
+
+/** The levels a picker shows. */
+export const LIGHT_LEVELS: Light[] = ['off', 'edge', 'glow'];
+
+/** The levels a stored value may hold, so a found stone survives a reload. */
+export const LIGHT_STORED: Light[] = [...LIGHT_LEVELS, 'stone'];
+
+export const DEFAULT_LIGHT: Light = 'edge';
+
+/** Sets the attribute the light tokens key off. */
+export function applyLight(light: Light | string | undefined): void {
+  const l: Light = LIGHT_STORED.includes(light as Light) ? (light as Light) : DEFAULT_LIGHT;
+  document.documentElement.setAttribute('data-light', l);
+}
+
+/** How many taps on `glow`, once it is chosen, reveal the stone. */
+export const STONE_TAPS = 5;
+
+/**
+ * The gesture that reveals the stone, the storm's gesture on the light picker:
+ * with the light at `glow`, tap `glow` five more times. Keep the count in the
+ * state of the screen that found it, never in storage.
+ *
+ * Returns the level to switch to, or undefined when the tap was not the fifth.
+ */
+export function stoneTap(state: { taps: number }, tapped: string, current: string): Light | undefined {
+  if (tapped !== 'glow' || current !== 'glow') {
+    state.taps = 0;
+    return undefined;
+  }
+  state.taps += 1;
+  if (state.taps < STONE_TAPS) return undefined;
+  state.taps = 0;
+  return 'stone';
+}
+
 /** How many taps on `wild`, once it is chosen, reveal the storm. */
 export const STORM_TAPS = 5;
 

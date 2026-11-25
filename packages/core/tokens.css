@@ -146,21 +146,80 @@
   --cell-pad-block: var(--space-5);
 }
 
+/* The light engine (data-light, applyLight in appearance.ts): how light falls
+   on the stone. Edge, the look without a setting, draws a light top edge on
+   every raised surface and on the lit controls. Glow also lets the one accent
+   fill, an on switch and a running bar catch light from above, and stone, the
+   hidden level, is glow with a grain over the page. Off leaves the plain
+   shadows. Declared wherever a theme is set, so each light-dark() lands on that
+   theme. */
+:root,
+[data-theme] {
+  /* The light top edge of a raised surface. */
+  --light-edge: inset 0 1px 0 0 light-dark(rgb(255 255 255 / 0.9), rgb(255 255 255 / 0.075));
+
+  /* The raised step: the edge, a faint contact line that keeps a white card off
+     a white page, and a short shadow under it. The shadow is neutral black,
+     since a tinted one under the stone reads as a colour cast. */
+  --elevation-raised: var(--light-edge), 0 0 0 1px light-dark(rgb(0 0 0 / 0.045), rgb(0 0 0 / 0.35)), 0 1px 2px light-dark(rgb(0 0 0 / 0.05), rgb(0 0 0 / 0.4)), 0 6px 20px -8px light-dark(rgb(0 0 0 / 0.12), rgb(0 0 0 / 0.7));
+
+  /* A lit control: the quiet button and the chosen segment take the edge and a
+     short shadow of their own. */
+  --elevation-control: inset 0 1px 0 0 light-dark(rgb(255 255 255 / 0.7), rgb(255 255 255 / 0.08)), 0 1px 2px light-dark(rgb(0 0 0 / 0.08), rgb(0 0 0 / 0.3));
+
+  /* The accent button's light from above. */
+  --light-sheen: none;
+
+  /* An on switch's light from above. */
+  --light-sheen-on: none;
+
+  /* The accent button's edge: a top light and an inner line a shade under the
+     fill. */
+  --elevation-accent: none;
+
+  /* The light a running bar sheds on its track. */
+  --light-progress: none;
+}
+
+/* Off: the shadows without the edge, and the controls flat. */
+:root[data-light="off"],
+:root[data-light="off"] [data-theme] {
+  --light-edge: inset 0 0 0 0 transparent;
+  --elevation-raised: 0 1px 2px light-dark(rgba(0, 0, 0, .06), rgba(0, 0, 0, .40)), 0 18px 40px -24px light-dark(rgba(0, 0, 0, .35), rgba(0, 0, 0, .85));
+  --elevation-control: none;
+}
+
+/* Glow and stone: the accent fill, an on switch and a running bar catch the
+   light. */
+:root:is([data-light="glow"], [data-light="stone"]),
+:root:is([data-light="glow"], [data-light="stone"]) [data-theme] {
+  --light-sheen: linear-gradient(to bottom, rgb(255 255 255 / 0.22), rgb(255 255 255 / 0) 55%, rgb(0 0 0 / 0.06));
+  --light-sheen-on: linear-gradient(to bottom, rgb(255 255 255 / 0.18), rgb(255 255 255 / 0) 60%);
+  --elevation-accent: inset 0 1px 0 0 rgb(255 255 255 / 0.45), inset 0 0 0 1px rgb(0 0 0 / 0.12), 0 1px 2px rgb(0 0 0 / 0.25);
+  --light-progress: 0 0 10px -2px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
 /* Elevation in fixed steps. Every surface stands on one of them, and a step is
    a shadow and a stacking order together, so something that floats over a card
    also paints over it. The ground and a well are flat. Raised is a card and
    what sticks to one; float is what opens over a card, such as a menu, a list
    or a bubble, and what the pointer holds; modal is a window or a sheet over
-   the scrim. The raised shadow is the theme's, below; the higher steps add a
-   longer, softer one beneath it, and are declared wherever a theme is set, so
-   they build on that theme's raised shadow. */
+   the scrim. The raised shadow is the light engine's, above; the higher steps
+   add a longer, softer one beneath it, and are declared wherever a theme is
+   set, so they build on that theme's raised shadow. */
 :root,
 [data-theme] {
-  --elevation-float: 0 10px 22px -8px rgba(0, 0, 0, .45), var(--elevation-raised);
-  --elevation-modal: 0 24px 48px -12px rgba(0, 0, 0, .5), var(--elevation-raised);
+  --elevation-float: 0 4px 8px -2px light-dark(rgb(0 0 0 / 0.08), rgb(0 0 0 / 0.45)), 0 16px 32px -12px light-dark(rgb(0 0 0 / 0.18), rgb(0 0 0 / 0.75)), var(--elevation-raised);
+  --elevation-modal: 0 8px 16px -4px light-dark(rgb(0 0 0 / 0.1), rgb(0 0 0 / 0.5)), 0 32px 64px -16px light-dark(rgb(0 0 0 / 0.28), rgb(0 0 0 / 0.85)), var(--elevation-raised);
 
   /* The one shadow every app already reads, the raised step. */
   --elevation: var(--elevation-raised);
+}
+
+:root[data-light="off"],
+:root[data-light="off"] [data-theme] {
+  --elevation-float: 0 10px 22px -8px rgba(0, 0, 0, .45), var(--elevation-raised);
+  --elevation-modal: 0 24px 48px -12px rgba(0, 0, 0, .5), var(--elevation-raised);
 }
 
 :root {
@@ -302,10 +361,6 @@
   --status-neutral-text: light-dark(#6f6f6f, #a8a8a8);
   --status-neutral-bg: light-dark(rgba(0, 0, 0, 0.045), rgba(255, 255, 255, 0.05));
   --status-neutral-solid: #8d8d8d;
-
-  /* The raised step's shadow and its hairline. The shadow is neutral black,
-     since a brown one under a grey card reads as a colour cast. */
-  --elevation-raised: 0 1px 2px light-dark(rgba(0, 0, 0, .06), rgba(0, 0, 0, .40)), 0 18px 40px -24px light-dark(rgba(0, 0, 0, .35), rgba(0, 0, 0, .85));
 
   /* The ground behind a floating window, and the blur that takes the page's
      detail away beneath it. */
@@ -518,6 +573,21 @@
   --font-cjk: "Noto Sans CJK TC", "Noto Sans TC";
 }
 /* tokens:main end */
+
+/* The stone, the light engine's hidden level: a fine grain over the whole page,
+   above every layer and out of the pointer's way. */
+@layer components {
+  :root[data-light="stone"] body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-bubble);
+    pointer-events: none;
+    opacity: 0.07;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
 
 /* The hidden leaf shape takes the other diagonal away from every element. */
 @layer components {
@@ -3451,8 +3521,17 @@
      The accent and status fills have no ramp, so each steps toward the theme's
      text colour; `opacity` would let the card show through and move the other
      way. */
-  .glim-btn--accent { background-color: var(--accent); color: var(--accent-contrast); }
-  .glim-btn--neutral { background-color: var(--carbon-surface3); color: var(--carbon-text); }
+  .glim-btn--accent {
+    background-color: var(--accent);
+    background-image: var(--light-sheen);
+    color: var(--accent-contrast);
+    box-shadow: var(--elevation-accent);
+  }
+  .glim-btn--neutral {
+    background-color: var(--carbon-surface3);
+    color: var(--carbon-text);
+    box-shadow: var(--elevation-control);
+  }
   .glim-btn--subtle { background-color: var(--carbon-surface2); color: var(--carbon-text); }
   .glim-btn--ok { background-color: var(--status-ok-solid); color: var(--carbon-bg); }
   .glim-btn--danger { background-color: var(--status-fail-solid); color: var(--carbon-bg); }
@@ -3491,7 +3570,10 @@
     background-color: var(--toggle-off);
     transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
   }
-  .glim-toggle-track[aria-checked="true"] { background-color: var(--accent); }
+  .glim-toggle-track[aria-checked="true"] {
+    background-color: var(--accent);
+    background-image: var(--light-sheen-on);
+  }
   .glim-toggle-track:focus-visible {
     outline: var(--focus-ring-width) solid var(--focus-ring);
     outline-offset: 2px;
@@ -4496,6 +4578,7 @@
   .glim-sel .glim-sel-seg.glim-active {
     background-color: var(--accent);
     color: var(--accent-contrast);
+    box-shadow: var(--elevation-control);
   }
   /* A disabled segment with a tip sits in the bubble's box, which takes the
      segment's place in the row. */
@@ -5889,6 +5972,7 @@
     overflow: hidden;
     border-radius: inherit;
     background-color: var(--accent);
+    box-shadow: var(--light-progress);
   }
   .glim-progress-fill::after {
     content: "";

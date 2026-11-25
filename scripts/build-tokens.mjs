@@ -25,7 +25,7 @@ const X = "org.glimstone";
 // An entry such as @contrast is where the groups' shared mode of that name
 // stands, as one block.
 const REGIONS = {
-  main: ["shape", "layout", "space", "density", "elevation", "focus", "colour", "legacy", "chart", "@contrast", "hover", "hover-tint", "font"],
+  main: ["shape", "layout", "space", "density", "light", "elevation", "focus", "colour", "legacy", "chart", "@contrast", "hover", "hover-tint", "font"],
   motion: ["direction", "motion"],
   drag: ["drag"],
   buttons: ["button"],

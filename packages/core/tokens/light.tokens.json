@@ -1,0 +1,99 @@
+{
+  "light": {
+    "$description": "The light engine (data-light, applyLight in appearance.ts): how light falls on the stone. Edge, the look without a setting, draws a light top edge on every raised surface and on the lit controls. Glow also lets the one accent fill, an on switch and a running bar catch light from above, and stone, the hidden level, is glow with a grain over the page. Off leaves the plain shadows. Declared wherever a theme is set, so each light-dark() lands on that theme.",
+    "$extensions": {
+      "org.glimstone": {
+        "selector": ":root,\n[data-theme]",
+        "modes": [
+          {
+            "name": "off",
+            "selector": ":root[data-light=\"off\"],\n:root[data-light=\"off\"] [data-theme]",
+            "$description": "Off: the shadows without the edge, and the controls flat."
+          },
+          {
+            "name": "glow",
+            "selector": ":root:is([data-light=\"glow\"], [data-light=\"stone\"]),\n:root:is([data-light=\"glow\"], [data-light=\"stone\"]) [data-theme]",
+            "$description": "Glow and stone: the accent fill, an on switch and a running bar catch the light."
+          }
+        ]
+      }
+    },
+    "light-edge": {
+      "$value": "inset 0 1px 0 0 light-dark(rgb(255 255 255 / 0.9), rgb(255 255 255 / 0.075))",
+      "$description": "The light top edge of a raised surface.",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "off": "inset 0 0 0 0 transparent"
+          }
+        }
+      }
+    },
+    "elevation-raised": {
+      "$value": "{light.light-edge}, 0 0 0 1px light-dark(rgb(0 0 0 / 0.045), rgb(0 0 0 / 0.35)), 0 1px 2px light-dark(rgb(0 0 0 / 0.05), rgb(0 0 0 / 0.4)), 0 6px 20px -8px light-dark(rgb(0 0 0 / 0.12), rgb(0 0 0 / 0.7))",
+      "$description": "The raised step: the edge, a faint contact line that keeps a white card off a white page, and a short shadow under it. The shadow is neutral black, since a tinted one under the stone reads as a colour cast.",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "off": "0 1px 2px light-dark(rgba(0, 0, 0, .06), rgba(0, 0, 0, .40)), 0 18px 40px -24px light-dark(rgba(0, 0, 0, .35), rgba(0, 0, 0, .85))"
+          }
+        }
+      }
+    },
+    "elevation-control": {
+      "$value": "inset 0 1px 0 0 light-dark(rgb(255 255 255 / 0.7), rgb(255 255 255 / 0.08)), 0 1px 2px light-dark(rgb(0 0 0 / 0.08), rgb(0 0 0 / 0.3))",
+      "$description": "A lit control: the quiet button and the chosen segment take the edge and a short shadow of their own.",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "off": "none"
+          }
+        }
+      }
+    },
+    "light-sheen": {
+      "$value": "none",
+      "$description": "The accent button's light from above.",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "glow": "linear-gradient(to bottom, rgb(255 255 255 / 0.22), rgb(255 255 255 / 0) 55%, rgb(0 0 0 / 0.06))"
+          }
+        }
+      }
+    },
+    "light-sheen-on": {
+      "$value": "none",
+      "$description": "An on switch's light from above.",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "glow": "linear-gradient(to bottom, rgb(255 255 255 / 0.18), rgb(255 255 255 / 0) 60%)"
+          }
+        }
+      }
+    },
+    "elevation-accent": {
+      "$value": "none",
+      "$description": "The accent button's edge: a top light and an inner line a shade under the fill.",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "glow": "inset 0 1px 0 0 rgb(255 255 255 / 0.45), inset 0 0 0 1px rgb(0 0 0 / 0.12), 0 1px 2px rgb(0 0 0 / 0.25)"
+          }
+        }
+      }
+    },
+    "light-progress": {
+      "$value": "none",
+      "$description": "The light a running bar sheds on its track.",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "glow": "0 0 10px -2px color-mix(in srgb, {colour.accent} 55%, transparent)"
+          }
+        }
+      }
+    }
+  }
+}
