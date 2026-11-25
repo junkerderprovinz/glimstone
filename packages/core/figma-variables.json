@@ -1196,12 +1196,12 @@
   {
    "variableId": "variable:shape.radius-card",
    "modeId": "mode:Shape:Soft",
-   "value": 8
+   "value": 14
   },
   {
    "variableId": "variable:shape.radius-card",
    "modeId": "mode:Shape:Round",
-   "value": 20
+   "value": 24
   },
   {
    "variableId": "variable:shape.radius-card",
@@ -1211,12 +1211,12 @@
   {
    "variableId": "variable:shape.radius-control",
    "modeId": "mode:Shape:Soft",
-   "value": 5
+   "value": 8
   },
   {
    "variableId": "variable:shape.radius-control",
    "modeId": "mode:Shape:Round",
-   "value": 12
+   "value": 16
   },
   {
    "variableId": "variable:shape.radius-control",
@@ -1226,7 +1226,7 @@
   {
    "variableId": "variable:shape.radius-pill",
    "modeId": "mode:Shape:Soft",
-   "value": 5
+   "value": 8
   },
   {
    "variableId": "variable:shape.radius-pill",

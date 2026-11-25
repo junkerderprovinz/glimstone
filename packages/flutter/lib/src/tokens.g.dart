@@ -653,8 +653,8 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
 
 /// The shape engine: how round cards, controls and pills are, in logical pixels.
 enum GlimShape {
-  round(card: 20, control: 12, pill: 9999),
-  soft(card: 8, control: 5, pill: 5),
+  round(card: 24, control: 16, pill: 9999),
+  soft(card: 14, control: 8, pill: 8),
   square(card: 0, control: 0, pill: 0);
 
   const GlimShape({required this.card, required this.control, required this.pill});

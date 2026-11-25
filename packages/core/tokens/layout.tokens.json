@@ -5,6 +5,10 @@
         "selector": ":root"
       }
     },
+    "radius-nested": {
+      "$value": "max(0px, calc({shape.radius-card} - {space.space-3}))",
+      "$description": "The corner of a sub-card or a well inside a card: the card's own less the gap between them, so the two curves run side by side."
+    },
     "page-gutter": {
       "$value": "{space.space-8}",
       "$description": "The distance from the window edge to everything on it, and between the rail and the content, set on the frame that holds both (see \"The rail is a CARD, not a wall\" in docs/design-language.md). The content's own padding is a separate distance."
