@@ -85,10 +85,13 @@ applyStoredLabelModes();`}
       />
       <H2>3. Font</H2>
       <p>
-        Every app ships Noto Sans so it draws the same on every machine. Import the variable files once at the entry and
-        let <code>--font-sans</code> do the rest.
+        Every app ships IBM Plex Sans so it draws the same on every machine, with Noto Sans behind it for the scripts
+        Plex does not draw. Import the variable files once at the entry and let <code>--font-sans</code> do the rest.
       </p>
-      <Code code={`import "@fontsource-variable/noto-sans";`} />
+      <Code
+        code={`import "@fontsource-variable/ibm-plex-sans";
+import "@fontsource-variable/noto-sans";`}
+      />
       <H2>4. Components</H2>
       <p>
         Copy the files from <code>reference/react/</code> you need. They take every string as a prop, fetch nothing and

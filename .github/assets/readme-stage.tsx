@@ -13,6 +13,7 @@
  */
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
+import "@fontsource-variable/ibm-plex-sans/wght.css";
 import "@fontsource-variable/noto-sans/wght.css";
 import "../../site/src/styles.css";
 import "../../site/src/glyph";
