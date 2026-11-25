@@ -452,6 +452,10 @@ Found in screenshot comparisons.
 
 The rule that a list page has only its cards and its list replaced a row of Filter, Sort and Search buttons over the lists.
 
+## Lists: the header's (i)
+
+The header was explained by a line that showed under it while the pointer was on the header, and on a first visit once by itself. It was laid over the list at the header's height, so it covered the first row, and a pointer that happened to rest on the header when the page loaded put it there before anybody had asked. Rule 8 already had the place for an explanation, so the line became the (i) at the header's end.
+
 ## Page actions: the corner
 
 A width cap on the page had put the floating actions at the column's edge, in the middle of the window.

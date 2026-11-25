@@ -6727,8 +6727,8 @@
 /* The list of a list page (ListTable; listModel.ts). A row reads as a ListRow:
    the same height, a hover a step up the ramp, and a picked row filled with the
    accent wash (rule 5). The header's words are buttons that sort, with a ▾
-   beside a column that filters, and a line under the header explains both
-   while the pointer is on it. */
+   beside a column that filters, and an (i) at the header's end explains both
+   (rule 8). */
 @layer components {
   .glim-list {
     position: relative;
@@ -6805,20 +6805,20 @@
     outline-offset: -2px;
   }
   .glim-list-tr > td.glim-table-end { text-align: end; }
-  .glim-list-hint {
+  /* The (i) stands in room the last column keeps free at the header's end,
+     outside the table, so it adds nothing to that column's name. */
+  .glim-list-info {
     position: absolute;
-    top: 2.25rem;
-    inset-inline: 0.25rem;
-    z-index: var(--z-raised);
-    margin: 0;
-    padding: var(--space-2) var(--space-5);
-    border-radius: var(--radius-control);
-    background-color: var(--carbon-surface2);
-    color: var(--carbon-text-sub);
-    font-size: var(--text-subline);
-    visibility: hidden;
+    top: 0;
+    inset-inline-end: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--space-11);
+    height: 2.25rem;
   }
-  .glim-list:has(thead:hover) .glim-list-hint { visibility: visible; }
+  .glim-list-th:last-child { padding-inline-end: calc(var(--space-2) + var(--space-11)); }
+  .glim-list-tr > td:last-child { padding-inline-end: calc(var(--space-5) + var(--space-11)); }
   .glim-list-search {
     position: absolute;
     top: 0.25rem;

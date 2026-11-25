@@ -109,12 +109,19 @@ test.describe("ListTable", () => {
     await expect(out(page)).toContainText("opened Windows 11");
   });
 
-  test("[list-hint] the line under the header shows while the pointer is on it", async ({ page }) => {
+  test("[list-hint] an (i) at the header's end says what a click, the ▾ and typing do, and nothing covers a row", async ({ page }) => {
     await open(page, "/components/list-table");
-    const hint = stage(page, "ListTableBackups").getByText("Click a heading to sort");
-    await expect(hint).toBeHidden();
     await header(page, "Kind").hover();
-    await expect(hint).toBeVisible();
+    const row = (await rows(page).first().boundingBox())!;
+    const onRow = await page.evaluate(([x, y]) => !!document.elementFromPoint(x!, y!)?.closest("tbody tr"), [row.x + row.width / 2, row.y + row.height / 2]);
+    expect(onRow).toBe(true);
+    const info = stage(page, "ListTableBackups").getByRole("img", { name: /Click a heading to sort/ });
+    const head = (await grid(page).locator("thead").boundingBox())!;
+    const mark = (await info.boundingBox())!;
+    expect(mark.y).toBeGreaterThanOrEqual(head.y);
+    expect(mark.y + mark.height).toBeLessThanOrEqual(head.y + head.height);
+    await info.hover();
+    await expect(page.locator(".glim-bubble")).toContainText("Click a heading to sort");
     await expect(grid(page)).toHaveAccessibleDescription(/Click a heading to sort/);
   });
 });

@@ -16,6 +16,7 @@ import {
   type ListTableText,
 } from "@glimstone/core";
 import Checkbox from "./Checkbox.vue";
+import InfoBubble from "./InfoBubble.vue";
 import { MarkSvg } from "./glyphs";
 import Popover from "./Popover.vue";
 
@@ -113,6 +114,7 @@ const value = (row: T, key: string) => String((row as Record<string, unknown>)[k
       :aria-label="text.search"
       @keydown.esc.prevent.stop="closeSearch"
     />
+    <span class="glim-list-info"><InfoBubble :tip="text.hint" /></span>
     <table ref="grid" role="grid" :aria-label="label" aria-multiselectable="true" :aria-describedby="hintId" class="glim-list-table">
       <thead>
         <tr>
@@ -154,7 +156,7 @@ const value = (row: T, key: string) => String((row as Record<string, unknown>)[k
       </tbody>
     </table>
     <p v-if="view.length === 0" class="glim-list-empty">{{ text.noMatch }}</p>
-    <p :id="hintId" class="glim-list-hint">{{ text.hint }}</p>
+    <p :id="hintId" class="glim-sr-only">{{ text.hint }}</p>
     <Popover v-if="open" :open="true" :anchor="filterOpen!.at" :label="text.filterOf(open.label)" @close="filterOpen = null">
       <div class="glim-list-filter-values">
         <Checkbox v-for="v in columnValues(rows, open.key)" :key="v" :label="v" :model-value="kept(open.key).includes(v)" @update:model-value="flip(open.key, v)" />

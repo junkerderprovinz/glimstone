@@ -39,6 +39,7 @@
     type ListSort,
   } from "@glimstone/core";
   import Checkbox from "./Checkbox.svelte";
+  import InfoBubble from "./InfoBubble.svelte";
   import MarkSvg from "./MarkSvg.svelte";
   import Popover from "./Popover.svelte";
 
@@ -128,6 +129,7 @@
       }}
     />
   {/if}
+  <span class="glim-list-info"><InfoBubble tip={text.hint} /></span>
   <table bind:this={grid} role="grid" aria-label={label} aria-multiselectable="true" aria-describedby={hintId} class="glim-list-table">
     <thead>
       <tr>
@@ -170,7 +172,7 @@
     </tbody>
   </table>
   {#if view.length === 0}<p class="glim-list-empty">{text.noMatch}</p>{/if}
-  <p id={hintId} class="glim-list-hint">{text.hint}</p>
+  <p id={hintId} class="glim-sr-only">{text.hint}</p>
   {#if open && filterOpen}
     <Popover open anchor={filterOpen.at} label={text.filterOf(open.label)} onClose={() => (filterOpen = null)}>
       <div class="glim-list-filter-values">

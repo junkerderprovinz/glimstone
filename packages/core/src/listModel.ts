@@ -18,7 +18,7 @@ export interface ListColumn extends TableColumn {
 export interface ListTableText {
   /** The floating search field's name. */
   search: string;
-  /** The line under the header while the pointer is on it. */
+  /** What the (i) at the header's end says, and the grid's description. */
   hint: string;
   /** What shows when filter or search leave no row. */
   noMatch: string;

@@ -749,7 +749,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "list-keys", keys: ["ArrowDown", "Shift+ArrowDown", "Space", "Ctrl+A"], when: "A row has focus", then: "The arrows move the focus, Shift extends the pick, Space picks or drops the row and Ctrl+A picks all." },
       { id: "list-page", keys: ["PageDown", "PageUp"], when: "A row has focus", then: "The focus moves ten rows, stopping at the first and the last row; with Shift the pick goes along." },
       { id: "list-open", keys: ["Enter"], when: "A row has focus, or is double-clicked", then: "Its object opens." },
-      { id: "list-hint", when: "The pointer rests on the header", then: "A line under it says what a click, the ▾ and typing do, and it is the grid's description." },
+      { id: "list-hint", when: "The pointer rests on the (i) at the header's end", then: "Its bubble says what a click, the ▾ and typing do, nothing covers a row, and the same words are the grid's description." },
     ],
   },
   fieldError: {

@@ -15,6 +15,7 @@ import {
   type ListTableText,
 } from "@glimstone/core";
 import { Checkbox } from "./Checkbox.tsx";
+import { InfoBubble } from "./InfoBubble.tsx";
 import { MarkSvg } from "./glyphs.tsx";
 import { Popover } from "./Popover.tsx";
 
@@ -138,6 +139,9 @@ export function ListTable<T extends object>(props: ListTableProps<T>) {
           }}
         />
       </Show>
+      <span class="glim-list-info">
+        <InfoBubble tip={props.text.hint} />
+      </span>
       <table ref={grid} role="grid" aria-label={props.label} aria-multiselectable="true" aria-describedby={hintId} class="glim-list-table">
         <thead>
           <tr>
@@ -189,7 +193,7 @@ export function ListTable<T extends object>(props: ListTableProps<T>) {
       <Show when={view().length === 0}>
         <p class="glim-list-empty">{props.text.noMatch}</p>
       </Show>
-      <p id={hintId} class="glim-list-hint">
+      <p id={hintId} class="glim-sr-only">
         {props.text.hint}
       </p>
       <Show when={open()}>
