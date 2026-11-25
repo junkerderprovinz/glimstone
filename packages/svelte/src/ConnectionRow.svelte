@@ -18,7 +18,7 @@
     badges?: Snippet;
     /** More quiet lines under the status, such as what uses the connection. */
     children?: Snippet;
-    /** A switch of the row, such as whether a service shows on the sign-in page, before the buttons. */
+    /** A switch of the row, such as whether a service shows on the sign-in page, at the end of the name's line above the buttons. */
     control?: Snippet;
     /** Where the test stands: `busy` while it runs, then `tone` and a `title` with what it found. */
     test?: ConnectionTest;
@@ -69,15 +69,15 @@
     <div class="glim-connection-head">
       <span class="glim-connection-name">{name}</span>
       {#if badges}<span class="glim-connection-badges">{@render badges()}</span>{/if}
+      {@render control?.()}
     </div>
     <div class="glim-connection-foot">
       <div class="glim-connection-about">
         {#if status}<p class="glim-connection-status">{status}</p>{/if}
         {@render children?.()}
       </div>
-      {#if control || buttons.length > 0}
+      {#if buttons.length > 0}
         <span class="glim-connection-actions">
-          {@render control?.()}
           {#each buttons as b (b.id)}
             <Button
               label={b.label}

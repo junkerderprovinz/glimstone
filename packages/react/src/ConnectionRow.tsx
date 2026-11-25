@@ -25,7 +25,7 @@ export interface ConnectionRowProps extends Omit<HTMLAttributes<HTMLDivElement>,
   badges?: ReactNode;
   /** More quiet lines under the status, such as what uses the connection. */
   children?: ReactNode;
-  /** A switch of the row, such as whether a service shows on the sign-in page, before the buttons. */
+  /** A switch of the row, such as whether a service shows on the sign-in page, at the end of the name's line above the buttons. */
   control?: ReactNode;
   /** Where the test stands: `busy` while it runs, then `tone` and a `title` with what it found. */
   test?: ConnectionTest;
@@ -53,15 +53,15 @@ export function ConnectionRow({ name, mark, status, badges, children, control, t
         <div className="glim-connection-head">
           <span className="glim-connection-name">{name}</span>
           {badges && <span className="glim-connection-badges">{badges}</span>}
+          {control}
         </div>
         <div className="glim-connection-foot">
           <div className="glim-connection-about">
             {status && <p className="glim-connection-status">{status}</p>}
             {children}
           </div>
-          {(control || buttons.length > 0) && (
+          {buttons.length > 0 && (
             <span className="glim-connection-actions">
-              {control}
               {buttons.map((b) => {
                 const face = connectionTestFace(b);
                 return (

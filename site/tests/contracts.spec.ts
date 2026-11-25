@@ -4944,15 +4944,17 @@ test.describe("SignInTile", () => {
     await expect(cardOf(page, "sessions").locator(".glim-connection-badges .glim-badge", { hasText: "This session" })).toHaveCount(1);
   });
 
-  test("[signin-tile-service-row] a service's switch speaks for itself and stands before its buttons, a gap apart", async ({ page }) => {
+  test("[signin-tile-service-row] a service's switch speaks for itself and stands at the end of the name's line, above the buttons", async ({ page }) => {
     await open(page, "/components/sign-in-tile");
     const rows = cardOf(page, "services").locator('[data-glim="ConnectionRow"]');
     await expect(rows.nth(0).locator(".glim-badge")).toHaveCount(0);
     await expect(rows.nth(1).locator(".glim-badge")).toHaveText("Not tested yet");
     await expect(rows.nth(2).locator(".glim-badge")).toHaveText("Paused");
-    const toggle = await rows.nth(0).locator(".glim-connection-actions .glim-toggle").boundingBox();
-    const next = await rows.nth(0).locator(".glim-connection-actions .glim-btn").first().boundingBox();
-    expect(next!.x - (toggle!.x + toggle!.width)).toBeGreaterThanOrEqual(12);
+    await expect(rows.nth(0).locator(".glim-connection-actions .glim-toggle")).toHaveCount(0);
+    const toggle = await rows.nth(0).locator(".glim-connection-head .glim-toggle").boundingBox();
+    const last = await rows.nth(0).locator(".glim-connection-actions .glim-btn").last().boundingBox();
+    expect(toggle!.y + toggle!.height).toBeLessThanOrEqual(last!.y);
+    expect(Math.abs(toggle!.x + toggle!.width - (last!.x + last!.width))).toBeLessThanOrEqual(2);
   });
 
   test("[signin-tile-paste] a client ID and secret pasted together fill both fields", async ({ page }) => {

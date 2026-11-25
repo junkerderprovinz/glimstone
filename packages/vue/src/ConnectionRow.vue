@@ -9,8 +9,8 @@ import type { ConnectionAction } from "./windowParts";
 // A connected service or account as a compact row ("Connections" in the design
 // language): its mark lit on a tile the row's whole height, its name with the
 // `badges` slot, one quiet line on how it stands, the default slot for more
-// lines, and at the end the `control` slot for a switch, the app's own actions,
-// then its test, edit and remove.
+// lines, the `control` slot for a switch at the end of the name's line, and at
+// the end the app's own actions, then its test, edit and remove.
 // A built-in button stands only where its listener is passed.
 const props = defineProps<{
   /** The service's name, also the row's accessible name. */
@@ -54,14 +54,14 @@ const buttons = computed(() =>
       <div class="glim-connection-head">
         <span class="glim-connection-name">{{ name }}</span>
         <span v-if="$slots.badges" class="glim-connection-badges"><slot name="badges" /></span>
+        <slot name="control" />
       </div>
       <div class="glim-connection-foot">
         <div class="glim-connection-about">
           <p v-if="status" class="glim-connection-status">{{ status }}</p>
           <slot />
         </div>
-        <span v-if="$slots.control || buttons.length > 0" class="glim-connection-actions">
-          <slot name="control" />
+        <span v-if="buttons.length > 0" class="glim-connection-actions">
           <Button
             v-for="b in buttons"
             :key="b.id"

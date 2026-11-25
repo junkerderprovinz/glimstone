@@ -5643,8 +5643,6 @@
   .glim-connection-badges .glim-badge--fail { background: linear-gradient(var(--status-fail-bg), var(--status-fail-bg)) var(--carbon-surface); }
   .glim-connection-badges .glim-badge--active { background: linear-gradient(var(--accent-soft), var(--accent-soft)) var(--carbon-surface); }
   .glim-connection-badges .glim-badge--neutral { background-color: color-mix(in srgb, var(--carbon-surface2), var(--carbon-surface3)); }
-  /* A switch is a setting, not one more button, so it keeps its distance. */
-  .glim-connection-actions > .glim-toggle:not(:last-child) { margin-inline-end: var(--space-6); }
   .glim-connection-about {
     display: flex;
     flex: 1 1 12rem;

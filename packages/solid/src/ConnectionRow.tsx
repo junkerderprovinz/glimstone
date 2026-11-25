@@ -26,7 +26,7 @@ export interface ConnectionRowProps extends Omit<JSX.HTMLAttributes<HTMLDivEleme
   badges?: JSX.Element;
   /** More quiet lines under the status, such as what uses the connection. */
   children?: JSX.Element;
-  /** A switch of the row, such as whether a service shows on the sign-in page, before the buttons. */
+  /** A switch of the row, such as whether a service shows on the sign-in page, at the end of the name's line above the buttons. */
   control?: JSX.Element;
   /** Where the test stands: `busy` while it runs, then `tone` and a `title` with what it found. */
   test?: ConnectionTest;
@@ -66,6 +66,7 @@ export function ConnectionRow(props: ConnectionRowProps) {
           <Show when={badges()}>
             <span class="glim-connection-badges">{badges()}</span>
           </Show>
+          {own.control}
         </div>
         <div class="glim-connection-foot">
           <div class="glim-connection-about">
@@ -74,9 +75,8 @@ export function ConnectionRow(props: ConnectionRowProps) {
             </Show>
             {own.children}
           </div>
-          <Show when={own.control || buttons().length > 0}>
+          <Show when={buttons().length > 0}>
             <span class="glim-connection-actions">
-              {own.control}
               {/* Index keeps each button in place while its action changes, so focus stays on it. */}
               <Index each={buttons()}>
                 {(b) => {
