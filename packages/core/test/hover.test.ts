@@ -17,8 +17,8 @@ const declared = (body: string, property: RegExp) => [...body.matchAll(new RegEx
 
 // The one hover ground, and the grounds that come from the accent, from a
 // rainbow position, from a brand tile or from a state hue, each of which the
-// hover is allowed to light.
-const LIT = /var\(--(hover|accent[\w-]*|item-hue[\w-]*|tile|status-[\w-]+)\)/;
+// hover is allowed to light. A field keeps its own neutral steps (rule 14).
+const LIT = /var\(--(hover|accent[\w-]*|item-hue[\w-]*|tile|status-[\w-]+|field-hover)\)/;
 
 // The system colours a forced-colors rule paints with.
 const SYSTEM = /^(Highlight|HighlightText|ButtonFace|ButtonText|Canvas|CanvasText|LinkText|GrayText|SelectedItem)$/;

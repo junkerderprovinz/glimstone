@@ -60,6 +60,9 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     required this.statusNeutralBg,
     required this.statusNeutralSolid,
     required this.glimScrim,
+    required this.fieldRest,
+    required this.fieldHover,
+    required this.fieldFocus,
     required this.chart1,
     required this.chart2,
     required this.chart3,
@@ -138,6 +141,9 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
   final Color statusNeutralBg;
   final Color statusNeutralSolid;
   final Color glimScrim;
+  final Color fieldRest;
+  final Color fieldHover;
+  final Color fieldFocus;
   final Color chart1;
   final Color chart2;
   final Color chart3;
@@ -223,6 +229,9 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     statusNeutralBg: Color(0x0DFFFFFF),
     statusNeutralSolid: Color(0xFF8D8D8D),
     glimScrim: Color(0xB8000000),
+    fieldRest: Color(0x13FFFFFF),
+    fieldHover: Color(0x18FFFFFF),
+    fieldFocus: Color(0x21FFFFFF),
     chart1: Color(0xFF3E98E3),
     chart2: Color(0xFFD47638),
     chart3: Color(0xFF2FEDEC),
@@ -299,6 +308,9 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     statusNeutralBg: Color(0x0DFFFFFF),
     statusNeutralSolid: Color(0xFF8D8D8D),
     glimScrim: Color(0xB8000000),
+    fieldRest: Color(0x13FFFFFF),
+    fieldHover: Color(0x18FFFFFF),
+    fieldFocus: Color(0x21FFFFFF),
     chart1: Color(0xFF3E98E3),
     chart2: Color(0xFFD47638),
     chart3: Color(0xFF2FEDEC),
@@ -374,6 +386,9 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     statusNeutralBg: Color(0x0B000000),
     statusNeutralSolid: Color(0xFF8D8D8D),
     glimScrim: Color(0x9E000000),
+    fieldRest: Color(0x0D000000),
+    fieldHover: Color(0x12000000),
+    fieldFocus: Color(0xFFFFFFFF),
     chart1: Color(0xFF035085),
     chart2: Color(0xFF793802),
     chart3: Color(0xFF079A99),
@@ -450,6 +465,9 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     Color? statusNeutralBg,
     Color? statusNeutralSolid,
     Color? glimScrim,
+    Color? fieldRest,
+    Color? fieldHover,
+    Color? fieldFocus,
     Color? chart1,
     Color? chart2,
     Color? chart3,
@@ -527,6 +545,9 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
         statusNeutralBg: statusNeutralBg ?? this.statusNeutralBg,
         statusNeutralSolid: statusNeutralSolid ?? this.statusNeutralSolid,
         glimScrim: glimScrim ?? this.glimScrim,
+        fieldRest: fieldRest ?? this.fieldRest,
+        fieldHover: fieldHover ?? this.fieldHover,
+        fieldFocus: fieldFocus ?? this.fieldFocus,
         chart1: chart1 ?? this.chart1,
         chart2: chart2 ?? this.chart2,
         chart3: chart3 ?? this.chart3,
@@ -607,6 +628,9 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
       statusNeutralBg: Color.lerp(statusNeutralBg, other.statusNeutralBg, t)!,
       statusNeutralSolid: Color.lerp(statusNeutralSolid, other.statusNeutralSolid, t)!,
       glimScrim: Color.lerp(glimScrim, other.glimScrim, t)!,
+      fieldRest: Color.lerp(fieldRest, other.fieldRest, t)!,
+      fieldHover: Color.lerp(fieldHover, other.fieldHover, t)!,
+      fieldFocus: Color.lerp(fieldFocus, other.fieldFocus, t)!,
       chart1: Color.lerp(chart1, other.chart1, t)!,
       chart2: Color.lerp(chart2, other.chart2, t)!,
       chart3: Color.lerp(chart3, other.chart3, t)!,

@@ -33,9 +33,22 @@ const rules = [...calm.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map(([, selector, body
 const declared = (body: string, property: string) =>
   body.match(new RegExp(`(?<![\\w-])${property}\\s*:\\s*([^;]+);`))?.[1]!.trim();
 
+/** A selector list split at its top-level commas, leaving those inside :is() and :not() alone. */
+function selectors(list: string): string[] {
+  const parts = [''];
+  let depth = 0;
+  for (const ch of list) {
+    if (ch === '(') depth++;
+    if (ch === ')') depth--;
+    if (ch === ',' && depth === 0) parts.push('');
+    else parts[parts.length - 1] += ch;
+  }
+  return parts.map((s) => s.trim());
+}
+
 /** The fill the last rule with exactly this selector sets. */
 function fill(selector: string): string | undefined {
-  const hits = rules.filter((r) => r.selector.split(/,\s*/).includes(selector)).map((r) => declared(r.body, 'background(?:-color)?'));
+  const hits = rules.filter((r) => selectors(r.selector).includes(selector)).map((r) => declared(r.body, 'background(?:-color)?'));
   return hits.filter(Boolean).at(-1);
 }
 
@@ -56,16 +69,39 @@ test('a select trigger and a combobox draw no ring on focus', () => {
   assert.equal(declared(rules.find((r) => r.selector.includes('.glim-select-trigger:focus-visible'))!.body, 'outline'), 'none');
 });
 
-test('a select trigger and a combobox take a text field\'s fill and its focus step', () => {
-  assert.equal(fill('.glim-select-trigger'), fill('.glim-input'));
-  assert.equal(fill('.glim-combobox-control'), fill('.glim-input'));
-  assert.equal(fill('.glim-select-trigger:focus-visible'), fill('.glim-input:focus'));
-  assert.equal(fill('.glim-combobox-control:focus-within'), fill('.glim-input:focus'));
-  assert.notEqual(fill('.glim-select-trigger:focus-visible'), fill('.glim-select-trigger'));
+const FIELDS = ['.glim-input', ...PICKERS];
+const WRONG = ':is(.glim-input, .glim-select-trigger, .glim-combobox-control)[aria-invalid="true"]';
+
+test('a text field, a select trigger and a combobox rest, hover and focus on the field steps', () => {
+  for (const field of FIELDS) assert.equal(fill(field), 'var(--field-rest)', field);
+  assert.equal(fill('.glim-input:focus'), 'var(--field-focus)');
+  assert.equal(fill('.glim-select-trigger:focus-visible'), 'var(--field-focus)');
+  assert.equal(fill('.glim-combobox-control:focus-within'), 'var(--field-focus)');
+  assert.match(calm, /:is\(\.glim-input, \.glim-select-trigger, \.glim-combobox-control\):hover:not\([^)]*\) \{\s*background-color: var\(--field-hover\);/);
 });
 
-test('in a well or a sub-card a focused picker steps up from the fields\' ground there', () => {
-  const inside = rules.filter((r) => /^:is\(\.glim-well, \.glim-subcard\)/.test(r.selector) && /focus/.test(r.selector) && PICKERS.some((p) => r.selector.includes(p)));
-  assert.ok(inside.length > 0, 'no focus rule for a picker in a well');
-  for (const r of inside) assert.equal(declared(r.body, 'background(?:-color)?'), fill('.glim-well .glim-input:focus'), r.selector);
+test('a field sits a little into its surface and takes the accent ink for its caret', () => {
+  for (const field of FIELDS) {
+    const body = rules.filter((r) => selectors(r.selector).includes(field)).map((r) => r.body).join(';');
+    assert.equal(declared(body, 'box-shadow'), 'var(--field-sink)', field);
+    assert.equal(declared(body, 'caret-color'), 'var(--accent-ink)', field);
+  }
+});
+
+test('in a well or a sub-card the fields take the field steps declared there, not a fill of their own', () => {
+  assert.ok(rules.some((r) => r.selector === '.glim-well, .glim-subcard' && /--field-rest/.test(r.body)), 'no field steps for a well');
+  const own = rules.filter((r) => /\.glim-(well|subcard)\b/.test(r.selector) && FIELDS.some((f) => r.selector.includes(f)) && declared(r.body, 'background(?:-color)?'));
+  assert.deepEqual(own.map((r) => r.selector), []);
+});
+
+test('a wrong value washes the field red, a little deeper while it has the keys', () => {
+  assert.equal(fill(WRONG), 'var(--field-invalid)');
+  assert.equal(fill(`${WRONG}:is(:focus, :focus-within)`), 'var(--field-invalid-focus)');
+});
+
+test('a field that turns wrong shakes once, only where motion is wanted', () => {
+  const at = source.indexOf(`:root:not([data-motion='off']) ${WRONG} {`);
+  assert.ok(at >= 0, 'no shake');
+  assert.match(source.slice(source.lastIndexOf('@media', at), at), /^@media \(prefers-reduced-motion: no-preference\)/);
+  assert.match(source.slice(at, source.indexOf('}', at)), /animation: glim-shake var\(--motion-shake-dur\)/);
 });

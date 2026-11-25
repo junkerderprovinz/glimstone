@@ -597,8 +597,8 @@
       }
     },
     "hairline": {
-      "$value": "inset 0 1px 0 light-dark(transparent, rgba(255, 255, 255, .045)), inset 0 0 0 1px light-dark(rgba(0, 0, 0, .05), transparent)",
-      "$description": "A top light on the dark ramps, a ring all round on the light one.",
+      "$value": "inset 0 0 0 0 transparent",
+      "$description": "A surface draws no line of its own: the light engine's edge and the raised step's contact shadow keep a card off the page. The contrast step rings it in the border colour.",
       "$extensions": {
         "org.glimstone": {
           "modes": {

@@ -367,8 +367,10 @@
   --glim-scrim: light-dark(rgba(0, 0, 0, .62), rgba(0, 0, 0, .72));
   --glim-scrim-blur: 6px;
 
-  /* A top light on the dark ramps, a ring all round on the light one. */
-  --hairline: inset 0 1px 0 light-dark(transparent, rgba(255, 255, 255, .045)), inset 0 0 0 1px light-dark(rgba(0, 0, 0, .05), transparent);
+  /* A surface draws no line of its own: the light engine's edge and the raised
+     step's contact shadow keep a card off the page. The contrast step rings it
+     in the border colour. */
+  --hairline: inset 0 0 0 0 transparent;
 
   /* The ring is the accent ink, opaque. The ink reads at 4.5:1 on the ramp's
      card (rule 45), which leaves at least 3:1 on every ground a ring stands on:
@@ -410,6 +412,34 @@
   :root {
     --glim-scrim-blur: 0px;
   }
+}
+
+/* The field steps (rule 14): a text field, a select and a combobox sit a little
+   into the surface they stand on. They are translucent, so the same steps read
+   on a card, in a well and on the page, and the field never carries a line or a
+   ring. Rest and hover are a faint wash of the theme's ink, focus lifts the
+   field to its brightest, and a wrong value turns the wash red. */
+:root,
+[data-theme] {
+  --field-rest: light-dark(rgba(0, 0, 0, 0.05), rgba(255, 255, 255, 0.075));
+  --field-hover: light-dark(rgba(0, 0, 0, 0.07), rgba(255, 255, 255, 0.095));
+  --field-focus: light-dark(#ffffff, rgba(255, 255, 255, 0.13));
+
+  /* A wrong value, and the same while the field has the keys. */
+  --field-invalid: color-mix(in srgb, var(--status-fail-solid) 14%, transparent);
+  --field-invalid-focus: color-mix(in srgb, var(--status-fail-solid) 20%, transparent);
+
+  /* The faint shade under the field's top edge that sets it into the surface. */
+  --field-sink: inset 0 1px 0 light-dark(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.28));
+}
+
+/* A well or a sub-card is a step lighter than the card in the dark and a step
+   darker in the light, so its fields take a step more wash to stay apart from
+   it. */
+.glim-well,
+.glim-subcard {
+  --field-rest: light-dark(rgba(0, 0, 0, 0.06), rgba(255, 255, 255, 0.09));
+  --field-hover: light-dark(rgba(0, 0, 0, 0.08), rgba(255, 255, 255, 0.11));
 }
 
 /* Deprecated tokens, kept so an app's own CSS that reads them still works until
@@ -3116,31 +3146,22 @@
     padding: 0 var(--space-6);
     border: 0;
     border-radius: var(--radius-control);
-    background: var(--carbon-surface2);
+    background-color: var(--field-rest);
     color: var(--carbon-text);
     font: inherit;
     font-size: var(--text-body);
     text-align: start;
     cursor: pointer;
+    box-shadow: var(--field-sink);
+    caret-color: var(--accent-ink);
   }
   .glim-combobox-control { padding-inline-end: var(--space-2); cursor: text; }
-  .glim-select-trigger:hover { background: var(--hover); }
-  /* A field, so the focus is the text field's step up the ramp, not a ring
-     (rule 14). It comes after the hover, so a focused trigger under the
-     pointer still shows it has the keys. */
+  /* A field, so the focus is the field's brightest step, not a ring (rule 14).
+     In a well or a sub-card the steps are declared again, a little deeper. */
   .glim-select-trigger:focus-visible,
   .glim-combobox-control:focus-within {
     outline: none;
-    background: var(--carbon-surface3);
-  }
-  /* In a well or a sub-card the trigger stands among fields, so it takes their
-     ground and hovers up the ramp (rule 21). */
-  :is(.glim-well, .glim-subcard) :is(.glim-select-trigger:not(.glim-select-trigger--inset), .glim-combobox-control) {
-    background: var(--carbon-surface3);
-  }
-  :is(.glim-well, .glim-subcard) .glim-select-trigger:not(.glim-select-trigger--inset):hover { background: var(--hover); }
-  :is(.glim-well, .glim-subcard) :is(.glim-select-trigger:not(.glim-select-trigger--inset):focus-visible, .glim-combobox-control:focus-within) {
-    background: var(--carbon-hover-raised);
+    background-color: var(--field-focus);
   }
   .glim-select-trigger[data-disabled] { opacity: 0.5; cursor: default; }
   /* Busy: the trigger keeps its focus and takes no input until the answer is back. */
@@ -5246,18 +5267,23 @@
     height: var(--btn-h);
     padding-inline: var(--space-6);
     border-radius: var(--radius-control);
-    background-color: var(--carbon-surface2);
+    background-color: var(--field-rest);
     color: var(--carbon-text);
     font-size: var(--text-body);
     line-height: 1.25rem;
+    box-shadow: var(--field-sink);
+    caret-color: var(--accent-ink);
   }
-  .glim-input:focus,
-  .glim-well .glim-input,
-  .glim-subcard .glim-input { background-color: var(--carbon-surface3); }
+  .glim-input:focus { background-color: var(--field-focus); }
+  /* Under the pointer a field takes the hover step, unless it already has the
+     keys or is open. */
+  @media (hover: hover) {
+    :is(.glim-input, .glim-select-trigger, .glim-combobox-control):hover:not(:focus, :focus-within, :disabled, [data-disabled], [data-state="open"]) {
+      background-color: var(--field-hover);
+    }
+  }
   .glim-well .glim-num-field { background-color: var(--carbon-surface3); }
   .glim-well .glim-num-field:focus { background-color: var(--carbon-hover-raised); }
-  .glim-well .glim-input:focus,
-  .glim-subcard .glim-input:focus { background-color: var(--carbon-hover-raised); }
   .glim-input:disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -6950,7 +6976,15 @@
    fault wash and a line under it says why, until the value is fixed. In a
    field row the line takes the whole width, under the control at the end. */
 @layer components {
-  :is(.glim-input, .glim-num-field)[aria-invalid="true"] { background-color: var(--status-fail-bg); }
+  .glim-num-field[aria-invalid="true"] { background-color: var(--status-fail-bg); }
+  :is(.glim-input, .glim-select-trigger, .glim-combobox-control)[aria-invalid="true"] { background-color: var(--field-invalid); }
+  :is(.glim-input, .glim-select-trigger, .glim-combobox-control)[aria-invalid="true"]:is(:focus, :focus-within) { background-color: var(--field-invalid-focus); }
+  /* The field shakes once as it turns wrong; the wash and the line stay. */
+  @media (prefers-reduced-motion: no-preference) {
+    :root:not([data-motion='off']) :is(.glim-input, .glim-select-trigger, .glim-combobox-control)[aria-invalid="true"] {
+      animation: glim-shake var(--motion-shake-dur) cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+  }
   .glim-field-error {
     display: flex;
     flex-basis: 100%;

@@ -250,6 +250,10 @@ const GROUND_PAIRS: [string, string][] = [
     [`--status-${s}-text`, `--status-${s}-bg`] as [string, string],
   ]),
   ...FIELD_GROUNDS.map((g) => ['--field-placeholder', g] as [string, string]),
+  ...['--field-rest', '--field-hover', '--field-focus', '--field-invalid', '--field-invalid-focus'].flatMap((g) => [
+    ['--carbon-text', g] as [string, string],
+    ['--field-placeholder', g] as [string, string],
+  ]),
 ];
 
 test('the stylesheet sets text on its own fill in more than a dozen ways', () => {

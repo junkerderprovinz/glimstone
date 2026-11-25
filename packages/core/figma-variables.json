@@ -794,6 +794,27 @@
   },
   {
    "action": "CREATE",
+   "id": "variable:field.field-rest",
+   "name": "field/field-rest",
+   "variableCollectionId": "collection:Colour",
+   "resolvedType": "COLOR"
+  },
+  {
+   "action": "CREATE",
+   "id": "variable:field.field-hover",
+   "name": "field/field-hover",
+   "variableCollectionId": "collection:Colour",
+   "resolvedType": "COLOR"
+  },
+  {
+   "action": "CREATE",
+   "id": "variable:field.field-focus",
+   "name": "field/field-focus",
+   "variableCollectionId": "collection:Colour",
+   "resolvedType": "COLOR"
+  },
+  {
+   "action": "CREATE",
    "id": "variable:chart.chart-1",
    "name": "chart/chart-1",
    "variableCollectionId": "collection:Colour",
@@ -2780,6 +2801,96 @@
     "g": 0,
     "b": 0,
     "a": 0.72
+   }
+  },
+  {
+   "variableId": "variable:field.field-rest",
+   "modeId": "mode:Colour:Light",
+   "value": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 0.05
+   }
+  },
+  {
+   "variableId": "variable:field.field-rest",
+   "modeId": "mode:Colour:Dark",
+   "value": {
+    "r": 1,
+    "g": 1,
+    "b": 1,
+    "a": 0.075
+   }
+  },
+  {
+   "variableId": "variable:field.field-rest",
+   "modeId": "mode:Colour:OLED",
+   "value": {
+    "r": 1,
+    "g": 1,
+    "b": 1,
+    "a": 0.075
+   }
+  },
+  {
+   "variableId": "variable:field.field-hover",
+   "modeId": "mode:Colour:Light",
+   "value": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 0.07
+   }
+  },
+  {
+   "variableId": "variable:field.field-hover",
+   "modeId": "mode:Colour:Dark",
+   "value": {
+    "r": 1,
+    "g": 1,
+    "b": 1,
+    "a": 0.095
+   }
+  },
+  {
+   "variableId": "variable:field.field-hover",
+   "modeId": "mode:Colour:OLED",
+   "value": {
+    "r": 1,
+    "g": 1,
+    "b": 1,
+    "a": 0.095
+   }
+  },
+  {
+   "variableId": "variable:field.field-focus",
+   "modeId": "mode:Colour:Light",
+   "value": {
+    "r": 1,
+    "g": 1,
+    "b": 1,
+    "a": 1
+   }
+  },
+  {
+   "variableId": "variable:field.field-focus",
+   "modeId": "mode:Colour:Dark",
+   "value": {
+    "r": 1,
+    "g": 1,
+    "b": 1,
+    "a": 0.13
+   }
+  },
+  {
+   "variableId": "variable:field.field-focus",
+   "modeId": "mode:Colour:OLED",
+   "value": {
+    "r": 1,
+    "g": 1,
+    "b": 1,
+    "a": 0.13
    }
   },
   {

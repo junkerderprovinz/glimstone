@@ -1,0 +1,68 @@
+{
+  "field": {
+    "$description": "The field steps (rule 14): a text field, a select and a combobox sit a little into the surface they stand on. They are translucent, so the same steps read on a card, in a well and on the page, and the field never carries a line or a ring. Rest and hover are a faint wash of the theme's ink, focus lifts the field to its brightest, and a wrong value turns the wash red.",
+    "$extensions": {
+      "org.glimstone": {
+        "selector": ":root,\n[data-theme]",
+        "theme": true,
+        "modes": [
+          {
+            "name": "nested",
+            "selector": ".glim-well,\n.glim-subcard",
+            "$description": "A well or a sub-card is a step lighter than the card in the dark and a step darker in the light, so its fields take a step more wash to stay apart from it."
+          }
+        ]
+      }
+    },
+    "field-rest": {
+      "$value": "rgba(0, 0, 0, 0.05)",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "rgba(255, 255, 255, 0.075)",
+          "modes": {
+            "nested": {
+              "light": "rgba(0, 0, 0, 0.06)",
+              "dark": "rgba(255, 255, 255, 0.09)"
+            }
+          }
+        }
+      }
+    },
+    "field-hover": {
+      "$value": "rgba(0, 0, 0, 0.07)",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "rgba(255, 255, 255, 0.095)",
+          "modes": {
+            "nested": {
+              "light": "rgba(0, 0, 0, 0.08)",
+              "dark": "rgba(255, 255, 255, 0.11)"
+            }
+          }
+        }
+      }
+    },
+    "field-focus": {
+      "$value": "#ffffff",
+      "$type": "color",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "rgba(255, 255, 255, 0.13)"
+        }
+      }
+    },
+    "field-invalid": {
+      "$value": "color-mix(in srgb, {colour.status-fail-solid} 14%, transparent)",
+      "$description": "A wrong value, and the same while the field has the keys."
+    },
+    "field-invalid-focus": {
+      "$value": "color-mix(in srgb, {colour.status-fail-solid} 20%, transparent)"
+    },
+    "field-sink": {
+      "$value": "inset 0 1px 0 light-dark(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.28))",
+      "$description": "The faint shade under the field's top edge that sets it into the surface."
+    }
+  }
+}
