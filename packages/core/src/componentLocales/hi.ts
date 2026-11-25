@@ -9,6 +9,7 @@ export const hi: ComponentWords = {
     selected: "{tag} चुना गया. Backspace या Delete इसे हटाता है",
     removed: "{tag} हटाया गया",
   },
+  multiSelect: { remove: "{item} हटाएँ", empty: "कुछ मेल नहीं खाता।", toggle: "सभी विकल्प दिखाएँ", search: "खोजने के लिए लिखें" },
   steps: { back: "पीछे", next: "आगे", finish: "पूरा करें" },
   splitter: { resize: "आकार बदलें" },
   fileUpload: {

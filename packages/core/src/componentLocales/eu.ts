@@ -9,6 +9,7 @@ export const eu: ComponentWords = {
     selected: "{tag} aukeratu da. Atzera-teklak edo Delete-k kentzen du",
     removed: "{tag} kendu da",
   },
+  multiSelect: { remove: "Kendu {item}", empty: "Ez dago bat datorrenik.", toggle: "Erakutsi aukera guztiak", search: "Idatzi bilatzeko" },
   steps: { back: "Atzera", next: "Hurrengoa", finish: "Amaitu" },
   splitter: { resize: "Aldatu tamaina" },
   fileUpload: {

@@ -9,6 +9,7 @@ export const fi: ComponentWords = {
     selected: "{tag} valittu. Askelpalautin tai Delete poistaa sen",
     removed: "{tag} poistettu",
   },
+  multiSelect: { remove: "Poista {item}", empty: "Mikään ei täsmää.", toggle: "Näytä kaikki vaihtoehdot", search: "Hae kirjoittamalla" },
   steps: { back: "Takaisin", next: "Seuraava", finish: "Valmis" },
   splitter: { resize: "Muuta kokoa" },
   fileUpload: {

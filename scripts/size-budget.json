@@ -8,8 +8,8 @@
     "brotli": 1280
   },
   "@glimstone/core": {
-    "gzip": 232960,
-    "brotli": 187392
+    "gzip": 235008,
+    "brotli": 188928
   },
   "@glimstone/react": {
     "gzip": 44544,
@@ -28,8 +28,8 @@
     "brotli": 46592
   },
   "plugin glimstone.js": {
-    "gzip": 260608,
-    "brotli": 212480
+    "gzip": 262656,
+    "brotli": 213504
   },
   "plugin fortress-card.js": {
     "gzip": 65024,

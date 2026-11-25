@@ -1,6 +1,6 @@
 {
   "name": "@glimstone/vue",
-  "version": "4.9.1",
+  "version": "4.9.2",
   "description": "GlimStone's components for Vue",
   "license": "AGPL-3.0-only",
   "repository": {
@@ -23,6 +23,10 @@
     "./Combobox": {
       "types": "./dist/entries/combobox.d.ts",
       "default": "./dist/Combobox.js"
+    },
+    "./MultiSelect": {
+      "types": "./dist/entries/multiselect.d.ts",
+      "default": "./dist/MultiSelect.js"
     },
     "./Slider": {
       "types": "./dist/entries/slider.d.ts",
@@ -116,7 +120,7 @@
     "build": "vite build && vue-tsc -p tsconfig.build.json"
   },
   "dependencies": {
-    "@glimstone/core": "4.9.1"
+    "@glimstone/core": "4.9.2"
   },
   "peerDependencies": {
     "@internationalized/date": "^3.12.4",

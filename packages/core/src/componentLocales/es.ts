@@ -14,6 +14,7 @@ export const es: ComponentWords = {
     selected: "{tag} elegido. Retroceso o Supr lo quita",
     removed: "{tag} quitado",
   },
+  multiSelect: { remove: "Quitar {item}", empty: "Nada coincide.", toggle: "Mostrar todas las opciones", search: "Escribe para buscar" },
   steps: { back: "Atrás", next: "Siguiente", finish: "Terminar" },
   splitter: { resize: "Cambiar el tamaño" },
   fileUpload: {

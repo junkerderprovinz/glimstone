@@ -14,6 +14,7 @@ export const cs: ComponentWords = {
     selected: "{tag} vybráno. Backspace nebo Delete ho odebere",
     removed: "{tag} odebráno",
   },
+  multiSelect: { remove: "Odebrat {item}", empty: "Nic neodpovídá.", toggle: "Zobrazit všechny možnosti", search: "Pište pro hledání" },
   steps: { back: "Zpět", next: "Další", finish: "Dokončit" },
   splitter: { resize: "Změnit velikost" },
   fileUpload: {

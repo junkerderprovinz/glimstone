@@ -14,6 +14,7 @@ export const ro: ComponentWords = {
     selected: "{tag}: ales. Backspace sau Delete îl elimină",
     removed: "{tag}: eliminat",
   },
+  multiSelect: { remove: "Elimină {item}", empty: "Nimic nu se potrivește.", toggle: "Arată toate opțiunile", search: "Scrie pentru a căuta" },
   steps: { back: "Înapoi", next: "Înainte", finish: "Finalizează" },
   splitter: { resize: "Redimensionează" },
   fileUpload: {

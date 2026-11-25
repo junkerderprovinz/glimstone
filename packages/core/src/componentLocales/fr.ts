@@ -9,6 +9,7 @@ export const fr: ComponentWords = {
     selected: "{tag} choisi. Retour arrière ou Suppr le retire",
     removed: "{tag} retiré",
   },
+  multiSelect: { remove: "Retirer {item}", empty: "Aucune correspondance.", toggle: "Afficher tous les choix", search: "Tapez pour chercher" },
   steps: { back: "Retour", next: "Suivant", finish: "Terminer" },
   splitter: { resize: "Redimensionner" },
   fileUpload: {

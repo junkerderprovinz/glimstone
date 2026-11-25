@@ -1,3 +1,7 @@
+## 4.9.2
+
+- No changes for Flutter. The sign-in rows, MultiSelect and the office marks are in the web packages.
+
 ## 4.9.1
 
 - No changes for Flutter. The notification card is in the web packages.

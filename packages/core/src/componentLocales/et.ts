@@ -9,6 +9,7 @@ export const et: ComponentWords = {
     selected: "{tag} valitud. Tagasisamm või Delete eemaldab selle",
     removed: "{tag} eemaldatud",
   },
+  multiSelect: { remove: "Eemalda {item}", empty: "Midagi ei sobi.", toggle: "Näita kõiki valikuid", search: "Otsimiseks kirjuta" },
   steps: { back: "Tagasi", next: "Edasi", finish: "Lõpeta" },
   splitter: { resize: "Muuda suurust" },
   fileUpload: {

@@ -14,6 +14,7 @@ export const el: ComponentWords = {
     selected: "{tag}: επιλέχθηκε. Το Backspace ή το Delete το αφαιρεί",
     removed: "{tag}: αφαιρέθηκε",
   },
+  multiSelect: { remove: "Αφαίρεση {item}", empty: "Τίποτα δεν ταιριάζει.", toggle: "Εμφάνιση όλων των επιλογών", search: "Πληκτρολόγησε για αναζήτηση" },
   steps: { back: "Πίσω", next: "Επόμενο", finish: "Ολοκλήρωση" },
   splitter: { resize: "Αλλαγή μεγέθους" },
   fileUpload: {

@@ -14,6 +14,7 @@ export const gl: ComponentWords = {
     selected: "{tag} escollido. Retroceso ou Supr quítao",
     removed: "{tag} quitado",
   },
+  multiSelect: { remove: "Quitar {item}", empty: "Nada coincide.", toggle: "Amosar todas as opcións", search: "Escribe para buscar" },
   steps: { back: "Atrás", next: "Seguinte", finish: "Rematar" },
   splitter: { resize: "Cambiar o tamaño" },
   fileUpload: {

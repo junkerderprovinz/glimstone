@@ -429,6 +429,18 @@ export const GLOSSARY: GlossarySection[] = [
         },
       },
       {
+        id: "multi-select",
+        en: "Multi-select",
+        de: "Mehrfachauswahl",
+        proposal: true,
+        code: ["MultiSelect"],
+        components: ["MultiSelect"],
+        text: {
+          en: "Picks several entries from a list and keeps them as tags in the field. A long list filters as somebody types.",
+          de: "Wählt mehrere Einträge aus einer Liste und zeigt sie als Schildchen im Feld. Eine lange Liste filtert beim Tippen.",
+        },
+      },
+      {
         id: "slider",
         en: "Slider",
         de: "Schieberegler",

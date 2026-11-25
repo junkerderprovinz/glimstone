@@ -25,6 +25,8 @@ export interface ConnectionRowProps extends Omit<HTMLAttributes<HTMLDivElement>,
   badges?: ReactNode;
   /** More quiet lines under the status, such as what uses the connection. */
   children?: ReactNode;
+  /** A switch of the row, such as whether a service shows on the sign-in page, at the end of the name's line above the buttons. */
+  control?: ReactNode;
   /** Where the test stands: `busy` while it runs, then `tone` and a `title` with what it found. */
   test?: ConnectionTest;
   /** Buttons of the app's own, such as Mount, before Test, Edit and Remove, so those keep their places at the end. */
@@ -39,7 +41,7 @@ export interface ConnectionRowProps extends Omit<HTMLAttributes<HTMLDivElement>,
 // On a phone the buttons show their glyphs alone, so they keep to one line.
 const NARROW = 640;
 
-export function ConnectionRow({ name, mark, status, badges, children, test, actions, text, labelKeys, onTest, onEdit, onRemove, className, ...rest }: ConnectionRowProps) {
+export function ConnectionRow({ name, mark, status, badges, children, control, test, actions, text, labelKeys, onTest, onEdit, onRemove, className, ...rest }: ConnectionRowProps) {
   const tile = connectionTile(mark);
   const buttons = connectionButtons({ actions, test, text, labelKeys, onTest, onEdit, onRemove }, { test: <IconCheck />, edit: <IconPencil />, remove: <IconTrash /> });
   return (
@@ -51,6 +53,7 @@ export function ConnectionRow({ name, mark, status, badges, children, test, acti
         <div className="glim-connection-head">
           <span className="glim-connection-name">{name}</span>
           {badges && <span className="glim-connection-badges">{badges}</span>}
+          {control}
         </div>
         <div className="glim-connection-foot">
           <div className="glim-connection-about">

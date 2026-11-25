@@ -3803,6 +3803,12 @@
     flex-direction: column;
     gap: var(--space-2);
   }
+  /* A person's passkeys and devices often start alike, "iPhone von ...", so
+     their names wrap rather than end in an ellipsis. */
+  .glim-signin-tile-rows .glim-connection-name {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
   .glim-signin-tile-text,
   .glim-signin-tile-quiet,
   .glim-signin-tile-said {
@@ -5513,6 +5519,19 @@
     opacity: 0;
   }
   .glim-list-row:is(:hover, :focus-within) > .glim-list-row-actions { opacity: 1; }
+  /* A switch among the buttons is a setting, not one more button, so it keeps
+     its distance from them. */
+  .glim-list-row-actions > .glim-toggle:not(:last-child) { margin-inline-end: var(--space-6); }
+  /* The lit row already wears --hover, which a quiet button would hover to and
+     vanish into, so under the pointer it fills with the accent, as the row's
+     tile does. */
+  .glim-list-row:is(:hover, :focus-within) > .glim-list-row-actions .glim-btn-subtle:not(:disabled):is(:hover, :focus-visible) {
+    background-color: var(--accent);
+    color: var(--accent-contrast);
+  }
+  .glim-list-row:is(:hover, :focus-within) > .glim-list-row-actions .glim-btn-subtle:not(:disabled):is(:hover, :focus-visible) > .glim-btn-glyph {
+    color: var(--accent-contrast);
+  }
   /* Buttons that always show take room the name needs on a phone, so they drop
      under it, still at the end, before the name is squeezed. */
   .glim-list-row--steady { flex-wrap: wrap; }
@@ -7172,6 +7191,11 @@
     outline: none;
   }
   .glim-tags-input::placeholder { color: var(--field-placeholder); }
+  /* A MultiSelect over a short list takes no typing, so it opens like a
+     select wherever the field is pressed and shows no caret. */
+  .glim-tags-control--pick,
+  .glim-tags-control--pick .glim-tags-input { cursor: pointer; }
+  .glim-tags-control--pick .glim-tags-input { caret-color: transparent; }
 }
 
 /* Steps: the row of named steps, the step in force and its foot. The step in

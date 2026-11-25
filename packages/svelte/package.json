@@ -1,6 +1,6 @@
 {
   "name": "@glimstone/svelte",
-  "version": "4.9.1",
+  "version": "4.9.2",
   "description": "GlimStone's components for Svelte",
   "license": "AGPL-3.0-only",
   "repository": {
@@ -27,6 +27,11 @@
       "types": "./dist/entries/combobox.d.ts",
       "svelte": "./dist/entries/combobox.js",
       "default": "./dist/entries/combobox.js"
+    },
+    "./MultiSelect": {
+      "types": "./dist/entries/multiselect.d.ts",
+      "svelte": "./dist/entries/multiselect.js",
+      "default": "./dist/entries/multiselect.js"
     },
     "./Slider": {
       "types": "./dist/entries/slider.d.ts",
@@ -141,7 +146,7 @@
     "build": "svelte-package -i src -o dist"
   },
   "dependencies": {
-    "@glimstone/core": "4.9.1"
+    "@glimstone/core": "4.9.2"
   },
   "peerDependencies": {
     "@internationalized/date": "^3.12.4",

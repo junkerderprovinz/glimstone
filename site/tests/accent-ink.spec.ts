@@ -50,6 +50,7 @@ const PAGES: Record<string, Show | null> = {
   "/components/list-row": null,
   "/components/menu-bar": openMenu("[data-demo] .glim-menubar-item"),
   "/components/meter": null,
+  "/components/multi-select": openMenu("[data-demo] .glim-combobox-toggle"),
   "/components/pill": null,
   "/components/progress-bar": null,
   "/components/row-mark": null,

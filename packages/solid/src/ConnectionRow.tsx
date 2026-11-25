@@ -26,6 +26,8 @@ export interface ConnectionRowProps extends Omit<JSX.HTMLAttributes<HTMLDivEleme
   badges?: JSX.Element;
   /** More quiet lines under the status, such as what uses the connection. */
   children?: JSX.Element;
+  /** A switch of the row, such as whether a service shows on the sign-in page, at the end of the name's line above the buttons. */
+  control?: JSX.Element;
   /** Where the test stands: `busy` while it runs, then `tone` and a `title` with what it found. */
   test?: ConnectionTest;
   /** Buttons of the app's own, such as Mount, before Test, Edit and Remove, so those keep their places at the end. */
@@ -42,7 +44,7 @@ export interface ConnectionRowProps extends Omit<JSX.HTMLAttributes<HTMLDivEleme
 const NARROW = 640;
 
 export function ConnectionRow(props: ConnectionRowProps) {
-  const [own, rest] = splitProps(props, ["name", "mark", "status", "badges", "children", "test", "actions", "text", "labelKeys", "onTest", "onEdit", "onRemove", "class"]);
+  const [own, rest] = splitProps(props, ["name", "mark", "status", "badges", "children", "control", "test", "actions", "text", "labelKeys", "onTest", "onEdit", "onRemove", "class"]);
   // A glyph is drawn anew on every read, so the mark is read once.
   const mark = createMemo(() => own.mark);
   const tile = () => connectionTile(mark());
@@ -64,6 +66,7 @@ export function ConnectionRow(props: ConnectionRowProps) {
           <Show when={badges()}>
             <span class="glim-connection-badges">{badges()}</span>
           </Show>
+          {own.control}
         </div>
         <div class="glim-connection-foot">
           <div class="glim-connection-about">

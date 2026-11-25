@@ -14,6 +14,7 @@ export const hr: ComponentWords = {
     selected: "{tag}: odabrano. Backspace ili Delete ga uklanja",
     removed: "{tag}: uklonjeno",
   },
+  multiSelect: { remove: "Ukloni {item}", empty: "Ništa ne odgovara.", toggle: "Prikaži sve mogućnosti", search: "Upiši za pretragu" },
   steps: { back: "Natrag", next: "Dalje", finish: "Završi" },
   splitter: { resize: "Promijeni veličinu" },
   fileUpload: {

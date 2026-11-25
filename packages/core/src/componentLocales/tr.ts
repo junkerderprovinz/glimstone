@@ -9,6 +9,7 @@ export const tr: ComponentWords = {
     selected: "{tag} seçildi. Geri tuşu ya da Delete onu kaldırır",
     removed: "{tag} kaldırıldı",
   },
+  multiSelect: { remove: "{item} kaldır", empty: "Eşleşen bir şey yok.", toggle: "Tüm seçenekleri göster", search: "Aramak için yaz" },
   steps: { back: "Geri", next: "İleri", finish: "Bitir" },
   splitter: { resize: "Yeniden boyutlandır" },
   fileUpload: {

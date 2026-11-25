@@ -9,6 +9,7 @@ export const is: ComponentWords = {
     selected: "{tag} valið. Bakklykill eða Delete fjarlægir það",
     removed: "{tag} fjarlægt",
   },
+  multiSelect: { remove: "Fjarlægja {item}", empty: "Ekkert passar.", toggle: "Sýna alla valkosti", search: "Skrifaðu til að leita" },
   steps: { back: "Til baka", next: "Áfram", finish: "Ljúka" },
   splitter: { resize: "Breyta stærð" },
   fileUpload: {

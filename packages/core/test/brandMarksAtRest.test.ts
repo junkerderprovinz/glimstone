@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { CAPTCHA_MARKS } from '../src/captchaMarks.ts';
 import { DOWNLOAD_MARKS } from '../src/downloadMarks.ts';
 import { MCP_MARKS } from '../src/mcpMarks.ts';
+import { OFFICE_MARKS } from '../src/officeMarks.ts';
 import { REGISTRY_MARKS } from '../src/registryMarks.ts';
 import { SERVICE_MARKS } from '../src/serviceMarks.ts';
 import { STORAGE_MARKS } from '../src/storageMarks.ts';
@@ -13,7 +14,7 @@ import { contrastRatio } from '../src/contrast.ts';
 // The resting drawing of every brand mark, on the tile it rests on: surface2
 // of each ramp. The floors are the generator's: 3:1 for a graphic on the dark
 // tile, and on the light one a brand's own colour down to 1.35:1.
-const catalogs = { CAPTCHA_MARKS, DOWNLOAD_MARKS, MCP_MARKS, REGISTRY_MARKS, SERVICE_MARKS, STORAGE_MARKS, TRANSFER_MARKS, VPN_MARKS };
+const catalogs = { CAPTCHA_MARKS, DOWNLOAD_MARKS, MCP_MARKS, OFFICE_MARKS, REGISTRY_MARKS, SERVICE_MARKS, STORAGE_MARKS, TRANSFER_MARKS, VPN_MARKS };
 const marks = Object.entries(catalogs).flatMap(([set, entries]) =>
   Object.entries(entries).map(([id, mark]) => [`${set}.${id}`, mark.svg] as const),
 );

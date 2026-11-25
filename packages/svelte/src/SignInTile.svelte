@@ -34,7 +34,6 @@
   import { onDestroy, onMount, untrack } from "svelte";
   import {
     accountFacts,
-    connectionTestFace,
     createSignInTileFlow,
     fill,
     passkeyFacts,
@@ -52,6 +51,7 @@
     signInTileCards,
     signInWhen,
     signInCardNotice,
+    signInPasswordAsks,
     signInPasswordElsewhere,
     signInShortHint,
     tokenFacts,
@@ -61,18 +61,16 @@
   import Badge from "./Badge.svelte";
   import Button from "./Button.svelte";
   import Card from "./Card.svelte";
-  import BrandMark from "./BrandMark.svelte";
+  import ConnectionRow from "./ConnectionRow.svelte";
   import EmptyState from "./EmptyState.svelte";
   import FieldRow from "./FieldRow.svelte";
   import FieldRowGroup from "./FieldRowGroup.svelte";
-  import GlyphTile from "./GlyphTile.svelte";
-  import ListRow from "./ListRow.svelte";
   import PasswordField from "./PasswordField.svelte";
   import SignInTileWindow from "./SignInTileWindow.svelte";
   import Toggle from "./Toggle.svelte";
   import UnavailableNotice from "./UnavailableNotice.svelte";
   import { useConfirm } from "./confirm.svelte.js";
-  import { glyphFor, IconCancel, IconCheck, IconClose, IconPencil, IconTrash } from "./glyphs.js";
+  import { glyphFor, IconCancel } from "./glyphs.js";
 
   // The settings tile "Sign-in" ("The sign-in tile" in the design language):
   // the password, the question before sensitive changes, two-factor, passkeys,
@@ -128,7 +126,10 @@
   const notice = (card: "askPassword" | "twoFactor" | "passkeys" | "tokens" | "services" | "sessions" | "accounts") => signInCardNotice(text, s, card);
   const elsewhere = $derived(signInPasswordElsewhere(text, s));
   const had = $derived(!!s.me?.password);
+  const asks = $derived(signInPasswordAsks(s, cards) && !s.editing);
   const glyph = (key: string) => glyphFor(key)!;
+  // The words of a row's own buttons: a service's test, edit and remove, and a passkey's rename in place of edit.
+  const rowText = (edit = text.services.edit) => ({ test: text.services.test, edit, remove: text.remove });
 
   function remove(what: SignInTileRemoval, id: string, name: string) {
     const q = removalQuestion(text, what, name);
@@ -142,6 +143,12 @@
   <UnavailableNotice title={n.title} reason={n.reason} />
 {/snippet}
 
+{#snippet askPasswordRow()}
+  <FieldRow label={text.askPassword.label} hint={text.askPassword.when}>
+    <Toggle bind:checked={() => !!s.settings?.askPassword, (on) => void flow.setAskPassword(on)} data-signin-tile="ask-password" />
+  </FieldRow>
+{/snippet}
+
 <div data-glim="SignInTile" class="glim-signin-tile">
   {#each shown as c, i (c)}
     {@const hue = hueStart + i}
@@ -149,10 +156,20 @@
       {@const t = text.password}
       <Card title={t.title} hint={s.me?.via === "open" ? t.openHint : fill(t.hint, { min: s.offer?.minPassword ?? 12 })} hueIndex={hue} data-signin-card="password">
         {#if elsewhere}
-          <p class="glim-signin-tile-text">{elsewhere}</p>
+          <div class="glim-signin-tile-body">
+            <p class="glim-signin-tile-text">{elsewhere}</p>
+            {#if asks}{@render askPasswordRow()}{/if}
+          </div>
         {:else}
           <div class="glim-signin-tile-body">
-            <FieldRow label={t.state} value={had ? t.set : t.none} tone={had ? undefined : "warn"} />
+            {#if had}
+              <FieldRowGroup>
+                <FieldRow label={t.state} value={t.set} />
+                {#if asks}{@render askPasswordRow()}{/if}
+              </FieldRowGroup>
+            {:else if !s.editing}
+              <EmptyState nested glyph={glyph(keys.setPassword)} title={t.none} hint={t.noneHint} />
+            {/if}
             {#if s.editing}
               <FieldRowGroup>
                 {#if had}
@@ -205,9 +222,7 @@
         {#if notice("askPassword")}
           {@render cardNotice(notice("askPassword")!)}
         {:else}
-          <FieldRow label={t.label} hint={t.when}>
-            <Toggle bind:checked={() => !!s.settings?.askPassword, (on) => void flow.setAskPassword(on)} data-signin-tile="ask-password" />
-          </FieldRow>
+          {@render askPasswordRow()}
         {/if}
       </Card>
     {:else if c === "twoFactor"}
@@ -218,10 +233,14 @@
           {@render cardNotice(notice("twoFactor")!)}
         {:else}
           <div class="glim-signin-tile-body">
-            <FieldRowGroup>
-              <FieldRow label={t.state} value={on ? t.on : t.off} tone={on ? "ok" : undefined} />
-              {#if on}<FieldRow label={t.codesLeft} value={plural(lang, t.codesLeftValue, s.me?.recoveryLeft ?? 0)} />{/if}
-            </FieldRowGroup>
+            {#if on}
+              <FieldRowGroup>
+                <FieldRow label={t.state} value={t.on} tone="ok" />
+                <FieldRow label={t.codesLeft} value={plural(lang, t.codesLeftValue, s.me?.recoveryLeft ?? 0)} />
+              </FieldRowGroup>
+            {:else}
+              <EmptyState nested glyph={glyph(keys.setUp)} title={t.none} hint={t.noneHint} />
+            {/if}
             <div class="glim-signin-tile-foot">
               {#if on}
                 <Button label={t.newCodes} labelKey={keys.newCodes} busy={s.busy === "two-factor-codes"} data-signin-tile="two-factor-codes" onClick={() => void flow.newCodes()} />
@@ -243,15 +262,20 @@
           <div class="glim-signin-tile-body">
             {#if !here}<UnavailableNotice title={t.unavailableTitle} reason={t.unavailable} />{/if}
             {#if s.passkeys.length > 0}
-              <div class="glim-list glim-signin-tile-rows">
+              <div class="glim-signin-tile-rows">
                 {#each s.passkeys as p (p.id)}
-                  <ListRow steady name={p.name} meta={passkeyFacts(text, p, when).added} tip={passkeyFacts(text, p, when).more}>
-                    {#snippet tile()}<GlyphTile glyph={glyph(keys.passkey)} />{/snippet}
-                    {#snippet actions()}
-                      <Button compact tone="subtle" label={t.rename} labelKey={keys.rename} glyph={IconPencil} data-signin-tile={`passkey-rename-${p.id}`} onClick={() => flow.askRenamePasskey(p.id)} />
-                      <Button compact tone="subtle" label={text.remove} labelKey={keys.remove} glyph={IconTrash} data-signin-tile={`remove-passkey-${p.id}`} onClick={() => remove("passkey", p.id, p.name)} />
-                    {/snippet}
-                  </ListRow>
+                  {@const facts = passkeyFacts(text, p, when)}
+                  <ConnectionRow
+                    name={p.name}
+                    mark={glyph(keys.passkey)}
+                    status={facts.added}
+                    text={rowText(t.rename)}
+                    labelKeys={{ edit: keys.rename, remove: keys.remove }}
+                    onEdit={() => flow.askRenamePasskey(p.id)}
+                    onRemove={() => remove("passkey", p.id, p.name)}
+                  >
+                    <p class="glim-connection-status">{facts.more}</p>
+                  </ConnectionRow>
                 {/each}
               </div>
             {:else if here}
@@ -272,29 +296,17 @@
           {@render cardNotice(notice("sessions")!)}
         {:else}
           <div class="glim-signin-tile-body">
-            <div class="glim-list glim-signin-tile-rows">
+            <div class="glim-signin-tile-rows">
               {#each s.sessions as x (x.id)}
                 {@const device = signInDevice(x.agent, t)}
-                {#snippet tile()}<GlyphTile glyph={glyph(device.phone ? keys.phone : keys.laptop)} />{/snippet}
                 {#snippet badges()}<Badge size="small" tone="active">{t.current}</Badge>{/snippet}
-                {#snippet end()}
-                  <Button
-                    compact
-                    tone="subtle"
-                    label={t.end}
-                    labelKey={keys.end}
-                    busy={s.busy === `session-end-${x.id}`}
-                    data-signin-tile={`session-end-${x.id}`}
-                    onClick={() => void flow.endSession(x.id)}
-                  />
-                {/snippet}
-                <ListRow
-                  steady
+                <ConnectionRow
                   name={device.name}
-                  meta={sessionFacts(text, x, s.serviceLabels, when).join(" · ")}
-                  {tile}
+                  mark={glyph(device.phone ? keys.phone : keys.laptop)}
+                  status={sessionFacts(text, x, s.serviceLabels, when).join(" · ")}
                   badges={x.current ? badges : undefined}
-                  actions={x.current ? undefined : end}
+                  text={rowText()}
+                  actions={x.current ? [] : [{ id: "end", label: t.end, labelKey: keys.end, busy: s.busy === `session-end-${x.id}`, onClick: () => void flow.endSession(x.id) }]}
                 />
               {/each}
             </div>
@@ -320,16 +332,19 @@
         {:else}
           <div class="glim-signin-tile-body">
             {#if s.tokens.length > 0}
-              <div class="glim-list glim-signin-tile-rows">
+              <div class="glim-signin-tile-rows">
                 {#each s.tokens as k (k.id)}
-                  {#snippet tile()}<GlyphTile glyph={glyph(keys.token)} />{/snippet}
                   {#snippet scopes()}
                     {#each k.scopes as scope (scope)}<Badge size="small">{t.scopes[scope] ?? scope}</Badge>{/each}
                   {/snippet}
-                  {#snippet actions()}
-                    <Button compact tone="subtle" label={t.revoke} labelKey={keys.revoke} data-signin-tile={`remove-token-${k.id}`} onClick={() => remove("token", k.id, k.name)} />
-                  {/snippet}
-                  <ListRow steady name={k.name} meta={tokenFacts(text, k, when).join(" · ")} {tile} badges={k.scopes.length > 0 ? scopes : undefined} {actions} />
+                  <ConnectionRow
+                    name={k.name}
+                    mark={glyph(keys.token)}
+                    status={tokenFacts(text, k, when).join(" · ")}
+                    badges={k.scopes.length > 0 ? scopes : undefined}
+                    text={rowText()}
+                    actions={[{ id: "revoke", label: t.revoke, labelKey: keys.revoke, onClick: () => remove("token", k.id, k.name) }]}
+                  />
                 {/each}
               </div>
             {:else}
@@ -349,46 +364,36 @@
         {:else}
           <div class="glim-signin-tile-body">
             {#if (s.services?.length ?? 0) > 0}
-              <div class="glim-list glim-signin-tile-rows">
+              <div class="glim-signin-tile-rows">
                 {#each s.services ?? [] as x (x.id)}
                   {@const badge = signInServiceBadge(text, x)}
                   {@const label = signInServiceLabel(x, providers, text)}
-                  {@const face = connectionTestFace(s.rowTests[x.id])}
-                  {#snippet brand()}<BrandMark svg={label.mark?.svg ?? ""} />{/snippet}
-                  <ListRow steady name={label.name} meta={signInServiceStatus(text, x, when)} data-signin-service={x.provider}>
-                    {#snippet tile()}<GlyphTile glyph={label.mark ? brand : glyph(keys.service)} />{/snippet}
-                    {#snippet badges()}<Badge size="small" tone={badge.tone}>{badge.label}</Badge>{/snippet}
-                    {#snippet actions()}
-                      {#if !x.fromConfig}
-                        <Toggle
-                          bind:checked={() => x.on, (on) => void flow.setServiceOn(x.id, on)}
-                          label={t.show}
-                          hideLabel
-                          refused={!x.tested || x.paused ? t.mustTest : undefined}
-                          data-signin-tile={`service-on-${x.id}`}
-                        />
-                      {/if}
-                      {#each signInServiceActions(text, x, s, keys.turnOn, (id) => void flow.confirmService(id)) as a (a.id)}
-                        <Button compact tone="subtle" label={a.label} labelKey={a.labelKey} busy={a.busy} data-signin-tile={`service-${a.id}-${x.id}`} onClick={a.onClick} />
-                      {/each}
-                      {#if !x.fromConfig}
-                        <Button
-                          compact
-                          tone={face.tone === "neutral" ? "subtle" : face.tone}
-                          label={t.test}
-                          labelKey={keys.test}
-                          glyph={face.outcome === "cross" ? IconClose : IconCheck}
-                          busy={s.rowTests[x.id]?.busy}
-                          title={s.rowTests[x.id]?.title}
-                          class={face.shake ? "glim-shake" : undefined}
-                          data-signin-tile={`service-test-${x.id}`}
-                          onClick={() => void flow.testService(x.id)}
-                        />
-                        <Button compact tone="subtle" label={t.edit} labelKey={keys.edit} glyph={IconPencil} data-signin-tile={`service-edit-${x.id}`} onClick={() => flow.editService(x.id)} />
-                        <Button compact tone="subtle" label={text.remove} labelKey={keys.remove} glyph={IconTrash} data-signin-tile={`remove-service-${x.id}`} onClick={() => remove("service", x.id, label.name)} />
-                      {/if}
-                    {/snippet}
-                  </ListRow>
+                  {@const mine = !x.fromConfig}
+                  {#snippet stands()}{#if badge}<Badge size="small" tone={badge.tone}>{badge.label}</Badge>{/if}{/snippet}
+                  {#snippet shown()}
+                    <Toggle
+                      bind:checked={() => x.on, (on) => void flow.setServiceOn(x.id, on)}
+                      label={t.show}
+                      hideLabel
+                      refused={!x.tested || x.paused ? t.mustTest : undefined}
+                      data-signin-tile={`service-on-${x.id}`}
+                    />
+                  {/snippet}
+                  <ConnectionRow
+                    name={label.name}
+                    mark={label.mark ?? glyph(keys.service)}
+                    status={signInServiceStatus(text, x, when)}
+                    badges={badge ? stands : undefined}
+                    data-signin-service={x.provider}
+                    control={mine ? shown : undefined}
+                    text={rowText()}
+                    labelKeys={{ test: keys.test, edit: keys.edit, remove: keys.remove }}
+                    actions={signInServiceActions(text, x, s, keys.turnOn, (id) => void flow.confirmService(id))}
+                    test={s.rowTests[x.id]}
+                    onTest={mine ? () => void flow.testService(x.id) : undefined}
+                    onEdit={mine ? () => flow.editService(x.id) : undefined}
+                    onRemove={mine ? () => remove("service", x.id, label.name) : undefined}
+                  />
                 {/each}
               </div>
             {/if}
@@ -404,32 +409,32 @@
         {#if notice("accounts")}
           {@render cardNotice(notice("accounts")!)}
         {:else}
-          <div class="glim-list glim-signin-tile-rows">
+          <div class="glim-signin-tile-rows">
             {#each s.accounts ?? [] as a (a.id)}
-              {#snippet tile()}<GlyphTile glyph={glyph(keys.account)} />{/snippet}
+              {@const mine = a.owner || a.id === s.me?.account}
               {#snippet badges()}
                 {#if a.owner}<Badge size="small">{t.owner}</Badge>{/if}
                 {#if a.blocked}<Badge size="small" tone="warn">{t.blocked}</Badge>{/if}
               {/snippet}
-              {#snippet manage()}
-                <Button
-                  compact
-                  tone="subtle"
-                  label={a.blocked ? t.unblock : t.block}
-                  labelKey={a.blocked ? keys.unblock : keys.block}
-                  busy={s.busy === `account-block-${a.id}`}
-                  data-signin-tile={`account-block-${a.id}`}
-                  onClick={() => void flow.block(a.id, !a.blocked)}
-                />
-                <Button compact tone="subtle" label={text.remove} labelKey={keys.remove} glyph={IconTrash} data-signin-tile={`remove-account-${a.id}`} onClick={() => remove("account", a.id, a.name)} />
-              {/snippet}
-              <ListRow
-                steady
+              <ConnectionRow
                 name={a.name}
-                meta={accountFacts(text, a, s.serviceLabels, when).join(" · ")}
-                {tile}
+                mark={glyph(keys.account)}
+                status={accountFacts(text, a, s.serviceLabels, when).join(" · ")}
                 badges={a.owner || a.blocked ? badges : undefined}
-                actions={!a.owner && a.id !== s.me?.account ? manage : undefined}
+                text={rowText()}
+                labelKeys={{ remove: keys.remove }}
+                actions={mine
+                  ? []
+                  : [
+                      {
+                        id: "block",
+                        label: a.blocked ? t.unblock : t.block,
+                        labelKey: a.blocked ? keys.unblock : keys.block,
+                        busy: s.busy === `account-block-${a.id}`,
+                        onClick: () => void flow.block(a.id, !a.blocked),
+                      },
+                    ]}
+                onRemove={mine ? undefined : () => remove("account", a.id, a.name)}
               />
             {/each}
           </div>

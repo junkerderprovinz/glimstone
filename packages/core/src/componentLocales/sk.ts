@@ -14,6 +14,7 @@ export const sk: ComponentWords = {
     selected: "{tag} vybrané. Backspace alebo Delete ho odstráni",
     removed: "{tag} odstránené",
   },
+  multiSelect: { remove: "Odstrániť {item}", empty: "Nič nezodpovedá.", toggle: "Zobraziť všetky možnosti", search: "Píš pre hľadanie" },
   steps: { back: "Späť", next: "Ďalej", finish: "Dokončiť" },
   splitter: { resize: "Zmeniť veľkosť" },
   fileUpload: {

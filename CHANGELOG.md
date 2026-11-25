@@ -2,6 +2,53 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## 4.9.2 - 2026-11-25
+
+The sign-in tile's lists stand in connection rows, the password question moves into the password card, and a card with nothing set up reads like an empty list. `MultiSelect` picks several entries from a list and keeps them as tags, and the core brings the marks of ONLYOFFICE, Collabora Online and Euro Office.
+
+## 🧩 Adopting apps
+
+- **Moving up:** install `@glimstone/core` with `@glimstone/react`, `@glimstone/vue`, `@glimstone/solid` or `@glimstone/svelte` at 4.9.2, all packages at the same number. Flutter moves its git dependency to v4.9.2.
+- **Three new words in `SignInTileText`, in every language the app has:** `password.noneHint` ("Set one, and only people who know it get in."), `twoFactor.none` ("Not set up yet") and `twoFactor.noneHint` ("Set it up, and a stolen password alone won't get anyone in."). `signInTileTextEn` carries them.
+- **`password.none` is the empty state's line:** reword it as "No password yet" in every language. The tile no longer draws `twoFactor.off`, so it can go unless your sign-in services use it.
+- **Keep `askPassword` in `cards`.** With `password` beside it, the question stands as a switch in the password card. Only a tile without the password card still draws it as a card of its own.
+- **`MultiSelect` needs nothing new to install.** It runs on the Zag combobox the packages already bring. Import it from `@glimstone/<framework>/MultiSelect` and take its words from `componentText(lang).multiSelect`.
+- **An app that copies GlimStone's styles into a stylesheet of its own** copies `tokens.css` again. It brings the connection row's switch in the head, the sign-in rows' wrapping names, the list row's accent hover, the brand mark's size on a glyph tile and the pointer of a short MultiSelect, which opens like a select.
+
+## ✨ Added
+
+- **`MultiSelect` in React, Vue, Solid and Svelte.** It picks several entries from a list and keeps each one in the field as a tag with its own remove button. A pick leaves the list open, and a list of more than seven choices filters as you type, while a shorter one opens like a Select. Its words come in all 42 languages.
+- **`OFFICE_MARKS` in `@glimstone/core/officeMarks`.** The marks of ONLYOFFICE, Collabora Online and Euro Office, each on a tile in its brand's colour, for a row that names an office server, such as one an app finds next to itself. The sources and their licences are in `office-marks/`.
+- **`ConnectionRow` takes a switch as `control`** in all four packages. It stands at the end of the name's line, above the buttons, for a setting such as whether a sign-in service shows on the sign-in page.
+- **`signInPasswordAsks()`** says whether the password card carries the question before sensitive changes.
+
+## 🎨 Design
+
+- **Every sign-in list stands in connection rows.** Tokens, passkeys, sessions, sign-in services and accounts take the row a cloud account has: the kind's glyph on the accent or the service's mark on its colour, the name over a quiet line, and the buttons at the end. A long name wraps instead of ending in an ellipsis, and a passkey's second line says when it was last used and where it works.
+- **The question before sensitive changes stands in the password card,** as a switch under the password.
+- **No password yet and two-factor that is off show an empty state,** a short line and a quiet one over the button, as the passkeys card does without a passkey. No status row says None or Off.
+- **A sign-in service's switch speaks for itself.** Its badge says only what the switch can't: Not tested yet, Paused, and On or Off for a service from the configuration file, which has no switch.
+- **A switch among a list row's buttons keeps a gap from them,** and a quiet button under the pointer fills with the accent so it stays visible on the lit row.
+- **Select and Combobox are drawn as borderless fields.** They take the text field's fill and show focus as a step up its ramp instead of a ring.
+- **A ListTable's header is explained by an (i) at its end** instead of a line over the first row.
+
+## ⚡ Improved
+
+- **Pagination shortens to "3 / 20"** when its row has no room for the page buttons.
+
+## 🐛 Fixed
+
+- **A toast's close cross sits centred on its first line,** also when the message wraps.
+- **A glyph segment in the Selector is measured at its square,** not at the glyph, so the segments line up.
+
+## 🌐 Translations
+
+- **New words in all 42 languages:** the MultiSelect's remove button, search line and empty list, and the sign-in tile's empty password and two-factor cards.
+
+## 🧪 Tests
+
+- **Contracts for the new parts in all four frameworks:** the MultiSelect, the connection rows, the switch above the buttons, the wrapping names, the empty states and the question in the password card. The sign-in tile, the notification card and the MultiSelect have fresh screenshot baselines.
+
 ## 4.9.1 - 2026-11-24
 
 Notifications get a card of their own: `NotifyCard` in React, Vue, Solid and Svelte, with the kit's ten kinds, a test for every channel and its words in all 42 languages. Apps hear of a new GlimStone only once npm serves it.
