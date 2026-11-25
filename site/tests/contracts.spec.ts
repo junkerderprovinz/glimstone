@@ -4856,7 +4856,7 @@ test.describe("SignInTile", () => {
     await make.getByLabel("Name", { exact: true }).fill("Open script");
     await make.getByRole("button", { name: "Create", exact: true }).click();
     await dialog(page, "Your new token").getByRole("button", { name: "I’ve copied the token" }).click();
-    await expect(cardOf(page, "tokens", name).locator(".glim-list-row-meta")).toContainText("ends when the app closes");
+    await expect(cardOf(page, "tokens", name).locator(".glim-connection-status")).toContainText("ends when the app closes");
   });
 
   test("[signin-tile-short] a short new password gets a quiet hint and still saves", async ({ page }) => {
@@ -4933,35 +4933,26 @@ test.describe("SignInTile", () => {
     await expect(said(page)).toHaveText("Passkey removed.");
   });
 
-  test("[signin-tile-rows] every sign-in list has one row: the name over a quiet line, glyph buttons always in view", async ({ page }) => {
+  test("[signin-tile-rows] every sign-in list stands in connection rows: the kind's glyph or the service's mark on a tile, the name over a quiet line, the buttons at the end", async ({ page }) => {
     await open(page, "/components/sign-in-tile");
-    const rows = demo(page).locator('[data-signin-card] .glim-list-row');
-    await expect(rows.first()).toBeVisible();
-    for (const card of ["passkeys", "sessions", "tokens", "services"]) {
-      const row = cardOf(page, card).locator(".glim-list-row:has(.glim-list-row-actions)").first();
-      await expect(row.locator(".glim-list-row-meta")).toHaveCount(1);
-      expect(await row.locator(".glim-list-row-actions").evaluate((e) => getComputedStyle(e).opacity)).toBe("1");
+    await expect(demo(page).locator("[data-signin-card] .glim-list-row")).toHaveCount(0);
+    for (const card of ["passkeys", "sessions", "tokens", "services", "accounts"]) {
+      const row = cardOf(page, card).locator('[data-glim="ConnectionRow"]').first();
+      await expect(row.locator(".glim-connection-tile")).toHaveCount(1);
+      await expect(row.locator(".glim-connection-status").first()).toBeVisible();
     }
-    const heights = await rows.evaluateAll((els) => els.map((e) => Math.round(e.getBoundingClientRect().height)));
-    expect(Math.max(...heights) - Math.min(...heights)).toBeLessThanOrEqual(20);
-    const sizes = await demo(page).locator('[data-signin-card] .glim-list-row-actions .glim-btn').evaluateAll((els) => [...new Set(els.map((e) => Math.round(e.getBoundingClientRect().height)))]);
-    expect(sizes).toHaveLength(1);
-    await expect(cardOf(page, "sessions").locator(".glim-badge", { hasText: "This session" })).toHaveCount(1);
+    await expect(cardOf(page, "sessions").locator(".glim-connection-badges .glim-badge", { hasText: "This session" })).toHaveCount(1);
   });
 
-  test("[signin-tile-service-row] a service's switch speaks for itself, and its buttons stand apart from it", async ({ page }) => {
+  test("[signin-tile-service-row] a service's switch speaks for itself and stands before its buttons, a gap apart", async ({ page }) => {
     await open(page, "/components/sign-in-tile");
-    const rows = cardOf(page, "services").locator(".glim-list-row");
+    const rows = cardOf(page, "services").locator('[data-glim="ConnectionRow"]');
     await expect(rows.nth(0).locator(".glim-badge")).toHaveCount(0);
     await expect(rows.nth(1).locator(".glim-badge")).toHaveText("Not tested yet");
     await expect(rows.nth(2).locator(".glim-badge")).toHaveText("Paused");
-    const toggle = await rows.nth(0).locator(".glim-toggle").boundingBox();
-    const next = await rows.nth(0).locator(".glim-list-row-actions .glim-btn").first().boundingBox();
+    const toggle = await rows.nth(0).locator(".glim-connection-actions .glim-toggle").boundingBox();
+    const next = await rows.nth(0).locator(".glim-connection-actions .glim-btn").first().boundingBox();
     expect(next!.x - (toggle!.x + toggle!.width)).toBeGreaterThanOrEqual(12);
-    const edit = rows.nth(0).getByRole("button", { name: "Edit" });
-    await edit.hover();
-    const lit = await rows.nth(0).evaluate((e) => getComputedStyle(e).backgroundColor);
-    await expect.poll(() => edit.evaluate((e) => getComputedStyle(e).backgroundColor)).not.toBe(lit);
   });
 
   test("[signin-tile-paste] a client ID and secret pasted together fill both fields", async ({ page }) => {
@@ -4999,11 +4990,12 @@ test.describe("SignInTile", () => {
     await expect(card.getByRole("button", { name: "Set up" })).toBeVisible();
   });
 
-  test("[signin-tile-passkey-row] a passkey row shows when it was added, and the rest stands in its bubble", async ({ page }) => {
+  test("[signin-tile-passkey-row] a passkey row says when it was added, and under it when it was last used and where it works", async ({ page }) => {
     await open(page, "/components/sign-in-tile");
     const row = cardOf(page, "passkeys").getByRole("group", { name: "Firefox on Windows" });
-    await expect(row.locator(".glim-list-row-meta")).toHaveText("Added Nov 2, 2026, 2:20 PM");
-    await expect(row.locator(".glim-list-row-tip")).toHaveCount(1);
+    const lines = row.locator(".glim-connection-status");
+    await expect(lines).toHaveCount(2);
+    await expect(lines.first()).toHaveText("Added Nov 2, 2026, 2:20 PM");
   });
 
   test("[signin-tile-passkeys-here] Add a passkey stays once the last passkey is gone", async ({ page }) => {
@@ -5032,23 +5024,23 @@ test.describe("SignInTile", () => {
 
   test("[signin-tile-names] a service is named by its own name, its kind or the app's word, never the protocol", async ({ page }) => {
     await open(page, "/components/sign-in-tile");
-    const names = cardOf(page, "services").locator(".glim-list-row-title");
+    const names = cardOf(page, "services").locator(".glim-connection-name");
     await expect(names).toHaveText(["Pocket ID", "Home login", "Sign-in service"]);
     await expect(cardOf(page, "services")).not.toContainText("OIDC");
-    await expect(cardOf(page, "services").getByRole("group", { name: "Pocket ID" }).locator(".glim-list-row-tile .glim-brand-svg")).toHaveCount(1);
+    await expect(cardOf(page, "services").getByRole("group", { name: "Pocket ID" }).locator(".glim-connection-tile .glim-brand-svg")).toHaveCount(1);
   });
 
   test("[signin-tile-config] a service from the configuration file has no Edit or Remove, and turns on again", async ({ page }) => {
     await open(page, "/components/sign-in-tile");
     const row = cardOf(page, "services").getByRole("group", { name: "Sign-in service" });
-    await expect(row.locator(".glim-list-row-meta")).toContainText("from the configuration file");
-    await expect(row.locator('[data-signin-tile^="service-test-"], [data-signin-tile^="service-edit-"], [data-signin-tile^="remove-service-"]')).toHaveCount(0);
+    await expect(row.locator(".glim-connection-status")).toContainText("from the configuration file");
+    await expect(row.locator('[data-connection="test"], [data-connection="edit"], [data-connection="remove"]')).toHaveCount(0);
     await expect(row.getByRole("switch")).toHaveCount(0);
-    await expect(row.locator(".glim-list-row-badges")).toHaveText("Paused");
-    await row.locator('[data-signin-tile="service-confirm-config"]').click();
+    await expect(row.locator(".glim-connection-badges")).toHaveText("Paused");
+    await row.locator('[data-connection="confirm"]').click();
     await expect(said(page)).toHaveText("Sign-in service is on the sign-in page.");
-    await expect(row.locator(".glim-list-row-badges")).toHaveText("On");
-    await expect(row.locator('[data-signin-tile="service-confirm-config"]')).toHaveCount(0);
+    await expect(row.locator(".glim-connection-badges")).toHaveText("On");
+    await expect(row.locator('[data-connection="confirm"]')).toHaveCount(0);
   });
 
   test("[signin-tile-services] the form of a picked service, and Turn on waits for the test", async ({ page }) => {
@@ -5080,7 +5072,7 @@ test.describe("SignInTile", () => {
     await expect(form.locator(".glim-signin-tile-quiet")).toContainText("gets the role Admin here");
     await form.getByRole("button", { name: "Cancel" }).click();
     const row = cardOf(page, "services").getByRole("group", { name: "Pocket ID" });
-    await row.locator('[data-signin-tile^="service-edit-"]').click();
+    await row.locator('[data-connection="edit"]').click();
     await expect(dialog(page, "Pocket ID").locator('[data-signin-field="role"]').getByRole("radio", { name: "Admin" })).toHaveAttribute("aria-checked", "true");
   });
 

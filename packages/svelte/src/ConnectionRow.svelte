@@ -18,6 +18,8 @@
     badges?: Snippet;
     /** More quiet lines under the status, such as what uses the connection. */
     children?: Snippet;
+    /** A switch of the row, such as whether a service shows on the sign-in page, before the buttons. */
+    control?: Snippet;
     /** Where the test stands: `busy` while it runs, then `tone` and a `title` with what it found. */
     test?: ConnectionTest;
     /** Buttons of the app's own, such as Mount, before Test, Edit and Remove, so those keep their places at the end. */
@@ -43,7 +45,7 @@
   // badges, one quiet line on how it stands, and at the end the app's own
   // actions, then its test, edit and remove. A built-in button stands only where
   // its handler is passed. The other props of a <div> go to the row.
-  let { name, mark, status, badges, children, test, actions, text, labelKeys, onTest, onEdit, onRemove, class: className, ...rest }: ConnectionRowProps = $props();
+  let { name, mark, status, badges, children, control, test, actions, text, labelKeys, onTest, onEdit, onRemove, class: className, ...rest }: ConnectionRowProps = $props();
 
   // On a phone the buttons show their glyphs alone, so they keep to one line.
   const NARROW = 640;
@@ -73,8 +75,9 @@
         {#if status}<p class="glim-connection-status">{status}</p>{/if}
         {@render children?.()}
       </div>
-      {#if buttons.length > 0}
+      {#if control || buttons.length > 0}
         <span class="glim-connection-actions">
+          {@render control?.()}
           {#each buttons as b (b.id)}
             <Button
               label={b.label}
