@@ -1,5 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { MARKS } from '../src/marks.ts';
 import { addToast, pauseToast, resumeToast, toastPoliteness, TOAST_DURATION_MS } from '../src/toastEngine.ts';
 
 const undo = { label: 'Undo', onClick: () => {} };
@@ -27,4 +29,30 @@ test('only a failure interrupts, every other toast is read out politely', () => 
   assert.equal(toastPoliteness('fail'), 'assertive');
   assert.equal(toastPoliteness('warn'), 'polite');
   assert.equal(toastPoliteness('success'), 'polite');
+});
+
+const css = readFileSync(new URL('../tokens.css', import.meta.url), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+const space = Object.fromEntries([...css.matchAll(/--(space-\d+):\s*([\d.]+)rem;/g)].map((m) => [m[1]!, Number(m[2]) * 16]));
+
+function declared(selector: string, property: string): string {
+  const body = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].find(([, s]) => s!.trim() === selector)?.[2] ?? '';
+  return body.match(new RegExp(`(?<![\\w-])${property}\\s*:\\s*([^;]+);`))?.[1]!.trim() ?? '';
+}
+
+/** A length of the stylesheet in pixels: rem, px and the spacing steps, under calc() too. */
+function px(value: string): number {
+  const plain = value
+    .replace(/var\(--(space-\d+)\)/g, (_, step: string) => String(space[step]))
+    .replace(/([\d.]+)rem/g, (_, n: string) => String(Number(n) * 16))
+    .replace(/([\d.]+)px/g, '$1')
+    .replace(/^calc/, '');
+  return Function(`return (${plain})`)() as number;
+}
+
+test('the dismiss cross sits centred on the first line of the message', () => {
+  assert.match(declared('.glim-toast-dismiss', 'display'), /flex/);
+  assert.equal(declared('.glim-toast-dismiss', 'align-items'), 'center');
+  const box = MARKS.dismiss.size + 2 * px(declared('.glim-toast-dismiss', 'padding'));
+  const top = px(declared('.glim-toast-dismiss', 'margin-block'));
+  assert.equal(top + box / 2, px(declared('.glim-toast-message', 'line-height')) / 2);
 });

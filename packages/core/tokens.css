@@ -4164,9 +4164,16 @@
       max-width: none;
     }
   }
+  /* The cross is centred in its box rather than set on a line of text, whose
+     height an app's own font and line height would decide. The 22px box sits
+     centred on the message's first 20px line. */
   .glim-toast-dismiss {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
-    margin: calc(-1 * var(--space-2));
+    margin-block: calc(var(--space-1) / -2);
+    margin-inline: calc(-1 * var(--space-2));
     padding: var(--space-2);
     border-radius: var(--radius-pill);
     color: var(--carbon-text-muted);
