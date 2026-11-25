@@ -132,12 +132,25 @@
     },
     "toggle-off": {
       "$value": "oklch(from {colour.accent} 0.64 min(calc(c * 0.05), 0.009) h)",
-      "$description": "A switch that is off. On the light ramp surface3 stands too close to a card and to the knob to see, so the track goes down to 3:1 against both.",
+      "$description": "A switch that is off: 3:1 against the card and against the knob, so the track reads without the knob and the knob without the colour.",
       "$extensions": {
         "org.glimstone": {
           "dark": "oklch(from {colour.accent} 0.54 min(calc(c * 0.07), 0.011) h)"
         }
       }
+    },
+    "toggle-knob": {
+      "$value": "#ffffff",
+      "$type": "color",
+      "$description": "The switch's knob, the same off and on: white on the light ramp, a dark stone on the dark ones, where a white knob would glare.",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "oklch(from {colour.accent} 0.2 min(calc(c * 0.07), 0.011) h)"
+        }
+      }
+    },
+    "toggle-knob-shadow": {
+      "$value": "0 1px 2px light-dark(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5))"
     },
     "carbon-border": {
       "$value": "oklch(from {colour.accent} 0.905 min(calc(c * 0.035), 0.006) h)",
@@ -398,7 +411,7 @@
     "status-info-text": {
       "$value": "oklch(0.5 0.1 86.7)",
       "$type": "color",
-      "$description": "Four state hues, Carbon's support tones. Paused reuses neutral; its label and its resume control carry the difference.\n\nInfo is the default accent, so its light text is Sunflower's ink step.",
+      "$description": "Four state hues, soft and set on one band of lightness per theme, so none of them shouts over the others. A hue's text stands a step further from the ground than its solid, so it reads at 4.5:1 on the hue's own wash. Paused reuses neutral; its label and its resume control carry the difference.\n\nInfo is the default accent, so its light text is Sunflower's ink step.",
       "$extensions": {
         "org.glimstone": {
           "dark": "#FCC419",
@@ -427,81 +440,91 @@
       }
     },
     "status-ok-text": {
-      "$value": "#0e6027",
+      "$value": "oklch(0.46 0.11 152)",
       "$type": "color",
       "$extensions": {
         "org.glimstone": {
-          "dark": "#6fdc8c",
+          "dark": "oklch(0.8 0.13 152)",
           "tailwind": "color-statusOk"
         }
       }
     },
     "status-ok-bg": {
-      "$value": "rgba(14, 96, 39, 0.11)",
-      "$type": "color",
+      "$value": "color-mix(in srgb, {colour.status-ok-solid} 11%, transparent)",
       "$extensions": {
         "org.glimstone": {
-          "dark": "rgba(111, 220, 140, 0.13)",
+          "dark": "color-mix(in srgb, {colour.status-ok-solid} 13%, transparent)",
           "tailwind": "color-statusOkBg"
         }
       }
     },
     "status-ok-solid": {
-      "$value": "#198038",
+      "$value": "oklch(0.5 0.12 152)",
       "$type": "color",
       "$extensions": {
         "org.glimstone": {
-          "dark": "#6fdc8c",
+          "dark": "oklch(0.8 0.13 152)",
           "tailwind": "color-statusOkSolid"
         }
       }
     },
+    "status-ok-wash": {
+      "$value": "color-mix(in srgb, {colour.status-ok-solid} 17%, transparent)",
+      "$description": "The fill of a state button: a soft wash of the hue under the hue's own text, a little deeper under the pointer."
+    },
+    "status-ok-wash-hover": {
+      "$value": "color-mix(in srgb, {colour.status-ok-solid} 26%, transparent)"
+    },
     "status-fail-text": {
-      "$value": "#da1e28",
+      "$value": "oklch(0.48 0.17 25)",
       "$type": "color",
       "$extensions": {
         "org.glimstone": {
-          "dark": "#ff8389",
+          "dark": "oklch(0.78 0.12 22)",
           "tailwind": "color-statusFail"
         }
       }
     },
     "status-fail-bg": {
-      "$value": "rgba(218, 30, 40, 0.06)",
-      "$type": "color",
+      "$value": "color-mix(in srgb, {colour.status-fail-solid} 8%, transparent)",
       "$extensions": {
         "org.glimstone": {
-          "dark": "rgba(255, 131, 137, 0.14)",
+          "dark": "color-mix(in srgb, {colour.status-fail-solid} 14%, transparent)",
           "tailwind": "color-statusFailBg"
         }
       }
     },
     "status-fail-solid": {
-      "$value": "#da1e28",
+      "$value": "oklch(0.53 0.18 25)",
       "$type": "color",
       "$extensions": {
         "org.glimstone": {
-          "dark": "#ff8389",
+          "dark": "oklch(0.74 0.14 22)",
           "tailwind": "color-statusFailSolid"
         }
       }
     },
+    "status-fail-wash": {
+      "$value": "color-mix(in srgb, {colour.status-fail-solid} 17%, transparent)"
+    },
+    "status-fail-wash-hover": {
+      "$value": "color-mix(in srgb, {colour.status-fail-solid} 26%, transparent)"
+    },
     "status-warn-text": {
-      "$value": "#ba4e00",
+      "$value": "oklch(0.48 0.12 52)",
       "$type": "color",
       "$extensions": {
         "org.glimstone": {
-          "dark": "#FF832B",
+          "dark": "oklch(0.78 0.14 55)",
           "tailwind": "color-statusWarn"
         }
       }
     },
     "status-warn-bg": {
-      "$value": "rgba(186, 78, 0, 0.06)",
-      "$type": "color",
+      "$value": "color-mix(in srgb, {colour.status-warn-solid} 8%, transparent)",
       "$extensions": {
         "org.glimstone": {
-          "dark": "rgba(255, 131, 43, 0.12)",
+          "dark": "color-mix(in srgb, {colour.status-warn-solid} 12%, transparent)",
           "tailwind": "color-statusWarnBg"
         }
       }
@@ -519,26 +542,31 @@
       }
     },
     "status-warn-bg-soft": {
-      "$value": "rgba(186, 78, 0, 0.05)",
-      "$type": "color",
+      "$value": "color-mix(in srgb, {colour.status-warn-solid} 5%, transparent)",
       "$description": "Quieter, for a paragraph that explains rather than warns, such as the refusal box under \"The second way in\".",
       "$extensions": {
         "org.glimstone": {
-          "dark": "rgba(255, 131, 43, 0.06)",
+          "dark": "color-mix(in srgb, {colour.status-warn-solid} 6%, transparent)",
           "tailwind": "color-statusWarnBgSoft",
           "tailwindNote": "The quiet end, for a paragraph that explains rather than warns."
         }
       }
     },
     "status-warn-solid": {
-      "$value": "#ba4e00",
+      "$value": "oklch(0.56 0.14 52)",
       "$type": "color",
       "$extensions": {
         "org.glimstone": {
-          "dark": "#FF832B",
+          "dark": "oklch(0.78 0.14 55)",
           "tailwind": "color-statusWarnSolid"
         }
       }
+    },
+    "status-warn-wash": {
+      "$value": "color-mix(in srgb, {colour.status-warn-solid} 17%, transparent)"
+    },
+    "status-warn-wash-hover": {
+      "$value": "color-mix(in srgb, {colour.status-warn-solid} 26%, transparent)"
     },
     "status-neutral-text": {
       "$value": "#6f6f6f",
@@ -625,6 +653,30 @@
         }
       },
       "$type": "color"
+    },
+    "tile-rest": {
+      "$value": "rgba(0, 0, 0, 0.045)",
+      "$type": "color",
+      "$description": "A tile at rest: a quiet wash of the theme's ink, so it still reads as something to press without a grey block, in a well as on a card.",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "rgba(255, 255, 255, 0.055)"
+        }
+      }
+    },
+    "scrollbar-thumb": {
+      "$value": "rgba(0, 0, 0, 0.25)",
+      "$type": "color",
+      "$description": "A scrollbar's thumb, faint on any ground, with no track under it.",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "rgba(255, 255, 255, 0.2)"
+        }
+      }
+    },
+    "selection": {
+      "$value": "color-mix(in srgb, {colour.accent} 22%, transparent)",
+      "$description": "Selected text: a wash of the accent under the text's own colour, as strong as it gets while the secondary text on it keeps 4.5:1 for any accent."
     }
   }
 }

@@ -288,6 +288,40 @@ test.describe("Toggle", () => {
     expect(ratio.knob).toBeGreaterThanOrEqual(3);
   });
 
+  test("[toggle-knob-inset] the knob keeps 3px of track around it, off, on and pressed, in both directions", async ({ page }) => {
+    await open(page, "/components/toggle");
+    const gaps = (name: string) =>
+      stage(page, "ToggleBasic")
+        .getByRole("switch", { name })
+        .evaluate((t) => {
+          const track = t.getBoundingClientRect();
+          const knob = t.querySelector(".glim-toggle-thumb")!.getBoundingClientRect();
+          const near = getComputedStyle(t).direction === "rtl" ? track.right - knob.right : knob.left - track.left;
+          const far = getComputedStyle(t).direction === "rtl" ? knob.left - track.left : track.right - knob.right;
+          const end = t.getAttribute("aria-checked") === "true" ? far : near;
+          return [knob.top - track.top, track.bottom - knob.bottom, end].map((v) => Math.round(v * 2) / 2);
+        });
+    for (const dir of ["ltr", "rtl"]) {
+      // The site's build turns :dir() into a list of right-to-left languages, so
+      // the demo takes a language along with its direction, as a page in Arabic would.
+      await page.evaluate((d) => {
+        const demo = document.querySelector('[data-demo="ToggleBasic"]')!;
+        demo.setAttribute("dir", d);
+        demo.setAttribute("lang", d === "rtl" ? "ar" : "en");
+      }, dir);
+      for (const name of ["Quiet notifications", "Play a sound"]) {
+        await expect.poll(() => gaps(name), `${name}, ${dir}`).toEqual([3, 3, 3]);
+        const box = (await stage(page, "ToggleBasic").getByRole("switch", { name }).boundingBox())!;
+        await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+        await page.mouse.down();
+        await expect.poll(() => gaps(name), `${name} pressed, ${dir}`).toEqual([3, 3, 3]);
+        // Let go away from the switch, so the press flips nothing.
+        await page.mouse.move(0, 0);
+        await page.mouse.up();
+      }
+    }
+  });
+
   test("[toggle-attrs] an id and a data hook reach the switch, a class stays on the frame", async ({ page }) => {
     await open(page, "/components/toggle");
     await expect(stage(page, "ToggleBasic").locator("#quiet-notifications")).toHaveAttribute("role", "switch");

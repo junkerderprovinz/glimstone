@@ -49,6 +49,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "toggle-name", when: "Always", then: "The label is the accessible name, also with hideLabel." },
       { id: "toggle-disabled", when: "The switch is disabled", then: "A click changes nothing." },
       { id: "toggle-attrs", when: "It is given an id, a data attribute or a listener", then: "They land on the switch itself, and a class stays on the frame." },
+      { id: "toggle-knob-inset", when: "It is off, on or pressed, in either direction", then: "Its knob keeps 3px of track above, below and at the end it rests on." },
       { id: "toggle-off-contrast", when: "It is off, in the light theme", then: "Its track holds 3:1 against the card and against its knob." },
       { id: "toggle-refused", keys: ["Space"], when: "It is refused, as OLED while Light is chosen", then: "It keeps its state and its focus, its track dims, and a click or a key shakes it." },
       { id: "toggle-refused-tip", when: "It is refused and the pointer rests on it", then: "Its bubble says why, and the reason is its description." },

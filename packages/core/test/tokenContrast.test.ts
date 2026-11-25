@@ -250,6 +250,9 @@ const GROUND_PAIRS: [string, string][] = [
     [`--status-${s}-text`, `--status-${s}-bg`] as [string, string],
   ]),
   ...FIELD_GROUNDS.map((g) => ['--field-placeholder', g] as [string, string]),
+  ...['ok', 'fail', 'warn'].map((s) => [`--status-${s}-text`, `--status-${s}-wash-hover`] as [string, string]),
+  ['--carbon-text', '--selection'],
+  ['--carbon-text-sub', '--selection'],
   ...['--field-rest', '--field-hover', '--field-focus', '--field-invalid', '--field-invalid-focus'].flatMap((g) => [
     ['--carbon-text', g] as [string, string],
     ['--field-placeholder', g] as [string, string],
@@ -464,5 +467,19 @@ for (const [themeName, theme] of Object.entries(THEMES)) {
 
   test(`a grey accent leaves the stone grey on ${themeName}`, () => {
     for (const name of STONE) assert.ok(chroma(labOf(name, withAccent(theme, '#777777'))) < 0.003, name);
+  });
+}
+
+for (const [themeName, theme] of Object.entries(THEMES)) {
+  test(`an off switch holds 3:1 against its knob and the card for every preset on ${themeName}`, () => {
+    const misses = ACCENTS.flatMap(({ name, hex: accent }) => {
+      const scope = withAccent(theme, accent);
+      const track = resolve('var(--toggle-off)', scope);
+      return ['--toggle-knob', '--carbon-surface']
+        .map((g) => [g, contrastRatio(hex(track), hex(resolve(`var(${g})`, scope)))] as const)
+        .filter(([, r]) => r < MIN_GRAPHIC_CONTRAST)
+        .map(([g, r]) => `${name} ${g}: ${r.toFixed(2)}:1`);
+    });
+    assert.deepEqual(misses, []);
   });
 }
