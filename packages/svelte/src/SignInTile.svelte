@@ -375,9 +375,9 @@
                   {@const label = signInServiceLabel(x, providers, text)}
                   {@const face = connectionTestFace(s.rowTests[x.id])}
                   {#snippet brand()}<BrandMark svg={label.mark?.svg ?? ""} />{/snippet}
-                  <ListRow steady name={label.name} meta={signInServiceStatus(text, x, when)} data-signin-service={x.provider}>
+                  {#snippet stands()}{#if badge}<Badge size="small" tone={badge.tone}>{badge.label}</Badge>{/if}{/snippet}
+                  <ListRow steady name={label.name} meta={signInServiceStatus(text, x, when)} badges={badge ? stands : undefined} data-signin-service={x.provider}>
                     {#snippet tile()}<GlyphTile glyph={label.mark ? brand : glyph(keys.service)} />{/snippet}
-                    {#snippet badges()}<Badge size="small" tone={badge.tone}>{badge.label}</Badge>{/snippet}
                     {#snippet actions()}
                       {#if !x.fromConfig}
                         <Toggle

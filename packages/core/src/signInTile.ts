@@ -1055,13 +1055,13 @@ export function accountFacts(text: SignInTileText, a: SignInAccount, services: r
   ];
 }
 
-/** A service's state as its badge says it. */
-export function signInServiceBadge(text: SignInTileText, s: SignInService): { tone: "ok" | "warn" | "neutral"; label: string } {
+/** The badge a service wears for what its switch does not say, or `null` where the switch says it all. */
+export function signInServiceBadge(text: SignInTileText, s: SignInService): { tone: "ok" | "warn" | "neutral"; label: string } | null {
   const t = text.services;
   if (s.paused) return { tone: "warn", label: t.paused };
-  if (s.on) return { tone: "ok", label: t.on };
-  if (!s.tested) return { tone: "warn", label: t.untested };
-  return { tone: "neutral", label: t.off };
+  if (!s.on && !s.tested) return { tone: "warn", label: t.untested };
+  if (!s.fromConfig) return null;
+  return s.on ? { tone: "ok", label: t.on } : { tone: "neutral", label: t.off };
 }
 
 export function signInServiceStatus(text: SignInTileText, s: SignInService, when: When): string {

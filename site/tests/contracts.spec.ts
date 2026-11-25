@@ -4949,6 +4949,21 @@ test.describe("SignInTile", () => {
     await expect(cardOf(page, "sessions").locator(".glim-badge", { hasText: "This session" })).toHaveCount(1);
   });
 
+  test("[signin-tile-service-row] a service's switch speaks for itself, and its buttons stand apart from it", async ({ page }) => {
+    await open(page, "/components/sign-in-tile");
+    const rows = cardOf(page, "services").locator(".glim-list-row");
+    await expect(rows.nth(0).locator(".glim-badge")).toHaveCount(0);
+    await expect(rows.nth(1).locator(".glim-badge")).toHaveText("Not tested yet");
+    await expect(rows.nth(2).locator(".glim-badge")).toHaveText("Paused");
+    const toggle = await rows.nth(0).locator(".glim-toggle").boundingBox();
+    const next = await rows.nth(0).locator(".glim-list-row-actions .glim-btn").first().boundingBox();
+    expect(next!.x - (toggle!.x + toggle!.width)).toBeGreaterThanOrEqual(12);
+    const edit = rows.nth(0).getByRole("button", { name: "Edit" });
+    await edit.hover();
+    const lit = await rows.nth(0).evaluate((e) => getComputedStyle(e).backgroundColor);
+    await expect.poll(() => edit.evaluate((e) => getComputedStyle(e).backgroundColor)).not.toBe(lit);
+  });
+
   test("[signin-tile-paste] a client ID and secret pasted together fill both fields", async ({ page }) => {
     await open(page, "/components/sign-in-tile");
     await cardOf(page, "services").getByRole("button", { name: "Add a sign-in service" }).click();

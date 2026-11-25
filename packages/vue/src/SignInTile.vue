@@ -312,8 +312,8 @@ function ask(what: SignInTileRemoval, id: string, name: string) {
               :data-signin-service="x.provider"
             >
               <template #tile><GlyphTile :glyph="serviceGlyph(x)" /></template>
-              <template #badges>
-                <Badge size="small" :tone="signInServiceBadge(text, x).tone">{{ signInServiceBadge(text, x).label }}</Badge>
+              <template v-if="signInServiceBadge(text, x)" #badges>
+                <Badge size="small" :tone="signInServiceBadge(text, x)!.tone">{{ signInServiceBadge(text, x)!.label }}</Badge>
               </template>
               <template #actions>
                 <Toggle

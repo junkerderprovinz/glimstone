@@ -474,9 +474,13 @@ function ServicesCard(props: CardProps) {
                       tile={<GlyphTile glyph={label().mark ? <BrandMark svg={label().mark!.svg} /> : glyphFor(keys().service)} />}
                       meta={signInServiceStatus(own.text, x, when)}
                       badges={
-                        <Badge size="small" tone={badge().tone}>
-                          {badge().label}
-                        </Badge>
+                        <Show when={badge()}>
+                          {(b) => (
+                            <Badge size="small" tone={b().tone}>
+                              {b().label}
+                            </Badge>
+                          )}
+                        </Show>
                       }
                       data-signin-service={x.provider}
                       actions={

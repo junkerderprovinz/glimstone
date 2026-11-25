@@ -468,9 +468,11 @@ function ServicesCard({ ctx, hue, providers }: { ctx: Ctx; hue: number; provider
                     tile={<GlyphTile glyph={label.mark ? <BrandMark svg={label.mark.svg} /> : glyphFor(keys.service)} />}
                     meta={signInServiceStatus(text, x, when)}
                     badges={
-                      <Badge size="small" tone={badge.tone}>
-                        {badge.label}
-                      </Badge>
+                      badge && (
+                        <Badge size="small" tone={badge.tone}>
+                          {badge.label}
+                        </Badge>
+                      )
                     }
                     data-signin-service={x.provider}
                     actions={

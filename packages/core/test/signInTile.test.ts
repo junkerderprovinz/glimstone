@@ -559,11 +559,16 @@ test('a client ID and secret pasted together land in both fields', async () => {
   assert.deepEqual([flow.state().draft.clientId, flow.state().draft.secret], ['glimstone', 'secret-123']);
 });
 
-test('a service badge says how it stands', () => {
-  assert.equal(signInServiceBadge(text, SERVICE).label, 'Not tested yet');
-  assert.equal(signInServiceBadge(text, { ...SERVICE, tested: true }).label, 'Off');
-  assert.equal(signInServiceBadge(text, { ...SERVICE, tested: true, on: true }).label, 'On');
-  assert.equal(signInServiceBadge(text, { ...SERVICE, tested: true, paused: true }).label, 'Paused');
+test('a service badge says what its switch does not', () => {
+  assert.equal(signInServiceBadge(text, SERVICE)?.label, 'Not tested yet');
+  assert.equal(signInServiceBadge(text, { ...SERVICE, tested: true }), null);
+  assert.equal(signInServiceBadge(text, { ...SERVICE, tested: true, on: true }), null);
+  assert.equal(signInServiceBadge(text, { ...SERVICE, tested: true, paused: true })?.label, 'Paused');
+});
+
+test('a service from the configuration file has no switch, so its badge says whether it is on', () => {
+  assert.equal(signInServiceBadge(text, { ...SERVICE, fromConfig: true, tested: true, on: true })?.label, 'On');
+  assert.equal(signInServiceBadge(text, { ...SERVICE, fromConfig: true, tested: true })?.label, 'Off');
 });
 
 test('a removal goes by its id and says so by name', async () => {
