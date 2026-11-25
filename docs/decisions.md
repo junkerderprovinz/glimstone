@@ -40,6 +40,10 @@ It replaces an earlier rule that every row action is visible at rest, on every l
 
 The variant first shipped as a glyph in every mode, on the reasoning that such a control is its symbol and that an ordinary button would print five verbs where a tidy strip had been. It was rejected in the words of the defect it was meant to fix: in `textGlyph` mode five controls in one card row printed no word while three beside them did. `IconButton` was asked for by a file list whose rows show their names first.
 
+## Rule 14: the select trigger is a field
+
+The `Select` trigger kept a hairline edge and the focus ring, on the reading that it opens a list and has no caret and is more a button than a field. Then edges on fields and dropdowns were ruled out, in GlimStone as in every app, so one rule holds for everything that carries a value. The trigger and the combobox took the text field's fill and its focus step. The ring had been their only sign of keyboard focus, and the step that replaces it is the one a text field has always shown.
+
 ## Rule 19: two button heights
 
 `--btn-h` came out of a report that buttons stood far too bulky beside the text fields. The half-rem step to `--btn-h-key` rests on another report: four pixels of difference between neighbours was filed as a bug, and eight never was.

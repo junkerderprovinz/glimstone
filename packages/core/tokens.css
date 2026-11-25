@@ -3043,9 +3043,9 @@
     width: 100%;
     height: var(--btn-h);
     padding: 0 var(--space-6);
-    border: 1px solid var(--carbon-border);
+    border: 0;
     border-radius: var(--radius-control);
-    background: var(--carbon-surface);
+    background: var(--carbon-surface2);
     color: var(--carbon-text);
     font: inherit;
     font-size: var(--text-body);
@@ -3054,18 +3054,23 @@
   }
   .glim-combobox-control { padding-inline-end: var(--space-2); cursor: text; }
   .glim-select-trigger:hover { background: var(--hover); }
+  /* A field, so the focus is the text field's step up the ramp, not a ring
+     (rule 14). It comes after the hover, so a focused trigger under the
+     pointer still shows it has the keys. */
   .glim-select-trigger:focus-visible,
   .glim-combobox-control:focus-within {
-    outline: var(--focus-ring-width) solid var(--focus-ring);
-    outline-offset: 1px;
+    outline: none;
+    background: var(--carbon-surface3);
   }
   /* In a well or a sub-card the trigger stands among fields, so it takes their
      ground and hovers up the ramp (rule 21). */
   :is(.glim-well, .glim-subcard) :is(.glim-select-trigger:not(.glim-select-trigger--inset), .glim-combobox-control) {
-    border-color: transparent;
     background: var(--carbon-surface3);
   }
   :is(.glim-well, .glim-subcard) .glim-select-trigger:not(.glim-select-trigger--inset):hover { background: var(--hover); }
+  :is(.glim-well, .glim-subcard) :is(.glim-select-trigger:not(.glim-select-trigger--inset):focus-visible, .glim-combobox-control:focus-within) {
+    background: var(--carbon-hover-raised);
+  }
   .glim-select-trigger[data-disabled] { opacity: 0.5; cursor: default; }
   /* Busy: the trigger keeps its focus and takes no input until the answer is back. */
   .glim-select-trigger[data-readonly] { opacity: 0.5; cursor: progress; }
@@ -3132,6 +3137,10 @@
   }
   .glim-select-trigger--inset:hover {
     background: var(--hover);
+    color: var(--carbon-text);
+  }
+  .glim-select-trigger--inset:focus-visible {
+    background: var(--carbon-hover-raised);
     color: var(--carbon-text);
   }
   .glim-select-trigger--row .glim-select-indicator svg,
