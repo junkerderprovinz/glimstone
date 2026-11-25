@@ -354,12 +354,14 @@ const segmentsOf = (track: HTMLElement) => Array.from(track.querySelectorAll<HTM
 /**
  * Each segment's width with its label on one line. The segments are held to
  * their flex share, so each is set to the size being read and given its own
- * style back straight after. The width comes from the computed style, since a
- * window's scale-in animation shrinks the bounding box.
+ * style back straight after. The label is a floor rather than the width, so a
+ * glyph segment keeps the square the stylesheet gives it. The width comes from
+ * the computed style, since a window's scale-in animation shrinks the bounding
+ * box.
  */
 export function measureSegments(segs: HTMLElement[]): number[] {
   const own = segs.map((s) => s.style.cssText);
-  for (const s of segs) Object.assign(s.style, { flex: "none", width: "max-content", minWidth: "0", maxWidth: "none" });
+  for (const s of segs) Object.assign(s.style, { flex: "none", minWidth: "max-content", maxWidth: "none" });
   const oneLine = segs.map((s) => parseFloat(getComputedStyle(s).width));
   segs.forEach((s, i) => (s.style.cssText = own[i]!));
   return oneLine;

@@ -42,6 +42,26 @@ test("the wall is built from the real components and stays out of the tab order"
   expect(await page.evaluate(() => !!document.activeElement?.closest('[data-showcase="wall"]'))).toBe(false);
 });
 
+test("an inline selector of glyphs in a field row is as wide as its square segments, inert or not", async ({ page }) => {
+  inDepth();
+  await open(page, "/", { theme: "dark" });
+  const tracks = wall(page).locator('[data-glim="FieldRow"] .glim-sel--inline');
+  await expect(tracks.first()).toBeAttached();
+  const fits = () =>
+    tracks.evaluateAll((all) =>
+      all.map((t) => {
+        const own = getComputedStyle(t);
+        const segs = [...t.querySelectorAll<HTMLElement>("[data-sel-id]")];
+        const row = segs.reduce((sum, s) => sum + s.offsetWidth, 0) + parseFloat(own.columnGap) * (segs.length - 1);
+        return t.clientWidth - parseFloat(own.paddingLeft) - parseFloat(own.paddingRight) >= row && segs.every((s) => s.offsetWidth === s.offsetHeight);
+      }),
+    );
+  expect(await fits()).not.toContain(false);
+  await wall(page).evaluate((el) => el.removeAttribute("inert"));
+  await page.setViewportSize({ width: 1281, height: 860 });
+  await expect.poll(fits).not.toContain(false);
+});
+
 test("the wall follows the accent, the corners and the theme chosen in the panel", async ({ page }) => {
   inDepth();
   await open(page, "/", { theme: "dark" });
