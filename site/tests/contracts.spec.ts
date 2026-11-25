@@ -4944,6 +4944,19 @@ test.describe("SignInTile", () => {
     await expect(cardOf(page, "sessions").locator(".glim-connection-badges .glim-badge", { hasText: "This session" })).toHaveCount(1);
   });
 
+  test("[signin-tile-wrap] a long name wraps on a phone, so two that start alike stay apart", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 800 });
+    await open(page, "/components/sign-in-tile");
+    await cardOf(page, "passkeys").getByRole("button", { name: "Rename" }).click();
+    const rename = dialog(page, "Rename the passkey");
+    const long = "iPhone von Johannes (iCloud-Schlüsselbund, synchronisiert)";
+    await rename.getByRole("textbox").fill(long);
+    await rename.getByRole("button", { name: "Save" }).click();
+    const name = cardOf(page, "passkeys").locator(".glim-connection-name", { hasText: long });
+    await expect(name).toBeVisible();
+    expect(await name.evaluate((el) => el.scrollWidth > el.clientWidth + 1)).toBe(false);
+  });
+
   test("[signin-tile-service-row] a service's switch speaks for itself and stands at the end of the name's line, above the buttons", async ({ page }) => {
     await open(page, "/components/sign-in-tile");
     const rows = cardOf(page, "services").locator('[data-glim="ConnectionRow"]');

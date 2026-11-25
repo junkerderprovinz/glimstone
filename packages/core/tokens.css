@@ -3794,6 +3794,12 @@
     flex-direction: column;
     gap: var(--space-2);
   }
+  /* A person's passkeys and devices often start alike, "iPhone von ...", so
+     their names wrap rather than end in an ellipsis. */
+  .glim-signin-tile-rows .glim-connection-name {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
   .glim-signin-tile-text,
   .glim-signin-tile-quiet,
   .glim-signin-tile-said {
