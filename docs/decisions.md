@@ -755,3 +755,27 @@ The first run of the contract tests found five gaps in the reference. ConfirmDia
 ## Adopting GlimStone in another app: why the components ship
 
 Two apps built from the design language alone landed on the same language in two dialects. One called the switch `Toggle` in its own file, the other called it `Switch` inside a shared `Field.tsx` beside six other controls. One had `ConfirmDialog` and the other `Confirm`, one `DropdownListbox` and the other `Choice`, and one kept `Card` in a settings-page helper while the other kept it in a `Shell.tsx`.
+
+## The palette: from Carbon's greys to stone
+
+From the first release to 4.9 the ground and the text were IBM Carbon's neutral greys, dark `#161616`, `#262626`, `#393939`, `#525252` and light `#f4f4f4`, `#ffffff`, `#e8e8e8`, `#d1d1d1`, with text at `#f4f4f4`, `#c6c6c6`, `#8d8d8d` and `#161616`, `#525252`, `#6f6f6f`. Beside a picked accent a pure grey read cold, and GlimStone 5 moved the ramp to OKLCH steps that take a faint share of the accent's hue. Every contrast test held on the new steps without a change to its threshold. The state hues were Carbon's support tones, `#6fdc8c`, `#ff8389` and `#FF832B` on dark, and a state button was filled solid with the ground's ink on top. Both moved, the hues to softer OKLCH values and the button to a wash. The preview's light text for those hues missed 4.5:1 on their own wash, so the text took a darker step than the solid.
+
+## The hover: surface3's lightness
+
+Until 4.9 the hover kept surface3's OKLab lightness exactly, 0.007 lower on the dark ramps, at 30% of the accent's chroma. On the stone it sits up to 0.025 under surface3 at 22%, which keeps the same 4.5:1 for the text and the secondary text on it. A field's hover was the accent's too. On its translucent steps it keeps a neutral wash of its own.
+
+## Form fields: an opaque step up the ramp
+
+A field used to rest on surface2, or surface3 in a well or a sub-card, and its focus lifted it one opaque step. Every place a field could stand needed a pair of rules of its own. The translucent steps read on any ground, so a well only declares them a little deeper. Cards lost their hairline at the same time: the light engine's edge and the raised step's contact shadow do its work.
+
+## The switch: a knob on the accent's ink
+
+The knob took `--accent-contrast` while on and the ground's colour while off, and it rested 4px from the end of an on track against 3px off. GlimStone 5 keeps one knob colour in both states, white on light and stone on dark, and 3px on every side, also while it stretches under a press.
+
+## The house font: Noto Sans
+
+Noto Sans was the house font from 2.8 to 4.9. Plex was compared with Inter, Geist and Google Sans in the GlimStone 5 preview and chosen, and Noto stays behind it for the scripts Plex does not draw.
+
+## The motion engine: a subtle level without spring
+
+Subtle used to ease without overshoot, 140ms for a page, and the transitions of single controls wrote their own times, 120 or 150ms on a fixed curve, which no level and no reduced motion reached. Subtle now springs on a `linear()` curve that passes its mark by under one per cent, 220ms for a page, and every transition reads the engine's tokens. The toast keeps a plain ease at wild, where the wild spring would carry it back past the screen edge.
