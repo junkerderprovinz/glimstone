@@ -2,6 +2,12 @@
 
 All notable changes to the GlimStone design language are documented here. Versioned independently of any app that adopts it.
 
+## Unreleased
+
+## ✨ Added
+
+- **`OFFICE_MARKS` in `@glimstone/core/officeMarks`**: the marks of ONLYOFFICE, Collabora Online and Euro Office, for a row that names an office server, each on a tile in its brand's colour. The sources and their licences are in `office-marks/`.
+
 ## 4.9.1 - 2026-11-24
 
 Notifications get a card of their own: `NotifyCard` in React, Vue, Solid and Svelte, with the kit's ten kinds, a test for every channel and its words in all 42 languages. Apps hear of a new GlimStone only once npm serves it.
