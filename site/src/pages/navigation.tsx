@@ -23,6 +23,10 @@ export function PaginationPage() {
           The two steps are ordinary buttons and follow the label mode. At the first or the last page the step that goes
           nowhere is disabled.
         </li>
+        <li>
+          The row never runs out of its box. Where it does not fit, the steps stand as glyphs with their words in the
+          bubble, around the page in force among all of them, such as 3 / 20.
+        </li>
         <li>A screen reader hears the row's name, and each page as "Page 3 of 20", with the one in force marked as the current page.</li>
       </ul>
       <H2>In every language</H2>

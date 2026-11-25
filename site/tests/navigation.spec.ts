@@ -17,7 +17,7 @@ const resolved = (el: import("@playwright/test").Locator, property: string) =>
 test.describe("Pagination", () => {
   const nav = (page: Page) => stage(page, "PaginationList").getByRole("navigation", { name: "Pages" });
   const pageButton = (page: Page, n: number) => nav(page).getByRole("button", { name: `Page ${n} of 20`, exact: true });
-  const caption = (page: Page) => stage(page, "PaginationList").locator("span.glim-num");
+  const caption = (page: Page) => stage(page, "PaginationList").locator("span.glim-num", { hasText: "Backups" });
 
   test("[pagination-nav] a navigation named by its label, the page in force marked current", async ({ page }) => {
     await open(page, "/components/pagination");
@@ -63,6 +63,27 @@ test.describe("Pagination", () => {
     await expect(pageButton(page, 20)).toBeVisible();
   });
 
+  test("[pagination-short] in a box too narrow for its pages the steps stand as glyphs around the page in force", async ({ page }) => {
+    await open(page, "/components/pagination");
+    const row = nav(page);
+    await row.evaluate((el) => (el.parentElement!.style.width = "399px"));
+    await expect(row).toHaveAttribute("data-short", "");
+    expect(await row.evaluate((el) => el.scrollWidth <= el.clientWidth && el.getBoundingClientRect().width <= 399)).toBe(true);
+    await expect(pageButton(page, 1)).toBeHidden();
+    await expect(row.locator(".glim-page-status")).toContainText("1 / 20");
+    const next = row.getByRole("button", { name: "Next page" });
+    const box = (await next.boundingBox())!;
+    expect(box.width).toBe(box.height);
+    await next.hover();
+    await expect(page.locator(".glim-bubble")).toHaveText("Next page");
+    await next.click();
+    await expect(row.locator(".glim-page-status")).toContainText("2 / 20");
+    await expect(caption(page)).toHaveText("Backups 11 to 20 of 195");
+    await row.evaluate((el) => (el.parentElement!.style.width = ""));
+    await expect(row).not.toHaveAttribute("data-short");
+    await expect(pageButton(page, 2)).toHaveAttribute("aria-current", "page");
+  });
+
   test("[pagination-accent] the page in force is filled with the accent", async ({ page }) => {
     await open(page, "/components/pagination");
     const fill = await pageButton(page, 1).evaluate((el) => getComputedStyle(el).backgroundColor);
@@ -82,7 +103,9 @@ test.describe("Pagination", () => {
     await page.locator('[data-demo="PaginationArabic"]').first().waitFor();
     const demo = stage(page, "PaginationArabic");
     const nav = demo.getByRole("navigation", { name: "الصفحات" });
-    await expect(nav.getByRole("button", { name: "الصفحة 1 من 20" })).toHaveAttribute("aria-current", "page");
+    // The demo's column is narrower than the Arabic row, so the row stands in its short form.
+    await expect(nav).toHaveAttribute("data-short", "");
+    await expect(nav.locator(".glim-page-status")).toContainText("الصفحة 1 من 20");
     const back = await nav.getByRole("button", { name: "الصفحة السابقة" }).boundingBox();
     const next = await nav.getByRole("button", { name: "الصفحة التالية" }).boundingBox();
     expect(back!.x).toBeGreaterThan(next!.x);
@@ -93,7 +116,8 @@ test.describe("Pagination", () => {
     await demo.getByRole("button", { name: "التالي", exact: true }).click();
     await demo.getByRole("button", { name: "التالي", exact: true }).click();
     await expect(demo.getByRole("button", { name: "حفظ" })).toBeVisible();
-    const spill = await demo.evaluate((root) => [...root.querySelectorAll<HTMLElement>("*")].filter((el) => el.scrollWidth > el.clientWidth + 1 && getComputedStyle(el).overflowX === "hidden").length);
+    // Words kept for a screen reader alone are clipped to a pixel on purpose.
+    const spill = await demo.evaluate((root) => [...root.querySelectorAll<HTMLElement>("*:not(.glim-sr-only)")].filter((el) => el.scrollWidth > el.clientWidth + 1 && getComputedStyle(el).overflowX === "hidden").length);
     expect(spill).toBe(0);
   });
 

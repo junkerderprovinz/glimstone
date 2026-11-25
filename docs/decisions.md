@@ -480,6 +480,10 @@ The groups, submenus and four widths of `Select` are what nineteen call sites ne
 
 The open search field replaced a search button that unfolded, along with four tiles to a row on a grey well and Cancel at the start of the button row.
 
+## Pagination: the short form
+
+The row was laid out on one line with nothing to give way, and in a card 399px wide it took 560px and cut "Previous page" off at the card's edge. A breakpoint in a container query was weighed first. The row's width moves with the language, the label mode and the number of digits in the pages, so any fixed width either switched too early or still let a long language run over, and the row is measured instead.
+
 ## First start and what's new: the dots
 
 Decided after a tester asked for the dots a prototype had used.

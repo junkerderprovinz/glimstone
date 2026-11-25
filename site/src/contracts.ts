@@ -804,6 +804,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "pagination-keys", keys: ["Tab", "Enter", "Space"], when: "The row has focus", then: "Tab reaches each page and each step in turn, and Enter or Space takes it." },
       { id: "pagination-ends", when: "The first or the last page is in force", then: "The step that would go past it is disabled." },
       { id: "pagination-gaps", when: "There are more pages than fit", then: "The first and the last page stay, the pages beside the one in force stand around it, and a gap marks the rest." },
+      { id: "pagination-short", when: "The row does not fit its box, as in a narrow card or a long language", then: "It never runs out of the box: the steps stand as glyphs with their words in the bubble, around the page in force among all of them, such as 3 / 20. It gets its pages back once there is room." },
       { id: "pagination-accent", when: "Always", then: "The page in force is filled with the accent, the others with a quiet fill." },
       { id: "pagination-languages", when: "The words come from componentText for a right-to-left language", then: "Every component reads in that language and mirrors, the steps point the other way, nothing runs out of its box, and a word the app passes itself wins." },
       { id: "pagination-forced", when: "A Windows contrast theme is on", then: "Every page has an edge, and the page in force takes the system's selection colours." },

@@ -6999,12 +6999,28 @@
 
 /* Pagination: every page is a quiet badge at the field height, and the one in
    force is filled with the accent, as anything chosen is (rule 3). The steps
-   are ordinary buttons; under a right-to-left language their arrows turn. */
+   are ordinary buttons; under a right-to-left language their arrows turn.
+   Where the row does not fit, watchPaginationFit sets `data-short` and the
+   steps stand as glyphs around "3 / 20". The row may be narrower than its
+   pages, or a flex parent would grow to hold them and the overflow would never
+   show. */
 @layer components {
   .glim-pagination {
     display: flex;
     align-items: center;
     gap: var(--space-2);
+    min-width: 0;
+    max-width: 100%;
+  }
+  .glim-pagination:not([data-short]) :is(.glim-page-step-short, .glim-tip-wrap:has(> .glim-page-step-short), .glim-page-status),
+  .glim-pagination[data-short] :is(.glim-page-step, .glim-tip-wrap:has(> .glim-page-step), .glim-page, .glim-page-gap) {
+    display: none;
+  }
+  .glim-page-status {
+    padding-inline: var(--space-4);
+    color: var(--carbon-text);
+    font-size: var(--text-body);
+    white-space: nowrap;
   }
   .glim-page {
     min-width: var(--btn-h);
@@ -7036,7 +7052,7 @@
     color: var(--carbon-text-muted);
     text-align: center;
   }
-  .glim-pagination > .glim-btn svg:dir(rtl) { scale: -1 1; }
+  .glim-pagination .glim-btn svg:dir(rtl) { scale: -1 1; }
 }
 
 /* PinInput: a row of text fields, one character each, at the key height so a

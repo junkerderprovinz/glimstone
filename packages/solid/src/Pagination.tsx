@@ -1,7 +1,7 @@
-import { createMemo, createSignal, createUniqueId, For, mergeProps } from "solid-js";
+import { createMemo, createSignal, createUniqueId, For, mergeProps, onCleanup, onMount, type JSX } from "solid-js";
 import * as pagination from "@zag-js/pagination";
 import { normalizeProps, useMachine } from "@zag-js/solid";
-import { PAGINATION_TEXT, pageDir, type PaginationText } from "@glimstone/core";
+import { PAGINATION_TEXT, pageDir, watchPaginationFit, type PaginationText } from "@glimstone/core";
 import { Button } from "./Button.tsx";
 import { IconBack, IconForward } from "./glyphs.tsx";
 
@@ -9,7 +9,8 @@ export type { PaginationText } from "@glimstone/core";
 
 // The pages of a long list, for the place a list cannot show every row at once.
 // The page in force is filled with the accent, as anything chosen is, and the
-// two steps follow the label mode like every other button.
+// two steps follow the label mode like every other button. Where the row has no
+// room, the steps stand as glyphs around "3 / 20" (watchPaginationFit).
 
 export interface PaginationProps {
   /** How many items the pages hold between them. */
@@ -48,16 +49,17 @@ export function Pagination(raw: PaginationProps) {
   // Keyed by page number, so a page keeps its button and its focus while the
   // gaps around it move.
   const keys = createMemo(() => api().pages.map((p, index) => (p.type === "page" ? p.value : `gap-${index}`)));
+  let nav!: HTMLElement;
+  onMount(() => onCleanup(watchPaginationFit(nav)));
+  const step = (label: () => string, glyph: () => JSX.Element, disabled: () => boolean, onClick: () => void) => (
+    <>
+      <Button class="glim-page-step" label={label()} labelKey={null} glyph={glyph()} variant="icon" disabled={disabled()} onClick={onClick} />
+      <Button class="glim-page-step-short" label={label()} labelKey={null} glyph={glyph()} compact disabled={disabled()} onClick={onClick} />
+    </>
+  );
   return (
-    <nav data-glim="Pagination" {...api().getRootProps()} class="glim-pagination">
-      <Button
-        label={words().previous}
-        labelKey={null}
-        glyph={<IconBack />}
-        variant="icon"
-        disabled={api().previousPage === null}
-        onClick={() => api().goToPrevPage()}
-      />
+    <nav ref={nav} data-glim="Pagination" {...api().getRootProps()} class="glim-pagination">
+      {step(() => words().previous, () => <IconBack />, () => api().previousPage === null, () => api().goToPrevPage())}
       <For each={keys()}>
         {(key) =>
           typeof key === "number" ? (
@@ -71,14 +73,11 @@ export function Pagination(raw: PaginationProps) {
           )
         }
       </For>
-      <Button
-        label={words().next}
-        labelKey={null}
-        glyph={<IconForward />}
-        variant="icon"
-        disabled={api().nextPage === null}
-        onClick={() => api().goToNextPage()}
-      />
+      <span class="glim-page-status glim-num">
+        <span aria-hidden="true">{words().status(api().page, api().totalPages)}</span>
+        <span class="glim-sr-only">{words().page(api().page, api().totalPages)}</span>
+      </span>
+      {step(() => words().next, () => <IconForward />, () => api().nextPage === null, () => api().goToNextPage())}
     </nav>
   );
 }
