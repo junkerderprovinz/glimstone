@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { computed, h, onBeforeUnmount, shallowRef, watch, type Component } from "vue";
+import { computed, onBeforeUnmount, shallowRef, watch, type Component } from "vue";
 import {
   accountFacts,
-  connectionTestFace,
   createSignInTileFlow,
   fill,
   passkeyFacts,
@@ -20,12 +19,12 @@ import {
   signInTileCards,
   signInWhen,
   signInCardNotice,
+  signInPasswordAsks,
   signInPasswordElsewhere,
   signInShortHint,
   tokenFacts,
   type Catalog,
   type SignInApi,
-  type SignInService,
   type SignInTileCard,
   type SignInTileField,
   type SignInTileLabelKeys,
@@ -40,10 +39,8 @@ import { useConfirm } from "./confirm";
 import EmptyState from "./EmptyState.vue";
 import FieldRow from "./FieldRow.vue";
 import FieldRowGroup from "./FieldRowGroup.vue";
-import GlyphTile from "./GlyphTile.vue";
-import BrandMark from "./BrandMark.vue";
-import { glyphFor, IconCancel, IconCheck, IconClose, IconPencil, IconTrash } from "./glyphs";
-import ListRow from "./ListRow.vue";
+import ConnectionRow from "./ConnectionRow.vue";
+import { glyphFor, IconCancel } from "./glyphs";
 import PasswordField from "./PasswordField.vue";
 import SignInTileWindow from "./SignInTileWindow.vue";
 import Toggle from "./Toggle.vue";
@@ -112,12 +109,10 @@ const shown = computed(() => signInTileCards(s.value, props.cards));
 const notice = (card: "askPassword" | "twoFactor" | "passkeys" | "tokens" | "services" | "sessions" | "accounts") => signInCardNotice(props.text, s.value, card);
 const elsewhere = computed(() => signInPasswordElsewhere(props.text, s.value));
 const had = computed(() => !!s.value.me?.password);
+const asks = computed(() => signInPasswordAsks(s.value, props.cards) && !s.value.editing);
 const glyph = (key: string) => glyphFor(key) as Component;
-const testFace = (id: string) => connectionTestFace(s.value.rowTests[id]);
-function serviceGlyph(x: SignInService): Component {
-  const mark = signInServiceLabel(x, props.providers, props.text).mark;
-  return mark ? () => h(BrandMark, { svg: mark.svg }) : glyph(keys.value.service);
-}
+// The words of a row's own buttons: a service's test, edit and remove, and a passkey's rename in place of edit.
+const rowText = (edit = props.text.services.edit) => ({ test: props.text.services.test, edit, remove: props.text.remove });
 
 const { confirm, ConfirmHost } = useConfirm({ title: props.text.confirm, cancel: props.text.cancel, confirm: props.text.confirm });
 function ask(what: SignInTileRemoval, id: string, name: string) {
@@ -138,9 +133,20 @@ function ask(what: SignInTileRemoval, id: string, name: string) {
         :hue-index="hueStart + i"
         data-signin-card="password"
       >
-        <p v-if="elsewhere" class="glim-signin-tile-text">{{ elsewhere }}</p>
+        <div v-if="elsewhere" class="glim-signin-tile-body">
+          <p class="glim-signin-tile-text">{{ elsewhere }}</p>
+          <FieldRow v-if="asks" :label="text.askPassword.label" :hint="text.askPassword.when">
+            <Toggle :model-value="!!s.settings?.askPassword" data-signin-tile="ask-password" @update:model-value="flow.setAskPassword($event)" />
+          </FieldRow>
+        </div>
         <div v-else class="glim-signin-tile-body">
-          <FieldRow :label="text.password.state" :value="had ? text.password.set : text.password.none" :tone="had ? undefined : 'warn'" />
+          <FieldRowGroup v-if="had">
+            <FieldRow :label="text.password.state" :value="text.password.set" />
+            <FieldRow v-if="asks" :label="text.askPassword.label" :hint="text.askPassword.when">
+              <Toggle :model-value="!!s.settings?.askPassword" data-signin-tile="ask-password" @update:model-value="flow.setAskPassword($event)" />
+            </FieldRow>
+          </FieldRowGroup>
+          <EmptyState v-else-if="!s.editing" nested :glyph="glyph(keys.setPassword)" :title="text.password.none" :hint="text.password.noneHint" />
           <FieldRowGroup v-if="s.editing">
             <FieldRow v-if="had" :label="text.password.current">
               <PasswordField autocomplete="current-password" :model-value="s.draft.current" :text="eye" :error="err('current')" @update:model-value="flow.set('current', $event)" />
@@ -188,10 +194,11 @@ function ask(what: SignInTileRemoval, id: string, name: string) {
       <Card v-else-if="c === 'twoFactor'" :title="text.twoFactor.title" :hint="text.twoFactor.hint" :hue-index="hueStart + i" data-signin-card="twoFactor">
         <UnavailableNotice v-if="notice('twoFactor')" :title="notice('twoFactor')!.title">{{ notice('twoFactor')!.reason }}</UnavailableNotice>
         <div v-else class="glim-signin-tile-body">
-          <FieldRowGroup>
-            <FieldRow :label="text.twoFactor.state" :value="s.me?.twoFactor ? text.twoFactor.on : text.twoFactor.off" :tone="s.me?.twoFactor ? 'ok' : undefined" />
-            <FieldRow v-if="s.me?.twoFactor" :label="text.twoFactor.codesLeft" :value="plural(lang, text.twoFactor.codesLeftValue, s.me?.recoveryLeft ?? 0)" />
+          <FieldRowGroup v-if="s.me?.twoFactor">
+            <FieldRow :label="text.twoFactor.state" :value="text.twoFactor.on" tone="ok" />
+            <FieldRow :label="text.twoFactor.codesLeft" :value="plural(lang, text.twoFactor.codesLeftValue, s.me?.recoveryLeft ?? 0)" />
           </FieldRowGroup>
+          <EmptyState v-else nested :glyph="glyph(keys.setUp)" :title="text.twoFactor.none" :hint="text.twoFactor.noneHint" />
           <div class="glim-signin-tile-foot">
             <template v-if="s.me?.twoFactor">
               <Button :label="text.twoFactor.newCodes" :label-key="keys.newCodes" :busy="s.busy === 'two-factor-codes'" data-signin-tile="two-factor-codes" @click="flow.newCodes()" />
@@ -206,22 +213,20 @@ function ask(what: SignInTileRemoval, id: string, name: string) {
         <UnavailableNotice v-if="notice('passkeys')" :title="notice('passkeys')!.title">{{ notice('passkeys')!.reason }}</UnavailableNotice>
         <div v-else class="glim-signin-tile-body">
           <UnavailableNotice v-if="!s.passkeysHere" :title="text.passkeys.unavailableTitle">{{ text.passkeys.unavailable }}</UnavailableNotice>
-          <div v-if="s.passkeys.length > 0" class="glim-list glim-signin-tile-rows">
-            <ListRow v-for="p in s.passkeys" :key="p.id" steady :name="p.name" :meta="passkeyFacts(text, p, when).added" :tip="passkeyFacts(text, p, when).more">
-              <template #tile><GlyphTile :glyph="glyph(keys.passkey)" /></template>
-              <template #actions>
-                <Button
-                  compact
-                  tone="subtle"
-                  :label="text.passkeys.rename"
-                  :label-key="keys.rename"
-                  :glyph="IconPencil"
-                  :data-signin-tile="`passkey-rename-${p.id}`"
-                  @click="flow.askRenamePasskey(p.id)"
-                />
-                <Button compact tone="subtle" :label="text.remove" :label-key="keys.remove" :glyph="IconTrash" :data-signin-tile="`remove-passkey-${p.id}`" @click="ask('passkey', p.id, p.name)" />
-              </template>
-            </ListRow>
+          <div v-if="s.passkeys.length > 0" class="glim-signin-tile-rows">
+            <ConnectionRow
+              v-for="p in s.passkeys"
+              :key="p.id"
+              :name="p.name"
+              :mark="glyph(keys.passkey)"
+              :status="passkeyFacts(text, p, when).added"
+              :text="rowText(text.passkeys.rename)"
+              :label-keys="{ edit: keys.rename, remove: keys.remove }"
+              :on-edit="() => flow.askRenamePasskey(p.id)"
+              :on-remove="() => ask('passkey', p.id, p.name)"
+            >
+              <p class="glim-connection-status">{{ passkeyFacts(text, p, when).more }}</p>
+            </ConnectionRow>
           </div>
           <EmptyState v-else-if="s.passkeysHere" nested :glyph="glyph(keys.passkey)" :title="text.passkeys.none" :hint="text.passkeys.noneHint" />
           <div v-if="s.passkeysHere" class="glim-signin-tile-foot">
@@ -233,24 +238,20 @@ function ask(what: SignInTileRemoval, id: string, name: string) {
       <Card v-else-if="c === 'sessions'" :title="text.sessions.title" :hint="text.sessions.hint" :hue-index="hueStart + i" data-signin-card="sessions">
         <UnavailableNotice v-if="notice('sessions')" :title="notice('sessions')!.title">{{ notice('sessions')!.reason }}</UnavailableNotice>
         <div v-else class="glim-signin-tile-body">
-          <div class="glim-list glim-signin-tile-rows">
-            <ListRow v-for="x in s.sessions" :key="x.id" steady :name="signInDevice(x.agent, text.sessions).name" :meta="sessionFacts(text, x, s.serviceLabels, when).join(' · ')">
-              <template #tile><GlyphTile :glyph="glyph(signInDevice(x.agent, text.sessions).phone ? keys.phone : keys.laptop)" /></template>
+          <div class="glim-signin-tile-rows">
+            <ConnectionRow
+              v-for="x in s.sessions"
+              :key="x.id"
+              :name="signInDevice(x.agent, text.sessions).name"
+              :mark="glyph(signInDevice(x.agent, text.sessions).phone ? keys.phone : keys.laptop)"
+              :status="sessionFacts(text, x, s.serviceLabels, when).join(' · ')"
+              :text="rowText()"
+              :actions="x.current ? [] : [{ id: 'end', label: text.sessions.end, labelKey: keys.end, busy: s.busy === `session-end-${x.id}`, onClick: () => void flow.endSession(x.id) }]"
+            >
               <template v-if="x.current" #badges>
                 <Badge size="small" tone="active">{{ text.sessions.current }}</Badge>
               </template>
-              <template v-if="!x.current" #actions>
-                <Button
-                  compact
-                  tone="subtle"
-                  :label="text.sessions.end"
-                  :label-key="keys.end"
-                  :busy="s.busy === `session-end-${x.id}`"
-                  :data-signin-tile="`session-end-${x.id}`"
-                  @click="flow.endSession(x.id)"
-                />
-              </template>
-            </ListRow>
+            </ConnectionRow>
           </div>
           <div v-if="s.sessions.some((x) => !x.current)" class="glim-signin-tile-foot">
             <Button
@@ -267,16 +268,20 @@ function ask(what: SignInTileRemoval, id: string, name: string) {
       <Card v-else-if="c === 'tokens'" :title="text.tokens.title" :hint="text.tokens.hint" :hue-index="hueStart + i" data-signin-card="tokens">
         <UnavailableNotice v-if="notice('tokens')" :title="notice('tokens')!.title">{{ notice('tokens')!.reason }}</UnavailableNotice>
         <div v-else class="glim-signin-tile-body">
-          <div v-if="s.tokens.length > 0" class="glim-list glim-signin-tile-rows">
-            <ListRow v-for="k in s.tokens" :key="k.id" steady :name="k.name" :meta="tokenFacts(text, k, when).join(' · ')">
-              <template #tile><GlyphTile :glyph="glyph(keys.token)" /></template>
+          <div v-if="s.tokens.length > 0" class="glim-signin-tile-rows">
+            <ConnectionRow
+              v-for="k in s.tokens"
+              :key="k.id"
+              :name="k.name"
+              :mark="glyph(keys.token)"
+              :status="tokenFacts(text, k, when).join(' · ')"
+              :text="rowText()"
+              :actions="[{ id: 'revoke', label: text.tokens.revoke, labelKey: keys.revoke, onClick: () => ask('token', k.id, k.name) }]"
+            >
               <template v-if="k.scopes.length > 0" #badges>
                 <Badge v-for="scope in k.scopes" :key="scope" size="small">{{ text.tokens.scopes[scope] ?? scope }}</Badge>
               </template>
-              <template #actions>
-                <Button compact tone="subtle" :label="text.tokens.revoke" :label-key="keys.revoke" :data-signin-tile="`remove-token-${k.id}`" @click="ask('token', k.id, k.name)" />
-              </template>
-            </ListRow>
+            </ConnectionRow>
           </div>
           <EmptyState v-else nested :glyph="glyph(keys.token)" :title="text.tokens.none" :hint="text.tokens.noneHint" />
           <div class="glim-signin-tile-foot">
@@ -288,22 +293,27 @@ function ask(what: SignInTileRemoval, id: string, name: string) {
       <Card v-else-if="c === 'services'" :title="text.services.title" :hint="text.services.hint" :hue-index="hueStart + i" data-signin-card="services">
         <UnavailableNotice v-if="notice('services')" :title="notice('services')!.title">{{ notice('services')!.reason }}</UnavailableNotice>
         <div v-else class="glim-signin-tile-body">
-          <div v-if="(s.services?.length ?? 0) > 0" class="glim-list glim-signin-tile-rows">
-            <ListRow
+          <div v-if="(s.services?.length ?? 0) > 0" class="glim-signin-tile-rows">
+            <ConnectionRow
               v-for="x in s.services ?? []"
               :key="x.id"
-              steady
               :name="signInServiceLabel(x, providers, text).name"
-              :meta="signInServiceStatus(text, x, when)"
+              :mark="signInServiceLabel(x, providers, text).mark ?? glyph(keys.service)"
+              :status="signInServiceStatus(text, x, when)"
               :data-signin-service="x.provider"
+              :text="rowText()"
+              :label-keys="{ test: keys.test, edit: keys.edit, remove: keys.remove }"
+              :actions="signInServiceActions(text, x, s, keys.turnOn, (id) => void flow.confirmService(id))"
+              :test="s.rowTests[x.id]"
+              :on-test="x.fromConfig ? undefined : () => void flow.testService(x.id)"
+              :on-edit="x.fromConfig ? undefined : () => flow.editService(x.id)"
+              :on-remove="x.fromConfig ? undefined : () => ask('service', x.id, signInServiceLabel(x, providers, text).name)"
             >
-              <template #tile><GlyphTile :glyph="serviceGlyph(x)" /></template>
-              <template #badges>
-                <Badge size="small" :tone="signInServiceBadge(text, x).tone">{{ signInServiceBadge(text, x).label }}</Badge>
+              <template v-if="signInServiceBadge(text, x)" #badges>
+                <Badge size="small" :tone="signInServiceBadge(text, x)!.tone">{{ signInServiceBadge(text, x)!.label }}</Badge>
               </template>
-              <template #actions>
+              <template v-if="!x.fromConfig" #control>
                 <Toggle
-                  v-if="!x.fromConfig"
                   :model-value="x.on"
                   :label="text.services.show"
                   hide-label
@@ -311,51 +321,8 @@ function ask(what: SignInTileRemoval, id: string, name: string) {
                   :data-signin-tile="`service-on-${x.id}`"
                   @update:model-value="flow.setServiceOn(x.id, $event)"
                 />
-                <Button
-                  v-for="a in signInServiceActions(text, x, s, keys.turnOn, (id) => void flow.confirmService(id))"
-                  :key="a.id"
-                  compact
-                  tone="subtle"
-                  :label="a.label"
-                  :label-key="a.labelKey"
-                  :busy="a.busy"
-                  :data-signin-tile="`service-${a.id}-${x.id}`"
-                  @click="a.onClick()"
-                />
-                <template v-if="!x.fromConfig">
-                  <Button
-                    compact
-                    :tone="testFace(x.id).tone === 'neutral' ? 'subtle' : testFace(x.id).tone"
-                    :label="text.services.test"
-                    :label-key="keys.test"
-                    :glyph="testFace(x.id).outcome === 'cross' ? IconClose : IconCheck"
-                    :busy="s.rowTests[x.id]?.busy"
-                    :title="s.rowTests[x.id]?.title"
-                    :class="{ 'glim-shake': testFace(x.id).shake }"
-                    :data-signin-tile="`service-test-${x.id}`"
-                    @click="flow.testService(x.id)"
-                  />
-                  <Button
-                    compact
-                    tone="subtle"
-                    :label="text.services.edit"
-                    :label-key="keys.edit"
-                    :glyph="IconPencil"
-                    :data-signin-tile="`service-edit-${x.id}`"
-                    @click="flow.editService(x.id)"
-                  />
-                  <Button
-                    compact
-                    tone="subtle"
-                    :label="text.remove"
-                    :label-key="keys.remove"
-                    :glyph="IconTrash"
-                    :data-signin-tile="`remove-service-${x.id}`"
-                    @click="ask('service', x.id, signInServiceLabel(x, providers, text).name)"
-                  />
-                </template>
               </template>
-            </ListRow>
+            </ConnectionRow>
           </div>
           <div class="glim-signin-tile-foot">
             <Button :label="text.services.add" :label-key="keys.addService" data-signin-tile="service-pick" @click="flow.pickService()" />
@@ -365,26 +332,35 @@ function ask(what: SignInTileRemoval, id: string, name: string) {
 
       <Card v-else :title="text.accounts.title" :hint="text.accounts.hint" :hue-index="hueStart + i" data-signin-card="accounts">
         <UnavailableNotice v-if="notice('accounts')" :title="notice('accounts')!.title">{{ notice('accounts')!.reason }}</UnavailableNotice>
-        <div v-else class="glim-list glim-signin-tile-rows">
-          <ListRow v-for="a in s.accounts ?? []" :key="a.id" steady :name="a.name" :meta="accountFacts(text, a, s.serviceLabels, when).join(' · ')">
-            <template #tile><GlyphTile :glyph="glyph(keys.account)" /></template>
+        <div v-else class="glim-signin-tile-rows">
+          <ConnectionRow
+            v-for="a in s.accounts ?? []"
+            :key="a.id"
+            :name="a.name"
+            :mark="glyph(keys.account)"
+            :status="accountFacts(text, a, s.serviceLabels, when).join(' · ')"
+            :text="rowText()"
+            :label-keys="{ remove: keys.remove }"
+            :actions="
+              a.owner || a.id === s.me?.account
+                ? []
+                : [
+                    {
+                      id: 'block',
+                      label: a.blocked ? text.accounts.unblock : text.accounts.block,
+                      labelKey: a.blocked ? keys.unblock : keys.block,
+                      busy: s.busy === `account-block-${a.id}`,
+                      onClick: () => void flow.block(a.id, !a.blocked),
+                    },
+                  ]
+            "
+            :on-remove="a.owner || a.id === s.me?.account ? undefined : () => ask('account', a.id, a.name)"
+          >
             <template v-if="a.owner || a.blocked" #badges>
               <Badge v-if="a.owner" size="small">{{ text.accounts.owner }}</Badge>
               <Badge v-if="a.blocked" size="small" tone="warn">{{ text.accounts.blocked }}</Badge>
             </template>
-            <template v-if="!a.owner && a.id !== s.me?.account" #actions>
-              <Button
-                compact
-                tone="subtle"
-                :label="a.blocked ? text.accounts.unblock : text.accounts.block"
-                :label-key="a.blocked ? keys.unblock : keys.block"
-                :busy="s.busy === `account-block-${a.id}`"
-                :data-signin-tile="`account-block-${a.id}`"
-                @click="flow.block(a.id, !a.blocked)"
-              />
-              <Button compact tone="subtle" :label="text.remove" :label-key="keys.remove" :glyph="IconTrash" :data-signin-tile="`remove-account-${a.id}`" @click="ask('account', a.id, a.name)" />
-            </template>
-          </ListRow>
+          </ConnectionRow>
         </div>
       </Card>
     </template>

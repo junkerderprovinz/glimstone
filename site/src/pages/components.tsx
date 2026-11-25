@@ -885,7 +885,7 @@ export function SignInTilePage() {
   return (
     <>
       <p className="lead">
-        The settings tile "Sign-in" of an app on the kit's sign-in: the password, the question before sensitive
+        The settings tile "Sign-in" of an app on the kit's sign-in: the password with the question before sensitive
         changes, two-factor, passkeys, sessions, API tokens, sign-in services and the accounts, each a card of its own.
       </p>
       <Head file="react/SignInTile.tsx" />
@@ -919,8 +919,8 @@ const arrived = takeSignInCode();
       </p>
       <H2>Without a password</H2>
       <p>
-        While the app is open, everyone who reaches it is an admin. The password card offers the first password, and
-        every lasting way in says that it waits for one, in place of its controls.
+        While the app is open, everyone who reaches it is an admin. The password card says there is none yet and
+        offers the first one, and every lasting way in says that it waits for one, in place of its controls.
       </p>
       <Demo name="SignInTileOpen" />
       <H2>An account from a sign-in service</H2>
@@ -932,6 +932,14 @@ const arrived = takeSignInCode();
       <H2>Rules</H2>
       <ul>
         <li>One title per card, with its (i). Every card's own buttons stand at the end of its foot.</li>
+        <li>
+          The question before sensitive changes is a switch in the password card. A tile without the password card
+          gives it a card of its own.
+        </li>
+        <li>
+          A card with nothing set up reads like an empty list: no password yet, or two-factor that is off, shows the
+          empty state over its button, as the passkeys card does, with no status row.
+        </li>
         <li>
           Switches save on the flip, the question before sensitive changes too, and snap back with a shake when the
           kit refuses. A sign-in service turns on with its passed test sign-in, the one exception.

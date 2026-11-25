@@ -20,6 +20,7 @@ import {
   signInRoleItems,
   passkeysAllowedAt,
   signInCardNotice,
+  signInPasswordAsks,
   signInPasswordElsewhere,
   signInTileCards,
   signInTileTextEn as text,
@@ -142,18 +143,39 @@ test('a tile reads only what its cards show', async () => {
   assert.deepEqual(calls.sort(), ['me', 'options']);
 });
 
-test('an open app shows every card', async () => {
+const WITHOUT_QUESTION = SIGN_IN_TILE_CARDS.filter((c) => c !== 'askPassword');
+
+test('an open app shows every card but the question, which waits for a password', async () => {
   const { api } = kit({ me: async () => ok({ ...ME, via: 'open', password: false, account: undefined }), settings: async () => no('setPasswordFirst', 409) });
   const { flow } = tile(api);
   await flow.refresh();
-  assert.deepEqual(signInTileCards(flow.state(), SIGN_IN_TILE_CARDS), [...SIGN_IN_TILE_CARDS]);
+  assert.deepEqual(signInTileCards(flow.state(), SIGN_IN_TILE_CARDS), WITHOUT_QUESTION);
+  assert.equal(signInPasswordAsks(flow.state(), SIGN_IN_TILE_CARDS), false);
 });
 
 test('an admin of a signed-in app sees every card that has something to show', async () => {
   const { api } = kit({ accounts: async () => ok([{ id: 'a1', name: 'owner', role: 'admin', owner: true, via: 'password', created: '', blocked: false, password: true }]) });
   const { flow } = tile(api);
   await flow.refresh();
-  assert.deepEqual(signInTileCards(flow.state(), SIGN_IN_TILE_CARDS), [...SIGN_IN_TILE_CARDS]);
+  assert.deepEqual(signInTileCards(flow.state(), SIGN_IN_TILE_CARDS), WITHOUT_QUESTION);
+});
+
+test('the question before changes stands in the password card, and in a card of its own only without one', async () => {
+  const { api } = kit();
+  const { flow } = tile(api);
+  await flow.refresh();
+  const s = flow.state();
+  assert.equal(signInPasswordAsks(s, SIGN_IN_TILE_CARDS), true);
+  assert.equal(signInPasswordAsks(s, ['password', 'twoFactor']), false);
+  assert.deepEqual(signInTileCards(s, ['askPassword', 'twoFactor']), ['askPassword', 'twoFactor']);
+  assert.equal(signInPasswordAsks(s, ['askPassword', 'twoFactor']), false);
+});
+
+test('an account from a sign-in service still finds the question in the password card', async () => {
+  const { api } = kit({ me: async () => ok({ ...ME, via: 'service', service: 'pocket', password: false }) });
+  const { flow } = tile(api);
+  await flow.refresh();
+  assert.equal(signInPasswordAsks(flow.state(), SIGN_IN_TILE_CARDS), true);
 });
 
 test('a short new password is saved, and the toast suggests a longer one', async () => {
@@ -537,11 +559,16 @@ test('a client ID and secret pasted together land in both fields', async () => {
   assert.deepEqual([flow.state().draft.clientId, flow.state().draft.secret], ['glimstone', 'secret-123']);
 });
 
-test('a service badge says how it stands', () => {
-  assert.equal(signInServiceBadge(text, SERVICE).label, 'Not tested yet');
-  assert.equal(signInServiceBadge(text, { ...SERVICE, tested: true }).label, 'Off');
-  assert.equal(signInServiceBadge(text, { ...SERVICE, tested: true, on: true }).label, 'On');
-  assert.equal(signInServiceBadge(text, { ...SERVICE, tested: true, paused: true }).label, 'Paused');
+test('a service badge says what its switch does not', () => {
+  assert.equal(signInServiceBadge(text, SERVICE)?.label, 'Not tested yet');
+  assert.equal(signInServiceBadge(text, { ...SERVICE, tested: true }), null);
+  assert.equal(signInServiceBadge(text, { ...SERVICE, tested: true, on: true }), null);
+  assert.equal(signInServiceBadge(text, { ...SERVICE, tested: true, paused: true })?.label, 'Paused');
+});
+
+test('a service from the configuration file has no switch, so its badge says whether it is on', () => {
+  assert.equal(signInServiceBadge(text, { ...SERVICE, fromConfig: true, tested: true, on: true })?.label, 'On');
+  assert.equal(signInServiceBadge(text, { ...SERVICE, fromConfig: true, tested: true })?.label, 'Off');
 });
 
 test('a removal goes by its id and says so by name', async () => {
