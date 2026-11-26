@@ -2203,7 +2203,7 @@ test.describe("Selector", () => {
       expect(a!.width).toBeCloseTo(b!.width, 0);
     };
     await under("General");
-    expect(await tab(page, "General").evaluate((t) => getComputedStyle(t).backgroundColor)).toBe("rgba(0, 0, 0, 0)");
+    await expect.poll(() => tab(page, "General").evaluate((t) => getComputedStyle(t).backgroundColor)).toBe("rgba(0, 0, 0, 0)");
     await tab(page, "Storage").click();
     await under("Storage");
     const panel = stage(page, "SelectorTabs").getByRole("tabpanel");
