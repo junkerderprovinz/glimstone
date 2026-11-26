@@ -47,9 +47,9 @@ export default function ListPage() {
         <Switch>
           <Match when={loading()}>
             <div role="group" aria-label="Backups" aria-busy="true">
-              <SkeletonRow />
-              <SkeletonRow />
-              <SkeletonRow />
+              <SkeletonRow badge={false} value actions={1} />
+              <SkeletonRow badge={false} value actions={1} />
+              <SkeletonRow badge={false} value actions={1} />
             </div>
           </Match>
           <Match when={shown().length > 0}>

@@ -66,6 +66,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "dialog-trap", keys: ["Tab", "Shift+Tab"], when: "Focus is on the last or first control", then: "Focus wraps inside the window." },
       { id: "dialog-return", when: "The window closes", then: "Focus goes back to the control that opened it." },
       { id: "dialog-backdrop", when: "A click lands outside the window", then: "It cancels." },
+      { id: "dialog-leave", when: "The window closes", then: "It fades and sinks 4px in two thirds of the time it took to come, as an inert copy that takes no clicks, and at motion off it goes at once." },
       { id: "dialog-question", when: "The message opens with a question", then: "The question leads in the text colour at 16px, and what follows stands under it, smaller and quieter, in a window 400px wide." },
     ],
   },
@@ -186,6 +187,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "toast-phone", when: "The window is a phone's", then: "A toast takes the window's width, the newest two show, and the page stays in view." },
       { id: "toast-pixels", when: "Toasts stack up", then: "The one in front is a whole number of pixels tall, whatever its severity, label mode or width, and right to left too, so it never lands on a half pixel." },
       { id: "toast-settled", when: "A toast has come in", then: "It holds no transform at any motion level, so a fixed element inside it is placed against the window." },
+      { id: "toast-leave", when: "A toast is dismissed or runs out", then: "It slides out toward its edge, and the one behind it moves into its place." },
       { id: "toast-title", when: "A toast has a title", then: "The title leads in the text colour and the message under it is its quieter description, both read out in that order." },
       { id: "toast-stack", when: "Several toasts are up", then: "The newest stands in front, the two before it show an 8px edge each behind it, and under the pointer they fan out one above the other." },
     ],
@@ -736,6 +738,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "skeleton-light-theme", when: "The light theme shows", then: "The band is a white glow, not a darker stripe." },
       { id: "skeleton-still", when: "Motion is off, or the system asks for reduced motion", then: "No light crosses." },
       { id: "skeleton-delay", when: "It appears", then: "It stays hidden for 400 ms and then shows." },
+      { id: "skeleton-match", when: "Its rows carry a value and buttons", then: "Its bars take the real row's measures, the glyph's size in the tile, cap height for the text and the value bar ending where the figures will." },
     ],
   },
   announce: {

@@ -63,6 +63,17 @@ test("[list-row-value] the list page keeps its figures in one column and only th
   await expect(block(page, "ConfirmFlow").locator(".glim-pill")).toHaveCount(0);
 });
 
+test("[skeleton-match] the list page's skeleton ends its value bar where the figures end", async ({ page }) => {
+  await page.goto(`/#/blocks?fw=${framework()}`);
+  const list = block(page, "ListPage");
+  const bar = list.locator(".glim-skeleton-value").first();
+  await expect(bar).toHaveCount(1);
+  const waiting = await bar.evaluate((b) => Math.round(b.getBoundingClientRect().right));
+  await expect(list.locator('[data-glim="ListRow"]')).toHaveCount(3);
+  const shown = await list.locator(".glim-list-row-value").first().evaluate((v) => Math.round(v.getBoundingClientRect().right));
+  expect(Math.abs(waiting - shown)).toBeLessThanOrEqual(1);
+});
+
 test("the settings page switches its cards with the tiles", async ({ page }) => {
   const settings = block(page, "SettingsPage");
   await settings.getByRole("tab", { name: "Notifications" }).or(settings.getByRole("radio", { name: "Notifications" })).click();

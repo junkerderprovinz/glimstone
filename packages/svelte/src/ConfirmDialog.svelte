@@ -31,7 +31,7 @@
 </script>
 
 <script lang="ts">
-  import { splitQuestion } from "@glimstone/core";
+  import { leaveBehind, splitQuestion } from "@glimstone/core";
   import Badge from "./Badge.svelte";
   import Button from "./Button.svelte";
   import { IconCancel, IconClose } from "./glyphs.js";
@@ -66,6 +66,7 @@
 
 <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
 <div
+  {@attach leaveBehind}
   class="glim-modal-backdrop"
   onclick={(e) => {
     if (e.target === e.currentTarget) onCancel();

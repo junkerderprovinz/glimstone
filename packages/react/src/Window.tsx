@@ -9,6 +9,7 @@ import {
   focusedAsker,
   menuIsOpen,
   returnFocus,
+  leaveBehind,
   stackWindow,
   windowFocusTarget,
   type WindowSize,
@@ -77,6 +78,7 @@ export function Window({ title, drawn, children, actions = [], start, size = "no
 
   return createPortal(
     <div
+      ref={leaveBehind}
       className="glim-modal-backdrop"
       // A press beside an open menu only closes the menu, not the window under it.
       onMouseDown={(e) => {

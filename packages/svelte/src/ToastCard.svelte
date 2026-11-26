@@ -20,7 +20,7 @@
 </script>
 
 <script lang="ts">
-  import { MARKS, softBreaks, TOAST_MARKS } from "@glimstone/core";
+  import { leaveBehind, MARKS, softBreaks, TOAST_MARKS } from "@glimstone/core";
   import Button from "./Button.svelte";
   import MarkSvg from "./MarkSvg.svelte";
 
@@ -39,6 +39,7 @@
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
+  {@attach leaveBehind}
   data-glim="ToastCard"
   onmouseenter={() => onMouseEnter(id)}
   onmouseleave={() => onMouseLeave(id)}

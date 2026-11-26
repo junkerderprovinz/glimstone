@@ -3,6 +3,7 @@ import { computed, onMounted, onUnmounted, shallowRef, useId, useSlots } from "v
 import {
   focusedAsker,
   footStartShows,
+  leavingRef,
   menuIsOpen,
   returnFocus,
   stackWindow,
@@ -44,6 +45,7 @@ const props = withDefaults(
   { actions: () => [], size: "normal", closeOnBackdrop: true },
 );
 const emit = defineEmits<{ close: [] }>();
+const leaving = leavingRef();
 const slots = useSlots();
 
 const card = shallowRef<HTMLElement | null>(null);
@@ -78,7 +80,7 @@ function pressBeside() {
 
 <template>
   <Teleport :to="portalTarget()">
-    <div class="glim-modal-backdrop" @mousedown.self="pressBeside">
+    <div :ref="leaving" class="glim-modal-backdrop" @mousedown.self="pressBeside">
       <div
         data-glim="Window"
         :data-glim-title="title"

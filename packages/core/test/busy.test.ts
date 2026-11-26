@@ -31,7 +31,7 @@ test('a ring takes the class of its size, the middle one by default', () => {
 });
 
 test('a placeholder row waits like a ring and can leave out its tile and badge', () => {
-  assert.deepEqual(skeletonRowView({}), { className: 'glim-skeleton-row', style: { '--busy-delay': '400ms' }, tile: true, badge: true });
+  assert.deepEqual(skeletonRowView({}), { className: 'glim-skeleton-row', style: { '--busy-delay': '400ms' }, tile: true, badge: true, value: false, actions: 0 });
   assert.deepEqual(skeletonRowView({ delay: 0, tile: false, badge: false }).style, { '--busy-delay': '0ms' });
   assert.equal(skeletonRowView({ tile: false }).tile, false);
 });

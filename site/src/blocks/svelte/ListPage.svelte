@@ -44,9 +44,9 @@
   <Card title="Backups">
     {#if loading}
       <div role="group" aria-label="Backups" aria-busy="true">
-        <SkeletonRow />
-        <SkeletonRow />
-        <SkeletonRow />
+        <SkeletonRow badge={false} value actions={1} />
+        <SkeletonRow badge={false} value actions={1} />
+        <SkeletonRow badge={false} value actions={1} />
       </div>
     {:else if shown.length}
       <div style="display: grid; gap: 2px">

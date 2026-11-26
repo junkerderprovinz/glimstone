@@ -6,6 +6,10 @@
     tile?: boolean;
     /** The badge at the row's end, for a list whose rows have one. */
     badge?: boolean;
+    /** A bar in the value column, for a list whose rows carry a `value`. */
+    value?: boolean;
+    /** How many row buttons to keep room for, so the value bar stands where the real rows put their figures. */
+    actions?: number;
     class?: string;
   }
 </script>
@@ -18,12 +22,14 @@
   // when the rows arrive. It shows only after BUSY_DELAY. The list around it
   // carries aria-busy and says what is loading; the row itself is hidden from
   // assistive technology.
-  let { delay, tile = true, badge = true, class: className }: SkeletonRowProps = $props();
-  const view = $derived(skeletonRowView({ delay, tile, badge }));
+  let { delay, tile = true, badge = true, value = false, actions = 0, class: className }: SkeletonRowProps = $props();
+  const view = $derived(skeletonRowView({ delay, tile, badge, value, actions }));
 </script>
 
 <div data-glim="SkeletonRow" aria-hidden="true" class={className ? `${view.className} ${className}` : view.className} style={css(view.style)}>
   {#if view.tile}<span class="glim-skeleton-block glim-skeleton-tile"></span>{/if}
   <span class="glim-skeleton-block glim-skeleton-name"></span>
   {#if view.badge}<span class="glim-skeleton-block glim-skeleton-badge"></span>{/if}
+  {#if view.value}<span class="glim-skeleton-block glim-skeleton-value"></span>{/if}
+  {#if view.actions > 0}<span class="glim-skeleton-actions"></span>{/if}
 </div>

@@ -1,5 +1,5 @@
 import { createEffect, createMemo, For, Index, onCleanup, onMount, Show } from "solid-js";
-import { announce, liveRegionAttrs, MARKS, softBreaks, TOAST_MARKS, toastAnnouncement, toastPoliteness, watchToastStack, type ToastAction, type ToastSeverity, type ToastViewportEntry } from "@glimstone/core";
+import { announce, leaveBehind, liveRegionAttrs, MARKS, softBreaks, TOAST_MARKS, toastAnnouncement, toastPoliteness, watchToastStack, type ToastAction, type ToastSeverity, type ToastViewportEntry } from "@glimstone/core";
 import { Button } from "./Button.tsx";
 import { MarkSvg } from "./glyphs.tsx";
 
@@ -36,6 +36,7 @@ export interface ToastCardProps {
 export function ToastCard(props: ToastCardProps) {
   return (
     <div
+      ref={(el) => onCleanup(leaveBehind(el))}
       data-glim="ToastCard"
       // Focus is heard as it bubbles, so tabbing onto the dismiss button pauses
       // the countdown like a hover does.

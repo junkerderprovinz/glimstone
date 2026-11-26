@@ -37,7 +37,7 @@
 
 <script lang="ts">
   import { onMount } from "svelte";
-  import { focusedAsker, menuIsOpen, returnFocus, stackWindow, windowFocusTarget } from "@glimstone/core";
+  import { focusedAsker, leaveBehind, menuIsOpen, returnFocus, stackWindow, windowFocusTarget } from "@glimstone/core";
   import Badge from "./Badge.svelte";
   import { lift } from "./lift.js";
   import WindowFootRow from "./WindowFootRow.svelte";
@@ -91,7 +91,7 @@
      so it is the only node Svelte removes for it, wherever the caller put it. -->
 {#snippet backdrop()}
   <!-- svelte-ignore a11y_no_static_element_interactions -->
-  <div class="glim-modal-backdrop" {@attach lift} onmousedown={pressBeside}>
+  <div class="glim-modal-backdrop" {@attach lift} {@attach leaveBehind} onmousedown={pressBeside}>
     <div
       data-glim="Window"
       data-glim-title={title}

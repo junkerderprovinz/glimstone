@@ -14,10 +14,14 @@ const props = withDefaults(
     tile?: boolean;
     /** The badge at the row's end, for a list whose rows have one. */
     badge?: boolean;
+    /** A bar in the value column, for a list whose rows carry a `value`. */
+    value?: boolean;
+    /** How many row buttons to keep room for, so the value bar stands where the real rows put their figures. */
+    actions?: number;
   }>(),
-  { tile: true, badge: true },
+  { tile: true, badge: true, value: false, actions: 0 },
 );
-const view = computed(() => skeletonRowView({ delay: props.delay, tile: props.tile, badge: props.badge }));
+const view = computed(() => skeletonRowView({ delay: props.delay, tile: props.tile, badge: props.badge, value: props.value, actions: props.actions }));
 </script>
 
 <template>
@@ -25,5 +29,7 @@ const view = computed(() => skeletonRowView({ delay: props.delay, tile: props.ti
     <span v-if="view.tile" class="glim-skeleton-block glim-skeleton-tile" />
     <span class="glim-skeleton-block glim-skeleton-name" />
     <span v-if="view.badge" class="glim-skeleton-block glim-skeleton-badge" />
+    <span v-if="view.value" class="glim-skeleton-block glim-skeleton-value" />
+    <span v-if="view.actions > 0" class="glim-skeleton-actions" />
   </div>
 </template>

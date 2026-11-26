@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, shallowRef, type Component } from "vue";
-import { splitQuestion } from "@glimstone/core";
+import { leavingRef, splitQuestion } from "@glimstone/core";
 import Badge from "./Badge.vue";
 import Button from "./Button.vue";
 import { IconCancel, IconClose } from "./glyphs";
@@ -23,6 +23,7 @@ const props = defineProps<{
 }>();
 const emit = defineEmits<{ confirm: []; cancel: [] }>();
 const split = computed(() => splitQuestion(props.message));
+const leave = leavingRef();
 const card = shallowRef<HTMLDivElement | null>(null);
 // Focus lands on Cancel, the answer that changes nothing.
 const cancel = shallowRef<{ el: HTMLButtonElement | null } | null>(null);
@@ -31,7 +32,7 @@ defineExpose({ card });
 </script>
 
 <template>
-  <div class="glim-modal-backdrop" @click.self="emit('cancel')">
+  <div :ref="leave" class="glim-modal-backdrop" @click.self="emit('cancel')">
     <div
       data-glim="ConfirmDialog"
       :data-glim-title="title"

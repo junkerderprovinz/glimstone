@@ -487,6 +487,21 @@ test.describe("ConfirmDialog", () => {
     await expect(page.getByRole("dialog")).toHaveCount(0);
   });
 
+  test("[dialog-leave] the window leaves softly and the page is free at once", async ({ page }) => {
+    await openDialog(page);
+    await page.keyboard.press("Escape");
+    const copy = page.locator(".glim-modal-backdrop[data-leaving]");
+    await expect(copy).toHaveCount(1);
+    await expect(copy).toHaveAttribute("aria-hidden", "true");
+    expect(await copy.evaluate((c) => (c as HTMLElement).inert && c.getAnimations({ subtree: true }).some((a) => (a as CSSAnimation).animationName === "glim-leave-drop"))).toBe(true);
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+    await expect(copy).toHaveCount(0);
+    await relook(page, { motion: "off" });
+    await stage(page, "ConfirmDelete").getByRole("button", { name: "Delete snapshot" }).click();
+    await page.keyboard.press("Escape");
+    await expect(page.locator(".glim-modal-backdrop")).toHaveCount(0, { timeout: 200 });
+  });
+
   test("[dialog-question] the question leads and the rest stands quieter under it", async ({ page }) => {
     await openDialog(page);
     const dialog = page.getByRole("dialog", { name: "Confirm" });
@@ -1683,6 +1698,18 @@ test.describe("Toast", () => {
       });
       expect(settled, `${motion}${reduce ? ", reduced" : ""}`).toEqual({ transform: "none", pinnedToWindow: true });
     }
+  });
+
+  test("[toast-leave] a dismissed toast slides out and the ones behind close up", async ({ page }) => {
+    await open(page, "/components/toast");
+    await press(page, "Success");
+    await press(page, "Warning");
+    const front = card(page, "The target is almost full");
+    await front.getByRole("button", { name: "Dismiss" }).click();
+    const copy = page.locator(".glim-toast-card[data-leaving]");
+    await expect(copy).toHaveCount(1);
+    await expect(card(page, "Settings saved").and(page.locator(":not([data-leaving])"))).not.toHaveAttribute("data-behind");
+    await expect(copy).toHaveCount(0);
   });
 
   test("[toast-title] a title leads and the message under it reads quieter", async ({ page }) => {
@@ -5116,7 +5143,8 @@ test.describe("NotifyCard", () => {
     await open(page, "/components/notify-card");
     await row(page, "ntfy").getByRole("button", { name: "Remove channel" }).click();
     const ask = page.getByRole("alertdialog").or(page.getByRole("dialog", { name: "Remove channel" }));
-    await expect(ask).toContainText("Remove ntfy? It stops sending right away.");
+    await expect(ask.locator(".glim-modal-question")).toHaveText("Remove ntfy?");
+    await expect(ask).toContainText("It stops sending right away.");
     await ask.getByRole("button", { name: "Remove channel" }).click();
     await expect(demo(page).locator("[data-notify-channel]")).toHaveCount(3);
     await expect(said(page)).toHaveText("Settings saved");

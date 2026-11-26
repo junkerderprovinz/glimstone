@@ -4,7 +4,7 @@
 // it on onClose. The other props of a <div> go to the card.
 
 import { children, createUniqueId, mergeProps, onCleanup, onMount, splitProps, type JSX } from "solid-js";
-import { focusedAsker, menuIsOpen, returnFocus, stackWindow, windowFocusTarget, type WindowSize } from "@glimstone/core";
+import { focusedAsker, leaveBehind, menuIsOpen, returnFocus, stackWindow, windowFocusTarget, type WindowSize } from "@glimstone/core";
 import { Badge } from "./Badge.tsx";
 import { Lift } from "./Lift.tsx";
 import { WindowFootRow, type WindowAction } from "./WindowFootRow.tsx";
@@ -68,6 +68,7 @@ export function Window(props: WindowProps) {
   return (
     <Lift>
       <div
+        ref={(el) => onCleanup(leaveBehind(el))}
         class="glim-modal-backdrop"
         // A press beside an open menu only closes the menu, not the window under it.
         onMouseDown={(e) => {

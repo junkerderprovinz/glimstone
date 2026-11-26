@@ -40,9 +40,9 @@ const trash = glyph("IconTrash");
     </div>
     <Card title="Backups">
       <div v-if="loading" role="group" aria-label="Backups" aria-busy="true">
-        <SkeletonRow />
-        <SkeletonRow />
-        <SkeletonRow />
+        <SkeletonRow :badge="false" value :actions="1" />
+        <SkeletonRow :badge="false" value :actions="1" />
+        <SkeletonRow :badge="false" value :actions="1" />
       </div>
       <div v-else-if="shown.length" style="display: grid; gap: 2px">
         <ListRow v-for="b in shown" :key="b.name" :name="b.name" :status="b.failed ? { tone: 'fail', label: 'Failed' } : undefined">

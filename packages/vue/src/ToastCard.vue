@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MARKS, softBreaks, TOAST_MARKS, type ToastAction, type ToastSeverity } from "@glimstone/core";
+import { leavingRef, MARKS, softBreaks, TOAST_MARKS, type ToastAction, type ToastSeverity } from "@glimstone/core";
 import Button from "./Button.vue";
 import { MarkSvg } from "./glyphs";
 
@@ -24,6 +24,7 @@ const emit = defineEmits<{
   focus: [id: string];
   blur: [id: string];
 }>();
+const leave = leavingRef();
 
 function act(action: ToastAction) {
   action.onClick();
@@ -33,6 +34,7 @@ function act(action: ToastAction) {
 
 <template>
   <div
+    :ref="leave"
     data-glim="ToastCard"
     :class="['glim-toast', 'glim-toast-card', { 'glim-toast-card--titled': title }]"
     @mouseenter="emit('mouseEnter', id)"

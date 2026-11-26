@@ -8,7 +8,7 @@
 // because Escape and the trap must work after focus has left this subtree.
 // `ref` (a plain prop in React 19) is the card the hook traps focus in.
 import type { ReactNode, Ref } from "react";
-import { splitQuestion } from "@glimstone/core";
+import { leaveBehind, splitQuestion } from "@glimstone/core";
 import { Badge } from "./Badge.tsx";
 import { Button } from "./Button.tsx";
 import { IconCancel, IconClose } from "./glyphs.tsx";
@@ -56,6 +56,7 @@ export function ConfirmDialog({
   const { question, detail } = splitQuestion(message);
   return (
     <div
+      ref={leaveBehind}
       className="glim-modal-backdrop"
       onClick={(e) => {
         if (e.target === e.currentTarget) onCancel();

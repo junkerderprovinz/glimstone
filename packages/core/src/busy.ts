@@ -27,8 +27,24 @@ export function busyRingView({ size = "medium", delay }: { size?: BusyRingSize; 
 export interface SkeletonRowView extends BusyView {
   tile: boolean;
   badge: boolean;
+  value: boolean;
+  /** How many row buttons the row keeps room for. */
+  actions: number;
 }
 
-export function skeletonRowView({ delay, tile = true, badge = true }: { delay?: number; tile?: boolean; badge?: boolean }): SkeletonRowView {
-  return { className: "glim-skeleton-row", style: waitStyle(delay), tile, badge };
+export function skeletonRowView({
+  delay,
+  tile = true,
+  badge = true,
+  value = false,
+  actions = 0,
+}: {
+  delay?: number;
+  tile?: boolean;
+  badge?: boolean;
+  value?: boolean;
+  actions?: number;
+}): SkeletonRowView {
+  const style = actions > 0 ? { ...waitStyle(delay), "--skeleton-actions": String(actions) } : waitStyle(delay);
+  return { className: "glim-skeleton-row", style, tile, badge, value, actions };
 }

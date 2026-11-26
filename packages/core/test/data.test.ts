@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import { listRowStatus } from '../src/listRow.ts';
 import { TOAST_MARKS } from '../src/marks.ts';
 import { meterFigure } from '../src/meter.ts';
+import { skeletonRowView } from '../src/busy.ts';
 
 const css = readFileSync(new URL('../tokens.css', import.meta.url), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
 
@@ -86,3 +87,15 @@ test('a card speaks in one row style: the name 14/500 and what explains it 13px 
 test('an update waiting is news, not a fault: its line stays neutral', () => {
   assert.equal(declared('.glim-version-state[data-tone="warn"] .glim-version-line', 'color'), 'var(--carbon-text-sub)');
 });
+
+test('a skeleton row takes the real row\'s measures: the glyph inside the tile, bars at cap height, room for the value and the buttons', () => {
+  const view = skeletonRowView({ value: true, actions: 2 });
+  assert.equal(view.value, true);
+  assert.equal(view.style?.['--skeleton-actions'], '2');
+  assert.equal(skeletonRowView({}).value, false);
+  assert.equal(declared('.glim-skeleton-tile', 'padding'), 'var(--space-3)');
+  assert.equal(declared(':is(.glim-skeleton-name, .glim-skeleton-value)', 'height'), '11px');
+  assert.equal(declared('.glim-skeleton-badge', 'height'), '1.25rem');
+  assert.match(declared('.glim-skeleton-actions', 'width'), /var\(--skeleton-actions, 1\) \* var\(--btn-h\)/);
+});
+

@@ -6,8 +6,8 @@
 // hook useConfirm owns the queue, the promise, the portal, Escape, the focus
 // trap and returning focus on close, because Escape and the trap must work
 // after focus has left this subtree.
-import { children, onMount, Show, type JSX } from "solid-js";
-import { splitQuestion } from "@glimstone/core";
+import { children, onCleanup, onMount, Show, type JSX } from "solid-js";
+import { leaveBehind, splitQuestion } from "@glimstone/core";
 import { Badge } from "./Badge.tsx";
 import { Button } from "./Button.tsx";
 import { IconCancel, IconClose } from "./glyphs.tsx";
@@ -48,6 +48,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
   onMount(() => cancel?.focus());
   return (
     <div
+      ref={(el) => onCleanup(leaveBehind(el))}
       class="glim-modal-backdrop"
       onClick={(e) => {
         if (e.target === e.currentTarget) props.onCancel();
