@@ -39,7 +39,7 @@
   // mode engine. The other props of a <button> go to the button.
   let { tip, shortcut, disabled, class: className, style, children, href, type = "button", ariaPressed, ariaExpanded, ...rest }: IconTipButtonProps = $props();
 
-  const tooltip = useTipBubble(() => tip, () => !!disabled, { shortcut });
+  const tooltip = useTipBubble(() => tip, () => !!disabled, { shortcut: () => shortcut });
   const link = $derived(!!href && !disabled);
 </script>
 

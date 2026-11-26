@@ -31,10 +31,10 @@ export interface TipBubbleOptions {
    *  `info` explains: roomier, on the floating surface, at once. */
   kind?: BubbleKind;
   /** A keyboard shortcut drawn beside a tooltip's words, such as "Ctrl K". */
-  shortcut?: string;
+  shortcut?: () => string | undefined;
 }
 
-export function useTipBubble(tip: () => string | undefined, disabled: () => boolean = () => false, { kind = "tip", shortcut }: TipBubbleOptions = {}): TipBubble {
+export function useTipBubble(tip: () => string | undefined, disabled: () => boolean = () => false, { kind = "tip", shortcut = () => undefined }: TipBubbleOptions = {}): TipBubble {
   let open = $state(false);
   const timer = restTimer(kind);
   let trigger = $state<HTMLElement | null>(null);
@@ -92,7 +92,9 @@ export function useTipBubble(tip: () => string | undefined, disabled: () => bool
       return shown;
     },
     kind,
-    shortcut,
+    get shortcut() {
+      return shortcut();
+    },
     get describedBy() {
       return shown ? id : undefined;
     },

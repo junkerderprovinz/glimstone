@@ -35,7 +35,7 @@ export interface IconTipButtonProps extends Omit<JSX.ButtonHTMLAttributes<HTMLBu
 export function IconTipButton(props: IconTipButtonProps) {
   const merged = mergeProps({ type: "button" } as const, props);
   const [own, rest] = splitProps(merged, ["tip", "shortcut", "disabled", "class", "style", "children", "href", "type", "ariaPressed", "ariaExpanded", "ref"]);
-  const tooltip = useTipBubble(() => own.tip, () => !!own.disabled, { shortcut: own.shortcut });
+  const tooltip = useTipBubble(() => own.tip, () => !!own.disabled, { shortcut: () => own.shortcut });
   const link = () => !!own.href && !own.disabled;
   const attach = (el: HTMLButtonElement) => {
     tooltip.ref(el);

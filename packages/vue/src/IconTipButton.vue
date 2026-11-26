@@ -22,7 +22,7 @@ const props = withDefaults(
   }>(),
   { disabled: false, type: "button" },
 );
-const bubble = useTipBubble(() => props.tip, () => props.disabled, { shortcut: props.shortcut });
+const bubble = useTipBubble(() => props.tip, () => props.disabled, { shortcut: () => props.shortcut });
 </script>
 
 <template>

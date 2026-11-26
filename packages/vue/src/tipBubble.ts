@@ -15,7 +15,7 @@ export interface TipBubble {
   text: ComputedRef<string | undefined>;
   shown: ComputedRef<boolean>;
   kind: BubbleKind;
-  shortcut: string | undefined;
+  shortcut: ComputedRef<string | undefined>;
   /** `aria-describedby` while open, so the bubble is announced as the trigger's description. */
   describedBy: ComputedRef<string | undefined>;
   /** Opens a tooltip once the pointer has rested, an info bubble at once. */
@@ -30,10 +30,10 @@ export interface TipBubbleOptions {
    *  `info` explains: roomier, on the floating surface, at once. */
   kind?: BubbleKind;
   /** A keyboard shortcut drawn beside a tooltip's words, such as "Ctrl K". */
-  shortcut?: string;
+  shortcut?: () => string | undefined;
 }
 
-export function useTipBubble(tip: () => string | undefined, disabled: () => boolean = () => false, { kind = "tip", shortcut }: TipBubbleOptions = {}): TipBubble {
+export function useTipBubble(tip: () => string | undefined, disabled: () => boolean = () => false, { kind = "tip", shortcut = () => undefined }: TipBubbleOptions = {}): TipBubble {
   const open = ref(false);
   const timer = restTimer(kind);
   const trigger = shallowRef<HTMLElement | null>(null);
@@ -82,7 +82,7 @@ export function useTipBubble(tip: () => string | undefined, disabled: () => bool
     text,
     shown,
     kind,
-    shortcut,
+    shortcut: computed(shortcut),
     describedBy: computed(() => (shown.value ? id : undefined)),
     show,
     hide,

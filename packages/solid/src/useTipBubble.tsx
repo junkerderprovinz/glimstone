@@ -33,7 +33,7 @@ export interface TipBubbleOptions {
    *  `info` explains: roomier, on the floating surface, at once. */
   kind?: BubbleKind;
   /** A keyboard shortcut drawn beside a tooltip's words, such as "Ctrl K". */
-  shortcut?: string;
+  shortcut?: () => string | undefined;
 }
 
 /**
@@ -41,7 +41,7 @@ export interface TipBubbleOptions {
  * @param disabled  Whether the trigger is disabled; a disabled trigger sits in a
  *                  TipWrap, so flipping it swaps the element under the pointer.
  */
-export function useTipBubble(tip: () => string | undefined, disabled: () => boolean = () => false, { kind = "tip", shortcut }: TipBubbleOptions = {}): TipBubble {
+export function useTipBubble(tip: () => string | undefined, disabled: () => boolean = () => false, { kind = "tip", shortcut = () => undefined }: TipBubbleOptions = {}): TipBubble {
   const [open, setOpen] = createSignal(false);
   const timer = restTimer(kind);
   let trigger: HTMLElement | null = null;
@@ -88,8 +88,8 @@ export function useTipBubble(tip: () => string | undefined, disabled: () => bool
         <Lift>
           <div ref={bubble} role="tooltip" id={id} class={`glim-bubble glim-fade glim-bubble--${kind}`}>
             {tip()}
-            <Show when={shortcut}>
-              <kbd class="glim-bubble-key">{shortcut}</kbd>
+            <Show when={shortcut()}>
+              <kbd class="glim-bubble-key">{shortcut()}</kbd>
             </Show>
           </div>
         </Lift>
