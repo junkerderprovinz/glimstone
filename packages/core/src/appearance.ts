@@ -8,6 +8,7 @@
 
 import { accentHovers, accentInks, contrastOn, validHex as valid } from './contrast.ts';
 import { warnDeprecatedAfterLoad } from './deprecated.ts';
+import { applyGlyphs, DEFAULT_GLYPHS } from './glyphStyle.ts';
 import { inkCss } from './oklab.ts';
 import { storageKey } from './storage.ts';
 import { applyOled, storedOled } from './theme.ts';
@@ -505,10 +506,12 @@ interface Cached {
   accent?: string;
   rainbow?: RainbowState;
   density?: string;
+  light?: string;
+  glyphs?: string;
 }
 
 /** `accent` is the setting, so the system mode is cached as SYSTEM_ACCENT. */
-export function cacheAppearance(shape: string, accent: string, rainbow?: RainbowState, density?: string): void {
+export function cacheAppearance(shape: string, accent: string, rainbow?: RainbowState, density?: string, light?: string, glyphs?: string): void {
   try {
     // The conditional spreads omit a key under exactOptionalPropertyTypes
     // instead of storing it as undefined.
@@ -517,6 +520,8 @@ export function cacheAppearance(shape: string, accent: string, rainbow?: Rainbow
       accent,
       ...(rainbow !== undefined ? { rainbow } : {}),
       ...(density !== undefined ? { density } : {}),
+      ...(light !== undefined ? { light } : {}),
+      ...(glyphs !== undefined ? { glyphs } : {}),
     };
     localStorage.setItem(storageKey('appearance'), JSON.stringify(payload));
   } catch {
@@ -538,17 +543,23 @@ export function applyCachedAppearance(): void {
     if (!raw) {
       applyShape(DEFAULT_SHAPE);
       applyDensity(DEFAULT_DENSITY);
+      applyLight(DEFAULT_LIGHT);
+      applyGlyphs(DEFAULT_GLYPHS);
       applyRainbow(undefined);
       return;
     }
-    const { shape, accent, rainbow, density } = JSON.parse(raw) as Cached;
+    const { shape, accent, rainbow, density, light, glyphs } = JSON.parse(raw) as Cached;
     applyShape(shape);
     applyDensity(density);
+    applyLight(light);
+    applyGlyphs(glyphs);
     applyAccent(accent);
     applyRainbow(rainbow);
   } catch {
     applyShape(DEFAULT_SHAPE);
     applyDensity(DEFAULT_DENSITY);
+    applyLight(DEFAULT_LIGHT);
+    applyGlyphs(DEFAULT_GLYPHS);
     applyRainbow(undefined);
   }
 }

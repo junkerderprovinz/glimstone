@@ -4,6 +4,7 @@ import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { fakeDocument } from './fakeDocument.ts';
+import { cacheAppearance } from '../src/appearance.ts';
 import { applyGlyphs, DEFAULT_GLYPHS, GLYPH_STYLES, glyphArt } from '../src/glyphStyle.ts';
 
 interface Line {
@@ -61,6 +62,15 @@ test('the glyph styles are filled and line, and filled is the default', () => {
   assert.equal(root.attrs.get('data-glyphs'), 'line');
   applyGlyphs('dotted');
   assert.equal(root.attrs.get('data-glyphs'), 'filled');
+});
+
+test('the glyph style travels with the cached look, so the first frame after a reload has it', async () => {
+  cacheAppearance('soft', '', undefined, undefined, undefined, 'line');
+  assert.equal(JSON.parse(root.storage.get('glim-appearance')!).glyphs, 'line');
+  root = fakeDocument(root.storage);
+  const fresh: typeof import('../src/appearance.ts') = await import('../src/appearance.ts?glyphs');
+  fresh.applyCachedAppearance();
+  assert.equal(root.attrs.get('data-glyphs'), 'line');
 });
 
 test('a glyph with a line drawing carries both on one grid, the filled one scaled from its own', () => {

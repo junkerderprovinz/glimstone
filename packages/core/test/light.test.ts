@@ -2,7 +2,7 @@ import { beforeEach, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fakeDocument } from './fakeDocument.ts';
-import { applyLight, DEFAULT_LIGHT, LIGHT_LEVELS, LIGHT_STORED, STONE_TAPS, stoneTap } from '../src/appearance.ts';
+import { applyLight, cacheAppearance, DEFAULT_LIGHT, LIGHT_LEVELS, LIGHT_STORED, STONE_TAPS, stoneTap } from '../src/appearance.ts';
 
 const css = readFileSync(new URL('../tokens.css', import.meta.url), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
 
@@ -34,6 +34,21 @@ test('a light level goes onto the root, a found stone survives, and anything els
   assert.equal(root.attrs.get('data-light'), 'edge');
   applyLight(undefined);
   assert.equal(root.attrs.get('data-light'), 'edge');
+});
+
+test('the light travels with the cached look, so the first frame after a reload has it', async () => {
+  cacheAppearance('soft', '', undefined, undefined, 'glow');
+  assert.equal(JSON.parse(root.storage.get('glim-appearance')!).light, 'glow');
+  root = fakeDocument(root.storage);
+  const fresh: typeof import('../src/appearance.ts') = await import('../src/appearance.ts?light');
+  fresh.applyCachedAppearance();
+  assert.equal(root.attrs.get('data-light'), 'glow');
+});
+
+test('a page with no cached look opens at the default light', async () => {
+  const fresh: typeof import('../src/appearance.ts') = await import('../src/appearance.ts?nolight');
+  fresh.applyCachedAppearance();
+  assert.equal(root.attrs.get('data-light'), DEFAULT_LIGHT);
 });
 
 test('five more taps on a chosen glow reveal the stone, and another level resets the count', () => {
