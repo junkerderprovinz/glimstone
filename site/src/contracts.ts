@@ -955,6 +955,12 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "signature-clear", when: "Clear is pressed", then: "Every stroke goes, and the value is empty." },
     ],
   },
+  Chart: {
+    rows: [
+      { id: "chart-frame", when: "Always", then: "One image named by its label, grid lines across only, quiet ticks without an axis line, bars with round tops, and a legend once there is more than one series." },
+      { id: "chart-hover", when: "The pointer moves over a point", then: "A band stands under it, and a tooltip shows the point's name and each series' swatch and figure." },
+    ],
+  },
   HoverCard: {
     rows: [
       { id: "hovercard-link", when: "Always", then: "The trigger is a link to the page the card previews." },

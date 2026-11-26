@@ -94,6 +94,34 @@ test.describe("Timer", () => {
   });
 });
 
+test.describe("Chart", () => {
+  const chart = (page: Page) => stage(page, "ChartBackups").locator('[data-glim="Chart"]');
+
+  test("[chart-frame] one named image on grid lines across, with round-topped bars and a legend", async ({ page }) => {
+    await open(page, "/guide/charts");
+    await expect(chart(page).getByRole("img", { name: "Gigabytes backed up per day" })).toBeVisible();
+    await expect(chart(page).locator(".glim-chart-grid")).toHaveCount(4);
+    await expect(chart(page).locator(".glim-chart-bar")).toHaveCount(10);
+    await expect(chart(page).locator(".glim-chart-legend li")).toHaveText(["Photos", "Documents"]);
+    const fill = await chart(page).locator(".glim-chart-bar").first().evaluate((b) => getComputedStyle(b).fill);
+    expect(fill).not.toBe(await chart(page).locator(".glim-chart-bar").nth(1).evaluate((b) => getComputedStyle(b).fill));
+  });
+
+  test("[chart-hover] the pointer brings a band and a tooltip with every series' figure", async ({ page }) => {
+    await open(page, "/guide/charts");
+    const svg = chart(page).locator("svg").first();
+    await svg.scrollIntoViewIfNeeded();
+    const box = (await svg.boundingBox())!;
+    await page.mouse.move(box.x + box.width - 20, box.y + box.height / 2);
+    await expect(chart(page).locator(".glim-chart-cursor")).toHaveCount(1);
+    const tip = chart(page).locator(".glim-chart-tooltip");
+    await expect(tip.locator(".glim-chart-tooltip-title")).toHaveText("Fri");
+    await expect(tip.locator(".glim-chart-tooltip-value")).toHaveText(["56 GB", "21 GB"]);
+    await page.mouse.move(0, 0);
+    await expect(tip).toHaveCount(0);
+  });
+});
+
 test.describe("HoverCard", () => {
   const link = (page: Page) => stage(page, "HoverCardServer").getByRole("link", { name: "the server in the cellar" });
   const card = (page: Page) => page.locator(".glim-hovercard");

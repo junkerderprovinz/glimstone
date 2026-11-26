@@ -52,6 +52,7 @@ export * from "./passwordField.ts";
 export * from "./paypal.ts";
 export * from "./picker.ts";
 export * from "./catalog.ts";
+export * from "./chart.ts";
 export * from "./pill.ts";
 export * from "./pinInput.ts";
 export * from "./portalHue.ts";

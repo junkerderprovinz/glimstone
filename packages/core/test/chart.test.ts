@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { contrastRatio } from '../src/contrast.ts';
 import { oklabOf, srgbOf, type Oklab } from '../src/oklab.ts';
+import { barPath, chartIndexAt, chartLayout, niceTicks, sparkline } from '../src/chart.ts';
 
 const css = readFileSync(new URL('../tokens.css', import.meta.url), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
 
@@ -95,4 +96,51 @@ THEMES.forEach((theme, t) => {
       }
     }
   });
+});
+
+test('an axis counts from zero in round steps that reach the largest figure', () => {
+  assert.deepEqual(niceTicks(0), [0]);
+  assert.deepEqual(niceTicks(87), [0, 25, 50, 75, 100]);
+  assert.deepEqual(niceTicks(4.2), [0, 2, 4, 6]);
+  assert.deepEqual(niceTicks(1200), [0, 500, 1000, 1500]);
+});
+
+test('a bar rounds its top corners and keeps its foot square on the base line', () => {
+  assert.equal(barPath(10, 20, 30, 50, 4), 'M10,70V24Q10,20 14,20H36Q40,20 40,24V70Z');
+  assert.equal(barPath(0, 0, 6, 2, 4), 'M0,2V2Q0,0 2,0H4Q6,0 6,2V2Z');
+});
+
+test('a chart lays its grid, its bars and its labels out on the plot', () => {
+  const data = [{ day: 'Mon', a: 40 }, { day: 'Tue', a: 87 }];
+  const layout = chartLayout({ data, x: 'day', series: [{ key: 'a', label: 'A' }], kind: 'bar', width: 248, height: 200, radius: 4 });
+  assert.deepEqual(layout.ticks.map((t) => t.value), [0, 25, 50, 75, 100]);
+  assert.equal(layout.ticks[0]!.y, 176);
+  assert.equal(layout.ticks[4]!.y, 8);
+  assert.equal(layout.bars.length, 2);
+  assert.equal(layout.bars[0]!.color, 'var(--chart-1)');
+  assert.deepEqual(layout.labels.map((l) => [l.text, l.x]), [['Mon', 90], ['Tue', 190]]);
+  assert.equal(chartIndexAt(layout, 60), 0);
+  assert.equal(chartIndexAt(layout, 239), 1);
+  assert.equal(chartIndexAt(layout, 10), null);
+});
+
+test('a sparkline spans its box from the lowest value to the highest', () => {
+  const s = sparkline([1, 3, 2], 100, 20);
+  assert.equal(s.points, '2,18 50,2 98,10');
+  assert.deepEqual(s.last, [98, 10]);
+});
+
+test('the chart frame draws its grid across only, quiet ticks and a band under the pointer', () => {
+  const rule = (sel: string) => css.match(new RegExp(`${sel.replace(/[.()]/g, '\$&')} \{([^}]*)\}`))?.[1] ?? '';
+  assert.match(rule('.glim-chart'), /--chart-grid:/);
+  assert.match(rule('.glim-chart-grid'), /stroke: var\(--chart-grid\)/);
+  assert.match(rule('.glim-chart-tick'), /fill: var\(--chart-axis\)/);
+  assert.match(rule('.glim-chart-tooltip'), /background-color: var\(--surface-overlay\)/);
+});
+
+test('the series share one band of lightness per theme, so none outshines the rest', () => {
+  for (const [l, d] of SERIES.map(([light, dark]) => [oklabOf(light)[0], oklabOf(dark)[0]])) {
+    assert.ok(l >= 0.49 && l <= 0.65, `light ${l.toFixed(3)}`);
+    assert.ok(d >= 0.67 && d <= 0.81, `dark ${d.toFixed(3)}`);
+  }
 });

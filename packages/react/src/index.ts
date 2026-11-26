@@ -32,6 +32,7 @@ export * from "./Kbd.tsx";
 export * from "./ListRow.tsx";
 export * from "./ListTable.tsx";
 export * from "./MenuBar.tsx";
+export * from "./Chart.tsx";
 export * from "./Meter.tsx";
 export * from "./NumberField.tsx";
 export * from "./PasswordField.tsx";

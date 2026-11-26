@@ -518,20 +518,21 @@
 
 /* Chart colours (rule 50), every one an OKLCH value written out, so a phone app
    and a design tool read the same numbers. The series come in a fixed order:
-   the eight accent hues, alternating warm and cool, on lightness steps chosen
-   so any two stay apart for people with protanopia, deuteranopia or tritanopia,
-   and each reaches 3:1 on a card and the page. Their chroma is the most sRGB
-   holds at that lightness, up to 0.14. */
+   the eight accent hues, alternating warm and cool, in one band of lightness
+   per theme, 0.50 to 0.64 light and 0.68 to 0.80 dark, so no series outshines
+   the others or the accent. Inside the band the steps keep any two apart for
+   people with protanopia, deuteranopia or tritanopia, and each reaches 3:1 on a
+   card and the page. */
 :root,
 [data-theme] {
-  --chart-1: light-dark(oklch(0.42 0.109 247), oklch(0.66 0.14 247)); /* blue */
-  --chart-2: light-dark(oklch(0.42 0.108 51), oklch(0.66 0.14 51)); /* orange */
-  --chart-3: light-dark(oklch(0.62 0.105 194), oklch(0.86 0.14 194)); /* teal */
-  --chart-4: light-dark(oklch(0.54 0.14 355), oklch(0.74 0.14 355)); /* magenta */
-  --chart-5: light-dark(oklch(0.62 0.126 87), oklch(0.78 0.14 87)); /* sunflower */
-  --chart-6: light-dark(oklch(0.62 0.14 301), oklch(0.78 0.132 301)); /* purple */
-  --chart-7: light-dark(oklch(0.5 0.137 150), oklch(0.78 0.14 150)); /* green */
-  --chart-8: light-dark(oklch(0.62 0.14 18), oklch(0.86 0.075 18)); /* red */
+  --chart-1: light-dark(oklch(0.55 0.169 250), oklch(0.8 0.071 251)); /* blue */
+  --chart-2: light-dark(oklch(0.55 0.14 50), oklch(0.8 0.129 60)); /* orange */
+  --chart-3: light-dark(oklch(0.62 0.106 194), oklch(0.68 0.12 189)); /* teal */
+  --chart-4: light-dark(oklch(0.5 0.17 355), oklch(0.74 0.168 350)); /* magenta */
+  --chart-5: light-dark(oklch(0.64 0.138 75), oklch(0.68 0.147 78)); /* sunflower */
+  --chart-6: light-dark(oklch(0.51 0.136 301), oklch(0.69 0.149 301)); /* purple */
+  --chart-7: light-dark(oklch(0.52 0.146 150), oklch(0.79 0.168 160)); /* green */
+  --chart-8: light-dark(oklch(0.6 0.167 22), oklch(0.68 0.17 19)); /* red */
 
   /* Sequential, for a heatmap or a density: one blue that gains lightness
      contrast and colour as the value grows, starting next to the ground. */
@@ -8488,6 +8489,103 @@
   .glim-signature-foot {
     display: flex;
     justify-content: flex-end;
+  }
+}
+
+/* Chart (rule 50): grid lines across only, ticks as quiet text without an
+   axis line, a band under the pointer, a tooltip with swatches and tabular
+   figures, a legend, bars with round tops. The plot sizes the drawing, never
+   the other way round. */
+@layer components {
+  .glim-chart {
+    --chart-grid: light-dark(rgb(0 0 0 / 0.08), rgb(255 255 255 / 0.08));
+    --chart-axis: var(--carbon-text-muted);
+    --chart-cursor: light-dark(rgb(0 0 0 / 0.04), rgb(255 255 255 / 0.05));
+    --chart-bar-radius: 4px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-6);
+    min-width: 0;
+  }
+  .glim-chart-plot { position: relative; }
+  .glim-chart svg {
+    display: block;
+    overflow: visible;
+  }
+  .glim-chart-grid {
+    stroke: var(--chart-grid);
+    shape-rendering: crispEdges;
+  }
+  .glim-chart-tick {
+    fill: var(--chart-axis);
+    font-size: var(--text-meta);
+    font-variant-numeric: tabular-nums;
+  }
+  .glim-chart-cursor { fill: var(--chart-cursor); }
+  /* A bar grows to its new figure when the data changes. */
+  @media (prefers-reduced-motion: no-preference) {
+    .glim-chart-bar { transition: d var(--motion-page-dur) var(--motion-spring); }
+  }
+  .glim-chart-cursor-line {
+    stroke: var(--chart-axis);
+    stroke-dasharray: 3 3;
+  }
+  .glim-chart-area { fill-opacity: 0.16; }
+  .glim-chart-dot {
+    stroke: var(--carbon-surface);
+    stroke-width: 2;
+  }
+  .glim-chart-tooltip {
+    position: absolute;
+    z-index: var(--z-raised-top);
+    display: grid;
+    gap: var(--space-2);
+    min-width: 9rem;
+    padding: var(--space-4) var(--space-5);
+    border-radius: var(--radius-control);
+    background-color: var(--surface-overlay);
+    box-shadow: var(--elevation-float);
+    font-size: var(--text-meta);
+    pointer-events: none;
+  }
+  .glim-chart-tooltip-title { font-weight: var(--font-weight-medium); }
+  .glim-chart-tooltip-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--carbon-text-sub);
+  }
+  .glim-chart-tooltip-value {
+    margin-inline-start: auto;
+    padding-inline-start: var(--space-6);
+    color: var(--carbon-text);
+  }
+  .glim-chart-swatch {
+    display: inline-block;
+    flex: none;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+  }
+  .glim-chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-2) var(--space-8);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--carbon-text-sub);
+    font-size: var(--text-meta);
+  }
+  .glim-chart-legend > li {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .glim-sparkline {
+    flex: none;
+    overflow: visible;
   }
 }
 
