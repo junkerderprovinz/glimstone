@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readdirSync, readFileSync } from 'node:fs';
 import { badgeClassName } from '../src/badge.ts';
-import { DEPRECATED, deprecatedReads, warnDeprecated, warnDeprecatedClasses, warnDeprecatedStyles } from '../src/deprecated.ts';
+import { DEPRECATED, deprecatedReads, deprecationNote, warnDeprecated, warnDeprecatedClasses, warnDeprecatedStyles } from '../src/deprecated.ts';
 
 function warnings(run: () => void): string[] {
   const seen: string[] = [];
@@ -44,6 +44,17 @@ test('a deprecated component warns in every framework package', () => {
       const source = readFileSync(new URL(`../../${pkg}/src/${name}.${ext}`, import.meta.url), 'utf8');
       assert.ok(source.includes(`warnDeprecated("${name}")`), `${pkg} ${name}`);
     }
+  }
+});
+
+test('pairsOnPhone says it has no effect and warns from the selector of every framework package', () => {
+  assert.equal(DEPRECATED['Selector pairsOnPhone']?.removal, '6.0.0');
+  assert.match(deprecationNote('Selector pairsOnPhone'), /has no effect/);
+  const files = { react: 'tsx', solid: 'tsx', vue: 'vue', svelte: 'svelte' };
+  for (const [pkg, ext] of Object.entries(files)) {
+    const source = readFileSync(new URL(`../../${pkg}/src/Selector.${ext}`, import.meta.url), 'utf8');
+    assert.match(source, /if \((?:props\.)?pairsOnPhone !== undefined\) warnDeprecated\("Selector pairsOnPhone"\)/, pkg);
+    assert.match(source, /@deprecated[^*]*no effect/, pkg);
   }
 });
 

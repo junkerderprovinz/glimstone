@@ -34,6 +34,7 @@ import {
   type SelectorSize,
   type SelectorVariant,
   type SelectorView,
+  warnDeprecated,
 } from "@glimstone/core";
 import { useFieldName } from "./fieldName.ts";
 import { Select } from "./Select.tsx";
@@ -110,7 +111,7 @@ export interface SelectorProps<M extends SelectMode = "one", V extends string | 
    *  alone where every segment has one, a strip of one turns into a dropdown
    *  otherwise, and a `many` strip cuts its labels short. */
   fit?: boolean;
-  /** Has no effect: every strip keeps to one row. */
+  /** @deprecated Has no effect, since every strip keeps to one row. Removed in 6.0.0. */
   pairsOnPhone?: boolean;
   /** The button height for every segment, for a strip beside a Button. */
   buttonHeight?: boolean;
@@ -151,6 +152,7 @@ export function Selector<M extends SelectMode = "one", V extends string | number
   equalWidth = false,
   inline: ownInline = false,
   fit = false,
+  pairsOnPhone,
   buttonHeight = false,
   hue = true,
   hueOffset,
@@ -158,6 +160,7 @@ export function Selector<M extends SelectMode = "one", V extends string | number
   panelId,
   className = "",
 }: SelectorProps<M, V>) {
+  if (pairsOnPhone !== undefined) warnDeprecated("Selector pairsOnPhone");
   const name = useFieldName(label);
   const inline = ownInline || (label === undefined && name !== undefined);
   const vertical = orientation === "vertical";

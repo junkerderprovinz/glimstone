@@ -503,7 +503,7 @@ export function SelectorPage() {
         </li>
         <li>
           <code>fit</code> shares the row evenly among page tabs without pinning them to a measured width.{" "}
-          <code>pairsOnPhone</code> is still accepted and has no effect.
+          <code>pairsOnPhone</code> has no effect and goes in 6.0.0. <code>glimstone-migrate</code> drops it.
         </li>
       </ul>
       <H2>Colour</H2>

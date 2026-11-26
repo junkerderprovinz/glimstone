@@ -22,7 +22,7 @@ function run(root: string, ...flags: string[]) {
   return { status: r.status, out: r.stdout + r.stderr };
 }
 
-const FILES = ['Status.tsx', 'Status.vue', 'Toasts.vue', 'theme.dart', 'app.css', 'stone.css', 'panel.scss', 'Stone.tsx', 'Stone.vue', 'Menu.svelte', 'index.html', 'stone.dart'];
+const FILES = ['Status.tsx', 'Status.vue', 'Toasts.vue', 'theme.dart', 'app.css', 'stone.css', 'panel.scss', 'Stone.tsx', 'Stone.vue', 'Menu.svelte', 'index.html', 'stone.dart', 'Picker.tsx', 'Picker.vue', 'Picker.svelte'];
 
 for (const file of FILES) {
   test(`${file} is rewritten to the current names`, () => {

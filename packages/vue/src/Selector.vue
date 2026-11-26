@@ -13,6 +13,7 @@ import {
   subscribeMedia,
   toggleSelection,
   watchSelectorFit,
+  warnDeprecated,
   watchSelectorThumb,
   WIDE_QUERY,
   type LabelMode,
@@ -60,7 +61,7 @@ const props = withDefaults(
     /** Share the row evenly without a pinned width, for page tabs. Every strip keeps to one row, a strip of one
      *  turning into a dropdown where its labels do not fit and not every segment has a glyph. */
     fit?: boolean;
-    /** Has no effect: every strip keeps to one row. */
+    /** @deprecated Has no effect, since every strip keeps to one row. Removed in 6.0.0. */
     pairsOnPhone?: boolean;
     /** The button height for every segment, for a strip beside a Button. */
     buttonHeight?: boolean;
@@ -80,7 +81,8 @@ const props = withDefaults(
     equalWidth: false,
     inline: false,
     fit: false,
-    pairsOnPhone: false,
+    // Undefined, or Vue would read a strip that never passes it as one passing false.
+    pairsOnPhone: undefined,
     buttonHeight: false,
     hue: true,
     disabled: false,
@@ -96,6 +98,7 @@ function useMedia(query: string) {
   return on;
 }
 
+if (props.pairsOnPhone !== undefined) warnDeprecated("Selector pairsOnPhone");
 const name = useFieldName(() => props.label);
 const inline = computed(() => props.inline || (props.label === undefined && name.value !== undefined));
 const mode = useLabelMode(selectorAxis(props.size, props.orientation));

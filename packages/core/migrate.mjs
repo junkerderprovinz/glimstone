@@ -76,6 +76,19 @@ function toastEvent(from, to) {
   };
 }
 
+const PAIRS_ON_PHONE = /\s+:?(?:pairsOnPhone|pairs-on-phone)(?:=(?:"[^"]*"|'[^']*'|\{[^}]*\}))?(?=[\s/>])/g;
+
+/** pairsOnPhone has no effect, so it goes with whatever value it was given. */
+function dropPairsOnPhone(text) {
+  let out = '';
+  let at = 0;
+  for (const { start, end } of tags(text, 'Selector')) {
+    out += text.slice(at, start) + text.slice(start, end).replace(PAIRS_ON_PHONE, '');
+    at = end;
+  }
+  return out + text.slice(at);
+}
+
 // An app's own CSS that mixed the accent with --ink-mix gets the token that
 // does it now; any other mix is reported, since the new ink is not a mix.
 const INK_MIXES = [
@@ -234,6 +247,7 @@ export const TRANSFORMS = [
     report: everyMatch(/\bcarbonHover\b/g, `carbonHover goes in 6.0.0: use hover on GlimDerived, the one hover of rule 21. ${GREY_HOVER}`),
   },
   ...statusHovers,
+  { name: 'Selector pairsOnPhone', rewrite: dropPairsOnPhone },
   ...['statusOkBg', 'statusFailBg', 'statusWarnBg', 'statusWarnBgSoft'].map((name) => ({ name: `GlimTheme ${name} argument`, files: DART, rewrite: dartDropArgument(name) })),
   {
     name: '.glim-avatar--hued',

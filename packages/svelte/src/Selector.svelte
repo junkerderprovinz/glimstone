@@ -41,7 +41,7 @@
      *  alone where every segment has one, a strip of one turns into a dropdown
      *  otherwise, and a `many` strip cuts its labels short. */
     fit?: boolean;
-    /** Has no effect: every strip keeps to one row. */
+    /** @deprecated Has no effect, since every strip keeps to one row. Removed in 6.0.0. */
     pairsOnPhone?: boolean;
     /** The button height for every segment, for a strip beside a Button. */
     buttonHeight?: boolean;
@@ -75,6 +75,7 @@
     tabSlideDir,
     toggleSelection,
     watchSelectorFit,
+    warnDeprecated,
     watchSelectorThumb,
     WIDE_QUERY,
     type SelectorLayout,
@@ -108,6 +109,7 @@
     equalWidth = false,
     inline: ownInline = false,
     fit = false,
+    pairsOnPhone,
     buttonHeight = false,
     hue = true,
     hueOffset,
@@ -115,6 +117,9 @@
     panelId,
     class: className = "",
   }: SelectorProps<M, V> = $props();
+
+  // svelte-ignore state_referenced_locally
+  if (pairsOnPhone !== undefined) warnDeprecated("Selector pairsOnPhone");
 
   const name = useFieldName(() => label);
   const inline = $derived(ownInline || (label === undefined && name() !== undefined));

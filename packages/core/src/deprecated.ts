@@ -101,6 +101,11 @@ export const DEPRECATED: Record<string, Deprecation> = {
       { ...SINCE, use: `Drop the argument. \`${name}\` is a getter on \`GlimTokens\`, worked out from the state's solid, so set the solid instead.`, find: String.raw`\b${name}\s*:` },
     ]),
   ),
+  "Selector pairsOnPhone": {
+    ...SINCE,
+    use: "Drop it. It has no effect, since every strip keeps to one row at every width.",
+    find: String.raw`<Selector\b[^>]*?\s:?(?:pairsOnPhone|pairs-on-phone)\b`,
+  },
   ".glim-avatar--hued": {
     ...SINCE,
     use: 'Use `glim-avatar--toned` with `--avatar-tone` set to one of `var(--chart-1)` to `var(--chart-8)`, as `avatarView()` writes it: the initials take the tone on a pale wash of it, and the accent stays for activity.',

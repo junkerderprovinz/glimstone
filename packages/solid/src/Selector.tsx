@@ -14,6 +14,7 @@ import {
   subscribeMedia,
   toggleSelection,
   watchSelectorFit,
+  warnDeprecated,
   watchSelectorThumb,
   WIDE_QUERY,
   type LabelMode,
@@ -103,7 +104,7 @@ export interface SelectorProps<M extends SelectMode = "one", V extends string | 
    *  alone where every segment has one, a strip of one turns into a dropdown
    *  otherwise, and a `many` strip cuts its labels short. */
   fit?: boolean;
-  /** Has no effect: every strip keeps to one row. */
+  /** @deprecated Has no effect, since every strip keeps to one row. Removed in 6.0.0. */
   pairsOnPhone?: boolean;
   /** The button height for every segment, for a strip beside a Button. */
   buttonHeight?: boolean;
@@ -144,6 +145,7 @@ export function Selector<M extends SelectMode = "one", V extends string | number
     } as const,
     props,
   );
+  if (props.pairsOnPhone !== undefined) warnDeprecated("Selector pairsOnPhone");
   const name = useFieldName(() => merged.label);
   const inline = () => merged.inline || (merged.label === undefined && name() !== undefined);
   const vertical = () => merged.orientation === "vertical";
