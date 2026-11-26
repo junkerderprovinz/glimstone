@@ -292,8 +292,11 @@ function dartTokens() {
       : retired.has(f)
         ? `    @Deprecated(${retiredNote(f)}) Color? ${f},`
         : `    required this.${f},`;
+  // A const constructor takes no `!`, so the assert holds the requirement and
+  // the transparent end of the chain is never reached.
   const initializers = [
-    ...fields.filter((f) => renamed.has(f)).map((f) => `${f} = ${f} ?? ${renamed.get(f)}!`),
+    ...fields.filter((f) => renamed.has(f)).map((f) => `assert(${f} != null || ${renamed.get(f)} != null, '${f} is required')`),
+    ...fields.filter((f) => renamed.has(f)).map((f) => `${f} = ${f} ?? ${renamed.get(f)} ?? const Color(0x00000000)`),
     ...fields.filter((f) => retired.has(f)).map((f) => `_${f} = ${f}`),
     `inkLightness = inkLightness ?? (inkMix == null || inkMix >= 1 ? ${steps.dark} : ${steps.light})`,
   ];
