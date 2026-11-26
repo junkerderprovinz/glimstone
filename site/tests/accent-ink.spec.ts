@@ -41,7 +41,6 @@ const PAGES: Record<string, Show | null> = {
   "/components/combobox": openMenu("[data-demo] .glim-combobox-toggle"),
   "/components/confirm-dialog": null,
   "/components/context-menu": null,
-  "/components/dropdown-listbox": null,
   "/components/empty-state": null,
   "/components/field-row": null,
   "/components/glyph-tile": null,

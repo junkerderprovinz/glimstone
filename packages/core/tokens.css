@@ -518,12 +518,7 @@
    that declares the stones, so it resolves there to that element's own step: a
    [data-theme] subtree, OLED and the contrast step all reach it, and
    light-dark() still resolves where the colour is used. Their Tailwind names
-   point at the stone steps themselves.
-
-   --ink-mix goes in 5.0.0. It is how much of the accent the ink kept against
-   black: all of it on the dark ramps and 55% on the light one. The stylesheet
-   does not read it, so it needs the theme's own selectors rather than a
-   light-dark(), which only takes colours. */
+   point at the stone steps themselves. */
 :root,
 [data-theme],
 [data-oled] {
@@ -537,17 +532,6 @@
   --carbon-text: var(--stone-text);
   --carbon-text-sub: var(--stone-text-sub);
   --carbon-text-muted: var(--stone-text-muted);
-  --ink-mix: 100%;
-}
-
-[data-theme="light"] {
-  --ink-mix: 55%;
-}
-
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) {
-    --ink-mix: 55%;
-  }
 }
 
 /* Chart colours (rule 50), every one an OKLCH value written out, so a phone app
@@ -4852,19 +4836,7 @@
   /* Zag's positioner places the open list; it only has to clear the page. */
   .glim-select-positioner { z-index: var(--z-window); }
 
-  /* The list panel of the deprecated DropdownListbox, portalled to <body>. Removed in 5.0.0. */
-  .glim-listbox {
-    position: fixed;
-    z-index: var(--z-window);
-    max-height: 15rem;
-    overflow-y: auto;
-    border-radius: var(--radius-card);
-    background-color: var(--surface-overlay);
-    box-shadow: var(--elevation-float), var(--hairline);
-    scrollbar-color: var(--stone-border) transparent;
-  }
-
-  /* The Info tile (InfoTile in AboutCard): the Version card's rows, each the
+  /* The Info tile (InfoTile): the Version card's rows, each the
      name of a part on the start side and its number on the end side, and the
      sentences of the Help and About cards. */
   .glim-info-text {
@@ -8225,7 +8197,7 @@
      guarantees to read against each other. The small controls opt out of the
      forcing so their two states stay apart. */
   @media (forced-colors: active) {
-    :is(.glim-card, .glim-well, .glim-subcard, .glim-panel, .glim-bubble, .glim-menu, .glim-listbox,
+    :is(.glim-card, .glim-well, .glim-subcard, .glim-panel, .glim-bubble, .glim-menu,
       .glim-select-content, .glim-popover, .glim-sheet-panel, .glim-modal-card, .glim-window,
       .glim-toast-card, .glim-notice, .glim-tile, .glim-sel--well, .glim-list) {
       border: 1px solid CanvasText;

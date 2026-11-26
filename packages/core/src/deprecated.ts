@@ -111,61 +111,6 @@ export const DEPRECATED: Record<string, Deprecation> = {
     use: 'Use `glim-avatar--toned` with `--avatar-tone` set to one of `var(--chart-1)` to `var(--chart-8)`, as `avatarView()` writes it: the initials take the tone on a pale wash of it, and the accent stays for activity.',
     find: String.raw`\bglim-avatar--hued\b`,
   },
-  "Badge shape": {
-    since: "4.4.0",
-    removal: "5.0.0",
-    use: 'Use `form`. Only shape="circle" has an effect, and form="circle" draws the same badge.',
-    find: String.raw`<Badge\b[^>]*?\s:?shape=`,
-  },
-  BadgeShape: { since: "4.4.0", removal: "5.0.0", use: "Use `BadgeForm`." },
-  AboutCard: {
-    since: "3.3.0",
-    removal: "5.0.0",
-    use: 'Use `InfoTile`, which adds the version rows\' sub-lines, the other components, "Check for updates" and the bug report.',
-  },
-  DropdownListbox: { since: "3.6.0", removal: "5.0.0", use: "Use Select, which keeps focus on its trigger and adds typeahead." },
-  "ToastViewport enter": {
-    since: "4.5.0",
-    removal: "5.0.0",
-    use: "Listen to `mouse-enter`, the name of React's handler.",
-    find: String.raw`<ToastViewport\b[^>]*?\s(?:@|v-on:)enter=`,
-  },
-  "ToastViewport leave": {
-    since: "4.5.0",
-    removal: "5.0.0",
-    use: "Listen to `mouse-leave`, the name of React's handler.",
-    find: String.raw`<ToastViewport\b[^>]*?\s(?:@|v-on:)leave=`,
-  },
-  "ToastViewport focusin": {
-    since: "4.5.0",
-    removal: "5.0.0",
-    use: "Listen to `focus`, the name of React's handler.",
-    find: String.raw`<ToastViewport\b[^>]*?\s(?:@|v-on:)focusin=`,
-  },
-  "ToastViewport focusout": {
-    since: "4.5.0",
-    removal: "5.0.0",
-    use: "Listen to `blur`, the name of React's handler.",
-    find: String.raw`<ToastViewport\b[^>]*?\s(?:@|v-on:)focusout=`,
-  },
-  "--ink-mix": {
-    since: "4.5.0",
-    removal: "5.0.0",
-    use: "Read `--accent-ink`, which moves the accent onto the theme's OKLab ink step. The steps themselves are `--ink-l-light` and `--ink-l-dark`.",
-    find: String.raw`var\(--ink-mix\)`,
-  },
-  "GlimTheme inkMix": {
-    since: "4.5.0",
-    removal: "5.0.0",
-    use: "Use `inkLightness`, the OKLab step the accent's ink moves to: 0.5 on a light theme, 0.74 on a dark one.",
-    find: String.raw`\binkMix\b`,
-  },
-  "GlimTheme focusRing argument": {
-    since: "4.5.0",
-    removal: "5.0.0",
-    use: "Drop the argument. `focusRing` is a getter on `GlimDerived` that returns the accent ink.",
-    find: String.raw`\bfocusRing\s*:`,
-  },
 };
 
 const warned = new Set<string>();

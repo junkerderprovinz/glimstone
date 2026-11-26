@@ -141,7 +141,7 @@ test('the generated manifest hashes the working tree as the current version', ()
   assert.ok(built.versions[current]['core/vanilla/fortress-card.js'], 'the framework-free files count as shipped');
   assert.ok(built.versions['4.3.0'], 'released versions come from the tags');
   assert.ok(built.classes.includes('glim-btn'));
-  assert.ok(built.deprecated.some((d: { name: string }) => d.name === 'DropdownListbox'));
+  assert.ok(built.deprecated.some((d: { name: string }) => d.name === 'Selector pairsOnPhone'));
   assert.ok(built.deprecated.every((d: { note: string }) => /goes in \d+\.0\.0/.test(d.note)));
   const find = (name: string) => new RegExp(built.deprecated.find((d: { name: string }) => d.name === name).find);
   assert.ok(find('--carbon-surface').test('var(--carbon-surface)'));

@@ -465,19 +465,6 @@ export const GLOSSARY: GlossarySection[] = [
         },
       },
       {
-        id: "listbox",
-        en: "Listbox, retiring",
-        de: "Listbox, veraltet",
-        proposal: true,
-        code: ["DropdownListbox", ".glim-listbox"],
-        components: ["DropdownListbox"],
-        rules: [18],
-        text: {
-          en: "The older list whose trigger the app builds itself. It stays until every app has moved to the select.",
-          de: "Die alte Auswahlliste, deren Auslöser die App selbst baut. Sie bleibt, bis jede App auf das Auswahlfeld umgestellt ist.",
-        },
-      },
-      {
         id: "steps",
         en: "Steps",
         de: "Schritte",
@@ -1359,8 +1346,8 @@ export const GLOSSARY: GlossarySection[] = [
         id: "info-tile",
         en: "Info tile",
         de: "Infokachel",
-        code: ["InfoTile", "AboutCard"],
-        components: ["InfoTile", "AboutCard", "InfoVersionCard", "InfoComponentsCard", "InfoHelpCard", "InfoAboutCard"],
+        code: ["InfoTile"],
+        components: ["InfoTile", "InfoVersionCard", "InfoComponentsCard", "InfoHelpCard", "InfoAboutCard"],
         text: {
           en: "The four cards of the Info tab in this order: the version card with the app, where its updates stand and what's new, the components card with every other version as a row, the help card with GitHub, Discord, mail and manual, and the about card with its sentence on money and the donation buttons under it.",
           de: "Die vier Karten des Info-Reiters in dieser Reihenfolge: die Versionskarte mit der App, dem Stand der Updates und den Neuigkeiten, die Komponentenkarte mit jeder anderen Version als Zeile, die Hilfe-Karte mit GitHub, Discord, E-Mail und Handbuch, und die Über-Karte mit dem Satz zum Geld und den Spendenknöpfen darunter.",

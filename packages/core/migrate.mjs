@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Rewrites an app's sources for GlimStone's breaking changes, one transform
 // per deprecated name, so an app can move before the major release that
-// removes it. What a program cannot rewrite, such as a value computed at run
+// removes it, and kept after the removal for an app that moves late. What a program cannot rewrite, such as a value computed at run
 // time or a component with a different API, is reported with file and line.
 //
 // It writes in place; with --check it writes nothing and fails while there is
@@ -208,8 +208,8 @@ const statusHovers = ['ok', 'fail', 'warn'].flatMap((tone) => {
 export const TRANSFORMS = [
   { name: 'Badge shape', rewrite: badgeShape, report: badgeShapeLeft },
   { name: 'BadgeShape', rewrite: (text) => text.replace(/\bBadgeShape\b/g, 'BadgeForm') },
-  { name: 'AboutCard', report: firstUse('AboutCard', "AboutCard goes in 5.0.0: move to InfoTile by hand, which adds the version rows' sub-lines, the other components, Check for updates and the bug report.") },
-  { name: 'DropdownListbox', report: firstUse('DropdownListbox', 'DropdownListbox goes in 5.0.0: move to Select by hand, which keeps focus on its trigger.') },
+  { name: 'AboutCard', report: firstUse('AboutCard', "AboutCard went in 5.0.0: move to InfoTile by hand, which adds the version rows' sub-lines, the other components, Check for updates and the bug report.") },
+  { name: 'DropdownListbox', report: firstUse('DropdownListbox', 'DropdownListbox went in 5.0.0: move to Select by hand, which keeps focus on its trigger.') },
   { name: 'ToastViewport enter', rewrite: toastEvent('enter', 'mouse-enter') },
   { name: 'ToastViewport leave', rewrite: toastEvent('leave', 'mouse-leave') },
   { name: 'ToastViewport focusin', rewrite: toastEvent('focusin', 'focus') },
@@ -218,13 +218,13 @@ export const TRANSFORMS = [
     name: '--ink-mix',
     files: STYLES,
     rewrite: inkMix,
-    report: firstMatch(/--ink-mix\b/g, '--ink-mix goes in 5.0.0: read --accent-ink, or move the colour onto --ink-l-light and --ink-l-dark as tokens.css does for the accent.'),
+    report: firstMatch(/--ink-mix\b/g, '--ink-mix went in 5.0.0: read --accent-ink, or move the colour onto --ink-l-light and --ink-l-dark as tokens.css does for the accent.'),
   },
   {
     name: 'GlimTheme inkMix',
     files: DART,
     rewrite: dartInkMix,
-    report: firstUse('inkMix', 'inkMix goes in 5.0.0: use inkLightness, the OKLab step the ink moves to (0.5 on a light theme, 0.74 on a dark one).'),
+    report: firstUse('inkMix', 'inkMix went in 5.0.0: use inkLightness, the OKLab step the ink moves to (0.5 on a light theme, 0.74 on a dark one).'),
   },
   { name: 'GlimTheme focusRing argument', files: DART, rewrite: dartDropArgument('focusRing') },
   ...stoneNames,

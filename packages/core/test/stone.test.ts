@@ -57,7 +57,7 @@ test('where the browser draws squircles, the soft corners take one', () => {
 });
 
 const FLOATING = [
-  '.glim-menu', '.glim-popover', '.glim-select-content', '.glim-listbox', '.glim-bubble', '.glim-toast-card', '.glim-modal-card',
+  '.glim-menu', '.glim-popover', '.glim-select-content', '.glim-bubble', '.glim-toast-card', '.glim-modal-card',
   '.glim-hovercard', '.glim-date-panel', '.glim-picker-popover', '.glim-picker-panel--float', '.glim-fpanel',
 ];
 

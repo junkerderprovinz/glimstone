@@ -15,7 +15,6 @@ const COMPONENTS = {
   Badge: "react/Badge.tsx",
   Card: "react/Card.tsx",
   ConfirmDialog: "react/ConfirmDialog.tsx",
-  DropdownListbox: "react/DropdownListbox.tsx",
   InfoBubble: "react/InfoBubble.tsx",
   IconTipButton: "react/IconTipButton.tsx",
   ToastViewport: "react/Toast.tsx",

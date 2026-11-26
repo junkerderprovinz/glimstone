@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, shallowRef, watch } from "vue";
-import { announce, liveRegionAttrs, toastAnnouncement, toastPoliteness, warnDeprecated, watchToastStack, type ToastAction, type ToastSeverity } from "@glimstone/core";
+import { announce, liveRegionAttrs, toastAnnouncement, toastPoliteness, watchToastStack, type ToastAction, type ToastSeverity } from "@glimstone/core";
 import ToastCard from "./ToastCard.vue";
-import { relayDeprecated } from "./deprecatedEvents";
 
 // The toast stack's presentational half (design-language.md, "Toasts"). It
 // holds no state: the app keeps the queue with the core's toastEngine and its
@@ -20,14 +19,6 @@ const props = defineProps<{
   toasts: { id: string; title?: string; message: string; severity: ToastSeverity; action?: ToastAction }[];
   /** Accessible name for each dismiss button. */
   dismissLabel: string;
-  /** @deprecated Listen to `mouse-enter`. Removed in 5.0.0. */
-  onEnter?: (id: string) => void;
-  /** @deprecated Listen to `mouse-leave`. Removed in 5.0.0. */
-  onLeave?: (id: string) => void;
-  /** @deprecated Listen to `focus`. Removed in 5.0.0. */
-  onFocusin?: (id: string) => void;
-  /** @deprecated Listen to `blur`. Removed in 5.0.0. */
-  onFocusout?: (id: string) => void;
 }>();
 const emit = defineEmits<{
   dismiss: [id: string];
@@ -36,23 +27,6 @@ const emit = defineEmits<{
   focus: [id: string];
   blur: [id: string];
 }>();
-const relay = relayDeprecated("ToastViewport", { mouseEnter: "enter", mouseLeave: "leave", focus: "focusin", blur: "focusout" }, props, warnDeprecated);
-function mouseEnter(id: string) {
-  emit("mouseEnter", id);
-  relay("mouseEnter", id);
-}
-function mouseLeave(id: string) {
-  emit("mouseLeave", id);
-  relay("mouseLeave", id);
-}
-function focus(id: string) {
-  emit("focus", id);
-  relay("focus", id);
-}
-function blur(id: string) {
-  emit("blur", id);
-  relay("blur", id);
-}
 
 const heard = new Set<string>();
 watch(
@@ -88,10 +62,10 @@ onBeforeUnmount(() => unwatch?.());
       :action="t.action"
       :dismiss-label="dismissLabel"
       @dismiss="emit('dismiss', $event)"
-      @mouse-enter="mouseEnter"
-      @mouse-leave="mouseLeave"
-      @focus="focus"
-      @blur="blur"
+      @mouse-enter="emit('mouseEnter', $event)"
+      @mouse-leave="emit('mouseLeave', $event)"
+      @focus="emit('focus', $event)"
+      @blur="emit('blur', $event)"
     />
   </div>
 </template>

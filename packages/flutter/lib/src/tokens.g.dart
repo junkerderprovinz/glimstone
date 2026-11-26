@@ -8,8 +8,6 @@ import 'package:flutter/material.dart';
 
 import 'theme.dart';
 
-const _inkMixNote = 'Use inkLightness, the OKLab step the ink moves to. inkMix goes in 5.0.0.';
-const _focusRingNote = 'The ring is the accent ink, the focusRing getter on GlimDerived. The argument goes in 5.0.0.';
 const _stateBgNote = 'The state backgrounds are getters on GlimTokens, worked out from the solids. The argument goes in 6.0.0.';
 
 /// The colours of one theme, as a [ThemeExtension] an app adds to its
@@ -104,8 +102,6 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     required this.chartDiv6,
     required this.chartDiv7,
     double? inkLightness,
-    @Deprecated(_inkMixNote) double? inkMix,
-    @Deprecated(_focusRingNote) Color? focusRing,
     @Deprecated(_stateBgNote) Color? statusOkBg,
     @Deprecated(_stateBgNote) Color? statusFailBg,
     @Deprecated(_stateBgNote) Color? statusWarnBg,
@@ -132,7 +128,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
        stoneTextSub = stoneTextSub ?? carbonTextSub ?? const Color(0x00000000),
        stoneTextMuted = stoneTextMuted ?? carbonTextMuted ?? const Color(0x00000000),
        _carbonHover = carbonHover,
-       inkLightness = inkLightness ?? (inkMix == null || inkMix >= 1 ? 0.74 : 0.5);
+       inkLightness = inkLightness ?? 0.74;
 
   final Color stoneGround;
   final Color stoneSidebar;
@@ -248,11 +244,6 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
   /// The OKLab lightness the accent's ink moves to, as in tokens.css: at most
   /// this on a light ramp, at least this on a dark one.
   final double inkLightness;
-
-  /// How much of the accent the ink kept against black before [inkLightness]:
-  /// 0.55 on a light theme, 1 on a dark one.
-  @Deprecated(_inkMixNote)
-  double get inkMix => inkLightness < 0.62 ? 0.55 : 1;
 
   /// The shape the user chose; it sets the radii of cards, controls and pills.
   final GlimShape shape;
@@ -587,8 +578,6 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     Color? chartDiv6,
     Color? chartDiv7,
     double? inkLightness,
-    @Deprecated(_inkMixNote) double? inkMix,
-    @Deprecated(_focusRingNote) Color? focusRing,
     @Deprecated(_stateBgNote) Color? statusOkBg,
     @Deprecated(_stateBgNote) Color? statusFailBg,
     @Deprecated(_stateBgNote) Color? statusWarnBg,
@@ -672,7 +661,7 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
         chartDiv5: chartDiv5 ?? this.chartDiv5,
         chartDiv6: chartDiv6 ?? this.chartDiv6,
         chartDiv7: chartDiv7 ?? this.chartDiv7,
-        inkLightness: inkLightness ?? (inkMix == null ? this.inkLightness : (inkMix < 1 ? 0.5 : 0.74)),
+        inkLightness: inkLightness ?? this.inkLightness,
         shape: shape ?? this.shape,
       );
 

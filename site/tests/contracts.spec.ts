@@ -529,57 +529,6 @@ test.describe("ConfirmDialog", () => {
   });
 });
 
-test.describe("DropdownListbox", () => {
-  async function openList(page: Page) {
-    await open(page, "/components/dropdown-listbox");
-    const trigger = stage(page, "DropdownSelect").locator("button.field");
-    await trigger.click();
-    await expect(page.getByRole("listbox", { name: "Time zone" })).toBeVisible();
-    await expect.poll(() => focusedText(page)).toBe("Europe/Vienna");
-    return trigger;
-  }
-
-  test("[list-open-focus] focus on the selected option", async ({ page }) => {
-    await openList(page);
-    expect(await page.evaluate(() => document.activeElement?.getAttribute("aria-selected"))).toBe("true");
-  });
-
-  test("[list-arrows] arrows move between options", async ({ page }) => {
-    await openList(page);
-    await page.keyboard.press("ArrowDown");
-    expect(await focusedText(page)).toBe("Europe/Berlin");
-    await page.keyboard.press("ArrowUp");
-    expect(await focusedText(page)).toBe("Europe/Vienna");
-  });
-
-  test("[list-home-end] Home and End", async ({ page }) => {
-    await openList(page);
-    await page.keyboard.press("End");
-    expect(await focusedText(page)).toBe("UTC");
-    await page.keyboard.press("Home");
-    expect(await focusedText(page)).toBe("Europe/Vienna");
-  });
-
-  test("[list-typeahead] a letter jumps", async ({ page }) => {
-    await openList(page);
-    await page.keyboard.press("a");
-    expect(await focusedText(page)).toBe("America/New_York");
-  });
-
-  test("[list-escape] Escape closes and returns focus", async ({ page }) => {
-    const trigger = await openList(page);
-    await page.keyboard.press("Escape");
-    await expect(page.getByRole("listbox")).toHaveCount(0);
-    await expect(trigger).toBeFocused();
-  });
-
-  test("[list-outside] a click outside closes", async ({ page }) => {
-    await openList(page);
-    await page.locator("main h1").click();
-    await expect(page.getByRole("listbox")).toHaveCount(0);
-  });
-});
-
 test.describe("Select", () => {
   const trigger = (page: Page) => stage(page, "SelectZag").locator(".glim-select-trigger");
   const list = (page: Page) => page.getByRole("listbox", { name: "Time zone", exact: true });

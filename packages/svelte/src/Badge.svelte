@@ -1,8 +1,8 @@
 <script lang="ts" module>
   import type { Snippet } from "svelte";
-  import type { BadgeForm, BadgeShape, BadgeSize, BadgeTone, NotchInset } from "@glimstone/core";
+  import type { BadgeForm, BadgeSize, BadgeTone, NotchInset } from "@glimstone/core";
 
-  export type { BadgeForm, BadgeShape, BadgeSize, BadgeTone, NotchInset } from "@glimstone/core";
+  export type { BadgeForm, BadgeSize, BadgeTone, NotchInset } from "@glimstone/core";
 
   export interface BadgeProps {
     children: Snippet;
@@ -14,9 +14,6 @@
     /** The corners: rounded, square, pill or circle. Without it they follow the
      *  shape setting. */
     form?: BadgeForm;
-    /** @deprecated Use `form`. Only "circle" has an effect: it makes the badge
-     *  icon-only. */
-    shape?: BadgeShape;
     /** Render as a <button> or a real <a href>, with the same box as a span. */
     as?: "span" | "button" | "a";
     onClick?: () => void;
@@ -72,7 +69,6 @@
     tone = "neutral",
     size = "medium",
     form,
-    shape,
     as = "span",
     onClick,
     disabled,
@@ -99,7 +95,7 @@
       // `.glim-notch-hue` drives the card-wide reactive hover in tokens.css, so
       // it is only set on a heading-sized badge.
       hueOn && size === "heading" && "glim-notch-hue",
-      badgeClassName({ tone, size, form, shape, wrap, iconOnly: tip !== undefined, inFlow, insetStart, action: as !== "span" }),
+      badgeClassName({ tone, size, form, wrap, iconOnly: tip !== undefined, inFlow, insetStart, action: as !== "span" }),
       className,
     ]
       .filter(Boolean)

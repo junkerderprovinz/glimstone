@@ -71,17 +71,6 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "dialog-question", when: "The message opens with a question", then: "The question leads in the text colour at 16px, and what follows stands under it, smaller and quieter, in a window 400px wide." },
     ],
   },
-  DropdownListbox: {
-    pattern: { name: "Listbox", url: `${APG}listbox/` },
-    rows: [
-      { id: "list-open-focus", when: "The list opens", then: "Focus is on the selected option." },
-      { id: "list-arrows", keys: ["ArrowDown", "ArrowUp"], when: "An option has focus", then: "Focus moves to the next or previous option." },
-      { id: "list-home-end", keys: ["Home", "End"], when: "An option has focus", then: "Focus moves to the first or last option." },
-      { id: "list-typeahead", keys: ["a-z"], when: "An option has focus", then: "Focus jumps to the next option starting with the letter." },
-      { id: "list-escape", keys: ["Escape"], when: "The list is open", then: "It closes and focus returns to the trigger." },
-      { id: "list-outside", when: "A click lands outside", then: "It closes." },
-    ],
-  },
   Select: {
     pattern: { name: "Select-only combobox", url: `${APG}combobox/examples/combobox-select-only/` },
     rows: [

@@ -1,5 +1,4 @@
-export { default as AboutCard, type AboutCardProps } from "./AboutCard.svelte";
-export { default as Badge, type BadgeForm, type BadgeProps, type BadgeShape, type BadgeSize, type BadgeTone, type NotchInset } from "./Badge.svelte";
+export { default as Badge, type BadgeForm, type BadgeProps, type BadgeSize, type BadgeTone, type NotchInset } from "./Badge.svelte";
 export { default as BrandMark, type BrandMarkProps } from "./BrandMark.svelte";
 export { default as BusyRing, type BusyRingProps, type BusyRingSize } from "./BusyRing.svelte";
 export { default as Button, type ButtonProps, type ButtonSize, type ButtonTone, type ButtonVariant } from "./Button.svelte";
@@ -12,7 +11,6 @@ export { default as ConnectionRow, type ConnectionAction, type ConnectionRowLabe
 export { default as ContextMenu, type ContextMenuProps, type MenuEntry, type MenuHead, type MenuItem } from "./ContextMenu.svelte";
 export { default as CopyField, type CopyFieldProps } from "./CopyField.svelte";
 export { default as CryptoDonateDialog, type CryptoCoin, type CryptoDonateDialogProps, type CryptoNetwork } from "./CryptoDonateDialog.svelte";
-export { default as DropdownListbox, type DropdownListboxProps } from "./DropdownListbox.svelte";
 export { default as EmptyState, type EmptyStateProps } from "./EmptyState.svelte";
 export { default as FieldError, type FieldErrorProps } from "./FieldError.svelte";
 export { default as FieldRow, type FieldRowProps } from "./FieldRow.svelte";

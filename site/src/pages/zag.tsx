@@ -22,7 +22,7 @@ export function SelectPage() {
     <>
       <p className="lead">
         The one dropdown. It picks one value from a short list, in groups with headings and submenus where the list
-        needs them. It takes over from DropdownListbox.
+        needs them.
       </p>
       <ZagNote file="react/Select.tsx" />
       <Demo name="SelectZag" />

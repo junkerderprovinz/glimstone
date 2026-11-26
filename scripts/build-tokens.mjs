@@ -249,8 +249,6 @@ function dartTokens() {
   }
   const colours = Object.keys(dark).filter((k) => dartColor(dark[k]) && light[k] && dartColor(light[k]));
   const inkLightness = (theme) => Number(theme === light ? light["ink-l-light"] : light["ink-l-dark"]);
-  // The deprecated inkMix maps onto these: below 1 it asked for the light ramp's ink.
-  const steps = { light: inkLightness(light), dark: inkLightness(dark) };
 
   const metrics = [...tokensOf("layout"), ...tokensOf("button")]
     .filter(([k, t]) => /^(text|btn)-/.test(k) && px(t.$value) !== null)
@@ -298,7 +296,7 @@ function dartTokens() {
     ...fields.filter((f) => renamed.has(f)).map((f) => `assert(${f} != null || ${renamed.get(f)} != null, '${f} is required')`),
     ...fields.filter((f) => renamed.has(f)).map((f) => `${f} = ${f} ?? ${renamed.get(f)} ?? const Color(0x00000000)`),
     ...fields.filter((f) => retired.has(f)).map((f) => `_${f} = ${f}`),
-    `inkLightness = inkLightness ?? (inkMix == null || inkMix >= 1 ? ${steps.dark} : ${steps.light})`,
+    `inkLightness = inkLightness ?? ${inkLightness(dark)}`,
   ];
   const field = (f) =>
     retired.has(f)
@@ -319,8 +317,6 @@ function dartTokens() {
 
 import 'package:flutter/material.dart';
 ${fallbacks ? "\nimport 'theme.dart';\n" : ""}
-const _inkMixNote = 'Use inkLightness, the OKLab step the ink moves to. inkMix goes in 5.0.0.';
-const _focusRingNote = 'The ring is the accent ink, the focusRing getter on GlimDerived. The argument goes in 5.0.0.';
 const _stateBgNote = 'The state backgrounds are getters on GlimTokens, worked out from the solids. The argument goes in 6.0.0.';
 
 /// The colours of one theme, as a [ThemeExtension] an app adds to its
@@ -330,8 +326,6 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
   const GlimTheme({
 ${fields.map(argument).join("\n")}
     double? inkLightness,
-    @Deprecated(_inkMixNote) double? inkMix,
-    @Deprecated(_focusRingNote) Color? focusRing,
 ${droppedArguments}
     this.shape = GlimShape.${defaultShape},
   }) : ${initializers.join(",\n       ")};
@@ -343,11 +337,6 @@ ${oldGetters}
   /// The OKLab lightness the accent's ink moves to, as in tokens.css: at most
   /// this on a light ramp, at least this on a dark one.
   final double inkLightness;
-
-  /// How much of the accent the ink kept against black before [inkLightness]:
-  /// 0.55 on a light theme, 1 on a dark one.
-  @Deprecated(_inkMixNote)
-  double get inkMix => inkLightness < ${(steps.light + steps.dark) / 2} ? 0.55 : 1;
 
   /// The shape the user chose; it sets the radii of cards, controls and pills.
   final GlimShape shape;
@@ -372,14 +361,12 @@ ${palette(light)}
   GlimTheme copyWith({
 ${fields.map(copyArgument).join("\n")}
     double? inkLightness,
-    @Deprecated(_inkMixNote) double? inkMix,
-    @Deprecated(_focusRingNote) Color? focusRing,
 ${droppedArguments}
     GlimShape? shape,
   }) =>
       GlimTheme(
 ${fields.map((f) => `        ${f}: ${copyValue(f)},`).join("\n")}
-        inkLightness: inkLightness ?? (inkMix == null ? this.inkLightness : (inkMix < 1 ? ${steps.light} : ${steps.dark})),
+        inkLightness: inkLightness ?? this.inkLightness,
         shape: shape ?? this.shape,
       );
 

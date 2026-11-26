@@ -1,7 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readdirSync, readFileSync } from 'node:fs';
-import { badgeClassName } from '../src/badge.ts';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { DEPRECATED, deprecatedReads, deprecationNote, warnDeprecated, warnDeprecatedClasses, warnDeprecatedStyles } from '../src/deprecated.ts';
 
 function warnings(run: () => void): string[] {
@@ -18,32 +17,33 @@ function warnings(run: () => void): string[] {
 
 test('a deprecated name warns once per page with its replacement and the release that removes it', () => {
   const seen = warnings(() => {
-    warnDeprecated('DropdownListbox');
-    warnDeprecated('DropdownListbox');
+    warnDeprecated('Selector pairsOnPhone');
+    warnDeprecated('Selector pairsOnPhone');
   });
   assert.equal(seen.length, 1);
-  assert.match(seen[0]!, /DropdownListbox is deprecated since GlimStone 3\.6\.0 and goes in 5\.0\.0\. Use Select/);
+  assert.match(seen[0]!, /Selector pairsOnPhone is deprecated since GlimStone 5\.0\.0 and goes in 6\.0\.0\. Drop it/);
+});
+
+test('GlimStone 5 ships none of the names deprecated in 4.x', () => {
+  assert.deepEqual(Object.keys(DEPRECATED).filter((name) => DEPRECATED[name]!.removal === '5.0.0'), []);
+  const files = { react: 'tsx', solid: 'tsx', vue: 'vue', svelte: 'svelte' };
+  for (const [pkg, ext] of Object.entries(files)) {
+    const src = new URL(`../../${pkg}/src/`, import.meta.url);
+    for (const name of ['AboutCard', 'DropdownListbox']) assert.ok(!existsSync(new URL(`${name}.${ext}`, src)), `${pkg} ${name}`);
+    assert.doesNotMatch(readFileSync(new URL('index.ts', src), 'utf8'), /\b(AboutCard|DropdownListbox|BadgeShape)\b/, pkg);
+    assert.doesNotMatch(readFileSync(new URL(`Badge.${ext}`, src), 'utf8'), /\bBadgeShape\b|\bshape\?:|shape: (props|merged)\.shape/, pkg);
+  }
+  assert.doesNotMatch(readFileSync(new URL('../src/badge.ts', import.meta.url), 'utf8'), /\bBadgeShape\b|\bshape\?:/);
+  assert.ok(!existsSync(new URL('../../vue/src/deprecatedEvents.ts', import.meta.url)));
+  const css = readFileSync(new URL('../tokens.css', import.meta.url), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+  assert.doesNotMatch(css, /--ink-mix|\.glim-listbox\b/);
+  assert.doesNotMatch(readFileSync(new URL('../../flutter/lib/src/tokens.g.dart', import.meta.url), 'utf8'), /\binkMix\b|Color\? focusRing/);
 });
 
 test('every deprecated name goes in a major release after the one that deprecated it', () => {
   for (const [name, { since, removal }] of Object.entries(DEPRECATED)) {
     assert.match(removal, /^\d+\.0\.0$/, name);
     assert.ok(Number(removal.split('.')[0]) > Number(since.split('.')[0]), name);
-  }
-});
-
-test('a badge given the old shape warns, one given a form does not', () => {
-  assert.deepEqual(warnings(() => badgeClassName({ form: 'circle' })), []);
-  assert.match(warnings(() => badgeClassName({ shape: 'circle' }))[0] ?? '', /Badge shape is deprecated/);
-});
-
-test('a deprecated component warns in every framework package', () => {
-  const files = { react: 'tsx', solid: 'tsx', vue: 'vue', svelte: 'svelte' };
-  for (const name of ['AboutCard', 'DropdownListbox']) {
-    for (const [pkg, ext] of Object.entries(files)) {
-      const source = readFileSync(new URL(`../../${pkg}/src/${name}.${ext}`, import.meta.url), 'utf8');
-      assert.ok(source.includes(`warnDeprecated("${name}")`), `${pkg} ${name}`);
-    }
   }
 });
 

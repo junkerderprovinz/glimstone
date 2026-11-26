@@ -20,8 +20,6 @@
 // heading of a card, a sub-card or a window is a badge. A page's <h1> and a
 // heading on a filled status callout stay plain text.
 
-import { warnDeprecated } from "./deprecated.ts";
-
 export type BadgeTone = "ok" | "fail" | "warn" | "active" | "neutral" | "heading" | "muted";
 export type BadgeSize = "small" | "medium" | "large" | "heading" | "icon";
 // The four forms of a badge. Without a form the corners follow the shape
@@ -29,9 +27,6 @@ export type BadgeSize = "small" | "medium" | "large" | "heading" | "icon";
 // rounded a small radius, square none, pill half the badge's height, so a
 // short badge never turns into a lozenge, and circle a circle around one glyph.
 export type BadgeForm = "rounded" | "square" | "pill" | "circle";
-
-/** @deprecated Use `BadgeForm`. Only "circle" has an effect: it makes the badge icon-only. Removed in 5.0.0. */
-export type BadgeShape = "pill" | "rounded" | "square" | "circle";
 
 // An explicit start offset for the heading notch, as a quarter-rem step.
 // Without it the notch sits at its static position, which follows the card's
@@ -45,8 +40,6 @@ export interface BadgeOptions {
   tone?: BadgeTone;
   size?: BadgeSize;
   form?: BadgeForm;
-  /** @deprecated Use `form`. Removed in 5.0.0. */
-  shape?: BadgeShape;
   /** The stage height becomes a floor with vertical padding, so a second line
    *  grows the box instead of spilling out of it. The box then has no definite
    *  height, so beside a taller flex sibling it stretches unless aligned. */
@@ -67,15 +60,13 @@ export function badgeClassName({
   tone = "neutral",
   size = "medium",
   form,
-  shape,
   wrap,
   iconOnly,
   inFlow,
   insetStart,
   action,
 }: BadgeOptions = {}): string {
-  if (shape) warnDeprecated("Badge shape");
-  const isIconOnly = form === "circle" || shape === "circle" || iconOnly === true;
+  const isIconOnly = form === "circle" || iconOnly === true;
   const isNotch = tone === "heading" && size === "heading";
   // An icon-only active badge takes the solid accent with contrast ink: with no
   // text left, the translucent wash only makes the tile look dimmed, and a

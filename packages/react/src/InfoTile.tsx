@@ -11,8 +11,6 @@ import {
   openInBrowser,
   updateAction,
   updateLine,
-  versionLink,
-  warnDeprecated,
   whatsNewLabel,
   withApp,
   type ComponentRow,
@@ -21,7 +19,6 @@ import {
   type UpdateRoute,
   type UpdateState,
   type VersionCardText,
-  type VersionRow,
 } from "@glimstone/core";
 import { Button } from "./Button.tsx";
 import { Card } from "./Card.tsx";
@@ -452,121 +449,6 @@ export function InfoTile({ version, components, help, about, hueIndex, ...data }
       <InfoComponentsCard {...components} hueIndex={at(1)} />
       <InfoHelpCard {...help} hueIndex={at(2)} />
       <InfoAboutCard {...about} hueIndex={at(3)} />
-    </div>
-  );
-}
-
-/**
- * The 3.2.0 props of the single About card, laid out as the Info tile: the
- * About card under `text.title`, the Version card under `text.version` with the
- * app and GlimStone as its rows, and the Help card.
- *
- * @deprecated Use `InfoTile`, which adds the version rows' sub-lines, the
- * other components, "Check for updates" and the bug report. Removed in 5.0.0.
- */
-export function AboutCard({
-  text,
-  version,
-  glimstoneVersion,
-  repoUrl,
-  repoGlyph,
-  glimstoneRepoUrl,
-  onCoffee,
-  coffeeArt,
-  cryptoGlyph,
-  paypalGlyph,
-  onPaypal,
-  onCrypto,
-  discordUrl,
-  discordGlyph,
-  mailAddress,
-  mailGlyph,
-  openUrl = openInBrowser,
-  hueIndex,
-}: {
-  text: {
-    title: string;
-    body: string;
-    coffee: string;
-    coffeeButton: string;
-    cryptoButton?: string;
-    paypalButton?: string;
-    report: string;
-    repoButton: string;
-    discordButton?: string;
-    mailButton: string;
-    mailSubject: string;
-    version: string;
-    unreleased: (version: string) => string;
-    /** The Help card's heading. Without it the card draws none. */
-    helpTitle?: string;
-  };
-  version: string | null;
-  glimstoneVersion: string;
-  repoUrl: string;
-  repoGlyph?: ReactNode;
-  glimstoneRepoUrl: string;
-  onCoffee: () => void;
-  coffeeArt: ReactNode;
-  cryptoGlyph?: ReactNode;
-  paypalGlyph?: ReactNode;
-  onPaypal?: () => void;
-  onCrypto?: () => void;
-  discordUrl?: string;
-  discordGlyph?: ReactNode;
-  mailAddress?: string;
-  mailGlyph?: ReactNode;
-  openUrl?: (url: string) => void;
-  hueIndex?: number;
-}) {
-  warnDeprecated("AboutCard");
-  const rows: VersionRow[] = [
-    ...(version ? [{ name: text.version, version, repoUrl }] : []),
-    { name: "GlimStone", version: glimstoneVersion, repoUrl: glimstoneRepoUrl },
-  ];
-  const at = (offset: number) => (hueIndex === undefined ? undefined : hueIndex + offset);
-  return (
-    <div data-glim="AboutCard" style={{ display: "contents" }}>
-      <Card title={text.version} hueIndex={at(0)}>
-        <ul className="glim-version-rows">
-          {rows.map((row) => {
-            const { shown, released, href } = versionLink(row);
-            return (
-              <li key={row.name} className="glim-version-row">
-                <span className="glim-version-name">
-                  <span className="glim-version-part">{row.name}</span>
-                </span>
-                {href ? (
-                  <a href={href} target="_blank" rel="noopener noreferrer" className="glim-num glim-version-number">
-                    {shown}
-                  </a>
-                ) : (
-                  <span className="glim-num glim-version-number">{released ? shown : text.unreleased(shown)}</span>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-      </Card>
-      <InfoHelpCard
-        hueIndex={at(1)}
-        text={{
-          title: text.helpTitle,
-          report: text.report,
-          repoButton: text.repoButton,
-          discordButton: text.discordButton,
-          mailButton: text.mailButton,
-          mailSubject: text.mailSubject,
-        }}
-        repoUrl={repoUrl}
-        repoGlyph={repoGlyph}
-        discordUrl={discordUrl}
-        discordGlyph={discordGlyph}
-        mailAddress={mailAddress}
-        mailGlyph={mailGlyph}
-        openUrl={openUrl}
-      />
-      <InfoAboutCard hueIndex={at(2)} text={text} onCoffee={onCoffee} coffeeArt={coffeeArt} onPaypal={onPaypal} paypalGlyph={paypalGlyph} onCrypto={onCrypto} cryptoGlyph={cryptoGlyph} />
     </div>
   );
 }

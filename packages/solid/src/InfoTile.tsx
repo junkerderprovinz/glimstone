@@ -11,8 +11,6 @@ import {
   openInBrowser,
   updateAction,
   updateLine,
-  versionLink,
-  warnDeprecated,
   whatsNewLabel,
   withApp,
   type ComponentRow,
@@ -21,7 +19,6 @@ import {
   type UpdateRoute,
   type UpdateState,
   type VersionCardText,
-  type VersionRow,
 } from "@glimstone/core";
 import { Button } from "./Button.tsx";
 import { Card } from "./Card.tsx";
@@ -436,117 +433,6 @@ export function InfoTile(props: InfoTileProps) {
       <InfoComponentsCard {...own.components} hueIndex={at(1)} />
       <InfoHelpCard {...own.help} hueIndex={at(2)} />
       <InfoAboutCard {...own.about} hueIndex={at(3)} />
-    </div>
-  );
-}
-
-/**
- * The 3.2.0 props of the single About card, laid out as the Info tile: the
- * About card under `text.title`, the Version card under `text.version` with the
- * app and GlimStone as its rows, and the Help card.
- *
- * @deprecated Use `InfoTile`, which adds the version rows' sub-lines, the
- * other components, "Check for updates" and the bug report.
- */
-export function AboutCard(props: {
-  text: {
-    title: string;
-    body: string;
-    coffee: string;
-    coffeeButton: string;
-    cryptoButton?: string;
-    paypalButton?: string;
-    report: string;
-    repoButton: string;
-    discordButton?: string;
-    mailButton: string;
-    mailSubject: string;
-    version: string;
-    unreleased: (version: string) => string;
-    /** The Help card's heading. Without it the card draws none. */
-    helpTitle?: string;
-  };
-  version: string | null;
-  glimstoneVersion: string;
-  repoUrl: string;
-  repoGlyph?: JSX.Element;
-  glimstoneRepoUrl: string;
-  onCoffee: () => void;
-  coffeeArt: JSX.Element;
-  cryptoGlyph?: JSX.Element;
-  paypalGlyph?: JSX.Element;
-  onPaypal?: () => void;
-  onCrypto?: () => void;
-  discordUrl?: string;
-  discordGlyph?: JSX.Element;
-  mailAddress?: string;
-  mailGlyph?: JSX.Element;
-  openUrl?: (url: string) => void;
-  hueIndex?: number;
-}) {
-  warnDeprecated("AboutCard");
-  const merged = mergeProps({ openUrl: openInBrowser }, props);
-  const rows = (): VersionRow[] => [
-    ...(merged.version ? [{ name: merged.text.version, version: merged.version, repoUrl: merged.repoUrl }] : []),
-    { name: "GlimStone", version: merged.glimstoneVersion, repoUrl: merged.glimstoneRepoUrl },
-  ];
-  const at = (offset: number) => (merged.hueIndex === undefined ? undefined : merged.hueIndex + offset);
-  return (
-    <div data-glim="AboutCard" style={{ display: "contents" }}>
-      <Card title={merged.text.version} hueIndex={at(0)}>
-        <ul class="glim-version-rows">
-          <For each={rows()}>
-            {(row) => {
-              const link = versionLink(row);
-              return (
-                <li class="glim-version-row">
-                  <span class="glim-version-name">
-                    <span class="glim-version-part">{row.name}</span>
-                  </span>
-                  <Show
-                    when={link.href}
-                    fallback={<span class="glim-num glim-version-number">{link.released ? link.shown : merged.text.unreleased(link.shown)}</span>}
-                  >
-                    {(href) => (
-                      <a href={href()} target="_blank" rel="noopener noreferrer" class="glim-num glim-version-number">
-                        {link.shown}
-                      </a>
-                    )}
-                  </Show>
-                </li>
-              );
-            }}
-          </For>
-        </ul>
-      </Card>
-      <InfoHelpCard
-        hueIndex={at(1)}
-        text={{
-          title: merged.text.helpTitle,
-          report: merged.text.report,
-          repoButton: merged.text.repoButton,
-          discordButton: merged.text.discordButton,
-          mailButton: merged.text.mailButton,
-          mailSubject: merged.text.mailSubject,
-        }}
-        repoUrl={merged.repoUrl}
-        repoGlyph={merged.repoGlyph}
-        discordUrl={merged.discordUrl}
-        discordGlyph={merged.discordGlyph}
-        mailAddress={merged.mailAddress}
-        mailGlyph={merged.mailGlyph}
-        openUrl={merged.openUrl}
-      />
-      <InfoAboutCard
-        hueIndex={at(2)}
-        text={merged.text}
-        onCoffee={merged.onCoffee}
-        coffeeArt={merged.coffeeArt}
-        onPaypal={merged.onPaypal}
-        paypalGlyph={merged.paypalGlyph}
-        onCrypto={merged.onCrypto}
-        cryptoGlyph={merged.cryptoGlyph}
-      />
     </div>
   );
 }

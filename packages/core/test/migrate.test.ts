@@ -43,8 +43,8 @@ test('what cannot be rewritten is reported with file and line', () => {
   assert.match(r.out, /Status\.tsx:17: Badge shape set from an expression/);
   assert.match(r.out, /Status\.vue:9: Badge shape set from an expression/);
   assert.match(r.out, /Status\.tsx:1: DropdownListbox .*Select/);
-  assert.match(r.out, /theme\.dart:11: inkMix goes in 5\.0\.0/);
-  assert.match(r.out, /app\.css:10: --ink-mix goes in 5\.0\.0/);
+  assert.match(r.out, /theme\.dart:11: inkMix went in 5\.0\.0/);
+  assert.match(r.out, /app\.css:10: --ink-mix went in 5\.0\.0/);
 });
 
 test('a grey hover is reported for the one hover rather than rewritten, since --hover is another colour', () => {
@@ -70,6 +70,12 @@ test('--check changes nothing and fails while there is something to do', () => {
   const r = run(root, '--check');
   assert.equal(r.status, 1);
   assert.equal(readFileSync(join(root, 'src', 'Status.vue'), 'utf8'), readFileSync(join(fixtures, 'before', 'Status.vue'), 'utf8'));
+});
+
+test('an app coming from 4.x still gets a transform for every name 5.0.0 removed', () => {
+  const covered = new Set(TRANSFORMS.map((t: { name: string }) => t.name));
+  const removed = ['Badge shape', 'BadgeShape', 'AboutCard', 'DropdownListbox', 'ToastViewport enter', 'ToastViewport leave', 'ToastViewport focusin', 'ToastViewport focusout', '--ink-mix', 'GlimTheme inkMix', 'GlimTheme focusRing argument'];
+  assert.deepEqual(removed.filter((name) => !covered.has(name)), []);
 });
 
 test('every deprecated name has a transform, so no breaking change ships without one', () => {

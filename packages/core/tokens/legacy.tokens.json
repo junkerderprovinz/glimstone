@@ -1,22 +1,10 @@
 {
   "legacy": {
-    "$description": "Deprecated tokens, kept so an app's own CSS that reads them still works until the major release that removes them (rule 52). npx glimstone-migrate rewrites them.\n\nThe carbon- names are the stone ramp under the names it had before 5.0.0, and go in 6.0.0. Each is an alias of its stone step, declared on every element that declares the stones, so it resolves there to that element's own step: a [data-theme] subtree, OLED and the contrast step all reach it, and light-dark() still resolves where the colour is used. Their Tailwind names point at the stone steps themselves.\n\n--ink-mix goes in 5.0.0. It is how much of the accent the ink kept against black: all of it on the dark ramps and 55% on the light one. The stylesheet does not read it, so it needs the theme's own selectors rather than a light-dark(), which only takes colours.",
+    "$description": "Deprecated tokens, kept so an app's own CSS that reads them still works until the major release that removes them (rule 52). npx glimstone-migrate rewrites them.\n\nThe carbon- names are the stone ramp under the names it had before 5.0.0, and go in 6.0.0. Each is an alias of its stone step, declared on every element that declares the stones, so it resolves there to that element's own step: a [data-theme] subtree, OLED and the contrast step all reach it, and light-dark() still resolves where the colour is used. Their Tailwind names point at the stone steps themselves.",
     "$extensions": {
       "org.glimstone": {
         "selector": ":root,\n[data-theme],\n[data-oled]",
-        "aliases": true,
-        "modes": [
-          {
-            "name": "light",
-            "selector": "[data-theme=\"light\"]",
-            "also": [
-              {
-                "selector": ":root:not([data-theme=\"dark\"])",
-                "media": "(prefers-color-scheme: light)"
-              }
-            ]
-          }
-        ]
+        "aliases": true
       }
     },
     "carbon-bg": {
@@ -58,17 +46,6 @@
     "carbon-text-muted": {
       "$value": "{colour.stone-text-muted}",
       "$extensions": { "org.glimstone": { "tailwind": "color-carbon-textMuted" } }
-    },
-    "ink-mix": {
-      "$value": "100%",
-      "$type": "dimension",
-      "$extensions": {
-        "org.glimstone": {
-          "modes": {
-            "light": "55%"
-          }
-        }
-      }
     }
   }
 }

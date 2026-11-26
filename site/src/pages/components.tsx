@@ -252,46 +252,6 @@ return <>... {confirmDialog}</>;`}
   );
 }
 
-export function DropdownPage() {
-  return (
-    <>
-      <p className="lead">
-        The list panel of a dropdown whose trigger the caller draws. It renders into a portal, so no card or scroll
-        container can clip it.
-      </p>
-      <Head file="react/DropdownListbox.tsx" />
-      <Callout>
-        <strong>Deprecated.</strong> Use <a href="#/components/select">Select</a>, which keeps focus on its trigger and
-        adds typeahead. The behaviour table below shows the row DropdownListbox misses. It stays in the reference until
-        the apps have moved.
-      </Callout>
-      <Demo name="DropdownSelect" />
-      <Usage
-        code={`<DropdownListbox open={open} onClose={close} triggerRef={trigger} label="Time zone">
-  {zones.map((z) => (
-    <button role="option" aria-selected={z === zone} onClick={() => pick(z)}>{z}</button>
-  ))}
-</DropdownListbox>`}
-      />
-      <H2>The caller owns the trigger</H2>
-      <p>
-        Only the panel is shared. The trigger is the app's own field at field height, so a closed dropdown never stands
-        taller than the inputs beside it. The panel opens toward whichever edge of the viewport has room.
-      </p>
-      <H2>Accessibility</H2>
-      <ul>
-        <li>Focus moves to the selected option once the panel sits at its real position.</li>
-        <li>Arrow keys, Home and End move between options; Enter and Space work because the options are buttons.</li>
-        <li>Escape, an outside click, a scroll or a resize close it. Clicking the trigger does not close and reopen it.</li>
-      </ul>
-      <H2>Behaviour</H2>
-      <ContractTable of="DropdownListbox" />
-      <H2>API</H2>
-      <PropsTable of="DropdownListbox" />
-    </>
-  );
-}
-
 export function InfoBubblePage() {
   return (
     <>
