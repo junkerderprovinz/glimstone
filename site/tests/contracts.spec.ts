@@ -4845,7 +4845,8 @@ test.describe("SignInCard refusals and engines", () => {
   test("[signin-engines] Sign in wears the accent", async ({ page }) => {
     await open(page, "/components/sign-in-card", { accent: "#4DABF7" });
     await field(page, "Password").fill("x");
-    expect(await button(page, "Sign in").evaluate((e) => getComputedStyle(e).backgroundColor)).toBe("rgb(77, 171, 247)");
+    // A button that turns enabled crosses from the disabled wash to its fill on the control transition.
+    await expect.poll(() => button(page, "Sign in").evaluate((e) => getComputedStyle(e).backgroundColor)).toBe("rgb(77, 171, 247)");
   });
 
   test("[signin-engines] the card, fields and buttons take the shape", async ({ page }) => {
