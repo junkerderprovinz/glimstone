@@ -33,6 +33,22 @@
           "tailwindNote": "The accent's hover (rule 21): hover:bg-hover on anything the pointer can reach, a button, a row, a menu entry or a tile."
         }
       }
+    },
+    "hover-raised": {
+      "$description": "The same hover for a control that rests on surface3, such as the neutral button or a segment in its groove, where --hover would sit within a hair of the fill. It stands a step further from surface3, lighter on the dark ramps and darker on the light one, and the text and the secondary text keep 4.5:1 on it.",
+      "$value": "oklab(from {colour.accent} 0.86 calc(a * {hover-tint.hover-chroma}) calc(b * {hover-tint.hover-chroma}))",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "oklab(from {colour.accent} 0.41 calc(a * {hover-tint.hover-chroma}) calc(b * {hover-tint.hover-chroma}))",
+          "modes": {
+            "oled": {
+              "dark": "oklab(from {colour.accent} 0.36 calc(a * {hover-tint.hover-chroma}) calc(b * {hover-tint.hover-chroma}))"
+            }
+          },
+          "tailwind": "color-hoverRaised",
+          "tailwindNote": "The hover of a control that rests on surface3: hover:bg-hoverRaised."
+        }
+      }
     }
   }
 }

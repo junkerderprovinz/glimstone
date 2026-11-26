@@ -89,3 +89,11 @@ test('the last system colour on this device paints the first frame after a reloa
   assert.equal(root.style.get('--accent'), '#0078D4');
   assert.equal(fresh.systemAccent(), '#0078D4');
 });
+
+test('the gold the stylesheet starts with gets its worked-out hover on the first frame, with nothing cached', async () => {
+  root.style.clear();
+  const fresh: typeof import('../src/appearance.ts') = await import('../src/appearance.ts?gold');
+  fresh.applyCachedAppearance();
+  assert.ok(root.style.get('--accent-hover-dark'));
+  assert.equal(root.style.get('--accent'), undefined);
+});

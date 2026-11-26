@@ -648,12 +648,20 @@
   /* How much of the accent's chroma the hover takes. */
   --hover-chroma: 0.22;
   --hover: light-dark(oklab(from var(--accent) 0.885 calc(a * var(--hover-chroma)) calc(b * var(--hover-chroma))), oklab(from var(--accent) 0.345 calc(a * var(--hover-chroma)) calc(b * var(--hover-chroma))));
+
+  /* The same hover for a control that rests on surface3, such as the neutral
+     button or a segment in its groove, where --hover would sit within a hair of
+     the fill. It stands a step further from surface3, lighter on the dark ramps
+     and darker on the light one, and the text and the secondary text keep 4.5:1
+     on it. */
+  --hover-raised: light-dark(oklab(from var(--accent) 0.86 calc(a * var(--hover-chroma)) calc(b * var(--hover-chroma))), oklab(from var(--accent) 0.41 calc(a * var(--hover-chroma)) calc(b * var(--hover-chroma))));
 }
 
 /* OLED moves surface3 one stone step down, and the hover with it. */
 [data-oled],
 [data-oled][data-rainbow] .glim-hue {
   --hover: light-dark(oklab(from var(--accent) 0.885 calc(a * var(--hover-chroma)) calc(b * var(--hover-chroma))), oklab(from var(--accent) 0.27 calc(a * var(--hover-chroma)) calc(b * var(--hover-chroma))));
+  --hover-raised: light-dark(oklab(from var(--accent) 0.86 calc(a * var(--hover-chroma)) calc(b * var(--hover-chroma))), oklab(from var(--accent) 0.36 calc(a * var(--hover-chroma)) calc(b * var(--hover-chroma))));
 }
 
 /* The house font is IBM Plex Sans, shipped with the app for Latin, Cyrillic,
@@ -2655,6 +2663,11 @@
   :is(.glim-btn-neutral, .glim-btn-subtle):not(:disabled):is(:hover, :focus-visible) {
     background-color: var(--hover);
   }
+  /* What rests on surface3 lights one step further, or the hover would barely show. */
+  .glim-btn-neutral:not(:disabled):is(:hover, :focus-visible),
+  :is(.glim-subcard, .glim-connection) .glim-btn-subtle:not(:disabled):is(:hover, :focus-visible) {
+    background-color: var(--hover-raised);
+  }
   :is(.glim-btn-neutral, .glim-btn-subtle):not(:disabled):is(:hover, :focus-visible) > .glim-btn-glyph,
   .glim-btn-bare:not(:disabled):is(:hover, :focus-visible) {
     color: var(--btn-tint);
@@ -3932,7 +3945,7 @@
   .glim-btn--warn { background-color: var(--status-warn-wash); color: var(--status-warn-text); }
   @media (hover: hover) {
     .glim-btn--accent:hover { background-color: var(--accent-hover); }
-    .glim-btn--neutral:hover { background-color: var(--hover); }
+    .glim-btn--neutral:hover { background-color: var(--hover-raised); }
     .glim-btn--subtle:hover { background-color: var(--hover); }
     .glim-btn--ok:hover { background-color: var(--status-ok-wash-hover); }
     .glim-btn--danger:hover { background-color: var(--status-fail-wash-hover); }
@@ -5059,7 +5072,7 @@
      light one. A deeper groove needs a lighter text token. */
   .glim-sel--well .glim-sel-seg { color: var(--stone-text-sub); }
   .glim-sel--well .glim-sel-seg:not(.glim-active):not(:disabled):hover {
-    background-color: var(--hover);
+    background-color: var(--hover-raised);
     color: var(--stone-text);
   }
   /* In the bare strip every segment is a badge at rest, not only the chosen
@@ -5091,6 +5104,7 @@
     background-color: var(--stone-surface3);
   }
   .glim-sel--chip:has(> .glim-sel-thumb) .glim-sel-seg:not(.glim-active) { background-color: transparent; }
+  .glim-sel--chip:has(> .glim-sel-thumb) .glim-sel-seg:not(.glim-active):not(:disabled):hover { background-color: var(--hover-raised); }
   .glim-sel:has(> .glim-sel-thumb) > :is(.glim-sel-seg, .glim-tip-wrap) {
     position: relative;
     z-index: var(--z-raised-top);
@@ -5504,7 +5518,7 @@
   }
   .glim-subcard .glim-sel--chip .glim-sel-seg:not(.glim-active):not(:disabled):hover,
   :is(.glim-subcard, .glim-well) .glim-sel-tile:not(.glim-active):hover {
-    background-color: var(--hover);
+    background-color: var(--hover-raised);
   }
 
   /* The general window (Window): the confirm surface's frame, grown to hold a
@@ -7887,7 +7901,7 @@
   }
   .glim-page:hover { background-color: var(--hover); }
   :is(.glim-well, .glim-subcard) .glim-page { background-color: var(--stone-surface3); }
-  :is(.glim-well, .glim-subcard) .glim-page:hover { background-color: var(--hover); }
+  :is(.glim-well, .glim-subcard) .glim-page:hover { background-color: var(--hover-raised); }
   .glim-page[data-selected] {
     background-color: var(--accent);
     color: var(--accent-contrast);
@@ -8601,6 +8615,7 @@
     background-color: var(--hover);
     font-weight: 600;
   }
+  .glim-date-cell[data-today]:hover { background-color: var(--hover-raised); }
   .glim-date-cell:is([data-outside-range], [data-disabled], [data-unavailable]) { color: color-mix(in oklab, var(--stone-text-muted) 45%, transparent); }
   .glim-date-cell:is([data-disabled], [data-unavailable]) { cursor: default; }
   .glim-date-cell[data-disabled]:hover { background-color: transparent; }

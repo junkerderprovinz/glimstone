@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { accentHovers, accentInks, contrastOn, contrastRatio, MIN_TEXT_CONTRAST } from '../src/contrast.ts';
+import { accentHovers, accentInks, contrastOn, contrastRatio, MIN_HOVER_STEP, MIN_TEXT_CONTRAST } from '../src/contrast.ts';
 import { ACCENTS, hueVars, RAINBOW } from '../src/appearance.ts';
 import { srgbOf, type Oklab } from '../src/oklab.ts';
 
@@ -375,9 +375,10 @@ function rule(selector: string): Record<string, string> {
   return Object.fromEntries([...body.matchAll(/([\w-]+)\s*:\s*([^;]+);/g)].map((m) => [m[1]!, m[2]!.trim()]));
 }
 
-// What a button, a row, a menu entry and a tile each declare under the pointer.
+// What a button, a row, a menu entry and a tile on a card's surfaces each declare
+// under the pointer.
 const HOVERED = {
-  'a neutral button': rule(':is(.glim-btn-neutral, .glim-btn-subtle):not(:disabled):is(:hover, :focus-visible)')['background-color'],
+  'a quiet button': rule(':is(.glim-btn-neutral, .glim-btn-subtle):not(:disabled):is(:hover, :focus-visible)')['background-color'],
   'a navigation row': rule('.glim-nav-row:not(.glim-active):hover')['background-color'],
   'a menu entry': rule('.glim-menu-item:hover,\n  .glim-menu:not([data-pointer]) .glim-menu-item:focus-visible,\n  .glim-menu-item[aria-expanded="true"]')['background-color'],
   'a tile': rule('.glim-sel-tile:not(.glim-active):hover')['background-color'],
@@ -421,9 +422,11 @@ for (const [themeName, theme] of Object.entries(THEMES)) {
   test(`the text and the secondary text read at 4.5:1 on the hover for ${SWEEP.length} picked accents on ${themeName}`, () => {
     const misses = SWEEP.flatMap((accent) => {
       const scope = withAccent(theme, accent);
-      return ['--stone-text', '--stone-text-sub'].map((ink) => [ink, pairRatio(ink, '--hover', scope)] as const)
-        .filter(([, r]) => r < MIN_TEXT_CONTRAST)
-        .map(([ink, r]) => `${accent} ${ink}: ${r.toFixed(2)}:1`);
+      return ['--hover', '--hover-raised'].flatMap((hover) =>
+        ['--stone-text', '--stone-text-sub'].map((ink) => [ink, pairRatio(ink, hover, scope)] as const)
+          .filter(([, r]) => r < MIN_TEXT_CONTRAST)
+          .map(([ink, r]) => `${accent} ${ink} on ${hover}: ${r.toFixed(2)}:1`),
+      );
     });
     assert.deepEqual(misses, []);
   });
@@ -434,6 +437,84 @@ for (const [themeName, theme] of Object.entries(THEMES)) {
       const scope = { ...theme, ...hueVars(i), [`--rb-${i}`]: hue, '--accent': position['--accent']! };
       assert.ok(hueGap(labOf('--hover', scope), oklabOfRgb(parse(hue))) <= 6, `position ${i}`);
     });
+  });
+}
+
+/** A selector list split at its top-level commas. */
+const members = (list: string) => {
+  const out = [''];
+  let depth = 0;
+  for (const ch of list) {
+    if (ch === '(') depth++;
+    if (ch === ')') depth--;
+    if (ch === ',' && depth === 0) out.push('');
+    else out[out.length - 1] += ch;
+  }
+  return out.map((s) => s.trim().replace(/\s+/g, ' '));
+};
+
+/** The fill the last rule with `selector` in its list gives, as the cascade would. */
+const fillOf = (selector: string) => {
+  let fill: string | undefined;
+  for (const [, list, body] of bare.matchAll(/([^{};]+)\{([^{}]*)\}/g)) {
+    if (!members(list!).includes(selector)) continue;
+    fill = body!.match(/background(?:-color)?\s*:\s*([^;]+);/)?.[1]?.trim() ?? fill;
+  }
+  assert.ok(fill, `no fill for ${selector}`);
+  return fill;
+};
+
+// Every control the pointer lights, the selector that lights it, the fill it
+// rests on (undefined where it rests on the ground itself) and that ground.
+const HOVERABLE: [string, string, string | undefined, string][] = [
+  ['an accent button', '.glim-btn--accent:hover', 'var(--accent)', '--stone-surface'],
+  ['a neutral button', '.glim-btn-neutral:not(:disabled):is(:hover, :focus-visible)', 'var(--stone-surface3)', '--stone-surface'],
+  ['a quiet button', ':is(.glim-btn-neutral, .glim-btn-subtle):not(:disabled):is(:hover, :focus-visible)', 'var(--stone-surface2)', '--stone-surface'],
+  ['a quiet button in a sub-card', ':is(.glim-subcard, .glim-connection) .glim-btn-subtle:not(:disabled):is(:hover, :focus-visible)', 'var(--stone-surface3)', '--stone-surface2'],
+  ['an ok button', '.glim-btn--ok:hover', 'var(--status-ok-wash)', '--stone-surface'],
+  ['a danger button', '.glim-btn--danger:hover', 'var(--status-fail-wash)', '--stone-surface'],
+  ['a warn button', '.glim-btn--warn:hover', 'var(--status-warn-wash)', '--stone-surface'],
+  ['a segment in the groove', '.glim-sel--well .glim-sel-seg:not(.glim-active):not(:disabled):hover', undefined, '--stone-surface3'],
+  ['a segment of a bare strip', '.glim-sel--chip .glim-sel-seg:not(.glim-active):not(:disabled):hover', 'var(--stone-surface2)', '--stone-surface'],
+  ['a segment of a sliding strip', '.glim-sel--chip:has(> .glim-sel-thumb) .glim-sel-seg:not(.glim-active):not(:disabled):hover', undefined, '--stone-surface3'],
+  ['a segment of a bare strip in a sub-card', '.glim-subcard .glim-sel--chip .glim-sel-seg:not(.glim-active):not(:disabled):hover', 'var(--stone-surface3)', '--stone-surface2'],
+  ['a tile', '.glim-sel-tile:not(.glim-active):hover', 'var(--tile-rest)', '--stone-surface'],
+  ['a tile in a well', ':is(.glim-subcard, .glim-well) .glim-sel-tile:not(.glim-active):hover', 'var(--stone-surface3)', '--stone-surface2'],
+  ['a navigation row', '.glim-nav-row:not(.glim-active):hover', undefined, '--stone-sidebar'],
+  ['a menu entry', '.glim-menu-item:hover', undefined, '--surface-overlay'],
+  ['a menu bar entry', '.glim-menubar-item:hover:not([aria-expanded="true"])', undefined, '--stone-surface'],
+  ['a list row', '.glim-list-row:is(:hover, :focus-within)', undefined, '--stone-surface'],
+  ['a table row', '.glim-list-tr:hover > td', undefined, '--stone-surface'],
+  ['a tree row', '.glim-tree-row:not([aria-selected="true"]):hover', undefined, '--stone-surface'],
+  ['a tree row in a well', '.glim-well .glim-tree-row:not([aria-selected="true"]):hover', undefined, '--stone-surface2'],
+  ['a page button', '.glim-page:hover', 'var(--stone-surface2)', '--stone-surface'],
+  ['a page button in a well', ':is(.glim-well, .glim-subcard) .glim-page:hover', 'var(--stone-surface3)', '--stone-surface2'],
+  ['a step', '.glim-steps-trigger:hover', undefined, '--stone-surface'],
+  ['a step in a well', ':is(.glim-well, .glim-subcard) .glim-steps-trigger:hover', undefined, '--stone-surface2'],
+  ['a disclosure', '.glim-disclosure-trigger:hover', undefined, '--stone-surface'],
+  ['a disclosure in a well', ':is(.glim-well, .glim-subcard) .glim-disclosure-trigger:hover', undefined, '--stone-surface2'],
+  ['a checkbox', '.glim-checkbox:hover', undefined, '--stone-surface'],
+  ['a permission', '.glim-permission:hover', undefined, '--stone-surface'],
+  ['a sort header', ':is(.glim-list-sort, .glim-list-filter):hover', undefined, '--stone-surface'],
+  ['a day', '.glim-date-cell:hover', undefined, '--surface-overlay'],
+  ['today', '.glim-date-cell[data-today]:hover', 'var(--hover)', '--surface-overlay'],
+  ['a date step', ':is(.glim-date-step, button.glim-date-title):hover', undefined, '--surface-overlay'],
+];
+
+for (const [themeName, theme] of Object.entries(THEMES)) {
+  test(`every control the pointer lights moves its fill a visible step on ${themeName}`, () => {
+    const lit = HOVERABLE.map(([what, selector, rest, ground]) => [what, fillOf(selector), rest, ground] as const);
+    const misses = [...ACCENTS.map((a) => a.hex), ...SWEEP].flatMap((accent) => {
+      const scope = withAccent(theme, accent);
+      const card = resolve('var(--stone-surface)', scope);
+      return lit.flatMap(([what, hovered, rest, ground]) => {
+        const under = parse(over(resolve(`var(${ground})`, scope), card));
+        const at = (fill: string | undefined) => (fill === undefined ? hex(under) : over(resolve(fill, scope), under));
+        const r = contrastRatio(at(rest), at(hovered));
+        return r < MIN_HOVER_STEP ? [`${accent} ${what}: ${r.toFixed(3)}:1`] : [];
+      });
+    });
+    assert.deepEqual(misses.slice(0, 20), [], `${misses.length} misses`);
   });
 }
 

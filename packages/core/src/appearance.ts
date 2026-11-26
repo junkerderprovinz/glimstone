@@ -307,7 +307,8 @@ function paintAccent(hex: string | undefined): void {
     if (ink) root.setProperty(`--accent-ink-${ramp}`, ink);
     else root.removeProperty(`--accent-ink-${ramp}`);
   }
-  const hovers = valid(hex) ? accentHovers(hex) : { light: undefined, dark: undefined };
+  // The stylesheet's gold needs its hover worked out too, or it barely moves on the dark ramp.
+  const hovers = accentHovers(valid(hex) ? hex : DEFAULT_ACCENT);
   for (const [ramp, hover] of Object.entries(hovers)) {
     if (hover) root.setProperty(`--accent-hover-${ramp}`, hover);
     else root.removeProperty(`--accent-hover-${ramp}`);
@@ -545,6 +546,7 @@ export function applyCachedAppearance(): void {
       applyDensity(DEFAULT_DENSITY);
       applyLight(DEFAULT_LIGHT);
       applyGlyphs(DEFAULT_GLYPHS);
+      applyAccent(undefined);
       applyRainbow(undefined);
       return;
     }

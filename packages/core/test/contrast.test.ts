@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { accentHovers, accentInks, contrastOn, contrastRatio, MIN_TEXT_CONTRAST, STONE } from '../src/contrast.ts';
+import { accentHovers, accentInks, contrastOn, contrastRatio, MIN_HOVER_STEP, MIN_TEXT_CONTRAST, STONE } from '../src/contrast.ts';
 import { ACCENTS } from '../src/appearance.ts';
 import { darkenTo, INK_LIGHTNESS, lightenTo, stoneOf } from '../src/oklab.ts';
 
@@ -109,8 +109,22 @@ test('a hover the ink would not read on steps away from the ink instead', () => 
   assert.equal(dark, undefined);
 });
 
-test('every preset keeps the stylesheet hover on both ramps', () => {
-  for (const a of ACCENTS) assert.deepEqual(accentHovers(a.hex), { light: undefined, dark: undefined }, a.name);
+test('a light accent on the dark ramp, which the step toward the text would barely move, steps toward its ink', () => {
+  const { light, dark } = accentHovers('#FCC419');
+  assert.equal(light, undefined);
+  assert.ok(dark);
+  assert.ok(contrastRatio('#FCC419', dark) >= MIN_HOVER_STEP);
+  assert.ok(contrastRatio(contrastOn('#FCC419'), dark) >= MIN_TEXT_CONTRAST);
+});
+
+test('every preset hovers a visible step on both ramps and keeps its ink', () => {
+  for (const a of ACCENTS) {
+    for (const hover of Object.values(accentHovers(a.hex))) {
+      if (hover === undefined) continue;
+      assert.ok(contrastRatio(a.hex, hover) >= MIN_HOVER_STEP, a.name);
+      assert.ok(contrastRatio(contrastOn(a.hex), hover) >= MIN_TEXT_CONTRAST, a.name);
+    }
+  }
 });
 
 test('every preset keeps its stylesheet ink on both ramps', () => {

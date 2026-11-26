@@ -3794,14 +3794,18 @@ test.describe("ConnectionRow", () => {
       for (const label of ["Share", "Mount", "Test", "Edit", "Remove"]) {
         const b = button(page, "Media share", label);
         const fill = () => b.evaluate((e) => getComputedStyle(e).backgroundColor);
-        const lit = await b.evaluate((e) => {
-          const probe = e.appendChild(document.createElement("span"));
-          probe.style.backgroundColor = "var(--hover)";
-          const c = getComputedStyle(probe).backgroundColor;
-          probe.remove();
-          return c;
-        });
+        // What rests on surface3 lights one step further than the hover.
+        const [hover, raised, surface3] = await b.evaluate((e) =>
+          ["var(--hover)", "var(--hover-raised)", "var(--stone-surface3)"].map((v) => {
+            const probe = e.appendChild(document.createElement("span"));
+            probe.style.backgroundColor = v;
+            const c = getComputedStyle(probe).backgroundColor;
+            probe.remove();
+            return c;
+          }),
+        );
         const rest = await fill();
+        const lit = rest === surface3 ? raised : hover;
         const look = `${label} in ${scheme}${oled ? " OLED" : ""}`;
         expect(rest, look).not.toBe(ground);
         await b.hover();

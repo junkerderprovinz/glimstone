@@ -108,6 +108,9 @@
   /* The accent's hover (rule 21): hover:bg-hover on anything the pointer can
      reach, a button, a row, a menu entry or a tile. */
   --color-hover: var(--hover);
+
+  /* The hover of a control that rests on surface3: hover:bg-hoverRaised. */
+  --color-hoverRaised: var(--hover-raised);
 }
 /* tokens:theme end */
 

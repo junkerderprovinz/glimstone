@@ -139,23 +139,32 @@ export function accentInks(hex: string): { light: string | undefined; dark: stri
 // The hover's step, color-mix(accent 85%, text) in tokens.css.
 const HOVER_STEP = 0.15;
 
+/** The least contrast between a control's resting fill and its hovered one, so a hover always shows. */
+export const MIN_HOVER_STEP = 1.08;
+
 /**
  * The hover of an accent fill on each ramp, where the stylesheet's step toward
- * the text colour would take the fill's ink under 4.5:1. That happens on the
- * mid-tones, where the ink only just clears the fill: a grey such as #777777
- * carries a black ink, and on the light ramp its hover darkens toward that
- * black. The hover then takes the same step away from the ink instead, which
- * only adds contrast. Undefined means the stylesheet's step holds, as it does
- * for every preset.
+ * the text colour would take the fill's ink under 4.5:1 or barely move the
+ * fill. The first happens on the mid-tones, where the ink only just clears the
+ * fill: a grey such as #777777 carries a black ink, and on the light ramp its
+ * hover darkens toward that black. The second happens where the accent is
+ * already close to the text colour, as a light accent is on the dark ramp. The
+ * hover then takes the same step away from the ink, or toward it where that
+ * moves the fill too little, keeping the ink at 4.5:1. Undefined means the
+ * stylesheet's step holds.
  */
 export function accentHovers(hex: string): { light: string | undefined; dark: string | undefined } {
   if (!validHex(hex)) return { light: undefined, dark: undefined };
   const fill = rgb(hex);
   const ink = rgb(contrastOn(hex));
   const away = luminance(ink) > luminance(fill) ? rgb(BLACK) : rgb(WHITE);
+  const step = (to: Rgb) => mix(fill, to, HOVER_STEP).map(Math.round) as Rgb;
+  const reads = (c: Rgb) => ratio(ink, c) >= MIN_TEXT_CONTRAST;
+  const shows = (c: Rgb) => ratio(fill, c) >= MIN_HOVER_STEP;
   const hover = (text: string) => {
-    const toward = mix(fill, rgb(text), HOVER_STEP).map(Math.round) as Rgb;
-    return ratio(ink, toward) >= MIN_TEXT_CONTRAST ? undefined : hexOf(mix(fill, away, HOVER_STEP));
+    if (reads(step(rgb(text))) && shows(step(rgb(text)))) return undefined;
+    const steps = [step(away), step(ink)].filter(reads);
+    return hexOf(steps.find(shows) ?? steps[0] ?? step(away));
   };
   return { light: hover(stoneOf(hex, ...STONE.lightText)), dark: hover(stoneOf(hex, ...STONE.darkText)) };
 }
