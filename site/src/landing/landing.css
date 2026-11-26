@@ -12,7 +12,7 @@
   --accent-glyph: var(--accent-ink);
   --btn-tint: var(--accent-ink);
   --focus-ring: var(--accent-ink);
-  --accent-hover: color-mix(in srgb, var(--accent) 85%, var(--carbon-text));
+  --accent-hover: color-mix(in srgb, var(--accent) 85%, var(--stone-text));
 }
 
 .la {
@@ -26,13 +26,13 @@
   max-width: 124rem;
   margin: 0 auto;
   padding-inline: var(--la-gutter);
-  color: var(--carbon-text);
+  color: var(--stone-text);
   caret-color: var(--accent-ink);
   overflow-x: clip;
 }
-.la ::selection { background: color-mix(in oklab, var(--accent) 36%, transparent); color: var(--carbon-text); }
+.la ::selection { background: color-mix(in oklab, var(--accent) 36%, transparent); color: var(--stone-text); }
 html:has(.la) {
-  scrollbar-color: color-mix(in oklab, var(--carbon-text) 24%, transparent) var(--carbon-bg);
+  scrollbar-color: color-mix(in oklab, var(--stone-text) 24%, transparent) var(--stone-ground);
   scrollbar-width: thin;
 }
 .la :is(a, button):focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 3px; }
@@ -77,7 +77,7 @@ html:has(.la) {
   text-wrap: balance;
 }
 .la-line { display: block; }
-.la-line--quiet { color: var(--carbon-text-muted); }
+.la-line--quiet { color: var(--stone-text-muted); }
 .la-hot { color: var(--accent-ink); }
 
 .la-track {
@@ -239,7 +239,7 @@ html:has(.la) {
   overflow: hidden;
   container-type: inline-size;
   border-radius: calc(var(--radius-card) + 0.5rem);
-  background: light-dark(var(--carbon-surface2), var(--carbon-sidebar));
+  background: light-dark(var(--stone-surface2), var(--stone-sidebar));
   /* No outline: the window stands off the page by its lit top edge and a
      shadow that grows longer on the side that leans away. */
   box-shadow:
@@ -269,7 +269,7 @@ html:has(.la) {
   padding-inline: 1.125rem;
   /* A full step off the window body, lighter in the dark and darker in the
      light, so the bar reads as its own strip without a line under it. */
-  background: light-dark(var(--carbon-surface3), color-mix(in oklab, var(--carbon-surface2) 75%, var(--carbon-sidebar)));
+  background: light-dark(var(--stone-surface3), color-mix(in oklab, var(--stone-surface2) 75%, var(--stone-sidebar)));
   box-shadow: inset 0 1px 0 0 light-dark(rgb(255 255 255 / 0.6), rgb(255 255 255 / 0.08)), 0 1px 3px light-dark(rgb(0 0 0 / 0.06), rgb(0 0 0 / 0.35));
   position: relative;
   z-index: 1;
@@ -278,7 +278,7 @@ html:has(.la) {
 }
 .la-window-app { font-weight: 600; }
 /* The bar is a step darker than the window, too dark for muted ink in the light theme. */
-.la-window-where { color: var(--carbon-text-sub); }
+.la-window-where { color: var(--stone-text-sub); }
 .la-window-where::before { content: "/"; margin-inline-end: 0.625rem; opacity: 0.5; }
 .la-window-body {
   position: relative;
@@ -325,7 +325,7 @@ html:has(.la) {
   transition: transform 300ms var(--la-ease), box-shadow 300ms ease;
 }
 .la-swatch:hover { transform: scale(1.12); }
-.la-swatch[aria-checked="true"] { box-shadow: 0 0 0 2px var(--carbon-surface), 0 0 0 3.5px var(--carbon-text); }
+.la-swatch[aria-checked="true"] { box-shadow: 0 0 0 2px var(--stone-surface), 0 0 0 3.5px var(--stone-text); }
 .la-swatch:focus-visible { outline-offset: 4px; }
 
 .la-window-toast {
@@ -384,11 +384,11 @@ html:has(.la) {
   padding: 0 0.25rem;
   list-style: none;
   font-size: var(--text-subline);
-  color: var(--carbon-text-muted);
+  color: var(--stone-text-muted);
 }
 .la-rail li { display: grid; gap: 0.5rem; transition: color 400ms ease; }
-.la-rail li.is-on { color: var(--carbon-text); }
-.la-rail-bar { position: relative; height: 2px; overflow: hidden; border-radius: 2px; background: var(--carbon-surface3); }
+.la-rail li.is-on { color: var(--stone-text); }
+.la-rail-bar { position: relative; height: 2px; overflow: hidden; border-radius: 2px; background: var(--stone-surface3); }
 .la-rail-bar::after {
   content: "";
   position: absolute;
@@ -406,7 +406,7 @@ html:has(.la) {
   margin: 0 0 2.25rem;
   font-size: clamp(1.125rem, 0.95rem + 0.4vw, 1.375rem);
   line-height: 1.55;
-  color: var(--carbon-text-sub);
+  color: var(--stone-text-sub);
   text-wrap: pretty;
 }
 .la-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
@@ -418,7 +418,7 @@ html:has(.la) {
   margin: 3rem 0 0;
   font-size: var(--text-subline);
   line-height: 1.5;
-  color: var(--carbon-text-muted);
+  color: var(--stone-text-muted);
 }
 .la-hint svg { flex: none; margin-top: 0.125rem; color: var(--accent-ink); }
 
@@ -444,7 +444,7 @@ html:has(.la) {
   margin: 0;
   font-size: clamp(1.125rem, 0.95rem + 0.4vw, 1.375rem);
   line-height: 1.5;
-  color: var(--carbon-text-sub);
+  color: var(--stone-text-sub);
   text-wrap: pretty;
 }
 
@@ -457,7 +457,7 @@ html:has(.la) {
   transform: scale(0.5);
   transition: opacity 400ms ease, transform 600ms var(--la-ease), box-shadow 400ms ease;
 }
-.la-hues span.is-on { transform: scale(1.1); box-shadow: 0 0 0 3px var(--carbon-bg), 0 0 0 4.5px var(--carbon-text-muted); }
+.la-hues span.is-on { transform: scale(1.1); box-shadow: 0 0 0 3px var(--stone-ground), 0 0 0 4.5px var(--stone-text-muted); }
 .la-hue-name { margin: 1rem 0 0; font-size: 1.125rem; font-weight: 600; }
 
 /* A magnified corner after the word, drawn with the radius of the step. */
@@ -484,10 +484,10 @@ html:has(.la) {
   padding: 0;
   list-style: none;
   font-size: 1.125rem;
-  color: var(--carbon-text-muted);
+  color: var(--stone-text-muted);
 }
 .la-readout li { display: inline-flex; align-items: center; gap: 0.5rem; transition: color 400ms ease; }
-.la-readout li.is-on { color: var(--carbon-text); font-weight: 600; }
+.la-readout li.is-on { color: var(--stone-text); font-weight: 600; }
 .la-readout li.is-on svg { color: var(--accent-ink); }
 
 .la-letters { display: inline-block; }
@@ -528,11 +528,11 @@ html:has(.la) {
   align-items: center;
   gap: clamp(1rem, 2.4vw, 2.5rem);
   padding-block: clamp(0.875rem, 2vw, 1.875rem);
-  color: var(--carbon-text-muted);
+  color: var(--stone-text-muted);
   text-decoration: none;
   transition: color 350ms ease;
 }
-.la-fw:hover, .la-fw:focus-visible { color: var(--carbon-text); }
+.la-fw:hover, .la-fw:focus-visible { color: var(--stone-text); }
 .la-fw-name {
   font-size: clamp(2.75rem, 1rem + 6.4vw, 8.25rem);
   font-weight: 620;
@@ -544,7 +544,7 @@ html:has(.la) {
 .la-fw-mark { display: grid; place-items: center; width: clamp(2rem, 3.6vw, 3.75rem); opacity: 0.55; filter: grayscale(1); transition: opacity 350ms ease, filter 350ms ease; }
 .la-fw-mark .fw-mark, .la-fw-mark svg { display: block; width: 100%; height: auto; }
 .la-fw:hover .la-fw-mark { opacity: 1; filter: none; }
-.la-fw-pkg { font-family: ui-monospace, "Cascadia Code", Menlo, Consolas, monospace; font-size: var(--text-body); color: var(--carbon-text-sub); }
+.la-fw-pkg { font-family: ui-monospace, "Cascadia Code", Menlo, Consolas, monospace; font-size: var(--text-body); color: var(--stone-text-sub); }
 .la-fw-go { display: grid; color: var(--accent-ink); opacity: 0; transform: translateX(-0.5rem); transition: opacity 300ms ease, transform 500ms var(--la-ease); }
 .la-fw:hover .la-fw-go, .la-fw:focus-visible .la-fw-go { opacity: 1; transform: none; }
 
@@ -556,11 +556,11 @@ html:has(.la) {
   font-weight: 520;
   line-height: 1.16;
   letter-spacing: -0.03em;
-  color: var(--carbon-text-muted);
+  color: var(--stone-text-muted);
   text-wrap: pretty;
 }
 .la-statement a {
-  color: var(--carbon-text);
+  color: var(--stone-text);
   text-decoration: underline;
   text-decoration-thickness: 0.055em;
   text-underline-offset: 0.14em;
@@ -579,10 +579,10 @@ html:has(.la) {
   margin: clamp(6rem, 14vh, 10rem) 0 0;
   padding-top: 1.5rem;
   font-size: var(--text-meta);
-  color: var(--carbon-text-muted);
+  color: var(--stone-text-muted);
 }
 .la-foot a { display: inline-flex; align-items: center; gap: 0.5rem; color: inherit; text-decoration: none; }
-.la-foot a:hover { color: var(--carbon-text); }
+.la-foot a:hover { color: var(--stone-text); }
 
 /* On a phone the window rides along at the top, the copy pins below it, and
    the stone sits small on the window's corner. */
@@ -598,7 +598,7 @@ html:has(.la) {
     z-index: 3;
     margin-inline: calc(-1 * var(--la-gutter));
     padding: 0.5rem var(--la-gutter) 0.75rem;
-    background: var(--carbon-bg);
+    background: var(--stone-ground);
   }
   .la-stage-pin { position: static; }
   .la-gem { right: 0.5rem; }
