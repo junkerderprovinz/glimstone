@@ -38,6 +38,7 @@ export * from "./infoTile.ts";
 export * from "./versionCards.ts";
 export * from "./inputModality.ts";
 export * from "./listModel.ts";
+export * from "./listRow.ts";
 export * from "./marks.ts";
 export * from "./marquee.ts";
 export * from "./media.ts";

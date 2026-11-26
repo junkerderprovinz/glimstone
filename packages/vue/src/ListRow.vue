@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { computed, useAttrs } from "vue";
+import { listRowStatus, type ListRowStatus } from "@glimstone/core";
 import InfoBubble from "./InfoBubble.vue";
+import { MarkSvg } from "./glyphs";
 
 // One row of a list: a glyph tile, the name, badges and buttons that come in on
-// hover and focus (rule 6), in the slots `tile`, `badges` and `actions`. A click
+// hover and focus (rule 6), in the slots `tile`, `badges` and `actions`, and the
+// row's figure in the slot `value`, a column of fixed width at its end. A click
 // listener makes the whole row a way into its object, by keyboard too.
 const props = defineProps<{
   name: string;
@@ -15,7 +18,11 @@ const props = defineProps<{
   meta?: string;
   /** Keeps the buttons in view at rest, for a short list of the person's own things, where each row's buttons are the point. */
   steady?: boolean;
+  /** A row that differs from the rest, as a mark in the state colour with
+   *  neutral words. The normal case passes nothing and stays quiet. */
+  status?: ListRowStatus;
 }>();
+const mark = computed(() => (props.status ? listRowStatus(props.status.tone).mark : undefined));
 const attrs = useAttrs();
 const opens = computed(() => !!attrs.onClick);
 const nameClass = computed(() => ["glim-list-row-name", { "glim-list-row-name--mono": props.mono }]);
@@ -49,6 +56,12 @@ function press(e: KeyboardEvent) {
       <span v-if="tip" class="glim-list-row-tip" @click.stop><InfoBubble :tip="tip" /></span>
     </span>
     <span v-if="$slots.badges" class="glim-list-row-badges"><slot name="badges" /></span>
+    <span v-if="status" class="glim-list-row-status" :data-tone="status.tone">
+      <MarkSvg v-if="mark" :mark="mark" class="glim-status-mark" />
+      <span v-else class="glim-status-dot" aria-hidden="true" />
+      <span>{{ status.label }}</span>
+    </span>
+    <span v-if="$slots.value" class="glim-list-row-value"><slot name="value" /></span>
     <span v-if="$slots.actions" class="glim-list-row-actions" @click.stop><slot name="actions" /></span>
   </div>
 </template>

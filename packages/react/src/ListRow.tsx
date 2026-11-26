@@ -1,5 +1,9 @@
 import type { HTMLAttributes, KeyboardEvent, MouseEvent, ReactNode } from "react";
+import { listRowStatus, type ListRowStatus } from "@glimstone/core";
 import { InfoBubble } from "./InfoBubble.tsx";
+import { MarkSvg } from "./glyphs.tsx";
+
+export type { ListRowStatus } from "@glimstone/core";
 
 // One row of a list: a glyph tile, the name, badges and buttons that come in on
 // hover and focus (rule 6). A click handler makes the whole row a way into its
@@ -19,6 +23,13 @@ export interface ListRowProps extends Omit<HTMLAttributes<HTMLDivElement>, "chil
   tile?: ReactNode;
   /** What stands at the row's end at rest. */
   badges?: ReactNode;
+  /** A row that differs from the rest, as a mark in the state colour with
+   *  neutral words, in its own place before the value. The normal case passes
+   *  nothing and stays quiet. */
+  status?: ListRowStatus;
+  /** The row's figure, such as a size, in a column of fixed width at its end,
+   *  so a status beside it moves nothing. A unit in <small> stands quieter. */
+  value?: ReactNode;
   /** The buttons that come in on hover and focus. A press on one does not open the row. */
   actions?: ReactNode;
   className?: string;
@@ -26,7 +37,7 @@ export interface ListRowProps extends Omit<HTMLAttributes<HTMLDivElement>, "chil
 
 const stay = (e: MouseEvent) => e.stopPropagation();
 
-export function ListRow({ name, tip, mono, meta, steady, tile, badges, actions, className, onClick, onKeyDown, ...rest }: ListRowProps) {
+export function ListRow({ name, tip, mono, meta, steady, tile, badges, status, value, actions, className, onClick, onKeyDown, ...rest }: ListRowProps) {
   function keys(e: KeyboardEvent<HTMLDivElement>) {
     onKeyDown?.(e);
     if (!onClick || e.target !== e.currentTarget || (e.key !== "Enter" && e.key !== " ")) return;
@@ -56,6 +67,13 @@ export function ListRow({ name, tip, mono, meta, steady, tile, badges, actions, 
         nameLine
       )}
       {badges && <span className="glim-list-row-badges">{badges}</span>}
+      {status && (
+        <span className="glim-list-row-status" data-tone={status.tone}>
+          {listRowStatus(status.tone).mark ? <MarkSvg mark={listRowStatus(status.tone).mark!} className="glim-status-mark" /> : <span className="glim-status-dot" aria-hidden="true" />}
+          <span>{status.label}</span>
+        </span>
+      )}
+      {value !== undefined && <span className="glim-list-row-value">{value}</span>}
       {actions && (
         <span className="glim-list-row-actions" onClick={stay}>
           {actions}

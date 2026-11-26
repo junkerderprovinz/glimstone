@@ -5941,6 +5941,56 @@
     justify-content: flex-end;
     gap: var(--space-3);
   }
+  /* A status gets its own place before the value, and the value a column of
+     fixed width at the row's end, so a "Failed" beside one row moves no
+     figure. The figure stands free in body ink, its unit a step smaller and
+     quieter. */
+  .glim-list-row {
+    --list-value-w: 4.5rem;
+  }
+  .glim-list-row-status {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--carbon-text-sub);
+    font-size: var(--text-subline);
+    white-space: nowrap;
+  }
+  .glim-status-dot {
+    flex: none;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--status-ok-solid);
+  }
+  .glim-status-mark {
+    flex: none;
+    width: var(--glyph-s);
+    height: var(--glyph-s);
+  }
+  .glim-list-row-status[data-tone="warn"] > .glim-status-mark { color: var(--status-warn-solid); }
+  .glim-list-row-status[data-tone="fail"] > .glim-status-mark { color: var(--status-fail-solid); }
+  .glim-list-row-value {
+    flex: none;
+    width: var(--list-value-w);
+    color: var(--carbon-text);
+    font-size: var(--text-subline);
+    font-variant-numeric: tabular-nums lining-nums;
+    text-align: end;
+    white-space: nowrap;
+  }
+  .glim-pill.glim-num {
+    height: auto;
+    padding: 0;
+    background: none;
+    color: var(--carbon-text);
+    font-size: var(--text-subline);
+  }
+  :is(.glim-list-row-value, .glim-pill.glim-num) small {
+    color: var(--carbon-text-muted);
+    font-size: var(--text-meta);
+  }
   .glim-list-row-actions {
     display: flex;
     flex: none;
@@ -5997,6 +6047,7 @@
   .glim-list-row { container: list-row / inline-size; }
   @container list-row (max-width: 30rem) {
     .glim-list-row-badges { display: none; }
+    .glim-list-row-status > :not(.glim-status-dot, .glim-status-mark) { display: none; }
   }
 
   /* A connected service or account (ConnectionRow): a flat group on the well's

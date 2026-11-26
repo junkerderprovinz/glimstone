@@ -351,6 +351,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "list-row-ellipsis", when: "The name is too long", then: "It ends in an ellipsis and the row keeps its height." },
       { id: "list-row-steady", when: "The row has a quiet line and steady", then: "The line stands under the name, and the buttons stay in view, dropping under the name on a narrow screen." },
       { id: "list-row-narrow", when: "The window is narrower than 600px", then: "The badges go and the name keeps the room." },
+      { id: "list-row-value", when: "Rows carry a value and one of them a status", then: "The figures end in one column whatever stands beside them, the unit a step smaller and quieter, and only the row that differs shows a status, as a mark in its state colour with neutral words." },
     ],
   },
   ConnectionRow: {
