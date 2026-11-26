@@ -33,6 +33,8 @@ import {
   ListTable,
   MenuBar,
   Meter,
+  Chart,
+  Sparkline,
   NumberField,
   PasswordField,
   PathField,
@@ -1582,6 +1584,19 @@ function MeterDemo() {
   );
 }
 
+function ChartDemo() {
+  const t = useT();
+  const days = [t("Mon", "Mo"), t("Tue", "Di"), t("Wed", "Mi"), t("Thu", "Do")].map((day, i) => ({ day, runs: [4, 6, 5, 8][i]! }));
+  return (
+    <div style={{ display: "grid", gap: 12, width: "100%", maxWidth: 320 }}>
+      <Chart label={t("Backups per day", "Sicherungen pro Tag")} data={days} x="day" series={[{ key: "runs", label: t("Backups", "Sicherungen") }]} height={140} />
+      <span style={row}>
+        {t("Last runs", "Letzte Läufe")} <Sparkline label={t("Minutes per run", "Minuten pro Lauf")} values={[4, 6, 5, 8, 7]} />
+      </span>
+    </div>
+  );
+}
+
 function InfoBubbleDemo() {
   const t = useT();
   const [on, setOn] = useState(true);
@@ -1826,6 +1841,7 @@ export const DEMOS: Record<string, ComponentType> = {
   shake: ShakeDemo,
   "progress-bar": ProgressDemo,
   meter: MeterDemo,
+  chart: ChartDemo,
   "info-bubble": InfoBubbleDemo,
   bubble: BubbleDemo,
   notice: NoticeDemo,

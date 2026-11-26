@@ -1114,6 +1114,18 @@ export const GLOSSARY: GlossarySection[] = [
         },
       },
       {
+        id: "chart",
+        en: "Chart",
+        de: "Diagramm",
+        code: ["Chart", "ChartLegend", "Sparkline", ".glim-chart"],
+        components: ["Chart", "ChartLegend", "Sparkline"],
+        rules: [50],
+        text: {
+          en: "Draws bars, lines or areas on the frame every chart shares: grid lines across only, quiet ticks, a band and a tooltip under the pointer, and a legend. Sparkline is the small line beside a figure.",
+          de: "Zeichnet Balken, Linien oder Flächen im Rahmen, den alle Diagramme teilen: Rasterlinien nur waagrecht, leise Achsenwerte, unter dem Zeiger ein Band mit Tooltip und eine Legende. Sparkline ist die kleine Linie neben einer Zahl.",
+        },
+      },
+      {
         id: "info-bubble",
         en: "Info bubble",
         de: "Infoblase",
