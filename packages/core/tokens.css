@@ -4949,7 +4949,8 @@
     padding-inline: var(--space-2);
   }
   /* A page with nothing on it yet still says what it will hold. */
-  .glim-sel-tile--dim { opacity: 0.55; }
+  /* Its glyph steps back, its words stay readable. */
+  .glim-sel-tile--dim:not(.glim-active) > svg { color: var(--carbon-text-muted); }
   /* A long name breaks onto a balanced second line and is clamped there. The
      clip reaches 3px past the box for the marks Arabic and Devanagari set
      outside the line. */

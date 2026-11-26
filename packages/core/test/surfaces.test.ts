@@ -118,3 +118,13 @@ test('a tooltip is small and inverted, an info bubble roomy on the floating surf
   assert.equal(declared('.glim-bubble--info', 'font-size'), 'var(--text-subline)');
   assert.equal(declared('.glim-bubble', 'background-color'), 'var(--surface-overlay)');
 });
+
+test('a dim selector tile keeps its words readable: only its glyph steps back, nothing turns see-through', () => {
+  assert.equal(declared('.glim-sel-tile--dim', 'opacity'), '');
+  assert.equal(declared('.glim-sel-tile--dim:not(.glim-active) > svg', 'color'), 'var(--carbon-text-muted)');
+});
+
+test('the fortress card falls back to the secondary text ink outside a host theme', () => {
+  const card = readFileSync(new URL('../vanilla/fortress-card.css', import.meta.url), 'utf8');
+  assert.match(card, /--fc-dim: var\(--alt-text-color, var\(--carbon-text-sub, #8d8d8d\)\);/);
+});
