@@ -126,7 +126,7 @@ test.describe("Form motion", () => {
     const locked = await stage(page, "CheckboxBasic").getByRole("checkbox", { name: "Name, always shown" }).evaluate((b) => {
       const box = b.querySelector(".glim-checkbox-box")!;
       const probe = document.createElement("span");
-      probe.style.color = "var(--carbon-text-muted)";
+      probe.style.color = "var(--stone-text-muted)";
       b.append(probe);
       const muted = getComputedStyle(probe).color;
       probe.remove();

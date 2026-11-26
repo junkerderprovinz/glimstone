@@ -9,5 +9,5 @@
     <span>Snapshots to keep</span>
     <NumberField min={1} max={30} bind:value={keep} />
   </label>
-  <p style="margin: 0; color: var(--carbon-text-sub); font-size: 13px">Keeps {keep} snapshots.</p>
+  <p style="margin: 0; color: var(--stone-text-sub); font-size: 13px">Keeps {keep} snapshots.</p>
 </div>

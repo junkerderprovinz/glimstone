@@ -198,5 +198,5 @@ test('a strip that picks one value draws its choice on a thumb that glides', () 
   assert.match(css, /\.glim-sel-thumb \{[^}]*position: absolute;[^}]*background-color: var\(--accent\);/);
   assert.match(css, /\.glim-sel-thumb\[data-placed\] \{[^}]*transition: translate var\(--motion-page-dur\) var\(--motion-spring\)/);
   assert.match(css, /\.glim-sel:has\(> \.glim-sel-thumb\[data-placed\]\) \.glim-sel-seg\.glim-active \{[^}]*background-color: transparent;/);
-  assert.match(css, /\.glim-sel--chip:has\(> \.glim-sel-thumb\) \{[^}]*background-color: var\(--carbon-surface3\);/);
+  assert.match(css, /\.glim-sel--chip:has\(> \.glim-sel-thumb\) \{[^}]*background-color: var\(--stone-surface3\);/);
 });

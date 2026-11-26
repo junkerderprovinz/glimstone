@@ -104,7 +104,7 @@ class _GlimSwitchState extends State<GlimSwitch> {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (!widget.hideLabel) ...[
-              Text(widget.label, style: TextStyle(color: glim.carbonText, fontSize: GlimMetrics.textBody, height: 20 / 14)),
+              Text(widget.label, style: TextStyle(color: glim.stoneText, fontSize: GlimMetrics.textBody, height: 20 / 14)),
               const SizedBox(width: 8),
             ],
             FocusableActionDetector(

@@ -32,7 +32,7 @@ const plain = bare.replace(MORE_BLOCK, '');
 // Every block declared wherever a theme is set: the palette, the hover steps and
 // the elevation.
 const themed = Object.assign({}, ...[...plain.matchAll(/:root,\s*\[data-theme\] \{([^}]*)\}/g)].map(([, body]) => props(body!))) as Record<string, string>;
-const oledBlock = block('[data-oled]', '--carbon-bg');
+const oledBlock = block('[data-oled]', '--stone-ground');
 
 // The hover tints, declared again inside a rainbow position so they take its hue.
 const hoverBlock = block(':root,\n[data-theme],\n[data-rainbow] .glim-hue', '--hover');
@@ -52,14 +52,14 @@ const THEMES: Record<string, Record<string, string>> = {
 // On the contrast step the text that carries meaning reaches AAA on the page
 // and on a card.
 const AAA = 7;
-const MORE_TEXT = ['--carbon-text', '--carbon-text-sub', '--carbon-text-muted', '--accent-ink', '--field-placeholder'];
+const MORE_TEXT = ['--stone-text', '--stone-text-sub', '--stone-text-muted', '--accent-ink', '--field-placeholder'];
 
 // A ring stands on the ground around a control: the page, the rail, a card, a
 // well, or a row's hover fill when the ring is drawn inside the row.
-const RING_GROUNDS = ['--carbon-bg', '--carbon-sidebar', '--carbon-surface', '--carbon-surface2', '--carbon-hover', '--surface-overlay'];
+const RING_GROUNDS = ['--stone-ground', '--stone-sidebar', '--stone-surface', '--stone-surface2', '--hover', '--surface-overlay'];
 // A field is filled with surface2 on a card and with surface3 in a well or a
 // sub-card.
-const FIELD_GROUNDS = ['--carbon-surface', '--carbon-surface2', '--carbon-surface3'];
+const FIELD_GROUNDS = ['--stone-surface', '--stone-surface2', '--stone-surface3'];
 
 const MIN_GRAPHIC_CONTRAST = 3;
 
@@ -233,29 +233,29 @@ const RULE_PAIRS = [
 
 // Text that stands on a ground rather than a fill of its own.
 const GROUND_PAIRS: [string, string][] = [
-  ...['--carbon-bg', '--carbon-surface', '--carbon-surface2', '--carbon-surface3'].flatMap((g) => [
-    ['--carbon-text', g] as [string, string],
-    ['--carbon-text-sub', g] as [string, string],
+  ...['--stone-ground', '--stone-surface', '--stone-surface2', '--stone-surface3'].flatMap((g) => [
+    ['--stone-text', g] as [string, string],
+    ['--stone-text-sub', g] as [string, string],
   ]),
-  ['--carbon-text-muted', '--carbon-bg'],
-  ['--carbon-text-muted', '--carbon-surface'],
-  ['--sidebar-text', '--carbon-sidebar'],
-  ['--accent-ink', '--carbon-bg'],
-  ['--accent-ink', '--carbon-sidebar'],
-  ['--accent-ink', '--carbon-surface'],
-  ['--accent-ink', '--carbon-surface2'],
-  ...['--carbon-text', '--carbon-text-sub', '--carbon-text-muted', '--accent-ink'].map((ink) => [ink, '--surface-overlay'] as [string, string]),
+  ['--stone-text-muted', '--stone-ground'],
+  ['--stone-text-muted', '--stone-surface'],
+  ['--sidebar-text', '--stone-sidebar'],
+  ['--accent-ink', '--stone-ground'],
+  ['--accent-ink', '--stone-sidebar'],
+  ['--accent-ink', '--stone-surface'],
+  ['--accent-ink', '--stone-surface2'],
+  ...['--stone-text', '--stone-text-sub', '--stone-text-muted', '--accent-ink'].map((ink) => [ink, '--surface-overlay'] as [string, string]),
   ['--accent-contrast', '--accent-hover'],
   ...['info', 'ok', 'fail', 'warn', 'neutral'].flatMap((s) => [
-    [`--status-${s}-text`, '--carbon-surface'] as [string, string],
+    [`--status-${s}-text`, '--stone-surface'] as [string, string],
     [`--status-${s}-text`, `--status-${s}-bg`] as [string, string],
   ]),
   ...FIELD_GROUNDS.map((g) => ['--field-placeholder', g] as [string, string]),
   ...['ok', 'fail', 'warn'].map((s) => [`--status-${s}-text`, `--status-${s}-wash-hover`] as [string, string]),
-  ['--carbon-text', '--selection'],
-  ['--carbon-text-sub', '--selection'],
+  ['--stone-text', '--selection'],
+  ['--stone-text-sub', '--selection'],
   ...['--field-rest', '--field-hover', '--field-focus', '--field-invalid', '--field-invalid-focus'].flatMap((g) => [
-    ['--carbon-text', g] as [string, string],
+    ['--stone-text', g] as [string, string],
     ['--field-placeholder', g] as [string, string],
   ]),
 ];
@@ -266,7 +266,7 @@ test('the stylesheet sets text on its own fill in more than a dozen ways', () =>
 
 /** The ratio of `ink` on `fill`, a translucent fill laid over the card first. */
 function pairRatio(ink: string, fill: string, scope: Record<string, string>): number {
-  const card = resolve('var(--carbon-surface)', scope);
+  const card = resolve('var(--stone-surface)', scope);
   const ground = parse(over(resolve(`var(${fill})`, scope), card));
   return contrastRatio(over(resolve(`var(${ink})`, scope), ground), hex(ground));
 }
@@ -311,7 +311,7 @@ for (const [themeName, theme] of Object.entries(THEMES)) {
     for (const { name: accentName, hex: accent } of ACCENTS) {
       test(`the text ramp and the ink reach 7:1 on the page and a card for ${accentName} on ${themeName}`, () => {
         const scope = withAccent(theme, accent);
-        const misses = MORE_TEXT.flatMap((ink) => ['--carbon-bg', '--carbon-surface'].map((g) => [ink, g, pairRatio(ink, g, scope)] as const))
+        const misses = MORE_TEXT.flatMap((ink) => ['--stone-ground', '--stone-surface'].map((g) => [ink, g, pairRatio(ink, g, scope)] as const))
           .filter(([, , r]) => r < AAA)
           .map(([ink, g, r]) => `${ink} on ${g}: ${r.toFixed(2)}:1`);
         assert.deepEqual(misses, []);
@@ -319,7 +319,7 @@ for (const [themeName, theme] of Object.entries(THEMES)) {
     }
 
     test(`a border reads at 3:1 on the card and the page on ${themeName}`, () => {
-      for (const g of ['--carbon-bg', '--carbon-surface']) assert.ok(pairRatio('--carbon-border', g, theme) >= MIN_GRAPHIC_CONTRAST, g);
+      for (const g of ['--stone-ground', '--stone-surface']) assert.ok(pairRatio('--stone-border', g, theme) >= MIN_GRAPHIC_CONTRAST, g);
     });
   }
 
@@ -334,7 +334,7 @@ for (const [themeName, theme] of Object.entries(THEMES)) {
       }
       assert.equal(ring[3], 1, `position ${i} is opaque`);
       const glyph = resolve('var(--item-hue-glyph)', scope);
-      const card = resolve('var(--carbon-surface)', scope);
+      const card = resolve('var(--stone-surface)', scope);
       assert.ok(contrastRatio(hex(glyph), hex(card)) >= MIN_TEXT_CONTRAST, `position ${i} glyph on the card`);
     });
   });
@@ -357,8 +357,8 @@ test('data-contrast="more" asks for the same step as the system setting', () => 
 
 // The one ground anything takes under the pointer (rule 21): a small step darker than
 // surface3 in lightness, and the grounds it lifts an element off.
-const HOVER_STEP = '--carbon-surface3';
-const HOVER_GROUNDS = ['--carbon-surface', '--carbon-surface2', '--surface-overlay'] as const;
+const HOVER_STEP = '--stone-surface3';
+const HOVER_GROUNDS = ['--stone-surface', '--stone-surface2', '--surface-overlay'] as const;
 
 const chroma = ([, a, b]: Oklab) => Math.hypot(a, b);
 const hueGap = ([, a1, b1]: Oklab, [, a2, b2]: Oklab) => {
@@ -421,7 +421,7 @@ for (const [themeName, theme] of Object.entries(THEMES)) {
   test(`the text and the secondary text read at 4.5:1 on the hover for ${SWEEP.length} picked accents on ${themeName}`, () => {
     const misses = SWEEP.flatMap((accent) => {
       const scope = withAccent(theme, accent);
-      return ['--carbon-text', '--carbon-text-sub'].map((ink) => [ink, pairRatio(ink, '--hover', scope)] as const)
+      return ['--stone-text', '--stone-text-sub'].map((ink) => [ink, pairRatio(ink, '--hover', scope)] as const)
         .filter(([, r]) => r < MIN_TEXT_CONTRAST)
         .map(([ink, r]) => `${accent} ${ink}: ${r.toFixed(2)}:1`);
     });
@@ -440,8 +440,8 @@ for (const [themeName, theme] of Object.entries(THEMES)) {
 // The ground, the surfaces and the text ramp: OKLCH lightness steps that take
 // a faint tint in the accent's hue, never more chroma than a stone shows.
 const STONE = [
-  '--carbon-bg', '--carbon-sidebar', '--carbon-surface', '--carbon-surface2', '--carbon-surface3', '--carbon-hover',
-  '--carbon-hover-raised', '--carbon-border', '--toggle-off', '--carbon-text', '--carbon-text-sub', '--carbon-text-muted',
+  '--stone-ground', '--stone-sidebar', '--stone-surface', '--stone-surface2', '--stone-surface3', '--carbon-hover',
+  '--stone-hover-raised', '--stone-border', '--toggle-off', '--stone-text', '--stone-text-sub', '--stone-text-muted',
   '--sidebar-text', '--field-placeholder',
 ];
 const STONE_CHROMA = 0.011;
@@ -484,7 +484,7 @@ for (const [themeName, theme] of Object.entries(THEMES)) {
     const misses = ACCENTS.flatMap(({ name, hex: accent }) => {
       const scope = withAccent(theme, accent);
       const track = resolve('var(--toggle-off)', scope);
-      return ['--toggle-knob', '--carbon-surface']
+      return ['--toggle-knob', '--stone-surface']
         .map((g) => [g, contrastRatio(hex(track), hex(resolve(`var(${g})`, scope)))] as const)
         .filter(([, r]) => r < MIN_GRAPHIC_CONTRAST)
         .map(([g, r]) => `${name} ${g}: ${r.toFixed(2)}:1`);

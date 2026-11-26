@@ -1,7 +1,7 @@
 import { IconTipButton } from "@glimstone/solid";
 import { Glyph } from "../solid/glyph";
 
-const ROW = "inline-flex h-8 w-8 items-center justify-center rounded-pill text-carbon-textSub hover:bg-hover hover:text-carbon-text";
+const ROW = "inline-flex h-8 w-8 items-center justify-center rounded-pill text-stone-textSub hover:bg-hover hover:text-stone-text";
 
 export default function IconTipBasic() {
   return (

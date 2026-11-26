@@ -22,7 +22,7 @@ function Attr({ name }: { name: string }) {
   useLook();
   const value = document.documentElement.getAttribute(name) ?? "unset";
   return (
-    <span style={{ fontSize: 13, color: "var(--carbon-text-muted)" }}>
+    <span style={{ fontSize: 13, color: "var(--stone-text-muted)" }}>
       <code>
         {name}="{value}"
       </code>

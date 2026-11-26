@@ -27,7 +27,7 @@ export default function DropdownSelect() {
               type="button"
               role="option"
               aria-selected={z === zone()}
-              class="block w-full px-3 py-2 text-start text-sm text-carbon-text hover:bg-hover aria-selected:font-semibold"
+              class="block w-full px-3 py-2 text-start text-sm text-stone-text hover:bg-hover aria-selected:font-semibold"
               onClick={() => {
                 setZone(z);
                 setOpen(false);

@@ -50,13 +50,13 @@ function drop(e: DragEvent) {
           padding: '32px 16px',
           textAlign: 'center',
           background: over ? 'var(--accent-soft)' : undefined,
-          color: 'var(--carbon-text-sub)',
+          color: 'var(--stone-text-sub)',
         }"
         @dragover.prevent="over = true"
         @dragleave="over = false"
         @drop.prevent="drop"
       >
-        <span :style="{ color: over ? 'var(--accent-ink)' : 'var(--carbon-text-muted)' }">
+        <span :style="{ color: over ? 'var(--accent-ink)' : 'var(--stone-text-muted)' }">
           <Glyph name="IconUpload" :size="32" />
         </span>
         <span>Drop files here, or choose them</span>

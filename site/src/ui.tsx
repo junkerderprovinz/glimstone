@@ -280,7 +280,7 @@ export function PropsTable({ of }: { of: keyof typeof propsData }) {
             <td>
               <code>{p.values ?? p.type}</code>
             </td>
-            <td>{p.default ? <code>{p.default}</code> : <span style={{ color: "var(--carbon-text-muted)" }}>-</span>}</td>
+            <td>{p.default ? <code>{p.default}</code> : <span style={{ color: "var(--stone-text-muted)" }}>-</span>}</td>
             <td>{ticks(p.doc)}</td>
           </tr>
         ))}
@@ -300,7 +300,7 @@ export function SourceLink({ file }: { file: string }) {
   return (
     <a
       className="nav-link"
-      style={{ display: "inline-flex", padding: "0.25rem 0.625rem", background: "var(--carbon-surface2)" }}
+      style={{ display: "inline-flex", padding: "0.25rem 0.625rem", background: "var(--stone-surface2)" }}
       href={`https://github.com/junkerderprovinz/glimstone/blob/main/${repoPath(file)}`}
       target="_blank"
       rel="noreferrer"
@@ -397,7 +397,7 @@ export function ContractTable({ of }: { of: keyof typeof CONTRACTS }) {
             <tr key={r.id}>
               <td>
                 <span className="kbd-row">
-                  {r.keys ? r.keys.map((k) => <span key={k} className="kbd">{k}</span>) : <span style={{ color: "var(--carbon-text-muted)" }}>-</span>}
+                  {r.keys ? r.keys.map((k) => <span key={k} className="kbd">{k}</span>) : <span style={{ color: "var(--stone-text-muted)" }}>-</span>}
                 </span>
               </td>
               <td>{r.when}</td>

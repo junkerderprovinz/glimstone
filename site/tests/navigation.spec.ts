@@ -89,7 +89,7 @@ test.describe("Pagination", () => {
     const fill = await pageButton(page, 1).evaluate((el) => getComputedStyle(el).backgroundColor);
     expect(fill).toBe(await resolved(nav(page), "--accent"));
     const rest = await pageButton(page, 2).evaluate((el) => getComputedStyle(el).backgroundColor);
-    expect(rest).toBe(await resolved(nav(page), "--carbon-surface2"));
+    expect(rest).toBe(await resolved(nav(page), "--stone-surface2"));
   });
 
   test("[pagination-languages] in Arabic every component reads right to left, and the app's own word wins", async ({ page }) => {

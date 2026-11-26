@@ -166,7 +166,7 @@ for (const raw of dark.split("\n")) {
   }
   const t = line.match(/^(--[a-z0-9-]+):\s*([^;]+);/);
   if (t) {
-    if (/^--(carbon|accent|status|focus|field)/.test(t[1])) {
+    if (/^--(stone|accent|status|focus|field)/.test(t[1])) {
       tokens.push({ name: t[1], value: t[2], doc: comment });
     }
     comment = "";

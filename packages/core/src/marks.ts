@@ -165,7 +165,7 @@ export const MARKS = {
 // The toast's severity as filled shapes (design-language.md, "Icon glyphs"). The
 // mark inside each is painted in the card's own surface colour so it reads as a
 // cutout.
-const CUTOUT = 'fill="var(--carbon-surface, transparent)"';
+const CUTOUT = 'fill="var(--stone-surface, transparent)"';
 export const TOAST_MARKS = {
   success: {
     viewBox: "0 0 16 16",

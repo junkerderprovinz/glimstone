@@ -247,7 +247,7 @@ const duration = (v) => {
 
 const SIDES = ["light", "dark", "oled"];
 const theme = readFileSync(new URL("tokens.g.dart", out), "utf8");
-const fields = new Set([...theme.matchAll(/required this\.(\w+),/g)].map((m) => m[1]));
+const fields = new Set([...theme.matchAll(/^ {2}final Color\?? _?(\w+);/gm)].map((m) => m[1]));
 const themeGroups = Object.keys(groups).filter((id) => ext(groups[id]).theme);
 
 // The stone ramp: every step of GlimTheme that tokens.css tints by the accent.
@@ -269,7 +269,7 @@ const stoneSteps = themeGroups.flatMap((id) =>
         if (!literal) throw new Error(`${name} is neither a stone step nor a literal on ${side}`);
         return `const ${literal}`;
       });
-      return sides.some((s) => s?.startsWith("glimStone")) ? { name: camel(name), sides } : null;
+      return sides.some((s) => s?.startsWith("glimStone")) ? { name: camel(name), sides, deprecated: !!ext(token(id, name)).dart?.deprecated } : null;
     })
     .filter(Boolean),
 );
@@ -401,7 +401,7 @@ extension GlimStoneRamp on GlimTheme {
   /// relative oklch() of each step.
   GlimTheme stoneOn(Color accent) => switch (ramp) {
 ${SIDES.map(
-  (side, i) => `        GlimRamp.${side} => copyWith(\n${stoneSteps.map((s) => `            ${s.name}: ${s.sides[i]},`).join("\n")}\n          ),`,
+  (side, i) => `        GlimRamp.${side} => copyWith(\n${stoneSteps.map((s) => `${s.deprecated ? "            // ignore: deprecated_member_use_from_same_package\n" : ""}            ${s.name}: ${s.sides[i]},`).join("\n")}\n          ),`,
 ).join("\n")}
       };
 }

@@ -23,7 +23,7 @@ class GlimCard extends StatelessWidget {
     final glim = _glim(context);
     return DecoratedBox(
       decoration: GlimDecoration(
-        color: glim.carbonSurface,
+        color: glim.stoneSurface,
         shape: glimOutline(glim.shape, glim.shape.card),
         shadows: GlimEngines.lightingOf(context).raised,
       ),
@@ -44,7 +44,7 @@ class GlimWell extends StatelessWidget {
   Widget build(BuildContext context) {
     final glim = _glim(context);
     return DecoratedBox(
-      decoration: GlimDecoration(color: glim.carbonSurface2, shape: glimOutline(glim.shape, glim.shape.nested)),
+      decoration: GlimDecoration(color: glim.stoneSurface2, shape: glimOutline(glim.shape, glim.shape.nested)),
       child: Padding(padding: padding, child: child),
     );
   }

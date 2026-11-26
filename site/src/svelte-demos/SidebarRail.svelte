@@ -33,7 +33,7 @@
   aria-label="Main"
   style="display: flex; flex-direction: column; justify-content: space-between; gap: 24px; width: {mode.current === 'glyph'
     ? 'var(--rail-narrow)'
-    : '14rem'}; height: 300px; padding: 12px; border-radius: var(--radius-card); background: var(--carbon-sidebar)"
+    : '14rem'}; height: 300px; padding: 12px; border-radius: var(--radius-card); background: var(--stone-sidebar)"
 >
   <div style="display: flex; flex-direction: column; gap: 4px">
     {#each MAIN as r, i (r.id)}{@render row(r, i)}{/each}

@@ -14,16 +14,19 @@ extension GlimDerived on GlimTheme {
   /// the hover takes the same step away from the ink, as applyAccent does on
   /// the web.
   Color get accentHover {
-    final toward = Color.lerp(accent, carbonText, _hoverStep)!;
+    final toward = Color.lerp(accent, stoneText, _hoverStep)!;
     final ink = glimContrastOn(accent);
     if (_ratio(_rgb(ink), _rounded(_rgb(toward))) >= glimMinTextContrast) return toward;
     final away = _luminance(_rgb(ink)) > _luminance(_rgb(accent)) ? _black : _white;
     return _color(_mix(_rgb(accent), away, _hoverStep));
   }
 
-  Color get statusOkHover => Color.lerp(statusOkSolid, carbonText, _hoverStep)!;
-  Color get statusFailHover => Color.lerp(statusFailSolid, carbonText, _hoverStep)!;
-  Color get statusWarnHover => Color.lerp(statusWarnSolid, carbonText, _hoverStep)!;
+  @Deprecated('A state button is a wash: statusOkWash under statusOkText, hovering to statusOkWashHover. statusOkHover goes in 6.0.0.')
+  Color get statusOkHover => Color.lerp(statusOkSolid, stoneText, _hoverStep)!;
+  @Deprecated('A state button is a wash: statusFailWash under statusFailText, hovering to statusFailWashHover. statusFailHover goes in 6.0.0.')
+  Color get statusFailHover => Color.lerp(statusFailSolid, stoneText, _hoverStep)!;
+  @Deprecated('A state button is a wash: statusWarnWash under statusWarnText, hovering to statusWarnWashHover. statusWarnHover goes in 6.0.0.')
+  Color get statusWarnHover => Color.lerp(statusWarnSolid, stoneText, _hoverStep)!;
 
   /// The accent as text on the page's ground: moved in OKLab onto the ramp's
   /// lightness step, darker on a light ramp and lighter on a dark one, as
@@ -50,7 +53,7 @@ extension GlimDerived on GlimTheme {
   Color get focusRing => accentInk;
 
   /// The ground of whatever the pointer is over, a button, a row, a menu
-  /// entry or a tile: a small step darker than [carbonSurface3], in the
+  /// entry or a tile: a small step darker than [stoneSurface3], in the
   /// accent's hue, as `--hover`.
   Color get hover {
     final lab = _oklab(accent);
@@ -58,9 +61,9 @@ extension GlimDerived on GlimTheme {
   }
 
   /// The ramp this theme stands on, told apart by its ground.
-  GlimRamp get ramp => carbonBg == const Color(0xFF000000)
+  GlimRamp get ramp => stoneGround == const Color(0xFF000000)
       ? GlimRamp.oled
-      : carbonBg.computeLuminance() > 0.5
+      : stoneGround.computeLuminance() > 0.5
           ? GlimRamp.light
           : GlimRamp.dark;
 
@@ -218,18 +221,18 @@ ThemeData glimThemeData(
         fontWeight: weight,
         // A variable face takes its weight from the axis, not from the name.
         fontVariations: [FontVariation.weight(weight.value.toDouble())],
-        color: color ?? glim.carbonText,
+        color: color ?? glim.stoneText,
       );
   final body = type(GlimMetrics.textBody, GlimType.trackingBody, GlimType.regular);
   final noLine = OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(shape.control));
 
   return ThemeData(
     brightness: brightness,
-    scaffoldBackgroundColor: glim.carbonBg,
-    colorScheme: ColorScheme.fromSeed(seedColor: glim.accent, brightness: brightness, surface: glim.carbonSurface).copyWith(
+    scaffoldBackgroundColor: glim.stoneGround,
+    colorScheme: ColorScheme.fromSeed(seedColor: glim.accent, brightness: brightness, surface: glim.stoneSurface).copyWith(
       primary: glim.accent,
       onPrimary: glim.accentContrast,
-      onSurface: glim.carbonText,
+      onSurface: glim.stoneText,
       error: glim.statusFailText,
     ),
     fontFamily: glimFontFamily,
@@ -240,7 +243,7 @@ ThemeData glimThemeData(
       titleSmall: type(GlimMetrics.textBody, GlimType.trackingBody, GlimType.medium),
       bodyLarge: body,
       bodyMedium: body,
-      bodySmall: type(GlimMetrics.textSubline, GlimType.trackingSubline, GlimType.regular, glim.carbonTextSub),
+      bodySmall: type(GlimMetrics.textSubline, GlimType.trackingSubline, GlimType.regular, glim.stoneTextSub),
       labelLarge: type(GlimMetrics.textBody, GlimType.trackingBody, GlimType.medium),
       labelMedium: type(GlimMetrics.textSubline, GlimType.trackingSubline, GlimType.medium),
       labelSmall: type(GlimMetrics.textMeta, GlimType.trackingMeta, GlimType.medium),
@@ -275,7 +278,7 @@ ThemeData glimThemeData(
       selectionHandleColor: glim.accentInk,
     ),
     cardTheme: CardThemeData(
-      color: glim.carbonSurface,
+      color: glim.stoneSurface,
       surfaceTintColor: Colors.transparent,
       elevation: 0,
       shape: glimOutline(shape, shape.card),

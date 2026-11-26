@@ -201,8 +201,8 @@ class _GlimButtonState extends State<GlimButton> {
     final lit = _hover || (_focus && _surface);
     return switch (widget.tone) {
       GlimTone.accent => (lit ? g.accentHover : g.accent, g.accentContrast),
-      GlimTone.neutral => (lit ? g.hover : g.carbonSurface3, g.carbonText),
-      GlimTone.subtle => (lit ? g.hover : g.carbonSurface2, g.carbonText),
+      GlimTone.neutral => (lit ? g.hover : g.stoneSurface3, g.stoneText),
+      GlimTone.subtle => (lit ? g.hover : g.stoneSurface2, g.stoneText),
       GlimTone.ok => (
           lit ? g.statusOkWashHover : g.statusOkWash,
           g.statusOkText

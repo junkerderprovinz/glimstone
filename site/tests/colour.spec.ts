@@ -33,8 +33,8 @@ const step = (colour: string) => Number(colour.match(/^oklch\(([\d.]+) /)?.[1]);
 test("OLED puts a chosen dark theme on black and moves the card one step down", async ({ page }) => {
   await open(page, { theme: "dark", oled: true });
   expect(await ground(page)).toBe("rgb(0, 0, 0)");
-  expect(step(await paint(page, "--carbon-surface"))).toBe(0.175);
-  expect(step(await paint(page, "--carbon-text"))).toBe(0.95);
+  expect(step(await paint(page, "--stone-surface"))).toBe(0.175);
+  expect(step(await paint(page, "--stone-text"))).toBe(0.95);
 });
 
 test("OLED follows the system's dark when no theme is chosen", async ({ page }) => {
@@ -178,7 +178,7 @@ test("a subtree can pin the other theme", async ({ page }) => {
   const pinned = await page.evaluate(() => {
     const el = document.createElement("div");
     el.dataset.theme = "light";
-    el.style.background = "var(--carbon-bg)";
+    el.style.background = "var(--stone-ground)";
     document.body.append(el);
     const c = getComputedStyle(el).backgroundColor;
     el.remove();

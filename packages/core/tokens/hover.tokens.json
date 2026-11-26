@@ -1,6 +1,6 @@
 {
   "hover": {
-    "$description": "The hover step of a filled tone that has no surface ramp of its own (rule 21): the fill mixed toward the theme's text colour, which is lighter on dark and darker on light, the direction the ramp moves. 15% is about one step of the dark ramp, surface3 to hover-raised. Declared wherever a theme is set, so --carbon-text is the one that theme defines. On a mid-tone picked accent that step would take the ink under 4.5:1, and applyAccent sets the ramp's hover as --accent-hover-light or --accent-hover-dark, a step away from the ink instead (accentHovers in contrast.ts).",
+    "$description": "The hover step of a filled tone that has no surface ramp of its own (rule 21): the fill mixed toward the theme's text colour, which is lighter on dark and darker on light, the direction the ramp moves. 15% is about one step of the dark ramp, surface3 to hover-raised. Declared wherever a theme is set, so --stone-text is the one that theme defines. On a mid-tone picked accent that step would take the ink under 4.5:1, and applyAccent sets the ramp's hover as --accent-hover-light or --accent-hover-dark, a step away from the ink instead (accentHovers in contrast.ts).",
     "$extensions": {
       "org.glimstone": {
         "selector": ":root,\n[data-theme]",
@@ -8,25 +8,27 @@
       }
     },
     "accent-hover": {
-      "$value": "var(--accent-hover-light, color-mix(in srgb, {colour.accent} 85%, {colour.carbon-text}))",
+      "$value": "var(--accent-hover-light, color-mix(in srgb, {colour.accent} 85%, {colour.stone-text}))",
       "$extensions": {
         "org.glimstone": {
-          "dark": "var(--accent-hover-dark, color-mix(in srgb, {colour.accent} 85%, {colour.carbon-text}))",
+          "dark": "var(--accent-hover-dark, color-mix(in srgb, {colour.accent} 85%, {colour.stone-text}))",
           "tailwind": "color-accentHover",
           "tailwindNote": "The accent-filled button's hover step (rule 21)."
         }
       }
     },
     "status-ok-hover": {
-      "$value": "color-mix(in srgb, {colour.status-ok-solid} 85%, {colour.carbon-text})",
+      "$description": "Deprecated with the fail and warn steps, and gone in 6.0.0. A state button is a wash under its hue's text that hovers to --status-*-wash-hover, so nothing here reads the solid hovers. npx glimstone-migrate reports each use with the wash pair to move the button to.",
+      "$value": "color-mix(in srgb, {colour.status-ok-solid} 85%, {colour.stone-text})",
       "$extensions": {
         "org.glimstone": {
-          "tailwind": "color-statusOkHover"
+          "tailwind": "color-statusOkHover",
+          "tailwindNote": "Deprecated with the fail and warn steps, and gone in 6.0.0: a state button is a wash and hovers to bg-statusOkWashHover."
         }
       }
     },
     "status-fail-hover": {
-      "$value": "color-mix(in srgb, {colour.status-fail-solid} 85%, {colour.carbon-text})",
+      "$value": "color-mix(in srgb, {colour.status-fail-solid} 85%, {colour.stone-text})",
       "$extensions": {
         "org.glimstone": {
           "tailwind": "color-statusFailHover"
@@ -34,7 +36,7 @@
       }
     },
     "status-warn-hover": {
-      "$value": "color-mix(in srgb, {colour.status-warn-solid} 85%, {colour.carbon-text})",
+      "$value": "color-mix(in srgb, {colour.status-warn-solid} 85%, {colour.stone-text})",
       "$extensions": {
         "org.glimstone": {
           "tailwind": "color-statusWarnHover"

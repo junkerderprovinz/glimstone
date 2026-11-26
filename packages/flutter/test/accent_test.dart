@@ -58,10 +58,10 @@ void main() {
 
         check('ink on the fill', g.accentContrast, g.accent);
         check('ink on the hover', g.accentContrast, g.accentHover);
-        for (final ground in [g.carbonBg, g.carbonSidebar, g.carbonSurface, g.carbonSurface2]) {
+        for (final ground in [g.stoneGround, g.stoneSidebar, g.stoneSurface, g.stoneSurface2]) {
           check('text on the ground', g.accentInk, ground);
         }
-        check('text on the wash', g.accentInk, over(g.accentSoft, g.carbonSurface));
+        check('text on the wash', g.accentInk, over(g.accentSoft, g.stoneSurface));
       }
       expect(misses, isEmpty);
     });
@@ -70,7 +70,7 @@ void main() {
       final misses = <String>[];
       for (final picked in sweep) {
         final g = base.withAccent(picked);
-        for (final (what, ink) in [('text', g.carbonText), ('secondary text', g.carbonTextSub)]) {
+        for (final (what, ink) in [('text', g.stoneText), ('secondary text', g.stoneTextSub)]) {
           final r = ratio(ink, g.hover);
           if (r < glimMinTextContrast) misses.add('${hex(picked)} $what ${r.toStringAsFixed(2)}');
         }

@@ -12,7 +12,7 @@ const row = { display: "flex", alignItems: "center", justifyContent: "space-betw
       <span>Snapshots to keep</span>
       <NumberField v-model="keep" :min="1" :max="30" />
     </label>
-    <p style="margin: 0; color: var(--carbon-text-sub); font-size: 13px">Keeps {{ keep ?? "" }} snapshots.</p>
+    <p style="margin: 0; color: var(--stone-text-sub); font-size: 13px">Keeps {{ keep ?? "" }} snapshots.</p>
   </div>
 </template>
 

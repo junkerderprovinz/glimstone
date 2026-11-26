@@ -99,7 +99,7 @@ void main() {
   testWidgets('[toggle-off-contrast] the off track holds 3:1 against the card and the knob in light', (tester) async {
     for (final accent in [GlimTheme.light.accent, const Color(0xFF1D99F3), const Color(0xFF777777)]) {
       final g = GlimTheme.light.withAccent(accent);
-      expect(ratio(g.toggleOff, g.carbonSurface), greaterThanOrEqualTo(3), reason: hex(accent));
+      expect(ratio(g.toggleOff, g.stoneSurface), greaterThanOrEqualTo(3), reason: hex(accent));
       expect(ratio(g.toggleOff, g.toggleKnob), greaterThanOrEqualTo(3), reason: hex(accent));
     }
   });

@@ -12,7 +12,7 @@ function Row(props: { width: SelectWidth; room: number }) {
   const [value, setValue] = createSignal("d");
   return (
     <div data-width={props.width} style={{ display: "flex", "align-items": "center", gap: "12px", width: `${props.room}px` }}>
-      <span style={{ flex: "none", width: "64px", color: "var(--carbon-text-sub)" }}>{props.width}</span>
+      <span style={{ flex: "none", width: "64px", color: "var(--stone-text-sub)" }}>{props.width}</span>
       <Select label={`Keep backups, ${props.width}`} hideLabel width={props.width} options={KEEP} value={value()} onChange={setValue} />
     </div>
   );

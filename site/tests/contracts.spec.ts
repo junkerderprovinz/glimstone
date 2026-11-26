@@ -4236,9 +4236,9 @@ test.describe("Meter", () => {
     const colour = (el: Locator) => el.evaluate((e) => getComputedStyle(e).backgroundColor);
     const track = quiet.getByRole("meter", { name: "holiday.mkv" });
     expect(await track.evaluate((e) => e.getBoundingClientRect().height)).toBeLessThanOrEqual(6);
-    expect(await colour(fill("holiday.mkv"))).toBe(await token(quiet, "--carbon-text-muted"));
+    expect(await colour(fill("holiday.mkv"))).toBe(await token(quiet, "--stone-text-muted"));
     expect(await colour(fill("photos"))).toBe(await token(quiet, "--status-fail-solid"));
-    expect(await colour(fill("disk1"))).toBe(await token(quiet, "--carbon-text-muted"));
+    expect(await colour(fill("disk1"))).toBe(await token(quiet, "--stone-text-muted"));
     await quiet.getByRole("button", { name: /free/ }).hover();
     expect(await colour(fill("disk1"))).toBe(await token(quiet, "--accent"));
   });
@@ -4763,8 +4763,8 @@ test.describe("SignInCard", () => {
       await page.emulateMedia({ colorScheme });
       await open(page, "/components/sign-in-card");
       const surface = await ground(card(page));
-      expect(await ground(stage(page, "SignInCardBasic").locator(".glim-signin"))).toBe(await token(page, "--carbon-bg"));
-      expect(surface).toBe(await token(page, "--carbon-surface"));
+      expect(await ground(stage(page, "SignInCardBasic").locator(".glim-signin"))).toBe(await token(page, "--stone-ground"));
+      expect(surface).toBe(await token(page, "--stone-surface"));
       seen.push(surface);
     }
     expect(seen[0]).not.toBe(seen[1]);

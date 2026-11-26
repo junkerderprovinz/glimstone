@@ -69,8 +69,8 @@ test('the number field\'s arrows are one column of two halves with a hover of th
 
 test('a checkbox draws its tick, and a locked one is grey with a grey tick', () => {
   assert.match(declared(body('.glim-checkbox-tick'), 'transition')!, /^stroke-dashoffset var\(--motion-/);
-  assert.equal(declared(body('.glim-checkbox:disabled > .glim-checkbox-box'), 'background-color'), 'var(--carbon-surface3)');
-  assert.equal(declared(body('.glim-checkbox:disabled[aria-checked="true"] > .glim-checkbox-box'), 'color'), 'var(--carbon-text-muted)');
+  assert.equal(declared(body('.glim-checkbox:disabled > .glim-checkbox-box'), 'background-color'), 'var(--stone-surface3)');
+  assert.equal(declared(body('.glim-checkbox:disabled[aria-checked="true"] > .glim-checkbox-box'), 'color'), 'var(--stone-text-muted)');
   assert.equal(declared(body('.glim-checkbox:disabled'), 'opacity'), undefined);
 });
 
@@ -105,7 +105,7 @@ test('a PIN box that waits for a character draws a caret, and the boxes stand in
 
 test('a tag stands on a wash of the field, its cross a step quieter than its words', () => {
   assert.equal(declared(body('.glim-tag'), 'background-color'), 'var(--field-part)');
-  assert.equal(declared(body('.glim-tag-remove'), 'color'), 'var(--carbon-text-sub)');
+  assert.equal(declared(body('.glim-tag-remove'), 'color'), 'var(--stone-text-sub)');
 });
 
 test('a file\'s row fills as it goes up', () => {

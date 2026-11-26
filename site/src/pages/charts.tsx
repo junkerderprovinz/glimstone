@@ -22,7 +22,7 @@ const HEAT = Array.from({ length: 7 }, (_, d) => Array.from({ length: 12 }, (_, 
 
 function Ground({ attrs, children }: { attrs: Record<string, string>; children: ReactNode }) {
   return (
-    <div {...attrs} className="glim-card" style={{ padding: 16, display: "grid", gap: 16, background: "var(--carbon-surface)", color: "var(--carbon-text)" }}>
+    <div {...attrs} className="glim-card" style={{ padding: 16, display: "grid", gap: 16, background: "var(--stone-surface)", color: "var(--stone-text)" }}>
       {children}
     </div>
   );

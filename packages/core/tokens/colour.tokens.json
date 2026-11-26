@@ -31,9 +31,9 @@
         ]
       }
     },
-    "carbon-bg": {
+    "stone-ground": {
       "$value": "oklch(from {colour.accent} 0.975 min(calc(c * 0.03), 0.005) h)",
-      "$description": "Ground and surfaces: the stone ramp, OKLCH lightness steps tinted toward the accent's hue. The tint is a share of the accent's chroma that stops at 0.011 on the dark ramp and 0.006 on the light one, so a saturated accent warms or cools the stone without colouring it, and a grey accent leaves it grey. The names keep the carbon- prefix every app already reads.",
+      "$description": "Ground and surfaces: the stone ramp, OKLCH lightness steps tinted toward the accent's hue. The tint is a share of the accent's chroma that stops at 0.011 on the dark ramp and 0.006 on the light one, so a saturated accent warms or cools the stone without colouring it, and a grey accent leaves it grey. The carbon- names apps read before 5.0.0 stay as aliases of these until 6.0.0, in the legacy block.",
       "$extensions": {
         "org.glimstone": {
           "dark": "oklch(from {colour.accent} 0.175 min(calc(c * 0.07), 0.011) h)",
@@ -42,11 +42,11 @@
               "dark": "#000000"
             }
           },
-          "tailwind": "color-carbon-background"
+          "tailwind": "color-stone-ground"
         }
       }
     },
-    "carbon-sidebar": {
+    "stone-sidebar": {
       "$value": "oklch(from {colour.accent} 0.995 min(calc(c * 0.015), 0.003) h)",
       "$extensions": {
         "org.glimstone": {
@@ -56,11 +56,11 @@
               "dark": "oklch(from {colour.accent} 0.175 min(calc(c * 0.07), 0.011) h)"
             }
           },
-          "tailwind": "color-carbon-sidebar"
+          "tailwind": "color-stone-sidebar"
         }
       }
     },
-    "carbon-surface": {
+    "stone-surface": {
       "$value": "oklch(from {colour.accent} 0.997 min(calc(c * 0.01), 0.002) h)",
       "$extensions": {
         "org.glimstone": {
@@ -70,11 +70,11 @@
               "dark": "oklch(from {colour.accent} 0.175 min(calc(c * 0.07), 0.011) h)"
             }
           },
-          "tailwind": "color-carbon-surface"
+          "tailwind": "color-stone-surface"
         }
       }
     },
-    "carbon-surface2": {
+    "stone-surface2": {
       "$value": "oklch(from {colour.accent} 0.955 min(calc(c * 0.03), 0.005) h)",
       "$extensions": {
         "org.glimstone": {
@@ -84,11 +84,11 @@
               "dark": "oklch(from {colour.accent} 0.235 min(calc(c * 0.07), 0.011) h)"
             }
           },
-          "tailwind": "color-carbon-surface2"
+          "tailwind": "color-stone-surface2"
         }
       }
     },
-    "carbon-surface3": {
+    "stone-surface3": {
       "$value": "oklch(from {colour.accent} 0.905 min(calc(c * 0.035), 0.006) h)",
       "$extensions": {
         "org.glimstone": {
@@ -98,11 +98,12 @@
               "dark": "oklch(from {colour.accent} 0.29 min(calc(c * 0.07), 0.011) h)"
             }
           },
-          "tailwind": "color-carbon-surface3"
+          "tailwind": "color-stone-surface3"
         }
       }
     },
     "carbon-hover": {
+      "$description": "Deprecated, and gone in 6.0.0. Every control hovers to the one --hover (rule 21), so nothing here reads this step. It keeps its value for an app's own rules, and npx glimstone-migrate reports each use rather than rewriting it, since --hover is another colour.",
       "$value": "oklch(from {colour.accent} 0.93 min(calc(c * 0.03), 0.005) h)",
       "$extensions": {
         "org.glimstone": {
@@ -112,11 +113,16 @@
               "dark": "oklch(from {colour.accent} 0.255 min(calc(c * 0.07), 0.011) h)"
             }
           },
-          "tailwind": "color-carbon-hover"
+          "tailwind": "color-carbon-hover",
+          "tailwindNote": "Deprecated, and gone in 6.0.0: hover:bg-hover is the one hover (rule 21).",
+          "dart": {
+            "deprecated": "Use hover on GlimDerived, the one hover (rule 21). carbonHover goes in 6.0.0.",
+            "otherwise": "hover"
+          }
         }
       }
     },
-    "carbon-hover-raised": {
+    "stone-hover-raised": {
       "$value": "oklch(from {colour.accent} 0.86 min(calc(c * 0.05), 0.009) h)",
       "$extensions": {
         "org.glimstone": {
@@ -126,7 +132,7 @@
               "dark": "oklch(from {colour.accent} 0.36 min(calc(c * 0.07), 0.011) h)"
             }
           },
-          "tailwind": "color-carbon-hoverRaised"
+          "tailwind": "color-stone-hoverRaised"
         }
       }
     },
@@ -167,7 +173,7 @@
     "toggle-knob-shadow": {
       "$value": "0 1px 2px light-dark(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5))"
     },
-    "carbon-border": {
+    "stone-border": {
       "$value": "oklch(from {colour.accent} 0.905 min(calc(c * 0.035), 0.006) h)",
       "$extensions": {
         "org.glimstone": {
@@ -181,7 +187,7 @@
               "dark": "oklch(from {colour.accent} 0.64 min(calc(c * 0.07), 0.011) h)"
             }
           },
-          "tailwind": "color-carbon-border"
+          "tailwind": "color-stone-border"
         }
       }
     },
@@ -283,17 +289,17 @@
         }
       }
     },
-    "carbon-text": {
+    "stone-text": {
       "$value": "oklch(from {colour.accent} 0.2 min(calc(c * 0.05), 0.009) h)",
       "$description": "Text ramp: three steps, the last still legible at 12px.",
       "$extensions": {
         "org.glimstone": {
           "dark": "oklch(from {colour.accent} 0.95 min(calc(c * 0.03), 0.005) h)",
-          "tailwind": "color-carbon-text"
+          "tailwind": "color-stone-text"
         }
       }
     },
-    "carbon-text-sub": {
+    "stone-text-sub": {
       "$value": "oklch(from {colour.accent} 0.43 min(calc(c * 0.07), 0.011) h)",
       "$extensions": {
         "org.glimstone": {
@@ -304,11 +310,11 @@
               "dark": "oklch(from {colour.accent} 0.88 min(calc(c * 0.05), 0.009) h)"
             }
           },
-          "tailwind": "color-carbon-textSub"
+          "tailwind": "color-stone-textSub"
         }
       }
     },
-    "carbon-text-muted": {
+    "stone-text-muted": {
       "$value": "oklch(from {colour.accent} 0.52 min(calc(c * 0.07), 0.011) h)",
       "$extensions": {
         "org.glimstone": {
@@ -319,7 +325,7 @@
               "dark": "oklch(from {colour.accent} 0.8 min(calc(c * 0.05), 0.009) h)"
             }
           },
-          "tailwind": "color-carbon-textMuted"
+          "tailwind": "color-stone-textMuted"
         }
       }
     },
@@ -485,10 +491,21 @@
     },
     "status-ok-wash": {
       "$value": "color-mix(in srgb, {colour.status-ok-solid} 17%, transparent)",
+      "$extensions": {
+        "org.glimstone": {
+          "tailwind": "color-statusOkWash",
+          "tailwindNote": "A state button: bg-statusOkWash text-statusOk hover:bg-statusOkWashHover, and the same for fail and warn."
+        }
+      },
       "$description": "The fill of a state button: a soft wash of the hue under the hue's own text, a little deeper under the pointer."
     },
     "status-ok-wash-hover": {
-      "$value": "color-mix(in srgb, {colour.status-ok-solid} 26%, transparent)"
+      "$value": "color-mix(in srgb, {colour.status-ok-solid} 26%, transparent)",
+      "$extensions": {
+        "org.glimstone": {
+          "tailwind": "color-statusOkWashHover"
+        }
+      }
     },
     "status-fail-text": {
       "$value": "oklch(0.48 0.17 25)",
@@ -520,10 +537,20 @@
       }
     },
     "status-fail-wash": {
-      "$value": "color-mix(in srgb, {colour.status-fail-solid} 17%, transparent)"
+      "$value": "color-mix(in srgb, {colour.status-fail-solid} 17%, transparent)",
+      "$extensions": {
+        "org.glimstone": {
+          "tailwind": "color-statusFailWash"
+        }
+      }
     },
     "status-fail-wash-hover": {
-      "$value": "color-mix(in srgb, {colour.status-fail-solid} 26%, transparent)"
+      "$value": "color-mix(in srgb, {colour.status-fail-solid} 26%, transparent)",
+      "$extensions": {
+        "org.glimstone": {
+          "tailwind": "color-statusFailWashHover"
+        }
+      }
     },
     "status-warn-text": {
       "$value": "oklch(0.48 0.12 52)",
@@ -578,10 +605,20 @@
       }
     },
     "status-warn-wash": {
-      "$value": "color-mix(in srgb, {colour.status-warn-solid} 17%, transparent)"
+      "$value": "color-mix(in srgb, {colour.status-warn-solid} 17%, transparent)",
+      "$extensions": {
+        "org.glimstone": {
+          "tailwind": "color-statusWarnWash"
+        }
+      }
     },
     "status-warn-wash-hover": {
-      "$value": "color-mix(in srgb, {colour.status-warn-solid} 26%, transparent)"
+      "$value": "color-mix(in srgb, {colour.status-warn-solid} 26%, transparent)",
+      "$extensions": {
+        "org.glimstone": {
+          "tailwind": "color-statusWarnWashHover"
+        }
+      }
     },
     "status-neutral-text": {
       "$value": "#6f6f6f",
@@ -645,7 +682,7 @@
       "$extensions": {
         "org.glimstone": {
           "modes": {
-            "contrast": "inset 0 0 0 1px {colour.carbon-border}"
+            "contrast": "inset 0 0 0 1px {colour.stone-border}"
           }
         }
       }

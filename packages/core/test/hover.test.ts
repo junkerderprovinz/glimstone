@@ -43,7 +43,7 @@ test('every hover in the stylesheet lights its ground with the accent', () => {
 test('a control without a ground of its own takes the accent ink under the pointer', () => {
   const grey = hovered
     .filter(({ body }) => declared(body, /background(?:-color)?/).length === 0)
-    .flatMap(({ selector, body }) => declared(body, /color/).filter((v) => /var\(--carbon-/.test(v)).map((v) => `${selector}: ${v}`));
+    .flatMap(({ selector, body }) => declared(body, /color/).filter((v) => /var\(--stone-/.test(v)).map((v) => `${selector}: ${v}`));
   assert.deepEqual(grey, []);
 });
 
