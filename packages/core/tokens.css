@@ -1410,6 +1410,11 @@
     --motion-shape-ease: var(--motion-spring);
     --motion-confirm-dur: 260ms;
     --motion-confirm-scale: .5;
+
+    /* How far a button gives under the press, on the control's time and the
+       spring. Off holds it still, and storm sets none, so under reduced motion
+       nothing gives. */
+    --motion-press-scale: .97;
     --motion-stagger-step: 15ms;
     --motion-stagger-cap: 200ms;
     --motion-stagger-dur: 140ms;
@@ -1574,6 +1579,7 @@
     --motion-shape-ease: linear;
     --motion-confirm-dur: 0s;
     --motion-confirm-scale: 0;
+    --motion-press-scale: 1;
     --motion-stagger-step: 0s;
     --motion-stagger-cap: 0s;
     --motion-stagger-dur: 0s;
@@ -2589,7 +2595,10 @@
     font-weight: 500;
     line-height: 1;
     box-sizing: border-box;
-    transition: opacity var(--motion-control-dur) var(--motion-ease), background-color var(--motion-control-dur) var(--motion-ease);
+    transition: opacity var(--motion-control-dur) var(--motion-ease), background-color var(--motion-control-dur) var(--motion-ease), scale var(--motion-control-dur) var(--motion-spring);
+  }
+  .glim-btn:active:not(:disabled) {
+    scale: var(--motion-press-scale, 1);
   }
 
   /* Disabled is one look for every control and tone: a faint wash or none,

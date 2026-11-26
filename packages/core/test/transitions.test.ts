@@ -59,3 +59,15 @@ test('a move springs and a fade does not, at every level', () => {
   assert.ok(block(":root[data-motion='storm']")['--motion-spring']);
   for (const level of [":root[data-motion='wild']", ":root[data-motion='off']", ":root[data-motion='storm']"]) assert.ok(block(level)['--motion-ease'], level);
 });
+
+test('a button gives way under the press, and stands still at off and under reduced motion', () => {
+  const subtle = block(':root')['--motion-press-scale'];
+  assert.equal(subtle, '.97');
+  assert.equal(block(":root[data-motion='wild']")['--motion-press-scale'] ?? subtle, '.97');
+  assert.equal(block(":root[data-motion='off']")['--motion-press-scale'], '1');
+  // Storm's tokens stand outside the gate, so one here would reach a system that asked for less motion.
+  assert.equal(block(":root[data-motion='storm']")['--motion-press-scale'], undefined);
+  assert.match(css, /\.glim-btn:active:not\(:disabled\) \{\s*scale: var\(--motion-press-scale, 1\);\s*\}/);
+  const button = css.slice(css.indexOf('  .glim-btn {'), css.indexOf('}', css.indexOf('  .glim-btn {')));
+  assert.match(button, /transition:[^;]*\bscale var\(--motion-control-dur\) var\(--motion-spring\)/);
+});

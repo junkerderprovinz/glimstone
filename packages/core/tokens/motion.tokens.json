@@ -349,6 +349,17 @@
         }
       }
     },
+    "motion-press-scale": {
+      "$value": ".97",
+      "$description": "How far a button gives under the press, on the control's time and the spring. Off holds it still, and storm sets none, so under reduced motion nothing gives.",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "off": "1"
+          }
+        }
+      }
+    },
     "motion-stagger-step": {
       "$value": "15ms",
       "$type": "duration",
