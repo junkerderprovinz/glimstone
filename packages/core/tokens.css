@@ -4869,6 +4869,45 @@
     color: var(--accent-contrast);
     box-shadow: var(--elevation-control);
   }
+  /* A strip that picks one value is one track, and its fill sits on a thumb
+     under the segments that glides from the old choice to the new one
+     (watchSelectorThumb). Until the thumb is placed the chosen segment keeps
+     its own fill, so nothing flashes empty. */
+  .glim-sel:has(> .glim-sel-thumb) {
+    position: relative;
+    isolation: isolate;
+  }
+  .glim-sel--chip:has(> .glim-sel-thumb) {
+    padding: var(--space-2);
+    border-radius: var(--radius-pill);
+    background-color: var(--carbon-surface3);
+  }
+  .glim-sel--chip:has(> .glim-sel-thumb) .glim-sel-seg:not(.glim-active) { background-color: transparent; }
+  .glim-sel:has(> .glim-sel-thumb) > :is(.glim-sel-seg, .glim-tip-wrap) {
+    position: relative;
+    z-index: var(--z-raised-top);
+  }
+  .glim-sel-thumb {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: var(--z-raised);
+    border-radius: var(--radius-pill);
+    background-color: var(--accent);
+    box-shadow: var(--elevation-control);
+    pointer-events: none;
+  }
+  .glim-sel-thumb:not([data-placed]),
+  .glim-sel--listed > .glim-sel-thumb { display: none; }
+  .glim-sel:has(> .glim-sel-thumb[data-placed]) .glim-sel-seg.glim-active {
+    background-color: transparent;
+    box-shadow: none;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .glim-sel-thumb[data-placed] {
+      transition: translate var(--motion-page-dur) var(--motion-spring), width var(--motion-page-dur) var(--motion-spring), height var(--motion-page-dur) var(--motion-spring), background-color var(--motion-control-dur) var(--motion-ease);
+    }
+  }
   /* A disabled segment with a tip sits in the bubble's box, which takes the
      segment's place in the row. */
   .glim-sel .glim-tip-wrap > .glim-sel-seg { flex: 1 1 auto; }

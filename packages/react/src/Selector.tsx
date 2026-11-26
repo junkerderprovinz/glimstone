@@ -12,6 +12,8 @@ import {
 import {
   countSelector,
   mediaMatches,
+  slideTabPanel,
+  tabSlideDir,
   roveSelector,
   rovedIndex,
   segmentView,
@@ -22,7 +24,9 @@ import {
   subscribeMedia,
   toggleSelection,
   watchSelectorFit,
+  watchSelectorThumb,
   WIDE_QUERY,
+  type LabelMode,
   type SelectMode,
   type SelectorActivation,
   type SelectorLayout,
@@ -85,6 +89,10 @@ export interface SelectorProps<M extends SelectMode = "one", V extends string | 
   onPress?: (id: V) => void;
   /** `vertical` is the column of tiles beside a settings area's pages. */
   orientation?: SelectorOrientation;
+  /** The label mode of this strip alone, in place of the app's setting, for a
+   *  strip that has to speak in glyphs, words or both whatever the rest does. */
+  labels?: LabelMode;
+
   size?: SelectorSize;
   variant?: SelectorVariant;
   /** "manual" moves the focus with the arrows and chooses on Space, Enter or a
@@ -136,6 +144,7 @@ export function Selector<M extends SelectMode = "one", V extends string | number
   onChange,
   onPress,
   orientation = "horizontal",
+  labels,
   size = "md",
   variant = "well",
   activation = "auto",
@@ -153,7 +162,8 @@ export function Selector<M extends SelectMode = "one", V extends string | number
   const inline = ownInline || (label === undefined && name !== undefined);
   const vertical = orientation === "vertical";
   const many = select === "many";
-  const mode = useLabelMode(selectorAxis(size, orientation));
+  const appMode = useLabelMode(selectorAxis(size, orientation));
+  const mode = labels ?? appMode;
   const strip = selectorView({
     mode,
     select: many ? "many" : "one",
@@ -190,6 +200,22 @@ export function Selector<M extends SelectMode = "one", V extends string | number
     const { pinWidth, canSqueeze, canList } = strip;
     return watchSelectorFit(track.current!, { pinWidth, fit, canSqueeze, canList }, setLayout);
   }, [vertical, strip.pinWidth, fit, strip.canSqueeze, strip.canList, inline, itemsKey, disabledKey, size, strip.mode]);
+
+  // One value glides: a thumb under the segments carries the fill from the
+  // old choice to the new one. Toggles in a `many` strip each keep their own.
+  const gliding = !vertical && !many;
+  useLayoutEffect(() => {
+    if (gliding) return watchSelectorThumb(track.current!);
+  }, [gliding]);
+
+  // A tab strip moves its panel in from the side of the tab it came from.
+  const chosenIndex = many ? -1 : items.findIndex((it) => it.id === value);
+  const lastIndex = useRef(chosenIndex);
+  useLayoutEffect(() => {
+    const dir = tabSlideDir(lastIndex.current, chosenIndex);
+    lastIndex.current = chosenIndex;
+    if (dir && panelId && strip.kind === "tab") slideTabPanel(document.getElementById(panelId), dir);
+  }, [chosenIndex, panelId, strip.kind]);
 
   const flex = selectorFlex({ layout, inline, fit });
   const listed = layout?.fit === "list";
@@ -231,6 +257,7 @@ export function Selector<M extends SelectMode = "one", V extends string | number
       className={`${strip.className}${listed ? " glim-sel--listed" : ""} ${className}`.trim()}
       style={flex.track as CSSProperties}
     >
+      {gliding && <span className="glim-sel-thumb" aria-hidden="true" />}
       {items.map((item, i) => (
         <Segment
           key={item.id}

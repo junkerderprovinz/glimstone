@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { segmentFit } from '../src/segmentLayout.ts';
-import { segmentView, selectorFlex, selectorView, type SelectorInput } from '../src/selector.ts';
+import { segmentView, selectorFlex, selectorView, tabSlideDir, type SelectorInput } from '../src/selector.ts';
 
 const GAP = 4;
 
@@ -173,4 +173,30 @@ test('the stylesheet lets no horizontal selector wrap its track or its labels', 
   // Without it a grid or flex parent grows to hold the whole row, and the
   // strip never sees that it has run out of room.
   assert.match(track.body, /contain:\s*inline-size/);
+});
+
+test('a vertical tile marked iconOnly shows its glyph alone and keeps its name in the bubble', () => {
+  const tiles = strip({ orientation: 'vertical', mode: 'textGlyph' });
+  const tile = (iconOnly: boolean) =>
+    segmentView({ strip: tiles, orientation: 'vertical', size: 'md', variant: 'well', equalWidth: false, buttonHeight: false, hue: false, index: 0, label: 'Backups', hasGlyph: true, iconOnly, on: false, disabled: false, squeezed: false, cut: false });
+  assert.match(tile(true).className, /glim-sel-tile--glyph/);
+  assert.equal(tile(true).labelClass, 'glim-sr-only');
+  assert.equal(tile(true).tip, 'Backups');
+  assert.doesNotMatch(tile(false).className, /glim-sel-tile--glyph/);
+  assert.equal(tile(false).labelClass, 'glim-sel-tile-label');
+});
+
+test('a tab panel comes in from the side of the tab it came from', () => {
+  assert.equal(tabSlideDir(0, 2), 1);
+  assert.equal(tabSlideDir(2, 1), -1);
+  assert.equal(tabSlideDir(1, 1), null);
+  assert.equal(tabSlideDir(-1, 1), null);
+});
+
+test('a strip that picks one value draws its choice on a thumb that glides', () => {
+  const css = readFileSync(new URL('../tokens.css', import.meta.url), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+  assert.match(css, /\.glim-sel-thumb \{[^}]*position: absolute;[^}]*background-color: var\(--accent\);/);
+  assert.match(css, /\.glim-sel-thumb\[data-placed\] \{[^}]*transition: translate var\(--motion-page-dur\) var\(--motion-spring\)/);
+  assert.match(css, /\.glim-sel:has\(> \.glim-sel-thumb\[data-placed\]\) \.glim-sel-seg\.glim-active \{[^}]*background-color: transparent;/);
+  assert.match(css, /\.glim-sel--chip:has\(> \.glim-sel-thumb\) \{[^}]*background-color: var\(--carbon-surface3\);/);
 });

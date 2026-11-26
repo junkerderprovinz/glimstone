@@ -2,6 +2,8 @@ import { createEffect, createMemo, createSignal, createUniqueId, For, mergeProps
 import {
   countSelector,
   mediaMatches,
+  slideTabPanel,
+  tabSlideDir,
   roveSelector,
   rovedIndex,
   segmentView,
@@ -12,7 +14,9 @@ import {
   subscribeMedia,
   toggleSelection,
   watchSelectorFit,
+  watchSelectorThumb,
   WIDE_QUERY,
+  type LabelMode,
   type SelectMode,
   type SelectorActivation,
   type SelectorLayout,
@@ -78,6 +82,10 @@ export interface SelectorProps<M extends SelectMode = "one", V extends string | 
   onPress?: (id: V) => void;
   /** `vertical` is the column of tiles beside a settings area's pages. */
   orientation?: SelectorOrientation;
+  /** The label mode of this strip alone, in place of the app's setting, for a
+   *  strip that has to speak in glyphs, words or both whatever the rest does. */
+  labels?: LabelMode;
+
   size?: SelectorSize;
   variant?: SelectorVariant;
   /** "manual" moves the focus with the arrows and chooses on Space, Enter or a
@@ -140,7 +148,8 @@ export function Selector<M extends SelectMode = "one", V extends string | number
   const inline = () => merged.inline || (merged.label === undefined && name() !== undefined);
   const vertical = () => merged.orientation === "vertical";
   const many = () => merged.select === "many";
-  const mode = useLabelMode(selectorAxis(merged.size, merged.orientation));
+  const appMode = useLabelMode(selectorAxis(merged.size, merged.orientation));
+  const mode = () => merged.labels ?? appMode();
   const wide = useMedia(WIDE_QUERY);
   const strip = createMemo(() =>
     selectorView({
@@ -191,6 +200,22 @@ export function Selector<M extends SelectMode = "one", V extends string | number
     }),
   );
 
+  // One value glides: a thumb under the segments carries the fill from the
+  // old choice to the new one. Toggles in a `many` strip each keep their own.
+  const gliding = () => !vertical() && !many();
+  createEffect(() => {
+    if (gliding()) onCleanup(watchSelectorThumb(track));
+  });
+
+  // A tab strip moves its panel in from the side of the tab it came from.
+  const chosenIndex = () => (many() ? -1 : merged.items.findIndex((it) => it.id === merged.value));
+  createEffect(
+    on(chosenIndex, (to, from) => {
+      const dir = tabSlideDir(from ?? -1, to);
+      if (dir && merged.panelId && strip().kind === "tab") slideTabPanel(document.getElementById(merged.panelId), dir);
+    }),
+  );
+
   const flex = createMemo(() => selectorFlex({ layout: layout(), inline: inline(), fit: merged.fit }));
   const listed = () => layout()?.fit === "list";
   const chosen = () => (many() ? (merged.value as readonly V[]) : null);
@@ -236,6 +261,9 @@ export function Selector<M extends SelectMode = "one", V extends string | number
       class={`${strip().className}${listed() ? " glim-sel--listed" : ""} ${merged.class}`.trim()}
       style={css(flex().track)}
     >
+      <Show when={gliding()}>
+        <span class="glim-sel-thumb" aria-hidden="true" />
+      </Show>
       <For each={merged.items}>
         {(item, i) => (
           <Segment

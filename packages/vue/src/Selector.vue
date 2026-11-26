@@ -3,6 +3,8 @@ import { computed, onScopeDispose, shallowRef, watch } from "vue";
 import {
   countSelector,
   mediaMatches,
+  slideTabPanel,
+  tabSlideDir,
   roveSelector,
   rovedIndex,
   selectorAxis,
@@ -11,7 +13,9 @@ import {
   subscribeMedia,
   toggleSelection,
   watchSelectorFit,
+  watchSelectorThumb,
   WIDE_QUERY,
+  type LabelMode,
   type SelectMode,
   type SelectorActivation,
   type SelectorLayout,
@@ -41,6 +45,10 @@ const props = withDefaults(
     select?: M;
     /** `vertical` is the column of tiles beside a settings area's pages. */
     orientation?: SelectorOrientation;
+    /** The label mode of this strip alone, in place of the app's setting, for a
+     *  strip that has to speak in glyphs, words or both whatever the rest does. */
+    labels?: LabelMode;
+
     size?: SelectorSize;
     variant?: SelectorVariant;
     /** "manual" moves the focus and chooses on Space, Enter or a click, for a strip that saves a setting. */
@@ -94,7 +102,7 @@ const mode = useLabelMode(selectorAxis(props.size, props.orientation));
 const wide = useMedia(WIDE_QUERY);
 const strip = computed(() =>
   selectorView({
-    mode: mode.value,
+    mode: props.labels ?? mode.value,
     select: props.select === "many" ? "many" : "one",
     activation: props.activation,
     orientation: props.orientation,
@@ -156,6 +164,24 @@ measured(
   },
 );
 
+// One value glides: a thumb under the segments carries the fill from the old
+// choice to the new one. Toggles in a `many` strip each keep their own.
+const gliding = computed(() => props.orientation !== "vertical" && props.select !== "many");
+measured(
+  () => gliding.value,
+  (el) => (gliding.value ? watchSelectorThumb(el) : undefined),
+);
+
+// A tab strip moves its panel in from the side of the tab it came from.
+watch(
+  () => (props.select === "many" ? -1 : props.items.findIndex((it) => it.id === props.modelValue)),
+  (to, from) => {
+    const dir = tabSlideDir(from, to);
+    if (dir && props.panelId && strip.value.kind === "tab") slideTabPanel(document.getElementById(props.panelId), dir);
+  },
+  { flush: "post" },
+);
+
 const flex = computed(() => selectorFlex({ layout: layout.value, inline: inline.value, fit: props.fit }));
 const listed = computed(() => layout.value?.fit === "list");
 const options = computed(() =>
@@ -208,6 +234,7 @@ function onKeydown(e: KeyboardEvent) {
     :style="flex.track"
     @keydown="onKeydown"
   >
+    <span v-if="gliding" class="glim-sel-thumb" aria-hidden="true" />
     <SelectorSegment
       v-for="(item, i) in items"
       :key="item.id"

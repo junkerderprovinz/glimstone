@@ -24,7 +24,7 @@
 <div style="display: grid; gap: 20px; width: 100%">
   <div style="display: grid; gap: 8px">
     <span style={caption}>Theme</span>
-    <Selector label="Theme" items={THEMES} bind:value={theme} activation="manual" equalWidth />
+    <Selector label="Theme" items={THEMES} bind:value={theme} activation="manual" equalWidth labels="textGlyph" />
   </div>
   <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap">
     <span style={caption}>Show</span>

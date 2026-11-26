@@ -2165,6 +2165,33 @@ test.describe("Selector", () => {
     await expect(page.getByRole("tooltip")).toHaveText("Look");
   });
 
+  test("[sel-glide] the fill glides under the new choice and the panel comes in from its side", async ({ page }) => {
+    await open(page, "/components/selector");
+    const thumb = tabs(page).locator(".glim-sel-thumb");
+    const under = async (name: string) => {
+      await expect(thumb).toHaveAttribute("data-placed", "");
+      await thumb.evaluate((t) => Promise.all(t.getAnimations().map((a) => a.finished)));
+      const [a, b] = await Promise.all([thumb.boundingBox(), tab(page, name).boundingBox()]);
+      expect(a!.x).toBeCloseTo(b!.x, 0);
+      expect(a!.width).toBeCloseTo(b!.width, 0);
+    };
+    await under("General");
+    expect(await tab(page, "General").evaluate((t) => getComputedStyle(t).backgroundColor)).toBe("rgba(0, 0, 0, 0)");
+    await tab(page, "Storage").click();
+    await under("Storage");
+    const panel = stage(page, "SelectorTabs").getByRole("tabpanel");
+    await tab(page, "General").click();
+    await expect(panel).toHaveCSS("--tab-dir", "-1");
+  });
+
+  test("[sel-labels] a strip with its own label mode keeps it under any setting", async ({ page }) => {
+    await open(page, "/components/selector", { labels: "glyph" });
+    const light = theme(page).getByRole("radio", { name: "Light" });
+    await expect(light.locator(".glim-sel-label")).toHaveText("Light");
+    await expect(light.locator("svg")).toHaveCount(1);
+    await expect(tab(page, "General").locator(".glim-sel-label")).toHaveCount(0);
+  });
+
   test("[tiles-height] the tiles share the column's height", async ({ page }) => {
     await open(page, "/components/selector");
     const heights = await column(page)

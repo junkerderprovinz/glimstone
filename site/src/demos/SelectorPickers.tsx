@@ -24,7 +24,7 @@ export default function SelectorPickers() {
     <div style={{ display: "grid", gap: 20, width: "100%" }}>
       <div style={{ display: "grid", gap: 8 }}>
         <span style={caption}>Theme</span>
-        <Selector label="Theme" items={THEMES} value={theme} onChange={setTheme} activation="manual" equalWidth />
+        <Selector label="Theme" items={THEMES} value={theme} onChange={setTheme} activation="manual" equalWidth labels="textGlyph" />
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
         <span style={caption}>Show</span>

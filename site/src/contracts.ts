@@ -221,6 +221,8 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "sel-name", when: "The label mode hides the words", then: "The label stays the accessible name and shows in the bubble on keyboard focus." },
       { id: "sel-equal", when: "equalWidth is on", then: "Every segment is as wide as the widest, and the strip spans its box." },
       { id: "sel-colour", when: "Rainbow is on", then: "Each tab's glyph shows a hue of its own, and two selectors that set values wear two colours." },
+      { id: "sel-glide", when: "A strip of one is chosen anew", then: "Its fill glides under the new segment as one thumb in the track, and the tab's panel comes in from that side." },
+      { id: "sel-labels", when: "A strip names its own label mode", then: "It speaks in that mode whatever the app's label setting says." },
       { id: "tiles-role", when: "orientation is vertical", then: "A vertical tablist of links; the chosen tile has aria-selected and aria-current=\"page\"." },
       { id: "tiles-arrows", keys: ["ArrowDown", "ArrowUp", "Home", "End"], when: "A tile has focus", then: "Focus moves along the column and the open page stays." },
       { id: "tiles-open", keys: ["Enter", "Space"], when: "A tile has focus", then: "Its page opens." },
