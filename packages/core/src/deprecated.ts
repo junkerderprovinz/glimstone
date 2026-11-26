@@ -177,3 +177,74 @@ export function warnDeprecated(name: string): void {
   warned.add(name);
   console.warn(deprecationNote(name));
 }
+
+/**
+ * The deprecated custom properties a block of declarations reads. A property
+ * it only declares is no use of it, so the aliases that keep an old name
+ * working do not count.
+ */
+export function deprecatedReads(declarations: string): string[] {
+  const reads: string[] = [];
+  for (const [, property, value] of declarations.matchAll(/([\w-]+)\s*:([^;]*)/g)) {
+    if (DEPRECATED[property!]) continue;
+    for (const [, name] of value!.matchAll(/var\(\s*(--[\w-]+)/g)) if (DEPRECATED[name!]) reads.push(name!);
+  }
+  return reads;
+}
+
+interface RuleLike {
+  cssText: string;
+  style?: { cssText: string };
+  cssRules?: ArrayLike<RuleLike>;
+  styleSheet?: SheetLike | null;
+}
+
+interface SheetLike {
+  readonly cssRules: ArrayLike<RuleLike>;
+}
+
+function warnRules(rules: ArrayLike<RuleLike>): void {
+  for (const rule of Array.from(rules)) {
+    if (rule.style) deprecatedReads(rule.style.cssText).forEach(warnDeprecated);
+    if (rule.cssRules) warnRules(rule.cssRules);
+    if (rule.styleSheet) warnDeprecatedStyles([rule.styleSheet]);
+  }
+}
+
+/** Warns once for each deprecated token the stylesheets read, in grouping rules and imports too. */
+export function warnDeprecatedStyles(sheets: ArrayLike<SheetLike>): void {
+  for (const sheet of Array.from(sheets)) {
+    let rules: ArrayLike<RuleLike>;
+    try {
+      rules = sheet.cssRules;
+    } catch {
+      // A cross-origin sheet hides its rules from the page.
+      continue;
+    }
+    warnRules(rules);
+  }
+}
+
+/** Warns once for each deprecated class an element on the page carries. */
+export function warnDeprecatedClasses(root: { querySelector(selector: string): unknown }): void {
+  for (const name of Object.keys(DEPRECATED)) if (name.startsWith(".") && root.querySelector(name)) warnDeprecated(name);
+}
+
+let checking = false;
+
+/**
+ * Looks once for deprecated tokens and classes, after the page has loaded and
+ * the browser is idle, so the walk through the stylesheets never holds up the
+ * first frame.
+ */
+export function warnDeprecatedAfterLoad(): void {
+  if (checking || typeof window === "undefined") return;
+  checking = true;
+  const check = () => {
+    warnDeprecatedStyles(document.styleSheets);
+    warnDeprecatedClasses(document);
+  };
+  const idle = () => ("requestIdleCallback" in window ? requestIdleCallback(check) : setTimeout(check));
+  if (document.readyState === "complete") idle();
+  else window.addEventListener("load", idle, { once: true });
+}

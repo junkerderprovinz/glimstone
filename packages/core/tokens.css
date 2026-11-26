@@ -7844,6 +7844,12 @@
     height: var(--btn-h-key);
     font-size: var(--text-body);
   }
+  /* Deprecated, and gone in 6.0.0: the accent fills the circle. The accent
+     marks activity, so avatarView() tones an avatar by name instead. */
+  .glim-avatar--hued {
+    background-color: var(--accent);
+    color: var(--accent-contrast);
+  }
   /* The initials in one of the chart tones on a pale wash of it. */
   .glim-avatar--toned {
     background-color: color-mix(in oklab, var(--avatar-tone) 18%, var(--stone-surface));
