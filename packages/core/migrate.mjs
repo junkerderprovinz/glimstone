@@ -94,9 +94,14 @@ function dartInkMix(text) {
   return text.replace(/\binkMix(\s*:\s*)(\d+(?:\.\d+)?)(?=\s*[,)])/g, (_, colon, v) => `inkLightness${colon}${Number(v) < 1 ? INK_LIGHTNESS.light : INK_LIGHTNESS.dark}`);
 }
 
-/** The focusRing argument went; the ring is the accent ink, a getter on GlimDerived. */
-function dartFocusRing(text) {
-  return text.replace(/\n?[ \t]*\bfocusRing\s*:\s*(?:[^,()\n]|\([^()]*\))+,/g, '');
+/**
+ * A GlimTheme argument that went, with its value: focusRing is the accent ink,
+ * a getter on GlimDerived, and the state backgrounds are worked out from the
+ * solids by GlimTokens.
+ */
+function dartDropArgument(name) {
+  const argument = new RegExp(String.raw`\n?[ \t]*\b${name}\s*:\s*(?:[^,()\n]|\([^()]*\))+,`, 'g');
+  return (text) => text.replace(argument, '');
 }
 
 function firstMatch(pattern, note) {
@@ -107,9 +112,85 @@ function firstUse(name, note) {
   return (text) => [...text.matchAll(new RegExp(`\\b${name}\\b`, 'g'))].slice(0, 1).map((m) => ({ index: m.index, note }));
 }
 
-const SCRIPTS = /\.(tsx?|jsx?|mjs|vue)$/;
-const STYLES = /\.(css|scss|vue|tsx?|jsx?)$/;
+function everyMatch(pattern, note) {
+  return (text) => [...text.matchAll(pattern)].map((m) => ({ index: m.index, note }));
+}
+
+const replacing = (pattern, to) => (text) => text.replace(pattern, to);
+
+const SCRIPTS = /\.(tsx?|jsx?|mjs|vue|svelte)$/;
+const STYLES = /\.(css|scss|vue|svelte|html|tsx?|jsx?)$/;
 const DART = /\.dart$/;
+
+// The stone ramp under the carbon- names GlimStone 4 gave it, beside each
+// step's stone name. The Tailwind and Flutter names follow from these.
+const STONE = [
+  ['bg', 'ground'],
+  ['sidebar', 'sidebar'],
+  ['surface', 'surface'],
+  ['surface2', 'surface2'],
+  ['surface3', 'surface3'],
+  ['hover-raised', 'hover-raised'],
+  ['border', 'border'],
+  ['text', 'text'],
+  ['text-sub', 'text-sub'],
+  ['text-muted', 'text-muted'],
+];
+
+// A Tailwind utility that takes a colour, after any variant, or the theme name
+// itself.
+const UTILITY = String.raw`(?<![\w-])(--color|bg|text|border(?:-[xytrblse])?|outline|ring(?:-offset)?|inset-ring|divide|fill|stroke|from|via|to|shadow|inset-shadow|drop-shadow|decoration|accent|caret|placeholder)`;
+
+const camel = (name) => name.replace(/-(\w)/g, (_, c) => c.toUpperCase());
+const tailwindKey = (step) => (step === 'bg' ? 'background' : camel(step));
+const dartName = (ramp, step) => ramp + camel(`-${step}`);
+
+const stoneNames = STONE.flatMap(([carbon, stone]) => [
+  { name: `--carbon-${carbon}`, files: STYLES, rewrite: replacing(new RegExp(String.raw`(?<![\w-])--carbon-${carbon}(?![\w-])`, 'g'), `--stone-${stone}`) },
+  {
+    name: `--color-carbon-${tailwindKey(carbon)}`,
+    files: STYLES,
+    rewrite: replacing(new RegExp(String.raw`${UTILITY}-carbon-${tailwindKey(carbon)}(?![\w-])`, 'g'), `$1-stone-${camel(stone)}`),
+  },
+  { name: `GlimTheme ${dartName('carbon', carbon)}`, files: DART, rewrite: replacing(new RegExp(String.raw`\b${dartName('carbon', carbon)}\b`, 'g'), dartName('stone', stone)) },
+]);
+
+// --hover is a step of its own, not the grey hover under another name, so each
+// control is moved and looked at by hand.
+const GREY_HOVER = 'It is another colour, so look at the control after the move.';
+
+// A state button is a wash under its hue's text. The solid hover swapped for
+// the wash's alone would sit on a solid fill, so the button moves as a whole.
+const statusHovers = ['ok', 'fail', 'warn'].flatMap((tone) => {
+  const Tone = camel(`-${tone}`);
+  const why = 'since a state button is a wash and the hover alone would sit on a solid fill.';
+  return [
+    {
+      name: `--status-${tone}-hover`,
+      files: STYLES,
+      report: everyMatch(
+        new RegExp(String.raw`(?<![\w-])--status-${tone}-hover(?![\w-])`, 'g'),
+        `--status-${tone}-hover goes in 6.0.0: move the button to --status-${tone}-wash under --status-${tone}-text, hovering to --status-${tone}-wash-hover, ${why}`,
+      ),
+    },
+    {
+      name: `--color-status${Tone}Hover`,
+      files: STYLES,
+      report: everyMatch(
+        new RegExp(String.raw`${UTILITY}-status${Tone}Hover\b`, 'g'),
+        `status${Tone}Hover goes in 6.0.0: move the button to bg-status${Tone}Wash text-status${Tone} hover:bg-status${Tone}WashHover, ${why}`,
+      ),
+    },
+    {
+      name: `GlimDerived status${Tone}Hover`,
+      files: DART,
+      report: everyMatch(
+        new RegExp(String.raw`(?<![\w-])status${Tone}Hover\b`, 'g'),
+        `status${Tone}Hover goes in 6.0.0: move the button to status${Tone}Wash under status${Tone}Text, hovering to status${Tone}WashHover, ${why}`,
+      ),
+    },
+  ];
+});
 
 export const TRANSFORMS = [
   { name: 'Badge shape', rewrite: badgeShape, report: badgeShapeLeft },
@@ -132,11 +213,40 @@ export const TRANSFORMS = [
     rewrite: dartInkMix,
     report: firstUse('inkMix', 'inkMix goes in 5.0.0: use inkLightness, the OKLab step the ink moves to (0.5 on a light theme, 0.74 on a dark one).'),
   },
-  { name: 'GlimTheme focusRing argument', files: DART, rewrite: dartFocusRing },
+  { name: 'GlimTheme focusRing argument', files: DART, rewrite: dartDropArgument('focusRing') },
+  ...stoneNames,
+  {
+    name: '--carbon-hover',
+    files: STYLES,
+    report: everyMatch(/(?<![\w-])--carbon-hover(?![\w-])/g, `--carbon-hover goes in 6.0.0: move the hover to --hover, the one hover of rule 21. ${GREY_HOVER}`),
+  },
+  {
+    name: '--color-carbon-hover',
+    files: STYLES,
+    report: everyMatch(
+      new RegExp(String.raw`${UTILITY}-carbon-hover(?![\w-])`, 'g'),
+      `--color-carbon-hover and its utilities, such as hover:bg-carbon-hover, go in 6.0.0: use hover:bg-hover, the one hover of rule 21. ${GREY_HOVER}`,
+    ),
+  },
+  {
+    name: 'GlimTheme carbonHover',
+    files: DART,
+    report: everyMatch(/\bcarbonHover\b/g, `carbonHover goes in 6.0.0: use hover on GlimDerived, the one hover of rule 21. ${GREY_HOVER}`),
+  },
+  ...statusHovers,
+  ...['statusOkBg', 'statusFailBg', 'statusWarnBg', 'statusWarnBgSoft'].map((name) => ({ name: `GlimTheme ${name} argument`, files: DART, rewrite: dartDropArgument(name) })),
+  {
+    name: '.glim-avatar--hued',
+    files: STYLES,
+    report: everyMatch(
+      /\bglim-avatar--hued\b/g,
+      'glim-avatar--hued goes in 6.0.0: use glim-avatar--toned with --avatar-tone set to one of var(--chart-1) to var(--chart-8), as avatarView() writes it. The accent stays for activity.',
+    ),
+  },
 ];
 
 const SKIP = new Set(['node_modules', 'dist', 'build', '.git']);
-const SOURCE = /\.(tsx?|jsx?|mjs|vue|css|scss|dart)$/;
+const SOURCE = /\.(tsx?|jsx?|mjs|vue|svelte|html|css|scss|dart)$/;
 
 function* sources(dir) {
   for (const name of readdirSync(dir)) {

@@ -1,0 +1,9 @@
+$ground: var(--stone-ground);
+
+.card {
+  background: $ground;
+
+  .title {
+    color: var(--stone-text);
+  }
+}

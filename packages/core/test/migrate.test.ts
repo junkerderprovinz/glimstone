@@ -22,7 +22,9 @@ function run(root: string, ...flags: string[]) {
   return { status: r.status, out: r.stdout + r.stderr };
 }
 
-for (const file of ['Status.tsx', 'Status.vue', 'Toasts.vue', 'theme.dart', 'app.css']) {
+const FILES = ['Status.tsx', 'Status.vue', 'Toasts.vue', 'theme.dart', 'app.css', 'stone.css', 'panel.scss', 'Stone.tsx', 'Stone.vue', 'Menu.svelte', 'index.html', 'stone.dart'];
+
+for (const file of FILES) {
   test(`${file} is rewritten to the current names`, () => {
     const root = app();
     assert.equal(run(root).status, 0);
@@ -43,6 +45,24 @@ test('what cannot be rewritten is reported with file and line', () => {
   assert.match(r.out, /Status\.tsx:1: DropdownListbox .*Select/);
   assert.match(r.out, /theme\.dart:11: inkMix goes in 5\.0\.0/);
   assert.match(r.out, /app\.css:10: --ink-mix goes in 5\.0\.0/);
+});
+
+test('a grey hover is reported for the one hover rather than rewritten, since --hover is another colour', () => {
+  const r = run(app());
+  assert.match(r.out, /stone\.css:8: --carbon-hover goes in 6\.0\.0: .*--hover/);
+  assert.match(r.out, /Stone\.tsx:9: .*hover:bg-carbon-hover.*hover:bg-hover/);
+  assert.match(r.out, /stone\.dart:8: carbonHover goes in 6\.0\.0: .*\bhover\b/);
+});
+
+test('a solid state hover is reported with the wash pair to move the button to', () => {
+  const r = run(app());
+  assert.match(r.out, /stone\.css:21: --status-ok-hover goes in 6\.0\.0: .*--status-ok-wash under --status-ok-text.*--status-ok-wash-hover/);
+  assert.match(r.out, /Stone\.tsx:8: statusFailHover goes in 6\.0\.0: .*bg-statusFailWash text-statusFail hover:bg-statusFailWashHover/);
+  assert.match(r.out, /stone\.dart:10: statusFailHover goes in 6\.0\.0: .*statusFailWash under statusFailText/);
+});
+
+test('an avatar filled with the accent is reported with the toned avatar that replaced it', () => {
+  assert.match(run(app()).out, /index\.html:4: glim-avatar--hued goes in 6\.0\.0: .*glim-avatar--toned.*--avatar-tone/);
 });
 
 test('--check changes nothing and fails while there is something to do', () => {
