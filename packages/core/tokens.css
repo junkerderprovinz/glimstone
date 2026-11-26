@@ -5633,18 +5633,21 @@
   :is(.glim-field-row, .glim-field-row-controls) > .glim-slider > .glim-slider-control { flex: 1; }
 
   /* A row with a switch is one target from end to end, as a settings row on a
-     phone is, so it shows a quiet ground under the pointer. */
+     phone is, so it shows a quiet ground under the pointer. The ground reaches
+     a little past the row as a spread shadow, which keeps the row's edges in
+     line with the rows around it. */
   .glim-field-row[data-press]:has([role="switch"]) {
-    margin-inline: calc(-1 * var(--space-4));
-    padding-inline: var(--space-4);
     border-radius: var(--radius-control);
     cursor: pointer;
   }
   @media (hover: hover) {
-    .glim-field-row[data-press]:has([role="switch"]:not(:disabled)):hover { background-color: var(--hover); }
+    .glim-field-row[data-press]:has([role="switch"]:not(:disabled)):hover {
+      background-color: var(--hover);
+      box-shadow: 0 0 0 var(--space-4) var(--hover);
+    }
   }
   @media (prefers-reduced-motion: no-preference) {
-    .glim-field-row[data-press]:has([role="switch"]) { transition: background-color var(--motion-content-dur) var(--motion-ease); }
+    .glim-field-row[data-press]:has([role="switch"]) { transition: background-color var(--motion-content-dur) var(--motion-ease), box-shadow var(--motion-content-dur) var(--motion-ease); }
   }
 
   /* Rows that share a column for their names (FieldRowGroup): a grid as wide as
@@ -6213,11 +6216,11 @@
   .glim-secret-confirm-live { display: block; }
   /* In a row the second field stands under the first, at its width. */
   .glim-field-row > .glim-secret-confirm { column-gap: var(--space-8); }
+  /* Its label gives way first, so a longer label never makes it narrower than the first. */
+  .glim-field-row > .glim-secret-confirm > .glim-secret-confirm-label { min-width: 0; }
   .glim-field-row > .glim-secret-confirm > .glim-secret-confirm-box {
-    flex: 1 1 var(--field-row-min);
-    width: auto;
-    min-width: min(var(--field-row-min), 100%);
-    max-width: max(min(var(--field-row-max), 100% - var(--field-row-name)), min(var(--field-row-min), 100%));
+    flex: none;
+    width: max(min(var(--field-row-max), 100% - var(--field-row-name)), min(var(--field-row-min), 100%));
   }
   .glim-field-row-controls:has(> .glim-secret-confirm) { flex-wrap: wrap; }
 

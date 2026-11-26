@@ -3097,8 +3097,7 @@ test.describe("FieldRow", () => {
     const group = stage(page, "FieldRowGroup");
     const lefts = await group.locator(".glim-field--grow").evaluateAll((els) => els.map((e) => Math.round(e.getBoundingClientRect().left)));
     expect(new Set(lefts).size).toBe(1);
-    // A row with a switch reaches past the column by its padding, so its ground can show under the pointer.
-    const place = await group.locator(".glim-field-row", { hasText: /^Notify/ }).evaluate((r) => Math.round(r.getBoundingClientRect().right - parseFloat(getComputedStyle(r).paddingInlineEnd) - r.querySelector("[role=switch]")!.getBoundingClientRect().right));
+    const place = await group.locator(".glim-field-row", { hasText: /^Notify/ }).evaluate((r) => Math.round(r.getBoundingClientRect().right - r.querySelector("[role=switch]")!.getBoundingClientRect().right));
     expect(place).toBe(0);
     const hours = await group.locator(".glim-field-row", { hasText: /^Hours/ }).evaluate((r) => {
       const [a, b] = r.querySelectorAll("input");
@@ -3210,8 +3209,12 @@ test.describe("PathField", () => {
 
   test("[path-width] the widths", async ({ page }) => {
     await open(page, "/components/path-field");
-    const width = await demo(page).locator(".glim-field-row", { hasText: "Short" }).locator(".glim-path").evaluate((p) => Math.round(p.getBoundingClientRect().width));
-    expect(width).toBe(192);
+    // In a row it fills the line the row's fields share, as a text field does.
+    const look = await demo(page).locator(".glim-field-row", { hasText: "Short" }).evaluate((r) => ({
+      path: Math.round(r.querySelector(".glim-path")!.getBoundingClientRect().width),
+      row: r.getBoundingClientRect().width,
+    }));
+    expect(look.path).toBe(Math.round(Math.min(24 * 16, look.row - 9 * 16)));
   });
 
   test("[path-narrow] little room leaves the glyph alone", async ({ page }) => {
@@ -3219,10 +3222,11 @@ test.describe("PathField", () => {
     const row = demo(page).locator(".glim-field-row", { hasText: /^Half/ });
     const look = await row.evaluate((r) => {
       const b = r.querySelector(".glim-btn")!.getBoundingClientRect();
-      return { square: Math.abs(b.width - b.height) < 1, field: r.querySelector("input")!.getBoundingClientRect().width };
+      const path = r.querySelector(".glim-path")!.getBoundingClientRect().width;
+      return { square: Math.abs(b.width - b.height) < 1, rest: path - b.width - r.querySelector("input")!.getBoundingClientRect().width };
     });
     expect(look.square).toBe(true);
-    expect(look.field).toBeGreaterThan(200);
+    expect(look.rest).toBeLessThan(13);
     await expect(row.getByRole("button", { name: "Choose" })).toHaveCount(1);
     await expect(button(page).first().getByText("Choose a folder")).toBeVisible();
   });
@@ -4322,7 +4326,9 @@ test.describe("SignInCard", () => {
     const password = field(page, "Password");
     await expect(password).toBeFocused();
     expect(await password.evaluate((e) => getComputedStyle(e).outlineStyle)).toBe("none");
-    expect(await ground(password)).toBe(await token(page, "--field-focus"));
+    // The fill steps up through a short transition.
+    const focus = await token(page, "--field-focus");
+    await expect.poll(() => ground(password)).toBe(focus);
     await expect(field(page, "Name", "SignInCardSlots")).not.toBeFocused();
   });
 
