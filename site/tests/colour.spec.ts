@@ -26,11 +26,15 @@ const paint = (page: Page, name: string) =>
 
 const ground = (page: Page) => page.evaluate(() => getComputedStyle(document.body).backgroundColor);
 
+// The OKLCH lightness of a stone colour. The browsers write the hue to a
+// different number of places, so the step is what a test compares.
+const step = (colour: string) => Number(colour.match(/^oklch\(([\d.]+) /)?.[1]);
+
 test("OLED puts a chosen dark theme on black and moves the card one step down", async ({ page }) => {
   await open(page, { theme: "dark", oled: true });
   expect(await ground(page)).toBe("rgb(0, 0, 0)");
-  expect(await paint(page, "--carbon-surface")).toBe("rgb(22, 22, 22)");
-  expect(await paint(page, "--carbon-text")).toBe("rgb(244, 244, 244)");
+  expect(step(await paint(page, "--carbon-surface"))).toBe(0.175);
+  expect(step(await paint(page, "--carbon-text"))).toBe(0.95);
 });
 
 test("OLED follows the system's dark when no theme is chosen", async ({ page }) => {
@@ -41,15 +45,15 @@ test("OLED follows the system's dark when no theme is chosen", async ({ page }) 
 
 test("OLED leaves the light theme alone, chosen or from the system", async ({ page }) => {
   await open(page, { theme: "light", oled: true });
-  expect(await ground(page)).toBe("rgb(244, 244, 244)");
+  expect(step(await ground(page))).toBe(0.975);
   await page.emulateMedia({ colorScheme: "light" });
   await page.evaluate(() => document.documentElement.removeAttribute("data-theme"));
-  expect(await ground(page)).toBe("rgb(244, 244, 244)");
+  expect(step(await ground(page))).toBe(0.975);
 });
 
-test("without OLED the dark ground stays Carbon's near-black", async ({ page }) => {
+test("without OLED the dark ground stays the stone's near-black", async ({ page }) => {
   await open(page, { theme: "dark", oled: false });
-  expect(await ground(page)).toBe("rgb(22, 22, 22)");
+  expect(step(await ground(page))).toBe(0.175);
 });
 
 test("a pale accent's text moves onto the light ramp's ink step and keeps its hue", async ({ page }) => {
@@ -103,8 +107,9 @@ const shadowOf = (page: Page, cls: string) =>
 
 test("OLED draws no ring round a card", async ({ page }) => {
   await open(page, { theme: "dark", oled: true });
-  // The light ramp's ring stays in the shadow list, transparent.
-  expect(await shadowOf(page, "glim-card")).not.toMatch(/rgba?\((?!0, 0, 0, 0\))[^)]*\) 0px 0px 0px 1px/);
+  // The raised step's contact line is black, which vanishes on black; a lighter
+  // line would read as a frame.
+  expect(await shadowOf(page, "glim-card")).not.toMatch(/rgba?\((?!0, 0, 0)[^)]*\) 0px 0px 0px 1px/);
 });
 
 test("under OLED a bubble keeps the dark look's shadow, which lifts it off a card", async ({ page }) => {
@@ -141,7 +146,7 @@ test("a pale accent's focus ring takes the darkened ink on the light theme", asy
   expect(ring).toMatch(/^oklab\(0\.5 /);
 });
 
-for (const [theme, grey] of [["dark", "rgb(198, 198, 198)"], ["light", "rgb(82, 82, 82)"]] as const) {
+for (const [theme, grey] of [["dark", 0.8], ["light", 0.43]] as const) {
   test(`a field's placeholder reads the placeholder token on the ${theme} theme`, async ({ page }) => {
     await open(page, { theme });
     const placeholder = await page.evaluate(() => {
@@ -153,18 +158,18 @@ for (const [theme, grey] of [["dark", "rgb(198, 198, 198)"], ["light", "rgb(82, 
       input.remove();
       return c;
     });
-    expect(placeholder).toBe(grey);
+    expect(step(placeholder)).toBe(grey);
   });
 }
 
 for (const [system, chosen, expected] of [
-  ["light", "dark", "rgb(22, 22, 22)"],
-  ["dark", "light", "rgb(244, 244, 244)"],
+  ["light", "dark", 0.175],
+  ["dark", "light", 0.975],
 ] as const) {
   test(`a chosen ${chosen} theme wins over the system's ${system}`, async ({ page }) => {
     await page.emulateMedia({ colorScheme: system });
     await open(page, { theme: chosen });
-    expect(await ground(page)).toBe(expected);
+    expect(step(await ground(page))).toBe(expected);
   });
 }
 
@@ -179,5 +184,5 @@ test("a subtree can pin the other theme", async ({ page }) => {
     el.remove();
     return c;
   });
-  expect(pinned).toBe("rgb(244, 244, 244)");
+  expect(step(pinned)).toBe(0.975);
 });

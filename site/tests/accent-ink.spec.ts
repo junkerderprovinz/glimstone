@@ -160,11 +160,13 @@ function measure(): Miss[] {
         if (r < needs) out.push({ what: where(el), text: (el.textContent ?? "").trim().slice(0, 40), ink: s.color, fill: `rgb(${fill.join(", ")})`, ratio: r, needs });
       }
     }
-    // A knob or a mark drawn as a small fill of its own on the accent, such as a
-    // switch's knob, is a graphic and needs 3:1.
+    // A mark drawn as a small fill of its own on the accent is a graphic and
+    // needs 3:1. The switch's knob is left out: it is white on the light ramp
+    // and stone on the dark ones whatever the accent, and the state reads from
+    // the track, which holds 3:1 off and takes the accent on.
     const own = parse(getComputedStyle(el).backgroundColor);
     const box = el.getBoundingClientRect();
-    if (own.a === 1 && box.width <= 24 && box.height <= 24 && el.parentElement) {
+    if (own.a === 1 && box.width <= 24 && box.height <= 24 && el.parentElement && !el.classList.contains("glim-toggle-thumb")) {
       const under = fillOf(el.parentElement);
       if (under && accentFill(under) && !accentFill(el)) {
         const fill = parse(getComputedStyle(under).backgroundColor).rgb;

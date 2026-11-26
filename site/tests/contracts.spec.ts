@@ -829,14 +829,14 @@ test.describe("Select in a well", () => {
       return colour;
     }, token);
 
-  test("[select-well] the trigger takes a field's ground and hovers up", async ({ page }) => {
+  test("[select-well] the trigger takes a field's ground and its hover step", async ({ page }) => {
     await open(page, "/components/select");
     for (const place of ["[data-well]", ".glim-subcard"]) {
       const box = stage(page, "SelectWell").locator(place);
       const trigger = box.locator(".glim-select-trigger");
       expect(await ground(trigger)).toBe(await ground(box.locator(".glim-input")));
       await trigger.hover();
-      await expect.poll(() => ground(trigger)).toBe(await tint(trigger, "--hover"));
+      await expect.poll(() => ground(trigger)).toBe(await tint(trigger, "--field-hover"));
       await page.mouse.move(0, 0);
     }
   });
@@ -4277,7 +4277,7 @@ test.describe("SignInCard", () => {
     const password = field(page, "Password");
     await expect(password).toBeFocused();
     expect(await password.evaluate((e) => getComputedStyle(e).outlineStyle)).toBe("none");
-    expect(await ground(password)).toBe(await token(page, "--carbon-surface3"));
+    expect(await ground(password)).toBe(await token(page, "--field-focus"));
     await expect(field(page, "Name", "SignInCardSlots")).not.toBeFocused();
   });
 
@@ -4521,7 +4521,7 @@ test.describe("SignInCard", () => {
     await page.emulateMedia({ colorScheme: "dark" });
     await open(page, "/components/sign-in-card", { oled: true });
     expect(await ground(stage(page, "SignInCardBasic").locator(".glim-signin"))).toBe("rgb(0, 0, 0)");
-    expect(await ground(card(page))).toBe(hexToRgb("#161616"));
+    expect(await ground(card(page))).toMatch(/^oklch\(0\.175 /);
   });
 
   test("[signin-width] 24rem wide, a phone's width less 16px either side", async ({ page }) => {
@@ -5821,17 +5821,19 @@ test.describe("Fortress", () => {
     await expect.poll(track).not.toBe(resting);
   });
 
-  for (const [name, look, card, row] of [
-    ["dark", { theme: "dark" }, "rgb(38, 38, 38)", "rgb(57, 57, 57)"],
-    ["light", { theme: "light" }, "rgb(255, 255, 255)", "rgb(232, 232, 232)"],
-    ["OLED", { theme: "dark", oled: true }, "rgb(22, 22, 22)", "rgb(38, 38, 38)"],
+  // Stone steps by their OKLCH lightness, since the browsers write the hue to
+  // a different number of places.
+  for (const [name, look, card, row, floating] of [
+    ["dark", { theme: "dark" }, /^oklch\(0\.235 /, /^oklch\(0\.29 /, /^oklch\(0\.275 /],
+    ["light", { theme: "light" }, /^oklch\(0\.997 /, /^oklch\(0\.955 /, /^rgb\(255, 255, 255\)$/],
+    ["OLED", { theme: "dark", oled: true }, /^oklch\(0\.175 /, /^oklch\(0\.235 /, /^oklch\(0\.235 /],
   ] as const) {
     test(`[fortress-modes] the cards and rows take the ${name} surfaces`, async ({ page }) => {
       await open(page, "/components/fortress", look);
       await showOthers(page);
       const ground = (sel: string) => inside(page).locator(sel).evaluate((e) => getComputedStyle(e).backgroundColor);
-      expect(await ground('[data-fortress-app="charlie"]')).toBe(card);
-      expect(await ground('[data-instance="c1"]')).toBe(row);
+      expect(await ground('[data-fortress-app="charlie"]')).toMatch(card);
+      expect(await ground('[data-instance="c1"]')).toMatch(row);
     });
 
     test(`[fortress-modes] the status window takes the ${name} surface`, async ({ page }) => {
@@ -5839,7 +5841,7 @@ test.describe("Fortress", () => {
       await stage(page, "FortressStatus").locator('[data-hook="report"]').click();
       const win = page.getByRole("dialog");
       const surface = await win.evaluate((w) => getComputedStyle(w).backgroundColor);
-      expect(surface).toBe(card);
+      expect(surface).toMatch(floating);
     });
   }
 

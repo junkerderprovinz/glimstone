@@ -77,9 +77,9 @@ test("the wall follows the accent, the corners and the theme chosen in the panel
   await panel(page).getByRole("radio", { name: "Round" }).click();
   expect(await style(page, ".glim-panel", "border-top-left-radius")).not.toBe("0px");
 
-  expect(await style(page, ".glim-panel", "background-color")).toBe("rgb(38, 38, 38)");
+  expect(await style(page, ".glim-panel", "background-color")).toMatch(/^oklch\(0\.235 /);
   await panel(page).getByRole("radio", { name: "Light" }).click();
-  await expect.poll(() => style(page, ".glim-panel", "background-color")).toBe("rgb(255, 255, 255)");
+  await expect.poll(() => style(page, ".glim-panel", "background-color")).toMatch(/^oklch\(0\.997 /);
 
   expect(await style(page, ".glim-btn", "outline-style")).toBe("none");
   await panel(page).locator('[data-axis="contrast"]').getByRole("switch").click();
