@@ -49,13 +49,13 @@ test('a row keeps its figures in a column of fixed width at its end', () => {
 
 test('a unit stands a step smaller and quieter than its figure, without a box', () => {
   assert.equal(declared(':is(.glim-list-row-value, .glim-pill.glim-num) small', 'font-size'), 'var(--text-meta)');
-  assert.equal(declared(':is(.glim-list-row-value, .glim-pill.glim-num) small', 'color'), 'var(--carbon-text-muted)');
+  assert.equal(declared(':is(.glim-list-row-value, .glim-pill.glim-num) small', 'color'), 'var(--stone-text-muted)');
   assert.equal(declared('.glim-pill.glim-num', 'background'), 'none');
   assert.equal(declared('.glim-pill.glim-num', 'padding'), '0');
 });
 
 test('a status stands in neutral words beside a mark in the state colour', () => {
-  assert.equal(declared('.glim-list-row-status', 'color'), 'var(--carbon-text-sub)');
+  assert.equal(declared('.glim-list-row-status', 'color'), 'var(--stone-text-sub)');
   assert.equal(declared('.glim-list-row-status[data-tone="fail"] > .glim-status-mark', 'color'), 'var(--status-fail-solid)');
   assert.equal(declared('.glim-list-row-status[data-tone="warn"] > .glim-status-mark', 'color'), 'var(--status-warn-solid)');
   assert.equal(declared('.glim-status-dot', 'background-color'), 'var(--status-ok-solid)');
@@ -68,7 +68,7 @@ test('a meter says its level: the app\'s words, else the percentage, nothing whi
 });
 
 test('an avatar wears a soft wash of its tone with the initials in the same tone', () => {
-  assert.equal(declared('.glim-avatar--toned', 'background-color'), 'color-mix(in oklab, var(--avatar-tone) 18%, var(--carbon-surface))');
+  assert.equal(declared('.glim-avatar--toned', 'background-color'), 'color-mix(in oklab, var(--avatar-tone) 18%, var(--stone-surface))');
   assert.match(declared('.glim-avatar--toned', 'color'), /oklch\(from var\(--avatar-tone\)/);
 });
 
@@ -85,7 +85,7 @@ test('a card speaks in one row style: the name 14/500 and what explains it 13px 
 });
 
 test('an update waiting is news, not a fault: its line stays neutral', () => {
-  assert.equal(declared('.glim-version-state[data-tone="warn"] .glim-version-line', 'color'), 'var(--carbon-text-sub)');
+  assert.equal(declared('.glim-version-state[data-tone="warn"] .glim-version-line', 'color'), 'var(--stone-text-sub)');
 });
 
 test('a skeleton row takes the real row\'s measures: the glyph inside the tile, bars at cap height, room for the value and the buttons', () => {
@@ -100,7 +100,7 @@ test('a skeleton row takes the real row\'s measures: the glyph inside the tile, 
 });
 
 test('a disabled control has colours of its own instead of turning see-through', () => {
-  const ink = 'color-mix(in oklab, var(--carbon-text) 38%, transparent)';
+  const ink = 'color-mix(in oklab, var(--stone-text) 38%, transparent)';
   for (const sel of ['.glim-btn:disabled', '.glim-badge-action:disabled', '.glim-sel-seg:disabled', '.glim-menu-item:disabled', '.glim-icon-btn:disabled', '.glim-select-content--menu .glim-menu-item[data-disabled]']) {
     assert.equal(declared(sel, 'opacity'), '', sel);
     assert.equal(declared(sel, 'color'), ink, sel);

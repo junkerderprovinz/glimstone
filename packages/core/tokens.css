@@ -265,14 +265,20 @@
      the accent's hue. The tint is a share of the accent's chroma that stops at
      0.011 on the dark ramp and 0.006 on the light one, so a saturated accent
      warms or cools the stone without colouring it, and a grey accent leaves it
-     grey. The names keep the carbon- prefix every app already reads. */
-  --carbon-bg: light-dark(oklch(from var(--accent) 0.975 min(calc(c * 0.03), 0.005) h), oklch(from var(--accent) 0.175 min(calc(c * 0.07), 0.011) h));
-  --carbon-sidebar: light-dark(oklch(from var(--accent) 0.995 min(calc(c * 0.015), 0.003) h), oklch(from var(--accent) 0.215 min(calc(c * 0.07), 0.011) h));
-  --carbon-surface: light-dark(oklch(from var(--accent) 0.997 min(calc(c * 0.01), 0.002) h), oklch(from var(--accent) 0.235 min(calc(c * 0.07), 0.011) h));
-  --carbon-surface2: light-dark(oklch(from var(--accent) 0.955 min(calc(c * 0.03), 0.005) h), oklch(from var(--accent) 0.29 min(calc(c * 0.07), 0.011) h));
-  --carbon-surface3: light-dark(oklch(from var(--accent) 0.905 min(calc(c * 0.035), 0.006) h), oklch(from var(--accent) 0.36 min(calc(c * 0.07), 0.011) h));
+     grey. The carbon- names apps read before 5.0.0 stay as aliases of these
+     until 6.0.0, in the legacy block. */
+  --stone-ground: light-dark(oklch(from var(--accent) 0.975 min(calc(c * 0.03), 0.005) h), oklch(from var(--accent) 0.175 min(calc(c * 0.07), 0.011) h));
+  --stone-sidebar: light-dark(oklch(from var(--accent) 0.995 min(calc(c * 0.015), 0.003) h), oklch(from var(--accent) 0.215 min(calc(c * 0.07), 0.011) h));
+  --stone-surface: light-dark(oklch(from var(--accent) 0.997 min(calc(c * 0.01), 0.002) h), oklch(from var(--accent) 0.235 min(calc(c * 0.07), 0.011) h));
+  --stone-surface2: light-dark(oklch(from var(--accent) 0.955 min(calc(c * 0.03), 0.005) h), oklch(from var(--accent) 0.29 min(calc(c * 0.07), 0.011) h));
+  --stone-surface3: light-dark(oklch(from var(--accent) 0.905 min(calc(c * 0.035), 0.006) h), oklch(from var(--accent) 0.36 min(calc(c * 0.07), 0.011) h));
+
+  /* Deprecated, and gone in 6.0.0. Every control hovers to the one --hover
+     (rule 21), so nothing here reads this step. It keeps its value for an app's
+     own rules, and npx glimstone-migrate reports each use rather than rewriting
+     it, since --hover is another colour. */
   --carbon-hover: light-dark(oklch(from var(--accent) 0.93 min(calc(c * 0.03), 0.005) h), oklch(from var(--accent) 0.3 min(calc(c * 0.07), 0.011) h));
-  --carbon-hover-raised: light-dark(oklch(from var(--accent) 0.86 min(calc(c * 0.05), 0.009) h), oklch(from var(--accent) 0.44 min(calc(c * 0.07), 0.011) h));
+  --stone-hover-raised: light-dark(oklch(from var(--accent) 0.86 min(calc(c * 0.05), 0.009) h), oklch(from var(--accent) 0.44 min(calc(c * 0.07), 0.011) h));
 
   /* Whatever floats over the page, a menu, a list, a bubble, a toast or a
      window: one stone step above the card on the dark ramps, so it stands off
@@ -288,16 +294,17 @@
      stone on the dark ones, where a white knob would glare. */
   --toggle-knob: light-dark(#ffffff, oklch(from var(--accent) 0.2 min(calc(c * 0.07), 0.011) h));
   --toggle-knob-shadow: 0 1px 2px light-dark(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5));
-  --carbon-border: light-dark(oklch(from var(--accent) 0.905 min(calc(c * 0.035), 0.006) h), oklch(from var(--accent) 0.3 min(calc(c * 0.07), 0.011) h));
+  --stone-border: light-dark(oklch(from var(--accent) 0.905 min(calc(c * 0.035), 0.006) h), oklch(from var(--accent) 0.3 min(calc(c * 0.07), 0.011) h));
 
   /* The About card's brand marks at rest, adjusted from the published brand
      colours. A brand colour is designed against white or its own fill, so on
-     the neutral button ground it fails 3:1 in one theme: #FFDD00 reads 1.14:1
-     on the light #d1d1d1, and PayPal's navy fails on the dark #525252. Warm
-     brands are deepened for the light theme and dark ones lightened for the
-     dark theme. Contrast: 5.7, 3.3, 3.1 and 7.7 to one on the dark ground, 3.2,
-     3.2, 8.7 and 11.9 on the light one. Discord's blurple, lightened for the
-     dark theme, reads 3.1 on the dark ground and 3.0 on the light one.
+     the neutral button ground, --stone-surface2, it fails 3:1 in one theme:
+     #FFDD00 reads 1.18:1 on the light ground and PayPal's navy 1.19:1 on the
+     dark one. Warm brands are deepened for the light theme and dark ones
+     lightened for the dark theme. On the default accent's stone, coffee and
+     docs, Bitcoin, PayPal and Discord read 10.5, 6.1, 6.2 and 5.6 to one on the
+     dark ground, 12.4, 7.3, 7.3 and 6.6 on OLED's, and 4.3, 4.4, 10.4 and 4.0
+     on the light one.
 
      The mail button has no brand colour: it reaches the app's own authors and
      follows the user's accent. The manual's book takes the yellow of the
@@ -322,9 +329,9 @@
   --brand-github: light-dark(#181717, #ffffff);
 
   /* Text ramp: three steps, the last still legible at 12px. */
-  --carbon-text: light-dark(oklch(from var(--accent) 0.2 min(calc(c * 0.05), 0.009) h), oklch(from var(--accent) 0.95 min(calc(c * 0.03), 0.005) h));
-  --carbon-text-sub: light-dark(oklch(from var(--accent) 0.43 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.8 min(calc(c * 0.05), 0.009) h));
-  --carbon-text-muted: light-dark(oklch(from var(--accent) 0.52 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.67 min(calc(c * 0.07), 0.011) h));
+  --stone-text: light-dark(oklch(from var(--accent) 0.2 min(calc(c * 0.05), 0.009) h), oklch(from var(--accent) 0.95 min(calc(c * 0.03), 0.005) h));
+  --stone-text-sub: light-dark(oklch(from var(--accent) 0.43 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.8 min(calc(c * 0.05), 0.009) h));
+  --stone-text-muted: light-dark(oklch(from var(--accent) 0.52 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.67 min(calc(c * 0.07), 0.011) h));
   --sidebar-text: light-dark(oklch(from var(--accent) 0.32 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.88 min(calc(c * 0.05), 0.009) h));
 
   /* A field's placeholder. Muted text falls to 2.4:1 on a sub-card's surface3
@@ -449,15 +456,15 @@
    colour, such as GitHub's, would vanish into the card, so --tile-edge rings
    every lit tile. */
 [data-oled] {
-  --carbon-bg: light-dark(oklch(from var(--accent) 0.975 min(calc(c * 0.03), 0.005) h), #000000);
-  --carbon-sidebar: light-dark(oklch(from var(--accent) 0.995 min(calc(c * 0.015), 0.003) h), oklch(from var(--accent) 0.175 min(calc(c * 0.07), 0.011) h));
-  --carbon-surface: light-dark(oklch(from var(--accent) 0.997 min(calc(c * 0.01), 0.002) h), oklch(from var(--accent) 0.175 min(calc(c * 0.07), 0.011) h));
-  --carbon-surface2: light-dark(oklch(from var(--accent) 0.955 min(calc(c * 0.03), 0.005) h), oklch(from var(--accent) 0.235 min(calc(c * 0.07), 0.011) h));
-  --carbon-surface3: light-dark(oklch(from var(--accent) 0.905 min(calc(c * 0.035), 0.006) h), oklch(from var(--accent) 0.29 min(calc(c * 0.07), 0.011) h));
+  --stone-ground: light-dark(oklch(from var(--accent) 0.975 min(calc(c * 0.03), 0.005) h), #000000);
+  --stone-sidebar: light-dark(oklch(from var(--accent) 0.995 min(calc(c * 0.015), 0.003) h), oklch(from var(--accent) 0.175 min(calc(c * 0.07), 0.011) h));
+  --stone-surface: light-dark(oklch(from var(--accent) 0.997 min(calc(c * 0.01), 0.002) h), oklch(from var(--accent) 0.175 min(calc(c * 0.07), 0.011) h));
+  --stone-surface2: light-dark(oklch(from var(--accent) 0.955 min(calc(c * 0.03), 0.005) h), oklch(from var(--accent) 0.235 min(calc(c * 0.07), 0.011) h));
+  --stone-surface3: light-dark(oklch(from var(--accent) 0.905 min(calc(c * 0.035), 0.006) h), oklch(from var(--accent) 0.29 min(calc(c * 0.07), 0.011) h));
   --carbon-hover: light-dark(oklch(from var(--accent) 0.93 min(calc(c * 0.03), 0.005) h), oklch(from var(--accent) 0.255 min(calc(c * 0.07), 0.011) h));
-  --carbon-hover-raised: light-dark(oklch(from var(--accent) 0.86 min(calc(c * 0.05), 0.009) h), oklch(from var(--accent) 0.36 min(calc(c * 0.07), 0.011) h));
+  --stone-hover-raised: light-dark(oklch(from var(--accent) 0.86 min(calc(c * 0.05), 0.009) h), oklch(from var(--accent) 0.36 min(calc(c * 0.07), 0.011) h));
   --surface-overlay: light-dark(#ffffff, oklch(from var(--accent) 0.235 min(calc(c * 0.07), 0.011) h));
-  --carbon-border: light-dark(oklch(from var(--accent) 0.905 min(calc(c * 0.035), 0.006) h), oklch(from var(--accent) 0.235 min(calc(c * 0.07), 0.011) h));
+  --stone-border: light-dark(oklch(from var(--accent) 0.905 min(calc(c * 0.035), 0.006) h), oklch(from var(--accent) 0.235 min(calc(c * 0.07), 0.011) h));
   --tile-edge: light-dark(transparent, rgba(255, 255, 255, .2));
 }
 
@@ -503,13 +510,33 @@
 }
 
 /* Deprecated tokens, kept so an app's own CSS that reads them still works until
-   5.0.0 (rule 52). --ink-mix is how much of the accent the ink kept against
+   the major release that removes them (rule 52). npx glimstone-migrate rewrites
+   them.
+
+   The carbon- names are the stone ramp under the names it had before 5.0.0, and
+   go in 6.0.0. Each is an alias of its stone step, declared on every element
+   that declares the stones, so it resolves there to that element's own step: a
+   [data-theme] subtree, OLED and the contrast step all reach it, and
+   light-dark() still resolves where the colour is used. Their Tailwind names
+   point at the stone steps themselves.
+
+   --ink-mix goes in 5.0.0. It is how much of the accent the ink kept against
    black: all of it on the dark ramps and 55% on the light one. The stylesheet
-   no longer reads it, so it needs the theme's own selectors rather than a
-   light-dark(), which only takes colours. npx glimstone-migrate rewrites the
-   mix it was made for. */
+   does not read it, so it needs the theme's own selectors rather than a
+   light-dark(), which only takes colours. */
 :root,
-[data-theme="dark"] {
+[data-theme],
+[data-oled] {
+  --carbon-bg: var(--stone-ground);
+  --carbon-sidebar: var(--stone-sidebar);
+  --carbon-surface: var(--stone-surface);
+  --carbon-surface2: var(--stone-surface2);
+  --carbon-surface3: var(--stone-surface3);
+  --carbon-hover-raised: var(--stone-hover-raised);
+  --carbon-border: var(--stone-border);
+  --carbon-text: var(--stone-text);
+  --carbon-text-sub: var(--stone-text-sub);
+  --carbon-text-muted: var(--stone-text-muted);
   --ink-mix: 100%;
 }
 
@@ -574,15 +601,15 @@
   :root,
   [data-theme] {
     --focus-ring-width: 3px;
-    --carbon-border: light-dark(oklch(from var(--accent) 0.54 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.64 min(calc(c * 0.07), 0.011) h));
-    --carbon-text-sub: light-dark(oklch(from var(--accent) 0.32 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.88 min(calc(c * 0.05), 0.009) h));
-    --carbon-text-muted: light-dark(oklch(from var(--accent) 0.43 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.8 min(calc(c * 0.05), 0.009) h));
+    --stone-border: light-dark(oklch(from var(--accent) 0.54 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.64 min(calc(c * 0.07), 0.011) h));
+    --stone-text-sub: light-dark(oklch(from var(--accent) 0.32 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.88 min(calc(c * 0.05), 0.009) h));
+    --stone-text-muted: light-dark(oklch(from var(--accent) 0.43 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.8 min(calc(c * 0.05), 0.009) h));
     --sidebar-text: light-dark(oklch(from var(--accent) 0.2 min(calc(c * 0.05), 0.009) h), oklch(from var(--accent) 0.95 min(calc(c * 0.03), 0.005) h));
     --field-placeholder: light-dark(oklch(from var(--accent) 0.32 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.88 min(calc(c * 0.05), 0.009) h));
     --ink-l-light: 0.40;
     --ink-l-dark: 0.84;
     --status-neutral-text: light-dark(#525252, #c6c6c6);
-    --hairline: inset 0 0 0 1px var(--carbon-border);
+    --hairline: inset 0 0 0 1px var(--stone-border);
   }
 }
 
@@ -591,31 +618,36 @@
 :root[data-contrast="more"],
 :root[data-contrast="more"] [data-theme] {
   --focus-ring-width: 3px;
-  --carbon-border: light-dark(oklch(from var(--accent) 0.54 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.64 min(calc(c * 0.07), 0.011) h));
-  --carbon-text-sub: light-dark(oklch(from var(--accent) 0.32 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.88 min(calc(c * 0.05), 0.009) h));
-  --carbon-text-muted: light-dark(oklch(from var(--accent) 0.43 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.8 min(calc(c * 0.05), 0.009) h));
+  --stone-border: light-dark(oklch(from var(--accent) 0.54 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.64 min(calc(c * 0.07), 0.011) h));
+  --stone-text-sub: light-dark(oklch(from var(--accent) 0.32 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.88 min(calc(c * 0.05), 0.009) h));
+  --stone-text-muted: light-dark(oklch(from var(--accent) 0.43 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.8 min(calc(c * 0.05), 0.009) h));
   --sidebar-text: light-dark(oklch(from var(--accent) 0.2 min(calc(c * 0.05), 0.009) h), oklch(from var(--accent) 0.95 min(calc(c * 0.03), 0.005) h));
   --field-placeholder: light-dark(oklch(from var(--accent) 0.32 min(calc(c * 0.07), 0.011) h), oklch(from var(--accent) 0.88 min(calc(c * 0.05), 0.009) h));
   --ink-l-light: 0.40;
   --ink-l-dark: 0.84;
   --status-neutral-text: light-dark(#525252, #c6c6c6);
-  --hairline: inset 0 0 0 1px var(--carbon-border);
+  --hairline: inset 0 0 0 1px var(--stone-border);
 }
 
 /* The hover step of a filled tone that has no surface ramp of its own (rule
    21): the fill mixed toward the theme's text colour, which is lighter on dark
    and darker on light, the direction the ramp moves. 15% is about one step of
    the dark ramp, surface3 to hover-raised. Declared wherever a theme is set, so
-   --carbon-text is the one that theme defines. On a mid-tone picked accent that
+   --stone-text is the one that theme defines. On a mid-tone picked accent that
    step would take the ink under 4.5:1, and applyAccent sets the ramp's hover as
    --accent-hover-light or --accent-hover-dark, a step away from the ink instead
    (accentHovers in contrast.ts). */
 :root,
 [data-theme] {
-  --accent-hover: light-dark(var(--accent-hover-light, color-mix(in srgb, var(--accent) 85%, var(--carbon-text))), var(--accent-hover-dark, color-mix(in srgb, var(--accent) 85%, var(--carbon-text))));
-  --status-ok-hover: color-mix(in srgb, var(--status-ok-solid) 85%, var(--carbon-text));
-  --status-fail-hover: color-mix(in srgb, var(--status-fail-solid) 85%, var(--carbon-text));
-  --status-warn-hover: color-mix(in srgb, var(--status-warn-solid) 85%, var(--carbon-text));
+  --accent-hover: light-dark(var(--accent-hover-light, color-mix(in srgb, var(--accent) 85%, var(--stone-text))), var(--accent-hover-dark, color-mix(in srgb, var(--accent) 85%, var(--stone-text))));
+
+  /* Deprecated with the fail and warn steps, and gone in 6.0.0. A state button
+     is a wash under its hue's text that hovers to --status-*-wash-hover, so
+     nothing here reads the solid hovers. npx glimstone-migrate reports each use
+     with the wash pair to move the button to. */
+  --status-ok-hover: color-mix(in srgb, var(--status-ok-solid) 85%, var(--stone-text));
+  --status-fail-hover: color-mix(in srgb, var(--status-fail-solid) 85%, var(--stone-text));
+  --status-warn-hover: color-mix(in srgb, var(--status-warn-solid) 85%, var(--stone-text));
 }
 
 /* The ground of whatever the pointer is over, in the accent's hue (rule 21). A
@@ -748,8 +780,8 @@
      full-width cells, so CJK gets normal spacing. */
   body {
     margin: 0;
-    background-color: var(--carbon-bg);
-    color: var(--carbon-text);
+    background-color: var(--stone-ground);
+    color: var(--stone-text);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -799,14 +831,14 @@
 
   /* The one raised surface. Never nest it (rule 1). */
   .glim-card {
-    background-color: var(--carbon-surface);
+    background-color: var(--stone-surface);
     border-radius: var(--radius-card);
     box-shadow: var(--elevation-raised), var(--hairline);
   }
 
   /* An inset well for tracks, drop zones and quiet groupings. */
   .glim-well {
-    background-color: var(--carbon-surface2);
+    background-color: var(--stone-surface2);
     border-radius: var(--radius-nested);
   }
 
@@ -815,7 +847,7 @@
     font-size: var(--text-meta);
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
   }
 
   /* Digits that stack in columns line up and never jitter while counting. */
@@ -848,7 +880,7 @@
   }
   .glim-meter-value {
     flex: none;
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     font-size: var(--text-meta);
     line-height: 1;
     white-space: nowrap;
@@ -863,9 +895,10 @@
      body level so no scroll container, card or table clips it. It is clamped
      into the viewport, flips above the trigger when below would clip
      (.glim-bubble--above), and its arrow follows the trigger when the bubble is
-     clamped off-centre. A bubble is a floating card, so it takes the raised
-     surface with the card's elevation and hairline. The fade comes from the
-     separate `.glim-fade` class. */
+     clamped off-centre. A bubble floats over the page, so it stands on
+     --surface-overlay with the float elevation, and the hairline rings it on
+     the contrast step only. The tooltip and the info bubble below set their own
+     ground and size. The fade comes from the separate `.glim-fade` class. */
   .glim-bubble {
     position: fixed;
     z-index: var(--z-bubble);
@@ -874,7 +907,7 @@
     max-width: 280px;
     pointer-events: none;
     background-color: var(--surface-overlay);
-    color: var(--carbon-text);
+    color: var(--stone-text);
     border: none;
     border-radius: var(--radius-control);
     box-shadow: var(--elevation-float), var(--hairline);
@@ -915,8 +948,8 @@
     max-width: 15rem;
     padding: var(--space-2) var(--space-4);
     border-radius: max(0.25rem, calc(var(--radius-control) - var(--space-1)));
-    background-color: var(--carbon-text);
-    color: var(--carbon-bg);
+    background-color: var(--stone-text);
+    color: var(--stone-ground);
     box-shadow: var(--elevation-notch);
     font-weight: var(--font-weight-medium);
     line-height: 1rem;
@@ -945,7 +978,7 @@
     height: var(--glyph-s);
     flex-shrink: 0;
     border-radius: var(--radius-pill);
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
     opacity: .8;
     cursor: help;
   }
@@ -982,7 +1015,7 @@
     position: relative;
     height: 7rem;
     border-radius: var(--radius-control);
-    border: 1px solid var(--carbon-border);
+    border: 1px solid var(--stone-border);
     cursor: crosshair;
   }
   .glim-picker-dot {
@@ -1044,7 +1077,7 @@
     background-color: var(--field-rest);
     box-shadow: var(--field-sink);
     caret-color: var(--accent-ink);
-    color: var(--carbon-text);
+    color: var(--stone-text);
     font-family: ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
     font-size: var(--text-meta);
     letter-spacing: 0.02em;
@@ -1101,7 +1134,7 @@
     flex: none;
     border-radius: var(--radius-pill);
     background-color: var(--glim-picker-colour);
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--glim-picker-colour) 30%, transparent), inset 0 0 0 1px var(--carbon-border);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--glim-picker-colour) 30%, transparent), inset 0 0 0 1px var(--stone-border);
   }
   .glim-picker-name {
     flex: 1;
@@ -1170,7 +1203,7 @@
     --accent-contrast: var(--item-hue-ink);
     --accent-soft: var(--item-hue-soft);
     --accent-glyph: var(--item-hue-glyph);
-    --accent-hover: color-mix(in srgb, var(--item-hue) 85%, var(--carbon-text));
+    --accent-hover: color-mix(in srgb, var(--item-hue) 85%, var(--stone-text));
     /* Reactive mode leaves this alone: the ring only paints on focus, which
        brings the hue back through :focus-within. */
     --focus-ring: var(--item-hue-ring);
@@ -1238,10 +1271,10 @@
   /* Reactive: the palette rests until an element is hovered or active, so
      colour still marks activity when a whole list would otherwise light up. */
   [data-rainbow='reactive'] .glim-hue {
-    --accent: var(--carbon-text-muted);
-    --accent-contrast: var(--carbon-bg);
+    --accent: var(--stone-text-muted);
+    --accent-contrast: var(--stone-ground);
     --accent-soft: transparent;
-    --accent-glyph: var(--carbon-text-muted);
+    --accent-glyph: var(--stone-text-muted);
   }
   [data-rainbow='reactive'] .glim-hue:hover,
   [data-rainbow='reactive'] .glim-hue:focus-within,
@@ -1344,8 +1377,9 @@
     --motion-fade-dur: 70ms;
     --motion-shake-dur: 220ms;
 
-    /* Distance and curve set the levels apart along with duration: 6px against
-       wild's 18px, and an ease where wild springs. There is no scale (see the
+    /* Distance and curve set the levels apart along with duration: 8px against
+       wild's 18px and storm's 34px, each on the level's own --motion-spring,
+       which swings further from subtle to storm. There is no scale (see the
        keyframe above). */
     --motion-page-travel: 8px;
     --motion-page-ease: var(--motion-spring);
@@ -2449,7 +2483,7 @@
     padding: 0;
     border: 0;
     background: none;
-    color: var(--carbon-text-muted, #a8a8a8);
+    color: var(--stone-text-muted, #a8a8a8);
     cursor: pointer;
     transition: color var(--motion-control-dur) var(--motion-ease);
   }
@@ -2486,7 +2520,7 @@
     }
     .glim-num-wrap:has(> .glim-num-field) .glim-num-step:hover:not(:disabled) {
       background-color: var(--hover);
-      color: var(--carbon-text);
+      color: var(--stone-text);
     }
     .glim-num-wrap:has(> .glim-num-field) .glim-num-step:active:not(:disabled) { background-color: var(--field-part-strong); }
     .glim-num-wrap:has(> .glim-num-field) .glim-num-step:active:not(:disabled) > svg { translate: 0 1px; }
@@ -2566,7 +2600,7 @@
     background-color: light-dark(rgb(0 0 0 / 0.05), rgb(255 255 255 / 0.06));
     background-image: none;
     box-shadow: none;
-    color: color-mix(in oklab, var(--carbon-text) 38%, transparent);
+    color: color-mix(in oklab, var(--stone-text) 38%, transparent);
     cursor: not-allowed;
   }
 
@@ -2820,7 +2854,7 @@
     padding-block: var(--space-10);
     text-align: center;
     font-size: var(--text-subline);
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
   }
   /* On a phone the search spans the width above the tiles, which go two to a
      row, closer together. */
@@ -2845,8 +2879,8 @@
     padding: 0;
     border: 0;
     border-radius: 0;
-    background-color: var(--carbon-surface2);
-    color: var(--carbon-text);
+    background-color: var(--stone-surface2);
+    color: var(--stone-text);
     font: inherit;
     text-align: start;
     text-decoration: none;
@@ -2983,7 +3017,7 @@
   }
 
   .glim-readme-btn-soon .glim-readme-btn {
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
     cursor: default;
   }
 
@@ -3354,7 +3388,7 @@
     align-items: center;
     justify-content: flex-end;
     height: var(--window-bar);
-    background-color: var(--carbon-bg);
+    background-color: var(--stone-ground);
     user-select: none;
   }
   .glim-window-button {
@@ -3376,7 +3410,7 @@
     width: var(--btn-h);
     height: var(--btn-h);
     border-radius: var(--radius-pill);
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     transition: background-color var(--motion-control-dur) var(--motion-ease), color var(--motion-control-dur) var(--motion-ease);
   }
   .glim-window-square > svg {
@@ -3385,7 +3419,7 @@
   }
   .glim-window-button:hover .glim-window-square {
     background-color: var(--hover);
-    color: var(--carbon-text);
+    color: var(--stone-text);
   }
   .glim-window-button:focus-visible .glim-window-square {
     outline: var(--focus-ring-width) solid var(--focus-ring);
@@ -3417,7 +3451,7 @@
      serve the React components and a page that mounts the machine by hand. */
   .glim-field-label {
     font-size: var(--text-subline);
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
   }
   .glim-select-trigger,
   .glim-combobox-control {
@@ -3431,7 +3465,7 @@
     border: 0;
     border-radius: var(--radius-control);
     background-color: var(--field-rest);
-    color: var(--carbon-text);
+    color: var(--stone-text);
     font: inherit;
     font-size: var(--text-body);
     text-align: start;
@@ -3508,16 +3542,16 @@
   .glim-select-trigger--inset {
     height: 1.5rem;
     border: 0;
-    background: color-mix(in srgb, var(--carbon-surface3) 70%, transparent);
-    color: var(--carbon-text-sub);
+    background: color-mix(in srgb, var(--stone-surface3) 70%, transparent);
+    color: var(--stone-text-sub);
   }
   .glim-select-trigger--inset:hover {
     background: var(--hover);
-    color: var(--carbon-text);
+    color: var(--stone-text);
   }
   .glim-select-trigger--inset:focus-visible {
-    background: var(--carbon-hover-raised);
-    color: var(--carbon-text);
+    background: var(--stone-hover-raised);
+    color: var(--stone-text);
   }
   .glim-select-trigger--row .glim-select-indicator svg,
   .glim-select-trigger--inset .glim-select-indicator svg { width: 0.75rem; height: 0.75rem; }
@@ -3547,13 +3581,13 @@
     border: 0;
     border-radius: var(--radius-pill);
     background: transparent;
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     cursor: pointer;
   }
   .glim-combobox-toggle:hover { background: var(--hover); }
   .glim-select-indicator {
     display: inline-flex;
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
   }
   .glim-select-indicator[data-state="open"] { rotate: 180deg; }
 
@@ -3584,9 +3618,9 @@
   @keyframes glim-list-grow { from { opacity: 0; scale: 0.96; } }
   /* While somebody types into a combobox, each row sets apart the part that matches. */
   .glim-select-item [data-search],
-  .glim-menu-item [data-search] { color: var(--carbon-text-sub); }
+  .glim-menu-item [data-search] { color: var(--stone-text-sub); }
   .glim-combobox-hit {
-    color: var(--carbon-text);
+    color: var(--stone-text);
     font-weight: 600;
   }
   .glim-select-item {
@@ -3596,13 +3630,13 @@
     gap: var(--space-6);
     padding: var(--space-4) var(--space-6);
     border-radius: var(--radius-control);
-    color: var(--carbon-text);
+    color: var(--stone-text);
     font-size: var(--text-body);
     cursor: pointer;
   }
   .glim-select-item[data-highlighted] { background: var(--hover); }
   .glim-select-item[data-state="checked"] { font-weight: 600; }
-  .glim-select-item[data-disabled] { color: var(--carbon-text-muted); cursor: default; }
+  .glim-select-item[data-disabled] { color: var(--stone-text-muted); cursor: default; }
   .glim-select-check { display: inline-flex; color: var(--accent-ink); }
   .glim-select-check:not([data-state="checked"]) { visibility: hidden; }
   .glim-select-label {
@@ -3614,18 +3648,18 @@
   }
   /* The submenu mark: the expand chevron turned to point where the submenu
      opens, which is the other way under a right-to-left language. */
-  .glim-select-caret { display: inline-flex; color: var(--carbon-text-muted); }
+  .glim-select-caret { display: inline-flex; color: var(--stone-text-muted); }
   .glim-select-caret svg { rotate: -90deg; }
   .glim-select-caret:dir(rtl) svg { rotate: 90deg; }
   .glim-select-group + .glim-select-group {
     margin-top: var(--space-2);
     padding-top: var(--space-2);
-    border-top: 1px solid color-mix(in srgb, var(--carbon-border) 60%, transparent);
+    border-top: 1px solid color-mix(in srgb, var(--stone-border) 60%, transparent);
   }
   /* A group's name, in line with the labels below it. */
   .glim-select-heading {
     padding: var(--space-3) var(--space-6) var(--space-2);
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
     font-size: var(--text-meta);
     font-weight: 500;
   }
@@ -3650,14 +3684,14 @@
   .glim-select-content--menu .glim-menu-item[data-highlighted] { background-color: var(--hover); }
   .glim-select-content--menu .glim-menu-item[data-disabled] {
     background-color: transparent;
-    color: color-mix(in oklab, var(--carbon-text) 38%, transparent);
+    color: color-mix(in oklab, var(--stone-text) 38%, transparent);
     cursor: default;
   }
   .glim-select-content--menu .glim-menu-tick:not([data-state="checked"]) { visibility: hidden; }
   .glim-select-content--menu .glim-select-group + .glim-select-group {
     margin-top: var(--space-2);
     padding-top: var(--space-2);
-    border-top-color: color-mix(in srgb, var(--carbon-text) 9%, transparent);
+    border-top-color: color-mix(in srgb, var(--stone-text) 9%, transparent);
   }
   @media (pointer: coarse) {
     .glim-select-content--menu .glim-menu-item {
@@ -3667,7 +3701,7 @@
   }
   .glim-select-empty {
     padding: var(--space-4) var(--space-6);
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
     font-size: var(--text-subline);
   }
 
@@ -3681,7 +3715,7 @@
     flex: 1;
     height: 0.25rem;
     border-radius: var(--radius-pill);
-    background: var(--carbon-surface3);
+    background: var(--stone-surface3);
   }
   .glim-slider-range {
     height: 100%;
@@ -3694,7 +3728,7 @@
     height: 1rem;
     border-radius: var(--radius-pill);
     background: var(--accent);
-    box-shadow: 0 0 0 3px var(--carbon-bg);
+    box-shadow: 0 0 0 3px var(--stone-ground);
     cursor: grab;
   }
   .glim-slider-thumb:focus-visible {
@@ -3709,8 +3743,8 @@
     left: 50%;
     padding: var(--space-1) var(--space-4);
     border-radius: var(--space-3);
-    background-color: var(--carbon-text);
-    color: var(--carbon-bg);
+    background-color: var(--stone-text);
+    color: var(--stone-ground);
     box-shadow: var(--elevation-float);
     font-size: var(--text-meta);
     font-weight: 500;
@@ -3731,7 +3765,7 @@
   .glim-slider-thumb[data-disabled] { opacity: 0.5; cursor: default; }
   .glim-slider-value {
     margin-inline-start: auto;
-    color: var(--carbon-text);
+    color: var(--stone-text);
     font-size: var(--text-body);
     font-variant-numeric: tabular-nums;
   }
@@ -3837,13 +3871,13 @@
     margin: 0;
     font-size: var(--text-body);
     line-height: 1.625;
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     overflow-wrap: break-word;
   }
   /* A confirmation leads with its question; what follows from it sits quieter. */
   .glim-modal-question {
     margin: 0;
-    color: var(--carbon-text);
+    color: var(--stone-text);
     font-size: var(--text-title);
     font-weight: var(--font-weight-strong);
     line-height: 1.5rem;
@@ -3853,7 +3887,7 @@
   }
   .glim-modal-question + .glim-modal-text {
     margin-top: var(--space-2);
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
     font-size: var(--text-body);
     line-height: 1.25rem;
   }
@@ -3895,11 +3929,11 @@
     box-shadow: var(--elevation-accent);
   }
   .glim-btn--neutral {
-    background-color: var(--carbon-surface3);
-    color: var(--carbon-text);
+    background-color: var(--stone-surface3);
+    color: var(--stone-text);
     box-shadow: var(--elevation-control);
   }
-  .glim-btn--subtle { background-color: var(--carbon-surface2); color: var(--carbon-text); }
+  .glim-btn--subtle { background-color: var(--stone-surface2); color: var(--stone-text); }
   .glim-btn--ok { background-color: var(--status-ok-wash); color: var(--status-ok-text); }
   .glim-btn--danger { background-color: var(--status-fail-wash); color: var(--status-fail-text); }
   .glim-btn--warn { background-color: var(--status-warn-wash); color: var(--status-warn-text); }
@@ -3926,12 +3960,12 @@
   .glim-toggle-label {
     font-size: var(--text-body);
     line-height: 1.25rem;
-    color: var(--carbon-text);
+    color: var(--stone-text);
   }
   /* The words are part of the switch's target, as a native label's would be. */
   .glim-toggle:has(> .glim-toggle-label) { cursor: pointer; }
   .glim-toggle:has(> .glim-toggle-track:disabled) { cursor: default; }
-  .glim-toggle:has(> .glim-toggle-track:disabled) > .glim-toggle-label { color: var(--carbon-text-muted); }
+  .glim-toggle:has(> .glim-toggle-track:disabled) > .glim-toggle-label { color: var(--stone-text-muted); }
   .glim-toggle-track {
     position: relative;
     display: inline-flex;
@@ -3966,7 +4000,7 @@
       display: block;
       flex-basis: 100%;
       font-size: var(--text-meta);
-      color: var(--carbon-text-sub);
+      color: var(--stone-text-sub);
     }
     .glim-field-row-controls:has(> .glim-toggle-refusal) { flex-wrap: wrap; }
   }
@@ -4063,9 +4097,9 @@
     border-radius: 50%;
     background-color: var(--status-dot);
   }
-  .glim-badge--neutral { background-color: var(--carbon-surface2); color: var(--carbon-text-sub); }
+  .glim-badge--neutral { background-color: var(--stone-surface2); color: var(--stone-text-sub); }
   .glim-badge--solid { background-color: var(--accent); color: var(--accent-contrast); }
-  .glim-badge--muted { color: var(--carbon-text-muted); }
+  .glim-badge--muted { color: var(--stone-text-muted); }
 
   /* The heading notch centres on the card's top edge at any height: a
      percentage resolves against the badge's own height, where a fixed -11px
@@ -4095,7 +4129,7 @@
   .glim-badge-action:disabled {
     pointer-events: none;
     background-color: light-dark(rgb(0 0 0 / 0.05), rgb(255 255 255 / 0.06));
-    color: color-mix(in oklab, var(--carbon-text) 38%, transparent);
+    color: color-mix(in oklab, var(--stone-text) 38%, transparent);
   }
   @media (hover: hover) {
     .glim-badge-action.glim-badge--ok:hover { background-color: color-mix(in srgb, var(--status-ok-bg), var(--status-ok-text) 12%); }
@@ -4118,7 +4152,7 @@
     gap: var(--space-8);
     padding: var(--space-9);
     border-radius: var(--radius-card);
-    background-color: var(--carbon-surface);
+    background-color: var(--stone-surface);
     box-shadow: var(--elevation-raised);
   }
   .glim-panel--nested {
@@ -4146,7 +4180,7 @@
     align-items: center;
     translate: 0 -50%;
     border-radius: var(--radius-pill);
-    background-color: var(--carbon-surface);
+    background-color: var(--stone-surface);
     box-shadow: var(--elevation-notch);
   }
   .glim-panel-action > :is(.glim-btn, .glim-icon-btn) {
@@ -4176,8 +4210,8 @@
     justify-content: center;
     min-height: 100dvh;
     padding: max(var(--space-8), calc((100dvh - var(--window-bar)) / 2 - 14rem)) var(--space-8) var(--space-8);
-    background-color: var(--carbon-bg);
-    color: var(--carbon-text);
+    background-color: var(--stone-ground);
+    color: var(--stone-text);
   }
   .glim-signin-card {
     display: flex;
@@ -4236,12 +4270,12 @@
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     font-size: var(--text-meta);
     font-weight: 500;
   }
   .glim-signin-hint {
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     font-size: var(--text-meta);
   }
   .glim-signin-error {
@@ -4251,7 +4285,7 @@
   .glim-signin-note {
     padding: var(--space-5) var(--space-6);
     border-radius: var(--radius-control);
-    background-color: var(--carbon-surface2);
+    background-color: var(--stone-surface2);
     font-size: var(--text-subline);
   }
   .glim-signin-code { letter-spacing: 0.35em; }
@@ -4269,7 +4303,7 @@
     border: 0;
     border-radius: var(--radius-control);
     background: none;
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     font: inherit;
     font-size: var(--text-subline);
     text-decoration: none;
@@ -4280,7 +4314,7 @@
     text-decoration: none;
   }
   .glim-signin-forgot:disabled {
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
     cursor: default;
   }
   .glim-signin-forgot[aria-busy="true"] { cursor: progress; }
@@ -4321,7 +4355,7 @@
   .glim-signin-tile-said {
     margin: 0;
     font-size: var(--text-subline);
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
   }
   .glim-signin-tile-quiet { font-size: var(--text-meta); }
   .glim-signin-tile-said--fail { color: var(--status-fail-text); }
@@ -4350,7 +4384,7 @@
     margin: 0;
     padding: var(--space-6) var(--space-8);
     border-radius: var(--radius-card);
-    background-color: var(--carbon-surface2);
+    background-color: var(--stone-surface2);
     list-style: none;
     font-family: ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
     font-variant-numeric: tabular-nums;
@@ -4382,7 +4416,7 @@
   .glim-notify-problem {
     margin: 0;
     font-size: var(--text-subline);
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
   }
   .glim-notify-said--fail,
   .glim-notify-problem { color: var(--status-fail-text); }
@@ -4420,11 +4454,11 @@
   }
   .glim-notice-title {
     font-weight: 500;
-    color: var(--carbon-text);
+    color: var(--stone-text);
   }
   .glim-notice-reason {
     margin-top: var(--space-2);
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
   }
   .glim-notice-action { margin-top: var(--space-6); }
 
@@ -4447,8 +4481,8 @@
     font-size: var(--text-body);
     line-height: 1.25rem;
   }
-  .glim-give-appeal { color: var(--carbon-text); }
-  .glim-give-intro { color: var(--carbon-text-sub); }
+  .glim-give-appeal { color: var(--stone-text); }
+  .glim-give-intro { color: var(--stone-text-sub); }
   .glim-give-status--ok { color: var(--status-ok-text); }
   .glim-give-status--fail { color: var(--status-fail-text); }
   .glim-give-foot {
@@ -4466,7 +4500,7 @@
     min-height: 0;
     padding: var(--space-4);
     border-radius: var(--radius-card);
-    background-color: var(--carbon-surface2);
+    background-color: var(--stone-surface2);
   }
   .glim-give-iframe {
     flex: 1 1 0%;
@@ -4495,12 +4529,12 @@
     width: 9rem;
     height: 2.25rem;
     padding-inline: var(--space-5);
-    border: 1px solid var(--carbon-border);
+    border: 1px solid var(--stone-border);
     border-radius: var(--radius-control);
-    background-color: var(--carbon-surface);
+    background-color: var(--stone-surface);
     font-size: var(--text-body);
     line-height: 1.25rem;
-    color: var(--carbon-text);
+    color: var(--stone-text);
   }
   .glim-give-amount--valid { border-color: var(--accent); }
   /* PayPal's buttons are cross-origin frames drawn light; under the dark scheme
@@ -4517,7 +4551,7 @@
     text-align: center;
     font-size: var(--text-meta);
     line-height: 1rem;
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
   }
 
   /* Crypto: the address of the chosen chain in a well, its chains under it, and
@@ -4530,7 +4564,7 @@
     gap: var(--space-6);
     padding: var(--space-8);
     border-radius: var(--radius-nested);
-    background-color: var(--carbon-surface2);
+    background-color: var(--stone-surface2);
   }
   .glim-give-address {
     width: 100%;
@@ -4540,7 +4574,7 @@
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-size: var(--text-meta);
     line-height: 1rem;
-    color: var(--carbon-text);
+    color: var(--stone-text);
   }
   .glim-give-networks {
     display: flex;
@@ -4551,11 +4585,11 @@
   .glim-give-network {
     padding: var(--space-2) var(--space-6);
     border-radius: var(--radius-pill);
-    background-color: var(--carbon-surface3);
+    background-color: var(--stone-surface3);
     font-size: var(--text-meta);
     font-weight: 500;
     line-height: 1rem;
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     transition: background-color var(--motion-control-dur) var(--motion-ease), color var(--motion-control-dur) var(--motion-ease);
   }
   .glim-give-network.glim-active {
@@ -4583,8 +4617,8 @@
     gap: var(--space-2);
     padding: var(--space-6) var(--space-4);
     border-radius: var(--radius-control);
-    background-color: var(--carbon-surface2);
-    color: var(--carbon-text-sub);
+    background-color: var(--stone-surface2);
+    color: var(--stone-text-sub);
   }
   .glim-give-coin.glim-active,
   .glim-give-coin--plain {
@@ -4602,11 +4636,11 @@
   @media (hover: hover) {
     .glim-give-network:not(.glim-active):hover {
       background-color: var(--hover);
-      color: var(--carbon-text);
+      color: var(--stone-text);
     }
     .glim-give-coin--plain:hover {
       background-color: var(--hover);
-      color: var(--carbon-text);
+      color: var(--stone-text);
     }
   }
 
@@ -4642,7 +4676,7 @@
     padding: var(--space-6) var(--space-7);
     border-radius: var(--radius-card);
     background-color: var(--surface-overlay);
-    color: var(--carbon-text);
+    color: var(--stone-text);
     box-shadow: var(--elevation-float);
     pointer-events: auto;
   }
@@ -4692,7 +4726,7 @@
   }
   .glim-toast-card--titled .glim-toast-body { gap: var(--space-1); }
   .glim-toast-card--titled .glim-toast-message {
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
     font-size: var(--text-subline);
   }
   .glim-toast-card--titled .glim-toast-action { margin-top: var(--space-3); }
@@ -4745,7 +4779,7 @@
     margin-inline: calc(-1 * var(--space-2));
     padding: var(--space-2);
     border-radius: var(--radius-pill);
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
     opacity: 0.8;
   }
   .glim-toast-dismiss:focus-visible { opacity: 1; }
@@ -4818,7 +4852,7 @@
     border-radius: var(--radius-card);
     background-color: var(--surface-overlay);
     box-shadow: var(--elevation-float), var(--hairline);
-    scrollbar-color: var(--carbon-border) transparent;
+    scrollbar-color: var(--stone-border) transparent;
   }
 
   /* The Info tile (InfoTile in AboutCard): the Version card's rows, each the
@@ -4828,7 +4862,7 @@
     margin: 0;
     font-size: var(--text-body);
     line-height: 1.25rem;
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
   }
   .glim-version-rows {
     display: flex;
@@ -4871,13 +4905,13 @@
     font-size: var(--text-body);
     font-weight: var(--font-weight-medium);
     line-height: 1.25rem;
-    color: var(--carbon-text);
+    color: var(--stone-text);
   }
   .glim-version-number {
     flex-shrink: 0;
     font-size: var(--text-body);
     line-height: 1.25rem;
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     text-decoration: none;
   }
   /* A number that opens its release reads as plain text and takes the
@@ -4911,14 +4945,14 @@
     min-width: 0;
     font-size: var(--text-body);
     font-weight: var(--font-weight-medium);
-    color: var(--carbon-text);
+    color: var(--stone-text);
   }
   .glim-version-head .glim-version-number {
     min-width: 0;
     margin-inline-start: auto;
     overflow-wrap: anywhere;
     font-size: var(--text-body);
-    color: var(--carbon-text);
+    color: var(--stone-text);
   }
   /* The card's last row: where the updates stand at its start, the buttons
      at its end, and the buttons drop under the words when the row is narrow. */
@@ -4939,18 +4973,18 @@
     margin: 0;
     font-size: var(--text-body);
     line-height: 1.25rem;
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
   }
   .glim-version-state[data-tone="ok"] .glim-version-line { color: var(--status-ok-text); }
   /* An update waiting is news, not a fault, so its line stays neutral beside its button. */
-  .glim-version-state[data-tone="warn"] .glim-version-line { color: var(--carbon-text-sub); }
+  .glim-version-state[data-tone="warn"] .glim-version-line { color: var(--stone-text-sub); }
   .glim-version-state[data-tone="fail"] .glim-version-line { color: var(--status-fail-text); }
-  .glim-version-note { color: var(--carbon-text-muted); }
+  .glim-version-note { color: var(--stone-text-muted); }
   .glim-version-progress {
     height: 4px;
     border-radius: 2px;
     overflow: hidden;
-    background: var(--carbon-surface3);
+    background: var(--stone-surface3);
   }
   .glim-version-progress > span {
     display: block;
@@ -4968,7 +5002,7 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: var(--carbon-text-muted);
+    background: var(--stone-text-muted);
   }
   .glim-version-dot[data-unseen] {
     background: var(--status-ok-solid);
@@ -4981,7 +5015,7 @@
   .glim-brand-svg > :is(.glim-mark-rest, .glim-mark-hover) { width: 100%; height: 100%; }
   .glim-brand-svg > .glim-mark-rest { display: block; }
 
-  .glim-readme-btn-hint { color: var(--carbon-text-sub); }
+  .glim-readme-btn-hint { color: var(--stone-text-sub); }
 
   /* The one horizontal selector (selector.ts; "The one horizontal selector").
      The track spans its box and its segments share the width, so a card of
@@ -5008,7 +5042,7 @@
     gap: var(--space-2);
     padding: var(--space-2);
     border-radius: var(--radius-pill);
-    background-color: var(--carbon-surface3);
+    background-color: var(--stone-surface3);
   }
   .glim-sel--chip { gap: var(--space-2); }
   /* A strip of one whose labels do not fit shows a dropdown in its place and
@@ -5036,26 +5070,26 @@
     transition: background-color var(--motion-control-dur) var(--motion-ease), color var(--motion-control-dur) var(--motion-ease);
   }
   .glim-sel-seg:disabled {
-    color: color-mix(in oklab, var(--carbon-text) 38%, transparent);
+    color: color-mix(in oklab, var(--stone-text) 38%, transparent);
     cursor: not-allowed;
   }
   /* Idle segments in the groove are transparent, which puts the sub text on
-     surface3 at 4.57:1 in the dark theme, just above AA. A deeper groove
-     needs a lighter text token. */
-  .glim-sel--well .glim-sel-seg { color: var(--carbon-text-sub); }
+     surface3: 5.8:1 in the dark theme on the default accent, 6.1:1 in the
+     light one. A deeper groove needs a lighter text token. */
+  .glim-sel--well .glim-sel-seg { color: var(--stone-text-sub); }
   .glim-sel--well .glim-sel-seg:not(.glim-active):not(:disabled):hover {
     background-color: var(--hover);
-    color: var(--carbon-text);
+    color: var(--stone-text);
   }
   /* In the bare strip every segment is a badge at rest, not only the chosen
      one. */
   .glim-sel--chip .glim-sel-seg {
-    background-color: var(--carbon-surface2);
-    color: var(--carbon-text-sub);
+    background-color: var(--stone-surface2);
+    color: var(--stone-text-sub);
   }
   .glim-sel--chip .glim-sel-seg:not(.glim-active):not(:disabled):hover {
     background-color: var(--hover);
-    color: var(--carbon-text);
+    color: var(--stone-text);
   }
   .glim-sel .glim-sel-seg.glim-active {
     background-color: var(--accent);
@@ -5073,7 +5107,7 @@
   .glim-sel--chip:has(> .glim-sel-thumb) {
     padding: var(--space-2);
     border-radius: var(--radius-pill);
-    background-color: var(--carbon-surface3);
+    background-color: var(--stone-surface3);
   }
   .glim-sel--chip:has(> .glim-sel-thumb) .glim-sel-seg:not(.glim-active) { background-color: transparent; }
   .glim-sel:has(> .glim-sel-thumb) > :is(.glim-sel-seg, .glim-tip-wrap) {
@@ -5209,7 +5243,7 @@
     border-radius: var(--radius-pill);
     background-color: var(--tile-rest);
     box-shadow: var(--elevation-tile);
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     font-size: var(--text-body);
     font-weight: 500;
     line-height: 1.25rem;
@@ -5218,7 +5252,7 @@
   }
   .glim-sel-tile:not(.glim-active):hover {
     background-color: var(--hover);
-    color: var(--carbon-text);
+    color: var(--stone-text);
   }
   .glim-sel-tile.glim-active {
     background-color: var(--accent);
@@ -5244,7 +5278,7 @@
   }
   /* A page with nothing on it yet still says what it will hold. */
   /* Its glyph steps back, its words stay readable. */
-  .glim-sel-tile--dim:not(.glim-active) > svg { color: var(--carbon-text-muted); }
+  .glim-sel-tile--dim:not(.glim-active) > svg { color: var(--stone-text-muted); }
   /* A long name breaks onto a balanced second line and is clamped there. The
      clip reaches 3px past the box for the marks Arabic and Devanagari set
      outside the line. */
@@ -5302,7 +5336,7 @@
   }
   .glim-nav-row:not(.glim-active):hover {
     background-color: var(--hover);
-    color: var(--carbon-text);
+    color: var(--stone-text);
   }
   .glim-nav-row.glim-active {
     background-color: var(--accent);
@@ -5405,7 +5439,7 @@
     padding-inline-start: var(--space-6);
     border-radius: var(--radius-control);
     background-color: transparent;
-    color: var(--carbon-text);
+    color: var(--stone-text);
     font-size: var(--text-body);
     line-height: 1.25rem;
     caret-color: var(--accent-ink);
@@ -5433,8 +5467,8 @@
     width: var(--space-13);
     height: var(--space-13);
     border-radius: var(--radius-control);
-    background-color: var(--carbon-surface2);
-    color: var(--carbon-text-sub);
+    background-color: var(--stone-surface2);
+    color: var(--stone-text-sub);
   }
   .glim-empty-glyph svg {
     width: var(--glyph-l);
@@ -5444,14 +5478,14 @@
     margin: 0;
     font-size: var(--text-body);
     line-height: 1.25rem;
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
   }
   .glim-empty-hint {
     max-width: 65ch;
     margin: 0;
     font-size: var(--text-subline);
     line-height: 1.25rem;
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
   }
 
   /* The sub-card (rule 1): a flat, filled group inside a card or a window, in
@@ -5468,7 +5502,7 @@
     gap: var(--space-6);
     padding: var(--space-8);
     border-radius: var(--radius-nested);
-    background-color: var(--carbon-surface2);
+    background-color: var(--stone-surface2);
   }
   .glim-subcard--titled { padding-top: var(--space-9); }
   * + .glim-subcard--titled { margin-top: var(--space-4); }
@@ -5485,7 +5519,7 @@
      quiet button in a connection row, which is a well. */
   :is(.glim-subcard, .glim-connection) .glim-btn--subtle,
   .glim-subcard .glim-sel--chip .glim-sel-seg:not(.glim-active) {
-    background-color: var(--carbon-surface3);
+    background-color: var(--stone-surface3);
   }
   .glim-subcard .glim-sel--chip .glim-sel-seg:not(.glim-active):not(:disabled):hover,
   :is(.glim-subcard, .glim-well) .glim-sel-tile:not(.glim-active):hover {
@@ -5520,7 +5554,7 @@
     flex: 1 1 auto;
     overflow-wrap: anywhere;
     font-size: var(--text-meta);
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
   }
   .glim-window-actions {
     display: flex;
@@ -5566,7 +5600,7 @@
   .glim-menu:not([data-pointer]) .glim-menu-item:focus-visible,
   .glim-menu-item[aria-expanded="true"] { background-color: var(--hover); }
   .glim-menu-item:disabled {
-    color: color-mix(in oklab, var(--carbon-text) 38%, transparent);
+    color: color-mix(in oklab, var(--stone-text) 38%, transparent);
     cursor: default;
   }
   .glim-menu-item:disabled:hover { background-color: transparent; }
@@ -5607,9 +5641,9 @@
   .glim-menu-count {
     padding-inline-start: var(--space-9);
     font-size: var(--text-meta);
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
   }
-  .glim-menu-caret { color: var(--carbon-text-muted); }
+  .glim-menu-caret { color: var(--stone-text-muted); }
   .glim-menu-caret svg {
     width: 0.7rem;
     height: 0.7rem;
@@ -5620,7 +5654,7 @@
     flex: none;
     height: 1px;
     margin: var(--space-2) var(--space-3);
-    background-color: color-mix(in srgb, var(--carbon-text) 9%, transparent);
+    background-color: color-mix(in srgb, var(--stone-text) 9%, transparent);
   }
   .glim-menu-head {
     display: flex;
@@ -5632,7 +5666,7 @@
     font-size: var(--text-meta);
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
   }
   .glim-menu-head-edit {
     display: grid;
@@ -5669,17 +5703,17 @@
     font-size: var(--text-body);
     font-weight: var(--font-weight-medium);
     letter-spacing: var(--tracking-body);
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     cursor: pointer;
   }
   .glim-menubar-item:hover:not([aria-expanded="true"]) {
     background-color: var(--hover);
-    color: var(--carbon-text);
+    color: var(--stone-text);
   }
   .glim-menubar-item[aria-expanded="true"] {
     background-color: var(--surface-overlay);
     box-shadow: var(--elevation-control);
-    color: var(--carbon-text);
+    color: var(--stone-text);
   }
 
   /* The checkbox (Checkbox, and the box of a menu's checkbox item): the one
@@ -5700,12 +5734,12 @@
   /* A locked box is grey with a grey tick rather than a dimmed accent, which
      muddies to olive on the dark ramps. */
   .glim-checkbox:disabled {
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
     cursor: default;
   }
   .glim-checkbox:disabled:hover { background-color: transparent; }
-  .glim-checkbox:disabled > .glim-checkbox-box { background-color: var(--carbon-surface3); }
-  .glim-checkbox:disabled[aria-checked="true"] > .glim-checkbox-box { color: var(--carbon-text-muted); }
+  .glim-checkbox:disabled > .glim-checkbox-box { background-color: var(--stone-surface3); }
+  .glim-checkbox:disabled[aria-checked="true"] > .glim-checkbox-box { color: var(--stone-text-muted); }
   .glim-checkbox-box {
     display: grid;
     flex: none;
@@ -5713,7 +5747,7 @@
     width: 1.125rem;
     height: 1.125rem;
     border-radius: min(var(--radius-control), 5px);
-    background-color: color-mix(in srgb, var(--carbon-surface3) 60%, transparent);
+    background-color: color-mix(in srgb, var(--stone-surface3) 60%, transparent);
     color: transparent;
   }
   .glim-checkbox-box > svg {
@@ -5750,10 +5784,10 @@
     height: 1.2rem;
     padding-inline: var(--space-3);
     border-radius: var(--radius-control);
-    background-color: var(--carbon-surface3);
+    background-color: var(--stone-surface3);
     font-family: inherit;
     font-size: var(--text-meta);
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     white-space: nowrap;
   }
 
@@ -5762,7 +5796,7 @@
      :where() for the state classes to win. */
   .glim-well,
   .glim-subcard {
-    --pill-ground: var(--carbon-surface3);
+    --pill-ground: var(--stone-surface3);
   }
   .glim-pill {
     display: inline-flex;
@@ -5776,8 +5810,8 @@
     white-space: nowrap;
   }
   :where(.glim-pill) {
-    background-color: var(--pill-ground, var(--carbon-surface2));
-    color: var(--carbon-text-sub);
+    background-color: var(--pill-ground, var(--stone-surface2));
+    color: var(--stone-text-sub);
   }
 
   /* A text field (PasswordField, CopyField): borderless and filled (rule 14),
@@ -5790,7 +5824,7 @@
     padding-inline: var(--space-6);
     border-radius: var(--radius-control);
     background-color: var(--field-rest);
-    color: var(--carbon-text);
+    color: var(--stone-text);
     font-size: var(--text-body);
     line-height: 1.25rem;
     box-shadow: var(--field-sink);
@@ -5804,7 +5838,7 @@
     border-radius: var(--radius-control);
     background-color: var(--field-rest);
     box-shadow: var(--field-sink);
-    color: var(--carbon-text);
+    color: var(--stone-text);
   }
   :is(.glim-num-wrap:has(> .glim-num-field), .glim-tags-control, .glim-time):focus-within { background-color: var(--field-focus); }
   /* Under the pointer a field takes the hover step, unless it already has the
@@ -5866,7 +5900,7 @@
   }
   .glim-field-row-label small {
     font-size: var(--text-meta);
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
   }
   .glim-field-row > :not(.glim-field-row-name) { max-width: 100%; }
 
@@ -5969,14 +6003,14 @@
     padding-inline: var(--space-5) var(--space-1);
     cursor: text;
   }
-  .glim-glyph-field:focus-within { background-color: var(--carbon-surface3); }
-  :is(.glim-well, .glim-subcard) .glim-glyph-field:focus-within { background-color: var(--carbon-hover-raised); }
+  .glim-glyph-field:focus-within { background-color: var(--stone-surface3); }
+  :is(.glim-well, .glim-subcard) .glim-glyph-field:focus-within { background-color: var(--stone-hover-raised); }
   .glim-glyph-field-glyph {
     display: inline-grid;
     flex: none;
     width: 0.95rem;
     height: 0.95rem;
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
   }
   .glim-glyph-field-glyph > svg {
     width: 100%;
@@ -6009,8 +6043,8 @@
     width: 1rem;
     height: 1rem;
   }
-  .glim-tile--quiet { color: var(--carbon-text-sub); }
-  .glim-tile--ground { background-color: var(--carbon-surface3); }
+  .glim-tile--quiet { color: var(--stone-text-sub); }
+  .glim-tile--ground { background-color: var(--stone-surface3); }
   .glim-tile--active,
   :is(button, a, .glim-list-row, .glim-nav-row):is(:hover, :focus-visible, :focus-within) > .glim-tile {
     background-color: var(--accent);
@@ -6032,14 +6066,14 @@
   .glim-table th {
     font-size: var(--text-meta);
     font-weight: 500;
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
   }
   .glim-table tr + tr td,
   .glim-table thead + tbody tr:first-child td {
-    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--carbon-text) 7%, transparent);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--stone-text) 7%, transparent);
   }
   .glim-table :is(th, td).glim-table-end { text-align: end; }
-  .glim-table td.glim-table-muted { color: var(--carbon-text-muted); }
+  .glim-table td.glim-table-muted { color: var(--stone-text-muted); }
   .glim-table td.glim-table-accent { color: var(--accent-ink); }
 
   /* A path and its picker's button (PathField). */
@@ -6087,11 +6121,11 @@
     width: 1.1rem;
     height: 1.1rem;
     border-radius: var(--radius-control);
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
   }
   .glim-tree-toggle:hover {
     background-color: color-mix(in srgb, var(--accent) 18%, transparent);
-    color: var(--carbon-text);
+    color: var(--stone-text);
   }
   .glim-tree-toggle > svg {
     width: 0.7rem;
@@ -6128,7 +6162,7 @@
     width: 1.125rem;
     height: 1.125rem;
     border-radius: var(--radius-pill);
-    background-color: color-mix(in srgb, var(--carbon-surface3) 60%, transparent);
+    background-color: color-mix(in srgb, var(--stone-surface3) 60%, transparent);
     color: transparent;
   }
   .glim-rowmark > svg {
@@ -6216,7 +6250,7 @@
     flex: none;
     align-items: center;
     gap: var(--space-3);
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     font-size: var(--text-subline);
     white-space: nowrap;
   }
@@ -6237,7 +6271,7 @@
   .glim-list-row-value {
     flex: none;
     width: var(--list-value-w);
-    color: var(--carbon-text);
+    color: var(--stone-text);
     font-size: var(--text-subline);
     font-variant-numeric: tabular-nums lining-nums;
     text-align: end;
@@ -6247,11 +6281,11 @@
     height: auto;
     padding: 0;
     background: none;
-    color: var(--carbon-text);
+    color: var(--stone-text);
     font-size: var(--text-subline);
   }
   :is(.glim-list-row-value, .glim-pill.glim-num) small {
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
     font-size: var(--text-meta);
   }
   .glim-list-row-actions {
@@ -6300,7 +6334,7 @@
   }
   .glim-list-row-text > .glim-list-row-name { flex: none; }
   .glim-list-row-meta {
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     font-size: var(--text-subline);
     overflow-wrap: anywhere;
   }
@@ -6385,7 +6419,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    color: var(--carbon-text);
+    color: var(--stone-text);
   }
   .glim-connection-badges,
   .glim-connection-actions {
@@ -6404,10 +6438,10 @@
     --badge-h: 1.5rem;
     --badge-px: 0.625rem;
   }
-  .glim-connection-badges .glim-badge--ok { background: linear-gradient(var(--status-ok-bg), var(--status-ok-bg)) var(--carbon-surface); }
-  .glim-connection-badges .glim-badge--fail { background: linear-gradient(var(--status-fail-bg), var(--status-fail-bg)) var(--carbon-surface); }
-  .glim-connection-badges .glim-badge--active { background: linear-gradient(var(--accent-soft), var(--accent-soft)) var(--carbon-surface); }
-  .glim-connection-badges .glim-badge--neutral { background-color: color-mix(in srgb, var(--carbon-surface2), var(--carbon-surface3)); }
+  .glim-connection-badges .glim-badge--ok { background: linear-gradient(var(--status-ok-bg), var(--status-ok-bg)) var(--stone-surface); }
+  .glim-connection-badges .glim-badge--fail { background: linear-gradient(var(--status-fail-bg), var(--status-fail-bg)) var(--stone-surface); }
+  .glim-connection-badges .glim-badge--active { background: linear-gradient(var(--accent-soft), var(--accent-soft)) var(--stone-surface); }
+  .glim-connection-badges .glim-badge--neutral { background-color: color-mix(in srgb, var(--stone-surface2), var(--stone-surface3)); }
   .glim-connection-about {
     display: flex;
     flex: 1 1 12rem;
@@ -6415,7 +6449,7 @@
     gap: var(--space-1);
     min-width: 0;
     font-size: var(--text-subline);
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
   }
   .glim-connection-status {
     margin: 0;
@@ -6447,7 +6481,7 @@
     width: var(--btn-h);
     height: var(--btn-h);
     border-radius: var(--radius-control);
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     cursor: pointer;
   }
   .glim-icon-btn > svg {
@@ -6455,7 +6489,7 @@
     height: var(--glyph-m);
   }
   .glim-icon-btn:disabled {
-    color: color-mix(in oklab, var(--carbon-text) 38%, transparent);
+    color: color-mix(in oklab, var(--stone-text) 38%, transparent);
     cursor: default;
   }
   .glim-icon-btn[aria-pressed="true"] {
@@ -6492,7 +6526,7 @@
     width: 1.6rem;
     height: 1.6rem;
     border-radius: var(--radius-control);
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
     cursor: pointer;
   }
   .glim-secret-eye:hover { color: var(--accent-glyph); }
@@ -6600,7 +6634,7 @@
     display: block;
     overflow: hidden;
     border-radius: var(--radius-pill);
-    background-color: var(--carbon-surface3);
+    background-color: var(--stone-surface3);
   }
   .glim-meter-track--small {
     display: inline-block;
@@ -6625,9 +6659,9 @@
      own glyph does (rule 40). The threshold still turns it red. */
   .glim-meter-track--quiet {
     height: 0.35rem;
-    background-color: var(--carbon-surface2);
+    background-color: var(--stone-surface2);
   }
-  .glim-meter-track--quiet > .glim-meter-fill { background-color: var(--carbon-text-muted); }
+  .glim-meter-track--quiet > .glim-meter-fill { background-color: var(--stone-text-muted); }
   :is(button, a):is(:hover, :focus-visible) .glim-meter-track--quiet:not(.glim-meter-track--full) > .glim-meter-fill {
     background-color: var(--accent);
   }
@@ -6645,7 +6679,7 @@
     height: 0.6rem;
     overflow: hidden;
     border-radius: var(--radius-pill);
-    background-color: var(--carbon-surface3);
+    background-color: var(--stone-surface3);
   }
   .glim-progress-fill {
     position: absolute;
@@ -6678,7 +6712,7 @@
     opacity: 0.5;
   }
   .glim-meter-track--quiet.glim-meter-track--busy > .glim-meter-fill {
-    background: repeating-linear-gradient(-45deg, var(--carbon-text-muted) 0 4px, transparent 4px 8px);
+    background: repeating-linear-gradient(-45deg, var(--stone-text-muted) 0 4px, transparent 4px 8px);
   }
 
   /* The Instances tab with the fortress in it ("The fortress" in the design
@@ -6756,7 +6790,7 @@
   }
   .glim-instance-facts {
     margin: 0;
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
     font-size: var(--text-meta);
     overflow-wrap: anywhere;
   }
@@ -6771,7 +6805,7 @@
     flex-direction: column-reverse;
   }
   .glim-instance-figures dt {
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
     font-size: var(--text-meta);
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -6793,7 +6827,7 @@
   .glim-instance > .glim-instance-acts { padding: 0 var(--space-8) var(--space-7); }
   .glim-instance-note {
     margin-inline-end: auto;
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     font-size: var(--text-subline);
   }
 
@@ -6813,7 +6847,7 @@
     gap: var(--space-5);
     padding: var(--space-3) var(--space-4);
     border-radius: var(--radius-control);
-    background-color: var(--carbon-surface2);
+    background-color: var(--stone-surface2);
   }
   .glim-instance-device {
     display: grid;
@@ -6821,8 +6855,8 @@
     width: 1.875rem;
     height: 1.875rem;
     border-radius: var(--radius-control);
-    background-color: var(--carbon-surface3);
-    color: var(--carbon-text-sub);
+    background-color: var(--stone-surface3);
+    color: var(--stone-text-sub);
   }
   .glim-instance-device svg {
     width: 0.875rem;
@@ -6847,7 +6881,7 @@
     font-weight: 600;
   }
   .glim-instance-row-sub {
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     font-size: var(--text-meta);
   }
 
@@ -6858,7 +6892,7 @@
     justify-content: center;
     gap: var(--space-4);
     padding: var(--space-11) var(--space-10);
-    border: 1.5px dashed var(--carbon-border);
+    border: 1.5px dashed var(--stone-border);
     background-color: transparent;
     box-shadow: none;
     text-align: center;
@@ -6866,7 +6900,7 @@
   .glim-instance--out .glim-instance-title { font-size: var(--text-body); }
   .glim-instance-hint {
     margin: 0;
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     font-size: var(--text-subline);
   }
   .glim-instance-found {
@@ -6874,7 +6908,7 @@
     align-items: center;
     gap: var(--space-4);
     margin: var(--space-2) 0 0;
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     font-size: var(--text-subline);
   }
   .glim-instance-found img {
@@ -6905,7 +6939,7 @@
     font-weight: 600;
   }
   .glim-fortress-sub {
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     font-size: var(--text-subline);
   }
 
@@ -6917,9 +6951,9 @@
     align-items: center;
     gap: var(--space-5);
     padding: var(--space-5) var(--space-6) var(--space-5) var(--space-8);
-    border: 1px solid var(--carbon-border);
+    border: 1px solid var(--stone-border);
     border-radius: var(--radius-card);
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     font-size: var(--text-subline);
   }
   /* On a phone the words keep their width and the button moves under them. */
@@ -6965,7 +6999,7 @@
     width: 0.7rem;
     height: 0.7rem;
     rotate: -90deg;
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
   }
   [dir="rtl"] .glim-permission-arrow { rotate: 90deg; }
   .glim-permission-to { display: inline-flex; }
@@ -6977,7 +7011,7 @@
     min-width: 0;
   }
   .glim-permission-title { font-weight: 600; }
-  .glim-permission:not(.glim-permission--on) .glim-permission-title { color: var(--carbon-text-sub); }
+  .glim-permission:not(.glim-permission--on) .glim-permission-title { color: var(--stone-text-sub); }
 
   /* The action the page exists for stands in the window's bottom right corner,
      with the rarer ones beside it ("Page actions"). */
@@ -7012,7 +7046,7 @@
   .glim-phrase-number {
     flex: none;
     width: 1.3rem;
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
     font-size: var(--text-meta);
     text-align: end;
   }
@@ -7030,7 +7064,7 @@
     gap: var(--space-4);
     padding: var(--space-4) var(--space-5);
     border-radius: var(--radius-control);
-    background-color: var(--carbon-surface2);
+    background-color: var(--stone-surface2);
     font-weight: 500;
   }
   /* The words beside their QR code, the rows stretched to the code's height
@@ -7050,7 +7084,7 @@
   .glim-phrase-scan {
     grid-column: 1 / -1;
     margin: 0;
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     font-size: var(--text-meta);
     text-align: end;
   }
@@ -7068,7 +7102,7 @@
     display: flex;
     align-items: flex-start;
     gap: var(--space-4);
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     font-size: var(--text-subline);
   }
   .glim-fortress-note svg {
@@ -7108,7 +7142,7 @@
   }
   .glim-status-heading {
     margin: 0;
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
     font-size: var(--text-meta);
     font-weight: 600;
     letter-spacing: 0.14em;
@@ -7136,7 +7170,7 @@
   }
   .glim-status-at {
     flex: none;
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
     font-size: var(--text-meta);
   }
   .glim-status-line > .glim-status-at:last-child { margin-inline-start: auto; }
@@ -7186,7 +7220,7 @@
     .glim-phrase-words { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .glim-fortress-actions {
       padding: var(--space-6) 0;
-      background-color: var(--carbon-bg);
+      background-color: var(--stone-ground);
       pointer-events: auto;
     }
   }
@@ -7373,7 +7407,7 @@
   }
   .glim-skeleton-block {
     flex: none;
-    background-color: var(--carbon-surface2);
+    background-color: var(--stone-surface2);
     background-image: linear-gradient(
       100deg,
       transparent 20%,
@@ -7452,7 +7486,7 @@
     border: 0;
     border-radius: var(--radius-card);
     background-color: var(--surface-overlay);
-    color: var(--carbon-text);
+    color: var(--stone-text);
     box-shadow: var(--elevation-float), var(--hairline);
   }
   /* Under the trigger and centred on it, above where there is no room below. */
@@ -7479,8 +7513,8 @@
     overflow: visible;
     border: 0;
     border-radius: var(--radius-card);
-    background-color: var(--carbon-surface);
-    color: var(--carbon-text);
+    background-color: var(--stone-surface);
+    color: var(--stone-text);
     box-shadow: var(--elevation-modal), var(--hairline);
     transition: translate var(--motion-sheet-dur, 0s) var(--motion-spring, ease);
   }
@@ -7547,7 +7581,7 @@
     font-size: var(--text-meta);
     font-weight: 500;
     text-align: start;
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
   }
   .glim-list-th-box {
     display: inline-flex;
@@ -7580,13 +7614,13 @@
   }
   .glim-list-sort-mark { flex: none; }
   .glim-list-sort-mark--asc { rotate: 180deg; }
-  .glim-list-th[aria-sort] .glim-list-sort { color: var(--carbon-text); }
+  .glim-list-th[aria-sort] .glim-list-sort { color: var(--stone-text); }
   .glim-list-filter[aria-pressed="true"] {
     background-color: var(--accent-soft);
     color: var(--accent-ink);
   }
   @media (hover: hover) {
-    :is(.glim-list-sort, .glim-list-filter):hover { background-color: var(--hover); color: var(--carbon-text); }
+    :is(.glim-list-sort, .glim-list-filter):hover { background-color: var(--hover); color: var(--stone-text); }
   }
   .glim-list-tr { cursor: default; }
   .glim-list-tr > td {
@@ -7631,7 +7665,7 @@
   .glim-list-empty {
     margin: 0;
     padding: var(--space-10) var(--space-5);
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
     text-align: center;
   }
   .glim-list-filter-values {
@@ -7697,7 +7731,7 @@
     display: block;
     flex-basis: 100%;
     margin-top: var(--space-2);
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     font-size: var(--text-subline);
   }
 }
@@ -7712,7 +7746,7 @@
     flex-direction: column;
   }
   .glim-accordion-item + .glim-accordion-item {
-    border-top: 1px solid color-mix(in srgb, var(--carbon-border) 60%, transparent);
+    border-top: 1px solid color-mix(in srgb, var(--stone-border) 60%, transparent);
   }
   .glim-disclosure-heading {
     margin: 0;
@@ -7728,7 +7762,7 @@
     border: 0;
     border-radius: var(--radius-control);
     background-color: transparent;
-    color: var(--carbon-text);
+    color: var(--stone-text);
     font: inherit;
     font-size: var(--text-body);
     font-weight: 500;
@@ -7743,7 +7777,7 @@
     outline-offset: 2px;
   }
   .glim-disclosure-trigger[data-disabled] {
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
     background-color: transparent;
     cursor: default;
   }
@@ -7754,13 +7788,13 @@
   .glim-disclosure-indicator {
     display: inline-flex;
     flex-shrink: 0;
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
   }
   .glim-disclosure-indicator[data-state="open"] { rotate: 180deg; }
   .glim-disclosure-content { overflow: hidden; }
   .glim-disclosure-body {
     padding: var(--space-2) var(--row-pad) var(--space-6);
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     font-size: var(--text-body);
     line-height: 1.5;
   }
@@ -7782,8 +7816,8 @@
 }
 
 /* Avatar: a person's picture in the shape of a pressable thing, or their
-   initials on the third surface. Under rainbow a list of people can give each
-   circle a hue of its own; the initials then take its ink. */
+   initials. With a name or a palette position the initials take one of the
+   chart tones on a pale wash of it (avatarView), never the accent. */
 @layer components {
   .glim-avatar {
     display: inline-grid;
@@ -7791,8 +7825,8 @@
     flex-shrink: 0;
     overflow: hidden;
     border-radius: var(--radius-pill);
-    background-color: var(--carbon-surface3);
-    color: var(--carbon-text-sub);
+    background-color: var(--stone-surface3);
+    color: var(--stone-text-sub);
     font-weight: 600;
     line-height: 1;
     user-select: none;
@@ -7813,9 +7847,15 @@
     height: var(--btn-h-key);
     font-size: var(--text-body);
   }
+  /* Deprecated, and gone in 6.0.0: the accent fills the circle. The accent
+     marks activity, so avatarView() tones an avatar by name instead. */
+  .glim-avatar--hued {
+    background-color: var(--accent);
+    color: var(--accent-contrast);
+  }
   /* The initials in one of the chart tones on a pale wash of it. */
   .glim-avatar--toned {
-    background-color: color-mix(in oklab, var(--avatar-tone) 18%, var(--carbon-surface));
+    background-color: color-mix(in oklab, var(--avatar-tone) 18%, var(--stone-surface));
     color: light-dark(oklch(from var(--avatar-tone) 0.45 c h), oklch(from var(--avatar-tone) 0.8 c h));
   }
   .glim-avatar-image {
@@ -7848,7 +7888,7 @@
   }
   .glim-page-status {
     padding-inline: var(--space-4);
-    color: var(--carbon-text);
+    color: var(--stone-text);
     font-size: var(--text-body);
     white-space: nowrap;
   }
@@ -7858,14 +7898,14 @@
     padding-inline: var(--space-4);
     border: 0;
     border-radius: var(--radius-control);
-    background-color: var(--carbon-surface2);
-    color: var(--carbon-text);
+    background-color: var(--stone-surface2);
+    color: var(--stone-text);
     font: inherit;
     font-size: var(--text-body);
     cursor: pointer;
   }
   .glim-page:hover { background-color: var(--hover); }
-  :is(.glim-well, .glim-subcard) .glim-page { background-color: var(--carbon-surface3); }
+  :is(.glim-well, .glim-subcard) .glim-page { background-color: var(--stone-surface3); }
   :is(.glim-well, .glim-subcard) .glim-page:hover { background-color: var(--hover); }
   .glim-page[data-selected] {
     background-color: var(--accent);
@@ -7879,7 +7919,7 @@
   }
   .glim-page-gap {
     min-width: 1.5rem;
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
     text-align: center;
   }
   .glim-pagination .glim-btn svg:dir(rtl) { scale: -1 1; }
@@ -7914,13 +7954,13 @@
     height: 4px;
     margin-inline: var(--space-2);
     border-radius: 50%;
-    background-color: var(--carbon-text-muted);
+    background-color: var(--stone-text-muted);
   }
   /* The box that takes the next character shows a caret of its own in the
      middle, blinking once a second; a digit grows in, and a whole code takes a
      short wash in the good colour. */
   .glim-pin-cell:focus:not([data-filled]) {
-    background-image: linear-gradient(var(--carbon-text), var(--carbon-text));
+    background-image: linear-gradient(var(--stone-text), var(--stone-text));
     background-position: center;
     background-repeat: no-repeat;
     background-size: 1.5px 1.125rem;
@@ -7971,7 +8011,7 @@
     padding-inline: var(--space-4) var(--space-1);
     border-radius: var(--radius-pill);
     background-color: var(--field-part);
-    color: var(--carbon-text);
+    color: var(--stone-text);
     font-size: var(--text-subline);
   }
   .glim-tag[data-highlighted] {
@@ -8000,7 +8040,7 @@
     border: 0;
     border-radius: var(--radius-pill);
     background-color: transparent;
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     cursor: pointer;
   }
   .glim-tag-remove svg {
@@ -8011,7 +8051,7 @@
   @media (hover: hover) {
     .glim-tag:not([data-highlighted]) .glim-tag-remove:hover {
       background-color: var(--hover);
-      color: var(--carbon-text);
+      color: var(--stone-text);
     }
   }
   .glim-tag-remove:focus-visible {
@@ -8040,9 +8080,10 @@
 }
 
 /* Steps: the row of named steps, the step in force and its foot. The step in
-   force is filled with the accent, a finished one carries a tick on the third
-   surface and the ones ahead their number on the second, so the row stays
-   quiet (rule 33). A hairline joins each step to the next. */
+   force is filled with the accent, a finished one is a neutral disc with the
+   accent's tick and the ones ahead a quiet ring round their number, so the row
+   stays quiet (rule 33). A line joins each step to the next and fills with the
+   accent behind the steps already taken. */
 @layer components {
   .glim-steps {
     display: flex;
@@ -8073,7 +8114,7 @@
     border: 0;
     border-radius: var(--radius-pill);
     background-color: transparent;
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     font: inherit;
     font-size: var(--text-body);
     cursor: pointer;
@@ -8086,7 +8127,7 @@
     outline-offset: 2px;
   }
   .glim-steps-trigger[data-current] {
-    color: var(--carbon-text);
+    color: var(--stone-text);
     font-weight: 600;
   }
   .glim-steps-indicator {
@@ -8096,8 +8137,8 @@
     width: 1.5rem;
     height: 1.5rem;
     border-radius: var(--radius-pill);
-    background-color: var(--carbon-surface2);
-    color: var(--carbon-text-sub);
+    background-color: var(--stone-surface2);
+    color: var(--stone-text-sub);
     font-size: var(--text-meta);
     font-weight: 600;
   }
@@ -8108,13 +8149,13 @@
   /* Done is a neutral disc with the accent's tick, ahead is a quiet ring, and
      the connector fills behind the steps already taken. */
   .glim-steps-indicator[data-complete] {
-    background-color: var(--carbon-surface2);
+    background-color: var(--stone-surface2);
     color: var(--accent-ink);
   }
   .glim-steps-indicator:not([data-complete], [data-current]) {
     background-color: transparent;
-    box-shadow: inset 0 0 0 1.5px var(--carbon-border);
-    color: var(--carbon-text-muted);
+    box-shadow: inset 0 0 0 1.5px var(--stone-border);
+    color: var(--stone-text-muted);
   }
   .glim-steps-indicator[data-current] {
     background-color: var(--accent);
@@ -8130,7 +8171,7 @@
     min-width: 1rem;
     height: 2px;
     border-radius: 1px;
-    background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 0 / 0% 100%, var(--carbon-border);
+    background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 0 / 0% 100%, var(--stone-border);
   }
   .glim-steps-separator:dir(rtl) { background-position: 100% 0, 0 0; }
   .glim-steps-item[data-complete] .glim-steps-separator { background-size: 100% 100%, auto; }
@@ -8157,13 +8198,13 @@
   @media (prefers-contrast: more) {
     :is(.glim-input, .glim-num-field, .glim-glyph-field, .glim-combobox-control, .glim-select-trigger,
       .glim-btn, .glim-sel-seg, .glim-sel-tile, .glim-toggle-track, .glim-checkbox-box, .glim-rowmark):not(:focus-visible) {
-      outline: 1px solid var(--carbon-border);
+      outline: 1px solid var(--stone-border);
       outline-offset: -1px;
     }
   }
   :root[data-contrast="more"] :is(.glim-input, .glim-num-field, .glim-glyph-field, .glim-combobox-control, .glim-select-trigger,
       .glim-btn, .glim-sel-seg, .glim-sel-tile, .glim-toggle-track, .glim-checkbox-box, .glim-rowmark):not(:focus-visible) {
-    outline: 1px solid var(--carbon-border);
+    outline: 1px solid var(--stone-border);
     outline-offset: -1px;
   }
 
@@ -8265,7 +8306,7 @@
   .glim-splitter-handle::before {
     content: "";
     position: absolute;
-    background-color: color-mix(in srgb, var(--carbon-border) 60%, transparent);
+    background-color: color-mix(in srgb, var(--stone-border) 60%, transparent);
   }
   .glim-splitter-handle[data-orientation="horizontal"]::before {
     inset-block: 0;
@@ -8280,7 +8321,7 @@
   .glim-splitter-grip {
     position: relative;
     border-radius: var(--radius-pill);
-    background-color: var(--carbon-surface3);
+    background-color: var(--stone-surface3);
   }
   .glim-splitter-handle[data-orientation="horizontal"] .glim-splitter-grip {
     width: var(--space-2);
@@ -8296,7 +8337,7 @@
     outline: var(--focus-ring-width) solid var(--focus-ring);
     outline-offset: var(--space-1);
   }
-  .glim-splitter-grip[data-disabled] { background-color: var(--carbon-surface2); }
+  .glim-splitter-grip[data-disabled] { background-color: var(--stone-surface2); }
 }
 
 /* ScrollArea: the platform's bar is hidden and a thin one of the house's own
@@ -8343,20 +8384,21 @@
   .glim-scroll-thumb {
     flex: 1;
     border-radius: var(--radius-pill);
-    background-color: var(--carbon-surface3);
+    background-color: var(--stone-surface3);
   }
   .glim-scroll-bar[data-orientation="vertical"] .glim-scroll-thumb { margin-inline-start: var(--space-1); }
   .glim-scroll-bar[data-orientation="horizontal"] .glim-scroll-thumb { margin-top: var(--space-1); }
   .glim-scroll-bar:is([data-hover], [data-dragging]) .glim-scroll-thumb {
     margin: 0;
-    background-color: var(--carbon-hover-raised);
+    background-color: var(--stone-hover-raised);
   }
 }
 @media (prefers-reduced-motion: no-preference) {
   .glim-scroll-thumb { transition: margin var(--motion-control-dur, 0s) var(--motion-ease), background-color var(--motion-control-dur, 0s) var(--motion-ease); }
 }
 
-/* FileUpload: the drop zone is one filled button on the second surface, with
+/* FileUpload: the drop zone is one filled button on the field steps, sunk a
+   little into its surface and brighter under the pointer and on focus, with
    its glyph and its words (rule 38). While files are held over it, it takes
    the accent's wash and its glyph the accent, since that is the moment the
    app is about to act. The files stand under it as rows. */
@@ -8377,7 +8419,7 @@
     border-radius: var(--radius-card);
     background-color: var(--field-rest);
     box-shadow: var(--field-sink);
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     font-size: var(--text-body);
     text-align: center;
     cursor: pointer;
@@ -8385,7 +8427,7 @@
   .glim-upload-drop > svg {
     width: var(--space-10);
     height: var(--space-10);
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
   }
   .glim-upload-words { max-width: 22rem; }
   @media (hover: hover) {
@@ -8399,7 +8441,7 @@
   .glim-upload-drop[data-dragging] {
     background-color: var(--field-focus);
     background-image: linear-gradient(var(--accent-soft), var(--accent-soft));
-    color: var(--carbon-text);
+    color: var(--stone-text);
   }
   .glim-upload-drop[data-dragging] > svg {
     color: var(--accent-glyph);
@@ -8443,12 +8485,12 @@
     flex: 1;
     min-width: 0;
     overflow: hidden;
-    color: var(--carbon-text);
+    color: var(--stone-text);
     text-overflow: ellipsis;
     white-space: nowrap;
   }
   .glim-upload-size {
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     font-size: var(--text-subline);
   }
 }
@@ -8486,7 +8528,7 @@
     flex-shrink: 0;
     width: 0.875rem;
     height: 0.875rem;
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
   }
   .glim-date-trigger:focus-visible { outline: none; }
   .glim-date-trigger[data-disabled] {
@@ -8523,14 +8565,14 @@
     border: 0;
     border-radius: var(--radius-control);
     background-color: transparent;
-    color: var(--carbon-text);
+    color: var(--stone-text);
     font: inherit;
     font-size: var(--text-body);
     cursor: pointer;
   }
   .glim-date-step {
     width: var(--btn-h);
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
   }
   .glim-date-step svg:dir(rtl) { scale: -1 1; }
   .glim-date-title {
@@ -8553,7 +8595,7 @@
   }
   .glim-date-weekday {
     padding-bottom: var(--space-2);
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     font-size: var(--text-meta);
     font-weight: 500;
   }
@@ -8563,7 +8605,7 @@
     width: 2.25rem;
     height: 2.25rem;
     border-radius: var(--radius-control);
-    color: var(--carbon-text);
+    color: var(--stone-text);
     font-size: var(--text-subline);
     cursor: pointer;
     outline: none;
@@ -8578,7 +8620,7 @@
     background-color: var(--hover);
     font-weight: 600;
   }
-  .glim-date-cell:is([data-outside-range], [data-disabled], [data-unavailable]) { color: color-mix(in oklab, var(--carbon-text-muted) 45%, transparent); }
+  .glim-date-cell:is([data-outside-range], [data-disabled], [data-unavailable]) { color: color-mix(in oklab, var(--stone-text-muted) 45%, transparent); }
   .glim-date-cell:is([data-disabled], [data-unavailable]) { cursor: default; }
   .glim-date-cell[data-disabled]:hover { background-color: transparent; }
   .glim-date-cell[data-selected] {
@@ -8632,11 +8674,11 @@
     user-select: none;
   }
   .glim-time-seg[data-empty] { color: var(--field-placeholder); }
-  .glim-time-seg:focus { background-color: var(--accent-soft); color: var(--carbon-text); }
-  .glim-time-colon { color: var(--carbon-text-muted); }
+  .glim-time-seg:focus { background-color: var(--accent-soft); color: var(--stone-text); }
+  .glim-time-colon { color: var(--stone-text-muted); }
   .glim-time-to {
     padding-inline: var(--space-3);
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
   }
 }
 
@@ -8663,7 +8705,7 @@
     width: var(--space-10);
     height: var(--space-10);
     border-radius: var(--radius-control);
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
     cursor: pointer;
     outline: none;
   }
@@ -8720,7 +8762,7 @@
   .glim-timer-figure {
     display: flex;
     direction: ltr;
-    color: var(--carbon-text);
+    color: var(--stone-text);
     font-size: var(--text-status);
     font-weight: 600;
     line-height: 1.2;
@@ -8778,13 +8820,13 @@
     width: 1.5px;
     height: var(--space-2);
     border-radius: 1px;
-    background-color: color-mix(in oklab, var(--carbon-text-muted) 70%, transparent);
+    background-color: color-mix(in oklab, var(--stone-text-muted) 70%, transparent);
   }
   .glim-angle-mark[data-quarter]::before {
     left: calc(50% - 1px);
     width: 2px;
     height: 7px;
-    background-color: var(--carbon-text-muted);
+    background-color: var(--stone-text-muted);
   }
   /* The thumb covers the dial only to turn with it; a press goes through to
      the dial, which sets the angle under the pointer. */
@@ -8821,7 +8863,7 @@
     display: grid;
     place-items: center;
     direction: ltr;
-    color: var(--carbon-text);
+    color: var(--stone-text);
     font-size: var(--text-body);
     font-weight: 500;
     font-variant-numeric: tabular-nums;
@@ -8847,12 +8889,12 @@
     position: relative;
     height: 10rem;
     border-radius: var(--radius-card);
-    background-color: var(--carbon-surface2);
-    color: var(--carbon-text);
+    background-color: var(--stone-surface2);
+    color: var(--stone-text);
     cursor: crosshair;
     touch-action: none;
   }
-  :is(.glim-well, .glim-subcard) .glim-signature-pad { background-color: var(--carbon-surface3); }
+  :is(.glim-well, .glim-subcard) .glim-signature-pad { background-color: var(--stone-surface3); }
   .glim-signature-pad:focus-visible {
     outline: var(--focus-ring-width) solid var(--focus-ring);
     outline-offset: 2px;
@@ -8873,7 +8915,7 @@
     inset-inline: var(--space-10);
     bottom: 28%;
     height: 1px;
-    background-color: color-mix(in srgb, var(--carbon-border) 60%, var(--carbon-text-muted));
+    background-color: color-mix(in srgb, var(--stone-border) 60%, var(--stone-text-muted));
     pointer-events: none;
   }
   .glim-signature-foot {
@@ -8889,7 +8931,7 @@
 @layer components {
   .glim-chart {
     --chart-grid: light-dark(rgb(0 0 0 / 0.08), rgb(255 255 255 / 0.08));
-    --chart-axis: var(--carbon-text-muted);
+    --chart-axis: var(--stone-text-muted);
     --chart-cursor: light-dark(rgb(0 0 0 / 0.04), rgb(255 255 255 / 0.05));
     --chart-bar-radius: 4px;
     display: grid;
@@ -8922,7 +8964,7 @@
   }
   .glim-chart-area { fill-opacity: 0.16; }
   .glim-chart-dot {
-    stroke: var(--carbon-surface);
+    stroke: var(--stone-surface);
     stroke-width: 2;
   }
   .glim-chart-tooltip {
@@ -8943,12 +8985,12 @@
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
   }
   .glim-chart-tooltip-value {
     margin-inline-start: auto;
     padding-inline-start: var(--space-6);
-    color: var(--carbon-text);
+    color: var(--stone-text);
   }
   .glim-chart-swatch {
     display: inline-block;
@@ -8965,7 +9007,7 @@
     margin: 0;
     padding: 0;
     list-style: none;
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     font-size: var(--text-meta);
   }
   .glim-chart-legend > li {
@@ -9004,7 +9046,7 @@
     padding: var(--space-8);
     border-radius: var(--radius-card);
     background-color: var(--surface-overlay);
-    color: var(--carbon-text);
+    color: var(--stone-text);
     font-size: var(--text-body);
     box-shadow: var(--elevation-float), var(--hairline);
   }
@@ -9023,8 +9065,8 @@
     height: var(--space-13);
     overflow: hidden;
     border-radius: var(--radius-control);
-    background-color: var(--carbon-surface2);
-    color: var(--carbon-text-sub);
+    background-color: var(--stone-surface2);
+    color: var(--stone-text-sub);
   }
   .glim-hovercard-media > svg { width: var(--glyph-l); height: var(--glyph-l); }
   .glim-hovercard-names {
@@ -9040,7 +9082,7 @@
     white-space: nowrap;
   }
   .glim-hovercard-meta {
-    color: var(--carbon-text-muted);
+    color: var(--stone-text-muted);
     font-size: var(--text-meta);
     line-height: 1rem;
   }
@@ -9049,7 +9091,7 @@
     gap: var(--space-2);
     margin: 0;
     padding-top: var(--space-6);
-    box-shadow: inset 0 1px 0 var(--carbon-border);
+    box-shadow: inset 0 1px 0 var(--stone-border);
   }
   .glim-hovercard-fact {
     display: flex;
@@ -9058,7 +9100,7 @@
     font-size: var(--text-subline);
     line-height: 1.25rem;
   }
-  .glim-hovercard-fact > dt { color: var(--carbon-text-muted); }
+  .glim-hovercard-fact > dt { color: var(--stone-text-muted); }
   .glim-hovercard-fact > dd { margin: 0; }
 }
 @media (prefers-reduced-motion: no-preference) {
@@ -9110,7 +9152,7 @@
     width: var(--space-4);
     height: var(--space-4);
     border-radius: var(--radius-pill);
-    background-color: var(--carbon-text-muted);
+    background-color: var(--stone-text-muted);
   }
   .glim-carousel-dot:hover::before { background-color: var(--accent); }
   .glim-carousel-dot[data-current]::before {
@@ -9140,7 +9182,7 @@
   .glim-marquee {
     flex: 1;
     min-width: 0;
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
   }
   .glim-marquee-viewport { min-width: 0; }
   .glim-marquee-item { white-space: nowrap; }
@@ -9207,14 +9249,14 @@
     width: min(22rem, calc(100vw - 16px));
     padding: var(--space-9) var(--space-8) var(--space-8);
     border-radius: var(--radius-card);
-    background-color: var(--carbon-surface);
-    color: var(--carbon-text);
+    background-color: var(--stone-surface);
+    color: var(--stone-text);
     box-shadow: var(--elevation-modal);
     outline: none;
   }
   .glim-tour-text {
     margin: 0 0 var(--space-8);
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     font-size: var(--text-body);
     line-height: 1.5;
   }
@@ -9235,7 +9277,7 @@
     width: 6px;
     height: 6px;
     border-radius: var(--radius-pill);
-    background-color: var(--carbon-surface3);
+    background-color: var(--stone-surface3);
   }
   .glim-tour-dot[data-current] {
     width: var(--space-8);
@@ -9270,7 +9312,7 @@
     padding-top: var(--space-9);
     border-radius: var(--radius-card);
     background-color: var(--surface-overlay);
-    color: var(--carbon-text);
+    color: var(--stone-text);
     box-shadow: var(--elevation-float), var(--hairline);
     outline: none;
   }
@@ -9302,7 +9344,7 @@
     min-height: 0;
     overflow: auto;
     padding: var(--space-4) var(--space-8);
-    color: var(--carbon-text-sub);
+    color: var(--stone-text-sub);
     font-size: var(--text-body);
   }
   .glim-fpanel-body[hidden] { display: none; }
@@ -9323,7 +9365,7 @@
 @layer components {
   @media (prefers-contrast: more) {
     :is(.glim-page, .glim-tags-control, .glim-steps-indicator, .glim-upload-drop, .glim-signature-pad):not(:focus-visible) {
-      outline: 1px solid var(--carbon-border);
+      outline: 1px solid var(--stone-border);
       outline-offset: -1px;
     }
   }

@@ -15,7 +15,7 @@ void main() {
       await tester.pumpAndSettle();
       final card = decorationOf(tester, GlimCard);
       expect(card.shadows, light.dark.raised, reason: light.name);
-      expect(card.color, GlimTheme.dark.carbonSurface);
+      expect(card.color, GlimTheme.dark.stoneSurface);
     }
   });
 
@@ -25,7 +25,7 @@ void main() {
       await tester.pumpAndSettle();
       final well = decorationOf(tester, GlimWell);
       expect(well.shadows, isEmpty);
-      expect(well.color, GlimTheme.dark.carbonSurface2);
+      expect(well.color, GlimTheme.dark.stoneSurface2);
       expect((well.shape as OutlinedBorder), glimOutline(shape, shape.nested));
     }
   });

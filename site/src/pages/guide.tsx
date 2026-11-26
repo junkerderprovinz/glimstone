@@ -16,7 +16,7 @@ export function Introduction() {
       <div className="tile-grid">
         <a className="tile" href="#/guide/palette">
           <strong>Palette</strong>
-          <p>IBM Carbon's neutral greys, one accent and four state hues.</p>
+          <p>A ground of stone tinted by the accent, one accent and four state hues.</p>
         </a>
         <a className="tile" href="#/engines/colour">
           <strong>Four engines</strong>
@@ -68,7 +68,7 @@ export function Adopting() {
       <p>
         Copy <SourceLink file="tokens.css" /> into the app and load it before anything else. Under Tailwind v4 add{" "}
         <SourceLink file="tailwind-theme.css" /> after it, which maps the tokens onto utilities such as{" "}
-        <code>bg-carbon-surface</code> and <code>text-accent</code>.
+        <code>bg-stone-surface</code> and <code>text-accent</code>.
       </p>
       <Code code={`@import "./glimstone/tokens.css";\n@import "./glimstone/tailwind-theme.css";`} />
       <H2>2. Engines</H2>
@@ -151,8 +151,8 @@ export function Palette() {
   return (
     <>
       <p className="lead">
-        The greys are IBM Carbon's, so every app in the family stands on the same ground. GlimStone adds the system on
-        top: the rules, the engines and the rainbow.
+        The ground is stone that takes a faint share of the accent's hue, the same share in every app, so every app in
+        the family stands on the same ground. GlimStone adds the system on top: the rules, the engines and the rainbow.
       </p>
       <p>Each swatch below is drawn from the live token, under the dark ramp, under OLED and under the light ramp.</p>
       {groups.map((g, i) => (
@@ -201,8 +201,8 @@ export function TypeScale() {
           <div key={s.token} className="swatch-row" style={{ gridTemplateColumns: "6rem minmax(0,1fr)" }}>
             <code>{s.px}px</code>
             <div>
-              <div style={{ fontSize: `var(${s.token})`, color: "var(--carbon-text)", lineHeight: 1.35 }}>{s.role}</div>
-              <div style={{ fontSize: 12, color: "var(--carbon-text-muted)", marginTop: 4 }}>{s.token}</div>
+              <div style={{ fontSize: `var(${s.token})`, color: "var(--stone-text)", lineHeight: 1.35 }}>{s.role}</div>
+              <div style={{ fontSize: 12, color: "var(--stone-text-muted)", marginTop: 4 }}>{s.token}</div>
             </div>
           </div>
         ))}

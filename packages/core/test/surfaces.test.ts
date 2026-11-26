@@ -37,7 +37,7 @@ test('a card action stands centred on the top edge at the end, on the card fill'
   assert.equal(declared('.glim-panel-action', 'top'), '0');
   assert.equal(declared('.glim-panel-action', 'inset-inline-end'), 'var(--space-8)');
   assert.equal(declared('.glim-panel-action', 'translate'), '0 -50%');
-  assert.equal(declared('.glim-panel-action', 'background-color'), 'var(--carbon-surface)');
+  assert.equal(declared('.glim-panel-action', 'background-color'), 'var(--stone-surface)');
 });
 
 test('the notch comes in three steps: a window, a card and a sub-card', () => {
@@ -61,10 +61,10 @@ test('a window holds its content 24px in from its sides, 20px on a phone', () =>
 });
 
 test('a confirmation leads with its question in the text colour and keeps the rest quiet', () => {
-  assert.equal(declared('.glim-modal-question', 'color'), 'var(--carbon-text)');
+  assert.equal(declared('.glim-modal-question', 'color'), 'var(--stone-text)');
   assert.equal(declared('.glim-modal-question', 'font-size'), 'var(--text-title)');
   assert.equal(declared('.glim-modal-question', 'font-weight'), 'var(--font-weight-strong)');
-  assert.equal(declared('.glim-modal-question + .glim-modal-text', 'color'), 'var(--carbon-text-muted)');
+  assert.equal(declared('.glim-modal-question + .glim-modal-text', 'color'), 'var(--stone-text-muted)');
   assert.equal(declared('.glim-modal-question + .glim-modal-text', 'font-size'), 'var(--text-body)');
 });
 
@@ -110,8 +110,8 @@ test('a rest timer opens a tooltip after the delay and an info bubble at once', 
 });
 
 test('a tooltip is small and inverted, an info bubble roomy on the floating surface', () => {
-  assert.equal(declared('.glim-bubble--tip', 'background-color'), 'var(--carbon-text)');
-  assert.equal(declared('.glim-bubble--tip', 'color'), 'var(--carbon-bg)');
+  assert.equal(declared('.glim-bubble--tip', 'background-color'), 'var(--stone-text)');
+  assert.equal(declared('.glim-bubble--tip', 'color'), 'var(--stone-ground)');
   assert.equal(declared('.glim-bubble--tip', 'box-shadow'), 'var(--elevation-notch)');
   assert.equal(declared('.glim-bubble--tip', 'max-width'), '15rem');
   assert.equal(declared('.glim-bubble--tip::before', 'display'), 'none');
@@ -122,12 +122,12 @@ test('a tooltip is small and inverted, an info bubble roomy on the floating surf
 
 test('a dim selector tile keeps its words readable: only its glyph steps back, nothing turns see-through', () => {
   assert.equal(declared('.glim-sel-tile--dim', 'opacity'), '');
-  assert.equal(declared('.glim-sel-tile--dim:not(.glim-active) > svg', 'color'), 'var(--carbon-text-muted)');
+  assert.equal(declared('.glim-sel-tile--dim:not(.glim-active) > svg', 'color'), 'var(--stone-text-muted)');
 });
 
 test('the fortress card falls back to the secondary text ink outside a host theme', () => {
   const card = readFileSync(new URL('../vanilla/fortress-card.css', import.meta.url), 'utf8');
-  assert.match(card, /--fc-dim: var\(--alt-text-color, var\(--carbon-text-sub, #8d8d8d\)\);/);
+  assert.match(card, /--fc-dim: var\(--alt-text-color, var\(--stone-text-sub, #8d8d8d\)\);/);
 });
 
 test('a done step is a neutral disc with the accent tick, and its connector fills behind it', () => {

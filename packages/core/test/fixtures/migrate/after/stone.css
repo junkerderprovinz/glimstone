@@ -1,0 +1,30 @@
+.panel {
+  background: var(--stone-ground);
+  color: var(--stone-text-sub);
+  border: 1px solid var(--stone-border);
+}
+
+.panel-row:hover {
+  background: var(--carbon-hover);
+}
+
+.panel-raised {
+  --panel-fill: var(--stone-surface3, var(--stone-surface2));
+  box-shadow: 0 0 0 1px var(--stone-hover-raised);
+}
+
+.app-dim {
+  --stone-surface: #202020;
+}
+
+.retry:hover {
+  background: var(--status-ok-hover);
+}
+
+@theme {
+  --color-panel: var(--color-stone-surface);
+}
+
+.chip {
+  @apply bg-stone-surface2 text-stone-textMuted;
+}

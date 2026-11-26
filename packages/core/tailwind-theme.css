@@ -1,5 +1,5 @@
 /* GlimStone's optional Tailwind v4 theme layer. It maps the custom properties in
-   tokens.css onto utility classes (bg-carbon-surface, text-accent, bg-statusOk,
+   tokens.css onto utility classes (bg-stone-surface, text-accent, bg-statusOk,
    ...) and defines nothing itself, so load tokens.css first. An app without
    Tailwind can skip this file. */
 
@@ -26,17 +26,19 @@
   --text-dense: var(--text-dense);
   --text-caption: var(--text-caption);
 
-  --color-carbon-background: var(--carbon-bg);
-  --color-carbon-sidebar: var(--carbon-sidebar);
-  --color-carbon-surface: var(--carbon-surface);
-  --color-carbon-surface2: var(--carbon-surface2);
-  --color-carbon-surface3: var(--carbon-surface3);
+  --color-stone-ground: var(--stone-ground);
+  --color-stone-sidebar: var(--stone-sidebar);
+  --color-stone-surface: var(--stone-surface);
+  --color-stone-surface2: var(--stone-surface2);
+  --color-stone-surface3: var(--stone-surface3);
+
+  /* Deprecated, and gone in 6.0.0: hover:bg-hover is the one hover (rule 21). */
   --color-carbon-hover: var(--carbon-hover);
-  --color-carbon-hoverRaised: var(--carbon-hover-raised);
-  --color-carbon-border: var(--carbon-border);
-  --color-carbon-text: var(--carbon-text);
-  --color-carbon-textSub: var(--carbon-text-sub);
-  --color-carbon-textMuted: var(--carbon-text-muted);
+  --color-stone-hoverRaised: var(--stone-hover-raised);
+  --color-stone-border: var(--stone-border);
+  --color-stone-text: var(--stone-text);
+  --color-stone-textSub: var(--stone-text-sub);
+  --color-stone-textMuted: var(--stone-text-muted);
   --color-accent: var(--accent);
   --color-accentContrast: var(--accent-contrast);
   --color-accentSoft: var(--accent-soft);
@@ -55,9 +57,16 @@
   --color-statusOk: var(--status-ok-text);
   --color-statusOkBg: var(--status-ok-bg);
   --color-statusOkSolid: var(--status-ok-solid);
+
+  /* A state button: bg-statusOkWash text-statusOk hover:bg-statusOkWashHover,
+     and the same for fail and warn. */
+  --color-statusOkWash: var(--status-ok-wash);
+  --color-statusOkWashHover: var(--status-ok-wash-hover);
   --color-statusFail: var(--status-fail-text);
   --color-statusFailBg: var(--status-fail-bg);
   --color-statusFailSolid: var(--status-fail-solid);
+  --color-statusFailWash: var(--status-fail-wash);
+  --color-statusFailWashHover: var(--status-fail-wash-hover);
   --color-statusWarn: var(--status-warn-text);
   --color-statusWarnBg: var(--status-warn-bg);
 
@@ -68,12 +77,30 @@
   /* The quiet end, for a paragraph that explains rather than warns. */
   --color-statusWarnBgSoft: var(--status-warn-bg-soft);
   --color-statusWarnSolid: var(--status-warn-solid);
+  --color-statusWarnWash: var(--status-warn-wash);
+  --color-statusWarnWashHover: var(--status-warn-wash-hover);
   --color-statusNeutral: var(--status-neutral-text);
   --color-statusNeutralBg: var(--status-neutral-bg);
   --color-statusNeutralSolid: var(--status-neutral-solid);
 
+  /* Deprecated, and gone in 6.0.0: the stone utilities under their carbon-
+     names. */
+  --color-carbon-background: var(--stone-ground);
+  --color-carbon-sidebar: var(--stone-sidebar);
+  --color-carbon-surface: var(--stone-surface);
+  --color-carbon-surface2: var(--stone-surface2);
+  --color-carbon-surface3: var(--stone-surface3);
+  --color-carbon-hoverRaised: var(--stone-hover-raised);
+  --color-carbon-border: var(--stone-border);
+  --color-carbon-text: var(--stone-text);
+  --color-carbon-textSub: var(--stone-text-sub);
+  --color-carbon-textMuted: var(--stone-text-muted);
+
   /* The accent-filled button's hover step (rule 21). */
   --color-accentHover: var(--accent-hover);
+
+  /* Deprecated with the fail and warn steps, and gone in 6.0.0: a state button
+     is a wash and hovers to bg-statusOkWashHover. */
   --color-statusOkHover: var(--status-ok-hover);
   --color-statusFailHover: var(--status-fail-hover);
   --color-statusWarnHover: var(--status-warn-hover);
@@ -98,10 +125,10 @@
   --color-hover: var(--hover);
 }
 [data-rainbow='reactive'] .glim-hue {
-  --color-accent: var(--carbon-text-muted);
-  --color-accentContrast: var(--carbon-bg);
+  --color-accent: var(--stone-text-muted);
+  --color-accentContrast: var(--stone-ground);
   --color-accentSoft: transparent;
-  --color-accentGlyph: var(--carbon-text-muted);
+  --color-accentGlyph: var(--stone-text-muted);
 }
 [data-rainbow='reactive'] .glim-hue:hover,
 [data-rainbow='reactive'] .glim-hue:focus-within,

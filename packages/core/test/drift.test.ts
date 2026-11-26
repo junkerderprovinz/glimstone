@@ -24,6 +24,8 @@ const manifest = {
   deprecated: [
     { name: 'DropdownListbox', note: 'DropdownListbox is deprecated since GlimStone 4.1.0 and goes in 5.0.0. Use Select.' },
     { name: 'Badge shape', note: 'Badge shape is deprecated since GlimStone 4.4.0 and goes in 5.0.0. Use `form`.', find: String.raw`<Badge\b[^>]*?\s:?shape=` },
+    { name: '--carbon-surface', note: '--carbon-surface is deprecated since GlimStone 5.0.0 and goes in 6.0.0. Use `--stone-surface`.', find: String.raw`(?<![\w-])--carbon-surface(?![\w-])` },
+    { name: 'GlimTheme carbonText', note: 'GlimTheme carbonText is deprecated since GlimStone 5.0.0 and goes in 6.0.0. Use `stoneText`.', find: String.raw`\bcarbonText\b` },
   ],
 };
 
@@ -103,6 +105,19 @@ test('a stylesheet that mentions a deprecated component is not a use', () => {
   assert.doesNotMatch(r.out, /DropdownListbox is deprecated/);
 });
 
+test('a deprecated token in an app stylesheet is reported, one named in a comment is not', () => {
+  const css = '/* was --carbon-surface */\n.panel {\n  background: var(--carbon-surface);\n}\n.raised { background: var(--carbon-surface2); }\n';
+  const r = check(app({ 'lib/version.ts': VERSION_430, 'styles/app.css': css }));
+  assert.match(r.out, /styles[\\/]app\.css:3: --carbon-surface is deprecated since GlimStone 5\.0\.0 and goes in 6\.0\.0\. Use `--stone-surface`/);
+  assert.equal(r.out.match(/--carbon-surface is deprecated/g)?.length, 1);
+});
+
+test('a deprecated name in a Svelte component or a Dart file is reported', () => {
+  const r = check(app({ 'lib/version.ts': VERSION_430, 'ui/Panel.svelte': '<div style="color: var(--carbon-surface)"></div>\n', 'lib/theme.dart': 'final c = theme.carbonText;\n' }));
+  assert.match(r.out, /ui[\\/]Panel\.svelte:1: --carbon-surface is deprecated/);
+  assert.match(r.out, /lib[\\/]theme\.dart:1: GlimTheme carbonText is deprecated/);
+});
+
 test('findings only fail the run with --strict', () => {
   const root = app({ 'lib/version.ts': VERSION_430, 'components/Selector.tsx': SELECTOR_420 });
   assert.equal(check(root).status, 0);
@@ -128,4 +143,9 @@ test('the generated manifest hashes the working tree as the current version', ()
   assert.ok(built.classes.includes('glim-btn'));
   assert.ok(built.deprecated.some((d: { name: string }) => d.name === 'DropdownListbox'));
   assert.ok(built.deprecated.every((d: { note: string }) => /goes in \d+\.0\.0/.test(d.note)));
+  const find = (name: string) => new RegExp(built.deprecated.find((d: { name: string }) => d.name === name).find);
+  assert.ok(find('--carbon-surface').test('var(--carbon-surface)'));
+  assert.ok(!find('--carbon-surface').test('var(--carbon-surface2)') && !find('--carbon-surface').test('var(--stone-surface)'));
+  assert.ok(find('--color-carbon-textSub').test('class="hover:text-carbon-textSub"'));
+  assert.ok(!find('--color-carbon-textSub').test('class="text-carbon-text"'));
 });

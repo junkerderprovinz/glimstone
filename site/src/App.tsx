@@ -242,10 +242,10 @@ function Search({ onClose }: { onClose: () => void }) {
               onMouseEnter={() => setSel(i)}
             >
               <span>{p.title}</span>
-              <span style={{ color: "var(--carbon-text-muted)", fontSize: 13 }}>{p.group}</span>
+              <span style={{ color: "var(--stone-text-muted)", fontSize: 13 }}>{p.group}</span>
             </a>
           ))}
-          {!hits.length && <p className="search-hit" style={{ color: "var(--carbon-text-muted)" }}>Nothing found.</p>}
+          {!hits.length && <p className="search-hit" style={{ color: "var(--stone-text-muted)" }}>Nothing found.</p>}
         </div>
       </div>
     </div>
@@ -336,7 +336,7 @@ export function App() {
           ))}
         </nav>
         <span style={{ flex: 1 }} />
-        <button type="button" className="field search-trigger" onClick={() => setSearch(true)} style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer", color: "var(--carbon-text-muted)" }}>
+        <button type="button" className="field search-trigger" onClick={() => setSearch(true)} style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer", color: "var(--stone-text-muted)" }}>
           <Glyph name="IconSearch" />
           <span className="search-word">Search</span>
           <span className="kbd">Ctrl K</span>
@@ -349,7 +349,7 @@ export function App() {
           aria-label="GitHub"
           title="GitHub"
           className="hide-narrow"
-          style={{ color: "var(--carbon-text-sub)", display: "inline-flex" }}
+          style={{ color: "var(--stone-text-sub)", display: "inline-flex" }}
         >
           <Glyph name="IconGithub" size={20} />
         </a>

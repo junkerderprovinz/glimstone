@@ -996,7 +996,7 @@ export const GLOSSARY: GlossarySection[] = [
           en: "One destination in the rail, the navigation on the left. Active means filled, never a bar beside it. The rail itself is a card with a surface token of its own.",
           de: "Ein Ziel in der Schiene, der Navigation links. Aktiv heißt gefüllt, nie ein Balken daneben. Die Schiene selbst ist eine Karte mit eigenem Flächen-Token.",
         },
-        also: [{ en: "Rail", de: "Schiene", code: "--carbon-sidebar" }],
+        also: [{ en: "Rail", de: "Schiene", code: "--stone-sidebar" }],
       },
       {
         id: "sign-in-card",

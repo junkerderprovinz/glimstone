@@ -1,0 +1,9 @@
+$ground: var(--carbon-bg);
+
+.card {
+  background: $ground;
+
+  .title {
+    color: var(--carbon-text);
+  }
+}

@@ -1,8 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { badgeClassName } from '../src/badge.ts';
-import { DEPRECATED, warnDeprecated } from '../src/deprecated.ts';
+import { DEPRECATED, deprecatedReads, warnDeprecated, warnDeprecatedClasses, warnDeprecatedStyles } from '../src/deprecated.ts';
 
 function warnings(run: () => void): string[] {
   const seen: string[] = [];
@@ -45,4 +45,57 @@ test('a deprecated component warns in every framework package', () => {
       assert.ok(source.includes(`warnDeprecated("${name}")`), `${pkg} ${name}`);
     }
   }
+});
+
+const rule = (declarations: string) => ({ cssText: '', style: { cssText: declarations } });
+
+test('a stylesheet that reads an old token warns once per name with its replacement and the release that removes it', () => {
+  const sheets = [
+    { cssRules: [rule('background: var(--carbon-surface); border-color: var(--carbon-surface);')] },
+    { cssRules: [{ cssText: '', cssRules: [rule('color: var(--color-carbon-border, red);'), { cssText: '', cssRules: [rule('background-color: var(--status-ok-hover);')] }] }] },
+  ];
+  const seen = warnings(() => {
+    warnDeprecatedStyles(sheets);
+    warnDeprecatedStyles(sheets);
+  });
+  assert.equal(seen.length, 3);
+  assert.match(seen[0]!, /^--carbon-surface is deprecated since GlimStone 5\.0\.0 and goes in 6\.0\.0\. Use `--stone-surface`/);
+  assert.match(seen[1]!, /^--color-carbon-border is deprecated .* Use `--color-stone-border`/);
+  assert.match(seen[2]!, /^--status-ok-hover is deprecated .* `--status-ok-wash`/);
+});
+
+test('declaring an old token, as the alias block does, is not a use', () => {
+  const sheets = [{ cssRules: [rule('--carbon-text: var(--stone-text); --color-carbon-text: var(--stone-text); --color-statusFailHover: var(--status-fail-hover);')] }];
+  assert.deepEqual(warnings(() => warnDeprecatedStyles(sheets)), []);
+});
+
+test('a sheet the page may not read is skipped and the rest are still read', () => {
+  const foreign = {
+    get cssRules(): never {
+      throw new Error('SecurityError');
+    },
+  };
+  const seen = warnings(() => warnDeprecatedStyles([foreign, { cssRules: [rule('color: var(--carbon-text-muted);')] }]));
+  assert.equal(seen.length, 1);
+  assert.match(seen[0]!, /^--carbon-text-muted is deprecated/);
+});
+
+test('an element with a deprecated class warns with what replaces it', () => {
+  const root = { querySelector: (selector: string) => (selector === '.glim-avatar--hued' ? {} : null) };
+  const seen = warnings(() => warnDeprecatedClasses(root));
+  assert.equal(seen.length, 1);
+  assert.match(seen[0]!, /^\.glim-avatar--hued is deprecated .* `glim-avatar--toned`/);
+});
+
+test('the stylesheets and components GlimStone ships read none of its deprecated tokens', () => {
+  const read = (path: string) => readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8');
+  const shipped = ['core/tokens.css', 'core/tailwind-theme.css', ...readdirSync(new URL('../vanilla/', import.meta.url)).filter((f) => f.endsWith('.css')).map((f) => `core/vanilla/${f}`)];
+  for (const pkg of ['core', 'react', 'vue', 'solid', 'svelte']) {
+    for (const f of readdirSync(new URL(`../../${pkg}/src/`, import.meta.url))) if (/\.(tsx?|vue|svelte)$/.test(f)) shipped.push(`${pkg}/src/${f}`);
+  }
+  const reads = shipped.flatMap((path) => {
+    const text = read(path).replace(/\/\*[\s\S]*?\*\//g, '');
+    return [...text.matchAll(/([^{};]*)\{([^{}]*)\}/g)].flatMap((m) => deprecatedReads(m[2]!).map((name) => `${path}: ${name}`));
+  });
+  assert.deepEqual(reads, []);
 });

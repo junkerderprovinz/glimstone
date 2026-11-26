@@ -6,20 +6,19 @@ import 'support.dart';
 
 List<String> steps(GlimTheme g) => [
       for (final c in [
-        g.carbonBg,
-        g.carbonSidebar,
-        g.carbonSurface,
-        g.carbonSurface2,
-        g.carbonSurface3,
-        g.carbonHover,
-        g.carbonHoverRaised,
+        g.stoneGround,
+        g.stoneSidebar,
+        g.stoneSurface,
+        g.stoneSurface2,
+        g.stoneSurface3,
+        g.stoneHoverRaised,
         g.surfaceOverlay,
         g.toggleOff,
         g.toggleKnob,
-        g.carbonBorder,
-        g.carbonText,
-        g.carbonTextSub,
-        g.carbonTextMuted,
+        g.stoneBorder,
+        g.stoneText,
+        g.stoneTextSub,
+        g.stoneTextMuted,
         g.sidebarText,
         g.fieldPlaceholder,
       ])
@@ -40,31 +39,31 @@ void main() {
     final light = GlimTheme.light.withAccent(blue);
     final dark = GlimTheme.dark.withAccent(blue);
     final oled = GlimTheme.oled.withAccent(blue);
-    expect(hex(light.carbonBg), '#F4F7FA');
-    expect(hex(light.carbonSurface3), '#DDE0E3');
-    expect(hex(light.carbonText), '#13161A');
-    expect(hex(dark.carbonBg), '#0D1115');
+    expect(hex(light.stoneGround), '#F4F7FA');
+    expect(hex(light.stoneSurface3), '#DDE0E3');
+    expect(hex(light.stoneText), '#13161A');
+    expect(hex(dark.stoneGround), '#0D1115');
     expect(hex(dark.toggleKnob), '#12171B');
     expect(hex(dark.surfaceOverlay), '#23282D');
-    expect(hex(oled.carbonSurface), '#0D1115');
-    expect(hex(oled.carbonSurface3), '#272C31');
+    expect(hex(oled.stoneSurface), '#0D1115');
+    expect(hex(oled.stoneSurface3), '#272C31');
   });
 
   test('a grey accent leaves the stone grey', () {
     final dark = GlimTheme.dark.withAccent(const Color(0xFF777777));
-    expect(hex(dark.carbonBg), '#101010');
+    expect(hex(dark.stoneGround), '#101010');
     expect(hex(dark.surfaceOverlay), '#282828');
-    expect(hex(GlimTheme.light.withAccent(const Color(0xFF777777)).carbonText), '#161616');
+    expect(hex(GlimTheme.light.withAccent(const Color(0xFF777777)).stoneText), '#161616');
   });
 
   test('the OLED ground stays black and the light floating surface white', () {
-    expect(GlimTheme.oled.withAccent(blue).carbonBg, const Color(0xFF000000));
+    expect(GlimTheme.oled.withAccent(blue).stoneGround, const Color(0xFF000000));
     expect(GlimTheme.light.withAccent(blue).surfaceOverlay, const Color(0xFFFFFFFF));
   });
 
   test('glimThemeData takes the accent and tints the theme with it', () {
     final glim = glimThemeData(Brightness.dark, accent: blue).extension<GlimTheme>()!;
     expect(glim.accent, blue);
-    expect(hex(glim.carbonBg), '#0D1115');
+    expect(hex(glim.stoneGround), '#0D1115');
   });
 }

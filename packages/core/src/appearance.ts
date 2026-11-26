@@ -7,6 +7,7 @@
 // It has no framework dependency; the React and Vue packages wrap it.
 
 import { accentHovers, accentInks, contrastOn, validHex as valid } from './contrast.ts';
+import { warnDeprecatedAfterLoad } from './deprecated.ts';
 import { inkCss } from './oklab.ts';
 import { storageKey } from './storage.ts';
 import { applyOled, storedOled } from './theme.ts';
@@ -523,8 +524,12 @@ export function cacheAppearance(shape: string, accent: string, rainbow?: Rainbow
   }
 }
 
-/** Applied at boot, before the app renders anything. */
+/**
+ * Applied at boot, before the app renders anything. Every app calls it at its
+ * root, so it also has the page look for deprecated names once it has loaded.
+ */
 export function applyCachedAppearance(): void {
+  warnDeprecatedAfterLoad();
   applyOled(storedOled());
   try {
     const system = localStorage.getItem(storageKey('system-accent')) ?? undefined;

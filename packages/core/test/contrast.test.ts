@@ -71,8 +71,8 @@ test('an accent that already reads keeps the stylesheet ink', () => {
 test('the stone contrast.ts measures on is the stone tokens.css paints', () => {
   const css = readFileSync(new URL('../tokens.css', import.meta.url), 'utf8');
   const step = ([l, share, cap]: readonly [number, number, number]) => `oklch(from var(--accent) ${l} min(calc(c * ${share}), ${cap}) h)`;
-  assert.ok(css.includes(`--carbon-surface: light-dark(${step(STONE.lightCard)}, ${step(STONE.darkCard)});`), 'the card');
-  assert.ok(css.includes(`--carbon-text: light-dark(${step(STONE.lightText)}, ${step(STONE.darkText)});`), 'the text');
+  assert.ok(css.includes(`--stone-surface: light-dark(${step(STONE.lightCard)}, ${step(STONE.darkCard)});`), 'the card');
+  assert.ok(css.includes(`--stone-text: light-dark(${step(STONE.lightText)}, ${step(STONE.darkText)});`), 'the text');
 });
 
 test('the stone takes the accent\'s hue and stays grey under a grey accent', () => {

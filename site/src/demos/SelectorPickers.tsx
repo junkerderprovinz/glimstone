@@ -15,7 +15,7 @@ const STATES = [
   { id: "failed", label: "Failed", disabled: true, title: "Nothing has failed" },
 ];
 
-const caption = { fontSize: 13, color: "var(--carbon-text-sub)" };
+const caption = { fontSize: 13, color: "var(--stone-text-sub)" };
 
 export default function SelectorPickers() {
   const [theme, setTheme] = useState("dark");

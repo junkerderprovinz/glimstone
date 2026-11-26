@@ -60,8 +60,8 @@ class MarkSet:
 # A mark drawn in its brand colours vanishes on one of the grounds: navy or
 # black on the dark tile, near-white on the light one. Which colours need a
 # second value is measured, not listed.
-SURFACE_DARK = "#393939"   # --carbon-surface2 on the dark ramp, a tile's ground
-SURFACE_LIGHT = "#e8e8e8"  # --carbon-surface2 on the light ramp
+SURFACE_DARK = "#393939"   # --stone-surface2 on the dark ramp, a tile's ground
+SURFACE_LIGHT = "#e8e8e8"  # --stone-surface2 on the light ramp
 
 # A deepened light value lands on the white card, a tile's #e8e8e8 and the
 # light ramp's surface3 at #d1d1d1.

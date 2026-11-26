@@ -461,37 +461,37 @@
   },
   {
    "action": "CREATE",
-   "id": "variable:colour.carbon-bg",
-   "name": "colour/carbon-bg",
+   "id": "variable:colour.stone-ground",
+   "name": "colour/stone-ground",
    "variableCollectionId": "collection:Colour",
    "resolvedType": "COLOR",
-   "description": "Ground and surfaces: the stone ramp, OKLCH lightness steps tinted toward the accent's hue. The tint is a share of the accent's chroma that stops at 0.011 on the dark ramp and 0.006 on the light one, so a saturated accent warms or cools the stone without colouring it, and a grey accent leaves it grey. The names keep the carbon- prefix every app already reads."
+   "description": "Ground and surfaces: the stone ramp, OKLCH lightness steps tinted toward the accent's hue. The tint is a share of the accent's chroma that stops at 0.011 on the dark ramp and 0.006 on the light one, so a saturated accent warms or cools the stone without colouring it, and a grey accent leaves it grey. The carbon- names apps read before 5.0.0 stay as aliases of these until 6.0.0, in the legacy block."
   },
   {
    "action": "CREATE",
-   "id": "variable:colour.carbon-sidebar",
-   "name": "colour/carbon-sidebar",
+   "id": "variable:colour.stone-sidebar",
+   "name": "colour/stone-sidebar",
    "variableCollectionId": "collection:Colour",
    "resolvedType": "COLOR"
   },
   {
    "action": "CREATE",
-   "id": "variable:colour.carbon-surface",
-   "name": "colour/carbon-surface",
+   "id": "variable:colour.stone-surface",
+   "name": "colour/stone-surface",
    "variableCollectionId": "collection:Colour",
    "resolvedType": "COLOR"
   },
   {
    "action": "CREATE",
-   "id": "variable:colour.carbon-surface2",
-   "name": "colour/carbon-surface2",
+   "id": "variable:colour.stone-surface2",
+   "name": "colour/stone-surface2",
    "variableCollectionId": "collection:Colour",
    "resolvedType": "COLOR"
   },
   {
    "action": "CREATE",
-   "id": "variable:colour.carbon-surface3",
-   "name": "colour/carbon-surface3",
+   "id": "variable:colour.stone-surface3",
+   "name": "colour/stone-surface3",
    "variableCollectionId": "collection:Colour",
    "resolvedType": "COLOR"
   },
@@ -500,12 +500,13 @@
    "id": "variable:colour.carbon-hover",
    "name": "colour/carbon-hover",
    "variableCollectionId": "collection:Colour",
-   "resolvedType": "COLOR"
+   "resolvedType": "COLOR",
+   "description": "Deprecated, and gone in 6.0.0. Every control hovers to the one --hover (rule 21), so nothing here reads this step. It keeps its value for an app's own rules, and npx glimstone-migrate reports each use rather than rewriting it, since --hover is another colour."
   },
   {
    "action": "CREATE",
-   "id": "variable:colour.carbon-hover-raised",
-   "name": "colour/carbon-hover-raised",
+   "id": "variable:colour.stone-hover-raised",
+   "name": "colour/stone-hover-raised",
    "variableCollectionId": "collection:Colour",
    "resolvedType": "COLOR"
   },
@@ -535,8 +536,8 @@
   },
   {
    "action": "CREATE",
-   "id": "variable:colour.carbon-border",
-   "name": "colour/carbon-border",
+   "id": "variable:colour.stone-border",
+   "name": "colour/stone-border",
    "variableCollectionId": "collection:Colour",
    "resolvedType": "COLOR"
   },
@@ -546,7 +547,7 @@
    "name": "colour/brand-coffee",
    "variableCollectionId": "collection:Colour",
    "resolvedType": "COLOR",
-   "description": "The About card's brand marks at rest, adjusted from the published brand colours. A brand colour is designed against white or its own fill, so on the neutral button ground it fails 3:1 in one theme: #FFDD00 reads 1.14:1 on the light #d1d1d1, and PayPal's navy fails on the dark #525252. Warm brands are deepened for the light theme and dark ones lightened for the dark theme. Contrast: 5.7, 3.3, 3.1 and 7.7 to one on the dark ground, 3.2, 3.2, 8.7 and 11.9 on the light one. Discord's blurple, lightened for the dark theme, reads 3.1 on the dark ground and 3.0 on the light one."
+   "description": "The About card's brand marks at rest, adjusted from the published brand colours. A brand colour is designed against white or its own fill, so on the neutral button ground, --stone-surface2, it fails 3:1 in one theme: #FFDD00 reads 1.18:1 on the light ground and PayPal's navy 1.19:1 on the dark one. Warm brands are deepened for the light theme and dark ones lightened for the dark theme. On the default accent's stone, coffee and docs, Bitcoin, PayPal and Discord read 10.5, 6.1, 6.2 and 5.6 to one on the dark ground, 12.4, 7.3, 7.3 and 6.6 on OLED's, and 4.3, 4.4, 10.4 and 4.0 on the light one."
   },
   {
    "action": "CREATE",
@@ -642,23 +643,23 @@
   },
   {
    "action": "CREATE",
-   "id": "variable:colour.carbon-text",
-   "name": "colour/carbon-text",
+   "id": "variable:colour.stone-text",
+   "name": "colour/stone-text",
    "variableCollectionId": "collection:Colour",
    "resolvedType": "COLOR",
    "description": "Text ramp: three steps, the last still legible at 12px."
   },
   {
    "action": "CREATE",
-   "id": "variable:colour.carbon-text-sub",
-   "name": "colour/carbon-text-sub",
+   "id": "variable:colour.stone-text-sub",
+   "name": "colour/stone-text-sub",
    "variableCollectionId": "collection:Colour",
    "resolvedType": "COLOR"
   },
   {
    "action": "CREATE",
-   "id": "variable:colour.carbon-text-muted",
-   "name": "colour/carbon-text-muted",
+   "id": "variable:colour.stone-text-muted",
+   "name": "colour/stone-text-muted",
    "variableCollectionId": "collection:Colour",
    "resolvedType": "COLOR"
   },
@@ -1389,7 +1390,7 @@
    }
   },
   {
-   "variableId": "variable:colour.carbon-bg",
+   "variableId": "variable:colour.stone-ground",
    "modeId": "mode:Colour:Light",
    "value": {
     "r": 0.9725490196078431,
@@ -1399,7 +1400,7 @@
    }
   },
   {
-   "variableId": "variable:colour.carbon-bg",
+   "variableId": "variable:colour.stone-ground",
    "modeId": "mode:Colour:Dark",
    "value": {
     "r": 0.07450980392156863,
@@ -1409,7 +1410,7 @@
    }
   },
   {
-   "variableId": "variable:colour.carbon-bg",
+   "variableId": "variable:colour.stone-ground",
    "modeId": "mode:Colour:OLED",
    "value": {
     "r": 0,
@@ -1419,7 +1420,7 @@
    }
   },
   {
-   "variableId": "variable:colour.carbon-sidebar",
+   "variableId": "variable:colour.stone-sidebar",
    "modeId": "mode:Colour:Light",
    "value": {
     "r": 0.996078431372549,
@@ -1429,7 +1430,7 @@
    }
   },
   {
-   "variableId": "variable:colour.carbon-sidebar",
+   "variableId": "variable:colour.stone-sidebar",
    "modeId": "mode:Colour:Dark",
    "value": {
     "r": 0.10980392156862745,
@@ -1439,7 +1440,7 @@
    }
   },
   {
-   "variableId": "variable:colour.carbon-sidebar",
+   "variableId": "variable:colour.stone-sidebar",
    "modeId": "mode:Colour:OLED",
    "value": {
     "r": 0.07450980392156863,
@@ -1449,7 +1450,7 @@
    }
   },
   {
-   "variableId": "variable:colour.carbon-surface",
+   "variableId": "variable:colour.stone-surface",
    "modeId": "mode:Colour:Light",
    "value": {
     "r": 0.996078431372549,
@@ -1459,7 +1460,7 @@
    }
   },
   {
-   "variableId": "variable:colour.carbon-surface",
+   "variableId": "variable:colour.stone-surface",
    "modeId": "mode:Colour:Dark",
    "value": {
     "r": 0.12549019607843137,
@@ -1469,7 +1470,7 @@
    }
   },
   {
-   "variableId": "variable:colour.carbon-surface",
+   "variableId": "variable:colour.stone-surface",
    "modeId": "mode:Colour:OLED",
    "value": {
     "r": 0.07450980392156863,
@@ -1479,7 +1480,7 @@
    }
   },
   {
-   "variableId": "variable:colour.carbon-surface2",
+   "variableId": "variable:colour.stone-surface2",
    "modeId": "mode:Colour:Light",
    "value": {
     "r": 0.9450980392156862,
@@ -1489,7 +1490,7 @@
    }
   },
   {
-   "variableId": "variable:colour.carbon-surface2",
+   "variableId": "variable:colour.stone-surface2",
    "modeId": "mode:Colour:Dark",
    "value": {
     "r": 0.1803921568627451,
@@ -1499,7 +1500,7 @@
    }
   },
   {
-   "variableId": "variable:colour.carbon-surface2",
+   "variableId": "variable:colour.stone-surface2",
    "modeId": "mode:Colour:OLED",
    "value": {
     "r": 0.12549019607843137,
@@ -1509,7 +1510,7 @@
    }
   },
   {
-   "variableId": "variable:colour.carbon-surface3",
+   "variableId": "variable:colour.stone-surface3",
    "modeId": "mode:Colour:Light",
    "value": {
     "r": 0.8823529411764706,
@@ -1519,7 +1520,7 @@
    }
   },
   {
-   "variableId": "variable:colour.carbon-surface3",
+   "variableId": "variable:colour.stone-surface3",
    "modeId": "mode:Colour:Dark",
    "value": {
     "r": 0.25098039215686274,
@@ -1529,7 +1530,7 @@
    }
   },
   {
-   "variableId": "variable:colour.carbon-surface3",
+   "variableId": "variable:colour.stone-surface3",
    "modeId": "mode:Colour:OLED",
    "value": {
     "r": 0.1803921568627451,
@@ -1569,7 +1570,7 @@
    }
   },
   {
-   "variableId": "variable:colour.carbon-hover-raised",
+   "variableId": "variable:colour.stone-hover-raised",
    "modeId": "mode:Colour:Light",
    "value": {
     "r": 0.8274509803921568,
@@ -1579,7 +1580,7 @@
    }
   },
   {
-   "variableId": "variable:colour.carbon-hover-raised",
+   "variableId": "variable:colour.stone-hover-raised",
    "modeId": "mode:Colour:Dark",
    "value": {
     "r": 0.3333333333333333,
@@ -1589,7 +1590,7 @@
    }
   },
   {
-   "variableId": "variable:colour.carbon-hover-raised",
+   "variableId": "variable:colour.stone-hover-raised",
    "modeId": "mode:Colour:OLED",
    "value": {
     "r": 0.25098039215686274,
@@ -1689,7 +1690,7 @@
    }
   },
   {
-   "variableId": "variable:colour.carbon-border",
+   "variableId": "variable:colour.stone-border",
    "modeId": "mode:Colour:Light",
    "value": {
     "r": 0.8823529411764706,
@@ -1699,7 +1700,7 @@
    }
   },
   {
-   "variableId": "variable:colour.carbon-border",
+   "variableId": "variable:colour.stone-border",
    "modeId": "mode:Colour:Dark",
    "value": {
     "r": 0.18823529411764706,
@@ -1709,7 +1710,7 @@
    }
   },
   {
-   "variableId": "variable:colour.carbon-border",
+   "variableId": "variable:colour.stone-border",
    "modeId": "mode:Colour:OLED",
    "value": {
     "r": 0.12549019607843137,
@@ -2139,7 +2140,7 @@
    }
   },
   {
-   "variableId": "variable:colour.carbon-text",
+   "variableId": "variable:colour.stone-text",
    "modeId": "mode:Colour:Light",
    "value": {
     "r": 0.09411764705882353,
@@ -2149,7 +2150,7 @@
    }
   },
   {
-   "variableId": "variable:colour.carbon-text",
+   "variableId": "variable:colour.stone-text",
    "modeId": "mode:Colour:Dark",
    "value": {
     "r": 0.9411764705882353,
@@ -2159,7 +2160,7 @@
    }
   },
   {
-   "variableId": "variable:colour.carbon-text",
+   "variableId": "variable:colour.stone-text",
    "modeId": "mode:Colour:OLED",
    "value": {
     "r": 0.9411764705882353,
@@ -2169,7 +2170,7 @@
    }
   },
   {
-   "variableId": "variable:colour.carbon-text-sub",
+   "variableId": "variable:colour.stone-text-sub",
    "modeId": "mode:Colour:Light",
    "value": {
     "r": 0.3215686274509804,
@@ -2179,7 +2180,7 @@
    }
   },
   {
-   "variableId": "variable:colour.carbon-text-sub",
+   "variableId": "variable:colour.stone-text-sub",
    "modeId": "mode:Colour:Dark",
    "value": {
     "r": 0.7529411764705882,
@@ -2189,7 +2190,7 @@
    }
   },
   {
-   "variableId": "variable:colour.carbon-text-sub",
+   "variableId": "variable:colour.stone-text-sub",
    "modeId": "mode:Colour:OLED",
    "value": {
     "r": 0.7529411764705882,
@@ -2199,7 +2200,7 @@
    }
   },
   {
-   "variableId": "variable:colour.carbon-text-muted",
+   "variableId": "variable:colour.stone-text-muted",
    "modeId": "mode:Colour:Light",
    "value": {
     "r": 0.4235294117647059,
@@ -2209,7 +2210,7 @@
    }
   },
   {
-   "variableId": "variable:colour.carbon-text-muted",
+   "variableId": "variable:colour.stone-text-muted",
    "modeId": "mode:Colour:Dark",
    "value": {
     "r": 0.596078431372549,
@@ -2219,7 +2220,7 @@
    }
   },
   {
-   "variableId": "variable:colour.carbon-text-muted",
+   "variableId": "variable:colour.stone-text-muted",
    "modeId": "mode:Colour:OLED",
    "value": {
     "r": 0.596078431372549,

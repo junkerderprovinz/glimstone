@@ -15,7 +15,7 @@ const STATES = [
   { id: "failed", label: "Failed", disabled: true, title: "Nothing has failed" },
 ];
 
-const caption = { "font-size": "13px", color: "var(--carbon-text-sub)" };
+const caption = { "font-size": "13px", color: "var(--stone-text-sub)" };
 
 export default function SelectorPickers() {
   const [theme, setTheme] = createSignal("dark");

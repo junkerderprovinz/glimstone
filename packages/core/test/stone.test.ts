@@ -65,7 +65,7 @@ test('whatever floats over the page stands on a surface step of its own', () => 
   for (const layer of FLOATING) {
     const fills = [...declared(layer, 'background-color'), ...declared(layer, 'background')];
     assert.ok(fills.includes('var(--surface-overlay)'), `${layer}: ${fills.join(', ')}`);
-    assert.ok(!fills.includes('var(--carbon-surface)'), layer);
+    assert.ok(!fills.includes('var(--stone-surface)'), layer);
   }
   assert.match(css, /\.glim-bubble::before \{[^}]*border-color: transparent transparent var\(--surface-overlay\) transparent;/);
 });

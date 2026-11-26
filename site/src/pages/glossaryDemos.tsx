@@ -84,7 +84,7 @@ export function useT() {
 const nothing = () => {};
 const row: CSSProperties = { display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" };
 const column: CSSProperties = { display: "grid", gap: 12, width: "100%" };
-const quiet: CSSProperties = { color: "var(--carbon-text-sub)" };
+const quiet: CSSProperties = { color: "var(--stone-text-sub)" };
 
 function Markup({ svg }: { svg: string }) {
   return <span style={{ display: "contents" }} dangerouslySetInnerHTML={{ __html: svg }} />;

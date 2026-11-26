@@ -787,3 +787,51 @@ The time picker was a field-shaped button that took no typing and opened a popov
 ## A field in a row: widths of its own
 
 A field in a FieldRow used to keep the width it was given, short, medium or wide, at the row's end, so a card with a medium and a wide field had controls that started at different places. In GlimStone 5 every field that takes text fills what the name leaves up to 24rem, short of a 9rem column for the names, and only a short field keeps its width. A field that drops under its name took the row's end and its own width there. It takes the whole line now.
+
+## The palette: the carbon- names
+
+The stone ramp first kept the `--carbon-*` names, so every app that read them took the new values without a change. A name that says Carbon on a ramp that is no longer Carbon's misleads whoever reads it, so the steps took stone names and the old ones were deprecated for 6.0.0. `--carbon-bg` became `--stone-ground`, the word the palette table uses. `--carbon-hover`, a grey step from before rule 21 made `--hover` the one hover, got no stone twin.
+
+## State buttons: a solid fill and its hover
+
+A state button was filled solid with its hue, and `--status-ok-hover`, `--status-fail-hover` and `--status-warn-hover` mixed that fill 15% toward the text colour for the pointer. Once a state button became a wash, nothing in GlimStone read them, and they were deprecated with the wash's own hover, `--status-*-wash-hover`, in their place.
+
+## The tooltip and info bubble: one look for two kinds
+
+The tooltip and the info bubble shared one look: the same surface, the same arrow and a 110ms fade, opening as soon as the pointer arrived. A toolbar crossed on the way to something else then lit a row of names. The two were parted: the tooltip became small, inverted and arrowless and waits for the pointer to rest, and the info bubble kept the arrow and moved onto the floating surface.
+
+## Hover cards: a delay of 600ms
+
+A hover card opened after 600ms and closed 300ms after the pointer left, and drew only what its caller put in. It opens after 400ms and closes after 150ms, and it has a head and up to three figures of its own, so two cards from two apps show the same parts in the same places.
+
+## Avatars: initials in the secondary text
+
+Initials stood on surface3 in the secondary text, and under rainbow a circle could take its palette position's ink. A list of people then read as a column of identical grey discs, and under rainbow a face borrowed the colour that marks a place in a list. The initials take a soft chart tone picked from the name, which keeps one person's colour the same wherever they appear and never wears the accent.
+
+## Lists: a badge on the right of every row
+
+A row's right side held badges in one style, and a row that was fine carried a green "Settled" pill like the rest. In a long list the one failure then had to be found among a column of pills. A row gained a value column of fixed width and a status in its own place, and the normal case lost its pill.
+
+## Charts: drawn by hand in the accent
+
+Each app drew its own chart: a smoothed line in the accent at a hairline weight over a gradient, no grid lines, ticks only once the scale was relative, the vertical value printed above the plot instead of in a column, and only the maximum labelled. Two apps drawing the same chart by these rules still drew two charts. `Chart` gave them one frame, with grid lines across, a 40px column for the ticks and a legend, and the series took the chart tokens.
+
+## The selector: a crossfade on a bare strip
+
+A strip that picked one value was bare like one that picked several, and its fill crossfaded from the old segment to the new one. A one-value strip became one track with a thumb that glides, which shows where the choice came from as well as where it went. The groove's figures were measured on Carbon's greys: 1.94:1 dark and 1.53:1 light on the card, an idle label at 4.57:1 dark and 5.12:1 light, and the hover at 1.57:1 dark and 1.16:1 light on the groove.
+
+## Windows: the scrim
+
+The scrim behind a window was .72 black on the dark theme and .62 on the light one, with a 6px blur. It hid where the window had come from. It is .5 and .42 with an 8px blur, so the page still shows and the blur does more of the parting.
+
+## Glyphs: one size beside text
+
+A glyph beside text was 20px and a few places set their own size, such as a 15px glyph on a share tile's shield. Beside 13px text a 20px glyph outweighed the words it labelled. The three sizes became tokens that follow the text beside them.
+
+## Disabled controls: see-through
+
+A disabled button or segment kept its look and lowered its opacity, and a dim selector tile lowered the opacity of the whole tile. On the stone the tile's name fell under 4.5:1, and a see-through control takes the colour of whatever lies under it. A disabled control keeps a faint wash with its words at 38% of the text colour, and a dim tile lowers only its glyph.
+
+## The motion engine: times written into the text
+
+The design language gave each keyframe one time, 280ms for a page, 220ms for a toast, 110ms for a fade and 360ms for a shake, which were the numbers of no single level once subtle became the default and began to spring. It gives both levels' numbers and names the tokens that hold them.

@@ -16,7 +16,7 @@ const STATES = [
   { id: "failed", label: "Failed", disabled: true, title: "Nothing has failed" },
 ];
 
-const caption = { fontSize: "13px", color: "var(--carbon-text-sub)" };
+const caption = { fontSize: "13px", color: "var(--stone-text-sub)" };
 
 const theme = ref("dark");
 const shown = ref(["running", "paused"]);

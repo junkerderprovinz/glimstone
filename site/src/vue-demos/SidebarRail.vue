@@ -22,7 +22,7 @@ const rail = computed(() => ({
   height: "300px",
   padding: "12px",
   borderRadius: "var(--radius-card)",
-  background: "var(--carbon-sidebar)",
+  background: "var(--stone-sidebar)",
 }));
 const group = { display: "flex", flexDirection: "column" as const, gap: "4px" };
 </script>
