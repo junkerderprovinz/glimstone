@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef, useState, type CSSProperties } from "react";
-import { ACCENTS } from "@glimstone/core";
+import { ACCENTS, type LabelMode } from "@glimstone/core";
 import { Button, Card, FieldRow, FieldRowGroup, ListRow, Meter, ProgressBar, Selector, ToastCard, Toggle } from "@glimstone/react";
 import { Glyph } from "../glyph";
 import type { Stop } from "./relay";
@@ -16,21 +16,17 @@ const PAGES = [
 ];
 
 const RUNS = [
-  { name: "photos", glyph: "IconFolder", meta: "Today, 02:00", size: "212 GB", tone: "ok" as const, state: "Done" },
-  { name: "invoices.zip", glyph: "IconArchive", meta: "Yesterday, 02:00", size: "18 MB", tone: "ok" as const, state: "Done" },
-  { name: "nightly.tar", glyph: "IconArchive", meta: "Monday, 02:00", size: "2.4 GB", tone: "warn" as const, state: "Skipped" },
+  { name: "photos", glyph: "IconFolder", meta: "Today, 02:00", size: "212", unit: "GB" },
+  { name: "invoices.zip", glyph: "IconArchive", meta: "Yesterday, 02:00", size: "18", unit: "MB" },
+  { name: "nightly.tar", glyph: "IconArchive", meta: "Monday, 02:00", size: "2.4", unit: "GB", skipped: true },
 ];
 
-// Every strip in the window speaks the way the label setting says: glyph alone,
-// words alone, or both.
-const asItems = <V extends string>(list: { id: V; name: string; glyph: string }[], speech: Speech) =>
-  list.map((x) => ({
-    id: x.id,
-    label: x.name,
-    tip: x.name,
-    glyph: speech === "text" ? undefined : <Glyph name={x.glyph} />,
-    iconOnly: speech === "glyph",
-  }));
+// Every strip in the window speaks the way the window's label setting says,
+// whatever the rest of the site does.
+const LABELS: Record<Speech, LabelMode> = { text: "text", glyph: "glyph", both: "textGlyph" };
+
+const asItems = <V extends string>(list: { id: V; name: string; glyph: string }[]) =>
+  list.map((x) => ({ id: x.id, label: x.name, tip: x.name, glyph: <Glyph name={x.glyph} /> }));
 
 // The label setting chooses which of the three forms a button takes. The
 // buttons are built per form so the window can speak differently from the
@@ -84,8 +80,8 @@ export function StageWindow({ look, taken, onPick, toast, replay, onRun, aim, pr
         <span className="la-window-where">Look</span>
       </div>
       <div className="la-window-body" ref={body}>
-        <div className="la-window-rail la-take accent-scope" style={scopeOf(taken.rail)} data-la-stop="rail" data-speech={look.speech}>
-          <Selector label="Settings pages" orientation="vertical" items={asItems(PAGES, look.speech)} value="look" onChange={still} />
+        <div className="la-window-rail la-take accent-scope" style={scopeOf(taken.rail)} data-la-stop="rail">
+          <Selector label="Settings pages" orientation="vertical" labels={LABELS[look.speech]} items={asItems(PAGES)} value="look" onChange={still} />
         </div>
         <div className="la-window-main">
           <div className="la-take accent-scope" style={scopeOf(look)}>
@@ -111,17 +107,17 @@ export function StageWindow({ look, taken, onPick, toast, replay, onRun, aim, pr
                 </FieldRow>
                 <FieldRow label="Corners">
                   <div className="la-src" data-la-src="corner">
-                    <Selector<"one", Corner> inline label="Corners" items={asItems(CORNERS, look.speech)} value={look.corner} onChange={(corner) => onPick({ corner })} />
+                    <Selector<"one", Corner> inline label="Corners" labels={LABELS[look.speech]} items={asItems(CORNERS)} value={look.corner} onChange={(corner) => onPick({ corner })} />
                   </div>
                 </FieldRow>
                 <FieldRow label="Motion">
                   <div className="la-src" data-la-src="pace">
-                    <Selector<"one", Pace> inline label="Motion" items={asItems(PACES, look.speech)} value={look.pace} onChange={(pace) => onPick({ pace })} />
+                    <Selector<"one", Pace> inline label="Motion" labels={LABELS[look.speech]} items={asItems(PACES)} value={look.pace} onChange={(pace) => onPick({ pace })} />
                   </div>
                 </FieldRow>
                 <FieldRow label="Labels">
                   <div className="la-src" data-la-src="speech">
-                    <Selector<"one", Speech> inline label="Labels" items={asItems(SPEECHES, look.speech)} value={look.speech} onChange={(speech) => onPick({ speech })} />
+                    <Selector<"one", Speech> inline label="Labels" labels={LABELS[look.speech]} items={asItems(SPEECHES)} value={look.speech} onChange={(speech) => onPick({ speech })} />
                   </div>
                 </FieldRow>
               </FieldRowGroup>
@@ -155,13 +151,13 @@ export function StageWindow({ look, taken, onPick, toast, replay, onRun, aim, pr
                     name={r.name}
                     meta={r.meta}
                     tile={<Glyph name={r.glyph} />}
-                    badges={
-                      <span className="la-run">
-                        <span className="la-run-state" data-tone={r.tone}>
-                          {r.state}
-                        </span>
-                        <span className="la-run-size glim-num">{r.size}</span>
-                      </span>
+                    status={r.skipped ? { tone: "warn", label: "Skipped" } : undefined}
+                    value={
+                      <>
+                        {r.size}
+                        {"\u202f"}
+                        <small>{r.unit}</small>
+                      </>
                     }
                   />
                 ))}

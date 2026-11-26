@@ -53,10 +53,16 @@ const strips = (page: Page) =>
     ];
   });
 
-test("every strip in the window follows the window's label setting", async ({ page }) => {
-  // Wide enough that the window shows its page list too.
-  await page.setViewportSize({ width: 1920, height: 1080 });
-  await open(page, "/", { theme: "dark", motion: "off" });
+for (const site of ["textGlyph", "text", "glyph", "reactive"]) {
+  test(`every strip in the window follows the window's label setting while the site's labels are ${site}`, async ({ page }) => {
+    // Wide enough that the window shows its page list too.
+    await page.setViewportSize({ width: 1920, height: 1080 });
+    await open(page, "/", { theme: "dark", motion: "off", labels: site });
+    await followsTheWindow(page);
+  });
+}
+
+async function followsTheWindow(page: Page) {
   const labels = stageWindow(page).getByRole("tablist", { name: "Labels" });
   for (const [option, words, glyph] of [
     ["Text only", true, false],
@@ -70,7 +76,7 @@ test("every strip in the window follows the window's label setting", async ({ pa
     // Five pages in the list, three selectors of three and two buttons.
     expect((await strips(page)).length, option).toBe(16);
   }
-});
+}
 
 test("the window stands off the page by its light and shadow, without a frame line", async ({ page }) => {
   await open(page, "/", { theme: "dark", motion: "off" });
