@@ -10,6 +10,9 @@
     /** One line saying what this whole card does, drawn as an "(i)" beside the
      *  title. */
     hint?: string;
+    /** One control for the whole card, such as an icon button or a status
+     *  badge, at the end of the top edge level with the notch. */
+    action?: Snippet;
     children: Snippet;
     /** This card's position in the rainbow, counted across the cards visible on
      *  the active tab. Omit it for a tab's only card. */
@@ -39,7 +42,7 @@
   // but keeps its top padding, which the heading notch pokes into.
   //
   // A card with neither `title` nor `hint` draws no heading.
-  let { title, drawn, hint, children, hueIndex, nested, ...data }: CardProps = $props();
+  let { title, drawn, hint, action, children, hueIndex, nested, ...data }: CardProps = $props();
 </script>
 
 <div
@@ -57,5 +60,6 @@
       </Badge>
     </h2>
   {/if}
+  {#if action}<div class="glim-panel-action">{@render action()}</div>{/if}
   {@render children()}
 </div>

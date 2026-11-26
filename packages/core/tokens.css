@@ -3620,14 +3620,35 @@
     flex: 1 1 0%;
     min-height: 0;
     overflow-y: auto;
-    padding: var(--space-8) var(--space-9);
+    padding-block: var(--space-8);
+    padding-inline: var(--space-10);
+  }
+  @media (max-width: 640px) {
+    .glim-modal-body { padding-inline: var(--space-9); }
   }
   .glim-modal-text {
     margin: 0;
-    font-size: 0.875rem;
+    font-size: var(--text-body);
     line-height: 1.625;
     color: var(--carbon-text-sub);
     overflow-wrap: break-word;
+  }
+  /* A confirmation leads with its question; what follows from it sits quieter. */
+  .glim-modal-question {
+    margin: 0;
+    color: var(--carbon-text);
+    font-size: var(--text-title);
+    font-weight: var(--font-weight-strong);
+    line-height: 1.5rem;
+    letter-spacing: var(--tracking-title);
+    text-wrap: pretty;
+    overflow-wrap: break-word;
+  }
+  .glim-modal-question + .glim-modal-text {
+    margin-top: var(--space-2);
+    color: var(--carbon-text-muted);
+    font-size: var(--text-body);
+    line-height: 1.25rem;
   }
   .glim-modal-extra {
     display: flex;
@@ -3885,6 +3906,36 @@
     margin: 0;
     font-size: inherit;
     font-weight: inherit;
+  }
+  /* One control for the whole card, centred on the top edge at its end like
+     the notch at its start. It stands on the card's own fill, so a washed
+     badge does not let the page show through where it crosses the edge. */
+  .glim-panel-action {
+    position: absolute;
+    top: 0;
+    inset-inline-end: var(--space-8);
+    z-index: var(--z-docked);
+    display: flex;
+    align-items: center;
+    translate: 0 -50%;
+    border-radius: var(--radius-pill);
+    background-color: var(--carbon-surface);
+    box-shadow: var(--elevation-notch);
+  }
+  .glim-panel-action > :is(.glim-btn, .glim-icon-btn) {
+    height: var(--space-11);
+    min-height: var(--space-11);
+  }
+  /* The notch speaks loudest on a window and quietest on a sub-card. */
+  :is(.glim-window-title, .glim-modal-title) .glim-badge--heading {
+    --badge-h: 28px;
+    --badge-px: var(--space-7);
+    font-size: var(--text-subline);
+  }
+  .glim-subcard .glim-panel-heading .glim-badge--heading {
+    --badge-h: 18px;
+    --badge-px: var(--space-4);
+    padding-block: 0;
   }
 
   /* The sign-in page (SignInCard): one card, the same width in every app, and
@@ -5115,11 +5166,14 @@
   }
 
   /* The general window (Window): the confirm surface's frame, grown to hold a
-     form, a list or a whole tool at three widths. Its notch sits in the card's
-     padding, so the body starts far enough down to clear it, and the start of
-     the foot holds one quiet line, such as where the work carries on. */
-  .glim-window { max-width: 40rem; }
-  .glim-window--wide { max-width: 58rem; }
+     question, a form, a longer form, a list or a whole tool. Its notch sits in
+     the card's padding, so the body starts far enough down to clear it, and
+     the start of the foot holds one quiet line, such as where the work
+     carries on. A confirmation takes the smallest width too. */
+  .glim-window { max-width: 35rem; }
+  .glim-modal-card.glim-window--small { max-width: 25rem; }
+  .glim-window--large { max-width: 45rem; }
+  .glim-window--wide { max-width: 60rem; }
   .glim-window--full {
     max-width: 80rem;
     height: calc(100vh - 2rem - var(--window-bar));
@@ -5279,17 +5333,25 @@
     align-items: center;
     gap: 2px;
   }
+  /* The word whose menu is open stands on the menu's own surface, so the two
+     read as one piece, a step apart from a word the pointer only passes. */
   .glim-menubar-item {
-    height: 2.2rem;
-    padding-inline: var(--space-6);
-    border-radius: var(--radius-pill);
-    font-weight: 500;
+    height: 1.875rem;
+    padding-inline: var(--space-5);
+    border-radius: var(--radius-control);
+    font-size: var(--text-body);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--tracking-body);
     color: var(--carbon-text-sub);
     cursor: pointer;
   }
-  .glim-menubar-item:hover,
-  .glim-menubar-item[aria-expanded="true"] {
+  .glim-menubar-item:hover:not([aria-expanded="true"]) {
     background-color: var(--hover);
+    color: var(--carbon-text);
+  }
+  .glim-menubar-item[aria-expanded="true"] {
+    background-color: var(--surface-overlay);
+    box-shadow: var(--elevation-control);
     color: var(--carbon-text);
   }
 

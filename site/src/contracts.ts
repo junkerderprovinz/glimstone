@@ -66,6 +66,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "dialog-trap", keys: ["Tab", "Shift+Tab"], when: "Focus is on the last or first control", then: "Focus wraps inside the window." },
       { id: "dialog-return", when: "The window closes", then: "Focus goes back to the control that opened it." },
       { id: "dialog-backdrop", when: "A click lands outside the window", then: "It cancels." },
+      { id: "dialog-question", when: "The message opens with a question", then: "The question leads in the text colour at 16px, and what follows stands under it, smaller and quieter, in a window 400px wide." },
     ],
   },
   DropdownListbox: {
@@ -264,6 +265,8 @@ export const CONTRACTS: Record<string, Contract> = {
     rows: [
       { id: "card-title", when: "It has a title", then: "The heading's words are the title, with nothing after it." },
       { id: "card-title-slot", when: "The notch holds markup, such as an unsaved dot", then: "It is drawn in the notch." },
+      { id: "card-action", when: "It has an action, such as a status badge", then: "The action stands at the end of the top edge, centred on it like the notch, 16px in from the card's side." },
+      { id: "card-notch-steps", when: "A window, a card and a sub-card each have a title", then: "Their notches are 28px, 22px and 18px high." },
     ],
   },
   TextField: {
@@ -499,6 +502,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "bar-hover", when: "A menu is open and the pointer moves onto another word", then: "That word's menu opens instead." },
       { id: "bar-toggle", when: "The word of the open menu is clicked", then: "The menu closes." },
       { id: "bar-escape", keys: ["Escape"], when: "A menu is open", then: "It closes and focus goes back to its word." },
+      { id: "bar-open-surface", when: "A word's menu is open", then: "The word stands on the menu's own surface, apart from the hover a passing pointer gives a word, in 14px words on a 30px row." },
     ],
   },
   Checkbox: {

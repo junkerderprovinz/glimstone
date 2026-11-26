@@ -8,6 +8,7 @@
 // because Escape and the trap must work after focus has left this subtree.
 // `ref` (a plain prop in React 19) is the card the hook traps focus in.
 import type { ReactNode, Ref } from "react";
+import { splitQuestion } from "@glimstone/core";
 import { Badge } from "./Badge.tsx";
 import { Button } from "./Button.tsx";
 import { IconCancel, IconClose } from "./glyphs.tsx";
@@ -52,6 +53,7 @@ export function ConfirmDialog({
   onCancel,
   ref,
 }: ConfirmDialogProps) {
+  const { question, detail } = splitQuestion(message);
   return (
     <div
       className="glim-modal-backdrop"
@@ -67,7 +69,7 @@ export function ConfirmDialog({
         aria-modal="true"
         aria-labelledby="confirmdialog-title"
         aria-describedby="confirmdialog-message"
-        className="glim-modal-card"
+        className="glim-modal-card glim-window--small"
       >
         <div className="glim-modal-head">
           {/* Rule 15: the title is a heading badge. It straddles the card's top
@@ -90,9 +92,10 @@ export function ConfirmDialog({
         </div>
 
         <div className="glim-modal-body">
-          <p id="confirmdialog-message" className="glim-modal-text">
-            {message}
-          </p>
+          <div id="confirmdialog-message">
+            <p className="glim-modal-question">{question}</p>
+            {detail && <p className="glim-modal-text">{detail}</p>}
+          </div>
           {extra !== undefined && <div className="glim-modal-extra">{extra}</div>}
         </div>
 

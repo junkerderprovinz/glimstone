@@ -486,6 +486,23 @@ test.describe("ConfirmDialog", () => {
     await page.mouse.click(8, 400);
     await expect(page.getByRole("dialog")).toHaveCount(0);
   });
+
+  test("[dialog-question] the question leads and the rest stands quieter under it", async ({ page }) => {
+    await openDialog(page);
+    const dialog = page.getByRole("dialog", { name: "Confirm" });
+    const question = dialog.locator(".glim-modal-question");
+    const detail = dialog.locator(".glim-modal-question + .glim-modal-text");
+    await expect(question).toHaveText("Delete the snapshot from 14 October?");
+    await expect(detail).toHaveText("The archive on the target stays.");
+    const look = (l: Locator) => l.evaluate((e) => ({ size: getComputedStyle(e).fontSize, weight: getComputedStyle(e).fontWeight, color: getComputedStyle(e).color }));
+    const [q, d] = [await look(question), await look(detail)];
+    expect(q.size).toBe("16px");
+    expect(q.weight).toBe("600");
+    expect(d.size).toBe("14px");
+    expect(q.color).toBe(await dialog.evaluate(() => getComputedStyle(document.body).color));
+    expect(d.color).not.toBe(q.color);
+    expect(await dialog.evaluate((e) => e.getBoundingClientRect().width)).toBeCloseTo(400, 0);
+  });
 });
 
 test.describe("DropdownListbox", () => {
@@ -2321,6 +2338,32 @@ test.describe("Card", () => {
     });
     expect(words).toBe("Schedule");
   });
+
+  test("[card-action] the action stands centred on the top edge at the end", async ({ page }) => {
+    await open(page, "/components/card");
+    const card = stage(page, "CardBasic").locator(".glim-panel").first();
+    const at = await card.evaluate((c) => {
+      const box = c.getBoundingClientRect();
+      const action = c.querySelector(".glim-panel-action")!.getBoundingClientRect();
+      const notch = c.querySelector(".glim-panel-heading .glim-badge")!.getBoundingClientRect();
+      return { end: box.right - action.right, middle: action.top + action.height / 2 - box.top, notch: notch.top + notch.height / 2 - box.top };
+    });
+    expect(at.end).toBeCloseTo(16, 0);
+    expect(at.middle).toBeCloseTo(0, 0);
+    expect(at.notch).toBeCloseTo(0, 0);
+    await expect(card.locator(".glim-panel-action .glim-badge")).toHaveText("On");
+  });
+
+  test("[card-notch-steps] a window, a card and a sub-card take three notch heights", async ({ page }) => {
+    const height = (l: Locator) => l.evaluate((b) => b.getBoundingClientRect().height);
+    await open(page, "/components/card");
+    expect(await height(stage(page, "CardBasic").locator(".glim-panel-heading .glim-badge"))).toBeCloseTo(22, 0);
+    await open(page, "/components/sub-card");
+    expect(await height(stage(page, "SubCardBasic").locator(".glim-subcard .glim-panel-heading .glim-badge").first())).toBeCloseTo(18, 0);
+    await open(page, "/components/window");
+    await stage(page, "WindowColumns").getByRole("button", { name: "Choose columns" }).click();
+    expect(await height(page.getByRole("dialog", { name: "Columns" }).locator(".glim-window-title .glim-badge"))).toBeCloseTo(28, 0);
+  });
 });
 
 test.describe("Window", () => {
@@ -2842,6 +2885,22 @@ test.describe("MenuBar", () => {
     await page.keyboard.press("Escape");
     await expect(menuOf(page, "View")).toHaveCount(0);
     await expect(word(page, "View")).toBeFocused();
+  });
+
+  test("[bar-open-surface] the open word stands on the menu's surface", async ({ page }) => {
+    await open(page, "/components/menu-bar");
+    const ground = (l: Locator) => l.evaluate((e) => getComputedStyle(e).backgroundColor);
+    await word(page, "Edit").hover();
+    const hovered = await ground(word(page, "Edit"));
+    await word(page, "File").click();
+    await expect(menuOf(page, "File")).toBeVisible();
+    await page.mouse.move(4, 4);
+    const opened = await ground(word(page, "File"));
+    expect(opened).toBe(await ground(menuOf(page, "File")));
+    expect(opened).not.toBe(hovered);
+    const box = await word(page, "File").evaluate((e) => ({ h: e.getBoundingClientRect().height, size: getComputedStyle(e).fontSize }));
+    expect(box.h).toBeCloseTo(30, 0);
+    expect(box.size).toBe("14px");
   });
 });
 

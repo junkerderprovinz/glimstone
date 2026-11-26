@@ -31,7 +31,9 @@ const props = withDefaults(
     actions?: WindowAction[];
     /** A quiet line at the start of the foot; the `start` slot takes markup. */
     start?: string;
-    /** `normal` for a question or a form, `wide` for a list, `full` for a tool. */
+    /** The width: `small` (400px) for a question, `normal` (560px) for a form,
+     *  `large` (720px) for a longer form, `wide` (960px) for a list, `full` for
+     *  a tool. */
     size?: WindowSize;
     /** The words of the way out the window adds. */
     text: { cancel: string; close: string };

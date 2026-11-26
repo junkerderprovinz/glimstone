@@ -20,6 +20,7 @@ export function Card({
   title,
   drawn,
   hint,
+  action,
   children,
   hueIndex,
   nested,
@@ -33,6 +34,9 @@ export function Card({
   /** One line saying what this whole card does, drawn as an "(i)" beside the
    *  title. */
   hint?: string;
+  /** One control for the whole card, such as an icon button or a status
+   *  badge, at the end of the top edge level with the notch. */
+  action?: ReactNode;
   children: ReactNode;
   /** This card's position in the rainbow, counted across the cards visible on
    *  the active tab. Omit it for a tab's only card. */
@@ -61,6 +65,7 @@ export function Card({
           </Badge>
         </h2>
       )}
+      {action && <div className="glim-panel-action">{action}</div>}
       {children}
     </div>
   );

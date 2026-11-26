@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { onMounted, shallowRef, type Component } from "vue";
+import { computed, onMounted, shallowRef, type Component } from "vue";
+import { splitQuestion } from "@glimstone/core";
 import Badge from "./Badge.vue";
 import Button from "./Button.vue";
 import { IconCancel, IconClose } from "./glyphs";
@@ -7,7 +8,7 @@ import { IconCancel, IconClose } from "./glyphs";
 // The confirm surface for a destructive action (rule 15). It holds no state;
 // useConfirm gives it the portal, Escape, the Tab trap and focus back to the
 // control that asked. A switch or two the answer needs go in the `extra` slot.
-defineProps<{
+const props = defineProps<{
   title: string;
   message: string;
   /** The words of the action being confirmed, so the answer repeats "Delete"
@@ -21,6 +22,7 @@ defineProps<{
   closeLabel?: string;
 }>();
 const emit = defineEmits<{ confirm: []; cancel: [] }>();
+const split = computed(() => splitQuestion(props.message));
 const card = shallowRef<HTMLDivElement | null>(null);
 // Focus lands on Cancel, the answer that changes nothing.
 const cancel = shallowRef<{ el: HTMLButtonElement | null } | null>(null);
@@ -38,7 +40,7 @@ defineExpose({ card });
       aria-modal="true"
       aria-labelledby="confirmdialog-title"
       aria-describedby="confirmdialog-message"
-      class="glim-modal-card"
+      class="glim-modal-card glim-window--small"
     >
       <div class="glim-modal-head">
         <h2 id="confirmdialog-title" class="glim-modal-title">
@@ -54,7 +56,10 @@ defineExpose({ card });
         />
       </div>
       <div class="glim-modal-body">
-        <p id="confirmdialog-message" class="glim-modal-text">{{ message }}</p>
+        <div id="confirmdialog-message">
+          <p class="glim-modal-question">{{ split.question }}</p>
+          <p v-if="split.detail" class="glim-modal-text">{{ split.detail }}</p>
+        </div>
         <div v-if="$slots.extra" class="glim-modal-extra"><slot name="extra" /></div>
       </div>
       <div class="glim-modal-foot">

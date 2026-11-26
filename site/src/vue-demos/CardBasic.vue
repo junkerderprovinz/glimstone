@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { Button, Card, Toggle } from "@glimstone/vue";
+import { Badge, Button, Card, Toggle } from "@glimstone/vue";
 
 const nightly = ref(true);
 </script>
@@ -8,6 +8,9 @@ const nightly = ref(true);
 <template>
   <div style="width: 100%; max-width: 420px; padding-top: 12px">
     <Card title="Schedule" hint="When the backup runs on its own.">
+      <template #action>
+        <Badge :tone="nightly ? 'ok' : 'neutral'">{{ nightly ? "On" : "Off" }}</Badge>
+      </template>
       <div style="display: grid; gap: 16px">
         <Toggle v-model="nightly" label="Run every night" />
         <div style="display: flex; justify-content: flex-end">

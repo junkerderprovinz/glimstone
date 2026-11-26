@@ -6,7 +6,7 @@ import { keepTabInside } from "./dialog.ts";
 import { menuIsOpen } from "./menu.ts";
 import { popoverIsOpen } from "./overlay.ts";
 
-export type WindowSize = "normal" | "wide" | "full";
+export type WindowSize = "small" | "normal" | "large" | "wide" | "full";
 
 export interface WindowActionBase {
   /** The forward action, filled with the accent. Its presence makes the way out Cancel rather than Close. */
