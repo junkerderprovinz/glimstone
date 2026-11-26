@@ -135,7 +135,7 @@
     "motion-page-travel": {
       "$value": "8px",
       "$type": "dimension",
-      "$description": "Distance and curve set the levels apart along with duration: 6px against wild's 18px, and an ease where wild springs. There is no scale (see the keyframe above).",
+      "$description": "Distance and curve set the levels apart along with duration: 8px against wild's 18px and storm's 34px, each on the level's own --motion-spring, which swings further from subtle to storm. There is no scale (see the keyframe above).",
       "$extensions": {
         "org.glimstone": {
           "modes": {

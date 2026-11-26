@@ -298,12 +298,13 @@
 
   /* The About card's brand marks at rest, adjusted from the published brand
      colours. A brand colour is designed against white or its own fill, so on
-     the neutral button ground it fails 3:1 in one theme: #FFDD00 reads 1.14:1
-     on the light #d1d1d1, and PayPal's navy fails on the dark #525252. Warm
-     brands are deepened for the light theme and dark ones lightened for the
-     dark theme. Contrast: 5.7, 3.3, 3.1 and 7.7 to one on the dark ground, 3.2,
-     3.2, 8.7 and 11.9 on the light one. Discord's blurple, lightened for the
-     dark theme, reads 3.1 on the dark ground and 3.0 on the light one.
+     the neutral button ground, --stone-surface2, it fails 3:1 in one theme:
+     #FFDD00 reads 1.18:1 on the light ground and PayPal's navy 1.19:1 on the
+     dark one. Warm brands are deepened for the light theme and dark ones
+     lightened for the dark theme. On the default accent's stone, coffee and
+     docs, Bitcoin, PayPal and Discord read 10.5, 6.1, 6.2 and 5.6 to one on the
+     dark ground, 12.4, 7.3, 7.3 and 6.6 on OLED's, and 4.3, 4.4, 10.4 and 4.0
+     on the light one.
 
      The mail button has no brand colour: it reaches the app's own authors and
      follows the user's accent. The manual's book takes the yellow of the
@@ -894,9 +895,10 @@
      body level so no scroll container, card or table clips it. It is clamped
      into the viewport, flips above the trigger when below would clip
      (.glim-bubble--above), and its arrow follows the trigger when the bubble is
-     clamped off-centre. A bubble is a floating card, so it takes the raised
-     surface with the card's elevation and hairline. The fade comes from the
-     separate `.glim-fade` class. */
+     clamped off-centre. A bubble floats over the page, so it stands on
+     --surface-overlay with the float elevation, and the hairline rings it on
+     the contrast step only. The tooltip and the info bubble below set their own
+     ground and size. The fade comes from the separate `.glim-fade` class. */
   .glim-bubble {
     position: fixed;
     z-index: var(--z-bubble);
@@ -1375,8 +1377,9 @@
     --motion-fade-dur: 70ms;
     --motion-shake-dur: 220ms;
 
-    /* Distance and curve set the levels apart along with duration: 6px against
-       wild's 18px, and an ease where wild springs. There is no scale (see the
+    /* Distance and curve set the levels apart along with duration: 8px against
+       wild's 18px and storm's 34px, each on the level's own --motion-spring,
+       which swings further from subtle to storm. There is no scale (see the
        keyframe above). */
     --motion-page-travel: 8px;
     --motion-page-ease: var(--motion-spring);
@@ -5071,8 +5074,8 @@
     cursor: not-allowed;
   }
   /* Idle segments in the groove are transparent, which puts the sub text on
-     surface3 at 4.57:1 in the dark theme, just above AA. A deeper groove
-     needs a lighter text token. */
+     surface3: 5.8:1 in the dark theme on the default accent, 6.1:1 in the
+     light one. A deeper groove needs a lighter text token. */
   .glim-sel--well .glim-sel-seg { color: var(--stone-text-sub); }
   .glim-sel--well .glim-sel-seg:not(.glim-active):not(:disabled):hover {
     background-color: var(--hover);
@@ -7813,8 +7816,8 @@
 }
 
 /* Avatar: a person's picture in the shape of a pressable thing, or their
-   initials on the third surface. Under rainbow a list of people can give each
-   circle a hue of its own; the initials then take its ink. */
+   initials. With a name or a palette position the initials take one of the
+   chart tones on a pale wash of it (avatarView), never the accent. */
 @layer components {
   .glim-avatar {
     display: inline-grid;
@@ -8077,9 +8080,10 @@
 }
 
 /* Steps: the row of named steps, the step in force and its foot. The step in
-   force is filled with the accent, a finished one carries a tick on the third
-   surface and the ones ahead their number on the second, so the row stays
-   quiet (rule 33). A hairline joins each step to the next. */
+   force is filled with the accent, a finished one is a neutral disc with the
+   accent's tick and the ones ahead a quiet ring round their number, so the row
+   stays quiet (rule 33). A line joins each step to the next and fills with the
+   accent behind the steps already taken. */
 @layer components {
   .glim-steps {
     display: flex;
@@ -8393,7 +8397,8 @@
   .glim-scroll-thumb { transition: margin var(--motion-control-dur, 0s) var(--motion-ease), background-color var(--motion-control-dur, 0s) var(--motion-ease); }
 }
 
-/* FileUpload: the drop zone is one filled button on the second surface, with
+/* FileUpload: the drop zone is one filled button on the field steps, sunk a
+   little into its surface and brighter under the pointer and on focus, with
    its glyph and its words (rule 38). While files are held over it, it takes
    the accent's wash and its glyph the accent, since that is the moment the
    app is about to act. The files stand under it as rows. */
