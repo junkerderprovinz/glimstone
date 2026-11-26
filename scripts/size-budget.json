@@ -1,35 +1,35 @@
 {
   "tokens.css": {
-    "gzip": 70144,
-    "brotli": 57344
+    "gzip": 75264,
+    "brotli": 61440
   },
   "tailwind-theme.css": {
     "gzip": 1536,
     "brotli": 1280
   },
   "@glimstone/core": {
-    "gzip": 235008,
-    "brotli": 188928
+    "gzip": 239616,
+    "brotli": 192000
   },
   "@glimstone/react": {
-    "gzip": 44544,
-    "brotli": 37376
+    "gzip": 47104,
+    "brotli": 39936
   },
   "@glimstone/solid": {
-    "gzip": 57856,
-    "brotli": 47104
+    "gzip": 60928,
+    "brotli": 49664
   },
   "@glimstone/svelte": {
-    "gzip": 67072,
-    "brotli": 52224
+    "gzip": 69632,
+    "brotli": 54784
   },
   "@glimstone/vue": {
-    "gzip": 57344,
-    "brotli": 46592
+    "gzip": 60416,
+    "brotli": 49152
   },
   "plugin glimstone.js": {
-    "gzip": 262656,
-    "brotli": 213504
+    "gzip": 266240,
+    "brotli": 217088
   },
   "plugin fortress-card.js": {
     "gzip": 65024,
