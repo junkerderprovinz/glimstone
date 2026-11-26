@@ -71,3 +71,18 @@ test('an avatar wears a soft wash of its tone with the initials in the same tone
   assert.match(declared('.glim-avatar--toned', 'color'), /oklch\(from var\(--avatar-tone\)/);
 });
 
+test('every font size in the stylesheet is a step of the type scale', () => {
+  const off = [...css.matchAll(/font-size:\s*([^;]+);/g)].map((m) => m[1]!.trim()).filter((v) => !/^(var\(--text-[a-z]+\)|inherit|0)$/.test(v));
+  assert.deepEqual(off, []);
+});
+
+test('a card speaks in one row style: the name 14/500 and what explains it 13px under it', () => {
+  assert.equal(declared('.glim-version-part', 'font-size'), 'var(--text-body)');
+  assert.equal(declared('.glim-version-part', 'font-weight'), 'var(--font-weight-medium)');
+  assert.equal(declared('.glim-version-app', 'font-weight'), 'var(--font-weight-medium)');
+  assert.equal(declared('.glim-list-row-meta', 'font-size'), 'var(--text-subline)');
+});
+
+test('an update waiting is news, not a fault: its line stays neutral', () => {
+  assert.equal(declared('.glim-version-state[data-tone="warn"] .glim-version-line', 'color'), 'var(--carbon-text-sub)');
+});
