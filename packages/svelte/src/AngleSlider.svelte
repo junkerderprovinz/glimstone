@@ -12,9 +12,10 @@
 </script>
 
 <script lang="ts">
+  import type { KeyboardEventHandler } from "svelte/elements";
   import * as angleSlider from "@zag-js/angle-slider";
   import { normalizeProps, useMachine } from "@zag-js/svelte";
-  import { ANGLE_MARKS, pageDir } from "@glimstone/core";
+  import { ANGLE_MARKS, angleKeyTarget, pageDir } from "@glimstone/core";
   import { useFieldName } from "./fieldName.js";
 
   // An angle set on a dial, such as how far a picture turns. The dial is round
@@ -40,6 +41,17 @@
     },
   }));
   const api = $derived(angleSlider.connect(service, normalizeProps));
+  // Zag sends End to 359 whatever the step, so Home and End are answered here.
+  const thumb = $derived.by(() => {
+    const own = api.getThumbProps();
+    const onkeydown: KeyboardEventHandler<HTMLElement> = (e) => {
+      const to = angleKeyTarget(e.key, step);
+      if (to === undefined) return own.onkeydown?.(e);
+      e.preventDefault();
+      api.setValue(to);
+    };
+    return { ...own, onkeydown };
+  });
   // A turn past 0° would spring the long way round, so that step lands at once.
   let last: number | undefined;
   const across = $derived.by(() => {
@@ -58,7 +70,7 @@
           <span {...api.getMarkerProps({ value: mark })} data-quarter={mark % 90 === 0 ? "" : undefined} class="glim-angle-mark"></span>
         {/each}
       </div>
-      <div {...api.getThumbProps()} aria-valuetext={`${api.value}°`} data-across={across ? "" : undefined} class="glim-angle-thumb">
+      <div {...thumb} aria-valuetext={`${api.value}°`} data-across={across ? "" : undefined} class="glim-angle-thumb">
         <span class="glim-angle-hand"></span>
       </div>
       <div {...api.getValueTextProps()} class="glim-angle-value glim-num">{`${api.value}°`}</div>

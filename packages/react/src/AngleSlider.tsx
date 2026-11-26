@@ -1,7 +1,7 @@
-import { useId, useRef } from "react";
+import { useId, useRef, type KeyboardEvent } from "react";
 import * as angleSlider from "@zag-js/angle-slider";
 import { normalizeProps, useMachine } from "@zag-js/react";
-import { ANGLE_MARKS, pageDir } from "@glimstone/core";
+import { ANGLE_MARKS, angleKeyTarget, pageDir } from "@glimstone/core";
 import { useFieldName } from "./fieldName.ts";
 
 // An angle set on a dial, such as how far a picture turns. The dial is round
@@ -32,6 +32,14 @@ export function AngleSlider({ label, value, onChange, step = 15, marks = ANGLE_M
     onValueChange: (d) => onChange(d.value),
   });
   const api = angleSlider.connect(service, normalizeProps);
+  // Zag sends End to 359 whatever the step, so Home and End are answered here.
+  const thumb = api.getThumbProps();
+  const onKeyDown = (e: KeyboardEvent<HTMLElement>) => {
+    const to = angleKeyTarget(e.key, step);
+    if (to === undefined) return thumb.onKeyDown?.(e);
+    e.preventDefault();
+    api.setValue(to);
+  };
   // A turn past 0° would spring the long way round, so that step lands at once.
   const last = useRef(api.value);
   const across = Math.abs(api.value - last.current) > 180;
@@ -48,7 +56,7 @@ export function AngleSlider({ label, value, onChange, step = 15, marks = ANGLE_M
               <span key={mark} {...api.getMarkerProps({ value: mark })} data-quarter={mark % 90 === 0 ? "" : undefined} className="glim-angle-mark" />
             ))}
           </div>
-          <div {...api.getThumbProps()} aria-valuetext={`${api.value}°`} data-across={across ? "" : undefined} className="glim-angle-thumb">
+          <div {...thumb} onKeyDown={onKeyDown} aria-valuetext={`${api.value}°`} data-across={across ? "" : undefined} className="glim-angle-thumb">
             <span className="glim-angle-hand" />
           </div>
           <div {...api.getValueTextProps()} className="glim-angle-value glim-num">{`${api.value}°`}</div>

@@ -972,7 +972,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "angle-role", when: "Always", then: "role=\"slider\" named by its label, from 0 to 360, with the value in degrees as aria-valuetext and in the middle of the dial." },
       { id: "angle-snap", when: "It has no step of its own", then: "It snaps every 15°, with a tick at each snap and a longer one at each quarter, and an accent hand points from the middle to the knob." },
       { id: "angle-arrows", keys: ["ArrowRight", "ArrowLeft"], when: "The dial has focus", then: "It turns a step." },
-      { id: "angle-ends", keys: ["Home", "End"], when: "The dial has focus", then: "It goes to 0°, or to 359°, a degree short of a full turn." },
+      { id: "angle-ends", keys: ["Home", "End"], when: "The dial has focus", then: "It goes to 0°, or to the last step before a full turn." },
       { id: "angle-press", when: "The dial is pressed or dragged", then: "The angle follows the pointer." },
       { id: "angle-round", when: "The shape setting is square", then: "The dial stays round." },
     ],

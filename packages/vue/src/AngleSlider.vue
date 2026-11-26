@@ -2,7 +2,7 @@
 import { computed, ref, useId, watch } from "vue";
 import * as angleSlider from "@zag-js/angle-slider";
 import { normalizeProps, useMachine } from "@zag-js/vue";
-import { ANGLE_MARKS, pageDir } from "@glimstone/core";
+import { ANGLE_MARKS, angleKeyTarget, pageDir } from "@glimstone/core";
 import { useFieldName } from "./fieldName";
 
 // An angle set on a dial, bound with v-model, such as how far a picture turns.
@@ -37,6 +37,19 @@ const service = useMachine(
   })),
 );
 const api = computed(() => angleSlider.connect(service, normalizeProps));
+// Zag sends End to 359 whatever the step, so Home and End are answered here.
+const thumb = computed(() => {
+  const own = api.value.getThumbProps();
+  return {
+    ...own,
+    onKeydown: (e: KeyboardEvent) => {
+      const to = angleKeyTarget(e.key, props.step);
+      if (to === undefined) return own.onKeydown?.(e);
+      e.preventDefault();
+      api.value.setValue(to);
+    },
+  };
+});
 // A turn past 0° would spring the long way round, so that step lands at once.
 const across = ref(false);
 watch(
@@ -59,7 +72,7 @@ watch(
             class="glim-angle-mark"
           />
         </div>
-        <div v-bind="api.getThumbProps()" :aria-valuetext="`${api.value}°`" :data-across="across ? '' : undefined" class="glim-angle-thumb">
+        <div v-bind="thumb" :aria-valuetext="`${api.value}°`" :data-across="across ? '' : undefined" class="glim-angle-thumb">
           <span class="glim-angle-hand" />
         </div>
         <div v-bind="api.getValueTextProps()" class="glim-angle-value glim-num">{{ `${api.value}°` }}</div>

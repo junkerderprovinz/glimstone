@@ -350,13 +350,14 @@ test.describe("AngleSlider", () => {
     await expect(thumb(page)).toHaveAttribute("aria-valuenow", "75");
   });
 
-  test("[angle-ends] Home and End go to 0° and to 359°", async ({ page }) => {
+  test("[angle-ends] Home and End go to 0° and the last step before a full turn", async ({ page }) => {
     await open(page, "/components/angle-slider");
     await thumb(page).focus();
+    await page.keyboard.press("End");
+    await expect(thumb(page)).toHaveAttribute("aria-valuenow", "345");
+    await expect(stage(page, "AngleSliderTurn").locator(".glim-angle-value")).toHaveText("345°");
     await page.keyboard.press("Home");
     await expect(thumb(page)).toHaveAttribute("aria-valuenow", "0");
-    await page.keyboard.press("End");
-    await expect(thumb(page)).toHaveAttribute("aria-valuenow", "359");
   });
 
   test("[angle-press] a press on the dial sets the angle there", async ({ page }) => {
