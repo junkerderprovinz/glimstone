@@ -36,6 +36,7 @@ export { default as InfoVersionCard } from "./InfoVersionCard.vue";
 export { default as InstanceCard } from "./InstanceCard.vue";
 export { default as Kbd } from "./Kbd.vue";
 export { default as ListRow } from "./ListRow.vue";
+export type { HoverCardFact, ListRowStatus } from "@glimstone/core";
 export { default as ListTable } from "./ListTable.vue";
 export { default as MenuBar } from "./MenuBar.vue";
 export { default as Meter } from "./Meter.vue";

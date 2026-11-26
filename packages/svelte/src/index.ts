@@ -36,6 +36,7 @@ export { default as InfoVersionCard, type InfoVersionCardProps, type UpdateCheck
 export { default as InstanceCard, type InstanceCardProps, type InstanceFigure } from "./InstanceCard.svelte";
 export { default as Kbd, type KbdProps } from "./Kbd.svelte";
 export { default as ListRow, type ListRowProps } from "./ListRow.svelte";
+export type { HoverCardFact, ListRowStatus } from "@glimstone/core";
 export { default as ListTable, type ListColumn, type ListTableProps, type ListTableText } from "./ListTable.svelte";
 export { default as MarkSvg } from "./MarkSvg.svelte";
 export { default as MenuBar, type MenuBarHandle, type MenuBarMenu, type MenuBarProps } from "./MenuBar.svelte";
