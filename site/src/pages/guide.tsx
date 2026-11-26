@@ -16,7 +16,7 @@ export function Introduction() {
       <div className="tile-grid">
         <a className="tile" href="#/guide/palette">
           <strong>Palette</strong>
-          <p>IBM Carbon's neutral greys, one accent and four state hues.</p>
+          <p>A ground of stone tinted by the accent, one accent and four state hues.</p>
         </a>
         <a className="tile" href="#/engines/colour">
           <strong>Four engines</strong>
@@ -151,8 +151,8 @@ export function Palette() {
   return (
     <>
       <p className="lead">
-        The greys are IBM Carbon's, so every app in the family stands on the same ground. GlimStone adds the system on
-        top: the rules, the engines and the rainbow.
+        The ground is stone that takes a faint share of the accent's hue, the same share in every app, so every app in
+        the family stands on the same ground. GlimStone adds the system on top: the rules, the engines and the rainbow.
       </p>
       <p>Each swatch below is drawn from the live token, under the dark ramp, under OLED and under the light ramp.</p>
       {groups.map((g, i) => (
