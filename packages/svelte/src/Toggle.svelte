@@ -57,7 +57,9 @@
 </script>
 
 <span data-glim="Toggle" bind:this={frame} class={`glim-toggle${className ? ` ${className}` : ""}`} {style}>
-  {#if label !== undefined && !hideLabel}<span class="glim-toggle-label">{label}</span>{/if}
+  <!-- The words are part of the switch's target, as a native label's would be. -->
+  <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+  {#if label !== undefined && !hideLabel}<span class="glim-toggle-label" onclick={() => frame.querySelector<HTMLElement>(".glim-toggle-track")?.click()}>{label}</span>{/if}
   <!-- No title: the label is always visible beside the switch, so a tooltip
        would only repeat it. A refused switch's bubble says why. -->
   <button

@@ -55,6 +55,7 @@ export * from "./SkeletonRow.tsx";
 export * from "./SubCard.tsx";
 export * from "./Table.tsx";
 export * from "./TextField.tsx";
+export * from "./TimePicker.tsx";
 export * from "./Toast.tsx";
 export * from "./Toggle.tsx";
 export * from "./Tree.tsx";

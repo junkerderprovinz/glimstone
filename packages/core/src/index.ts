@@ -1,5 +1,6 @@
 export * from "./accordion.ts";
 export * from "./announce.ts";
+export * from "./angleSlider.ts";
 export * from "./appearance.ts";
 export * from "./appMarks.ts";
 export * from "./avatar.ts";
@@ -74,6 +75,7 @@ export { en as notifyCardTextEn } from "./notifyLocales/en.ts";
 export * from "./splitter.ts";
 export * from "./steps.ts";
 export * from "./storage.ts";
+export * from "./timePicker.ts";
 export * from "./timer.ts";
 export * from "./tipBubble.ts";
 export * from "./table.ts";

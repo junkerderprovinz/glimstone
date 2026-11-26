@@ -80,6 +80,8 @@ const COMPONENTS = {
   DatePicker: "react/DatePicker.tsx",
   Rating: "react/Rating.tsx",
   Timer: "react/Timer.tsx",
+  TimePicker: "react/TimePicker.tsx",
+  TimeRangePicker: "react/TimePicker.tsx",
   AngleSlider: "react/AngleSlider.tsx",
   SignaturePad: "react/SignaturePad.tsx",
   HoverCard: "react/HoverCard.tsx",

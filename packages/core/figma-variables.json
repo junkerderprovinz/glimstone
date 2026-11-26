@@ -839,6 +839,22 @@
   },
   {
    "action": "CREATE",
+   "id": "variable:field.field-part",
+   "name": "field/field-part",
+   "variableCollectionId": "collection:Colour",
+   "resolvedType": "COLOR",
+   "description": "A part inside a field, such as a tag or a stepper under the pointer: a wash on top of the field's own, so it reads in every step of it."
+  },
+  {
+   "action": "CREATE",
+   "id": "variable:field.field-part-strong",
+   "name": "field/field-part-strong",
+   "variableCollectionId": "collection:Colour",
+   "resolvedType": "COLOR",
+   "description": "The same part while it is pressed, or the day the keys are on."
+  },
+  {
+   "action": "CREATE",
    "id": "variable:chart.chart-1",
    "name": "chart/chart-1",
    "variableCollectionId": "collection:Colour",
@@ -2930,6 +2946,66 @@
     "g": 1,
     "b": 1,
     "a": 0.13
+   }
+  },
+  {
+   "variableId": "variable:field.field-part",
+   "modeId": "mode:Colour:Light",
+   "value": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 0.06
+   }
+  },
+  {
+   "variableId": "variable:field.field-part",
+   "modeId": "mode:Colour:Dark",
+   "value": {
+    "r": 1,
+    "g": 1,
+    "b": 1,
+    "a": 0.08
+   }
+  },
+  {
+   "variableId": "variable:field.field-part",
+   "modeId": "mode:Colour:OLED",
+   "value": {
+    "r": 1,
+    "g": 1,
+    "b": 1,
+    "a": 0.08
+   }
+  },
+  {
+   "variableId": "variable:field.field-part-strong",
+   "modeId": "mode:Colour:Light",
+   "value": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 0.09
+   }
+  },
+  {
+   "variableId": "variable:field.field-part-strong",
+   "modeId": "mode:Colour:Dark",
+   "value": {
+    "r": 1,
+    "g": 1,
+    "b": 1,
+    "a": 0.12
+   }
+  },
+  {
+   "variableId": "variable:field.field-part-strong",
+   "modeId": "mode:Colour:OLED",
+   "value": {
+    "r": 1,
+    "g": 1,
+    "b": 1,
+    "a": 0.12
    }
   },
   {

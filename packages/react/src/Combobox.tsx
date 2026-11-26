@@ -4,12 +4,14 @@ import * as combobox from "@zag-js/combobox";
 import { useFieldName } from "./fieldName.ts";
 import { normalizeProps, Portal, useMachine } from "@zag-js/react";
 import { IconCheck, IconExpand } from "./glyphs.tsx";
+import { SearchHit } from "./searchHit.tsx";
 import type { SelectOption } from "./Select.tsx";
 
 // A field that filters a list while somebody types, for lists too long for a
 // Select: containers, time zones, languages. Focus stays in the field while
 // the arrows move through the list, and a search that finds nothing says so
 // instead of closing, since a list that vanishes reads as a broken field.
+// While somebody types, each row sets apart the part that matches.
 
 export interface ComboboxProps {
   label?: string;
@@ -29,6 +31,7 @@ export interface ComboboxProps {
 export function Combobox({ label, hideLabel, options, value, onChange, placeholder, empty, toggleLabel, disabled }: ComboboxProps) {
   const name = useFieldName(label);
   const [shown, setShown] = useState(options);
+  const [query, setQuery] = useState("");
   const collection = combobox.collection({
     items: shown,
     itemToValue: (o) => o.value,
@@ -44,9 +47,16 @@ export function Combobox({ label, hideLabel, options, value, onChange, placehold
     positioning: { sameWidth: true, gutter: 6 },
     // Typing opens the list after the filter has run, so only a close may put
     // the full list back.
-    onOpenChange: ({ open }) => !open && setShown(options),
-    onInputValueChange: ({ inputValue }) => {
-      const q = inputValue.toLocaleLowerCase();
+    onOpenChange: ({ open }) => {
+      if (open) return;
+      setShown(options);
+      setQuery("");
+    },
+    onInputValueChange: ({ inputValue, reason }) => {
+      // Picking an item writes its label into the field, which is no search.
+      const typed = reason === "input-change" ? inputValue : "";
+      const q = typed.toLocaleLowerCase();
+      setQuery(typed);
       setShown(options.filter((o) => o.label.toLocaleLowerCase().includes(q)));
     },
     onValueChange: (d) => onChange(d.value[0] ?? ""),
@@ -72,7 +82,9 @@ export function Combobox({ label, hideLabel, options, value, onChange, placehold
             {shown.length === 0 && <li className="glim-select-empty">{empty}</li>}
             {shown.map((item) => (
               <li key={item.value} {...api.getItemProps({ item })} className="glim-select-item">
-                <span {...api.getItemTextProps({ item })}>{item.label}</span>
+                <span {...api.getItemTextProps({ item })} data-search={query ? "" : undefined}>
+                  <SearchHit label={item.label} query={query} />
+                </span>
                 <span {...api.getItemIndicatorProps({ item })} className="glim-select-check">
                   <IconCheck />
                 </span>

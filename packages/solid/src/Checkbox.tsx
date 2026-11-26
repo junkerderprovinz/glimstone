@@ -1,5 +1,4 @@
 import { mergeProps, Show } from "solid-js";
-import { IconCheck } from "./glyphs.tsx";
 
 // The checkbox, for the places a box stands instead of a switch (rule 39):
 // "Don't show again" under a notice, and choices that are applied together,
@@ -36,7 +35,20 @@ export function Checkbox(props: CheckboxProps) {
       class={["glim-checkbox", merged.slim && "glim-checkbox--slim", merged.class].filter(Boolean).join(" ")}
     >
       <span class="glim-checkbox-box" aria-hidden="true">
-        <IconCheck />
+        {/* The tick draws itself in as its dash closes. */}
+        <svg viewBox="0 0 14 14" width="14" height="14" fill="none" class="glim-mark">
+          <path
+            d="M3 7.4 5.7 10 11 4.2"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            pathLength="1"
+            stroke-dasharray="1"
+            stroke-dashoffset={merged.checked ? 0 : 1}
+            class="glim-checkbox-tick"
+          />
+        </svg>
       </span>
       <Show when={!bare()}>
         <span>{merged.label}</span>

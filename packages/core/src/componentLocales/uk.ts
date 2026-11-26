@@ -63,7 +63,8 @@ export const uk: ComponentWords = {
   tour: { back: "Назад", next: "Далі", close: "Закрити", progress: "{step} з {steps}" },
   floatingPanel: { minimize: "Згорнути", maximize: "Розгорнути", restore: "Відновити", close: "Закрити" },
   signaturePad: { area: "Підпис", clear: "Очистити" },
-  passwordField: { show: "Показати", hide: "Сховати", confirm: "Підтвердьте пароль", mismatch: "Паролі не збігаються" },
+  passwordField: { show: "Показати", hide: "Сховати", confirm: "Підтвердьте пароль", mismatch: "Паролі не збігаються", again: "Ще раз" },
+  timePicker: { hour: "Години", minute: "Хвилини", start: "Початок", end: "Кінець", to: "до" },
   versionCard: {
     title: "Версія",
     hint: "Версія {app}, стан оновлень і що принесла ця версія.",

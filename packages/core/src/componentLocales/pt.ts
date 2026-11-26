@@ -62,7 +62,8 @@ export const pt: ComponentWords = {
   tour: { back: "Voltar", next: "Seguinte", close: "Fechar", progress: "{step} de {steps}" },
   floatingPanel: { minimize: "Minimizar", maximize: "Maximizar", restore: "Restaurar", close: "Fechar" },
   signaturePad: { area: "Assinatura", clear: "Limpar" },
-  passwordField: { show: "Mostrar", hide: "Ocultar", confirm: "Confirmar a palavra-passe", mismatch: "As palavras-passe não coincidem" },
+  passwordField: { show: "Mostrar", hide: "Ocultar", confirm: "Confirmar a palavra-passe", mismatch: "As palavras-passe não coincidem", again: "Mais uma vez" },
+  timePicker: { hour: "Horas", minute: "Minutos", start: "Início", end: "Fim", to: "até" },
   versionCard: {
     title: "Versão",
     hint: "A versão do {app}, em que ponto estão as atualizações e o que esta versão trouxe.",

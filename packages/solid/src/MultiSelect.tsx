@@ -13,6 +13,7 @@ import { normalizeProps, useMachine } from "@zag-js/solid";
 import { useFieldName } from "./fieldName.ts";
 import { IconCheck, IconClose, IconExpand } from "./glyphs.tsx";
 import { Lift } from "./Lift.tsx";
+import { SearchHit } from "./searchHit.tsx";
 import type { SelectOption } from "./Select.tsx";
 
 export type { MultiSelectText } from "@glimstone/core";
@@ -132,7 +133,9 @@ export function MultiSelect(raw: MultiSelectProps) {
             <For each={shown()}>
               {(item) => (
                 <li {...api().getItemProps({ item })} class="glim-select-item">
-                  <span {...api().getItemTextProps({ item })}>{item.label}</span>
+                  <span {...api().getItemTextProps({ item })} data-search={searches() && query() ? "" : undefined}>
+                    <SearchHit label={item.label} query={searches() ? query() : ""} />
+                  </span>
                   <span {...api().getItemIndicatorProps({ item })} class="glim-select-check">
                     <IconCheck />
                   </span>

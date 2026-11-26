@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, shallowRef, useAttrs, useId } from "vue";
 import { fieldErrorView, textFieldClass, type FieldWidth } from "@glimstone/core";
-import FieldError from "./FieldError.vue";
+import FieldErrorLine from "./FieldErrorLine.vue";
 import { useFieldName } from "./fieldName";
 
 // One line of text, bound with v-model: borderless and filled, focus a step up
@@ -38,5 +38,5 @@ defineExpose({ input });
     :aria-describedby="err.describedBy"
     :class="classes"
   />
-  <FieldError v-if="err.errorId" :id="err.errorId">{{ error }}</FieldError>
+  <FieldErrorLine :id="err.errorId" :error="error" />
 </template>

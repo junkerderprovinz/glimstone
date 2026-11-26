@@ -81,7 +81,8 @@ export interface ComponentWords {
   };
   floatingPanel: { minimize: string; maximize: string; restore: string; close: string };
   signaturePad: { area: string; clear: string };
-  passwordField: { show: string; hide: string; confirm: string; mismatch: string };
+  passwordField: { show: string; hide: string; confirm: string; mismatch: string; again: string };
+  timePicker: { hour: string; minute: string; start: string; end: string; to: string };
   versionCard: {
     title: string;
     /** "{app}". */

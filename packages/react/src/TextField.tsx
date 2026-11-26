@@ -1,6 +1,6 @@
-import { useId, type InputHTMLAttributes, type Ref, type TextareaHTMLAttributes } from "react";
-import { fieldErrorView, textFieldClass, type FieldWidth } from "@glimstone/core";
-import { FieldError } from "./FieldError.tsx";
+import { useId, useLayoutEffect, useRef, type InputHTMLAttributes, type Ref, type TextareaHTMLAttributes } from "react";
+import { fieldErrorView, fitTextArea, textFieldClass, type FieldWidth } from "@glimstone/core";
+import { FieldErrorLine } from "./fieldErrorLine.tsx";
 import { useFieldName } from "./fieldName.ts";
 
 export type { FieldWidth } from "@glimstone/core";
@@ -37,7 +37,7 @@ export function TextField({ label, mono, width, error, className, type = "text",
         type={type}
         className={`${textFieldClass({ width, mono })} ${className ?? ""}`.trim()}
       />
-      {err.errorId && <FieldError id={err.errorId}>{error}</FieldError>}
+      <FieldErrorLine id={err.errorId} error={error} />
     </>
   );
 }
@@ -54,22 +54,33 @@ export interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
   ref?: Ref<HTMLTextAreaElement>;
 }
 
-export function TextArea({ label, mono, width, error, className, id, "aria-describedby": describedBy, ...rest }: TextAreaProps) {
+export function TextArea({ label, mono, width, error, className, id, ref, onInput, "aria-describedby": describedBy, ...rest }: TextAreaProps) {
   const name = useFieldName(label);
   const own = useId();
   const err = fieldErrorView(error, id ?? own, describedBy);
+  const area = useRef<HTMLTextAreaElement | null>(null);
+  useLayoutEffect(() => fitTextArea(area.current), [rest.value]);
   return (
     <>
       <textarea
         data-glim="TextArea"
         aria-label={name}
         {...rest}
+        ref={(el) => {
+          area.current = el;
+          if (typeof ref === "function") ref(el);
+          else if (ref) ref.current = el;
+        }}
+        onInput={(e) => {
+          fitTextArea(e.currentTarget);
+          onInput?.(e);
+        }}
         id={id}
         aria-invalid={err.invalid}
         aria-describedby={err.describedBy}
         className={`${textFieldClass({ width, mono, area: true })} ${className ?? ""}`.trim()}
       />
-      {err.errorId && <FieldError id={err.errorId}>{error}</FieldError>}
+      <FieldErrorLine id={err.errorId} error={error} />
     </>
   );
 }

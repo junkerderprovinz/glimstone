@@ -51,6 +51,7 @@ export const IconForward = markSnippet(MARKS.forward);
 export const IconUpload = markSnippet(MARKS.upload);
 export const IconCalendar = markSnippet(MARKS.calendar);
 export const IconStar = markSnippet(MARKS.star);
+export const IconEyedropper = markSnippet(MARKS.eyedropper);
 export const IconPlay = markSnippet(MARKS.play);
 export const IconPause = markSnippet(MARKS.pause);
 export const IconResetArrow = markSnippet(MARKS.resetArrow);

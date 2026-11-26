@@ -38,7 +38,8 @@ test.describe("Field errors", () => {
     await field.fill("");
     const line = row.getByText("A job needs a name");
     await expect(line).toBeVisible();
-    expect(await below(line, field)).toBe(true);
+    // The line slides in from just above its place.
+    await expect.poll(() => below(line, field)).toBe(true);
     expect((await name.boundingBox())!.x).toBeCloseTo(before.x, 0);
   });
 

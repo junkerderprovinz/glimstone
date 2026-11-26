@@ -23,17 +23,20 @@
   import { useFieldName } from "./fieldName.js";
   import { IconCheck, IconExpand } from "./glyphs.js";
   import { lift } from "./lift.js";
+  import SearchHit from "./SearchHit.svelte";
 
   // A field that filters a list while somebody types, for lists too long for a
   // Select: containers, time zones, languages. Focus stays in the field while
   // the arrows move through the list, and a search that finds nothing says so
   // instead of closing, since a list that vanishes reads as a broken field.
+  // While somebody types, each row sets apart the part that matches.
   let { label, hideLabel, options, value = $bindable(), onChange, placeholder, empty, toggleLabel, disabled }: ComboboxProps = $props();
 
   const name = useFieldName(() => label);
   const id = $props.id();
   // svelte-ignore state_referenced_locally
   let shown = $state.raw(options);
+  let query = $state("");
   const service = useMachine(combobox.machine, () => ({
     id,
     collection: combobox.collection({
@@ -49,10 +52,15 @@
     // Typing opens the list after the filter has run, so only a close may put
     // the full list back.
     onOpenChange: ({ open }: { open: boolean }) => {
-      if (!open) shown = options;
+      if (open) return;
+      shown = options;
+      query = "";
     },
-    onInputValueChange: ({ inputValue }: { inputValue: string }) => {
-      const q = inputValue.toLocaleLowerCase();
+    onInputValueChange: ({ inputValue, reason }: { inputValue: string; reason?: string }) => {
+      // Picking an item writes its label into the field, which is no search.
+      const typed = reason === "input-change" ? inputValue : "";
+      const q = typed.toLocaleLowerCase();
+      query = typed;
       shown = options.filter((o) => o.label.toLocaleLowerCase().includes(q));
     },
     onValueChange: (d: { value: string[] }) => {
@@ -78,7 +86,7 @@
       {/if}
       {#each shown as item (item.value)}
         <li {...api.getItemProps({ item })} class="glim-select-item">
-          <span {...api.getItemTextProps({ item })}>{item.label}</span>
+          <span {...api.getItemTextProps({ item })} data-search={query ? "" : undefined}><SearchHit label={item.label} {query} /></span>
           <span {...api.getItemIndicatorProps({ item })} class="glim-select-check">{@render IconCheck()}</span>
         </li>
       {/each}

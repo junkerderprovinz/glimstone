@@ -56,7 +56,8 @@ export const gl: ComponentWords = {
   tour: { back: "Atrás", next: "Seguinte", close: "Pechar", progress: "{step} de {steps}" },
   floatingPanel: { minimize: "Minimizar", maximize: "Maximizar", restore: "Restaurar", close: "Pechar" },
   signaturePad: { area: "Sinatura", clear: "Borrar" },
-  passwordField: { show: "Amosar", hide: "Agochar", confirm: "Confirmar o contrasinal", mismatch: "Os contrasinais non coinciden" },
+  passwordField: { show: "Amosar", hide: "Agochar", confirm: "Confirmar o contrasinal", mismatch: "Os contrasinais non coinciden", again: "Outra vez" },
+  timePicker: { hour: "Horas", minute: "Minutos", start: "Inicio", end: "Fin", to: "a" },
   versionCard: {
     title: "Versión",
     hint: "A versión de {app}, en que punto están as actualizacións e que trouxo esta versión.",

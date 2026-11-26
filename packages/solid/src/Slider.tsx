@@ -53,6 +53,9 @@ export function Slider(raw: SliderProps) {
         <Index each={api().value}>
           {(_, index) => (
             <div {...api().getThumbProps({ index })} class="glim-slider-thumb">
+              <span class="glim-slider-bubble" aria-hidden="true">
+                {props.format(api().value[index]!)}
+              </span>
               <input {...api().getHiddenInputProps({ index })} />
             </div>
           )}

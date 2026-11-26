@@ -51,7 +51,8 @@ export const no: ComponentWords = {
   tour: { back: "Tilbake", next: "Neste", close: "Lukk", progress: "{step} av {steps}" },
   floatingPanel: { minimize: "Minimer", maximize: "Maksimer", restore: "Gjenopprett", close: "Lukk" },
   signaturePad: { area: "Signatur", clear: "Tøm" },
-  passwordField: { show: "Vis", hide: "Skjul", confirm: "Bekreft passordet", mismatch: "Passordene er ikke like" },
+  passwordField: { show: "Vis", hide: "Skjul", confirm: "Bekreft passordet", mismatch: "Passordene er ikke like", again: "En gang til" },
+  timePicker: { hour: "Timer", minute: "Minutter", start: "Start", end: "Slutt", to: "til" },
   versionCard: {
     title: "Versjon",
     hint: "Versjonen av {app}, hvor oppdateringene står, og hva denne versjonen brakte.",

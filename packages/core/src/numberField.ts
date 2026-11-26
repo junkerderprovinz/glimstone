@@ -94,8 +94,10 @@ export function attachNumberSteppers(
     b.addEventListener("mousedown", (e) => e.preventDefault()); // keep focus in the field
     b.addEventListener("click", () => {
       if (input.disabled || input.readOnly) return;
+      const before = input.value;
       if (direction > 0) input.stepUp();
       else input.stepDown();
+      if (input.value !== before) roll(direction);
       input.dispatchEvent(new Event("input", { bubbles: true }));
       input.dispatchEvent(new Event("change", { bubbles: true }));
       sync();
@@ -113,6 +115,17 @@ export function attachNumberSteppers(
 
   stack.append(up, down);
   wrap.appendChild(stack);
+
+  // The stylesheet rolls the digits in from the side they count towards. The
+  // attribute comes off and on again, so a quick second press plays it again.
+  let rollTimer = 0;
+  function roll(direction: 1 | -1) {
+    input.removeAttribute("data-roll");
+    void input.offsetWidth;
+    input.setAttribute("data-roll", direction > 0 ? "up" : "down");
+    clearTimeout(rollTimer);
+    rollTimer = window.setTimeout(() => input.removeAttribute("data-roll"), 600);
+  }
 
   const sync = () => syncNumberSteppers(input);
 
@@ -145,6 +158,8 @@ export function attachNumberSteppers(
     input.removeEventListener("input", sync);
     input.removeEventListener("change", sync);
     input.removeEventListener("wheel", wheel);
+    clearTimeout(rollTimer);
+    input.removeAttribute("data-roll");
     input.classList.remove("glim-num-input");
     stack.remove();
     if (!own) {

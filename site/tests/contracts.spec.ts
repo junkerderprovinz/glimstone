@@ -40,6 +40,15 @@ const hexToRgb = (hex: string) => {
   return `rgb(${r}, ${g}, ${b})`;
 };
 
+// An open list grows out of its trigger, so it is measured once it stands still.
+const settled = (el: Locator) =>
+  el.evaluate(async (e) => {
+    const frame = () => new Promise((done) => requestAnimationFrame(done));
+    while (e.hasAttribute("data-aligning")) await frame();
+    await frame();
+    await Promise.all(e.getAnimations().map((a) => a.finished));
+  });
+
 // Zag moves focus into an open list on the next frame; nobody types faster than that.
 const listHasFocus = (page: Page) => page.evaluate(() => !!document.activeElement?.closest('[role="listbox"], [role="menu"]'));
 
@@ -795,6 +804,7 @@ test.describe("Select sizes and labels", () => {
     await row.click();
     const box = page.getByRole("listbox", { name: "Quality" });
     await expect(box).toBeVisible();
+    await settled(box);
     expect((await row.boundingBox())!.width).toBeLessThan(208);
     expect((await box.boundingBox())!.width).toBeGreaterThanOrEqual(208);
   });
@@ -1005,12 +1015,14 @@ test.describe("Select right to left", () => {
     await unit.click();
     const box = page.getByRole("listbox", { name: "Keep backups, hug" });
     await expect(box).toBeVisible();
-    const t = (await unit.boundingBox())!;
-    // Zag places the list on the frame after it shows.
+    // The list opens over the trigger with the words of the chosen row on the
+    // value's, which stand at the right edge here.
+    const words = await unit.locator(".glim-select-value").boundingBox();
     await expect.poll(async () => {
-      const l = (await box.boundingBox())!;
-      return Math.abs(l.x + l.width - (t.x + t.width));
+      const chosen = (await box.locator('[data-state="checked"] [data-part="item-text"]').boundingBox())!;
+      return Math.abs(chosen.x + chosen.width - (words!.x + words!.width));
     }).toBeLessThanOrEqual(2);
+    const t = (await unit.boundingBox())!;
     expect((await box.boundingBox())!.width).toBeGreaterThan(t.width + 20);
     await expect.poll(() => listHasFocus(page)).toBe(true);
     await page.keyboard.press("Escape");
@@ -1053,6 +1065,7 @@ test.describe("Select on a touch screen", () => {
     await stage(page, "SelectZag").locator(".glim-select-trigger").tap();
     const box = page.getByRole("listbox", { name: "Time zone", exact: true });
     await expect(box).toBeVisible();
+    await settled(box);
     const heights = await box.evaluate((b) => [...b.querySelectorAll('[role="option"]')].map((e) => e.getBoundingClientRect().height));
     expect(Math.min(...heights)).toBeGreaterThanOrEqual(44);
 
@@ -2237,12 +2250,11 @@ test.describe("NumberField", () => {
   test("[num-focus] focus is a step up the ramp, without a ring", async ({ page }) => {
     await open(page, "/components/number-field");
     const box = page.locator("[data-demo] input[type=number]").first();
-    const look = () => box.evaluate((e) => ({ outline: getComputedStyle(e).outlineStyle, ground: getComputedStyle(e).backgroundColor }));
-    const rest = await look();
+    const ground = () => box.evaluate((e) => getComputedStyle(e.parentElement!).backgroundColor);
+    const rest = await ground();
     await box.focus();
-    const held = await look();
-    expect(held.outline).toBe("none");
-    expect(held.ground).not.toBe(rest.ground);
+    expect(await box.evaluate((e) => getComputedStyle(e).outlineStyle)).toBe("none");
+    await expect.poll(ground).not.toBe(rest);
   });
 
   const field = (page: Page) => stage(page, "NumberFieldBasic").getByRole("spinbutton", { name: "Snapshots to keep" });
@@ -2426,7 +2438,7 @@ test.describe("SubCard", () => {
     const bg = (sel: string) =>
       stage(page, "SubCardBasic").locator(sel).first().evaluate((e) => getComputedStyle(e).backgroundColor);
     const sub = await bg(".glim-subcard");
-    expect(await bg(".glim-num-field")).not.toBe(sub);
+    expect(await bg(".glim-num-wrap")).not.toBe(sub);
     expect(await bg(".glim-btn")).not.toBe(sub);
   });
 });
@@ -3136,41 +3148,63 @@ test.describe("TextField", () => {
     const look = () => box(page, "Address").evaluate((e) => ({ outline: getComputedStyle(e).outlineStyle, ground: getComputedStyle(e).backgroundColor }));
     const rest = await look();
     await box(page, "Address").focus();
-    const held = await look();
-    expect(held.outline).toBe("none");
-    expect(held.ground).not.toBe(rest.ground);
+    // The fill steps up through a short transition.
+    await expect.poll(async () => (await look()).ground).not.toBe(rest.ground);
+    expect((await look()).outline).toBe("none");
   });
 
-  test("[text-area] a text area is taller and grows", async ({ page }) => {
+  test("[text-area] a text area starts three lines tall and grows with its text up to ten", async ({ page }) => {
     await open(page, "/components/text-field");
     const notes = box(page, "Notes");
     await expect(notes).toHaveJSProperty("tagName", "TEXTAREA");
-    const look = await notes.evaluate((e) => ({ height: e.getBoundingClientRect().height, resize: getComputedStyle(e).resize }));
-    expect(look.height).toBeGreaterThan(40);
-    expect(look.resize).toBe("vertical");
+    const look = () => notes.evaluate((e) => ({ height: e.getBoundingClientRect().height, line: parseFloat(getComputedStyle(e).lineHeight), resize: getComputedStyle(e).resize }));
+    await notes.fill("");
+    const empty = await look();
+    expect(empty.resize).toBe("none");
+    expect(empty.height).toBeGreaterThanOrEqual(3 * empty.line);
+    expect(empty.height).toBeLessThan(4 * empty.line + 20);
+    await notes.fill(Array.from({ length: 6 }, (_, i) => `line ${i + 1}`).join("\n"));
+    await expect.poll(async () => (await look()).height).toBeGreaterThan(empty.height + 2 * empty.line);
+    await notes.fill(Array.from({ length: 30 }, (_, i) => `line ${i + 1}`).join("\n"));
+    const full = await look();
+    expect(full.height).toBeLessThanOrEqual(10 * full.line + 20);
   });
 });
 
 test.describe("FieldRow", () => {
   const rows = (page: Page) => stage(page, "FieldRowBasic");
 
-  test("[row-grow] a growing field takes what the label leaves", async ({ page }) => {
+  test("[row-grow] in a group a growing field takes what the names leave", async ({ page }) => {
     await open(page, "/components/field-row");
-    const gap = await rows(page).locator(".glim-field-row", { hasText: "Share link" }).evaluate((r) => {
-      const name = r.querySelector(".glim-field-row-label")!.getBoundingClientRect();
-      const field = r.querySelector("input")!.getBoundingClientRect();
-      return { left: Math.round(field.left - name.right), right: Math.round(r.getBoundingClientRect().right - field.right) };
+    const gap = await stage(page, "FieldRowGroup").locator(".glim-field-row", { has: page.locator(".glim-field--grow") }).first().evaluate((r) => {
+      const field = r.querySelector(".glim-field--grow")!.getBoundingClientRect();
+      return Math.round(r.getBoundingClientRect().right - field.right);
     });
-    expect(gap).toEqual({ left: 12, right: 0 });
+    expect(gap).toBe(0);
+  });
+
+  test("[row-switch] a press anywhere on a row with a switch flips it", async ({ page }) => {
+    await open(page, "/components/field-row");
+    const row = rows(page).locator(".glim-field-row", { hasText: /^Notify/ });
+    const notify = row.getByRole("switch", { name: "Notify", exact: true });
+    await expect(notify).toHaveAttribute("aria-checked", "true");
+    const box = (await row.boundingBox())!;
+    const ground = () => row.evaluate((r) => getComputedStyle(r).backgroundColor);
+    const rest = await ground();
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await expect.poll(ground).not.toBe(rest);
+    await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+    await expect(notify).toHaveAttribute("aria-checked", "false");
+    expect(await row.evaluate((r) => getComputedStyle(r).cursor)).toBe("pointer");
   });
 
   test("[row-many] two controls stand together at the row's end", async ({ page }) => {
     await open(page, "/components/field-row");
     const gaps = await rows(page).locator(".glim-field-row", { hasText: /^Hours/ }).evaluate((r) => {
-      const [a, b] = r.querySelectorAll("input");
+      const [a, b] = r.querySelectorAll(".glim-time");
       return { between: Math.round(b.getBoundingClientRect().left - a.getBoundingClientRect().right), end: Math.round(r.getBoundingClientRect().right - b.getBoundingClientRect().right) };
     });
-    expect(gaps).toEqual({ between: 12, end: 0 });
+    expect(gaps).toEqual({ between: 16, end: 0 });
   });
 
   test("[row-name] the row names its control", async ({ page }) => {
@@ -3232,7 +3266,7 @@ test.describe("FieldRow", () => {
     expect(ends).toBeLessThan(1);
   });
 
-  test("[row-widths] a field keeps its width beside the label", async ({ page }) => {
+  test("[row-widths] the fields of a card start on one line, a short one keeps its width", async ({ page }) => {
     await open(page, "/components/field-row");
     const place = (name: string, field: string) =>
       rows(page).locator(".glim-field-row", { hasText: new RegExp(`^${name}`) }).evaluate((r, f) => {
@@ -3240,9 +3274,14 @@ test.describe("FieldRow", () => {
         const name = r.querySelector(".glim-field-row-name")!.getBoundingClientRect();
         return { width: Math.round(box.width), beside: box.left >= name.right, end: Math.round(r.getBoundingClientRect().right - box.right) };
       }, field);
-    expect(await place("Password", ".glim-secret")).toEqual({ width: 192, beside: true, end: 0 });
-    expect(await place("Link", ".glim-copy")).toEqual({ width: 352, beside: true, end: 0 });
-    expect(await place("Address", "input")).toEqual({ width: 352, beside: true, end: 0 });
+    const row = await rows(page).locator(".glim-field-row").first().evaluate((r) => r.getBoundingClientRect().width);
+    const widest = Math.round(Math.min(24 * 16, row - 9 * 16));
+    for (const [name, field] of [["Name", "input"], ["Password", ".glim-secret"], ["Link", ".glim-copy"], ["Address", "input"], ["Share link", "input"], ["Keep", ".glim-select"]]) {
+      expect(await place(name, field), name).toEqual({ width: widest, beside: true, end: 0 });
+    }
+    const copies = await place("Copies", ".glim-num-wrap");
+    expect(copies.width).toBeLessThan(120);
+    expect(copies.end).toBe(0);
   });
 
   test("[row-group] the names share one column", async ({ page }) => {
@@ -3295,6 +3334,8 @@ test.describe("FieldRow", () => {
   test("[row-narrow] without room the control moves under the label", async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 800 });
     await open(page, "/components/field-row");
+    // Narrower than a name and the smallest field side by side.
+    await rows(page).locator(".glim-field-row").first().evaluate((r) => (r.parentElement!.style.width = "200px"));
     const row = rows(page).locator(".glim-field-row", { hasText: "Address" });
     const place = await row.evaluate((r) => {
       const name = r.querySelector(".glim-field-row-name")!.getBoundingClientRect();
@@ -3304,6 +3345,9 @@ test.describe("FieldRow", () => {
     expect(place.under).toBe(true);
     expect(place.end).toBeLessThan(1);
     expect(place.inside).toBe(true);
+    await expect(row).toHaveAttribute("data-stacked", "");
+    const full = await row.evaluate((r) => Math.round(r.getBoundingClientRect().width - r.querySelector("input")!.getBoundingClientRect().width));
+    expect(full).toBe(0);
   });
 });
 
@@ -3357,8 +3401,12 @@ test.describe("PathField", () => {
 
   test("[path-width] the widths", async ({ page }) => {
     await open(page, "/components/path-field");
-    const width = await demo(page).locator(".glim-field-row", { hasText: "Short" }).locator(".glim-path").evaluate((p) => Math.round(p.getBoundingClientRect().width));
-    expect(width).toBe(192);
+    // In a row it fills the line the row's fields share, as a text field does.
+    const look = await demo(page).locator(".glim-field-row", { hasText: "Short" }).evaluate((r) => ({
+      path: Math.round(r.querySelector(".glim-path")!.getBoundingClientRect().width),
+      row: r.getBoundingClientRect().width,
+    }));
+    expect(look.path).toBe(Math.round(Math.min(24 * 16, look.row - 9 * 16)));
   });
 
   test("[path-narrow] little room leaves the glyph alone", async ({ page }) => {
@@ -3366,10 +3414,11 @@ test.describe("PathField", () => {
     const row = demo(page).locator(".glim-field-row", { hasText: /^Half/ });
     const look = await row.evaluate((r) => {
       const b = r.querySelector(".glim-btn")!.getBoundingClientRect();
-      return { square: Math.abs(b.width - b.height) < 1, field: r.querySelector("input")!.getBoundingClientRect().width };
+      const path = r.querySelector(".glim-path")!.getBoundingClientRect().width;
+      return { square: Math.abs(b.width - b.height) < 1, rest: path - b.width - r.querySelector("input")!.getBoundingClientRect().width };
     });
     expect(look.square).toBe(true);
-    expect(look.field).toBeGreaterThan(200);
+    expect(look.rest).toBeLessThan(13);
     await expect(row.getByRole("button", { name: "Choose" })).toHaveCount(1);
     await expect(button(page).first().getByText("Choose a folder")).toBeVisible();
   });
@@ -3974,9 +4023,9 @@ test.describe("PasswordField", () => {
     const look = () => box.evaluate((e) => ({ outline: getComputedStyle(e).outlineStyle, ground: getComputedStyle(e).backgroundColor }));
     const rest = await look();
     await box.focus();
-    const held = await look();
-    expect(held.outline).toBe("none");
-    expect(held.ground).not.toBe(rest.ground);
+    // The fill steps up through a short transition.
+    await expect.poll(async () => (await look()).ground).not.toBe(rest.ground);
+    expect((await look()).outline).toBe("none");
   });
 
   test("[pw-hidden] hidden at first, the eye named Show", async ({ page }) => {
@@ -4045,7 +4094,7 @@ test.describe("PasswordField", () => {
     await expect(second(page).locator("xpath=..").getByRole("button")).toHaveAccessibleName("Show");
     const a = (await first(page).boundingBox())!;
     const b = (await second(page).boundingBox())!;
-    expect(b.width).toBeCloseTo(a.width, 0);
+    expect(Math.abs(b.width - a.width)).toBeLessThan(1);
     expect(b.y).toBeGreaterThan(a.y + a.height);
   });
 
@@ -4479,7 +4528,9 @@ test.describe("SignInCard", () => {
     const password = field(page, "Password");
     await expect(password).toBeFocused();
     expect(await password.evaluate((e) => getComputedStyle(e).outlineStyle)).toBe("none");
-    expect(await ground(password)).toBe(await token(page, "--field-focus"));
+    // The fill steps up through a short transition.
+    const focus = await token(page, "--field-focus");
+    await expect.poll(() => ground(password)).toBe(focus);
     await expect(field(page, "Name", "SignInCardSlots")).not.toBeFocused();
   });
 

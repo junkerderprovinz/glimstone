@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { CopyField, FieldRow, NumberField, PasswordField, Selector, TextField, Toggle } from "@glimstone/vue";
+import { CopyField, FieldRow, NumberField, PasswordField, Selector, TextField, TimePicker, Toggle } from "@glimstone/vue";
 import { Combobox } from "@glimstone/vue/Combobox";
 import { Select } from "@glimstone/vue/Select";
 import { Slider } from "@glimstone/vue/Slider";
@@ -28,6 +28,8 @@ const keep = ref<string | null>("month");
 const secret = ref("");
 const copies = ref<number | null>(3);
 const address = ref("smb://bottich/media");
+const from = ref<string | null>("08:00");
+const to = ref<string | null>("17:00");
 </script>
 
 <template>
@@ -67,8 +69,8 @@ const address = ref("smb://bottich/media");
       <TextField model-value="https://bottich/s/3f9a" width="grow" mono />
     </FieldRow>
     <FieldRow label="Hours">
-      <TextField model-value="08:00" label="From" width="short" />
-      <TextField model-value="17:00" label="To" width="short" />
+      <TimePicker v-model="from" label="From" :minute-step="15" />
+      <TimePicker v-model="to" label="To" :minute-step="15" />
     </FieldRow>
     <FieldRow label="Volume">
       <Slider v-model="volume" :min="0" :max="100" :format="(v: number) => `${v}%`" />

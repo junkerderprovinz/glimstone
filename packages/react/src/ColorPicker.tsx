@@ -1,24 +1,30 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
 import { createPortal } from "react-dom";
 import {
+  canPickFromScreen,
   COLOR_NAMES_DE,
   COLOR_PICKER_TEXT,
   colorPicker,
   floatColorPicker,
+  MARKS,
   nearestColorName,
   normalizeHex,
+  pickFromScreen,
+  rainbowSwatches,
   type ColorName,
   type ColorPicker as Widget,
   type ColorPickerPanelText,
   portalTarget,
 } from "@glimstone/core";
 import { Button } from "./Button.tsx";
-import { IconCheck } from "./glyphs.tsx";
+import { IconButton } from "./IconButton.tsx";
+import { IconCheck, MarkSvg } from "./glyphs.tsx";
 
 export type { ColorName, ColorPickerPanelText } from "@glimstone/core";
 
 // The colour picker as a component: the core's square and hue bar, a preview
-// with the name the colour proposes, the hex field and Apply. Nothing changes
+// with the name the colour proposes, a row of ready colours, the hex field, an
+// eyedropper where the browser has one, and Apply. Nothing changes
 // until Apply, so a caller can show the colour live through onInput and still
 // keep the old one when the picker closes without it.
 
@@ -36,18 +42,22 @@ export interface ColorPickerProps {
   onClose?: () => void;
   /** The names a colour is matched against, nearest in OKLab. `false` shows none. */
   names?: readonly ColorName[] | false;
+  /** The ready colours under the hue bar, as `#rrggbb`. The page's rainbow unless given, and `false` shows none. */
+  swatches?: string[] | false;
   /** The words, read when the picker opens. */
   text?: Partial<ColorPickerPanelText>;
   className?: string;
 }
 
-export function ColorPicker({ value, onApply, onInput, anchor, onClose, names = COLOR_NAMES_DE, text, className }: ColorPickerProps) {
+export function ColorPicker({ value, onApply, onInput, anchor, onClose, names = COLOR_NAMES_DE, swatches, text, className }: ColorPickerProps) {
   const words = { ...COLOR_PICKER_TEXT, ...text };
   const panel = useRef<HTMLDivElement>(null);
   const host = useRef<HTMLDivElement>(null);
   const widget = useRef<Widget | null>(null);
   const [draft, setDraft] = useState(() => normalizeHex(value) ?? "#000000");
   const [typed, setTyped] = useState(draft);
+  const [ready, setReady] = useState<string[]>([]);
+  const [dropper] = useState(canPickFromScreen);
   const latest = useRef({ onInput, onClose });
   useLayoutEffect(() => {
     latest.current = { onInput, onClose };
@@ -101,6 +111,18 @@ export function ColorPicker({ value, onApply, onInput, anchor, onClose, names = 
     }
   }
 
+  useLayoutEffect(() => {
+    setReady(swatches === false ? [] : (swatches ?? rainbowSwatches()).flatMap((c) => normalizeHex(c) ?? []));
+  }, [swatches]);
+
+  /** A colour from a ready swatch or from the screen, taken as a drag on the square would be. */
+  function take(hex: string) {
+    setDraft(hex);
+    setTyped(hex);
+    widget.current?.setValue(hex);
+    onInput?.(hex);
+  }
+
   const body = (
     <div
       data-glim="ColorPicker"
@@ -110,6 +132,21 @@ export function ColorPicker({ value, onApply, onInput, anchor, onClose, names = 
       onKeyDown={onKeyDown}
     >
       <div ref={host} style={{ display: "contents" }} />
+      {ready.length > 0 && (
+        <div role="group" aria-label={words.swatches} className="glim-picker-swatches">
+          {ready.map((hex) => (
+            <button
+              key={hex}
+              type="button"
+              aria-label={hex}
+              aria-pressed={hex === draft}
+              className="glim-picker-preset"
+              style={{ "--glim-preset": hex } as CSSProperties}
+              onClick={() => take(hex)}
+            />
+          ))}
+        </div>
+      )}
       <div className="glim-picker-foot">
         <span className="glim-picker-swatch" aria-hidden="true" />
         {name !== null && <span className="glim-picker-name">{name}</span>}
@@ -128,6 +165,16 @@ export function ColorPicker({ value, onApply, onInput, anchor, onClose, names = 
             onInput?.(hex);
           }}
         />
+        {dropper && (
+          <IconButton
+            tip={words.eyedropper}
+            glyph={<MarkSvg mark={MARKS.eyedropper} className="glim-mark" />}
+            onClick={async () => {
+              const hex = await pickFromScreen();
+              if (hex) take(hex);
+            }}
+          />
+        )}
       </div>
       <div className="glim-picker-actions">
         <Button label={words.apply} labelKey="apply" glyph={<IconCheck />} tone="accent" onClick={apply} />

@@ -46,7 +46,8 @@ export const ja: ComponentWords = {
   tour: { back: "戻る", next: "次へ", close: "閉じる", progress: "{steps} 中 {step}" },
   floatingPanel: { minimize: "最小化", maximize: "最大化", restore: "元のサイズに戻す", close: "閉じる" },
   signaturePad: { area: "署名", clear: "消去" },
-  passwordField: { show: "表示", hide: "非表示", confirm: "パスワードの確認", mismatch: "パスワードが一致しません" },
+  passwordField: { show: "表示", hide: "非表示", confirm: "パスワードの確認", mismatch: "パスワードが一致しません", again: "もう一度" },
+  timePicker: { hour: "時", minute: "分", start: "開始", end: "終了", to: "～" },
   versionCard: {
     title: "バージョン",
     hint: "{app} のバージョン、アップデートの状況、このバージョンでの変更点。",

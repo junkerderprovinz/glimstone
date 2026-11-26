@@ -33,6 +33,9 @@
 
   const name = useFieldName(() => label);
   const words = $derived({ ...RATING_TEXT, ...text });
+  // Counts the picks: the stylesheet names one spring per parity, so a second
+  // pick of the same star springs again.
+  let picks = $state(0);
   const id = $props.id();
   const service = useMachine(ratingGroup.machine, () => ({
     id,
@@ -43,6 +46,7 @@
     readOnly,
     disabled,
     onValueChange: (d: { value: number }) => {
+      picks += 1;
       value = d.value;
       onChange?.(d.value);
     },
@@ -55,7 +59,12 @@
   <label {...api.getLabelProps()} class={label === undefined ? "glim-sr-only" : "glim-field-label"}>{name()}</label>
   <div {...api.getControlProps()} class="glim-rating-control">
     {#each api.items as index (index)}
-      <span {...api.getItemProps({ index })} class="glim-rating-star">
+      <span
+        {...api.getItemProps({ index })}
+        data-pop={picks > 0 && index === Math.ceil(api.value) ? (picks % 2 ? "odd" : "even") : undefined}
+        style:--i={index - 1}
+        class="glim-rating-star"
+      >
         {@render IconStar()}
         <span class="glim-rating-fill" aria-hidden="true">{@render IconStar()}</span>
       </span>

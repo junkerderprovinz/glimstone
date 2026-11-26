@@ -1,7 +1,8 @@
 <script lang="ts" generics="T extends string">
+  import { untrack } from "svelte";
   import * as select from "@zag-js/select";
   import { mergeProps, normalizeProps, useMachine } from "@zag-js/svelte";
-  import { closeOnPageMove, endOption, flattenRuns, pageDir, SELECT_POSITIONING, selectRootClass, selectRowParts } from "@glimstone/core";
+  import { alignOverTrigger, closeOnPageMove, endOption, flattenRuns, pageDir, SELECT_POSITIONING, selectRootClass, selectRowParts } from "@glimstone/core";
   import { useTipBubble } from "./bubble.svelte.js";
   import { IconCheck, IconExpand } from "./glyphs.js";
   import { lift } from "./lift.js";
@@ -73,6 +74,10 @@
   $effect(() => {
     if (open) return closeOnPageMove(() => api.setOpen(false));
   });
+  let content: HTMLDivElement;
+  $effect(() => {
+    if (open) return untrack(() => alignOverTrigger(content, ref!, value));
+  });
   const hue = usePortalHue(() => open, () => ref);
 
   const choices = (g: SelectGroup<T>) => g.entries as SelectOption<T>[];
@@ -110,7 +115,7 @@
   </div>
   <TipBubble state={bubble} />
   <div {@attach lift} {...mergeProps(api.getPositionerProps(), { style: hue.style })} class={`glim-select-positioner ${hue.className}`.trim()}>
-    <div {...api.getContentProps()} class={parts.content}>
+    <div {...api.getContentProps()} bind:this={content} class={parts.content}>
       {#each groups as g, gi (gi)}
         {#if g.entries.length > 0}
           <div {...g.heading ? api.getItemGroupProps({ id: `${uid}-g${gi}` }) : {}} class="glim-select-group">

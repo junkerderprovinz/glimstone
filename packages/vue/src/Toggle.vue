@@ -38,6 +38,10 @@ const frame = shallowRef<HTMLElement | null>(null);
 
 let stopShake: (() => void) | undefined;
 onScopeDispose(() => stopShake?.());
+// The words are part of the switch's target, as a native label's would be.
+function pressTrack() {
+  frame.value?.querySelector<HTMLButtonElement>(".glim-toggle-track")?.click();
+}
 function press() {
   if (!props.refused) {
     checked.value = !checked.value;
@@ -50,7 +54,7 @@ function press() {
 
 <template>
   <span ref="frame" data-glim="Toggle" :class="['glim-toggle', $attrs.class]" :style="$attrs.style as StyleValue">
-    <span v-if="caption" class="glim-toggle-label">{{ label }}</span>
+    <span v-if="caption" class="glim-toggle-label" @click="pressTrack">{{ label }}</span>
     <button
       v-bind="{ ...$attrs, class: undefined, style: undefined }"
       :ref="(el: unknown) => (tip.trigger.value = el as HTMLElement | null)"

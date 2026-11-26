@@ -8,6 +8,7 @@
 // A native `<input type="color">` can open the OS picker in a separate window,
 // outside the page, where no Playwright check can reach it either.
 
+import { rainbowAt } from "./appearance.ts";
 import { keepTabInside } from "./dialog.ts";
 import { claimMenu, closeMenuOutside } from "./menu.ts";
 
@@ -29,10 +30,14 @@ export interface ColorPickerText {
   hue: string;
 }
 
-/** The words of the ColorPicker components: the widget's two names, the hex field's and Apply. */
+/** The words of the ColorPicker components: the widget's two names, the hex field's, the ready colours', the eyedropper's and Apply. */
 export interface ColorPickerPanelText extends ColorPickerText {
   hex: string;
   apply: string;
+  /** The name of the row of ready colours. */
+  swatches: string;
+  /** The button that takes a colour from anywhere on the screen. */
+  eyedropper: string;
 }
 
 export const COLOR_PICKER_TEXT: ColorPickerPanelText = {
@@ -40,7 +45,35 @@ export const COLOR_PICKER_TEXT: ColorPickerPanelText = {
   hue: "Hue",
   hex: "Hex",
   apply: "Apply",
+  swatches: "Ready colours",
+  eyedropper: "Pick from the screen",
 };
+
+/**
+ * The eight colours of the page's rainbow, as `#rrggbb`, for the picker's
+ * ready colours: the palette applyRainbow() holds, in its order, also while
+ * the rainbow look is off. A shorter palette gives fewer.
+ */
+export function rainbowSwatches(): string[] {
+  return [...new Set(Array.from({ length: 8 }, (_, i) => normalizeHex(rainbowAt(i)) ?? []).flat())];
+}
+
+/** Whether the browser can take a colour from the screen (the EyeDropper API). */
+export function canPickFromScreen(): boolean {
+  return typeof window !== "undefined" && "EyeDropper" in window;
+}
+
+/** A colour taken from the screen as `#rrggbb`, or null when the person backs out. */
+export async function pickFromScreen(): Promise<string | null> {
+  const Dropper = (window as unknown as { EyeDropper?: new () => { open: () => Promise<{ sRGBHex: string }> } }).EyeDropper;
+  if (!Dropper) return null;
+  try {
+    const { sRGBHex } = await new Dropper().open();
+    return normalizeHex(sRGBHex);
+  } catch {
+    return null;
+  }
+}
 
 export interface Hsv {
   h: number;

@@ -503,6 +503,19 @@ export const GLOSSARY: GlossarySection[] = [
           de: "Ein Tag aus einem Kalender. Der Auslöser zeigt den Tag und nimmt keine Eingabe, der gewählte Tag trägt den Akzent.",
         },
       },
+      {
+        id: "time-picker",
+        en: "Time picker",
+        de: "Zeitwähler",
+        proposal: true,
+        code: ["TimePicker", "TimeRangePicker", ".glim-time", ".glim-time-seg"],
+        components: ["TimePicker", "TimeRangePicker"],
+        rules: [14],
+        text: {
+          en: "A time of day in one field of two segments, hours and minutes, which the arrows count and digits type. A span holds the start and the end in one field.",
+          de: "Eine Uhrzeit in einem Feld aus zwei Abschnitten, Stunden und Minuten, die die Pfeile zählen und Ziffern tippen. Eine Spanne hält Beginn und Ende in einem Feld.",
+        },
+      },
     ],
   },
   {

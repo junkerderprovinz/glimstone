@@ -56,7 +56,8 @@ export const id: ComponentWords = {
   tour: { back: "Kembali", next: "Berikutnya", close: "Tutup", progress: "{step} dari {steps}" },
   floatingPanel: { minimize: "Perkecil", maximize: "Perbesar", restore: "Pulihkan", close: "Tutup" },
   signaturePad: { area: "Tanda tangan", clear: "Bersihkan" },
-  passwordField: { show: "Tampilkan", hide: "Sembunyikan", confirm: "Konfirmasi kata sandi", mismatch: "Kata sandi tidak cocok" },
+  passwordField: { show: "Tampilkan", hide: "Sembunyikan", confirm: "Konfirmasi kata sandi", mismatch: "Kata sandi tidak cocok", again: "Sekali lagi" },
+  timePicker: { hour: "Jam", minute: "Menit", start: "Mulai", end: "Selesai", to: "sampai" },
   versionCard: {
     title: "Versi",
     hint: "Versi {app}, status pembaruannya, dan apa yang dibawa versi ini.",

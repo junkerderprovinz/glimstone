@@ -46,7 +46,8 @@ export const en: ComponentWords = {
   tour: { back: "Back", next: "Next", close: "Close", progress: "{step} of {steps}" },
   floatingPanel: { minimize: "Minimise", maximize: "Maximise", restore: "Restore", close: "Close" },
   signaturePad: { area: "Signature", clear: "Clear" },
-  passwordField: { show: "Show", hide: "Hide", confirm: "Confirm password", mismatch: "The passwords do not match" },
+  passwordField: { show: "Show", hide: "Hide", confirm: "Confirm password", mismatch: "The passwords do not match", again: "Once more" },
+  timePicker: { hour: "Hours", minute: "Minutes", start: "Start", end: "End", to: "to" },
   versionCard: {
     title: "Version",
     hint: "The version of {app}, where its updates stand and what this version brought.",

@@ -16,7 +16,7 @@ import { BusyRingPage, SkeletonRowPage } from "./pages/loading";
 import { PopoverPage, SheetPage } from "./pages/overlay";
 import { ListTablePage } from "./pages/lists";
 import { FloatingPanelPage, ScrollAreaPage, SplitterPage } from "./pages/layout";
-import { AngleSliderPage, DatePickerPage, FileUploadPage, PinInputPage, RatingPage, SignaturePadPage, TagsInputPage } from "./pages/inputs";
+import { AngleSliderPage, DatePickerPage, FileUploadPage, PinInputPage, RatingPage, SignaturePadPage, TagsInputPage, TimePickerPage } from "./pages/inputs";
 import { PaginationPage, RadioGroupPage, StepsPage, TabsPage, TourPage } from "./pages/navigation";
 import { AvatarPage, CarouselPage, HoverCardPage, MarqueePage, TimerPage } from "./pages/display";
 import { AccordionPage, CollapsiblePage } from "./pages/reading";
@@ -153,6 +153,7 @@ const PAGES: Page[] = [
   { path: "/components/steps", title: "Steps", group: "Components", Comp: StepsPage, tag: "Zag" },
   { path: "/components/sub-card", title: "SubCard", group: "Components", Comp: SubCardPage },
   { path: "/components/tags-input", title: "TagsInput", group: "Components", Comp: TagsInputPage, tag: "Zag" },
+  { path: "/components/time-picker", title: "TimePicker", group: "Components", Comp: TimePickerPage },
   { path: "/components/timer", title: "Timer", group: "Components", Comp: TimerPage, tag: "Zag" },
   { path: "/components/toast", title: "Toast", group: "Components", Comp: ToastPage },
   { path: "/components/table", title: "Table", group: "Components", Comp: TablePage },

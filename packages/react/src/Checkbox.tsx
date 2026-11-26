@@ -1,5 +1,3 @@
-import { IconCheck } from "./glyphs.tsx";
-
 // The checkbox, for the places a box stands instead of a switch (rule 39):
 // "Don't show again" under a notice, and choices that are applied together,
 // such as which columns a list shows. Every setting is a Toggle. It is a
@@ -35,7 +33,20 @@ export function Checkbox({ checked, onChange, label, hideLabel = false, slim = f
       className={classes}
     >
       <span className="glim-checkbox-box" aria-hidden="true">
-        <IconCheck />
+        {/* The tick draws itself in as its dash closes. */}
+        <svg viewBox="0 0 14 14" width="14" height="14" fill="none" className="glim-mark">
+          <path
+            d="M3 7.4 5.7 10 11 4.2"
+            stroke="currentColor"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            pathLength={1}
+            strokeDasharray={1}
+            strokeDashoffset={checked ? 0 : 1}
+            className="glim-checkbox-tick"
+          />
+        </svg>
       </span>
       {!bare && <span>{label}</span>}
     </button>

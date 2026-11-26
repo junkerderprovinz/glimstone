@@ -63,6 +63,26 @@
     "field-sink": {
       "$value": "inset 0 1px 0 light-dark(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.28))",
       "$description": "The faint shade under the field's top edge that sets it into the surface."
+    },
+    "field-part": {
+      "$value": "rgba(0, 0, 0, 0.06)",
+      "$type": "color",
+      "$description": "A part inside a field, such as a tag or a stepper under the pointer: a wash on top of the field's own, so it reads in every step of it.",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "rgba(255, 255, 255, 0.08)"
+        }
+      }
+    },
+    "field-part-strong": {
+      "$value": "rgba(0, 0, 0, 0.09)",
+      "$type": "color",
+      "$description": "The same part while it is pressed, or the day the keys are on.",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "rgba(255, 255, 255, 0.12)"
+        }
+      }
     }
   }
 }

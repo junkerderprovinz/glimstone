@@ -560,6 +560,7 @@ export function NumberFieldPage() {
           <code>stepUp()</code>.
         </li>
         <li>The width belongs to the input and has to be definite, since the arrows sit against its end.</li>
+        <li>Under a mouse the arrows are one column at the field's end, two halves with a hover ground each, and the digits roll in from the side they count towards.</li>
         <li>Under a finger the arrows sit side by side, each the field's full height.</li>
       </ul>
       <H2>Accessibility</H2>
@@ -1507,7 +1508,7 @@ export function CheckboxPage() {
       <H2>Rules</H2>
       <ul>
         <li>Drawn, never the system's box. It reads the control radius, held small enough to stay a box.</li>
-        <li>Ticked, it fills with the accent and the tick takes the accent's contrast ink.</li>
+        <li>Ticked, it fills with the accent and the tick draws itself in the accent's contrast ink. A locked box is grey with a grey tick.</li>
         <li>The whole row is the target, the words as well as the box.</li>
       </ul>
       <H2>Slim</H2>
@@ -1593,6 +1594,7 @@ export function PasswordFieldPage() {
       <H2>Rules</H2>
       <ul>
         <li>The eye is a bare glyph in the field's trailing padding, neutral and never the accent. It means look, not act.</li>
+        <li>Once the secret shows, a stroke draws itself through the eye. A typed secret stands in dots a little larger and further apart than the font's.</li>
         <li>
           The field is as wide as a plain field in the same column, or takes <code>width</code>. In Vue a template ref
           reaches the input as <code>input</code>, and <code>eyeAttrs</code> go on the eye.
@@ -1614,6 +1616,7 @@ export function PasswordFieldPage() {
           character, and goes again, emptied, when the first is emptied. A slip of the finger then never becomes a
           password nobody can sign in with.
         </li>
+        <li>The empty second field asks for the password again in words, so it never reads as a secret already typed.</li>
         <li>
           While the second field holds something other than the first, a line under it says the passwords do not match.
           The field carries <code>aria-invalid</code>, the line is its description and a screen reader hears it politely.
@@ -1657,6 +1660,7 @@ export function TextFieldPage() {
           A field beside its name stands in a <a href="#/components/field-row">FieldRow</a>, which names it (rule 35).
           A text area keeps its name above it, because it needs the column's width.
         </li>
+        <li>A text area starts three lines tall and grows with its text up to ten, then scrolls. It has no grip in its corner.</li>
         <li>
           Four widths and the column: <code>short</code> for a port or a time, <code>medium</code> for a word,{" "}
           <code>wide</code> for a line of text, <code>grow</code> for what a row has left, and <code>fill</code> for the
@@ -1725,7 +1729,10 @@ export function FieldRowPage() {
           <code>Combobox</code> need no <code>label</code> of their own there. An app's own
           control asks <code>useFieldName</code> for it.
         </li>
-        <li>Several controls stand together at the row's end, and one with <code>width="grow"</code> takes all the room the name leaves.</li>
+        <li>A field that takes text fills what the name leaves, up to 24rem and short of a 9rem column for the names, so the fields of a card start on one line. A short field keeps its width.</li>
+        <li>Only where a name and the smallest field do not fit side by side does the field drop under the name, and there it takes the whole line.</li>
+        <li>A row with a switch is one target: a press anywhere on it flips the switch.</li>
+        <li>Several controls stand together at the row's end, and in a FieldRowGroup one with <code>width="grow"</code> takes all the room the names leave.</li>
         <li>A click on the label focuses a field and flips a switch, as a real label does. A selector stays as it is.</li>
         <li>
           <code>hint</code> is the "(i)" beside the name (rule 8). Words in other markup, such as a quiet "optional", go
@@ -2185,6 +2192,11 @@ export function ColorPickerPage() {
           Nothing changes before Apply. <code>onInput</code> reports every step for a live preview elsewhere.
         </li>
         <li>Mouse, pen and finger drag the same way and keep dragging past the square's edge.</li>
+        <li>
+          The page's eight rainbow colours stand under the hue bar as ready colours, and <code>swatches</code> names
+          others or, with <code>false</code>, none. Where the browser can take a colour from the screen, an eyedropper
+          stands beside the hex field.
+        </li>
         <li>
           The arrow keys move the colour, Shift in bigger steps. On the square left and right are saturation, up and down
           brightness. Home and End go to the ends of the hue bar.
