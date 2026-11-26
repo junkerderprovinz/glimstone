@@ -9,8 +9,9 @@ const paths = ["/", ...[...readFileSync(new URL("../src/App.tsx", import.meta.ur
 for (const theme of ["dark", "light"]) {
   for (const path of paths) {
     test(`${path} in the ${theme} theme has no axe violation`, async ({ page }) => {
-      // Still, so no text is read halfway through fading in.
-      await page.addInitScript((t) => localStorage.setItem("gs-docs-look", JSON.stringify({ theme: t, motion: "off" })), theme);
+      // The start page fades its text in, and axe reads a line caught halfway as too faint.
+      const look = path === "/" ? { theme, motion: "off" } : { theme };
+      await page.addInitScript((l) => localStorage.setItem("gs-docs-look", JSON.stringify(l)), look);
       await page.goto(`/#${path}?fw=react`);
       await page.locator("main h1").first().waitFor();
       await page.evaluate(() => document.fonts.ready);
