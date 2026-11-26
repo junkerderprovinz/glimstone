@@ -13,7 +13,8 @@ dependencies:
     path: ..
 
 flutter:
-  # The house font, which an app ships itself; the variable file carries every weight.
+  # Plex comes with the package. Noto Sans stands behind it for the scripts Plex
+  # does not draw, and an app ships it itself; the variable file carries every weight.
   fonts:
     - family: Noto Sans
       fonts:
