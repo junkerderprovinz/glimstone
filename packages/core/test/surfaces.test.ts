@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { splitQuestion } from '../src/dialog.ts';
+import { TOUR_SPOTLIGHT_GAP, tourDots, tourSpotlightRadius } from '../src/tour.ts';
 import { restTimer, tooltipClosed, tooltipDelay, TOOLTIP_DELAY_MS, TOOLTIP_SKIP_MS } from '../src/tipBubble.ts';
 
 const css = readFileSync(new URL('../tokens.css', import.meta.url), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
@@ -127,4 +128,38 @@ test('a dim selector tile keeps its words readable: only its glyph steps back, n
 test('the fortress card falls back to the secondary text ink outside a host theme', () => {
   const card = readFileSync(new URL('../vanilla/fortress-card.css', import.meta.url), 'utf8');
   assert.match(card, /--fc-dim: var\(--alt-text-color, var\(--carbon-text-sub, #8d8d8d\)\);/);
+});
+
+test('a done step is a neutral disc with the accent tick, and its connector fills behind it', () => {
+  assert.equal(declared('.glim-steps-indicator[data-complete]', 'color'), 'var(--accent-ink)');
+  assert.equal(declared('.glim-steps-indicator:not([data-complete], [data-current])', 'background-color'), 'transparent');
+  assert.equal(declared('.glim-steps-separator', 'height'), '2px');
+  assert.equal(declared('.glim-steps-item[data-complete] .glim-steps-separator', 'background-size'), '100% 100%, auto');
+  assert.match(css, /\.glim-steps-separator \{[^}]*transition: background-size var\(--motion-page-dur\)/);
+});
+
+test('a scroll area fades its content only toward an edge it scrolls on to', () => {
+  assert.match(declared('.glim-scroll-viewport', 'mask-image'), /var\(--glim-fade-top\).*var\(--glim-fade-bottom\)/);
+  assert.equal(declared('.glim-scroll-viewport[data-overflow-y]:not([data-at-top])', '--glim-fade-top'), 'var(--space-10)');
+  assert.equal(declared('.glim-scroll-viewport[data-overflow-y]:not([data-at-bottom])', '--glim-fade-bottom'), 'var(--space-10)');
+});
+
+test('a badge and a pill share one status table: a wash, an ink and a dot', () => {
+  for (const tone of ['ok', 'fail']) {
+    assert.equal(declared(`:is(.glim-badge--${tone}, .glim-pill--${tone})`, 'background-color'), `var(--status-${tone}-bg)`);
+    assert.equal(declared(`:is(.glim-badge--${tone}, .glim-pill--${tone})`, 'color'), `var(--status-${tone}-text)`);
+    assert.equal(declared(`:is(.glim-badge--${tone}, .glim-pill--${tone})`, '--status-dot'), `var(--status-${tone}-solid)`);
+  }
+  assert.equal(declared(':is(.glim-badge--warn, .glim-pill--warn)', 'background-color'), 'var(--status-warn-bg-strong)');
+  assert.match(css, /:is\(\.glim-badge--ok, \.glim-badge--warn, \.glim-badge--fail, \.glim-badge--active, \.glim-pill--ok, \.glim-pill--warn, \.glim-pill--fail, \.glim-pill--state\):not\(\.glim-badge--icon-only\)::before \{[^}]*width: 6px;/);
+  assert.equal(declared('.glim-pill', 'height'), '1.25rem');
+});
+
+test('a tour spotlight stands 6px off its target and rounds by the same', () => {
+  assert.equal(TOUR_SPOTLIGHT_GAP, 6);
+  assert.equal(tourSpotlightRadius(8), 14);
+  assert.deepEqual(tourDots(3, 1), [false, true, false]);
+  assert.match(css, /\.glim-tour-spotlight \{[^}]*box-shadow: 0 0 0 2px var\(--accent\), 0 0 0 6px color-mix/);
+  assert.equal(declared('.glim-tour-dot[data-current]', 'width'), 'var(--space-8)');
+  assert.match(css, /\.glim-tour-spotlight \{[^}]*transition: left calc\(var\(--motion-page-dur\) \* 1\.6\)/);
 });

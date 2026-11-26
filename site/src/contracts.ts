@@ -468,7 +468,10 @@ export const CONTRACTS: Record<string, Contract> = {
     ],
   },
   Pill: {
-    rows: [{ id: "pill-well", when: "It stands in a well or a sub-card", then: "It steps up one surface, and a state pill keeps its wash." }],
+    rows: [
+      { id: "pill-well", when: "It stands in a well or a sub-card", then: "It steps up one surface, and a state pill keeps its wash." },
+      { id: "pill-status", when: "It shows a state", then: "It takes the same wash, ink and 6px dot as a badge of that state." },
+    ],
   },
   ContextMenu: {
     pattern: { name: "Menu", url: `${APG}menubar/` },
@@ -867,6 +870,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "steps-next", when: "Next or Back is pressed", then: "The next or the previous step comes in. On the first step Back is disabled." },
       { id: "steps-finish", when: "The last step is in force", then: "Next is Finish, and it calls onFinish." },
       { id: "steps-done", when: "A step lies behind the one in force", then: "It carries a tick. The step in force is filled with the accent." },
+      { id: "steps-connector", when: "A step is done", then: "The connector after it fills with the accent, and a step still ahead is a quiet ring." },
       { id: "steps-arrows", keys: ["ArrowRight", "ArrowLeft", "Home", "End", "Enter"], when: "A step in the row has focus", then: "The arrows move the focus along the row and wrap round, Home and End go to the ends, and Enter goes to that step." },
       { id: "steps-one-stop", keys: ["Tab"], when: "The focus enters the row", then: "It lands on the step in force, so the row is one stop." },
     ],
@@ -887,6 +891,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "scroll-keys", keys: ["ArrowDown", "PageDown", "End"], when: "The box has focus", then: "It scrolls, as a box the platform draws would." },
       { id: "scroll-wheel", when: "The wheel turns over it, or a finger drags it", then: "It scrolls." },
       { id: "scroll-own-bar", when: "The content is taller than the box", then: "The platform's bar is hidden and the house's thin bar shows for that direction alone." },
+      { id: "scroll-fade", when: "There is more to scroll to above or below", then: "The content fades out over 24px toward that edge, and only that one." },
     ],
   },
   FileUpload: {
@@ -977,7 +982,8 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "tour-dialog", when: "A step is open", then: "It is a modal dialog named by its title and described by its text, with where the tour stands, such as \"1 of 3\"." },
       { id: "tour-next", when: "Next or Back is pressed", then: "The tour walks to the next or the previous step. On the last step the forward button is Close, which ends the tour." },
       { id: "tour-escape", keys: ["Escape"], when: "A step is open", then: "The tour ends and the focus goes back to what started it." },
-      { id: "tour-spotlight", when: "A step points at a part of the page", then: "The page behind is darkened, and that part stays clear with the accent's ring around it." },
+      { id: "tour-spotlight", when: "A step points at a part of the page", then: "The page behind is darkened, and that part stays clear with the accent's ring 6px off it, which glides to the next part with the step." },
+      { id: "tour-dots", when: "A step is open", then: "Where the tour stands is a row of dots, the current one drawn long in the accent, and read out as \"2 of 3\"." },
     ],
   },
   FloatingPanel: {

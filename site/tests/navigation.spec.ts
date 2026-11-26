@@ -179,6 +179,17 @@ test.describe("Steps", () => {
     await expect(current).toHaveText("2");
   });
 
+  test("[steps-connector] the connector fills behind a step that is done", async ({ page }) => {
+    await open(page, "/components/steps", { motion: "off" });
+    const separators = stage(page, "StepsStorage").locator(".glim-steps-separator");
+    const filled = () => separators.evaluateAll((all) => all.map((s) => getComputedStyle(s).backgroundSize.split(",")[0]!.trim()));
+    expect(await filled()).toEqual(["0% 100%", "0% 100%"]);
+    await button(page, "Next").click();
+    await expect.poll(filled).toEqual(["100% 100%", "0% 100%"]);
+    const ahead = stage(page, "StepsStorage").locator(".glim-steps-indicator").last();
+    expect(await ahead.evaluate((i) => getComputedStyle(i).backgroundColor)).toBe("rgba(0, 0, 0, 0)");
+  });
+
   test("[steps-arrows] the arrows, Home and End move the focus along the row, Enter goes there", async ({ page }) => {
     await open(page, "/components/steps");
     await tab(page, "Kind").focus();
@@ -248,5 +259,16 @@ test.describe("Tour", () => {
     const box = await spot.boundingBox();
     expect(Math.abs(box!.x - target!.x)).toBeLessThan(12);
     await expect(page.locator(".glim-tour-backdrop")).toBeVisible();
+  });
+
+  test("[tour-dots] the place in the tour is a row of dots, the current one drawn long", async ({ page }) => {
+    await begin(page);
+    const dots = step(page).locator(".glim-tour-dot");
+    await expect(dots).toHaveCount(3);
+    const widths = () => dots.evaluateAll((all) => all.map((d) => Math.round(d.getBoundingClientRect().width)));
+    await expect.poll(widths).toEqual([16, 6, 6]);
+    await step(page).getByRole("button", { name: "Next" }).click();
+    await expect.poll(widths).toEqual([6, 16, 6]);
+    await expect(step(page).locator(".glim-tour-progress")).toHaveText("2 of 3");
   });
 });

@@ -3869,10 +3869,22 @@
      because the flat accent measures 1.5:1 on that wash in the light theme.
      solid is the heading's fill: any translucent accent wash reads as dimmed.
      muted has no ground at all, for a quiet caption such as a version link. */
-  .glim-badge--ok { background-color: var(--status-ok-bg); color: var(--status-ok-text); }
-  .glim-badge--fail { background-color: var(--status-fail-bg); color: var(--status-fail-text); }
-  .glim-badge--warn { background-color: var(--status-warn-bg-strong); color: var(--status-warn-text); }
-  .glim-badge--active { background-color: var(--accent-soft); color: var(--accent-ink); }
+  /* One status table for Badge and Pill: each tone is a wash, an ink and a
+     6px dot before the words. A neutral pill holds a size or a figure and
+     keeps no dot. */
+  :is(.glim-badge--ok, .glim-pill--ok) { --status-dot: var(--status-ok-solid); background-color: var(--status-ok-bg); color: var(--status-ok-text); }
+  :is(.glim-badge--fail, .glim-pill--fail) { --status-dot: var(--status-fail-solid); background-color: var(--status-fail-bg); color: var(--status-fail-text); }
+  :is(.glim-badge--warn, .glim-pill--warn) { --status-dot: var(--status-warn-solid); background-color: var(--status-warn-bg-strong); color: var(--status-warn-text); }
+  :is(.glim-badge--active, .glim-pill--state) { --status-dot: var(--accent); background-color: var(--accent-soft); color: var(--accent-ink); }
+  :is(.glim-badge--ok, .glim-badge--warn, .glim-badge--fail, .glim-badge--active, .glim-pill--ok, .glim-pill--warn, .glim-pill--fail, .glim-pill--state):not(.glim-badge--icon-only)::before {
+    content: "";
+    flex: none;
+    width: 6px;
+    height: 6px;
+    margin-inline-end: var(--space-1);
+    border-radius: 50%;
+    background-color: var(--status-dot);
+  }
   .glim-badge--neutral { background-color: var(--carbon-surface2); color: var(--carbon-text-sub); }
   .glim-badge--solid { background-color: var(--accent); color: var(--accent-contrast); }
   .glim-badge--muted { color: var(--carbon-text-muted); }
@@ -5552,30 +5564,28 @@
     white-space: nowrap;
   }
 
-  /* The data pill (Pill): one value of a row, quiet at rest. A state takes a
-     wash of its solid colour over the second surface, so the text keeps the
-     body ink and a column of pills still reads as one column. */
+  /* The data pill (Pill): one value of a row, quiet at rest, a step up in a
+     well. A state takes the badge's table, so its ground and ink sit under
+     :where() for the state classes to win. */
   .glim-well,
   .glim-subcard {
     --pill-ground: var(--carbon-surface3);
-    --pill-state: var(--carbon-hover-raised);
   }
   .glim-pill {
     display: inline-flex;
     flex: none;
     align-items: center;
-    height: 1.35rem;
+    gap: var(--space-2);
+    height: 1.25rem;
     padding-inline: var(--space-4);
     border-radius: var(--radius-pill);
-    background-color: var(--pill-ground, var(--carbon-surface2));
     font-size: var(--text-meta);
-    color: var(--carbon-text-sub);
     white-space: nowrap;
   }
-  .glim-pill--state { background-color: var(--pill-state, var(--carbon-surface3)); color: var(--carbon-text); }
-  .glim-pill--ok { background-color: color-mix(in srgb, var(--pill-ground, var(--carbon-surface2)), var(--status-ok-solid) 25%); color: var(--carbon-text); }
-  .glim-pill--warn { background-color: color-mix(in srgb, var(--pill-ground, var(--carbon-surface2)), var(--status-warn-solid) 35%); color: var(--carbon-text); }
-  .glim-pill--fail { background-color: color-mix(in srgb, var(--pill-ground, var(--carbon-surface2)), var(--status-fail-solid) 35%); color: var(--carbon-text); }
+  :where(.glim-pill) {
+    background-color: var(--pill-ground, var(--carbon-surface2));
+    color: var(--carbon-text-sub);
+  }
 
   /* A text field (PasswordField, CopyField): borderless and filled (rule 14),
      a step up the ramp on focus and inside a sub-card, like the number field.
@@ -7753,9 +7763,16 @@
     width: 0.75rem;
     height: 0.75rem;
   }
+  /* Done is a neutral disc with the accent's tick, ahead is a quiet ring, and
+     the connector fills behind the steps already taken. */
   .glim-steps-indicator[data-complete] {
-    background-color: var(--carbon-surface3);
-    color: var(--carbon-text);
+    background-color: var(--carbon-surface2);
+    color: var(--accent-ink);
+  }
+  .glim-steps-indicator:not([data-complete], [data-current]) {
+    background-color: transparent;
+    box-shadow: inset 0 0 0 1.5px var(--carbon-border);
+    color: var(--carbon-text-muted);
   }
   .glim-steps-indicator[data-current] {
     background-color: var(--accent);
@@ -7769,8 +7786,14 @@
   .glim-steps-separator {
     flex: 1;
     min-width: 1rem;
-    height: 1px;
-    background-color: color-mix(in srgb, var(--carbon-border) 60%, transparent);
+    height: 2px;
+    border-radius: 1px;
+    background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 0 / 0% 100%, var(--carbon-border);
+  }
+  .glim-steps-separator:dir(rtl) { background-position: 100% 0, 0 0; }
+  .glim-steps-item[data-complete] .glim-steps-separator { background-size: 100% 100%, auto; }
+  @media (prefers-reduced-motion: no-preference) {
+    .glim-steps-separator { transition: background-size var(--motion-page-dur) var(--motion-ease); }
   }
   .glim-steps-content:focus-visible {
     outline: var(--focus-ring-width) solid var(--focus-ring);
@@ -7943,9 +7966,19 @@
     min-width: 0;
     border-radius: var(--radius-control);
   }
+  /* The content fades out toward an edge only where there is more to scroll to. */
+  @property --glim-fade-top { syntax: "<length>"; inherits: false; initial-value: 0px; }
+  @property --glim-fade-bottom { syntax: "<length>"; inherits: false; initial-value: 0px; }
   .glim-scroll-viewport {
     border-radius: inherit;
     scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 var(--glim-fade-top), #000 calc(100% - var(--glim-fade-bottom)), transparent);
+    mask-image: linear-gradient(to bottom, transparent, #000 var(--glim-fade-top), #000 calc(100% - var(--glim-fade-bottom)), transparent);
+  }
+  .glim-scroll-viewport[data-overflow-y]:not([data-at-top]) { --glim-fade-top: var(--space-10); }
+  .glim-scroll-viewport[data-overflow-y]:not([data-at-bottom]) { --glim-fade-bottom: var(--space-10); }
+  @media (prefers-reduced-motion: no-preference) {
+    .glim-scroll-viewport { transition: --glim-fade-top var(--motion-fade-dur) var(--motion-ease), --glim-fade-bottom var(--motion-fade-dur) var(--motion-ease); }
   }
   .glim-scroll-viewport::-webkit-scrollbar { display: none; }
   .glim-scroll-content { min-width: 0; }
@@ -8595,11 +8628,20 @@
     backdrop-filter: blur(var(--glim-scrim-blur));
     z-index: var(--z-window);
   }
+  /* The ring stands off its target (tourSpotlight), drawn in the accent with
+     a soft halo, and glides to the next target with the step. */
   .glim-tour-spotlight {
     border-radius: var(--radius-control);
-    box-shadow: 0 0 0 var(--focus-ring-width) var(--accent);
+    box-shadow: 0 0 0 2px var(--accent), 0 0 0 6px color-mix(in srgb, var(--accent) 25%, transparent);
     pointer-events: none;
     z-index: var(--z-window);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .glim-tour-spotlight {
+      transition: left calc(var(--motion-page-dur) * 1.6) var(--motion-ease), top calc(var(--motion-page-dur) * 1.6) var(--motion-ease), width calc(var(--motion-page-dur) * 1.6) var(--motion-ease), height calc(var(--motion-page-dur) * 1.6) var(--motion-ease), border-radius calc(var(--motion-page-dur) * 1.6) var(--motion-ease);
+    }
+    .glim-tour-backdrop { transition: clip-path calc(var(--motion-page-dur) * 1.6) var(--motion-ease); }
+    .glim-tour-dot { transition: width var(--motion-page-dur) var(--motion-spring), background-color var(--motion-control-dur) var(--motion-ease); }
   }
   /* The machine stacks the step over its backdrop from this base. */
   .glim-tour-positioner { --tour-z-index: var(--z-window); }
@@ -8635,11 +8677,24 @@
     justify-content: flex-end;
     gap: var(--space-4);
   }
+  /* Where the tour stands is a row of dots, the current one drawn long in the accent. */
   .glim-tour-progress {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
     margin-inline-end: auto;
-    color: var(--carbon-text-sub);
-    font-size: var(--text-subline);
   }
+  .glim-tour-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-pill);
+    background-color: var(--carbon-surface3);
+  }
+  .glim-tour-dot[data-current] {
+    width: var(--space-8);
+    background-color: var(--accent);
+  }
+  .glim-tour-positioner[data-type="tooltip"] { padding: var(--space-5); }
 }
 @media (prefers-reduced-transparency: reduce) {
   .glim-tour-backdrop { backdrop-filter: none; }

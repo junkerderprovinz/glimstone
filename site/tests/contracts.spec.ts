@@ -2405,6 +2405,16 @@ test.describe("SubCard", () => {
 });
 
 test.describe("Pill", () => {
+  test("[pill-status] a pill and a badge of one state share its wash, its ink and its dot", async ({ page }) => {
+    await open(page, "/components/pill");
+    const look = (l: Locator) => l.evaluate((e) => ({ ground: getComputedStyle(e).backgroundColor, ink: getComputedStyle(e).color, dot: getComputedStyle(e, "::before").backgroundColor, size: getComputedStyle(e, "::before").width }));
+    const pill = await look(stage(page, "PillTones").locator(".glim-pill--ok").first());
+    await open(page, "/components/badge");
+    const badge = await look(stage(page, "BadgeTones").locator(".glim-badge--ok").first());
+    expect(pill).toEqual(badge);
+    expect(pill.size).toBe("6px");
+  });
+
   test("[pill-well] it steps up in a well, and a state keeps its wash", async ({ page }) => {
     await open(page, "/components/pill");
     const ground = (place: string, cls: string) => stage(page, "PillWell").locator(`${place} .${cls}`).first().evaluate((e) => getComputedStyle(e).backgroundColor);
@@ -2415,7 +2425,6 @@ test.describe("Pill", () => {
     expect(sub).toBe(well);
     const washed = await ground("[data-well]", "glim-pill--ok");
     expect(washed).not.toBe(well);
-    expect(washed).not.toBe(await ground("[data-plain]", "glim-pill--ok"));
   });
 });
 

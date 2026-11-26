@@ -45,3 +45,30 @@ export function tourSteps(steps: readonly TourStep[]) {
     description,
   }));
 }
+
+/** How far the spotlight's ring stands off the step's target, in px. */
+export const TOUR_SPOTLIGHT_GAP = 6;
+
+/** The spotlight's corner for a target with corners of `targetRadius` px: grown by the gap, so the ring keeps it all round. */
+export function tourSpotlightRadius(targetRadius: number): number {
+  return targetRadius + TOUR_SPOTLIGHT_GAP;
+}
+
+/** The corner of a step's target as the page draws it, 0 for a step without one. */
+export function tourTargetRadius(step: TourStep | undefined): number {
+  const target = typeof step?.target === "string" ? document.querySelector<HTMLElement>(step.target) : step?.target?.();
+  return target ? parseFloat(getComputedStyle(target).borderTopLeftRadius) || 0 : 0;
+}
+
+/** The machine's spotlight settings for the step at `index`. */
+export function tourSpotlight(steps: readonly TourStep[], index: number) {
+  return {
+    spotlightOffset: { x: TOUR_SPOTLIGHT_GAP, y: TOUR_SPOTLIGHT_GAP },
+    spotlightRadius: tourSpotlightRadius(tourTargetRadius(steps[index])),
+  };
+}
+
+/** The progress dots of a tour: one per step, the current one marked. */
+export function tourDots(steps: number, index: number): boolean[] {
+  return Array.from({ length: steps }, (_, i) => i === index);
+}

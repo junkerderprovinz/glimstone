@@ -1,7 +1,7 @@
-import { useEffect, useId } from "react";
+import { useEffect, useId, useState } from "react";
 import * as tour from "@zag-js/tour";
 import { normalizeProps, Portal, useMachine } from "@zag-js/react";
-import { TOUR_TEXT, pageDir, portalTarget, tourSteps, type TourStep, type TourText } from "@glimstone/core";
+import { TOUR_TEXT, pageDir, portalTarget, tourDots, tourSpotlight, tourSteps, type TourStep, type TourText } from "@glimstone/core";
 import { Badge } from "./Badge.tsx";
 import { Button } from "./Button.tsx";
 import { IconBack, IconCheck, IconForward } from "./glyphs.tsx";
@@ -23,10 +23,13 @@ export interface TourProps {
 
 export function Tour({ steps, open, onOpenChange, text }: TourProps) {
   const words = { ...TOUR_TEXT, ...text };
+  const [at, setAt] = useState(0);
   const service = useMachine(tour.machine, {
     id: useId(),
     dir: pageDir(),
     steps: tourSteps(steps),
+    ...tourSpotlight(steps, at),
+    onStepChange: (d) => setAt(d.stepIndex),
     onStatusChange: (d) => {
       if (d.status === "dismissed" || d.status === "completed" || d.status === "skipped") {
         onOpenChange(false);
@@ -57,8 +60,11 @@ export function Tour({ steps, open, onOpenChange, text }: TourProps) {
                 {api.step.description}
               </p>
               <div className="glim-tour-foot">
-                <span {...api.getProgressTextProps()} className="glim-tour-progress glim-num">
-                  {words.progress(api.stepIndex + 1, api.totalSteps)}
+                <span {...api.getProgressTextProps()} className="glim-tour-progress">
+                  <span className="glim-sr-only">{words.progress(api.stepIndex + 1, api.totalSteps)}</span>
+                  {tourDots(api.totalSteps, api.stepIndex).map((current, i) => (
+                    <span key={i} aria-hidden="true" className="glim-tour-dot" data-current={current || undefined} />
+                  ))}
                 </span>
                 <Button label={words.back} labelKey={null} glyph={<IconBack />} disabled={!api.hasPrevStep} onClick={api.prev} />
                 {api.lastStep ? (

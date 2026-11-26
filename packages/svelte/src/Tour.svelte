@@ -16,7 +16,7 @@
   import { untrack } from "svelte";
   import * as tour from "@zag-js/tour";
   import { normalizeProps, useMachine } from "@zag-js/svelte";
-  import { TOUR_TEXT, pageDir, tourSteps } from "@glimstone/core";
+  import { TOUR_TEXT, pageDir, tourDots, tourSpotlight, tourSteps } from "@glimstone/core";
   import Badge from "./Badge.svelte";
   import Button from "./Button.svelte";
   import { IconBack, IconCheck, IconForward } from "./glyphs.js";
@@ -30,10 +30,13 @@
 
   const words = $derived({ ...TOUR_TEXT, ...text });
   const id = $props.id();
+  let at = $state(0);
   const service = useMachine(tour.machine, () => ({
     id,
     dir: pageDir(),
     steps: tourSteps(steps),
+    ...tourSpotlight(steps, at),
+    onStepChange: (d: { stepIndex: number }) => (at = d.stepIndex),
     onStatusChange: (d: { status: string }) => {
       if (d.status === "dismissed" || d.status === "completed" || d.status === "skipped") {
         open = false;
@@ -61,7 +64,10 @@
         </h2>
         <p {...api.getDescriptionProps()} class="glim-tour-text">{api.step.description}</p>
         <div class="glim-tour-foot">
-          <span {...api.getProgressTextProps()} class="glim-tour-progress glim-num">{words.progress(api.stepIndex + 1, api.totalSteps)}</span>
+          <span {...api.getProgressTextProps()} class="glim-tour-progress">
+            <span class="glim-sr-only">{words.progress(api.stepIndex + 1, api.totalSteps)}</span>
+            {#each tourDots(api.totalSteps, api.stepIndex) as current, i (i)}<span aria-hidden="true" class="glim-tour-dot" data-current={current || undefined}></span>{/each}
+          </span>
           <Button label={words.back} labelKey={null} glyph={IconBack} disabled={!api.hasPrevStep} onClick={() => api.prev()} />
           {#if api.lastStep}
             <Button label={words.close} labelKey={null} glyph={IconCheck} tone="accent" onClick={end} />
