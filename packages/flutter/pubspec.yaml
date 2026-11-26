@@ -16,3 +16,11 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter:
+  # The house face. The variable file carries every weight; the OFL beside it
+  # is its licence.
+  fonts:
+    - family: IBM Plex Sans
+      fonts:
+        - asset: fonts/IBMPlexSans.ttf
