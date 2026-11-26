@@ -99,3 +99,26 @@ test('a skeleton row takes the real row\'s measures: the glyph inside the tile, 
   assert.match(declared('.glim-skeleton-actions', 'width'), /var\(--skeleton-actions, 1\) \* var\(--btn-h\)/);
 });
 
+test('a disabled control has colours of its own instead of turning see-through', () => {
+  const ink = 'color-mix(in oklab, var(--carbon-text) 38%, transparent)';
+  for (const sel of ['.glim-btn:disabled', '.glim-badge-action:disabled', '.glim-sel-seg:disabled', '.glim-menu-item:disabled', '.glim-icon-btn:disabled', '.glim-select-content--menu .glim-menu-item[data-disabled]']) {
+    assert.equal(declared(sel, 'opacity'), '', sel);
+    assert.equal(declared(sel, 'color'), ink, sel);
+  }
+  assert.equal(declared('.glim-btn:disabled', 'background-color'), 'light-dark(rgb(0 0 0 / 0.05), rgb(255 255 255 / 0.06))');
+});
+
+test('a glyph takes one of three sizes: 14 beside small text, 16 beside body text, 20 in the rail and a tile', () => {
+  assert.equal(declared('.glim-info-icon', 'width'), 'var(--glyph-s)');
+  assert.equal(declared('.glim-info-icon svg', 'width'), 'var(--glyph-s)');
+  assert.equal(declared('.glim-list-row-tile > svg', 'width'), 'var(--glyph-m)');
+  assert.equal(declared('.glim-menu-glyph', 'width'), 'var(--glyph-m)');
+  assert.equal(declared('.glim-icon-btn > svg', 'width'), 'var(--glyph-m)');
+  assert.equal(declared(':is(.glim-nav-row, .glim-nav-row-main) > svg', 'width'), 'var(--glyph-l)');
+  assert.equal(declared('.glim-empty-glyph svg', 'width'), 'var(--glyph-l)');
+  assert.equal(declared('.glim-empty-glyph', 'opacity'), '');
+});
+
+test('an (i) beside a name centres on the x-height, where the eye reads the line', () => {
+  assert.equal(declared(':is(.glim-list-row-name, .glim-version-part) > .glim-info-icon', 'margin-block-end'), 'calc((1ex - var(--glyph-s)) / 2)');
+});
