@@ -8,6 +8,8 @@ import { MarkSvg } from "./glyphs";
 // the countdown like a hover does.
 const props = defineProps<{
   id: string;
+  /** A short first line; the message then reads as its description. */
+  title?: string;
   message: string;
   severity: ToastSeverity;
   /** A button such as Undo. A press runs it and dismisses the toast. */
@@ -32,7 +34,7 @@ function act(action: ToastAction) {
 <template>
   <div
     data-glim="ToastCard"
-    class="glim-toast glim-toast-card"
+    :class="['glim-toast', 'glim-toast-card', { 'glim-toast-card--titled': title }]"
     @mouseenter="emit('mouseEnter', id)"
     @mouseleave="emit('mouseLeave', id)"
     @focusin="emit('focus', id)"
@@ -41,6 +43,7 @@ function act(action: ToastAction) {
   >
     <MarkSvg :mark="TOAST_MARKS[severity]" :class="`glim-toast-glyph glim-toast-glyph--${severity}`" />
     <div class="glim-toast-body">
+      <p v-if="title" class="glim-toast-title">{{ title }}</p>
       <p class="glim-toast-message">
         <template v-for="(part, i) in softBreaks(message)" :key="i"><wbr v-if="i > 0" />{{ part }}</template>
       </p>

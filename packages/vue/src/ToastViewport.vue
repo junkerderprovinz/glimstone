@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { watch } from "vue";
-import { announce, liveRegionAttrs, toastPoliteness, warnDeprecated, type ToastAction, type ToastSeverity } from "@glimstone/core";
+import { onBeforeUnmount, onMounted, shallowRef, watch } from "vue";
+import { announce, liveRegionAttrs, toastAnnouncement, toastPoliteness, warnDeprecated, watchToastStack, type ToastAction, type ToastSeverity } from "@glimstone/core";
 import ToastCard from "./ToastCard.vue";
 import { relayDeprecated } from "./deprecatedEvents";
 
@@ -17,7 +17,7 @@ import { relayDeprecated } from "./deprecatedEvents";
 // would be announced on arrival by some screen readers and not by others.
 defineOptions({ inheritAttrs: false });
 const props = defineProps<{
-  toasts: { id: string; message: string; severity: ToastSeverity; action?: ToastAction }[];
+  toasts: { id: string; title?: string; message: string; severity: ToastSeverity; action?: ToastAction }[];
   /** Accessible name for each dismiss button. */
   dismissLabel: string;
   /** @deprecated Listen to `mouse-enter`. Removed in 5.0.0. */
@@ -63,21 +63,26 @@ watch(
     for (const t of toasts) {
       if (heard.has(t.id)) continue;
       heard.add(t.id);
-      announce(t.message, toastPoliteness(t.severity));
+      announce(toastAnnouncement(t), toastPoliteness(t.severity));
     }
   },
   { immediate: true, deep: 1, flush: "post" },
 );
+const stack = shallowRef<HTMLDivElement | null>(null);
+let unwatch: (() => void) | undefined;
+onMounted(() => (unwatch = watchToastStack(stack.value!)));
+onBeforeUnmount(() => unwatch?.());
 </script>
 
 <template>
   <div class="glim-sr-only" v-bind="liveRegionAttrs('polite')" />
   <div class="glim-sr-only" v-bind="liveRegionAttrs('assertive')" />
-  <div data-glim="ToastViewport" class="glim-toast-stack" v-bind="$attrs">
+  <div ref="stack" data-glim="ToastViewport" class="glim-toast-stack" v-bind="$attrs">
     <ToastCard
       v-for="t in toasts"
       :id="t.id"
       :key="t.id"
+      :title="t.title"
       :message="t.message"
       :severity="t.severity"
       :action="t.action"

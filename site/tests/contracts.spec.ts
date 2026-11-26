@@ -1583,10 +1583,10 @@ test.describe("Toast", () => {
     await expect(region(page, "polite")).toHaveAttribute("role", "status");
     await expect(region(page, "assertive")).toHaveAttribute("role", "alert");
     await press(page, "Failure");
-    await expect(region(page, "assertive")).toHaveText("Could not reach the target.");
+    await expect(region(page, "assertive")).toHaveText("Could not reach the target. The next try starts in five minutes.");
     await press(page, "Warning");
-    await expect(region(page, "polite")).toHaveText("The target is almost full.");
-    await expect(card(page, "The target is almost full.")).not.toHaveAttribute("role");
+    await expect(region(page, "polite")).toHaveText("The target is almost full. 38 GB are left, about two more nights.");
+    await expect(card(page, "The target is almost full")).not.toHaveAttribute("role");
   });
 
   test("[toast-sticky] a toast with an action stays until it is dismissed", async ({ page }) => {
@@ -1603,7 +1603,7 @@ test.describe("Toast", () => {
   test("[toast-expire] leaves after four seconds", async ({ page }) => {
     await open(page, "/components/toast");
     await press(page, "Success");
-    const toast = card(page, "Settings saved.");
+    const toast = card(page, "Settings saved");
     await expect(toast).toBeVisible();
     await page.waitForTimeout(3000);
     await expect(toast).toBeVisible();
@@ -1613,7 +1613,7 @@ test.describe("Toast", () => {
   test("[toast-pause] hover keeps it", async ({ page }) => {
     await open(page, "/components/toast");
     await press(page, "Warning");
-    const toast = card(page, "The target is almost full.");
+    const toast = card(page, "The target is almost full");
     await toast.hover();
     await page.waitForTimeout(5500);
     await expect(toast).toBeVisible();
@@ -1625,14 +1625,20 @@ test.describe("Toast", () => {
     await open(page, "/components/toast");
     await press(page, "Success");
     await press(page, "Warning");
-    const success = card(page, "Settings saved.");
+    const success = card(page, "Settings saved");
+    // The older toast lies behind the newer one until the pointer fans the stack out.
+    await card(page, "The target is almost full").hover();
+    await expect(success).not.toHaveAttribute("data-buried");
+    await expect.poll(() => success.evaluate((c) => getComputedStyle(c).translate)).not.toBe("0px -8px");
+    await success.evaluate((c) => Promise.all(c.getAnimations().map((a) => a.finished)));
     await success.getByRole("button", { name: "Dismiss" }).click();
     await expect(success).toHaveCount(0);
-    await expect(card(page, "The target is almost full.")).toBeVisible();
+    await expect(card(page, "The target is almost full")).toBeVisible();
   });
 
-  // A toast on a half pixel puts every toast above it there too, and Chromium
-  // rounds those edges a pixel up or down from one paint to the next.
+  // A toast on a half pixel rounds its edges a pixel up or down from one paint
+  // to the next. The cards behind it are drawn smaller on purpose and only
+  // show an edge.
   test("[toast-pixels] every toast stands on whole pixels", async ({ page }) => {
     test.setTimeout(120_000);
     await open(page, "/components/toast");
@@ -1645,7 +1651,7 @@ test.describe("Toast", () => {
           for (const name of ["Success", "Warning", "Failure", "With an action", "A long path"]) await press(page, name);
           const halves = await page.locator(".glim-toast-stack").evaluate(async (s) => {
             await Promise.all(s.getAnimations({ subtree: true }).map((a) => a.finished));
-            return [...s.querySelectorAll<HTMLElement>(".glim-toast-card")]
+            return [...s.querySelectorAll<HTMLElement>(".glim-toast-card:not([data-behind])")]
               .filter((c) => getComputedStyle(c).display !== "none")
               .flatMap((c) => {
                 const r = c.getBoundingClientRect();
@@ -1677,6 +1683,43 @@ test.describe("Toast", () => {
       });
       expect(settled, `${motion}${reduce ? ", reduced" : ""}`).toEqual({ transform: "none", pinnedToWindow: true });
     }
+  });
+
+  test("[toast-title] a title leads and the message under it reads quieter", async ({ page }) => {
+    await open(page, "/components/toast");
+    await press(page, "Success");
+    const toast = card(page, "Settings saved");
+    await expect(toast.locator(".glim-toast-title")).toHaveText("Settings saved");
+    await expect(toast.locator(".glim-toast-message")).toHaveText("The new schedule runs tonight at 02:00.");
+    const look = await toast.evaluate((t) => {
+      const css = (sel: string) => getComputedStyle(t.querySelector(sel)!);
+      return { title: css(".glim-toast-title").fontWeight, size: css(".glim-toast-message").fontSize, ink: css(".glim-toast-message").color, text: css(".glim-toast-title").color };
+    });
+    expect(look.title).toBe("600");
+    expect(look.size).toBe("13px");
+    expect(look.ink).not.toBe(look.text);
+  });
+
+  test("[toast-stack] older toasts show their edge behind the newest and fan out under the pointer", async ({ page }) => {
+    await open(page, "/components/toast");
+    for (const name of ["Success", "Warning", "Failure"]) await press(page, name);
+    await page.mouse.move(10, 10);
+    const cards = page.locator(".glim-toast-card");
+    await expect(cards).toHaveCount(3);
+    const boxes = () =>
+      cards.evaluateAll(async (all) => {
+        await Promise.all(all.flatMap((c) => c.getAnimations({ subtree: true }).map((a) => a.finished)));
+        return all.map((c) => ({ top: c.getBoundingClientRect().top, bottom: c.getBoundingClientRect().bottom, behind: c.hasAttribute("data-behind") }));
+      });
+    const stacked = await boxes();
+    expect(stacked.map((b) => b.behind)).toEqual([true, true, false]);
+    const front = stacked[2]!;
+    expect(front.top - stacked[1]!.top).toBeCloseTo(8, 0);
+    expect(front.top - stacked[0]!.top).toBeCloseTo(16, 0);
+    await cards.nth(2).hover();
+    await expect.poll(async () => (await boxes())[1]!.bottom).toBeLessThanOrEqual(front.top);
+    const fanned = await boxes();
+    expect(fanned[0]!.bottom).toBeLessThanOrEqual(fanned[1]!.top);
   });
 });
 

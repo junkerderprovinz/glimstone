@@ -103,6 +103,34 @@
           "tailwind": "text-caption"
         }
       }
+    },
+    "glyph-s": {
+      "$value": "14px",
+      "$type": "dimension",
+      "$description": "The three glyph sizes. Beside text a glyph centres on the x-height, where the eye reads the line.",
+      "$extensions": {
+        "org.glimstone": {
+          "note": "beside 12 and 13px text"
+        }
+      }
+    },
+    "glyph-m": {
+      "$value": "16px",
+      "$type": "dimension",
+      "$extensions": {
+        "org.glimstone": {
+          "note": "beside 14 and 16px text"
+        }
+      }
+    },
+    "glyph-l": {
+      "$value": "20px",
+      "$type": "dimension",
+      "$extensions": {
+        "org.glimstone": {
+          "note": "in the rail, a tile and on a key"
+        }
+      }
     }
   }
 }

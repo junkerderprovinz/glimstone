@@ -102,6 +102,12 @@
   --text-heading: var(--text-status);
   --text-dense: var(--text-meta);
   --text-caption: var(--text-meta);
+
+  /* The three glyph sizes. Beside text a glyph centres on the x-height, where
+     the eye reads the line. */
+  --glyph-s: 14px; /* beside 12 and 13px text */
+  --glyph-m: 16px; /* beside 14 and 16px text */
+  --glyph-l: 20px; /* in the rail, a tile and on a key */
 }
 
 /* The spacing scale. Every padding, margin and gap in the components reads one
@@ -4418,20 +4424,25 @@
      each card turns it back on. The inset is padding inside the box rather than
      an offset of it, because `overflow-y: auto` also clips horizontally and
      would cut off the cards' shadows and the sideways slide of their entrance. */
+  /* The cards lie over each other in one cell, the newest in front and last
+     in the tree, so it paints on top. The two before it show only their edge
+     above it (watchToastStack marks them), and while the pointer or the focus
+     is on the stack they fan out one above the other. */
   .glim-toast-stack {
     position: fixed;
     bottom: 0;
     inset-inline-end: 0;
     z-index: var(--z-toast);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
+    display: grid;
+    align-items: end;
+    gap: var(--space-5);
     max-height: 100vh;
-    overflow-y: auto;
     padding: var(--space-8);
     pointer-events: none;
   }
+  .glim-toast-stack > .glim-toast-card { grid-area: 1 / 1; }
   .glim-toast-card {
+    position: relative;
     display: flex;
     align-items: flex-start;
     gap: var(--space-5);
@@ -4441,8 +4452,59 @@
     border-radius: var(--radius-card);
     background-color: var(--surface-overlay);
     color: var(--carbon-text);
+    box-shadow: var(--elevation-float);
     pointer-events: auto;
   }
+  .glim-toast-card[data-behind] {
+    height: var(--toast-front-h);
+    overflow: clip;
+    transform-origin: 50% 0;
+    translate: 0 calc(var(--toast-i) * -1 * var(--space-4));
+    scale: calc(1 - var(--toast-i) * 0.04);
+  }
+  .glim-toast-card[data-behind] > * { opacity: 0; }
+  .glim-toast-card[data-buried] {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .glim-toast-stack:is(:hover, :focus-within) > .glim-toast-card[data-behind] {
+    height: auto;
+    overflow: visible;
+    opacity: 1;
+    pointer-events: auto;
+    translate: 0 calc(-1 * var(--toast-y));
+    scale: none;
+  }
+  .glim-toast-stack:is(:hover, :focus-within) > .glim-toast-card[data-behind] > * { opacity: 1; }
+  /* The gap under a fanned card still belongs to the stack, so the fan stays
+     open while the pointer crosses it. */
+  .glim-toast-stack:is(:hover, :focus-within) > .glim-toast-card::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: 100%;
+    height: var(--space-5);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .glim-toast-card {
+      transition: translate var(--motion-page-dur) var(--motion-spring), scale var(--motion-page-dur) var(--motion-spring), opacity var(--motion-fade-dur) var(--motion-ease);
+    }
+    .glim-toast-card > * { transition: opacity var(--motion-fade-dur) var(--motion-ease); }
+  }
+  /* A title leads in the text colour and the message under it is its quieter description. */
+  .glim-toast-title {
+    margin: 0;
+    font-size: var(--text-body);
+    font-weight: var(--font-weight-strong);
+    line-height: 1.25rem;
+    overflow-wrap: break-word;
+  }
+  .glim-toast-card--titled .glim-toast-body { gap: var(--space-1); }
+  .glim-toast-card--titled .glim-toast-message {
+    color: var(--carbon-text-muted);
+    font-size: var(--text-subline);
+  }
+  .glim-toast-card--titled .glim-toast-action { margin-top: var(--space-3); }
   /* Severity shows only in the glyph's state hue (rule 4), never as a coloured
      rail on the card (rule 5). */
   .glim-toast-glyph {
@@ -4462,7 +4524,7 @@
   .glim-toast-message {
     margin: 0;
     text-wrap: pretty;
-    font-size: 0.875rem;
+    font-size: var(--text-body);
     /* Whole pixels per line, or every toast stacked beside this one lands on a
        fraction and Chromium rounds its edges differently from paint to paint. */
     line-height: 1.25rem;
@@ -8265,8 +8327,10 @@
   }
   .glim-hovercard-positioner { z-index: var(--z-menu); }
   .glim-hovercard {
-    width: max-content;
-    max-width: min(20rem, calc(100vw - 16px));
+    display: grid;
+    gap: var(--space-6);
+    width: 18rem;
+    max-width: calc(100vw - 16px);
     padding: var(--space-8);
     border-radius: var(--radius-card);
     background-color: var(--surface-overlay);
@@ -8274,6 +8338,58 @@
     font-size: var(--text-body);
     box-shadow: var(--elevation-float), var(--hairline);
   }
+  /* A tile, the name over one quiet line, and up to three figures. */
+  .glim-hovercard-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+    min-width: 0;
+  }
+  .glim-hovercard-media {
+    display: inline-grid;
+    flex: none;
+    place-items: center;
+    width: var(--space-13);
+    height: var(--space-13);
+    overflow: hidden;
+    border-radius: var(--radius-control);
+    background-color: var(--carbon-surface2);
+    color: var(--carbon-text-sub);
+  }
+  .glim-hovercard-media > svg { width: var(--glyph-l); height: var(--glyph-l); }
+  .glim-hovercard-names {
+    display: grid;
+    min-width: 0;
+  }
+  .glim-hovercard-title {
+    overflow: hidden;
+    font-size: var(--text-body);
+    font-weight: var(--font-weight-strong);
+    line-height: 1.25rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .glim-hovercard-meta {
+    color: var(--carbon-text-muted);
+    font-size: var(--text-meta);
+    line-height: 1rem;
+  }
+  .glim-hovercard-facts {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+    padding-top: var(--space-6);
+    box-shadow: inset 0 1px 0 var(--carbon-border);
+  }
+  .glim-hovercard-fact {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-8);
+    font-size: var(--text-subline);
+    line-height: 1.25rem;
+  }
+  .glim-hovercard-fact > dt { color: var(--carbon-text-muted); }
+  .glim-hovercard-fact > dd { margin: 0; }
 }
 @media (prefers-reduced-motion: no-preference) {
   .glim-hovercard[data-state="open"] { animation: glim-fade-in var(--motion-fade-dur, 0s) ease-out; }

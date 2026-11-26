@@ -30,6 +30,8 @@ export interface ToastAction {
 
 export interface ToastEntry {
   id: string;
+  /** A short first line in the text colour; the message then reads as its description. */
+  title?: string;
   message: string;
   severity: ToastSeverity;
   action?: ToastAction;
@@ -51,7 +53,7 @@ export interface ToastEntry {
  *  ones are left to drop, and drops the oldest paused one only after that. */
 export function addToast(
   list: ToastEntry[],
-  toast: { id: string; message: string; severity: ToastSeverity; action?: ToastAction },
+  toast: { id: string; title?: string; message: string; severity: ToastSeverity; action?: ToastAction },
   now: number,
   durationMs: number = TOAST_DURATION_MS,
   maxVisible: number = MAX_VISIBLE_TOASTS
@@ -59,6 +61,7 @@ export function addToast(
   const sticky = !!toast.action;
   const newest: ToastEntry = {
     id: toast.id,
+    ...(toast.title ? { title: toast.title } : {}),
     message: toast.message,
     severity: toast.severity,
     action: toast.action,
@@ -144,6 +147,11 @@ export function toastPoliteness(severity: ToastSeverity): Politeness {
   return severity === "fail" ? "assertive" : "polite";
 }
 
+/** What a screen reader hears for a toast: the title, then the message. */
+export function toastAnnouncement(toast: { title?: string; message: string }): string {
+  return toast.title ? `${toast.title}. ${toast.message}` : toast.message;
+}
+
 /** Quiet mode filters by severity: it hides routine successes, never warnings
  *  or failures. */
 export function shouldShowToast(severity: ToastSeverity, quiet: boolean): boolean {
@@ -152,6 +160,7 @@ export function shouldShowToast(severity: ToastSeverity, quiet: boolean): boolea
 
 export interface ToastViewportEntry {
   id: string;
+  title?: string;
   message: string;
   severity: ToastSeverity;
   action?: ToastAction;

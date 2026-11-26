@@ -1,5 +1,5 @@
-import { Fragment, useEffect, useRef } from "react";
-import { announce, liveRegionAttrs, MARKS, softBreaks, TOAST_MARKS, toastPoliteness, type ToastAction, type ToastSeverity, type ToastViewportEntry } from "@glimstone/core";
+import { Fragment, useEffect, useLayoutEffect, useRef } from "react";
+import { announce, liveRegionAttrs, MARKS, softBreaks, TOAST_MARKS, toastAnnouncement, toastPoliteness, watchToastStack, type ToastAction, type ToastSeverity, type ToastViewportEntry } from "@glimstone/core";
 import { Button } from "./Button.tsx";
 import { MarkSvg } from "./glyphs.tsx";
 
@@ -19,6 +19,8 @@ export type { ToastViewportEntry } from "@glimstone/core";
 
 export interface ToastCardProps {
   id: string;
+  /** A short first line; the message then reads as its description. */
+  title?: string;
   message: string;
   severity: ToastSeverity;
   /** A button such as Undo. A press runs it and dismisses the toast. */
@@ -34,6 +36,7 @@ export interface ToastCardProps {
 
 export function ToastCard({
   id,
+  title,
   message,
   severity,
   action,
@@ -59,10 +62,11 @@ export function ToastCard({
           onDismiss(id);
         }
       }}
-      className="glim-toast glim-toast-card"
+      className={title ? "glim-toast glim-toast-card glim-toast-card--titled" : "glim-toast glim-toast-card"}
     >
       <MarkSvg mark={TOAST_MARKS[severity]} className={`glim-toast-glyph glim-toast-glyph--${severity}`} />
       <div className="glim-toast-body">
+        {title && <p className="glim-toast-title">{title}</p>}
         <p className="glim-toast-message">
           {softBreaks(message).map((part, i) => (
             <Fragment key={i}>
@@ -117,18 +121,21 @@ export function ToastViewport({ toasts, dismissLabel, onDismiss, onMouseEnter, o
     for (const t of toasts) {
       if (heard.current.has(t.id)) continue;
       heard.current.add(t.id);
-      announce(t.message, toastPoliteness(t.severity));
+      announce(toastAnnouncement(t), toastPoliteness(t.severity));
     }
   }, [toasts]);
+  const stack = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => watchToastStack(stack.current!), []);
   return (
     <>
     <div className="glim-sr-only" {...liveRegionAttrs("polite")} />
     <div className="glim-sr-only" {...liveRegionAttrs("assertive")} />
-    <div data-glim="ToastViewport" className="glim-toast-stack">
+    <div ref={stack} data-glim="ToastViewport" className="glim-toast-stack">
       {toasts.map((t) => (
         <ToastCard
           key={t.id}
           id={t.id}
+          title={t.title}
           message={t.message}
           severity={t.severity}
           action={t.action}

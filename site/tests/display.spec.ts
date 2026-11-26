@@ -98,7 +98,7 @@ test.describe("HoverCard", () => {
     await open(page, "/components/hover-card");
     await link(page).hover();
     await expect(card(page)).toBeVisible();
-    await expect(card(page)).toContainText("2.1 TB free");
+    await expect(card(page)).toContainText("2.1 TB");
     await page.mouse.move(0, 0);
     await expect(card(page)).toHaveCount(0);
   });
@@ -112,6 +112,18 @@ test.describe("HoverCard", () => {
     await page.keyboard.press("Escape");
     await expect(card(page)).toHaveCount(0);
     await expect(link(page)).toBeFocused();
+  });
+
+  test("[hovercard-head] a tile, the name over a quiet line, and up to three figures", async ({ page }) => {
+    await open(page, "/components/hover-card");
+    await link(page).hover();
+    await expect(card(page).locator(".glim-hovercard-head .glim-hovercard-media svg")).toHaveCount(1);
+    await expect(card(page).locator(".glim-hovercard-title")).toHaveText("Cellar");
+    await expect(card(page).locator(".glim-hovercard-meta")).toHaveText("Connected, last seen a minute ago");
+    await expect(card(page).locator(".glim-hovercard-fact dt")).toHaveText(["Free", "Backups", "Last run"]);
+    await expect(card(page).locator(".glim-hovercard-fact dd")).toHaveText(["2.1 TB", "214", "4 min"]);
+    const tile = await card(page).locator(".glim-hovercard-media").evaluate((t) => t.getBoundingClientRect().width);
+    expect(tile).toBeCloseTo(40, 0);
   });
 });
 

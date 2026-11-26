@@ -184,8 +184,10 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "toast-room", when: "A toast has an action", then: "The action stands under the message, so the message keeps the width of the card." },
       { id: "toast-path", when: "The message holds a path", then: "It breaks after a slash rather than inside a word." },
       { id: "toast-phone", when: "The window is a phone's", then: "A toast takes the window's width, the newest two show, and the page stays in view." },
-      { id: "toast-pixels", when: "Toasts stack up", then: "Each one is a whole number of pixels tall, whatever its severity, label mode or width, and right to left too, so none of them lands on a half pixel." },
+      { id: "toast-pixels", when: "Toasts stack up", then: "The one in front is a whole number of pixels tall, whatever its severity, label mode or width, and right to left too, so it never lands on a half pixel." },
       { id: "toast-settled", when: "A toast has come in", then: "It holds no transform at any motion level, so a fixed element inside it is placed against the window." },
+      { id: "toast-title", when: "A toast has a title", then: "The title leads in the text colour and the message under it is its quieter description, both read out in that order." },
+      { id: "toast-stack", when: "Several toasts are up", then: "The newest stands in front, the two before it show an 8px edge each behind it, and under the pointer they fan out one above the other." },
     ],
   },
   WindowBar: {
@@ -945,6 +947,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "hovercard-link", when: "Always", then: "The trigger is a link to the page the card previews." },
       { id: "hovercard-hover", when: "The pointer rests on the link, and later leaves it", then: "The card opens after openDelay and closes after closeDelay." },
       { id: "hovercard-focus", keys: ["Tab", "Escape"], when: "The keyboard reaches the link", then: "The card opens, Escape closes it and the focus stays on the link." },
+      { id: "hovercard-head", when: "It has media, a title, a meta line and facts", then: "Its head is a 40px tile beside the name over the quiet line, and up to three figures stand under it, name and value." },
     ],
   },
   Carousel: {

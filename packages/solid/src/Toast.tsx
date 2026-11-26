@@ -1,5 +1,5 @@
-import { createEffect, createMemo, For, Index, Show } from "solid-js";
-import { announce, liveRegionAttrs, MARKS, softBreaks, TOAST_MARKS, toastPoliteness, type ToastAction, type ToastSeverity, type ToastViewportEntry } from "@glimstone/core";
+import { createEffect, createMemo, For, Index, onCleanup, onMount, Show } from "solid-js";
+import { announce, liveRegionAttrs, MARKS, softBreaks, TOAST_MARKS, toastAnnouncement, toastPoliteness, watchToastStack, type ToastAction, type ToastSeverity, type ToastViewportEntry } from "@glimstone/core";
 import { Button } from "./Button.tsx";
 import { MarkSvg } from "./glyphs.tsx";
 
@@ -18,6 +18,8 @@ export type { ToastViewportEntry } from "@glimstone/core";
 
 export interface ToastCardProps {
   id: string;
+  /** A short first line; the message then reads as its description. */
+  title?: string;
   message: string;
   severity: ToastSeverity;
   /** A button such as Undo. A press runs it and dismisses the toast. */
@@ -47,10 +49,13 @@ export function ToastCard(props: ToastCardProps) {
           props.onDismiss(props.id);
         }
       }}
-      class="glim-toast glim-toast-card"
+      class={props.title ? "glim-toast glim-toast-card glim-toast-card--titled" : "glim-toast glim-toast-card"}
     >
       <MarkSvg mark={TOAST_MARKS[props.severity]} class={`glim-toast-glyph glim-toast-glyph--${props.severity}`} />
       <div class="glim-toast-body">
+        <Show when={props.title}>
+          <p class="glim-toast-title">{props.title}</p>
+        </Show>
         <p class="glim-toast-message">
           <Index each={softBreaks(props.message)}>
             {(part, i) => (
@@ -104,9 +109,11 @@ export function ToastViewport(props: ToastViewportProps) {
     for (const t of props.toasts) {
       if (heard.has(t.id)) continue;
       heard.add(t.id);
-      announce(t.message, toastPoliteness(t.severity));
+      announce(toastAnnouncement(t), toastPoliteness(t.severity));
     }
   });
+  let stack!: HTMLDivElement;
+  onMount(() => onCleanup(watchToastStack(stack)));
   // A paused toast arrives as a new object, so the cards are keyed by id and
   // the one under the pointer stays the same element.
   const ids = createMemo(() => props.toasts.map((t) => t.id));
@@ -115,11 +122,12 @@ export function ToastViewport(props: ToastViewportProps) {
     <>
       <div class="glim-sr-only" {...liveRegionAttrs("polite")} />
       <div class="glim-sr-only" {...liveRegionAttrs("assertive")} />
-      <div data-glim="ToastViewport" class="glim-toast-stack">
+      <div ref={stack} data-glim="ToastViewport" class="glim-toast-stack">
         <For each={ids()}>
           {(id) => (
             <ToastCard
               id={id}
+              title={entry(id).title}
               message={entry(id).message}
               severity={entry(id).severity}
               action={entry(id).action}

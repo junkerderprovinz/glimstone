@@ -265,6 +265,27 @@
   },
   {
    "action": "CREATE",
+   "id": "variable:layout.glyph-s",
+   "name": "layout/glyph-s",
+   "variableCollectionId": "collection:Size",
+   "resolvedType": "FLOAT"
+  },
+  {
+   "action": "CREATE",
+   "id": "variable:layout.glyph-m",
+   "name": "layout/glyph-m",
+   "variableCollectionId": "collection:Size",
+   "resolvedType": "FLOAT"
+  },
+  {
+   "action": "CREATE",
+   "id": "variable:layout.glyph-l",
+   "name": "layout/glyph-l",
+   "variableCollectionId": "collection:Size",
+   "resolvedType": "FLOAT"
+  },
+  {
+   "action": "CREATE",
    "id": "variable:button.btn-h",
    "name": "button/btn-h",
    "variableCollectionId": "collection:Size",
@@ -1110,6 +1131,21 @@
     "type": "VARIABLE_ALIAS",
     "id": "variable:layout.text-meta"
    }
+  },
+  {
+   "variableId": "variable:layout.glyph-s",
+   "modeId": "mode:Size:Value",
+   "value": 14
+  },
+  {
+   "variableId": "variable:layout.glyph-m",
+   "modeId": "mode:Size:Value",
+   "value": 16
+  },
+  {
+   "variableId": "variable:layout.glyph-l",
+   "modeId": "mode:Size:Value",
+   "value": 20
   },
   {
    "variableId": "variable:button.btn-h",

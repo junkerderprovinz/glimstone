@@ -1,4 +1,11 @@
 import { HoverCard } from "@glimstone/solid/HoverCard";
+import { Glyph } from "../solid/glyph";
+
+const FACTS = [
+  { label: "Free", value: "2.1 TB" },
+  { label: "Backups", value: "214" },
+  { label: "Last run", value: "4 min" },
+];
 
 export default function HoverCardServer() {
   return (
@@ -7,12 +14,10 @@ export default function HoverCardServer() {
       <HoverCard
         label="the server in the cellar"
         href="#/components/hover-card"
-        content={() => (
-          <div style={{ display: "grid", gap: "4px" }}>
-            <strong>Cellar</strong>
-            <span>Connected, 2.1 TB free, last seen a minute ago</span>
-          </div>
-        )}
+        media={<Glyph name="IconServer" size={20} />}
+        title="Cellar"
+        meta="Connected, last seen a minute ago"
+        facts={FACTS}
       />{" "}
       and finished in four minutes.
     </p>
