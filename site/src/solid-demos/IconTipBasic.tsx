@@ -6,10 +6,10 @@ const ROW = "inline-flex h-8 w-8 items-center justify-center rounded-pill text-c
 export default function IconTipBasic() {
   return (
     <>
-      <IconTipButton tip="Move up" class={ROW}>
+      <IconTipButton tip="Move up" shortcut="Alt ↑" class={ROW}>
         <Glyph name="IconMoveUp" />
       </IconTipButton>
-      <IconTipButton tip="Move down" class={ROW}>
+      <IconTipButton tip="Move down" shortcut="Alt ↓" class={ROW}>
         <Glyph name="IconMoveDown" />
       </IconTipButton>
       <IconTipButton tip="Pin to the top" class={ROW} ariaPressed={false}>

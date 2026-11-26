@@ -5,6 +5,9 @@
   export interface IconTipButtonProps extends Omit<HTMLButtonAttributes, "children" | "type" | "class" | "disabled" | "style"> {
     /** The hover and focus explanation, and the button's `aria-label`. */
     tip: string;
+    /** The keyboard shortcut that does the same, drawn beside the tip and
+     *  announced as `aria-keyshortcuts`, such as "Ctrl K". */
+    shortcut?: string;
     disabled?: boolean;
     class?: string;
     /** `aria-pressed` for a trigger that toggles rather than acts once. Omitted,
@@ -34,9 +37,9 @@
   // Unlike Button, this control has no label to hide: a bare glyph in a box the
   // caller sizes, with no width stage, no tone fill and no place in the label
   // mode engine. The other props of a <button> go to the button.
-  let { tip, disabled, class: className, style, children, href, type = "button", ariaPressed, ariaExpanded, ...rest }: IconTipButtonProps = $props();
+  let { tip, shortcut, disabled, class: className, style, children, href, type = "button", ariaPressed, ariaExpanded, ...rest }: IconTipButtonProps = $props();
 
-  const tooltip = useTipBubble(() => tip, () => !!disabled);
+  const tooltip = useTipBubble(() => tip, () => !!disabled, { shortcut });
   const link = $derived(!!href && !disabled);
 </script>
 
@@ -51,6 +54,7 @@
     disabled={link ? undefined : disabled}
     bind:this={tooltip.trigger}
     aria-label={tip}
+    aria-keyshortcuts={shortcut?.trim().replace(/\s+/g, "+")}
     aria-pressed={ariaPressed}
     aria-expanded={ariaExpanded}
     aria-describedby={tooltip.describedBy}

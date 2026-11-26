@@ -13,6 +13,9 @@ import { useTipBubble } from "./useTipBubble.tsx";
 export interface IconTipButtonProps extends Omit<JSX.ButtonHTMLAttributes<HTMLButtonElement>, "children" | "type" | "class" | "disabled" | "style"> {
   /** The hover and focus explanation, and the button's `aria-label`. */
   tip: string;
+  /** The keyboard shortcut that does the same, drawn beside the tip and
+   *  announced as `aria-keyshortcuts`, such as "Ctrl K". */
+  shortcut?: string;
   disabled?: boolean;
   class?: string;
   /** `aria-pressed` for a trigger that toggles rather than acts once. Omitted,
@@ -31,8 +34,8 @@ export interface IconTipButtonProps extends Omit<JSX.ButtonHTMLAttributes<HTMLBu
 
 export function IconTipButton(props: IconTipButtonProps) {
   const merged = mergeProps({ type: "button" } as const, props);
-  const [own, rest] = splitProps(merged, ["tip", "disabled", "class", "style", "children", "href", "type", "ariaPressed", "ariaExpanded", "ref"]);
-  const tooltip = useTipBubble(() => own.tip, () => !!own.disabled);
+  const [own, rest] = splitProps(merged, ["tip", "shortcut", "disabled", "class", "style", "children", "href", "type", "ariaPressed", "ariaExpanded", "ref"]);
+  const tooltip = useTipBubble(() => own.tip, () => !!own.disabled, { shortcut: own.shortcut });
   const link = () => !!own.href && !own.disabled;
   const attach = (el: HTMLButtonElement) => {
     tooltip.ref(el);
@@ -54,6 +57,7 @@ export function IconTipButton(props: IconTipButtonProps) {
           aria-pressed={own.ariaPressed}
           aria-expanded={own.ariaExpanded}
           aria-describedby={tooltip.describedBy()}
+          aria-keyshortcuts={own.shortcut?.trim().replace(/\s+/g, "+")}
           {...tooltip.handlers}
           class={own.class}
           style={own.style}

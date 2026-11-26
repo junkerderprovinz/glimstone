@@ -13,9 +13,9 @@ defineProps<{ state: TipBubble }>();
       :ref="(el) => (state.bubble.value = el as HTMLElement | null)"
       :id="state.id"
       role="tooltip"
-      class="glim-bubble glim-fade"
+      :class="['glim-bubble', 'glim-fade', `glim-bubble--${state.kind}`]"
     >
-      {{ state.text.value }}
+      {{ state.text.value }}<kbd v-if="state.shortcut" class="glim-bubble-key">{{ state.shortcut }}</kbd>
     </div>
   </Teleport>
 </template>

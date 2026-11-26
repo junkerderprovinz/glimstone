@@ -3,9 +3,12 @@
 // by every hover tooltip and every "(i)" info icon.
 
 import { pointerWasLast, trackInputModality } from './inputModality.ts';
+import { restTimer } from './tipBubble.ts';
 
 const BUBBLE_ID = 'glim-bubble';
 let currentTrigger: Element | null = null;
+const tipTimer = restTimer('tip');
+const isInfo = (trigger: Element) => trigger.classList.contains('glim-info-icon');
 
 function bubbleEl(): HTMLDivElement {
   let el = document.getElementById(BUBBLE_ID) as HTMLDivElement | null;
@@ -22,8 +25,12 @@ function bubbleEl(): HTMLDivElement {
 }
 
 function hide(): void {
+  tipTimer.cancel();
   const el = document.getElementById(BUBBLE_ID);
-  if (el) el.style.display = 'none';
+  if (el && el.style.display !== 'none') {
+    el.style.display = 'none';
+    tipTimer.closed(el.classList.contains('glim-bubble--tip'));
+  }
   currentTrigger = null;
 }
 
@@ -33,6 +40,8 @@ function show(trigger: Element): void {
   const el = bubbleEl();
   const rect = trigger.getBoundingClientRect();
   el.textContent = tip;
+  el.classList.toggle('glim-bubble--info', isInfo(trigger));
+  el.classList.toggle('glim-bubble--tip', !isInfo(trigger));
   // Shown before measuring, since offsetWidth and offsetHeight need layout.
   el.style.display = 'block';
   const vw = document.documentElement.clientWidth || window.innerWidth;
@@ -101,8 +110,11 @@ export function wireTooltips(): void {
       }
     }
     if (trigger === currentTrigger) return;
+    tipTimer.cancel();
     currentTrigger = trigger;
-    show(trigger);
+    // A control's tooltip waits for the pointer to rest; focus and the "(i)" answer at once.
+    if (event.type === 'mouseover' && !isInfo(trigger)) tipTimer.rest(() => currentTrigger === trigger && show(trigger));
+    else show(trigger);
   }
 
   function out(event: Event): void {

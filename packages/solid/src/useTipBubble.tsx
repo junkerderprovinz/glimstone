@@ -1,5 +1,5 @@
 import { createEffect, createSignal, createUniqueId, on, onCleanup, Show, type Accessor, type JSX } from "solid-js";
-import { dismissBubbleOn, placeBubble, pointerWasLast, trackInputModality } from "@glimstone/core";
+import { dismissBubbleOn, placeBubble, pointerWasLast, restTimer, trackInputModality, type BubbleKind } from "@glimstone/core";
 import { Lift } from "./Lift.tsx";
 
 // The one hover and focus tooltip, as a primitive. The "(i)" of InfoBubble, a
@@ -23,8 +23,17 @@ export interface TipBubble {
   /** The bubble, lifted to the body so no card's `overflow: hidden` clips it.
    *  Render it beside the trigger. */
   bubble: JSX.Element;
+  /** Opens a tooltip once the pointer has rested, an info bubble at once. */
   show: () => void;
   hide: () => void;
+}
+
+export interface TipBubbleOptions {
+  /** `tip` names a control: small, inverted, once the pointer has rested.
+   *  `info` explains: roomier, on the floating surface, at once. */
+  kind?: BubbleKind;
+  /** A keyboard shortcut drawn beside a tooltip's words, such as "Ctrl K". */
+  shortcut?: string;
 }
 
 /**
@@ -32,8 +41,9 @@ export interface TipBubble {
  * @param disabled  Whether the trigger is disabled; a disabled trigger sits in a
  *                  TipWrap, so flipping it swaps the element under the pointer.
  */
-export function useTipBubble(tip: () => string | undefined, disabled: () => boolean = () => false): TipBubble {
+export function useTipBubble(tip: () => string | undefined, disabled: () => boolean = () => false, { kind = "tip", shortcut }: TipBubbleOptions = {}): TipBubble {
   const [open, setOpen] = createSignal(false);
+  const timer = restTimer(kind);
   let trigger: HTMLElement | null = null;
   let bubble: HTMLDivElement | undefined;
   const id = createUniqueId();
@@ -43,9 +53,14 @@ export function useTipBubble(tip: () => string | undefined, disabled: () => bool
   trackInputModality();
 
   const show = () => {
-    if (tip()) setOpen(true);
+    if (tip()) timer.rest(() => setOpen(true));
   };
-  const hide = () => setOpen(false);
+  const hide = () => {
+    timer.cancel();
+    timer.closed(open());
+    setOpen(false);
+  };
+  onCleanup(timer.cancel);
 
   // Effects run once the bubble is in the document and before the browser
   // paints, so it is measured and placed without a visible jump.
@@ -63,7 +78,7 @@ export function useTipBubble(tip: () => string | undefined, disabled: () => bool
       onMouseEnter: show,
       onMouseLeave: hide,
       onFocus: () => {
-        if (!pointerWasLast()) show();
+        if (tip() && !pointerWasLast()) setOpen(true);
       },
       onBlur: hide,
     },
@@ -71,8 +86,11 @@ export function useTipBubble(tip: () => string | undefined, disabled: () => bool
     bubble: (
       <Show when={shown()}>
         <Lift>
-          <div ref={bubble} role="tooltip" id={id} class="glim-bubble glim-fade">
+          <div ref={bubble} role="tooltip" id={id} class={`glim-bubble glim-fade glim-bubble--${kind}`}>
             {tip()}
+            <Show when={shortcut}>
+              <kbd class="glim-bubble-key">{shortcut}</kbd>
+            </Show>
           </div>
         </Lift>
       </Show>

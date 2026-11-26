@@ -170,6 +170,7 @@ export const CONTRACTS: Record<string, Contract> = {
     rows: [
       { id: "icontip-name", when: "Always", then: "The tip is the accessible name." },
       { id: "icontip-focus", keys: ["Tab"], when: "The button receives keyboard focus", then: "The tip shows in the house bubble, not the browser's." },
+      { id: "icontip-rest", when: "The pointer rests on the button, then moves to the next", then: "The tip opens after 500ms, small and inverted with the shortcut beside it, and the next one opens at once." },
     ],
   },
   Toast: {

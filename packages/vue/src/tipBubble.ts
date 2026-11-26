@@ -5,7 +5,7 @@
 // say; TipBubble.vue draws the bubble, and the core places and dismisses it.
 
 import { computed, onScopeDispose, ref, shallowRef, useId, watch, type ComputedRef, type Ref } from "vue";
-import { dismissBubbleOn, placeBubble, pointerWasLast, trackInputModality } from "@glimstone/core";
+import { dismissBubbleOn, placeBubble, pointerWasLast, restTimer, trackInputModality, type BubbleKind } from "@glimstone/core";
 
 export interface TipBubble {
   /** The trigger the bubble is placed against. */
@@ -14,16 +14,28 @@ export interface TipBubble {
   id: string;
   text: ComputedRef<string | undefined>;
   shown: ComputedRef<boolean>;
+  kind: BubbleKind;
+  shortcut: string | undefined;
   /** `aria-describedby` while open, so the bubble is announced as the trigger's description. */
   describedBy: ComputedRef<string | undefined>;
+  /** Opens a tooltip once the pointer has rested, an info bubble at once. */
   show: () => void;
   hide: () => void;
   /** Focus opens the bubble only when the keyboard was used last; a mouse user gets focus as a side effect. */
   showOnFocus: () => void;
 }
 
-export function useTipBubble(tip: () => string | undefined, disabled: () => boolean = () => false): TipBubble {
+export interface TipBubbleOptions {
+  /** `tip` names a control: small, inverted, once the pointer has rested.
+   *  `info` explains: roomier, on the floating surface, at once. */
+  kind?: BubbleKind;
+  /** A keyboard shortcut drawn beside a tooltip's words, such as "Ctrl K". */
+  shortcut?: string;
+}
+
+export function useTipBubble(tip: () => string | undefined, disabled: () => boolean = () => false, { kind = "tip", shortcut }: TipBubbleOptions = {}): TipBubble {
   const open = ref(false);
+  const timer = restTimer(kind);
   const trigger = shallowRef<HTMLElement | null>(null);
   const bubble = shallowRef<HTMLElement | null>(null);
   const id = useId();
@@ -36,9 +48,11 @@ export function useTipBubble(tip: () => string | undefined, disabled: () => bool
 
   trackInputModality();
   const show = () => {
-    if (text.value) open.value = true;
+    if (text.value) timer.rest(() => (open.value = true));
   };
   const hide = () => {
+    timer.cancel();
+    timer.closed(open.value);
     open.value = false;
   };
 
@@ -56,7 +70,10 @@ export function useTipBubble(tip: () => string | undefined, disabled: () => bool
     },
     { flush: "post" },
   );
-  onScopeDispose(() => stop?.());
+  onScopeDispose(() => {
+    stop?.();
+    timer.cancel();
+  });
 
   return {
     trigger,
@@ -64,11 +81,13 @@ export function useTipBubble(tip: () => string | undefined, disabled: () => bool
     id,
     text,
     shown,
+    kind,
+    shortcut,
     describedBy: computed(() => (shown.value ? id : undefined)),
     show,
     hide,
     showOnFocus: () => {
-      if (!pointerWasLast()) show();
+      if (text.value && !pointerWasLast()) open.value = true;
     },
   };
 }

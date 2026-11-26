@@ -19,7 +19,7 @@
   // has less margin on a busy fill.
   let { tip, onAccent = false }: InfoBubbleProps = $props();
 
-  const tooltip = useTipBubble(() => tip);
+  const tooltip = useTipBubble(() => tip, undefined, { kind: "info" });
 </script>
 
 <!-- Inside a <label>, a click on a span is forwarded to the label's field,

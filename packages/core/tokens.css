@@ -861,6 +861,34 @@
     border-width: 6px 6px 0 6px;
     border-color: var(--surface-overlay) transparent transparent transparent;
   }
+  /* A tooltip names a control, so it is small and inverted with only a
+     contact shadow, and a shortcut stands beside its words. An info bubble
+     explains, so it gets room to read on the floating surface. */
+  .glim-bubble--tip {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    max-width: 15rem;
+    padding: var(--space-2) var(--space-4);
+    border-radius: max(0.25rem, calc(var(--radius-control) - var(--space-1)));
+    background-color: var(--carbon-text);
+    color: var(--carbon-bg);
+    box-shadow: var(--elevation-notch);
+    font-weight: var(--font-weight-medium);
+    line-height: 1rem;
+  }
+  .glim-bubble--tip::before { display: none; }
+  .glim-bubble-key {
+    font: inherit;
+    font-variant-numeric: tabular-nums;
+    color: color-mix(in oklab, currentColor 62%, transparent);
+  }
+  .glim-bubble--info {
+    max-width: 18rem;
+    padding: var(--space-5) var(--space-6);
+    font-size: var(--text-subline);
+    line-height: 1.25rem;
+  }
 
   /* The "(i)" trigger (packages/core/src/tooltip.ts's infoIcon()): a bare stroked glyph,
      never a filled badge, since a fill would read as a control. Opacity carries

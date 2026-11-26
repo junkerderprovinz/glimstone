@@ -77,7 +77,7 @@ export { useFieldName } from "./fieldName.js";
 export { deviceGlyph } from "./fortressParts.js";
 export { glyphFor, IconBack, IconCalendar, IconCancel, IconCheck, IconClose, IconCopy, IconExpand, IconEye, IconEyeOff, IconFolderOpen, IconForward, IconPause, IconPencil, IconPlay, IconResetArrow, IconSearch, IconStar, IconTrash, IconUpload, IconWindowMaximise, IconWindowMinimise, IconWindowRestore, setGlyphResolver } from "./glyphs.js";
 export * from "./portalHue.svelte.js";
-export { useTipBubble, type TipBubble } from "./bubble.svelte.js";
+export { useTipBubble, type TipBubble, type TipBubbleOptions } from "./bubble.svelte.js";
 export * from "./useDragArmed.svelte.js";
 export { usePaypalButtons, type PaypalButtonsOptions } from "./usePaypalButtons.svelte.js";
 export type { ToastAction } from "@glimstone/core";

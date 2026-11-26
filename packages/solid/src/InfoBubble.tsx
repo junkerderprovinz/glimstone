@@ -11,7 +11,7 @@ import { useTipBubble } from "./useTipBubble.tsx";
 // has less margin on a busy fill.
 export function InfoBubble(props: { tip: string; onAccent?: boolean }) {
   const merged = mergeProps({ onAccent: false }, props);
-  const tooltip = useTipBubble(() => merged.tip);
+  const tooltip = useTipBubble(() => merged.tip, undefined, { kind: "info" });
 
   return (
     <>

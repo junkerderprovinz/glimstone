@@ -8,6 +8,6 @@
   const pin = glyph("IconPin");
 </script>
 
-<IconTipButton tip="Move up" class={ROW}>{@render up()}</IconTipButton>
-<IconTipButton tip="Move down" class={ROW}>{@render down()}</IconTipButton>
+<IconTipButton tip="Move up" shortcut="Alt ↑" class={ROW}>{@render up()}</IconTipButton>
+<IconTipButton tip="Move down" shortcut="Alt ↓" class={ROW}>{@render down()}</IconTipButton>
 <IconTipButton tip="Pin to the top" class={ROW} ariaPressed={false}>{@render pin()}</IconTipButton>

@@ -1480,8 +1480,35 @@ test.describe("IconTipButton", () => {
     await open(page, "/components/icon-tip-button");
     const button = stage(page, "IconTipBasic").getByRole("button", { name: "Move up" });
     await button.focus();
-    await expect(page.getByRole("tooltip")).toHaveText("Move up");
+    await expect(page.getByRole("tooltip")).toHaveText(/^Move up/);
     await expect(button).not.toHaveAttribute("title", /.*/);
+  });
+
+  test("[icontip-rest] the tooltip waits for the pointer to rest, then the next comes at once", async ({ page }) => {
+    await open(page, "/components/icon-tip-button");
+    const up = stage(page, "IconTipBasic").getByRole("button", { name: "Move up" });
+    const down = stage(page, "IconTipBasic").getByRole("button", { name: "Move down" });
+    // Timed in the page, since a busy machine stretches the time between two steps of the test.
+    await up.evaluate((b) => {
+      const w = window as unknown as { entered?: number; shownAt?: number };
+      b.addEventListener("mouseenter", () => (w.entered ??= performance.now()));
+      new MutationObserver(() => {
+        if (document.querySelector("[role=tooltip]")) w.shownAt ??= performance.now();
+      }).observe(document.body, { childList: true, subtree: true });
+    });
+    await up.hover();
+    await expect(page.getByRole("tooltip")).toHaveText("Move upAlt ↑");
+    const waited = await page.evaluate(() => {
+      const w = window as unknown as { entered: number; shownAt: number };
+      return w.shownAt - w.entered;
+    });
+    expect(waited).toBeGreaterThanOrEqual(450);
+    await expect(page.getByRole("tooltip").locator(".glim-bubble-key")).toHaveText("Alt ↑");
+    const look = await page.getByRole("tooltip").evaluate((b) => ({ ground: getComputedStyle(b).backgroundColor, ink: getComputedStyle(b).color, text: getComputedStyle(document.body).color }));
+    expect(look.ground).toBe(look.text);
+    await down.hover();
+    await expect(page.getByRole("tooltip")).toHaveText(/^Move down/, { timeout: 200 });
+    await expect(up).toHaveAttribute("aria-keyshortcuts", "Alt+↑");
   });
 });
 
