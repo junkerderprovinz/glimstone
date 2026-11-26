@@ -779,3 +779,11 @@ Noto Sans was the house font from 2.8 to 4.9. Plex was compared with Inter, Geis
 ## The motion engine: a subtle level without spring
 
 Subtle used to ease without overshoot, 140ms for a page, and the transitions of single controls wrote their own times, 120 or 150ms on a fixed curve, which no level and no reduced motion reached. Subtle now springs on a `linear()` curve that passes its mark by under one per cent, 220ms for a page, and every transition reads the engine's tokens. The toast keeps a plain ease at wild, where the wild spring would carry it back past the screen edge.
+
+## The time picker: from a popover of two lists to a field of segments
+
+The time picker was a field-shaped button that took no typing and opened a popover with two scrolling listbox columns, hours and minutes, on the shared positioning of the tooltip engine. Its trap was dismissal: a scroll listener on the window also caught the columns' own scrolls and the popover closed a moment after it opened. GlimStone 5 makes the time a field of two spin buttons that the arrows count and digits type, the way an operating system's own time fields work, and the popover with its columns goes. A span of two times became one field as well, where the old design needed two pickers side by side.
+
+## A field in a row: widths of its own
+
+A field in a FieldRow used to keep the width it was given, short, medium or wide, at the row's end, so a card with a medium and a wide field had controls that started at different places. In GlimStone 5 every field that takes text fills what the name leaves up to 24rem, short of a 9rem column for the names, and only a short field keeps its width. A field that drops under its name took the row's end and its own width there. It takes the whole line now.
