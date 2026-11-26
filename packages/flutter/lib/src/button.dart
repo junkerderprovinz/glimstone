@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'engines.dart';
+import 'engines.g.dart';
 import 'glyph.dart';
+import 'paint.dart';
 import 'theme.dart';
 import 'tokens.g.dart';
 
@@ -81,6 +84,8 @@ class _GlimButtonState extends State<GlimButton> {
     final showText = !hasGlyph || !hides;
     final showGlyph = hasGlyph && widget.mode != GlimLabelMode.text;
     final (ground, ink) = _fill(glim);
+    final lighting = GlimEngines.lightingOf(context);
+    final motion = GlimEngines.motionOf(context);
 
     final face = Row(
       mainAxisSize: MainAxisSize.min,
@@ -103,9 +108,12 @@ class _GlimButtonState extends State<GlimButton> {
               style: TextStyle(
                   color: ink,
                   fontSize: GlimMetrics.textBody,
-                  fontWeight: FontWeight.w500,
-                  // A variable font such as Noto Sans takes its weight here.
-                  fontVariations: const [FontVariation.weight(500)],
+                  letterSpacing: GlimMetrics.textBody * GlimType.trackingBody,
+                  fontWeight: GlimType.medium,
+                  // A variable face takes its weight from the axis.
+                  fontVariations: [
+                    FontVariation.weight(GlimType.medium.value.toDouble())
+                  ],
                   height: 1.4),
             ),
           ),
@@ -136,24 +144,39 @@ class _GlimButtonState extends State<GlimButton> {
               onTap: widget.onPressed,
               child: Opacity(
                 opacity: enabled ? 1 : 0.5,
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 120),
-                  height: GlimMetrics.btnH,
-                  // The words take a width stage as a floor; the modes that
-                  // hide them hug the glyph.
-                  constraints: hides && hasGlyph
-                      ? null
-                      : BoxConstraints(minWidth: glimStageWidth(widget.label, glyph: hasGlyph)),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: GlimMetrics.btnPadX),
-                  decoration: BoxDecoration(
-                    color: ground,
-                    borderRadius: BorderRadius.circular(glim.shape.pill),
-                    border: _focus
-                        ? Border.all(color: glim.accent, width: 2)
-                        : null,
+                child: GlimFocusRing(
+                  visible: _focus,
+                  shape: glim.shape,
+                  radius: glim.shape.pill,
+                  color: glim.focusRing,
+                  width: glimFocusRingWidth,
+                  child: AnimatedContainer(
+                    duration: motion.controlDur,
+                    curve: motion.ease,
+                    height: GlimMetrics.btnH,
+                    // The words take a width stage as a floor; the modes that
+                    // hide them hug the glyph.
+                    constraints: hides && hasGlyph
+                        ? null
+                        : BoxConstraints(
+                            minWidth:
+                                glimStageWidth(widget.label, glyph: hasGlyph)),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: GlimMetrics.btnPadX),
+                    decoration: GlimDecoration(
+                      color: ground,
+                      gradient: widget.tone == GlimTone.accent
+                          ? lighting.sheen
+                          : null,
+                      shape: glimOutline(glim.shape, glim.shape.pill),
+                      shadows: switch (widget.tone) {
+                        GlimTone.accent => lighting.accent,
+                        GlimTone.neutral => lighting.control,
+                        _ => const [],
+                      },
+                    ),
+                    child: face,
                   ),
-                  child: face,
                 ),
               ),
             ),
@@ -166,36 +189,31 @@ class _GlimButtonState extends State<GlimButton> {
         : button;
   }
 
-  // The surface tones take rule 40's tint under the pointer: a little of the
-  // accent in the ground and all of it in the glyph.
-  bool get _tinted =>
-      (_hover || _focus) &&
-      (widget.tone == GlimTone.neutral || widget.tone == GlimTone.subtle);
+  bool get _surface =>
+      widget.tone == GlimTone.neutral || widget.tone == GlimTone.subtle;
+
+  // The surface tones take rule 40's tint under the pointer and the keys: a
+  // little of the accent in the ground and all of it in the glyph.
+  bool get _tinted => (_hover || _focus) && _surface;
 
   (Color, Color) _fill(GlimTheme g) {
-    final lit = _hover || _focus;
+    // The fills and the washes deepen under the pointer only.
+    final lit = _hover || (_focus && _surface);
     return switch (widget.tone) {
       GlimTone.accent => (lit ? g.accentHover : g.accent, g.accentContrast),
-      GlimTone.neutral => (
-          lit
-              ? g.hover
-              : g.carbonSurface3,
-          g.carbonText
+      GlimTone.neutral => (lit ? g.hover : g.carbonSurface3, g.carbonText),
+      GlimTone.subtle => (lit ? g.hover : g.carbonSurface2, g.carbonText),
+      GlimTone.ok => (
+          lit ? g.statusOkWashHover : g.statusOkWash,
+          g.statusOkText
         ),
-      GlimTone.subtle => (
-          lit
-              ? g.hover
-              : g.carbonSurface2,
-          g.carbonText
-        ),
-      GlimTone.ok => (lit ? g.statusOkHover : g.statusOkSolid, g.carbonBg),
       GlimTone.danger => (
-          lit ? g.statusFailHover : g.statusFailSolid,
-          g.carbonBg
+          lit ? g.statusFailWashHover : g.statusFailWash,
+          g.statusFailText
         ),
       GlimTone.warn => (
-          lit ? g.statusWarnHover : g.statusWarnSolid,
-          g.carbonBg
+          lit ? g.statusWarnWashHover : g.statusWarnWash,
+          g.statusWarnText
         ),
     };
   }
