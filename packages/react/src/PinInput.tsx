@@ -1,14 +1,15 @@
-import { useId } from "react";
+import { Fragment, useId } from "react";
 import * as pinInput from "@zag-js/pin-input";
 import { normalizeProps, useMachine } from "@zag-js/react";
-import { PIN_INPUT_TEXT, pinCells, type PinInputText } from "@glimstone/core";
+import { PIN_INPUT_TEXT, pinCells, pinGroupStarts, type PinInputText } from "@glimstone/core";
 import { useFieldName } from "./fieldName.ts";
 
 export type { PinInputText } from "@glimstone/core";
 
 // A short code typed one character to a box, such as the six digits of a
 // second factor. A code is data, so the boxes run left to right in every
-// language. Inside a FieldRow the row names it.
+// language, and a code of six or nine stands in groups of three. Inside a
+// FieldRow the row names it.
 
 export interface PinInputProps {
   label?: string;
@@ -55,7 +56,10 @@ export function PinInput({ label, value, onChange, onComplete, length = 6, type 
       </label>
       <div {...api.getControlProps()} className="glim-pin-control">
         {api.items.map((index) => (
-          <input key={index} {...api.getInputProps({ index })} className="glim-input glim-pin-cell glim-num" />
+          <Fragment key={index}>
+            {pinGroupStarts(index, length) && <span className="glim-pin-sep" aria-hidden="true" />}
+            <input {...api.getInputProps({ index })} className="glim-input glim-pin-cell glim-num" />
+          </Fragment>
         ))}
       </div>
       <input {...api.getHiddenInputProps()} />

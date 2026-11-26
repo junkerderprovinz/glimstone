@@ -77,7 +77,31 @@ test('a text field, a select trigger and a combobox rest, hover and focus on the
   assert.equal(fill('.glim-input:focus'), 'var(--field-focus)');
   assert.equal(fill('.glim-select-trigger:focus-visible'), 'var(--field-focus)');
   assert.equal(fill('.glim-combobox-control:focus-within'), 'var(--field-focus)');
-  assert.match(calm, /:is\(\.glim-input, \.glim-select-trigger, \.glim-combobox-control\):hover:not\([^)]*\) \{\s*background-color: var\(--field-hover\);/);
+  const hover = rules.find((r) => r.selector.includes(':hover:not(:focus, :focus-within') && declared(r.body, 'background-color') === 'var(--field-hover)');
+  assert.ok(hover, 'no hover step');
+  for (const field of [...FIELDS, ...SHELLS]) assert.ok(hover.selector.includes(field), field);
+});
+
+// The fields whose shell is a wrapper around their parts.
+const SHELLS = ['.glim-num-wrap:has(> .glim-num-field)', '.glim-tags-control', '.glim-time'];
+
+test('a number field, the tags and a time take a text field\'s shell and its steps', () => {
+  for (const shell of SHELLS) {
+    const body = rules.filter((r) => r.selector.startsWith(':is(') && r.selector.endsWith(')') && selectors(r.selector.slice(4, -1)).includes(shell)).map((r) => r.body).join(';');
+    assert.equal(declared(body, 'background-color'), 'var(--field-rest)', shell);
+    assert.equal(declared(body, 'box-shadow'), 'var(--field-sink)', shell);
+  }
+  const focus = rules.find((r) => r.selector.startsWith(':is(.glim-num-wrap') && r.selector.endsWith(':focus-within'));
+  assert.equal(declared(focus!.body, 'background-color'), 'var(--field-focus)');
+});
+
+test('a number field and the tags turn red like a text field when what they hold is wrong', () => {
+  assert.equal(fill(':is(.glim-num-wrap, .glim-tags-control):has([aria-invalid="true"])'), 'var(--field-invalid)');
+});
+
+test('the hex field of a colour picker is a field like any other', () => {
+  assert.equal(fill('.glim-picker-hex'), 'var(--field-rest)');
+  assert.equal(fill('.glim-picker-hex:focus'), 'var(--field-focus)');
 });
 
 test('a field sits a little into its surface and takes the accent ink for its caret', () => {

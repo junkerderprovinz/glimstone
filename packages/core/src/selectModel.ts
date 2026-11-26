@@ -262,3 +262,57 @@ export function shake(el: HTMLElement): () => void {
     el.removeEventListener("animationend", done);
   };
 }
+
+/**
+ * Opens a list over its trigger with the row of `value` where the trigger's
+ * value stands, so the eye finds the value where it left it. The list waits
+ * hidden (data-aligning) for the frames the machine takes to place it and
+ * then grows out of that row. Where the window is too short above, the list
+ * stops 8px below its top. The shift goes on the list, inside the positioner
+ * the machine owns, so the machine's next placement keeps it. Returns the
+ * teardown.
+ */
+export function alignOverTrigger(list: HTMLElement, trigger: HTMLElement, value: string | null): () => void {
+  list.setAttribute("data-aligning", "");
+  list.style.translate = "";
+  list.style.transformOrigin = "";
+  let frame = requestAnimationFrame(() => {
+    frame = requestAnimationFrame(() => {
+      const row = value === null ? null : list.querySelector<HTMLElement>(`[data-value="${CSS.escape(value)}"]`);
+      if (row) {
+        const t = trigger.getBoundingClientRect();
+        const r = row.getBoundingClientRect();
+        const l = list.getBoundingClientRect();
+        const rowTop = r.top - l.top;
+        const top = Math.max(8, t.top + t.height / 2 - rowTop - r.height / 2);
+        // The words line up at their start, the right edge under a right-to-left
+        // language. The machine lines the list up with the trigger on that side
+        // and may still be moving it, so both are measured from their own edge.
+        const side = getComputedStyle(trigger).direction === "rtl" ? "right" : "left";
+        const words = (row.querySelector<HTMLElement>('[data-part="item-text"]') ?? row).getBoundingClientRect()[side] - l[side];
+        const face = (trigger.querySelector<HTMLElement>(".glim-select-value") ?? trigger).getBoundingClientRect()[side] - t[side];
+        list.style.transformOrigin = `50% ${rowTop + r.height / 2}px`;
+        list.style.translate = `${Math.round(face - words)}px ${Math.round(top - l.top)}px`;
+      }
+      list.removeAttribute("data-aligning");
+    });
+  });
+  return () => {
+    cancelAnimationFrame(frame);
+    list.removeAttribute("data-aligning");
+  };
+}
+
+export interface SearchParts {
+  before: string;
+  hit: string;
+  after: string;
+}
+
+/** A label cut round the first place the search matches it, ignoring case, or null where it does not match. */
+export function searchParts(label: string, query: string): SearchParts | null {
+  if (!query) return null;
+  const at = label.toLocaleLowerCase().indexOf(query.toLocaleLowerCase());
+  if (at < 0) return null;
+  return { before: label.slice(0, at), hit: label.slice(at, at + query.length), after: label.slice(at + query.length) };
+}

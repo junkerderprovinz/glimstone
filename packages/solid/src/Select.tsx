@@ -3,6 +3,7 @@ import * as menu from "@zag-js/menu";
 import * as select from "@zag-js/select";
 import { normalizeProps, useMachine } from "@zag-js/solid";
 import {
+  alignOverTrigger,
   closeOnPageMove,
   endOption,
   defaultWidth,
@@ -162,6 +163,10 @@ function ListSelect<T extends string>(props: Inner<T>) {
   const trigger = useTrigger(props, all);
   createEffect(on(() => api().open, (open) => open && onCleanup(closeOnPageMove(() => api().setOpen(false)))));
   const hue = usePortalHue(() => api().open, trigger.el);
+  let content!: HTMLDivElement;
+  // The list is placed once as it opens, not again with every change of the machine.
+  const open = createMemo(() => api().open);
+  createEffect(on(open, (isOpen) => isOpen && onCleanup(alignOverTrigger(content, trigger.el()!, props.value))));
   const glyphs = () => all().some((o) => o.glyph);
   const parts = () => selectRowParts(props.rows, glyphs());
   const onKeyDown = (e: KeyboardEvent) => {
@@ -199,7 +204,7 @@ function ListSelect<T extends string>(props: Inner<T>) {
       {trigger.tip.bubble}
       <Lift>
         <Positioner attrs={api().getPositionerProps()} hue={hue}>
-          <div {...api().getContentProps()} class={parts().content}>
+          <div {...api().getContentProps()} ref={content} class={parts().content}>
             <For each={props.groups}>
               {(g, gi) => {
                 const id = () => `${uid}-g${gi()}`;
@@ -254,28 +259,28 @@ function MenuSelect<T extends string>(props: Inner<T>) {
   const hue = usePortalHue(() => api().open, trigger.el);
   const glyphs = () => all().some((o) => o.glyph);
   const parts = () => selectRowParts(props.rows, glyphs());
+  let content!: HTMLDivElement;
   const subId = (gi: number, ei: number) => `${uid}-sub-${gi}-${ei}`;
 
+  const open = createMemo(() => api().open);
   createEffect(
-    on(
-      () => api().open,
-      (open) => {
-        if (!open) return;
-        onCleanup(closeOnPageMove(() => api().setOpen(false)));
-        // Zag highlights on the frame after the list opens, so the home row
-        // goes one frame later still.
-        const home = homeRow(props.groups, props.value, subId);
-        if (home === null) return;
-        let inner = 0;
-        const outer = requestAnimationFrame(() => {
-          inner = requestAnimationFrame(() => api().setHighlightedValue(home));
-        });
-        onCleanup(() => {
-          cancelAnimationFrame(outer);
-          cancelAnimationFrame(inner);
-        });
-      },
-    ),
+    on(open, (isOpen) => {
+      if (!isOpen) return;
+      onCleanup(closeOnPageMove(() => api().setOpen(false)));
+      // Zag highlights on the frame after the list opens, so the home row
+      // goes one frame later still.
+      const home = homeRow(props.groups, props.value, subId);
+      onCleanup(alignOverTrigger(content, trigger.el()!, home));
+      if (home === null) return;
+      let inner = 0;
+      const outer = requestAnimationFrame(() => {
+        inner = requestAnimationFrame(() => api().setHighlightedValue(home));
+      });
+      onCleanup(() => {
+        cancelAnimationFrame(outer);
+        cancelAnimationFrame(inner);
+      });
+    }),
   );
 
   const text = () => faceLabels(all(), props.value, props.placeholder, props.width).text;
@@ -320,7 +325,7 @@ function MenuSelect<T extends string>(props: Inner<T>) {
       {trigger.tip.bubble}
       <Lift>
         <Positioner attrs={api().getPositionerProps()} hue={hue}>
-          <div {...api().getContentProps()} class={parts().content}>
+          <div {...api().getContentProps()} ref={content} class={parts().content}>
             <For each={props.groups}>
               {(g, gi) => {
                 const id = () => `g${gi()}`;

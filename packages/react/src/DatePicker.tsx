@@ -56,6 +56,10 @@ export function DatePicker({ label, value, onChange, min, max, locale, disabled 
   const hue = usePortalHue(api.open, triggerRef);
   const positioner = api.getPositionerProps();
   const months = api.getMonthsGrid({ columns: 4, format: "short" });
+  // Which way the month turned, so the new one slides in from that side.
+  const month = api.visibleRange.start.toString();
+  const seen = useRef<{ month: string; turn?: "next" | "prev" }>({ month });
+  if (seen.current.month !== month) seen.current = { month, turn: month > seen.current.month ? "next" : "prev" };
   const years = api.getYearsGrid({ columns: 4 });
   return (
     <div data-glim="DatePicker" {...api.getRootProps()} className="glim-date">
@@ -93,7 +97,7 @@ export function DatePicker({ label, value, onChange, min, max, locale, disabled 
                     ))}
                   </tr>
                 </thead>
-                <tbody {...api.getTableBodyProps({ view: "day" })}>
+                <tbody key={month} {...api.getTableBodyProps({ view: "day" })} data-turn={seen.current.turn}>
                   {api.weeks.map((week, i) => (
                     <tr key={i} {...api.getTableRowProps({ view: "day" })}>
                       {week.map((day, j) => (

@@ -60,6 +60,12 @@ export function DatePicker(raw: DatePickerProps) {
   const hue = usePortalHue(() => api().open, trigger);
   const positioner = () => api().getPositionerProps();
   const months = () => api().getMonthsGrid({ columns: 4, format: "short" });
+  // Which way the month turned, so the new one slides in from that side.
+  const month = createMemo(() => api().visibleRange.start.toString());
+  const seen = createMemo<{ month: string; turn?: "next" | "prev" }>(
+    (last) => (last.month === month() ? last : { month: month(), turn: month() > last.month ? "next" : "prev" }),
+    { month: month() },
+  );
   const years = () => api().getYearsGrid({ columns: 4 });
   return (
     <div data-glim="DatePicker" {...api().getRootProps()} class="glim-date">
@@ -103,23 +109,28 @@ export function DatePicker(raw: DatePickerProps) {
                     </For>
                   </tr>
                 </thead>
-                <tbody {...api().getTableBodyProps({ view: "day" })}>
-                  <For each={api().weeks}>
-                    {(week) => (
-                      <tr {...api().getTableRowProps({ view: "day" })}>
-                        <For each={week}>
-                          {(day) => (
-                            <td {...api().getDayTableCellProps({ value: day })}>
-                              <div {...api().getDayTableCellTriggerProps({ value: day })} class="glim-date-cell glim-num">
-                                {day.day}
-                              </div>
-                            </td>
-                          )}
-                        </For>
-                      </tr>
-                    )}
-                  </For>
-                </tbody>
+                {/* One body per month, so the new one slides in afresh. */}
+                <For each={[month()]}>
+                  {() => (
+                    <tbody {...api().getTableBodyProps({ view: "day" })} data-turn={seen().turn}>
+                      <For each={api().weeks}>
+                        {(week) => (
+                          <tr {...api().getTableRowProps({ view: "day" })}>
+                            <For each={week}>
+                              {(day) => (
+                                <td {...api().getDayTableCellProps({ value: day })}>
+                                  <div {...api().getDayTableCellTriggerProps({ value: day })} class="glim-date-cell glim-num">
+                                    {day.day}
+                                  </div>
+                                </td>
+                              )}
+                            </For>
+                          </tr>
+                        )}
+                      </For>
+                    </tbody>
+                  )}
+                </For>
               </table>
             </div>
             <div {...api().getViewProps({ view: "month" })} hidden={api().view !== "month"}>

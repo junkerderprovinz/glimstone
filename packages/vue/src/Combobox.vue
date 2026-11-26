@@ -1,17 +1,19 @@
 <script setup lang="ts">
 import { portalTarget } from "@glimstone/core";
-import { computed, shallowRef, useId, watch } from "vue";
+import { computed, ref, shallowRef, useId, watch } from "vue";
 import * as combobox from "@zag-js/combobox";
 import { normalizeProps, useMachine } from "@zag-js/vue";
 import { useFieldName } from "./fieldName";
 import { IconCheck, IconExpand } from "./glyphs";
+import SearchHit from "./SearchHit.vue";
 import type { SelectOption } from "./selectParts";
 
 // A field that filters a list while somebody types, for lists too long for a
 // Select: containers, time zones, languages. Focus stays in the field while
 // the arrows move through the list, and a search that finds nothing says so
-// instead of closing, since a list that vanishes reads as a broken field. Inside
-// a FieldRow the row names it and draws the words.
+// instead of closing, since a list that vanishes reads as a broken field. While
+// somebody types, each row sets apart the part that matches. Inside a FieldRow
+// the row names it and draws the words.
 const props = withDefaults(
   defineProps<{
     label?: string;
@@ -32,6 +34,7 @@ const model = defineModel<string>({ required: true });
 const name = useFieldName(() => props.label);
 const id = useId();
 const shown = shallowRef(props.options);
+const query = ref("");
 watch(
   () => props.options,
   (o) => (shown.value = o),
@@ -56,10 +59,15 @@ const service = useMachine(
     // Typing opens the list after the filter has run, so only a close may put
     // the full list back.
     onOpenChange: ({ open }: { open: boolean }) => {
-      if (!open) shown.value = props.options;
+      if (open) return;
+      shown.value = props.options;
+      query.value = "";
     },
-    onInputValueChange: ({ inputValue }: { inputValue: string }) => {
-      const q = inputValue.toLocaleLowerCase();
+    onInputValueChange: ({ inputValue, reason }: { inputValue: string; reason?: string }) => {
+      // Picking an item writes its label into the field, which is no search.
+      const typed = reason === "input-change" ? inputValue : "";
+      const q = typed.toLocaleLowerCase();
+      query.value = typed;
       shown.value = props.options.filter((o) => o.label.toLocaleLowerCase().includes(q));
     },
     onValueChange: (d: { value: string[] }) => (model.value = d.value[0] ?? ""),
@@ -82,7 +90,7 @@ const api = computed(() => combobox.connect(service, normalizeProps));
         <ul v-bind="api.getContentProps()" class="glim-select-content">
           <li v-if="shown.length === 0" class="glim-select-empty">{{ empty }}</li>
           <li v-for="item in shown" :key="item.value" v-bind="api.getItemProps({ item })" class="glim-select-item">
-            <span v-bind="api.getItemTextProps({ item })">{{ item.label }}</span>
+            <span v-bind="api.getItemTextProps({ item })" :data-search="query ? '' : undefined"><SearchHit :label="item.label" :query="query" /></span>
             <span v-bind="api.getItemIndicatorProps({ item })" class="glim-select-check"><IconCheck /></span>
           </li>
         </ul>

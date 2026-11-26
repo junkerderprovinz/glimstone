@@ -2,7 +2,7 @@
   import { untrack } from "svelte";
   import * as menu from "@zag-js/menu";
   import { mergeProps, normalizeProps, useMachine } from "@zag-js/svelte";
-  import { closeOnPageMove, faceLabels, flattenRuns, homeRow, isSubmenu, pageDir, SELECT_POSITIONING, selectRootClass, selectRowParts } from "@glimstone/core";
+  import { alignOverTrigger, closeOnPageMove, faceLabels, flattenRuns, homeRow, isSubmenu, pageDir, SELECT_POSITIONING, selectRootClass, selectRowParts } from "@glimstone/core";
   import { useTipBubble } from "./bubble.svelte.js";
   import { IconExpand } from "./glyphs.js";
   import { lift } from "./lift.js";
@@ -65,6 +65,7 @@
     count: () => shake ?? 0,
   });
   const hue = usePortalHue(() => open, () => ref);
+  let content: HTMLDivElement;
 
   $effect(() => {
     if (!open) return;
@@ -72,13 +73,20 @@
     // Zag highlights on the frame after the list opens, so the home row goes
     // one frame later still.
     const home = untrack(() => homeRow(groups, value, subId));
-    if (home === null) return stop;
+    const unalign = untrack(() => alignOverTrigger(content, ref!, home));
+    if (home === null) {
+      return () => {
+        stop();
+        unalign();
+      };
+    }
     let inner = 0;
     const outer = requestAnimationFrame(() => {
       inner = requestAnimationFrame(() => api.setHighlightedValue(home));
     });
     return () => {
       stop();
+      unalign();
       cancelAnimationFrame(outer);
       cancelAnimationFrame(inner);
     };
@@ -123,7 +131,7 @@
   </div>
   <TipBubble state={bubble} />
   <div {@attach lift} {...mergeProps(api.getPositionerProps(), { style: hue.style })} class={`glim-select-positioner ${hue.className}`.trim()}>
-    <div {...api.getContentProps()} class={parts.content}>
+    <div {...api.getContentProps()} bind:this={content} class={parts.content}>
       {#each groups as g, gi (gi)}
         {#if g.entries.length > 0}
           <div {...g.heading ? api.getItemGroupProps({ id: `g${gi}` }) : {}} class="glim-select-group">

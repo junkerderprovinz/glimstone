@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, useId } from "vue";
+import { computed, ref, useId, watch } from "vue";
 import * as datePicker from "@zag-js/date-picker";
 import { normalizeProps, useMachine } from "@zag-js/vue";
 import { DATE_PICKER_TEXT, formatDay, pageDir, pageLocale, portalTarget, SELECT_POSITIONING, type DatePickerText, type DateView } from "@glimstone/core";
@@ -55,6 +55,10 @@ const service = useMachine(
   })),
 );
 const api = computed(() => datePicker.connect(service, normalizeProps));
+// Which way the month turned, so the new one slides in from that side.
+const month = computed(() => api.value.visibleRange.start.toString());
+const turn = ref<"next" | "prev" | undefined>(undefined);
+watch(month, (now, before) => (turn.value = now > before ? "next" : "prev"));
 const triggerRef = ref<HTMLElement | null>(null);
 const hue = usePortalHue(() => api.value.open, triggerRef);
 const months = computed(() => api.value.getMonthsGrid({ columns: 4, format: "short" }));
@@ -85,7 +89,7 @@ const years = computed(() => api.value.getYearsGrid({ columns: 4 }));
                   <th v-for="(day, i) in api.weekDays" :key="i" scope="col" :aria-label="day.long" class="glim-date-weekday">{{ day.narrow }}</th>
                 </tr>
               </thead>
-              <tbody v-bind="api.getTableBodyProps({ view: 'day' })">
+              <tbody :key="month" v-bind="api.getTableBodyProps({ view: 'day' })" :data-turn="turn">
                 <tr v-for="(week, i) in api.weeks" :key="i" v-bind="api.getTableRowProps({ view: 'day' })">
                   <td v-for="(day, j) in week" :key="j" v-bind="api.getDayTableCellProps({ value: day })">
                     <div v-bind="api.getDayTableCellTriggerProps({ value: day })" class="glim-date-cell glim-num">{{ day.day }}</div>

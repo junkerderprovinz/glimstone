@@ -16,8 +16,6 @@
 </script>
 
 <script lang="ts">
-  import { IconCheck } from "./glyphs.js";
-
   // The checkbox, for the places a box stands instead of a switch (rule 39):
   // "Don't show again" under a notice, and choices that are applied together,
   // such as which columns a list shows. Every setting is a Toggle. It is a
@@ -43,6 +41,21 @@
   onkeydown={(e) => e.key === "Enter" && e.preventDefault()}
   class={["glim-checkbox", slim && "glim-checkbox--slim", className].filter(Boolean).join(" ")}
 >
-  <span class="glim-checkbox-box" aria-hidden="true">{@render IconCheck()}</span>
+  <!-- The tick draws itself in as its dash closes. -->
+  <span class="glim-checkbox-box" aria-hidden="true"
+    ><svg viewBox="0 0 14 14" width="14" height="14" fill="none" class="glim-mark"
+      ><path
+        d="M3 7.4 5.7 10 11 4.2"
+        stroke="currentColor"
+        stroke-width="2.2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        pathLength="1"
+        stroke-dasharray="1"
+        stroke-dashoffset={checked ? 0 : 1}
+        class="glim-checkbox-tick"
+      /></svg
+    ></span
+  >
   {#if !bare}<span>{label}</span>{/if}
 </button>

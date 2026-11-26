@@ -64,6 +64,14 @@
   let trigger = $state<HTMLButtonElement | null>(null);
   const hue = usePortalHue(() => api.open, () => trigger);
   const months = $derived(api.getMonthsGrid({ columns: 4, format: "short" }));
+  // Which way the month turned, so the new one slides in from that side.
+  const month = $derived(api.visibleRange.start.toString());
+  let seen: { month: string; turn?: "next" | "prev" } | undefined;
+  const turn = $derived.by(() => {
+    if (!seen) seen = { month };
+    else if (seen.month !== month) seen = { month, turn: month > seen.month ? "next" : "prev" };
+    return seen.turn;
+  });
   const years = $derived(api.getYearsGrid({ columns: 4 }));
 </script>
 
@@ -91,17 +99,19 @@
               {/each}
             </tr>
           </thead>
-          <tbody {...api.getTableBodyProps({ view: "day" })}>
-            {#each api.weeks as week, i (i)}
-              <tr {...api.getTableRowProps({ view: "day" })}>
-                {#each week as day, j (j)}
-                  <td {...api.getDayTableCellProps({ value: day })}>
-                    <div {...api.getDayTableCellTriggerProps({ value: day })} class="glim-date-cell glim-num">{day.day}</div>
-                  </td>
-                {/each}
-              </tr>
-            {/each}
-          </tbody>
+          {#key month}
+            <tbody {...api.getTableBodyProps({ view: "day" })} data-turn={turn}>
+              {#each api.weeks as week, i (i)}
+                <tr {...api.getTableRowProps({ view: "day" })}>
+                  {#each week as day, j (j)}
+                    <td {...api.getDayTableCellProps({ value: day })}>
+                      <div {...api.getDayTableCellTriggerProps({ value: day })} class="glim-date-cell glim-num">{day.day}</div>
+                    </td>
+                  {/each}
+                </tr>
+              {/each}
+            </tbody>
+          {/key}
         </table>
       </div>
       <div {...api.getViewProps({ view: "month" })} hidden={api.view !== "month"}>

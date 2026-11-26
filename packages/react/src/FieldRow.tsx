@@ -1,11 +1,12 @@
-import { useContext, useRef, type HTMLAttributes, type ReactNode } from "react";
-import { pressRowControl, type PillTone } from "@glimstone/core";
+import { useContext, useEffect, useRef, type HTMLAttributes, type ReactNode } from "react";
+import { pressRowControl, pressRowSwitch, watchRowStack, type PillTone } from "@glimstone/core";
 import { FieldRowContext, FieldRowGroupContext } from "./fieldName.ts";
 import { InfoBubble } from "./InfoBubble.tsx";
 import { Pill } from "./Pill.tsx";
 
 // One labelled row of a card or a window (rule 35): the name at its start and
-// the control at its end, which takes its accessible name from `label`.
+// the control at its end, which takes its accessible name from `label`. A row
+// with a switch is one target from end to end.
 
 export interface FieldRowProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
   /** The row's name, and the accessible name of the control in it. */
@@ -25,9 +26,10 @@ export interface FieldRowProps extends Omit<HTMLAttributes<HTMLDivElement>, "chi
   className?: string;
 }
 
-export function FieldRow({ label, drawn, hint, value, tone, wide, children, className, ...rest }: FieldRowProps) {
+export function FieldRow({ label, drawn, hint, value, tone, wide, children, className, onClick, ...rest }: FieldRowProps) {
   const row = useRef<HTMLDivElement>(null);
   const inGroup = useContext(FieldRowGroupContext);
+  useEffect(() => watchRowStack(row.current!), []);
   const control =
     children ??
     (value !== undefined && (
@@ -37,7 +39,16 @@ export function FieldRow({ label, drawn, hint, value, tone, wide, children, clas
     ));
   return (
     <FieldRowContext.Provider value={label}>
-      <div data-glim="FieldRow" {...rest} ref={row} className={["glim-field-row", wide && "glim-field-row--wide", className].filter(Boolean).join(" ")}>
+      <div
+        data-glim="FieldRow"
+        data-press=""
+        {...rest}
+        ref={row}
+        onClick={(e) => {
+          onClick?.(e);
+          pressRowSwitch(row.current!, e.target);
+        }}
+        className={["glim-field-row", wide && "glim-field-row--wide", className].filter(Boolean).join(" ")}>
         <span className="glim-field-row-name">
           <span className="glim-field-row-label" onClick={() => pressRowControl(row.current!)}>
             {drawn ?? label}

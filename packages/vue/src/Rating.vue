@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, useId } from "vue";
+import { computed, ref, useId } from "vue";
 import * as ratingGroup from "@zag-js/rating-group";
 import { normalizeProps, useMachine } from "@zag-js/vue";
 import { RATING_TEXT, pageDir, type RatingText } from "@glimstone/core";
@@ -28,6 +28,9 @@ const value = defineModel<number>({ required: true });
 
 const name = useFieldName(() => props.label);
 const words = computed(() => ({ ...RATING_TEXT, ...props.text }));
+// Counts the picks: the stylesheet names one spring per parity, so a second
+// pick of the same star springs again.
+const picks = ref(0);
 const id = useId();
 const service = useMachine(
   ratingGroup.machine,
@@ -39,7 +42,10 @@ const service = useMachine(
     allowHalf: props.allowHalf,
     readOnly: props.readOnly,
     disabled: props.disabled,
-    onValueChange: (d: { value: number }) => (value.value = d.value),
+    onValueChange: (d: { value: number }) => {
+      picks.value++;
+      value.value = d.value;
+    },
     translations: { ratingValueText: (index: number) => words.value.star(index, props.count) },
   })),
 );
@@ -50,7 +56,14 @@ const api = computed(() => ratingGroup.connect(service, normalizeProps));
   <div data-glim="Rating" v-bind="api.getRootProps()" class="glim-rating">
     <label v-bind="api.getLabelProps()" :class="label === undefined ? 'glim-sr-only' : 'glim-field-label'">{{ name }}</label>
     <div v-bind="api.getControlProps()" class="glim-rating-control">
-      <span v-for="index in api.items" :key="index" v-bind="api.getItemProps({ index })" class="glim-rating-star">
+      <span
+        v-for="index in api.items"
+        :key="index"
+        v-bind="api.getItemProps({ index })"
+        :data-pop="picks > 0 && index === Math.ceil(api.value) ? (picks % 2 ? 'odd' : 'even') : undefined"
+        :style="{ '--i': index - 1 }"
+        class="glim-rating-star"
+      >
         <IconStar />
         <span class="glim-rating-fill" aria-hidden="true"><IconStar /></span>
       </span>

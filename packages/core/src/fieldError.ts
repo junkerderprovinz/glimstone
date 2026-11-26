@@ -29,3 +29,29 @@ export function fieldErrorView(error: string | undefined, id: string, describedB
   const errorId = `${id}-error`;
   return { invalid: true, describedBy: describedBy ? `${describedBy} ${errorId}` : errorId, errorId };
 }
+
+/**
+ * Calls `done` once a closing error line has played its way out. The field
+ * keeps the line a moment with data-closing after its value is fixed, and
+ * where motion is off or the system asks for less the line has no animation
+ * and goes at once. Returns the cancel.
+ */
+export function whenFieldErrorClosed(line: HTMLElement, done: () => void): () => void {
+  const style = getComputedStyle(line);
+  if (style.display === "none" || style.animationName === "none" || parseFloat(style.animationDuration) === 0) {
+    done();
+    return () => {};
+  }
+  const finish = () => {
+    clearTimeout(late);
+    line.removeEventListener("animationend", finish);
+    done();
+  };
+  // A line whose animation the browser never runs, as in a tab in the background, still goes.
+  const late = setTimeout(finish, 1000);
+  line.addEventListener("animationend", finish);
+  return () => {
+    clearTimeout(late);
+    line.removeEventListener("animationend", finish);
+  };
+}

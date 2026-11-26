@@ -55,7 +55,10 @@ export function Toggle(props: ToggleProps) {
     <>
       <span data-glim="Toggle" ref={frame} class={`glim-toggle${own.class ? ` ${own.class}` : ""}`} style={own.style}>
         <Show when={own.label !== undefined && !own.hideLabel}>
-          <span class="glim-toggle-label">{own.label}</span>
+          {/* The words are part of the switch's target, as a native label's would be. */}
+          <span class="glim-toggle-label" onClick={() => frame.querySelector<HTMLButtonElement>(".glim-toggle-track")?.click()}>
+            {own.label}
+          </span>
         </Show>
         {/* No `title=`: the label is always visible beside the switch, so a
             tooltip would only repeat it. A refused switch's bubble says why. */}

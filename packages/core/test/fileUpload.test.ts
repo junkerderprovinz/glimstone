@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { FILE_UPLOAD_TEXT, formatFileSize } from '../src/fileUpload.ts';
+import { FILE_UPLOAD_TEXT, formatFileSize, uploadProgressView } from '../src/fileUpload.ts';
 
 test('a size takes the largest unit that keeps it at one or more', () => {
   assert.equal(formatFileSize(512, 'en'), '512 byte');
@@ -19,4 +19,12 @@ test('a size is written in the language of the page', () => {
 
 test('a refused file is named with its reason', () => {
   assert.equal(FILE_UPLOAD_TEXT.refused('scan.tiff', 'FILE_TOO_LARGE'), 'scan.tiff is too large');
+});
+
+test('a file going up fills its row by its share, and stops filling once it is there', () => {
+  assert.deepEqual(uploadProgressView(undefined), { state: undefined, share: undefined });
+  assert.deepEqual(uploadProgressView(0.4), { state: 'sending', share: 0.4 });
+  assert.deepEqual(uploadProgressView(1), { state: 'done', share: 1 });
+  assert.deepEqual(uploadProgressView(1.3), { state: 'done', share: 1 });
+  assert.deepEqual(uploadProgressView(-1), { state: 'sending', share: 0 });
 });

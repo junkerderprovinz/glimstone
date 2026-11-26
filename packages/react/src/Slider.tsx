@@ -50,6 +50,9 @@ export function Slider({ label, value, onChange, min, max, step = 1, format, dis
         </div>
         {api.value.map((_, index) => (
           <div key={index} {...api.getThumbProps({ index })} className="glim-slider-thumb">
+            <span className="glim-slider-bubble" aria-hidden="true">
+              {format(api.value[index]!)}
+            </span>
             <input {...api.getHiddenInputProps({ index })} />
           </div>
         ))}

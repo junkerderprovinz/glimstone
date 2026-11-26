@@ -128,12 +128,14 @@ test.describe("TagsInput", () => {
     await expect(tags(page)).toHaveText(["photos", "weekly", "music", "videos"]);
   });
 
-  test("[tags-ground] a tag stands one surface step above the field", async ({ page }) => {
+  test("[tags-ground] a tag stands on a wash of the field, its cross quieter than its words", async ({ page }) => {
     await open(page, "/components/tags-input");
-    const ground = (sel: string) => stage(page, "TagsInputLabels").locator(sel).first().evaluate((el) => getComputedStyle(el).backgroundColor);
-    expect(await ground(".glim-tag")).not.toBe(await ground(".glim-tags-control"));
+    const look = (sel: string) => stage(page, "TagsInputLabels").locator(sel).first().evaluate((el) => ({ ground: getComputedStyle(el).backgroundColor, ink: getComputedStyle(el).color }));
+    expect((await look(".glim-tag")).ground).not.toBe((await look(".glim-tags-control")).ground);
+    expect((await look(".glim-tag")).ground).toMatch(/^rgba\(/);
+    expect((await look(".glim-tag-remove")).ink).not.toBe((await look(".glim-tag")).ink);
     await field(page).click();
-    expect(await ground(".glim-tag")).not.toBe(await ground(".glim-tags-control"));
+    expect((await look(".glim-tag")).ground).not.toBe((await look(".glim-tags-control")).ground);
   });
 });
 
@@ -152,7 +154,7 @@ test.describe("FileUpload", () => {
     await zone(page).focus();
     await page.keyboard.press("Enter");
     await (await chooser).setFiles(settings);
-    await expect(stage(page, "FileUploadImport").getByText("Ready to import settings.json")).toBeVisible();
+    await expect(stage(page, "FileUploadImport").locator(".glim-upload-name")).toHaveText("settings.json");
   });
 
   test("[upload-list] a chosen file stands under the zone with its size and a remove button", async ({ page }) => {
@@ -184,7 +186,7 @@ test.describe("FileUpload", () => {
     await zone(page).dispatchEvent("dragenter", { dataTransfer: data });
     await zone(page).dispatchEvent("dragover", { dataTransfer: data });
     await expect(zone(page)).toHaveAttribute("data-dragging", "");
-    expect(await zone(page).evaluate((el) => getComputedStyle(el).backgroundColor)).not.toBe(rest);
+    await expect.poll(() => zone(page).evaluate((el) => getComputedStyle(el).backgroundColor)).not.toBe(rest);
     await zone(page).dispatchEvent("dragleave", { dataTransfer: data });
     await expect(zone(page)).not.toHaveAttribute("data-dragging", "");
   });
@@ -331,20 +333,24 @@ test.describe("AngleSlider", () => {
     await expect(thumb(page)).toHaveAttribute("aria-valuenow", "90");
     await expect(thumb(page)).toHaveAttribute("aria-valuemax", "360");
     await expect(thumb(page)).toHaveAttribute("aria-valuetext", "90°");
-    await expect(stage(page, "AngleSliderTurn").locator(".glim-angle-value")).toHaveText("90°");
+    const value = stage(page, "AngleSliderTurn").locator(".glim-angle-value");
+    await expect(value).toHaveText("90°");
+    const [dial, middle] = await Promise.all([stage(page, "AngleSliderTurn").locator(".glim-angle-dial").boundingBox(), value.boundingBox()]);
+    expect(Math.abs(dial!.x + dial!.width / 2 - (middle!.x + middle!.width / 2))).toBeLessThan(1.5);
+    expect(Math.abs(dial!.y + dial!.height / 2 - (middle!.y + middle!.height / 2))).toBeLessThan(1.5);
   });
 
   test("[angle-arrows] the arrows turn it a step", async ({ page }) => {
     await open(page, "/components/angle-slider");
     await thumb(page).focus();
     await page.keyboard.press("ArrowRight");
-    await expect(thumb(page)).toHaveAttribute("aria-valuenow", "91");
+    await expect(thumb(page)).toHaveAttribute("aria-valuenow", "105");
     await page.keyboard.press("ArrowLeft");
     await page.keyboard.press("ArrowLeft");
-    await expect(thumb(page)).toHaveAttribute("aria-valuenow", "89");
+    await expect(thumb(page)).toHaveAttribute("aria-valuenow", "75");
   });
 
-  test("[angle-ends] Home and End go to 0° and the last step before a full turn", async ({ page }) => {
+  test("[angle-ends] Home and End go to 0° and to 359°", async ({ page }) => {
     await open(page, "/components/angle-slider");
     await thumb(page).focus();
     await page.keyboard.press("Home");
@@ -357,8 +363,7 @@ test.describe("AngleSlider", () => {
     await open(page, "/components/angle-slider");
     const box = (await stage(page, "AngleSliderTurn").locator(".glim-angle-dial").boundingBox())!;
     await page.mouse.click(box.x + box.width / 2, box.y + box.height - 4);
-    await expect.poll(async () => Number(await thumb(page).getAttribute("aria-valuenow"))).toBeGreaterThan(170);
-    expect(Number(await thumb(page).getAttribute("aria-valuenow"))).toBeLessThan(190);
+    await expect(thumb(page)).toHaveAttribute("aria-valuenow", "180");
   });
 
   test("[angle-round] the dial stays round in the square shape setting", async ({ page }) => {

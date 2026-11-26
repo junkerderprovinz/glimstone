@@ -1,4 +1,4 @@
-import { useId } from "react";
+import { useId, useState, type CSSProperties } from "react";
 import * as ratingGroup from "@zag-js/rating-group";
 import { normalizeProps, useMachine } from "@zag-js/react";
 import { RATING_TEXT, pageDir, type RatingText } from "@glimstone/core";
@@ -28,6 +28,9 @@ export interface RatingProps {
 export function Rating({ label, value, onChange, count = 5, allowHalf = false, readOnly = false, disabled = false, text }: RatingProps) {
   const name = useFieldName(label);
   const words = { ...RATING_TEXT, ...text };
+  // Counts the picks: the stylesheet names one spring per parity, so a second
+  // pick of the same star springs again.
+  const [picks, setPicks] = useState(0);
   const service = useMachine(ratingGroup.machine, {
     id: useId(),
     dir: pageDir(),
@@ -36,7 +39,10 @@ export function Rating({ label, value, onChange, count = 5, allowHalf = false, r
     allowHalf,
     readOnly,
     disabled,
-    onValueChange: (d) => onChange(d.value),
+    onValueChange: (d) => {
+      setPicks((n) => n + 1);
+      onChange(d.value);
+    },
     translations: { ratingValueText: (index) => words.star(index, count) },
   });
   const api = ratingGroup.connect(service, normalizeProps);
@@ -47,7 +53,13 @@ export function Rating({ label, value, onChange, count = 5, allowHalf = false, r
       </label>
       <div {...api.getControlProps()} className="glim-rating-control">
         {api.items.map((index) => (
-          <span key={index} {...api.getItemProps({ index })} className="glim-rating-star">
+          <span
+            key={index}
+            {...api.getItemProps({ index })}
+            data-pop={picks > 0 && index === Math.ceil(api.value) ? (picks % 2 ? "odd" : "even") : undefined}
+            style={{ "--i": index - 1 } as CSSProperties}
+            className="glim-rating-star"
+          >
             <IconStar />
             <span className="glim-rating-fill" aria-hidden="true">
               <IconStar />

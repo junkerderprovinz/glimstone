@@ -34,6 +34,7 @@
   import { useFieldName } from "./fieldName.js";
   import { IconCheck, IconClose, IconExpand } from "./glyphs.js";
   import { lift } from "./lift.js";
+  import SearchHit from "./SearchHit.svelte";
 
   // A field that picks several choices from a list and keeps them as tags,
   // each with its own remove mark. It is Zag's combobox in multiple mode, so
@@ -146,7 +147,7 @@
       {/if}
       {#each shown as item (item.value)}
         <li {...api.getItemProps({ item })} class="glim-select-item">
-          <span {...api.getItemTextProps({ item })}>{item.label}</span>
+          <span {...api.getItemTextProps({ item })} data-search={searches && query ? "" : undefined}><SearchHit label={item.label} query={searches ? query : ""} /></span>
           <span {...api.getItemIndicatorProps({ item })} class="glim-select-check">{@render IconCheck()}</span>
         </li>
       {/each}

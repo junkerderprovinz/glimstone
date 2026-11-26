@@ -17,8 +17,8 @@
 </script>
 
 <script lang="ts">
-  import { fieldErrorView, textFieldClass } from "@glimstone/core";
-  import FieldError from "./FieldError.svelte";
+  import { fieldErrorView, fitTextArea, textFieldClass } from "@glimstone/core";
+  import FieldErrorLine from "./FieldErrorLine.svelte";
   import { useFieldName } from "./fieldName.js";
 
   // A few lines of text in the look of a TextField, bound with `bind:value`.
@@ -31,6 +31,7 @@
     class: className,
     id,
     "aria-describedby": describedBy,
+    oninput,
     value = $bindable(),
     ref = $bindable(null),
     ...rest
@@ -39,6 +40,11 @@
   const name = useFieldName(() => label);
   const own = $props.id();
   const err = $derived(fieldErrorView(error, id ?? own, describedBy ?? undefined));
+
+  $effect(() => {
+    void value;
+    fitTextArea(ref);
+  });
 </script>
 
 <textarea
@@ -47,9 +53,13 @@
   {...rest}
   bind:this={ref}
   bind:value
+  oninput={(e) => {
+    fitTextArea(e.currentTarget);
+    oninput?.(e);
+  }}
   {id}
   aria-invalid={err.invalid}
   aria-describedby={err.describedBy}
   class={`${textFieldClass({ width, mono, area: true })} ${className ?? ""}`.trim()}
 ></textarea>
-{#if err.errorId}<FieldError id={err.errorId}>{error}</FieldError>{/if}
+<FieldErrorLine id={err.errorId} {error} />

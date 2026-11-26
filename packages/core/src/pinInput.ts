@@ -24,3 +24,8 @@ export function pinCells(value: string, length: number): string[] {
   const chars = Array.from(value);
   return Array.from({ length }, (_, i) => chars[i] ?? "");
 }
+
+/** Whether a new group of three starts at the box at `index`, as a code of six or nine is read aloud. */
+export function pinGroupStarts(index: number, length: number): boolean {
+  return length > 3 && length % 3 === 0 && index > 0 && index % 3 === 0;
+}

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, shallowRef, useAttrs, useId, watch } from "vue";
 import { attachNumberSteppers, fieldErrorView, syncNumberSteppers } from "@glimstone/core";
-import FieldError from "./FieldError.vue";
+import FieldErrorLine from "./FieldErrorLine.vue";
 import { useFieldName } from "./fieldName";
 
 // A number input with its two steppers inside the field, bound with v-model:
@@ -66,5 +66,5 @@ function onInput(e: Event) {
       @input="onInput"
     />
   </span>
-  <FieldError v-if="err.errorId" :id="err.errorId">{{ error }}</FieldError>
+  <FieldErrorLine :id="err.errorId" :error="error" />
 </template>

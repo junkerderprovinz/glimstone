@@ -1,5 +1,5 @@
 import { createSignal } from "solid-js";
-import { CopyField, FieldRow, NumberField, PasswordField, Selector, TextField, Toggle } from "@glimstone/solid";
+import { CopyField, FieldRow, NumberField, PasswordField, Selector, TextField, TimePicker, Toggle } from "@glimstone/solid";
 import { Combobox } from "@glimstone/solid/Combobox";
 import { Select } from "@glimstone/solid/Select";
 import { Slider } from "@glimstone/solid/Slider";
@@ -26,6 +26,8 @@ export default function FieldRowBasic() {
   const [keep, setKeep] = createSignal("month");
   const [volume, setVolume] = createSignal(40);
   const [zone, setZone] = createSignal("vienna");
+  const [from, setFrom] = createSignal<string | null>("08:00");
+  const [to, setTo] = createSignal<string | null>("17:00");
   return (
     <div style={{ display: "grid", gap: "8px", width: "100%", "max-width": "560px" }}>
       <FieldRow label="Name" hint="Shown in the list of jobs.">
@@ -69,8 +71,8 @@ export default function FieldRowBasic() {
         <TextField width="grow" mono value="https://bottich/s/3f9a" />
       </FieldRow>
       <FieldRow label="Hours">
-        <TextField label="From" width="short" value="08:00" />
-        <TextField label="To" width="short" value="17:00" />
+        <TimePicker label="From" value={from()} onChange={setFrom} minuteStep={15} />
+        <TimePicker label="To" value={to()} onChange={setTo} minuteStep={15} />
       </FieldRow>
       <FieldRow label="Volume">
         <Slider value={volume()} onChange={setVolume} min={0} max={100} format={(v) => `${v}%`} />

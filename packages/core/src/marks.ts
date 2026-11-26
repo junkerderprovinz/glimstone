@@ -130,6 +130,12 @@ export const MARKS = {
     size: 14,
     body: '<path fill-rule="evenodd" d="M2.25 2H11.75A1.5 1.5 0 0 1 13.25 3.5V11.75A1.5 1.5 0 0 1 11.75 13.25H2.25A1.5 1.5 0 0 1 0.75 11.75V3.5A1.5 1.5 0 0 1 2.25 2ZM3.25 0.5H4.5V2H3.25ZM9.5 0.5H10.75V2H9.5ZM2.25 6H4.75V8.25H2.25ZM5.75 6H8.25V8.25H5.75ZM9.25 6H11.75V8.25H9.25ZM2.25 9.5H4.75V11.75H2.25ZM5.75 9.5H8.25V11.75H5.75Z"></path>',
   },
+  /** The eyedropper of a ColorPicker, which takes a colour from anywhere on the screen. */
+  eyedropper: {
+    viewBox: "0 0 16 16",
+    size: 16,
+    body: '<path d="M11.3 1.2a2.2 2.2 0 0 1 3.1 3.1l-1.9 1.9.6.6a.9.9 0 0 1-1.3 1.3l-.3-.3-5.6 5.6a2 2 0 0 1-1 .5l-1.9.4-.8.8a.9.9 0 0 1-1.3-1.3l.8-.8.4-1.9a2 2 0 0 1 .5-1l5.6-5.6-.3-.3a.9.9 0 0 1 1.3-1.3l.6.6Zm-2.8 5-5.3 5.3-.2 1 1-.2 5.3-5.3Z"/>',
+  },
   /** `IconStar` from the assortment: one star of a rating. */
   star: {
     viewBox: "1.007 0.513 21.972 21.972",

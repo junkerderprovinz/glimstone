@@ -1,7 +1,7 @@
 import { createMemo, createUniqueId, For, mergeProps, Show } from "solid-js";
 import * as fileUpload from "@zag-js/file-upload";
 import { normalizeProps, useMachine } from "@zag-js/solid";
-import { FILE_UPLOAD_TEXT, formatFileSize, pageDir, type FileRefusal, type FileUploadText } from "@glimstone/core";
+import { FILE_UPLOAD_TEXT, formatFileSize, pageDir, uploadProgressView, type FileRefusal, type FileUploadText } from "@glimstone/core";
 import { IconButton } from "./IconButton.tsx";
 import { IconClose, IconUpload } from "./glyphs.tsx";
 
@@ -10,7 +10,8 @@ export type { FileRefusal, FileUploadText } from "@glimstone/core";
 // Files handed to the app by dropping them or from the picker, such as a
 // settings file to import. The drop zone is itself the button that opens the
 // picker, so there is one control and one stop for Tab. The files stand under
-// it as rows, and a refused one is named with its reason.
+// it as rows, each filling as its file goes up, and a refused one is named
+// with its reason.
 
 export interface FileUploadProps {
   label: string;
@@ -22,6 +23,8 @@ export interface FileUploadProps {
   /** The largest file it takes, in bytes. */
   maxFileSize?: number;
   disabled?: boolean;
+  /** How far a file has gone up, from 0 to 1, while the app sends it. Its row fills with it. */
+  progress?: (file: File) => number | undefined;
   text?: Partial<FileUploadText>;
 }
 
@@ -54,8 +57,16 @@ export function FileUpload(raw: FileUploadProps) {
       <Show when={api().acceptedFiles.length > 0}>
         <ul {...api().getItemGroupProps()} class="glim-upload-files">
           <For each={api().acceptedFiles}>
-            {(file) => (
-              <li {...api().getItemProps({ file })} class="glim-upload-file">
+            {(file) => {
+              const sent = () => uploadProgressView(props.progress?.(file));
+              return (
+              <li
+                {...api().getItemProps({ file })}
+                aria-busy={sent().state === "sending" ? true : undefined}
+                data-progress={sent().state}
+                style={sent().share === undefined ? undefined : { "--glim-upload-progress": String(sent().share) }}
+                class="glim-upload-file"
+              >
                 <span {...api().getItemNameProps({ file })} class="glim-upload-name">
                   {file.name}
                 </span>
@@ -64,7 +75,8 @@ export function FileUpload(raw: FileUploadProps) {
                 </span>
                 <IconButton tip={words().remove(file.name)} glyph={<IconClose />} onClick={() => api().deleteFile(file)} />
               </li>
-            )}
+              );
+            }}
           </For>
         </ul>
       </Show>

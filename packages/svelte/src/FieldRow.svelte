@@ -24,25 +24,37 @@
 
 <script lang="ts">
   import { getContext, setContext } from "svelte";
-  import { pressRowControl } from "@glimstone/core";
+  import { pressRowControl, pressRowSwitch, watchRowStack } from "@glimstone/core";
   import { FIELD_ROW, FIELD_ROW_GROUP } from "./fieldName.js";
   import InfoBubble from "./InfoBubble.svelte";
   import Pill from "./Pill.svelte";
 
   // One labelled row of a card or a window (rule 35): the name at its start and
-  // the control at its end, which takes its accessible name from `label`.
-  let { label, drawn, hint, value, tone, wide, children, class: className, ...rest }: FieldRowProps = $props();
+  // the control at its end, which takes its accessible name from `label`. A row
+  // with a switch is one target from end to end.
+  let { label, drawn, hint, value, tone, wide, children, class: className, onclick, ...rest }: FieldRowProps = $props();
 
   setContext(FIELD_ROW, () => label);
   const inGroup = getContext<boolean | undefined>(FIELD_ROW_GROUP) ?? false;
   let row: HTMLDivElement;
+  $effect(() => watchRowStack(row));
 </script>
 
 {#snippet control()}
   {#if children}{@render children()}{:else if value !== undefined}<Pill class="glim-num" {tone}>{value}</Pill>{/if}
 {/snippet}
 
-<div data-glim="FieldRow" {...rest} bind:this={row} class={["glim-field-row", wide && "glim-field-row--wide", className].filter(Boolean).join(" ")}>
+<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+<div
+  data-glim="FieldRow"
+  data-press=""
+  {...rest}
+  bind:this={row}
+  onclick={(e) => {
+    onclick?.(e);
+    pressRowSwitch(row, e.target);
+  }}
+  class={["glim-field-row", wide && "glim-field-row--wide", className].filter(Boolean).join(" ")}>
   <span class="glim-field-row-name">
     <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <span class="glim-field-row-label" onclick={() => pressRowControl(row)}>{#if drawn}{@render drawn()}{:else}{label}{/if}</span>

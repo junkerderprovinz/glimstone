@@ -478,6 +478,13 @@
 
   /* The faint shade under the field's top edge that sets it into the surface. */
   --field-sink: inset 0 1px 0 light-dark(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.28));
+
+  /* A part inside a field, such as a tag or a stepper under the pointer: a wash
+     on top of the field's own, so it reads in every step of it. */
+  --field-part: light-dark(rgba(0, 0, 0, 0.06), rgba(255, 255, 255, 0.08));
+
+  /* The same part while it is pressed, or the day the keys are on. */
+  --field-part-strong: light-dark(rgba(0, 0, 0, 0.09), rgba(255, 255, 255, 0.12));
 }
 
 /* A well or a sub-card is a step lighter than the card in the dark and a step
@@ -963,7 +970,9 @@
     padding: var(--space-3) var(--space-5);
     border: none;
     border-radius: var(--radius-control);
-    background-color: var(--carbon-surface2);
+    background-color: var(--field-rest);
+    box-shadow: var(--field-sink);
+    caret-color: var(--accent-ink);
     color: var(--carbon-text);
     font-family: ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
     font-size: var(--text-meta);
@@ -972,7 +981,10 @@
   }
   .glim-picker-hex:focus {
     outline: none;
-    background-color: var(--carbon-hover);
+    background-color: var(--field-focus);
+  }
+  @media (hover: hover) {
+    .glim-picker-hex:hover:not(:focus) { background-color: var(--field-hover); }
   }
 
   /* A drag on the square or the bar is the picker's, never a scroll of the
@@ -1037,6 +1049,34 @@
   .glim-picker-actions {
     display: flex;
     justify-content: flex-end;
+  }
+  /* The ready colours under the bar, the page's rainbow unless the app names
+     its own, and the eyedropper in the foot where the browser has one. */
+  .glim-picker-swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+  .glim-picker-preset {
+    width: var(--space-10);
+    height: var(--space-10);
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background-color: var(--glim-preset);
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+  }
+  .glim-picker-preset[aria-pressed="true"] { box-shadow: inset 0 0 0 2px var(--surface-overlay), 0 0 0 2px var(--glim-preset); }
+  .glim-picker-preset:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+  @media (hover: hover) {
+    .glim-picker-preset:hover { scale: 1.12; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .glim-picker-preset { transition: scale var(--motion-shape-dur) var(--motion-spring); }
   }
 
   /* Rainbow, the accent in its plural form (docs/design-language.md; the JS side
@@ -2355,6 +2395,39 @@
     .glim-num-step { transition: none; }
   }
 
+  /* Under a mouse the arrows of a NumberField are one column at the field's
+     end, two halves of its full height, each with a hover ground of its own
+     and a press that sinks its glyph. The digits roll in from the side they
+     count towards (numberField.ts sets data-roll). */
+  @media not (pointer: coarse) {
+    .glim-num-wrap:has(> .glim-num-field) > .glim-num-steppers {
+      inset-block: 0;
+      inset-inline-end: 0;
+      width: 1.5rem;
+      gap: 0;
+      justify-content: stretch;
+    }
+    .glim-num-wrap:has(> .glim-num-field) .glim-num-step {
+      flex: 1 1 0;
+      width: 100%;
+      height: auto;
+      transition: background-color var(--motion-control-dur) var(--motion-ease), color var(--motion-control-dur) var(--motion-ease);
+    }
+    .glim-num-wrap:has(> .glim-num-field) .glim-num-step:hover:not(:disabled) {
+      background-color: var(--hover);
+      color: var(--carbon-text);
+    }
+    .glim-num-wrap:has(> .glim-num-field) .glim-num-step:active:not(:disabled) { background-color: var(--field-part-strong); }
+    .glim-num-wrap:has(> .glim-num-field) .glim-num-step:active:not(:disabled) > svg { translate: 0 1px; }
+    .glim-num-field { padding-inline-end: var(--space-12); }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .glim-num-field[data-roll="up"] { animation: glim-roll-up var(--motion-wipe-dur) var(--motion-spring); }
+    .glim-num-field[data-roll="down"] { animation: glim-roll-down var(--motion-wipe-dur) var(--motion-spring); }
+  }
+  @keyframes glim-roll-up { from { translate: 0 6px; opacity: 0.2; } }
+  @keyframes glim-roll-down { from { translate: 0 -6px; opacity: 0.2; } }
+
   /* Under a coarse pointer two 11px arrows stacked in a 32px field are too small
      to hit, so they sit side by side, each the field's full height and 32px
      wide, and the padding widens to match. The glyphs keep their size. */
@@ -3408,6 +3481,21 @@
     outline: none;
   }
   .glim-select-content[hidden] { display: none; }
+  /* A list opens over its trigger with the chosen row where the value stood
+     (selectAlign.ts): it waits hidden for the frame it takes to measure, then
+     grows out of that row. */
+  .glim-select-content[data-aligning] { opacity: 0; }
+  @media (prefers-reduced-motion: no-preference) {
+    .glim-select-content:not([data-aligning]) { animation: glim-list-grow var(--motion-check-dur) var(--motion-spring); }
+  }
+  @keyframes glim-list-grow { from { opacity: 0; scale: 0.96; } }
+  /* While somebody types into a combobox, each row sets apart the part that matches. */
+  .glim-select-item [data-search],
+  .glim-menu-item [data-search] { color: var(--carbon-text-sub); }
+  .glim-combobox-hit {
+    color: var(--carbon-text);
+    font-weight: 600;
+  }
   .glim-select-item {
     display: flex;
     align-items: center;
@@ -3521,6 +3609,32 @@
     outline-offset: 3px;
   }
   .glim-slider-thumb[data-dragging] { cursor: grabbing; }
+  /* While the thumb is dragged, its value stands in a bubble over it. */
+  .glim-slider-bubble {
+    position: absolute;
+    bottom: calc(100% + var(--space-4));
+    left: 50%;
+    padding: var(--space-1) var(--space-4);
+    border-radius: var(--space-3);
+    background-color: var(--carbon-text);
+    color: var(--carbon-bg);
+    box-shadow: var(--elevation-float);
+    font-size: var(--text-meta);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.25rem;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    translate: -50% 4px;
+  }
+  .glim-slider-thumb:is([data-dragging], :active) > .glim-slider-bubble {
+    opacity: 1;
+    translate: -50% 0;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .glim-slider-bubble { transition: opacity var(--motion-content-dur) var(--motion-ease), translate var(--motion-check-dur) var(--motion-spring); }
+  }
   .glim-slider-thumb[data-disabled] { opacity: 0.5; cursor: default; }
   .glim-slider-value {
     margin-inline-start: auto;
@@ -3700,6 +3814,10 @@
     line-height: 1.25rem;
     color: var(--carbon-text);
   }
+  /* The words are part of the switch's target, as a native label's would be. */
+  .glim-toggle:has(> .glim-toggle-label) { cursor: pointer; }
+  .glim-toggle:has(> .glim-toggle-track:disabled) { cursor: default; }
+  .glim-toggle:has(> .glim-toggle-track:disabled) > .glim-toggle-label { color: var(--carbon-text-muted); }
   .glim-toggle-track {
     position: relative;
     display: inline-flex;
@@ -5020,24 +5138,24 @@
     padding-inline: var(--space-2);
   }
 
-  /* The number field's box (NumberField): borderless and filled (rule 14),
-     focus a step up the ramp. The width belongs to the input and has to be
-     definite, since the arrows sit against its end. */
+  /* The number field's box (NumberField): the wrapper is the field's shell,
+     so the digits can roll inside it. The width belongs to the input and has
+     to be definite, since the arrows sit against its end. */
   .glim-num-field {
     width: 6rem;
     height: var(--btn-h);
     padding-inline-start: var(--space-6);
     border-radius: var(--radius-control);
-    background-color: var(--carbon-surface2);
+    background-color: transparent;
     color: var(--carbon-text);
     font-size: var(--text-body);
     line-height: 1.25rem;
+    caret-color: var(--accent-ink);
   }
-  .glim-num-field:focus { background-color: var(--carbon-surface3); }
-  .glim-num-field:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
+  .glim-num-field:focus { outline: none; }
+  .glim-num-field:disabled { cursor: not-allowed; }
+  .glim-num-wrap:has(> .glim-num-field) { overflow: hidden; }
+  .glim-num-wrap:has(> .glim-num-field:disabled) { opacity: 0.5; }
 
   /* An empty list or panel ("Empty states"): a muted, oversized glyph above
      a muted title, an optional hint and an optional action. */
@@ -5102,12 +5220,8 @@
      surface, and hover one more (rule 21). A tile does so in a well too, and a
      quiet button in a connection row, which is a well. */
   :is(.glim-subcard, .glim-connection) .glim-btn--subtle,
-  .glim-subcard .glim-num-field,
   .glim-subcard .glim-sel--chip .glim-sel-seg:not(.glim-active) {
     background-color: var(--carbon-surface3);
-  }
-  .glim-subcard .glim-num-field:focus {
-    background-color: var(--carbon-hover-raised);
   }
   .glim-subcard .glim-sel--chip .glim-sel-seg:not(.glim-active):not(:disabled):hover,
   :is(.glim-subcard, .glim-well) .glim-sel-tile:not(.glim-active):hover {
@@ -5308,11 +5422,15 @@
     cursor: pointer;
   }
   .glim-checkbox:hover { background-color: var(--hover); }
+  /* A locked box is grey with a grey tick rather than a dimmed accent, which
+     muddies to olive on the dark ramps. */
   .glim-checkbox:disabled {
-    opacity: 0.55;
+    color: var(--carbon-text-muted);
     cursor: default;
   }
   .glim-checkbox:disabled:hover { background-color: transparent; }
+  .glim-checkbox:disabled > .glim-checkbox-box { background-color: var(--carbon-surface3); }
+  .glim-checkbox:disabled[aria-checked="true"] > .glim-checkbox-box { color: var(--carbon-text-muted); }
   .glim-checkbox-box {
     display: grid;
     flex: none;
@@ -5330,6 +5448,12 @@
   [aria-checked="true"] > .glim-checkbox-box {
     background-color: var(--accent);
     color: var(--accent-contrast);
+  }
+  /* The tick draws itself in, and the box gives a little under the press. */
+  @media (prefers-reduced-motion: no-preference) {
+    .glim-checkbox-tick { transition: stroke-dashoffset var(--motion-shape-dur) var(--motion-ease); }
+    .glim-checkbox-box { transition: background-color var(--motion-shape-dur) var(--motion-ease), scale var(--motion-check-dur) var(--motion-spring); }
+    .glim-checkbox:active:not(:disabled) > .glim-checkbox-box { scale: 0.92; }
   }
   /* The slim checkbox: the box alone, for a row or a cell of a dense list,
      where the frame's padding and hover ground would crowd the row. The row
@@ -5400,15 +5524,28 @@
     caret-color: var(--accent-ink);
   }
   .glim-input:focus { background-color: var(--field-focus); }
+  /* One shell for every kind of field: a number field's wrapper, the tags'
+     control and a time's segments take a text field's fill, its sink and its
+     steps, so a row of different fields reads as one set. */
+  :is(.glim-num-wrap:has(> .glim-num-field), .glim-tags-control, .glim-time) {
+    border-radius: var(--radius-control);
+    background-color: var(--field-rest);
+    box-shadow: var(--field-sink);
+    color: var(--carbon-text);
+  }
+  :is(.glim-num-wrap:has(> .glim-num-field), .glim-tags-control, .glim-time):focus-within { background-color: var(--field-focus); }
   /* Under the pointer a field takes the hover step, unless it already has the
      keys or is open. */
   @media (hover: hover) {
-    :is(.glim-input, .glim-select-trigger, .glim-combobox-control):hover:not(:focus, :focus-within, :disabled, [data-disabled], [data-state="open"]) {
+    :is(.glim-input, .glim-select-trigger, .glim-combobox-control, .glim-num-wrap:has(> .glim-num-field), .glim-tags-control, .glim-time):hover:not(:focus, :focus-within, :disabled, [data-disabled], [data-state="open"]) {
       background-color: var(--field-hover);
     }
   }
-  .glim-well .glim-num-field { background-color: var(--carbon-surface3); }
-  .glim-well .glim-num-field:focus { background-color: var(--carbon-hover-raised); }
+  @media (prefers-reduced-motion: no-preference) {
+    :is(.glim-input, .glim-select-trigger, .glim-combobox-control, .glim-num-wrap:has(> .glim-num-field), .glim-tags-control, .glim-time) {
+      transition: background-color var(--motion-content-dur) var(--motion-ease);
+    }
+  }
   .glim-input:disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -5420,13 +5557,18 @@
     text-overflow: ellipsis;
   }
 
-  /* A few lines of text (TextArea): the field's look, grown by its corner. */
+  /* A few lines of text (TextArea): the field's look, growing with its text
+     from three lines to ten, without the corner grip. Where the browser cannot
+     size a field by its content, textAreaFit() in field.ts does it. */
   .glim-input--area {
     display: block;
     height: auto;
-    min-height: calc(var(--btn-h) * 2);
-    padding-block: var(--space-3);
-    resize: vertical;
+    min-height: calc(3lh + 2 * var(--space-4));
+    max-height: calc(10lh + 2 * var(--space-4));
+    padding-block: var(--space-4);
+    overflow-y: auto;
+    resize: none;
+    field-sizing: content;
   }
 
   /* One labelled row (FieldRow, rule 35): the name at the start and its controls
@@ -5455,13 +5597,52 @@
   }
   .glim-field-row > :not(.glim-field-row-name) { max-width: 100%; }
 
-  .glim-field-row > .glim-slider {
-    flex: 1 1 13rem;
-    min-width: 0;
+  /* A field that takes text fills what the name leaves, but stops short of a
+     shared name column and of one widest width, so the fields of a card start
+     on one line. A longer name takes room from the field instead; only when
+     less than its smallest width is left does the field drop under the name,
+     and there it takes the whole line (FieldRow sets data-stacked). */
+  .glim-field-row {
+    column-gap: var(--space-8);
+    --field-row-min: 10rem;
+    --field-row-max: 24rem;
+    --field-row-name: 9rem;
   }
-  .glim-field-row > .glim-combobox {
-    flex: 0 1 16rem;
-    min-width: 0;
+  :is(.glim-field-row, .glim-field-row-controls) > :is(.glim-input:not(.glim-field--short, .glim-pin-cell), .glim-secret:not(.glim-field--short), .glim-select, .glim-combobox, .glim-date, .glim-tags, .glim-copy:not(.glim-field--short), .glim-path, .glim-slider) {
+    flex: 1 1 var(--field-row-min);
+    width: auto;
+    min-width: min(var(--field-row-min), 100%);
+    max-width: max(min(var(--field-row-max), 100% - var(--field-row-name)), min(var(--field-row-min), 100%));
+  }
+  :is(.glim-field-row[data-stacked], .glim-field-row-group .glim-field-row-controls) > :is(.glim-input, .glim-secret, .glim-select, .glim-combobox, .glim-date, .glim-tags, .glim-copy, .glim-path, .glim-slider) { max-width: none; }
+  :is(.glim-field-row, .glim-field-row-controls) > .glim-select > div > .glim-select-trigger { width: 100%; }
+  /* A slider in a row: the track in the line, its value after it in a column of its own. */
+  :is(.glim-field-row, .glim-field-row-controls) > .glim-slider {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+  }
+  :is(.glim-field-row, .glim-field-row-controls) > .glim-slider > .glim-slider-head {
+    order: 2;
+    flex: none;
+    justify-content: flex-end;
+    width: 2.75rem;
+  }
+  :is(.glim-field-row, .glim-field-row-controls) > .glim-slider > .glim-slider-control { flex: 1; }
+
+  /* A row with a switch is one target from end to end, as a settings row on a
+     phone is, so it shows a quiet ground under the pointer. */
+  .glim-field-row[data-press]:has([role="switch"]) {
+    margin-inline: calc(-1 * var(--space-4));
+    padding-inline: var(--space-4);
+    border-radius: var(--radius-control);
+    cursor: pointer;
+  }
+  @media (hover: hover) {
+    .glim-field-row[data-press]:has([role="switch"]:not(:disabled)):hover { background-color: var(--hover); }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .glim-field-row[data-press]:has([role="switch"]) { transition: background-color var(--motion-content-dur) var(--motion-ease); }
   }
 
   /* Rows that share a column for their names (FieldRowGroup): a grid as wide as
@@ -5992,6 +6173,21 @@
     width: 0.95rem;
     height: 0.95rem;
   }
+  /* A typed secret in dots a little larger and further apart than the font's;
+     the placeholder stays in words. */
+  .glim-secret > .glim-input[type="password"]:not(:placeholder-shown) {
+    font-size: calc(var(--text-body) * 1.15);
+    letter-spacing: 0.14em;
+  }
+  /* Once the secret shows, a stroke draws itself through the eye. It is drawn
+     in as an animation as well, since the eye's bubble may draw the button
+     anew, which skips a transition. */
+  @media (prefers-reduced-motion: no-preference) {
+    .glim-secret-slash { transition: stroke-dashoffset var(--motion-shape-dur) var(--motion-ease); }
+    [data-struck] > .glim-secret-slash,
+    [data-struck] > mask > .glim-secret-slash { animation: glim-slash var(--motion-shape-dur) var(--motion-ease) backwards; }
+  }
+  @keyframes glim-slash { from { stroke-dashoffset: 1; } }
 
   /* The second field of a PasswordField with confirm, drawn as a row of its
      own under the first: its label at the start, the field at the end with
@@ -6013,6 +6209,14 @@
     min-width: 0;
   }
   .glim-secret-confirm-live { display: block; }
+  /* In a row the second field stands under the first, at its width. */
+  .glim-field-row > .glim-secret-confirm { column-gap: var(--space-8); }
+  .glim-field-row > .glim-secret-confirm > .glim-secret-confirm-box {
+    flex: 1 1 var(--field-row-min);
+    width: auto;
+    min-width: min(var(--field-row-min), 100%);
+    max-width: max(min(var(--field-row-max), 100% - var(--field-row-name)), min(var(--field-row-min), 100%));
+  }
   .glim-field-row-controls:has(> .glim-secret-confirm) { flex-wrap: wrap; }
 
   /* A value to copy (CopyField): the value in monospace, read-only so it can
@@ -7101,9 +7305,10 @@
    fault wash and a line under it says why, until the value is fixed. In a
    field row the line takes the whole width, under the control at the end. */
 @layer components {
-  .glim-num-field[aria-invalid="true"] { background-color: var(--status-fail-bg); }
-  :is(.glim-input, .glim-select-trigger, .glim-combobox-control)[aria-invalid="true"] { background-color: var(--field-invalid); }
-  :is(.glim-input, .glim-select-trigger, .glim-combobox-control)[aria-invalid="true"]:is(:focus, :focus-within) { background-color: var(--field-invalid-focus); }
+  :is(.glim-input, .glim-select-trigger, .glim-combobox-control)[aria-invalid="true"],
+  :is(.glim-num-wrap, .glim-tags-control):has([aria-invalid="true"]) { background-color: var(--field-invalid); }
+  :is(.glim-input, .glim-select-trigger, .glim-combobox-control)[aria-invalid="true"]:is(:focus, :focus-within),
+  :is(.glim-num-wrap, .glim-tags-control):has([aria-invalid="true"]):focus-within { background-color: var(--field-invalid-focus); }
   /* The field shakes once as it turns wrong; the wash and the line stay. */
   @media (prefers-reduced-motion: no-preference) {
     :root:not([data-motion='off']) :is(.glim-input, .glim-select-trigger, .glim-combobox-control)[aria-invalid="true"] {
@@ -7116,8 +7321,22 @@
     align-items: center;
     gap: var(--space-3);
     margin-top: var(--space-2);
+    overflow: hidden;
     color: var(--status-fail-text);
     font-size: var(--text-subline);
+  }
+  /* The line opens instead of pushing the form down at once, and closes the
+     same way once the value is fixed: the field keeps it a moment with
+     data-closing. Without motion a closing line is gone at once. */
+  .glim-field-error[data-closing] { display: none; }
+  @media (prefers-reduced-motion: no-preference) {
+    :root:not([data-motion="off"]) .glim-field-error { animation: glim-error-open var(--motion-wipe-dur) var(--motion-ease) backwards; }
+    :root:not([data-motion="off"]) .glim-field-error[data-closing] {
+      display: flex;
+      animation: glim-error-close var(--motion-wipe-dur) var(--motion-ease) forwards;
+    }
+    :root:not([data-motion="off"]) :is(.glim-field-row, .glim-field-row-controls) > .glim-field-error { animation-name: glim-error-open-row; }
+    :root:not([data-motion="off"]) :is(.glim-field-row, .glim-field-row-controls) > .glim-field-error[data-closing] { animation-name: glim-error-close-row; }
   }
   .glim-field-error > svg {
     flex: none;
@@ -7128,6 +7347,11 @@
     justify-content: flex-end;
     margin-top: 0;
   }
+  /* In a row the line also takes the row's gap with it. */
+  @keyframes glim-error-open { from { max-height: 0; margin-top: 0; opacity: 0; translate: 0 -4px; } to { max-height: 1.5rem; } }
+  @keyframes glim-error-close { from { max-height: 1.5rem; } to { max-height: 0; margin-top: 0; opacity: 0; translate: 0 -4px; } }
+  @keyframes glim-error-open-row { from { max-height: 0; margin-top: calc(-1 * var(--space-3)); opacity: 0; translate: 0 -4px; } to { max-height: 1.5rem; } }
+  @keyframes glim-error-close-row { from { max-height: 1.5rem; } to { max-height: 0; margin-top: calc(-1 * var(--space-3)); opacity: 0; translate: 0 -4px; } }
   /* A line that only informs (fieldNoteView) sits where an error would, in the quiet ink. */
   .glim-field-note {
     display: block;
@@ -7331,6 +7555,7 @@
   }
   .glim-pin-control {
     display: flex;
+    align-items: center;
     gap: var(--space-3);
   }
   .glim-input.glim-pin-cell {
@@ -7339,14 +7564,40 @@
     padding: 0;
     font-size: var(--text-title);
     text-align: center;
+    caret-color: transparent;
   }
   .glim-pin-cell:disabled { cursor: not-allowed; }
+  /* A code of six or nine stands in groups of three, the way it is read aloud. */
+  .glim-pin-sep {
+    width: 4px;
+    height: 4px;
+    margin-inline: var(--space-2);
+    border-radius: 50%;
+    background-color: var(--carbon-text-muted);
+  }
+  /* The box that takes the next character shows a caret of its own in the
+     middle, blinking once a second; a digit grows in, and a whole code takes a
+     short wash in the good colour. */
+  .glim-pin-cell:focus:not([data-filled]) {
+    background-image: linear-gradient(var(--carbon-text), var(--carbon-text));
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 1.5px 1.125rem;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    :root:not([data-motion="off"]) .glim-pin-cell:focus:not([data-filled]) { animation: glim-pin-caret 1s steps(1) infinite; }
+    .glim-pin-cell[data-filled] { animation: glim-pin-digit var(--motion-content-dur) var(--motion-ease); }
+    .glim-pin[data-complete]:not([data-invalid]) .glim-pin-cell { animation: glim-pin-whole calc(2 * var(--motion-confirm-dur)) var(--motion-ease); }
+  }
+  @keyframes glim-pin-caret { 50% { background-size: 0 0; } }
+  @keyframes glim-pin-digit { from { font-size: var(--text-body); } }
+  @keyframes glim-pin-whole { 0%, 50% { background-color: color-mix(in oklab, var(--status-ok-solid) 22%, transparent); } }
 }
 
-/* TagsInput: the field's fill with the tags as pills inside it, each one
-   surface step above the field so it never vanishes into it, also in a well
-   and while the field has focus. A tag the arrow keys picked takes the
-   accent, since the next Backspace removes it. */
+/* TagsInput: the field's shell with the tags as quiet pills inside it, a
+   wash on top of the field's own so they read in every step of it, and a
+   cross a step quieter than the words. A tag the arrow keys picked takes the
+   accent and lifts, since the next Backspace removes it. A new tag fades in. */
 @layer components {
   .glim-tags {
     display: grid;
@@ -7360,13 +7611,8 @@
     gap: var(--space-2);
     min-height: var(--btn-h);
     padding: var(--space-2);
-    border-radius: var(--radius-control);
-    background-color: var(--carbon-surface2);
     cursor: text;
   }
-  .glim-tags-control:focus-within,
-  :is(.glim-well, .glim-subcard) .glim-tags-control { background-color: var(--carbon-surface3); }
-  :is(.glim-well, .glim-subcard) .glim-tags-control:focus-within { background-color: var(--carbon-hover-raised); }
   .glim-tags-control[data-disabled] {
     opacity: 0.5;
     cursor: not-allowed;
@@ -7380,20 +7626,24 @@
     align-items: center;
     gap: var(--space-1);
     max-width: 100%;
-    height: 1.5rem;
+    height: 1.375rem;
     padding-inline: var(--space-4) var(--space-1);
     border-radius: var(--radius-pill);
-    background-color: var(--carbon-surface3);
+    background-color: var(--field-part);
     color: var(--carbon-text);
     font-size: var(--text-subline);
   }
-  .glim-tags-control:focus-within .glim-tag,
-  :is(.glim-well, .glim-subcard) .glim-tags-control .glim-tag { background-color: var(--carbon-hover-raised); }
-  :is(.glim-well, .glim-subcard) .glim-tags-control:focus-within .glim-tag { background-color: var(--carbon-surface3); }
   .glim-tag[data-highlighted] {
     background-color: var(--accent);
     color: var(--accent-contrast);
+    translate: 0 -1px;
+    box-shadow: var(--elevation-control);
   }
+  @media (prefers-reduced-motion: no-preference) {
+    .glim-tag { transition: translate var(--motion-shape-dur) var(--motion-spring), box-shadow var(--motion-shape-dur) var(--motion-ease), background-color var(--motion-content-dur) var(--motion-ease); }
+    .glim-tag-item { animation: glim-tag-in var(--motion-stagger-dur) var(--motion-ease); }
+  }
+  @keyframes glim-tag-in { from { opacity: 0; scale: 0.9; } }
   .glim-tag-text {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -7403,20 +7653,26 @@
     display: inline-grid;
     place-items: center;
     flex-shrink: 0;
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1rem;
+    height: 1rem;
     padding: 0;
     border: 0;
     border-radius: var(--radius-pill);
     background-color: transparent;
-    color: inherit;
+    color: var(--carbon-text-sub);
     cursor: pointer;
   }
   .glim-tag-remove svg {
-    width: 0.625rem;
-    height: 0.625rem;
+    width: 0.5rem;
+    height: 0.5rem;
   }
-  .glim-tag:not([data-highlighted]) .glim-tag-remove:hover { color: var(--accent-glyph); }
+  .glim-tag[data-highlighted] .glim-tag-remove { color: inherit; }
+  @media (hover: hover) {
+    .glim-tag:not([data-highlighted]) .glim-tag-remove:hover {
+      background-color: var(--hover);
+      color: var(--carbon-text);
+    }
+  }
   .glim-tag-remove:focus-visible {
     outline: var(--focus-ring-width) solid var(--focus-ring);
     outline-offset: 1px;
@@ -7755,7 +8011,8 @@
     min-height: calc(var(--btn-h-key) * 2.5);
     padding: var(--space-8);
     border-radius: var(--radius-card);
-    background-color: var(--carbon-surface2);
+    background-color: var(--field-rest);
+    box-shadow: var(--field-sink);
     color: var(--carbon-text-sub);
     font-size: var(--text-body);
     text-align: center;
@@ -7767,18 +8024,28 @@
     color: var(--carbon-text-sub);
   }
   .glim-upload-words { max-width: 22rem; }
-  .glim-upload-drop:hover { background-color: var(--hover); }
-  :is(.glim-well, .glim-subcard) .glim-upload-drop { background-color: var(--carbon-surface3); }
-  :is(.glim-well, .glim-subcard) .glim-upload-drop:hover { background-color: var(--hover); }
-  .glim-upload-drop:focus-visible {
-    outline: var(--focus-ring-width) solid var(--focus-ring);
-    outline-offset: 2px;
+  @media (hover: hover) {
+    .glim-upload-drop:hover:not([data-disabled]) { background-color: var(--field-hover); }
   }
+  .glim-upload-drop:focus-visible {
+    outline: none;
+    background-color: var(--field-focus);
+  }
+  /* Files held over the zone light it with the accent's wash and lift its glyph. */
   .glim-upload-drop[data-dragging] {
-    background-color: var(--accent-soft);
+    background-color: var(--field-focus);
+    background-image: linear-gradient(var(--accent-soft), var(--accent-soft));
     color: var(--carbon-text);
   }
-  .glim-upload-drop[data-dragging] > svg { color: var(--accent-glyph); }
+  .glim-upload-drop[data-dragging] > svg {
+    color: var(--accent-glyph);
+    translate: 0 -4px;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .glim-upload-drop { transition: background-color var(--motion-content-dur) var(--motion-ease); }
+    .glim-upload-drop > svg { transition: translate var(--motion-confirm-dur) var(--motion-spring), color var(--motion-content-dur) var(--motion-ease); }
+    .glim-upload-file[data-progress] { transition: --glim-upload-progress var(--motion-wipe-dur) linear; }
+  }
   .glim-upload-drop[data-disabled] {
     opacity: 0.5;
     cursor: not-allowed;
@@ -7786,6 +8053,7 @@
   .glim-upload-files {
     display: flex;
     flex-direction: column;
+    gap: var(--space-1);
     margin: 0;
     padding: 0;
     list-style: none;
@@ -7799,7 +8067,14 @@
     border-radius: var(--radius-control);
   }
   .glim-upload-file:hover { background-color: var(--hover); }
-  .glim-upload-file + .glim-upload-file { border-top: 1px solid color-mix(in srgb, var(--carbon-border) 60%, transparent); }
+  /* While the app sends a file, its row fills from the start as it goes up,
+     so no bar of its own is needed. */
+  .glim-upload-file[data-progress="sending"] {
+    background-image: linear-gradient(to right, var(--accent-soft) calc(var(--glim-upload-progress) * 100%), transparent 0);
+  }
+  .glim-upload-file[data-progress="sending"]:dir(rtl) {
+    background-image: linear-gradient(to left, var(--accent-soft) calc(var(--glim-upload-progress) * 100%), transparent 0);
+  }
   .glim-upload-name {
     flex: 1;
     min-width: 0;
@@ -7814,11 +8089,18 @@
   }
 }
 
+@property --glim-upload-progress {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
 /* DatePicker: the trigger is a text field that shows the day and takes no
    typing, with the calendar glyph at its end. The calendar floats on the
-   body at the float step. The chosen day is filled with the accent, today
-   carries the accent's ink, and a day outside the month or the range is
-   muted. */
+   body at the float step. The chosen day is filled with the accent and today
+   stands on a quiet ground. A day outside the month or the range only fades,
+   nothing is struck through, and a new month slides in from the side it
+   came from. */
 @layer components {
   .glim-date {
     display: grid;
@@ -7842,10 +8124,7 @@
     height: 0.875rem;
     color: var(--carbon-text-sub);
   }
-  .glim-date-trigger:focus-visible {
-    outline: var(--focus-ring-width) solid var(--focus-ring);
-    outline-offset: 2px;
-  }
+  .glim-date-trigger:focus-visible { outline: none; }
   .glim-date-trigger[data-disabled] {
     opacity: 0.5;
     cursor: not-allowed;
@@ -7917,8 +8196,8 @@
   .glim-date-cell {
     display: grid;
     place-items: center;
-    width: var(--btn-h);
-    height: var(--btn-h);
+    width: 2.25rem;
+    height: 2.25rem;
     border-radius: var(--radius-control);
     color: var(--carbon-text);
     font-size: var(--text-subline);
@@ -7930,21 +8209,13 @@
     font-size: var(--text-body);
   }
   .glim-date-cell:hover { background-color: var(--hover); }
-  .glim-date-cell[data-focus] {
-    outline: var(--focus-ring-width) solid var(--focus-ring);
-    outline-offset: -2px;
-  }
+  .glim-date-cell[data-focus]:not([data-selected]) { background-color: var(--field-part-strong); }
   .glim-date-cell[data-today] {
-    color: var(--accent-ink);
+    background-color: var(--hover);
     font-weight: 600;
   }
-  .glim-date-cell[data-outside-range] { color: var(--carbon-text-sub); }
-  .glim-date-cell[data-disabled],
-  .glim-date-cell[data-unavailable] {
-    color: var(--carbon-text-muted);
-    text-decoration: line-through;
-    cursor: default;
-  }
+  .glim-date-cell:is([data-outside-range], [data-disabled], [data-unavailable]) { color: color-mix(in oklab, var(--carbon-text-muted) 45%, transparent); }
+  .glim-date-cell:is([data-disabled], [data-unavailable]) { cursor: default; }
   .glim-date-cell[data-disabled]:hover { background-color: transparent; }
   .glim-date-cell[data-selected] {
     background-color: var(--accent);
@@ -7955,12 +8226,62 @@
 }
 @media (prefers-reduced-motion: no-preference) {
   .glim-date-panel[data-state="open"] { animation: glim-fade-in var(--motion-fade-dur, 0s) ease-out; }
+  .glim-date-grid > tbody[data-turn="next"] { animation: glim-month-turn var(--motion-tab-dur) var(--motion-spring); }
+  .glim-date-grid > tbody[data-turn="prev"] { --glim-month-dir: -1; animation: glim-month-turn var(--motion-tab-dur) var(--motion-spring); }
+}
+@keyframes glim-month-turn { from { translate: calc(var(--glim-month-dir, 1) * var(--tab-dir-sign, 1) * var(--motion-tab-travel, 0px)) 0; opacity: 0; } }
+
+/* TimePicker: one field with the segments in it. The segment that has the
+   focus takes the accent's soft fill instead of a line, and the colon stays
+   quiet. A time is data, so it runs left to right in every language. */
+@layer components {
+  .glim-time {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    width: max-content;
+    max-width: 100%;
+    height: var(--btn-h);
+    padding-inline: var(--space-4);
+    direction: ltr;
+    font-size: var(--text-body);
+    font-variant-numeric: tabular-nums;
+    cursor: text;
+  }
+  .glim-time[data-disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .glim-time-half {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+  .glim-time-seg {
+    min-width: 2ch;
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--space-2);
+    outline: none;
+    line-height: 1.25rem;
+    text-align: center;
+    cursor: default;
+    user-select: none;
+  }
+  .glim-time-seg[data-empty] { color: var(--field-placeholder); }
+  .glim-time-seg:focus { background-color: var(--accent-soft); color: var(--carbon-text); }
+  .glim-time-colon { color: var(--carbon-text-muted); }
+  .glim-time-to {
+    padding-inline: var(--space-3);
+    color: var(--carbon-text-sub);
+  }
 }
 
 /* Rating: each star is drawn twice, a ground in the muted text colour, which
    holds 3:1 on a card as a graphic must, and the accent's fill over it, cut
-   to half its width for a half star. A pointer over the stars shows the value
-   a press would give. Each star is 24px, the smallest target WCAG 2.2 allows. */
+   to half its width for a half star. A pointer over the stars fills them up
+   to it one after the other, showing the value a press would give, and the
+   star a press picks springs once. Each star is 24px, the smallest target
+   WCAG 2.2 allows. */
 @layer components {
   .glim-rating {
     display: grid;
@@ -7992,9 +8313,24 @@
     display: grid;
     place-items: center;
     color: var(--accent);
-    visibility: hidden;
+    opacity: 0;
+    scale: 0.6;
   }
-  .glim-rating-star[data-highlighted] .glim-rating-fill { visibility: visible; }
+  .glim-rating-star[data-highlighted] .glim-rating-fill {
+    opacity: 1;
+    scale: 1;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .glim-rating-fill {
+      transition: opacity var(--motion-control-dur) var(--motion-ease), scale var(--motion-check-dur) var(--motion-spring);
+      transition-delay: calc(var(--i, 0) * var(--motion-stagger-step));
+    }
+    .glim-rating-star[data-pop="odd"] { animation: glim-star-pop-odd var(--motion-confirm-dur) var(--motion-ease); }
+    .glim-rating-star[data-pop="even"] { animation: glim-star-pop-even var(--motion-confirm-dur) var(--motion-ease); }
+  }
+  /* Two names for one spring, so a second pick of the same star plays it again. */
+  @keyframes glim-star-pop-odd { 40% { scale: 1.18; } }
+  @keyframes glim-star-pop-even { 40% { scale: 1.18; } }
   .glim-rating-star[data-half] .glim-rating-fill { clip-path: inset(0 50% 0 0); }
   .glim-rating-star[data-half]:dir(rtl) .glim-rating-fill { clip-path: inset(0 0 0 50%); }
   .glim-rating-star:focus-visible {
@@ -8047,14 +8383,19 @@
     align-items: center;
     gap: var(--space-8);
   }
+  /* The dial sits into the surface like a field, with a tick at each snap,
+     a longer one at each quarter, and an accent hand from the value in the
+     middle out to the knob. */
   .glim-angle-dial {
     position: relative;
-    width: 5rem;
-    height: 5rem;
+    width: 6rem;
+    height: 6rem;
     border-radius: 50%;
-    background-color: var(--carbon-surface3);
+    background-color: var(--field-rest);
+    box-shadow: var(--field-sink);
     cursor: pointer;
   }
+  .glim-angle-dial:has(.glim-angle-thumb:focus-visible) { background-color: var(--field-focus); }
   .glim-angle-dial[data-disabled] {
     opacity: 0.5;
     cursor: not-allowed;
@@ -8068,11 +8409,17 @@
   .glim-angle-mark::before {
     content: "";
     position: absolute;
-    top: var(--space-2);
+    top: var(--space-3);
+    left: calc(50% - 0.75px);
+    width: 1.5px;
+    height: var(--space-2);
+    border-radius: 1px;
+    background-color: color-mix(in oklab, var(--carbon-text-muted) 70%, transparent);
+  }
+  .glim-angle-mark[data-quarter]::before {
     left: calc(50% - 1px);
     width: 2px;
-    height: var(--space-3);
-    border-radius: 1px;
+    height: 7px;
     background-color: var(--carbon-text-muted);
   }
   /* The thumb covers the dial only to turn with it; a press goes through to
@@ -8086,23 +8433,40 @@
   .glim-angle-thumb::before {
     content: "";
     position: absolute;
-    top: var(--space-1);
-    left: calc(50% - 0.5rem);
-    width: 1rem;
-    height: 1rem;
+    top: var(--space-2);
+    left: calc(50% - 0.4375rem);
+    width: 0.875rem;
+    height: 0.875rem;
     border-radius: 50%;
     background-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--carbon-surface3);
+    box-shadow: var(--toggle-knob-shadow);
   }
-  .glim-angle-thumb:focus-visible::before {
-    outline: var(--focus-ring-width) solid var(--focus-ring);
-    outline-offset: 3px;
+  .glim-angle-thumb:focus-visible::before { outline: none; }
+  .glim-angle-hand {
+    position: absolute;
+    top: calc(var(--space-2) + 0.875rem);
+    bottom: calc(50% + 1rem);
+    left: calc(50% - 1px);
+    width: 2px;
+    border-radius: 1px;
+    background-color: var(--accent);
   }
   .glim-angle-value {
-    min-width: 3.5rem;
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
     direction: ltr;
     color: var(--carbon-text);
-    font-size: var(--text-title);
+    font-size: var(--text-body);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    pointer-events: none;
+  }
+  /* It turns to a snap on a short spring. A turn past 0° would spring the
+     long way round, so that one step lands at once (data-across). */
+  @media (prefers-reduced-motion: no-preference) {
+    .glim-angle-thumb:not([data-across]) { transition: rotate var(--motion-check-dur) var(--motion-spring); }
   }
 }
 

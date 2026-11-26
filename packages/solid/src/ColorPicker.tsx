@@ -1,22 +1,28 @@
-import { createEffect, createSignal, mergeProps, on, onCleanup, onMount, Show } from "solid-js";
+import { createEffect, createSignal, For, mergeProps, on, onCleanup, onMount, Show } from "solid-js";
 import {
+  canPickFromScreen,
   COLOR_NAMES_DE,
   COLOR_PICKER_TEXT,
   colorPicker,
   floatColorPicker,
+  MARKS,
   nearestColorName,
   normalizeHex,
+  pickFromScreen,
+  rainbowSwatches,
   type ColorName,
   type ColorPickerPanelText,
 } from "@glimstone/core";
 import { Button } from "./Button.tsx";
-import { IconCheck } from "./glyphs.tsx";
+import { IconButton } from "./IconButton.tsx";
+import { IconCheck, MarkSvg } from "./glyphs.tsx";
 import { Lift } from "./Lift.tsx";
 
 export type { ColorName, ColorPickerPanelText } from "@glimstone/core";
 
 // The colour picker as a component: the core's square and hue bar, a preview
-// with the name the colour proposes, the hex field and Apply. Nothing changes
+// with the name the colour proposes, a row of ready colours, the hex field, an
+// eyedropper where the browser has one, and Apply. Nothing changes
 // until Apply, so a caller can show the colour live through onInput and still
 // keep the old one when the picker closes without it.
 
@@ -34,6 +40,8 @@ export interface ColorPickerProps {
   onClose?: () => void;
   /** The names a colour is matched against, nearest in OKLab. `false` shows none. */
   names?: readonly ColorName[] | false;
+  /** The ready colours under the hue bar, as `#rrggbb`. The page's rainbow unless given, and `false` shows none. */
+  swatches?: string[] | false;
   /** The words, read when the picker opens. */
   text?: Partial<ColorPickerPanelText>;
   class?: string;
@@ -44,6 +52,8 @@ export function ColorPicker(props: ColorPickerProps) {
   const words = { ...COLOR_PICKER_TEXT, ...merged.text };
   const [draft, setDraft] = createSignal(normalizeHex(merged.value) ?? "#000000");
   const [typed, setTyped] = createSignal(draft());
+  const [ready, setReady] = createSignal<string[]>([]);
+  const dropper = canPickFromScreen();
   const widget = colorPicker(
     draft(),
     (hex) => {
@@ -81,6 +91,19 @@ export function ColorPicker(props: ColorPickerProps) {
     widget.focus();
   });
 
+  createEffect(() => {
+    const given = merged.swatches;
+    setReady(given === false ? [] : (given ?? rainbowSwatches()).flatMap((c) => normalizeHex(c) ?? []));
+  });
+
+  /** A colour from a ready swatch or from the screen, taken as a drag on the square would be. */
+  function take(hex: string) {
+    setDraft(hex);
+    setTyped(hex);
+    widget.setValue(hex);
+    merged.onInput?.(hex);
+  }
+
   const name = () => (merged.names === false ? null : nearestColorName(draft(), merged.names));
 
   function apply() {
@@ -116,12 +139,38 @@ export function ColorPicker(props: ColorPickerProps) {
       onKeyDown={onKeyDown}
     >
       <div ref={host} style={{ display: "contents" }} />
+      <Show when={ready().length > 0}>
+        <div role="group" aria-label={words.swatches} class="glim-picker-swatches">
+          <For each={ready()}>
+            {(hex) => (
+              <button
+                type="button"
+                aria-label={hex}
+                aria-pressed={hex === draft()}
+                class="glim-picker-preset"
+                style={{ "--glim-preset": hex }}
+                onClick={() => take(hex)}
+              />
+            )}
+          </For>
+        </div>
+      </Show>
       <div class="glim-picker-foot">
         <span class="glim-picker-swatch" aria-hidden="true" />
         <Show when={name() !== null}>
           <span class="glim-picker-name">{name()}</span>
         </Show>
         <input class="glim-picker-hex" value={typed()} maxlength={7} spellcheck={false} aria-label={words.hex} onInput={onTyped} />
+        <Show when={dropper}>
+          <IconButton
+            tip={words.eyedropper}
+            glyph={<MarkSvg mark={MARKS.eyedropper} class="glim-mark" />}
+            onClick={async () => {
+              const hex = await pickFromScreen();
+              if (hex) take(hex);
+            }}
+          />
+        </Show>
       </div>
       <div class="glim-picker-actions">
         <Button label={words.apply} labelKey="apply" glyph={<IconCheck />} tone="accent" onClick={apply} />

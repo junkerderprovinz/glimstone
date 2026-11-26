@@ -46,3 +46,17 @@ export function formatFileSize(bytes: number, locale?: string): string {
     maximumFractionDigits: unit === 0 || value >= 100 ? 0 : 1,
   }).format(value);
 }
+
+export interface UploadProgressView {
+  /** "sending" while the file goes up, "done" once it is there, undefined while the app says nothing. */
+  state: "sending" | "done" | undefined;
+  /** How far it has gone, from 0 to 1, for the row's fill. */
+  share: number | undefined;
+}
+
+/** How a file's row shows what the app says of its upload, from 0 to 1. */
+export function uploadProgressView(sent: number | undefined): UploadProgressView {
+  if (sent === undefined || Number.isNaN(sent)) return { state: undefined, share: undefined };
+  const share = Math.min(1, Math.max(0, sent));
+  return { state: share >= 1 ? "done" : "sending", share };
+}

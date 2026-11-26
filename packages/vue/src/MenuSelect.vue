@@ -3,6 +3,7 @@ import { computed, shallowRef, useId, watch } from "vue";
 import * as menu from "@zag-js/menu";
 import { normalizeProps, useMachine } from "@zag-js/vue";
 import {
+  alignOverTrigger,
   closeOnPageMove,
   faceLabels,
   flattenRuns,
@@ -74,6 +75,14 @@ useTriggerMotion(trigger, {
   shakeCount: () => props.shake ?? 0,
 });
 const hue = usePortalHue(() => api.value.open, trigger);
+const content = shallowRef<HTMLElement | null>(null);
+watch(
+  () => api.value.open,
+  (open, _, onCleanup) => {
+    if (open && content.value && trigger.value) onCleanup(alignOverTrigger(content.value, trigger.value, homeRow(props.groups, props.value, subId)));
+  },
+  { flush: "post" },
+);
 
 watch(
   () => api.value.open,
@@ -140,7 +149,7 @@ defineExpose({ trigger });
     <TipBubble :state="bubble" />
     <Teleport :to="portalTarget()">
       <div v-bind="api.getPositionerProps()" :style="hue.style.value" :class="['glim-select-positioner', hue.className.value]">
-        <div v-bind="api.getContentProps()" :class="parts.content">
+        <div ref="content" v-bind="api.getContentProps()" :class="parts.content">
           <template v-for="(g, gi) in groups" :key="gi">
             <div v-if="g.entries.length > 0" v-bind="g.heading ? api.getItemGroupProps({ id: `g${gi}` }) : {}" class="glim-select-group">
               <div v-if="g.heading" v-bind="api.getItemGroupLabelProps({ htmlFor: `g${gi}` })" :class="parts.heading">

@@ -63,6 +63,8 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     required this.fieldRest,
     required this.fieldHover,
     required this.fieldFocus,
+    required this.fieldPart,
+    required this.fieldPartStrong,
     required this.chart1,
     required this.chart2,
     required this.chart3,
@@ -144,6 +146,8 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
   final Color fieldRest;
   final Color fieldHover;
   final Color fieldFocus;
+  final Color fieldPart;
+  final Color fieldPartStrong;
   final Color chart1;
   final Color chart2;
   final Color chart3;
@@ -232,6 +236,8 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     fieldRest: Color(0x13FFFFFF),
     fieldHover: Color(0x18FFFFFF),
     fieldFocus: Color(0x21FFFFFF),
+    fieldPart: Color(0x14FFFFFF),
+    fieldPartStrong: Color(0x1FFFFFFF),
     chart1: Color(0xFF3E98E3),
     chart2: Color(0xFFD47638),
     chart3: Color(0xFF2FEDEC),
@@ -311,6 +317,8 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     fieldRest: Color(0x13FFFFFF),
     fieldHover: Color(0x18FFFFFF),
     fieldFocus: Color(0x21FFFFFF),
+    fieldPart: Color(0x14FFFFFF),
+    fieldPartStrong: Color(0x1FFFFFFF),
     chart1: Color(0xFF3E98E3),
     chart2: Color(0xFFD47638),
     chart3: Color(0xFF2FEDEC),
@@ -389,6 +397,8 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     fieldRest: Color(0x0D000000),
     fieldHover: Color(0x12000000),
     fieldFocus: Color(0xFFFFFFFF),
+    fieldPart: Color(0x0F000000),
+    fieldPartStrong: Color(0x17000000),
     chart1: Color(0xFF035085),
     chart2: Color(0xFF793802),
     chart3: Color(0xFF079A99),
@@ -468,6 +478,8 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
     Color? fieldRest,
     Color? fieldHover,
     Color? fieldFocus,
+    Color? fieldPart,
+    Color? fieldPartStrong,
     Color? chart1,
     Color? chart2,
     Color? chart3,
@@ -548,6 +560,8 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
         fieldRest: fieldRest ?? this.fieldRest,
         fieldHover: fieldHover ?? this.fieldHover,
         fieldFocus: fieldFocus ?? this.fieldFocus,
+        fieldPart: fieldPart ?? this.fieldPart,
+        fieldPartStrong: fieldPartStrong ?? this.fieldPartStrong,
         chart1: chart1 ?? this.chart1,
         chart2: chart2 ?? this.chart2,
         chart3: chart3 ?? this.chart3,
@@ -631,6 +645,8 @@ class GlimTheme extends ThemeExtension<GlimTheme> {
       fieldRest: Color.lerp(fieldRest, other.fieldRest, t)!,
       fieldHover: Color.lerp(fieldHover, other.fieldHover, t)!,
       fieldFocus: Color.lerp(fieldFocus, other.fieldFocus, t)!,
+      fieldPart: Color.lerp(fieldPart, other.fieldPart, t)!,
+      fieldPartStrong: Color.lerp(fieldPartStrong, other.fieldPartStrong, t)!,
       chart1: Color.lerp(chart1, other.chart1, t)!,
       chart2: Color.lerp(chart2, other.chart2, t)!,
       chart3: Color.lerp(chart3, other.chart3, t)!,

@@ -1,8 +1,9 @@
-import { useEffect, useId, useRef, type KeyboardEvent, type ReactNode, type Ref, type RefObject } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, type KeyboardEvent, type ReactNode, type Ref, type RefObject } from "react";
 import * as menu from "@zag-js/menu";
 import * as select from "@zag-js/select";
 import { normalizeProps, Portal, useMachine } from "@zag-js/react";
 import {
+  alignOverTrigger,
   closeOnPageMove,
   endOption,
   defaultWidth,
@@ -166,6 +167,8 @@ function ListSelect<T extends string>({
   const trigger = useTrigger({ all, value, onChange, inert: !!(disabled || busy), tip, disabled, shake, outer: ref });
   useEffect(() => (api.open ? closeOnPageMove(() => api.setOpen(false)) : undefined), [api.open]); // eslint-disable-line react-hooks/exhaustive-deps
   const hue = usePortalHue(api.open, trigger.ref);
+  const content = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => (api.open ? alignOverTrigger(content.current!, trigger.ref.current!, value) : undefined), [api.open]); // eslint-disable-line react-hooks/exhaustive-deps
   const glyphs = all.some((o) => o.glyph);
   const parts = selectRowParts(rows, glyphs);
   const tp = api.getTriggerProps();
@@ -204,7 +207,7 @@ function ListSelect<T extends string>({
       {trigger.tip.bubble}
       <Portal container={{ current: portalTarget() }}>
         <div {...positioner} style={{ ...positioner.style, ...hue.style }} className={`glim-select-positioner ${hue.className}`.trim()}>
-          <div {...api.getContentProps()} className={parts.content}>
+          <div {...api.getContentProps()} ref={content} className={parts.content}>
             {groups.map((g, gi) => {
               const items = g.entries as SelectOption<T>[];
               if (items.length === 0) return null;
@@ -277,6 +280,8 @@ function MenuSelect<T extends string>({
   // Zag highlights on the frame after the list opens, so the home row goes one
   // frame later still.
   const home = homeRow(groups, value, subId);
+  const content = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => (api.open ? alignOverTrigger(content.current!, trigger.ref.current!, home) : undefined), [api.open]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!api.open || home === null) return;
     let inner = 0;
@@ -333,7 +338,7 @@ function MenuSelect<T extends string>({
       {trigger.tip.bubble}
       <Portal container={{ current: portalTarget() }}>
         <div {...positioner} style={{ ...positioner.style, ...hue.style }} className={`glim-select-positioner ${hue.className}`.trim()}>
-          <div {...api.getContentProps()} className={parts.content}>
+          <div {...api.getContentProps()} ref={content} className={parts.content}>
             {groups.map((g, gi) => {
               if (g.entries.length === 0) return null;
               const id = `g${gi}`;

@@ -20,7 +20,7 @@
 
 <script lang="ts">
   import { fieldErrorView, textFieldClass } from "@glimstone/core";
-  import FieldError from "./FieldError.svelte";
+  import FieldErrorLine from "./FieldErrorLine.svelte";
   import { useFieldName } from "./fieldName.js";
 
   // A line of text: borderless and filled, focus a step up the ramp (rule 14).
@@ -58,4 +58,4 @@
   {type}
   class={`${textFieldClass({ width, mono })} ${className ?? ""}`.trim()}
 />
-{#if err.errorId}<FieldError id={err.errorId}>{error}</FieldError>{/if}
+<FieldErrorLine id={err.errorId} {error} />

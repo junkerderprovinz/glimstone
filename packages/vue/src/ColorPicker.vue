@@ -1,22 +1,28 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, shallowRef, watch } from "vue";
+import { computed, h, onBeforeUnmount, onMounted, ref, shallowRef, watch } from "vue";
 import {
+  canPickFromScreen,
   COLOR_NAMES_DE,
   COLOR_PICKER_TEXT,
   colorPicker,
   floatColorPicker,
+  MARKS,
   nearestColorName,
   normalizeHex,
+  pickFromScreen,
+  rainbowSwatches,
   type ColorName,
   type ColorPicker as Widget,
   type ColorPickerPanelText,
   portalTarget,
 } from "@glimstone/core";
 import Button from "./Button.vue";
-import { IconCheck } from "./glyphs";
+import IconButton from "./IconButton.vue";
+import { IconCheck, MarkSvg } from "./glyphs";
 
 // The colour picker as a component: the core's square and hue bar, a preview
-// with the name the colour proposes, the hex field and Apply. v-model holds
+// with the name the colour proposes, a row of ready colours, the hex field, an
+// eyedropper where the browser has one, and Apply. v-model holds
 // the applied colour and changes only on Apply, so a caller can show the
 // colour live through `input` and still keep the old one when the picker
 // closes without it.
@@ -27,10 +33,13 @@ const props = withDefaults(
     anchor?: HTMLElement | null;
     /** The names a colour is matched against, nearest in OKLab. `false` shows none. */
     names?: readonly ColorName[] | false;
+    /** The ready colours under the hue bar, as `#rrggbb`. The page's rainbow unless given, and `false` shows none. */
+    swatches?: string[] | false;
     /** The words, read when the picker opens. */
     text?: Partial<ColorPickerPanelText>;
   }>(),
-  { anchor: null, names: () => COLOR_NAMES_DE },
+  // Vue would read a missing `swatches` as false, which shows none.
+  { anchor: null, names: () => COLOR_NAMES_DE, swatches: undefined },
 );
 const model = defineModel<string>({ required: true });
 const emit = defineEmits<{
@@ -48,6 +57,9 @@ const host = shallowRef<HTMLElement | null>(null);
 const draft = ref(normalizeHex(model.value) ?? "#000000");
 const typed = ref(draft.value);
 const name = computed(() => (props.names === false ? null : nearestColorName(draft.value, props.names)));
+const ready = ref<string[]>([]);
+const dropper = canPickFromScreen();
+const IconEyedropper = () => h(MarkSvg, { mark: MARKS.eyedropper, class: "glim-mark" });
 
 const widget: Widget = colorPicker(
   draft.value,
@@ -60,7 +72,13 @@ const widget: Widget = colorPicker(
 );
 
 let unfloat: (() => void) | undefined;
+function readSwatches() {
+  ready.value = props.swatches === false ? [] : (props.swatches ?? rainbowSwatches()).flatMap((c) => normalizeHex(c) ?? []);
+}
+watch(() => props.swatches, readSwatches);
+
 onMounted(() => {
+  readSwatches();
   host.value!.appendChild(widget.el);
   if (props.anchor && panel.value) {
     unfloat = floatColorPicker(panel.value, props.anchor, () => emit("close"));
@@ -84,6 +102,19 @@ function onTyped(e: Event) {
   draft.value = hex;
   widget.setValue(hex);
   emit("input", hex);
+}
+
+/** A colour from a ready swatch or from the screen, taken as a drag on the square would be. */
+function take(hex: string) {
+  draft.value = hex;
+  typed.value = hex;
+  widget.setValue(hex);
+  emit("input", hex);
+}
+
+async function pickScreen() {
+  const hex = await pickFromScreen();
+  if (hex) take(hex);
 }
 
 function apply() {
@@ -113,6 +144,18 @@ function onKeyDown(e: KeyboardEvent) {
       @keydown="onKeyDown"
     >
       <div ref="host" style="display: contents" />
+      <div v-if="ready.length > 0" role="group" :aria-label="words.swatches" class="glim-picker-swatches">
+        <button
+          v-for="hex in ready"
+          :key="hex"
+          type="button"
+          :aria-label="hex"
+          :aria-pressed="hex === draft"
+          class="glim-picker-preset"
+          :style="{ '--glim-preset': hex }"
+          @click="take(hex)"
+        />
+      </div>
       <div class="glim-picker-foot">
         <span class="glim-picker-swatch" aria-hidden="true" />
         <span v-if="name !== null" class="glim-picker-name">{{ name }}</span>
@@ -124,6 +167,7 @@ function onKeyDown(e: KeyboardEvent) {
           :aria-label="words.hex"
           @input="onTyped"
         />
+        <IconButton v-if="dropper" :tip="words.eyedropper" :glyph="IconEyedropper" @click="pickScreen" />
       </div>
       <div class="glim-picker-actions">
         <Button :label="words.apply" label-key="apply" :glyph="IconCheck" tone="accent" @click="apply" />

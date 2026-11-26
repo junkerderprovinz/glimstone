@@ -14,6 +14,8 @@
     /** The largest file it takes, in bytes. */
     maxFileSize?: number;
     disabled?: boolean;
+    /** How far a file has gone up, from 0 to 1, while the app sends it. Its row fills with it. */
+    progress?: (file: File) => number | undefined;
     text?: Partial<FileUploadText>;
   }
 </script>
@@ -21,15 +23,16 @@
 <script lang="ts">
   import * as fileUpload from "@zag-js/file-upload";
   import { normalizeProps, useMachine } from "@zag-js/svelte";
-  import { FILE_UPLOAD_TEXT, formatFileSize, pageDir, type FileRefusal } from "@glimstone/core";
+  import { FILE_UPLOAD_TEXT, formatFileSize, pageDir, uploadProgressView, type FileRefusal } from "@glimstone/core";
   import IconButton from "./IconButton.svelte";
   import { IconClose, IconUpload } from "./glyphs.js";
 
   // Files handed to the app by dropping them or from the picker, such as a
   // settings file to import. The drop zone is itself the button that opens the
   // picker, so there is one control and one stop for Tab. The files stand under
-  // it as rows, and a refused one is named with its reason.
-  let { label, value = $bindable(), onChange, accept, maxFiles = 1, maxFileSize, disabled = false, text }: FileUploadProps = $props();
+  // it as rows, each filling as its file goes up, and a refused one is named
+  // with its reason.
+  let { label, value = $bindable(), onChange, accept, maxFiles = 1, maxFileSize, disabled = false, progress, text }: FileUploadProps = $props();
 
   const words = $derived({ ...FILE_UPLOAD_TEXT, ...text });
   const id = $props.id();
@@ -60,7 +63,14 @@
   {#if api.acceptedFiles.length > 0}
     <ul {...api.getItemGroupProps()} class="glim-upload-files">
       {#each api.acceptedFiles as file (`${file.name}-${file.size}`)}
-        <li {...api.getItemProps({ file })} class="glim-upload-file">
+        {@const sent = uploadProgressView(progress?.(file))}
+        <li
+          {...api.getItemProps({ file })}
+          aria-busy={sent.state === "sending" ? true : undefined}
+          data-progress={sent.state}
+          style:--glim-upload-progress={sent.share}
+          class="glim-upload-file"
+        >
           <span {...api.getItemNameProps({ file })} class="glim-upload-name">{file.name}</span>
           <span {...api.getItemSizeTextProps({ file })} class="glim-upload-size glim-num">{formatFileSize(file.size)}</span>
           <IconButton tip={words.remove(file.name)} glyph={IconClose} onclick={() => api.deleteFile(file)} />
