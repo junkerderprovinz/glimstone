@@ -25,6 +25,15 @@ test.describe("Avatar", () => {
     await expect(person(page, "Ada Lovelace").locator(".glim-avatar-fallback")).toBeHidden();
   });
 
+  test("[avatar-tone] the initials take a soft tone from the name, never the accent", async ({ page }) => {
+    await open(page, "/components/avatar");
+    const looks = await stage(page, "AvatarPeople").locator(".glim-avatar").evaluateAll((all) => all.map((a) => getComputedStyle(a).color));
+    const accent = await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue("--accent").trim());
+    expect(new Set(looks).size).toBeGreaterThan(1);
+    for (const ink of looks) expect(ink).not.toBe(accent);
+    await expect(person(page, "Grace Hopper")).toHaveClass(/glim-avatar--toned/);
+  });
+
   test("[avatar-shape] the corners follow the shape setting", async ({ page }) => {
     await open(page, "/components/avatar");
     const corner = () => person(page, "Grace Hopper").evaluate((el) => parseFloat(getComputedStyle(el).borderTopLeftRadius));

@@ -1,4 +1,4 @@
-import { meterView, type MeterSize } from "@glimstone/core";
+import { meterFigure, meterShowsValue, meterView, type MeterSize } from "@glimstone/core";
 import { useTipBubble } from "./useTipBubble.tsx";
 
 export type { MeterSize } from "@glimstone/core";
@@ -19,31 +19,50 @@ export interface MeterProps {
   quiet?: boolean;
   /** The level in words, such as "120 GB free of 4 TB": read out, and shown in the bubble. */
   valueText?: string;
+  /** The figure beside the track, such as "1.4 / 2 TB". The percentage when left out. */
+  figure?: string;
+  /** Shows the figure beside the track. On by default for `medium`, off for `small` and `quiet`. */
+  showValue?: boolean;
   className?: string;
 }
 
-export function Meter({ value, label, size = "medium", threshold = 0.9, quiet, valueText, className }: MeterProps) {
+export function Meter({ value, label, size = "medium", threshold = 0.9, quiet, valueText, figure, showValue, className }: MeterProps) {
   const view = meterView(value, { size, threshold, quiet });
   const tip = useTipBubble(valueText);
   const busy = view.percent === null;
+  const meter = (
+    <span
+      data-glim="Meter"
+      ref={tip.ref}
+      {...tip.handlers}
+      role={busy ? "progressbar" : "meter"}
+      aria-label={label}
+      aria-valuemin={busy ? undefined : 0}
+      aria-valuemax={busy ? undefined : 100}
+      aria-valuenow={view.percent ?? undefined}
+      aria-valuetext={valueText}
+      aria-busy={busy || undefined}
+      className={className ? `${view.className} ${className}` : view.className}
+    >
+      <span className="glim-meter-fill" style={view.width ? { width: view.width } : undefined} />
+    </span>
+  );
+  if (!meterShowsValue(size, quiet, showValue)) {
+    return (
+      <>
+        {meter}
+        {tip.bubble}
+      </>
+    );
+  }
+  // The figure repeats what the meter already says, so a screen reader hears it once.
   return (
-    <>
-      <span
-        data-glim="Meter"
-        ref={tip.ref}
-        {...tip.handlers}
-        role={busy ? "progressbar" : "meter"}
-        aria-label={label}
-        aria-valuemin={busy ? undefined : 0}
-        aria-valuemax={busy ? undefined : 100}
-        aria-valuenow={view.percent ?? undefined}
-        aria-valuetext={valueText}
-        aria-busy={busy || undefined}
-        className={className ? `${view.className} ${className}` : view.className}
-      >
-        <span className="glim-meter-fill" style={view.width ? { width: view.width } : undefined} />
+    <span className={`glim-meter-row glim-meter-row--${size}`}>
+      {meter}
+      <span className="glim-meter-value glim-num" aria-hidden="true">
+        {meterFigure(view.percent, figure)}
       </span>
       {tip.bubble}
-    </>
+    </span>
   );
 }

@@ -26,7 +26,7 @@
   const id = $props.id();
   const service = useMachine(avatar.machine, () => ({ id, dir: pageDir() }));
   const api = $derived(avatar.connect(service, normalizeProps));
-  const view = $derived(avatarView({ size, hueIndex }));
+  const view = $derived(avatarView({ size, hueIndex, name }));
 </script>
 
 <span data-glim="Avatar" {...api.getRootProps()} role="img" aria-label={name} class={view.className} style={css(view.style)}>

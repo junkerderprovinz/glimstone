@@ -1,4 +1,3 @@
-import { hueVars } from "./appearance.ts";
 import { intlHas } from "./intl.ts";
 
 // A person's picture, or their initials while it loads or when there is none.
@@ -31,11 +30,22 @@ export interface AvatarView {
   style: Record<string, string> | undefined;
 }
 
-/** Neutral by default. A palette position fills the circle with its hue, for a list of people under rainbow. */
-export function avatarView({ size, hueIndex }: { size: AvatarSize; hueIndex?: number }): AvatarView {
-  const hued = hueIndex !== undefined;
+/** One of the eight chart series for a name, the same for the same name on every visit. */
+export function avatarTone(name: string): number {
+  let h = 0;
+  for (const ch of name.trim().toLocaleLowerCase()) h = (Math.imul(h, 31) + ch.codePointAt(0)!) | 0;
+  return (Math.abs(h) % 8) + 1;
+}
+
+/**
+ * Neutral without a name. With one the initials take a soft tone of a chart
+ * series, from the palette position where there is one and else from the
+ * name, never the accent, which marks activity.
+ */
+export function avatarView({ size, hueIndex, name }: { size: AvatarSize; hueIndex?: number; name?: string }): AvatarView {
+  const tone = hueIndex !== undefined ? (hueIndex % 8) + 1 : name ? avatarTone(name) : undefined;
   return {
-    className: `glim-avatar glim-avatar--${size}${hued ? " glim-avatar--hued glim-hue" : ""}`,
-    style: hued ? hueVars(hueIndex) : undefined,
+    className: `glim-avatar glim-avatar--${size}${tone ? " glim-avatar--toned" : ""}`,
+    style: tone ? { "--avatar-tone": `var(--chart-${tone})` } : undefined,
   };
 }

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { listRowStatus } from '../src/listRow.ts';
 import { TOAST_MARKS } from '../src/marks.ts';
+import { meterFigure } from '../src/meter.ts';
 
 const css = readFileSync(new URL('../tokens.css', import.meta.url), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
 
@@ -57,5 +58,16 @@ test('a status stands in neutral words beside a mark in the state colour', () =>
   assert.equal(declared('.glim-list-row-status[data-tone="fail"] > .glim-status-mark', 'color'), 'var(--status-fail-solid)');
   assert.equal(declared('.glim-list-row-status[data-tone="warn"] > .glim-status-mark', 'color'), 'var(--status-warn-solid)');
   assert.equal(declared('.glim-status-dot', 'background-color'), 'var(--status-ok-solid)');
+});
+
+test('a meter says its level: the app\'s words, else the percentage, nothing while it reads', () => {
+  assert.equal(meterFigure(null), '');
+  assert.equal(meterFigure(42, '1.4 / 2 TB'), '1.4 / 2 TB');
+  assert.equal(meterFigure(42), new Intl.NumberFormat(undefined, { style: 'percent' }).format(0.42));
+});
+
+test('an avatar wears a soft wash of its tone with the initials in the same tone', () => {
+  assert.equal(declared('.glim-avatar--toned', 'background-color'), 'color-mix(in oklab, var(--avatar-tone) 18%, var(--carbon-surface))');
+  assert.match(declared('.glim-avatar--toned', 'color'), /oklch\(from var\(--avatar-tone\)/);
 });
 

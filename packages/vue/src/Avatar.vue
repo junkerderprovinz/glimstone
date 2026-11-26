@@ -21,7 +21,7 @@ const props = withDefaults(
 const id = useId();
 const service = useMachine(avatar.machine, { id, dir: pageDir() });
 const api = computed(() => avatar.connect(service, normalizeProps));
-const view = computed(() => avatarView({ size: props.size, hueIndex: props.hueIndex }));
+const view = computed(() => avatarView({ size: props.size, hueIndex: props.hueIndex, name: props.name }));
 </script>
 
 <template>

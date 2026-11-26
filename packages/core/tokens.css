@@ -823,6 +823,34 @@
      this sets a real one. */
   .glim-meter { contain: size layout; }
 
+  /* A meter says its level: the figure in tabular digits beside the track. */
+  .glim-meter-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    min-width: 0;
+  }
+  .glim-meter-row--small {
+    display: inline-flex;
+    vertical-align: middle;
+  }
+  .glim-meter-row--medium > .glim-meter {
+    flex: 1 1 auto;
+    width: auto;
+  }
+  .glim-meter-value {
+    flex: none;
+    color: var(--carbon-text-sub);
+    font-size: var(--text-meta);
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .glim-meter-row--small > .glim-meter-value {
+    min-width: 3ch;
+    text-align: end;
+  }
+  .glim-active .glim-meter-value { color: inherit; }
+
   /* The tooltip and info bubble (rule 8), placed by packages/core/src/tooltip.ts at
      body level so no scroll container, card or table clips it. It is clamped
      into the viewport, flips above the trigger when below would clip
@@ -7504,9 +7532,10 @@
     height: var(--btn-h-key);
     font-size: var(--text-body);
   }
-  .glim-avatar--hued {
-    background-color: var(--accent);
-    color: var(--accent-contrast);
+  /* The initials in one of the chart tones on a pale wash of it. */
+  .glim-avatar--toned {
+    background-color: color-mix(in oklab, var(--avatar-tone) 18%, var(--carbon-surface));
+    color: light-dark(oklch(from var(--avatar-tone) 0.45 c h), oklch(from var(--avatar-tone) 0.8 c h));
   }
   .glim-avatar-image {
     width: 100%;

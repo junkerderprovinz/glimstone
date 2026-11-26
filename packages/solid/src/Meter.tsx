@@ -1,5 +1,5 @@
-import { mergeProps } from "solid-js";
-import { meterView, type MeterSize } from "@glimstone/core";
+import { mergeProps, Show } from "solid-js";
+import { meterFigure, meterShowsValue, meterView, type MeterSize } from "@glimstone/core";
 import { useTipBubble } from "./useTipBubble.tsx";
 
 export type { MeterSize } from "@glimstone/core";
@@ -20,6 +20,10 @@ export interface MeterProps {
   quiet?: boolean;
   /** The level in words, such as "120 GB free of 4 TB": read out, and shown in the bubble. */
   valueText?: string;
+  /** The figure beside the track, such as "1.4 / 2 TB". The percentage when left out. */
+  figure?: string;
+  /** Shows the figure beside the track. On by default for `medium`, off for `small` and `quiet`. */
+  showValue?: boolean;
   class?: string;
 }
 
@@ -28,24 +32,41 @@ export function Meter(props: MeterProps) {
   const view = () => meterView(merged.value, { size: merged.size, threshold: merged.threshold, quiet: merged.quiet });
   const tip = useTipBubble(() => merged.valueText);
   const busy = () => view().percent === null;
+  const meter = (
+  <span
+      data-glim="Meter"
+      ref={tip.ref}
+      {...tip.handlers}
+      role={busy() ? "progressbar" : "meter"}
+      aria-label={merged.label}
+      aria-valuemin={busy() ? undefined : 0}
+      aria-valuemax={busy() ? undefined : 100}
+      aria-valuenow={view().percent ?? undefined}
+      aria-valuetext={merged.valueText}
+      aria-busy={busy() || undefined}
+      class={merged.class ? `${view().className} ${merged.class}` : view().className}
+    >
+      <span class="glim-meter-fill" style={view().width ? { width: view().width! } : undefined} />
+    </span>
+  );
+  // The figure repeats what the meter already says, so a screen reader hears it once.
   return (
-    <>
-      <span
-        data-glim="Meter"
-        ref={tip.ref}
-        {...tip.handlers}
-        role={busy() ? "progressbar" : "meter"}
-        aria-label={merged.label}
-        aria-valuemin={busy() ? undefined : 0}
-        aria-valuemax={busy() ? undefined : 100}
-        aria-valuenow={view().percent ?? undefined}
-        aria-valuetext={merged.valueText}
-        aria-busy={busy() || undefined}
-        class={merged.class ? `${view().className} ${merged.class}` : view().className}
-      >
-        <span class="glim-meter-fill" style={view().width ? { width: view().width! } : undefined} />
+    <Show
+      when={meterShowsValue(merged.size, merged.quiet, merged.showValue)}
+      fallback={
+        <>
+          {meter}
+          {tip.bubble}
+        </>
+      }
+    >
+      <span class={`glim-meter-row glim-meter-row--${merged.size}`}>
+        {meter}
+        <span class="glim-meter-value glim-num" aria-hidden="true">
+          {meterFigure(view().percent, merged.figure)}
+        </span>
+        {tip.bubble}
       </span>
-      {tip.bubble}
-    </>
+    </Show>
   );
 }

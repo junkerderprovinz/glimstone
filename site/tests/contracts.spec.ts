@@ -4167,6 +4167,16 @@ test.describe("Meter", () => {
     expect(await colour(fill("disk1"))).toBe(await token(quiet, "--accent"));
   });
 
+  test("[meter-value] a medium meter says its level beside the track", async ({ page }) => {
+    await open(page, "/components/meter");
+    const media = stage(page, "MeterLevels").getByRole("meter", { name: "media" });
+    const row = media.locator("xpath=..");
+    await expect(row).toHaveClass(/glim-meter-row--medium/);
+    await expect(row.locator(".glim-meter-value")).toHaveText(/31\s?%/);
+    await expect(row.locator(".glim-meter-value")).toHaveAttribute("aria-hidden", "true");
+    await expect(stage(page, "MeterLevels").getByRole("meter", { name: "disk1" }).locator("xpath=..")).not.toHaveClass(/glim-meter-row/);
+  });
+
   test("[meter-tip] the words show in the bubble", async ({ page }) => {
     await open(page, "/components/meter");
     const disk = meters(page).getByRole("meter", { name: "cache" });
