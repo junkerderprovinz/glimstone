@@ -1,76 +1,48 @@
 import { expect, test, type Page } from "@playwright/test";
 import { open, relook } from "./page";
 
-// The start page's wall and the Make it yours panel. Neither depends on a
+// The Make it yours panel and the frame around the docs. Neither depends on a
 // framework, so one project runs them in depth and every project checks that
 // they work while its framework is the one the site shows.
 const inDepth = () => test.skip(test.info().project.metadata.fw !== "react", "framework-free");
 
-const wall = (page: Page) => page.locator('[data-showcase="wall"]');
 const panel = (page: Page) => page.getByRole("dialog", { name: "Make it yours" });
 
 // Windows hands the clipboard back with CRLF line ends.
 const clipboard = async (page: Page) => (await page.evaluate(() => navigator.clipboard.readText())).replace(/\r\n/g, "\n");
 
 async function openPanel(page: Page) {
-  await page.getByRole("button", { name: "Make it yours" }).click();
+  await page.locator(".site-header").getByRole("button", { name: "Look" }).click();
   await expect(panel(page)).toBeVisible();
+  // Off the button again, so its fill reads without the hover.
+  await page.mouse.move(0, 0);
 }
 
+// The header's Look button turns to the accent while the panel is open, so it
+// shows the accent on every page.
+const accentFill = (page: Page) =>
+  page.locator(".site-header .glim-btn--accent").evaluate((el) => getComputedStyle(el).backgroundColor);
 const style = (page: Page, selector: string, property: string) =>
-  wall(page).locator(selector).first().evaluate((el, p) => getComputedStyle(el).getPropertyValue(p), property);
+  page.locator(`main ${selector}`).first().evaluate((el, p) => getComputedStyle(el).getPropertyValue(p), property);
 
-test("the wall, the panel and its snippet work while the site shows this framework", async ({ page, context, browserName }) => {
+test("the panel and its snippet work while the site shows this framework", async ({ page, context, browserName }) => {
   if (browserName === "chromium") await context.grantPermissions(["clipboard-read", "clipboard-write"]);
   await open(page, "/", { theme: "dark" });
-  await expect(wall(page).locator('[data-glim="SignInCard"]').first()).toBeAttached();
   await openPanel(page);
   await panel(page).getByRole("radio", { name: "Blue" }).click();
-  await expect.poll(() => style(page, ".glim-btn--accent", "background-color")).toBe("rgb(29, 153, 243)");
+  await expect.poll(() => accentFill(page)).toBe("rgb(29, 153, 243)");
   await panel(page).locator('[data-look="copy"]').click();
   expect(await clipboard(page)).toContain('accent: "#1D99F3"');
 });
 
-test("the wall is built from the real components and stays out of the tab order", async ({ page }) => {
+test("the page follows the accent, the corners and the theme chosen in the panel", async ({ page }) => {
   inDepth();
-  await open(page, "/");
-  for (const name of ["SignInCard", "FortressAppCard", "Selector", "Meter", "ProgressBar", "ToastCard", "ListRow", "InfoVersionCard", "EmptyState", "SubCard", "Toggle"]) {
-    await expect(wall(page).locator(`[data-glim="${name}"]`).first(), name).toBeAttached();
-  }
-  await expect(wall(page)).toHaveAttribute("inert", "");
-  await page.keyboard.press("Tab");
-  expect(await page.evaluate(() => !!document.activeElement?.closest('[data-showcase="wall"]'))).toBe(false);
-});
-
-test("an inline selector of glyphs in a field row is as wide as its square segments, inert or not", async ({ page }) => {
-  inDepth();
-  await open(page, "/", { theme: "dark" });
-  const tracks = wall(page).locator('[data-glim="FieldRow"] .glim-sel--inline');
-  await expect(tracks.first()).toBeAttached();
-  const fits = () =>
-    tracks.evaluateAll((all) =>
-      all.map((t) => {
-        const own = getComputedStyle(t);
-        const segs = [...t.querySelectorAll<HTMLElement>("[data-sel-id]")];
-        const row = segs.reduce((sum, s) => sum + s.offsetWidth, 0) + parseFloat(own.columnGap) * (segs.length - 1);
-        return t.clientWidth - parseFloat(own.paddingLeft) - parseFloat(own.paddingRight) >= row && segs.every((s) => s.offsetWidth === s.offsetHeight);
-      }),
-    );
-  expect(await fits()).not.toContain(false);
-  await wall(page).evaluate((el) => el.removeAttribute("inert"));
-  await page.setViewportSize({ width: 1281, height: 860 });
-  await expect.poll(fits).not.toContain(false);
-});
-
-test("the wall follows the accent, the corners and the theme chosen in the panel", async ({ page }) => {
-  inDepth();
-  await open(page, "/", { theme: "dark" });
-  const accentButton = ".glim-btn--accent";
-  expect(await style(page, accentButton, "background-color")).toBe("rgb(252, 196, 25)");
+  await open(page, "/components/card", { theme: "dark" });
   await openPanel(page);
+  // The button eases between colours, so each reading waits for it to land.
+  await expect.poll(() => accentFill(page)).toBe("rgb(252, 196, 25)");
   await panel(page).getByRole("radio", { name: "Blue" }).click();
-  // The button eases between colours, so the reading waits for it to land.
-  await expect.poll(() => style(page, accentButton, "background-color")).toBe("rgb(29, 153, 243)");
+  await expect.poll(() => accentFill(page)).toBe("rgb(29, 153, 243)");
 
   await panel(page).getByRole("radio", { name: "Square" }).click();
   expect(await style(page, ".glim-panel", "border-top-left-radius")).toBe("0px");
@@ -84,20 +56,6 @@ test("the wall follows the accent, the corners and the theme chosen in the panel
   expect(await style(page, ".glim-btn", "outline-style")).toBe("none");
   await panel(page).locator('[data-axis="contrast"]').getByRole("switch").click();
   expect(await style(page, ".glim-btn", "outline-style")).toBe("solid");
-});
-
-test("the wall drifts with motion on and stands still with motion off or reduced", async ({ page }) => {
-  inDepth();
-  await page.emulateMedia({ reducedMotion: "no-preference" });
-  await open(page, "/", { motion: "subtle" });
-  expect(await style(page, ".wall-track", "animation-name")).toBe("wall-drift");
-  await openPanel(page);
-  await panel(page).locator('[data-axis="motion"]').getByRole("radio", { name: "Off" }).click();
-  expect(await style(page, ".wall-track", "animation-name")).toBe("none");
-  await panel(page).getByRole("radio", { name: "Wild" }).click();
-  expect(await style(page, ".wall-track", "animation-name")).toBe("wall-drift");
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  expect(await style(page, ".wall-track", "animation-name")).toBe("none");
 });
 
 test("the panel lists every axis of the look", async ({ page }) => {
@@ -244,16 +202,6 @@ test("with the rainbow on, the panel shows its palette and the settings under it
   expect(await page.evaluate(() => document.documentElement.style.getPropertyValue("--rb-0"))).toBe("#2e8b57");
 });
 
-test("the frameworks under the hero carry their marks and lead to their adoption notes", async ({ page }) => {
-  inDepth();
-  await open(page, "/", { theme: "dark" });
-  const links = page.locator(".hero-frameworks a");
-  await expect(links).toHaveText(["React", "Vue", "Solid", "Svelte"]);
-  for (const link of await links.all()) await expect(link.locator(".fw-mark svg")).toHaveCount(1);
-  await links.filter({ hasText: "Svelte" }).click();
-  await expect(page.locator("main h3#svelte")).toBeInViewport();
-});
-
 test("a click on the chosen swatch opens the picker, and the colour picked lands on the page and in the snippet", async ({ page, context, browserName }) => {
   inDepth();
   if (browserName === "chromium") await context.grantPermissions(["clipboard-read", "clipboard-write"]);
@@ -270,7 +218,7 @@ test("a click on the chosen swatch opens the picker, and the colour picked lands
   const hex = page.getByRole("textbox", { name: "Hex" });
   await hex.fill("#2E8B57");
   await page.getByRole("button", { name: "Apply" }).click();
-  await expect.poll(() => style(page, ".glim-btn--accent", "background-color")).toBe("rgb(46, 139, 87)");
+  await expect.poll(() => accentFill(page)).toBe("rgb(46, 139, 87)");
   await expect(chosen).toHaveAttribute("aria-label", /#2E8B57/);
   await panel(page).locator('[data-look="copy"]').click();
   const snippet = await clipboard(page);
@@ -292,10 +240,10 @@ test("Reset accent after a picked colour brings back the default accent on the p
   await chosen.click();
   await page.getByRole("textbox", { name: "Hex" }).fill("#2E8B57");
   await page.getByRole("button", { name: "Apply" }).click();
-  await expect.poll(() => style(page, ".glim-btn--accent", "background-color")).toBe("rgb(46, 139, 87)");
+  await expect.poll(() => accentFill(page)).toBe("rgb(46, 139, 87)");
 
   await reset.click();
-  await expect.poll(() => style(page, ".glim-btn--accent", "background-color")).toBe("rgb(252, 196, 25)");
+  await expect.poll(() => accentFill(page)).toBe("rgb(252, 196, 25)");
   await expect(row.locator('[data-swatch="Sunflower"]')).toHaveAttribute("aria-checked", "true");
   await expect(row.locator('[data-swatch="Sunflower"]')).not.toHaveAttribute("aria-label", /#2E8B57/i);
   await expect(reset).toBeDisabled();
@@ -345,21 +293,23 @@ test.describe("at phone width", () => {
   });
 });
 
-test("[site-centre] on a wide screen the page stands in the middle between the nav and the window's edge, with the contents list at that edge", async ({ page }) => {
+test("[site-centre] on a wide screen the page stands in the middle between the nav and the contents list, each at its edge of the window", async ({ page }) => {
   inDepth();
   await page.setViewportSize({ width: 1920, height: 1000 });
-  for (const path of ["/components/angle-slider", "/"]) {
+  for (const path of ["/components/angle-slider", "/introduction"]) {
     await open(page, path);
     const box = (sel: string) => page.locator(sel).first().evaluate((e) => e.getBoundingClientRect().toJSON() as DOMRect);
     const frame = page.locator(".site-frame");
     const [gutter, gap] = await frame.evaluate((f) => [parseFloat(getComputedStyle(f).paddingInlineEnd), parseFloat(getComputedStyle(f).columnGap)]);
-    const edge = (await box(".site-frame")).right - gutter;
     const nav = await box(".site-nav");
+    const toc = await box(".site-toc");
     const main = await box(".site-frame > main");
-    const room = { start: nav.right + gap, end: path === "/" ? edge : (await box(".site-toc")).left - gap };
-    if (path !== "/") expect(Math.abs((await box(".site-toc")).right - edge), path).toBeLessThan(1);
-    expect(Math.abs(main.left - room.start - (room.end - main.right)), path).toBeLessThan(2);
-    expect(main.left - room.start, path).toBeGreaterThan(100);
+    expect(nav.left, path).toBe(gutter);
+    expect(Math.abs(toc.right - (1920 - gutter)), path).toBeLessThan(1);
+    expect(nav.width, path).toBe(toc.width);
+    expect(Math.abs(main.left - (nav.right + gap) - (toc.left - gap - main.right)), path).toBeLessThan(2);
+    // 68rem at most, however wide the window.
+    expect(main.width, path).toBe(68 * 16);
   }
 });
 
@@ -386,5 +336,6 @@ test("the header and the docs nav stay in place while a long page scrolls under 
   for (const part of [page.locator(".site-header"), nav]) expect(await part.evaluate((el) => getComputedStyle(el).position)).toBe("sticky");
   const before = (await nav.boundingBox())!.y;
   await page.evaluate(() => window.scrollTo(0, 1200));
-  await expect.poll(async () => (await nav.boundingBox())!.y).toBeCloseTo(Math.min(before, 56), 0);
+  const header = await page.locator(".site-header").evaluate((h) => h.getBoundingClientRect().height);
+  await expect.poll(async () => (await nav.boundingBox())!.y).toBeCloseTo(Math.min(before, header), 0);
 });

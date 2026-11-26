@@ -73,6 +73,16 @@ test('the stone lays a fine grain over the page that takes no pointer', () => {
   assert.match(m[1]!, /position: fixed/);
 });
 
+test('the grain\'s specks vary in lightness, so the overlay lightens some and darkens others', () => {
+  const m = css.match(/:root\[data-light="stone"\] body::after \{([^}]*)\}/);
+  const matrix = decodeURIComponent(m![1]!).match(/feColorMatrix values='([^']+)'/)![1]!.trim().split(/\s+/).map(Number);
+  // Each colour row takes the noise's red channel, so no speck sits on the grey
+  // that an overlay leaves as it is.
+  for (const row of [0, 1, 2]) assert.ok(matrix[row * 5]! > 1, `row ${row}: ${matrix.slice(row * 5, row * 5 + 5).join(' ')}`);
+  assert.equal(matrix[18], 0);
+  assert.equal(matrix[19], 1);
+});
+
 test('the lit parts read the light tokens', () => {
   assert.match(css, /\.glim-btn--neutral \{[^}]*box-shadow: var\(--elevation-control\)/);
   assert.match(css, /\.glim-btn--accent \{[^}]*background-image: var\(--light-sheen\);[^}]*box-shadow: var\(--elevation-accent\)/);

@@ -1,29 +1,19 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:glimstone/glimstone.dart';
 
+import 'support.dart';
+
 // Each test is named after its contract row in site/src/contracts.ts, "[id] ...",
 // which is how the site finds its result.
 
-// Widths are measured in the house font; the test font draws every letter as a
-// square, so no label would fit its stage.
-Future<void> loadNotoSans() async {
-  final bytes = File('example/fonts/NotoSans.ttf').readAsBytesSync();
-  await (FontLoader('Noto Sans')..addFont(Future.value(ByteData.sublistView(bytes)))).load();
-}
-
-Widget host(Widget child, {Brightness brightness = Brightness.dark}) =>
-    MaterialApp(
-      theme: glimThemeData(brightness),
-      home: Scaffold(body: Center(child: child)),
-    );
+GlimDecoration groundOf(WidgetTester tester) =>
+    tester.widget<AnimatedContainer>(find.byType(AnimatedContainer)).decoration! as GlimDecoration;
 
 void main() {
-  setUpAll(loadNotoSans);
+  setUpAll(loadPlex);
 
   testWidgets('[button-keys] Enter and Space act', (tester) async {
     var presses = 0;
@@ -106,10 +96,7 @@ void main() {
       (tester) async {
     await tester.pumpWidget(host(GlimButton(
         label: 'Refresh', glyph: GlimGlyphs.retry, onPressed: () {})));
-    Color ground() => ((tester
-            .widget<AnimatedContainer>(find.byType(AnimatedContainer))
-            .decoration!) as BoxDecoration)
-        .color!;
+    Color ground() => groundOf(tester).color!;
     final rest = ground();
     final mouse = await tester.createGesture(kind: PointerDeviceKind.mouse);
     await mouse.addPointer(location: tester.getCenter(find.byType(GlimButton)));
@@ -119,5 +106,64 @@ void main() {
     expect(lit, isNot(rest));
     expect(lit, glim.hover);
     await mouse.removePointer();
+  });
+
+  testWidgets('a state button is a wash of its hue under the hue''s own text', (tester) async {
+    final glim = GlimTheme.dark;
+    for (final (tone, wash, hover, ink) in [
+      (GlimTone.ok, glim.statusOkWash, glim.statusOkWashHover, glim.statusOkText),
+      (GlimTone.danger, glim.statusFailWash, glim.statusFailWashHover, glim.statusFailText),
+      (GlimTone.warn, glim.statusWarnWash, glim.statusWarnWashHover, glim.statusWarnText),
+    ]) {
+      await tester.pumpWidget(host(GlimButton(label: 'Delete', tone: tone, onPressed: () {})));
+      expect(groundOf(tester).color, wash, reason: tone.name);
+      expect(tester.widget<Text>(find.text('Delete')).style!.color, ink, reason: tone.name);
+      final mouse = await tester.createGesture(kind: PointerDeviceKind.mouse);
+      await mouse.addPointer(location: tester.getCenter(find.byType(GlimButton)));
+      await tester.pumpAndSettle();
+      expect(groundOf(tester).color, hover, reason: tone.name);
+      await mouse.removePointer();
+    }
+  });
+
+  testWidgets('the focus ring is the accent ink, standing off the button', (tester) async {
+    await tester.pumpWidget(host(GlimButton(label: 'Save', onPressed: () {})));
+    GlimFocusRing ring() => tester.widget<GlimFocusRing>(find.byType(GlimFocusRing));
+    expect(ring().visible, isFalse);
+    await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+    await tester.pump();
+    expect(ring().visible, isTrue);
+    expect(ring().color, GlimTheme.dark.focusRing);
+    expect(ring().gap, 2);
+    expect(ring().width, glimFocusRingWidth);
+    expect(groundOf(tester).color, GlimTheme.dark.hover);
+  });
+
+  testWidgets('a button is a pill only in the round shape', (tester) async {
+    for (final shape in GlimShape.values) {
+      await tester.pumpWidget(host(GlimButton(label: 'Save', onPressed: () {}), shape: shape));
+      await tester.pumpAndSettle();
+      expect(groundOf(tester).shape, glimOutline(shape, shape.pill), reason: shape.name);
+    }
+    expect(GlimShape.soft.pill, GlimShape.soft.control);
+  });
+
+  testWidgets('the accent fill catches the light at glow and the neutral one takes the lit edge', (tester) async {
+    for (final light in GlimLight.values) {
+      await tester.pumpWidget(host(GlimButton(label: 'Save', tone: GlimTone.accent, onPressed: () {}), light: light));
+      await tester.pumpAndSettle();
+      expect(groundOf(tester).gradient, light.dark.sheen, reason: light.name);
+      expect(groundOf(tester).shadows, light.dark.accent, reason: light.name);
+      await tester.pumpWidget(host(GlimButton(label: 'Refresh', onPressed: () {}), light: light));
+      await tester.pumpAndSettle();
+      expect(groundOf(tester).shadows, light.dark.control, reason: light.name);
+    }
+  });
+
+  testWidgets('the button moves on the motion engine', (tester) async {
+    await tester.pumpWidget(host(GlimButton(label: 'Save', onPressed: () {})));
+    final box = tester.widget<AnimatedContainer>(find.byType(AnimatedContainer));
+    expect(box.duration, GlimMotion.subtle.controlDur);
+    expect(box.curve, GlimMotion.subtle.ease);
   });
 }

@@ -14,40 +14,55 @@ body {
   background: var(--carbon-bg);
 }
 
+/* The nav keeps to the window's left edge and the contents list to its right,
+   both the same width, so the page between them stands in the middle. */
+:root {
+  --header-h: 3.75rem;
+  --side: 15rem;
+  --frame-gap: 3rem;
+}
 .site-header {
   position: sticky;
   top: 0;
   z-index: 30;
-  height: 3.5rem;
+  height: var(--header-h);
   display: flex;
   align-items: center;
   gap: 1rem;
   padding: 0 var(--page-gutter);
-  background: color-mix(in srgb, var(--carbon-bg) 88%, transparent);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--carbon-border);
+  background: var(--carbon-bg);
+  border-bottom: 1px solid color-mix(in srgb, var(--carbon-border) 70%, transparent);
 }
+.site-topnav { position: relative; display: flex; align-items: center; gap: 0.25rem; margin-inline-start: 1.25rem; }
+.site-topnav a {
+  position: relative;
+  z-index: 1;
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--radius-control);
+  color: var(--carbon-text-sub);
+  font-size: var(--text-body);
+  text-decoration: none;
+}
+.site-topnav a:hover { color: var(--carbon-text); background: var(--hover); }
+.site-topnav a[aria-current="page"] { color: var(--carbon-text); font-weight: 600; }
+.site-header .search-trigger {
+  min-width: 15rem;
+  height: 2.25rem;
+  padding-inline: 0.75rem 0.5rem;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: light-dark(rgb(0 0 0 / 0.045), rgb(255 255 255 / 0.06));
+}
+.site-header .search-trigger .kbd { margin-inline-start: auto; }
 .site-frame {
   display: grid;
-  grid-template-columns: 15rem minmax(0, 1fr) 13rem;
-  gap: 2.5rem;
+  grid-template-columns: var(--side) minmax(0, 1fr) var(--side);
+  gap: var(--frame-gap);
   padding: 0 var(--page-gutter);
 }
-/* On a wide screen the page keeps the width it has at 88rem and stands in the
-   middle of the room between the nav and the window's edge, where the contents
-   list stands, so it does not cling to the nav. */
-@media (min-width: 88rem) {
-  .site-frame > main {
-    max-width: 53rem;
-    margin-inline-start: max(0px, (100% - 53rem) / 2);
-  }
-  .site-frame.is-home > main {
-    max-width: 68.5rem;
-    margin-inline-start: max(0px, (100% - 68.5rem) / 2);
-  }
-}
+.site-frame > main { width: 100%; max-width: 68rem; justify-self: center; }
 @media (max-width: 80rem) {
-  .site-frame { grid-template-columns: 15rem minmax(0, 1fr); }
+  .site-frame { grid-template-columns: var(--side) minmax(0, 1fr); }
   .site-toc { display: none; }
 }
 @media (max-width: 52rem) {
@@ -56,51 +71,72 @@ body {
   .site-nav.open {
     display: block;
     position: fixed;
-    inset: 3.5rem 0 0 0;
+    inset: var(--header-h) 0 0 0;
     z-index: 25;
+    max-height: none;
     background: var(--carbon-bg);
     padding: 1rem var(--page-gutter);
   }
 }
 .site-nav, .site-toc {
   position: sticky;
-  top: 3.5rem;
+  top: var(--header-h);
   align-self: start;
-  max-height: calc(100vh - 3.5rem);
+  max-height: calc(100vh - var(--header-h));
   overflow-y: auto;
   padding: 1.5rem 0 3rem;
 }
-.nav-group + .nav-group { margin-top: 1.25rem; }
+.nav-group + .nav-group { margin-top: 1.75rem; }
+.site-nav .look-label, .site-toc .look-label {
+  margin: 0 0 0.375rem;
+  padding-inline-start: 0.625rem !important;
+  color: var(--carbon-text);
+  font-size: var(--text-subline);
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
 .nav-link {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.375rem 0.75rem;
-  border-radius: var(--radius-pill);
-  color: var(--carbon-text-sub);
+  padding: 0.3125rem 0.625rem;
+  border-radius: var(--radius-control);
+  color: var(--carbon-text-muted);
   font-size: var(--text-body);
   text-decoration: none;
 }
-.nav-link:hover { background: var(--carbon-hover); color: var(--carbon-text); }
-.nav-link[aria-current="page"] {
-  background: var(--accent-soft);
-  color: var(--carbon-text);
-  font-weight: 600;
+.nav-link:hover { background: var(--hover); color: var(--carbon-text); }
+.nav-link[aria-current="page"] { color: var(--carbon-text); font-weight: 600; }
+/* Which component runs on a Zag machine is said on its page, not beside every name. */
+.nav-link .glim-badge { display: none; }
+/* One highlight per list under its current entry, gliding from entry to entry. */
+.nav-mark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: var(--radius-control);
+  opacity: 0;
+  transition:
+    transform 460ms cubic-bezier(0.16, 1, 0.3, 1),
+    width 460ms cubic-bezier(0.16, 1, 0.3, 1),
+    height 460ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 200ms ease;
 }
-/* The muted grey does not hold its contrast on the accent wash. */
-.nav-link[aria-current="page"] .glim-badge--muted { color: var(--carbon-text-sub); }
-.nav-link[aria-current="page"]::before {
-  content: "";
-  width: 0.375rem;
-  height: 0.375rem;
-  border-radius: var(--radius-pill);
-  background: var(--accent);
-  margin-inline-start: -0.125rem;
+.site-nav > .nav-mark { background: var(--accent-soft); }
+.site-topnav > .nav-mark { background: light-dark(rgb(0 0 0 / 0.05), rgb(255 255 255 / 0.07)); }
+:root[data-motion="off"] .nav-mark { transition: none; }
+@media (prefers-reduced-motion: reduce) {
+  .nav-mark { transition: opacity 150ms ease; }
 }
 .toc-link {
   display: block;
   padding: 0.25rem 0 0.25rem 0.75rem;
-  border-inline-start: 2px solid var(--carbon-border);
+  border-inline-start: 1px solid var(--carbon-border);
   color: var(--carbon-text-muted);
   font-size: var(--text-subline);
   text-decoration: none;
@@ -108,10 +144,18 @@ body {
 .toc-link:hover { color: var(--carbon-text); }
 .toc-link.active { border-color: var(--accent); color: var(--carbon-text); }
 
+/* A page change cross-fades the page alone; the header and the nav stand still. */
+main.prose { view-transition-name: page; }
+::view-transition-old(page) { animation: 140ms ease-in both page-out; }
+::view-transition-new(page) { animation: 380ms cubic-bezier(0.16, 1, 0.3, 1) both page-in; }
+@keyframes page-out { to { opacity: 0; transform: translateY(-4px); } }
+@keyframes page-in { from { opacity: 0; transform: translateY(10px); filter: blur(4px); } }
+
 /* Prose. The docs are the one place in the family that has headings, because a
    reference is read top to bottom rather than worked in. */
-.prose { padding: 2rem 0 6rem; min-width: 0; }
-.prose h1 { font-size: 2rem; line-height: 1.2; font-weight: 700; margin: 0.5rem 0 0.75rem; letter-spacing: -0.01em; }
+.prose { padding: 2.75rem 0 6rem; min-width: 0; }
+.prose > .look-label { display: none; }
+.prose h1 { font-size: 2.25rem; line-height: 1.15; font-weight: 650; margin: 0 0 0.75rem; letter-spacing: -0.022em; }
 .prose > h2 { font-size: 1.375rem; font-weight: 650; margin: 3rem 0 0.75rem; }
 .prose > h3 { font-size: var(--text-title); font-weight: 650; margin: 2rem 0 0.5rem; }
 .prose > p, .prose > ul > li, .prose > div > p { font-size: 0.9375rem; line-height: 1.7; color: var(--carbon-text-sub); }
@@ -140,23 +184,21 @@ body {
 
 /* A demo: the live component on the page's ground, the source under it. */
 .demo {
-  margin: 1.25rem 0;
-  border: 1px solid var(--carbon-border);
-  border-radius: var(--radius-card);
+  margin: 1.5rem 0;
+  border: 1px solid color-mix(in srgb, var(--carbon-border) 80%, transparent);
+  border-radius: calc(var(--radius-card) + 0.25rem);
   overflow: hidden;
   background: var(--carbon-surface);
 }
 .demo-stage {
-  padding: 2.5rem 1.5rem;
+  padding: 3rem 1.5rem;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
-  background:
-    radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--carbon-text) 9%, transparent) 1px, transparent 0) 0 0 / 16px 16px,
-    var(--carbon-bg);
-  min-height: 9rem;
+  background: var(--carbon-bg);
+  min-height: 10rem;
 }
 .demo-stage.left { justify-content: flex-start; align-items: stretch; }
 /* A few buttons side by side that each open a state of the window under test. */
@@ -251,7 +293,7 @@ body {
 }
 /* React and Vue side by side where the page is wide enough, one above the
    other where it is not. Each names its framework above its stage. */
-.demo-pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); }
+.demo-pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(max(18rem, calc(50% - 1px)), 1fr)); }
 /* Every cell takes the same edge, the first a clear one, so the twins get the
    same width and a strip that only just fits does so in all of them. */
 .demo-pair > .demo-cell { position: relative; display: flex; flex-direction: column; min-width: 0; border-inline-start: 1px solid transparent; }
@@ -523,6 +565,8 @@ pre.code {
 @media (max-width: 52rem) {
   .nav-toggle { display: inline-flex; }
   .search-word, .search-trigger .kbd { display: none; }
+  .site-topnav { display: none; }
+  .site-header .search-trigger { min-width: 0; }
 }
 
 .logo { width: 38px; display: inline-flex; }
@@ -615,112 +659,11 @@ pre.code {
 .tested.fail { color: var(--status-fail-text); }
 .tested.none { color: var(--carbon-text-muted); }
 
-/* The start page. The heading and a wall of composed screens share the first
-   view; the wall leans back and drifts, the heading stays still beside it. */
-.site-frame.is-home { grid-template-columns: 15rem minmax(0, 1fr); }
-.site-frame.is-home .site-toc { display: none; }
-@media (max-width: 52rem) {
-  .site-frame.is-home { grid-template-columns: minmax(0, 1fr); }
-}
-.hero {
-  display: grid;
-  grid-template-columns: minmax(0, 24rem) minmax(0, 1fr);
-  align-items: center;
-  gap: 2rem;
-  min-height: min(40rem, calc(100vh - 7rem));
-  margin: -2rem calc(-1 * var(--page-gutter)) 1rem 0;
-}
-.hero-text { padding-block: 3rem; }
-.prose .hero h1 {
-  font-size: clamp(2.25rem, 1.6rem + 2vw, 3.25rem);
-  line-height: 1.08;
-  letter-spacing: -0.025em;
-  text-wrap: balance;
-  margin: 0 0 1.25rem;
-}
-.hero-lead {
-  margin: 0 0 2rem;
-  max-width: 34ch;
-  font-size: 1.0625rem;
-  line-height: 1.6;
-  color: var(--carbon-text-sub);
-  text-wrap: pretty;
-}
-.hero-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
-@media (max-width: 64rem) {
-  .hero { grid-template-columns: minmax(0, 1fr); min-height: 0; gap: 0; margin-inline-start: calc(-1 * var(--page-gutter)); }
-  .hero-text { padding: 2.5rem var(--page-gutter) 1.5rem; }
-}
-
-.wall {
-  --wall-scale: 0.9;
-  position: relative;
-  height: min(44rem, calc(100vh - 5rem));
-  overflow: clip;
-  user-select: none;
-  mask-image:
-    linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent),
-    linear-gradient(to right, transparent, #000 10%, #000 94%, transparent);
-  mask-composite: intersect;
-}
-.wall-plane {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  display: flex;
-  gap: 1.75rem;
-  align-items: flex-start;
-  transform-origin: 0 50%;
-  transform: translateY(-50%) scale(var(--wall-scale)) perspective(2400px) rotateX(12deg) rotateY(-8deg) rotateZ(9deg);
-}
-.wall-col { flex: none; width: 22rem; height: 64rem; overflow: hidden; }
-.wall-col:nth-child(2) { width: 27rem; margin-top: -9rem; }
-.wall-col:nth-child(3) { margin-top: -4rem; }
-.wall-track { display: grid; gap: 1.75rem; padding-top: 0.75rem; will-change: transform; }
-.wall-item { min-width: 0; }
-.wall-stack { display: grid; gap: 1rem; }
-.wall-rows { display: grid; gap: 2px; }
-.wall-foot { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem; }
-.wall-toasts { display: grid; gap: 0.625rem; }
-.wall-toasts .glim-toast { animation: none; }
-.wall-screen {
-  padding: 1.25rem 1rem 1rem;
-  border: 1px solid var(--carbon-border);
-  border-radius: var(--radius-card);
-  background: var(--carbon-bg);
-}
-.wall-settings { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 1rem; align-items: start; }
-.wall-settings .glim-panel { margin-top: 0.75rem; }
-.wall-signin .glim-signin { min-height: 0; padding: 0; background: none; }
-.wall-signin .glim-signin-card { width: 100%; }
-@media (max-width: 64rem) {
-  .wall { --wall-scale: 0.8; height: 30rem; }
-}
-@media (max-width: 30rem) {
-  .wall { --wall-scale: 0.66; height: 24rem; }
-}
-
-/* The drift is the motion engine's: one keyframe, a duration per level, and
-   nothing at all for off or for a device that asks for less motion. */
-@keyframes wall-drift {
-  from { transform: translateY(0); }
-  to { transform: translateY(calc(-50% - 0.875rem)); }
-}
-@media (prefers-reduced-motion: no-preference) {
-  :root { --motion-wall-dur: 160s; }
-  :root[data-motion="wild"] { --motion-wall-dur: 90s; }
-  :root[data-motion="off"] { --motion-wall-dur: 160s; }
-  :root[data-motion="storm"] { --motion-wall-dur: 36s; }
-  .wall-track { animation: wall-drift var(--motion-wall-dur, 160s) linear infinite; }
-  .wall-col:nth-child(2) .wall-track { animation-direction: reverse; animation-duration: calc(var(--motion-wall-dur, 160s) * 1.25); }
-  :root[data-motion="off"] .wall-track { animation: none; }
-}
-
 /* Make it yours: docked beside the page where there is room, so every change
    shows on the page it changes, and a sheet from the bottom on a phone. */
 .look-panel {
   position: fixed;
-  top: 3.5rem;
+  top: var(--header-h);
   bottom: 0;
   inset-inline-end: 0;
   z-index: 40;
@@ -733,16 +676,20 @@ pre.code {
   outline: none;
 }
 :root { --look-w: 28rem; }
+/* The panel covers the contents list and the end of the page's column. The
+   page keeps the start it had and gives up only the width under the panel,
+   so nothing moves when it opens. */
 @media (min-width: 64rem) {
-  :root[data-look-open] .site-frame { max-width: calc(100% - var(--look-w)); }
-  :root[data-look-open] .site-frame:not(.is-home) { grid-template-columns: 15rem minmax(0, 1fr); }
-  :root[data-look-open] .site-toc { display: none; }
+  :root[data-look-open] { --look-room: calc(var(--look-w) - var(--page-gutter) - var(--side) - var(--frame-gap) + 1.5rem); }
+  :root[data-look-open] .site-toc { visibility: hidden; }
+  :root[data-look-open] .site-frame > main {
+    justify-self: stretch;
+    width: auto;
+    margin-inline: max(0px, (100% - 68rem) / 2) var(--look-room);
+  }
 }
-/* The panel takes the contents list's column and its own width off the frame,
-   so the page's margin gives them back and the page stays where it stood. */
-@media (min-width: 88rem) {
-  :root[data-look-open] .site-frame:not(.is-home) > main { margin-inline-start: max(0px, (100% + 12.5rem - 53rem) / 2); }
-  :root[data-look-open] .site-frame.is-home > main { margin-inline-start: max(0px, (100% + var(--look-w) - 68.5rem) / 2); }
+@media (min-width: 64rem) and (max-width: 80rem) {
+  :root[data-look-open] { --look-room: calc(var(--look-w) - var(--page-gutter) + 1.5rem); }
 }
 @media (max-width: 63.99rem) {
   .look-panel {
@@ -818,21 +765,3 @@ pre.code.block-code { max-height: 36rem; }
 .fw-mark svg { width: 100%; height: 100%; }
 .demo-fw, .th-framework { display: inline-flex; align-items: center; gap: 0.375rem; }
 .prose h3.with-glyph { display: flex; align-items: center; gap: 0.5rem; }
-
-/* The frameworks under the hero's buttons: quiet, in the text colour, each a
-   way into its package's adoption notes. */
-.hero-frameworks { display: flex; flex-wrap: wrap; gap: 0.25rem 0.5rem; margin: 1.75rem 0 0; padding: 0; list-style: none; }
-.hero-framework {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 2rem;
-  padding: 0 0.625rem;
-  border-radius: var(--radius-pill);
-  color: var(--carbon-text-sub);
-  font-size: var(--text-subline);
-  text-decoration: none;
-}
-.hero-framework:hover { background: var(--carbon-hover); color: var(--carbon-text); }
-.hero-framework:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
-.hero-frameworks li:first-child .hero-framework { margin-inline-start: -0.625rem; }
