@@ -51,7 +51,8 @@ export const bg: ComponentWords = {
   tour: { back: "Назад", next: "Напред", close: "Затваряне", progress: "{step} от {steps}" },
   floatingPanel: { minimize: "Минимизиране", maximize: "Максимизиране", restore: "Възстановяване", close: "Затваряне" },
   signaturePad: { area: "Подпис", clear: "Изчистване" },
-  passwordField: { show: "Показване", hide: "Скриване", confirm: "Потвърждаване на паролата", mismatch: "Паролите не съвпадат" },
+  passwordField: { show: "Показване", hide: "Скриване", confirm: "Потвърждаване на паролата", mismatch: "Паролите не съвпадат", again: "Още веднъж" },
+  timePicker: { hour: "Часове", minute: "Минути", start: "Начало", end: "Край", to: "до" },
   versionCard: {
     title: "Версия",
     hint: "Версията на {app}, докъде са обновленията и какво донесе тази версия.",

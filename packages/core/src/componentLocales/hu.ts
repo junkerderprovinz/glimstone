@@ -51,7 +51,8 @@ export const hu: ComponentWords = {
   tour: { back: "Vissza", next: "Tovább", close: "Bezárás", progress: "{step}/{steps}" },
   floatingPanel: { minimize: "Kis méret", maximize: "Teljes méret", restore: "Eredeti méret", close: "Bezárás" },
   signaturePad: { area: "Aláírás", clear: "Törlés" },
-  passwordField: { show: "Megjelenítés", hide: "Elrejtés", confirm: "Jelszó megerősítése", mismatch: "A jelszavak nem egyeznek" },
+  passwordField: { show: "Megjelenítés", hide: "Elrejtés", confirm: "Jelszó megerősítése", mismatch: "A jelszavak nem egyeznek", again: "Még egyszer" },
+  timePicker: { hour: "Óra", minute: "Perc", start: "Kezdés", end: "Vége", to: "-" },
   versionCard: {
     title: "Verzió",
     hint: "A(z) {app} verziója, a frissítések állapota és hogy mit hozott ez a verzió.",

@@ -46,7 +46,8 @@ export const zh: ComponentWords = {
   tour: { back: "上一步", next: "下一步", close: "关闭", progress: "第 {step} 步，共 {steps} 步" },
   floatingPanel: { minimize: "最小化", maximize: "最大化", restore: "还原", close: "关闭" },
   signaturePad: { area: "签名", clear: "清除" },
-  passwordField: { show: "显示", hide: "隐藏", confirm: "确认密码", mismatch: "两次输入的密码不一致" },
+  passwordField: { show: "显示", hide: "隐藏", confirm: "确认密码", mismatch: "两次输入的密码不一致", again: "再输一次" },
+  timePicker: { hour: "时", minute: "分", start: "开始", end: "结束", to: "至" },
   versionCard: {
     title: "版本",
     hint: "{app} 的版本、更新状态以及此版本带来的变化。",

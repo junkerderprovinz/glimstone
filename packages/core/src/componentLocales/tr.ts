@@ -46,7 +46,8 @@ export const tr: ComponentWords = {
   tour: { back: "Geri", next: "İleri", close: "Kapat", progress: "{step}/{steps}" },
   floatingPanel: { minimize: "Simge durumuna küçült", maximize: "Ekranı kapla", restore: "Önceki boyut", close: "Kapat" },
   signaturePad: { area: "İmza", clear: "Temizle" },
-  passwordField: { show: "Göster", hide: "Gizle", confirm: "Parolayı onayla", mismatch: "Parolalar eşleşmiyor" },
+  passwordField: { show: "Göster", hide: "Gizle", confirm: "Parolayı onayla", mismatch: "Parolalar eşleşmiyor", again: "Bir kez daha" },
+  timePicker: { hour: "Saat", minute: "Dakika", start: "Başlangıç", end: "Bitiş", to: "-" },
   versionCard: {
     title: "Sürüm",
     hint: "{app} sürümü, güncellemelerin durumu ve bu sürümün getirdikleri.",

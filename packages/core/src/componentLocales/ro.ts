@@ -62,7 +62,8 @@ export const ro: ComponentWords = {
   tour: { back: "Înapoi", next: "Înainte", close: "Închide", progress: "{step} din {steps}" },
   floatingPanel: { minimize: "Minimizează", maximize: "Maximizează", restore: "Restaurează", close: "Închide" },
   signaturePad: { area: "Semnătură", clear: "Șterge" },
-  passwordField: { show: "Arată", hide: "Ascunde", confirm: "Confirmă parola", mismatch: "Parolele nu coincid" },
+  passwordField: { show: "Arată", hide: "Ascunde", confirm: "Confirmă parola", mismatch: "Parolele nu coincid", again: "Încă o dată" },
+  timePicker: { hour: "Ore", minute: "Minute", start: "Început", end: "Sfârșit", to: "până la" },
   versionCard: {
     title: "Versiune",
     hint: "Versiunea {app}, stadiul actualizărilor și ce a adus această versiune.",

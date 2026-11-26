@@ -51,7 +51,8 @@ export const nl: ComponentWords = {
   tour: { back: "Terug", next: "Volgende", close: "Sluiten", progress: "{step} van {steps}" },
   floatingPanel: { minimize: "Minimaliseren", maximize: "Maximaliseren", restore: "Herstellen", close: "Sluiten" },
   signaturePad: { area: "Handtekening", clear: "Wissen" },
-  passwordField: { show: "Tonen", hide: "Verbergen", confirm: "Wachtwoord bevestigen", mismatch: "De wachtwoorden komen niet overeen" },
+  passwordField: { show: "Tonen", hide: "Verbergen", confirm: "Wachtwoord bevestigen", mismatch: "De wachtwoorden komen niet overeen", again: "Nog een keer" },
+  timePicker: { hour: "Uren", minute: "Minuten", start: "Begin", end: "Einde", to: "tot" },
   versionCard: {
     title: "Versie",
     hint: "De versie van {app}, hoe het met de updates staat en wat deze versie bracht.",

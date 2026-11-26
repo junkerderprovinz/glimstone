@@ -58,7 +58,8 @@ export const sk: ComponentWords = {
   tour: { back: "Späť", next: "Ďalej", close: "Zavrieť", progress: "{step} z {steps}" },
   floatingPanel: { minimize: "Minimalizovať", maximize: "Maximalizovať", restore: "Obnoviť", close: "Zavrieť" },
   signaturePad: { area: "Podpis", clear: "Vymazať" },
-  passwordField: { show: "Zobraziť", hide: "Skryť", confirm: "Potvrdenie hesla", mismatch: "Heslá sa nezhodujú" },
+  passwordField: { show: "Zobraziť", hide: "Skryť", confirm: "Potvrdenie hesla", mismatch: "Heslá sa nezhodujú", again: "Ešte raz" },
+  timePicker: { hour: "Hodiny", minute: "Minúty", start: "Začiatok", end: "Koniec", to: "do" },
   versionCard: {
     title: "Verzia",
     hint: "Verzia aplikácie {app}, stav aktualizácií a čo táto verzia priniesla.",

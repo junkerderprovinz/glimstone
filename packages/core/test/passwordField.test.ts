@@ -26,5 +26,6 @@ test('a repetition left over from an emptied first field hides with it', () => {
 
 test("the sign-in card's reset form says what the field says", () => {
   const { confirmPassword, mismatch, show, hide } = signInTextEn;
-  assert.deepEqual({ confirm: confirmPassword, mismatch, show, hide }, PASSWORD_FIELD_TEXT);
+  const { show: fieldShow, hide: fieldHide, confirm, mismatch: fieldMismatch } = PASSWORD_FIELD_TEXT;
+  assert.deepEqual({ confirm: confirmPassword, mismatch, show, hide }, { confirm, mismatch: fieldMismatch, show: fieldShow, hide: fieldHide });
 });

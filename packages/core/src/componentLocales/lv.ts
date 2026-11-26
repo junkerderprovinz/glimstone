@@ -57,7 +57,8 @@ export const lv: ComponentWords = {
   tour: { back: "Atpakaļ", next: "Tālāk", close: "Aizvērt", progress: "{step} no {steps}" },
   floatingPanel: { minimize: "Minimizēt", maximize: "Maksimizēt", restore: "Atjaunot", close: "Aizvērt" },
   signaturePad: { area: "Paraksts", clear: "Notīrīt" },
-  passwordField: { show: "Rādīt", hide: "Slēpt", confirm: "Apstipriniet paroli", mismatch: "Paroles nesakrīt" },
+  passwordField: { show: "Rādīt", hide: "Slēpt", confirm: "Apstipriniet paroli", mismatch: "Paroles nesakrīt", again: "Vēlreiz" },
+  timePicker: { hour: "Stundas", minute: "Minūtes", start: "Sākums", end: "Beigas", to: "līdz" },
   versionCard: {
     title: "Versija",
     hint: "{app} versija, atjauninājumu stāvoklis un ko šī versija atnesa.",

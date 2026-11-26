@@ -46,7 +46,8 @@ export const ko: ComponentWords = {
   tour: { back: "이전", next: "다음", close: "닫기", progress: "{steps}단계 중 {step}단계" },
   floatingPanel: { minimize: "최소화", maximize: "최대화", restore: "이전 크기로", close: "닫기" },
   signaturePad: { area: "서명", clear: "지우기" },
-  passwordField: { show: "보기", hide: "숨기기", confirm: "비밀번호 확인", mismatch: "비밀번호가 일치하지 않습니다" },
+  passwordField: { show: "보기", hide: "숨기기", confirm: "비밀번호 확인", mismatch: "비밀번호가 일치하지 않습니다", again: "한 번 더" },
+  timePicker: { hour: "시", minute: "분", start: "시작", end: "종료", to: "~" },
   versionCard: {
     title: "버전",
     hint: "{app}의 버전, 업데이트 상태, 이 버전에서 달라진 점.",

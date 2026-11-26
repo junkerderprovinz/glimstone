@@ -58,7 +58,8 @@ export const sl: ComponentWords = {
   tour: { back: "Nazaj", next: "Naprej", close: "Zapri", progress: "{step} od {steps}" },
   floatingPanel: { minimize: "Pomanjšaj", maximize: "Povečaj", restore: "Obnovi", close: "Zapri" },
   signaturePad: { area: "Podpis", clear: "Počisti" },
-  passwordField: { show: "Pokaži", hide: "Skrij", confirm: "Potrdi geslo", mismatch: "Gesli se ne ujemata" },
+  passwordField: { show: "Pokaži", hide: "Skrij", confirm: "Potrdi geslo", mismatch: "Gesli se ne ujemata", again: "Še enkrat" },
+  timePicker: { hour: "Ure", minute: "Minute", start: "Začetek", end: "Konec", to: "do" },
   versionCard: {
     title: "Različica",
     hint: "Različica aplikacije {app}, stanje posodobitev in kaj je prinesla ta različica.",

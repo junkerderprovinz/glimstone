@@ -46,7 +46,8 @@ export const th: ComponentWords = {
   tour: { back: "ย้อนกลับ", next: "ถัดไป", close: "ปิด", progress: "{step} จาก {steps}" },
   floatingPanel: { minimize: "ย่อ", maximize: "ขยาย", restore: "คืนขนาด", close: "ปิด" },
   signaturePad: { area: "ลายเซ็น", clear: "ล้าง" },
-  passwordField: { show: "แสดง", hide: "ซ่อน", confirm: "ยืนยันรหัสผ่าน", mismatch: "รหัสผ่านไม่ตรงกัน" },
+  passwordField: { show: "แสดง", hide: "ซ่อน", confirm: "ยืนยันรหัสผ่าน", mismatch: "รหัสผ่านไม่ตรงกัน", again: "อีกครั้ง" },
+  timePicker: { hour: "ชั่วโมง", minute: "นาที", start: "เริ่ม", end: "สิ้นสุด", to: "ถึง" },
   versionCard: {
     title: "เวอร์ชัน",
     hint: "เวอร์ชันของ {app} สถานะการอัปเดต และสิ่งที่เวอร์ชันนี้นำมา",

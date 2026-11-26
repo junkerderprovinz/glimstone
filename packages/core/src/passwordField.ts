@@ -13,6 +13,8 @@ export interface PasswordFieldText {
   confirm: string;
   /** The line under the second field while the two differ. */
   mismatch: string;
+  /** What the empty second field asks for, in words, so it never reads as a typed secret. */
+  again: string;
 }
 
 export const PASSWORD_FIELD_TEXT: PasswordFieldText = en.passwordField;
