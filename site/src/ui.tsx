@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type ComponentType, type KeyboardEvent, ty
 import type { Component as SvelteComponent } from "svelte";
 import type { Component as VueComponent } from "vue";
 import { highlight } from "sugar-high";
-import { Button, Badge } from "@glimstone/react";
+import { Button, Badge, useGlyphs, useLight } from "@glimstone/react";
 import propsData from "./gen/props.json";
 import { CONTRACTS } from "./contracts";
 import { FrameworkMark } from "./frameworks";
@@ -133,7 +133,7 @@ const svelteSources = import.meta.glob<string>("./svelte-demos/*.svelte", { eage
 
 // The Flutter demos are one web app, built from packages/flutter/example and
 // placed under public/flutter, which draws a demo by its name.
-const FLUTTER_DEMOS = new Set(["ButtonTones", "ButtonStates"]);
+const FLUTTER_DEMOS = new Set(["ButtonTones", "ButtonStates", "ToggleBasic", "CardBasic"]);
 const flutterSource = Object.values(
   import.meta.glob<string>("../../packages/flutter/example/lib/main.dart", { eager: true, query: "?raw", import: "default" }),
 )[0];
@@ -147,12 +147,15 @@ type View = "preview" | Framework;
 
 function FlutterFrame({ name }: { name: string }) {
   const look = useLook();
+  const [light] = useLight();
+  const [glyphs] = useGlyphs();
   const theme =
     look.theme === "system" ? (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark") : look.theme;
+  const query = new URLSearchParams({ demo: name, theme, accent: look.accent, shape: look.shape, light, glyphs, motion: look.motion, labels: look.labels });
   return (
     <iframe
       title={`${name} in Flutter`}
-      src={`flutter/index.html?demo=${name}&theme=${theme}&shape=${look.shape}&labels=${look.labels}`}
+      src={`flutter/index.html?${query}`}
       style={{ display: "block", width: "100%", height: 160, border: 0, colorScheme: "normal" }}
     />
   );
