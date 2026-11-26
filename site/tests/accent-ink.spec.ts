@@ -161,12 +161,10 @@ function measure(): Miss[] {
       }
     }
     // A mark drawn as a small fill of its own on the accent is a graphic and
-    // needs 3:1. The switch's knob is left out: it is white on the light ramp
-    // and stone on the dark ones whatever the accent, and the state reads from
-    // the track, which holds 3:1 off and takes the accent on.
+    // needs 3:1, the switch's knob among them.
     const own = parse(getComputedStyle(el).backgroundColor);
     const box = el.getBoundingClientRect();
-    if (own.a === 1 && box.width <= 24 && box.height <= 24 && el.parentElement && !el.classList.contains("glim-toggle-thumb")) {
+    if (own.a === 1 && box.width <= 24 && box.height <= 24 && el.parentElement) {
       const under = fillOf(el.parentElement);
       if (under && accentFill(under) && !accentFill(el)) {
         const fill = parse(getComputedStyle(under).backgroundColor).rgb;

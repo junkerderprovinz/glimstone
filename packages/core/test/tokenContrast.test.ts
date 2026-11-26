@@ -471,6 +471,14 @@ for (const [themeName, theme] of Object.entries(THEMES)) {
   });
 }
 
+test('an on switch takes its knob from the accent\'s ink, which holds 3:1 on every preset', () => {
+  assert.match(css, /\.glim-toggle-track\[aria-checked="true"\] \.glim-toggle-thumb \{[^}]*background-color: var\(--accent-contrast\)/);
+  const misses = ACCENTS.map(({ name, hex: accent }) => [name, contrastRatio(contrastOn(accent), accent)] as const)
+    .filter(([, r]) => r < MIN_GRAPHIC_CONTRAST)
+    .map(([name, r]) => `${name}: ${r.toFixed(2)}:1`);
+  assert.deepEqual(misses, []);
+});
+
 for (const [themeName, theme] of Object.entries(THEMES)) {
   test(`an off switch holds 3:1 against its knob and the card for every preset on ${themeName}`, () => {
     const misses = ACCENTS.flatMap(({ name, hex: accent }) => {

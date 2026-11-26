@@ -3981,7 +3981,10 @@
     translate: var(--knob-inset) 0;
     transition: translate var(--motion-shape-dur) var(--motion-spring), width var(--motion-shape-dur) var(--motion-spring);
   }
+  /* On the accent the knob takes the accent's ink: white or stone alone would
+     drop under 3:1 on a light accent such as Sunflower. */
   .glim-toggle-track[aria-checked="true"] .glim-toggle-thumb {
+    background-color: var(--accent-contrast);
     translate: calc(2.25rem - var(--knob) - var(--knob-inset)) 0;
   }
   /* The flex track already mirrors the thumb's rest position under RTL, so the

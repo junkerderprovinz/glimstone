@@ -104,16 +104,17 @@ void main() {
     }
   });
 
-  testWidgets('the knob is the same in both states, white on light and dark stone on dark', (tester) async {
+  testWidgets('the knob is white on light and dark stone on dark while off, and the accent\'s ink while on', (tester) async {
     Color knobColour() => (tester.widget<AnimatedContainer>(find.descendant(of: knob, matching: find.byType(AnimatedContainer))).decoration! as GlimDecoration).color!;
     for (final b in Brightness.values) {
       final g = glimThemeData(b).extension<GlimTheme>()!;
       for (final on in [false, true]) {
         await tester.pumpWidget(host(Flip(key: ValueKey(on), initial: on), brightness: b));
         await tester.pumpAndSettle();
-        expect(knobColour(), g.toggleKnob);
+        expect(knobColour(), on ? g.accentContrast : g.toggleKnob);
       }
       expect(g.toggleKnob.computeLuminance() > 0.5, b == Brightness.light);
+      expect(ratio(g.accent, g.accentContrast), greaterThanOrEqualTo(3));
     }
   });
 

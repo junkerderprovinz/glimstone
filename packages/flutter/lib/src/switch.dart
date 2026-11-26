@@ -85,7 +85,8 @@ class _GlimSwitchState extends State<GlimSwitch> {
             child: AnimatedContainer(
               duration: motion.controlDur,
               curve: motion.ease,
-              decoration: GlimDecoration(color: glim.toggleKnob, shape: knobShape, shadows: glim.toggleKnobShadow),
+              // On the accent the knob takes the accent's ink, which holds 3:1 where white or stone would not.
+              decoration: GlimDecoration(color: on ? glim.accentContrast : glim.toggleKnob, shape: knobShape, shadows: glim.toggleKnobShadow),
             ),
           ),
         ],

@@ -770,7 +770,7 @@ A field used to rest on surface2, or surface3 in a well or a sub-card, and its f
 
 ## The switch: a knob on the accent's ink
 
-The knob took `--accent-contrast` while on and the ground's colour while off, and it rested 4px from the end of an on track against 3px off. GlimStone 5 keeps one knob colour in both states, white on light and stone on dark, and 3px on every side, also while it stretches under a press.
+The knob rested 4px from the end of an on track against 3px off. GlimStone 5 keeps 3px on every side, also while it stretches under a press, and draws the knob white on light and stone on dark while off. While on it keeps `--accent-contrast`: one knob colour for both states measured 1.6:1 white on Sunflower and 2.9:1 stone on Blue, under the 3:1 a control needs.
 
 ## The house font: Noto Sans
 
