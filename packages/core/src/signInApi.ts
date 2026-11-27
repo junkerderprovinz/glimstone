@@ -373,8 +373,12 @@ export interface SignInApi {
 
 /** `/`, `/files` and `files/` all become a root with a slash at both ends. */
 export function signInRoot(root = "/"): string {
-  const trimmed = root.replace(/^\/+|\/+$/g, "");
-  return trimmed ? `/${trimmed}/` : "/";
+  // Counted by hand, since /\/+$/ backtracks over every slash of a long run.
+  let start = 0;
+  let end = root.length;
+  while (start < end && root[start] === "/") start++;
+  while (end > start && root[end - 1] === "/") end--;
+  return start < end ? `/${root.slice(start, end)}/` : "/";
 }
 
 /**

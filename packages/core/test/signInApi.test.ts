@@ -35,6 +35,8 @@ test('a root comes out with a slash at both ends', () => {
   assert.equal(signInRoot(), '/');
   assert.equal(signInRoot('files/'), '/files/');
   assert.equal(signInRoot('//a/b//'), '/a/b/');
+  assert.equal(signInRoot('///'), '/');
+  assert.equal(signInRoot(`a${'/'.repeat(100_000)}b`), `/a${'/'.repeat(100_000)}b/`);
 });
 
 test('a change goes as JSON and a read sends no body', async () => {
