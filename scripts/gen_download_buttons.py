@@ -6,7 +6,8 @@ holding them together with the donation buttons, and every button row in
 README.md.
 
 The buttons come in the same five groups, in this order: the server (the
-Unraid template, the container and the source), the desktop apps,
+stores, the systems with a section of their own in the README, the container
+and the source), the desktop apps,
 the phone apps, the browser extensions and the house's companion apps. What a
 repository does not ship is left out. Each group opens with its title, a band
 across the column with the group's icon and word, and fills a row of four
@@ -20,7 +21,9 @@ preview. They stand centred under the intro, side by side when a repository
 has both, between their own markers, which the first run puts in above the
 table of contents. A repository with only these two needs no download rows.
 
-A button carries its name, as the apps' buttons do at rest. A desktop build
+A button carries its name, as the apps' buttons do at rest. Where the mark
+is the name, as Synology's and QNAP's wordmarks are, the mark stands alone and
+centred, since their owners allow no other text beside it. A desktop build
 adds its architecture on a second line, since an ARM segment beside a bare
 name reads as the only build there is. A listing still to come adds a line
 saying so.
@@ -32,10 +35,10 @@ Size and corner radius are the Buy Me a Coffee button's (841.9 by 245.3, rx
 38.2), so every button on the page has the same shape.
 
 The logos are the platforms' own marks from Font Awesome Free (CC BY 4.0 for the
-icons), Vivaldi's and Flatpak's from Simple Icons (Flatpak's mark is CC BY 3.0,
-flatpak.org/press), F-Droid's from its 2015 logo in
+icons), Vivaldi's, Proxmox's, Synology's, QNAP's and Flatpak's from Simple Icons (Flatpak's
+mark is CC BY 3.0, flatpak.org/press), F-Droid's from its 2015 logo in
 gitlab.com/fdroid/artwork (CC BY-SA 3.0 or GPL-3.0-or-later) with the eyes,
-ring and F cut out, and Unraid's from Dashboard Icons (Apache-2.0); see
+ring and F cut out, and Unraid's and UGREEN's from Dashboard Icons (Apache-2.0); see
 scripts/brand-paths/. The companions carry their own
 logos. Every mark is drawn in the button's one ink.
 Each is a trademark of its owner, used unmodified and only to name the platform
@@ -92,6 +95,11 @@ SEAM = 1.0
 # ParleyPort's flag leaves much of its box empty and reads small beside the
 # solid marks, so it is drawn a little larger.
 LARGER = {"parleyport": 1.12}
+# A wordmark standing alone fills this much of the button. The width keeps
+# QNAP's mark above the 95 pixels its guide asks for on screen, and the height
+# leaves Synology's the clear space of its S above and below.
+WORDMARK_W = W * 0.62
+WORDMARK_H = H * 0.42
 
 # A system stack, because an SVG loaded through <img> cannot fetch a webfont.
 # The layout leaves room for a face wider than the one it was measured with.
@@ -116,6 +124,22 @@ KINDS = {
     "zimaos":           (0, "zimaos", "#f4f4f4", "#1b1b1b", "ZimaOS", "Community store", "Install from the ZimaOS and CasaOS store"),
     # The tile Dashboard Icons sets Umbrel's mark on.
     "umbrel":           (0, "umbrel", "#5351f3", "#ffffff", "Umbrel", "Community store", "Install from the umbrelOS community app store"),
+    # The blue of TrueNAS's mark, where white holds 3.3:1, about as much as on MOS's green.
+    "truenas":          (0, "truenas", "#0095d5", "#ffffff", "TrueNAS", "App catalog", "Install from the TrueNAS app catalog"),
+    # The same tile for an app outside the catalog: it leads to the app's file in truenas-apps.
+    "truenas-yaml":     (0, "truenas", "#0095d5", "#ffffff", "TrueNAS", "Install via YAML", "Install on TrueNAS with a ready-made YAML file"),
+    # Proxmox's orange. White holds 3.0:1 on it, a little under Unraid's
+    # orange, which is enough for type this large. It leads to the README's own
+    # Proxmox section, so its link is an anchor on the page, and so do the
+    # three NAS buttons after it.
+    "proxmox":          (0, "proxmox", "#e57000", "#ffffff", "Proxmox", "LXC container", "Run it on Proxmox VE"),
+    # Synology's grey with its all-black wordmark, one of the versions its logo
+    # guide allows. Black holds 10:1 on it.
+    "synology":         (0, "synology", "#b5b5b6", "#000000", "", "", "Run it on a Synology NAS"),
+    # QNAP's blue with the white wordmark its guide shows on that blue.
+    "qnap":             (0, "qnap", "#0c2e82", "#ffffff", "", "", "Run it on a QNAP NAS"),
+    # The green UGREEN's NAS site uses as its brand colour. White holds 5.6:1.
+    "ugreen":           (0, "ugreen", "#007934", "#ffffff", "UGREEN", "NAS", "Run it on a UGREEN NAS"),
     "docker":           (0, "docker", "#1d63ed", "#ffffff", "Docker", "Container", "Run it with Docker"),
     "compose":          (0, "docker", "#1d63ed", "#ffffff", "Docker", "compose file", "Download the docker-compose file"),
     # Slate, since GitHub's black vanishes in the dark theme.
@@ -126,10 +150,10 @@ KINDS = {
     # Beside the docs button, as wide. A violet no other button uses, so it
     # stands apart from the yellow, and white holds 6.5:1 on it.
     "preview":          (None, "eye", "#6f42c1", "#ffffff", "Live preview", "live site", "Try it live"),
-    "windows":          (1, "windows", *WINDOWS, "Windows", "x64", "Download for Windows"),
-    "windows-arm":      (1, None, *WINDOWS, "Windows", "ARM64", "Download for Windows on ARM"),
-    "windows-portable": (1, "windows", *WINDOWS, "Portable", "x64", "Download the portable Windows app"),
-    "windows-portable-arm": (1, None, *WINDOWS, "Portable", "ARM64", "Download the portable Windows app for ARM"),
+    "windows":          (1, "windows", *WINDOWS, "Windows", "x86", "Download for Windows"),
+    "windows-arm":      (1, None, *WINDOWS, "Windows", "ARM", "Download for Windows on ARM"),
+    "windows-portable": (1, "windows", *WINDOWS, "Portable", "x86", "Download the portable Windows app"),
+    "windows-portable-arm": (1, None, *WINDOWS, "Portable", "ARM", "Download the portable Windows app for ARM"),
     "windows-script":   (1, "windows", *WINDOWS, "Windows", "start script", "Download the Windows start script"),
     # Space grey, since black vanishes against GitHub's dark theme. "Apple
     # silicon and Intel" is wider than the button.
@@ -138,15 +162,15 @@ KINDS = {
     # For apps that ship Intel and Apple silicon as two files.
     "macos-split":      (1, "apple", "#6e6e73", "#ffffff", "macOS", "Apple and Intel", "Download for macOS on Apple silicon or Intel"),
     # Tux yellow, with dark ink for contrast.
-    "linux":            (1, "linux", "#fcc624", "#1b1b1b", "Linux", "x64", "Download for Linux"),
-    "linux-arm":        (1, None, "#fcc624", "#1b1b1b", "Linux", "ARM64", "Download for Linux on ARM"),
-    "linux-portable":   (1, "linux", "#fcc624", "#1b1b1b", "Portable", "x64", "Download the portable Linux app"),
-    "linux-portable-arm": (1, None, "#fcc624", "#1b1b1b", "Portable", "ARM64", "Download the portable Linux app for ARM"),
-    "appimage":         (1, "linux", "#fcc624", "#1b1b1b", "AppImage", "x64", "Download the AppImage"),
-    "appimage-arm":     (1, None, "#fcc624", "#1b1b1b", "AppImage", "ARM64", "Download the AppImage for ARM"),
+    "linux":            (1, "linux", "#fcc624", "#1b1b1b", "Linux", "x86", "Download for Linux"),
+    "linux-arm":        (1, None, "#fcc624", "#1b1b1b", "Linux", "ARM", "Download for Linux on ARM"),
+    "linux-portable":   (1, "linux", "#fcc624", "#1b1b1b", "Portable", "x86", "Download the portable Linux app"),
+    "linux-portable-arm": (1, None, "#fcc624", "#1b1b1b", "Portable", "ARM", "Download the portable Linux app for ARM"),
+    "appimage":         (1, "linux", "#fcc624", "#1b1b1b", "AppImage", "x86", "Download the AppImage"),
+    "appimage-arm":     (1, None, "#fcc624", "#1b1b1b", "AppImage", "ARM", "Download the AppImage for ARM"),
     # Flatpak's own blue, where white holds 3.3:1, about as much as on Unraid's orange.
-    "flatpak":          (1, "flatpak", "#4a90d9", "#ffffff", "Flatpak", "x64", "Download the Flatpak"),
-    "flatpak-arm":      (1, None, "#4a90d9", "#ffffff", "Flatpak", "ARM64", "Download the Flatpak for ARM"),
+    "flatpak":          (1, "flatpak", "#4a90d9", "#ffffff", "Flatpak", "x86", "Download the Flatpak"),
+    "flatpak-arm":      (1, None, "#4a90d9", "#ffffff", "Flatpak", "ARM", "Download the Flatpak for ARM"),
     "linux-script":     (1, "linux", "#fcc624", "#1b1b1b", "Linux", "start script", "Download the Linux start script"),
     "google-play":      (2, "google-play", "#01875f", "#ffffff", "Google Play", "Google Play", "Get it on Google Play"),
     "f-droid":          (2, "f-droid", "#1976d2", "#ffffff", "F-Droid", "F-Droid", "Get it on F-Droid"),
@@ -168,8 +192,8 @@ KINDS = {
     # logo's darker half, since a one-ink mark cannot carry its colours.
     "parleyport":       (COMPANIONS, "parleyport", "#1f2328", "#ffffff", "ParleyPort", "own relay", "Get ParleyPort, the relay for apps that pair their instances"),
     "bombvault-widget": (COMPANIONS, "bombvault-widget", "#4e5051", "#ffffff", "Widget", "Unraid plugin", "Get the BombVault Widget for the Unraid dashboard"),
-    # The brown of TollRoll's ribbon, where white holds 7.5:1.
-    "tollroll":         (COMPANIONS, "tollroll", "#7f443a", "#ffffff", "TollRoll", "Unraid plugin", "Get TollRoll, the tile for the Unraid dashboard"),
+    # The gold of TollRoll's logo, where the dark ink holds 9.6:1.
+    "tollroll":         (COMPANIONS, "tollroll", "#e6bc59", "#1b1b1b", "TollRoll", "Unraid plugin", "Get TollRoll, the tile for the Unraid dashboard"),
 }
 # Joined to the button they belong to, in this order, rather than standing alone.
 SEGMENTS = {
@@ -202,7 +226,8 @@ TITLES = {
 PHONES = "Phone"
 # Links that may lead away from the repository.
 STORES = ("play.google.com", "f-droid.org", "apps.apple.com","chromewebstore.google.com", "addons.mozilla.org", "microsoftedge.microsoft.com",
-          "unraid.net", "mos-official.net", "github.com/junkerderprovinz/zimaos-apps", "github.com/junkerderprovinz/umbrel-apps",
+          "unraid.net", "mos-official.net", "apps.truenas.com","github.com/junkerderprovinz/zimaos-apps", "github.com/junkerderprovinz/umbrel-apps",
+          "github.com/junkerderprovinz/truenas-apps",
           "github.com/junkerderprovinz/parleyport", "github.com/junkerderprovinz/bombvault-widget",
           "github.com/junkerderprovinz/tollroll")
 
@@ -210,13 +235,19 @@ STORES = ("play.google.com", "f-droid.org", "apps.apple.com","chromewebstore.goo
 # travel along the whole row, the same band as the donation row's. Its numbers
 # are in screen pixels, where the gap between buttons is measured.
 #
-# The row is `<img width="160">` separated by a newline, two spaces and a
-# `&nbsp;`, which HTML collapses to 13.16px at GitHub's 16px body text. A
-# `&nbsp;` glued to `</a>` measures 8.77px, so the separator is part of the rule.
-# The parts of the Windows button are glued with nothing between them.
+# Each button stands on its own line with an `&nbsp;` on either side, so two
+# neighbours are `&nbsp;`, a collapsed newline and `&nbsp;` apart, 13.16px at
+# GitHub's 16px body text. A row that wraps breaks at the newline, and every line
+# keeps an `&nbsp;` at both ends, so it stays centred. The parts of the Windows
+# button are glued with nothing between them.
 BAND_PX = 33.0     # the band's width on screen
 SPEED = 250.0      # screen pixels per second
 GAP_PX = 13.16     # measured, see above
+# An image on GitHub sits on the text baseline, which leaves 5.5px under each
+# line. Clear space above and below every button tops that up to GAP_PX, so the
+# lines of a row keep the distance its buttons keep beside each other.
+LINE_SLACK_PX = 5.5  # measured
+ROW_PAD_PX = (GAP_PX - LINE_SLACK_PX) / 2
 # The donation buttons' width, so every button on the page is the same size.
 RENDER_PX = 160.0
 # Two segments and the gap they replace make one button's place. Whole pixels,
@@ -295,9 +326,11 @@ NAME_AND_SUB = """  <text x="{head_x}" y="108" font-family="{font}" font-size="8
   <text x="{sub_x}" y="186" font-family="{font}" font-size="64" font-weight="400" fill="{ink}" fill-opacity="0.9">{sub_text}</text>"""
 
 # A segment has no mark, and its left edge is a darker line against the part
-# before it. It names only what differs from the button it joins.
+# before it. It carries the same two lines as the button it joins, centred and a
+# little smaller, since AppImage has to fit half a button.
 SEGMENT_FACE = """  <rect width="{divider}" height="{h}" fill="#000" fill-opacity="0.28"/>
-  <text x="{mid}" y="151" text-anchor="middle" font-family="{font}" font-size="72" font-weight="700" fill="{ink}">{sub_text}</text>"""
+  <text x="{mid}" y="112" text-anchor="middle" font-family="{font}" font-size="72" font-weight="700" fill="{ink}">{head}</text>
+  <text x="{mid}" y="182" text-anchor="middle" font-family="{font}" font-size="58" font-weight="400" fill="{ink}" fill-opacity="0.9">{sub_text}</text>"""
 
 # Every button on the page shows one file, buttons.svg, through its own
 # #svgView fragment. The shine's clock starts when an <img> gets its file, and
@@ -371,7 +404,7 @@ def rows():
     for kind, href in config.BUTTONS.items():
         if href is None and kind not in SOON:
             raise SystemExit("%s has no link" % kind)
-        if href and "/%s/" % REPO not in href and not any(host in href for host in STORES):
+        if href and not href.startswith("#") and "/%s/" % REPO not in href and not any(host in href for host in STORES):
             raise SystemExit("REPO is %r, but %s leads to %s" % (REPO, kind, href))
     joined = {s for group in SEGMENTS.values() for s in group}
     for base, group in SEGMENTS.items():
@@ -434,20 +467,21 @@ def outline(w, corners):
     return " ".join(d) + " Z"
 
 
-def brand(name, ink):
-    """One mark as markup in the button's ink, and the scale and offsets that
-    centre it in GLYPH."""
+def brand(name, ink, fit_w, fit_h, room_w, room_h):
+    """One mark as markup in the button's ink, scaled to fit fit_w by fit_h,
+    and the scale and offsets that centre it in room_w by room_h."""
     paths = [p for p in io.open(os.path.join(BRANDS, name + ".txt"), encoding="utf-8").read().splitlines() if p.strip()]
     box = io.open(os.path.join(BRANDS, name + ".box.txt"), encoding="utf-8").read().strip()
     x, y, width, height = (float(n) for n in box.split())
-    # Scaled by height so the marks share an optical size, then nudged right by
-    # half the width they do not use, since Apple's mark is narrower. A mark
-    # wider than WIDEST is scaled by width and lowered by half the height it
-    # leaves. The box's origin is taken off, since not every viewBox starts at 0.
-    scale = min(GLYPH / height, WIDEST / width) * LARGER.get(name, 1.0)
+    # Beside a name, marks are scaled by height so they share an optical size,
+    # then nudged right by half the width they do not use, since Apple's mark is
+    # narrower. A mark wider than WIDEST is scaled by width and lowered by half
+    # the height it leaves. The box's origin is taken off, since not every
+    # viewBox starts at 0.
+    scale = min(fit_h / height, fit_w / width) * LARGER.get(name, 1.0)
     seam = ' stroke="%s" stroke-width="%s"' % (ink, num(SEAM / scale)) if len(paths) > 1 else ""
     markup = "\n".join('    <path d="%s"%s/>' % (p, seam) for p in paths)
-    return markup, scale, (GLYPH - width * scale) / 2 - x * scale, (GLYPH - height * scale) / 2 - y * scale
+    return markup, scale, (room_w - width * scale) / 2 - x * scale, (room_h - height * scale) / 2 - y * scale
 
 
 def num(x):
@@ -461,8 +495,13 @@ def button(part, delay, cycle):
     common = dict(font=FONT, ink=part.ink, head=part.head, sub_text=part.sub if two_lines else "")
     words = (NAME_AND_SUB if two_lines else NAME).format(head_x=TEXT_X, sub_x=TEXT_X + 2, **common)
     if part.mark:
-        markup, scale, dx, dy = brand(part.mark, part.ink)
-        face = MARK.format(gx=round(GX + dx, 2), gy=round(GY + dy, 2), scale=round(scale, 5), paths=markup, ink=part.ink) + words
+        if part.head:
+            markup, scale, dx, dy = brand(part.mark, part.ink, WIDEST, GLYPH, GLYPH, GLYPH)
+            gx, gy = GX + dx, GY + dy
+        else:
+            markup, scale, gx, gy = brand(part.mark, part.ink, WORDMARK_W, WORDMARK_H, part.width, H)
+            words = ""
+        face = MARK.format(gx=round(gx, 2), gy=round(gy, 2), scale=round(scale, 5), paths=markup, ink=part.ink) + words
     else:
         common["sub_text"] = part.sub
         face = SEGMENT_FACE.format(divider=num(DIVIDER_W), h=H, mid=num(part.width / 2), **common)
@@ -606,25 +645,30 @@ def place_docs(text):
     return text[:at] + nl + nl + DOCS_OPEN + nl + DOCS_CLOSE + text[at:]
 
 
-def row(items, nl, url):
-    """One centred row: a link per image, the separator on its own line, two
-    spaces in, because that is the gap GAP_PX was measured on. The parts of one
+def row(rows, nl, url):
+    """One centred paragraph: a line per button, two spaces in, with the `&nbsp;`
+    on either side that GAP_PX was measured on, and a <br> between rows. The
+    rows of a group share the paragraph, so a phone that wraps every row sees
+    one even spacing instead of a paragraph gap after each. The parts of one
     button share a line with nothing between them."""
     lines = ['<p align="center">']
-    if isinstance(items, Title):
+    if isinstance(rows, Title):
         lines.append('  <picture><source media="(prefers-color-scheme: dark)" srcset="%s/%s-dark.svg"><img src="%s/%s.svg" alt="%s" width="100%%"></picture>'
-                     % (BANDS, items.id, BANDS, items.id, escape(items.word)))
+                     % (BANDS, rows.id, BANDS, rows.id, escape(rows.word)))
         lines.append("</p>")
         return nl.join(lines) + nl
-    for index, parts in enumerate(items):
+    for index, items in enumerate(rows):
         if index:
-            lines.append("  &nbsp;")
-        imgs = []
-        for href, alt, x, width, height, render in parts:
-            img = ('<img src="%s#svgView(viewBox(%s,0,%s,%s))" alt="%s" width="%s" height="%s">'
-                   % (url, num(x), num(width), num(height), escape(alt), num(render), num(render * height / width)))
-            imgs.append('<a href="%s">%s</a>' % (escape(href), img) if href else img)
-        lines.append("  " + "".join(imgs))
+            lines.append("  <br>")
+        for parts in items:
+            imgs = []
+            for href, alt, x, width, height, render in parts:
+                pad = ROW_PAD_PX * width / render
+                img = ('<img src="%s#svgView(viewBox(%s,%s,%s,%s))" alt="%s" width="%s" height="%s">'
+                       % (url, num(x), num(-pad), num(width), num(height + 2 * pad), escape(alt), num(render),
+                          num(render * (height + 2 * pad) / width)))
+                imgs.append('<a href="%s">%s</a>' % (escape(href), img) if href else img)
+            lines.append("  &nbsp;" + "".join(imgs) + "&nbsp;")
     lines.append("</p>")
     return nl.join(lines) + nl
 
@@ -642,8 +686,14 @@ def write_readme(text, downloads, groups, apps, docs, donations, url):
             nl = "\r\n" if text[start:].split("\n", 1)[0].endswith("\r") else "\n"
             # A <br> between paragraphs is the one spacer GitHub keeps, and it
             # sets a new group about twice as far off as the next row.
-            body = "".join(("<br>" + nl if i and group[i] != group[i - 1] else "") + row(items, nl, url)
-                           for i, items in enumerate(table))
+            runs = []
+            for i, items in enumerate(table):
+                if runs and not isinstance(items, Title) and not isinstance(runs[-1][1], Title) and group[i] == runs[-1][0]:
+                    runs[-1][1].append(items)
+                else:
+                    runs.append((group[i], items if isinstance(items, Title) else [items]))
+            body = "".join(("<br>" + nl if i and runs[i][0] != runs[i - 1][0] else "") + row(rows, nl, url)
+                           for i, (_, rows) in enumerate(runs))
             text = text[:start] + opener + nl + body + text[end:]
     io.open(README, "w", encoding="utf-8", newline="").write(text)
     sizes = "+".join(str(sum(len(item) for item in r)) for r in downloads if not isinstance(r, Title))
