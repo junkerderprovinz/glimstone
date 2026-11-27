@@ -28,8 +28,8 @@ rather than for outside adoption; <a href="docs/design-language.md">docs/design-
 
 <!-- docs-button: written by scripts/gen_download_buttons.py -->
 <p align="center">
-  &nbsp;<a href="https://junkerderprovinz.github.io/glimstone/#/guide/adopting"><img src="https://raw.githubusercontent.com/junkerderprovinz/glimstone/main/.github/assets/download-buttons/buttons.svg?v=399374c88eb4#svgView(viewBox(0,-20.153,1010.28,285.606))" alt="Read the documentation" width="192" height="54.278"></a>&nbsp;
-  &nbsp;<a href="https://junkerderprovinz.github.io/glimstone/"><img src="https://raw.githubusercontent.com/junkerderprovinz/glimstone/main/.github/assets/download-buttons/buttons.svg?v=399374c88eb4#svgView(viewBox(1035,-20.153,1010.28,285.606))" alt="Try it live" width="192" height="54.278"></a>&nbsp;
+  <a href="https://junkerderprovinz.github.io/glimstone/#/guide/adopting"><img src="https://raw.githubusercontent.com/junkerderprovinz/glimstone/main/.github/assets/download-buttons/buttons.svg?v=ff8c6b6af759#svgView(viewBox(-23.082,-20.153,1056.444,285.606))" alt="Read the documentation" width="200.773" height="54.278"></a>
+  <a href="https://junkerderprovinz.github.io/glimstone/"><img src="https://raw.githubusercontent.com/junkerderprovinz/glimstone/main/.github/assets/download-buttons/buttons.svg?v=ff8c6b6af759#svgView(viewBox(1059.918,-20.153,1056.444,285.606))" alt="Try it live" width="200.773" height="54.278"></a>
 </p>
 <!-- /docs-button -->
 
@@ -71,9 +71,9 @@ If it has earned a place on your server or computer, toss a coin to your knight:
 
 <!-- give-buttons: written by scripts/gen_download_buttons.py -->
 <p align="center">
-  &nbsp;<a href="https://buymeacoffee.com/junkerderprovinz"><img src="https://raw.githubusercontent.com/junkerderprovinz/glimstone/main/.github/assets/download-buttons/buttons.svg?v=399374c88eb4#svgView(viewBox(2070,-20.153,841.9,285.606))" alt="Buy me a coffee" width="160" height="54.278"></a>&nbsp;
-  &nbsp;<a href="https://www.paypal.com/donate/?hosted_button_id=76FVV52TKXTUS"><img src="https://raw.githubusercontent.com/junkerderprovinz/glimstone/main/.github/assets/download-buttons/buttons.svg?v=399374c88eb4#svgView(viewBox(2936,-20.153,841.9,285.606))" alt="PayPal" width="160" height="54.278"></a>&nbsp;
-  &nbsp;<a href="https://junkerderprovinz.github.io/junkerderprovinz/"><img src="https://raw.githubusercontent.com/junkerderprovinz/glimstone/main/.github/assets/download-buttons/buttons.svg?v=399374c88eb4#svgView(viewBox(3802,-20.153,841.9,285.606))" alt="Donate with crypto" width="160" height="54.278"></a>&nbsp;
+  <a href="https://buymeacoffee.com/junkerderprovinz"><img src="https://raw.githubusercontent.com/junkerderprovinz/glimstone/main/.github/assets/download-buttons/buttons.svg?v=ff8c6b6af759#svgView(viewBox(2142.918,-20.153,888.064,285.606))" alt="Buy me a coffee" width="168.773" height="54.278"></a>
+  <a href="https://www.paypal.com/donate/?hosted_button_id=76FVV52TKXTUS"><img src="https://raw.githubusercontent.com/junkerderprovinz/glimstone/main/.github/assets/download-buttons/buttons.svg?v=ff8c6b6af759#svgView(viewBox(3056.918,-20.153,888.064,285.606))" alt="PayPal" width="168.773" height="54.278"></a>
+  <a href="https://junkerderprovinz.github.io/junkerderprovinz/"><img src="https://raw.githubusercontent.com/junkerderprovinz/glimstone/main/.github/assets/download-buttons/buttons.svg?v=ff8c6b6af759#svgView(viewBox(3970.918,-20.153,888.064,285.606))" alt="Donate with crypto" width="168.773" height="54.278"></a>
 </p>
 <!-- /give-buttons -->
 
