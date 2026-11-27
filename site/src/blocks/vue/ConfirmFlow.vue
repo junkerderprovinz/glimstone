@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { onUnmounted, ref, shallowRef } from "vue";
 import { addToast, pauseToast, removeToast, resumeToast, type ToastEntry } from "@glimstone/core";
-import { Card, IconButton, ListRow, Pill, ToastViewport, useConfirm } from "@glimstone/vue";
+import { Card, IconButton, ListRow, ToastViewport, useConfirm } from "@glimstone/vue";
 import { glyph, Glyph } from "../../vue/glyph";
 
 const SNAPSHOTS = ["14 October", "21 October", "28 October"];
+const SIZES: Record<string, string> = { "14 October": "38.2", "21 October": "38.9", "28 October": "41.5" };
 
 // Deleting asks first, and the toast that reports it can take it back.
 const { confirm, ConfirmHost } = useConfirm({ title: "Delete snapshot", cancel: "Cancel", confirm: "Delete" });
@@ -35,7 +36,7 @@ const trash = glyph("IconTrash");
       <div style="display: grid; gap: 2px">
         <ListRow v-for="day in snapshots" :key="day" :name="day">
           <template #tile><Glyph name="IconArchive" /></template>
-          <template #badges><Pill tone="ok">Settled</Pill></template>
+          <template #value>{{ SIZES[day] }}&#x202f;<small>GB</small></template>
           <template #actions>
             <IconButton :tip="`Delete the snapshot from ${day}`" :glyph="trash" @click="remove(day)" />
           </template>

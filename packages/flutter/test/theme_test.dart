@@ -27,14 +27,14 @@ void main() {
     expect(GlimTheme.light.focusRing, GlimTheme.light.accentInk);
   });
 
-  test('the hover is the accent on surface3\'s lightness', () {
-    expectNear(GlimTheme.dark.hover, 0xFF5C4F2F);
-    expectNear(GlimTheme.oled.hover, 0xFF433616);
-    expectNear(GlimTheme.light.hover, 0xFFE0D0AC);
+  test('the hover is the accent a small step darker than surface3', () {
+    expectNear(GlimTheme.dark.hover, 0xFF423822);
+    expectNear(GlimTheme.oled.hover, 0xFF2E2510);
+    expectNear(GlimTheme.light.hover, 0xFFE4D8BE);
   });
 
   test('the hover follows a picked accent', () {
-    expectNear(GlimTheme.dark.withAccent(const Color(0xFF1D99F3)).hover, 0xFF3A536B);
-    expectNear(GlimTheme.light.withAccent(const Color(0xFF1D99F3)).hover, 0xFFB8D5F1);
+    expectNear(GlimTheme.dark.withAccent(const Color(0xFF1D99F3)).hover, 0xFF2A3B4B);
+    expectNear(GlimTheme.light.withAccent(const Color(0xFF1D99F3)).hover, 0xFFC7DCF1);
   });
 }

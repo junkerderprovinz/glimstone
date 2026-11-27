@@ -15,7 +15,7 @@ const STATES = [
   { id: "failed", label: "Failed", disabled: true, title: "Nothing has failed" },
 ];
 
-const caption = { "font-size": "13px", color: "var(--carbon-text-sub)" };
+const caption = { "font-size": "13px", color: "var(--stone-text-sub)" };
 
 export default function SelectorPickers() {
   const [theme, setTheme] = createSignal("dark");
@@ -24,7 +24,7 @@ export default function SelectorPickers() {
     <div style={{ display: "grid", gap: "20px", width: "100%" }}>
       <div style={{ display: "grid", gap: "8px" }}>
         <span style={caption}>Theme</span>
-        <Selector label="Theme" items={THEMES} value={theme()} onChange={setTheme} activation="manual" equalWidth />
+        <Selector label="Theme" items={THEMES} value={theme()} onChange={setTheme} activation="manual" equalWidth labels="textGlyph" />
       </div>
       <div style={{ display: "flex", "align-items": "center", gap: "12px", "flex-wrap": "wrap" }}>
         <span style={caption}>Show</span>

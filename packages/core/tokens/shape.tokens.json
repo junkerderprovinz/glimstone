@@ -22,12 +22,12 @@
       }
     },
     "radius-card": {
-      "$value": "0.5rem",
+      "$value": "0.875rem",
       "$type": "dimension",
       "$extensions": {
         "org.glimstone": {
           "modes": {
-            "round": "1.25rem",
+            "round": "1.5rem",
             "square": "0",
             "leaf": "1.25rem"
           },
@@ -36,12 +36,12 @@
       }
     },
     "radius-control": {
-      "$value": "0.3125rem",
+      "$value": "0.5rem",
       "$type": "dimension",
       "$extensions": {
         "org.glimstone": {
           "modes": {
-            "round": "0.75rem",
+            "round": "1rem",
             "square": "0",
             "leaf": "0.75rem"
           },
@@ -50,7 +50,7 @@
       }
     },
     "radius-pill": {
-      "$value": "0.3125rem",
+      "$value": "0.5rem",
       "$type": "dimension",
       "$extensions": {
         "org.glimstone": {

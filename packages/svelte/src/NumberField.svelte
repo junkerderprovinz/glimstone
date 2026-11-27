@@ -22,7 +22,7 @@
 
 <script lang="ts">
   import { attachNumberSteppers, fieldErrorView, syncNumberSteppers } from "@glimstone/core";
-  import FieldError from "./FieldError.svelte";
+  import FieldErrorLine from "./FieldErrorLine.svelte";
   import { useFieldName } from "./fieldName.js";
 
   // A number input with its two steppers inside the field; the steppers, the
@@ -67,4 +67,4 @@
     class={`glim-num-input glim-num-field glim-num ${className}`.trim()}
   />
 </span>
-{#if err.errorId}<FieldError id={err.errorId}>{error}</FieldError>{/if}
+<FieldErrorLine id={err.errorId} {error} />

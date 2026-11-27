@@ -56,7 +56,8 @@ export const el: ComponentWords = {
   tour: { back: "Πίσω", next: "Επόμενο", close: "Κλείσιμο", progress: "{step} από {steps}" },
   floatingPanel: { minimize: "Ελαχιστοποίηση", maximize: "Μεγιστοποίηση", restore: "Επαναφορά", close: "Κλείσιμο" },
   signaturePad: { area: "Υπογραφή", clear: "Καθαρισμός" },
-  passwordField: { show: "Εμφάνιση", hide: "Απόκρυψη", confirm: "Επιβεβαίωση κωδικού", mismatch: "Οι κωδικοί δεν ταιριάζουν" },
+  passwordField: { show: "Εμφάνιση", hide: "Απόκρυψη", confirm: "Επιβεβαίωση κωδικού", mismatch: "Οι κωδικοί δεν ταιριάζουν", again: "Άλλη μία φορά" },
+  timePicker: { hour: "Ώρες", minute: "Λεπτά", start: "Έναρξη", end: "Λήξη", to: "έως" },
   versionCard: {
     title: "Έκδοση",
     hint: "Η έκδοση του {app}, πού βρίσκονται οι ενημερώσεις και τι έφερε αυτή η έκδοση.",

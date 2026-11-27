@@ -1,5 +1,5 @@
 <script lang="ts" module>
-  import type { SelectMode, SelectorActivation, SelectorOrientation, SelectorSize, SelectorVariant } from "@glimstone/core";
+  import type { LabelMode, SelectMode, SelectorActivation, SelectorOrientation, SelectorSize, SelectorVariant } from "@glimstone/core";
   import type { SelectorItem } from "./selectorItem.js";
 
   export type { SelectMode, SelectorActivation, SelectorOrientation, SelectorSize, SelectorVariant } from "@glimstone/core";
@@ -20,6 +20,10 @@
     onPress?: (id: V) => void;
     /** `vertical` is the column of tiles beside a settings area's pages. */
     orientation?: SelectorOrientation;
+    /** The label mode of this strip alone, in place of the app's setting, for a
+     *  strip that has to speak in glyphs, words or both whatever the rest does. */
+    labels?: LabelMode;
+
     size?: SelectorSize;
     variant?: SelectorVariant;
     /** "manual" moves the focus with the arrows and chooses on Space, Enter or a
@@ -37,7 +41,7 @@
      *  alone where every segment has one, a strip of one turns into a dropdown
      *  otherwise, and a `many` strip cuts its labels short. */
     fit?: boolean;
-    /** Has no effect: every strip keeps to one row. */
+    /** @deprecated Has no effect, since every strip keeps to one row. Removed in 6.0.0. */
     pairsOnPhone?: boolean;
     /** The button height for every segment, for a strip beside a Button. */
     buttonHeight?: boolean;
@@ -67,8 +71,12 @@
     selectorFlex,
     selectorView,
     subscribeMedia,
+    slideTabPanel,
+    tabSlideDir,
     toggleSelection,
     watchSelectorFit,
+    warnDeprecated,
+    watchSelectorThumb,
     WIDE_QUERY,
     type SelectorLayout,
   } from "@glimstone/core";
@@ -94,12 +102,14 @@
     onChange,
     onPress,
     orientation = "horizontal",
+    labels,
     size = "md",
     variant = "well",
     activation = "auto",
     equalWidth = false,
     inline: ownInline = false,
     fit = false,
+    pairsOnPhone,
     buttonHeight = false,
     hue = true,
     hueOffset,
@@ -107,6 +117,9 @@
     panelId,
     class: className = "",
   }: SelectorProps<M, V> = $props();
+
+  // svelte-ignore state_referenced_locally
+  if (pairsOnPhone !== undefined) warnDeprecated("Selector pairsOnPhone");
 
   const name = useFieldName(() => label);
   const inline = $derived(ownInline || (label === undefined && name() !== undefined));
@@ -118,7 +131,7 @@
   $effect(() => subscribeMedia(WIDE_QUERY, () => (wide = mediaMatches(WIDE_QUERY))));
   const strip = $derived(
     selectorView({
-      mode: mode.current,
+      mode: labels ?? mode.current,
       select: many ? "many" : "one",
       activation,
       orientation,
@@ -171,6 +184,23 @@
 
   const flex = $derived(selectorFlex({ layout, inline, fit }));
 
+  // One value glides: a thumb under the segments carries the fill from the
+  // old choice to the new one. Toggles in a `many` strip each keep their own.
+  const gliding = $derived(!vertical && !many);
+  $effect(() => {
+    if (gliding) return watchSelectorThumb(track);
+  });
+
+  // A tab strip moves its panel in from the side of the tab it came from.
+  const chosenIndex = $derived(many ? -1 : items.findIndex((it) => it.id === value));
+  let lastIndex = -1;
+  $effect(() => {
+    const to = chosenIndex;
+    const dir = tabSlideDir(lastIndex, to);
+    lastIndex = to;
+    if (dir && panelId && strip.kind === "tab") slideTabPanel(document.getElementById(panelId), dir);
+  });
+
   // countSelector writes the strip's colour onto the track's style itself, so
   // the layout's properties go on one by one rather than as style text.
   $effect(() => {
@@ -220,6 +250,7 @@
   onkeydown={onKeyDown}
   class={`${strip.className}${listed ? " glim-sel--listed" : ""} ${className}`.trim()}
 >
+  {#if gliding}<span class="glim-sel-thumb" aria-hidden="true"></span>{/if}
   {#each items as item, i (item.id)}
     <SelectorSegment
       {item}

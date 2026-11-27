@@ -1,14 +1,15 @@
-import { createMemo, createUniqueId, For, mergeProps } from "solid-js";
+import { createMemo, createUniqueId, For, mergeProps, Show } from "solid-js";
 import * as pinInput from "@zag-js/pin-input";
 import { normalizeProps, useMachine } from "@zag-js/solid";
-import { PIN_INPUT_TEXT, pinCells, type PinInputText } from "@glimstone/core";
+import { PIN_INPUT_TEXT, pinCells, pinGroupStarts, type PinInputText } from "@glimstone/core";
 import { useFieldName } from "./fieldName.ts";
 
 export type { PinInputText } from "@glimstone/core";
 
 // A short code typed one character to a box, such as the six digits of a
 // second factor. A code is data, so the boxes run left to right in every
-// language. Inside a FieldRow the row names it.
+// language, and a code of six or nine stands in groups of three. Inside a
+// FieldRow the row names it.
 
 export interface PinInputProps {
   label?: string;
@@ -56,7 +57,16 @@ export function PinInput(raw: PinInputProps) {
         {name()}
       </label>
       <div {...api().getControlProps()} class="glim-pin-control">
-        <For each={api().items}>{(index) => <input {...api().getInputProps({ index })} class="glim-input glim-pin-cell glim-num" />}</For>
+        <For each={api().items}>
+          {(index) => (
+            <>
+              <Show when={pinGroupStarts(index, props.length)}>
+                <span class="glim-pin-sep" aria-hidden="true" />
+              </Show>
+              <input {...api().getInputProps({ index })} class="glim-input glim-pin-cell glim-num" />
+            </>
+          )}
+        </For>
       </div>
       <input {...api().getHiddenInputProps()} />
     </div>

@@ -19,7 +19,7 @@
 <div style="display: grid; gap: 12px">
   {#each ROWS as r (r.width)}
     <div data-width={r.width} style="display: flex; align-items: center; gap: 12px; width: {r.room}px">
-      <span style="flex: none; width: 64px; color: var(--carbon-text-sub)">{r.width}</span>
+      <span style="flex: none; width: 64px; color: var(--stone-text-sub)">{r.width}</span>
       <Select label={`Keep backups, ${r.width}`} hideLabel width={r.width} options={KEEP} bind:value={values[r.width]} />
     </div>
   {/each}

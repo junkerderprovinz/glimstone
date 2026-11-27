@@ -26,12 +26,13 @@
 <script lang="ts">
   import * as pinInput from "@zag-js/pin-input";
   import { normalizeProps, useMachine } from "@zag-js/svelte";
-  import { PIN_INPUT_TEXT, pinCells } from "@glimstone/core";
+  import { PIN_INPUT_TEXT, pinCells, pinGroupStarts } from "@glimstone/core";
   import { useFieldName } from "./fieldName.js";
 
   // A short code typed one character to a box, such as the six digits of a
   // second factor. A code is data, so the boxes run left to right in every
-  // language. Inside a FieldRow the row names it.
+  // language, and a code of six or nine stands in groups of three. Inside a
+  // FieldRow the row names it.
   let {
     label,
     value = $bindable(),
@@ -74,6 +75,7 @@
   <label {...api.getLabelProps()} class={label === undefined ? "glim-sr-only" : "glim-field-label"}>{name()}</label>
   <div {...api.getControlProps()} class="glim-pin-control">
     {#each api.items as index (index)}
+      {#if pinGroupStarts(index, length)}<span class="glim-pin-sep" aria-hidden="true"></span>{/if}
       <input {...api.getInputProps({ index })} class="glim-input glim-pin-cell glim-num" />
     {/each}
   </div>

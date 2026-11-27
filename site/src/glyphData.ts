@@ -1,4 +1,6 @@
+import { glyphArt, type GlyphDrawing } from "@glimstone/core";
 import glyphs from "@glimstone/core/glyphs.json";
+import lines from "@glimstone/core/glyphs-line.json";
 
 export interface GlyphEntry {
   name: string;
@@ -9,6 +11,13 @@ export interface GlyphEntry {
 
 export const GLYPHS = glyphs as GlyphEntry[];
 export const glyphByName = new Map(GLYPHS.map((g) => [g.name, g]));
+const lineByName = new Map((lines as { name: string; svg: string }[]).map((l) => [l.name, l]));
+
+/** A glyph as its <svg> takes it, with its line drawing beside the filled one where it has one. */
+export function glyphArtOf(name: string): GlyphDrawing | undefined {
+  const g = glyphByName.get(name);
+  return g && glyphArt(g, lineByName.get(name));
+}
 
 // The site's own label keys. A real app maps its translation keys the same way.
 const KEYS: Record<string, string> = {

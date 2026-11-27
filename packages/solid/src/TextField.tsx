@@ -1,6 +1,6 @@
-import { createUniqueId, mergeProps, Show, splitProps, type JSX } from "solid-js";
-import { fieldErrorView, textFieldClass, type FieldWidth } from "@glimstone/core";
-import { FieldError } from "./FieldError.tsx";
+import { createEffect, createUniqueId, mergeProps, on, splitProps, type JSX } from "solid-js";
+import { fieldErrorView, fitTextArea, textFieldClass, type FieldWidth } from "@glimstone/core";
+import { FieldErrorLine } from "./fieldErrorLine.tsx";
 import { useFieldName } from "./fieldName.ts";
 
 export type { FieldWidth } from "@glimstone/core";
@@ -38,7 +38,7 @@ export function TextField(props: TextFieldProps) {
         type={own.type}
         class={`${textFieldClass({ width: own.width, mono: own.mono })} ${own.class ?? ""}`.trim()}
       />
-      <Show when={err().errorId}>{(id) => <FieldError id={id()}>{own.error}</FieldError>}</Show>
+      <FieldErrorLine id={err().errorId} error={own.error} />
     </>
   );
 }
@@ -55,22 +55,32 @@ export interface TextAreaProps extends Omit<JSX.TextareaHTMLAttributes<HTMLTextA
 }
 
 export function TextArea(props: TextAreaProps) {
-  const [own, rest] = splitProps(props, ["label", "mono", "width", "error", "class", "id", "aria-describedby"]);
+  const [own, rest] = splitProps(props, ["label", "mono", "width", "error", "class", "id", "ref", "onInput", "aria-describedby"]);
   const name = useFieldName(() => own.label);
   const fallback = createUniqueId();
   const err = () => fieldErrorView(own.error, own.id ?? fallback, own["aria-describedby"]);
+  let area!: HTMLTextAreaElement;
+  createEffect(on(() => rest.value, () => fitTextArea(area)));
   return (
     <>
       <textarea
         data-glim="TextArea"
         aria-label={name()}
         {...rest}
+        ref={(el) => {
+          area = el;
+          if (typeof own.ref === "function") (own.ref as (el: HTMLTextAreaElement) => void)(el);
+        }}
+        onInput={(e) => {
+          fitTextArea(e.currentTarget);
+          if (typeof own.onInput === "function") own.onInput(e);
+        }}
         id={own.id}
         aria-invalid={err().invalid}
         aria-describedby={err().describedBy}
         class={`${textFieldClass({ width: own.width, mono: own.mono, area: true })} ${own.class ?? ""}`.trim()}
       />
-      <Show when={err().errorId}>{(id) => <FieldError id={id()}>{own.error}</FieldError>}</Show>
+      <FieldErrorLine id={err().errorId} error={own.error} />
     </>
   );
 }

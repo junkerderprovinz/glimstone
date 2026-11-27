@@ -7,6 +7,8 @@
 // It has no framework dependency; the React and Vue packages wrap it.
 
 import { accentHovers, accentInks, contrastOn, validHex as valid } from './contrast.ts';
+import { warnDeprecatedAfterLoad } from './deprecated.ts';
+import { applyGlyphs, DEFAULT_GLYPHS } from './glyphStyle.ts';
 import { inkCss } from './oklab.ts';
 import { storageKey } from './storage.ts';
 import { applyOled, storedOled } from './theme.ts';
@@ -176,6 +178,52 @@ export function applyDensity(density: Density | string | undefined): void {
   document.documentElement.setAttribute('data-density', d);
 }
 
+/**
+ * How light falls on the stone. `edge` draws a light top edge on every raised
+ * surface, `glow` also lets the accent fill and the switches catch light from
+ * above, and `off` leaves the plain shadows. The strings go into `data-light`
+ * and storage like the other axes.
+ *
+ * `stone` is glow with a fine grain over the page, a real level that no picker
+ * offers; `stoneTap` reveals it.
+ */
+export type Light = 'off' | 'edge' | 'glow' | 'stone';
+
+/** The levels a picker shows. */
+export const LIGHT_LEVELS: Light[] = ['off', 'edge', 'glow'];
+
+/** The levels a stored value may hold, so a found stone survives a reload. */
+export const LIGHT_STORED: Light[] = [...LIGHT_LEVELS, 'stone'];
+
+export const DEFAULT_LIGHT: Light = 'edge';
+
+/** Sets the attribute the light tokens key off. */
+export function applyLight(light: Light | string | undefined): void {
+  const l: Light = LIGHT_STORED.includes(light as Light) ? (light as Light) : DEFAULT_LIGHT;
+  document.documentElement.setAttribute('data-light', l);
+}
+
+/** How many taps on `glow`, once it is chosen, reveal the stone. */
+export const STONE_TAPS = 5;
+
+/**
+ * The gesture that reveals the stone, the storm's gesture on the light picker:
+ * with the light at `glow`, tap `glow` five more times. Keep the count in the
+ * state of the screen that found it, never in storage.
+ *
+ * Returns the level to switch to, or undefined when the tap was not the fifth.
+ */
+export function stoneTap(state: { taps: number }, tapped: string, current: string): Light | undefined {
+  if (tapped !== 'glow' || current !== 'glow') {
+    state.taps = 0;
+    return undefined;
+  }
+  state.taps += 1;
+  if (state.taps < STONE_TAPS) return undefined;
+  state.taps = 0;
+  return 'stone';
+}
+
 /** How many taps on `wild`, once it is chosen, reveal the storm. */
 export const STORM_TAPS = 5;
 
@@ -259,7 +307,8 @@ function paintAccent(hex: string | undefined): void {
     if (ink) root.setProperty(`--accent-ink-${ramp}`, ink);
     else root.removeProperty(`--accent-ink-${ramp}`);
   }
-  const hovers = valid(hex) ? accentHovers(hex) : { light: undefined, dark: undefined };
+  // The stylesheet's gold needs its hover worked out too, or it barely moves on the dark ramp.
+  const hovers = accentHovers(valid(hex) ? hex : DEFAULT_ACCENT);
   for (const [ramp, hover] of Object.entries(hovers)) {
     if (hover) root.setProperty(`--accent-hover-${ramp}`, hover);
     else root.removeProperty(`--accent-hover-${ramp}`);
@@ -458,10 +507,12 @@ interface Cached {
   accent?: string;
   rainbow?: RainbowState;
   density?: string;
+  light?: string;
+  glyphs?: string;
 }
 
 /** `accent` is the setting, so the system mode is cached as SYSTEM_ACCENT. */
-export function cacheAppearance(shape: string, accent: string, rainbow?: RainbowState, density?: string): void {
+export function cacheAppearance(shape: string, accent: string, rainbow?: RainbowState, density?: string, light?: string, glyphs?: string): void {
   try {
     // The conditional spreads omit a key under exactOptionalPropertyTypes
     // instead of storing it as undefined.
@@ -470,6 +521,8 @@ export function cacheAppearance(shape: string, accent: string, rainbow?: Rainbow
       accent,
       ...(rainbow !== undefined ? { rainbow } : {}),
       ...(density !== undefined ? { density } : {}),
+      ...(light !== undefined ? { light } : {}),
+      ...(glyphs !== undefined ? { glyphs } : {}),
     };
     localStorage.setItem(storageKey('appearance'), JSON.stringify(payload));
   } catch {
@@ -477,8 +530,12 @@ export function cacheAppearance(shape: string, accent: string, rainbow?: Rainbow
   }
 }
 
-/** Applied at boot, before the app renders anything. */
+/**
+ * Applied at boot, before the app renders anything. Every app calls it at its
+ * root, so it also has the page look for deprecated names once it has loaded.
+ */
 export function applyCachedAppearance(): void {
+  warnDeprecatedAfterLoad();
   applyOled(storedOled());
   try {
     const system = localStorage.getItem(storageKey('system-accent')) ?? undefined;
@@ -487,17 +544,24 @@ export function applyCachedAppearance(): void {
     if (!raw) {
       applyShape(DEFAULT_SHAPE);
       applyDensity(DEFAULT_DENSITY);
+      applyLight(DEFAULT_LIGHT);
+      applyGlyphs(DEFAULT_GLYPHS);
+      applyAccent(undefined);
       applyRainbow(undefined);
       return;
     }
-    const { shape, accent, rainbow, density } = JSON.parse(raw) as Cached;
+    const { shape, accent, rainbow, density, light, glyphs } = JSON.parse(raw) as Cached;
     applyShape(shape);
     applyDensity(density);
+    applyLight(light);
+    applyGlyphs(glyphs);
     applyAccent(accent);
     applyRainbow(rainbow);
   } catch {
     applyShape(DEFAULT_SHAPE);
     applyDensity(DEFAULT_DENSITY);
+    applyLight(DEFAULT_LIGHT);
+    applyGlyphs(DEFAULT_GLYPHS);
     applyRainbow(undefined);
   }
 }

@@ -14,12 +14,16 @@ export interface SkeletonRowProps {
   tile?: boolean;
   /** The badge at the row's end, for a list whose rows have one. */
   badge?: boolean;
+  /** A bar in the value column, for a list whose rows carry a `value`. */
+  value?: boolean;
+  /** How many row buttons to keep room for, so the value bar stands where the real rows put their figures. */
+  actions?: number;
   class?: string;
 }
 
 export function SkeletonRow(props: SkeletonRowProps) {
-  const merged = mergeProps({ tile: true, badge: true }, props);
-  const view = () => skeletonRowView({ delay: merged.delay, tile: merged.tile, badge: merged.badge });
+  const merged = mergeProps({ tile: true, badge: true, value: false, actions: 0 }, props);
+  const view = () => skeletonRowView({ delay: merged.delay, tile: merged.tile, badge: merged.badge, value: merged.value, actions: merged.actions });
   return (
     <div data-glim="SkeletonRow" aria-hidden="true" class={merged.class ? `${view().className} ${merged.class}` : view().className} style={css(view().style)}>
       <Show when={view().tile}>
@@ -28,6 +32,12 @@ export function SkeletonRow(props: SkeletonRowProps) {
       <span class="glim-skeleton-block glim-skeleton-name" />
       <Show when={view().badge}>
         <span class="glim-skeleton-block glim-skeleton-badge" />
+      </Show>
+      <Show when={view().value}>
+        <span class="glim-skeleton-block glim-skeleton-value" />
+      </Show>
+      <Show when={view().actions > 0}>
+        <span class="glim-skeleton-actions" />
       </Show>
     </div>
   );

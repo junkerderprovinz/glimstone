@@ -12,7 +12,7 @@ async function look(page: Page, contrast: "more" | "no-preference", theme: "dark
   await relook(page, { theme });
   return page.evaluate(() => {
     const host = document.createElement("div");
-    host.innerHTML = `<span data-probe="muted" style="color: var(--carbon-text-muted)">m</span>
+    host.innerHTML = `<span data-probe="muted" style="color: var(--stone-text-muted)">m</span>
       <input class="glim-input" data-probe="input">
       <button class="glim-btn glim-btn--subtle" data-probe="button">b</button>`;
     document.body.append(host);

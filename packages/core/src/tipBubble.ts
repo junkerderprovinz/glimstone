@@ -40,3 +40,48 @@ export function dismissBubbleOn(hide: () => void): () => void {
     window.removeEventListener("keydown", onKey);
   };
 }
+
+/** A tooltip names a control; an info bubble explains, so it opens at once and reads roomier. */
+export type BubbleKind = "tip" | "info";
+
+/** How long the pointer rests on a control before its tooltip opens. */
+export const TOOLTIP_DELAY_MS = 500;
+
+/** How soon after one tooltip closes the next opens without the wait, so running along a toolbar reads each tip at once. */
+export const TOOLTIP_SKIP_MS = 300;
+
+let lastTooltipClose = -Infinity;
+
+/** The wait before a tooltip opens under the pointer: none while another has just closed, the full delay otherwise. */
+export function tooltipDelay(now: number = performance.now(), delay: number = TOOLTIP_DELAY_MS): number {
+  return now - lastTooltipClose < TOOLTIP_SKIP_MS ? 0 : delay;
+}
+
+/** Notes that a tooltip closed, which opens the window in which the next one needs no wait. */
+export function tooltipClosed(now: number = performance.now()): void {
+  lastTooltipClose = now;
+}
+
+/**
+ * The wait between the pointer coming to rest on a trigger and its bubble
+ * opening. `rest` opens a tooltip after the delay and an info bubble at once,
+ * `cancel` drops an open still waiting, and `closed` notes a tooltip that was
+ * showing.
+ */
+export function restTimer(kind: BubbleKind, delay: number = TOOLTIP_DELAY_MS) {
+  let wait: ReturnType<typeof setTimeout> | undefined;
+  return {
+    rest(open: () => void) {
+      clearTimeout(wait);
+      const ms = kind === "tip" ? tooltipDelay(performance.now(), delay) : 0;
+      if (ms === 0) open();
+      else wait = setTimeout(open, ms);
+    },
+    cancel() {
+      clearTimeout(wait);
+    },
+    closed(wasOpen: boolean) {
+      if (wasOpen && kind === "tip") tooltipClosed();
+    },
+  };
+}

@@ -1,6 +1,6 @@
 {
   "hover-tint": {
-    "$description": "The ground of whatever the pointer is over, in the accent's hue (rule 21). A button, a row, a menu entry and a tile all take this one colour, so two things lit side by side never differ. It keeps the OKLab lightness of surface3, which lifts a row off the card and a quiet button off surface2 while the text and the secondary text on it keep 4.5:1. On the dark ramps it sits 0.007 below surface3, where a saturated green would otherwise take the secondary text under 4.5:1. The chroma is a share of the accent's own, so a grey accent leaves surface3's grey. Declared again inside a rainbow position, so the hover takes the position's hue there, and in reactive mode only once the position lights up.",
+    "$description": "The ground of whatever the pointer is over, in the accent's hue (rule 21). A button, a row, a menu entry and a tile all take this one colour, so two things lit side by side never differ. It sits a small step darker than surface3, which lifts a row off the card and a quiet button off surface2 while the text and the secondary text on it keep 4.5:1. The chroma is a share of the accent's own, so a grey accent leaves surface3's grey. Declared again inside a rainbow position, so the hover takes the position's hue there, and in reactive mode only once the position lights up.",
     "$extensions": {
       "org.glimstone": {
         "selector": ":root,\n[data-theme],\n[data-rainbow] .glim-hue",
@@ -9,28 +9,44 @@
           {
             "name": "oled",
             "selector": "[data-oled],\n[data-oled][data-rainbow] .glim-hue",
-            "$description": "OLED moves surface3 one Carbon step down, and the hover with it."
+            "$description": "OLED moves surface3 one stone step down, and the hover with it."
           }
         ]
       }
     },
     "hover-chroma": {
-      "$value": 0.3,
+      "$value": 0.22,
       "$type": "number",
       "$description": "How much of the accent's chroma the hover takes."
     },
     "hover": {
-      "$value": "oklab(from {colour.accent} 0.861 calc(a * {hover-tint.hover-chroma}) calc(b * {hover-tint.hover-chroma}))",
+      "$value": "oklab(from {colour.accent} 0.885 calc(a * {hover-tint.hover-chroma}) calc(b * {hover-tint.hover-chroma}))",
       "$extensions": {
         "org.glimstone": {
-          "dark": "oklab(from {colour.accent} 0.432 calc(a * {hover-tint.hover-chroma}) calc(b * {hover-tint.hover-chroma}))",
+          "dark": "oklab(from {colour.accent} 0.345 calc(a * {hover-tint.hover-chroma}) calc(b * {hover-tint.hover-chroma}))",
           "modes": {
             "oled": {
-              "dark": "oklab(from {colour.accent} 0.338 calc(a * {hover-tint.hover-chroma}) calc(b * {hover-tint.hover-chroma}))"
+              "dark": "oklab(from {colour.accent} 0.27 calc(a * {hover-tint.hover-chroma}) calc(b * {hover-tint.hover-chroma}))"
             }
           },
           "tailwind": "color-hover",
           "tailwindNote": "The accent's hover (rule 21): hover:bg-hover on anything the pointer can reach, a button, a row, a menu entry or a tile."
+        }
+      }
+    },
+    "hover-raised": {
+      "$description": "The same hover for a control that rests on surface3, such as the neutral button or a segment in its groove, where --hover would sit within a hair of the fill. It stands a step further from surface3, lighter on the dark ramps and darker on the light one, and the text and the secondary text keep 4.5:1 on it.",
+      "$value": "oklab(from {colour.accent} 0.86 calc(a * {hover-tint.hover-chroma}) calc(b * {hover-tint.hover-chroma}))",
+      "$extensions": {
+        "org.glimstone": {
+          "dark": "oklab(from {colour.accent} 0.41 calc(a * {hover-tint.hover-chroma}) calc(b * {hover-tint.hover-chroma}))",
+          "modes": {
+            "oled": {
+              "dark": "oklab(from {colour.accent} 0.36 calc(a * {hover-tint.hover-chroma}) calc(b * {hover-tint.hover-chroma}))"
+            }
+          },
+          "tailwind": "color-hoverRaised",
+          "tailwindNote": "The hover of a control that rests on surface3: hover:bg-hoverRaised."
         }
       }
     }

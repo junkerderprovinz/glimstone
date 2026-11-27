@@ -16,7 +16,7 @@ const STATES = [
   { id: "failed", label: "Failed", disabled: true, title: "Nothing has failed" },
 ];
 
-const caption = { fontSize: "13px", color: "var(--carbon-text-sub)" };
+const caption = { fontSize: "13px", color: "var(--stone-text-sub)" };
 
 const theme = ref("dark");
 const shown = ref(["running", "paused"]);
@@ -26,7 +26,7 @@ const shown = ref(["running", "paused"]);
   <div style="display: grid; gap: 20px; width: 100%">
     <div style="display: grid; gap: 8px">
       <span :style="caption">Theme</span>
-      <Selector v-model="theme" label="Theme" :items="THEMES" activation="manual" equal-width />
+      <Selector v-model="theme" label="Theme" :items="THEMES" activation="manual" equal-width labels="textGlyph" />
     </div>
     <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap">
       <span :style="caption">Show</span>

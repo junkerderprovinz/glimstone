@@ -1,6 +1,6 @@
 {
   "chart": {
-    "$description": "Chart colours (rule 50), every one an OKLCH value written out, so a phone app and a design tool read the same numbers. The series come in a fixed order: the eight accent hues, alternating warm and cool, on lightness steps chosen so any two stay apart for people with protanopia, deuteranopia or tritanopia, and each reaches 3:1 on a card and the page. Their chroma is the most sRGB holds at that lightness, up to 0.14.",
+    "$description": "Chart colours (rule 50), every one an OKLCH value written out, so a phone app and a design tool read the same numbers. The series come in a fixed order: the eight accent hues, alternating warm and cool, in one band of lightness per theme, 0.50 to 0.64 light and 0.68 to 0.80 dark, so no series outshines the others or the accent. Inside the band the steps keep any two apart for people with protanopia, deuteranopia or tritanopia, and each reaches 3:1 on a card and the page.",
     "$extensions": {
       "org.glimstone": {
         "selector": ":root,\n[data-theme]",
@@ -8,81 +8,81 @@
       }
     },
     "chart-1": {
-      "$value": "oklch(0.42 0.109 247)",
+      "$value": "oklch(0.55 0.169 250)",
       "$type": "color",
       "$extensions": {
         "org.glimstone": {
-          "dark": "oklch(0.66 0.14 247)",
+          "dark": "oklch(0.8 0.071 251)",
           "note": "blue"
         }
       }
     },
     "chart-2": {
-      "$value": "oklch(0.42 0.108 51)",
+      "$value": "oklch(0.55 0.14 50)",
       "$type": "color",
       "$extensions": {
         "org.glimstone": {
-          "dark": "oklch(0.66 0.14 51)",
+          "dark": "oklch(0.8 0.129 60)",
           "note": "orange"
         }
       }
     },
     "chart-3": {
-      "$value": "oklch(0.62 0.105 194)",
+      "$value": "oklch(0.62 0.106 194)",
       "$type": "color",
       "$extensions": {
         "org.glimstone": {
-          "dark": "oklch(0.86 0.14 194)",
+          "dark": "oklch(0.68 0.12 189)",
           "note": "teal"
         }
       }
     },
     "chart-4": {
-      "$value": "oklch(0.54 0.14 355)",
+      "$value": "oklch(0.5 0.17 355)",
       "$type": "color",
       "$extensions": {
         "org.glimstone": {
-          "dark": "oklch(0.74 0.14 355)",
+          "dark": "oklch(0.74 0.168 350)",
           "note": "magenta"
         }
       }
     },
     "chart-5": {
-      "$value": "oklch(0.62 0.126 87)",
+      "$value": "oklch(0.64 0.138 75)",
       "$type": "color",
       "$extensions": {
         "org.glimstone": {
-          "dark": "oklch(0.78 0.14 87)",
+          "dark": "oklch(0.68 0.147 78)",
           "note": "sunflower"
         }
       }
     },
     "chart-6": {
-      "$value": "oklch(0.62 0.14 301)",
+      "$value": "oklch(0.51 0.136 301)",
       "$type": "color",
       "$extensions": {
         "org.glimstone": {
-          "dark": "oklch(0.78 0.132 301)",
+          "dark": "oklch(0.69 0.149 301)",
           "note": "purple"
         }
       }
     },
     "chart-7": {
-      "$value": "oklch(0.5 0.137 150)",
+      "$value": "oklch(0.52 0.146 150)",
       "$type": "color",
       "$extensions": {
         "org.glimstone": {
-          "dark": "oklch(0.78 0.14 150)",
+          "dark": "oklch(0.79 0.168 160)",
           "note": "green"
         }
       }
     },
     "chart-8": {
-      "$value": "oklch(0.62 0.14 18)",
+      "$value": "oklch(0.6 0.167 22)",
       "$type": "color",
       "$extensions": {
         "org.glimstone": {
-          "dark": "oklch(0.86 0.075 18)",
+          "dark": "oklch(0.68 0.17 19)",
           "note": "red"
         }
       }

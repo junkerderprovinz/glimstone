@@ -9,11 +9,11 @@ export function SampleSurface() {
       <Card title="Backups" hint="Every job that writes to a target." hueIndex={0}>
         <div style={{ display: "grid", gap: 14 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
-            <span className="text-sm text-carbon-text">Nightly appdata</span>
+            <span className="text-sm text-stone-text">Nightly appdata</span>
             <Badge tone="ok">Settled</Badge>
           </div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
-            <span className="text-sm text-carbon-text">Photos to the cloud</span>
+            <span className="text-sm text-stone-text">Photos to the cloud</span>
             <Badge tone="active">Running</Badge>
           </div>
           <Toggle label="Verify after each run" checked={on} onChange={setOn} />

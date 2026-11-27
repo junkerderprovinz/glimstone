@@ -5,6 +5,10 @@
         "selector": ":root"
       }
     },
+    "radius-nested": {
+      "$value": "max(0px, calc({shape.radius-card} - {space.space-3}))",
+      "$description": "The corner of a sub-card or a well inside a card: the card's own less the gap between them, so the two curves run side by side."
+    },
     "page-gutter": {
       "$value": "{space.space-8}",
       "$description": "The distance from the window edge to everything on it, and between the rail and the content, set on the frame that holds both (see \"The rail is a CARD, not a wall\" in docs/design-language.md). The content's own padding is a separate distance."
@@ -97,6 +101,34 @@
       "$extensions": {
         "org.glimstone": {
           "tailwind": "text-caption"
+        }
+      }
+    },
+    "glyph-s": {
+      "$value": "14px",
+      "$type": "dimension",
+      "$description": "The three glyph sizes. Beside text a glyph centres on the x-height, where the eye reads the line.",
+      "$extensions": {
+        "org.glimstone": {
+          "note": "beside 12 and 13px text"
+        }
+      }
+    },
+    "glyph-m": {
+      "$value": "16px",
+      "$type": "dimension",
+      "$extensions": {
+        "org.glimstone": {
+          "note": "beside 14 and 16px text"
+        }
+      }
+    },
+    "glyph-l": {
+      "$value": "20px",
+      "$type": "dimension",
+      "$extensions": {
+        "org.glimstone": {
+          "note": "in the rail, a tile and on a key"
         }
       }
     }

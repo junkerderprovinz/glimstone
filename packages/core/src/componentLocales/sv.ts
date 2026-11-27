@@ -46,7 +46,8 @@ export const sv: ComponentWords = {
   tour: { back: "Tillbaka", next: "Nästa", close: "Stäng", progress: "{step} av {steps}" },
   floatingPanel: { minimize: "Minimera", maximize: "Maximera", restore: "Återställ", close: "Stäng" },
   signaturePad: { area: "Underskrift", clear: "Rensa" },
-  passwordField: { show: "Visa", hide: "Dölj", confirm: "Bekräfta lösenordet", mismatch: "Lösenorden stämmer inte överens" },
+  passwordField: { show: "Visa", hide: "Dölj", confirm: "Bekräfta lösenordet", mismatch: "Lösenorden stämmer inte överens", again: "En gång till" },
+  timePicker: { hour: "Timmar", minute: "Minuter", start: "Start", end: "Slut", to: "till" },
   versionCard: {
     title: "Version",
     hint: "Versionen av {app}, hur det står till med uppdateringarna och vad den här versionen förde med sig.",

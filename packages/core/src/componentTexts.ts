@@ -28,6 +28,7 @@ import type { TourText } from "./tour.ts";
 import type { FloatingPanelText } from "./floatingPanel.ts";
 import type { SignaturePadText } from "./signaturePad.ts";
 import type { PasswordFieldText } from "./passwordField.ts";
+import type { TimePickerText } from "./timePicker.ts";
 import { componentsCardText, versionCardText, type ComponentsCardText, type VersionCardText } from "./versionCards.ts";
 import { en } from "./componentLocales/en.ts";
 import { de } from "./componentLocales/de.ts";
@@ -95,6 +96,7 @@ export interface ComponentText {
   floatingPanel: FloatingPanelText;
   signaturePad: SignaturePadText;
   passwordField: PasswordFieldText;
+  timePicker: TimePickerText;
   versionCard: VersionCardText;
   componentsCard: ComponentsCardText;
 }
@@ -122,6 +124,7 @@ export function componentText(lang: string): ComponentText {
     floatingPanel: w.floatingPanel,
     signaturePad: w.signaturePad,
     passwordField: w.passwordField,
+    timePicker: w.timePicker,
     versionCard: versionCardText(w.versionCard, code),
     componentsCard: componentsCardText(w.componentsCard),
   };

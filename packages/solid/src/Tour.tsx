@@ -1,7 +1,7 @@
-import { createEffect, createMemo, createUniqueId, on, Show } from "solid-js";
+import { createEffect, createMemo, createSignal, createUniqueId, For, on, Show } from "solid-js";
 import * as tour from "@zag-js/tour";
 import { normalizeProps, useMachine } from "@zag-js/solid";
-import { TOUR_TEXT, pageDir, tourSteps, type TourStep, type TourText } from "@glimstone/core";
+import { TOUR_TEXT, pageDir, tourDots, tourSpotlight, tourSteps, type TourStep, type TourText } from "@glimstone/core";
 import { Badge } from "./Badge.tsx";
 import { Button } from "./Button.tsx";
 import { IconBack, IconCheck, IconForward } from "./glyphs.tsx";
@@ -25,10 +25,13 @@ export interface TourProps {
 export function Tour(props: TourProps) {
   const words = () => ({ ...TOUR_TEXT, ...props.text });
   const id = createUniqueId();
+  const [at, setAt] = createSignal(0);
   const service = useMachine(tour.machine, () => ({
     id,
     dir: pageDir(),
     steps: tourSteps(props.steps),
+    ...tourSpotlight(props.steps, at()),
+    onStepChange: (d: { stepIndex: number }) => setAt(d.stepIndex),
     onStatusChange: (d: { status: string }) => {
       if (d.status === "dismissed" || d.status === "completed" || d.status === "skipped") {
         props.onOpenChange(false);
@@ -58,8 +61,11 @@ export function Tour(props: TourProps) {
                   {step().description}
                 </p>
                 <div class="glim-tour-foot">
-                  <span {...api().getProgressTextProps()} class="glim-tour-progress glim-num">
-                    {words().progress(api().stepIndex + 1, api().totalSteps)}
+                  <span {...api().getProgressTextProps()} class="glim-tour-progress">
+                    <span class="glim-sr-only">{words().progress(api().stepIndex + 1, api().totalSteps)}</span>
+                    <For each={tourDots(api().totalSteps, api().stepIndex)}>
+                      {(current) => <span aria-hidden="true" class="glim-tour-dot" data-current={current || undefined} />}
+                    </For>
                   </span>
                   <Button label={words().back} labelKey={null} glyph={<IconBack />} disabled={!api().hasPrevStep} onClick={() => api().prev()} />
                   <Show

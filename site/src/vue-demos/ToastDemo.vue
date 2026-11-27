@@ -3,10 +3,10 @@ import { onUnmounted, ref, shallowRef } from "vue";
 import { addToast, pauseToast, removeToast, resumeToast, type ToastEntry, type ToastSeverity } from "@glimstone/core";
 import { Button, ToastViewport } from "@glimstone/vue";
 
-const MESSAGES: Record<ToastSeverity, string> = {
-  success: "Settings saved.",
-  warn: "The target is almost full.",
-  fail: "Could not reach the target.",
+const MESSAGES: Record<ToastSeverity, { title: string; message: string }> = {
+  success: { title: "Settings saved", message: "The new schedule runs tonight at 02:00." },
+  warn: { title: "The target is almost full", message: "38 GB are left, about two more nights." },
+  fail: { title: "Could not reach the target", message: "The next try starts in five minutes." },
 };
 
 const toasts = shallowRef<ToastEntry[]>([]);
@@ -19,7 +19,7 @@ const tick = setInterval(() => {
 onUnmounted(() => clearInterval(tick));
 
 const show = (severity: ToastSeverity) =>
-  (toasts.value = addToast(toasts.value, { id: String(next++), message: MESSAGES[severity], severity }, Date.now()));
+  (toasts.value = addToast(toasts.value, { id: String(next++), ...MESSAGES[severity], severity }, Date.now()));
 const undoable = () =>
   (toasts.value = addToast(
     toasts.value,

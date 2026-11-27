@@ -1,9 +1,10 @@
 import { createSignal, For, onCleanup } from "solid-js";
 import { addToast, pauseToast, removeToast, resumeToast, type ToastEntry } from "@glimstone/core";
-import { Card, IconButton, ListRow, Pill, ToastViewport, useConfirm } from "@glimstone/solid";
+import { Card, IconButton, ListRow, ToastViewport, useConfirm } from "@glimstone/solid";
 import { Glyph } from "../../solid/glyph";
 
 const SNAPSHOTS = ["14 October", "21 October", "28 October"];
+const SIZES: Record<string, string> = { "14 October": "38.2", "21 October": "38.9", "28 October": "41.5" };
 
 // Deleting asks first, and the toast that reports it can take it back.
 export default function ConfirmFlow() {
@@ -36,7 +37,13 @@ export default function ConfirmFlow() {
               <ListRow
                 name={day}
                 tile={<Glyph name="IconArchive" />}
-                badges={<Pill tone="ok">Settled</Pill>}
+                value={
+                  <>
+                    {SIZES[day]}
+                    {"\u202f"}
+                    <small>GB</small>
+                  </>
+                }
                 actions={<IconButton tip={`Delete the snapshot from ${day}`} glyph={<Glyph name="IconTrash" />} onClick={() => remove(day)} />}
               />
             )}

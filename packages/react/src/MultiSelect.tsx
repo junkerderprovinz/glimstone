@@ -13,6 +13,7 @@ import * as combobox from "@zag-js/combobox";
 import { normalizeProps, Portal, useMachine } from "@zag-js/react";
 import { useFieldName } from "./fieldName.ts";
 import { IconCheck, IconClose, IconExpand } from "./glyphs.tsx";
+import { SearchHit } from "./searchHit.tsx";
 import type { SelectOption } from "./Select.tsx";
 
 export type { MultiSelectText } from "@glimstone/core";
@@ -133,7 +134,9 @@ export function MultiSelect({
             {shown.length === 0 && <li className="glim-select-empty">{words.empty}</li>}
             {shown.map((item) => (
               <li key={item.value} {...api.getItemProps({ item })} className="glim-select-item">
-                <span {...api.getItemTextProps({ item })}>{item.label}</span>
+                <span {...api.getItemTextProps({ item })} data-search={searches && query ? "" : undefined}>
+                  <SearchHit label={item.label} query={searches ? query : ""} />
+                </span>
                 <span {...api.getItemIndicatorProps({ item })} className="glim-select-check">
                   <IconCheck />
                 </span>

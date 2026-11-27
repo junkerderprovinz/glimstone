@@ -16,7 +16,7 @@ export default function NumberFieldBasic() {
           onChange={(e) => setKeep(e.target.value === "" ? "" : e.target.valueAsNumber)}
         />
       </label>
-      <p style={{ margin: 0, color: "var(--carbon-text-sub)", fontSize: 13 }}>Keeps {keep} snapshots.</p>
+      <p style={{ margin: 0, color: "var(--stone-text-sub)", fontSize: 13 }}>Keeps {keep} snapshots.</p>
     </div>
   );
 }

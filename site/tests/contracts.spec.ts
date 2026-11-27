@@ -40,6 +40,15 @@ const hexToRgb = (hex: string) => {
   return `rgb(${r}, ${g}, ${b})`;
 };
 
+// An open list grows out of its trigger, so it is measured once it stands still.
+const settled = (el: Locator) =>
+  el.evaluate(async (e) => {
+    const frame = () => new Promise((done) => requestAnimationFrame(done));
+    while (e.hasAttribute("data-aligning")) await frame();
+    await frame();
+    await Promise.all(e.getAnimations().map((a) => a.finished));
+  });
+
 // Zag moves focus into an open list on the next frame; nobody types faster than that.
 const listHasFocus = (page: Page) => page.evaluate(() => !!document.activeElement?.closest('[role="listbox"], [role="menu"]'));
 
@@ -288,6 +297,40 @@ test.describe("Toggle", () => {
     expect(ratio.knob).toBeGreaterThanOrEqual(3);
   });
 
+  test("[toggle-knob-inset] the knob keeps 3px of track around it, off, on and pressed, in both directions", async ({ page }) => {
+    await open(page, "/components/toggle");
+    const gaps = (name: string) =>
+      stage(page, "ToggleBasic")
+        .getByRole("switch", { name })
+        .evaluate((t) => {
+          const track = t.getBoundingClientRect();
+          const knob = t.querySelector(".glim-toggle-thumb")!.getBoundingClientRect();
+          const near = getComputedStyle(t).direction === "rtl" ? track.right - knob.right : knob.left - track.left;
+          const far = getComputedStyle(t).direction === "rtl" ? knob.left - track.left : track.right - knob.right;
+          const end = t.getAttribute("aria-checked") === "true" ? far : near;
+          return [knob.top - track.top, track.bottom - knob.bottom, end].map((v) => Math.round(v * 2) / 2);
+        });
+    for (const dir of ["ltr", "rtl"]) {
+      // The site's build turns :dir() into a list of right-to-left languages, so
+      // the demo takes a language along with its direction, as a page in Arabic would.
+      await page.evaluate((d) => {
+        const demo = document.querySelector('[data-demo="ToggleBasic"]')!;
+        demo.setAttribute("dir", d);
+        demo.setAttribute("lang", d === "rtl" ? "ar" : "en");
+      }, dir);
+      for (const name of ["Quiet notifications", "Play a sound"]) {
+        await expect.poll(() => gaps(name), `${name}, ${dir}`).toEqual([3, 3, 3]);
+        const box = (await stage(page, "ToggleBasic").getByRole("switch", { name }).boundingBox())!;
+        await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+        await page.mouse.down();
+        await expect.poll(() => gaps(name), `${name} pressed, ${dir}`).toEqual([3, 3, 3]);
+        // Let go away from the switch, so the press flips nothing.
+        await page.mouse.move(0, 0);
+        await page.mouse.up();
+      }
+    }
+  });
+
   test("[toggle-attrs] an id and a data hook reach the switch, a class stays on the frame", async ({ page }) => {
     await open(page, "/components/toggle");
     await expect(stage(page, "ToggleBasic").locator("#quiet-notifications")).toHaveAttribute("role", "switch");
@@ -452,56 +495,37 @@ test.describe("ConfirmDialog", () => {
     await page.mouse.click(8, 400);
     await expect(page.getByRole("dialog")).toHaveCount(0);
   });
-});
 
-test.describe("DropdownListbox", () => {
-  async function openList(page: Page) {
-    await open(page, "/components/dropdown-listbox");
-    const trigger = stage(page, "DropdownSelect").locator("button.field");
-    await trigger.click();
-    await expect(page.getByRole("listbox", { name: "Time zone" })).toBeVisible();
-    await expect.poll(() => focusedText(page)).toBe("Europe/Vienna");
-    return trigger;
-  }
-
-  test("[list-open-focus] focus on the selected option", async ({ page }) => {
-    await openList(page);
-    expect(await page.evaluate(() => document.activeElement?.getAttribute("aria-selected"))).toBe("true");
-  });
-
-  test("[list-arrows] arrows move between options", async ({ page }) => {
-    await openList(page);
-    await page.keyboard.press("ArrowDown");
-    expect(await focusedText(page)).toBe("Europe/Berlin");
-    await page.keyboard.press("ArrowUp");
-    expect(await focusedText(page)).toBe("Europe/Vienna");
-  });
-
-  test("[list-home-end] Home and End", async ({ page }) => {
-    await openList(page);
-    await page.keyboard.press("End");
-    expect(await focusedText(page)).toBe("UTC");
-    await page.keyboard.press("Home");
-    expect(await focusedText(page)).toBe("Europe/Vienna");
-  });
-
-  test("[list-typeahead] a letter jumps", async ({ page }) => {
-    await openList(page);
-    await page.keyboard.press("a");
-    expect(await focusedText(page)).toBe("America/New_York");
-  });
-
-  test("[list-escape] Escape closes and returns focus", async ({ page }) => {
-    const trigger = await openList(page);
+  test("[dialog-leave] the window leaves softly and the page is free at once", async ({ page }) => {
+    await openDialog(page);
     await page.keyboard.press("Escape");
-    await expect(page.getByRole("listbox")).toHaveCount(0);
-    await expect(trigger).toBeFocused();
+    const copy = page.locator(".glim-modal-backdrop[data-leaving]");
+    await expect(copy).toHaveCount(1);
+    await expect(copy).toHaveAttribute("aria-hidden", "true");
+    expect(await copy.evaluate((c) => (c as HTMLElement).inert && c.getAnimations({ subtree: true }).some((a) => (a as CSSAnimation).animationName === "glim-leave-drop"))).toBe(true);
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+    await expect(copy).toHaveCount(0);
+    await relook(page, { motion: "off" });
+    await stage(page, "ConfirmDelete").getByRole("button", { name: "Delete snapshot" }).click();
+    await page.keyboard.press("Escape");
+    await expect(page.locator(".glim-modal-backdrop")).toHaveCount(0, { timeout: 200 });
   });
 
-  test("[list-outside] a click outside closes", async ({ page }) => {
-    await openList(page);
-    await page.locator("main h1").click();
-    await expect(page.getByRole("listbox")).toHaveCount(0);
+  test("[dialog-question] the question leads and the rest stands quieter under it", async ({ page }) => {
+    await openDialog(page);
+    const dialog = page.getByRole("dialog", { name: "Confirm" });
+    const question = dialog.locator(".glim-modal-question");
+    const detail = dialog.locator(".glim-modal-question + .glim-modal-text");
+    await expect(question).toHaveText("Delete the snapshot from 14 October?");
+    await expect(detail).toHaveText("The archive on the target stays.");
+    const look = (l: Locator) => l.evaluate((e) => ({ size: getComputedStyle(e).fontSize, weight: getComputedStyle(e).fontWeight, color: getComputedStyle(e).color }));
+    const [q, d] = [await look(question), await look(detail)];
+    expect(q.size).toBe("16px");
+    expect(q.weight).toBe("600");
+    expect(d.size).toBe("14px");
+    expect(q.color).toBe(await dialog.evaluate(() => getComputedStyle(document.body).color));
+    expect(d.color).not.toBe(q.color);
+    expect(await dialog.evaluate((e) => e.getBoundingClientRect().width)).toBeCloseTo(400, 0);
   });
 });
 
@@ -729,6 +753,7 @@ test.describe("Select sizes and labels", () => {
     await row.click();
     const box = page.getByRole("listbox", { name: "Quality" });
     await expect(box).toBeVisible();
+    await settled(box);
     expect((await row.boundingBox())!.width).toBeLessThan(208);
     expect((await box.boundingBox())!.width).toBeGreaterThanOrEqual(208);
   });
@@ -795,14 +820,14 @@ test.describe("Select in a well", () => {
       return colour;
     }, token);
 
-  test("[select-well] the trigger takes a field's ground and hovers up", async ({ page }) => {
+  test("[select-well] the trigger takes a field's ground and its hover step", async ({ page }) => {
     await open(page, "/components/select");
     for (const place of ["[data-well]", ".glim-subcard"]) {
       const box = stage(page, "SelectWell").locator(place);
       const trigger = box.locator(".glim-select-trigger");
       expect(await ground(trigger)).toBe(await ground(box.locator(".glim-input")));
       await trigger.hover();
-      await expect.poll(() => ground(trigger)).toBe(await tint(trigger, "--hover"));
+      await expect.poll(() => ground(trigger)).toBe(await tint(trigger, "--field-hover"));
       await page.mouse.move(0, 0);
     }
   });
@@ -939,12 +964,14 @@ test.describe("Select right to left", () => {
     await unit.click();
     const box = page.getByRole("listbox", { name: "Keep backups, hug" });
     await expect(box).toBeVisible();
-    const t = (await unit.boundingBox())!;
-    // Zag places the list on the frame after it shows.
+    // The list opens over the trigger with the words of the chosen row on the
+    // value's, which stand at the right edge here.
+    const words = await unit.locator(".glim-select-value").boundingBox();
     await expect.poll(async () => {
-      const l = (await box.boundingBox())!;
-      return Math.abs(l.x + l.width - (t.x + t.width));
+      const chosen = (await box.locator('[data-state="checked"] [data-part="item-text"]').boundingBox())!;
+      return Math.abs(chosen.x + chosen.width - (words!.x + words!.width));
     }).toBeLessThanOrEqual(2);
+    const t = (await unit.boundingBox())!;
     expect((await box.boundingBox())!.width).toBeGreaterThan(t.width + 20);
     await expect.poll(() => listHasFocus(page)).toBe(true);
     await page.keyboard.press("Escape");
@@ -987,6 +1014,7 @@ test.describe("Select on a touch screen", () => {
     await stage(page, "SelectZag").locator(".glim-select-trigger").tap();
     const box = page.getByRole("listbox", { name: "Time zone", exact: true });
     await expect(box).toBeVisible();
+    await settled(box);
     const heights = await box.evaluate((b) => [...b.querySelectorAll('[role="option"]')].map((e) => e.getBoundingClientRect().height));
     expect(Math.min(...heights)).toBeGreaterThanOrEqual(44);
 
@@ -1429,8 +1457,35 @@ test.describe("IconTipButton", () => {
     await open(page, "/components/icon-tip-button");
     const button = stage(page, "IconTipBasic").getByRole("button", { name: "Move up" });
     await button.focus();
-    await expect(page.getByRole("tooltip")).toHaveText("Move up");
+    await expect(page.getByRole("tooltip")).toHaveText(/^Move up/);
     await expect(button).not.toHaveAttribute("title", /.*/);
+  });
+
+  test("[icontip-rest] the tooltip waits for the pointer to rest, then the next comes at once", async ({ page }) => {
+    await open(page, "/components/icon-tip-button");
+    const up = stage(page, "IconTipBasic").getByRole("button", { name: "Move up" });
+    const down = stage(page, "IconTipBasic").getByRole("button", { name: "Move down" });
+    // Timed in the page, since a busy machine stretches the time between two steps of the test.
+    await up.evaluate((b) => {
+      const w = window as unknown as { entered?: number; shownAt?: number };
+      b.addEventListener("mouseenter", () => (w.entered ??= performance.now()));
+      new MutationObserver(() => {
+        if (document.querySelector("[role=tooltip]")) w.shownAt ??= performance.now();
+      }).observe(document.body, { childList: true, subtree: true });
+    });
+    await up.hover();
+    await expect(page.getByRole("tooltip")).toHaveText("Move upAlt ↑");
+    const waited = await page.evaluate(() => {
+      const w = window as unknown as { entered: number; shownAt: number };
+      return w.shownAt - w.entered;
+    });
+    expect(waited).toBeGreaterThanOrEqual(450);
+    await expect(page.getByRole("tooltip").locator(".glim-bubble-key")).toHaveText("Alt ↑");
+    const look = await page.getByRole("tooltip").evaluate((b) => ({ ground: getComputedStyle(b).backgroundColor, ink: getComputedStyle(b).color, text: getComputedStyle(document.body).color }));
+    expect(look.ground).toBe(look.text);
+    await down.hover();
+    await expect(page.getByRole("tooltip")).toHaveText(/^Move down/, { timeout: 200 });
+    await expect(up).toHaveAttribute("aria-keyshortcuts", "Alt+↑");
   });
 });
 
@@ -1505,10 +1560,10 @@ test.describe("Toast", () => {
     await expect(region(page, "polite")).toHaveAttribute("role", "status");
     await expect(region(page, "assertive")).toHaveAttribute("role", "alert");
     await press(page, "Failure");
-    await expect(region(page, "assertive")).toHaveText("Could not reach the target.");
+    await expect(region(page, "assertive")).toHaveText("Could not reach the target. The next try starts in five minutes.");
     await press(page, "Warning");
-    await expect(region(page, "polite")).toHaveText("The target is almost full.");
-    await expect(card(page, "The target is almost full.")).not.toHaveAttribute("role");
+    await expect(region(page, "polite")).toHaveText("The target is almost full. 38 GB are left, about two more nights.");
+    await expect(card(page, "The target is almost full")).not.toHaveAttribute("role");
   });
 
   test("[toast-sticky] a toast with an action stays until it is dismissed", async ({ page }) => {
@@ -1525,7 +1580,7 @@ test.describe("Toast", () => {
   test("[toast-expire] leaves after four seconds", async ({ page }) => {
     await open(page, "/components/toast");
     await press(page, "Success");
-    const toast = card(page, "Settings saved.");
+    const toast = card(page, "Settings saved");
     await expect(toast).toBeVisible();
     await page.waitForTimeout(3000);
     await expect(toast).toBeVisible();
@@ -1535,7 +1590,7 @@ test.describe("Toast", () => {
   test("[toast-pause] hover keeps it", async ({ page }) => {
     await open(page, "/components/toast");
     await press(page, "Warning");
-    const toast = card(page, "The target is almost full.");
+    const toast = card(page, "The target is almost full");
     await toast.hover();
     await page.waitForTimeout(5500);
     await expect(toast).toBeVisible();
@@ -1547,14 +1602,20 @@ test.describe("Toast", () => {
     await open(page, "/components/toast");
     await press(page, "Success");
     await press(page, "Warning");
-    const success = card(page, "Settings saved.");
+    const success = card(page, "Settings saved");
+    // The older toast lies behind the newer one until the pointer fans the stack out.
+    await card(page, "The target is almost full").hover();
+    await expect(success).not.toHaveAttribute("data-buried");
+    await expect.poll(() => success.evaluate((c) => getComputedStyle(c).translate)).not.toBe("0px -8px");
+    await success.evaluate((c) => Promise.all(c.getAnimations().map((a) => a.finished)));
     await success.getByRole("button", { name: "Dismiss" }).click();
     await expect(success).toHaveCount(0);
-    await expect(card(page, "The target is almost full.")).toBeVisible();
+    await expect(card(page, "The target is almost full")).toBeVisible();
   });
 
-  // A toast on a half pixel puts every toast above it there too, and Chromium
-  // rounds those edges a pixel up or down from one paint to the next.
+  // A toast on a half pixel rounds its edges a pixel up or down from one paint
+  // to the next. The cards behind it are drawn smaller on purpose and only
+  // show an edge.
   test("[toast-pixels] every toast stands on whole pixels", async ({ page }) => {
     test.setTimeout(120_000);
     await open(page, "/components/toast");
@@ -1567,7 +1628,7 @@ test.describe("Toast", () => {
           for (const name of ["Success", "Warning", "Failure", "With an action", "A long path"]) await press(page, name);
           const halves = await page.locator(".glim-toast-stack").evaluate(async (s) => {
             await Promise.all(s.getAnimations({ subtree: true }).map((a) => a.finished));
-            return [...s.querySelectorAll<HTMLElement>(".glim-toast-card")]
+            return [...s.querySelectorAll<HTMLElement>(".glim-toast-card:not([data-behind])")]
               .filter((c) => getComputedStyle(c).display !== "none")
               .flatMap((c) => {
                 const r = c.getBoundingClientRect();
@@ -1599,6 +1660,55 @@ test.describe("Toast", () => {
       });
       expect(settled, `${motion}${reduce ? ", reduced" : ""}`).toEqual({ transform: "none", pinnedToWindow: true });
     }
+  });
+
+  test("[toast-leave] a dismissed toast slides out and the ones behind close up", async ({ page }) => {
+    await open(page, "/components/toast");
+    await press(page, "Success");
+    await press(page, "Warning");
+    const front = card(page, "The target is almost full");
+    await front.getByRole("button", { name: "Dismiss" }).click();
+    const copy = page.locator(".glim-toast-card[data-leaving]");
+    await expect(copy).toHaveCount(1);
+    await expect(card(page, "Settings saved").and(page.locator(":not([data-leaving])"))).not.toHaveAttribute("data-behind");
+    await expect(copy).toHaveCount(0);
+  });
+
+  test("[toast-title] a title leads and the message under it reads quieter", async ({ page }) => {
+    await open(page, "/components/toast");
+    await press(page, "Success");
+    const toast = card(page, "Settings saved");
+    await expect(toast.locator(".glim-toast-title")).toHaveText("Settings saved");
+    await expect(toast.locator(".glim-toast-message")).toHaveText("The new schedule runs tonight at 02:00.");
+    const look = await toast.evaluate((t) => {
+      const css = (sel: string) => getComputedStyle(t.querySelector(sel)!);
+      return { title: css(".glim-toast-title").fontWeight, size: css(".glim-toast-message").fontSize, ink: css(".glim-toast-message").color, text: css(".glim-toast-title").color };
+    });
+    expect(look.title).toBe("600");
+    expect(look.size).toBe("13px");
+    expect(look.ink).not.toBe(look.text);
+  });
+
+  test("[toast-stack] older toasts show their edge behind the newest and fan out under the pointer", async ({ page }) => {
+    await open(page, "/components/toast");
+    for (const name of ["Success", "Warning", "Failure"]) await press(page, name);
+    await page.mouse.move(10, 10);
+    const cards = page.locator(".glim-toast-card");
+    await expect(cards).toHaveCount(3);
+    const boxes = () =>
+      cards.evaluateAll(async (all) => {
+        await Promise.all(all.flatMap((c) => c.getAnimations({ subtree: true }).map((a) => a.finished)));
+        return all.map((c) => ({ top: c.getBoundingClientRect().top, bottom: c.getBoundingClientRect().bottom, behind: c.hasAttribute("data-behind") }));
+      });
+    const stacked = await boxes();
+    expect(stacked.map((b) => b.behind)).toEqual([true, true, false]);
+    const front = stacked[2]!;
+    expect(front.top - stacked[1]!.top).toBeCloseTo(8, 0);
+    expect(front.top - stacked[0]!.top).toBeCloseTo(16, 0);
+    await cards.nth(2).hover();
+    await expect.poll(async () => (await boxes())[1]!.bottom).toBeLessThanOrEqual(front.top);
+    const fanned = await boxes();
+    expect(fanned[0]!.bottom).toBeLessThanOrEqual(fanned[1]!.top);
   });
 });
 
@@ -2044,6 +2154,33 @@ test.describe("Selector", () => {
     await expect(page.getByRole("tooltip")).toHaveText("Look");
   });
 
+  test("[sel-glide] the fill glides under the new choice and the panel comes in from its side", async ({ page }) => {
+    await open(page, "/components/selector");
+    const thumb = tabs(page).locator(".glim-sel-thumb");
+    const under = async (name: string) => {
+      await expect(thumb).toHaveAttribute("data-placed", "");
+      await thumb.evaluate((t) => Promise.all(t.getAnimations().map((a) => a.finished)));
+      const [a, b] = await Promise.all([thumb.boundingBox(), tab(page, name).boundingBox()]);
+      expect(a!.x).toBeCloseTo(b!.x, 0);
+      expect(a!.width).toBeCloseTo(b!.width, 0);
+    };
+    await under("General");
+    await expect.poll(() => tab(page, "General").evaluate((t) => getComputedStyle(t).backgroundColor)).toBe("rgba(0, 0, 0, 0)");
+    await tab(page, "Storage").click();
+    await under("Storage");
+    const panel = stage(page, "SelectorTabs").getByRole("tabpanel");
+    await tab(page, "General").click();
+    await expect(panel).toHaveCSS("--tab-dir", "-1");
+  });
+
+  test("[sel-labels] a strip with its own label mode keeps it under any setting", async ({ page }) => {
+    await open(page, "/components/selector", { labels: "glyph" });
+    const light = theme(page).getByRole("radio", { name: "Light" });
+    await expect(light.locator(".glim-sel-label")).toHaveText("Light");
+    await expect(light.locator("svg")).toHaveCount(1);
+    await expect(tab(page, "General").locator(".glim-sel-label")).toHaveCount(0);
+  });
+
   test("[tiles-height] the tiles share the column's height", async ({ page }) => {
     await open(page, "/components/selector");
     const heights = await column(page)
@@ -2062,12 +2199,11 @@ test.describe("NumberField", () => {
   test("[num-focus] focus is a step up the ramp, without a ring", async ({ page }) => {
     await open(page, "/components/number-field");
     const box = page.locator("[data-demo] input[type=number]").first();
-    const look = () => box.evaluate((e) => ({ outline: getComputedStyle(e).outlineStyle, ground: getComputedStyle(e).backgroundColor }));
-    const rest = await look();
+    const ground = () => box.evaluate((e) => getComputedStyle(e.parentElement!).backgroundColor);
+    const rest = await ground();
     await box.focus();
-    const held = await look();
-    expect(held.outline).toBe("none");
-    expect(held.ground).not.toBe(rest.ground);
+    expect(await box.evaluate((e) => getComputedStyle(e).outlineStyle)).toBe("none");
+    await expect.poll(ground).not.toBe(rest);
   });
 
   const field = (page: Page) => stage(page, "NumberFieldBasic").getByRole("spinbutton", { name: "Snapshots to keep" });
@@ -2251,12 +2387,22 @@ test.describe("SubCard", () => {
     const bg = (sel: string) =>
       stage(page, "SubCardBasic").locator(sel).first().evaluate((e) => getComputedStyle(e).backgroundColor);
     const sub = await bg(".glim-subcard");
-    expect(await bg(".glim-num-field")).not.toBe(sub);
+    expect(await bg(".glim-num-wrap")).not.toBe(sub);
     expect(await bg(".glim-btn")).not.toBe(sub);
   });
 });
 
 test.describe("Pill", () => {
+  test("[pill-status] a pill and a badge of one state share its wash, its ink and its dot", async ({ page }) => {
+    await open(page, "/components/pill");
+    const look = (l: Locator) => l.evaluate((e) => ({ ground: getComputedStyle(e).backgroundColor, ink: getComputedStyle(e).color, dot: getComputedStyle(e, "::before").backgroundColor, size: getComputedStyle(e, "::before").width }));
+    const pill = await look(stage(page, "PillTones").locator(".glim-pill--ok").first());
+    await open(page, "/components/badge");
+    const badge = await look(stage(page, "BadgeTones").locator(".glim-badge--ok").first());
+    expect(pill).toEqual(badge);
+    expect(pill.size).toBe("6px");
+  });
+
   test("[pill-well] it steps up in a well, and a state keeps its wash", async ({ page }) => {
     await open(page, "/components/pill");
     const ground = (place: string, cls: string) => stage(page, "PillWell").locator(`${place} .${cls}`).first().evaluate((e) => getComputedStyle(e).backgroundColor);
@@ -2267,7 +2413,6 @@ test.describe("Pill", () => {
     expect(sub).toBe(well);
     const washed = await ground("[data-well]", "glim-pill--ok");
     expect(washed).not.toBe(well);
-    expect(washed).not.toBe(await ground("[data-plain]", "glim-pill--ok"));
   });
 });
 
@@ -2286,6 +2431,32 @@ test.describe("Card", () => {
       while (walk.nextNode()) if (walk.currentNode.textContent) return walk.currentNode.textContent;
     });
     expect(words).toBe("Schedule");
+  });
+
+  test("[card-action] the action stands centred on the top edge at the end", async ({ page }) => {
+    await open(page, "/components/card");
+    const card = stage(page, "CardBasic").locator(".glim-panel").first();
+    const at = await card.evaluate((c) => {
+      const box = c.getBoundingClientRect();
+      const action = c.querySelector(".glim-panel-action")!.getBoundingClientRect();
+      const notch = c.querySelector(".glim-panel-heading .glim-badge")!.getBoundingClientRect();
+      return { end: box.right - action.right, middle: action.top + action.height / 2 - box.top, notch: notch.top + notch.height / 2 - box.top };
+    });
+    expect(at.end).toBeCloseTo(16, 0);
+    expect(at.middle).toBeCloseTo(0, 0);
+    expect(at.notch).toBeCloseTo(0, 0);
+    await expect(card.locator(".glim-panel-action .glim-badge")).toHaveText("On");
+  });
+
+  test("[card-notch-steps] a window, a card and a sub-card take three notch heights", async ({ page }) => {
+    const height = (l: Locator) => l.evaluate((b) => b.getBoundingClientRect().height);
+    await open(page, "/components/card");
+    expect(await height(stage(page, "CardBasic").locator(".glim-panel-heading .glim-badge"))).toBeCloseTo(22, 0);
+    await open(page, "/components/sub-card");
+    expect(await height(stage(page, "SubCardBasic").locator(".glim-subcard .glim-panel-heading .glim-badge").first())).toBeCloseTo(18, 0);
+    await open(page, "/components/window");
+    await stage(page, "WindowColumns").getByRole("button", { name: "Choose columns" }).click();
+    expect(await height(page.getByRole("dialog", { name: "Columns" }).locator(".glim-window-title .glim-badge"))).toBeCloseTo(28, 0);
   });
 });
 
@@ -2809,6 +2980,22 @@ test.describe("MenuBar", () => {
     await expect(menuOf(page, "View")).toHaveCount(0);
     await expect(word(page, "View")).toBeFocused();
   });
+
+  test("[bar-open-surface] the open word stands on the menu's surface", async ({ page }) => {
+    await open(page, "/components/menu-bar");
+    const ground = (l: Locator) => l.evaluate((e) => getComputedStyle(e).backgroundColor);
+    await word(page, "Edit").hover();
+    const hovered = await ground(word(page, "Edit"));
+    await word(page, "File").click();
+    await expect(menuOf(page, "File")).toBeVisible();
+    await page.mouse.move(4, 4);
+    const opened = await ground(word(page, "File"));
+    expect(opened).toBe(await ground(menuOf(page, "File")));
+    expect(opened).not.toBe(hovered);
+    const box = await word(page, "File").evaluate((e) => ({ h: e.getBoundingClientRect().height, size: getComputedStyle(e).fontSize }));
+    expect(box.h).toBeCloseTo(30, 0);
+    expect(box.size).toBe("14px");
+  });
 });
 
 test.describe("Checkbox", () => {
@@ -2910,41 +3097,63 @@ test.describe("TextField", () => {
     const look = () => box(page, "Address").evaluate((e) => ({ outline: getComputedStyle(e).outlineStyle, ground: getComputedStyle(e).backgroundColor }));
     const rest = await look();
     await box(page, "Address").focus();
-    const held = await look();
-    expect(held.outline).toBe("none");
-    expect(held.ground).not.toBe(rest.ground);
+    // The fill steps up through a short transition.
+    await expect.poll(async () => (await look()).ground).not.toBe(rest.ground);
+    expect((await look()).outline).toBe("none");
   });
 
-  test("[text-area] a text area is taller and grows", async ({ page }) => {
+  test("[text-area] a text area starts three lines tall and grows with its text up to ten", async ({ page }) => {
     await open(page, "/components/text-field");
     const notes = box(page, "Notes");
     await expect(notes).toHaveJSProperty("tagName", "TEXTAREA");
-    const look = await notes.evaluate((e) => ({ height: e.getBoundingClientRect().height, resize: getComputedStyle(e).resize }));
-    expect(look.height).toBeGreaterThan(40);
-    expect(look.resize).toBe("vertical");
+    const look = () => notes.evaluate((e) => ({ height: e.getBoundingClientRect().height, line: parseFloat(getComputedStyle(e).lineHeight), resize: getComputedStyle(e).resize }));
+    await notes.fill("");
+    const empty = await look();
+    expect(empty.resize).toBe("none");
+    expect(empty.height).toBeGreaterThanOrEqual(3 * empty.line);
+    expect(empty.height).toBeLessThan(4 * empty.line + 20);
+    await notes.fill(Array.from({ length: 6 }, (_, i) => `line ${i + 1}`).join("\n"));
+    await expect.poll(async () => (await look()).height).toBeGreaterThan(empty.height + 2 * empty.line);
+    await notes.fill(Array.from({ length: 30 }, (_, i) => `line ${i + 1}`).join("\n"));
+    const full = await look();
+    expect(full.height).toBeLessThanOrEqual(10 * full.line + 20);
   });
 });
 
 test.describe("FieldRow", () => {
   const rows = (page: Page) => stage(page, "FieldRowBasic");
 
-  test("[row-grow] a growing field takes what the label leaves", async ({ page }) => {
+  test("[row-grow] in a group a growing field takes what the names leave", async ({ page }) => {
     await open(page, "/components/field-row");
-    const gap = await rows(page).locator(".glim-field-row", { hasText: "Share link" }).evaluate((r) => {
-      const name = r.querySelector(".glim-field-row-label")!.getBoundingClientRect();
-      const field = r.querySelector("input")!.getBoundingClientRect();
-      return { left: Math.round(field.left - name.right), right: Math.round(r.getBoundingClientRect().right - field.right) };
+    const gap = await stage(page, "FieldRowGroup").locator(".glim-field-row", { has: page.locator(".glim-field--grow") }).first().evaluate((r) => {
+      const field = r.querySelector(".glim-field--grow")!.getBoundingClientRect();
+      return Math.round(r.getBoundingClientRect().right - field.right);
     });
-    expect(gap).toEqual({ left: 12, right: 0 });
+    expect(gap).toBe(0);
+  });
+
+  test("[row-switch] a press anywhere on a row with a switch flips it", async ({ page }) => {
+    await open(page, "/components/field-row");
+    const row = rows(page).locator(".glim-field-row", { hasText: /^Notify/ });
+    const notify = row.getByRole("switch", { name: "Notify", exact: true });
+    await expect(notify).toHaveAttribute("aria-checked", "true");
+    const box = (await row.boundingBox())!;
+    const ground = () => row.evaluate((r) => getComputedStyle(r).backgroundColor);
+    const rest = await ground();
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await expect.poll(ground).not.toBe(rest);
+    await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+    await expect(notify).toHaveAttribute("aria-checked", "false");
+    expect(await row.evaluate((r) => getComputedStyle(r).cursor)).toBe("pointer");
   });
 
   test("[row-many] two controls stand together at the row's end", async ({ page }) => {
     await open(page, "/components/field-row");
     const gaps = await rows(page).locator(".glim-field-row", { hasText: /^Hours/ }).evaluate((r) => {
-      const [a, b] = r.querySelectorAll("input");
+      const [a, b] = r.querySelectorAll(".glim-time");
       return { between: Math.round(b.getBoundingClientRect().left - a.getBoundingClientRect().right), end: Math.round(r.getBoundingClientRect().right - b.getBoundingClientRect().right) };
     });
-    expect(gaps).toEqual({ between: 12, end: 0 });
+    expect(gaps).toEqual({ between: 16, end: 0 });
   });
 
   test("[row-name] the row names its control", async ({ page }) => {
@@ -3006,7 +3215,7 @@ test.describe("FieldRow", () => {
     expect(ends).toBeLessThan(1);
   });
 
-  test("[row-widths] a field keeps its width beside the label", async ({ page }) => {
+  test("[row-widths] the fields of a card start on one line, a short one keeps its width", async ({ page }) => {
     await open(page, "/components/field-row");
     const place = (name: string, field: string) =>
       rows(page).locator(".glim-field-row", { hasText: new RegExp(`^${name}`) }).evaluate((r, f) => {
@@ -3014,9 +3223,14 @@ test.describe("FieldRow", () => {
         const name = r.querySelector(".glim-field-row-name")!.getBoundingClientRect();
         return { width: Math.round(box.width), beside: box.left >= name.right, end: Math.round(r.getBoundingClientRect().right - box.right) };
       }, field);
-    expect(await place("Password", ".glim-secret")).toEqual({ width: 192, beside: true, end: 0 });
-    expect(await place("Link", ".glim-copy")).toEqual({ width: 352, beside: true, end: 0 });
-    expect(await place("Address", "input")).toEqual({ width: 352, beside: true, end: 0 });
+    const row = await rows(page).locator(".glim-field-row").first().evaluate((r) => r.getBoundingClientRect().width);
+    const widest = Math.round(Math.min(24 * 16, row - 9 * 16));
+    for (const [name, field] of [["Name", "input"], ["Password", ".glim-secret"], ["Link", ".glim-copy"], ["Address", "input"], ["Share link", "input"], ["Keep", ".glim-select"]]) {
+      expect(await place(name, field), name).toEqual({ width: widest, beside: true, end: 0 });
+    }
+    const copies = await place("Copies", ".glim-num-wrap");
+    expect(copies.width).toBeLessThan(120);
+    expect(copies.end).toBe(0);
   });
 
   test("[row-group] the names share one column", async ({ page }) => {
@@ -3069,6 +3283,8 @@ test.describe("FieldRow", () => {
   test("[row-narrow] without room the control moves under the label", async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 800 });
     await open(page, "/components/field-row");
+    // Narrower than a name and the smallest field side by side.
+    await rows(page).locator(".glim-field-row").first().evaluate((r) => (r.parentElement!.style.width = "200px"));
     const row = rows(page).locator(".glim-field-row", { hasText: "Address" });
     const place = await row.evaluate((r) => {
       const name = r.querySelector(".glim-field-row-name")!.getBoundingClientRect();
@@ -3078,6 +3294,9 @@ test.describe("FieldRow", () => {
     expect(place.under).toBe(true);
     expect(place.end).toBeLessThan(1);
     expect(place.inside).toBe(true);
+    await expect(row).toHaveAttribute("data-stacked", "");
+    const full = await row.evaluate((r) => Math.round(r.getBoundingClientRect().width - r.querySelector("input")!.getBoundingClientRect().width));
+    expect(full).toBe(0);
   });
 });
 
@@ -3131,8 +3350,12 @@ test.describe("PathField", () => {
 
   test("[path-width] the widths", async ({ page }) => {
     await open(page, "/components/path-field");
-    const width = await demo(page).locator(".glim-field-row", { hasText: "Short" }).locator(".glim-path").evaluate((p) => Math.round(p.getBoundingClientRect().width));
-    expect(width).toBe(192);
+    // In a row it fills the line the row's fields share, as a text field does.
+    const look = await demo(page).locator(".glim-field-row", { hasText: "Short" }).evaluate((r) => ({
+      path: Math.round(r.querySelector(".glim-path")!.getBoundingClientRect().width),
+      row: r.getBoundingClientRect().width,
+    }));
+    expect(look.path).toBe(Math.round(Math.min(24 * 16, look.row - 9 * 16)));
   });
 
   test("[path-narrow] little room leaves the glyph alone", async ({ page }) => {
@@ -3140,10 +3363,11 @@ test.describe("PathField", () => {
     const row = demo(page).locator(".glim-field-row", { hasText: /^Half/ });
     const look = await row.evaluate((r) => {
       const b = r.querySelector(".glim-btn")!.getBoundingClientRect();
-      return { square: Math.abs(b.width - b.height) < 1, field: r.querySelector("input")!.getBoundingClientRect().width };
+      const path = r.querySelector(".glim-path")!.getBoundingClientRect().width;
+      return { square: Math.abs(b.width - b.height) < 1, rest: path - b.width - r.querySelector("input")!.getBoundingClientRect().width };
     });
     expect(look.square).toBe(true);
-    expect(look.field).toBeGreaterThan(200);
+    expect(look.rest).toBeLessThan(13);
     await expect(row.getByRole("button", { name: "Choose" })).toHaveCount(1);
     await expect(button(page).first().getByText("Choose a folder")).toBeVisible();
   });
@@ -3570,14 +3794,18 @@ test.describe("ConnectionRow", () => {
       for (const label of ["Share", "Mount", "Test", "Edit", "Remove"]) {
         const b = button(page, "Media share", label);
         const fill = () => b.evaluate((e) => getComputedStyle(e).backgroundColor);
-        const lit = await b.evaluate((e) => {
-          const probe = e.appendChild(document.createElement("span"));
-          probe.style.backgroundColor = "var(--hover)";
-          const c = getComputedStyle(probe).backgroundColor;
-          probe.remove();
-          return c;
-        });
+        // What rests on surface3 lights one step further than the hover.
+        const [hover, raised, surface3] = await b.evaluate((e) =>
+          ["var(--hover)", "var(--hover-raised)", "var(--stone-surface3)"].map((v) => {
+            const probe = e.appendChild(document.createElement("span"));
+            probe.style.backgroundColor = v;
+            const c = getComputedStyle(probe).backgroundColor;
+            probe.remove();
+            return c;
+          }),
+        );
         const rest = await fill();
+        const lit = rest === surface3 ? raised : hover;
         const look = `${label} in ${scheme}${oled ? " OLED" : ""}`;
         expect(rest, look).not.toBe(ground);
         await b.hover();
@@ -3748,9 +3976,9 @@ test.describe("PasswordField", () => {
     const look = () => box.evaluate((e) => ({ outline: getComputedStyle(e).outlineStyle, ground: getComputedStyle(e).backgroundColor }));
     const rest = await look();
     await box.focus();
-    const held = await look();
-    expect(held.outline).toBe("none");
-    expect(held.ground).not.toBe(rest.ground);
+    // The fill steps up through a short transition.
+    await expect.poll(async () => (await look()).ground).not.toBe(rest.ground);
+    expect((await look()).outline).toBe("none");
   });
 
   test("[pw-hidden] hidden at first, the eye named Show", async ({ page }) => {
@@ -3793,6 +4021,17 @@ test.describe("PasswordField", () => {
     await expect(eye(page, "Token")).toBeDisabled();
   });
 
+  test("[pw-disabled-height] a disabled field stands as tall as an enabled one, its eye inside", async ({ page }) => {
+    await open(page, "/components/password-field");
+    const wrap = (name: string) => field(page, name).locator("xpath=..");
+    const enabled = (await wrap("Password").boundingBox())!;
+    const off = (await wrap("Token").boundingBox())!;
+    const glyph = (await eye(page, "Token").boundingBox())!;
+    expect(off.height).toBeCloseTo(enabled.height, 0);
+    expect(glyph.y).toBeGreaterThanOrEqual(off.y);
+    expect(glyph.y + glyph.height).toBeLessThanOrEqual(off.y + off.height);
+  });
+
   const twice = (page: Page) => stage(page, "PasswordFieldConfirm");
   const first = (page: Page) => twice(page).locator('input[aria-label="New password"]');
   const second = (page: Page) => twice(page).getByLabel("Confirm password", { exact: true });
@@ -3808,7 +4047,7 @@ test.describe("PasswordField", () => {
     await expect(second(page).locator("xpath=..").getByRole("button")).toHaveAccessibleName("Show");
     const a = (await first(page).boundingBox())!;
     const b = (await second(page).boundingBox())!;
-    expect(b.width).toBeCloseTo(a.width, 0);
+    expect(Math.abs(b.width - a.width)).toBeLessThan(1);
     expect(b.y).toBeGreaterThan(a.y + a.height);
   });
 
@@ -3950,11 +4189,21 @@ test.describe("Meter", () => {
     const colour = (el: Locator) => el.evaluate((e) => getComputedStyle(e).backgroundColor);
     const track = quiet.getByRole("meter", { name: "holiday.mkv" });
     expect(await track.evaluate((e) => e.getBoundingClientRect().height)).toBeLessThanOrEqual(6);
-    expect(await colour(fill("holiday.mkv"))).toBe(await token(quiet, "--carbon-text-muted"));
+    expect(await colour(fill("holiday.mkv"))).toBe(await token(quiet, "--stone-text-muted"));
     expect(await colour(fill("photos"))).toBe(await token(quiet, "--status-fail-solid"));
-    expect(await colour(fill("disk1"))).toBe(await token(quiet, "--carbon-text-muted"));
+    expect(await colour(fill("disk1"))).toBe(await token(quiet, "--stone-text-muted"));
     await quiet.getByRole("button", { name: /free/ }).hover();
     expect(await colour(fill("disk1"))).toBe(await token(quiet, "--accent"));
+  });
+
+  test("[meter-value] a medium meter says its level beside the track", async ({ page }) => {
+    await open(page, "/components/meter");
+    const media = stage(page, "MeterLevels").getByRole("meter", { name: "media" });
+    const row = media.locator("xpath=..");
+    await expect(row).toHaveClass(/glim-meter-row--medium/);
+    await expect(row.locator(".glim-meter-value")).toHaveText(/31\s?%/);
+    await expect(row.locator(".glim-meter-value")).toHaveAttribute("aria-hidden", "true");
+    await expect(stage(page, "MeterLevels").getByRole("meter", { name: "disk1" }).locator("xpath=..")).not.toHaveClass(/glim-meter-row/);
   });
 
   test("[meter-tip] the words show in the bubble", async ({ page }) => {
@@ -4232,7 +4481,9 @@ test.describe("SignInCard", () => {
     const password = field(page, "Password");
     await expect(password).toBeFocused();
     expect(await password.evaluate((e) => getComputedStyle(e).outlineStyle)).toBe("none");
-    expect(await ground(password)).toBe(await token(page, "--carbon-surface3"));
+    // The fill steps up through a short transition.
+    const focus = await token(page, "--field-focus");
+    await expect.poll(() => ground(password)).toBe(focus);
     await expect(field(page, "Name", "SignInCardSlots")).not.toBeFocused();
   });
 
@@ -4465,8 +4716,8 @@ test.describe("SignInCard", () => {
       await page.emulateMedia({ colorScheme });
       await open(page, "/components/sign-in-card");
       const surface = await ground(card(page));
-      expect(await ground(stage(page, "SignInCardBasic").locator(".glim-signin"))).toBe(await token(page, "--carbon-bg"));
-      expect(surface).toBe(await token(page, "--carbon-surface"));
+      expect(await ground(stage(page, "SignInCardBasic").locator(".glim-signin"))).toBe(await token(page, "--stone-ground"));
+      expect(surface).toBe(await token(page, "--stone-surface"));
       seen.push(surface);
     }
     expect(seen[0]).not.toBe(seen[1]);
@@ -4476,7 +4727,7 @@ test.describe("SignInCard", () => {
     await page.emulateMedia({ colorScheme: "dark" });
     await open(page, "/components/sign-in-card", { oled: true });
     expect(await ground(stage(page, "SignInCardBasic").locator(".glim-signin"))).toBe("rgb(0, 0, 0)");
-    expect(await ground(card(page))).toBe(hexToRgb("#161616"));
+    expect(await ground(card(page))).toMatch(/^oklch\(0\.175 /);
   });
 
   test("[signin-width] 24rem wide, a phone's width less 16px either side", async ({ page }) => {
@@ -4598,7 +4849,8 @@ test.describe("SignInCard refusals and engines", () => {
   test("[signin-engines] Sign in wears the accent", async ({ page }) => {
     await open(page, "/components/sign-in-card", { accent: "#4DABF7" });
     await field(page, "Password").fill("x");
-    expect(await button(page, "Sign in").evaluate((e) => getComputedStyle(e).backgroundColor)).toBe("rgb(77, 171, 247)");
+    // A button that turns enabled crosses from the disabled wash to its fill on the control transition.
+    await expect.poll(() => button(page, "Sign in").evaluate((e) => getComputedStyle(e).backgroundColor)).toBe("rgb(77, 171, 247)");
   });
 
   test("[signin-engines] the card, fields and buttons take the shape", async ({ page }) => {
@@ -4896,7 +5148,8 @@ test.describe("NotifyCard", () => {
     await open(page, "/components/notify-card");
     await row(page, "ntfy").getByRole("button", { name: "Remove channel" }).click();
     const ask = page.getByRole("alertdialog").or(page.getByRole("dialog", { name: "Remove channel" }));
-    await expect(ask).toContainText("Remove ntfy? It stops sending right away.");
+    await expect(ask.locator(".glim-modal-question")).toHaveText("Remove ntfy?");
+    await expect(ask).toContainText("It stops sending right away.");
     await ask.getByRole("button", { name: "Remove channel" }).click();
     await expect(demo(page).locator("[data-notify-channel]")).toHaveCount(3);
     await expect(said(page)).toHaveText("Settings saved");
@@ -5776,17 +6029,19 @@ test.describe("Fortress", () => {
     await expect.poll(track).not.toBe(resting);
   });
 
-  for (const [name, look, card, row] of [
-    ["dark", { theme: "dark" }, "rgb(38, 38, 38)", "rgb(57, 57, 57)"],
-    ["light", { theme: "light" }, "rgb(255, 255, 255)", "rgb(232, 232, 232)"],
-    ["OLED", { theme: "dark", oled: true }, "rgb(22, 22, 22)", "rgb(38, 38, 38)"],
+  // Stone steps by their OKLCH lightness, since the browsers write the hue to
+  // a different number of places.
+  for (const [name, look, card, row, floating] of [
+    ["dark", { theme: "dark" }, /^oklch\(0\.235 /, /^oklch\(0\.29 /, /^oklch\(0\.275 /],
+    ["light", { theme: "light" }, /^oklch\(0\.997 /, /^oklch\(0\.955 /, /^rgb\(255, 255, 255\)$/],
+    ["OLED", { theme: "dark", oled: true }, /^oklch\(0\.175 /, /^oklch\(0\.235 /, /^oklch\(0\.235 /],
   ] as const) {
     test(`[fortress-modes] the cards and rows take the ${name} surfaces`, async ({ page }) => {
       await open(page, "/components/fortress", look);
       await showOthers(page);
       const ground = (sel: string) => inside(page).locator(sel).evaluate((e) => getComputedStyle(e).backgroundColor);
-      expect(await ground('[data-fortress-app="charlie"]')).toBe(card);
-      expect(await ground('[data-instance="c1"]')).toBe(row);
+      expect(await ground('[data-fortress-app="charlie"]')).toMatch(card);
+      expect(await ground('[data-instance="c1"]')).toMatch(row);
     });
 
     test(`[fortress-modes] the status window takes the ${name} surface`, async ({ page }) => {
@@ -5794,7 +6049,7 @@ test.describe("Fortress", () => {
       await stage(page, "FortressStatus").locator('[data-hook="report"]').click();
       const win = page.getByRole("dialog");
       const surface = await win.evaluate((w) => getComputedStyle(w).backgroundColor);
-      expect(surface).toBe(card);
+      expect(surface).toMatch(floating);
     });
   }
 

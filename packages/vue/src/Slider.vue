@@ -51,6 +51,7 @@ const api = computed(() => slider.connect(service, normalizeProps));
         <div v-bind="api.getRangeProps()" class="glim-slider-range" />
       </div>
       <div v-for="(_, index) in api.value" :key="index" v-bind="api.getThumbProps({ index })" class="glim-slider-thumb">
+        <span class="glim-slider-bubble" aria-hidden="true">{{ format(api.value[index]!) }}</span>
         <input v-bind="api.getHiddenInputProps({ index })" />
       </div>
     </div>

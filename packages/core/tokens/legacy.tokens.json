@@ -1,33 +1,51 @@
 {
   "legacy": {
-    "$description": "Deprecated tokens, kept so an app's own CSS that reads them still works until 5.0.0 (rule 52). --ink-mix is how much of the accent the ink kept against black: all of it on the dark ramps and 55% on the light one. The stylesheet no longer reads it, so it needs the theme's own selectors rather than a light-dark(), which only takes colours. npx glimstone-migrate rewrites the mix it was made for.",
+    "$description": "Deprecated tokens, kept so an app's own CSS that reads them still works until the major release that removes them (rule 52). npx glimstone-migrate rewrites them.\n\nThe carbon- names are the stone ramp under the names it had before 5.0.0, and go in 6.0.0. Each is an alias of its stone step, declared on every element that declares the stones, so it resolves there to that element's own step: a [data-theme] subtree, OLED and the contrast step all reach it, and light-dark() still resolves where the colour is used. Their Tailwind names point at the stone steps themselves.",
     "$extensions": {
       "org.glimstone": {
-        "selector": ":root,\n[data-theme=\"dark\"]",
-        "modes": [
-          {
-            "name": "light",
-            "selector": "[data-theme=\"light\"]",
-            "also": [
-              {
-                "selector": ":root:not([data-theme=\"dark\"])",
-                "media": "(prefers-color-scheme: light)"
-              }
-            ]
-          }
-        ]
+        "selector": ":root,\n[data-theme],\n[data-oled]",
+        "aliases": true
       }
     },
-    "ink-mix": {
-      "$value": "100%",
-      "$type": "dimension",
-      "$extensions": {
-        "org.glimstone": {
-          "modes": {
-            "light": "55%"
-          }
-        }
-      }
+    "carbon-bg": {
+      "$value": "{colour.stone-ground}",
+      "$extensions": { "org.glimstone": { "tailwind": "color-carbon-background", "tailwindNote": "Deprecated, and gone in 6.0.0: the stone utilities under their carbon- names." } }
+    },
+    "carbon-sidebar": {
+      "$value": "{colour.stone-sidebar}",
+      "$extensions": { "org.glimstone": { "tailwind": "color-carbon-sidebar" } }
+    },
+    "carbon-surface": {
+      "$value": "{colour.stone-surface}",
+      "$extensions": { "org.glimstone": { "tailwind": "color-carbon-surface" } }
+    },
+    "carbon-surface2": {
+      "$value": "{colour.stone-surface2}",
+      "$extensions": { "org.glimstone": { "tailwind": "color-carbon-surface2" } }
+    },
+    "carbon-surface3": {
+      "$value": "{colour.stone-surface3}",
+      "$extensions": { "org.glimstone": { "tailwind": "color-carbon-surface3" } }
+    },
+    "carbon-hover-raised": {
+      "$value": "{colour.stone-hover-raised}",
+      "$extensions": { "org.glimstone": { "tailwind": "color-carbon-hoverRaised" } }
+    },
+    "carbon-border": {
+      "$value": "{colour.stone-border}",
+      "$extensions": { "org.glimstone": { "tailwind": "color-carbon-border" } }
+    },
+    "carbon-text": {
+      "$value": "{colour.stone-text}",
+      "$extensions": { "org.glimstone": { "tailwind": "color-carbon-text" } }
+    },
+    "carbon-text-sub": {
+      "$value": "{colour.stone-text-sub}",
+      "$extensions": { "org.glimstone": { "tailwind": "color-carbon-textSub" } }
+    },
+    "carbon-text-muted": {
+      "$value": "{colour.stone-text-muted}",
+      "$extensions": { "org.glimstone": { "tailwind": "color-carbon-textMuted" } }
     }
   }
 }

@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { computed, shallowRef, useAttrs, useId } from "vue";
-import { fieldErrorView, textFieldClass, type FieldWidth } from "@glimstone/core";
-import FieldError from "./FieldError.vue";
+import { computed, shallowRef, useAttrs, useId, watch } from "vue";
+import { fieldErrorView, fitTextArea, textFieldClass, type FieldWidth } from "@glimstone/core";
+import FieldErrorLine from "./FieldErrorLine.vue";
 import { useFieldName } from "./fieldName";
 
-// A few lines of text, bound with v-model, in the look of a TextField and
-// dragged taller from its corner. Other attributes go to the <textarea>.
+// A few lines of text, bound with v-model, in the look of a TextField,
+// growing with its text from three lines to ten. Other attributes go to the
+// <textarea>.
 defineOptions({ inheritAttrs: false });
 const props = defineProps<{
   /** The accessible name. Inside a FieldRow the row gives it. */
@@ -24,6 +25,7 @@ const own = useId();
 const err = computed(() => fieldErrorView(props.error, (attrs.id as string | undefined) ?? own, attrs["aria-describedby"] as string | undefined));
 const input = shallowRef<HTMLTextAreaElement | null>(null);
 defineExpose({ input });
+watch([value, input], () => fitTextArea(input.value), { flush: "post" });
 </script>
 
 <template>
@@ -36,6 +38,7 @@ defineExpose({ input });
     :aria-invalid="err.invalid"
     :aria-describedby="err.describedBy"
     :class="classes"
+    @input="fitTextArea(input)"
   />
-  <FieldError v-if="err.errorId" :id="err.errorId">{{ error }}</FieldError>
+  <FieldErrorLine :id="err.errorId" :error="error" />
 </template>

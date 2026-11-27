@@ -89,6 +89,16 @@ test.describe("ScrollArea", () => {
     await expect(bars.and(page.locator('[data-orientation="vertical"]'))).toBeVisible();
     await expect(bars.and(page.locator('[data-orientation="horizontal"]'))).toBeHidden();
   });
+
+  test("[scroll-fade] the content fades only toward an edge it scrolls on to", async ({ page }) => {
+    await open(page, "/components/scroll-area", { motion: "off" });
+    const fade = () => box(page).evaluate((el) => [getComputedStyle(el).getPropertyValue("--glim-fade-top"), getComputedStyle(el).getPropertyValue("--glim-fade-bottom")]);
+    await expect.poll(fade).toEqual(["0px", "24px"]);
+    await box(page).evaluate((el) => (el.scrollTop = 40));
+    await expect.poll(fade).toEqual(["24px", "24px"]);
+    await box(page).evaluate((el) => (el.scrollTop = el.scrollHeight));
+    await expect.poll(fade).toEqual(["24px", "0px"]);
+  });
 });
 
 test.describe("FloatingPanel", () => {

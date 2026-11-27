@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { accentHovers, accentInks, contrastOn, contrastRatio, MIN_TEXT_CONTRAST } from '../src/contrast.ts';
+import { accentHovers, accentInks, contrastOn, contrastRatio, MIN_HOVER_STEP, MIN_TEXT_CONTRAST } from '../src/contrast.ts';
 import { ACCENTS, hueVars, RAINBOW } from '../src/appearance.ts';
 import { srgbOf, type Oklab } from '../src/oklab.ts';
 
@@ -32,7 +32,7 @@ const plain = bare.replace(MORE_BLOCK, '');
 // Every block declared wherever a theme is set: the palette, the hover steps and
 // the elevation.
 const themed = Object.assign({}, ...[...plain.matchAll(/:root,\s*\[data-theme\] \{([^}]*)\}/g)].map(([, body]) => props(body!))) as Record<string, string>;
-const oledBlock = block('[data-oled]', '--carbon-bg');
+const oledBlock = block('[data-oled]', '--stone-ground');
 
 // The hover tints, declared again inside a rainbow position so they take its hue.
 const hoverBlock = block(':root,\n[data-theme],\n[data-rainbow] .glim-hue', '--hover');
@@ -52,14 +52,14 @@ const THEMES: Record<string, Record<string, string>> = {
 // On the contrast step the text that carries meaning reaches AAA on the page
 // and on a card.
 const AAA = 7;
-const MORE_TEXT = ['--carbon-text', '--carbon-text-sub', '--carbon-text-muted', '--accent-ink', '--field-placeholder'];
+const MORE_TEXT = ['--stone-text', '--stone-text-sub', '--stone-text-muted', '--accent-ink', '--field-placeholder'];
 
 // A ring stands on the ground around a control: the page, the rail, a card, a
 // well, or a row's hover fill when the ring is drawn inside the row.
-const RING_GROUNDS = ['--carbon-bg', '--carbon-sidebar', '--carbon-surface', '--carbon-surface2', '--carbon-hover'];
+const RING_GROUNDS = ['--stone-ground', '--stone-sidebar', '--stone-surface', '--stone-surface2', '--hover', '--surface-overlay'];
 // A field is filled with surface2 on a card and with surface3 in a well or a
 // sub-card.
-const FIELD_GROUNDS = ['--carbon-surface', '--carbon-surface2', '--carbon-surface3'];
+const FIELD_GROUNDS = ['--stone-surface', '--stone-surface2', '--stone-surface3'];
 
 const MIN_GRAPHIC_CONTRAST = 3;
 
@@ -110,13 +110,13 @@ function split(args: string, separator: RegExp): string[] {
 
 const NAMED: Record<string, Rgba> = { black: [0, 0, 0, 1], white: [255, 255, 255, 1], transparent: [0, 0, 0, 0] };
 
-/** Works out one channel of a relative oklab(), with `l`, `a` and `b` those of the origin. */
-function channel(expr: string, origin: Oklab, scope: Record<string, string>): number {
+/** Works out one channel of a relative colour, with `keys` naming the origin's channels in order. */
+function channel(expr: string, origin: Oklab, scope: Record<string, string>, keys = 'lab'): number {
   const js = expr
     .replace(/var\((--[\w-]+)\)/g, (_, name: string) => String(Number(scope[name])))
     .replace(/calc\(/g, '(')
     .replace(/\b(min|max)\(/g, 'Math.$1(')
-    .replace(/\b([lab])\b/g, (_, k: string) => String(origin['lab'.indexOf(k)]));
+    .replace(new RegExp(`\\b([${keys}])\\b`, 'g'), (_, k: string) => String(origin[keys.indexOf(k)]));
   assert.match(js, /^[\d.\s+\-*/(),eMathminax]+$/, `cannot work out ${expr}`);
   return Function(`return ${js}`)() as number;
 }
@@ -149,6 +149,15 @@ function resolve(value: string, scope: Record<string, string>): Rgba {
     const o = resolve(origin!, scope);
     const lab = oklabOfRgb(o);
     return fromOklab(exprs.map((e) => channel(e, lab, scope)) as Oklab, o[3]);
+  }
+  const relLch = v.match(/^oklch\(from\s+([\s\S]+)\)$/);
+  if (relLch) {
+    const [origin, ...exprs] = split(relLch[1]!, /\s/);
+    const o = resolve(origin!, scope);
+    const [L, A, B] = oklabOfRgb(o);
+    const hue = (Math.atan2(B, A) * 180) / Math.PI;
+    const [l, c, h] = exprs.map((e) => channel(e, [L, Math.hypot(A, B), hue < 0 ? hue + 360 : hue], scope, 'lch')) as Oklab;
+    return fromOklab([l, c * Math.cos((h * Math.PI) / 180), c * Math.sin((h * Math.PI) / 180)], o[3]);
   }
   const lch = v.match(/^oklch\(\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s*(?:\/\s*([\d.]+))?\s*\)$/);
   if (lch) {
@@ -224,23 +233,31 @@ const RULE_PAIRS = [
 
 // Text that stands on a ground rather than a fill of its own.
 const GROUND_PAIRS: [string, string][] = [
-  ...['--carbon-bg', '--carbon-surface', '--carbon-surface2', '--carbon-surface3'].flatMap((g) => [
-    ['--carbon-text', g] as [string, string],
-    ['--carbon-text-sub', g] as [string, string],
+  ...['--stone-ground', '--stone-surface', '--stone-surface2', '--stone-surface3'].flatMap((g) => [
+    ['--stone-text', g] as [string, string],
+    ['--stone-text-sub', g] as [string, string],
   ]),
-  ['--carbon-text-muted', '--carbon-bg'],
-  ['--carbon-text-muted', '--carbon-surface'],
-  ['--sidebar-text', '--carbon-sidebar'],
-  ['--accent-ink', '--carbon-bg'],
-  ['--accent-ink', '--carbon-sidebar'],
-  ['--accent-ink', '--carbon-surface'],
-  ['--accent-ink', '--carbon-surface2'],
+  ['--stone-text-muted', '--stone-ground'],
+  ['--stone-text-muted', '--stone-surface'],
+  ['--sidebar-text', '--stone-sidebar'],
+  ['--accent-ink', '--stone-ground'],
+  ['--accent-ink', '--stone-sidebar'],
+  ['--accent-ink', '--stone-surface'],
+  ['--accent-ink', '--stone-surface2'],
+  ...['--stone-text', '--stone-text-sub', '--stone-text-muted', '--accent-ink'].map((ink) => [ink, '--surface-overlay'] as [string, string]),
   ['--accent-contrast', '--accent-hover'],
   ...['info', 'ok', 'fail', 'warn', 'neutral'].flatMap((s) => [
-    [`--status-${s}-text`, '--carbon-surface'] as [string, string],
+    [`--status-${s}-text`, '--stone-surface'] as [string, string],
     [`--status-${s}-text`, `--status-${s}-bg`] as [string, string],
   ]),
   ...FIELD_GROUNDS.map((g) => ['--field-placeholder', g] as [string, string]),
+  ...['ok', 'fail', 'warn'].map((s) => [`--status-${s}-text`, `--status-${s}-wash-hover`] as [string, string]),
+  ['--stone-text', '--selection'],
+  ['--stone-text-sub', '--selection'],
+  ...['--field-rest', '--field-hover', '--field-focus', '--field-invalid', '--field-invalid-focus'].flatMap((g) => [
+    ['--stone-text', g] as [string, string],
+    ['--field-placeholder', g] as [string, string],
+  ]),
 ];
 
 test('the stylesheet sets text on its own fill in more than a dozen ways', () => {
@@ -249,7 +266,7 @@ test('the stylesheet sets text on its own fill in more than a dozen ways', () =>
 
 /** The ratio of `ink` on `fill`, a translucent fill laid over the card first. */
 function pairRatio(ink: string, fill: string, scope: Record<string, string>): number {
-  const card = resolve('var(--carbon-surface)', scope);
+  const card = resolve('var(--stone-surface)', scope);
   const ground = parse(over(resolve(`var(${fill})`, scope), card));
   return contrastRatio(over(resolve(`var(${ink})`, scope), ground), hex(ground));
 }
@@ -294,7 +311,7 @@ for (const [themeName, theme] of Object.entries(THEMES)) {
     for (const { name: accentName, hex: accent } of ACCENTS) {
       test(`the text ramp and the ink reach 7:1 on the page and a card for ${accentName} on ${themeName}`, () => {
         const scope = withAccent(theme, accent);
-        const misses = MORE_TEXT.flatMap((ink) => ['--carbon-bg', '--carbon-surface'].map((g) => [ink, g, pairRatio(ink, g, scope)] as const))
+        const misses = MORE_TEXT.flatMap((ink) => ['--stone-ground', '--stone-surface'].map((g) => [ink, g, pairRatio(ink, g, scope)] as const))
           .filter(([, , r]) => r < AAA)
           .map(([ink, g, r]) => `${ink} on ${g}: ${r.toFixed(2)}:1`);
         assert.deepEqual(misses, []);
@@ -302,7 +319,7 @@ for (const [themeName, theme] of Object.entries(THEMES)) {
     }
 
     test(`a border reads at 3:1 on the card and the page on ${themeName}`, () => {
-      for (const g of ['--carbon-bg', '--carbon-surface']) assert.ok(pairRatio('--carbon-border', g, theme) >= MIN_GRAPHIC_CONTRAST, g);
+      for (const g of ['--stone-ground', '--stone-surface']) assert.ok(pairRatio('--stone-border', g, theme) >= MIN_GRAPHIC_CONTRAST, g);
     });
   }
 
@@ -317,7 +334,7 @@ for (const [themeName, theme] of Object.entries(THEMES)) {
       }
       assert.equal(ring[3], 1, `position ${i} is opaque`);
       const glyph = resolve('var(--item-hue-glyph)', scope);
-      const card = resolve('var(--carbon-surface)', scope);
+      const card = resolve('var(--stone-surface)', scope);
       assert.ok(contrastRatio(hex(glyph), hex(card)) >= MIN_TEXT_CONTRAST, `position ${i} glyph on the card`);
     });
   });
@@ -338,10 +355,10 @@ test('data-contrast="more" asks for the same step as the system setting', () => 
   assert.deepEqual(block(':root[data-contrast="more"],\n:root[data-contrast="more"] [data-theme]', '--ink-l-light'), more);
 });
 
-// The one ground anything takes under the pointer (rule 21): the lightness of
-// surface3, and the grounds it lifts an element off.
-const HOVER_STEP = '--carbon-surface3';
-const HOVER_GROUNDS = ['--carbon-surface', '--carbon-surface2'] as const;
+// The one ground anything takes under the pointer (rule 21): a small step darker than
+// surface3 in lightness, and the grounds it lifts an element off.
+const HOVER_STEP = '--stone-surface3';
+const HOVER_GROUNDS = ['--stone-surface', '--stone-surface2', '--surface-overlay'] as const;
 
 const chroma = ([, a, b]: Oklab) => Math.hypot(a, b);
 const hueGap = ([, a1, b1]: Oklab, [, a2, b2]: Oklab) => {
@@ -358,9 +375,10 @@ function rule(selector: string): Record<string, string> {
   return Object.fromEntries([...body.matchAll(/([\w-]+)\s*:\s*([^;]+);/g)].map((m) => [m[1]!, m[2]!.trim()]));
 }
 
-// What a button, a row, a menu entry and a tile each declare under the pointer.
+// What a button, a row, a menu entry and a tile on a card's surfaces each declare
+// under the pointer.
 const HOVERED = {
-  'a neutral button': rule(':is(.glim-btn-neutral, .glim-btn-subtle):not(:disabled):is(:hover, :focus-visible)')['background-color'],
+  'a quiet button': rule(':is(.glim-btn-neutral, .glim-btn-subtle):not(:disabled):is(:hover, :focus-visible)')['background-color'],
   'a navigation row': rule('.glim-nav-row:not(.glim-active):hover')['background-color'],
   'a menu entry': rule('.glim-menu-item:hover,\n  .glim-menu:not([data-pointer]) .glim-menu-item:focus-visible,\n  .glim-menu-item[aria-expanded="true"]')['background-color'],
   'a tile': rule('.glim-sel-tile:not(.glim-active):hover')['background-color'],
@@ -368,10 +386,11 @@ const HOVERED = {
 
 for (const [themeName, theme] of Object.entries(THEMES)) {
   for (const { name: accentName, hex: accent } of ACCENTS) {
-    test(`the hover keeps surface3's lightness in ${accentName}'s hue on ${themeName}`, () => {
+    test(`the hover sits a small step darker than surface3 in ${accentName}'s hue on ${themeName}`, () => {
       const scope = withAccent(theme, accent);
       const lab = labOf('--hover', scope);
-      assert.ok(Math.abs(lab[0] - labOf(HOVER_STEP, scope)[0]) <= 0.01, `lightness ${lab[0].toFixed(3)}`);
+      const step = labOf(HOVER_STEP, scope)[0] - lab[0];
+      assert.ok(step >= 0 && step <= 0.025, `lightness ${lab[0].toFixed(3)}`);
       assert.ok(chroma(lab) >= 0.02, `chroma ${chroma(lab).toFixed(3)}`);
       assert.ok(hueGap(lab, oklabOfRgb(parse(accent))) <= 6, `hue ${hueGap(lab, oklabOfRgb(parse(accent))).toFixed(1)} degrees off`);
     });
@@ -403,9 +422,11 @@ for (const [themeName, theme] of Object.entries(THEMES)) {
   test(`the text and the secondary text read at 4.5:1 on the hover for ${SWEEP.length} picked accents on ${themeName}`, () => {
     const misses = SWEEP.flatMap((accent) => {
       const scope = withAccent(theme, accent);
-      return ['--carbon-text', '--carbon-text-sub'].map((ink) => [ink, pairRatio(ink, '--hover', scope)] as const)
-        .filter(([, r]) => r < MIN_TEXT_CONTRAST)
-        .map(([ink, r]) => `${accent} ${ink}: ${r.toFixed(2)}:1`);
+      return ['--hover', '--hover-raised'].flatMap((hover) =>
+        ['--stone-text', '--stone-text-sub'].map((ink) => [ink, pairRatio(ink, hover, scope)] as const)
+          .filter(([, r]) => r < MIN_TEXT_CONTRAST)
+          .map(([ink, r]) => `${accent} ${ink} on ${hover}: ${r.toFixed(2)}:1`),
+      );
     });
     assert.deepEqual(misses, []);
   });
@@ -416,5 +437,139 @@ for (const [themeName, theme] of Object.entries(THEMES)) {
       const scope = { ...theme, ...hueVars(i), [`--rb-${i}`]: hue, '--accent': position['--accent']! };
       assert.ok(hueGap(labOf('--hover', scope), oklabOfRgb(parse(hue))) <= 6, `position ${i}`);
     });
+  });
+}
+
+/** A selector list split at its top-level commas. */
+const members = (list: string) => {
+  const out = [''];
+  let depth = 0;
+  for (const ch of list) {
+    if (ch === '(') depth++;
+    if (ch === ')') depth--;
+    if (ch === ',' && depth === 0) out.push('');
+    else out[out.length - 1] += ch;
+  }
+  return out.map((s) => s.trim().replace(/\s+/g, ' '));
+};
+
+/** The fill the last rule with `selector` in its list gives, as the cascade would. */
+const fillOf = (selector: string) => {
+  let fill: string | undefined;
+  for (const [, list, body] of bare.matchAll(/([^{};]+)\{([^{}]*)\}/g)) {
+    if (!members(list!).includes(selector)) continue;
+    fill = body!.match(/background(?:-color)?\s*:\s*([^;]+);/)?.[1]?.trim() ?? fill;
+  }
+  assert.ok(fill, `no fill for ${selector}`);
+  return fill;
+};
+
+// Every control the pointer lights, the selector that lights it, the fill it
+// rests on (undefined where it rests on the ground itself) and that ground.
+const HOVERABLE: [string, string, string | undefined, string][] = [
+  ['an accent button', '.glim-btn--accent:hover', 'var(--accent)', '--stone-surface'],
+  ['a neutral button', '.glim-btn-neutral:not(:disabled):is(:hover, :focus-visible)', 'var(--stone-surface3)', '--stone-surface'],
+  ['a quiet button', ':is(.glim-btn-neutral, .glim-btn-subtle):not(:disabled):is(:hover, :focus-visible)', 'var(--stone-surface2)', '--stone-surface'],
+  ['a quiet button in a sub-card', ':is(.glim-subcard, .glim-connection) .glim-btn-subtle:not(:disabled):is(:hover, :focus-visible)', 'var(--stone-surface3)', '--stone-surface2'],
+  ['an ok button', '.glim-btn--ok:hover', 'var(--status-ok-wash)', '--stone-surface'],
+  ['a danger button', '.glim-btn--danger:hover', 'var(--status-fail-wash)', '--stone-surface'],
+  ['a warn button', '.glim-btn--warn:hover', 'var(--status-warn-wash)', '--stone-surface'],
+  ['a segment in the groove', '.glim-sel--well .glim-sel-seg:not(.glim-active):not(:disabled):hover', undefined, '--stone-surface3'],
+  ['a segment of a bare strip', '.glim-sel--chip .glim-sel-seg:not(.glim-active):not(:disabled):hover', 'var(--stone-surface2)', '--stone-surface'],
+  ['a segment of a sliding strip', '.glim-sel--chip:has(> .glim-sel-thumb) .glim-sel-seg:not(.glim-active):not(:disabled):hover', undefined, '--stone-surface3'],
+  ['a segment of a bare strip in a sub-card', '.glim-subcard .glim-sel--chip .glim-sel-seg:not(.glim-active):not(:disabled):hover', 'var(--stone-surface3)', '--stone-surface2'],
+  ['a tile', '.glim-sel-tile:not(.glim-active):hover', 'var(--tile-rest)', '--stone-surface'],
+  ['a tile in a well', ':is(.glim-subcard, .glim-well) .glim-sel-tile:not(.glim-active):hover', 'var(--stone-surface3)', '--stone-surface2'],
+  ['a navigation row', '.glim-nav-row:not(.glim-active):hover', undefined, '--stone-sidebar'],
+  ['a menu entry', '.glim-menu-item:hover', undefined, '--surface-overlay'],
+  ['a menu bar entry', '.glim-menubar-item:hover:not([aria-expanded="true"])', undefined, '--stone-surface'],
+  ['a list row', '.glim-list-row:is(:hover, :focus-within)', undefined, '--stone-surface'],
+  ['a table row', '.glim-list-tr:hover > td', undefined, '--stone-surface'],
+  ['a tree row', '.glim-tree-row:not([aria-selected="true"]):hover', undefined, '--stone-surface'],
+  ['a tree row in a well', '.glim-well .glim-tree-row:not([aria-selected="true"]):hover', undefined, '--stone-surface2'],
+  ['a page button', '.glim-page:hover', 'var(--stone-surface2)', '--stone-surface'],
+  ['a page button in a well', ':is(.glim-well, .glim-subcard) .glim-page:hover', 'var(--stone-surface3)', '--stone-surface2'],
+  ['a step', '.glim-steps-trigger:hover', undefined, '--stone-surface'],
+  ['a step in a well', ':is(.glim-well, .glim-subcard) .glim-steps-trigger:hover', undefined, '--stone-surface2'],
+  ['a disclosure', '.glim-disclosure-trigger:hover', undefined, '--stone-surface'],
+  ['a disclosure in a well', ':is(.glim-well, .glim-subcard) .glim-disclosure-trigger:hover', undefined, '--stone-surface2'],
+  ['a checkbox', '.glim-checkbox:hover', undefined, '--stone-surface'],
+  ['a permission', '.glim-permission:hover', undefined, '--stone-surface'],
+  ['a sort header', ':is(.glim-list-sort, .glim-list-filter):hover', undefined, '--stone-surface'],
+  ['a day', '.glim-date-cell:hover', undefined, '--surface-overlay'],
+  ['today', '.glim-date-cell[data-today]:hover', 'var(--hover)', '--surface-overlay'],
+  ['a date step', ':is(.glim-date-step, button.glim-date-title):hover', undefined, '--surface-overlay'],
+];
+
+for (const [themeName, theme] of Object.entries(THEMES)) {
+  test(`every control the pointer lights moves its fill a visible step on ${themeName}`, () => {
+    const lit = HOVERABLE.map(([what, selector, rest, ground]) => [what, fillOf(selector), rest, ground] as const);
+    const misses = [...ACCENTS.map((a) => a.hex), ...SWEEP].flatMap((accent) => {
+      const scope = withAccent(theme, accent);
+      const card = resolve('var(--stone-surface)', scope);
+      return lit.flatMap(([what, hovered, rest, ground]) => {
+        const under = parse(over(resolve(`var(${ground})`, scope), card));
+        const at = (fill: string | undefined) => (fill === undefined ? hex(under) : over(resolve(fill, scope), under));
+        const r = contrastRatio(at(rest), at(hovered));
+        return r < MIN_HOVER_STEP ? [`${accent} ${what}: ${r.toFixed(3)}:1`] : [];
+      });
+    });
+    assert.deepEqual(misses.slice(0, 20), [], `${misses.length} misses`);
+  });
+}
+
+// The ground, the surfaces and the text ramp: OKLCH lightness steps that take
+// a faint tint in the accent's hue, never more chroma than a stone shows.
+const STONE = [
+  '--stone-ground', '--stone-sidebar', '--stone-surface', '--stone-surface2', '--stone-surface3', '--carbon-hover',
+  '--stone-hover-raised', '--stone-border', '--toggle-off', '--stone-text', '--stone-text-sub', '--stone-text-muted',
+  '--sidebar-text', '--field-placeholder',
+];
+const STONE_CHROMA = 0.011;
+
+test('every stone step is written relative to the accent', () => {
+  for (const name of STONE) assert.match(themed[name]!, /^light-dark\(oklch\(from var\(--accent\) /, name);
+});
+
+for (const [themeName, theme] of Object.entries(THEMES)) {
+  test(`the stone takes the accent's hue and stays near grey on ${themeName}`, () => {
+    const misses = [...ACCENTS.map((a) => a.hex), ...CUSTOM_ACCENTS].flatMap((accent) => {
+      const scope = withAccent(theme, accent);
+      const tint = oklabOfRgb(parse(accent));
+      return STONE.flatMap((name) => {
+        const lab = labOf(name, scope);
+        // Eight bits a channel move a colour this grey by up to 0.002 in chroma.
+        if (chroma(lab) > STONE_CHROMA + 0.002) return [`${accent} ${name} chroma ${chroma(lab).toFixed(4)}`];
+        if (chroma(tint) > 0.08 && chroma(lab) > 0.006 && hueGap(lab, tint) > 25) return [`${accent} ${name} ${hueGap(lab, tint).toFixed(0)} degrees off`];
+        return [];
+      });
+    });
+    assert.deepEqual(misses, []);
+  });
+
+  test(`a grey accent leaves the stone grey on ${themeName}`, () => {
+    for (const name of STONE) assert.ok(chroma(labOf(name, withAccent(theme, '#777777'))) < 0.003, name);
+  });
+}
+
+test('an on switch takes its knob from the accent\'s ink, which holds 3:1 on every preset', () => {
+  assert.match(css, /\.glim-toggle-track\[aria-checked="true"\] \.glim-toggle-thumb \{[^}]*background-color: var\(--accent-contrast\)/);
+  const misses = ACCENTS.map(({ name, hex: accent }) => [name, contrastRatio(contrastOn(accent), accent)] as const)
+    .filter(([, r]) => r < MIN_GRAPHIC_CONTRAST)
+    .map(([name, r]) => `${name}: ${r.toFixed(2)}:1`);
+  assert.deepEqual(misses, []);
+});
+
+for (const [themeName, theme] of Object.entries(THEMES)) {
+  test(`an off switch holds 3:1 against its knob and the card for every preset on ${themeName}`, () => {
+    const misses = ACCENTS.flatMap(({ name, hex: accent }) => {
+      const scope = withAccent(theme, accent);
+      const track = resolve('var(--toggle-off)', scope);
+      return ['--toggle-knob', '--stone-surface']
+        .map((g) => [g, contrastRatio(hex(track), hex(resolve(`var(${g})`, scope)))] as const)
+        .filter(([, r]) => r < MIN_GRAPHIC_CONTRAST)
+        .map(([g, r]) => `${name} ${g}: ${r.toFixed(2)}:1`);
+    });
+    assert.deepEqual(misses, []);
   });
 }

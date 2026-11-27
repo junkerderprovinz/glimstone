@@ -63,7 +63,8 @@ export const ru: ComponentWords = {
   tour: { back: "Назад", next: "Далее", close: "Закрыть", progress: "{step} из {steps}" },
   floatingPanel: { minimize: "Свернуть", maximize: "Развернуть", restore: "Восстановить", close: "Закрыть" },
   signaturePad: { area: "Подпись", clear: "Очистить" },
-  passwordField: { show: "Показать", hide: "Скрыть", confirm: "Подтвердите пароль", mismatch: "Пароли не совпадают" },
+  passwordField: { show: "Показать", hide: "Скрыть", confirm: "Подтвердите пароль", mismatch: "Пароли не совпадают", again: "Ещё раз" },
+  timePicker: { hour: "Часы", minute: "Минуты", start: "Начало", end: "Конец", to: "до" },
   versionCard: {
     title: "Версия",
     hint: "Версия {app}, состояние обновлений и что принесла эта версия.",

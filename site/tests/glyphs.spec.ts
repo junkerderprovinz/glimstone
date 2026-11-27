@@ -20,3 +20,18 @@ test("the ink recorded for the drawn device glyphs is what the browser measures"
     box.forEach((v, i) => expect(v, `${name} ink ${i}`).toBeCloseTo(g.ink[i], 2));
   }
 });
+
+test("data-glyphs=\"line\" swaps every glyph that has a line drawing for it", async ({ page }) => {
+  await page.goto("/#/components/button?fw=react");
+  await page.locator("main h1").first().waitFor();
+  const shown = () =>
+    page.evaluate(() => {
+      const seen = (sel: string) => [...document.querySelectorAll(sel)].filter((el) => getComputedStyle(el).display !== "none").length;
+      return { filled: seen("main .glim-glyph-filled"), line: seen("main .glim-glyph-line") };
+    });
+  const filled = await shown();
+  expect(filled.filled).toBeGreaterThan(0);
+  expect(filled.line).toBe(0);
+  await page.evaluate(() => document.documentElement.setAttribute("data-glyphs", "line"));
+  expect(await shown()).toEqual({ filled: 0, line: filled.filled });
+});

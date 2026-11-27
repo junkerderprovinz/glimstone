@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState, type ComponentType } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ComponentType } from "react";
 import { GLIMSTONE_VERSION, Badge, Button } from "@glimstone/react";
 import logo from "../../.github/assets/logo.svg?raw";
 import { Glyph } from "./glyph";
 import { LookPanel, setLookPanel, useLookPanel } from "./lookPanel";
-import { Hero } from "./showcase";
+import { Landing } from "./landing/Landing";
+import { crossFadePages, glide } from "./pageMotion";
 import { BlocksPage } from "./pages/blocks";
 import { Adopting, Glyphs, Introduction, Palette, Rules, TypeScale } from "./pages/guide";
 import { Charts } from "./pages/charts";
@@ -15,7 +16,7 @@ import { BusyRingPage, SkeletonRowPage } from "./pages/loading";
 import { PopoverPage, SheetPage } from "./pages/overlay";
 import { ListTablePage } from "./pages/lists";
 import { FloatingPanelPage, ScrollAreaPage, SplitterPage } from "./pages/layout";
-import { AngleSliderPage, DatePickerPage, FileUploadPage, PinInputPage, RatingPage, SignaturePadPage, TagsInputPage } from "./pages/inputs";
+import { AngleSliderPage, DatePickerPage, FileUploadPage, PinInputPage, RatingPage, SignaturePadPage, TagsInputPage, TimePickerPage } from "./pages/inputs";
 import { PaginationPage, RadioGroupPage, StepsPage, TabsPage, TourPage } from "./pages/navigation";
 import { AvatarPage, CarouselPage, HoverCardPage, MarqueePage, TimerPage } from "./pages/display";
 import { AccordionPage, CollapsiblePage } from "./pages/reading";
@@ -29,7 +30,6 @@ import {
   ConnectionRowPage,
   ContextMenuPage,
   CopyFieldPage,
-  DropdownPage,
   EmptyStatePage,
   FieldRowPage,
   GlyphFieldPage,
@@ -73,7 +73,7 @@ interface Page {
 }
 
 const PAGES: Page[] = [
-  { path: "/", title: "Introduction", group: "Guide", Comp: Introduction },
+  { path: "/introduction", title: "Introduction", group: "Guide", Comp: Introduction },
   { path: "/blocks", title: "Blocks", group: "Guide", Comp: BlocksPage },
   { path: "/guide/adopting", title: "Adopting", group: "Guide", Comp: Adopting },
   { path: "/guide/rules", title: "Rules", group: "Guide", Comp: Rules },
@@ -106,7 +106,6 @@ const PAGES: Page[] = [
   { path: "/components/context-menu", title: "ContextMenu", group: "Components", Comp: ContextMenuPage },
   { path: "/components/copy-field", title: "CopyField", group: "Components", Comp: CopyFieldPage },
   { path: "/components/date-picker", title: "DatePicker", group: "Components", Comp: DatePickerPage, tag: "Zag" },
-  { path: "/components/dropdown-listbox", title: "DropdownListbox", group: "Components", Comp: DropdownPage, tag: "Old" },
   { path: "/components/empty-state", title: "EmptyState", group: "Components", Comp: EmptyStatePage },
   { path: "/components/field-row", title: "FieldRow", group: "Components", Comp: FieldRowPage },
   { path: "/components/file-upload", title: "FileUpload", group: "Components", Comp: FileUploadPage, tag: "Zag" },
@@ -152,6 +151,7 @@ const PAGES: Page[] = [
   { path: "/components/steps", title: "Steps", group: "Components", Comp: StepsPage, tag: "Zag" },
   { path: "/components/sub-card", title: "SubCard", group: "Components", Comp: SubCardPage },
   { path: "/components/tags-input", title: "TagsInput", group: "Components", Comp: TagsInputPage, tag: "Zag" },
+  { path: "/components/time-picker", title: "TimePicker", group: "Components", Comp: TimePickerPage },
   { path: "/components/timer", title: "Timer", group: "Components", Comp: TimerPage, tag: "Zag" },
   { path: "/components/toast", title: "Toast", group: "Components", Comp: ToastPage },
   { path: "/components/table", title: "Table", group: "Components", Comp: TablePage },
@@ -240,27 +240,37 @@ function Search({ onClose }: { onClose: () => void }) {
               onMouseEnter={() => setSel(i)}
             >
               <span>{p.title}</span>
-              <span style={{ color: "var(--carbon-text-muted)", fontSize: 13 }}>{p.group}</span>
+              <span style={{ color: "var(--stone-text-muted)", fontSize: 13 }}>{p.group}</span>
             </a>
           ))}
-          {!hits.length && <p className="search-hit" style={{ color: "var(--carbon-text-muted)" }}>Nothing found.</p>}
+          {!hits.length && <p className="search-hit" style={{ color: "var(--stone-text-muted)" }}>Nothing found.</p>}
         </div>
       </div>
     </div>
   );
 }
 
+// The top navigation's sections, each lit while one of its pages is open.
+const SECTIONS: { label: string; href: string; holds: (p: Page) => boolean }[] = [
+  { label: "Docs", href: "#/introduction", holds: (p) => p.group === "Guide" && p.path !== "/blocks" },
+  { label: "Blocks", href: "#/blocks", holds: (p) => p.path === "/blocks" },
+  { label: "Engines", href: "#/engines/colour", holds: (p) => p.group === "Engines" },
+  { label: "Components", href: "#/components/accordion", holds: (p) => p.group === "Components" },
+];
+
 export function App() {
   const { path, section } = useRoute();
+  const home = path === "/";
   const page = PAGES.find((p) => p.path === path) ?? PAGES[0];
   const [search, setSearch] = useState(false);
   const look = useLookPanel();
   const [nav, setNav] = useState(false);
-  const toc = useToc(page.path);
+  const toc = useToc(home ? path : page.path);
   const index = PAGES.indexOf(page);
-  const home = page.path === "/";
   const prev = PAGES[index - 1];
   const next = PAGES[index + 1];
+  const sideNav = useRef<HTMLElement>(null);
+  const topNav = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
@@ -273,12 +283,26 @@ export function App() {
     return () => removeEventListener("keydown", key);
   }, []);
 
+  useEffect(crossFadePages, []);
+
   useEffect(() => {
     setNav(false);
     document.title = home ? "GlimStone" : `${page.title} · GlimStone`;
     if (section) document.getElementById(section)?.scrollIntoView({ block: "start" });
     else scrollTo({ top: 0 });
-  }, [page, section]);
+  }, [page, home, section]);
+
+  useLayoutEffect(() => {
+    const place = () => {
+      glide(sideNav.current, '.nav-link[aria-current="page"]');
+      glide(topNav.current, 'a[aria-current="page"]');
+    };
+    place();
+    // The house font changes every entry's width once it has loaded.
+    document.fonts.ready.then(place);
+    addEventListener("resize", place);
+    return () => removeEventListener("resize", place);
+  }, [page, home, nav]);
 
   return (
     <>
@@ -301,8 +325,16 @@ export function App() {
             {GLIMSTONE_VERSION}
           </Badge>
         </span>
+        <nav className="site-topnav" aria-label="Sections" ref={topNav}>
+          <span className="nav-mark" aria-hidden="true" />
+          {SECTIONS.map((s) => (
+            <a key={s.label} href={s.href} aria-current={!home && s.holds(page) ? "page" : undefined}>
+              {s.label}
+            </a>
+          ))}
+        </nav>
         <span style={{ flex: 1 }} />
-        <button type="button" className="field search-trigger" onClick={() => setSearch(true)} style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer", color: "var(--carbon-text-muted)" }}>
+        <button type="button" className="field search-trigger" onClick={() => setSearch(true)} style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer", color: "var(--stone-text-muted)" }}>
           <Glyph name="IconSearch" />
           <span className="search-word">Search</span>
           <span className="kbd">Ctrl K</span>
@@ -315,76 +347,77 @@ export function App() {
           aria-label="GitHub"
           title="GitHub"
           className="hide-narrow"
-          style={{ color: "var(--carbon-text-sub)", display: "inline-flex" }}
+          style={{ color: "var(--stone-text-sub)", display: "inline-flex" }}
         >
           <Glyph name="IconGithub" size={20} />
         </a>
       </header>
-      <div className={`site-frame${home ? " is-home" : ""}`}>
-        <nav className={`site-nav${nav ? " open" : ""}`} aria-label="Docs">
-          {GROUPS.map((g) => (
-            <div className="nav-group" key={g}>
-              <span className="look-label" style={{ paddingInlineStart: 12 }}>
-                {g}
-              </span>
-              {PAGES.filter((p) => p.group === g).map((p) => (
-                <a key={p.path} className="nav-link" href={`#${p.path}`} aria-current={p === page ? "page" : undefined}>
-                  {p.title}
-                  {p.tag && (
-                    <span style={{ marginInlineStart: "auto" }}>
-                      <Badge size="small" tone="muted">{p.tag}</Badge>
-                    </span>
-                  )}
-                </a>
-              ))}
-            </div>
-          ))}
-        </nav>
-        <main className="prose" key={page.path}>
-          {home ? (
-            <Hero />
-          ) : (
-            <>
-              <span className="look-label">{page.group}</span>
-              <h1>{page.title}</h1>
-            </>
-          )}
-          <page.Comp />
-          <div style={{ display: "flex", justifyContent: "space-between", gap: 12, marginTop: 64 }}>
-            {prev ? (
-              <a className="tile" href={`#${prev.path}`} style={{ flex: 1 }}>
-                <span className="look-label">Previous</span>
-                <strong>{prev.title}</strong>
-              </a>
-            ) : (
-              <span />
-            )}
-            {next && (
-              <a className="tile" href={`#${next.path}`} style={{ flex: 1, textAlign: "end" }}>
-                <span className="look-label">Next</span>
-                <strong>{next.title}</strong>
-              </a>
-            )}
-          </div>
+      {home ? (
+        <main className="landing" key="/">
+          <Landing />
         </main>
-        <aside className="site-toc" aria-label="On this page">
-          {toc.items.length > 0 && (
-            <>
-              <span className="look-label">On this page</span>
-              {toc.items.map((t) => (
-                <a
-                  key={t.id}
-                  className={`toc-link${t.id === toc.active ? " active" : ""}`}
-                  style={t.depth === 3 ? { paddingInlineStart: 24 } : undefined}
-                  href={`#${page.path}?s=${t.id}`}
-                >
-                  {t.text}
+      ) : (
+        <div className="site-frame">
+          <nav className={`site-nav${nav ? " open" : ""}`} aria-label="Docs" ref={sideNav}>
+            <span className="nav-mark" aria-hidden="true" />
+            {GROUPS.map((g) => (
+              <div className="nav-group" key={g}>
+                <span className="look-label" style={{ paddingInlineStart: 12 }}>
+                  {g}
+                </span>
+                {PAGES.filter((p) => p.group === g).map((p) => (
+                  <a key={p.path} className="nav-link" href={`#${p.path}`} aria-current={p === page ? "page" : undefined}>
+                    {p.title}
+                    {p.tag && (
+                      <span style={{ marginInlineStart: "auto" }}>
+                        <Badge size="small" tone="muted">{p.tag}</Badge>
+                      </span>
+                    )}
+                  </a>
+                ))}
+              </div>
+            ))}
+          </nav>
+          <main className="prose" key={page.path}>
+            <span className="look-label">{page.group}</span>
+            <h1>{page.title}</h1>
+            <page.Comp />
+            <div style={{ display: "flex", justifyContent: "space-between", gap: 12, marginTop: 64 }}>
+              {prev ? (
+                <a className="tile" href={`#${prev.path}`} style={{ flex: 1 }}>
+                  <span className="look-label">Previous</span>
+                  <strong>{prev.title}</strong>
                 </a>
-              ))}
-            </>
-          )}
-        </aside>
-      </div>
+              ) : (
+                <span />
+              )}
+              {next && (
+                <a className="tile" href={`#${next.path}`} style={{ flex: 1, textAlign: "end" }}>
+                  <span className="look-label">Next</span>
+                  <strong>{next.title}</strong>
+                </a>
+              )}
+            </div>
+          </main>
+          <aside className="site-toc" aria-label="On this page">
+            {toc.items.length > 0 && (
+              <>
+                <span className="look-label">On this page</span>
+                {toc.items.map((t) => (
+                  <a
+                    key={t.id}
+                    className={`toc-link${t.id === toc.active ? " active" : ""}`}
+                    style={t.depth === 3 ? { paddingInlineStart: 24 } : undefined}
+                    href={`#${page.path}?s=${t.id}`}
+                  >
+                    {t.text}
+                  </a>
+                ))}
+              </>
+            )}
+          </aside>
+        </div>
+      )}
       {search && <Search onClose={() => setSearch(false)} />}
       <LookPanel />
     </>

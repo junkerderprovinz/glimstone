@@ -49,11 +49,13 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "toggle-name", when: "Always", then: "The label is the accessible name, also with hideLabel." },
       { id: "toggle-disabled", when: "The switch is disabled", then: "A click changes nothing." },
       { id: "toggle-attrs", when: "It is given an id, a data attribute or a listener", then: "They land on the switch itself, and a class stays on the frame." },
+      { id: "toggle-knob-inset", when: "It is off, on or pressed, in either direction", then: "Its knob keeps 3px of track above, below and at the end it rests on." },
       { id: "toggle-off-contrast", when: "It is off, in the light theme", then: "Its track holds 3:1 against the card and against its knob." },
       { id: "toggle-refused", keys: ["Space"], when: "It is refused, as OLED while Light is chosen", then: "It keeps its state and its focus, its track dims, and a click or a key shakes it." },
       { id: "toggle-refused-tip", when: "It is refused and the pointer rests on it", then: "Its bubble says why, and the reason is its description." },
       { id: "toggle-refused-line", when: "It is refused on a touch screen", then: "The reason stands as a line under the row." },
       { id: "toggle-refused-lifted", when: "The refusal is lifted, as OLED under System", then: "It flips again." },
+      { id: "toggle-label", when: "Its words stand beside it and are clicked", then: "It flips, as from a native label." },
     ],
   },
   ConfirmDialog: {
@@ -65,17 +67,8 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "dialog-trap", keys: ["Tab", "Shift+Tab"], when: "Focus is on the last or first control", then: "Focus wraps inside the window." },
       { id: "dialog-return", when: "The window closes", then: "Focus goes back to the control that opened it." },
       { id: "dialog-backdrop", when: "A click lands outside the window", then: "It cancels." },
-    ],
-  },
-  DropdownListbox: {
-    pattern: { name: "Listbox", url: `${APG}listbox/` },
-    rows: [
-      { id: "list-open-focus", when: "The list opens", then: "Focus is on the selected option." },
-      { id: "list-arrows", keys: ["ArrowDown", "ArrowUp"], when: "An option has focus", then: "Focus moves to the next or previous option." },
-      { id: "list-home-end", keys: ["Home", "End"], when: "An option has focus", then: "Focus moves to the first or last option." },
-      { id: "list-typeahead", keys: ["a-z"], when: "An option has focus", then: "Focus jumps to the next option starting with the letter." },
-      { id: "list-escape", keys: ["Escape"], when: "The list is open", then: "It closes and focus returns to the trigger." },
-      { id: "list-outside", when: "A click lands outside", then: "It closes." },
+      { id: "dialog-leave", when: "The window closes", then: "It fades and sinks 4px in two thirds of the time it took to come, as an inert copy that takes no clicks, and at motion off it goes at once." },
+      { id: "dialog-question", when: "The message opens with a question", then: "The question leads in the text colour at 16px, and what follows stands under it, smaller and quieter, in a window 400px wide." },
     ],
   },
   Select: {
@@ -84,11 +77,12 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "select-menu-rows", when: "rows is menu", then: "The options are the rows of a context menu: the glyph's room, the words, the tick at the end and the wash on the value in force." },
       { id: "select-trigger-attrs", when: "triggerAttrs are given", then: "The trigger carries them, and they follow the value." },
       { id: "select-list-id", when: "listId is given", then: "The open list carries it as its id." },
-      { id: "select-well", when: "The trigger stands in a well or a sub-card", then: "It takes the same ground as a field there, and hovers up the ramp." },
+      { id: "select-well", when: "The trigger stands in a well or a sub-card", then: "It takes the same ground as a field there, and the field's hover step." },
       { id: "select-closed", when: "The list is closed", then: "What holds it on the body takes no room and no pointer." },
       { id: "select-menu-keys", keys: ["ArrowDown", "Enter"], when: "rows is menu", then: "The keys, the typing and the choosing stay those of the select." },
       { id: "select-menu-sub", when: "rows is menu and the list has submenus", then: "Headings, options and submenu rows are drawn as in a context menu." },
       { id: "select-open-focus", keys: ["Enter", "Space", "ArrowDown"], when: "The trigger has focus", then: "The list opens on the selected option." },
+      { id: "select-aligned", when: "The list opens", then: "It stands over the trigger with the chosen row where the value stood, and grows out of that row. With submenus it is the row whose submenu holds the value." },
       { id: "select-arrows", keys: ["ArrowDown", "ArrowUp"], when: "The list is open", then: "The highlight moves to the next or previous option." },
       { id: "select-home-end", keys: ["Home", "End"], when: "The list is open", then: "The highlight moves to the first or last option." },
       { id: "select-closed-keys", keys: ["ArrowDown", "ArrowUp", "Home", "End"], when: "The list is closed and its trigger has focus", then: "The list opens, on the chosen option for the arrows and on the first or the last for Home and End, and the value stays until one is picked." },
@@ -128,6 +122,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "combo-active", when: "An entry is highlighted", then: "The field points at it with aria-activedescendant; focus stays in the field." },
       { id: "combo-escape", keys: ["Escape"], when: "The list is open", then: "It closes." },
       { id: "combo-empty", when: "Nothing matches", then: "The list says so instead of vanishing." },
+      { id: "combo-hit", when: "Somebody types", then: "Each entry sets apart the part that matches, and the rest stands quieter." },
     ],
   },
   MultiSelect: {
@@ -139,6 +134,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "ms-remove", when: "A tag's remove button is pressed", then: "The tag goes and focus moves to the field." },
       { id: "ms-backspace", keys: ["Backspace"], when: "The field is empty and has focus", then: "The last tag goes." },
       { id: "ms-search", when: "The list holds more than seven entries and somebody types", then: "It shows only matching entries, and says so when nothing matches." },
+      { id: "ms-hit", when: "A long list is searched", then: "Each entry sets apart the part that matches, as in a Combobox." },
       { id: "ms-short", when: "The list holds seven entries or fewer", then: "The field takes no typing, and ArrowDown opens the whole list." },
       { id: "ms-space", keys: ["Space"], when: "A short list is open with an entry highlighted", then: "It is picked and the list stays open, as in a Select." },
       { id: "ms-escape", keys: ["Escape"], when: "The list is open", then: "It closes and focus stays in the field." },
@@ -152,6 +148,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "slider-arrows", keys: ["ArrowRight", "ArrowLeft"], when: "The thumb has focus", then: "The value moves by one step." },
       { id: "slider-page", keys: ["PageUp", "PageDown"], when: "The thumb has focus", then: "The value moves by a large step, ten by default." },
       { id: "slider-home-end", keys: ["Home", "End"], when: "The thumb has focus", then: "The value jumps to the minimum or maximum." },
+      { id: "slider-bubble", when: "The thumb is dragged", then: "Its value stands in a bubble over it, in the words format gives, and the bubble goes when the thumb is let go." },
     ],
   },
   InfoBubble: {
@@ -168,6 +165,7 @@ export const CONTRACTS: Record<string, Contract> = {
     rows: [
       { id: "icontip-name", when: "Always", then: "The tip is the accessible name." },
       { id: "icontip-focus", keys: ["Tab"], when: "The button receives keyboard focus", then: "The tip shows in the house bubble, not the browser's." },
+      { id: "icontip-rest", when: "The pointer rests on the button, then moves to the next", then: "The tip opens after 500ms, small and inverted with the shortcut beside it, and the next one opens at once." },
     ],
   },
   Toast: {
@@ -181,8 +179,11 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "toast-room", when: "A toast has an action", then: "The action stands under the message, so the message keeps the width of the card." },
       { id: "toast-path", when: "The message holds a path", then: "It breaks after a slash rather than inside a word." },
       { id: "toast-phone", when: "The window is a phone's", then: "A toast takes the window's width, the newest two show, and the page stays in view." },
-      { id: "toast-pixels", when: "Toasts stack up", then: "Each one is a whole number of pixels tall, whatever its severity, label mode or width, and right to left too, so none of them lands on a half pixel." },
+      { id: "toast-pixels", when: "Toasts stack up", then: "The one in front is a whole number of pixels tall, whatever its severity, label mode or width, and right to left too, so it never lands on a half pixel." },
       { id: "toast-settled", when: "A toast has come in", then: "It holds no transform at any motion level, so a fixed element inside it is placed against the window." },
+      { id: "toast-leave", when: "A toast is dismissed or runs out", then: "It slides out toward its edge, and the one behind it moves into its place." },
+      { id: "toast-title", when: "A toast has a title", then: "The title leads in the text colour and the message under it is its quieter description, both read out in that order." },
+      { id: "toast-stack", when: "Several toasts are up", then: "The newest stands in front, the two before it show an 8px edge each behind it, and under the pointer they fan out one above the other." },
     ],
   },
   WindowBar: {
@@ -216,6 +217,8 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "sel-name", when: "The label mode hides the words", then: "The label stays the accessible name and shows in the bubble on keyboard focus." },
       { id: "sel-equal", when: "equalWidth is on", then: "Every segment is as wide as the widest, and the strip spans its box." },
       { id: "sel-colour", when: "Rainbow is on", then: "Each tab's glyph shows a hue of its own, and two selectors that set values wear two colours." },
+      { id: "sel-glide", when: "A strip of one is chosen anew", then: "Its fill glides under the new segment as one thumb in the track, and the tab's panel comes in from that side." },
+      { id: "sel-labels", when: "A strip names its own label mode", then: "It speaks in that mode whatever the app's label setting says." },
       { id: "tiles-role", when: "orientation is vertical", then: "A vertical tablist of links; the chosen tile has aria-selected and aria-current=\"page\"." },
       { id: "tiles-arrows", keys: ["ArrowDown", "ArrowUp", "Home", "End"], when: "A tile has focus", then: "Focus moves along the column and the open page stays." },
       { id: "tiles-open", keys: ["Enter", "Space"], when: "A tile has focus", then: "Its page opens." },
@@ -231,6 +234,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "num-focus", when: "The field has focus", then: "Its fill steps up the ramp and no ring shows (rule 14)." },
       { id: "num-arrows", keys: ["ArrowUp", "ArrowDown"], when: "The field has focus", then: "The value moves by one step." },
       { id: "num-steppers", when: "An arrow inside the field is pressed", then: "The value steps, the app hears it, and focus stays in the field." },
+      { id: "num-column", when: "The pointer is a mouse", then: "The arrows are one column at the field's end, two halves of its height, each with a hover ground of its own, and the digits roll in from the side they count towards." },
       { id: "num-ends", when: "The value is at its maximum", then: "The up arrow greys out and does nothing." },
       { id: "num-wheel", keys: ["Wheel"], when: "The field has focus", then: "The value steps, up for more, and the page does not scroll." },
       { id: "num-wheel-hover", keys: ["Wheel"], when: "The pointer is over a field without focus", then: "The value stays." },
@@ -263,6 +267,8 @@ export const CONTRACTS: Record<string, Contract> = {
     rows: [
       { id: "card-title", when: "It has a title", then: "The heading's words are the title, with nothing after it." },
       { id: "card-title-slot", when: "The notch holds markup, such as an unsaved dot", then: "It is drawn in the notch." },
+      { id: "card-action", when: "It has an action, such as a status badge", then: "The action stands at the end of the top edge, centred on it like the notch, 16px in from the card's side." },
+      { id: "card-notch-steps", when: "A window, a card and a sub-card each have a title", then: "Their notches are 28px, 22px and 18px high." },
     ],
   },
   TextField: {
@@ -272,7 +278,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "text-width", when: "It has a width", then: "short, medium and wide are fixed widths, and fill takes its column." },
       { id: "text-attrs", when: "It is given attributes", then: "They land on the field." },
       { id: "text-focus", when: "The field has focus", then: "Its fill steps up the ramp and no ring shows (rule 14)." },
-      { id: "text-area", when: "It is a TextArea", then: "It starts taller than a line and can be dragged taller." },
+      { id: "text-area", when: "It is a TextArea", then: "It starts three lines tall, grows with its text up to ten, and has no grip in its corner." },
     ],
   },
   FieldRow: {
@@ -283,13 +289,14 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "row-hint", when: "It has a hint", then: "An (i) stands beside the label and stays out of the control's name." },
       { id: "row-words", when: "The label is drawn with markup of its own", then: "The control's name stays the label's words." },
       { id: "row-value", when: "It holds only a value", then: "The value stands at the row's end as a pill, in its tone." },
-      { id: "row-widths", when: "The control has a width", then: "It keeps it beside the label, at the row's end." },
-      { id: "row-grow", when: "The control's width is grow", then: "It takes all the room the label leaves." },
+      { id: "row-widths", when: "A field that takes text stands beside the label", then: "It fills what the label leaves up to 24rem, short of a 9rem column for the names, so the fields of a card start on one line. A short field keeps its width." },
+      { id: "row-grow", when: "The control's width is grow and the row stands in a FieldRowGroup", then: "It takes all the room the names leave." },
+      { id: "row-switch", when: "The row holds a switch", then: "A press anywhere on the row flips it, and the row shows a quiet ground under the pointer." },
       { id: "row-many", when: "The row holds more than one control", then: "They stand together at the row's end." },
       { id: "row-group", when: "Rows stand in a FieldRowGroup", then: "Their names share one column as wide as the longest, so growing fields start at one edge." },
       { id: "row-group-phone", when: "A FieldRowGroup stands in a window narrower than 600px", then: "The rows go back to wrapping on their own." },
       { id: "row-group-columns", when: "A FieldRowGroup has two columns", then: "Each column lines up its own names, and a wide row spans both." },
-      { id: "row-narrow", when: "The row has no room for both", then: "The control moves under the label and keeps the row's end." },
+      { id: "row-narrow", when: "The row has no room for both", then: "The control moves under the label and takes the whole line." },
     ],
   },
   PathField: {
@@ -342,6 +349,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "list-row-ellipsis", when: "The name is too long", then: "It ends in an ellipsis and the row keeps its height." },
       { id: "list-row-steady", when: "The row has a quiet line and steady", then: "The line stands under the name, and the buttons stay in view, dropping under the name on a narrow screen." },
       { id: "list-row-narrow", when: "The window is narrower than 600px", then: "The badges go and the name keeps the room." },
+      { id: "list-row-value", when: "Rows carry a value and one of them a status", then: "The figures end in one column whatever stands beside them, the unit a step smaller and quieter, and only the row that differs shows a status, as a mark in its state colour with neutral words." },
     ],
   },
   ConnectionRow: {
@@ -458,7 +466,10 @@ export const CONTRACTS: Record<string, Contract> = {
     ],
   },
   Pill: {
-    rows: [{ id: "pill-well", when: "It stands in a well or a sub-card", then: "It steps up one surface, and a state pill keeps its wash." }],
+    rows: [
+      { id: "pill-well", when: "It stands in a well or a sub-card", then: "It steps up one surface, and a state pill keeps its wash." },
+      { id: "pill-status", when: "It shows a state", then: "It takes the same wash, ink and 6px dot as a badge of that state." },
+    ],
   },
   ContextMenu: {
     pattern: { name: "Menu", url: `${APG}menubar/` },
@@ -498,6 +509,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "bar-hover", when: "A menu is open and the pointer moves onto another word", then: "That word's menu opens instead." },
       { id: "bar-toggle", when: "The word of the open menu is clicked", then: "The menu closes." },
       { id: "bar-escape", keys: ["Escape"], when: "A menu is open", then: "It closes and focus goes back to its word." },
+      { id: "bar-open-surface", when: "A word's menu is open", then: "The word stands on the menu's own surface, apart from the hover a passing pointer gives a word, in 14px words on a 30px row." },
     ],
   },
   Checkbox: {
@@ -509,13 +521,15 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "check-name", when: "Always", then: "The label is the accessible name, also with hideLabel." },
       { id: "check-disabled", when: "The box is disabled", then: "A click changes nothing." },
       { id: "check-slim", when: "It is slim", then: "Only the box shows, without padding or hover ground, and the label is its accessible name." },
+      { id: "check-tick", when: "It is ticked, or locked", then: "The tick draws itself in. A locked box is grey with a grey tick, never a dimmed accent." },
     ],
   },
   PasswordField: {
     pattern: { name: "Button", url: `${APG}button/` },
     rows: [
       { id: "pw-hidden", when: "Always at first", then: "The secret is hidden and the eye inside the field is a button named Show." },
-      { id: "pw-reveal", keys: ["Enter", "Space"], when: "The eye has focus", then: "The secret shows as text and the eye is named Hide. Pressed again, it hides." },
+      { id: "pw-reveal", keys: ["Enter", "Space"], when: "The eye has focus", then: "The secret shows as text, a stroke draws itself through the eye and it is named Hide. Pressed again, it hides." },
+      { id: "pw-dots", when: "A secret is typed", then: "It stands in dots larger and further apart than the font's, and the empty second field asks for it again in words." },
       { id: "pw-keep", when: "The eye is pressed", then: "The value stays as typed." },
       { id: "pw-width", when: "It stands in a column with a plain field", then: "Both are as wide, the eye inside the field." },
       { id: "pw-disabled", when: "The field is disabled", then: "The eye is disabled too." },
@@ -546,6 +560,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "meter-still", when: "Always", then: "Nothing moves on a meter, at every motion level." },
       { id: "meter-quiet", when: "It is quiet", then: "The track is slim, the fill grey, and inside a button it takes the accent under the pointer. The threshold still turns it red." },
       { id: "meter-tip", when: "The pointer rests on it", then: "Its words show in the bubble." },
+      { id: "meter-value", when: "It is medium, or small with showValue", then: "Its level stands beside the track in tabular digits, the app's figure or the percentage, and a screen reader hears it once." },
     ],
   },
   ProgressBar: {
@@ -566,6 +581,8 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "picker-arrows", keys: ["ArrowRight", "ArrowUp"], when: "The square or the hue bar has focus", then: "The colour moves, Shift in bigger steps, and the hex field follows." },
       { id: "picker-drag", when: "The square is dragged with mouse, pen or finger", then: "The handle follows, also past the square's edge." },
       { id: "picker-hex", when: "A valid hex colour is typed", then: "The square, the preview and the name follow." },
+      { id: "picker-presets", when: "The picker is open", then: "The page's eight rainbow colours stand under the hue bar as ready colours, a press takes one as a drag would, and the one in force is pressed." },
+      { id: "picker-dropper", when: "The browser can take a colour from the screen", then: "An eyedropper stands in the foot beside the hex field, named by its words. Where it cannot, there is none." },
       { id: "picker-name", when: "Names are on", then: "The name is the nearest of the list in OKLab, such as Petrol for #1b6b73." },
       { id: "picker-apply", keys: ["Enter"], when: "Inside the picker", then: "The colour and its name are applied, the picker closes and focus goes back to its control." },
       { id: "picker-form", when: "The app passes a form after a pick", then: "The form takes the tiles' place with its first field focused, and Cancel, Back and the form's actions stand in the foot. Back brings the tiles back." },
@@ -633,7 +650,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "signin-head", when: "Always", then: "The app's logo stands large above its name, both centred in the card, and the name is the page's heading. No pill sits above the card." },
       { id: "signin-logo", when: "The logo is upright, square or wide, an image or an inline SVG", then: "It stands 7.5rem tall at its own proportions, centred, and never wider than the card's content." },
       { id: "signin-labels", when: "Always", then: "Each label stands above its field, in normal case, and names it." },
-      { id: "signin-focus", when: "The card opens", then: "The first empty field has the focus, shown as a field shows it, a step up the ramp." },
+      { id: "signin-focus", when: "The card opens", then: "The first empty field has the focus, shown as a field shows it, on its brightest step." },
       { id: "signin-disabled", when: "The password field is empty", then: "Sign in is disabled, and the first character turns it on." },
       { id: "signin-wide", when: "Always", then: "Every button is as wide as the fields." },
       { id: "signin-error", when: "The app refuses the password", then: "Its reason stands above Sign in as an alert, and the password stays as typed." },
@@ -721,6 +738,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "skeleton-light-theme", when: "The light theme shows", then: "The band is a white glow, not a darker stripe." },
       { id: "skeleton-still", when: "Motion is off, or the system asks for reduced motion", then: "No light crosses." },
       { id: "skeleton-delay", when: "It appears", then: "It stays hidden for 400 ms and then shows." },
+      { id: "skeleton-match", when: "Its rows carry a value and buttons", then: "Its bars take the real row's measures, the glyph's size in the tile, cap height for the text and the value bar ending where the figures will." },
     ],
   },
   announce: {
@@ -776,6 +794,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "field-error-line", when: "A field has an error", then: "A line in the fault colour stands under the field and says why." },
       { id: "field-error-row", when: "The field stands in a FieldRow", then: "The line stands under the field across the row, and the row's name keeps its place." },
       { id: "field-error-clear", when: "The value is fixed while the field has focus", then: "The error and the line go, and the focus stays in the field." },
+      { id: "field-error-motion", when: "The line comes or goes", then: "It opens and closes in a short wipe instead of the form jumping, and at once where motion is off." },
       { id: "field-error-kinds", when: "A PasswordField or a NumberField has an error", then: "It carries it the same way." },
     ],
   },
@@ -813,6 +832,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "avatar-fallback", when: "There is no picture, or it fails to load", then: "The initials show, the first letter of the first and the last name." },
       { id: "avatar-image", when: "The picture has loaded", then: "It shows and the initials go." },
       { id: "avatar-shape", when: "The shape setting changes", then: "Its corners follow it, a circle in round and none in square." },
+      { id: "avatar-tone", when: "It has a name", then: "Its initials take a soft tone picked from the name, the same on every visit and never the accent." },
     ],
   },
   Pagination: {
@@ -836,6 +856,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "pin-backspace", keys: ["Backspace"], when: "A box has focus", then: "It empties the box, and in an empty box steps back to the one before." },
       { id: "pin-arrows", keys: ["ArrowLeft", "ArrowRight"], when: "A box has focus", then: "The focus moves to the box before or after it." },
       { id: "pin-paste", when: "A code is pasted into a box", then: "It fills every box from the start." },
+      { id: "pin-groups", when: "It has six or nine boxes", then: "They stand in groups of three, and the box that takes the next character shows a caret of its own." },
       { id: "pin-ltr", when: "The page runs right to left", then: "The boxes still run left to right, since a code is data." },
     ],
   },
@@ -846,7 +867,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "tags-backspace", keys: ["Backspace"], when: "The field is empty", then: "The last tag is picked and takes the accent, and a second Backspace removes it." },
       { id: "tags-arrows", keys: ["ArrowLeft", "ArrowRight", "Delete"], when: "The field is empty, or a tag is picked", then: "The arrows pick the tag before or after, and Delete removes the picked one." },
       { id: "tags-paste", when: "A list is pasted into the field", then: "Each entry becomes a tag." },
-      { id: "tags-ground", when: "Always, with focus too", then: "A tag's fill is one surface step away from the field's, so it never vanishes into it." },
+      { id: "tags-ground", when: "Always, with focus too", then: "A tag stands on a wash of the field's own fill, so it reads in every step of the field, and its cross is a step quieter than its words." },
     ],
   },
   Steps: {
@@ -856,6 +877,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "steps-next", when: "Next or Back is pressed", then: "The next or the previous step comes in. On the first step Back is disabled." },
       { id: "steps-finish", when: "The last step is in force", then: "Next is Finish, and it calls onFinish." },
       { id: "steps-done", when: "A step lies behind the one in force", then: "It carries a tick. The step in force is filled with the accent." },
+      { id: "steps-connector", when: "A step is done", then: "The connector after it fills with the accent, and a step still ahead is a quiet ring." },
       { id: "steps-arrows", keys: ["ArrowRight", "ArrowLeft", "Home", "End", "Enter"], when: "A step in the row has focus", then: "The arrows move the focus along the row and wrap round, Home and End go to the ends, and Enter goes to that step." },
       { id: "steps-one-stop", keys: ["Tab"], when: "The focus enters the row", then: "It lands on the step in force, so the row is one stop." },
     ],
@@ -876,6 +898,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "scroll-keys", keys: ["ArrowDown", "PageDown", "End"], when: "The box has focus", then: "It scrolls, as a box the platform draws would." },
       { id: "scroll-wheel", when: "The wheel turns over it, or a finger drags it", then: "It scrolls." },
       { id: "scroll-own-bar", when: "The content is taller than the box", then: "The platform's bar is hidden and the house's thin bar shows for that direction alone." },
+      { id: "scroll-fade", when: "There is more to scroll to above or below", then: "The content fades out over 24px toward that edge, and only that one." },
     ],
   },
   FileUpload: {
@@ -884,6 +907,7 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "upload-list", when: "A file is chosen", then: "It stands under the zone as a row with its name, its size in the page's language and a button to remove it." },
       { id: "upload-refused", when: "A file is of a kind it does not take, too large or one too many", then: "The file is left out and a line in the fault colour names it with the reason." },
       { id: "upload-drag", when: "Files are held over the zone", then: "It takes the accent's wash, and lets it go when they leave." },
+      { id: "upload-progress", when: "The app says how far a file has gone up", then: "Its row fills from the start by that share and is busy, and stops filling once the file is there." },
     ],
   },
   DatePicker: {
@@ -894,9 +918,23 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "date-arrows", keys: ["ArrowRight", "ArrowDown", "PageDown"], when: "A day has focus", then: "The arrows move a day or a week, Page Down and Page Up a month." },
       { id: "date-choose", keys: ["Enter"], when: "A day has focus", then: "It is chosen, the calendar closes and the focus goes back to the trigger." },
       { id: "date-escape", keys: ["Escape"], when: "The calendar is open", then: "It closes without a change and the focus goes back to the trigger." },
-      { id: "date-range", when: "A day lies before min or after max", then: "It is disabled and cannot be chosen." },
+      { id: "date-range", when: "A day lies before min or after max", then: "It is disabled, fades and cannot be chosen. Nothing in the calendar is struck through." },
+      { id: "date-turn", when: "The next or the previous month comes in", then: "It slides in from that side, and lands at once where motion is off." },
       { id: "date-views", when: "The month in the head is pressed", then: "The months of the year show, and a month leads back to its days." },
       { id: "date-accent", when: "The calendar is open", then: "The chosen day is filled with the accent." },
+    ],
+  },
+  TimePicker: {
+    pattern: { name: "Spinbutton", url: `${APG}spinbutton/` },
+    rows: [
+      { id: "time-segments", when: "Always", then: "A group named by its label, of two spin buttons named Hours and Minutes, each showing two digits." },
+      { id: "time-arrows", keys: ["ArrowUp", "ArrowDown"], when: "A segment has focus", then: "It counts up or down round the clock, the minutes by minuteStep." },
+      { id: "time-digits", when: "Digits are typed into the hours", then: "They fill the hours and the focus moves on to the minutes. Once both hold a number, onChange hands over the time as \"08:30\"." },
+      { id: "time-move", keys: ["ArrowLeft", "ArrowRight"], when: "A segment has focus", then: "The focus moves to the segment before or after it." },
+      { id: "time-backspace", keys: ["Backspace"], when: "A segment has focus", then: "It empties the segment and the time is null, and in an empty segment it steps back." },
+      { id: "time-range", when: "It is a TimeRangePicker", then: "One field holds the start and the end, each a group named Start and End, with the word between them, and onChange hands over both." },
+      { id: "time-focus", when: "A segment has focus", then: "It takes the accent's soft fill and the field steps up like any field, without a ring." },
+      { id: "time-ltr", when: "The page runs right to left", then: "The segments still run left to right, since a time is data." },
     ],
   },
   Rating: {
@@ -904,7 +942,7 @@ export const CONTRACTS: Record<string, Contract> = {
     rows: [
       { id: "rating-radios", when: "Always", then: "A radio group named by its label, of one radio a star, each named by its value, such as \"3 of 5 stars\". The stars up to the value are filled with the accent." },
       { id: "rating-arrows", keys: ["ArrowRight", "ArrowLeft", "Home", "End"], when: "A star has focus", then: "The arrows move the value a star, Home and End go to the first and the last." },
-      { id: "rating-hover", when: "The pointer rests on a star", then: "The stars up to it light, and go back to the value when the pointer leaves. A press gives that value." },
+      { id: "rating-hover", when: "The pointer rests on a star", then: "The stars up to it fill one after the other, and go back to the value when the pointer leaves. A press gives that value, and the star picked springs once." },
       { id: "rating-half", when: "allowHalf is on and the value has a half", then: "The last star is half filled." },
     ],
   },
@@ -920,7 +958,8 @@ export const CONTRACTS: Record<string, Contract> = {
   AngleSlider: {
     pattern: { name: "Slider", url: `${APG}slider/` },
     rows: [
-      { id: "angle-role", when: "Always", then: "role=\"slider\" named by its label, from 0 to 360, with the value in degrees as aria-valuetext and beside the dial." },
+      { id: "angle-role", when: "Always", then: "role=\"slider\" named by its label, from 0 to 360, with the value in degrees as aria-valuetext and in the middle of the dial." },
+      { id: "angle-snap", when: "It has no step of its own", then: "It snaps every 15°, with a tick at each snap and a longer one at each quarter, and an accent hand points from the middle to the knob." },
       { id: "angle-arrows", keys: ["ArrowRight", "ArrowLeft"], when: "The dial has focus", then: "It turns a step." },
       { id: "angle-ends", keys: ["Home", "End"], when: "The dial has focus", then: "It goes to 0°, or to the last step before a full turn." },
       { id: "angle-press", when: "The dial is pressed or dragged", then: "The angle follows the pointer." },
@@ -934,11 +973,18 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "signature-clear", when: "Clear is pressed", then: "Every stroke goes, and the value is empty." },
     ],
   },
+  Chart: {
+    rows: [
+      { id: "chart-frame", when: "Always", then: "One image named by its label, grid lines across only, quiet ticks without an axis line, bars with round tops, and a legend once there is more than one series." },
+      { id: "chart-hover", when: "The pointer moves over a point", then: "A band stands under it, and a tooltip shows the point's name and each series' swatch and figure." },
+    ],
+  },
   HoverCard: {
     rows: [
       { id: "hovercard-link", when: "Always", then: "The trigger is a link to the page the card previews." },
       { id: "hovercard-hover", when: "The pointer rests on the link, and later leaves it", then: "The card opens after openDelay and closes after closeDelay." },
       { id: "hovercard-focus", keys: ["Tab", "Escape"], when: "The keyboard reaches the link", then: "The card opens, Escape closes it and the focus stays on the link." },
+      { id: "hovercard-head", when: "It has media, a title, a meta line and facts", then: "Its head is a 40px tile beside the name over the quiet line, and up to three figures stand under it, name and value." },
     ],
   },
   Carousel: {
@@ -965,7 +1011,8 @@ export const CONTRACTS: Record<string, Contract> = {
       { id: "tour-dialog", when: "A step is open", then: "It is a modal dialog named by its title and described by its text, with where the tour stands, such as \"1 of 3\"." },
       { id: "tour-next", when: "Next or Back is pressed", then: "The tour walks to the next or the previous step. On the last step the forward button is Close, which ends the tour." },
       { id: "tour-escape", keys: ["Escape"], when: "A step is open", then: "The tour ends and the focus goes back to what started it." },
-      { id: "tour-spotlight", when: "A step points at a part of the page", then: "The page behind is darkened, and that part stays clear with the accent's ring around it." },
+      { id: "tour-spotlight", when: "A step points at a part of the page", then: "The page behind is darkened, and that part stays clear with the accent's ring 6px off it, which glides to the next part with the step." },
+      { id: "tour-dots", when: "A step is open", then: "Where the tour stands is a row of dots, the current one drawn long in the accent, and read out as \"2 of 3\"." },
     ],
   },
   FloatingPanel: {

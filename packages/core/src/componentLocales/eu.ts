@@ -51,7 +51,8 @@ export const eu: ComponentWords = {
   tour: { back: "Atzera", next: "Hurrengoa", close: "Itxi", progress: "{step}/{steps}" },
   floatingPanel: { minimize: "Minimizatu", maximize: "Maximizatu", restore: "Leheneratu", close: "Itxi" },
   signaturePad: { area: "Sinadura", clear: "Garbitu" },
-  passwordField: { show: "Erakutsi", hide: "Ezkutatu", confirm: "Berretsi pasahitza", mismatch: "Pasahitzak ez datoz bat" },
+  passwordField: { show: "Erakutsi", hide: "Ezkutatu", confirm: "Berretsi pasahitza", mismatch: "Pasahitzak ez datoz bat", again: "Berriro" },
+  timePicker: { hour: "Orduak", minute: "Minutuak", start: "Hasiera", end: "Amaiera", to: "arte" },
   versionCard: {
     title: "Bertsioa",
     hint: "{app}(r)en bertsioa, eguneraketen egoera eta bertsio honek ekarri duena.",

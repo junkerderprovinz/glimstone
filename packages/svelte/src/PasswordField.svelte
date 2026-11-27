@@ -25,10 +25,10 @@
 
 <script lang="ts">
   import { fieldErrorView, fieldNoteView, fieldWidthClass, PASSWORD_FIELD_TEXT, passwordConfirmView } from "@glimstone/core";
-  import FieldError from "./FieldError.svelte";
+  import FieldErrorLine from "./FieldErrorLine.svelte";
   import { useFieldName } from "./fieldName.js";
-  import { IconEye, IconEyeOff } from "./glyphs.js";
   import IconTipButton from "./IconTipButton.svelte";
+  import RevealEye from "./RevealEye.svelte";
 
   // A field for a secret with the reveal eye inside it ("The reveal eye" in the
   // design language). The props are a native <input>'s, so a call site swaps
@@ -85,10 +85,10 @@
     class="glim-input"
   />
   <IconTipButton {...eyeAttrs} tip={shown ? words.hide : words.show} class="glim-secret-eye" disabled={!!disabled} onclick={() => (shown = !shown)}>
-    {#if shown}{@render IconEyeOff()}{:else}{@render IconEye()}{/if}
+    <RevealEye struck={shown} />
   </IconTipButton>
 </span>
-{#if err.errorId}<FieldError id={err.errorId}>{error}</FieldError>{/if}
+<FieldErrorLine id={err.errorId} {error} />
 {#if quiet.noteId}<span id={quiet.noteId} class="glim-field-note">{note}</span>{/if}
 {#if confirm && view.shown}
   <span class="glim-secret-confirm">
@@ -100,6 +100,7 @@
           autocomplete="new-password"
           spellcheck={false}
           bind:value={repeat}
+          placeholder={words.again}
           aria-invalid={mismatch.invalid}
           aria-describedby={mismatch.describedBy}
           {disabled}
@@ -107,11 +108,11 @@
           class="glim-input"
         />
         <IconTipButton tip={repeatShown ? words.hide : words.show} class="glim-secret-eye" disabled={!!disabled} onclick={() => (repeatShown = !repeatShown)}>
-          {#if repeatShown}{@render IconEyeOff()}{:else}{@render IconEye()}{/if}
+          <RevealEye struck={repeatShown} />
         </IconTipButton>
       </span>
       <span aria-live="polite" class="glim-secret-confirm-live">
-        {#if mismatch.errorId}<FieldError id={mismatch.errorId}>{words.mismatch}</FieldError>{/if}
+        <FieldErrorLine id={mismatch.errorId} error={view.mismatch ? words.mismatch : undefined} />
       </span>
     </span>
   </span>

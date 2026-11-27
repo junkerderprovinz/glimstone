@@ -1,6 +1,6 @@
-import { createEffect, createUniqueId, mergeProps, on, onCleanup, onMount, Show, splitProps, type JSX } from "solid-js";
+import { createEffect, createUniqueId, mergeProps, on, onCleanup, onMount, splitProps, type JSX } from "solid-js";
 import { attachNumberSteppers, fieldErrorView, syncNumberSteppers } from "@glimstone/core";
-import { FieldError } from "./FieldError.tsx";
+import { FieldErrorLine } from "./fieldErrorLine.tsx";
 import { useFieldName } from "./fieldName.ts";
 
 // A number input with its two steppers inside the field; the steppers, the
@@ -60,7 +60,7 @@ export function NumberField(props: NumberFieldProps) {
           class={`glim-num-input glim-num-field glim-num ${own.class}`.trim()}
         />
       </span>
-      <Show when={err().errorId}>{(id) => <FieldError id={id()}>{own.error}</FieldError>}</Show>
+      <FieldErrorLine id={err().errorId} error={own.error} />
     </>
   );
 }

@@ -12,7 +12,7 @@
   --fc-well: color-mix(in srgb, currentColor 6%, transparent);
   --fc-head: var(--hover-button-background, #e22828);
   --fc-head-ink: var(--hover-button-text-color, #fff);
-  --fc-dim: var(--alt-text-color, #8d8d8d);
+  --fc-dim: var(--alt-text-color, var(--stone-text-sub, #8d8d8d));
   --fc-track: var(--checkbox-color, #8d8d8d);
   --fc-on: var(--link-text-color, #486dba);
   --fc-on-ink: #fff;

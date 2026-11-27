@@ -1,10 +1,10 @@
 import { Show } from "solid-js";
 import { setGlyphResolver } from "@glimstone/solid";
-import { glyphByName, glyphNameFor } from "../glyphData";
+import { glyphArtOf, glyphNameFor } from "../glyphData";
 
 export function Glyph(props: { name: string; size?: number }) {
   return (
-    <Show when={glyphByName.get(props.name)}>
+    <Show when={glyphArtOf(props.name)}>
       {(g) => <svg width={props.size ?? 16} height={props.size ?? 16} viewBox={g().viewBox} aria-hidden="true" fill="currentColor" innerHTML={g().svg} />}
     </Show>
   );

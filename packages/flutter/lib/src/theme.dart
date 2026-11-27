@@ -2,6 +2,9 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import 'engines.dart';
+import 'engines.g.dart';
+import 'paint.dart';
 import 'tokens.g.dart';
 
 /// The tokens tokens.css derives, worked out the same way.
@@ -11,16 +14,19 @@ extension GlimDerived on GlimTheme {
   /// the hover takes the same step away from the ink, as applyAccent does on
   /// the web.
   Color get accentHover {
-    final toward = Color.lerp(accent, carbonText, _hoverStep)!;
+    final toward = Color.lerp(accent, stoneText, _hoverStep)!;
     final ink = glimContrastOn(accent);
     if (_ratio(_rgb(ink), _rounded(_rgb(toward))) >= glimMinTextContrast) return toward;
     final away = _luminance(_rgb(ink)) > _luminance(_rgb(accent)) ? _black : _white;
     return _color(_mix(_rgb(accent), away, _hoverStep));
   }
 
-  Color get statusOkHover => Color.lerp(statusOkSolid, carbonText, _hoverStep)!;
-  Color get statusFailHover => Color.lerp(statusFailSolid, carbonText, _hoverStep)!;
-  Color get statusWarnHover => Color.lerp(statusWarnSolid, carbonText, _hoverStep)!;
+  @Deprecated('A state button is a wash: statusOkWash under statusOkText, hovering to statusOkWashHover. statusOkHover goes in 6.0.0.')
+  Color get statusOkHover => Color.lerp(statusOkSolid, stoneText, _hoverStep)!;
+  @Deprecated('A state button is a wash: statusFailWash under statusFailText, hovering to statusFailWashHover. statusFailHover goes in 6.0.0.')
+  Color get statusFailHover => Color.lerp(statusFailSolid, stoneText, _hoverStep)!;
+  @Deprecated('A state button is a wash: statusWarnWash under statusWarnText, hovering to statusWarnWashHover. statusWarnHover goes in 6.0.0.')
+  Color get statusWarnHover => Color.lerp(statusWarnSolid, stoneText, _hoverStep)!;
 
   /// The accent as text on the page's ground: moved in OKLab onto the ramp's
   /// lightness step, darker on a light ramp and lighter on a dark one, as
@@ -28,7 +34,7 @@ extension GlimDerived on GlimTheme {
   /// accent's own wash there, it goes on toward black or white until it reads,
   /// as applyAccent does on the web.
   Color get accentInk {
-    final onLight = carbonBg.computeLuminance() > 0.5;
+    final onLight = ramp == GlimRamp.light;
     final lab = _oklab(accent);
     final l = lab[0];
     var ink = accent;
@@ -47,17 +53,23 @@ extension GlimDerived on GlimTheme {
   Color get focusRing => accentInk;
 
   /// The ground of whatever the pointer is over, a button, a row, a menu
-  /// entry or a tile: [carbonSurface3]'s lightness in the accent's hue, as
-  /// `--hover`.
+  /// entry or a tile: a small step darker than [stoneSurface3], in the
+  /// accent's hue, as `--hover`.
   Color get hover {
     final lab = _oklab(accent);
-    final nudge = carbonBg.computeLuminance() > 0.5 ? 0.0 : _hoverNudge;
-    return _srgb(_oklab(carbonSurface3)[0] - nudge, lab[1] * _hoverChroma, lab[2] * _hoverChroma);
+    return _srgb(ramp.hover, lab[1] * glimHoverChroma, lab[2] * glimHoverChroma);
   }
 
-  /// This theme with a picked accent, its fill ink and its wash worked out
-  /// the way applyAccent does on the web.
-  GlimTheme withAccent(Color picked) => copyWith(
+  /// The ramp this theme stands on, told apart by its ground.
+  GlimRamp get ramp => stoneGround == const Color(0xFF000000)
+      ? GlimRamp.oled
+      : stoneGround.computeLuminance() > 0.5
+          ? GlimRamp.light
+          : GlimRamp.dark;
+
+  /// This theme with a picked accent: the stone tinted by it, and its fill
+  /// ink and its wash worked out the way applyAccent does on the web.
+  GlimTheme withAccent(Color picked) => stoneOn(picked).copyWith(
         accent: picked,
         accentContrast: glimContrastOn(picked),
         accentSoft: picked.withValues(alpha: _softShare),
@@ -84,12 +96,6 @@ Color glimContrastOn(Color fill) {
 // of the accent in --accent-soft.
 const _hoverStep = 0.15;
 const _softShare = 0.14;
-
-// The share of the accent's chroma the hover takes, and how far it sits below
-// surface3 on a dark ramp, where a saturated green would otherwise take the
-// secondary text under 4.5:1 (--hover-chroma and --hover in tokens.css).
-const _hoverChroma = 0.3;
-const _hoverNudge = 0.007;
 
 // Channels from 0 to 255, as the core's contrast.ts counts them.
 const _white = [255.0, 255.0, 255.0];
@@ -160,6 +166,17 @@ List<double> _oklab(Color c) {
   ];
 }
 
+/// A stone step on [accent]'s hue: OKLCH [lightness] with [share] of the
+/// accent's chroma, at most [cap], as `oklch(from var(--accent) ...)` in
+/// tokens.css.
+Color glimStone(Color accent, double lightness, double share, double cap) {
+  final lab = _oklab(accent);
+  final chroma = math.sqrt(lab[1] * lab[1] + lab[2] * lab[2]);
+  if (chroma == 0) return _srgb(lightness, 0, 0);
+  final k = math.min(chroma * share, cap) / chroma;
+  return _srgb(lightness, lab[1] * k, lab[2] * k);
+}
+
 Color _srgb(double lightness, double a, double b) {
   final l = math.pow(lightness + 0.3963377774 * a + 0.2158037573 * b, 3).toDouble();
   final m = math.pow(lightness - 0.1055613458 * a - 0.0638541728 * b, 3).toDouble();
@@ -174,21 +191,121 @@ Color _srgb(double lightness, double a, double b) {
   );
 }
 
-/// A [ThemeData] that carries GlimStone's colours, for an app that has none
-/// of its own yet. An app with a theme adds [GlimTheme.dark] or
-/// [GlimTheme.light] to its own `extensions` instead. [oled] puts the dark
-/// theme on true black and leaves the light one as it is.
-ThemeData glimThemeData(Brightness brightness, {GlimShape shape = GlimShape.soft, bool oled = false}) {
+/// The house face as Flutter names a font that a package ships.
+const glimFontFamily = 'packages/glimstone/${GlimType.family}';
+
+/// A [ThemeData] that carries GlimStone's colours and engines, for an app that
+/// has none of its own yet. An app with a theme adds [GlimTheme.dark] or
+/// [GlimTheme.light] and a [GlimEngines] to its own `extensions` instead.
+/// [oled] puts the dark theme on true black and leaves the light one as it is.
+/// [accent] tints the stone and the fills as a picked colour does on the web.
+ThemeData glimThemeData(
+  Brightness brightness, {
+  GlimShape shape = GlimShape.soft,
+  bool oled = false,
+  Color? accent,
+  GlimLight light = glimDefaultLight,
+  GlimGlyphStyle glyphs = glimDefaultGlyphs,
+  GlimMotion motion = glimDefaultMotion,
+}) {
   final dark = oled ? GlimTheme.oled : GlimTheme.dark;
-  final glim = (brightness == Brightness.dark ? dark : GlimTheme.light).copyWith(shape: shape);
+  var glim = (brightness == Brightness.dark ? dark : GlimTheme.light).copyWith(shape: shape);
+  if (accent != null) glim = glim.withAccent(accent);
+  final lit = light.on(brightness);
+
+  TextStyle type(double size, double tracking, FontWeight weight, [Color? color]) => TextStyle(
+        fontFamily: glimFontFamily,
+        fontFamilyFallback: GlimType.fallback,
+        fontSize: size,
+        letterSpacing: size * tracking,
+        fontWeight: weight,
+        // A variable face takes its weight from the axis, not from the name.
+        fontVariations: [FontVariation.weight(weight.value.toDouble())],
+        color: color ?? glim.stoneText,
+      );
+  final body = type(GlimMetrics.textBody, GlimType.trackingBody, GlimType.regular);
+  final noLine = OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(shape.control));
+
   return ThemeData(
     brightness: brightness,
-    scaffoldBackgroundColor: glim.carbonBg,
-    colorScheme: ColorScheme.fromSeed(
-        seedColor: glim.accent,
-        brightness: brightness,
-        surface: glim.carbonSurface),
-    fontFamily: 'Noto Sans',
-    extensions: [glim],
+    scaffoldBackgroundColor: glim.stoneGround,
+    colorScheme: ColorScheme.fromSeed(seedColor: glim.accent, brightness: brightness, surface: glim.stoneSurface).copyWith(
+      primary: glim.accent,
+      onPrimary: glim.accentContrast,
+      onSurface: glim.stoneText,
+      error: glim.statusFailText,
+    ),
+    fontFamily: glimFontFamily,
+    fontFamilyFallback: GlimType.fallback,
+    textTheme: TextTheme(
+      headlineSmall: type(GlimMetrics.textStatus, GlimType.trackingStatus, GlimType.strong),
+      titleMedium: type(GlimMetrics.textTitle, GlimType.trackingTitle, GlimType.strong),
+      titleSmall: type(GlimMetrics.textBody, GlimType.trackingBody, GlimType.medium),
+      bodyLarge: body,
+      bodyMedium: body,
+      bodySmall: type(GlimMetrics.textSubline, GlimType.trackingSubline, GlimType.regular, glim.stoneTextSub),
+      labelLarge: type(GlimMetrics.textBody, GlimType.trackingBody, GlimType.medium),
+      labelMedium: type(GlimMetrics.textSubline, GlimType.trackingSubline, GlimType.medium),
+      labelSmall: type(GlimMetrics.textMeta, GlimType.trackingMeta, GlimType.medium),
+    ),
+    hoverColor: glim.hover,
+    // Rule 14: a field sits a little into its surface on translucent steps and
+    // never carries a line or a ring. Focus is its brightest step.
+    inputDecorationTheme: InputDecorationThemeData(
+      filled: true,
+      fillColor: WidgetStateColor.resolveWith((states) {
+        final focused = states.contains(WidgetState.focused);
+        if (states.contains(WidgetState.error)) return focused ? glim.fieldInvalidFocus : glim.fieldInvalid;
+        if (focused) return glim.fieldFocus;
+        if (states.contains(WidgetState.hovered)) return glim.fieldHover;
+        return glim.fieldRest;
+      }),
+      hoverColor: Colors.transparent,
+      hintStyle: body.copyWith(color: glim.fieldPlaceholder),
+      isDense: true,
+      constraints: const BoxConstraints(minHeight: GlimMetrics.btnH),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      border: noLine,
+      enabledBorder: noLine,
+      focusedBorder: noLine,
+      errorBorder: noLine,
+      focusedErrorBorder: noLine,
+      disabledBorder: noLine,
+    ),
+    textSelectionTheme: TextSelectionThemeData(
+      cursorColor: glim.accentInk,
+      selectionColor: glim.selection,
+      selectionHandleColor: glim.accentInk,
+    ),
+    cardTheme: CardThemeData(
+      color: glim.stoneSurface,
+      surfaceTintColor: Colors.transparent,
+      elevation: 0,
+      shape: glimOutline(shape, shape.card),
+    ),
+    // What floats over a card stands on a surface of its own, over a scrim
+    // light enough to show where it came from.
+    dialogTheme: DialogThemeData(
+      backgroundColor: glim.surfaceOverlay,
+      surfaceTintColor: Colors.transparent,
+      barrierColor: glim.glimScrim,
+      shape: glimOutline(shape, shape.card),
+    ),
+    popupMenuTheme: PopupMenuThemeData(
+      color: glim.surfaceOverlay,
+      surfaceTintColor: Colors.transparent,
+      shape: glimOutline(shape, shape.control),
+    ),
+    tooltipTheme: TooltipThemeData(
+      decoration: GlimDecoration(color: glim.surfaceOverlay, shape: glimOutline(shape, shape.control), shadows: lit.float),
+      textStyle: type(GlimMetrics.textMeta, GlimType.trackingMeta, GlimType.regular),
+    ),
+    scrollbarTheme: ScrollbarThemeData(thumbColor: WidgetStatePropertyAll(glim.scrollbarThumb)),
+    switchTheme: SwitchThemeData(
+      thumbColor: WidgetStatePropertyAll(glim.toggleKnob),
+      trackColor: WidgetStateColor.resolveWith((states) => states.contains(WidgetState.selected) ? glim.accent : glim.toggleOff),
+      trackOutlineColor: const WidgetStatePropertyAll(Colors.transparent),
+    ),
+    extensions: [glim, GlimEngines(light: light, glyphs: glyphs, motion: motion)],
   );
 }

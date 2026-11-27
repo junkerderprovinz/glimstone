@@ -268,10 +268,12 @@ export function segmentView(g: SegmentInput): SegmentView {
   const hueClass = g.hue ? (g.strip.perTab && !g.iconOnly ? "glim-hue glim-hue-icon" : "glim-hue") : "";
 
   if (vertical) {
+    // A tile marked iconOnly stands as a glyph whatever the mode but text, as a segment does.
+    const glyphOnly = mode === "glyph" || (g.iconOnly && mode !== "text");
     return {
       className: [
         "glim-sel-tile",
-        mode === "glyph" && "glim-sel-tile--glyph",
+        glyphOnly && "glim-sel-tile--glyph",
         reactive && "glim-sel-tile--reactive glim-reactive",
         g.dim && "glim-sel-tile--dim",
         hueClass,
@@ -281,7 +283,7 @@ export function segmentView(g: SegmentInput): SegmentView {
         .join(" "),
       style: Object.keys(style).length ? style : undefined,
       showGlyph: mode !== "text",
-      labelClass: reactive ? "glim-sel-tile-caption" : mode === "glyph" ? "glim-sr-only" : "glim-sel-tile-label",
+      labelClass: reactive ? "glim-sel-tile-caption" : glyphOnly ? "glim-sr-only" : "glim-sel-tile-label",
       ariaLabel: undefined,
       tip: reactive && !g.disabled ? undefined : tip,
     };
@@ -502,4 +504,72 @@ export function countSelector(track: HTMLElement): () => void {
     tracks.delete(track);
     queue();
   };
+}
+
+const CHOSEN = '[data-sel-id]:is([aria-selected="true"], [aria-checked="true"], .glim-active)';
+
+/**
+ * Keeps a strip's `.glim-sel-thumb` under its chosen segment, so the fill can
+ * glide from one segment to the next. The thumb copies a segment's `--accent`
+ * only where the segment sets one of its own, as a tab does under rainbow; an
+ * inherited one stays live, so the thumb follows when an ancestor's accent
+ * changes. `data-placed` comes a frame after the first placement, so the thumb
+ * lands without gliding in from the corner. Returns the teardown.
+ */
+export function watchSelectorThumb(track: HTMLElement): () => void {
+  const thumb = track.querySelector<HTMLElement>(":scope > .glim-sel-thumb");
+  if (!thumb) return () => {};
+  let frame = 0;
+  const place = () => {
+    const seg = track.querySelector<HTMLElement>(CHOSEN);
+    if (!seg || track.classList.contains("glim-sel--listed")) {
+      thumb.removeAttribute("data-placed");
+      return;
+    }
+    const box = track.getBoundingClientRect();
+    const r = seg.getBoundingClientRect();
+    if (r.width === 0) return;
+    thumb.style.width = `${r.width}px`;
+    thumb.style.height = `${r.height}px`;
+    thumb.style.translate = `${r.left - box.left - track.clientLeft}px ${r.top - box.top - track.clientTop}px`;
+    const own = getComputedStyle(seg).getPropertyValue("--accent");
+    if (own && own !== getComputedStyle(track).getPropertyValue("--accent")) thumb.style.setProperty("--accent", own);
+    else thumb.style.removeProperty("--accent");
+    if (!thumb.hasAttribute("data-placed")) {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => thumb.setAttribute("data-placed", ""));
+    }
+  };
+  place();
+  const resize = new ResizeObserver(place);
+  resize.observe(track);
+  for (const seg of track.querySelectorAll("[data-sel-id]")) resize.observe(seg);
+  const change = new MutationObserver(place);
+  change.observe(track, { subtree: true, attributes: true, attributeFilter: ["aria-selected", "aria-checked", "class"] });
+  return () => {
+    cancelAnimationFrame(frame);
+    resize.disconnect();
+    change.disconnect();
+  };
+}
+
+/**
+ * Replays a tab change on its panel: it comes in from the side of the tab it
+ * came from, `dir` 1 toward a later tab and -1 toward an earlier one. The
+ * motion engine sets the length and the travel, so it stands still where
+ * motion is off.
+ */
+export function slideTabPanel(panel: HTMLElement | null, dir: 1 | -1): void {
+  if (!panel) return;
+  panel.style.setProperty("--tab-dir", String(dir));
+  panel.classList.remove("glim-tab-slide");
+  void panel.offsetWidth;
+  panel.classList.add("glim-tab-slide");
+  panel.addEventListener("animationend", () => panel.classList.remove("glim-tab-slide"), { once: true });
+}
+
+/** The way a tab strip's panel comes in when the chosen tab moves from `from` to `to`, or null when nothing moved. */
+export function tabSlideDir(from: number, to: number): 1 | -1 | null {
+  if (from < 0 || to < 0 || from === to) return null;
+  return to > from ? 1 : -1;
 }

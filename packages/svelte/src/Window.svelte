@@ -18,7 +18,9 @@
     actions?: WindowAction[];
     /** A quiet line at the start of the foot, such as where the work carries on. */
     start?: string | Snippet;
-    /** `normal` for a question or a form, `wide` for a list, `full` for a tool. */
+    /** The width: `small` (400px) for a question, `normal` (560px) for a form,
+     *  `large` (720px) for a longer form, `wide` (960px) for a list, `full` for
+     *  a tool. */
     size?: WindowSize;
     /** The words of the way out the window adds. */
     text: { cancel: string; close: string };
@@ -35,7 +37,7 @@
 
 <script lang="ts">
   import { onMount } from "svelte";
-  import { focusedAsker, menuIsOpen, returnFocus, stackWindow, windowFocusTarget } from "@glimstone/core";
+  import { focusedAsker, leaveBehind, menuIsOpen, returnFocus, stackWindow, windowFocusTarget } from "@glimstone/core";
   import Badge from "./Badge.svelte";
   import { lift } from "./lift.js";
   import WindowFootRow from "./WindowFootRow.svelte";
@@ -89,7 +91,7 @@
      so it is the only node Svelte removes for it, wherever the caller put it. -->
 {#snippet backdrop()}
   <!-- svelte-ignore a11y_no_static_element_interactions -->
-  <div class="glim-modal-backdrop" {@attach lift} onmousedown={pressBeside}>
+  <div class="glim-modal-backdrop" {@attach lift} {@attach leaveBehind} onmousedown={pressBeside}>
     <div
       data-glim="Window"
       data-glim-title={title}

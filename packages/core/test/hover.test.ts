@@ -15,10 +15,10 @@ const hovered = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
 
 const declared = (body: string, property: RegExp) => [...body.matchAll(new RegExp(`(?<![\\w-])(?:${property.source})\\s*:\\s*([^;]+);`, 'g'))].map((m) => m[1]!.trim());
 
-// The one hover ground, and the grounds that come from the accent, from a
+// The hover ground, its raised step for what rests on surface3, and the grounds that come from the accent, from a
 // rainbow position, from a brand tile or from a state hue, each of which the
-// hover is allowed to light.
-const LIT = /var\(--(hover|accent[\w-]*|item-hue[\w-]*|tile|status-[\w-]+)\)/;
+// hover is allowed to light. A field keeps its own neutral steps (rule 14).
+const LIT = /var\(--(hover(?:-raised)?|accent[\w-]*|item-hue[\w-]*|tile|status-[\w-]+|field-hover)\)/;
 
 // The system colours a forced-colors rule paints with.
 const SYSTEM = /^(Highlight|HighlightText|ButtonFace|ButtonText|Canvas|CanvasText|LinkText|GrayText|SelectedItem)$/;
@@ -43,7 +43,7 @@ test('every hover in the stylesheet lights its ground with the accent', () => {
 test('a control without a ground of its own takes the accent ink under the pointer', () => {
   const grey = hovered
     .filter(({ body }) => declared(body, /background(?:-color)?/).length === 0)
-    .flatMap(({ selector, body }) => declared(body, /color/).filter((v) => /var\(--carbon-/.test(v)).map((v) => `${selector}: ${v}`));
+    .flatMap(({ selector, body }) => declared(body, /color/).filter((v) => /var\(--stone-/.test(v)).map((v) => `${selector}: ${v}`));
   assert.deepEqual(grey, []);
 });
 

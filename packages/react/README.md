@@ -54,7 +54,6 @@ needs none of them.
 | `Combobox` | A field that filters a long list as somebody types |
 | `MultiSelect` | Several picks from a list, kept as tags in the field; a long list filters as somebody types |
 | `Slider` | A value on a range, with the value in words beside the label |
-| `DropdownListbox` | Deprecated, use `Select` |
 | `ConfirmDialog` + `useConfirm` | The confirm surface for a destructive action, and the hook that gives it a portal, Escape, the Tab trap and focus back to the control that asked |
 | `ToastViewport` | Transient feedback; the queue is the core's `toastEngine` |
 | `InfoBubble`, `IconTipButton` | The "(i)" explanation and the hover name on an icon-only control |

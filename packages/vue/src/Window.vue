@@ -3,6 +3,7 @@ import { computed, onMounted, onUnmounted, shallowRef, useId, useSlots } from "v
 import {
   focusedAsker,
   footStartShows,
+  leavingRef,
   menuIsOpen,
   returnFocus,
   stackWindow,
@@ -31,7 +32,9 @@ const props = withDefaults(
     actions?: WindowAction[];
     /** A quiet line at the start of the foot; the `start` slot takes markup. */
     start?: string;
-    /** `normal` for a question or a form, `wide` for a list, `full` for a tool. */
+    /** The width: `small` (400px) for a question, `normal` (560px) for a form,
+     *  `large` (720px) for a longer form, `wide` (960px) for a list, `full` for
+     *  a tool. */
     size?: WindowSize;
     /** The words of the way out the window adds. */
     text: { cancel: string; close: string };
@@ -42,6 +45,7 @@ const props = withDefaults(
   { actions: () => [], size: "normal", closeOnBackdrop: true },
 );
 const emit = defineEmits<{ close: [] }>();
+const leaving = leavingRef();
 const slots = useSlots();
 
 const card = shallowRef<HTMLElement | null>(null);
@@ -76,7 +80,7 @@ function pressBeside() {
 
 <template>
   <Teleport :to="portalTarget()">
-    <div class="glim-modal-backdrop" @mousedown.self="pressBeside">
+    <div :ref="leaving" class="glim-modal-backdrop" @mousedown.self="pressBeside">
       <div
         data-glim="Window"
         :data-glim-title="title"

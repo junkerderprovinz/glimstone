@@ -14,6 +14,7 @@ import * as combobox from "@zag-js/combobox";
 import { normalizeProps, useMachine } from "@zag-js/vue";
 import { useFieldName } from "./fieldName";
 import { IconCheck, IconClose, IconExpand } from "./glyphs";
+import SearchHit from "./SearchHit.vue";
 import type { SelectOption } from "./selectParts";
 
 // A field that picks several choices from a list and keeps them as tags, bound
@@ -130,7 +131,9 @@ function remove(v: string) {
         <ul v-bind="api.getContentProps()" class="glim-select-content">
           <li v-if="shown.length === 0" class="glim-select-empty">{{ words.empty }}</li>
           <li v-for="item in shown" :key="item.value" v-bind="api.getItemProps({ item })" class="glim-select-item">
-            <span v-bind="api.getItemTextProps({ item })">{{ item.label }}</span>
+            <span v-bind="api.getItemTextProps({ item })" :data-search="searches && query ? '' : undefined"
+              ><SearchHit :label="item.label" :query="searches ? query : ''"
+            /></span>
             <span v-bind="api.getItemIndicatorProps({ item })" class="glim-select-check"><IconCheck /></span>
           </li>
         </ul>

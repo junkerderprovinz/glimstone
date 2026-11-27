@@ -3,6 +3,7 @@ import { computed, shallowRef, useId, watch } from "vue";
 import * as select from "@zag-js/select";
 import { normalizeProps, useMachine } from "@zag-js/vue";
 import {
+  alignOverTrigger,
   closeOnPageMove,
   endOption,
   flattenRuns,
@@ -88,6 +89,14 @@ watch(
   },
 );
 const hue = usePortalHue(() => api.value.open, trigger);
+const content = shallowRef<HTMLElement | null>(null);
+watch(
+  () => api.value.open,
+  (open, _, onCleanup) => {
+    if (open && content.value && trigger.value) onCleanup(alignOverTrigger(content.value, trigger.value, props.value));
+  },
+  { flush: "post" },
+);
 
 function keydown(e: KeyboardEvent) {
   const to = api.value.open ? undefined : endOption(all.value, e.key);
@@ -132,7 +141,7 @@ defineExpose({ trigger });
         :style="hue.style.value"
         :class="['glim-select-positioner', hue.className.value]"
       >
-        <div v-bind="api.getContentProps()" :class="parts.content">
+        <div ref="content" v-bind="api.getContentProps()" :class="parts.content">
           <template v-for="(g, gi) in groups" :key="gi">
             <div
               v-if="g.entries.length > 0"

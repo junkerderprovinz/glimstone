@@ -465,19 +465,6 @@ export const GLOSSARY: GlossarySection[] = [
         },
       },
       {
-        id: "listbox",
-        en: "Listbox, retiring",
-        de: "Listbox, veraltet",
-        proposal: true,
-        code: ["DropdownListbox", ".glim-listbox"],
-        components: ["DropdownListbox"],
-        rules: [18],
-        text: {
-          en: "The older list whose trigger the app builds itself. It stays until every app has moved to the select.",
-          de: "Die alte Auswahlliste, deren Auslöser die App selbst baut. Sie bleibt, bis jede App auf das Auswahlfeld umgestellt ist.",
-        },
-      },
-      {
         id: "steps",
         en: "Steps",
         de: "Schritte",
@@ -501,6 +488,19 @@ export const GLOSSARY: GlossarySection[] = [
         text: {
           en: "A day picked from a calendar. The trigger shows the day and takes no typing, and the chosen day takes the accent.",
           de: "Ein Tag aus einem Kalender. Der Auslöser zeigt den Tag und nimmt keine Eingabe, der gewählte Tag trägt den Akzent.",
+        },
+      },
+      {
+        id: "time-picker",
+        en: "Time picker",
+        de: "Zeitwähler",
+        proposal: true,
+        code: ["TimePicker", "TimeRangePicker", ".glim-time", ".glim-time-seg"],
+        components: ["TimePicker", "TimeRangePicker"],
+        rules: [14],
+        text: {
+          en: "A time of day in one field of two segments, hours and minutes, which the arrows count and digits type. A span holds the start and the end in one field.",
+          de: "Eine Uhrzeit in einem Feld aus zwei Abschnitten, Stunden und Minuten, die die Pfeile zählen und Ziffern tippen. Eine Spanne hält Beginn und Ende in einem Feld.",
         },
       },
     ],
@@ -983,7 +983,7 @@ export const GLOSSARY: GlossarySection[] = [
           en: "One destination in the rail, the navigation on the left. Active means filled, never a bar beside it. The rail itself is a card with a surface token of its own.",
           de: "Ein Ziel in der Schiene, der Navigation links. Aktiv heißt gefüllt, nie ein Balken daneben. Die Schiene selbst ist eine Karte mit eigenem Flächen-Token.",
         },
-        also: [{ en: "Rail", de: "Schiene", code: "--carbon-sidebar" }],
+        also: [{ en: "Rail", de: "Schiene", code: "--stone-sidebar" }],
       },
       {
         id: "sign-in-card",
@@ -1111,6 +1111,18 @@ export const GLOSSARY: GlossarySection[] = [
         text: {
           en: "Shows a standing level, such as how full a disk is, and never moves. Past its threshold it turns red, and quiet is the slim grey form for footers.",
           de: "Zeigt einen stehenden Stand, etwa den Füllstand einer Platte, und bewegt sich nie. Ab der Schwelle wird er rot, quiet ist die schmale graue Form für Fußzeilen.",
+        },
+      },
+      {
+        id: "chart",
+        en: "Chart",
+        de: "Diagramm",
+        code: ["Chart", "ChartLegend", "Sparkline", ".glim-chart"],
+        components: ["Chart", "ChartLegend", "Sparkline"],
+        rules: [50],
+        text: {
+          en: "Draws bars, lines or areas on the frame every chart shares: grid lines across only, quiet ticks, a band and a tooltip under the pointer, and a legend. Sparkline is the small line beside a figure.",
+          de: "Zeichnet Balken, Linien oder Flächen im Rahmen, den alle Diagramme teilen: Rasterlinien nur waagrecht, leise Achsenwerte, unter dem Zeiger ein Band mit Tooltip und eine Legende. Sparkline ist die kleine Linie neben einer Zahl.",
         },
       },
       {
@@ -1334,8 +1346,8 @@ export const GLOSSARY: GlossarySection[] = [
         id: "info-tile",
         en: "Info tile",
         de: "Infokachel",
-        code: ["InfoTile", "AboutCard"],
-        components: ["InfoTile", "AboutCard", "InfoVersionCard", "InfoComponentsCard", "InfoHelpCard", "InfoAboutCard"],
+        code: ["InfoTile"],
+        components: ["InfoTile", "InfoVersionCard", "InfoComponentsCard", "InfoHelpCard", "InfoAboutCard"],
         text: {
           en: "The four cards of the Info tab in this order: the version card with the app, where its updates stand and what's new, the components card with every other version as a row, the help card with GitHub, Discord, mail and manual, and the about card with its sentence on money and the donation buttons under it.",
           de: "Die vier Karten des Info-Reiters in dieser Reihenfolge: die Versionskarte mit der App, dem Stand der Updates und den Neuigkeiten, die Komponentenkarte mit jeder anderen Version als Zeile, die Hilfe-Karte mit GitHub, Discord, E-Mail und Handbuch, und die Über-Karte mit dem Satz zum Geld und den Spendenknöpfen darunter.",

@@ -1,4 +1,4 @@
-// The label, colour, motion and density engines as composables. Each value belongs to
+// The label, colour, motion, light, glyph and density engines as composables. Each value belongs to
 // the document, not a component: a button and a nav row far apart in the tree
 // read the same mode, so every composable follows the document and writes back
 // through the core.
@@ -7,10 +7,14 @@ import { computed, onScopeDispose, shallowRef, type Ref, type WritableComputedRe
 import {
   applyAccent,
   applyDensity,
+  applyGlyphs,
+  applyLight,
   applyMotion,
   applyRainbow,
   applyShape,
   DEFAULT_DENSITY,
+  DEFAULT_GLYPHS,
+  DEFAULT_LIGHT,
   DEFAULT_MOTION,
   DEFAULT_SHAPE,
   getLabelMode,
@@ -21,8 +25,10 @@ import {
   subscribeLabelMode,
   subscribeRainbow,
   type Density,
+  type GlyphStyle,
   type LabelAxis,
   type LabelMode,
+  type Light,
   type Motion,
   type RainbowState,
   type Shape,
@@ -74,6 +80,18 @@ export function useShape(): WritableComputedRef<Shape> {
 export function useMotion(): WritableComputedRef<Motion> {
   const motion = rootValue("data-motion", () => (document.documentElement.getAttribute("data-motion") as Motion) ?? DEFAULT_MOTION);
   return computed({ get: () => motion.value, set: applyMotion });
+}
+
+/** How light falls on the stone. */
+export function useLight(): WritableComputedRef<Light> {
+  const light = rootValue("data-light", () => (document.documentElement.getAttribute("data-light") as Light) ?? DEFAULT_LIGHT);
+  return computed({ get: () => light.value, set: applyLight });
+}
+
+/** Whether the glyphs are drawn filled or as lines. */
+export function useGlyphs(): WritableComputedRef<GlyphStyle> {
+  const glyphs = rootValue("data-glyphs", () => (document.documentElement.getAttribute("data-glyphs") as GlyphStyle) ?? DEFAULT_GLYPHS);
+  return computed({ get: () => glyphs.value, set: applyGlyphs });
 }
 
 export function useDensity(): WritableComputedRef<Density> {

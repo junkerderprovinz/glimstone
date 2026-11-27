@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { addToast, pauseToast, removeToast, resumeToast, type ToastEntry, type ToastSeverity } from "@glimstone/core";
 import { Button, ToastViewport } from "@glimstone/react";
 
-const MESSAGES: Record<ToastSeverity, string> = {
-  success: "Settings saved.",
-  warn: "The target is almost full.",
-  fail: "Could not reach the target.",
+const MESSAGES: Record<ToastSeverity, { title: string; message: string }> = {
+  success: { title: "Settings saved", message: "The new schedule runs tonight at 02:00." },
+  warn: { title: "The target is almost full", message: "38 GB are left, about two more nights." },
+  fail: { title: "Could not reach the target", message: "The next try starts in five minutes." },
 };
 
 export default function ToastDemo() {
@@ -22,7 +22,7 @@ export default function ToastDemo() {
   }, []);
 
   const show = (severity: ToastSeverity) =>
-    setToasts((list) => addToast(list, { id: String(next.current++), message: MESSAGES[severity], severity }, Date.now()));
+    setToasts((list) => addToast(list, { id: String(next.current++), ...MESSAGES[severity], severity }, Date.now()));
   const undoable = () =>
     setToasts((list) =>
       addToast(

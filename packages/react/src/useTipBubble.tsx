@@ -1,6 +1,6 @@
-import { useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
-import { dismissBubbleOn, placeBubble, pointerWasLast, trackInputModality, portalTarget } from "@glimstone/core";
+import { dismissBubbleOn, placeBubble, pointerWasLast, restTimer, trackInputModality, portalTarget, type BubbleKind } from "@glimstone/core";
 
 // The one hover and focus tooltip, as a hook. The "(i)" of InfoBubble, a
 // bare IconTipButton, a SelectorTab segment and a Button whose text the label
@@ -34,9 +34,18 @@ export interface TipBubble {
    *  since a disabled <button> emits no mouse events. Other triggers pass
    *  through unchanged. */
   wrap: (node: ReactNode) => ReactNode;
-  /** Open or close by hand, for a hover wrapper of the call site's own. */
+  /** Open or close by hand, for a hover wrapper of the call site's own. A
+   *  tooltip opens once the pointer has rested. */
   show: () => void;
   hide: () => void;
+}
+
+export interface TipBubbleOptions {
+  /** `tip` names a control: small, inverted, once the pointer has rested.
+   *  `info` explains: roomier, on the floating surface, at once. */
+  kind?: BubbleKind;
+  /** A keyboard shortcut drawn beside a tooltip's words, such as "Ctrl K". */
+  shortcut?: string;
 }
 
 /**
@@ -44,8 +53,9 @@ export interface TipBubble {
  *             and `wrap` passes its node through.
  * @param disabled  Whether the trigger is currently disabled; see `wrap`.
  */
-export function useTipBubble(tip?: string, disabled = false): TipBubble {
+export function useTipBubble(tip?: string, disabled = false, { kind = "tip", shortcut }: TipBubbleOptions = {}): TipBubble {
   const [open, setOpen] = useState(false);
+  const timer = useMemo(() => restTimer(kind), [kind]);
   const triggerRef = useRef<HTMLElement | null>(null);
   const bubbleRef = useRef<HTMLDivElement | null>(null);
   const tooltipId = useId();
@@ -64,16 +74,19 @@ export function useTipBubble(tip?: string, disabled = false): TipBubble {
 
   const shown = !!tip && open;
 
+  // The pointer opens a tooltip once it has rested; the keyboard at once.
   function show() {
-    if (!tip) return;
-    setOpen(true);
+    if (tip) timer.rest(() => setOpen(true));
   }
   function hide() {
+    timer.cancel();
+    timer.closed(open);
     setOpen(false);
   }
+  useEffect(() => timer.cancel, [timer]);
   useEffect(trackInputModality, []);
   function showOnFocus() {
-    if (!pointerWasLast()) show();
+    if (tip && !pointerWasLast()) setOpen(true);
   }
 
   useLayoutEffect(() => {
@@ -99,9 +112,10 @@ export function useTipBubble(tip?: string, disabled = false): TipBubble {
             ref={bubbleRef}
             role="tooltip"
             id={tooltipId}
-            className="glim-bubble glim-fade"
+            className={`glim-bubble glim-fade glim-bubble--${kind}`}
           >
             {tip}
+            {shortcut && <kbd className="glim-bubble-key">{shortcut}</kbd>}
           </div>,
           portalTarget(),
         )

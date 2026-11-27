@@ -39,8 +39,33 @@
         ]
       }
     },
+    "motion-spring": {
+      "$value": "linear(0, 0.06 2.5%, 0.22 6%, 0.45 11%, 0.67 17%, 0.83 24%, 0.93 32%, 0.985 42%, 1.006 53%, 1.008 64%, 1.002 80%, 1)",
+      "$description": "The curve of everything that moves: a spring that settles just past its mark and back, written out as linear() so the browser plays the same curve the phone does. Wild swings further, storm further still, and off moves in a straight line. A fade or a change of colour takes --motion-ease, since a spring overshoots and opacity would clamp at 1 and sit flat.",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "linear(0, 0.08 2%, 0.31 6%, 0.65 12%, 0.95 18%, 1.08 24%, 1.1 28%, 1.07 34%, 1.01 44%, 0.99 52%, 1.003 70%, 1)",
+            "off": "linear",
+            "storm": "cubic-bezier(.22, 1.94, .45, 1)"
+          }
+        }
+      }
+    },
+    "motion-ease": {
+      "$value": "cubic-bezier(0.4, 0, 0.2, 1)",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "wild": "cubic-bezier(0.4, 0, 0.2, 1)",
+            "off": "linear",
+            "storm": "cubic-bezier(0.4, 0, 0.2, 1)"
+          }
+        }
+      }
+    },
     "motion-page-dur": {
-      "$value": "140ms",
+      "$value": "220ms",
       "$type": "duration",
       "$extensions": {
         "org.glimstone": {
@@ -108,9 +133,9 @@
       }
     },
     "motion-page-travel": {
-      "$value": "6px",
+      "$value": "8px",
       "$type": "dimension",
-      "$description": "Distance and curve set the levels apart along with duration: 6px against wild's 18px, and an ease where wild springs. There is no scale (see the keyframe above).",
+      "$description": "Distance and curve set the levels apart along with duration: 8px against wild's 18px and storm's 34px, each on the level's own --motion-spring, which swings further from subtle to storm. There is no scale (see the keyframe above).",
       "$extensions": {
         "org.glimstone": {
           "modes": {
@@ -122,12 +147,11 @@
       }
     },
     "motion-page-ease": {
-      "$value": "cubic-bezier(.2, .6, .2, 1)",
-      "$type": "cubicBezier",
+      "$value": "{motion.motion-spring}",
       "$extensions": {
         "org.glimstone": {
           "modes": {
-            "wild": "cubic-bezier(.34, 1.56, .64, 1)",
+            "wild": "{motion.motion-spring}",
             "off": "linear",
             "storm": "cubic-bezier(.22, 1.94, .45, 1)"
           },
@@ -138,14 +162,14 @@
       }
     },
     "motion-toast-ease": {
-      "$value": "cubic-bezier(.2, .6, .2, 1)",
-      "$type": "cubicBezier",
-      "$description": "The toast slides in from the screen edge, and a spring would carry it back past that edge, which reads as a glitch, so it keeps this ease at every level but storm.",
+      "$value": "{motion.motion-spring}",
+      "$description": "The toast slides in from the screen edge, and a spring that swings would carry it back past that edge, which reads as a glitch. Subtle's spring passes its mark by under a pixel on this distance, so it keeps it; wild takes a plain ease, and only storm swings past.",
       "$extensions": {
         "org.glimstone": {
           "modes": {
             "off": "ease",
-            "storm": "cubic-bezier(.22, 1.94, .45, 1)"
+            "storm": "cubic-bezier(.22, 1.94, .45, 1)",
+            "wild": "cubic-bezier(.2, .6, .2, 1)"
           },
           "modeNotes": {
             "storm": "The only level where the toast springs past the screen edge."
@@ -185,7 +209,7 @@
       }
     },
     "motion-modal-dur": {
-      "$value": "150ms",
+      "$value": "200ms",
       "$type": "duration",
       "$extensions": {
         "org.glimstone": {
@@ -289,13 +313,13 @@
       }
     },
     "motion-shape-ease": {
-      "$value": "cubic-bezier(.2, .6, .2, 1)",
-      "$type": "cubicBezier",
+      "$value": "{motion.motion-spring}",
       "$extensions": {
         "org.glimstone": {
           "modes": {
             "off": "linear",
-            "storm": "cubic-bezier(.22, 1.94, .45, 1)"
+            "storm": "cubic-bezier(.22, 1.94, .45, 1)",
+            "wild": "{motion.motion-spring}"
           }
         }
       }
@@ -321,6 +345,17 @@
             "wild": "1",
             "off": "0",
             "storm": "1.9"
+          }
+        }
+      }
+    },
+    "motion-press-scale": {
+      "$value": ".97",
+      "$description": "How far a button gives under the press, on the control's time and the spring. Off holds it still, and storm sets none, so under reduced motion nothing gives.",
+      "$extensions": {
+        "org.glimstone": {
+          "modes": {
+            "off": "1"
           }
         }
       }

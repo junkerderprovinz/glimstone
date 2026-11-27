@@ -5,6 +5,7 @@
     "verbatimModuleSyntax": true,
     "paths": {
       "@glimstone/core/glyphs.json": ["../packages/core/glyphs.json"],
+      "@glimstone/core/glyphs-line.json": ["../packages/core/glyphs-line.json"],
       "@glimstone/core": ["../packages/core/src/index.ts"],
       "@glimstone/core/*": ["../packages/core/src/*"],
       "@glimstone/svelte": ["../packages/svelte/src/index.ts"],

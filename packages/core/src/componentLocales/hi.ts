@@ -46,7 +46,8 @@ export const hi: ComponentWords = {
   tour: { back: "पीछे", next: "आगे", close: "बंद करें", progress: "{steps} में से {step}" },
   floatingPanel: { minimize: "छोटा करें", maximize: "बड़ा करें", restore: "पहले जैसा करें", close: "बंद करें" },
   signaturePad: { area: "हस्ताक्षर", clear: "साफ़ करें" },
-  passwordField: { show: "दिखाएँ", hide: "छिपाएँ", confirm: "पासवर्ड की पुष्टि करें", mismatch: "दोनों पासवर्ड मेल नहीं खाते" },
+  passwordField: { show: "दिखाएँ", hide: "छिपाएँ", confirm: "पासवर्ड की पुष्टि करें", mismatch: "दोनों पासवर्ड मेल नहीं खाते", again: "एक बार फिर" },
+  timePicker: { hour: "घंटे", minute: "मिनट", start: "शुरुआत", end: "अंत", to: "से" },
   versionCard: {
     title: "संस्करण",
     hint: "{app} का संस्करण, अपडेट की स्थिति और इस संस्करण में क्या आया।",

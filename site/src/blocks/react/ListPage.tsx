@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Card, EmptyState, IconButton, ListRow, Pill, SkeletonRow, TextField } from "@glimstone/react";
+import { Button, Card, EmptyState, IconButton, ListRow, SkeletonRow, TextField } from "@glimstone/react";
 import { Glyph } from "../../glyph";
 
 interface Backup {
@@ -13,6 +13,18 @@ const START: Backup[] = [
   { name: "photos", size: "212 GB" },
   { name: "documents", size: "880 MB", failed: true },
 ];
+
+// The figure carries the row; the unit stands a step quieter after a narrow space.
+function Size({ of }: { of: string }) {
+  const [n, unit] = of.split(" ");
+  return (
+    <>
+      {n}
+      {"\u202f"}
+      <small>{unit}</small>
+    </>
+  );
+}
 
 export default function ListPage() {
   const [backups, setBackups] = useState(START);
@@ -38,9 +50,9 @@ export default function ListPage() {
       <Card title="Backups">
         {loading ? (
           <div role="group" aria-label="Backups" aria-busy="true">
-            <SkeletonRow />
-            <SkeletonRow />
-            <SkeletonRow />
+            <SkeletonRow badge={false} value actions={1} />
+            <SkeletonRow badge={false} value actions={1} />
+            <SkeletonRow badge={false} value actions={1} />
           </div>
         ) : shown.length > 0 ? (
           <div style={{ display: "grid", gap: 2 }}>
@@ -49,12 +61,8 @@ export default function ListPage() {
                 key={b.name}
                 name={b.name}
                 tile={<Glyph name="IconArchive" />}
-                badges={
-                  <>
-                    <Pill className="glim-num">{b.size}</Pill>
-                    {b.failed && <Pill tone="fail">Failed</Pill>}
-                  </>
-                }
+                status={b.failed ? { tone: "fail", label: "Failed" } : undefined}
+                value={<Size of={b.size} />}
                 actions={
                   <IconButton
                     tip={`Delete ${b.name}`}

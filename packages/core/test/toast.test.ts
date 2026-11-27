@@ -2,7 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { MARKS } from '../src/marks.ts';
-import { addToast, pauseToast, resumeToast, toastPoliteness, TOAST_DURATION_MS } from '../src/toastEngine.ts';
+import { addToast, pauseToast, resumeToast, toastAnnouncement, toastPoliteness, TOAST_DURATION_MS } from '../src/toastEngine.ts';
+import { toastPlaces } from '../src/toastStack.ts';
 
 const undo = { label: 'Undo', onClick: () => {} };
 
@@ -55,4 +56,26 @@ test('the dismiss cross sits centred on the first line of the message', () => {
   const box = MARKS.dismiss.size + 2 * px(declared('.glim-toast-dismiss', 'padding'));
   const top = px(declared('.glim-toast-dismiss', 'margin-block'));
   assert.equal(top + box / 2, px(declared('.glim-toast-message', 'line-height')) / 2);
+});
+
+test('a toast with a title keeps it, and is read out title first', () => {
+  const [t] = addToast([], { id: 'a', title: 'Settings saved', message: 'The new schedule runs tonight.', severity: 'success' }, 0);
+  assert.equal(t!.title, 'Settings saved');
+  assert.equal(toastAnnouncement(t!), 'Settings saved. The new schedule runs tonight.');
+  assert.equal(toastAnnouncement({ message: 'Saved' }), 'Saved');
+});
+
+test('the newest toast stands in front, two show their edge and the rest lie out of sight', () => {
+  const places = toastPlaces([60, 44, 80, 44], 10);
+  assert.deepEqual(places.map((p) => [p.depth, p.behind, p.buried]), [[0, false, false], [1, true, false], [2, true, false], [3, true, true]]);
+  assert.deepEqual(places.map((p) => p.lift), [0, 70, 124, 214]);
+});
+
+test('a stack lays its cards over each other and fans them out under the pointer', () => {
+  assert.equal(declared('.glim-toast-stack', 'display'), 'grid');
+  assert.equal(declared('.glim-toast-stack > .glim-toast-card', 'grid-area'), '1 / 1');
+  assert.equal(declared('.glim-toast-card', 'box-shadow'), 'var(--elevation-float)');
+  assert.equal(declared('.glim-toast-card[data-behind]', 'height'), 'var(--toast-front-h)');
+  assert.equal(declared('.glim-toast-card[data-buried]', 'opacity'), '0');
+  assert.equal(declared('.glim-toast-stack:is(:hover, :focus-within) > .glim-toast-card[data-behind]', 'translate'), '0 calc(-1 * var(--toast-y))');
 });

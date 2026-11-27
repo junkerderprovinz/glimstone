@@ -1,4 +1,4 @@
-import { createMemo, createUniqueId, For, mergeProps } from "solid-js";
+import { createMemo, createSignal, createUniqueId, For, mergeProps } from "solid-js";
 import * as ratingGroup from "@zag-js/rating-group";
 import { normalizeProps, useMachine } from "@zag-js/solid";
 import { RATING_TEXT, pageDir, type RatingText } from "@glimstone/core";
@@ -30,6 +30,9 @@ export function Rating(raw: RatingProps) {
   const id = createUniqueId();
   const name = useFieldName(() => props.label);
   const words = () => ({ ...RATING_TEXT, ...props.text });
+  // Counts the picks: the stylesheet names one spring per parity, so a second
+  // pick of the same star springs again.
+  const [picks, setPicks] = createSignal(0);
   const service = useMachine(ratingGroup.machine, () => ({
     id,
     dir: pageDir(),
@@ -38,7 +41,10 @@ export function Rating(raw: RatingProps) {
     allowHalf: props.allowHalf,
     readOnly: props.readOnly,
     disabled: props.disabled,
-    onValueChange: (d: { value: number }) => props.onChange(d.value),
+    onValueChange: (d: { value: number }) => {
+      setPicks((n) => n + 1);
+      props.onChange(d.value);
+    },
     translations: { ratingValueText: (index: number) => words().star(index, props.count) },
   }));
   const api = createMemo(() => ratingGroup.connect(service, normalizeProps));
@@ -50,7 +56,12 @@ export function Rating(raw: RatingProps) {
       <div {...api().getControlProps()} class="glim-rating-control">
         <For each={api().items}>
           {(index) => (
-            <span {...api().getItemProps({ index })} class="glim-rating-star">
+            <span
+              {...api().getItemProps({ index })}
+              data-pop={picks() > 0 && index === Math.ceil(api().value) ? (picks() % 2 ? "odd" : "even") : undefined}
+              style={{ "--i": String(index - 1) }}
+              class="glim-rating-star"
+            >
               <IconStar />
               <span class="glim-rating-fill" aria-hidden="true">
                 <IconStar />

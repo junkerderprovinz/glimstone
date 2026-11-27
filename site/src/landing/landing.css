@@ -1,0 +1,680 @@
+/* The start page: very large type, one live window, and a story told by
+   scrolling. Its classes start with la- and stay out of the docs' way. */
+
+/* The accent inside the start page walks on its own, so the tokens that derive
+   from it are derived again inside, from one colour that can be animated. */
+@property --scope-accent { syntax: "<color>"; inherits: true; initial-value: #fcc419; }
+.accent-scope {
+  --accent: var(--scope-accent);
+  --accent-contrast: #161616;
+  --accent-soft: color-mix(in srgb, var(--accent) 14%, transparent);
+  --accent-ink: light-dark(oklab(from var(--accent) min(l, var(--ink-l-light)) calc(a * min(1, var(--ink-l-light) / l)) calc(b * min(1, var(--ink-l-light) / l))), oklab(from var(--accent) max(l, var(--ink-l-dark)) calc(a * min(1, (1 - var(--ink-l-dark)) / (1 - l))) calc(b * min(1, (1 - var(--ink-l-dark)) / (1 - l)))));
+  --accent-glyph: var(--accent-ink);
+  --btn-tint: var(--accent-ink);
+  --focus-ring: var(--accent-ink);
+  --accent-hover: color-mix(in srgb, var(--accent) 85%, var(--stone-text));
+}
+
+.la {
+  --la-gutter: clamp(1rem, 3.8vw, 4.5rem);
+  --la-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --la-spring: linear(0, 0.08 2%, 0.31 6%, 0.65 12%, 0.95 18%, 1.08 24%, 1.1 28%, 1.07 34%, 1.01 44%, 0.99 52%, 1.003 70%, 1);
+  --la-pin: 5.25rem;
+  /* The stone crowns the window's far corner and rises this far above it. */
+  --la-gem: clamp(7rem, 13.5vw, 16.5rem);
+  --la-rise: calc(var(--la-gem) * 0.66);
+  max-width: 124rem;
+  margin: 0 auto;
+  padding-inline: var(--la-gutter);
+  color: var(--stone-text);
+  caret-color: var(--accent-ink);
+  overflow-x: clip;
+}
+.la ::selection { background: color-mix(in oklab, var(--accent) 36%, transparent); color: var(--stone-text); }
+html:has(.la) {
+  scrollbar-color: color-mix(in oklab, var(--stone-text) 24%, transparent) var(--stone-ground);
+  scrollbar-width: thin;
+}
+.la :is(a, button):focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 3px; }
+
+/* The window's settings reach the whole show, and each part of the window
+   takes them on its own when the light gets there: the accent, and the
+   corners, whose radius tokens are registered lengths and so morph. The
+   show itself takes a new accent at once, in the stone's flash: easing an
+   inherited colour across the whole page costs every frame while it runs,
+   so only the stone and the parts the light reaches ease into it. */
+.la .la-show.accent-scope {
+  transition:
+    --radius-card 750ms var(--la-ease),
+    --radius-control 750ms var(--la-ease),
+    --radius-pill 750ms var(--la-ease);
+}
+.la .la-show.accent-scope:has([data-la-pace="wild"]) { transition-timing-function: var(--la-spring); transition-duration: 900ms; }
+.la .la-take.accent-scope,
+.la .la-hot.accent-scope,
+.la .la-gem.accent-scope {
+  transition:
+    --scope-accent 700ms var(--la-ease),
+    --radius-card 750ms var(--la-ease),
+    --radius-control 750ms var(--la-ease),
+    --radius-pill 750ms var(--la-ease);
+}
+.la [data-la-pace="wild"] .la-take.accent-scope {
+  transition-timing-function: var(--la-ease), var(--la-spring), var(--la-spring), var(--la-spring);
+  transition-duration: 700ms, 900ms, 900ms, 900ms;
+}
+.la .la-show.accent-scope:has([data-la-pace="off"]) { transition: none; }
+.la-src { display: contents; }
+
+.la-title {
+  margin: 0;
+  padding-block: clamp(2.25rem, 7vh, 5rem) clamp(2rem, 5.5vh, 4rem);
+  padding-inline-end: calc(var(--la-gem) + 1rem);
+  font-size: clamp(2.5rem, 4.45vw, 6rem);
+  font-weight: 650;
+  line-height: 0.93;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+.la-line { display: block; }
+.la-line--quiet { color: var(--stone-text-muted); }
+.la-hot { color: var(--accent-ink); }
+
+.la-track {
+  /* Where the window pins: centred in the room below the site header, never
+     under it. The chapter copy pins on the same line. */
+  --la-top: max(var(--la-pin), calc((100vh - var(--la-pin-h, 40rem)) / 2 + 1.875rem));
+  display: grid;
+  grid-template-columns: minmax(19rem, 0.72fr) minmax(0, 1.28fr);
+  column-gap: clamp(2.5rem, 4.5vw, 6rem);
+}
+.la-story { grid-column: 1; grid-row: 1; min-width: 0; }
+/* The stage rises by the stone's height, so at the top the stone stands
+   beside the headline and the window starts level with the lead. */
+.la-stage { grid-column: 2; grid-row: 1; min-width: 0; margin-top: calc(-1 * var(--la-rise)); }
+.la-stage-pin {
+  position: sticky;
+  top: var(--la-top);
+  display: grid;
+  gap: 1.5rem;
+  padding-top: var(--la-rise);
+  isolation: isolate;
+}
+.la-stage-window { position: relative; z-index: 1; }
+/* A faint wash of the window's accent behind it, the stone's light on the ground. */
+.la-stage-glow {
+  position: absolute;
+  inset: var(--la-rise) -4% 8%;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--accent) 10%, transparent), transparent);
+}
+
+/* The set stone. The setting keeps its silver, the star takes the accent at
+   four depths, the same four the gold has in the mark. */
+.la-gem {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 3;
+  width: var(--la-gem);
+  aspect-ratio: 1;
+  pointer-events: none;
+}
+.la-gem-body { position: absolute; inset: 0; z-index: 2; }
+.la-gem-art { display: block; width: 100%; height: 100%; overflow: visible; }
+.la-gem-art polygon { fill: var(--f); stroke: var(--f); stroke-width: 1px; stroke-linejoin: round; }
+.la-gem-art .la-f5 { --f: #ccd1d4; }
+.la-gem-art .la-f1 { --f: #b4b8b9; }
+.la-gem-art .la-f4 { --f: #72767d; }
+.la-gem-art .la-f3 { --f: #4d5054; }
+.la-gem-art .la-f2 { --f: oklch(from var(--accent) 0.9 calc(c * 0.6) h); }
+.la-gem-art .la-f6 { --f: oklch(from var(--accent) 0.81 calc(c * 0.74) h); }
+.la-gem-art .la-f7 { --f: oklch(from var(--accent) 0.65 calc(c * 0.72) h); }
+.la-gem-art .la-f8 { --f: oklch(from var(--accent) 0.46 calc(c * 0.42) h); }
+.la-gem::before {
+  content: "";
+  position: absolute;
+  inset: 84% 10% -6%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, light-dark(rgb(0 0 0 / 0.16), rgb(0 0 0 / 0.55)), transparent);
+}
+.la-gem-halo {
+  position: absolute;
+  inset: -32%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--accent) 24%, transparent), color-mix(in oklab, var(--accent) 7%, transparent) 48%, transparent);
+}
+.la-gem-glint {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  overflow: hidden;
+  mask: var(--la-mark) center / contain no-repeat;
+}
+.la-gem-sweep, .la-gem-flash {
+  position: absolute;
+  inset: -30% -80%;
+  opacity: 0;
+  background: linear-gradient(112deg, transparent 43%, rgb(255 255 255 / 0.45) 49%, rgb(255 255 255 / 0.8) 50%, rgb(255 255 255 / 0.45) 51%, transparent 57%);
+}
+.la-gem-flash { background: linear-gradient(112deg, transparent 36%, rgb(255 255 255 / 0.35) 46%, rgb(255 255 255 / 0.75) 50%, rgb(255 255 255 / 0.35) 54%, transparent 64%); }
+.la-spark { position: absolute; z-index: 4; width: 1.25rem; height: 1.25rem; margin: -0.625rem 0 0 -0.625rem; fill: #fff; opacity: 0; }
+
+/* The light of one change: a thin trace drawn behind a short bright head,
+   from the control into the stone and from the stone to each part. */
+.la-beams {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  fill: none;
+  --la-ink: light-dark(oklch(from var(--la-beam) min(l, 0.6) c h), color-mix(in oklab, var(--la-beam) 62%, white));
+  --la-curve: cubic-bezier(0.45, 0, 0.2, 1);
+}
+.la-beam-trace {
+  stroke: var(--la-ink);
+  stroke-width: 1.25;
+  stroke-linecap: round;
+  stroke-dasharray: 100 100;
+  stroke-dashoffset: 100;
+  opacity: 0.55;
+  animation:
+    la-draw var(--la-run) var(--la-curve) var(--la-at) forwards,
+    la-fade 900ms ease-out calc(var(--la-at) + var(--la-run) + 120ms) forwards;
+}
+.la-beam-head {
+  stroke: var(--la-ink);
+  stroke-width: 2.25;
+  stroke-linecap: round;
+  stroke-dasharray: 4 200;
+  stroke-dashoffset: 4;
+  opacity: 0;
+  animation: la-run var(--la-run) var(--la-curve) var(--la-at) forwards;
+}
+.la-beam-land {
+  stroke: var(--la-ink);
+  stroke-width: 1.5;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: la-land 750ms var(--la-ease) calc(var(--la-at) + var(--la-run)) forwards;
+}
+@keyframes la-draw { to { stroke-dashoffset: 0; } }
+@keyframes la-fade { to { opacity: 0; } }
+@keyframes la-run {
+  0% { stroke-dashoffset: 4; opacity: 1; }
+  92% { opacity: 1; }
+  100% { stroke-dashoffset: -100; opacity: 0; }
+}
+@keyframes la-land {
+  0% { opacity: 0.9; scale: 0.3; }
+  100% { opacity: 0; scale: 2.4; }
+}
+@keyframes la-flash {
+  0% { opacity: 1; translate: -42% 0; }
+  100% { opacity: 1; translate: 42% 0; }
+}
+@keyframes la-flare {
+  0% { scale: 1; }
+  25% { scale: 1.14; }
+  100% { scale: 1; }
+}
+@keyframes la-glint {
+  0% { opacity: 1; translate: -38% 0; }
+  32% { opacity: 1; translate: 38% 0; }
+  33%, 100% { opacity: 0; translate: 38% 0; }
+}
+@keyframes la-twinkle {
+  0%, 84%, 100% { opacity: 0; scale: 0.2; rotate: 0deg; }
+  90% { opacity: 0.9; scale: 1; rotate: 45deg; }
+}
+@keyframes la-gem-in { from { opacity: 0; scale: 0.86; rotate: -10deg; } }
+
+.la-window {
+  position: relative;
+  overflow: hidden;
+  container-type: inline-size;
+  border-radius: calc(var(--radius-card) + 0.5rem);
+  background: light-dark(var(--stone-surface2), var(--stone-sidebar));
+  /* No outline: the window stands off the page by its lit top edge and a
+     shadow that grows longer on the side that leans away. */
+  box-shadow:
+    inset 0 1px 0 0 light-dark(rgb(255 255 255 / 0.9), rgb(255 255 255 / 0.09)),
+    0 2px 6px light-dark(rgb(0 0 0 / 0.06), rgb(0 0 0 / 0.4)),
+    24px 40px 80px -28px light-dark(rgb(0 0 0 / 0.22), rgb(0 0 0 / 0.7)),
+    48px 90px 160px -60px light-dark(rgb(0 0 0 / 0.26), rgb(0 0 0 / 0.85));
+}
+/* The window leans back a little, turned toward the headline, and stands up
+   straight while the pointer is on it so it reads as a tool, not a picture. */
+.la-stage-window {
+  transform: perspective(2400px) rotateY(-7deg) rotateX(4deg);
+  transform-origin: 30% 50%;
+  transition: transform 700ms var(--la-ease, ease);
+}
+.la-stage-window:hover, .la-stage-window:focus-within { transform: perspective(2400px) rotateY(0deg) rotateX(0deg); }
+@media (max-width: 56rem) {
+  .la-stage-window, .la-stage-window:hover { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) { .la-stage-window { transition: none; } }
+:root[data-motion="off"] .la-stage-window { transition: none; }
+.la-window-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  height: 2.75rem;
+  padding-inline: 1.125rem;
+  /* A full step off the window body, lighter in the dark and darker in the
+     light, so the bar reads as its own strip without a line under it. */
+  background: light-dark(var(--stone-surface3), color-mix(in oklab, var(--stone-surface2) 75%, var(--stone-sidebar)));
+  box-shadow: inset 0 1px 0 0 light-dark(rgb(255 255 255 / 0.6), rgb(255 255 255 / 0.08)), 0 1px 3px light-dark(rgb(0 0 0 / 0.06), rgb(0 0 0 / 0.35));
+  position: relative;
+  z-index: 1;
+  font-size: var(--text-subline);
+  user-select: none;
+}
+.la-window-app { font-weight: 600; }
+/* The bar is a step darker than the window, too dark for muted ink in the light theme. */
+.la-window-where { color: var(--stone-text-sub); }
+.la-window-where::before { content: "/"; margin-inline-end: 0.625rem; opacity: 0.5; }
+.la-window-body {
+  position: relative;
+  display: grid;
+  grid-template-columns: 10.5rem minmax(0, 1fr);
+  gap: 1.75rem;
+  padding: 2rem 1.75rem 2.25rem;
+}
+.la-window-main { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 1.5rem; align-items: start; }
+.la-window-stack, .la-meters { display: grid; gap: 1.375rem; }
+.la-window-actions { display: flex; justify-content: flex-end; gap: 0.5rem; }
+.la-window-rail { align-self: start; }
+.la-window .glim-sel--inline { width: auto !important; contain: none; }
+/* The gliding thumb copies the accent when it moves, so here it reads the
+   walking accent directly or it would lag one colour behind. */
+.la .la-show .glim-sel-thumb { background-color: var(--scope-accent); }
+.la-window-runs { grid-column: 1 / -1; }
+.la-window-rows { display: grid; }
+@container (max-width: 62rem) {
+  .la-window-main { grid-template-columns: minmax(0, 1fr); }
+  .la-window-runs { display: none; }
+}
+@container (max-width: 44rem) {
+  .la-window-body { grid-template-columns: minmax(0, 1fr); padding: 1.25rem 1rem 1.5rem; }
+  .la-window-rail { display: none; }
+}
+@container (max-width: 30rem) {
+  .la-window-wide { display: none; }
+  .la-window .la-window-toast { inset-inline: 0.75rem; bottom: 0.75rem; width: auto; }
+  .la-window-body { padding: 0.875rem 0.75rem 1rem; }
+  .la-window-main { gap: 0.875rem; }
+}
+
+.la-swatches { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.375rem; }
+.la-swatch {
+  width: 1.375rem;
+  height: 1.375rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: var(--la-swatch);
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.14);
+  cursor: pointer;
+  transition: transform 300ms var(--la-ease), box-shadow 300ms ease;
+}
+.la-swatch:hover { transform: scale(1.12); }
+.la-swatch[aria-checked="true"] { box-shadow: 0 0 0 2px var(--stone-surface), 0 0 0 3.5px var(--stone-text); }
+.la-swatch:focus-visible { outline-offset: 4px; }
+
+.la-window-toast {
+  position: absolute;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 4;
+  width: min(21rem, calc(100% - 2.5rem));
+}
+.la .la-window-toast .glim-toast { width: 100%; min-width: 0; max-width: none; animation: none; }
+.la-toast-spot { height: 3.5rem; visibility: hidden; pointer-events: none; }
+@keyframes la-refill { from { transform: scaleX(0); } }
+.la-meters :is(.glim-meter-fill, .glim-progress-fill) { transform-origin: left center; }
+@keyframes la-toast-subtle { from { opacity: 0; transform: translateY(12px); } }
+@keyframes la-toast-wild {
+  0% { opacity: 0; transform: translateY(64px) scale(0.9) rotate(-2deg); }
+  40% { opacity: 1; }
+  100% { transform: none; }
+}
+
+/* The watched pointer of the first view: it travels like a hand and presses
+   with a small ring where it clicks. */
+.la-cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  pointer-events: none;
+  transition: transform 780ms cubic-bezier(0.65, 0, 0.25, 1);
+  filter: drop-shadow(0 2px 3px rgb(0 0 0 / 0.45));
+}
+.la-cursor svg { display: block; transform-origin: 5px 3px; transition: transform 120ms ease; }
+.la-cursor.is-pressing svg { transform: scale(0.84); }
+.la-cursor-ring {
+  position: absolute;
+  top: 3px;
+  left: 5px;
+  width: 30px;
+  height: 30px;
+  margin: -15px 0 0 -15px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.35);
+  opacity: 0;
+}
+.la-cursor.is-pressing .la-cursor-ring { animation: la-press 520ms var(--la-ease); }
+@keyframes la-press {
+  0% { opacity: 0.9; transform: scale(0.3); }
+  100% { opacity: 0; transform: scale(1.6); }
+}
+
+.la-rail {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0 0.25rem;
+  list-style: none;
+  font-size: var(--text-subline);
+  color: var(--stone-text-muted);
+}
+.la-rail li { display: grid; gap: 0.5rem; transition: color 400ms ease; }
+.la-rail li.is-on { color: var(--stone-text); }
+.la-rail-bar { position: relative; height: 2px; overflow: hidden; border-radius: 2px; background: var(--stone-surface3); }
+.la-rail-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform: scaleX(var(--la-fill));
+  transform-origin: left;
+  transition: transform 700ms var(--la-ease);
+}
+.la-rail-bar:dir(rtl)::after { transform-origin: right; }
+
+.la-intro { position: relative; min-height: 72vh; padding-top: 0.25rem; }
+.la-lead {
+  max-width: 36ch;
+  margin: 0 0 2.25rem;
+  font-size: clamp(1.125rem, 0.95rem + 0.4vw, 1.375rem);
+  line-height: 1.55;
+  color: var(--stone-text-sub);
+  text-wrap: pretty;
+}
+.la-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+.la-hint {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  max-width: 34ch;
+  margin: 3rem 0 0;
+  font-size: var(--text-subline);
+  line-height: 1.5;
+  color: var(--stone-text-muted);
+}
+.la-hint svg { flex: none; margin-top: 0.125rem; color: var(--accent-ink); }
+
+.la-markers { display: grid; padding-top: 30vh; }
+.la-marker { height: 46vh; }
+.la-markers--intro { position: absolute; inset: -60vh 0 0; padding: 0; }
+.la-markers--intro .la-marker { height: 100%; }
+
+.la-ch { position: relative; display: grid; margin-top: 16vh; }
+.la-ch > * { grid-area: 1 / 1; }
+.la-ch-copy { position: sticky; top: calc(var(--la-top) + var(--la-rise)); z-index: 1; align-self: start; padding-bottom: 3rem; }
+
+.la-word {
+  margin: 0 0 1.75rem;
+  font-size: clamp(3.5rem, 8.3vw, 9.75rem);
+  font-weight: 650;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+}
+.la-word--colour { color: var(--accent-ink); }
+.la-text {
+  max-width: 34ch;
+  margin: 0;
+  font-size: clamp(1.125rem, 0.95rem + 0.4vw, 1.375rem);
+  line-height: 1.5;
+  color: var(--stone-text-sub);
+  text-wrap: pretty;
+}
+
+.la-hues { display: flex; flex-wrap: wrap; gap: 0.375rem; margin-top: 2.25rem; }
+.la-hues span {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  background: var(--la-swatch);
+  transform: scale(0.5);
+  transition: opacity 400ms ease, transform 600ms var(--la-ease), box-shadow 400ms ease;
+}
+.la-hues span.is-on { transform: scale(1.1); box-shadow: 0 0 0 3px var(--stone-ground), 0 0 0 4.5px var(--stone-text-muted); }
+.la-hue-name { margin: 1rem 0 0; font-size: 1.125rem; font-weight: 600; }
+
+/* A magnified corner after the word, drawn with the radius of the step. */
+.la-corner {
+  display: inline-block;
+  width: 0.56em;
+  height: 0.56em;
+  margin-inline-start: 0.14em;
+  border-block-start: 0.085em solid var(--accent-ink);
+  border-inline-start: 0.085em solid var(--accent-ink);
+  border-start-start-radius: 0;
+  vertical-align: 0.02em;
+  transition: border-start-start-radius 800ms var(--la-ease);
+}
+.la-corner--soft { border-start-start-radius: 0.16em; }
+.la-corner--round { border-start-start-radius: 0.56em; }
+.la-show:has([data-la-pace="off"]) .la-corner { transition: none; }
+
+.la-readout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.75rem;
+  margin: 2.25rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 1.125rem;
+  color: var(--stone-text-muted);
+}
+.la-readout li { display: inline-flex; align-items: center; gap: 0.5rem; transition: color 400ms ease; }
+.la-readout li.is-on { color: var(--stone-text); font-weight: 600; }
+.la-readout li.is-on svg { color: var(--accent-ink); }
+
+.la-letters { display: inline-block; }
+.la-letters > span { display: inline-block; }
+@keyframes la-letter-subtle { from { opacity: 0.2; transform: translateY(0.1em); } }
+@keyframes la-letter-wild {
+  0% { opacity: 0; transform: translateY(0.5em) rotate(-8deg); }
+  35% { opacity: 1; }
+  100% { transform: none; }
+}
+
+.la-word--speech { display: flex; align-items: center; }
+.la-speech-glyph, .la-speech-text {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: max-width 700ms var(--la-ease), opacity 500ms ease, margin 700ms var(--la-ease), filter 500ms ease;
+}
+.la-speech-glyph { max-width: 1em; margin-inline-end: 0.16em; color: var(--accent-ink); line-height: 0; }
+.la-speech-glyph svg { width: 0.78em; height: 0.78em; }
+.la-speech-text { max-width: 3.4em; padding-block: 0.06em; }
+.la-speech--text .la-speech-glyph { max-width: 0; margin-inline-end: 0; opacity: 0; filter: blur(8px); }
+.la-speech--glyph .la-speech-text { max-width: 0; opacity: 0; filter: blur(8px); }
+
+.la-frameworks { padding-block: clamp(8rem, 20vh, 15rem) 0; }
+.la-sub {
+  max-width: 18ch;
+  margin: 0 0 clamp(2rem, 5vh, 3.5rem);
+  font-size: clamp(2rem, 1.1rem + 2.8vw, 4.25rem);
+  font-weight: 620;
+  line-height: 1;
+  letter-spacing: -0.035em;
+}
+.la-fw-list { margin: 0; padding: 0; list-style: none; }
+.la-fw {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: clamp(1rem, 2.4vw, 2.5rem);
+  padding-block: clamp(0.875rem, 2vw, 1.875rem);
+  color: var(--stone-text-muted);
+  text-decoration: none;
+  transition: color 350ms ease;
+}
+.la-fw:hover, .la-fw:focus-visible { color: var(--stone-text); }
+.la-fw-name {
+  font-size: clamp(2.75rem, 1rem + 6.4vw, 8.25rem);
+  font-weight: 620;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  transition: transform 600ms var(--la-ease);
+}
+.la-fw:hover .la-fw-name { transform: translateX(0.08em); }
+.la-fw-mark { display: grid; place-items: center; width: clamp(2rem, 3.6vw, 3.75rem); opacity: 0.55; filter: grayscale(1); transition: opacity 350ms ease, filter 350ms ease; }
+.la-fw-mark .fw-mark, .la-fw-mark svg { display: block; width: 100%; height: auto; }
+.la-fw:hover .la-fw-mark { opacity: 1; filter: none; }
+.la-fw-pkg { font-family: ui-monospace, "Cascadia Code", Menlo, Consolas, monospace; font-size: var(--text-body); color: var(--stone-text-sub); }
+.la-fw-go { display: grid; color: var(--accent-ink); opacity: 0; transform: translateX(-0.5rem); transition: opacity 300ms ease, transform 500ms var(--la-ease); }
+.la-fw:hover .la-fw-go, .la-fw:focus-visible .la-fw-go { opacity: 1; transform: none; }
+
+.la-base { padding-block: clamp(8rem, 22vh, 16rem); }
+.la-statement {
+  max-width: 30ch;
+  margin: 0;
+  font-size: clamp(1.75rem, 0.9rem + 2.5vw, 3.75rem);
+  font-weight: 520;
+  line-height: 1.16;
+  letter-spacing: -0.03em;
+  color: var(--stone-text-muted);
+  text-wrap: pretty;
+}
+.la-statement a {
+  color: var(--stone-text);
+  text-decoration: underline;
+  text-decoration-thickness: 0.055em;
+  text-underline-offset: 0.14em;
+  text-decoration-color: color-mix(in oklab, var(--accent) 70%, transparent);
+  transition: color 250ms ease, text-decoration-color 250ms ease;
+}
+.la-statement a:hover { color: var(--accent-ink); text-decoration-color: var(--accent); }
+
+.la-end { padding-block: clamp(4rem, 10vh, 8rem) 2rem; }
+.la-word--end { font-size: clamp(3.5rem, 10.6vw, 13.5rem); line-height: 0.88; margin-bottom: 2.5rem; }
+.la-text--end { max-width: 44ch; margin-bottom: 2.25rem; }
+.la-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: clamp(6rem, 14vh, 10rem) 0 0;
+  padding-top: 1.5rem;
+  font-size: var(--text-meta);
+  color: var(--stone-text-muted);
+}
+.la-foot a { display: inline-flex; align-items: center; gap: 0.5rem; color: inherit; text-decoration: none; }
+.la-foot a:hover { color: var(--stone-text); }
+
+/* On a phone the window rides along at the top, the copy pins below it, and
+   the stone sits small on the window's corner. */
+@media (max-width: 52rem) {
+  .la { --la-gem: 4.75rem; --la-rise: 1.75rem; }
+  .la-title { padding-inline-end: 0; }
+  .la-track { grid-template-columns: minmax(0, 1fr); }
+  .la-stage {
+    grid-column: 1;
+    grid-row: 1;
+    position: sticky;
+    top: 3.75rem;
+    z-index: 3;
+    margin-inline: calc(-1 * var(--la-gutter));
+    padding: 0.5rem var(--la-gutter) 0.75rem;
+    background: var(--stone-ground);
+  }
+  .la-stage-pin { position: static; }
+  .la-gem { right: 0.5rem; }
+  .la-stage-glow, .la-rail { display: none; }
+  .la-story { grid-row: 2; }
+  .la-intro { min-height: 0; padding-top: 1.75rem; padding-bottom: 30vh; }
+  .la-hint { margin-top: 2rem; }
+  .la-ch { margin-top: 0; }
+  .la-ch-copy { top: calc(3.75rem + var(--la-pin-h, 0px) + 1.5rem); padding-block: 0.5rem 2rem; }
+  .la-word { font-size: clamp(2.75rem, 12vw, 4rem); margin-bottom: 0.875rem; }
+  .la-text { font-size: 1.0625rem; }
+  .la-hues { margin-top: 1.25rem; gap: 0.5rem; }
+  .la-hues span { width: 1.375rem; height: 1.375rem; }
+  .la-hue-name, .la-readout { display: none; }
+  .la-markers { padding-top: 20vh; }
+  .la-marker { height: 38vh; }
+  .la-fw { grid-template-columns: auto minmax(0, 1fr) auto; row-gap: 0.25rem; }
+  .la-fw-pkg { grid-column: 2; grid-row: 2; font-size: var(--text-meta); }
+  .la-fw-go { opacity: 1; transform: none; grid-column: 3; grid-row: 1 / 3; }
+  .la-foot { flex-direction: column; }
+}
+
+/* Motion. The first view has one authored entrance; further down, the big
+   words rise as they scroll in, scrubbed by the scroll where the browser can,
+   and turned on by an observer where it cannot. Nothing moves when the
+   device or the page asks for stillness. */
+@keyframes la-in { from { opacity: 0; transform: translateY(0.28em); filter: blur(12px); } }
+@keyframes la-in-soft { from { opacity: 0; transform: translateY(14px); } }
+@keyframes la-window-in { from { opacity: 0; transform: translateY(56px) scale(0.97); filter: blur(10px); } }
+@keyframes la-rise { from { opacity: 0; transform: translateY(0.32em); filter: blur(14px); } }
+@keyframes la-slide { from { opacity: 0.15; transform: translateX(calc(var(--la-dir, 1) * 14vw)); } }
+
+@media (prefers-reduced-motion: no-preference) {
+  :root:not([data-motion="off"]) .la-line { animation: la-in 1150ms var(--la-ease) both; }
+  :root:not([data-motion="off"]) .la-line--quiet { animation-delay: 110ms; }
+  :root:not([data-motion="off"]) .la-stage-window { animation: la-window-in 1400ms var(--la-ease) 320ms both; }
+  :root:not([data-motion="off"]) .la-gem { animation: la-gem-in 1300ms var(--la-ease) 760ms both; }
+  :root:not([data-motion="off"]) .la-gem-sweep { animation: la-glint 9s var(--la-ease) 2.2s infinite; }
+  :root:not([data-motion="off"]) .la-spark { animation: la-twinkle 8.4s ease-in-out infinite; }
+  :root:not([data-motion="off"]) :is(.la-gem:not(.is-awake), .la-stage-pin:hover .la-gem) :is(.la-gem-sweep, .la-spark) { animation-play-state: paused; }
+  :root:not([data-motion="off"]) .la-gem-flash { animation: la-flash 950ms var(--la-ease) both; }
+  :root:not([data-motion="off"]) .la-gem-halo[data-flash] { animation: la-flare 1300ms var(--la-ease) both; }
+  :root:not([data-motion="off"]) .la-window[data-la-pace="subtle"] .la-meters.is-replay :is(.glim-meter-fill, .glim-progress-fill) { animation: la-refill 900ms var(--la-ease) both; }
+  :root:not([data-motion="off"]) .la-window[data-la-pace="wild"] .la-meters.is-replay :is(.glim-meter-fill, .glim-progress-fill) { animation: la-refill 1100ms var(--la-spring) both; }
+  :root:not([data-motion="off"]) .la-intro > :is(.la-lead, .la-actions, .la-hint) { animation: la-in-soft 900ms var(--la-ease) both; }
+  :root:not([data-motion="off"]) .la-intro > .la-lead { animation-delay: 520ms; }
+  :root:not([data-motion="off"]) .la-intro > .la-actions { animation-delay: 620ms; }
+  :root:not([data-motion="off"]) .la-intro > .la-hint { animation-delay: 1400ms; }
+
+  :root:not([data-motion="off"]) .la-window[data-la-pace="subtle"] .la-window-toast { animation: la-toast-subtle 320ms var(--la-ease) both; }
+  :root:not([data-motion="off"]) .la-window[data-la-pace="wild"] .la-window-toast { animation: la-toast-wild 900ms var(--la-spring) both; }
+  :root:not([data-motion="off"]) .la-letters--subtle > span { animation: la-letter-subtle 560ms var(--la-ease) both; animation-delay: calc(var(--i) * 35ms); }
+  :root:not([data-motion="off"]) .la-letters--wild > span { animation: la-letter-wild 1000ms var(--la-spring) both; animation-delay: calc(var(--i) * 60ms); }
+
+  @supports (animation-timeline: view()) {
+    :root:not([data-motion="off"]) .la-reveal:not(li) {
+      animation: la-rise both var(--la-ease);
+      animation-timeline: view();
+      animation-range: entry 0% entry 85%;
+    }
+    :root:not([data-motion="off"]) li.la-reveal {
+      animation: la-slide both var(--la-ease);
+      animation-timeline: view();
+      animation-range: entry 0% cover 42%;
+    }
+  }
+  :root:not([data-motion="off"]) .la-armed .la-reveal { transition: opacity 1000ms var(--la-ease), transform 1200ms var(--la-ease), filter 900ms var(--la-ease); }
+  :root:not([data-motion="off"]) .la-armed .la-reveal:not(.is-in) { opacity: 0; transform: translateY(0.32em); filter: blur(14px); }
+  :root:not([data-motion="off"]) .la-armed li.la-reveal:not(.is-in) { opacity: 0.15; transform: translateX(calc(var(--la-dir, 1) * 14vw)); filter: none; }
+}
+
+/* A window set to no motion keeps still inside, the way an app would. */
+.la-window[data-la-pace="off"] * { transition-duration: 0s !important; animation: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .la-cursor, .la-beams { display: none; }
+  .la-show.accent-scope, .la *, .la *::after { transition-duration: 0s !important; }
+}
+:root[data-motion="off"] :is(.la-cursor, .la-beams) { display: none; }
+:root[data-motion="off"] .la-show.accent-scope, :root[data-motion="off"] .la * { transition-duration: 0s !important; }

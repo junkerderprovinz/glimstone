@@ -1,11 +1,23 @@
-import { createSignal, For, Match, onCleanup, Show, Switch } from "solid-js";
-import { Button, Card, EmptyState, IconButton, ListRow, Pill, SkeletonRow, TextField } from "@glimstone/solid";
+import { createSignal, For, Match, onCleanup, Switch } from "solid-js";
+import { Button, Card, EmptyState, IconButton, ListRow, SkeletonRow, TextField } from "@glimstone/solid";
 import { Glyph } from "../../solid/glyph";
 
 interface Backup {
   name: string;
   size: string;
   failed?: boolean;
+}
+
+// The figure carries the row; the unit stands a step quieter after a narrow space.
+function Size(props: { of: string }) {
+  const parts = () => props.of.split(" ");
+  return (
+    <>
+      {parts()[0]}
+      {"\u202f"}
+      <small>{parts()[1]}</small>
+    </>
+  );
 }
 
 export default function ListPage() {
@@ -35,9 +47,9 @@ export default function ListPage() {
         <Switch>
           <Match when={loading()}>
             <div role="group" aria-label="Backups" aria-busy="true">
-              <SkeletonRow />
-              <SkeletonRow />
-              <SkeletonRow />
+              <SkeletonRow badge={false} value actions={1} />
+              <SkeletonRow badge={false} value actions={1} />
+              <SkeletonRow badge={false} value actions={1} />
             </div>
           </Match>
           <Match when={shown().length > 0}>
@@ -47,14 +59,8 @@ export default function ListPage() {
                   <ListRow
                     name={b.name}
                     tile={<Glyph name="IconArchive" />}
-                    badges={
-                      <>
-                        <Pill class="glim-num">{b.size}</Pill>
-                        <Show when={b.failed}>
-                          <Pill tone="fail">Failed</Pill>
-                        </Show>
-                      </>
-                    }
+                    status={b.failed ? { tone: "fail", label: "Failed" } : undefined}
+                    value={<Size of={b.size} />}
                     actions={
                       <IconButton
                         tip={`Delete ${b.name}`}

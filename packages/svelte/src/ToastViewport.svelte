@@ -17,7 +17,7 @@
 </script>
 
 <script lang="ts">
-  import { announce, liveRegionAttrs, toastPoliteness } from "@glimstone/core";
+  import { announce, liveRegionAttrs, toastAnnouncement, toastPoliteness, watchToastStack } from "@glimstone/core";
   import ToastCard from "./ToastCard.svelte";
 
   // The toast system's presentational half (design-language.md, "Toasts"). It
@@ -40,17 +40,20 @@
     for (const t of toasts) {
       if (heard.has(t.id)) continue;
       heard.add(t.id);
-      announce(t.message, toastPoliteness(t.severity));
+      announce(toastAnnouncement(t), toastPoliteness(t.severity));
     }
   });
+  let stack: HTMLDivElement;
+  $effect(() => watchToastStack(stack));
 </script>
 
 <div class="glim-sr-only" {...liveRegionAttrs("polite")}></div>
 <div class="glim-sr-only" {...liveRegionAttrs("assertive")}></div>
-<div data-glim="ToastViewport" class="glim-toast-stack">
+<div bind:this={stack} data-glim="ToastViewport" class="glim-toast-stack">
   {#each toasts as t (t.id)}
     <ToastCard
       id={t.id}
+      title={t.title}
       message={t.message}
       severity={t.severity}
       action={t.action}

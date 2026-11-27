@@ -8,7 +8,7 @@ const block = (page: Page, name: string) => page.locator(`[data-demo="${name}"][
 const PARTS: Record<string, string[]> = {
   SignInPage: ["SignInCard"],
   SettingsPage: ["Selector", "Card", "FieldRow", "Toggle"],
-  ListPage: ["ListRow", "Pill", "TextField"],
+  ListPage: ["ListRow", "TextField"],
   InfoPage: ["InfoTile", "InfoVersionCard", "InfoComponentsCard", "InfoHelpCard", "InfoAboutCard"],
   UploadArea: ["Card", "ListRow"],
   ConfirmFlow: ["ListRow", "IconButton"],
@@ -47,6 +47,31 @@ test("the list page filters to an empty state and back", async ({ page }) => {
   await expect(list.getByText("No backups match the filter")).toBeVisible();
   await list.getByRole("button", { name: "Clear the filter" }).click();
   await expect(list.locator('[data-glim="ListRow"]')).toHaveCount(3);
+});
+
+test("[list-row-value] the list page keeps its figures in one column and only the failure stands out", async ({ page }) => {
+  const list = block(page, "ListPage");
+  const rows = list.locator('[data-glim="ListRow"]');
+  await expect(rows).toHaveCount(3);
+  const ends = await list.locator(".glim-list-row-value").evaluateAll((all) => all.map((v) => Math.round(v.getBoundingClientRect().right)));
+  expect(new Set(ends).size).toBe(1);
+  await expect(list.locator(".glim-list-row-value").first()).toHaveText("2.4\u202fGB");
+  const unit = await list.locator(".glim-list-row-value small").first().evaluate((s) => getComputedStyle(s).fontSize);
+  expect(unit).toBe("12px");
+  await expect(list.locator(".glim-list-row-status")).toHaveCount(1);
+  await expect(list.locator('.glim-list-row-status[data-tone="fail"]')).toContainText("Failed");
+  await expect(block(page, "ConfirmFlow").locator(".glim-pill")).toHaveCount(0);
+});
+
+test("[skeleton-match] the list page's skeleton ends its value bar where the figures end", async ({ page }) => {
+  await page.goto(`/#/blocks?fw=${framework()}`);
+  const list = block(page, "ListPage");
+  const bar = list.locator(".glim-skeleton-value").first();
+  await expect(bar).toHaveCount(1);
+  const waiting = await bar.evaluate((b) => Math.round(b.getBoundingClientRect().right));
+  await expect(list.locator('[data-glim="ListRow"]')).toHaveCount(3);
+  const shown = await list.locator(".glim-list-row-value").first().evaluate((v) => Math.round(v.getBoundingClientRect().right));
+  expect(Math.abs(waiting - shown)).toBeLessThanOrEqual(1);
 });
 
 test("the settings page switches its cards with the tiles", async ({ page }) => {

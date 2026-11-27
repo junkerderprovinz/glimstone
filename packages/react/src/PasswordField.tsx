@@ -1,8 +1,7 @@
 import { useEffect, useId, useState, type InputHTMLAttributes, type Ref } from "react";
-import { fieldErrorView, fieldNoteView, fieldWidthClass, PASSWORD_FIELD_TEXT, passwordConfirmView, type FieldWidth, type PasswordFieldText } from "@glimstone/core";
-import { FieldError } from "./FieldError.tsx";
+import { fieldErrorView, fieldNoteView, fieldWidthClass, MARKS, PASSWORD_FIELD_TEXT, passwordConfirmView, type FieldWidth, type PasswordFieldText } from "@glimstone/core";
+import { FieldErrorLine } from "./fieldErrorLine.tsx";
 import { useFieldName } from "./fieldName.ts";
-import { IconEye, IconEyeOff } from "./glyphs.tsx";
 import { IconTipButton } from "./IconTipButton.tsx";
 
 // A field for a secret with the reveal eye inside it ("The reveal eye" in the
@@ -67,10 +66,10 @@ export function PasswordField({ width, eyeAttrs, text, error, note, confirm = fa
           className="glim-input"
         />
         <IconTipButton {...eyeAttrs} tip={shown ? words.hide : words.show} className="glim-secret-eye" disabled={disabled} onClick={() => setShown(!shown)}>
-          {shown ? <IconEyeOff /> : <IconEye />}
+          <RevealEye struck={shown} />
         </IconTipButton>
       </span>
-      {err.errorId && <FieldError id={err.errorId}>{error}</FieldError>}
+      <FieldErrorLine id={err.errorId} error={error} />
       {quiet.noteId && (
         <span id={quiet.noteId} className="glim-field-note">
           {note}
@@ -88,6 +87,7 @@ export function PasswordField({ width, eyeAttrs, text, error, note, confirm = fa
                 autoComplete="new-password"
                 spellCheck={false}
                 value={repeat}
+                placeholder={words.again}
                 onChange={(e) => setRepeat(e.target.value)}
                 aria-invalid={mismatch.invalid}
                 aria-describedby={mismatch.describedBy}
@@ -96,15 +96,32 @@ export function PasswordField({ width, eyeAttrs, text, error, note, confirm = fa
                 className="glim-input"
               />
               <IconTipButton tip={repeatShown ? words.hide : words.show} className="glim-secret-eye" disabled={disabled} onClick={() => setRepeatShown(!repeatShown)}>
-                {repeatShown ? <IconEyeOff /> : <IconEye />}
+                <RevealEye struck={repeatShown} />
               </IconTipButton>
             </span>
             <span aria-live="polite" className="glim-secret-confirm-live">
-              {mismatch.errorId && <FieldError id={mismatch.errorId}>{words.mismatch}</FieldError>}
+              <FieldErrorLine id={mismatch.errorId} error={view.mismatch ? words.mismatch : undefined} />
             </span>
           </span>
         </span>
       )}
     </>
+  );
+}
+
+/** The eye, with a stroke that draws itself through it once the secret shows.
+ *  The stroke cuts a gap into the eye behind it, so it reads on the filled glyph. */
+function RevealEye({ struck }: { struck: boolean }) {
+  const cut = useId();
+  const slash = { pathLength: 1, strokeDasharray: 1, strokeDashoffset: struck ? 0 : 1, strokeLinecap: "round" as const, fill: "none", className: "glim-secret-slash" };
+  return (
+    <svg width="16" height="16" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true" data-struck={struck ? "" : undefined} className="glim-mark">
+      <mask id={cut} maskUnits="userSpaceOnUse" x="0" y="0" width="14" height="14">
+        <rect width="14" height="14" fill="white" />
+        <path d="M1.6 1.6 12.4 12.4" stroke="black" strokeWidth="3.4" {...slash} />
+      </mask>
+      <g mask={`url(#${cut})`} dangerouslySetInnerHTML={{ __html: MARKS.eye.body }} />
+      <path d="M1.6 1.6 12.4 12.4" stroke="currentColor" strokeWidth="1.5" {...slash} />
+    </svg>
   );
 }

@@ -2,14 +2,15 @@
 import { computed, useId } from "vue";
 import * as fileUpload from "@zag-js/file-upload";
 import { normalizeProps, useMachine } from "@zag-js/vue";
-import { FILE_UPLOAD_TEXT, formatFileSize, pageDir, type FileRefusal, type FileUploadText } from "@glimstone/core";
+import { FILE_UPLOAD_TEXT, formatFileSize, pageDir, uploadProgressView, type FileRefusal, type FileUploadText } from "@glimstone/core";
 import IconButton from "./IconButton.vue";
 import { IconClose, IconUpload } from "./glyphs";
 
 // Files handed to the app by dropping them or from the picker, bound with
 // v-model, such as a settings file to import. The drop zone is itself the
 // button that opens the picker, so there is one control and one stop for Tab.
-// The files stand under it as rows, and a refused one is named with its reason.
+// The files stand under it as rows, each filling as its file goes up, and a
+// refused one is named with its reason.
 const props = withDefaults(
   defineProps<{
     label: string;
@@ -19,6 +20,8 @@ const props = withDefaults(
     /** The largest file it takes, in bytes. */
     maxFileSize?: number;
     disabled?: boolean;
+    /** How far a file has gone up, from 0 to 1, while the app sends it. Its row fills with it. */
+    progress?: (file: File) => number | undefined;
     text?: Partial<FileUploadText>;
   }>(),
   { maxFiles: 1, disabled: false },
@@ -42,6 +45,7 @@ const service = useMachine(
   })),
 );
 const api = computed(() => fileUpload.connect(service, normalizeProps));
+const sent = (file: File) => uploadProgressView(props.progress?.(file));
 </script>
 
 <template>
@@ -53,7 +57,15 @@ const api = computed(() => fileUpload.connect(service, normalizeProps));
     </div>
     <input v-bind="api.getHiddenInputProps()" />
     <ul v-if="api.acceptedFiles.length > 0" v-bind="api.getItemGroupProps()" class="glim-upload-files">
-      <li v-for="file in api.acceptedFiles" :key="`${file.name}-${file.size}`" v-bind="api.getItemProps({ file })" class="glim-upload-file">
+      <li
+        v-for="file in api.acceptedFiles"
+        :key="`${file.name}-${file.size}`"
+        v-bind="api.getItemProps({ file })"
+        :aria-busy="sent(file).state === 'sending' ? true : undefined"
+        :data-progress="sent(file).state"
+        :style="sent(file).share === undefined ? undefined : { '--glim-upload-progress': sent(file).share }"
+        class="glim-upload-file"
+      >
         <span v-bind="api.getItemNameProps({ file })" class="glim-upload-name">{{ file.name }}</span>
         <span v-bind="api.getItemSizeTextProps({ file })" class="glim-upload-size glim-num">{{ formatFileSize(file.size) }}</span>
         <IconButton :tip="words.remove(file.name)" :glyph="IconClose" @click="api.deleteFile(file)" />

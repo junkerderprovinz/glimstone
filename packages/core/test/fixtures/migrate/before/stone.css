@@ -1,0 +1,30 @@
+.panel {
+  background: var(--carbon-bg);
+  color: var(--carbon-text-sub);
+  border: 1px solid var(--carbon-border);
+}
+
+.panel-row:hover {
+  background: var(--carbon-hover);
+}
+
+.panel-raised {
+  --panel-fill: var(--carbon-surface3, var(--carbon-surface2));
+  box-shadow: 0 0 0 1px var(--carbon-hover-raised);
+}
+
+.app-dim {
+  --carbon-surface: #202020;
+}
+
+.retry:hover {
+  background: var(--status-ok-hover);
+}
+
+@theme {
+  --color-panel: var(--color-carbon-surface);
+}
+
+.chip {
+  @apply bg-carbon-surface2 text-carbon-textMuted;
+}

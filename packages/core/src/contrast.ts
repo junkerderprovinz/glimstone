@@ -2,7 +2,7 @@
 // with it. Every ink it hands out reaches 4.5:1, the minimum for body text,
 // whatever colour somebody picked or the system supplied.
 
-import { darkenTo, INK_LIGHTNESS, lightenTo } from './oklab.ts';
+import { darkenTo, INK_LIGHTNESS, lightenTo, stoneOf } from './oklab.ts';
 
 /** The ratio body text needs, and the floor of every ink computed here. */
 export const MIN_TEXT_CONTRAST = 4.5;
@@ -12,12 +12,20 @@ const DARK_INK = '#161616';
 const WHITE = '#FFFFFF';
 const BLACK = '#000000';
 
-// The card surface of each ramp in tokens.css, where accent text mostly sits.
-// OLED's darker card only adds to the dark figure, so the dark ink holds there
-// as well. On light the step itself is set on surface2 and clears it for any
-// colour, so the card and the wash are the grounds left to check.
-const LIGHT_CARD = '#FFFFFF';
-const DARK_CARD = '#262626';
+/**
+ * The stone steps of tokens.css the inks are measured on, as the lightness,
+ * the share of the accent's chroma and its cap: each ramp's card, where accent
+ * text mostly sits, and each ramp's text, which a filled control's hover moves
+ * toward. OLED's darker card only adds to the dark figure, so the dark ink
+ * holds there as well. On light the step itself is set on surface2 and clears
+ * it for any colour, so the card and the wash are the grounds left to check.
+ */
+export const STONE = {
+  lightCard: [0.997, 0.01, 0.002],
+  darkCard: [0.235, 0.07, 0.011],
+  lightText: [0.2, 0.05, 0.009],
+  darkText: [0.95, 0.03, 0.005],
+} as const;
 // The share of the accent in --accent-soft, which applyAccent writes.
 const SOFT_SHARE = 0.14;
 
@@ -115,41 +123,48 @@ export function accentInks(hex: string): { light: string | undefined; dark: stri
   const accent = rgb(hex);
   const light = rgb(darkenTo(hex, INK_LIGHTNESS.light));
   const dark = rgb(lightenTo(hex, INK_LIGHTNESS.dark));
-  // The wash darkens white and lightens the dark card, so it is the tighter
-  // ground on either ramp.
-  const lightWash = mix(rgb(LIGHT_CARD), accent, SOFT_SHARE).map(Math.round) as Rgb;
-  const darkWash = mix(rgb(DARK_CARD), accent, SOFT_SHARE).map(Math.round) as Rgb;
+  const lightCard = rgb(stoneOf(hex, ...STONE.lightCard));
+  const darkCard = rgb(stoneOf(hex, ...STONE.darkCard));
+  // The wash darkens the light card and lightens the dark one, so it is the
+  // tighter ground on either ramp.
+  const lightWash = mix(lightCard, accent, SOFT_SHARE).map(Math.round) as Rgb;
+  const darkWash = mix(darkCard, accent, SOFT_SHARE).map(Math.round) as Rgb;
   const reads = (ink: Rgb, card: Rgb, wash: Rgb) => Math.min(ratio(ink, card), ratio(ink, wash)) >= MIN_TEXT_CONTRAST;
   return {
-    light: reads(light, rgb(LIGHT_CARD), lightWash) ? undefined : pushed(light, rgb(BLACK), lightWash),
-    dark: reads(dark, rgb(DARK_CARD), darkWash) ? undefined : pushed(dark, rgb(WHITE), darkWash),
+    light: reads(light, lightCard, lightWash) ? undefined : pushed(light, rgb(BLACK), lightWash),
+    dark: reads(dark, darkCard, darkWash) ? undefined : pushed(dark, rgb(WHITE), darkWash),
   };
 }
 
-// --carbon-text of each ramp in tokens.css, which a filled control's hover
-// moves toward.
-const LIGHT_TEXT = '#161616';
-const DARK_TEXT = '#F4F4F4';
 // The hover's step, color-mix(accent 85%, text) in tokens.css.
 const HOVER_STEP = 0.15;
 
+/** The least contrast between a control's resting fill and its hovered one, so a hover always shows. */
+export const MIN_HOVER_STEP = 1.08;
+
 /**
  * The hover of an accent fill on each ramp, where the stylesheet's step toward
- * the text colour would take the fill's ink under 4.5:1. That happens on the
- * mid-tones, where the ink only just clears the fill: a grey such as #777777
- * carries a black ink, and on the light ramp its hover darkens toward that
- * black. The hover then takes the same step away from the ink instead, which
- * only adds contrast. Undefined means the stylesheet's step holds, as it does
- * for every preset.
+ * the text colour would take the fill's ink under 4.5:1 or barely move the
+ * fill. The first happens on the mid-tones, where the ink only just clears the
+ * fill: a grey such as #777777 carries a black ink, and on the light ramp its
+ * hover darkens toward that black. The second happens where the accent is
+ * already close to the text colour, as a light accent is on the dark ramp. The
+ * hover then takes the same step away from the ink, or toward it where that
+ * moves the fill too little, keeping the ink at 4.5:1. Undefined means the
+ * stylesheet's step holds.
  */
 export function accentHovers(hex: string): { light: string | undefined; dark: string | undefined } {
   if (!validHex(hex)) return { light: undefined, dark: undefined };
   const fill = rgb(hex);
   const ink = rgb(contrastOn(hex));
   const away = luminance(ink) > luminance(fill) ? rgb(BLACK) : rgb(WHITE);
+  const step = (to: Rgb) => mix(fill, to, HOVER_STEP).map(Math.round) as Rgb;
+  const reads = (c: Rgb) => ratio(ink, c) >= MIN_TEXT_CONTRAST;
+  const shows = (c: Rgb) => ratio(fill, c) >= MIN_HOVER_STEP;
   const hover = (text: string) => {
-    const toward = mix(fill, rgb(text), HOVER_STEP).map(Math.round) as Rgb;
-    return ratio(ink, toward) >= MIN_TEXT_CONTRAST ? undefined : hexOf(mix(fill, away, HOVER_STEP));
+    if (reads(step(rgb(text))) && shows(step(rgb(text)))) return undefined;
+    const steps = [step(away), step(ink)].filter(reads);
+    return hexOf(steps.find(shows) ?? steps[0] ?? step(away));
   };
-  return { light: hover(LIGHT_TEXT), dark: hover(DARK_TEXT) };
+  return { light: hover(stoneOf(hex, ...STONE.lightText)), dark: hover(stoneOf(hex, ...STONE.darkText)) };
 }

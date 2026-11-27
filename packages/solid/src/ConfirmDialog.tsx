@@ -6,7 +6,8 @@
 // hook useConfirm owns the queue, the promise, the portal, Escape, the focus
 // trap and returning focus on close, because Escape and the trap must work
 // after focus has left this subtree.
-import { children, onMount, Show, type JSX } from "solid-js";
+import { children, onCleanup, onMount, Show, type JSX } from "solid-js";
+import { leaveBehind, splitQuestion } from "@glimstone/core";
 import { Badge } from "./Badge.tsx";
 import { Button } from "./Button.tsx";
 import { IconCancel, IconClose } from "./glyphs.tsx";
@@ -41,11 +42,13 @@ export interface ConfirmDialogProps {
 
 export function ConfirmDialog(props: ConfirmDialogProps) {
   const extra = children(() => props.extra);
+  const split = () => splitQuestion(props.message);
   let cancel: HTMLButtonElement | undefined;
   // Focus lands on Cancel, the answer that changes nothing.
   onMount(() => cancel?.focus());
   return (
     <div
+      ref={(el) => onCleanup(leaveBehind(el))}
       class="glim-modal-backdrop"
       onClick={(e) => {
         if (e.target === e.currentTarget) props.onCancel();
@@ -59,7 +62,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
         aria-modal="true"
         aria-labelledby="confirmdialog-title"
         aria-describedby="confirmdialog-message"
-        class="glim-modal-card"
+        class="glim-modal-card glim-window--small"
       >
         <div class="glim-modal-head">
           {/* The title is a heading badge that straddles the card's top edge
@@ -82,9 +85,12 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
         </div>
 
         <div class="glim-modal-body">
-          <p id="confirmdialog-message" class="glim-modal-text">
-            {props.message}
-          </p>
+          <div id="confirmdialog-message">
+            <p class="glim-modal-question">{split().question}</p>
+            <Show when={split().detail}>
+              <p class="glim-modal-text">{split().detail}</p>
+            </Show>
+          </div>
           <Show when={extra() !== undefined}>
             <div class="glim-modal-extra">{extra()}</div>
           </Show>

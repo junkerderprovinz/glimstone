@@ -1,23 +1,25 @@
 <script setup lang="ts">
-import { computed, useId } from "vue";
+import { computed, ref, useId, watch } from "vue";
 import * as angleSlider from "@zag-js/angle-slider";
 import { normalizeProps, useMachine } from "@zag-js/vue";
-import { pageDir } from "@glimstone/core";
+import { ANGLE_MARKS, angleKeyTarget, pageDir } from "@glimstone/core";
 import { useFieldName } from "./fieldName";
 
 // An angle set on a dial, bound with v-model, such as how far a picture turns.
 // The dial is round whatever the shape setting, since a circle is its geometry
-// and not a corner, and the value stands beside it in degrees, left to right
-// in every language. Inside a FieldRow the row names it.
+// and not a corner. A hand points from the middle to the knob, and the value
+// stands in the middle in degrees, left to right in every language. It snaps
+// every 15 degrees unless `step` asks for finer, with a tick at each snap.
+// Inside a FieldRow the row names it.
 const props = withDefaults(
   defineProps<{
     label?: string;
     step?: number;
-    /** The angles that carry a tick on the dial. */
+    /** The angles that carry a tick on the dial. A tick on a quarter is longer. */
     marks?: number[];
     disabled?: boolean;
   }>(),
-  { step: 1, marks: () => [0, 90, 180, 270], disabled: false },
+  { step: 15, marks: () => ANGLE_MARKS, disabled: false },
 );
 const value = defineModel<number>({ required: true });
 
@@ -35,6 +37,25 @@ const service = useMachine(
   })),
 );
 const api = computed(() => angleSlider.connect(service, normalizeProps));
+// Zag sends End to 359 whatever the step, so Home and End are answered here.
+const thumb = computed(() => {
+  const own = api.value.getThumbProps();
+  return {
+    ...own,
+    onKeydown: (e: KeyboardEvent) => {
+      const to = angleKeyTarget(e.key, props.step);
+      if (to === undefined) return own.onKeydown?.(e);
+      e.preventDefault();
+      api.value.setValue(to);
+    },
+  };
+});
+// A turn past 0° would spring the long way round, so that step lands at once.
+const across = ref(false);
+watch(
+  () => api.value.value,
+  (now, before) => (across.value = Math.abs(now - before) > 180),
+);
 </script>
 
 <template>
@@ -43,11 +64,19 @@ const api = computed(() => angleSlider.connect(service, normalizeProps));
     <div class="glim-angle-body">
       <div v-bind="api.getControlProps()" class="glim-angle-dial">
         <div v-bind="api.getMarkerGroupProps()" class="glim-angle-marks">
-          <span v-for="mark in marks" :key="mark" v-bind="api.getMarkerProps({ value: mark })" class="glim-angle-mark" />
+          <span
+            v-for="mark in marks"
+            :key="mark"
+            v-bind="api.getMarkerProps({ value: mark })"
+            :data-quarter="mark % 90 === 0 ? '' : undefined"
+            class="glim-angle-mark"
+          />
         </div>
-        <div v-bind="api.getThumbProps()" :aria-valuetext="`${api.value}°`" class="glim-angle-thumb" />
+        <div v-bind="thumb" :aria-valuetext="`${api.value}°`" :data-across="across ? '' : undefined" class="glim-angle-thumb">
+          <span class="glim-angle-hand" />
+        </div>
+        <div v-bind="api.getValueTextProps()" class="glim-angle-value glim-num">{{ `${api.value}°` }}</div>
       </div>
-      <div v-bind="api.getValueTextProps()" class="glim-angle-value glim-num">{{ `${api.value}°` }}</div>
     </div>
     <input v-bind="api.getHiddenInputProps()" />
   </div>

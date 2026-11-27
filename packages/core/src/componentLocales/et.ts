@@ -46,7 +46,8 @@ export const et: ComponentWords = {
   tour: { back: "Tagasi", next: "Edasi", close: "Sulge", progress: "{step}/{steps}" },
   floatingPanel: { minimize: "Minimeeri", maximize: "Maksimeeri", restore: "Taasta", close: "Sulge" },
   signaturePad: { area: "Allkiri", clear: "Tühjenda" },
-  passwordField: { show: "Näita", hide: "Peida", confirm: "Kinnita parool", mismatch: "Paroolid ei kattu" },
+  passwordField: { show: "Näita", hide: "Peida", confirm: "Kinnita parool", mismatch: "Paroolid ei kattu", again: "Veel kord" },
+  timePicker: { hour: "Tunnid", minute: "Minutid", start: "Algus", end: "Lõpp", to: "kuni" },
   versionCard: {
     title: "Versioon",
     hint: "Rakenduse {app} versioon, uuenduste seis ja mida see versioon tõi.",

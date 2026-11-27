@@ -47,7 +47,7 @@ export const NATIVE_MOTION: Record<MotionLevel, NativeMotion> = {
     confirm: 420, confirmScale: 1,
   },
   subtle: {
-    layout: 140, fade: 70, toast: 120, spring: false, damping: 1,
+    layout: 220, fade: 70, toast: 120, spring: true, damping: 0.9,
     travel: 10, sway: 0, stagger: 25, press: 0.97, bounce: 1, edge: 0,
     confirm: 260, confirmScale: 0.5,
   },

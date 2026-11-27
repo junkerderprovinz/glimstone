@@ -18,7 +18,7 @@ test('a file without a limit fails, so a new one is budgeted when it is added', 
 });
 
 test('brotli packs a stylesheet smaller than gzip', () => {
-  const size = packed('.glim-card { background: var(--carbon-surface); }\n'.repeat(200));
+  const size = packed('.glim-card { background: var(--stone-surface); }\n'.repeat(200));
   assert.ok(size.brotli < size.gzip);
 });
 

@@ -8,7 +8,7 @@ import TipBubble from "./TipBubble.vue";
 // "active". `onAccent` is for an icon inside a filled accent badge such as a
 // card heading.
 const props = withDefaults(defineProps<{ tip: string; onAccent?: boolean }>(), { onAccent: false });
-const bubble = useTipBubble(() => props.tip);
+const bubble = useTipBubble(() => props.tip, undefined, { kind: "info" });
 </script>
 
 <template>

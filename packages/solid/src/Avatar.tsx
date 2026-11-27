@@ -23,7 +23,7 @@ export function Avatar(raw: AvatarProps) {
   const id = createUniqueId();
   const service = useMachine(avatar.machine, () => ({ id, dir: pageDir() }));
   const api = createMemo(() => avatar.connect(service, normalizeProps));
-  const view = createMemo(() => avatarView({ size: props.size, hueIndex: props.hueIndex }));
+  const view = createMemo(() => avatarView({ size: props.size, hueIndex: props.hueIndex, name: props.name }));
   return (
     <span data-glim="Avatar" {...api().getRootProps()} role="img" aria-label={props.name} class={view().className} style={css(view().style)}>
       <Show when={props.src}>

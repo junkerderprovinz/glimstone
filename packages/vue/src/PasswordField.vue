@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef, useAttrs, useId, watch, type StyleValue } from "vue";
 import { fieldErrorView, fieldNoteView, fieldWidthClass, PASSWORD_FIELD_TEXT, passwordConfirmView, type FieldWidth, type PasswordFieldText } from "@glimstone/core";
-import FieldError from "./FieldError.vue";
+import FieldErrorLine from "./FieldErrorLine.vue";
 import { useFieldName } from "./fieldName";
-import { IconEye, IconEyeOff } from "./glyphs";
 import IconTipButton from "./IconTipButton.vue";
+import RevealEye from "./RevealEye.vue";
 
 // A field for a secret with the reveal eye inside it ("The reveal eye" in the
 // design language), bound with v-model. Attributes such as `autocomplete`,
@@ -79,10 +79,10 @@ defineExpose({ input });
       class="glim-input"
     />
     <IconTipButton v-bind="eyeAttrs" :tip="shown ? words.hide : words.show" class="glim-secret-eye" :disabled="disabled" @click="shown = !shown">
-      <component :is="shown ? IconEyeOff : IconEye" />
+      <RevealEye :struck="shown" />
     </IconTipButton>
   </span>
-  <FieldError v-if="err.errorId" :id="err.errorId">{{ error }}</FieldError>
+  <FieldErrorLine :id="err.errorId" :error="error" />
   <span v-if="quiet.noteId" :id="quiet.noteId" class="glim-field-note">{{ note }}</span>
   <span v-if="confirm && view.shown" class="glim-secret-confirm">
     <label :for="`${id}-confirm`" class="glim-secret-confirm-label">{{ words.confirm }}</label>
@@ -91,6 +91,7 @@ defineExpose({ input });
         <input
           :id="`${id}-confirm`"
           v-model="repeat"
+          :placeholder="words.again"
           autocomplete="new-password"
           spellcheck="false"
           :aria-invalid="mismatch.invalid"
@@ -100,11 +101,11 @@ defineExpose({ input });
           class="glim-input"
         />
         <IconTipButton :tip="repeatShown ? words.hide : words.show" class="glim-secret-eye" :disabled="disabled" @click="repeatShown = !repeatShown">
-          <component :is="repeatShown ? IconEyeOff : IconEye" />
+          <RevealEye :struck="repeatShown" />
         </IconTipButton>
       </span>
       <span aria-live="polite" class="glim-secret-confirm-live">
-        <FieldError v-if="mismatch.errorId" :id="mismatch.errorId">{{ words.mismatch }}</FieldError>
+        <FieldErrorLine :id="mismatch.errorId" :error="view.mismatch ? words.mismatch : undefined" />
       </span>
     </span>
   </span>

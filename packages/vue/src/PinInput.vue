@@ -2,12 +2,13 @@
 import { computed, useId } from "vue";
 import * as pinInput from "@zag-js/pin-input";
 import { normalizeProps, useMachine } from "@zag-js/vue";
-import { PIN_INPUT_TEXT, pinCells, type PinInputText } from "@glimstone/core";
+import { PIN_INPUT_TEXT, pinCells, pinGroupStarts, type PinInputText } from "@glimstone/core";
 import { useFieldName } from "./fieldName";
 
 // A short code typed one character to a box, bound with v-model, such as the
 // six digits of a second factor. A code is data, so the boxes run left to
-// right in every language. Inside a FieldRow the row names it.
+// right in every language, and a code of six or nine stands in groups of
+// three. Inside a FieldRow the row names it.
 const props = withDefaults(
   defineProps<{
     label?: string;
@@ -58,7 +59,10 @@ const api = computed(() => pinInput.connect(service, normalizeProps));
   <div data-glim="PinInput" v-bind="api.getRootProps()" class="glim-pin">
     <label v-bind="api.getLabelProps()" :class="label === undefined ? 'glim-sr-only' : 'glim-field-label'">{{ name }}</label>
     <div v-bind="api.getControlProps()" class="glim-pin-control">
-      <input v-for="index in api.items" :key="index" v-bind="api.getInputProps({ index })" class="glim-input glim-pin-cell glim-num" />
+      <template v-for="index in api.items" :key="index">
+        <span v-if="pinGroupStarts(index, length)" class="glim-pin-sep" aria-hidden="true" />
+        <input v-bind="api.getInputProps({ index })" class="glim-input glim-pin-cell glim-num" />
+      </template>
     </div>
     <input v-bind="api.getHiddenInputProps()" />
   </div>

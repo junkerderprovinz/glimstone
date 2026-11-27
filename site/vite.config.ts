@@ -25,7 +25,7 @@ function entriesOf(pkg: string, ext: string) {
 // The site runs on the packages' sources, so a change shows without building
 // them first. The assets sit beside the core's sources, not in them.
 const alias = [
-  { find: /^@glimstone\/core\/(tokens\.css|tailwind-theme\.css|glyphs\.json)$/, replacement: `${packages}/core/$1` },
+  { find: /^@glimstone\/core\/(tokens\.css|tailwind-theme\.css|glyphs\.json|glyphs-line\.json)$/, replacement: `${packages}/core/$1` },
   { find: /^@glimstone\/(core|react|vue|solid|svelte)$/, replacement: `${packages}/$1/src/index.ts` },
   { find: /^@glimstone\/(core|react)\/(.*)$/, replacement: `${packages}/$1/src/$2` },
   ...entriesOf("vue", ".ts"),

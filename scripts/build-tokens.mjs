@@ -9,13 +9,14 @@
 // mode's `also` lists further selectors that ask for the same values, each a
 // block of its own right after the mode's. In a group marked theme, a token's
 // $value is the light ramp's and its dark value sits beside it, written out as
-// one light-dark().
+// one light-dark(). A group marked aliases holds deprecated names, each a
+// reference to the token that replaced it.
 //
 // Run from the repository root: node scripts/build-tokens.mjs [--check]
 import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import StyleDictionary from "style-dictionary";
-import { srgbOf } from "../packages/core/src/oklab.ts";
+import { oklabOf, srgbOf } from "../packages/core/src/oklab.ts";
 
 const repo = new URL("../", import.meta.url);
 const source = new URL("packages/core/tokens/", repo);
@@ -25,7 +26,7 @@ const X = "org.glimstone";
 // An entry such as @contrast is where the groups' shared mode of that name
 // stands, as one block.
 const REGIONS = {
-  main: ["shape", "layout", "space", "density", "elevation", "focus", "colour", "legacy", "chart", "@contrast", "hover", "hover-tint", "font"],
+  main: ["shape", "layout", "space", "density", "light", "elevation", "focus", "colour", "field", "legacy", "chart", "@contrast", "hover", "hover-tint", "font"],
   motion: ["direction", "motion"],
   drag: ["drag"],
   buttons: ["button"],
@@ -138,7 +139,12 @@ function sharedCss(name) {
   return modeCss(mode, users.flatMap((u) => modeEntries(u.id, name)));
 }
 
-// The @theme block: every token with a Tailwind name, in source order.
+// The token a deprecated alias stands for, as {group.name}, or nothing.
+const aliasOf = (id, t) => (meta(id).aliases && /^\{[^.}]+\.[^}]+\}$/.test(t.$value) ? t.$value : null);
+
+// The @theme block: every token with a Tailwind name, in source order. An
+// alias's Tailwind name maps onto the token it stands for, so an old utility
+// never reads through a deprecated property.
 function tailwindTheme() {
   const lines = [];
   let last;
@@ -149,7 +155,7 @@ function tailwindTheme() {
       const note = ext(t).tailwindNote;
       if ((last && last !== id) || note) lines.push("");
       if (note) lines.push(comment(note, 78));
-      lines.push(`--${tw}: var(--${name});`);
+      lines.push(`--${tw}: ${css(aliasOf(id, t) ?? `{${id}.${name}}`)};`);
       last = id;
     }
   }
@@ -158,8 +164,39 @@ function tailwindTheme() {
 
 const h = (n) => Number(n).toString(16).padStart(2, "0").toUpperCase();
 
+const literal = (name) => ORDER.map((id) => groups[id][name]).find(Boolean)?.$value;
+
+/**
+ * A relative oklch() on another token, worked out on that token's own value.
+ * The stone ramp is tinted by the accent the user picks, so a phone app and a
+ * design tool get it on the default accent.
+ */
+function relativeOklch(value) {
+  const m = value.match(/^oklch\(from var\(--([\w-]+)\)\s+(.+)\)$/);
+  if (!m) return null;
+  const [L, a, b] = oklabOf(literal(m[1]));
+  const hue = (Math.atan2(b, a) * 180) / Math.PI;
+  const origin = { l: L, c: Math.hypot(a, b), h: hue < 0 ? hue + 360 : hue };
+  const channels = [""];
+  let depth = 0;
+  for (const ch of m[2]) {
+    if (ch === "(") depth++;
+    if (ch === ")") depth--;
+    if (ch === " " && depth === 0) channels.push("");
+    else channels[channels.length - 1] += ch;
+  }
+  const [l, c, h] = channels.map((expr) => {
+    const js = expr.replace(/calc\(/g, "(").replace(/\b(min|max)\(/g, "Math.$1(").replace(/\b([lch])\b/g, (_, k) => String(origin[k]));
+    if (!/^[\d.\s+\-*/(),Mathminax]+$/.test(js)) throw new Error(`cannot work out ${expr} in ${value}`);
+    return Function(`return ${js}`)();
+  });
+  return srgbOf([l, c * Math.cos((h * Math.PI) / 180), c * Math.sin((h * Math.PI) / 180)]);
+}
+
 /** An oklch(), rgb() or hex colour as sRGB channels from 0 to 255, or null for anything else. */
 function rgbaOf(value) {
+  value = css(value);
+  value = relativeOklch(value) ?? value;
   const hex = value.match(/^#([0-9a-f]{6})([0-9a-f]{2})?$/i);
   if (hex) return [...[0, 2, 4].map((i) => parseInt(hex[1].slice(i, i + 2), 16)), hex[2] ? parseInt(hex[2], 16) / 255 : 1];
   const lch = value.match(/^oklch\(\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s*(?:\/\s*([\d.]+))?\s*\)$/);
@@ -212,8 +249,6 @@ function dartTokens() {
   }
   const colours = Object.keys(dark).filter((k) => dartColor(dark[k]) && light[k] && dartColor(light[k]));
   const inkLightness = (theme) => Number(theme === light ? light["ink-l-light"] : light["ink-l-dark"]);
-  // The deprecated inkMix maps onto these: below 1 it asked for the light ramp's ink.
-  const steps = { light: inkLightness(light), dark: inkLightness(dark) };
 
   const metrics = [...tokensOf("layout"), ...tokensOf("button")]
     .filter(([k, t]) => /^(text|btn)-/.test(k) && px(t.$value) !== null)
@@ -231,37 +266,77 @@ function dartTokens() {
   const fields = colours.map(camel);
   const palette = (theme) => colours.map((k) => `    ${camel(k)}: ${dartColor(theme[k])},`).join("\n");
 
+  // A deprecated alias names the field that took its place, and the old name
+  // stays as an argument and a getter until it goes.
+  const renamed = new Map(
+    ORDER.flatMap((id) => tokensOf(id).flatMap(([name, t]) => {
+      const to = aliasOf(id, t);
+      return to ? [[camel(to.slice(1, -1).split(".")[1]), camel(name)]] : [];
+    })),
+  );
+  const renameNote = (f) => `'Use ${f}, the same colour. ${renamed.get(f)} goes in 6.0.0.'`;
+  // A deprecated colour without a twin keeps its value where one is given and
+  // reads as its replacement where none is.
+  const retired = new Map(themed.flatMap((id) => tokensOf(id).filter(([, t]) => ext(t).dart?.deprecated).map(([name, t]) => [camel(name), ext(t).dart])));
+  const retiredNote = (f) => `'${retired.get(f).deprecated}'`;
+  // Arguments for colours GlimTokens works out from another one, taken and
+  // ignored until they go.
+  const dropped = ["statusOkBg", "statusFailBg", "statusWarnBg", "statusWarnBgSoft"];
+  const droppedArguments = dropped.map((f) => `    @Deprecated(_stateBgNote) Color? ${f},`).join("\n");
+
+  const argument = (f) =>
+    renamed.has(f)
+      ? `    Color? ${f},\n    @Deprecated(${renameNote(f)}) Color? ${renamed.get(f)},`
+      : retired.has(f)
+        ? `    @Deprecated(${retiredNote(f)}) Color? ${f},`
+        : `    required this.${f},`;
+  // A const constructor takes no `!`, so the assert holds the requirement and
+  // the transparent end of the chain is never reached.
+  const initializers = [
+    ...fields.filter((f) => renamed.has(f)).map((f) => `assert(${f} != null || ${renamed.get(f)} != null, '${f} is required')`),
+    ...fields.filter((f) => renamed.has(f)).map((f) => `${f} = ${f} ?? ${renamed.get(f)} ?? const Color(0x00000000)`),
+    ...fields.filter((f) => retired.has(f)).map((f) => `_${f} = ${f}`),
+    `inkLightness = inkLightness ?? ${inkLightness(dark)}`,
+  ];
+  const field = (f) =>
+    retired.has(f)
+      ? `  final Color? _${f};\n\n  @Deprecated(${retiredNote(f)})\n  Color get ${f} => _${f} ?? this.${retired.get(f).otherwise};\n`
+      : `  final Color ${f};`;
+  const oldGetters = [...renamed].map(([f, old]) => `  @Deprecated(${renameNote(f)})\n  Color get ${old} => ${f};`).join("\n\n");
+  const copyArgument = (f) =>
+    renamed.has(f) ? `    Color? ${f},\n    @Deprecated(${renameNote(f)}) Color? ${renamed.get(f)},` : retired.has(f) ? `    @Deprecated(${retiredNote(f)}) Color? ${f},` : `    Color? ${f},`;
+  const copyValue = (f) => (renamed.has(f) ? `${f} ?? ${renamed.get(f)} ?? this.${f}` : retired.has(f) ? `${f} ?? _${f}` : `${f} ?? this.${f}`);
+  const lerpValue = (f) => (retired.has(f) ? `Color.lerp(${f}, other.${f}, t)` : `Color.lerp(${f}, other.${f}, t)!`);
+  const fallbacks = [...retired.values()].some((r) => r.otherwise);
+
   return `// Generated by scripts/build-tokens.mjs from packages/core/tokens. Edit the
 // source and run the script; a change here is overwritten.
 
-import 'package:flutter/material.dart';
+// The class carries its own deprecated members until the release that removes them.
+// ignore_for_file: deprecated_member_use_from_same_package
 
-const _inkMixNote = 'Use inkLightness, the OKLab step the ink moves to. inkMix goes in 5.0.0.';
-const _focusRingNote = 'The ring is the accent ink, the focusRing getter on GlimDerived. The argument goes in 5.0.0.';
+import 'package:flutter/material.dart';
+${fallbacks ? "\nimport 'theme.dart';\n" : ""}
+const _stateBgNote = 'The state backgrounds are getters on GlimTokens, worked out from the solids. The argument goes in 6.0.0.';
 
 /// The colours of one theme, as a [ThemeExtension] an app adds to its
 /// [ThemeData] and reads with \`Theme.of(context).extension<GlimTheme>()\`.
 @immutable
 class GlimTheme extends ThemeExtension<GlimTheme> {
   const GlimTheme({
-${fields.map((f) => `    required this.${f},`).join("\n")}
+${fields.map(argument).join("\n")}
     double? inkLightness,
-    @Deprecated(_inkMixNote) double? inkMix,
-    @Deprecated(_focusRingNote) Color? focusRing,
+${droppedArguments}
     this.shape = GlimShape.${defaultShape},
-  // ignore: deprecated_member_use_from_same_package
-  }) : inkLightness = inkLightness ?? (inkMix == null || inkMix >= 1 ? ${steps.dark} : ${steps.light});
+  }) : ${initializers.join(",\n       ")};
 
-${fields.map((f) => `  final Color ${f};`).join("\n")}
+${fields.map(field).join("\n")}
+
+${oldGetters}
 
   /// The OKLab lightness the accent's ink moves to, as in tokens.css: at most
   /// this on a light ramp, at least this on a dark one.
   final double inkLightness;
-
-  /// How much of the accent the ink kept against black before [inkLightness]:
-  /// 0.55 on a light theme, 1 on a dark one.
-  @Deprecated(_inkMixNote)
-  double get inkMix => inkLightness < ${(steps.light + steps.dark) / 2} ? 0.55 : 1;
 
   /// The shape the user chose; it sets the radii of cards, controls and pills.
   final GlimShape shape;
@@ -284,16 +359,14 @@ ${palette(light)}
 
   @override
   GlimTheme copyWith({
-${fields.map((f) => `    Color? ${f},`).join("\n")}
+${fields.map(copyArgument).join("\n")}
     double? inkLightness,
-    @Deprecated(_inkMixNote) double? inkMix,
-    @Deprecated(_focusRingNote) Color? focusRing,
+${droppedArguments}
     GlimShape? shape,
   }) =>
       GlimTheme(
-${fields.map((f) => `        ${f}: ${f} ?? this.${f},`).join("\n")}
-        // ignore: deprecated_member_use_from_same_package
-        inkLightness: inkLightness ?? (inkMix == null ? this.inkLightness : (inkMix < 1 ? ${steps.light} : ${steps.dark})),
+${fields.map((f) => `        ${f}: ${copyValue(f)},`).join("\n")}
+        inkLightness: inkLightness ?? this.inkLightness,
         shape: shape ?? this.shape,
       );
 
@@ -301,7 +374,7 @@ ${fields.map((f) => `        ${f}: ${f} ?? this.${f},`).join("\n")}
   GlimTheme lerp(GlimTheme? other, double t) {
     if (other == null) return this;
     return GlimTheme(
-${fields.map((f) => `      ${f}: Color.lerp(${f}, other.${f}, t)!,`).join("\n")}
+${fields.map((f) => `      ${f}: ${lerpValue(f)},`).join("\n")}
       inkLightness: inkLightness + (other.inkLightness - inkLightness) * t,
       shape: t < 0.5 ? shape : other.shape,
     );

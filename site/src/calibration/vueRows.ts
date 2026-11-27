@@ -189,7 +189,7 @@ export const VUE_ROWS: Record<string, Component> = {
       h(Meter, { value: 0.92, label: "backups" }),
     ]),
   footmeter: () =>
-    h("div", { style: { display: "flex", alignItems: "center", gap: "0.5rem", width: "22rem", fontSize: "12px", color: "var(--carbon-text-muted)" } }, [
+    h("div", { style: { display: "flex", alignItems: "center", gap: "0.5rem", width: "22rem", fontSize: "12px", color: "var(--stone-text-muted)" } }, [
       h("span", "3 Elemente"),
       h("span", { style: { flex: 1 } }),
       h("button", { type: "button", class: "demo-footer-line" }, ["1,4 TB frei", h(Meter, { quiet: true, size: "small", value: 0.66, label: "disk1" })]),

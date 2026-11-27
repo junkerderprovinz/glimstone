@@ -46,7 +46,8 @@ export const fi: ComponentWords = {
   tour: { back: "Takaisin", next: "Seuraava", close: "Sulje", progress: "{step}/{steps}" },
   floatingPanel: { minimize: "Pienennä", maximize: "Suurenna", restore: "Palauta", close: "Sulje" },
   signaturePad: { area: "Allekirjoitus", clear: "Tyhjennä" },
-  passwordField: { show: "Näytä", hide: "Piilota", confirm: "Vahvista salasana", mismatch: "Salasanat eivät täsmää" },
+  passwordField: { show: "Näytä", hide: "Piilota", confirm: "Vahvista salasana", mismatch: "Salasanat eivät täsmää", again: "Vielä kerran" },
+  timePicker: { hour: "Tunnit", minute: "Minuutit", start: "Alku", end: "Loppu", to: "-" },
   versionCard: {
     title: "Versio",
     hint: "Sovelluksen {app} versio, päivitysten tila ja mitä tämä versio toi.",

@@ -48,6 +48,25 @@ export function meterView(value: number | null | undefined, { size = "medium", t
  * when the bar is paused, finished or failed, since a light still travelling a
  * finished bar contradicts the number beside it.
  */
+let percentFormat: Intl.NumberFormat | undefined;
+
+/**
+ * The figure a meter shows beside its track: the app's own words where it has
+ * them, else the percentage. Nothing while the level is still being read,
+ * since the stripes already say so.
+ */
+export function meterFigure(percent: number | null, figure?: string): string {
+  if (percent === null) return "";
+  if (figure) return figure;
+  percentFormat ??= new Intl.NumberFormat(typeof document === "object" ? document.documentElement.lang || undefined : undefined, { style: "percent" });
+  return percentFormat.format(percent / 100);
+}
+
+/** Whether a meter shows its figure: a medium one does unless it is quiet. */
+export function meterShowsValue(size: MeterSize, quiet: boolean | undefined, showValue: boolean | undefined): boolean {
+  return showValue ?? (size === "medium" && !quiet);
+}
+
 export function progressView(value: number | null | undefined, state: { paused?: boolean; failed?: boolean } = {}): BarView {
   const { v, width, percent } = measure(value);
   const classes = ["glim-meter", "glim-progress"];

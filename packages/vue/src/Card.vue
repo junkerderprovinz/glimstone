@@ -8,7 +8,8 @@ import InfoBubble from "./InfoBubble.vue";
 // drawn. The heading is a filled badge straddling the card's top edge, and the
 // `hint` rides inside it because the badge is out of normal flow. With a
 // `hueIndex` the card sets `--accent` once for everything inside it. The `title`
-// slot holds markup for the notch, such as an unsaved dot. A card with no title
+// slot holds markup for the notch, such as an unsaved dot, and the `action` slot
+// one control for the whole card at the end of the top edge. A card with no title
 // of either kind and no `hint` draws no heading.
 const props = defineProps<{
   /** Omit it where a control inside already carries the same name. */
@@ -36,6 +37,7 @@ const style = computed(() => (props.hueIndex !== undefined ? hueVars(props.hueIn
         <slot name="title">{{ title }}</slot><InfoBubble v-if="hint" :tip="hint" on-accent />
       </Badge>
     </h2>
+    <div v-if="$slots.action" class="glim-panel-action"><slot name="action" /></div>
     <slot />
   </div>
 </template>

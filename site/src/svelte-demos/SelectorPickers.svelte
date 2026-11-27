@@ -15,7 +15,7 @@
     { id: "failed", label: "Failed", disabled: true, title: "Nothing has failed" },
   ];
 
-  const caption = "font-size: 13px; color: var(--carbon-text-sub)";
+  const caption = "font-size: 13px; color: var(--stone-text-sub)";
 
   let theme = $state("dark");
   let shown = $state(["running", "paused"]);
@@ -24,7 +24,7 @@
 <div style="display: grid; gap: 20px; width: 100%">
   <div style="display: grid; gap: 8px">
     <span style={caption}>Theme</span>
-    <Selector label="Theme" items={THEMES} bind:value={theme} activation="manual" equalWidth />
+    <Selector label="Theme" items={THEMES} bind:value={theme} activation="manual" equalWidth labels="textGlyph" />
   </div>
   <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap">
     <span style={caption}>Show</span>

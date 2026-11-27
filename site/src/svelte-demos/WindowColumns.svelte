@@ -16,7 +16,6 @@
 {#if open}
   <Window
     title="Columns"
-    size="wide"
     text={TEXT}
     start="Drag a column's header to move it"
     actions={[

@@ -41,7 +41,6 @@ const PAGES: Record<string, Show | null> = {
   "/components/combobox": openMenu("[data-demo] .glim-combobox-toggle"),
   "/components/confirm-dialog": null,
   "/components/context-menu": null,
-  "/components/dropdown-listbox": null,
   "/components/empty-state": null,
   "/components/field-row": null,
   "/components/glyph-tile": null,
@@ -160,8 +159,8 @@ function measure(): Miss[] {
         if (r < needs) out.push({ what: where(el), text: (el.textContent ?? "").trim().slice(0, 40), ink: s.color, fill: `rgb(${fill.join(", ")})`, ratio: r, needs });
       }
     }
-    // A knob or a mark drawn as a small fill of its own on the accent, such as a
-    // switch's knob, is a graphic and needs 3:1.
+    // A mark drawn as a small fill of its own on the accent is a graphic and
+    // needs 3:1, the switch's knob among them.
     const own = parse(getComputedStyle(el).backgroundColor);
     const box = el.getBoundingClientRect();
     if (own.a === 1 && box.width <= 24 && box.height <= 24 && el.parentElement) {

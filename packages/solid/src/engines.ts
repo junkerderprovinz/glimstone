@@ -2,10 +2,14 @@ import { createSignal, onCleanup, type Accessor } from "solid-js";
 import {
   applyAccent,
   applyDensity,
+  applyGlyphs,
+  applyLight,
   applyMotion,
   applyRainbow,
   applyShape,
   DEFAULT_DENSITY,
+  DEFAULT_GLYPHS,
+  DEFAULT_LIGHT,
   DEFAULT_MOTION,
   DEFAULT_SHAPE,
   getLabelMode,
@@ -14,14 +18,16 @@ import {
   subscribeLabelMode,
   subscribeRainbow,
   type Density,
+  type GlyphStyle,
   type LabelAxis,
   type LabelMode,
+  type Light,
   type Motion,
   type RainbowState,
   type Shape,
 } from "@glimstone/core";
 
-// The label, colour, shape, motion and density engines as primitives. Each value
+// The label, colour, shape, motion, light, glyph and density engines as primitives. Each value
 // belongs to the document, not a component, so every primitive follows the
 // document and writes back through the core, in the [value, set] shape of
 // createSignal.
@@ -67,6 +73,16 @@ export function useShape(): [Accessor<Shape>, (next: Shape) => void] {
 
 export function useMotion(): [Accessor<Motion>, (next: Motion) => void] {
   return [rootValue("data-motion", () => (document.documentElement.getAttribute("data-motion") as Motion | null) ?? DEFAULT_MOTION), applyMotion];
+}
+
+/** How light falls on the stone. */
+export function useLight(): [Accessor<Light>, (next: Light) => void] {
+  return [rootValue("data-light", () => (document.documentElement.getAttribute("data-light") as Light | null) ?? DEFAULT_LIGHT), applyLight];
+}
+
+/** Whether the glyphs are drawn filled or as lines. */
+export function useGlyphs(): [Accessor<GlyphStyle>, (next: GlyphStyle) => void] {
+  return [rootValue("data-glyphs", () => (document.documentElement.getAttribute("data-glyphs") as GlyphStyle | null) ?? DEFAULT_GLYPHS), applyGlyphs];
 }
 
 /** The row density of lists and tables. */

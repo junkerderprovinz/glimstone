@@ -11,6 +11,9 @@ import { useTipBubble } from "./useTipBubble.tsx";
 export interface IconTipButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children" | "type"> {
   /** The hover and focus explanation, and the button's `aria-label`. */
   tip: string;
+  /** The keyboard shortcut that does the same, drawn beside the tip and
+   *  announced as `aria-keyshortcuts`, such as "Ctrl K". */
+  shortcut?: string;
   disabled?: boolean;
   className?: string;
   /** `aria-pressed` for a trigger that toggles rather than acts once. Omitted,
@@ -27,8 +30,8 @@ export interface IconTipButtonProps extends Omit<ButtonHTMLAttributes<HTMLButton
   type?: "button" | "submit";
 }
 
-export function IconTipButton({ tip, disabled, className, style, children, href, type = "button", ariaPressed, ariaExpanded, ...rest }: IconTipButtonProps) {
-  const tooltip = useTipBubble(tip, disabled);
+export function IconTipButton({ tip, shortcut, disabled, className, style, children, href, type = "button", ariaPressed, ariaExpanded, ...rest }: IconTipButtonProps) {
+  const tooltip = useTipBubble(tip, disabled, { shortcut });
   const Element = (href && !disabled ? "a" : "button") as "button";
   const own = href && !disabled ? { href } : { type, disabled };
 
@@ -41,6 +44,7 @@ export function IconTipButton({ tip, disabled, className, style, children, href,
           {...own}
           ref={tooltip.ref}
           aria-label={tip}
+          aria-keyshortcuts={shortcut?.trim().replace(/\s+/g, "+")}
           aria-pressed={ariaPressed}
           aria-expanded={ariaExpanded}
           aria-describedby={tooltip.describedBy}

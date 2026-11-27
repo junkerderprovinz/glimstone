@@ -60,3 +60,14 @@ export function focusedAsker(): HTMLElement | null {
 export function returnFocus(asker: HTMLElement | null): void {
   if (asker && document.contains(asker)) asker.focus();
 }
+
+/**
+ * A confirmation's message as the question and what follows from it, so the
+ * question can lead. It splits after the first question mark that ends a
+ * sentence; a message without one is all question.
+ */
+export function splitQuestion(message: string): { question: string; detail: string } {
+  const at = message.search(/[?？؟]\s/);
+  if (at < 0) return { question: message.trim(), detail: "" };
+  return { question: message.slice(0, at + 1).trim(), detail: message.slice(at + 1).trim() };
+}

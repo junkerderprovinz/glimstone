@@ -26,6 +26,9 @@ export function Card(props: {
   /** One line saying what this whole card does, drawn as an "(i)" beside the
    *  title. */
   hint?: string;
+  /** One control for the whole card, such as an icon button or a status
+   *  badge, at the end of the top edge level with the notch. */
+  action?: JSX.Element;
   children: JSX.Element;
   /** This card's position in the rainbow, counted across the cards visible on
    *  the active tab. Omit it for a tab's only card. */
@@ -36,8 +39,9 @@ export function Card(props: {
   /** Data attributes for the box, so a component built on the card can name itself. */
   [data: `data-${string}`]: string | undefined;
 }) {
-  const [own, data] = splitProps(props, ["title", "drawn", "hint", "children", "hueIndex", "nested"]);
+  const [own, data] = splitProps(props, ["title", "drawn", "hint", "action", "children", "hueIndex", "nested"]);
   const drawn = children(() => own.drawn);
+  const action = children(() => own.action);
   return (
     <div
       data-glim="Card"
@@ -53,6 +57,9 @@ export function Card(props: {
             <Show when={own.hint}>{(hint) => <InfoBubble tip={hint()} onAccent />}</Show>
           </Badge>
         </h2>
+      </Show>
+      <Show when={action()}>
+        <div class="glim-panel-action">{action()}</div>
       </Show>
       {own.children}
     </div>

@@ -9,7 +9,7 @@ import { useTipBubble } from "./useTipBubble.tsx";
 // it inherits the badge's --accent-contrast ink and drops the idle opacity, which
 // has less margin on a busy fill.
 export function InfoBubble({ tip, onAccent = false }: { tip: string; onAccent?: boolean }) {
-  const tooltip = useTipBubble(tip);
+  const tooltip = useTipBubble(tip, false, { kind: "info" });
 
   return (
     <>

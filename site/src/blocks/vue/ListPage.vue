@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
-import { Button, Card, EmptyState, IconButton, ListRow, Pill, SkeletonRow, TextField } from "@glimstone/vue";
+import { Button, Card, EmptyState, IconButton, ListRow, SkeletonRow, TextField } from "@glimstone/vue";
 import { glyph, Glyph } from "../../vue/glyph";
 
 interface Backup {
@@ -40,17 +40,14 @@ const trash = glyph("IconTrash");
     </div>
     <Card title="Backups">
       <div v-if="loading" role="group" aria-label="Backups" aria-busy="true">
-        <SkeletonRow />
-        <SkeletonRow />
-        <SkeletonRow />
+        <SkeletonRow :badge="false" value :actions="1" />
+        <SkeletonRow :badge="false" value :actions="1" />
+        <SkeletonRow :badge="false" value :actions="1" />
       </div>
       <div v-else-if="shown.length" style="display: grid; gap: 2px">
-        <ListRow v-for="b in shown" :key="b.name" :name="b.name">
+        <ListRow v-for="b in shown" :key="b.name" :name="b.name" :status="b.failed ? { tone: 'fail', label: 'Failed' } : undefined">
           <template #tile><Glyph name="IconArchive" /></template>
-          <template #badges>
-            <Pill class="glim-num">{{ b.size }}</Pill>
-            <Pill v-if="b.failed" tone="fail">Failed</Pill>
-          </template>
+          <template #value>{{ b.size.split(" ")[0] }}&#x202f;<small>{{ b.size.split(" ")[1] }}</small></template>
           <template #actions>
             <IconButton :tip="`Delete ${b.name}`" :glyph="trash" @click="remove(b)" />
           </template>

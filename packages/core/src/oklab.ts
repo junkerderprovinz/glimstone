@@ -52,6 +52,17 @@ export function srgbOf([L, a, b]: Oklab): string {
   return '#' + rgb.map((v) => Math.round(Math.min(1, Math.max(0, gamma(v))) * 255).toString(16).padStart(2, '0')).join('').toUpperCase();
 }
 
+/**
+ * A stone step as tokens.css paints it for the accent `hex`: `lightness` in
+ * OKLab, in the accent's hue, with `share` of its chroma and at most `cap`.
+ */
+export function stoneOf(hex: string, lightness: number, share: number, cap: number): string {
+  const [, a, b] = oklabOf(hex);
+  const c = Math.hypot(a, b);
+  const k = c === 0 ? 0 : Math.min(c * share, cap) / c;
+  return srgbOf([lightness, a * k, b * k]);
+}
+
 /** `hex` moved toward black until its lightness is at most `lightness`. */
 export function darkenTo(hex: string, lightness: number): string {
   const [l, a, b] = oklabOf(hex);

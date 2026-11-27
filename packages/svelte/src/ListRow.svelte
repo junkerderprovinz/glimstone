@@ -1,6 +1,9 @@
 <script lang="ts" module>
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
+  import type { ListRowStatus } from "@glimstone/core";
+
+  export type { ListRowStatus } from "@glimstone/core";
 
   export interface ListRowProps extends Omit<HTMLAttributes<HTMLDivElement>, "children" | "class"> {
     name: string;
@@ -16,6 +19,13 @@
     tile?: Snippet;
     /** What stands at the row's end at rest. */
     badges?: Snippet;
+    /** A row that differs from the rest, as a mark in the state colour with
+     *  neutral words, in its own place before the value. The normal case passes
+     *  nothing and stays quiet. */
+    status?: ListRowStatus;
+    /** The row's figure, such as a size, in a column of fixed width at its end,
+     *  so a status beside it moves nothing. A unit in <small> stands quieter. */
+    value?: Snippet;
     /** The buttons that come in on hover and focus. A press on one does not open the row. */
     actions?: Snippet;
     class?: string;
@@ -23,12 +33,14 @@
 </script>
 
 <script lang="ts">
+  import { listRowStatus } from "@glimstone/core";
   import InfoBubble from "./InfoBubble.svelte";
+  import MarkSvg from "./MarkSvg.svelte";
 
   // One row of a list: a glyph tile, the name, badges and buttons that come in on
   // hover and focus (rule 6). A click handler makes the whole row a way into its
   // object, by keyboard too. The other props of a <div> go to the row.
-  let { name, tip, mono, meta, steady, tile, badges, actions, class: className, onclick, onkeydown, ...rest }: ListRowProps = $props();
+  let { name, tip, mono, meta, steady, tile, badges, status, value, actions, class: className, onclick, onkeydown, ...rest }: ListRowProps = $props();
 
   const stay = (e: MouseEvent) => e.stopPropagation();
 
@@ -61,6 +73,14 @@
     {@render nameLine()}
   {/if}
   {#if badges}<span class="glim-list-row-badges">{@render badges()}</span>{/if}
+  {#if status}
+    {@const mark = listRowStatus(status.tone).mark}
+    <span class="glim-list-row-status" data-tone={status.tone}>
+      {#if mark}<MarkSvg {mark} class="glim-status-mark" />{:else}<span class="glim-status-dot" aria-hidden="true"></span>{/if}
+      <span>{status.label}</span>
+    </span>
+  {/if}
+  {#if value}<span class="glim-list-row-value">{@render value()}</span>{/if}
   <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
   {#if actions}<span class="glim-list-row-actions" onclick={stay}>{@render actions()}</span>{/if}
 </div>

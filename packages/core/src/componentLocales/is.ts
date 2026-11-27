@@ -46,7 +46,8 @@ export const is: ComponentWords = {
   tour: { back: "Til baka", next: "Áfram", close: "Loka", progress: "{step} af {steps}" },
   floatingPanel: { minimize: "Lágmarka", maximize: "Hámarka", restore: "Endurheimta", close: "Loka" },
   signaturePad: { area: "Undirskrift", clear: "Hreinsa" },
-  passwordField: { show: "Sýna", hide: "Fela", confirm: "Staðfesta lykilorð", mismatch: "Lykilorðin stemma ekki" },
+  passwordField: { show: "Sýna", hide: "Fela", confirm: "Staðfesta lykilorð", mismatch: "Lykilorðin stemma ekki", again: "Einu sinni enn" },
+  timePicker: { hour: "Klukkustundir", minute: "Mínútur", start: "Upphaf", end: "Lok", to: "til" },
   versionCard: {
     title: "Útgáfa",
     hint: "Útgáfa {app}, staða uppfærslna og hvað þessi útgáfa færði.",

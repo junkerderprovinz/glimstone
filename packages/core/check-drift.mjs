@@ -29,7 +29,8 @@ if (!dirs.length) {
 const manifest = JSON.parse(readFileSync(flags.get('manifest') ?? new URL('./drift-manifest.json', import.meta.url), 'utf8'));
 const hash = (text) => createHash('sha256').update(text.replace(/\r\n/g, '\n')).digest('hex').slice(0, 16);
 const SKIP = new Set(['node_modules', 'dist', 'build', '.git']);
-const SOURCE = /\.(tsx?|jsx?|mjs|vue|css|json)$/;
+const SOURCE = /\.(tsx?|jsx?|mjs|vue|svelte|html|css|scss|json|dart)$/;
+const STYLESHEET = /\.s?css$/;
 
 function* sources(dir) {
   for (const name of readdirSync(dir)) {
@@ -43,6 +44,8 @@ function* sources(dir) {
 const files = dirs.flatMap((d) => [...sources(d)]).map((path) => ({ path, text: readFileSync(path, 'utf8') }));
 const shown = (path) => relative(process.cwd(), path);
 const lineOf = (text, index) => text.slice(0, index).split('\n').length;
+// A stylesheet with its comments blanked out, every line where it was.
+const uncommented = (css) => css.replace(/\/\*[\s\S]*?\*\//g, (c) => c.replace(/[^\n]/g, ' '));
 const findings = [];
 
 let version = flags.get('version');
@@ -77,7 +80,7 @@ if (release) {
 
 const gsClasses = new Set(manifest.classes);
 for (const { path, text } of files.filter((f) => f.path.endsWith('.css'))) {
-  const css = text.replace(/\/\*[\s\S]*?\*\//g, (c) => c.replace(/[^\n]/g, ' '));
+  const css = uncommented(text);
   const seen = new Set();
   for (const m of css.matchAll(/\.(glim-[a-zA-Z0-9_-]+)/g)) {
     if (gsClasses.has(m[1]) || seen.has(m[1])) continue;
@@ -87,9 +90,11 @@ for (const { path, text } of files.filter((f) => f.path.endsWith('.css'))) {
 }
 
 // A copy of a GS file defines the deprecated names rather than using them,
-// and a stylesheet only names them in comments.
+// and a stylesheet's comments only name them.
 const shipped = new Set(Object.values(manifest.versions).flatMap((entries) => Object.keys(entries).map((p) => basename(p))));
-const users = files.filter((f) => !shipped.has(basename(f.path)) && !f.path.endsWith('.css'));
+const users = files
+  .filter((f) => !shipped.has(basename(f.path)))
+  .map((f) => (STYLESHEET.test(f.path) ? { ...f, text: uncommented(f.text) } : f));
 for (const { name, note, find } of manifest.deprecated) {
   const re = new RegExp(find ?? `\\b${name}\\b`);
   for (const { path, text } of users) {

@@ -2,9 +2,9 @@
    and each element stands on a sunken stage inside it, so no line is drawn
    anywhere inside a card. */
 .gl-page {
-  --gl-dot: color-mix(in srgb, var(--carbon-text) 11%, transparent);
-  --gl-mark-ground: var(--carbon-text);
-  --gl-mark-ink: var(--carbon-bg);
+  --gl-dot: color-mix(in srgb, var(--stone-text) 11%, transparent);
+  --gl-mark-ground: var(--stone-text);
+  --gl-mark-ink: var(--stone-ground);
 }
 .gl-bar {
   display: flex;
@@ -14,7 +14,7 @@
   margin: 1.25rem 0 0;
 }
 .gl-meta-line {
-  color: var(--carbon-text-muted);
+  color: var(--stone-text-muted);
   font-size: var(--text-subline, 13px);
   line-height: 1.9;
 }
@@ -63,7 +63,7 @@
   font-size: var(--text-subline, 13px);
 }
 .gl-names dt {
-  color: var(--carbon-text-muted);
+  color: var(--stone-text-muted);
   font-size: var(--text-meta);
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -75,7 +75,7 @@
   align-items: center;
   gap: 6px;
   margin: 0;
-  color: var(--carbon-text);
+  color: var(--stone-text);
   font-weight: 600;
 }
 .gl-code code,
@@ -89,8 +89,8 @@
 .gl-code code {
   padding: 1px 6px;
   border-radius: var(--radius-control);
-  background: var(--carbon-surface2);
-  color: var(--carbon-text-sub);
+  background: var(--stone-surface2);
+  color: var(--stone-text-sub);
   line-height: 18px;
 }
 .gl-abbr {
@@ -99,14 +99,14 @@
   min-height: 18px;
   padding: 0 0.4rem;
   border-radius: var(--radius-control);
-  background: var(--carbon-surface3);
-  color: var(--carbon-text);
+  background: var(--stone-surface3);
+  color: var(--stone-text);
   font-size: var(--text-meta);
   font-weight: 650;
   letter-spacing: 0.04em;
 }
-.gl-desc { margin: 0; color: var(--carbon-text-sub); line-height: 1.6; max-width: 62ch; }
-.gl-rule { margin: 0.5rem 0 0; color: var(--carbon-text-muted); font-size: var(--text-meta); }
+.gl-desc { margin: 0; color: var(--stone-text-sub); line-height: 1.6; max-width: 62ch; }
+.gl-rule { margin: 0.5rem 0 0; color: var(--stone-text-muted); font-size: var(--text-meta); }
 
 /* The sunken stage an element stands on: the page's own ground, dotted, so a
    card or a window shown there sits as it would on a page. */
@@ -115,7 +115,7 @@
   position: relative;
   min-width: 0;
   border-radius: var(--radius-control);
-  background-color: var(--carbon-bg);
+  background-color: var(--stone-ground);
   background-image: radial-gradient(var(--gl-dot) 1px, transparent 1.3px);
   background-size: 16px 16px;
 }
@@ -131,7 +131,7 @@
   .gl-stage { padding: 1.75rem 0.875rem; }
 }
 .gl-stage--listed { min-height: 0; padding-block: 1.25rem; background-image: none; }
-.gl-listed { margin: 0; color: var(--carbon-text-muted); }
+.gl-listed { margin: 0; color: var(--stone-text-muted); }
 
 /* Fixed parts of a component stay inside their stage instead of the window. */
 .gl-contained {
@@ -147,7 +147,7 @@
   --window-bar: 2.5rem;
   max-width: 32rem;
   padding-top: var(--window-bar);
-  background: var(--carbon-surface);
+  background: var(--stone-surface);
   box-shadow: var(--elevation), var(--hairline);
 }
 
@@ -200,7 +200,7 @@
 .gl-mark {
   position: absolute;
   z-index: 12;
-  box-shadow: 0 0 0 2px var(--carbon-bg), 0 2px 6px rgb(0 0 0 / 0.25);
+  box-shadow: 0 0 0 2px var(--stone-ground), 0 2px 6px rgb(0 0 0 / 0.25);
   pointer-events: none;
   transition: transform 160ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
@@ -220,7 +220,7 @@
 .gl-figure-stage[data-hot="7"] .gl-spot[data-spot="7"],
 .gl-figure-stage[data-hot="8"] .glim-modal-foot,
 .gl-figure-stage[data-hot="9"] .gl-spot[data-spot="9"] {
-  outline: 2px dashed var(--carbon-text);
+  outline: 2px dashed var(--stone-text);
   outline-offset: 4px;
 }
 .gl-figure-stage[data-hot="8"] .glim-modal-foot { outline-offset: -2px; border-radius: var(--radius-control); }
@@ -236,7 +236,7 @@
   transform: scale(1.25);
 }
 
-.gl-legend-lead { margin: 0 0 0.75rem; color: var(--carbon-text-muted); font-size: var(--text-subline, 13px); max-width: 52ch; }
+.gl-legend-lead { margin: 0 0 0.75rem; color: var(--stone-text-muted); font-size: var(--text-subline, 13px); max-width: 52ch; }
 .gl-legend { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
 .gl-legend-item {
   display: grid;
@@ -245,7 +245,7 @@
   gap: 0.875rem;
   padding: 0.5rem 0.75rem;
   border-radius: var(--radius-control);
-  color: var(--carbon-text);
+  color: var(--stone-text);
   text-decoration: none;
 }
 .gl-legend-item:hover,
@@ -253,16 +253,16 @@
 .gl-legend-text { display: grid; gap: 1px; min-width: 0; }
 .gl-legend-name { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem; }
 .gl-legend-name strong { font-size: var(--text-body); font-weight: 650; }
-.gl-legend-other { color: var(--carbon-text-sub); font-size: var(--text-subline, 13px); }
-.gl-legend-code { justify-self: start; color: var(--carbon-text-muted); }
+.gl-legend-other { color: var(--stone-text-sub); font-size: var(--text-subline, 13px); }
+.gl-legend-code { justify-self: start; color: var(--stone-text-muted); }
 
 .gl-index { overflow-x: auto; padding-top: 0.75rem; }
 .gl-index .glim-table { width: 100%; }
 .gl-index .glim-table :is(th, td) { white-space: normal; }
 .gl-index-name { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
-.gl-index-name a { font-weight: 600; color: var(--carbon-text); text-decoration: none; }
+.gl-index-name a { font-weight: 600; color: var(--stone-text); text-decoration: none; }
 .gl-index-name a:hover { text-decoration: underline; text-underline-offset: 3px; }
-.gl-index code { color: var(--carbon-text-sub); }
+.gl-index code { color: var(--stone-text-sub); }
 
 /* The four badge forms, each with the radius its form gives. */
 .gl-forms { display: flex; flex-wrap: wrap; gap: 12px; }
@@ -274,10 +274,10 @@
   margin: 0;
   padding: 16px 12px 12px;
   border-radius: var(--radius-control);
-  background: var(--carbon-surface);
+  background: var(--stone-surface);
 }
 .gl-form figcaption { display: grid; justify-items: center; gap: 1px; font-size: 12px; }
-.gl-form figcaption span { color: var(--carbon-text-muted); font-size: var(--text-meta); }
+.gl-form figcaption span { color: var(--stone-text-muted); font-size: var(--text-meta); }
 
 .gl-own-row-btn {
   display: inline-flex;
@@ -289,10 +289,10 @@
   border: 0;
   border-radius: var(--radius-control);
   background: transparent;
-  color: var(--carbon-text-sub);
+  color: var(--stone-text-sub);
   cursor: pointer;
 }
-.gl-own-row-btn:hover { background: var(--hover); color: var(--carbon-text); }
+.gl-own-row-btn:hover { background: var(--hover); color: var(--stone-text); }
 
 .gl-dense-row {
   display: flex;
@@ -304,23 +304,7 @@
   font-size: 13px;
   cursor: pointer;
 }
-.gl-dense-row:hover { background: var(--carbon-hover); }
-
-.gl-listbox-trigger { width: 14rem; max-width: 100%; text-align: start; cursor: pointer; }
-.gl-listbox-option {
-  display: block;
-  width: 100%;
-  padding: 0.5rem 0.75rem;
-  border: 0;
-  background: transparent;
-  color: var(--carbon-text);
-  font: inherit;
-  font-size: var(--text-body);
-  text-align: start;
-  cursor: pointer;
-}
-.gl-listbox-option:hover { background: var(--carbon-hover); }
-.gl-listbox-option[aria-selected="true"] { font-weight: 650; }
+.gl-dense-row:hover { background: var(--hover); }
 
 .gl-rail {
   display: flex;
@@ -331,14 +315,14 @@
   height: 260px;
   padding: 12px;
   border-radius: var(--radius-card);
-  background: var(--carbon-sidebar);
+  background: var(--stone-sidebar);
 }
 
 .gl-signin-in-place { min-height: 0; width: 100%; padding: 0; background: transparent; }
 
 .gl-move-rows { display: grid; gap: 6px; width: 100%; max-width: 360px; }
-.gl-move-row { display: flex; align-items: center; gap: 10px; padding: 8px 12px; color: var(--carbon-text); }
-.gl-move-row svg { flex: none; color: var(--carbon-text-muted); }
+.gl-move-row { display: flex; align-items: center; gap: 10px; padding: 8px 12px; color: var(--stone-text); }
+.gl-move-row svg { flex: none; color: var(--stone-text-muted); }
 
 .gl-live-dot {
   display: inline-block;
@@ -355,7 +339,7 @@
   gap: 4px 2.5rem;
   font-size: 18px;
 }
-.gl-num-compare > :nth-child(-n + 2) { color: var(--carbon-text-muted); font-size: var(--text-meta); letter-spacing: 0.08em; text-transform: uppercase; }
+.gl-num-compare > :nth-child(-n + 2) { color: var(--stone-text-muted); font-size: var(--text-meta); letter-spacing: 0.08em; text-transform: uppercase; }
 
 .gl-glyph-grid {
   display: grid;
@@ -369,6 +353,6 @@
   gap: 6px;
   padding: 12px 4px 8px;
   border-radius: var(--radius-control);
-  background: var(--carbon-surface);
+  background: var(--stone-surface);
 }
-.gl-glyph-cell code { color: var(--carbon-text-muted); font-size: 10.5px; }
+.gl-glyph-cell code { color: var(--stone-text-muted); font-size: 10.5px; }

@@ -1,6 +1,6 @@
 {
   "font": {
-    "$description": "The house font is Noto Sans, shipped with the app for Latin, Cyrillic, Greek, Vietnamese and Devanagari, with Noto's own cuts for Arabic, Hebrew and Thai. The \"Variable\" names are the shipped files, the plain ones an install on the machine. Chinese, Japanese and Korean are too heavy to ship, so their Noto cut is used where the system has it, and the system font where it does not; Han characters are drawn differently per language, so the lang of the page picks the cut (docs/design-language.md, \"The house font\").",
+    "$description": "The house font is IBM Plex Sans, shipped with the app for Latin, Cyrillic, Greek and Vietnamese. Noto Sans stands behind it for the scripts Plex does not draw: Devanagari from Noto Sans itself, Arabic, Hebrew and Thai from Noto's own cuts. The \"Variable\" names are the shipped files, the plain ones an install on the machine. Chinese, Japanese and Korean are too heavy to ship, so their Noto cut is used where the system has it, and the system font where it does not; Han characters are drawn differently per language, so the lang of the page picks the cut (docs/design-language.md, \"The house font\").",
     "$extensions": {
       "org.glimstone": {
         "selector": ":root",
@@ -33,7 +33,41 @@
       }
     },
     "font-sans": {
-      "$value": "\"Noto Sans Variable\", \"Noto Sans\", \"Noto Sans Arabic Variable\", \"Noto Sans Arabic\", \"Noto Sans Hebrew Variable\", \"Noto Sans Hebrew\", \"Noto Sans Thai Variable\", \"Noto Sans Thai\", {font.font-cjk}, system-ui, -apple-system, sans-serif"
+      "$value": "\"IBM Plex Sans Variable\", \"IBM Plex Sans\", \"Noto Sans Variable\", \"Noto Sans\", \"Noto Sans Arabic Variable\", \"Noto Sans Arabic\", \"Noto Sans Hebrew Variable\", \"Noto Sans Hebrew\", \"Noto Sans Thai Variable\", \"Noto Sans Thai\", {font.font-cjk}, system-ui, -apple-system, sans-serif"
+    },
+    "font-weight-regular": {
+      "$value": 400,
+      "$type": "fontWeight",
+      "$description": "Three weights and no more: running text, a name or a label that stands out a little, and a heading or a figure."
+    },
+    "font-weight-medium": {
+      "$value": 500,
+      "$type": "fontWeight"
+    },
+    "font-weight-strong": {
+      "$value": 600,
+      "$type": "fontWeight"
+    },
+    "tracking-status": {
+      "$value": "-0.012em",
+      "$type": "dimension",
+      "$description": "The tracking of each size on the type scale. Plex runs a touch wide, so the large sizes close up and the smallest opens a little to stay legible."
+    },
+    "tracking-title": {
+      "$value": "-0.01em",
+      "$type": "dimension"
+    },
+    "tracking-body": {
+      "$value": "-0.006em",
+      "$type": "dimension"
+    },
+    "tracking-subline": {
+      "$value": "-0.003em",
+      "$type": "dimension"
+    },
+    "tracking-meta": {
+      "$value": "0.01em",
+      "$type": "dimension"
     }
   }
 }

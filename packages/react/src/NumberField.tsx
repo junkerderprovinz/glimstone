@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, type ChangeEventHandler, type InputHTMLAttributes, type Ref } from "react";
 import { attachNumberSteppers, fieldErrorView, syncNumberSteppers } from "@glimstone/core";
-import { FieldError } from "./FieldError.tsx";
+import { FieldErrorLine } from "./fieldErrorLine.tsx";
 import { useFieldName } from "./fieldName.ts";
 
 // A number input with its two steppers inside the field; the steppers, the
@@ -59,7 +59,7 @@ export function NumberField({ className = "", ref, error, "aria-label": ariaLabe
           className={`glim-num-input glim-num-field glim-num ${className}`.trim()}
         />
       </span>
-      {err.errorId && <FieldError id={err.errorId}>{error}</FieldError>}
+      <FieldErrorLine id={err.errorId} error={error} />
     </>
   );
 }

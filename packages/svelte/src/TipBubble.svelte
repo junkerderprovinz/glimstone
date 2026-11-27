@@ -7,5 +7,5 @@
 </script>
 
 {#if state.shown}
-  <div {@attach lift} bind:this={state.bubble} id={state.id} role="tooltip" class="glim-bubble glim-fade">{state.text}</div>
+  <div {@attach lift} bind:this={state.bubble} id={state.id} role="tooltip" class="glim-bubble glim-fade glim-bubble--{state.kind}">{state.text}{#if state.shortcut}<kbd class="glim-bubble-key">{state.shortcut}</kbd>{/if}</div>
 {/if}

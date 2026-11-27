@@ -17,9 +17,3 @@ test('a badge without a form follows the shape setting', () => {
 test('a circle holds one glyph in a square box', () => {
   assert.ok(classes({ form: 'circle' }).includes('glim-badge--icon-only'));
 });
-
-test('the old shape circle still makes an icon-only badge and nothing more', () => {
-  const old = classes({ shape: 'circle' });
-  assert.ok(old.includes('glim-badge--icon-only'));
-  assert.ok(!old.includes('glim-badge--circle'));
-});

@@ -31,7 +31,6 @@ const actions = [
   <Window
     v-if="open"
     title="Columns"
-    size="wide"
     :text="TEXT"
     start="Drag a column's header to move it"
     :actions="actions"

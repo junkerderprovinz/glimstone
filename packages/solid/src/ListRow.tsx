@@ -1,5 +1,9 @@
 import { children, Show, splitProps, type JSX } from "solid-js";
+import { listRowStatus, type ListRowStatus } from "@glimstone/core";
 import { InfoBubble } from "./InfoBubble.tsx";
+import { MarkSvg } from "./glyphs.tsx";
+
+export type { ListRowStatus } from "@glimstone/core";
 
 // One row of a list: a glyph tile, the name, badges and buttons that come in on
 // hover and focus (rule 6). A click handler makes the whole row a way into its
@@ -19,6 +23,13 @@ export interface ListRowProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, "
   tile?: JSX.Element;
   /** What stands at the row's end at rest. */
   badges?: JSX.Element;
+  /** A row that differs from the rest, as a mark in the state colour with
+   *  neutral words, in its own place before the value. The normal case passes
+   *  nothing and stays quiet. */
+  status?: ListRowStatus;
+  /** The row's figure, such as a size, in a column of fixed width at its end,
+   *  so a status beside it moves nothing. A unit in <small> stands quieter. */
+  value?: JSX.Element;
   /** The buttons that come in on hover and focus. A press on one does not open the row. */
   actions?: JSX.Element;
   class?: string;
@@ -27,7 +38,7 @@ export interface ListRowProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, "
 const stay = (e: MouseEvent) => e.stopPropagation();
 
 export function ListRow(props: ListRowProps) {
-  const [own, rest] = splitProps(props, ["name", "tip", "mono", "meta", "steady", "tile", "badges", "actions", "class", "onClick", "onKeyDown"]);
+  const [own, rest] = splitProps(props, ["name", "tip", "mono", "meta", "steady", "tile", "badges", "status", "value", "actions", "class", "onClick", "onKeyDown"]);
   const keys: JSX.EventHandler<HTMLDivElement, KeyboardEvent> = (e) => {
     if (typeof own.onKeyDown === "function") own.onKeyDown(e);
     if (!own.onClick || e.target !== e.currentTarget || (e.key !== "Enter" && e.key !== " ")) return;
@@ -38,6 +49,7 @@ export function ListRow(props: ListRowProps) {
   const tile = children(() => own.tile);
   const badges = children(() => own.badges);
   const actions = children(() => own.actions);
+  const value = children(() => own.value);
   const nameLine = () => (
     <span class={own.mono ? "glim-list-row-name glim-list-row-name--mono" : "glim-list-row-name"}>
       <span class="glim-list-row-title">{own.name}</span>
@@ -64,6 +76,19 @@ export function ListRow(props: ListRowProps) {
       </Show>
       <Show when={badges()}>
         <span class="glim-list-row-badges">{badges()}</span>
+      </Show>
+      <Show when={own.status}>
+        {(status) => (
+          <span class="glim-list-row-status" data-tone={status().tone}>
+            <Show when={listRowStatus(status().tone).mark} fallback={<span class="glim-status-dot" aria-hidden="true" />}>
+              {(mark) => <MarkSvg mark={mark()} class="glim-status-mark" />}
+            </Show>
+            <span>{status().label}</span>
+          </span>
+        )}
+      </Show>
+      <Show when={value() !== undefined && value() !== null}>
+        <span class="glim-list-row-value">{value()}</span>
       </Show>
       <Show when={actions()}>
         <span class="glim-list-row-actions" onClick={stay}>

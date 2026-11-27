@@ -31,6 +31,7 @@
 </script>
 
 <script lang="ts">
+  import { leaveBehind, splitQuestion } from "@glimstone/core";
   import Badge from "./Badge.svelte";
   import Button from "./Button.svelte";
   import { IconCancel, IconClose } from "./glyphs.js";
@@ -56,6 +57,7 @@
     onCancel,
     ref = $bindable(null),
   }: ConfirmDialogProps = $props();
+  const split = $derived(splitQuestion(message));
 
   // Focus lands on Cancel, the answer that changes nothing.
   let cancel = $state<HTMLElement | null>(null);
@@ -64,6 +66,7 @@
 
 <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
 <div
+  {@attach leaveBehind}
   class="glim-modal-backdrop"
   onclick={(e) => {
     if (e.target === e.currentTarget) onCancel();
@@ -77,7 +80,7 @@
     aria-modal="true"
     aria-labelledby="confirmdialog-title"
     aria-describedby="confirmdialog-message"
-    class="glim-modal-card"
+    class="glim-modal-card glim-window--small"
   >
     <div class="glim-modal-head">
       <!-- The title is a heading badge that straddles the card's top edge
@@ -91,7 +94,10 @@
     </div>
 
     <div class="glim-modal-body">
-      <p id="confirmdialog-message" class="glim-modal-text">{message}</p>
+      <div id="confirmdialog-message">
+        <p class="glim-modal-question">{split.question}</p>
+        {#if split.detail}<p class="glim-modal-text">{split.detail}</p>{/if}
+      </div>
       {#if extra !== undefined}
         <div class="glim-modal-extra">{@render extra()}</div>
       {/if}

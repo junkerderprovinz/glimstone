@@ -15,7 +15,6 @@ const COMPONENTS = {
   Badge: "react/Badge.tsx",
   Card: "react/Card.tsx",
   ConfirmDialog: "react/ConfirmDialog.tsx",
-  DropdownListbox: "react/DropdownListbox.tsx",
   InfoBubble: "react/InfoBubble.tsx",
   IconTipButton: "react/IconTipButton.tsx",
   ToastViewport: "react/Toast.tsx",
@@ -80,6 +79,8 @@ const COMPONENTS = {
   DatePicker: "react/DatePicker.tsx",
   Rating: "react/Rating.tsx",
   Timer: "react/Timer.tsx",
+  TimePicker: "react/TimePicker.tsx",
+  TimeRangePicker: "react/TimePicker.tsx",
   AngleSlider: "react/AngleSlider.tsx",
   SignaturePad: "react/SignaturePad.tsx",
   HoverCard: "react/HoverCard.tsx",
@@ -164,7 +165,7 @@ for (const raw of dark.split("\n")) {
   }
   const t = line.match(/^(--[a-z0-9-]+):\s*([^;]+);/);
   if (t) {
-    if (/^--(carbon|accent|status|focus|field)/.test(t[1])) {
+    if (/^--(stone|accent|status|focus|field)/.test(t[1])) {
       tokens.push({ name: t[1], value: t[2], doc: comment });
     }
     comment = "";

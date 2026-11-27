@@ -26,7 +26,7 @@ const values = reactive<Record<string, string | null>>({ fill: "d", steady: "d",
       :data-width="r.width"
       :style="{ display: 'flex', alignItems: 'center', gap: '12px', width: `${r.room}px` }"
     >
-      <span style="flex: none; width: 64px; color: var(--carbon-text-sub)">{{ r.width }}</span>
+      <span style="flex: none; width: 64px; color: var(--stone-text-sub)">{{ r.width }}</span>
       <Select v-model="values[r.width]" :label="`Keep backups, ${r.width}`" hide-label :width="r.width" :options="KEEP" />
     </div>
   </div>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed, useId, watch } from "vue";
+import { computed, ref, useId, watch } from "vue";
 import * as tour from "@zag-js/tour";
 import { normalizeProps, useMachine } from "@zag-js/vue";
-import { TOUR_TEXT, pageDir, portalTarget, tourSteps, type TourStep, type TourText } from "@glimstone/core";
+import { TOUR_TEXT, pageDir, portalTarget, tourDots, tourSpotlight, tourSteps, type TourStep, type TourText } from "@glimstone/core";
 import Badge from "./Badge.vue";
 import Button from "./Button.vue";
 import { IconBack, IconCheck, IconForward } from "./glyphs";
@@ -20,12 +20,15 @@ const open = defineModel<boolean>("open", { required: true });
 
 const words = computed(() => ({ ...TOUR_TEXT, ...props.text }));
 const id = useId();
+const at = ref(0);
 const service = useMachine(
   tour.machine,
   computed(() => ({
     id,
     dir: pageDir(),
     steps: tourSteps(props.steps),
+    ...tourSpotlight(props.steps, at.value),
+    onStepChange: (d: { stepIndex: number }) => (at.value = d.stepIndex),
     onStatusChange: (d: { status: string }) => {
       if (d.status === "dismissed" || d.status === "completed" || d.status === "skipped") {
         open.value = false;
@@ -52,7 +55,10 @@ watch(open, (on) => on && !api.value.open && api.value.start(), { immediate: tru
           </h2>
           <p v-bind="api.getDescriptionProps()" class="glim-tour-text">{{ api.step.description }}</p>
           <div class="glim-tour-foot">
-            <span v-bind="api.getProgressTextProps()" class="glim-tour-progress glim-num">{{ words.progress(api.stepIndex + 1, api.totalSteps) }}</span>
+            <span v-bind="api.getProgressTextProps()" class="glim-tour-progress">
+              <span class="glim-sr-only">{{ words.progress(api.stepIndex + 1, api.totalSteps) }}</span>
+              <span v-for="(current, i) in tourDots(api.totalSteps, api.stepIndex)" :key="i" aria-hidden="true" class="glim-tour-dot" :data-current="current || undefined" />
+            </span>
             <Button :label="words.back" :label-key="null" :glyph="IconBack" :disabled="!api.hasPrevStep" @click="api.prev()" />
             <Button v-if="api.lastStep" :label="words.close" :label-key="null" :glyph="IconCheck" tone="accent" @click="end" />
             <Button v-else :label="words.next" :label-key="null" :glyph="IconForward" tone="accent" @click="api.next()" />

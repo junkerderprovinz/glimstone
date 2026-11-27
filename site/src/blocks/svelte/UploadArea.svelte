@@ -50,7 +50,7 @@
       style:padding="32px 16px"
       style:text-align="center"
       style:background={over ? "var(--accent-soft)" : undefined}
-      style:color="var(--carbon-text-sub)"
+      style:color="var(--stone-text-sub)"
       ondragover={(e) => {
         e.preventDefault();
         over = true;
@@ -58,7 +58,7 @@
       ondragleave={() => (over = false)}
       ondrop={drop}
     >
-      <span style:color={over ? "var(--accent-ink)" : "var(--carbon-text-muted)"}>
+      <span style:color={over ? "var(--accent-ink)" : "var(--stone-text-muted)"}>
         {@render glyph("IconUpload", 32)()}
       </span>
       <span>Drop files here, or choose them</span>

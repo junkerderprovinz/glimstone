@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CopyField, FieldRow, NumberField, PasswordField, Selector, TextField, Toggle } from "@glimstone/react";
+import { CopyField, FieldRow, NumberField, PasswordField, Selector, TextField, TimePicker, Toggle } from "@glimstone/react";
 import { Combobox } from "@glimstone/react/Combobox";
 import { Select } from "@glimstone/react/Select";
 import { Slider } from "@glimstone/react/Slider";
@@ -26,6 +26,8 @@ export default function FieldRowBasic() {
   const [keep, setKeep] = useState("month");
   const [volume, setVolume] = useState(40);
   const [zone, setZone] = useState("vienna");
+  const [from, setFrom] = useState<string | null>("08:00");
+  const [to, setTo] = useState<string | null>("17:00");
   return (
     <div style={{ display: "grid", gap: 8, width: "100%", maxWidth: 560 }}>
       <FieldRow label="Name" hint="Shown in the list of jobs.">
@@ -62,8 +64,8 @@ export default function FieldRowBasic() {
         <TextField width="grow" mono defaultValue="https://bottich/s/3f9a" />
       </FieldRow>
       <FieldRow label="Hours">
-        <TextField label="From" width="short" defaultValue="08:00" />
-        <TextField label="To" width="short" defaultValue="17:00" />
+        <TimePicker label="From" value={from} onChange={setFrom} minuteStep={15} />
+        <TimePicker label="To" value={to} onChange={setTo} minuteStep={15} />
       </FieldRow>
       <FieldRow label="Volume">
         <Slider value={volume} onChange={setVolume} min={0} max={100} format={(v) => `${v}%`} />

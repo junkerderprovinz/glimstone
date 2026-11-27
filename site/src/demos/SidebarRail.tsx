@@ -40,7 +40,7 @@ export default function SidebarRail() {
         height: 300,
         padding: 12,
         borderRadius: "var(--radius-card)",
-        background: "var(--carbon-sidebar)",
+        background: "var(--stone-sidebar)",
       }}
     >
       <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>{MAIN.map(row)}</div>

@@ -3,6 +3,8 @@
 
   export interface ToastCardProps {
     id: string;
+    /** A short first line; the message then reads as its description. */
+    title?: string;
     message: string;
     severity: ToastSeverity;
     /** A button such as Undo. A press runs it and dismisses the toast. */
@@ -18,14 +20,14 @@
 </script>
 
 <script lang="ts">
-  import { MARKS, softBreaks, TOAST_MARKS } from "@glimstone/core";
+  import { leaveBehind, MARKS, softBreaks, TOAST_MARKS } from "@glimstone/core";
   import Button from "./Button.svelte";
   import MarkSvg from "./MarkSvg.svelte";
 
   // One toast, without state, so a test can mount it with props. Focus is
   // heard on focusin and focusout, so tabbing onto the dismiss button pauses
   // the countdown like a hover does.
-  let { id, message, severity, action, dismissLabel, onDismiss, onMouseEnter, onMouseLeave, onFocus, onBlur }: ToastCardProps = $props();
+  let { id, title, message, severity, action, dismissLabel, onDismiss, onMouseEnter, onMouseLeave, onFocus, onBlur }: ToastCardProps = $props();
 
   function keys(e: KeyboardEvent) {
     if (e.key === "Escape") {
@@ -37,16 +39,18 @@
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
+  {@attach leaveBehind}
   data-glim="ToastCard"
   onmouseenter={() => onMouseEnter(id)}
   onmouseleave={() => onMouseLeave(id)}
   onfocusin={() => onFocus(id)}
   onfocusout={() => onBlur(id)}
   onkeydown={keys}
-  class="glim-toast glim-toast-card"
+  class={title ? "glim-toast glim-toast-card glim-toast-card--titled" : "glim-toast glim-toast-card"}
 >
   <MarkSvg mark={TOAST_MARKS[severity]} class={`glim-toast-glyph glim-toast-glyph--${severity}`} />
   <div class="glim-toast-body">
+    {#if title}<p class="glim-toast-title">{title}</p>{/if}
     <p class="glim-toast-message">{#each softBreaks(message) as part, i}{#if i > 0}<wbr />{/if}{part}{/each}</p>
     {#if action}
       {@const act = action}

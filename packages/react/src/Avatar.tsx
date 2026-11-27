@@ -20,7 +20,7 @@ export interface AvatarProps {
 export function Avatar({ name, src, size = "md", hueIndex }: AvatarProps) {
   const service = useMachine(avatar.machine, { id: useId(), dir: pageDir() });
   const api = avatar.connect(service, normalizeProps);
-  const view = avatarView({ size, hueIndex });
+  const view = avatarView({ size, hueIndex, name });
   return (
     <span data-glim="Avatar" {...api.getRootProps()} role="img" aria-label={name} className={view.className} style={view.style}>
       {src && <img {...api.getImageProps()} src={src} alt="" className="glim-avatar-image" />}

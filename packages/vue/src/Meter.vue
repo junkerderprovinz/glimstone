@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { meterView, type MeterSize } from "@glimstone/core";
+import { meterFigure, meterShowsValue, meterView, type MeterSize } from "@glimstone/core";
 import { useTipBubble } from "./tipBubble";
 import TipBubble from "./TipBubble.vue";
 
@@ -22,31 +22,60 @@ const props = withDefaults(
     quiet?: boolean;
     /** The level in words, such as "120 GB free of 4 TB": read out, and shown in the bubble. */
     valueText?: string;
+    /** The figure beside the track, such as "1.4 / 2 TB". The percentage when left out. */
+    figure?: string;
+    /** Shows the figure beside the track. On by default for `medium`, off for `small` and `quiet`. */
+    showValue?: boolean;
   }>(),
-  { value: null, size: "medium", threshold: 0.9, quiet: false },
+  { value: null, size: "medium", threshold: 0.9, quiet: false, showValue: undefined },
 );
 const view = computed(() => meterView(props.value, { size: props.size, threshold: props.threshold, quiet: props.quiet }));
 const busy = computed(() => view.value.percent === null);
 const bubble = useTipBubble(() => props.valueText);
+const shown = computed(() => meterShowsValue(props.size, props.quiet, props.showValue));
 </script>
 
+<!-- The figure repeats what the meter already says, so a screen reader hears it once. -->
 <template>
-  <span
-    data-glim="Meter"
-    v-bind="$attrs"
-    :ref="(el) => (bubble.trigger.value = el as HTMLElement | null)"
-    :role="busy ? 'progressbar' : 'meter'"
-    :aria-label="label"
-    :aria-valuemin="busy ? undefined : 0"
-    :aria-valuemax="busy ? undefined : 100"
-    :aria-valuenow="view.percent ?? undefined"
-    :aria-valuetext="valueText"
-    :aria-busy="busy || undefined"
-    :class="view.className"
-    @mouseenter="bubble.show"
-    @mouseleave="bubble.hide"
-  >
-    <span class="glim-meter-fill" :style="view.width ? { width: view.width } : undefined" />
+  <span v-if="shown" :class="['glim-meter-row', `glim-meter-row--${size}`]">
+    <span
+      data-glim="Meter"
+      v-bind="$attrs"
+      :ref="(el) => (bubble.trigger.value = el as HTMLElement | null)"
+      :role="busy ? 'progressbar' : 'meter'"
+      :aria-label="label"
+      :aria-valuemin="busy ? undefined : 0"
+      :aria-valuemax="busy ? undefined : 100"
+      :aria-valuenow="view.percent ?? undefined"
+      :aria-valuetext="valueText"
+      :aria-busy="busy || undefined"
+      :class="view.className"
+      @mouseenter="bubble.show"
+      @mouseleave="bubble.hide"
+    >
+      <span class="glim-meter-fill" :style="view.width ? { width: view.width } : undefined" />
+    </span>
+    <span class="glim-meter-value glim-num" aria-hidden="true">{{ meterFigure(view.percent, figure) }}</span>
+    <TipBubble :state="bubble" />
   </span>
-  <TipBubble :state="bubble" />
+  <template v-else>
+    <span
+      data-glim="Meter"
+      v-bind="$attrs"
+      :ref="(el) => (bubble.trigger.value = el as HTMLElement | null)"
+      :role="busy ? 'progressbar' : 'meter'"
+      :aria-label="label"
+      :aria-valuemin="busy ? undefined : 0"
+      :aria-valuemax="busy ? undefined : 100"
+      :aria-valuenow="view.percent ?? undefined"
+      :aria-valuetext="valueText"
+      :aria-busy="busy || undefined"
+      :class="view.className"
+      @mouseenter="bubble.show"
+      @mouseleave="bubble.hide"
+    >
+      <span class="glim-meter-fill" :style="view.width ? { width: view.width } : undefined" />
+    </span>
+    <TipBubble :state="bubble" />
+  </template>
 </template>

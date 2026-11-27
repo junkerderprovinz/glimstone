@@ -1,10 +1,10 @@
 import { setGlyphResolver } from "@glimstone/react";
-import { glyphByName, glyphNameFor } from "./glyphData";
+import { glyphArtOf, glyphNameFor } from "./glyphData";
 
 export { GLYPHS, type GlyphEntry } from "./glyphData";
 
 export function Glyph({ name, size = 16 }: { name: string; size?: number }) {
-  const g = glyphByName.get(name);
+  const g = glyphArtOf(name);
   if (!g) return null;
   return (
     <svg

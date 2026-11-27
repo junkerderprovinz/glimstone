@@ -22,7 +22,7 @@ export function SelectPage() {
     <>
       <p className="lead">
         The one dropdown. It picks one value from a short list, in groups with headings and submenus where the list
-        needs them. It takes over from DropdownListbox.
+        needs them.
       </p>
       <ZagNote file="react/Select.tsx" />
       <Demo name="SelectZag" />
@@ -120,7 +120,7 @@ export function SelectPage() {
           With focus on the closed trigger, the mouse wheel steps through the options, skipping disabled ones and
           stopping at both ends. Hovering alone changes nothing.
         </li>
-        <li>The list opens below the trigger on the side its text starts from, and above or end-aligned where that does not fit.</li>
+        <li>The list opens over the trigger with the chosen row where the value stood, its words on the value's, and grows out of that row. With submenus it is the row whose submenu holds the value.</li>
         <li>A scroll or a resize outside the open list closes it.</li>
         <li>A list longer than a screen is a <a href="#/components/combobox">Combobox</a>.</li>
       </ul>
@@ -144,6 +144,7 @@ export function ComboboxPage() {
       <H2>Rules</H2>
       <ul>
         <li>A search that finds nothing says so in the list. A list that vanishes reads as a broken field.</li>
+        <li>While somebody types, each entry sets apart the part that matches, and the rest stands quieter.</li>
         <li>Focus stays in the field while the arrows move through the list.</li>
       </ul>
       <H2>Behaviour</H2>
@@ -200,6 +201,7 @@ export function SliderPage() {
       <H2>Rules</H2>
       <ul>
         <li>The value stands beside the label in words ("30 days", not "30"), and a screen reader hears the same words.</li>
+        <li>While the thumb is dragged, its value stands in a bubble over it.</li>
         <li>Where the exact number matters, pair the slider with a number field.</li>
       </ul>
       <H2>Behaviour</H2>

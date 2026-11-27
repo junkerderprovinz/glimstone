@@ -1,9 +1,10 @@
 <script lang="ts">
   import { addToast, pauseToast, removeToast, resumeToast, type ToastEntry } from "@glimstone/core";
-  import { Card, IconButton, ListRow, Pill, ToastViewport, useConfirm } from "@glimstone/svelte";
+  import { Card, IconButton, ListRow, ToastViewport, useConfirm } from "@glimstone/svelte";
   import { glyph } from "../../svelte/glyph";
 
   const SNAPSHOTS = ["14 October", "21 October", "28 October"];
+  const SIZES: Record<string, string> = { "14 October": "38.2", "21 October": "38.9", "28 October": "41.5" };
 
   // Deleting asks first, and the toast that reports it can take it back.
   const ask = useConfirm({ title: "Delete snapshot", cancel: "Cancel", confirm: "Delete" });
@@ -31,8 +32,6 @@
   const trash = glyph("IconTrash");
 </script>
 
-{#snippet settled()}<Pill tone="ok">Settled</Pill>{/snippet}
-
 <div style="width: 100%; max-width: 560px; padding-top: 12px">
   <Card title="Snapshots">
     <div style="display: grid; gap: 2px">
@@ -40,7 +39,8 @@
         {#snippet actions()}
           <IconButton tip={`Delete the snapshot from ${day}`} glyph={trash} onclick={() => remove(day)} />
         {/snippet}
-        <ListRow name={day} tile={archive} badges={settled} {actions} />
+        {#snippet value()}{SIZES[day]}{"\u202f"}<small>GB</small>{/snippet}
+        <ListRow name={day} tile={archive} {value} {actions} />
       {/each}
     </div>
   </Card>

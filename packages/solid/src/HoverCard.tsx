@@ -1,7 +1,7 @@
-import { createMemo, createSignal, createUniqueId, mergeProps, Show, type JSX } from "solid-js";
+import { createMemo, createSignal, createUniqueId, For, mergeProps, Show, type JSX } from "solid-js";
 import * as hoverCard from "@zag-js/hover-card";
 import { normalizeProps, useMachine } from "@zag-js/solid";
-import { pageDir } from "@glimstone/core";
+import { hoverCardFacts, pageDir, type HoverCardFact } from "@glimstone/core";
 import { Lift } from "./Lift.tsx";
 import { usePortalHue } from "./portalHue.ts";
 import { css } from "./style.ts";
@@ -11,6 +11,8 @@ import { css } from "./style.ts";
 // It only previews: everything in it is also behind the link, so a touch
 // screen, which has no hover, loses nothing.
 
+export type { HoverCardFact } from "@glimstone/core";
+
 export interface HoverCardProps {
   /** The link's words. */
   label: string;
@@ -18,12 +20,20 @@ export interface HoverCardProps {
   /** How long the pointer rests before the card opens, and after it leaves before it closes, in ms. */
   openDelay?: number;
   closeDelay?: number;
-  /** Draws the card. */
-  content: () => JSX.Element;
+  /** A glyph or an avatar for the card's head, in a 40px tile. */
+  media?: JSX.Element;
+  /** The head's name. */
+  title?: string;
+  /** One quiet line under the name, such as an address or a state. */
+  meta?: string;
+  /** Up to three figures under the head, each a name and a value. */
+  facts?: readonly HoverCardFact[];
+  /** Draws the card's body below the head, or the whole card without one. */
+  content?: () => JSX.Element;
 }
 
 export function HoverCard(raw: HoverCardProps) {
-  const props = mergeProps({ openDelay: 600, closeDelay: 300 }, raw);
+  const props = mergeProps({ openDelay: 400, closeDelay: 150 }, raw);
   const id = createUniqueId();
   const service = useMachine(hoverCard.machine, () => ({
     id,
@@ -49,7 +59,34 @@ export function HoverCard(raw: HoverCardProps) {
             class={`glim-hovercard-positioner ${hue.className()}`.trim()}
           >
             <div {...api().getContentProps()} class="glim-hovercard">
-              {props.content()}
+              <Show when={props.media || props.title}>
+                <div class="glim-hovercard-head">
+                  <Show when={props.media}>
+                    <span class="glim-hovercard-media">{props.media}</span>
+                  </Show>
+                  <span class="glim-hovercard-names">
+                    <Show when={props.title}>
+                      <strong class="glim-hovercard-title">{props.title}</strong>
+                    </Show>
+                    <Show when={props.meta}>
+                      <span class="glim-hovercard-meta">{props.meta}</span>
+                    </Show>
+                  </span>
+                </div>
+              </Show>
+              <Show when={hoverCardFacts(props.facts).length}>
+                <dl class="glim-hovercard-facts">
+                  <For each={hoverCardFacts(props.facts)}>
+                    {(f) => (
+                      <div class="glim-hovercard-fact">
+                        <dt>{f.label}</dt>
+                        <dd class="glim-num">{f.value}</dd>
+                      </div>
+                    )}
+                  </For>
+                </dl>
+              </Show>
+              {props.content?.()}
             </div>
           </div>
         </Lift>

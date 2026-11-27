@@ -1,4 +1,4 @@
-import { dismissBubbleOn, placeBubble, pointerWasLast, trackInputModality } from "@glimstone/core";
+import { dismissBubbleOn, placeBubble, pointerWasLast, restTimer, trackInputModality, type BubbleKind } from "@glimstone/core";
 
 // The one hover and focus tooltip. The "(i)" of InfoBubble, a bare
 // IconTipButton, a Select trigger and a Button whose text the label engine
@@ -13,8 +13,11 @@ export interface TipBubble {
   readonly id: string;
   readonly text: string | undefined;
   readonly shown: boolean;
+  readonly kind: BubbleKind;
+  readonly shortcut: string | undefined;
   /** `aria-describedby` while open, so the bubble is announced as the trigger's description. */
   readonly describedBy: string | undefined;
+  /** Opens a tooltip once the pointer has rested, an info bubble at once. */
   show: () => void;
   hide: () => void;
   /** Focus opens the bubble only when the keyboard was used last; a mouse user gets focus as a side effect. */
@@ -23,8 +26,17 @@ export interface TipBubble {
 
 let count = 0;
 
-export function useTipBubble(tip: () => string | undefined, disabled: () => boolean = () => false): TipBubble {
+export interface TipBubbleOptions {
+  /** `tip` names a control: small, inverted, once the pointer has rested.
+   *  `info` explains: roomier, on the floating surface, at once. */
+  kind?: BubbleKind;
+  /** A keyboard shortcut drawn beside a tooltip's words, such as "Ctrl K". */
+  shortcut?: () => string | undefined;
+}
+
+export function useTipBubble(tip: () => string | undefined, disabled: () => boolean = () => false, { kind = "tip", shortcut = () => undefined }: TipBubbleOptions = {}): TipBubble {
   let open = $state(false);
+  const timer = restTimer(kind);
   let trigger = $state<HTMLElement | null>(null);
   let bubble = $state<HTMLElement | null>(null);
   const id = `glim-tip-${++count}`;
@@ -42,11 +54,14 @@ export function useTipBubble(tip: () => string | undefined, disabled: () => bool
 
   trackInputModality();
   const show = () => {
-    if (text) open = true;
+    if (text) timer.rest(() => (open = true));
   };
   const hide = () => {
+    timer.cancel();
+    timer.closed(open);
     open = false;
   };
+  $effect(() => timer.cancel);
 
   // Effects run once the bubble is in the document and before the browser
   // paints, so it is measured and placed without a visible jump.
@@ -76,13 +91,17 @@ export function useTipBubble(tip: () => string | undefined, disabled: () => bool
     get shown() {
       return shown;
     },
+    kind,
+    get shortcut() {
+      return shortcut();
+    },
     get describedBy() {
       return shown ? id : undefined;
     },
     show,
     hide,
     showOnFocus: () => {
-      if (!pointerWasLast()) show();
+      if (text && !pointerWasLast()) open = true;
     },
   };
 }

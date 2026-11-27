@@ -12,6 +12,9 @@ const props = withDefaults(
   defineProps<{
     /** The hover and focus explanation, and the button's `aria-label`. */
     tip: string;
+    /** The keyboard shortcut that does the same, drawn beside the tip and
+     *  announced as `aria-keyshortcuts`, such as "Ctrl K". */
+    shortcut?: string;
     disabled?: boolean;
     /** Makes it a link. A disabled one stays a disabled button. */
     href?: string;
@@ -19,7 +22,7 @@ const props = withDefaults(
   }>(),
   { disabled: false, type: "button" },
 );
-const bubble = useTipBubble(() => props.tip, () => props.disabled);
+const bubble = useTipBubble(() => props.tip, () => props.disabled, { shortcut: () => props.shortcut });
 </script>
 
 <template>
@@ -33,6 +36,7 @@ const bubble = useTipBubble(() => props.tip, () => props.disabled);
       :type="href && !disabled ? undefined : type"
       :disabled="href && !disabled ? undefined : disabled"
       :aria-label="tip"
+      :aria-keyshortcuts="shortcut?.trim().replace(/\s+/g, '+')"
       :aria-describedby="bubble.describedBy.value"
       @mouseenter="bubble.show"
       @mouseleave="bubble.hide"

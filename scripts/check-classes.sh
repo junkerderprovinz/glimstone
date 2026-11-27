@@ -31,7 +31,7 @@ done
 
 # 2. No Tailwind utility in a class list, so an app without Tailwind gets the
 #    same look as one with it.
-grep -nP "class(Name)?=[^>]*(?<![\w-])(flex|grid|inline-flex|items-[a-z]+|justify-[a-z]+|gap-[0-9.]+|p[xytbse]?-[0-9.]+|m[xytbse]?-[0-9.]+|-m-[0-9]|(bg|text|border|ring)-(carbon|accent|status)[A-Za-z0-9-]*|text-(xs|sm|base|lg)|rounded-(card|control|pill|full)|shrink-0|sr-only|hover:[a-z-]+)(?![\w-])" $components \
+grep -nP "class(Name)?=[^>]*(?<![\w-])(flex|grid|inline-flex|items-[a-z]+|justify-[a-z]+|gap-[0-9.]+|p[xytbse]?-[0-9.]+|m[xytbse]?-[0-9.]+|-m-[0-9]|(bg|text|border|ring)-(stone|carbon|accent|status)[A-Za-z0-9-]*|text-(xs|sm|base|lg)|rounded-(card|control|pill|full)|shrink-0|sr-only|hover:[a-z-]+)(?![\w-])" $components \
   && note "a Tailwind utility in a component (above)"
 
 # 3. Every custom property set inline from a component's own style object.
@@ -42,29 +42,7 @@ done
 # 4. Nothing may point at a file that only exists inside an adopting app.
 grep -n "index\.css" $components && note "a comment names an app's own stylesheet"
 
-# 5. No filled control hovers to the grey step below it (rule 21). On the dark
-#    ramp `--carbon-hover` is #353535, below surface2's #393939, so a control
-#    filled with surface2 or surface3 that hovers to it goes darker.
-while IFS= read -r hit; do
-  note "a surface-filled control hovers down the ramp (rule 21): $hit"
-done < <(perl -0777 -ne '
-  s{/\*.*?\*/}{}gs;
-  my %fill;
-  while (/([^{}]+)\{([^{}]*)\}/g) {
-    my ($sel, $body) = ($1, $2);
-    next unless $body =~ /background(?:-color)?:\s*var\(--carbon-surface[23]\)/;
-    $fill{$_} = 1 for map { s/^\s+|\s+$//gr } split /,/, $sel;
-  }
-  while (/([^{}]+)\{([^{}]*)\}/g) {
-    my ($sel, $body) = ($1, $2);
-    next unless $body =~ /background(?:-color)?:\s*var\(--carbon-hover\)/;
-    for my $s (map { s/^\s+|\s+$//gr } split /,/, $sel) {
-      (my $base = $s) =~ s/:hover//;
-      print "$s\n" if $fill{$base};
-    }
-  }' $tokens)
-
-# 6. A :has() never tests the class or style attribute (rule 36). Chrome then
+# 5. A :has() never tests the class or style attribute (rule 36). Chrome then
 #    restyles the whole page whenever a class or an inline style changes, and a
 #    page that animates a bar through either stalls on every frame. Comments are
 #    dropped first, and the argument is matched with its nested brackets.

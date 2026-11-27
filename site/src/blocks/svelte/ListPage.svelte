@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Button, Card, EmptyState, IconButton, ListRow, Pill, SkeletonRow, TextField } from "@glimstone/svelte";
+  import { Button, Card, EmptyState, IconButton, ListRow, SkeletonRow, TextField } from "@glimstone/svelte";
   import { glyph } from "../../svelte/glyph";
 
   interface Backup {
@@ -44,21 +44,18 @@
   <Card title="Backups">
     {#if loading}
       <div role="group" aria-label="Backups" aria-busy="true">
-        <SkeletonRow />
-        <SkeletonRow />
-        <SkeletonRow />
+        <SkeletonRow badge={false} value actions={1} />
+        <SkeletonRow badge={false} value actions={1} />
+        <SkeletonRow badge={false} value actions={1} />
       </div>
     {:else if shown.length}
       <div style="display: grid; gap: 2px">
         {#each shown as b (b.name)}
-          {#snippet badges()}
-            <Pill class="glim-num">{b.size}</Pill>
-            {#if b.failed}<Pill tone="fail">Failed</Pill>{/if}
-          {/snippet}
+          {#snippet value()}{b.size.split(" ")[0]}{"\u202f"}<small>{b.size.split(" ")[1]}</small>{/snippet}
           {#snippet actions()}
             <IconButton tip={`Delete ${b.name}`} glyph={trash} onclick={() => (backups = backups.filter((x) => x !== b))} />
           {/snippet}
-          <ListRow name={b.name} tile={archive} {badges} {actions} />
+          <ListRow name={b.name} tile={archive} status={b.failed ? { tone: "fail", label: "Failed" } : undefined} {value} {actions} />
         {/each}
       </div>
     {:else if backups.length}

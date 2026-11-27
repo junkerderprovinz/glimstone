@@ -10,7 +10,6 @@ import {
   ConfirmDialog,
   ContextMenu,
   CopyField,
-  DropdownListbox,
   EmptyState,
   FieldRow,
   FieldRowGroup,
@@ -33,6 +32,8 @@ import {
   ListTable,
   MenuBar,
   Meter,
+  Chart,
+  Sparkline,
   NumberField,
   PasswordField,
   PathField,
@@ -82,7 +83,7 @@ export function useT() {
 const nothing = () => {};
 const row: CSSProperties = { display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" };
 const column: CSSProperties = { display: "grid", gap: 12, width: "100%" };
-const quiet: CSSProperties = { color: "var(--carbon-text-sub)" };
+const quiet: CSSProperties = { color: "var(--stone-text-sub)" };
 
 function Markup({ svg }: { svg: string }) {
   return <span style={{ display: "contents" }} dangerouslySetInnerHTML={{ __html: svg }} />;
@@ -658,39 +659,6 @@ function ColorPickerDemo() {
   const t = useT();
   const [hex, setHex] = useState("#1d99f3");
   return <ColorPicker value={hex} onApply={setHex} text={{ area: t("Saturation and brightness", "Sättigung und Helligkeit"), hue: t("Hue", "Farbton"), hex: "Hex", apply: t("Apply", "Übernehmen") }} />;
-}
-
-const ZONES = ["Europe/Vienna", "Europe/Berlin", "America/New_York", "Asia/Tokyo", "UTC"];
-
-function ListboxDemo() {
-  const t = useT();
-  const [open, setOpen] = useState(false);
-  const [zone, setZone] = useState(ZONES[0]!);
-  const trigger = useRef<HTMLButtonElement>(null);
-  return (
-    <>
-      <button ref={trigger} type="button" className="glim-input gl-listbox-trigger" aria-haspopup="listbox" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
-        {zone}
-      </button>
-      <DropdownListbox open={open} onClose={() => setOpen(false)} triggerRef={trigger} label={t("Time zone", "Zeitzone")}>
-        {ZONES.map((z) => (
-          <button
-            key={z}
-            type="button"
-            role="option"
-            aria-selected={z === zone}
-            className="gl-listbox-option"
-            onClick={() => {
-              setZone(z);
-              setOpen(false);
-            }}
-          >
-            {z}
-          </button>
-        ))}
-      </DropdownListbox>
-    </>
-  );
 }
 
 function TextFieldDemo() {
@@ -1582,6 +1550,19 @@ function MeterDemo() {
   );
 }
 
+function ChartDemo() {
+  const t = useT();
+  const days = [t("Mon", "Mo"), t("Tue", "Di"), t("Wed", "Mi"), t("Thu", "Do")].map((day, i) => ({ day, runs: [4, 6, 5, 8][i]! }));
+  return (
+    <div style={{ display: "grid", gap: 12, width: "100%", maxWidth: 320 }}>
+      <Chart label={t("Backups per day", "Sicherungen pro Tag")} data={days} x="day" series={[{ key: "runs", label: t("Backups", "Sicherungen") }]} height={140} />
+      <span style={row}>
+        {t("Last runs", "Letzte Läufe")} <Sparkline label={t("Minutes per run", "Minuten pro Lauf")} values={[4, 6, 5, 8, 7]} />
+      </span>
+    </div>
+  );
+}
+
 function InfoBubbleDemo() {
   const t = useT();
   const [on, setOn] = useState(true);
@@ -1791,7 +1772,6 @@ export const DEMOS: Record<string, ComponentType> = {
   combobox: ComboboxDemo,
   slider: SliderDemo,
   "color-picker": ColorPickerDemo,
-  listbox: ListboxDemo,
   "text-field": TextFieldDemo,
   "text-area": TextAreaDemo,
   "password-field": PasswordDemo,
@@ -1826,6 +1806,7 @@ export const DEMOS: Record<string, ComponentType> = {
   shake: ShakeDemo,
   "progress-bar": ProgressDemo,
   meter: MeterDemo,
+  chart: ChartDemo,
   "info-bubble": InfoBubbleDemo,
   bubble: BubbleDemo,
   notice: NoticeDemo,
